@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "0.1.0"
+VERSION = "5.0.0"
 
 
 def default_repo() -> Repo:
@@ -188,6 +188,7 @@ TOOLS = [
                 "budget_tokens": {"type": "integer", "description": "max context tokens (default 1500)"},
                 "max_nodes": {"type": "integer", "description": "max capability nodes (default 12)"},
                 "min_trust": {"type": "number", "description": "okf trust floor 0..1 (default 0.5)"},
+                "requester": {"type": "string", "description": "agent id for ACL policy (jake=* )"},
             },
             "required": ["intent"],
         },
@@ -217,6 +218,27 @@ TOOLS = [
                            "limit": {"type": "integer"}},
             "required": ["concept"],
         },
+    },
+    {
+        "name": "capabilities_refresh",
+        "description": (
+            "v3 drift report. Compares configured root mtimes to "
+            ".last_seen.json. Pass apply=true to rebuild the index if stale."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {"apply": {"type": "boolean"}},
+        },
+    },
+    {
+        "name": "capabilities_analytics",
+        "description": "v5 per-asset pack/rating analytics (writes .context/analytics.json).",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_public_catalog",
+        "description": "v5 public catalog: assets whose okf.acl contains 'public'.",
+        "inputSchema": {"type": "object", "properties": {}},
     },
 ]
 
@@ -297,7 +319,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
                      budget_tokens=int(args.get("budget_tokens", 1500)),
                      max_nodes=int(args.get("max_nodes", 12)),
                      min_trust=float(args.get("min_trust", 0.5)),
-                     requester_acl=args.get("requester_acl"))
+                     requester_acl=args.get("requester_acl"),
+                     requester=args.get("requester"))
 
     def graph(args: dict):
         from .fabric import expand
@@ -309,6 +332,20 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return {"concept": args.get("concept"),
                 "ids": lookup_concept(repo, str(args.get("concept", "")),
                                       int(args.get("limit", 20)))}
+
+    def refresh(args: dict):
+        from .refresh import auto_refresh, drift_report
+        if args.get("apply"):
+            return auto_refresh(repo)
+        return drift_report(repo)
+
+    def analytics(_args: dict):
+        from .surface import write_analytics
+        return write_analytics(repo)
+
+    def public_catalog(_args: dict):
+        from .surface import write_public_catalog
+        return write_public_catalog(repo)
 
     handlers = {
         "capabilities_search": search,
@@ -324,5 +361,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_context_pack": context_pack,
         "capabilities_graph": graph,
         "capabilities_concepts": concepts,
+        "capabilities_refresh": refresh,
+        "capabilities_analytics": analytics,
+        "capabilities_public_catalog": public_catalog,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

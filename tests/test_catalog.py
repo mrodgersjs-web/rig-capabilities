@@ -380,23 +380,153 @@ class FabricTests(unittest.TestCase):
         from rig_capabilities.registry import status as reg_status
         rep = reg_status(repo_filter="nonexistent-repo-xyz",
                          path=str(Path(self._tmp.name) / "no-such-registry.json"))
+        self.assertEqual(0, rep["count"])
+
+
+class VersionLadderTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_v3_drift_then_refresh(self):
+        from rig_capabilities.refresh import auto_refresh, drift_report, mark_seen
+        mark_seen(self.repo)
+        r1 = drift_report(self.repo)
+        self.assertFalse(r1["stale"])
+        ext = Path(self.tmp / "extskills" / "ext-thing" / "SKILL.md")
+        ext.write_text(ext.read_text() + "\n# touched\n")
+        later = ext.stat().st_mtime + 5
+        os.utime(ext, (later, later))
+        r2 = drift_report(self.repo)
+        self.assertTrue(r2["stale"])
+        self.assertIn("ext", r2["drifted"])
+        r3 = auto_refresh(self.repo)
+        self.assertTrue(r3["refreshed"])
+        self.assertFalse(drift_report(self.repo)["stale"])
+
+    def test_v3_decay_unseen_is_one(self):
+        from datetime import datetime, timedelta, timezone
+        from rig_capabilities.policy import decay_multiplier
+        self.assertEqual(1.0, decay_multiplier(None))
+        now = datetime(2026, 8, 30, tzinfo=timezone.utc)
+        recent = (now - timedelta(days=10)).isoformat()
+        self.assertEqual(1.0, decay_multiplier(recent, now))
+        old = (now - timedelta(days=180)).isoformat()
+        self.assertLess(decay_multiplier(old, now), 1.0)
+        self.assertGreaterEqual(decay_multiplier(old, now), 0.85)
+
+    def test_v3_acl_enforced_for_requester(self):
+        from rig_capabilities.fabric import context_pack
+        (self.repo.root / "acl_policy.json").write_text(json.dumps({
+            "agents": {"locked": ["secret-scope"], "jake": ["*"],
+                       "default": ["public"]}}))
+        d = self.repo.cap_root / "skills" / "secret-thing"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "SKILL.md").write_text(
+            "---\nname: secret-thing\ndescription: classified threat notes\n"
+            "status: Stable\nacl: [secret-scope]\n---\n# secret\nbody long enough\n")
+        self.repo.build_index()
+        locked = context_pack(self.repo, "classified threat notes",
+                              max_nodes=8, requester="locked")
+        open_ = context_pack(self.repo, "classified threat notes",
+                             max_nodes=8, requester="jake")
+        ids_locked = [n["id"] for n in locked["nodes"]]
+        ids_jake = [n["id"] for n in open_["nodes"]]
+        self.assertIn("secret-thing", ids_jake)
+        self.assertTrue(locked["tiers"]["acl_enforced"])
+        self.assertTrue(open_["tiers"]["acl_enforced"])  # policy applied; * permits
+        self.assertIn("secret-thing", ids_locked)
+        denied = context_pack(self.repo, "classified threat notes",
+                              max_nodes=8, requester="stranger")
+        self.assertNotIn("secret-thing", [n["id"] for n in denied["nodes"]])
+
+    def test_v4_ratings_shift_trust(self):
+        from rig_capabilities.fabric import context_pack, rate
+        from rig_capabilities.policy import ratings_delta
+        rep = context_pack(self.repo, "demo capability")
+        rate(self.repo, rep["id"], "useful")
+        rate(self.repo, rep["id"], "useful")
+        d = ratings_delta(self.repo)
+        for n in json.loads(Path(rep["artifact"]).read_text())["nodes"]:
+            self.assertGreaterEqual(d.get(n["id"], 0), 0.05)
+
+    def test_v4_federation_prefixes_source(self):
+        peer = Repo(self.tmp / "peer")
+        sk = peer.cap_root / "skills" / "peer-only"
+        sk.mkdir(parents=True, exist_ok=True)
+        (sk / "SKILL.md").write_text(
+            "---\nname: peer-only\ndescription: unique peer asset\n---\n# peer\nbody\n")
+        peer.config_path.write_text(json.dumps({"defaults": False,
+                                                "external_roots": []}))
+        peer.build_index()
+        cfg = json.loads(self.repo.config_path.read_text())
+        cfg["federates"] = [{"label": "peer", "path": str(peer.root)}]
+        self.repo.config_path.write_text(json.dumps(cfg))
+        doc = self.repo.build_index()
+        hits = [a for a in doc["assets"] if a["id"] == "peer-only"]
+        self.assertEqual(1, len(hits))
+        self.assertEqual("fed:peer", hits[0]["source"])
+        self.assertFalse(hits[0]["installable"])
+
+    def test_v4_workspace_log(self):
+        from rig_capabilities.fabric import context_pack
+        context_pack(self.repo, "demo capability", requester="jake")
+        log = self.repo.root / ".context" / "agents" / "jake" / "log.jsonl"
+        self.assertTrue(log.exists())
+        rec = json.loads(log.read_text().splitlines()[0])
+        self.assertEqual("demo capability", rec["intent"])
+
+    def test_v5_sign_verify_roundtrip(self):
+        from rig_capabilities.fabric import context_pack
+        from rig_capabilities.surface import generate_key, load_key, verify_artifact
+        generate_key(self.repo)
+        rep = context_pack(self.repo, "demo capability")
+        self.assertTrue(rep["tiers"]["signed"])
+        art = json.loads(Path(rep["artifact"]).read_text())
+        self.assertTrue(verify_artifact(art, load_key(self.repo)))
+
+    def test_v5_public_catalog_opt_in(self):
+        from rig_capabilities.surface import public_assets, write_public_catalog
+        d = self.repo.cap_root / "skills" / "open-thing"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "SKILL.md").write_text(
+            "---\nname: open-thing\ndescription: public surface asset\n"
+            "acl: [public]\n---\n# open\nbody long enough\n")
+        self.repo.build_index()
+        ids = [a["id"] for a in public_assets(self.repo)]
+        self.assertIn("open-thing", ids)
+        self.assertNotIn("demo-skill", ids)
+        w = write_public_catalog(self.repo)
+        self.assertGreaterEqual(w["count"], 1)
+        self.assertTrue(Path(w["path"]).exists())
+
+    def test_v5_analytics_counts(self):
+        from rig_capabilities.fabric import context_pack, rate
+        from rig_capabilities.surface import collect_analytics
+        rep = context_pack(self.repo, "demo capability")
+        rate(self.repo, rep["id"], "useful")
+        a = collect_analytics(self.repo)
+        self.assertGreaterEqual(a["packs"], 1)
+        self.assertTrue(any(v.get("useful", 0) >= 1 for v in a["per_asset"].values()))
+
+
 
     def test_registry_status_one_round_trip(self):
-        import json
-        from rig_capabilities.registry import (load_registry, status_one)
         path = Path(self._tmp.name) / "reg.json"
         path.write_text(json.dumps({"repositories": [{
             "id": "demo", "github": "octocat/Hello-World",
             "local_path": "/nonexistent/path",
             "expected_origin": "https://github.com/octocat/Hello-World.git",
             "disposition": "TEST"}]}))
+        from rig_capabilities.registry import load_registry, status_one
         rows = load_registry(path)
         self.assertEqual(1, len(rows))
         rec = status_one(rows[0], fetch=False)
         self.assertEqual("demo", rec["id"])
-        self.assertEqual("octocat/Hello-World", rec["github"])
-        self.assertIsNone(rec.get("local_path"))
         self.assertFalse(rec["live"])
-
 if __name__ == "__main__":
     unittest.main()

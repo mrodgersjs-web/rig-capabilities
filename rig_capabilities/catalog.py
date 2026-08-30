@@ -142,7 +142,8 @@ class Repo:
         use_defaults = user.get("defaults", True) is not False
         cfg = {"external_roots": (list(DEFAULT_EXTERNAL_ROOTS) if use_defaults else []),
                "install_roots": ({k: dict(v) for k, v in DEFAULT_INSTALL_ROOTS.items()}
-                                 if use_defaults else {})}
+                                 if use_defaults else {}),
+               "federates": []}
         if isinstance(user.get("external_roots"), list):
             seen = {r["label"] for r in cfg["external_roots"]}
             for r in user["external_roots"]:
@@ -162,6 +163,9 @@ class Repo:
                     cfg["install_roots"].pop(kind, None)
                 else:
                     cfg["install_roots"][kind] = dict(roots)
+        if isinstance(user.get("federates"), list):
+            cfg["federates"] = [f for f in user["federates"]
+                                if isinstance(f, dict) and f.get("label") and f.get("path")]
         return cfg
 
     # -- hashing -----------------------------------------------------------
@@ -285,6 +289,13 @@ class Repo:
                     continue  # canonical shadows external
                 seen.add((a["id"], a["kind"]))
                 assets.append(a)
+        from .federation import federated_assets
+        for a in federated_assets(self):
+            key = (a["id"], a.get("kind"))
+            if key in seen:
+                continue
+            seen.add(key)
+            assets.append(a)
         return assets
 
     # -- index -------------------------------------------------------------

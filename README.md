@@ -3,11 +3,12 @@
 The canonical, git-versioned home for RIG capabilities — **skills, agents,
 hooks, goal harnesses, loops, and commands** — served to every harness
 (Claude Code, Codex, OMP, Hermes, Prime Agent) over one stdlib-only MCP
-server, and managed from one CLI.
+server, and managed from one CLI. Package version **5.0.0** (v2 fabric →
+v3 drift/ACL/decay → v4 federation/ratings-trust/workspaces → v5 signed
+packs + public catalog + analytics).
 
-Quick health: `./bin/rig-capabilities registry status --fetch` reports every
-registered repo's GitHub home, visibility, last push, and origin match
-against `~/Developer/rig-intelligence/registry/workstation-repositories.json`.
+Quick health: `./bin/rig-capabilities registry status --fetch` and
+`./bin/rig-capabilities refresh`.
 
 ## Why
 
@@ -68,12 +69,12 @@ tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 | `capabilities_context_pack` | **context fabric** — BM25 + ollama dense + lanes + graph expansion → token-budgeted, trust/freshness-filtered context pack with per-bundle provenance; persisted under `.context/` |
 | `capabilities_graph` | capability-graph adjacency expansion from one id |
 | `capabilities_concepts` | concept index: normalized term → capability ids |
+| `capabilities_refresh` | v3 drift report; apply=true rebuilds a stale index |
+| `capabilities_analytics` | v5 per-asset pack/rating analytics |
+| `capabilities_public_catalog` | v5 assets whose `acl` contains `public` |
 
-CLI twins: `pack`, `graph`, `concepts`, `fabric-build`, `okf-check`, `rate`.
-Bundles carry OKF metadata (`owner/domain/status/verified_on/acl/relates_to`);
-trust and freshness are computed deterministically — see
-[docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md) for the layer map and the
-honest-degradation contract.
+CLI twins: `pack --requester`, `refresh`, `trusts`, `analytics`, `publish`,
+`sign`, `verify`. See [docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md).
 
 Wire into all harnesses: `./install.sh` (dry-run) then `./install.sh --apply`;
 check with `./install.sh --verify`. Managed blocks sit between

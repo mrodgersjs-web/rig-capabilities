@@ -33,7 +33,8 @@ def _as_list(v):
     if v is None:
         return []
     if isinstance(v, str):
-        return [t.strip() for t in v.replace(";", ",").split(",") if t.strip()]
+        return [t.strip().strip("[]") for t in v.replace(";", ",").split(",")
+                if t.strip().strip("[]")]
     if isinstance(v, list):
         return [str(x).strip() for x in v if str(x).strip()]
     return []

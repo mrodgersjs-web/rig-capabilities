@@ -1,7 +1,12 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-Canonical home for RIG skills, agents, hooks, harnesses, loops, and commands.
-Search covers every installed harness root; install copies canonical assets
-into harness roots and records a ledger. Stdlib only.
+v5: catalog + context fabric + drift/ACL/decay + federation + signed packs.
+Stdlib only.
 """
-__version__ = "0.1.0"
+__version__ = "5.0.0"
+VERSION_LADDER = {
+    "2": "catalog + MCP + 4-tier context fabric",
+    "3": "drift auto-refresh + observation-decay + ACL policy",
+    "4": "local federation + ratings→trust + per-agent workspaces",
+    "5": "HMAC pack signing + public catalog + per-asset analytics",
+}

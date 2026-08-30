@@ -8,6 +8,7 @@ domain: Document production
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
+acl: [public]
 ---
 
 # rig-office-docs

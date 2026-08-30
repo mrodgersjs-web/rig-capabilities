@@ -17,10 +17,18 @@ Commands:
   outcomes                                counts per outcome lane
   fabric-build                            build graph + concepts + embeddings cache
   pack "<intent>" [--budget N] [--max-nodes N] [--min-trust F] [--acl a,b]
-                                          context fabric -> provenance-stamped
-                                          runtime context pack (markdown)
+                                          [--requester NAME]
+  graph <id> [--depth N]                  adjacency expansion
+  concepts <concept>                      concept-index lookup
+  okf-check                               OKF metadata completeness report
   rate <pack-id> useful|partial|wasted [note]
-  registry status [--id ID] [--fetch]   workstation-repo registry health
+  registry status [--id ID] [--fetch]     workstation-repo registry health
+  refresh [--apply]                       v3 drift report; --apply rebuilds if stale
+  trusts                                  v3/v4 decay + ratings trust table
+  analytics                               v5 per-asset pack/rating analytics
+  publish                                 v5 write .public-catalog.json
+  sign [--generate-key] [pack-id]         v5 HMAC-sign a pack (or generate key)
+  verify <pack-id>                        v5 verify pack signature
 """
 from __future__ import annotations
 
@@ -32,7 +40,7 @@ import sys
 from pathlib import Path
 
 if hasattr(signal, "SIGPIPE"):
-    signal.signal(signal.SIGPIPE, signal.SIG_DFL)  # `| head` exits quietly
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -89,9 +97,11 @@ def main() -> int:
     p.add_argument("--per", type=int, default=5)
 
     sub.add_parser("outcomes")
-
     sub.add_parser("fabric-build")
     sub.add_parser("okf-check")
+    sub.add_parser("trusts")
+    sub.add_parser("analytics")
+    sub.add_parser("publish")
 
     p = sub.add_parser("pack")
     p.add_argument("intent")
@@ -99,6 +109,7 @@ def main() -> int:
     p.add_argument("--max-nodes", dest="max_nodes", type=int, default=12)
     p.add_argument("--min-trust", dest="min_trust", type=float, default=0.5)
     p.add_argument("--acl")
+    p.add_argument("--requester")
 
     p = sub.add_parser("graph")
     p.add_argument("id")
@@ -118,6 +129,16 @@ def main() -> int:
     p = reg_sub.add_parser("status")
     p.add_argument("--id")
     p.add_argument("--fetch", action="store_true")
+
+    p = sub.add_parser("refresh")
+    p.add_argument("--apply", action="store_true")
+
+    p = sub.add_parser("sign")
+    p.add_argument("pack_id", nargs="?")
+    p.add_argument("--generate-key", action="store_true")
+
+    p = sub.add_parser("verify")
+    p.add_argument("pack_id")
 
     args = ap.parse_args()
 
@@ -219,15 +240,18 @@ def main() -> int:
         from rig_capabilities.fabric import context_pack
         rep = context_pack(repo, args.intent, budget_tokens=args.budget,
                            max_nodes=args.max_nodes, min_trust=args.min_trust,
-                           requester_acl=args.acl.split(",") if args.acl else None)
+                           requester_acl=args.acl.split(",") if args.acl else None,
+                           requester=args.requester)
         print(rep["markdown"])
+        print(f"-- tiers={rep['tiers']} lanes={rep['lanes']} "
+              f"~{rep['estimated_tokens']}tok artifact={rep['artifact']}",
+              file=sys.stderr)
     elif args.cmd == "rate":
         from rig_capabilities.fabric import rate
         print(json.dumps(rate(repo, args.pack_id, args.verdict, args.note)))
     elif args.cmd == "registry" and args.reg_cmd == "status":
         from rig_capabilities.registry import status as reg_status
-        rep = reg_status(repo_filter=args.id, fetch=args.fetch)
-        print(json.dumps(rep, indent=1))
+        print(json.dumps(reg_status(repo_filter=args.id, fetch=args.fetch), indent=1))
     elif args.cmd == "graph":
         from rig_capabilities.fabric import expand
         print(json.dumps(expand(repo, [args.id], depth=args.depth), indent=1))
@@ -238,6 +262,56 @@ def main() -> int:
     elif args.cmd == "okf-check":
         from rig_capabilities.okf import check
         print(json.dumps(check(repo), indent=1))
+    elif args.cmd == "refresh":
+        from rig_capabilities.refresh import auto_refresh, drift_report
+        print(json.dumps(auto_refresh(repo) if args.apply else drift_report(repo),
+                         indent=1))
+    elif args.cmd == "trusts":
+        from rig_capabilities.policy import last_observed, ratings_delta
+        print(json.dumps({"observed": last_observed(repo),
+                          "ratings_delta": ratings_delta(repo)}, indent=1))
+    elif args.cmd == "analytics":
+        from rig_capabilities.surface import write_analytics
+        print(json.dumps(write_analytics(repo), indent=1))
+    elif args.cmd == "publish":
+        from rig_capabilities.surface import write_public_catalog
+        print(json.dumps(write_public_catalog(repo), indent=1))
+    elif args.cmd == "sign":
+        from rig_capabilities.surface import (generate_key, load_key,
+                                              sign_artifact, verify_artifact)
+        if args.generate_key:
+            p = generate_key(repo)
+            print(json.dumps({"key": str(p)}))
+            return 0
+        if not args.pack_id:
+            print("sign: pack-id required (or --generate-key)", file=sys.stderr)
+            return 1
+        key = load_key(repo)
+        if not key:
+            print("no signing key (run sign --generate-key)", file=sys.stderr)
+            return 1
+        p = Path(repo.root) / ".context" / f"{args.pack_id}.json"
+        if not p.exists():
+            print(f"unknown pack: {args.pack_id}", file=sys.stderr)
+            return 1
+        art = json.loads(p.read_text())
+        art["signature"] = sign_artifact(art, key)
+        p.write_text(json.dumps(art, indent=1))
+        print(json.dumps({"pack": args.pack_id, "signed": True,
+                          "ok": verify_artifact(art, key)}))
+    elif args.cmd == "verify":
+        from rig_capabilities.surface import load_key, verify_artifact
+        key = load_key(repo)
+        p = Path(repo.root) / ".context" / f"{args.pack_id}.json"
+        if not p.exists():
+            print(f"unknown pack: {args.pack_id}", file=sys.stderr)
+            return 1
+        art = json.loads(p.read_text())
+        ok = bool(key) and verify_artifact(art, key)
+        print(json.dumps({"pack": args.pack_id, "verified": ok,
+                          "has_key": bool(key),
+                          "has_signature": bool(art.get("signature"))}))
+        return 0 if ok else 1
     return 0
 
 

@@ -247,11 +247,29 @@ def dense_search(repo, query: str, limit: int = 40,
 
 def context_pack(repo, intent: str, budget_tokens: int = 1500,
                  max_nodes: int = 12, min_trust: float = 0.5,
-                 requester_acl: list | None = None) -> dict:
+                 requester_acl: list | None = None,
+                 requester: str | None = None,
+                 sign: bool = True) -> dict:
+    from .federation import log_pack
+    from .policy import (acl_allows, effective_trust, permitted_scopes,
+                         record_observation, trust_tables)
+    from .refresh import auto_refresh
+    from .surface import load_key, sign_artifact
+
+    auto_refresh(repo)
     doc = repo.load_index()
     assets = dedupe(doc["assets"])
     corpus = Corpus(assets)
     by_id = {a["id"]: a for a in assets}
+    obs, deltas = trust_tables(repo)
+
+    scopes = permitted_scopes(repo, requester)
+    if requester_acl is not None:
+        call_scopes = set(requester_acl)
+        if scopes is not None:
+            call_scopes &= scopes
+    else:
+        call_scopes = scopes
 
     sparse = corpus.bm25(intent, limit=60)
     dense, dense_ok = dense_search(repo, intent, limit=60)
@@ -265,20 +283,23 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
         ranks["dense"][a["id"]] = 1.0 / (1 + r)
     cand = set(ranks["sparse"]) | set(ranks["dense"]) | lane_ids
 
+    def trust_of(a) -> float:
+        return effective_trust((a.get("okf") or {}).get("trust", 0.7),
+                               a["id"], obs, deltas)
+
     def okf_ok(a) -> bool:
         o = a.get("okf") or {}
         if o.get("freshness") == "Deprecated":
             return False
-        if o.get("trust", 0.7) < min_trust:
+        if trust_of(a) < min_trust:
             return False
-        acl = o.get("acl") or []
-        if acl and requester_acl is not None and not set(acl) & set(requester_acl):
+        if not acl_allows(o.get("acl") or [], call_scopes):
             return False
         return True
 
     def score(aid):
         a = by_id[aid]
-        t = (a.get("okf") or {}).get("trust", 0.7)
+        t = trust_of(a)
         s = 0.5 * ranks["sparse"].get(aid, 0.0) + 0.3 * ranks["dense"].get(aid, 0.0)
         if not dense_ok:
             s = 0.65 * ranks["sparse"].get(aid, 0.0)
@@ -287,11 +308,10 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
             s += 0.08
         return s
 
-    seeds = [aid for aid in cand if okf_ok(by_id[aid])]
+    seeds = [aid for aid in cand if aid in by_id and okf_ok(by_id[aid])]
     seeds.sort(key=score, reverse=True)
     chosen = seeds[:max_nodes]
 
-    # graph expansion from the top seeds, bounded
     g = load_graph(repo)
     adjacent = []
     for aid in chosen[:3]:
@@ -301,17 +321,17 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     extra = [nb for _s, nb in sorted(adjacent, reverse=True)][:4]
     chosen += extra
 
-    # assemble markdown under budget
     parts = [f"# Context pack — {intent}\n"]
     used = len(parts[0]) // 4
     nodes = []
     for aid in chosen:
         a = by_id[aid]
         o = a.get("okf") or {}
+        t = trust_of(a)
         head = repo.content(a["abs_path"])[:1400]
         excerpt = " ".join(head.split())[:260]
         block = (f"\n## {a['kind']}: {aid}  "
-                 f"[trust {o.get('trust', 0.7)} | {o.get('freshness', 'Unknown')} | "
+                 f"[trust {t} | {o.get('freshness', 'Unknown')} | "
                  f"sha {a['sha']}]\n"
                  f"source: {a['source']}  path: {a['path']}\n"
                  f"> {excerpt}\n")
@@ -321,7 +341,7 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
         parts.append(block)
         used += cost
         nodes.append({"id": aid, "kind": a["kind"], "source": a["source"],
-                      "sha": a["sha"], "trust": o.get("trust", 0.7),
+                      "sha": a["sha"], "trust": t,
                       "freshness": o.get("freshness", "Unknown"),
                       "score": round(score(aid), 3),
                       "tier": "adjacent" if aid in extra else "core"})
@@ -332,11 +352,20 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     art_dir = Path(repo.root) / ".context"
     art_dir.mkdir(exist_ok=True)
     artifact = {"id": pack_id, "intent": intent, "budget_tokens": budget_tokens,
+                "requester": requester or "",
                 "tiers": {"metadata_filter": True, "sparse_bm25": True,
-                          "dense_ollama": dense_ok, "graph": bool(g)},
+                          "dense_ollama": dense_ok, "graph": bool(g),
+                          "acl_enforced": call_scopes is not None,
+                          "decay": True, "ratings_trust": True},
                 "lanes": [l["outcome"] for l in lanes[:3]],
                 "nodes": nodes, "estimated_tokens": used}
+    key = load_key(repo) if sign else None
+    artifact["tiers"]["signed"] = bool(key)
+    if key:
+        artifact["signature"] = sign_artifact(artifact, key)
     (art_dir / f"{pack_id}.json").write_text(json.dumps(artifact, indent=1))
+    record_observation(repo, pack_id, [n["id"] for n in nodes], requester)
+    log_pack(repo, requester, pack_id, intent)
     artifact.update({"markdown": markdown, "artifact":
                      str(art_dir / f"{pack_id}.json")})
     return artifact
