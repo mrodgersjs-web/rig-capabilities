@@ -1,0 +1,102 @@
+harness_id: mh-03-agent-composition-session
+harness_name: Agent Composition Session Goal Harness
+session_type: agent-composition-session
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_agentcompose(role, skills, harness, memory_binding, traceability)
+primary_diamonds: [D2, D3]
+bms_bias: "A1 verification-led for resolution and binding checks; A2 for drafting agent manifests; A3 forbidden for capability resolution; A4 forbidden — a composed agent is not registered to the fleet by this session"
+identity_lock:
+  startup_phrase: "I am the composer. An agent is its bindings — every capability resolves to an installed, certified asset or the agent does not exist."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and composition target pinned: agent role id, destination under artifacts/agents/, and the declared capability list written before any resolution begins"
+      proof: "Session log line 'TARGET: artifacts/agents/<role>/' plus the verbatim capability list; recorded to .rig/compose/target.txt"
+    - id: "0.2"
+      requirement: "Composition doctrine loaded: traceability = 1.0 is the only acceptable outcome — every declared capability must resolve to an installed skill AND its gates must be refutation-certified; partial stacks are rejected, not shipped"
+      proof: "Session preamble contains the phrase 'traceability = 1.0'"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before first file is opened"
+      proof: "Session log line of form 'COORD: L3-L4 x D2-D3 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_agentcompose(role, skills, harness, memory_binding, traceability) declared with all five components named"
+      proof: "Session log contains the tuple declaration verbatim"
+capability_gates:
+  - category: "Skill Resolution"
+    gates:
+      - id: "1.1"
+        requirement: "Every declared capability resolves to an installed skill: each capability name is matched against artifacts/skill_catalog.json and artifacts/skills/*/SKILL.md trigger_conditions; unresolved capabilities are listed, never silently dropped"
+        proof: "python3 -c joining the capability list against the catalog; resolution table (capability | skill | path | resolved:bool) saved to .rig/compose/resolution.txt; any resolved:false blocks composition"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "No duplicate or shadowed skills: two bound skills may not claim the same trigger surface without an explicit precedence note in the manifest"
+        proof: "python3 -c pairwise-comparing bound skills' trigger_conditions for token overlap; overlaps require a precedence line in the manifest; report in .rig/compose/overlap.txt"
+        failure_tier: degrade
+      - id: "1.3"
+        requirement: "Each bound skill's gates are refutation-certified: every bound skill's done-test is located and its planted-failure fixture exists on disk (per mh-01 contract)"
+        proof: "python3 -c asserting for each bound skill that '## Done test' exists in SKILL.md and the regression fixture file exists; per-skill verdicts in .rig/compose/cert-check.txt"
+        failure_tier: halt
+  - category: "Harness Binding"
+    gates:
+      - id: "2.1"
+        requirement: "Exactly one governing harness bound: the manifest names one harness_id from artifacts/harnesses/ whose session_type covers this agent's primary loop; the file parses and its failure_protocol tiers are intact"
+        proof: "python3 -c using yaml.safe_load on the bound harness asserting the five canonical sections exist; harness path recorded in .rig/compose/harness-bind.txt"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Coordinate compatibility: the agent's declared operating coordinates fall within the bound harness's coordinate_space (levels, diamonds, bms_modes, iqrsqpi_steps)"
+        proof: "python3 -c asserting agent coordinates are subsets of harness coordinate_space lists; subset check output in .rig/compose/coords.txt"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "MathExec anchor: the composed stack's quantitative spine is proven live — the substrate passes self-test and the agent manifest names which estimator its scoring surfaces use"
+        proof: "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py self-test exits 0 ('SELF-TEST PASS' saved); manifest contains an 'estimator:' field matching robust_madz|qn_z|bootstrap_lower|certified_z; both in .rig/compose/mathexec.txt"
+        failure_tier: halt
+  - category: "Memory Binding"
+    gates:
+      - id: "3.1"
+        requirement: "Four-surface memory binding complete: the manifest declares record_event, retrieve, propose_memory, and predict surfaces wired to rig-memory-os, and the memory scope covers every memory.record_event / memory.propose_memory call appearing in the bound skills"
+        proof: "python3 -c grepping bound skills for memory\\.(record_event|propose_memory) calls and asserting each falls inside a declared manifest scope; coverage table in .rig/compose/memory-coverage.txt"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Binding round-trip executed: the composition session itself records an event through the canonical bridge and recalls it byte-for-byte"
+        proof: "rig-memory-os memory.record_event(kind=\"agent_composed\", role=<role>, skills=<n>, harness=<id>, traceability=1.0) returns an event id; immediate retrieve matches byte-for-byte; round-trip saved to .rig/compose/memory-roundtrip.txt"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Composition pattern proposed: the proven skill+harness pairing is submitted as a reusable memory so future compositions start from certified stacks"
+        proof: "rig-memory-os memory.propose_memory(content=\"composition_pattern\", evidence_refs=[<event id from 3.2>]) acknowledged; ack id recorded in .rig/compose/proposal.txt"
+        failure_tier: degrade
+  - category: "Traceability & Closure"
+    gates:
+      - id: "4.1"
+        requirement: "Traceability certified at 1.0: a final join proves every manifest capability maps to (installed skill, certified gates, covered memory scope) — the row count of the join equals the declared capability count"
+        proof: "python3 -c emitting the full traceability join to .rig/compose/traceability.txt and asserting zero rows with any unresolved column; exit 0 required"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Manifest landed: artifacts/agents/<role>/ manifest written, parses, contains no placeholder tokens, and references only paths that exist on disk"
+        proof: "python3 -c asserting every path-like string in the manifest resolves via os.path.exists; grep -nE 'TODO|PLACEHOLDER' returns zero hits; both recorded"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events"
+  - "Traceability join is complete at 1.0 — zero unresolved capabilities, skills, gates, or memory scopes"
+  - "Bound harness parses with canonical sections and compatible coordinates"
+  - "MathExec self-test passed this session and the manifest names its estimator"
+  - "agent_composed event recorded and round-trip verified; composition pattern proposed"
+  - "Agent manifest on disk references only existing paths"
+  - "One improvement entry appended to the improvements log"
+failure_protocol:
+  halt_gates: ["1.1", "1.3", "2.1", "2.2", "2.3", "3.1", "3.2", "4.1", "4.2"]
+  degrade_gates: ["1.2", "3.3"]
+  stop_gates: []
+  notes: "No stop gates: composition failure is refusal, never emergency. A halt on 1.1 (unresolved capability) requires either removing the capability from the manifest or running mh-01 to genesis the missing skill first — never shipping a partially resolved stack"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "the same capability class fails resolution 3+ times → a standing skill is genesis'd for it; recurring memory-scope misses are proposed to meta-agent-memory-binder as manifest-template constraints"
+final_rule:
+  - "Traceability is binary: 1.0 or the agent does not ship."
+  - "A bound skill without a certified done-test is an unbound skill."
+  - "Memory surfaces are four or none — record, retrieve, propose, predict."
+  - "Every agent-composition session leaves the system stronger than it found it."
+governs_loops: [GL-BD, GL-GG, GL-SI]

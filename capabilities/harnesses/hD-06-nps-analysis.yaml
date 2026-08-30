@@ -1,0 +1,97 @@
+harness_id: hD-06-nps-analysis
+harness_name: NPS Analysis Goal Harness
+session_type: ops-nps-analysis
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2]
+harness_tuple: H_nps(integrity, pii, segmentation, themes, verbatims, caveats, routing)
+primary_diamonds: [D2]
+bms_bias: "A1 for data integrity and scoring math; A2 for theme extraction; A3 only for narrative drafting; A4 never"
+identity_lock:
+  startup_phrase: "NPS analysis session. The data speaks; the analyst quotes. No theme without verbatims, no claim without counts."
+  gates:
+    - id: "0.1"
+      requirement: "Survey cohort declared: wave id, collection window, population definition"
+      proof: "artifacts/nps/<run>/cohort.md with wave_id, window start/end, population query"
+    - id: "0.2"
+      requirement: "Raw export located and never mutated in place; all analysis works on a copy"
+      proof: "raw file hash recorded; analysis directory contains copied file with different sha256 path but identical content hash (verified)"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L2-L4; D2-D3; A1-A2)"
+      proof: "coordinate block in ~/.hermes/jake/nps/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_nps declared with all 7 components"
+      proof: "session log contains 'H_nps(' line"
+capability_gates:
+  - category: "Data Integrity"
+    gates:
+      - id: "1.1"
+        requirement: "Row-count reconciliation: export row count matches survey platform reported response count"
+        proof: "artifacts/nps/<run>/integrity.json with export_rows, platform_rows, delta; delta == 0 or delta explained in cohort.md"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Score distribution computed deterministically: promoters/passives/detractors counts and NPS formula shown"
+        proof: "python3 scripts/nps_score.py --in responses.csv --out score.json exit 0; score.json contains p, n, d counts and nps = round(100*(p-d)/total, 1)"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "PII redaction pass before any downstream analysis or quoting: emails, phone numbers, internal account ids masked"
+        proof: "python3 scripts/redact_pii.py --in responses.csv --out responses_redacted.csv; grep -cE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+' responses_redacted.csv == 0"
+        failure_tier: stop
+      - id: "1.4"
+        requirement: "No fabricated or inferred responses: every quoted verbatim traces to a row id in the redacted export"
+        proof: "artifacts/nps/<run>/verbatim_map.json maps each quoted string to row_id; all row_ids exist in redacted csv"
+        failure_tier: halt
+  - category: "Analysis Rigor"
+    gates:
+      - id: "2.1"
+        requirement: "Segmentation computed with predeclared cuts: plan tier, tenure band, company size — cuts fixed before scores are examined"
+        proof: "artifacts/nps/<run>/segments.yaml lists cuts with definitions; segments.json results reference exactly these cuts"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Theme extraction with counts: each theme has frequency and example row ids; themes cover >= 80% of comment volume or residual is labeled 'misc'"
+        proof: "artifacts/nps/<run>/themes.json — sum(theme counts) + misc >= 0.8 * total_comments"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Verbatim evidence per theme: >= 2 direct quotes per reported theme, masked and row-anchored"
+        proof: "themes.json quotes arrays all length >= 2 and all strings present in verbatim_map.json"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Statistical caveats stated: response rate, sample bias risk, margin context for small segments"
+        proof: "artifacts/nps/<run>/report.md contains '## Caveats' section with response_rate numeric and per-segment n"
+        failure_tier: degrade
+  - category: "Action Routing"
+    gates:
+      - id: "3.1"
+        requirement: "Detractor follow-up list produced: detractors with contactable accounts routed as CRM tasks, not just counted"
+        proof: "artifacts/nps/<run>/followups.json with task records created via Twenty API; jq 'length >= 1' true or explicit zero-detractor note"
+        failure_tier: degrade
+      - id: "3.2"
+        requirement: "Recommendations mapped to owners: every '## Recommendations' item has owner and due date"
+        proof: "grep -A2 '## Recommendations' report.md shows owner: and due: per bullet; zero ownerless items"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Promoter advocacy candidates flagged for the advocacy program (reference/case-study pool)"
+        proof: "artifacts/nps/<run>/advocacy_candidates.json with row anchors; handed to advocate-sourcing roster file"
+        failure_tier: degrade
+definition_of_done:
+  - "Score computed deterministically and reconciled against platform counts"
+  - "Report shipped at artifacts/nps/<run>/report.md with segmentation, themes, verbatims, caveats, and owned recommendations"
+  - "PII redaction proven; every verbatim row-anchored"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (analyzed | blocked | provisional), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.4", "2.1", "2.2", "2.3", "3.2"]
+  degrade_gates: ["2.4", "3.1", "3.3"]
+  stop_gates: ["1.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a verbatim that fails row-anchoring triggers immediate audit of the redaction pipeline"
+final_rule:
+  - "No theme ships without counts and at least two row-anchored verbatims."
+  - "PII redaction is a stop-tier gate: unredacted data never moves downstream."
+  - "A recommendation without an owner is a wish, not an action."
+  - "Every NPS analysis session leaves the system stronger than it found it."
+governs_loops: [GL-OD-nps, voice-of-customer, customer-insights, sentiment-analysis]

@@ -1,0 +1,110 @@
+harness_id: hA-02-code-refactor
+harness_name: Code Refactor Session Goal Harness
+session_type: code-refactor-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_refactor(behavior_lock, transform_steps, parity_proof, improvement)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for verification of behavior parity; A2 for mechanical transforms; A3 for naming only; A4 forbidden"
+identity_lock:
+  startup_phrase: "I change the shape of the code, never its behavior, and I prove it."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and refactor target pinned to a file list plus a stated behavior-preservation claim"
+      proof: "Session log contains the file list and the one-sentence behavior claim"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: characterization tests before transforms, one pattern per pass, parity proof after every pass"
+      proof: "Session preamble names all three procedures verbatim"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first edit"
+      proof: "Session log line 'COORD: L2-L4 x D1-D3 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_refactor(behavior_lock, transform_steps, parity_proof, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Behavior Lock"
+    gates:
+      - id: "1.1"
+        requirement: "Green baseline before any edit: full test suite run and exit code 0 recorded; a red baseline converts the session to a bug-fix session, not a refactor"
+        proof: "Exit code + summary tail in .rig/refactor/baseline.txt; if red, session log records the conversion decision"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Characterization coverage for touch points: every function in the refactor file list that lacks a covering test gets a characterization test capturing current behavior BEFORE the first transform"
+        proof: "git diff of the test-only pre-commit at .rig/refactor/char-tests.diff; commit SHA of the pre-commit recorded"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Public API surface snapshot: exported symbols enumerated (ts-prune, go doc, pydoc, or hand list) before edits so the post-refactor surface can be diffed"
+        proof: ".rig/refactor/api-surface-before.txt exists and is non-empty for every touched package"
+        failure_tier: halt
+  - category: "Transform Discipline"
+    gates:
+      - id: "2.1"
+        requirement: "One pattern per pass: each commit applies exactly one named refactoring (extract function, rename, inline, move module...) — no mixed-mechanics commits"
+        proof: "git log --oneline for the session where each commit message names exactly one refactoring pattern; mixed commits are flagged in session log"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Behavior parity proof after every pass: test suite re-run after each commit and exit 0; any red run triggers immediate git revert of that pass before continuing"
+        proof: "Per-commit exit codes in .rig/refactor/parity-runs.txt with one 'PASS' line per commit SHA"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Mechanical transforms use AST-aware tooling where available (ast-grep, ts-morph, gofmt -r, comby) rather than regex or hand-edits for rename/move shapes"
+        proof: "Transform commands recorded in .rig/refactor/transforms.log; hand-edit exceptions each carry a one-line justification"
+        failure_tier: degrade
+      - id: "2.4"
+        requirement: "Diff size discipline: no single commit exceeds 400 changed lines; larger transforms are split into preparatory + application commits"
+        proof: "git log --stat per session commit; any >400-line commit is explicitly justified in the session log or split"
+        failure_tier: degrade
+  - category: "Parity & Cleanup"
+    gates:
+      - id: "3.1"
+        requirement: "Public API surface unchanged (or every change is deliberate and listed): post-refactor symbol dump diffed against api-surface-before.txt"
+        proof: "diff .rig/refactor/api-surface-before.txt .rig/refactor/api-surface-after.txt output attached; each delta annotated 'deliberate: <reason>'"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "No stale artifacts: dead code, commented-out blocks, and orphaned imports introduced or left by the refactor are removed; knip/deadcode/vulture run shows no new dead symbols in touched packages"
+        proof: "Dead-code tool output attached with zero new entries vs the pre-refactor run"
+        failure_tier: degrade
+      - id: "3.3"
+        requirement: "No sneaked-in behavior changes: diff manually scanned for logic edits disguised as refactors (default-value changes, reordering of side effects, error-message text changes)"
+        proof: "Session log section 'behavior-delta scan' states clean, or lists each delta with a pointer to its approved gate"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Full-suite final green + lint + typecheck all exit 0 on the final tree, not on any intermediate commit"
+        proof: "Three exit codes recorded in .rig/refactor/final-green.txt with the final HEAD SHA"
+        failure_tier: halt
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "Refactor summary written: motivation, pattern list, risk register (what could still be different), and rollback commit range"
+        proof: ".rig/refactor/summary.md exists with all four sections; rollback range is a valid git range verified with git log"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Improvement entry written: one observed code-smell pattern worth a lint rule, or one harness gap"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-02-code-refactor"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events"
+  - "Final tree green across tests, lint, typecheck with recorded exit codes"
+  - "API surface delta is empty or fully annotated deliberate"
+  - "summary.md with rollback range committed alongside the refactor"
+  - "One improvement entry appended"
+  - "Identity closure: coordinate, parity verdict, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "3.1", "3.3", "3.4", "4.1", "4.2"]
+  degrade_gates: ["2.3", "2.4", "3.2"]
+  stop_gates: []
+  notes: "no stop-tier gates in a local refactor; a red parity run is a halt that resolves by revert, never by force"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times → promote the check to an AST lint rule or tighten the gate proof"
+final_rule:
+  - "Behavior lock before the first edit; no characterization, no refactor."
+  - "One pattern per pass, parity proof per pass."
+  - "A red test mid-refactor is answered with revert, never with hope."
+  - "No improvement entry, no session complete."
+  - "Every code-refactor session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-BD, GL-VQ]

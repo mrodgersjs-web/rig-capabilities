@@ -1,0 +1,136 @@
+harness_id: hC-06-accessibility-audit-session
+harness_name: Accessibility Audit Goal Harness
+session_type: accessibility-audit-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  - L5
+  diamonds:
+  - D1
+  - D3
+  bms_modes:
+  - A1
+  - A2
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_accessibility_audit_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D1
+- D3
+bms_bias: A1-A2 preferred; A3 permitted for remediation design; A4 only with approval
+identity_lock:
+  startup_phrase: 'Accessibility audit mode: WCAG 2.2 AA is the floor, assistive-tech evidence is the proof.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D1-A1'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_accessibility_audit(identity, gates, dod, failure_protocol,
+      self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Scope & Automated Scans
+  gates:
+  - id: '1.1'
+    requirement: 'Scope and conformance target declared: URL/route list, WCAG 2.2 level AA minimum'
+    proof: artifacts/a11y/<slug>/scope.yaml with route list and conformance level; every scanned page maps to a
+      scope entry
+    failure_tier: halt
+  - id: '1.2'
+    requirement: Automated scan run on every scoped route with results preserved
+    proof: '`npx axe <route> --save artifacts/a11y/<slug>/axe/<route>.json` (or pa11y equivalent) per route; violation
+      counts summarized by impact'
+    failure_tier: halt
+  - id: '1.3'
+    requirement: Contrast computation executed programmatically for all text/background pairs in the rendered pages
+    proof: '`node scripts/contrast-audit.mjs <routes>` output table; every failing pair listed with measured ratio
+      vs required (4.5:1 / 3:1)'
+    failure_tier: halt
+- category: Manual & Assistive-Tech Verification
+  gates:
+  - id: '2.1'
+    requirement: 'Keyboard-only walkthrough: every interactive element reachable and operable; tab order matches
+      visual order; zero keyboard traps'
+    proof: 'artifacts/a11y/<slug>/keyboard-log.md per route: element count tabbed vs interactive count in DOM; trap
+      check = none found'
+    failure_tier: halt
+  - id: '2.2'
+    requirement: Screen reader pass (VoiceOver or NVDA) on critical flows with announcement log
+    proof: 'artifacts/a11y/<slug>/sr-log.md: per-step actual announcement vs expected; mismatches filed as findings'
+    failure_tier: halt
+  - id: '2.3'
+    requirement: Visible focus indicator verified on every focusable element (not suppressed by CSS)
+    proof: '`grep -rn ''outline: *none\|outline: *0'' src --include=''*.css''` hits all paired with a replacement
+      focus style or filed as findings'
+    failure_tier: halt
+  - id: '2.4'
+    requirement: 'Reduced-motion and zoom/reflow checks: prefers-reduced-motion honored; usable at 200% zoom / 320px
+      reflow'
+    proof: 'emulated-media test artifacts: screenshots at 200% zoom + `prefers-reduced-motion: reduce` render in
+      artifacts/a11y/<slug>/'
+    failure_tier: degrade
+  - id: '2.5'
+    requirement: 'Forms audited: every input has a programmatic label; errors are associated via aria-describedby
+      and announced'
+    proof: 'form inventory table: input count vs labeled count equal; error-announcement evidence in sr-log.md'
+    failure_tier: degrade
+- category: Findings & Remediation
+  gates:
+  - id: '3.1'
+    requirement: Findings report maps every issue to a WCAG 2.2 success criterion and severity
+    proof: 'artifacts/a11y/<slug>/report.md: criterion ID + severity + evidence link per finding; zero unmapped
+      findings'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: Remediation tickets filed for all critical/serious findings with reproduction steps
+    proof: ticket list in report appendix (issue IDs or local tickets.yaml); each cites finding ID and repro path
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: Re-test criteria stated per finding so fixes are verifiable, not vibes
+    proof: every finding carries a 'verified by' line naming the command or manual check that proves the fix
+    failure_tier: degrade
+definition_of_done:
+- All 11 capability gates passed with artifacts under artifacts/a11y/<slug>/
+- 'Primary objective achieved: WCAG-criterion-mapped findings report with remediation and re-test criteria'
+- Assistive-tech evidence (keyboard + screen reader logs) exists for every critical flow
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '1.3'
+  - '2.1'
+  - '2.2'
+  - '2.3'
+  - '3.1'
+  degrade_gates:
+  - '2.4'
+  - '2.5'
+  - '3.2'
+  - '3.3'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every accessibility-audit-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-VQ
+- GL-RI
+- GL-SI

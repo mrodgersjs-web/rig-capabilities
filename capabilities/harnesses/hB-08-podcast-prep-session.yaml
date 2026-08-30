@@ -1,0 +1,131 @@
+harness_id: hB-08-podcast-prep
+harness_name: Podcast Prep Session Harness
+session_type: podcast-prep-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L2-D3-A1-I4
+primary_diamonds:
+- D3
+bms_bias: A1
+identity_lock:
+  startup_phrase: I am the Podcast Prep operator. The guest should meet questions they've never answered; the listener should
+    leave with one idea they can use tomorrow.
+  identity_gates:
+  - Confirm the guest (or solo topic) and the episode’s single through-line before research.
+  - 'Confirm prior appearances reviewed: never ask a question the guest answered verbatim on another show.'
+  - Confirm episode format (interview / solo / panel) and target length before building the run sheet.
+  - Refuse generic question lists ('tell us about your journey') — every question must cite its origin.
+capability_gates:
+- id: CG-01
+  name: Through-line lock
+  requirement: Episode through-line and target listener takeaway written in one sentence each.
+  proof: $SESS/throughline.yaml parses with keys throughline, takeaway; validator exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Guest dossier
+  requirement: Dossier contains bio, 3 prior appearances with links, 5 known positions, and 2 contradictions worth probing.
+  proof: $SESS/dossier.md has all sections; `grep -cE 'https?://' $SESS/dossier.md` >= 3; `grep -c '^- ' $SESS/dossier.md`
+    >= 10
+  failure_tier: halt
+- id: CG-03
+  name: Novelty screen
+  requirement: Every proposed question checked against prior-appearance transcripts; novelty score >=0.7.
+  proof: '`python3 scripts/question_novelty.py $SESS/questions.md $SESS/prior_transcripts/ --min 0.7` exits 0'
+  failure_tier: halt
+- id: CG-04
+  name: Question ladder
+  requirement: Run sheet orders questions warmup -> core -> stretch -> close, with time budget per block summing to target
+    length +/-10%.
+  proof: '`python3 scripts/run_sheet_math.py $SESS/runsheet.yaml` exits 0 and writes $SESS/proof/run_math.json'
+  failure_tier: halt
+- id: CG-05
+  name: Follow-up forks
+  requirement: Each core question has >=2 pre-written follow-up forks (if-guest-says-X paths).
+  proof: '`python3 -c "import yaml;r=yaml.safe_load(open(''$SESS/runsheet.yaml''));assert all(len(q.get(''forks'',[]))>=2
+    for q in r[''core''])"` exits 0'
+  failure_tier: degrade
+- id: CG-06
+  name: Asset & logistics check
+  requirement: Recording links, backup recorder note, guest one-sheet (bio, socials, headshot path), and promo obligations
+    documented.
+  proof: $SESS/logistics.yaml parses with keys record_link, backup_plan, onesheet_path, promo; `test -f $(python3 -c "import
+    yaml;print(yaml.safe_load(open('$SESS/logistics.yaml'))['onesheet_path'])")` exits 0
+  failure_tier: halt
+- id: CG-07
+  name: Sensitive-topic map
+  requirement: Topics the guest avoids or that need framing are listed with handling notes.
+  proof: $SESS/sensitive.md exists with >=1 entry OR explicit 'none declared' line; `test -s $SESS/sensitive.md` exits 0
+  failure_tier: degrade
+- id: CG-08
+  name: Intro/outro copy
+  requirement: 60-word intro and outro with CTA drafted, matching show voice.
+  proof: '`wc -w $SESS/intro.txt` between 45-75; `grep -cE ''https?://|@'' $SESS/outro.txt` >= 1'
+  failure_tier: degrade
+- id: CG-09
+  name: Proof packet seal
+  requirement: Dossier, run sheet, novelty report, logistics hashed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Through-line locked; every question passes the novelty screen.
+- Run sheet time math balances and core questions carry follow-up forks.
+- Logistics verified with the one-sheet file present on disk.
+- Intro/outro drafted; sensitive topics mapped or explicitly cleared.
+- Proof packet sealed.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: halt
+    CG-05: degrade
+    CG-06: halt
+    CG-07: degrade
+    CG-08: degrade
+    CG-09: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/podcast-prep-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/podcast-prep-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.podcast
+- GL-OD-podcast
+- call-brief-framework.episode

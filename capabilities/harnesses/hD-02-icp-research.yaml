@@ -1,0 +1,97 @@
+harness_id: hD-02-icp-research
+harness_name: ICP Research Goal Harness
+session_type: gtm-icp-research
+coordinate_space:
+  levels: [L1, L2, L3]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S]
+harness_tuple: H_icp(question, sources, sample, firmographics, anti_icp, evidence, validation)
+primary_diamonds: [D2]
+bms_bias: "A1 for data extraction and validation; A2 for pattern synthesis; A3 only for hypothesis framing; A4 never"
+identity_lock:
+  startup_phrase: "ICP research session. The ICP is a falsifiable artifact, not a vibe. Every attribute is anchored to data."
+  gates:
+    - id: "0.1"
+      requirement: "Research question declared before any scraping: which segment, which hypothesis, which decision this ICP feeds"
+      proof: "artifacts/icp/<run>/question.md contains segment, hypothesis, decision fields (all non-empty)"
+    - id: "0.2"
+      requirement: "rig-crm and data-sourcing doctrine loaded; Twenty CRM reachable"
+      proof: "curl -sf http://localhost:3000/healthz exit 0"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L3, D1-D2, A1-A2)"
+      proof: "coordinate block in ~/.hermes/jake/icp/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_icp declared with all 7 components"
+      proof: "session log contains 'H_icp(' line"
+capability_gates:
+  - category: "Source Discipline"
+    gates:
+      - id: "1.1"
+        requirement: "Source inventory enumerated before analysis: CRM segment query, closed-won/closed-lost exports, external enrichment provider, review sites (G2/Capterra)"
+        proof: "artifacts/icp/<run>/sources.json lists >= 3 origins each with url_or_query, fetched_at, row_count, license_or_tos_note"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Sample size floor met: >= 30 accounts in the analyzed cohort or an explicit small-sample caveat recorded"
+        proof: "python3 -c \"import json; d=json.load(open('artifacts/icp/<run>/cohort.json')); assert len(d['accounts']) >= 30 or d.get('small_sample_caveat')\" exit 0"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Closed-lost and churned accounts included — ICP built only from winners is rejected"
+        proof: "cohort.json outcome field contains both 'won' and 'lost' values; jq '[.accounts[].outcome] | unique | length >= 2' true"
+        failure_tier: halt
+  - category: "Attribute Extraction"
+    gates:
+      - id: "2.1"
+        requirement: "Firmographic extraction scripted, not hand-assembled: industry, size band, geography, tech stack signals per account"
+        proof: "python3 scripts/extract_firmographics.py --cohort artifacts/icp/<run>/cohort.json --out firmographics.csv exit 0; csv has >= 4 attribute columns"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Buying-trigger signals identified from win/loss notes or call transcripts with quote anchors"
+        proof: "artifacts/icp/<run>/triggers.jsonl — each trigger has >= 2 verbatim quote anchors with source record ids"
+        failure_tier: degrade
+      - id: "2.3"
+        requirement: "Anti-ICP defined explicitly: segments to exclude with the data reason for each exclusion"
+        proof: "artifacts/icp/<run>/anti_icp.md lists >= 2 exclusions each with supporting metric (win_rate, churn_rate, or sales_cycle_days)"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Attribute-to-outcome correlation computed: which attributes actually separate won from lost"
+        proof: "artifacts/icp/<run>/correlation_report.md contains per-attribute win-rate deltas computed by scripts/icp_correlation.py; every claimed attribute shows its delta number"
+        failure_tier: degrade
+  - category: "Validation & Anchoring"
+    gates:
+      - id: "3.1"
+        requirement: "Every load-bearing claim in the ICP doc carries an evidence anchor (CRM query id, file path + line, or source URL)"
+        proof: "grep -cE '\\[evidence:' artifacts/icp/<run>/icp.md >= number of ## claim headers; zero unanchored claims"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "ICP falsifiability statement: the doc names what future data would prove it wrong"
+        proof: "icp.md contains a '## Kill Criteria' section with >= 2 measurable conditions"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "CRM segment validation: the ICP definition runs as a Twenty query and returns a plausible nonzero count"
+        proof: "artifacts/icp/<run>/segment_query.json executed; result count recorded in validation.log; count > 0 and count < total_people"
+        failure_tier: degrade
+      - id: "3.4"
+        requirement: "Independent review dispatch: a second pass (agent or human) attempts to refute the top 3 ICP attributes"
+        proof: "artifacts/icp/<run>/refute_pass.md with verdict per attribute (confirmed | weakened | rejected) and reasoning"
+        failure_tier: degrade
+definition_of_done:
+  - "ICP doc shipped at artifacts/icp/<run>/icp.md with evidence anchors, anti-ICP, and kill criteria"
+  - "Cohort, firmographics, correlation report, and segment validation all present and hashed in proofpacket.json"
+  - "Closed-lost data represented; no winners-only ICP accepted"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (validated | provisional | refuted), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.3", "3.1", "3.2"]
+  degrade_gates: ["2.2", "2.4", "3.3", "3.4"]
+  stop_gates: []
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; an ICP kill criterion firing in production triggers immediate harness review"
+final_rule:
+  - "No ICP attribute ships without an evidence anchor and a win/loss delta."
+  - "A winners-only ICP is a failed session, not a positive result."
+  - "An ICP without kill criteria is a horoscope, not a target."
+  - "Every ICP research session leaves the system stronger than it found it."
+governs_loops: [GL-OD-icp, gtm-icp, segmentation]

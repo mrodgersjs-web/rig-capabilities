@@ -1,0 +1,110 @@
+harness_id: hA-05-code-migration
+harness_name: Code Migration Session Goal Harness
+session_type: code-migration-session
+coordinate_space:
+  levels: [L2, L3, L4, L5]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_migrate(caller_census, strangler_plan, cutover_proof, rollback, improvement)
+primary_diamonds: [D1, D2, D3]
+bms_bias: "A1 for caller census and cutover verification; A2 for codemods; A3 for docs only; A4 forbidden"
+identity_lock:
+  startup_phrase: "Every caller migrates or is named. Clean cutover or no cutover."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and migration pinned to exact from→to (library version, framework version, or API contract), with both versions recorded"
+      proof: "Session log contains from-version and to-version strings and the source of each (lockfile, manifest)"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: caller census before edits, strangler or flag-gated rollout, zero shims left behind, rollback path proven"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first edit"
+      proof: "Session log line 'COORD: L2-L5 x D1-D3 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_migrate(caller_census, strangler_plan, cutover_proof, rollback, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Census & Plan"
+    gates:
+      - id: "1.1"
+        requirement: "Caller census complete: every import/call-site of the migrated surface enumerated via grep/ast-grep (not from memory), split into production, test, and tooling callers"
+        proof: ".rig/migrate/callers.txt from ast-grep or grep -rn over the repo; count cross-checked against a second pattern variant (import vs require vs from)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Breaking-change inventory: the target's changelog/migration guide consulted and every applicable breaking change mapped to affected callers from the census"
+        proof: ".rig/migrate/breaking.md with one row per breaking change: change | affected caller files | codemod-able? | plan"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Migration strategy chosen and stated: big-bang vs strangler-fig vs feature-flag, with the reason; strangler plans name the seam file(s)"
+        proof: ".rig/migrate/strategy.md names strategy + seam files; strangler seams exist as real paths in the repo"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Baseline green: full suite + typecheck + build all exit 0 on the pre-migration tree, recorded"
+        proof: "Three exit codes + pre-migration HEAD SHA in .rig/migrate/baseline.txt"
+        failure_tier: halt
+  - category: "Execution"
+    gates:
+      - id: "2.1"
+        requirement: "Codemods before hand-edits: mechanical API changes applied via ast-grep/ts-morph/jscodeshift/comby recipes that are themselves saved to the repo or .rig/migrate/codemods/"
+        proof: "Codemod recipe files exist; each recipe's dry-run diff sample attached in .rig/migrate/codemod-samples/"
+        failure_tier: degrade
+      - id: "2.2"
+        requirement: "No orphaned callers mid-flight: at every session commit, grep for the old surface returns only files on the declared remaining-migration list"
+        proof: "Per-commit grep output in .rig/migrate/cutover-progress.txt; any unexpected hit halts the session"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Compat shims are forbidden as terminal state: any temporary adapter carries a TODO with an expiry and is tracked on the shim list; final tree has zero entries"
+        proof: ".rig/migrate/shims.md list is empty at closure, or each entry has owner + expiry date and the session is not closable as 'cutover complete'"
+        failure_tier: halt
+  - category: "Cutover Proof"
+    gates:
+      - id: "3.1"
+        requirement: "Zero old-surface references in final tree: grep/ast-grep over the whole repo for the old import paths, old API names, and old config keys returns empty (excluding the migration notes themselves)"
+        proof: "Final grep outputs appended to .rig/migrate/cutover-proof.txt with the final HEAD SHA"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Full verification stack green on final tree: tests, typecheck, lint, and a production build (next build / cargo build --release / go build ./... / docker build) all exit 0"
+        proof: "Four exit codes + build artifact name in .rig/migrate/final-green.txt"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Behavior spot-check: the top 3 user-visible or API-visible flows touching the migrated surface are exercised (e2e test, smoke script, or manual runbook) and pass"
+        proof: ".rig/migrate/smoke.md names the 3 flows, the command for each, and its exit/pass evidence"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Rollback proven, not asserted: rollback instructions executed at least to the dry-run level (git revert of the migration range on a scratch branch builds green, or flag-off path exercised)"
+        proof: ".rig/migrate/rollback.txt with the scratch-branch revert SHA and its build exit code, or flag-off evidence"
+        failure_tier: halt
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "Migration notes written: from→to, breaking changes hit, decisions made, remaining risks, and the rollback pointer — filed at docs/ or .rig/migrate/MIGRATION-NOTES.md"
+        proof: "File exists with all five sections; linked from the final commit message"
+        failure_tier: degrade
+      - id: "4.2"
+        requirement: "Improvement entry written: one lesson (codemod worth keeping, census gap, doc gap in upstream guide)"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-05-code-migration"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "cutover-proof.txt shows zero old-surface references at final SHA"
+  - "final-green.txt shows tests/typecheck/lint/build all exit 0"
+  - "shims.md is empty or the session is explicitly closed as 'partial — strangler in flight' with named seams"
+  - "Rollback dry-run evidence recorded"
+  - "Identity closure: coordinate, cutover verdict, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "1.4", "2.2", "2.3", "3.1", "3.2", "3.3", "3.4", "4.2"]
+  degrade_gates: ["2.1", "4.1"]
+  stop_gates: []
+  notes: "a migration that cannot prove rollback degrades to a strangler-partial close, never to a forced big-bang"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times → codemod recipe promoted to repo tooling, or census pattern library updated"
+final_rule:
+  - "Census before edits; memory is not a census."
+  - "No shims as terminal state."
+  - "No cutover claim without a green build and an exercised rollback."
+  - "No improvement entry, no session complete."
+  - "Every code-migration session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-BD, GL-GR]

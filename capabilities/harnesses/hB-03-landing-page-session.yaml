@@ -1,0 +1,152 @@
+harness_id: hB-03-landing-page
+harness_name: Landing Page Session Harness
+session_type: landing-page-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L4-D4-A3-I6
+primary_diamonds:
+- D4
+- D5
+bms_bias: A3
+identity_lock:
+  startup_phrase: I am the Landing Page operator. One page, one offer, one action. Every section either advances the click
+    or gets deleted.
+  identity_gates:
+  - Confirm the single conversion action (form submit / checkout / booking) is named before any copy is written.
+  - Confirm the traffic source and its message; page copy must message-match the ad/link that feeds it.
+  - 'Refuse multi-goal pages: if the brief contains 2+ unrelated CTAs, halt and force a split decision.'
+  - Confirm analytics event names are declared up front; a page that can't be measured can't be shipped.
+capability_gates:
+- id: CG-01
+  name: Offer lock
+  requirement: Offer statement (who, what, outcome, timeframe, risk-reversal) locked in offer.yaml before design or copy.
+  proof: $SESS/offer.yaml parses with keys who, what, outcome, timeframe, risk_reversal; validation script exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Message match
+  requirement: Headline contains the exact keyword phrase or promise token from the traffic source.
+  proof: '`python3 scripts/message_match.py --source $SESS/source_message.txt --page $SESS/page.html` exits 0 (token overlap
+    >=0.8 on headline)'
+  failure_tier: halt
+- id: CG-03
+  name: Single CTA discipline
+  requirement: Exactly one unique CTA destination across the page; CTA appears above the fold and at page end.
+  proof: '`grep -oE ''href="[^"]+"'' $SESS/page.html | grep cta | sort -u | wc -l` == 1; DOM assert `python3 scripts/cta_positions.py
+    $SESS/page.html` exits 0'
+  failure_tier: halt
+- id: CG-04
+  name: Proof density
+  requirement: '>=3 distinct proof elements (testimonial w/ name+role, metric with source, logo row, or case reference) within
+    the first 2 scroll-depths.'
+  proof: '`python3 scripts/proof_density.py $SESS/page.html --min 3 --within-viewports 2` exits 0'
+  failure_tier: degrade
+- id: CG-05
+  name: Objection coverage
+  requirement: FAQ or objection block addresses the top 3 objections listed in offer.yaml, each with a concrete answer.
+  proof: '`python3 -c "import yaml;o=yaml.safe_load(open(''$SESS/offer.yaml''));assert len(o.get(''objections'',[]))>=3"`
+    AND each objection string found in page text via `grep -F`'
+  failure_tier: degrade
+- id: CG-06
+  name: Form friction audit
+  requirement: Form fields <=5 unless offer.yaml justifies more; every field labeled; no placeholder-only labels.
+  proof: '`python3 scripts/form_audit.py $SESS/page.html --max-fields 5` exits 0'
+  failure_tier: halt
+- id: CG-07
+  name: Performance budget
+  requirement: Page weight <=1.5MB total, LCP element renders <=2.5s on throttled profile, zero render-blocking third-party
+    scripts without defer/async.
+  proof: '`python3 scripts/perf_budget.py $SESS/page.html --max-bytes 1572864 --max-lcp 2.5` exits 0 and writes $SESS/proof/perf.json'
+  failure_tier: degrade
+- id: CG-08
+  name: Mobile layout proof
+  requirement: Viewport 390x844 screenshot shows no horizontal overflow and CTA visible without scrolling on load.
+  proof: $SESS/proof/mobile.png exists (width 390); `python3 scripts/overflow_check.py $SESS/page.html --viewport 390x844`
+    exits 0
+  failure_tier: halt
+- id: CG-09
+  name: Accessibility floor
+  requirement: Contrast >=4.5:1 on body text, all images alt-tagged, form errors announced, focus order linear.
+  proof: '`python3 scripts/a11y_floor.py $SESS/page.html` exits 0 (axe-core subset, zero critical violations)'
+  failure_tier: halt
+- id: CG-10
+  name: Analytics wiring
+  requirement: Declared events (view, cta_click, form_submit) fire with correct names in a headless run.
+  proof: '`python3 scripts/events_probe.py $SESS/page.html --expect view,cta_click,form_submit` exits 0 and writes $SESS/proof/events.json'
+  failure_tier: halt
+- id: CG-11
+  name: SEO/social card
+  requirement: Title, meta description, og:image, and canonical tag present and non-duplicated.
+  proof: '`grep -c ''<link rel="canonical"'' $SESS/page.html` == 1; `python3 scripts/social_card.py $SESS/page.html` exits
+    0'
+  failure_tier: degrade
+- id: CG-12
+  name: Proof packet seal
+  requirement: HTML, offer, perf and event proofs hashed into sealed packet.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0 covering page.html, offer.yaml, perf.json, events.json, mobile.png'
+  failure_tier: halt
+definition_of_done:
+- One CTA destination, message-matched headline, and locked offer — verified by scripts, not review.
+- Performance and mobile proofs on disk and within budget.
+- Analytics events fire with declared names in the probe run.
+- Zero critical a11y violations; form friction within budget or justified in writing.
+- Proof packet sealed; any degrade-tier waiver recorded in $SESS/proof/waivers.md with owner.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: degrade
+    CG-05: degrade
+    CG-06: halt
+    CG-07: degrade
+    CG-08: halt
+    CG-09: halt
+    CG-10: halt
+    CG-11: degrade
+    CG-12: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/landing-page-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/landing-page-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.landing
+- GL-OD-conversion
+- offer-testing.page

@@ -1,0 +1,137 @@
+harness_id: hC-10-brand-identity-session
+harness_name: Brand Identity Goal Harness
+session_type: brand-identity-session
+coordinate_space:
+  levels:
+  - L4
+  - L5
+  diamonds:
+  - D2
+  - D3
+  bms_modes:
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_brand_identity_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+- D3
+bms_bias: A2-A3 preferred for creative divergence; A1 for token export; A4 only with approval
+identity_lock:
+  startup_phrase: 'Brand identity mode: sortable in 3 seconds, consistent in 3 years, veto authority respected.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L5-D3-A3'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_brand_identity(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Platform & Positioning
+  gates:
+  - id: '1.1'
+    requirement: 'Brand platform documented: mission, values, personality sliders, and anti-traits (what the brand
+      never does)'
+    proof: artifacts/brand/<slug>/platform.md with all four sections; anti-traits list non-empty
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Competitive visual audit: 10 competitors grid-captured and pattern-mapped to find the open visual
+      lane'
+    proof: artifacts/brand/<slug>/competitive/ with 10 captures + patterns.md naming the claimed differentiation
+      lane
+    failure_tier: halt
+  - id: '1.3'
+    requirement: '3-second sortability test: brand artifacts distinguishable from the competitive set at thumbnail
+      size'
+    proof: 'sortability-test note: reviewer, method (thumbnail grid shuffle), result with misidentification count'
+    failure_tier: degrade
+- category: Identity System
+  gates:
+  - id: '2.1'
+    requirement: 'Logo usage rules specified: clearspace formula, minimum sizes (px and print), forbidden treatments'
+    proof: logo-rules section in artifacts/brand/<slug>/guidelines.md with clearspace diagram + misuse gallery
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'Color system role-assigned: primary/secondary/accent/semantic colors with tested foreground-background
+      pairs'
+    proof: color table with role + hex + token name; pair-contrast results all >= 4.5:1 for text pairs (script output
+      attached)
+    failure_tier: halt
+  - id: '2.3'
+    requirement: 'Type system complete: primary + secondary faces, full scale, and licensed fallback stack for web/email/system'
+    proof: 'type section in guidelines.md: scale table + fallback stacks + license file paths under assets/fonts/'
+    failure_tier: degrade
+  - id: '2.4'
+    requirement: 'Voice and tone table: 4+ dimensions with do/don''t example pairs drawn from real brand surfaces'
+    proof: voice table in guidelines.md; each dimension has a quoted do-example and don't-example
+    failure_tier: degrade
+  - id: '2.5'
+    requirement: 'Imagery/art-direction style guide: subject matter, treatment, color grading, and banned clichés'
+    proof: imagery section with 3 on-style reference images (local paths) and an explicit banned-list
+    failure_tier: degrade
+- category: Operationalization
+  gates:
+  - id: '3.1'
+    requirement: 'Asset inventory with naming convention: every logo/color/type asset versioned and locatable'
+    proof: 'artifacts/brand/<slug>/asset-manifest.yaml: path + sha256 + variant tags per asset; naming regex stated
+      and conforming'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: Brand tokens exported to the canonical token source (tokens/tokens.json) without duplicating existing
+      keys
+    proof: '`git diff tokens/tokens.json` shows brand.* tier additions; `node tokens/validate.mjs` exit 0'
+    failure_tier: halt
+  - id: '3.3'
+    requirement: Brand guardian (Theo) veto review completed with verdict recorded
+    proof: artifacts/brand/<slug>/theo-verdict.md with pass/veto + specific revision notes if vetoed
+    failure_tier: halt
+  - id: '3.4'
+    requirement: Pre-publish brand checklist produced for downstream artifact creators
+    proof: checklist artifact with the 6 scorecard dimensions each mapped to a verifiable check
+    failure_tier: degrade
+definition_of_done:
+- All 12 capability gates passed with artifacts under artifacts/brand/<slug>/
+- 'Primary objective achieved: operational brand system — guidelines + tokens + asset manifest, not just moodboards'
+- Theo verdict on file; token export validates clean
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '3.1'
+  - '3.2'
+  - '3.3'
+  degrade_gates:
+  - '1.3'
+  - '2.3'
+  - '2.4'
+  - '2.5'
+  - '3.4'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every brand-identity-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-FS
+- GL-VQ

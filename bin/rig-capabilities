@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""rig-capabilities CLI — manage the canonical capability store.
+
+Commands:
+  stats                                   counts by kind/source + install ledger
+  reindex                                 rescan repo + all external roots
+  search <query> [--kind K] [--limit N]   search every harness root
+  list [--kind K] [--source S] [--limit N]
+  get <id>                                print metadata + content head
+  add <id> --kind K --path P [--overwrite]   canonicalize an asset into the repo
+  install <id> --harness H [--force]      copy canonical asset into a harness root
+  wire [--apply|--verify]                 wire the MCP server into all harnesses
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from rig_capabilities.catalog import KINDS, Repo  # noqa: E402
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(prog="rig-capabilities", description=__doc__,
+                                 formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    sub.add_parser("stats")
+    sub.add_parser("reindex")
+
+    p = sub.add_parser("search")
+    p.add_argument("query")
+    p.add_argument("--kind", choices=KINDS)
+    p.add_argument("--limit", type=int, default=20)
+
+    p = sub.add_parser("list")
+    p.add_argument("--kind", choices=KINDS)
+    p.add_argument("--source")
+    p.add_argument("--limit", type=int, default=100)
+
+    p = sub.add_parser("get")
+    p.add_argument("id")
+
+    p = sub.add_parser("add")
+    p.add_argument("id")
+    p.add_argument("--kind", required=True, choices=KINDS)
+    p.add_argument("--path", required=True)
+    p.add_argument("--overwrite", action="store_true")
+
+    p = sub.add_parser("install")
+    p.add_argument("id")
+    p.add_argument("--harness", required=True,
+                   choices=["claude", "codex", "hermes", "agents", "omp"])
+    p.add_argument("--force", action="store_true")
+
+    p = sub.add_parser("wire")
+    p.add_argument("--apply", action="store_true")
+    p.add_argument("--verify", action="store_true")
+
+    args = ap.parse_args()
+
+    if args.cmd == "wire":
+        cmd = [sys.executable, str(REPO_ROOT / "wire" / "wire.py")]
+        if args.apply:
+            cmd.append("--apply")
+        if args.verify:
+            cmd.append("--verify")
+        return subprocess.call(cmd)
+
+    repo = Repo(REPO_ROOT)
+
+    if args.cmd == "stats":
+        print(json.dumps(repo.stats(), indent=1))
+    elif args.cmd == "reindex":
+        doc = repo.build_index()
+        print(f"indexed {doc['count']} capabilities -> {repo.index_path}")
+    elif args.cmd == "search":
+        rows = repo.search(args.query, kind=args.kind, limit=args.limit)
+        for r in rows:
+            desc = r["description"][:90].replace("\n", " ")
+            print(f"{r['score']:>4}  {r['kind']:<8} {r['id']:<44} [{r['source']}] {desc}")
+        print(f"-- {len(rows)} results")
+    elif args.cmd == "list":
+        doc = repo.load_index()
+        rows = [a for a in doc["assets"]
+                if (not args.kind or a["kind"] == args.kind)
+                and (not args.source or a["source"] == args.source)]
+        for a in rows[:args.limit]:
+            print(f"{a['kind']:<8} {a['id']:<44} [{a['source']}]")
+        print(f"-- {len(rows)} total, {min(len(rows), args.limit)} shown")
+    elif args.cmd == "get":
+        matches = repo.resolve(args.id)
+        if not matches:
+            print(f"unknown capability: {args.id}", file=sys.stderr)
+            return 1
+        for m in matches:
+            print(f"== {m['kind']}/{m['id']} [{m['source']}] sha={m['sha']}")
+            print(f"   {m['path']}")
+            print(f"   {m['description']}")
+    elif args.cmd == "add":
+        print(json.dumps(repo.add(args.id, args.kind, args.path,
+                                  overwrite=args.overwrite), indent=1))
+    elif args.cmd == "install":
+        try:
+            print(json.dumps(repo.install(args.id, args.harness, force=args.force),
+                             indent=1))
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

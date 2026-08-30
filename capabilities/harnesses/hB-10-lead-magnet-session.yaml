@@ -1,0 +1,137 @@
+harness_id: hB-10-lead-magnet
+harness_name: Lead Magnet Session Harness
+session_type: lead-magnet-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L4-D4-A3-I6
+primary_diamonds:
+- D4
+- D2
+bms_bias: A3
+identity_lock:
+  startup_phrase: I am the Lead Magnet operator. The asset must be worth an email address on its own — specific enough to
+    use in 10 minutes, impossible to get from a search result.
+  identity_gates:
+  - Confirm the magnet format (checklist / template / calculator / swipe file / mini-guide) matches the audience’s job-to-be-done.
+  - Confirm the post-download nurture path is named; a magnet without a follow-up sequence is a halt.
+  - Refuse recycled blog content repackaged as a 'guide' — the asset must contain net-new utility.
+  - Confirm the delivery mechanism (email gate / direct) and its tracking are declared.
+capability_gates:
+- id: CG-01
+  name: JTBD lock
+  requirement: Job-to-be-done statement and the 10-minute-use promise written and locked.
+  proof: $SESS/jtbd.yaml parses with keys job, ten_minute_promise; validator exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Utility test
+  requirement: Asset contains >=1 fillable/reusable artifact (template fields, formulas, checklists) — not prose only.
+  proof: '`grep -cE ''\[ \]|\{\{|<input|\bformula:'' $SESS/asset.md` >= 3 OR $SESS/asset.xlsx exists with `file` confirmation'
+  failure_tier: halt
+- id: CG-03
+  name: Specificity screen
+  requirement: Every section names a concrete tool, number, step, or example; zero 'it depends' sections without decision
+    criteria.
+  proof: '`python3 scripts/specificity.py $SESS/asset.md` exits 0 (genericity lint)'
+  failure_tier: degrade
+- id: CG-04
+  name: Title promise match
+  requirement: Title’s promise is verifiably delivered inside the asset; promise words mapped to sections.
+  proof: '`python3 scripts/promise_map.py $SESS/title.txt $SESS/asset.md` exits 0'
+  failure_tier: halt
+- id: CG-05
+  name: Brand & layout proof
+  requirement: Rendered PDF uses declared fonts/colors, has cover page, page numbers, and footer CTA; file size <10MB.
+  proof: $SESS/asset.pdf exists; `pdfinfo $SESS/asset.pdf | grep -c Pages` == 1; size check `stat -f%z $SESS/asset.pdf` <
+    10485760
+  failure_tier: degrade
+- id: CG-06
+  name: Gate form alignment
+  requirement: Opt-in form asks <=3 fields; form copy states exactly what arrives and when; privacy link present.
+  proof: '`python3 scripts/form_audit.py $SESS/gate.html --max-fields 3` exits 0; `grep -ci privacy $SESS/gate.html` >= 1'
+  failure_tier: halt
+- id: CG-07
+  name: Delivery path test
+  requirement: 'End-to-end test: submit test email -> asset link received -> link downloads the exact hashed file.'
+  proof: '`python3 scripts/delivery_e2e.py --form $SESS/gate.html --expect-sha $(sha256sum $SESS/asset.pdf|cut -d'' '' -f1)`
+    exits 0 and writes $SESS/proof/delivery.json'
+  failure_tier: halt
+- id: CG-08
+  name: Nurture handoff
+  requirement: Nurture sequence ID referenced in the magnet’s final page and in the ESP tag map.
+  proof: '`grep -c $(python3 -c "import yaml;print(yaml.safe_load(open(''$SESS/jtbd.yaml''))[''nurture_id''])") $SESS/asset.md`
+    >= 1 AND tag map entry in $SESS/esp_tags.yaml'
+  failure_tier: degrade
+- id: CG-09
+  name: Tracking events
+  requirement: Events magnet_view, magnet_submit, magnet_download declared and firing in probe.
+  proof: '`python3 scripts/events_probe.py $SESS/gate.html --expect magnet_view,magnet_submit,magnet_download` exits 0'
+  failure_tier: degrade
+- id: CG-10
+  name: Proof packet seal
+  requirement: Asset, gate, delivery proof, and event proof hashed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Asset passes the utility test with reusable artifacts, not prose alone.
+- Title promise machine-mapped to delivered sections.
+- End-to-end delivery proven with hash-identical file download.
+- Gate form within friction budget; nurture handoff wired both directions.
+- Proof packet sealed.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: degrade
+    CG-04: halt
+    CG-05: degrade
+    CG-06: halt
+    CG-07: halt
+    CG-08: degrade
+    CG-09: degrade
+    CG-10: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/lead-magnet-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/lead-magnet-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.leadmagnet
+- GL-OD-capture
+- lifecycle-mapping.magnet

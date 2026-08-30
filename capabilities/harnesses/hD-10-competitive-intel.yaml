@@ -1,0 +1,97 @@
+harness_id: hD-10-competitive-intel
+harness_name: Competitive Intel Goal Harness
+session_type: gtm-competitive-intel
+coordinate_space:
+  levels: [L1, L2, L3]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P]
+harness_tuple: H_compintel(competitor_set, feature_matrix, pricing_snap, review_mining, tos_compliance, deltas, battlecard, refresh)
+primary_diamonds: [D2]
+bms_bias: "A1 for scraping compliance and snapshot integrity; A2 for extraction; A3 for positioning synthesis; A4 never — distribution is gated"
+identity_lock:
+  startup_phrase: "Competitive intel session. Public data only, snapshots hashed, every comparison traceable. Intel that can't be sourced can't be shipped."
+  gates:
+    - id: "0.1"
+      requirement: "Competitor set locked for this run: named list with inclusion rationale; no mid-run scope creep without re-lock"
+      proof: "artifacts/compintel/<run>/competitors.yaml — >= 2 competitors each with rationale; file hash recorded in session log"
+    - id: "0.2"
+      requirement: "Compliance posture declared: public pages and permitted APIs only; robots.txt and ToS check per domain"
+      proof: "artifacts/compintel/<run>/compliance.json — per domain: robots_ok: true, method (public_web | api | review_export)"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L3; D2-D3; A1-A3)"
+      proof: "coordinate block in ~/.hermes/jake/compintel/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_compintel declared with all 8 components"
+      proof: "session log contains 'H_compintel(' line"
+capability_gates:
+  - category: "Evidence Collection"
+    gates:
+      - id: "1.1"
+        requirement: "Feature matrix built from official docs/pages only: each cell carries a source URL and scraped_at timestamp"
+        proof: "artifacts/compintel/<run>/feature_matrix.json — every non-null cell has source_url and scraped_at; jq '[.. | .source_url? // empty] | length >= 20' true"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Pricing snapshot captured live: pricing pages archived as local snapshots with hashes; price points extracted into structured data"
+        proof: "artifacts/compintel/<run>/pricing_snapshots/ per competitor; shasum -a 256 -c pricing.sha256 exit 0; pricing.json values trace to snapshots"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Review mining quantified: G2/Capterra themes with review counts and date range; no theme from fewer than 5 reviews"
+        proof: "artifacts/compintel/<run>/reviews.json — per theme: count >= 5, date_range, platform; raw review hashes stored"
+        failure_tier: degrade
+      - id: "1.4"
+        requirement: "Change detection vs prior snapshot: diff of features/pricing since last run computed and highlighted"
+        proof: "python3 scripts/compintel_diff.py --prev artifacts/compintel/prev/ --cur artifacts/compintel/<run>/ --out diff.md exit 0 (skipped with note on first-ever run)"
+        failure_tier: degrade
+  - category: "Analysis Integrity"
+    gates:
+      - id: "2.1"
+        requirement: "Positioning deltas written as falsifiable comparisons: 'they have X, we have Y' with sources on both sides"
+        proof: "artifacts/compintel/<run>/deltas.md — every delta row cites both competitor source and internal source"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "No strawman rule: competitor capabilities stated at full strength per their own docs, weaknesses cited from reviews not assumed"
+        proof: "deltas.md weakness rows each cite a review or changelog source; scripts/strawman_lint.py exit 0"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Uncertainty tagged: inferred competitor strategy labeled [INFERENCE] vs documented [FACT]"
+        proof: "deltas.md and battlecard carry tag per claim; scripts/uncertainty_lint.py exit 0"
+        failure_tier: halt
+  - category: "Battlecard Production"
+    gates:
+      - id: "3.1"
+        requirement: "Battlecard artifact produced per competitor in the battlecard-library format: overview, strengths, weaknesses, objection responses, landmines"
+        proof: "artifacts/compintel/<run>/battlecards/<competitor>.md contains all 5 required sections; scripts/battlecard_lint.py exit 0"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Objection responses grounded: each 'why us' answer cites a verifiable differentiator, not a superlative"
+        proof: "battlecards objection rows each cite source or internal proof asset; grep -c 'because' >= 3 per battlecard"
+        failure_tier: degrade
+      - id: "3.3"
+        requirement: "Distribution gated: battlecards marked internal-only until owner approval; external use requires Gate-D"
+        proof: "battlecard frontmatter distribution: internal; any external share logged with APPROVE <run_id> in gate_d.log"
+        failure_tier: stop
+      - id: "3.4"
+        requirement: "Refresh cadence set: next refresh date and change-triggers (pricing change, major launch) recorded"
+        proof: "artifacts/compintel/<run>/refresh.yaml with next_refresh date and >= 2 trigger conditions"
+        failure_tier: degrade
+definition_of_done:
+  - "Feature matrix, pricing snapshots, review mining, and deltas all present with sources and timestamps"
+  - "Battlecards produced per competitor, lint-clean, distribution-marked"
+  - "Compliance log shows public-only methods for every domain touched"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (shipped | partial | blocked), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "2.1", "2.2", "2.3", "3.1"]
+  degrade_gates: ["1.3", "1.4", "3.2", "3.4"]
+  stop_gates: ["3.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a battlecard claim proven wrong in the field triggers same-week refresh of that competitor"
+final_rule:
+  - "No intel ships from a method that wouldn't survive a ToS review."
+  - "Competitors are quoted at full strength; strawmen are a stop-worthy defect."
+  - "Battlecards are internal by default; external distribution is Gate-D."
+  - "Every competitive intel session leaves the system stronger than it found it."
+governs_loops: [GL-OD-compintel, competitive-intel, battlecard-library, battlecard-system, market-signal-tracker]

@@ -1,0 +1,127 @@
+harness_id: hC-05-design-token-build-session
+harness_name: Design Token Build Goal Harness
+session_type: design-token-build-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  - L5
+  diamonds:
+  - D1
+  bms_modes:
+  - A1
+  - A2
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_design_token_build_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D1
+bms_bias: A1-A2 preferred; A3 permitted for taxonomy design; A4 only with approval
+identity_lock:
+  startup_phrase: 'Token build mode: single source of truth, deterministic builds, consumers never hardcode.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L3-D1-A1'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_design_token_build(identity, gates, dod, failure_protocol,
+      self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Source of Truth
+  gates:
+  - id: '1.1'
+    requirement: 'Token source declared: exactly one canonical tokens file (tokens/tokens.json); no parallel token
+      stores'
+    proof: '`find . -name ''tokens*.json'' -not -path ''./node_modules/*''` returns exactly the canonical path (or
+      documented legacy stores with removal dates)'
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Token schema validation passes: every token has value, type, and tier (global/alias/component)'
+    proof: '`node tokens/validate.mjs tokens/tokens.json` exit 0; validation output captured in session log'
+    failure_tier: halt
+  - id: '1.3'
+    requirement: 'Naming convention enforced: tier-prefixed dot-paths (color.global.*, color.alias.*, space.*, font.*)
+      with no collisions'
+    proof: validator duplicate/collision check exit 0; naming rules documented in tokens/README.md
+    failure_tier: degrade
+- category: Build & Outputs
+  gates:
+  - id: '2.1'
+    requirement: 'Token build runs deterministically: two consecutive builds produce byte-identical outputs'
+    proof: '`node tokens/build.mjs && sha256sum dist/tokens/* > /tmp/t1 && node tokens/build.mjs && sha256sum -c
+      /tmp/t1` exit 0'
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'All declared output targets generated: CSS custom properties, Tailwind config, and platform exports
+      as scoped'
+    proof: dist/tokens/ contains tokens.css + tailwind.tokens.js (+ ios/android if scoped); each file's token count
+      equals source count in build log
+    failure_tier: halt
+  - id: '2.3'
+    requirement: 'Generated-file diff reviewed: every change traces to a source token change'
+    proof: '`git diff dist/tokens/` reviewed; changelog.md maps each output delta to source token path'
+    failure_tier: degrade
+  - id: '2.4'
+    requirement: Token snapshot tests pass (name stability + value pinning for semantic tokens)
+    proof: '`npm test -- tokens` exit 0; snapshot diff empty or updated with justification in changelog'
+    failure_tier: halt
+- category: Integration & Versioning
+  gates:
+  - id: '3.1'
+    requirement: 'Consumer smoke test: at least one real component switched from hardcoded values to built tokens
+      and renders identically'
+    proof: before/after screenshot pair in artifacts/token-build/<slug>/; visual diff tool reports no unintended
+      change
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Residual hardcoded-value sweep: consumers scanned for literals that duplicate token values'
+    proof: '`grep -rEo ''#[0-9a-fA-F]{6}'' src --include=''*.tsx'' --include=''*.css''` results all matched to tokens
+      or exception-listed'
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: Token package version bumped with changelog; publish is local-only (registry push requires Gate-D)
+    proof: tokens/CHANGELOG.md entry with semver bump rationale; `git tag tokens-v<X.Y.Z>` created; no push performed
+    failure_tier: degrade
+definition_of_done:
+- All 10 capability gates passed with deterministic-build proof captured
+- 'Primary objective achieved: canonical tokens build to all declared targets and integrate into a live component'
+- Two consecutive builds byte-identical (sha256 match recorded)
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '2.4'
+  - '3.1'
+  degrade_gates:
+  - '1.3'
+  - '2.3'
+  - '3.2'
+  - '3.3'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every design-token-build-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-SH

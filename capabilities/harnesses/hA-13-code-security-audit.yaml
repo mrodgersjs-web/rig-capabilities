@@ -1,0 +1,110 @@
+harness_id: hA-13-code-security-audit
+harness_name: Code Security Audit Session Goal Harness
+session_type: code-security-audit-session
+coordinate_space:
+  levels: [L2, L3, L4, L5]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_secaudit(threat_surface, scanner_evidence, manual_taint, findings_register, improvement)
+primary_diamonds: [D1, D2, D3]
+bms_bias: "A1 for scans and verification; A2 for fix proposals; A3 for report writing; A4 forbidden — findings never leave the session without Gate-D"
+identity_lock:
+  startup_phrase: "I assume the input is hostile and the dependency is compromised until proven otherwise."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the audit scope pinned: repo paths in scope, trust boundaries declared (public endpoints, auth paths, file handling, deserialization), and audit type (full vs diff-scoped)"
+      proof: "Session log contains path list, boundary list, and audit type"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: scanner-plus-manual (never scanner-only), every finding reproduced or marked theoretical, severity with exploit path, no silent severity-downgrades"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first scan"
+      proof: "Session log line 'COORD: L2-L5 x D1-D3 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_secaudit(threat_surface, scanner_evidence, manual_taint, findings_register, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Surface Mapping"
+    gates:
+      - id: "1.1"
+        requirement: "Attack surface enumerated: all entry points listed — HTTP routes, CLI args, file parsers, webhook handlers, message consumers, IPC — with auth requirements per entry"
+        proof: ".rig/security/surface.md with entry-point table (path | handler file:line | auth requirement | input types)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Trust boundaries drawn: where untrusted data crosses into privileged operations (DB, filesystem, shell, template render, deserialization) is mapped as boundary list"
+        proof: ".rig/security/boundaries.md; each boundary names source-of-untrusted-input and sink"
+        failure_tier: halt
+  - category: "Scanner Evidence"
+    gates:
+      - id: "2.1"
+        requirement: "SAST run: semgrep with the repo-appropriate rulesets (p/owasp-top-ten + language pack) over in-scope paths; raw JSON report saved"
+        proof: ".rig/security/semgrep.json exists, parses with jq, and its ruleset list is recorded"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Dependency/SCA scan: pip-audit / pnpm audit / govulncheck / cargo audit + container scan (trivy/grype) if a Dockerfile exists; results saved with severity counts"
+        proof: ".rig/security/sca.txt with counts per severity; Dockerfile scan report if applicable"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Secret sweep: gitleaks detect (git history included for full audits) + trufflehog on the working tree; every hit verified live vs revoked vs false-positive"
+        proof: ".rig/security/secrets.txt with per-hit verdict; a live credential hit triggers stop tier immediately"
+        failure_tier: stop
+      - id: "2.4"
+        requirement: "IaC & config scan (when present): checkov/trivy config over Terraform, k8s manifests, Dockerfiles — privileged containers, 0.0.0.0 bindings, public buckets flagged"
+        proof: ".rig/security/iac-scan.txt or a 'no IaC in scope' statement backed by file search"
+        failure_tier: degrade
+  - category: "Manual Taint Review"
+    gates:
+      - id: "3.1"
+        requirement: "Top-boundary manual taint: for the 5 riskiest boundaries from gate 1.2, a human-style source→sink trace performed (read the code, name the sanitization or its absence); scanners don't substitute"
+        proof: ".rig/security/taint-traces.md with 5 traces: source | path | sanitizers | sink | verdict"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "AuthN/AuthZ logic review: session/JWT handling, permission checks on mutating endpoints, and object-level authorization (IDOR) manually reviewed on the auth path and 3 sampled endpoints"
+        proof: ".rig/security/authz-review.md with per-endpoint verdicts including one negative test case each"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Injection-class sweep: raw SQL concatenation, shell command construction, template eval, SSRF-reachable URL fetchers, and unsafe deserialization (pickle, yaml.load, unserialize) grepped and each hit dispositioned"
+        proof: ".rig/security/injection-sweep.txt with grep outputs + per-hit disposition"
+        failure_tier: halt
+  - category: "Findings Register"
+    gates:
+      - id: "4.1"
+        requirement: "Findings register complete: every scanner hit and manual finding deduped into a register with severity (CVSS or critical/high/medium/low), exploit path, affected file:line, and reproduction status (reproduced / theoretical)"
+        proof: ".rig/security/FINDINGS.md where each entry has all six fields; dedup count stated vs raw scanner count"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Severity honesty: no finding downgraded without a written exploitability argument; reproduced findings cannot be graded below medium without human sign-off"
+        proof: "FINDINGS.md 'downgrade justifications' section; sign-off names recorded where used"
+        failure_tier: halt
+      - id: "4.3"
+        requirement: "Fix-or-track disposition: every critical/high has either a landed fix (with regression test) or a tracked ticket with owner + due date; nothing critical/high is 'noted' and dropped"
+        proof: "FINDINGS.md disposition column; fix entries point to commit SHAs, tracked entries point to ticket IDs"
+        failure_tier: halt
+      - id: "4.4"
+        requirement: "Improvement entry written: one systemic class (missing middleware, absent default, insecure-by-default library pattern) that would prevent future findings"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-13-code-security-audit"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events"
+  - "FINDINGS.md complete with dedup, severities, repro status, and dispositions"
+  - "Manual taint traces exist for the 5 riskiest boundaries — scanner output alone never closes the audit"
+  - "All critical/high findings fixed-with-test or tracked with owner+date"
+  - "One improvement entry naming a systemic class"
+  - "Identity closure: coordinate, audit verdict (clean / findings-tracked / blocked), next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "2.1", "2.2", "3.1", "3.2", "3.3", "4.1", "4.2", "4.3", "4.4"]
+  degrade_gates: ["2.4"]
+  stop_gates: ["2.3"]
+  notes: "a live (unrevoked) credential or a reproduced critical finding is a stop: escalate to a human before any further action, and findings never leave the session without Gate-D"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same vulnerability class recurs 3+ times → custom semgrep rule, middleware default, or dependency policy proposed to kill the class"
+final_rule:
+  - "Scanners find candidates; only traces prove vulnerabilities."
+  - "No severity downgrade without an exploitability argument."
+  - "Critical and high never close as 'noted'."
+  - "No improvement entry, no session complete."
+  - "Every code-security-audit session leaves the system stronger than it found it."
+governs_loops: [GL-SI, GL-VQ, GL-RI]

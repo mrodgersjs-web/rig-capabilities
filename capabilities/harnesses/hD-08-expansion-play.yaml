@@ -1,0 +1,101 @@
+harness_id: hD-08-expansion-play
+harness_name: Expansion Play Goal Harness
+session_type: gtm-expansion-play
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_expansion(eligibility, signals, play, champion, roi_narrative, crm_records, forecast, approval)
+primary_diamonds: [D2, D1]
+bms_bias: "A1 for eligibility and signal checks; A2 for play selection and ROI math; A3 for narrative drafting; A4 never — customer contact is Gate-D"
+identity_lock:
+  startup_phrase: "Expansion play session. Expansion is earned by demonstrated value. Upsell without usage evidence is spam with a CRM entry."
+  gates:
+    - id: "0.1"
+      requirement: "Expansion doctrine loaded (expansion-playbook, expansion-plays, usage-to-value-map read this session)"
+      proof: "grep -lq 'expansion' ~/.claude/skills/expansion-playbook/SKILL.md && echo LOADED in session log"
+    - id: "0.2"
+      requirement: "Operating mode declared: analysis + drafts only; zero customer contact without approval"
+      proof: "session log line 'MODE=draft-only' in ~/.hermes/jake/expansion/session-<ts>.log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A3)"
+      proof: "coordinate block parseable by jq '.coordinate'"
+    - id: "0.4"
+      requirement: "Harness tuple H_expansion declared with all 8 components"
+      proof: "session log contains 'H_expansion(' line"
+capability_gates:
+  - category: "Eligibility & Signals"
+    gates:
+      - id: "1.1"
+        requirement: "Eligible account list produced by reproducible query: seat utilization, feature adoption, plan ceiling proximity, tenure"
+        proof: "artifacts/expansion/<run>/eligibility_query.sql + eligible.json; re-run hash matches; jq 'length >= 1' true or explicit empty-cohort note"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Expansion signal verified per account: usage metric crosses the declared threshold with the actual series attached"
+        proof: "artifacts/expansion/<run>/signals.jsonl — per account: metric, threshold, observed_value, series_id; all observed_value >= threshold"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Suppression applied: accounts with open churn-risk flags, unresolved escalations, or in-flight negotiations excluded with reason codes"
+        proof: "artifacts/expansion/<run>/suppressed.json — every excluded account has reason_code from declared enum"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Champion identified per account: named contact with engagement evidence, or account is downgraded to 'nurture' track"
+        proof: "artifacts/expansion/<run>/champions.json — per account: contact_id + last_engagement date, or track: nurture"
+        failure_tier: degrade
+  - category: "Play & Narrative"
+    gates:
+      - id: "2.1"
+        requirement: "Play selected from the expansion playbook by signal type, with the selection rule recorded"
+        proof: "artifacts/expansion/<run>/play_selection.json — per account: play_id + selection_rule; every play_id exists in expansion-playbook index"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "ROI narrative computed from the account's own usage data (usage-to-value map): hours saved, seats utilized, features adopted — with numbers, not adjectives"
+        proof: "artifacts/expansion/<run>/roi/<account>.md — every value claim cites a metric from signals.jsonl; grep -c 'hours\\|seats\\|%\\|\\$' >= 3 per file"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Proposal draft exists per account with concrete ask: tier, seat count, or module — and the price is stated, not implied"
+        proof: "artifacts/expansion/<run>/drafts/<account>.md contains explicit ask line with amount; scripts/ask_scan.py exit 0"
+        failure_tier: degrade
+      - id: "2.4"
+        requirement: "Objection pre-mortem: top 3 likely objections per segment with prepared responses"
+        proof: "artifacts/expansion/<run>/objections.md — >= 3 objections with responses per represented segment"
+        failure_tier: degrade
+  - category: "Pipeline & Approval"
+    gates:
+      - id: "3.1"
+        requirement: "CRM opportunity records created per account with play_id, amount, stage, and next_step"
+        proof: "artifacts/expansion/<run>/opportunities.json — Twenty API record ids; count equals play-track account count"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Forecast impact computed and logged: pipeline delta by close-month, confidence-weighted"
+        proof: "artifacts/expansion/<run>/forecast_delta.json with per-month expected_value and weighting method stated"
+        failure_tier: degrade
+      - id: "3.3"
+        requirement: "Gate-D approval before any customer-facing outreach: typed APPROVE <run_id> per account batch"
+        proof: "artifacts/expansion/<run>/gate_d.log APPROVE lines; absent them all drafts remain arm: false"
+        failure_tier: stop
+      - id: "3.4"
+        requirement: "Playbook feedback loop: session learnings (signal quality, objection hits) appended to the expansion playbook log"
+        proof: "append to ~/.hermes/jake/expansion/playbook_feedback.jsonl with run_id and >= 1 learning"
+        failure_tier: degrade
+definition_of_done:
+  - "Eligible cohort reproducible; every play-track account has verified signals, matched play, ROI narrative, and CRM opportunity"
+  - "Suppressed accounts carry reason codes; nurture-track accounts carry champion-gap notes"
+  - "Drafts armed only with approval; forecast delta logged"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (plays-staged | partial | blocked), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "3.1"]
+  degrade_gates: ["1.4", "2.3", "2.4", "3.2", "3.4"]
+  stop_gates: ["3.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a signal threshold producing 3 consecutive dead plays is recalibrated"
+final_rule:
+  - "No expansion ask without usage evidence that crosses a declared threshold."
+  - "No ROI narrative built from adjectives; every value claim cites the account's own metrics."
+  - "No customer contact without typed Gate-D approval for this exact batch."
+  - "Every expansion play session leaves the system stronger than it found it."
+governs_loops: [GL-OD-expansion, expansion-playbook, expansion-plays, usage-to-value-map, capacity-modeling]

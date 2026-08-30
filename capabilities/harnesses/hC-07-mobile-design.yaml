@@ -1,0 +1,142 @@
+harness_id: hC-07-mobile-design-session
+harness_name: Mobile Design Goal Harness
+session_type: mobile-design-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_mobile_design_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+bms_bias: A1-A2 preferred; A3 permitted for platform-pattern exploration; A4 only with approval
+identity_lock:
+  startup_phrase: 'Mobile design mode: thumbs, safe areas, and dynamic type decide the layout — not desktop habits.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D2-A2'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_mobile_design(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Platform & Constraints
+  gates:
+  - id: '1.1'
+    requirement: 'Target platform(s) declared with guideline source: iOS HIG and/or Material 3, version pinned'
+    proof: artifacts/mobile/<slug>/platform.md naming guideline doc + version; every pattern decision cites it
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Device matrix declared: minimum 3 sizes including smallest supported and largest'
+    proof: device matrix table in platform.md; screenshots exist for every matrix row
+    failure_tier: halt
+  - id: '1.3'
+    requirement: 'Safe-area insets respected: no interactive element inside notch/home-indicator zones'
+    proof: safe-area overlay screenshots in artifacts/mobile/<slug>/ showing content inside safe bounds on each
+      matrix device
+    failure_tier: halt
+- category: Touch & Ergonomics
+  gates:
+  - id: '2.1'
+    requirement: 'Touch targets meet minimums: 44x44pt (iOS) / 48x48dp (Android) including padding, spacing between
+      adjacent targets >= 8pt'
+    proof: 'measurement pass over comps: target-size table per screen in artifacts/mobile/<slug>/touch-audit.md;
+      zero sub-minimum targets or filed exceptions'
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'Thumb-zone analysis: primary actions in natural reach for one-handed use on the largest matrix
+      device'
+    proof: thumb-zone map overlay per key screen with primary-action placement marked and justified
+    failure_tier: degrade
+  - id: '2.3'
+    requirement: 'Gesture conflicts checked: no custom gesture collides with system gestures (edge swipe, home swipe,
+      long-press)'
+    proof: gesture inventory table in touch-audit.md mapping each custom gesture against the platform reserved list
+    failure_tier: degrade
+- category: Type, States & Resilience
+  gates:
+  - id: '3.1'
+    requirement: 'Dynamic type / font scaling verified: layouts survive largest accessibility text size without
+      truncation of critical content'
+    proof: screenshots at default + largest text size per key screen; truncation list empty or filed as findings
+    failure_tier: halt
+  - id: '3.2'
+    requirement: Dark mode variant designed for every screen using semantic tokens, not inverted hex
+    proof: dark captures in artifacts/mobile/<slug>/dark/ per screen; `grep` of styles shows semantic token usage
+      for surfaces
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: Offline, loading, empty, and error states designed for every data-driven screen
+    proof: states checklist per screen in artifacts/mobile/<slug>/states.md; missing states are explicit deferrals
+      with reason
+    failure_tier: halt
+  - id: '3.4'
+    requirement: 'Performance budget honored: hero images sized for device DPR, skeletons defined, no blocking web-font
+      flash plan documented'
+    proof: asset budget table (per-image KB vs budget) + skeleton spec in states.md
+    failure_tier: degrade
+- category: Evidence & Review
+  gates:
+  - id: '4.1'
+    requirement: 'Full capture set delivered: every screen x every matrix device x light/dark where applicable'
+    proof: capture manifest artifacts/mobile/<slug>/manifest.yaml with file path + sha256 per capture; count matches
+      matrix
+    failure_tier: halt
+  - id: '4.2'
+    requirement: 'Platform-fidelity review: no desktop-first patterns (hover-dependent affordances, tiny tap rows,
+      right-click menus) survive'
+    proof: '`grep` / checklist pass recorded in review section; any found pattern dispositioned in the decision
+      log'
+    failure_tier: degrade
+definition_of_done:
+- All 12 capability gates passed with capture manifest and hashes on disk
+- 'Primary objective achieved: platform-cited mobile design with complete states and ergonomics evidence'
+- Touch-target and safe-area audits show zero unfiled violations
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '1.3'
+  - '2.1'
+  - '3.1'
+  - '3.3'
+  - '4.1'
+  degrade_gates:
+  - '2.2'
+  - '2.3'
+  - '3.2'
+  - '3.4'
+  - '4.2'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every mobile-design-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-VQ

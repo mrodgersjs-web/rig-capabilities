@@ -1,0 +1,105 @@
+harness_id: mh-06-install-verification-session
+harness_name: Install Verification Session Goal Harness
+session_type: install-verification-session
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D4]
+  bms_modes: [A1]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_installverify(asset, install_method, red_proof, seal, fleet_record)
+primary_diamonds: [D1, D4]
+bms_bias: "A1 exclusively — install verification is pure evidence work; A2/A3 forbidden (no prose substitutes for a red-path exit code); A4 forbidden — this session verifies global installs, it never performs outward fleet pushes without Gate-D"
+identity_lock:
+  startup_phrase: "I am the install verifier. An install I cannot break on purpose is an install I cannot trust."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and install target pinned: asset name, source path, install method (symlink or copy), and every destination directory declared before anything is linked or copied"
+      proof: "Session log line 'INSTALL: <asset> via <symlink|copy> to <dest...>'; destination list saved to .rig/install/destinations.txt"
+    - id: "0.2"
+      requirement: "Verification doctrine loaded: can-go-red proof is mandatory — a gate that only ever returns green is theater and blocks certification; every certification event is recorded to rig-memory-os"
+      proof: "Session preamble contains the phrases 'can-go-red' and 'install_certified'"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before any destination is touched"
+      proof: "Session log line of form 'COORD: L3-L4 x D1-D4 x A1 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_installverify(asset, install_method, red_proof, seal, fleet_record) declared with all five components named"
+      proof: "Session log contains the tuple declaration verbatim"
+capability_gates:
+  - category: "Source Integrity"
+    gates:
+      - id: "1.1"
+        requirement: "Source asset pinned by content hash: sha256 of every source file is computed before install; the source parses/compiles in place (YAML safe_load for harnesses, SKILL.md section check for skills)"
+        proof: "sha256sum over source files saved to .rig/install/source-hashes.txt; python3 parse assertion exits 0; both recorded"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Source carries its own proof bundle: the asset's done-test exists and currently passes against the source location (pre-install green baseline)"
+        proof: "bash -c <asset done-test> exit code 0 with output saved to .rig/install/pre-green.txt"
+        failure_tier: halt
+  - category: "Install Mechanics"
+    gates:
+      - id: "2.1"
+        requirement: "Install executed per declared method: symlink installs create links that resolve (readlink succeeds, target == source path); copy installs produce byte-identical destinations (sha256 match against 1.1 hashes)"
+        proof: "For symlink: readlink <dest> output equals source path, saved to .rig/install/link-check.txt. For copy: sha256sum of destinations matches source-hashes.txt line-for-line, saved to .rig/install/copy-check.txt"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "No clobber without record: any pre-existing file at a destination was either absent, identical, or archived before overwrite; surprise overwrites are forbidden"
+        proof: "Pre-install snapshot of destination directory listing vs post-install; overwritten paths each have an archive entry in .rig/install/clobber-archive/; python3 set assertion on the diff"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Discoverability check: the installed asset is reachable through the intended discovery surface — catalog row updated, or directory listing/glob over the install root finds it"
+        proof: "python3 -c globbing the install root for the asset name AND (if cataloged) json-loading the catalog asserting the row exists and points at the installed path; output in .rig/install/discovery.txt"
+        failure_tier: halt
+  - category: "Can-Go-Red Proof"
+    gates:
+      - id: "3.1"
+        requirement: "Post-install GREEN: the asset's done-test executes against the INSTALLED location and exits 0"
+        proof: "bash -c <done-test, cwd=installed location> exit code 0; output saved to .rig/install/post-green.txt"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Post-install RED proof: a planted break is applied to a COPY of the installed asset (or a temporary sabotage that is then reverted) and the same done-test MUST exit non-zero with an informative message; the red output and the revert are both verified"
+        proof: "Recorded triple in .rig/install/red-proof.txt: sabotage description | bash exit code (!= 0) with stderr captured | post-revert re-run exit code 0; a done-test that stays green under sabotage blocks certification"
+        failure_tier: stop
+      - id: "3.3"
+        requirement: "Substrate liveness: the MathExec substrate passes self-test this session, anchoring that planted-failure machinery is itself functional on this machine"
+        proof: "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py self-test exits 0 with 'SELF-TEST PASS' saved to .rig/install/mathexec.txt"
+        failure_tier: halt
+  - category: "Seal & Record"
+    gates:
+      - id: "4.1"
+        requirement: "Install record sealed: {name, path, sha256, green_exit, red_exit, red_message} written as the certification record and sealed via meta-proof-sealer (digest chained to predecessor)"
+        proof: ".rig/install/install-record.json contains all six fields; seal verification recomputes the digest from disk bytes and matches; seal output in .rig/install/seal.txt"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Certification event recorded to rig-memory-os: install_certified on pass or install_blocked on failure, including the red-path exit code as evidence"
+        proof: "rig-memory-os memory.record_event(kind=\"install_certified\"|\"install_blocked\", name=<asset>, red_exit=<code>, seal_digest=<hash>) returns an event id recalled byte-for-byte; round-trip in .rig/install/memory-roundtrip.txt"
+        failure_tier: halt
+      - id: "4.3"
+        requirement: "Fleet manifest consistency: if the install targets multiple destinations, every destination verifies independently; the install manifest (install_manifest.json or session equivalent) lists only destinations that individually passed 2.1-3.2"
+        proof: "python3 -c asserting every manifest destination has a corresponding per-destination evidence file; per-destination verdicts in .rig/install/fleet-verdicts.txt"
+        failure_tier: degrade
+      - id: "4.4"
+        requirement: "Repeat-offender escalation: an asset whose red-path check has failed in prior sessions (per rig-memory-os recall) is flagged and proposed as an untrusted gate"
+        proof: "rig-memory-os recall of prior install_blocked events for this asset name; if count > 0, memory.propose_memory(content=\"untrusted_gate\", evidence_refs=[<event ids>]) acknowledged; recall output and (conditional) proposal ack in .rig/install/recall.txt"
+        failure_tier: degrade
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events"
+  - "Installed asset verified at every destination: links resolve or copies hash-match, discovery surface finds it"
+  - "Done-test GREEN post-install and provably RED under planted sabotage with revert confirmed"
+  - "Install record sealed with all six fields; digest verified from disk bytes"
+  - "install_certified / install_blocked event recorded to rig-memory-os and round-trip verified"
+  - "One improvement entry appended to the improvements log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "2.1", "2.2", "2.3", "3.1", "3.3", "4.1", "4.2"]
+  degrade_gates: ["4.3", "4.4"]
+  stop_gates: ["3.2"]
+  notes: "stop on 3.2: a done-test that cannot go red under sabotage means the install's safety net is fictional — certification is refused, install_blocked is recorded, and the asset is quarantined until its done-test is rewritten; the sabotage MUST be reverted before the session halts"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "the same asset fails red-path 2+ times → it is added to the untrusted-gate list and its done-test is escalated for rewrite; install destinations that repeatedly drift out of sync get a fleet-verdicts tightening in gate 4.3"
+final_rule:
+  - "Green is worthless until red is demonstrated."
+  - "Hash the source, verify the destination, seal the record."
+  - "Sabotage, watch it fail, revert, watch it pass — in that order, every time."
+  - "Every install-verification session leaves the system stronger than it found it."
+governs_loops: [GL-VQ, GL-GG, GL-RI]

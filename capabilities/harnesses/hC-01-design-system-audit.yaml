@@ -1,0 +1,136 @@
+harness_id: hC-01-design-system-audit-session
+harness_name: Design System Audit Goal Harness
+session_type: design-system-audit-session
+coordinate_space:
+  levels:
+  - L2
+  - L3
+  - L5
+  diamonds:
+  - D1
+  - D2
+  bms_modes:
+  - A1
+  - A2
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_design_system_audit_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D1
+- D2
+bms_bias: A1-A2 preferred; A3 permitted for exploratory token mining; A4 only with approval
+identity_lock:
+  startup_phrase: 'Design system audit mode: evidence over vibes, inventory over impression.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L3-D1-A1'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_design_system_audit(identity, gates, dod, failure_protocol,
+      self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Inventory & Coverage
+  gates:
+  - id: '1.1'
+    requirement: 'Full component inventory enumerated: every component file, its stories, and its consumers'
+    proof: command `find src/components -name '*.tsx' | sort > artifacts/ds-audit/inventory.txt` + `wc -l` count
+      recorded in report
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Token coverage measured: percentage of raw hex/px literals vs token references across components'
+    proof: command `grep -rEo '#[0-9a-fA-F]{3,8}' src --include='*.tsx' --include='*.css' | sort | uniq -c | sort
+      -rn > artifacts/ds-audit/raw-literals.txt`; coverage % stated in report
+    failure_tier: halt
+  - id: '1.3'
+    requirement: Duplicate/near-duplicate component detection run with a stated similarity threshold
+    proof: command `npx jscpd src/components --min-tokens 50 --reporters json --output artifacts/ds-audit/jscpd`
+      exit 0; report JSON path recorded
+    failure_tier: degrade
+- category: Consistency & Naming
+  gates:
+  - id: '2.1'
+    requirement: Component naming convention conformance checked against DESIGN.md naming rules
+    proof: '`scripts/audit-naming.sh src/components` exit code 0, or violation list attached with per-violation
+      disposition'
+    failure_tier: degrade
+  - id: '2.2'
+    requirement: 'Variant matrix completeness: every interactive component has stories for default/hover/active/focus/disabled/loading/error'
+    proof: story count per component extracted via `ls src/components/**/*.stories.*` diffed against variant checklist;
+      gap table in report
+    failure_tier: halt
+  - id: '2.3'
+    requirement: 'Doc coverage: each component directory has a README with props table and usage example'
+    proof: '`find src/components -mindepth 2 -maxdepth 2 -type d` diffed against `find src/components -name README.md`;
+      missing list in report'
+    failure_tier: degrade
+- category: Accessibility & Quality Signals
+  gates:
+  - id: '3.1'
+    requirement: Automated a11y scan run against the rendered component catalog
+    proof: '`npx axe http://localhost:6006 --save artifacts/ds-audit/axe.json` artifact exists; violation count
+      by impact level in report'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Bundle impact snapshot: component library weight measured and recorded'
+    proof: '`npx source-map-explorer dist/*.js --json > artifacts/ds-audit/bundle.json`; total KB recorded in report'
+    failure_tier: degrade
+- category: Findings & Remediation
+  gates:
+  - id: '4.1'
+    requirement: Findings report written with severity-ranked issues, each mapped to inventory evidence
+    proof: artifacts/ds-audit/report.md exists; `sha256sum` recorded in session log; every finding cites an inventory
+      line or scan artifact
+    failure_tier: halt
+  - id: '4.2'
+    requirement: 'Deprecation list produced: components marked for removal with migration targets'
+    proof: artifacts/ds-audit/deprecations.yaml with `component`, `reason`, `migrate_to`, `consumers_count` per
+      entry
+    failure_tier: degrade
+  - id: '4.3'
+    requirement: Remediation plan with owner and order produced from findings
+    proof: report section 'Remediation Plan' with per-item owner, effort estimate, and dependency order
+    failure_tier: degrade
+definition_of_done:
+- All 11 capability gates passed with evidence on disk under artifacts/ds-audit/
+- 'Primary objective achieved: severity-ranked audit report + remediation plan committed'
+- No finding lacks a cited evidence artifact (command output, scan JSON, or file diff)
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict (GO/NO-GO), and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.2'
+  - '3.1'
+  - '4.1'
+  degrade_gates:
+  - '1.3'
+  - '2.1'
+  - '2.3'
+  - '3.2'
+  - '4.2'
+  - '4.3'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every design-system-audit-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-VQ

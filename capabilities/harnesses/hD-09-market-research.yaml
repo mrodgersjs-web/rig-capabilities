@@ -1,0 +1,97 @@
+harness_id: hD-09-market-research
+harness_name: Market Research Goal Harness
+session_type: gtm-market-research
+coordinate_space:
+  levels: [L2, L3]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2]
+harness_tuple: H_market(question, source_tiers, corroboration, contradictions, sizing, provenance, synthesis, uncertainty)
+primary_diamonds: [D2]
+bms_bias: "A1 for provenance and math; A2 for extraction; A3 for synthesis narrative; A4 never — published conclusions require human sign-off"
+identity_lock:
+  startup_phrase: "Market research session. Sources before synthesis, math before narrative, uncertainty stated before confidence implied."
+  gates:
+    - id: "0.1"
+      requirement: "Research question framed as a decision: what decision this research feeds and what would change it"
+      proof: "artifacts/market/<run>/question.md with decision, change_conditions fields non-empty"
+    - id: "0.2"
+      requirement: "Research doctrine loaded (market-research, research-ops, source tiering rules)"
+      proof: "grep -q 'primary' ~/.claude/skills/market-research/SKILL.md && echo LOADED in session log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L2-L3; D2-D3; A1-A3)"
+      proof: "coordinate block in ~/.hermes/jake/market/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_market declared with all 8 components"
+      proof: "session log contains 'H_market(' line"
+capability_gates:
+  - category: "Source Discipline"
+    gates:
+      - id: "1.1"
+        requirement: "Source inventory tiered before reading: primary (filings, gov data, direct data), secondary (analyst, trade press), tertiary (blogs, vendor content) — labeled per source"
+        proof: "artifacts/market/<run>/sources.json — every source has tier enum, url, accessed_at; jq '[.[] | .tier] | unique | length >= 2' true"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Primary-source floor: >= 2 tier-1 sources underpin the load-bearing claims"
+        proof: "jq '[.[] | select(.tier == \"primary\")] | length >= 2' sources.json true"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Corroboration rule: every load-bearing claim backed by >= 2 independent sources (not one source citing another)"
+        proof: "artifacts/market/<run>/claims.json — each claim.source_ids length >= 2 and sources verified independent (different publishers)"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Contradiction log: conflicting data points across sources recorded, not silently averaged away"
+        proof: "artifacts/market/<run>/contradictions.md lists each conflict with both values and sources, or explicit 'none found' note"
+        failure_tier: degrade
+  - category: "Sizing & Math"
+    gates:
+      - id: "2.1"
+        requirement: "TAM/SAM/SOM computed with stated method per layer (top-down, bottom-up, or value-theory) and all assumptions enumerated"
+        proof: "artifacts/market/<run>/sizing.md — per layer: method, formula, inputs with source ids, computed value; python3 scripts/verify_sizing.py exit 0"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Sensitivity stated: which single assumption moves the answer most, with the swing quantified"
+        proof: "sizing.md contains '## Sensitivity' with the dominant assumption and its swing range"
+        failure_tier: degrade
+      - id: "2.3"
+        requirement: "Currency of data verified: every quantitative input dated; inputs older than the declared staleness threshold are flagged"
+        proof: "claims.json inputs each have as_of date; flagged_stale array present (may be empty)"
+        failure_tier: halt
+  - category: "Synthesis & Honesty"
+    gates:
+      - id: "3.1"
+        requirement: "Synthesis doc written with claim-to-source map: every section's key claims carry source id citations"
+        proof: "artifacts/market/<run>/synthesis.md — grep -c '\\[S[0-9]' >= number of ## sections; zero uncited key claims"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Uncertainty labels applied: every forward-looking statement tagged [FACT | INFERENCE | SPECULATION]"
+        proof: "synthesis.md forward-looking lines carry exactly one tag; scripts/uncertainty_lint.py exit 0"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Refute pass: a second pass actively attempts to falsify the top 3 conclusions with counter-evidence"
+        proof: "artifacts/market/<run>/refute.md — per conclusion: attempted falsification, counter-evidence found or not, verdict"
+        failure_tier: degrade
+      - id: "3.4"
+        requirement: "Provenance bundle sealed: all source snapshots (html/pdf) archived locally with hashes"
+        proof: "artifacts/market/<run>/snapshots/ contains per-source files; shasum -a 256 -c snapshots.sha256 exit 0"
+        failure_tier: halt
+definition_of_done:
+  - "Synthesis shipped with source-tiered claims, corroboration, contradictions, sizing math, and uncertainty labels"
+  - "Provenance bundle sealed and hash-verified; refute pass recorded"
+  - "Research question answered with a decision-relevant recommendation or an explicit 'insufficient evidence' verdict"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (answered | provisional | insufficient-evidence), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.3", "3.1", "3.2", "3.4"]
+  degrade_gates: ["1.4", "2.2", "3.3"]
+  stop_gates: []
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a load-bearing claim later proven wrong triggers a provenance-pipeline audit"
+final_rule:
+  - "No load-bearing claim ships on a single source."
+  - "No sizing number without its formula, inputs, and dominant sensitivity."
+  - "Uncertainty labels are mandatory; confidence without a tag is a fabrication risk."
+  - "Every market research session leaves the system stronger than it found it."
+governs_loops: [GL-OD-market-research, market-research, market-sizing-analysis, market-scenario-modeler]

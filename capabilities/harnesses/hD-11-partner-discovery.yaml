@@ -1,0 +1,97 @@
+harness_id: hD-11-partner-discovery
+harness_name: Partner Discovery Goal Harness
+session_type: gtm-partner-discovery
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_partner(thesis, ecosystem_map, rubric, fit_evidence, contact_path, drafts, crm_records, mutual_value, tracking)
+primary_diamonds: [D2, D3]
+bms_bias: "A1 for records and compliance; A2 for scoring; A3 for thesis and narrative; A4 never — partner outreach is Gate-D"
+identity_lock:
+  startup_phrase: "Partner discovery session. Partnerships are value exchanges, not contact harvesting. Every candidate carries a mutual-value hypothesis."
+  gates:
+    - id: "0.1"
+      requirement: "Partner thesis declared: what kind of partner (integration, channel, co-marketing, referral) and what gap they close"
+      proof: "artifacts/partner/<run>/thesis.md with partner_type enum and gap fields non-empty"
+    - id: "0.2"
+      requirement: "Partner doctrine loaded (partner-ecosystem-map, partner-ops, joint-solution-blueprint read this session)"
+      proof: "grep -lq 'partner' ~/.claude/skills/partner-ops/SKILL.md && echo LOADED in session log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A3)"
+      proof: "coordinate block in ~/.hermes/jake/partner/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_partner declared with all 9 components"
+      proof: "session log contains 'H_partner(' line"
+capability_gates:
+  - category: "Ecosystem Mapping"
+    gates:
+      - id: "1.1"
+        requirement: "Ecosystem map produced: adjacent vendors, communities, integrators, and platforms relevant to the thesis, categorized"
+        proof: "artifacts/partner/<run>/ecosystem_map.json — >= 10 candidates across >= 2 categories with category labels"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Overlap analysis: candidate audiences/customers overlap with ICP estimated from public evidence (case studies, marketplace listings, shared logos)"
+        proof: "artifacts/partner/<run>/overlap.json — per candidate: overlap_evidence array with >= 1 public source URL"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Conflict screen: candidates with direct competitive overlap or existing exclusivity conflicts flagged and excluded with reason codes"
+        proof: "artifacts/partner/<run>/conflicts.json — excluded candidates carry reason_code from declared enum"
+        failure_tier: halt
+  - category: "Scoring & Fit"
+    gates:
+      - id: "2.1"
+        requirement: "Scoring rubric versioned and applied deterministically: audience fit, integration feasibility, brand alignment, reach, effort"
+        proof: "artifacts/partner/<run>/scores.json — per candidate: rubric_version + 5 subscores; python3 scripts/partner_score.py exit 0 reproduces identical scores"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Fit evidence per shortlisted candidate: >= 2 concrete pointers (shared customer proof, complementary feature docs, integration surface)"
+        proof: "artifacts/partner/<run>/shortlist.json — each entry evidence array length >= 2 with URLs"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Mutual-value hypothesis written per shortlisted candidate: what they gain, what we gain, first joint motion"
+        proof: "artifacts/partner/<run>/mutual_value.md — per candidate: their_gain, our_gain, first_motion; all fields non-empty"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Contact path compliance: outreach contacts sourced from public professional surfaces only; no scraped personal data"
+        proof: "artifacts/partner/<run>/contacts.json — per contact: source (company_page | linkedin_public | event_speaker_page); zero personal-email guesses"
+        failure_tier: stop
+  - category: "Outreach & Tracking"
+    gates:
+      - id: "3.1"
+        requirement: "Outreach drafts personalized to the mutual-value hypothesis, not a template blast"
+        proof: "artifacts/partner/<run>/drafts/<candidate>.md each reference the candidate's mutual_value entry; template-similarity check via scripts/draft_similarity.py < 0.8"
+        failure_tier: degrade
+      - id: "3.2"
+        requirement: "CRM partner records created with thesis link, score, and next step"
+        proof: "artifacts/partner/<run>/partner_records.json — Twenty API record ids; count equals shortlist length"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Gate-D approval before any outbound partner contact: typed APPROVE <run_id> recorded"
+        proof: "artifacts/partner/<run>/gate_d.log APPROVE line; absent it drafts remain arm: false and session ends as staged"
+        failure_tier: stop
+      - id: "3.4"
+        requirement: "Next-step tracking configured: per candidate, response window and follow-up owner/date recorded"
+        proof: "artifacts/partner/<run>/tracking.yaml — per candidate: follow_up_owner, follow_up_date, response_window_days"
+        failure_tier: degrade
+definition_of_done:
+  - "Ecosystem map, overlap analysis, conflict screen, deterministic scores, and mutual-value hypotheses all present"
+  - "Shortlisted candidates have CRM records, compliant contact paths, and tracking entries"
+  - "Drafts armed only with approval; staged-only is a complete outcome"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (staged | approved | blocked), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "3.2"]
+  degrade_gates: ["3.1", "3.4"]
+  stop_gates: ["2.4", "3.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; rubric subscore weights recalibrated when scored-top candidates consistently fail to convert"
+final_rule:
+  - "No candidate advances without a mutual-value hypothesis and two pieces of fit evidence."
+  - "No contact path from non-public data; compliance is stop-tier."
+  - "No partner outreach without typed Gate-D approval for this exact run."
+  - "Every partner discovery session leaves the system stronger than it found it."
+governs_loops: [GL-OD-partner, partner-ecosystem-map, partner-ops, partner-revenue-desk, co-marketing-governance]

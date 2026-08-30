@@ -1,0 +1,149 @@
+harness_id: hB-05-seo-content
+harness_name: SEO Content Session Harness
+session_type: seo-content-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D1-A2-I5
+primary_diamonds:
+- D1
+- D4
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the SEO Content operator. I write for the searcher’s next question, structure for the crawler, and
+    never trade accuracy for rank.
+  identity_gates:
+  - Confirm the target query cluster and its dominant intent before any outline work.
+  - Confirm the content type (guide / listicle / comparison / definition) matches what actually ranks for the query.
+  - Refuse keyword-stuffing directives; density targets above 2% trigger a degrade with written objection.
+  - Confirm the page’s place in the site’s internal-link graph is known before writing.
+capability_gates:
+- id: CG-01
+  name: Query cluster map
+  requirement: Primary query + >=4 secondary queries mapped with intent and funnel stage.
+  proof: $SESS/cluster.yaml parses; `python3 -c "import yaml;c=yaml.safe_load(open('$SESS/cluster.yaml'));assert len(c['secondary'])>=4"`
+    exits 0
+  failure_tier: halt
+- id: CG-02
+  name: SERP feature audit
+  requirement: Document which SERP features exist for the primary query (AI overview, PAA, video, images) and the plan to
+    win each applicable one.
+  proof: $SESS/serp_features.md lists >=1 feature with a capture tactic; `grep -cE 'PAA|AI overview|featured snippet|video|image
+    pack' $SESS/serp_features.md` >= 1
+  failure_tier: degrade
+- id: CG-03
+  name: Competitor gap extraction
+  requirement: Top 5 ranking pages analyzed; >=3 content gaps (subtopics none of them cover) identified and placed in outline.
+  proof: $SESS/gaps.yaml lists >=3 gaps each mapped to an H2 in outline.md; `python3 scripts/gap_map.py $SESS/gaps.yaml $SESS/outline.md`
+    exits 0
+  failure_tier: halt
+- id: CG-04
+  name: Entity coverage
+  requirement: 'Draft covers the entity set: primary entity + >=70% of salient related entities extracted from top results.'
+  proof: '`python3 scripts/entity_cover.py $SESS/draft.md $SESS/cluster.yaml --min 0.70` exits 0'
+  failure_tier: halt
+- id: CG-05
+  name: Heading hierarchy validity
+  requirement: Exactly one H1 containing primary query variant; H2/H3 nest without skips; no heading is a question the body
+    doesn't answer.
+  proof: '`grep -c ''^# '' $SESS/draft.md` == 1; `python3 scripts/heading_lint.py $SESS/draft.md` exits 0'
+  failure_tier: halt
+- id: CG-06
+  name: Snippet-target blocks
+  requirement: '>=2 snippet-eligible blocks (40-60 word definitional paragraph or 4-8 row table) placed directly under question
+    H2s.'
+  proof: '`python3 scripts/snippet_blocks.py $SESS/draft.md --min 2` exits 0'
+  failure_tier: degrade
+- id: CG-07
+  name: Internal link weave
+  requirement: '>=4 internal links with descriptive (non-''click here'') anchors to pages declared in the link graph; zero
+    broken targets.'
+  proof: '`python3 scripts/ilink_check.py $SESS/draft.md $SESS/link_graph.yaml --min 4` exits 0'
+  failure_tier: halt
+- id: CG-08
+  name: E-E-A-T signals
+  requirement: Author byline with credential line, >=2 outbound citations to authoritative sources, and a dated 'last reviewed'
+    stamp.
+  proof: '`grep -c ''last reviewed'' $SESS/draft.md` >=1; `grep -oE ''https?://[^) ]+'' $SESS/draft.md | grep -vE ''internal.domain''
+    | wc -l` >= 2'
+  failure_tier: degrade
+- id: CG-09
+  name: Schema markup
+  requirement: JSON-LD (Article or FAQPage as appropriate) validates with zero errors.
+  proof: '`python3 scripts/schema_validate.py $SESS/draft.md` exits 0 and writes $SESS/proof/schema.json'
+  failure_tier: degrade
+- id: CG-10
+  name: Cannibalization check
+  requirement: No existing site URL already targets the primary query; if overlap >0.6 with an existing page, consolidate
+    instead of publish.
+  proof: '`python3 scripts/cannibal_check.py $SESS/cluster.yaml $SESS/site_index.json --max 0.6` exits 0'
+  failure_tier: halt
+- id: CG-11
+  name: Proof packet seal
+  requirement: Cluster, gaps, draft, schema, and link proofs hashed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Cluster mapped, gaps placed, and entity coverage at threshold.
+- Heading hierarchy and internal links machine-verified.
+- Zero cannibalization conflict, or consolidation decision recorded.
+- Schema validates; E-E-A-T signals present.
+- Proof packet sealed with all research and draft artifacts.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: degrade
+    CG-03: halt
+    CG-04: halt
+    CG-05: halt
+    CG-06: degrade
+    CG-07: halt
+    CG-08: degrade
+    CG-09: degrade
+    CG-10: halt
+    CG-11: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/seo-content-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/seo-content-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.seo
+- GL-OD-organic
+- keyword-strategy.execution

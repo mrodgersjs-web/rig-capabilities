@@ -1,0 +1,133 @@
+harness_id: hB-04-linkedin-post
+harness_name: LinkedIn Post Session Harness
+session_type: linkedin-post-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L2-D2-A2-I4
+primary_diamonds:
+- D2
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the LinkedIn operator. Hook in two lines, value in the body, one conversation starter at the end —
+    no broetry, no engagement bait.
+  identity_gates:
+  - Confirm the post pillar (build-in-public / lesson / contrarian take / receipt) before drafting.
+  - Load the author voice fingerprint; if the post could be attributed to any generic creator, rewrite.
+  - Refuse engagement-bait mechanics ('comment YES', 'repost if') outright — session degrades if requested.
+  - Confirm whether the post pairs with a visual; decide before writing, not after.
+capability_gates:
+- id: CG-01
+  name: Pillar & angle lock
+  requirement: Post pillar and one-sentence angle recorded in angle.yaml.
+  proof: $SESS/angle.yaml parses with keys pillar, angle; `python3 -c "import yaml;a=yaml.safe_load(open('$SESS/angle.yaml'));assert
+    a['pillar'] in ['build','lesson','contrarian','receipt']"` exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Hook strength
+  requirement: First two lines <=210 chars total, contain a number, a proper noun, or a tension statement; no question-hook
+    two posts in a row (check log).
+  proof: '`python3 scripts/hook_check.py $SESS/post.md --log ~/.rig/logs/linkedin_hooks.jsonl` exits 0'
+  failure_tier: halt
+- id: CG-03
+  name: Length & format band
+  requirement: Post 900-1,300 chars for text-only or 400-700 when paired with visual; line breaks every 1-2 sentences.
+  proof: '`python3 scripts/li_format.py $SESS/post.md --mode $(grep mode $SESS/angle.yaml|cut -d'' '' -f2)` exits 0'
+  failure_tier: degrade
+- id: CG-04
+  name: Receipt requirement
+  requirement: Posts in receipt/lesson pillars contain at least one concrete artifact reference (metric, screenshot reference,
+    date, or named tool version).
+  proof: '`grep -cE ''[0-9]+%|[0-9]+x|v[0-9]+\.[0-9]+|20[0-9]{2}-[0-9]{2}'' $SESS/post.md` >= 1'
+  failure_tier: halt
+- id: CG-05
+  name: Voice fingerprint
+  requirement: Banned-token scan clean; signature-vocab density within profile band.
+  proof: '`grep -ciE ''delve|thrilled to announce|humbled|game changer'' $SESS/post.md` == 0 AND `python3 scripts/voice_fp.py
+    $SESS/post.md` exits 0'
+  failure_tier: halt
+- id: CG-06
+  name: Close integrity
+  requirement: Final line is a single conversation prompt <=80 chars; zero external links in body (links go to first comment
+    if required).
+  proof: '`tail -1 $SESS/post.md | wc -c` <= 80; `grep -cE ''https?://'' $SESS/post.md` == 0 OR links documented in $SESS/first_comment.txt'
+  failure_tier: degrade
+- id: CG-07
+  name: Hashtag discipline
+  requirement: 0-3 hashtags, all lowercase, none invented-for-this-post (must exist in profile hashtag registry).
+  proof: '`grep -oE ''#[A-Za-z0-9]+'' $SESS/post.md | wc -l` <= 3 AND each found via `grep -F` in $SESS/hashtag_registry.txt'
+  failure_tier: degrade
+- id: CG-08
+  name: Visual pairing proof
+  requirement: If mode=visual, the asset exists at spec (1080x1350 or 1200x627) and its sha256 is recorded.
+  proof: 'For visual mode: `file $SESS/asset.png` confirms PNG AND `python3 scripts/img_size.py $SESS/asset.png --allow 1080x1350,1200x627`
+    exits 0; hash in $SESS/proof/asset.sha256'
+  failure_tier: degrade
+- id: CG-09
+  name: Proof packet seal
+  requirement: Post, angle, and asset hashes sealed; hook appended to hook log for anti-repetition.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0; `tail -1 ~/.rig/logs/linkedin_hooks.jsonl | grep -c $(sha256sum
+    $SESS/post.md|cut -d'' '' -f1)` >= 1'
+  failure_tier: halt
+definition_of_done:
+- Hook passes strength check and is not a repeat pattern from the last 10 hooks.
+- Body carries a concrete receipt when the pillar demands one.
+- No engagement bait, no body links, hashtags within registry.
+- Visual (if any) at exact spec with sealed hash.
+- Proof packet sealed and hook log appended.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: degrade
+    CG-04: halt
+    CG-05: halt
+    CG-06: degrade
+    CG-07: degrade
+    CG-08: degrade
+    CG-09: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/linkedin-post-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/linkedin-post-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.linkedin
+- GL-OD-shortform
+- content-atelier.shortform

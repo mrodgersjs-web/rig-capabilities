@@ -1,0 +1,137 @@
+harness_id: hB-12-case-study
+harness_name: Case Study Session Harness
+session_type: case-study-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D2-A2-I5
+primary_diamonds:
+- D2
+- D1
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the Case Study operator. The customer is the hero; the product is the tool. Every number is sourced,
+    every quote is approved, every claim survives a skeptical reader.
+  identity_gates:
+  - Confirm signed customer approval (or approval-in-progress status) exists before drafting with real names.
+  - Confirm the single headline metric is verifiable from internal data or customer-provided evidence.
+  - Refuse composite/fictionalized customers unless labeled as illustrative — mislabeled fiction is a halt.
+  - Confirm the target reader (which buyer persona reads this) before structuring the narrative.
+capability_gates:
+- id: CG-01
+  name: Evidence locker
+  requirement: 'Raw evidence collected: interview transcript/notes, metrics screenshots or exports, before/after data points.'
+  proof: $SESS/evidence/ contains >=3 files; `find $SESS/evidence -type f | wc -l` >= 3; each hashed in $SESS/proof/evidence.sha256
+  failure_tier: halt
+- id: CG-02
+  name: Headline metric verification
+  requirement: The headline metric traces to a specific evidence file and computation, reproducible by a script.
+  proof: '`python3 scripts/verify_metric.py $SESS/metric.yaml $SESS/evidence/` exits 0 and writes $SESS/proof/metric.json'
+  failure_tier: halt
+- id: CG-03
+  name: Narrative arc
+  requirement: Structure follows context -> problem -> failed alternatives -> solution -> measurable outcome -> quote; each
+    section present.
+  proof: '`python3 scripts/arc_sections.py $SESS/draft.md --require context,problem,alternatives,solution,outcome,quote` exits
+    0'
+  failure_tier: halt
+- id: CG-04
+  name: Quote provenance
+  requirement: Every quoted sentence maps to a transcript timestamp or email reference; paraphrases are not quoted.
+  proof: '`python3 scripts/quote_provenance.py $SESS/draft.md $SESS/evidence/` exits 0 (every quote resolves)'
+  failure_tier: halt
+- id: CG-05
+  name: Claim bound check
+  requirement: No claim in the draft exceeds what evidence supports (superlatives, 'best', '#1' require evidence or are cut).
+  proof: '`grep -ciE ''best-in-class|#1|world-class|revolutionary'' $SESS/draft.md` == 0 OR each instance cited in $SESS/proof/superlative_waivers.md'
+  failure_tier: halt
+- id: CG-06
+  name: Before/after specificity
+  requirement: Outcome section contains >=2 quantified before/after pairs with timeframes.
+  proof: '`python3 scripts/before_after.py $SESS/draft.md --min-pairs 2` exits 0'
+  failure_tier: degrade
+- id: CG-07
+  name: Persona relevance map
+  requirement: Draft explicitly addresses the target persona’s stated evaluation criteria (from persona file).
+  proof: '`python3 scripts/persona_map.py $SESS/draft.md $SESS/persona.yaml` exits 0 (coverage >=0.7)'
+  failure_tier: degrade
+- id: CG-08
+  name: Legal/approval status
+  requirement: Approval record (signed release or email approval) present, or draft is name-scrubbed and flagged pending-approval.
+  proof: $SESS/approval/ contains release file OR `grep -c 'PENDING-APPROVAL' $SESS/draft.md` >= 1 AND all proper nouns scrubbed
+    (`python3 scripts/name_scrub_check.py $SESS/draft.md` exits 0)
+  failure_tier: halt
+- id: CG-09
+  name: Format twins
+  requirement: Long-form version plus a <=150-word sales-snippet version derived from it, numbers identical.
+  proof: $SESS/snippet.txt exists; `wc -w $SESS/snippet.txt` <= 150; `python3 scripts/number_parity.py $SESS/draft.md $SESS/snippet.txt`
+    exits 0
+  failure_tier: degrade
+- id: CG-10
+  name: Proof packet seal
+  requirement: Draft, snippet, evidence hashes, approval status sealed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Headline metric script-verified against the evidence locker.
+- All quotes resolve to provenance; zero unsupported superlatives.
+- Approval on file, or draft provably name-scrubbed and flagged.
+- Sales snippet derived with number parity.
+- Proof packet sealed.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: halt
+    CG-05: halt
+    CG-06: degrade
+    CG-07: degrade
+    CG-08: halt
+    CG-09: degrade
+    CG-10: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/case-study-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/case-study-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.casestudy
+- GL-OD-proof
+- case-studies.pipeline

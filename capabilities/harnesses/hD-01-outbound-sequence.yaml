@@ -1,0 +1,104 @@
+harness_id: hD-01-outbound-sequence
+harness_name: Outbound Sequence Goal Harness
+session_type: gtm-outbound-sequence
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_outbound(icp_list, crm_dedupe, suppression, personalization, cadence, safety_gate, proofpacket)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 mandatory for send-gate checks; A2 preferred for copy scoring; A3 permitted for variant generation; A4 never — every send is Gate-D"
+identity_lock:
+  startup_phrase: "Outbound sequence session. Draft-only until Gate-D. Every recipient earns their seat in the queue."
+  gates:
+    - id: "0.1"
+      requirement: "gstack/rig cold-send doctrine loaded (gtm-cold-send-safety read this session)"
+      proof: "grep -q 'fail-closed' ~/.claude/skills/gtm-cold-send-safety/SKILL.md && echo LOADED"
+    - id: "0.2"
+      requirement: "Operating mode declared: draft-only; no send API, no sequence-enroll call permitted"
+      proof: "session log line 'MODE=draft-only' written to ~/.hermes/jake/outbound/session-<ts>.log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated for this run (levels, diamonds, bms mode per gate)"
+      proof: "coordinate block present in session log, parseable by jq '.coordinate'"
+    - id: "0.4"
+      requirement: "Harness tuple H_outbound declared with all 7 components named"
+      proof: "session log contains 'H_outbound(' line listing icp_list..proofpacket"
+    - id: "0.5"
+      requirement: "Twenty CRM reachable before any recipient work begins"
+      proof: "curl -sf http://localhost:3000/healthz exit 0, else session does not start"
+capability_gates:
+  - category: "Audience Construction"
+    gates:
+      - id: "1.1"
+        requirement: "Target list sourced from an approved origin (Apollo export, CRM segment query, scraped event list) with provenance recorded per source"
+        proof: "artifacts/outbound/<run>/sources.json lists each origin with url_or_query, fetched_at, row_count"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "List deduped against Twenty CRM people+leads before any copy is written"
+        proof: "python3 scripts/dedupe_crm.py --list artifacts/outbound/<run>/raw.csv --crm http://localhost:3000 --out deduped.csv; report shows removed_count and 0 collisions in spot-check of 10"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Suppression applied: blocklist, existing-opportunity domains, unsubscribed, competitor domains"
+        proof: "artifacts/outbound/<run>/suppression_report.json with per-rule hit counts; jq '.total_suppressed >= 0' true and rules array non-empty"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "ICP fit score computed per recipient using the dept scoring rubric (5-factor composite)"
+        proof: "scored.csv has icp_score column; python3 -c \"import csv; rows=list(csv.DictReader(open('scored.csv'))); assert all(0 <= float(r['icp_score']) <= 100 for r in rows)\" exit 0"
+        failure_tier: degrade
+  - category: "Message Craft"
+    gates:
+      - id: "2.1"
+        requirement: "Every step in the sequence carries recipient-specific personalization grounded in a scraped or CRM fact, not a merge-field placeholder"
+        proof: "artifacts/outbound/<run>/personalization.jsonl — one line per recipient with fact_source field; grep -c 'fact_source' equals recipient count"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Copy passes voice + slop check (no banned phrases, no generic AI openers)"
+        proof: "python3 scripts/voice_check.py artifacts/outbound/<run>/drafts/ exit 0; banned_phrases.txt zero hits"
+        failure_tier: degrade
+      - id: "2.3"
+        requirement: "Sequence cadence declared as config: step count, delay days, channel per step, stop-on-reply rule"
+        proof: "artifacts/outbound/<run>/sequence.yaml validates against schema/sequence.schema.json via python3 scripts/validate_sequence.py exit 0"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Claims in copy are anchored (ANCHOR law): every stat, customer name, or capability claim cites a source"
+        proof: "claims_map.json pairs each claim string with a source URL or CRM record id; jq 'length >= 1' true"
+        failure_tier: degrade
+  - category: "Send Safety"
+    gates:
+      - id: "3.1"
+        requirement: "gtm-cold-send-safety deterministic gate run per recipient: 8/8 checks or recipient is dropped"
+        proof: "artifacts/outbound/<run>/safety_gate.jsonl — per-recipient {checks: 8, passed: N, verdict}; jq '[.[] | select(.passed < 8)] | length' == 0 in final queue"
+        failure_tier: stop
+      - id: "3.2"
+        requirement: "Sender deliverability verified: SPF, DKIM, DMARC pass for sending domain; daily volume under cap"
+        proof: "dig +short TXT <domain> contains v=spf1; python3 scripts/dmarc_check.py <domain> exit 0; volume < configured cap in sequence.yaml"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Gate-D arming: send queue remains inert until typed human approval 'APPROVE <run_id>' recorded"
+        proof: "artifacts/outbound/<run>/gate_d.log contains APPROVE line with run_id and timestamp; absent approval, queue file has arm: false and session ends draft-only"
+        failure_tier: stop
+      - id: "3.4"
+        requirement: "ProofPacket sealed: recipient manifest, copy drafts, safety results hashed together"
+        proof: "artifacts/outbound/<run>/proofpacket.json with sha256 of manifest+drafts+safety jsonl; shasum -a 256 -c manifest.sha256 exit 0"
+        failure_tier: halt
+definition_of_done:
+  - "All halt-tier gates passed; degrade-tier gates passed or degradations logged with justification"
+  - "Send queue exists as a verifiable artifact (manifest + drafts + safety jsonl + proofpacket) even when unarmed"
+  - "Recipients failing safety or dedupe are excluded with reason codes, never silently dropped"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log with run_id"
+  - "Identity closure: coordinate, verdict (drafted | armed | blocked), and next safe action stated in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.3", "3.2", "3.4"]
+  degrade_gates: ["1.4", "2.2", "2.4"]
+  stop_gates: ["3.1", "3.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times across runs; reply-rate regression on a cadence variant feeds back into sequence.yaml defaults"
+final_rule:
+  - "No recipient enters a queue without provenance, dedupe, suppression, and an 8/8 safety pass."
+  - "No send, enroll, or publish without typed Gate-D approval for this exact run_id."
+  - "Draft-only is a complete outcome; a blocked send with evidence beats an armed guess."
+  - "Every outbound sequence session leaves the system stronger than it found it."
+governs_loops: [GL-OD-outbound, gtm-outbound, cold-send-safety]
