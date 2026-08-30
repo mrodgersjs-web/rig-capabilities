@@ -186,12 +186,13 @@ claude-agent-sdk-typescript repo) → trial/patterns only, use published package
 
 ## 7. Execution order
 
-0. Read doc-skills LICENSE.txt (compliance).
+
+0. Read doc-skills LICENSE.txt (compliance). *(DONE — verdict §2: proprietary, vendored copies in breach, remediation is GO item #5)*
 1. **Safety layer** (3.1) — cc-safety-net install → karanb192 guard pack → saved → config-guard last.
-2. **rig-capabilities live**: wire all 5 harnesses, reindex, seed first canonical batch (harnesses, live hooks, jake goal-harnesses, stray RIG skills). *(in progress this session)*
+2. **rig-capabilities live**: wire all 5 harnesses, reindex, seed first canonical batch (harnesses, live hooks, jake goal-harnesses, stray RIG skills). *(DONE this session — see Executed log)*
 3. **ruflo retirement** (4 ordered edits, §2).
 4. **Plugin re-enable + dedup sweep**: authoritative `claude plugin list` → enable wanted dormant plugins → verify load → delete vendored duplicates.
-5. **trailofbits + openai/skills** marketplace installs; canonicalize chosen picks.
+5. **trailofbits + openai/skills** installs. *(DONE — bulk expansion; provenance + CC-BY-SA stamps recorded; curation pass pending)*
 6. **Improvement engine**: wire the already-built GEPA into `rlm_improve` (staged, metric contract locked); vendor ACE; AWM nightly cron; MemPalace replace-or-delete decision on mem0 stub.
 7. **Eval layer**: runner decision (rig-goal-engine recommended; prime/harbor explicit) → compile 56 harness YAMLs into it + pilots → Inspect + deepeval only → Langfuse v2→current upgrade + Claude Code OTLP wiring. No re-installs of harbor/promptfoo/prime.
 8. **Headless**: claude-agent-sdk-python in `~/.rig/departments`; claude-code-action on RIG repos.
@@ -199,3 +200,20 @@ claude-agent-sdk-typescript repo) → trial/patterns only, use published package
 
 Each step verified with command output before the next. No outward/irreversible
 action without explicit Gate-D approval.
+### Executed 2026-08-30 (this session)
+- `trailofbits/skills` installed via `skills` CLI — **CC-BY-SA-4.0 confirmed from
+  upstream LICENSE**; full-repo bulk expansion (~110 skills/root incl. testing-
+  handbook fuzzing + trailmark family). 34 SKILL.md files stamped with the
+  CC-BY-SA credit footer; `SKILLS-PROVENANCE.md` written to both roots. Curation
+  pass (keep/retire per RIG vertical) is the follow-up.
+- `openai/skills` installed — **upstream repo has NO license file** (license API
+  404). Per house policy: internal trial only, never vendored into shipped
+  artifacts, never rebranded. Provenance recorded.
+- Vendored: `~/vendor/ace` (Apache-2.0), `~/vendor/agent-workflow-memory`
+  (MIT), `~/vendor/agent-orchestrator` (Apache-2.0, pattern reference).
+- Hooks authored in-repo, adversarially verified (11/11 plant/restore matrix),
+  ledger-installed to `~/.claude/hooks`, wired into `settings.json` PreToolUse
+  (groups 6→8, backup `settings.json.bak-<ts>`): `guard-dangerous-commands.sh`
+  (rm -rf root/home/system, mkfs, dd-to-device, force-push main, fork bomb;
+  fail-open on internal error) + `guard-secret-write.sh` (AWS/GitHub/Slack/
+  Stripe/Google/PEM credential patterns).
