@@ -12,7 +12,7 @@ SPECS=$(python3 -c "import yaml,pathlib; print(sum(len(yaml.safe_load(open(f)).g
 cat << EOF
 
 ╔══════════════════════════════════════════════════════════╗
-║  GOAL LOOP ACTIVE — 73 loops loaded                     ║
+║  GOAL LOOP ACTIVE — ${SPECS:-?} loops loaded                     ║
 ║                                                          ║
 ║  SELECT A LOOP BEFORE DOING MEANINGFUL WORK:             ║
 ║                                                          ║
