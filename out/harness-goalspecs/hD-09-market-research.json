@@ -1,0 +1,282 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-09-MARKET-RESEARCH",
+      "name": "Market Research Goal Harness",
+      "description": "Market Research Goal Harness [gtm-market-research] \u2014 compiled from capabilities/harnesses/hD-09-market-research.yaml",
+      "anchor": "LL2-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "Synthesis shipped with source-tiered claims, corroboration, contradictions, sizing math, and uncertainty labels",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Research question framed as a decision: what decision this r",
+          "description": "Research question framed as a decision: what decision this research feeds and what would change it",
+          "command": "artifacts/market/<run>/question.md with decision, change_conditions fields non-empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Research doctrine loaded (market-research, research-ops, sou",
+          "description": "Research doctrine loaded (market-research, research-ops, source tiering rules)",
+          "command": "grep -q 'primary' ~/.claude/skills/market-research/SKILL.md && echo LOADED in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L2-L3; D2-D3; A1-A3)",
+          "description": "RIG coordinate stated (L2-L3; D2-D3; A1-A3)",
+          "command": "coordinate block in ~/.hermes/jake/market/session-<ts>.log parseable by jq",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_market declared with all 8 components",
+          "description": "Harness tuple H_market declared with all 8 components",
+          "command": "session log contains 'H_market(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Source Discipline",
+          "name": "1.1 Source inventory tiered before reading: primary (filings, go",
+          "description": "Source inventory tiered before reading: primary (filings, gov data, direct data), secondary (analyst, trade press), tertiary (blogs, vendor content) \u2014 labeled per source",
+          "command": "artifacts/market/<run>/sources.json \u2014 every source has tier enum, url, accessed_at; jq '[.[] | .tier] | unique | length >= 2' true",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Source Discipline",
+          "name": "1.2 Primary-source floor: >= 2 tier-1 sources underpin the load-",
+          "description": "Primary-source floor: >= 2 tier-1 sources underpin the load-bearing claims",
+          "command": "jq '[.[] | select(.tier == \"primary\")] | length >= 2' sources.json true",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Source Discipline",
+          "name": "1.3 Corroboration rule: every load-bearing claim backed by >= 2 ",
+          "description": "Corroboration rule: every load-bearing claim backed by >= 2 independent sources (not one source citing another)",
+          "command": "artifacts/market/<run>/claims.json \u2014 each claim.source_ids length >= 2 and sources verified independent (different publishers)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Source Discipline",
+          "name": "1.4 Contradiction log: conflicting data points across sources re",
+          "description": "Contradiction log: conflicting data points across sources recorded, not silently averaged away",
+          "command": "artifacts/market/<run>/contradictions.md lists each conflict with both values and sources, or explicit 'none found' note",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Sizing & Math",
+          "name": "2.1 TAM/SAM/SOM computed with stated method per layer (top-down,",
+          "description": "TAM/SAM/SOM computed with stated method per layer (top-down, bottom-up, or value-theory) and all assumptions enumerated",
+          "command": "artifacts/market/<run>/sizing.md \u2014 per layer: method, formula, inputs with source ids, computed value; python3 scripts/verify_sizing.py exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Sizing & Math",
+          "name": "2.2 Sensitivity stated: which single assumption moves the answer",
+          "description": "Sensitivity stated: which single assumption moves the answer most, with the swing quantified",
+          "command": "sizing.md contains '## Sensitivity' with the dominant assumption and its swing range",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Sizing & Math",
+          "name": "2.3 Currency of data verified: every quantitative input dated; i",
+          "description": "Currency of data verified: every quantitative input dated; inputs older than the declared staleness threshold are flagged",
+          "command": "claims.json inputs each have as_of date; flagged_stale array present (may be empty)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Synthesis & Honesty",
+          "name": "3.1 Synthesis doc written with claim-to-source map: every sectio",
+          "description": "Synthesis doc written with claim-to-source map: every section's key claims carry source id citations",
+          "command": "artifacts/market/<run>/synthesis.md \u2014 grep -c '\\[S[0-9]' >= number of ## sections; zero uncited key claims",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Synthesis & Honesty",
+          "name": "3.2 Uncertainty labels applied: every forward-looking statement ",
+          "description": "Uncertainty labels applied: every forward-looking statement tagged [FACT | INFERENCE | SPECULATION]",
+          "command": "synthesis.md forward-looking lines carry exactly one tag; scripts/uncertainty_lint.py exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Synthesis & Honesty",
+          "name": "3.3 Refute pass: a second pass actively attempts to falsify the ",
+          "description": "Refute pass: a second pass actively attempts to falsify the top 3 conclusions with counter-evidence",
+          "command": "artifacts/market/<run>/refute.md \u2014 per conclusion: attempted falsification, counter-evidence found or not, verdict",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Synthesis & Honesty",
+          "name": "3.4 Provenance bundle sealed: all source snapshots (html/pdf) ar",
+          "description": "Provenance bundle sealed: all source snapshots (html/pdf) archived locally with hashes",
+          "command": "artifacts/market/<run>/snapshots/ contains per-source files; shasum -a 256 -c snapshots.sha256 exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Market research session. Sources before synthesis, math before narrative, uncertainty stated before confidence implied.",
+        "harness_tuple": "H_market(question, source_tiers, corroboration, contradictions, sizing, provenance, synthesis, uncertainty)",
+        "bms_bias": "A1 for provenance and math; A2 for extraction; A3 for synthesis narrative; A4 never \u2014 published conclusions require human sign-off",
+        "meta": {
+          "harness_id": "hD-09-market-research",
+          "session_type": "gtm-market-research",
+          "governs_loops": [
+            "GL-OD-market-research",
+            "market-research",
+            "market-sizing-analysis",
+            "market-scenario-modeler"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; a load-bearing claim later proven wrong triggers a provenance-pipeline audit"
+          }
+        }
+      },
+      "success_conditions": [
+        "Synthesis shipped with source-tiered claims, corroboration, contradictions, sizing math, and uncertainty labels",
+        "Provenance bundle sealed and hash-verified; refute pass recorded",
+        "Research question answered with a decision-relevant recommendation or an explicit 'insufficient evidence' verdict",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (answered | provisional | insufficient-evidence), next safe action in session log"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2, 3.4: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Research question framed as a decision: what decision this research feeds and what would change it",
+        "Research doctrine loaded (market-research, research-ops, source tiering rules)",
+        "RIG coordinate stated (L2-L3; D2-D3; A1-A3)",
+        "Harness tuple H_market declared with all 8 components",
+        "Source inventory tiered before reading: primary (filings, gov data, direct data), secondary (analyst, trade press), tertiary (blogs, vendor content) \u2014 labeled per source",
+        "Primary-source floor: >= 2 tier-1 sources underpin the load-bearing claims",
+        "Corroboration rule: every load-bearing claim backed by >= 2 independent sources (not one source citing another)",
+        "Contradiction log: conflicting data points across sources recorded, not silently averaged away",
+        "TAM/SAM/SOM computed with stated method per layer (top-down, bottom-up, or value-theory) and all assumptions enumerated",
+        "Sensitivity stated: which single assumption moves the answer most, with the swing quantified",
+        "Currency of data verified: every quantitative input dated; inputs older than the declared staleness threshold are flagged",
+        "Synthesis doc written with claim-to-source map: every section's key claims carry source id citations",
+        "Uncertainty labels applied: every forward-looking statement tagged [FACT | INFERENCE | SPECULATION]",
+        "Refute pass: a second pass actively attempts to falsify the top 3 conclusions with counter-evidence",
+        "Provenance bundle sealed: all source snapshots (html/pdf) archived locally with hashes"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-09-market-research.yaml",
+        "final_rule": [
+          "No load-bearing claim ships on a single source.",
+          "No sizing number without its formula, inputs, and dominant sensitivity.",
+          "Uncertainty labels are mandatory; confidence without a tag is a fabrication risk.",
+          "Every market research session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.3",
+            "3.1",
+            "3.2",
+            "3.4"
+          ],
+          "degrade": [
+            "1.4",
+            "2.2",
+            "3.3"
+          ],
+          "stop": [],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

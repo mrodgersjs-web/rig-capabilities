@@ -1,0 +1,302 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-05-LAUNCH-PREP",
+      "name": "Launch Prep Goal Harness",
+      "description": "Launch Prep Goal Harness [gtm-launch-prep] \u2014 compiled from capabilities/harnesses/hD-05-launch-prep.yaml",
+      "anchor": "LL1-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "Checklist readiness score computed and meets the tier threshold (or shortfall items named with owners)",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Launch named and tiered: launch-tiering rubric applied (Tier",
+          "description": "Launch named and tiered: launch-tiering rubric applied (Tier 1/2/3) with rationale",
+          "command": "artifacts/launch/<run>/tier.md contains tier enum and >= 2 rationale bullets citing reach and risk",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Launch owner and channel owners assigned by name; no unowned",
+          "description": "Launch owner and channel owners assigned by name; no unowned checklist section permitted",
+          "command": "artifacts/launch/<run>/owners.yaml \u2014 every checklist section key maps to a non-empty owner",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "description": "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "command": "coordinate block in ~/.hermes/jake/launch/session-<ts>.log parseable by jq",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_launch declared with all 7 components",
+          "description": "Harness tuple H_launch declared with all 7 components",
+          "command": "session log contains 'H_launch(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Readiness Inventory",
+          "name": "1.1 Launch checklist generated from the tier template with every",
+          "description": "Launch checklist generated from the tier template with every item carrying status and evidence link",
+          "command": "artifacts/launch/<run>/checklist.yaml \u2014 jq '[.items[] | select(.status == \"unverified\")] | length' drives the readiness score; zero items missing evidence field",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Readiness Inventory",
+          "name": "1.2 Asset inventory complete: landing page, emails, social, sale",
+          "description": "Asset inventory complete: landing page, emails, social, sales enablement, docs \u2014 each with sha256 and final-approval flag",
+          "command": "artifacts/launch/<run>/assets.json \u2014 every asset has sha256 and approved: true; shasum -a 256 -c assets.sha256 exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Readiness Inventory",
+          "name": "1.3 Messaging consistency pass: same positioning statement and C",
+          "description": "Messaging consistency pass: same positioning statement and CTA across all public surfaces",
+          "command": "python3 scripts/consistency_check.py artifacts/launch/<run>/assets.json exit 0; report shows positioning_match: true",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "1.4",
+          "category": "Readiness Inventory",
+          "name": "1.4 Support readiness: FAQ draft + internal macro doc exist for ",
+          "description": "Support readiness: FAQ draft + internal macro doc exist for launch-day questions",
+          "command": "artifacts/launch/<run>/support/faq.md and macros.md both non-empty (wc -l > 20 each)",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Systems Verification",
+          "name": "2.1 Analytics instrumentation verified live: events fire on stag",
+          "description": "Analytics instrumentation verified live: events fire on staging for signup, conversion, and share actions",
+          "command": "artifacts/launch/<run>/analytics_proof.json \u2014 per-event {event, fired_on_staging: true, captured_at}; jq 'length >= 3' true",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Systems Verification",
+          "name": "2.2 Staging end-to-end run completed: full user path exercised (",
+          "description": "Staging end-to-end run completed: full user path exercised (landing -> signup -> first value) with screenshots or trace ids",
+          "command": "artifacts/launch/<run>/e2e/ contains per-step evidence files; scripts/e2e_launch.sh exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Systems Verification",
+          "name": "2.3 Rollback / kill switch tested on staging: reverting the laun",
+          "description": "Rollback / kill switch tested on staging: reverting the launch flag restores prior state",
+          "command": "artifacts/launch/<run>/rollback_test.log shows flag revert executed and state verification passed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Systems Verification",
+          "name": "2.4 CRM and email plumbing verified: launch segment query return",
+          "description": "CRM and email plumbing verified: launch segment query returns expected count; sequence enroll path tested with a test address",
+          "command": "segment_count in plumbing.json > 0; test enroll receipt logged with message_id",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Risk & Approval",
+          "name": "3.1 Risk register reviewed: top 5 launch risks each with mitigat",
+          "description": "Risk register reviewed: top 5 launch risks each with mitigation and owner (risk-playbooks format)",
+          "command": "artifacts/launch/<run>/risks.yaml \u2014 exactly >= 5 risks each with mitigation and owner fields",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.2",
+          "category": "Risk & Approval",
+          "name": "3.2 Compliance/brand review pass for regulated claims: no unappr",
+          "description": "Compliance/brand review pass for regulated claims: no unapproved superlatives or unverifiable stats in public copy",
+          "command": "artifacts/launch/<run>/compliance_review.md with per-asset verdict and reviewer identity",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Risk & Approval",
+          "name": "3.3 Go/No-Go verdict computed: readiness score = verified items ",
+          "description": "Go/No-Go verdict computed: readiness score = verified items / total items, threshold per tier (T1: 1.0, T2: 0.95, T3: 0.9)",
+          "command": "artifacts/launch/<run>/verdict.json with score, threshold, verdict enum; score computed by scripts/launch_verdict.py",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Risk & Approval",
+          "name": "3.4 Gate-D arming for go-live: typed APPROVE <run_id> recorded b",
+          "description": "Gate-D arming for go-live: typed APPROVE <run_id> recorded before any publish/deploy/send action",
+          "command": "artifacts/launch/<run>/gate_d.log APPROVE line present; absent it session ends as 'ready-unarmed' which is a complete outcome",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Launch prep session. A launch is a promise kept in public. Readiness is proven per item, never declared in aggregate.",
+        "harness_tuple": "H_launch(checklist, assets, channels, instrumentation, rollback, approvals, verdict)",
+        "bms_bias": "A1 for readiness checks and asset hashing; A2 for risk review; A3 permitted for messaging variants; A4 never \u2014 go-live is Gate-D",
+        "meta": {
+          "harness_id": "hD-05-launch-prep",
+          "session_type": "gtm-launch-prep",
+          "governs_loops": [
+            "GL-OD-launch",
+            "launch-plays",
+            "launch-tiering",
+            "risk-playbooks"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; a launch-day incident maps back to a missing gate within 24h"
+          }
+        }
+      },
+      "success_conditions": [
+        "Checklist readiness score computed and meets the tier threshold (or shortfall items named with owners)",
+        "Assets hashed and approved; staging e2e, analytics, rollback, and plumbing all evidenced",
+        "Verdict artifact present: go | no-go | ready-unarmed, each with reasoning",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, next safe action in session log"
+      ],
+      "failure_states": [
+        "stop gate(s) 3.4: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 2.4, 3.2, 3.3: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Launch named and tiered: launch-tiering rubric applied (Tier 1/2/3) with rationale",
+        "Launch owner and channel owners assigned by name; no unowned checklist section permitted",
+        "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+        "Harness tuple H_launch declared with all 7 components",
+        "Launch checklist generated from the tier template with every item carrying status and evidence link",
+        "Asset inventory complete: landing page, emails, social, sales enablement, docs \u2014 each with sha256 and final-approval flag",
+        "Messaging consistency pass: same positioning statement and CTA across all public surfaces",
+        "Support readiness: FAQ draft + internal macro doc exist for launch-day questions",
+        "Analytics instrumentation verified live: events fire on staging for signup, conversion, and share actions",
+        "Staging end-to-end run completed: full user path exercised (landing -> signup -> first value) with screenshots or trace ids",
+        "Rollback / kill switch tested on staging: reverting the launch flag restores prior state",
+        "CRM and email plumbing verified: launch segment query returns expected count; sequence enroll path tested with a test address",
+        "Risk register reviewed: top 5 launch risks each with mitigation and owner (risk-playbooks format)",
+        "Compliance/brand review pass for regulated claims: no unapproved superlatives or unverifiable stats in public copy",
+        "Go/No-Go verdict computed: readiness score = verified items / total items, threshold per tier (T1: 1.0, T2: 0.95, T3: 0.9)",
+        "Gate-D arming for go-live: typed APPROVE <run_id> recorded before any publish/deploy/send action"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-05-launch-prep.yaml",
+        "final_rule": [
+          "Readiness is a computed score over evidenced items, never a feeling in a meeting.",
+          "No publish, deploy, or send without typed Gate-D approval for this exact launch run.",
+          "An unarmed ready launch is a success state; an armed unready one is a failure state.",
+          "Every launch prep session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.3",
+            "2.4",
+            "3.2",
+            "3.3"
+          ],
+          "degrade": [
+            "1.3",
+            "1.4",
+            "3.1"
+          ],
+          "stop": [
+            "3.4"
+          ],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

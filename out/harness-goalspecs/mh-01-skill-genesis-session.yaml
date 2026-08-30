@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-MH-01-SKILL-GENESIS-SESSION",
+      "name": "Skill Genesis Session Goal Harness",
+      "description": "Skill Genesis Session Goal Harness [skill-genesis-session] \u2014 compiled from capabilities/harnesses/mh-01-skill-genesis-session.yaml",
+      "anchor": "LL3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and genesis target pinned: skill name,",
+          "description": "Startup phrase spoken and genesis target pinned: skill name, trigger conditions, and the exact directory artifacts/skills/<name>/ declared before any content is written",
+          "command": "Session log line 'TARGET: artifacts/skills/<name>' recorded; name matches /^[a-z0-9-]+$/ via python3 -c regex assertion",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Meta-skill doctrine loaded: this session operates on the ass",
+          "description": "Meta-skill doctrine loaded: this session operates on the asset library, not on content; the three mandatory blocks (math_claim, rig-memory-os integration, done test) are named in the session preamble",
+          "command": "Session preamble lists the strings 'Math claim (Deviatrix MathExec)', 'Rig Memory OS integration', 'Done test' verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before first file is opened",
+          "description": "RIG coordinate stated before first file is opened",
+          "command": "Session log line of form 'COORD: L3-L4 x D1-D3 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_skillgenesis(need, math_claim, done_test, pl",
+          "description": "Harness tuple H_skillgenesis(need, math_claim, done_test, planted_failure, ship) declared with all five components named",
+          "command": "Session log contains the tuple declaration verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Need & Novelty",
+          "name": "1.1 Skill-scout pass executed before writing: the need is checke",
+          "description": "Skill-scout pass executed before writing: the need is checked against the existing catalog artifacts/skill_catalog.json and no shipped skill already covers the capability; overlap with any existing skill is named and differentiated",
+          "command": "python3 -c that json-loads skill_catalog.json and asserts the new name is absent and lists the nearest-neighbor skills by trigger overlap; output saved to .rig/genesis/novelty.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Need & Novelty",
+          "name": "1.2 Need statement is executable: the skill's trigger conditions",
+          "description": "Need statement is executable: the skill's trigger conditions are concrete enough that a matcher could fire them; zero trigger condition is a bare adjective",
+          "command": ".rig/genesis/need.md contains 2-5 trigger_conditions lines each containing a verb and a noun; validated by a python3 assertion that every line matches /\\w+(ing|e)?\\s+\\w+/ and contains no word from a banned-vague list",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Math Claim",
+          "name": "2.1 MathExec substrate proven live this session: the deviation e",
+          "description": "MathExec substrate proven live this session: the deviation engine that will back this skill's math_claim is exercised end to end before any claim is written into the skill",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py self-test exits 0 with 'SELF-TEST PASS' output appended to .rig/genesis/mathexec.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Math Claim",
+          "name": "2.2 math_claim block authored with all four fields: claim (quant",
+          "description": "math_claim block authored with all four fields: claim (quantified), reference_population (real baseline corpus), estimator (named from the substrate), expected_result (falsifiable)",
+          "command": "python3 -c that parses the SKILL.md yaml block and asserts keys {claim, reference_population, estimator, expected_result} are all present and non-empty; exit 0 recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Math Claim",
+          "name": "2.3 Math claim executes against its baseline: the skill's claime",
+          "description": "Math claim executes against its baseline: the skill's claimed estimator is run via the substrate with a real score and baseline and returns a finite certified z",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py deviation --score <s> --baseline <b> emits JSON with 'certified_z' finite; output saved to .rig/genesis/deviation.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Done-Test & Planted Failure",
+          "name": "3.1 Done-test authored as a runnable bash block inside the SKILL",
+          "description": "Done-test authored as a runnable bash block inside the SKILL.md '## Done test' section; it references only real paths and asserts observable state, not prose claims",
+          "command": "python3 -c that extracts the fenced block after '## Done test' and asserts it is non-empty and contains at least one 'assert' or exit-code check; extraction script output recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Done-Test & Planted Failure",
+          "name": "3.2 Done-test goes GREEN on the real artifact: the extracted blo",
+          "description": "Done-test goes GREEN on the real artifact: the extracted block is executed against the freshly authored skill and exits 0",
+          "command": "bash -c <extracted done-test> exit code 0 appended to .rig/genesis/done-green.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Done-Test & Planted Failure",
+          "name": "3.3 Planted-failure proof: a deliberately broken fixture (trunca",
+          "description": "Planted-failure proof: a deliberately broken fixture (truncated artifact, missing required section, or wrong estimator name) is run through the same done-test and the test MUST go RED with a non-zero exit and an informative message",
+          "command": "bash -c <done-test against broken fixture> exit code != 0 and stderr/stdout captured in .rig/genesis/done-red.txt; a green exit here is itself a session failure",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Done-Test & Planted Failure",
+          "name": "3.4 Planted failure is retained as a permanent regression case: ",
+          "description": "Planted failure is retained as a permanent regression case: the broken fixture and its expected RED output are committed beside the skill, not discarded",
+          "command": "ls artifacts/skills/<name>/ contains the fixture file; git status shows it staged; recorded in .rig/genesis/regression-fixture.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Memory & Ship",
+          "name": "4.1 Rig Memory OS integration section authored and exercised: th",
+          "description": "Rig Memory OS integration section authored and exercised: the skill documents memory.record_event and memory.propose_memory, and the genesis itself records an event through the canonical bridge",
+          "command": "rig-memory-os memory.record_event(kind=\"skill_genesis\", skill=<name>, green_exit=0, red_exit=<code>) returns an event id, and the id is immediately recalled byte-for-byte; round-trip proof saved to .rig/genesis/memory-roundtrip.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Memory & Ship",
+          "name": "4.2 Ship gate: SKILL.md passes the meta-memory-os-bridge bridge ",
+          "description": "Ship gate: SKILL.md passes the meta-memory-os-bridge bridge check (both memory surfaces named) and the file is written to artifacts/skills/<name>/SKILL.md with no placeholder tokens remaining",
+          "command": "grep -c 'memory.record_event' and 'memory.propose_memory' both >= 1; grep -nE 'TODO|PLACEHOLDER|<name>' outside the done-test fixture returns zero hits; exit codes recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the genesis author. A skill without a done-test that can go red is not a skill.",
+        "harness_tuple": "H_skillgenesis(need, math_claim, done_test, planted_failure, ship)",
+        "bms_bias": "A1 verification-led for every gate; A2 permitted for drafting skill prose; A3 forbidden for done-test logic; A4 forbidden \u2014 genesis never publishes to a live catalog without Gate-D",
+        "meta": {
+          "harness_id": "mh-01-skill-genesis-session",
+          "session_type": "skill-genesis-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-VQ",
+            "GL-SI"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across genesis sessions \u2192 the genesis template's section is rewritten, or a recurring planted-failure class is absorbed into meta-skill-refuter's mutant taxonomy"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "SKILL.md exists with math_claim, rig-memory-os integration, and done-test sections all populated and parseable",
+        "Done-test demonstrated GREEN on the real artifact and RED on the planted failure, both exit codes on file",
+        "Planted-failure fixture committed as a permanent regression case",
+        "skill_genesis event recorded to rig-memory-os and verified by round-trip recall",
+        "One improvement entry appended to the improvements log",
+        "Identity closure: coordinate, shipped skill path, and next safe action stated in the session tail"
+      ],
+      "failure_states": [
+        "stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect",
+        "stop gate(s) 3.3: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.4, 4.1, 4.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and genesis target pinned: skill name, trigger conditions, and the exact directory artifacts/skills/<name>/ declared before any content is written",
+        "Meta-skill doctrine loaded: this session operates on the asset library, not on content; the three mandatory blocks (math_claim, rig-memory-os integration, done test) are named in the session preamble",
+        "RIG coordinate stated before first file is opened",
+        "Harness tuple H_skillgenesis(need, math_claim, done_test, planted_failure, ship) declared with all five components named",
+        "Skill-scout pass executed before writing: the need is checked against the existing catalog artifacts/skill_catalog.json and no shipped skill already covers the capability; overlap with any existing skill is named and differentiated",
+        "Need statement is executable: the skill's trigger conditions are concrete enough that a matcher could fire them; zero trigger condition is a bare adjective",
+        "MathExec substrate proven live this session: the deviation engine that will back this skill's math_claim is exercised end to end before any claim is written into the skill",
+        "math_claim block authored with all four fields: claim (quantified), reference_population (real baseline corpus), estimator (named from the substrate), expected_result (falsifiable)",
+        "Math claim executes against its baseline: the skill's claimed estimator is run via the substrate with a real score and baseline and returns a finite certified z",
+        "Done-test authored as a runnable bash block inside the SKILL.md '## Done test' section; it references only real paths and asserts observable state, not prose claims",
+        "Done-test goes GREEN on the real artifact: the extracted block is executed against the freshly authored skill and exits 0",
+        "Planted-failure proof: a deliberately broken fixture (truncated artifact, missing required section, or wrong estimator name) is run through the same done-test and the test MUST go RED with a non-zero exit and an informative message",
+        "Planted failure is retained as a permanent regression case: the broken fixture and its expected RED output are committed beside the skill, not discarded",
+        "Rig Memory OS integration section authored and exercised: the skill documents memory.record_event and memory.propose_memory, and the genesis itself records an event through the canonical bridge",
+        "Ship gate: SKILL.md passes the meta-memory-os-bridge bridge check (both memory surfaces named) and the file is written to artifacts/skills/<name>/SKILL.md with no placeholder tokens remaining"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/mh-01-skill-genesis-session.yaml",
+        "final_rule": [
+          "No done-test, no skill.",
+          "A test that can't go red is not a test \u2014 it is decoration.",
+          "The planted failure ships with the skill, forever.",
+          "No memory event, no session complete.",
+          "Every skill-genesis session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2",
+            "3.4",
+            "4.1",
+            "4.2"
+          ],
+          "degrade": [
+            "1.2"
+          ],
+          "stop": [
+            "3.3"
+          ],
+          "notes": "stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect"
+        }
+      }
+    }
+  ]
+}

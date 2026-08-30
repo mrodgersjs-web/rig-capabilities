@@ -1,0 +1,311 @@
+{
+  "goals": [
+    {
+      "id": "GL-MH-05-ASSET-PRUNING-SESSION",
+      "name": "Asset Pruning Session Goal Harness",
+      "description": "Asset Pruning Session Goal Harness [asset-pruning-session] \u2014 compiled from capabilities/harnesses/mh-05-asset-pruning-session.yaml",
+      "anchor": "LL3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and pruning scope pinned: the exact as",
+          "description": "Startup phrase spoken and pruning scope pinned: the exact asset classes in scope (skills, harnesses, agents, catalogs) and the absolute exclusion list declared before any evaluation begins",
+          "command": "Session log line 'SCOPE: <classes> | EXCLUDE: <paths>'; exclusion list saved to .rig/prune/exclusions.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Pruning doctrine loaded: condemnation requires a recorded fa",
+          "description": "Pruning doctrine loaded: condemnation requires a recorded failing done-test or a quantified drift/usage verdict \u2014 boredom, taste, and age alone never condemn",
+          "command": "Session preamble contains the phrase 'failing done-test recorded' and 'no cut without evidence'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before any asset is evaluated",
+          "description": "RIG coordinate stated before any asset is evaluated",
+          "command": "Session log line of form 'COORD: L3-L4 x D1-D3 x A1 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_prune(condemnation_set, failing_tests, drift",
+          "description": "Harness tuple H_prune(condemnation_set, failing_tests, drift_findings, restore_points, verdict) declared with all five components named",
+          "command": "Session log contains the tuple declaration verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Condemnation Evidence",
+          "name": "1.1 Every condemned skill carries a recorded failing done-test: ",
+          "description": "Every condemned skill carries a recorded failing done-test: the skill's own '## Done test' block was executed and exited non-zero against the CURRENT artifact, with output on file \u2014 no skill enters the condemnation set on inspection alone",
+          "command": "Per condemned skill: bash -c <extracted done-test> exit code != 0 with stdout/stderr saved to .rig/prune/failures/<skill>.txt; python3 assertion that condemnation set == set of recorded failure files",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Condemnation Evidence",
+          "name": "1.2 Restorability proven before any cut: every condemnation-set ",
+          "description": "Restorability proven before any cut: every condemnation-set asset is archived (tar of the asset directory plus its catalog row) and the archive's integrity verified",
+          "command": "tar -czf .rig/prune/restore/<asset>.tar.gz <asset dir> followed by tar -tzf listing matching the source file list; sha256 of archive recorded in .rig/prune/restore/manifest.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Condemnation Evidence",
+          "name": "1.3 Reverse-dependency sweep: no surviving asset references a co",
+          "description": "Reverse-dependency sweep: no surviving asset references a condemned one \u2014 catalogs, agent manifests, and harness bindings are grepped for each condemned name",
+          "command": "grep -rn '<condemned-name>' artifacts/ excluding the asset itself and .rig/prune/ returns zero hits, or each hit has a written migration line in .rig/prune/dependents.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Catalog & Drift Pass",
+          "name": "2.1 Catalog pruner pass: skill_catalog.json, harness_catalog.jso",
+          "description": "Catalog pruner pass: skill_catalog.json, harness_catalog.json, and agent_catalog.json entries are validated against disk \u2014 every catalog row points at an existing, parseable asset; phantom rows are enumerated",
+          "command": "python3 -c json-loading each catalog and asserting os.path.exists plus parse success per row; phantom list saved to .rig/prune/phantoms.txt (empty allowed, file mandatory)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Catalog & Drift Pass",
+          "name": "2.2 Doctrine drift audit: live assets are scanned for stale thre",
+          "description": "Doctrine drift audit: live assets are scanned for stale thresholds, dead loop references (GL-* ids that no longer exist), and superseded doctrine phrases; findings carry file:line anchors",
+          "command": "grep -rnE '<known drift patterns>' over artifacts/skills/ artifacts/harnesses/ artifacts/agents/ with hits triaged in .rig/prune/drift.txt as condemn / repair / annotate",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Catalog & Drift Pass",
+          "name": "2.3 Usage telemetry check: kill-candidates justified by non-use ",
+          "description": "Usage telemetry check: kill-candidates justified by non-use must show a telemetry window \u2014 an asset with zero recorded invocations over the window AND a failing done-test; usage alone never condemns",
+          "command": "python3 -c reading the usage telemetry log asserting each non-use condemnation cites a window length and zero-count; table in .rig/prune/usage.txt",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Catalog & Drift Pass",
+          "name": "2.4 Quantified drift scoring: drift findings that claim statisti",
+          "description": "Quantified drift scoring: drift findings that claim statistical weight are scored against the substrate rather than asserted",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py deviation --score <finding_rate> --baseline <historical_rates> per quantified claim; JSON outputs in .rig/prune/drift-zscores/; self-test rerun first if substrate was not exercised this session",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Approval & Execution",
+          "name": "3.1 Condemnation set frozen and presented for Gate-D: the set (w",
+          "description": "Condemnation set frozen and presented for Gate-D: the set (with per-asset evidence links: failing test output, restore archive hash, dependency sweep) is written as a single reviewable document; no deletion command is staged before approval",
+          "command": ".rig/prune/condemnation.md exists with one section per asset containing the three evidence links; python3 os.path.exists assertion per link; session log states 'AWAITING GATE-D'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Approval & Execution",
+          "name": "3.2 Approval recorded: the human's explicit approval token for t",
+          "description": "Approval recorded: the human's explicit approval token for this exact condemnation set (content-hash matched) is on file before any delete runs",
+          "command": "Approval line in session log includes sha256 of condemnation.md; recomputed hash matches; recorded to .rig/prune/approval.txt",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Approval & Execution",
+          "name": "3.3 Deletion executes exactly the approved set and nothing else:",
+          "description": "Deletion executes exactly the approved set and nothing else: the delete list is derived programmatically from the approved document, and post-delete verification confirms only approved paths are gone",
+          "command": "python3 -c diffing pre/post directory listings; deleted set == approved set (set equality assertion); survivors untouched; result in .rig/prune/post-delete.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Approval & Execution",
+          "name": "3.4 Catalogs and dependents updated in the same transaction: rem",
+          "description": "Catalogs and dependents updated in the same transaction: removed assets' catalog rows deleted, dependent migrations applied, and every catalog still validates (gate 2.1 re-run green)",
+          "command": "Re-run of the 2.1 validation script exits 0 post-delete; diff of catalog files saved to .rig/prune/catalog-diff.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Recording",
+          "name": "4.1 Prune verdict recorded to rig-memory-os with cut count, rest",
+          "description": "Prune verdict recorded to rig-memory-os with cut count, restore manifest hash, and per-asset verdicts",
+          "command": "rig-memory-os memory.record_event(kind=\"asset_pruned\", cut_count=<n>, restored=<bool>, restore_manifest_sha=<hash>, verdict=<pass>) returns an event id recalled byte-for-byte; round-trip in .rig/prune/memory-roundtrip.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Recording",
+          "name": "4.2 Condemnation classes proposed upstream: recurring cut causes",
+          "description": "Condemnation classes proposed upstream: recurring cut causes (e.g. untestable skill shapes) are submitted so genesis/forge templates harden against producing cuttable assets",
+          "command": "rig-memory-os memory.propose_memory(content=\"condemnation_class\", evidence_refs=[<asset_pruned event id>]) acknowledged; ack id in .rig/prune/proposal.txt",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the surgeon. Nothing dies without a failing test on record \u2014 and I restore before I cut.",
+        "harness_tuple": "H_prune(condemnation_set, failing_tests, drift_findings, restore_points, verdict)",
+        "bms_bias": "A1 exclusively \u2014 pruning is evidence-only; A2 forbidden (no prose may argue for a cut); A3 forbidden; A4 forbidden \u2014 deletion executes only after human Gate-D approval of the condemnation set",
+        "meta": {
+          "harness_id": "mh-05-asset-pruning-session",
+          "session_type": "asset-pruning-session",
+          "governs_loops": [
+            "GL-VQ",
+            "GL-GG",
+            "GL-OF"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "the same condemnation class recurs in 3+ prune sessions \u2192 the producing template (genesis or forge) is patched; restore archives never needed in 10 sessions \u2192 archive cadence is reviewed but never dropped"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "Every deleted asset had a recorded failing done-test, a verified restore archive, and a clean dependency sweep",
+        "Gate-D approval on file, content-hash matched to the exact condemnation set",
+        "Post-delete verification: deleted set == approved set; all catalogs re-validate green",
+        "asset_pruned event recorded and round-trip verified; condemnation classes proposed",
+        "One improvement entry appended to the improvements log"
+      ],
+      "failure_states": [
+        "stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0",
+        "stop gate(s) 3.2: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 3.1, 3.3, 3.4, 4.1: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and pruning scope pinned: the exact asset classes in scope (skills, harnesses, agents, catalogs) and the absolute exclusion list declared before any evaluation begins",
+        "Pruning doctrine loaded: condemnation requires a recorded failing done-test or a quantified drift/usage verdict \u2014 boredom, taste, and age alone never condemn",
+        "RIG coordinate stated before any asset is evaluated",
+        "Harness tuple H_prune(condemnation_set, failing_tests, drift_findings, restore_points, verdict) declared with all five components named",
+        "Every condemned skill carries a recorded failing done-test: the skill's own '## Done test' block was executed and exited non-zero against the CURRENT artifact, with output on file \u2014 no skill enters the condemnation set on inspection alone",
+        "Restorability proven before any cut: every condemnation-set asset is archived (tar of the asset directory plus its catalog row) and the archive's integrity verified",
+        "Reverse-dependency sweep: no surviving asset references a condemned one \u2014 catalogs, agent manifests, and harness bindings are grepped for each condemned name",
+        "Catalog pruner pass: skill_catalog.json, harness_catalog.json, and agent_catalog.json entries are validated against disk \u2014 every catalog row points at an existing, parseable asset; phantom rows are enumerated",
+        "Doctrine drift audit: live assets are scanned for stale thresholds, dead loop references (GL-* ids that no longer exist), and superseded doctrine phrases; findings carry file:line anchors",
+        "Usage telemetry check: kill-candidates justified by non-use must show a telemetry window \u2014 an asset with zero recorded invocations over the window AND a failing done-test; usage alone never condemns",
+        "Quantified drift scoring: drift findings that claim statistical weight are scored against the substrate rather than asserted",
+        "Condemnation set frozen and presented for Gate-D: the set (with per-asset evidence links: failing test output, restore archive hash, dependency sweep) is written as a single reviewable document; no deletion command is staged before approval",
+        "Approval recorded: the human's explicit approval token for this exact condemnation set (content-hash matched) is on file before any delete runs",
+        "Deletion executes exactly the approved set and nothing else: the delete list is derived programmatically from the approved document, and post-delete verification confirms only approved paths are gone",
+        "Catalogs and dependents updated in the same transaction: removed assets' catalog rows deleted, dependent migrations applied, and every catalog still validates (gate 2.1 re-run green)",
+        "Prune verdict recorded to rig-memory-os with cut count, restore manifest hash, and per-asset verdicts",
+        "Condemnation classes proposed upstream: recurring cut causes (e.g. untestable skill shapes) are submitted so genesis/forge templates harden against producing cuttable assets"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/mh-05-asset-pruning-session.yaml",
+        "final_rule": [
+          "No failing done-test on record, no condemnation.",
+          "Restore is proven before the cut, not promised after.",
+          "The approved set and the deleted set are the same set, proven by diff.",
+          "Every asset-pruning session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "3.1",
+            "3.3",
+            "3.4",
+            "4.1"
+          ],
+          "degrade": [
+            "2.2",
+            "2.3",
+            "2.4",
+            "4.2"
+          ],
+          "stop": [
+            "3.2"
+          ],
+          "notes": "stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0"
+        }
+      }
+    }
+  ]
+}

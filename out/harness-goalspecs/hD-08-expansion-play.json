@@ -1,0 +1,303 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-08-EXPANSION-PLAY",
+      "name": "Expansion Play Goal Harness",
+      "description": "Expansion Play Goal Harness [gtm-expansion-play] \u2014 compiled from capabilities/harnesses/hD-08-expansion-play.yaml",
+      "anchor": "LL1-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "Eligible cohort reproducible; every play-track account has verified signals, matched play, ROI narrative, and CRM opportunity",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Expansion doctrine loaded (expansion-playbook, expansion-pla",
+          "description": "Expansion doctrine loaded (expansion-playbook, expansion-plays, usage-to-value-map read this session)",
+          "command": "grep -lq 'expansion' ~/.claude/skills/expansion-playbook/SKILL.md && echo LOADED in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Operating mode declared: analysis + drafts only; zero custom",
+          "description": "Operating mode declared: analysis + drafts only; zero customer contact without approval",
+          "command": "session log line 'MODE=draft-only' in ~/.hermes/jake/expansion/session-<ts>.log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "description": "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "command": "coordinate block parseable by jq '.coordinate'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_expansion declared with all 8 components",
+          "description": "Harness tuple H_expansion declared with all 8 components",
+          "command": "session log contains 'H_expansion(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Eligibility & Signals",
+          "name": "1.1 Eligible account list produced by reproducible query: seat u",
+          "description": "Eligible account list produced by reproducible query: seat utilization, feature adoption, plan ceiling proximity, tenure",
+          "command": "artifacts/expansion/<run>/eligibility_query.sql + eligible.json; re-run hash matches; jq 'length >= 1' true or explicit empty-cohort note",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Eligibility & Signals",
+          "name": "1.2 Expansion signal verified per account: usage metric crosses ",
+          "description": "Expansion signal verified per account: usage metric crosses the declared threshold with the actual series attached",
+          "command": "artifacts/expansion/<run>/signals.jsonl \u2014 per account: metric, threshold, observed_value, series_id; all observed_value >= threshold",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Eligibility & Signals",
+          "name": "1.3 Suppression applied: accounts with open churn-risk flags, un",
+          "description": "Suppression applied: accounts with open churn-risk flags, unresolved escalations, or in-flight negotiations excluded with reason codes",
+          "command": "artifacts/expansion/<run>/suppressed.json \u2014 every excluded account has reason_code from declared enum",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Eligibility & Signals",
+          "name": "1.4 Champion identified per account: named contact with engageme",
+          "description": "Champion identified per account: named contact with engagement evidence, or account is downgraded to 'nurture' track",
+          "command": "artifacts/expansion/<run>/champions.json \u2014 per account: contact_id + last_engagement date, or track: nurture",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Play & Narrative",
+          "name": "2.1 Play selected from the expansion playbook by signal type, wi",
+          "description": "Play selected from the expansion playbook by signal type, with the selection rule recorded",
+          "command": "artifacts/expansion/<run>/play_selection.json \u2014 per account: play_id + selection_rule; every play_id exists in expansion-playbook index",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Play & Narrative",
+          "name": "2.2 ROI narrative computed from the account's own usage data (us",
+          "description": "ROI narrative computed from the account's own usage data (usage-to-value map): hours saved, seats utilized, features adopted \u2014 with numbers, not adjectives",
+          "command": "artifacts/expansion/<run>/roi/<account>.md \u2014 every value claim cites a metric from signals.jsonl; grep -c 'hours\\|seats\\|%\\|\\$' >= 3 per file",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Play & Narrative",
+          "name": "2.3 Proposal draft exists per account with concrete ask: tier, s",
+          "description": "Proposal draft exists per account with concrete ask: tier, seat count, or module \u2014 and the price is stated, not implied",
+          "command": "artifacts/expansion/<run>/drafts/<account>.md contains explicit ask line with amount; scripts/ask_scan.py exit 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Play & Narrative",
+          "name": "2.4 Objection pre-mortem: top 3 likely objections per segment wi",
+          "description": "Objection pre-mortem: top 3 likely objections per segment with prepared responses",
+          "command": "artifacts/expansion/<run>/objections.md \u2014 >= 3 objections with responses per represented segment",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Pipeline & Approval",
+          "name": "3.1 CRM opportunity records created per account with play_id, am",
+          "description": "CRM opportunity records created per account with play_id, amount, stage, and next_step",
+          "command": "artifacts/expansion/<run>/opportunities.json \u2014 Twenty API record ids; count equals play-track account count",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Pipeline & Approval",
+          "name": "3.2 Forecast impact computed and logged: pipeline delta by close",
+          "description": "Forecast impact computed and logged: pipeline delta by close-month, confidence-weighted",
+          "command": "artifacts/expansion/<run>/forecast_delta.json with per-month expected_value and weighting method stated",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Pipeline & Approval",
+          "name": "3.3 Gate-D approval before any customer-facing outreach: typed A",
+          "description": "Gate-D approval before any customer-facing outreach: typed APPROVE <run_id> per account batch",
+          "command": "artifacts/expansion/<run>/gate_d.log APPROVE lines; absent them all drafts remain arm: false",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Pipeline & Approval",
+          "name": "3.4 Playbook feedback loop: session learnings (signal quality, o",
+          "description": "Playbook feedback loop: session learnings (signal quality, objection hits) appended to the expansion playbook log",
+          "command": "append to ~/.hermes/jake/expansion/playbook_feedback.jsonl with run_id and >= 1 learning",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Expansion play session. Expansion is earned by demonstrated value. Upsell without usage evidence is spam with a CRM entry.",
+        "harness_tuple": "H_expansion(eligibility, signals, play, champion, roi_narrative, crm_records, forecast, approval)",
+        "bms_bias": "A1 for eligibility and signal checks; A2 for play selection and ROI math; A3 for narrative drafting; A4 never \u2014 customer contact is Gate-D",
+        "meta": {
+          "harness_id": "hD-08-expansion-play",
+          "session_type": "gtm-expansion-play",
+          "governs_loops": [
+            "GL-OD-expansion",
+            "expansion-playbook",
+            "expansion-plays",
+            "usage-to-value-map",
+            "capacity-modeling"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; a signal threshold producing 3 consecutive dead plays is recalibrated"
+          }
+        }
+      },
+      "success_conditions": [
+        "Eligible cohort reproducible; every play-track account has verified signals, matched play, ROI narrative, and CRM opportunity",
+        "Suppressed accounts carry reason codes; nurture-track accounts carry champion-gap notes",
+        "Drafts armed only with approval; forecast delta logged",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (plays-staged | partial | blocked), next safe action in session log"
+      ],
+      "failure_states": [
+        "stop gate(s) 3.3: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 3.1: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Expansion doctrine loaded (expansion-playbook, expansion-plays, usage-to-value-map read this session)",
+        "Operating mode declared: analysis + drafts only; zero customer contact without approval",
+        "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+        "Harness tuple H_expansion declared with all 8 components",
+        "Eligible account list produced by reproducible query: seat utilization, feature adoption, plan ceiling proximity, tenure",
+        "Expansion signal verified per account: usage metric crosses the declared threshold with the actual series attached",
+        "Suppression applied: accounts with open churn-risk flags, unresolved escalations, or in-flight negotiations excluded with reason codes",
+        "Champion identified per account: named contact with engagement evidence, or account is downgraded to 'nurture' track",
+        "Play selected from the expansion playbook by signal type, with the selection rule recorded",
+        "ROI narrative computed from the account's own usage data (usage-to-value map): hours saved, seats utilized, features adopted \u2014 with numbers, not adjectives",
+        "Proposal draft exists per account with concrete ask: tier, seat count, or module \u2014 and the price is stated, not implied",
+        "Objection pre-mortem: top 3 likely objections per segment with prepared responses",
+        "CRM opportunity records created per account with play_id, amount, stage, and next_step",
+        "Forecast impact computed and logged: pipeline delta by close-month, confidence-weighted",
+        "Gate-D approval before any customer-facing outreach: typed APPROVE <run_id> per account batch",
+        "Playbook feedback loop: session learnings (signal quality, objection hits) appended to the expansion playbook log"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-08-expansion-play.yaml",
+        "final_rule": [
+          "No expansion ask without usage evidence that crosses a declared threshold.",
+          "No ROI narrative built from adjectives; every value claim cites the account's own metrics.",
+          "No customer contact without typed Gate-D approval for this exact batch.",
+          "Every expansion play session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.2",
+            "3.1"
+          ],
+          "degrade": [
+            "1.4",
+            "2.3",
+            "2.4",
+            "3.2",
+            "3.4"
+          ],
+          "stop": [
+            "3.3"
+          ],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

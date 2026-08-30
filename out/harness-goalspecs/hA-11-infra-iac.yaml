@@ -1,0 +1,315 @@
+{
+  "goals": [
+    {
+      "id": "GL-HA-11-INFRA-IAC",
+      "name": "Infrastructure-as-Code Session Goal Harness",
+      "description": "Infrastructure-as-Code Session Goal Harness [infra-iac-session] \u2014 compiled from capabilities/harnesses/hA-11-infra-iac.yaml",
+      "anchor": "LL3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the IaC target pinned: tool (terra",
+          "description": "Startup phrase spoken and the IaC target pinned: tool (terraform/opentofu/pulumi/cdk), workspace/stack, and backend state location",
+          "command": "Session log contains tool+version (terraform version output), workspace, and backend config path",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Procedures declared mandatory: fmt+validate before plan, pla",
+          "description": "Procedures declared mandatory: fmt+validate before plan, plan reviewed by a second pair of eyes (human or reviewer agent), policy-as-code green, no apply without Gate-D",
+          "command": "All four procedure names in session preamble",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before the first HCL edit",
+          "description": "RIG coordinate stated before the first HCL edit",
+          "command": "Session log line 'COORD: L3-L5 x D1-D3 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_iac(state_lock, plan_review, policy_gate, dr",
+          "description": "Harness tuple H_iac(state_lock, plan_review, policy_gate, drift_check, improvement) declared",
+          "command": "Tuple declaration present in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Authoring Discipline",
+          "name": "1.1 Format and validate clean: terraform fmt -check -recursive a",
+          "description": "Format and validate clean: terraform fmt -check -recursive and terraform validate (or pulumi preview typecheck) exit 0 on the changed modules",
+          "command": "Exit codes + output in .rig/iac/fmt-validate.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Authoring Discipline",
+          "name": "1.2 Static security scan: checkov / tfsec / trivy config run ove",
+          "description": "Static security scan: checkov / tfsec / trivy config run over changed modules; every finding fixed or suppressed with a written reason and expiry",
+          "command": "Scan report in .rig/iac/security-scan.txt; suppressions table in .rig/iac/suppressions.md (finding | reason | expiry)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Authoring Discipline",
+          "name": "1.3 No secrets in code or state-pointers: no hardcoded credentia",
+          "description": "No secrets in code or state-pointers: no hardcoded credentials, keys, or tokens (gitleaks over module dir); sensitive values come from vars marked sensitive, Vault/SSM data sources, or env",
+          "command": "gitleaks report empty; grep -rnE '(aws_secret|private_key|password\\s*=)' over .tf files returns only var references",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Authoring Discipline",
+          "name": "1.4 Version pins: provider and module versions pinned (required_",
+          "description": "Version pins: provider and module versions pinned (required_providers with ~> or =), no floating 'latest' module refs",
+          "command": "grep over changed .tf files shows version constraints on every provider/module block",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Plan & Policy",
+          "name": "2.1 Plan captured as artifact: terraform plan -out=tfplan plus t",
+          "description": "Plan captured as artifact: terraform plan -out=tfplan plus terraform show -json tfplan saved; plan reviewed line-by-line for destroys and replacements",
+          "command": ".rig/iac/tfplan + tfplan.json exist; .rig/iac/plan-review.md lists every destroy/replace action with a verdict",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Plan & Policy",
+          "name": "2.2 Destroy protection: any resource being destroyed or replaced",
+          "description": "Destroy protection: any resource being destroyed or replaced has an explicit human-acknowledged note; production stateful resources carry prevent_destroy or the exception is documented",
+          "command": "plan-review.md destroy section signed (name + date); lifecycle blocks grep-verified on stateful resources",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Plan & Policy",
+          "name": "2.3 Policy-as-code green: OPA/conftest or terraform-compliance p",
+          "description": "Policy-as-code green: OPA/conftest or terraform-compliance policies run against tfplan.json and pass (or violations carry approved waivers)",
+          "command": "conftest test tfplan.json output in .rig/iac/policy.txt; waiver list with approver names",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Plan & Policy",
+          "name": "2.4 Cost delta estimated: infracost breakdown (or equivalent) ru",
+          "description": "Cost delta estimated: infracost breakdown (or equivalent) run on the plan; monthly delta recorded and flagged if it exceeds the session's stated threshold",
+          "command": ".rig/iac/cost.txt with infracost output and the delta line highlighted",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "State & Drift",
+          "name": "3.1 State integrity: remote state backend confirmed (no local st",
+          "description": "State integrity: remote state backend confirmed (no local state for shared infra), state locking enabled, and terraform plan -refresh-only (or drift detection) shows no unmanaged drift before the change",
+          "command": "Backend config block path + refresh-only plan output in .rig/iac/drift-before.txt; drift items each dispositioned",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "State & Drift",
+          "name": "3.2 Blast radius mapped: the plan's affected resources mapped to",
+          "description": "Blast radius mapped: the plan's affected resources mapped to the services/environments they serve; shared resources (VPC, DNS, IAM) get an extra caution flag",
+          "command": ".rig/iac/blast-radius.md with resource\u2192service mapping; shared-resource flags present",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Closure",
+          "name": "4.1 Rollback path written: how to un-apply this change (revert c",
+          "description": "Rollback path written: how to un-apply this change (revert commit + plan, or state rm + import instructions for renames) documented before apply is requested",
+          "command": ".rig/iac/rollback.md with concrete commands; rename cases covered with state mv commands",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Closure",
+          "name": "4.2 Apply request packaged (not executed): a Gate-D request cont",
+          "description": "Apply request packaged (not executed): a Gate-D request containing plan artifact path, destroy summary, cost delta, blast radius, and rollback pointer",
+          "command": ".rig/iac/APPLY-REQUEST.md exists with all five fields; session log states 'apply deferred to Gate-D'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.3",
+          "category": "Closure",
+          "name": "4.3 Improvement entry written: one module smell, one policy gap,",
+          "description": "Improvement entry written: one module smell, one policy gap, or one drift source discovered",
+          "command": "Appended line to ~/.hermes/jake/improvements.log tagged hA-11-infra-iac",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Plan is the contract. Apply is a ceremony, never a surprise.",
+        "harness_tuple": "H_iac(state_lock, plan_review, policy_gate, drift_check, improvement)",
+        "bms_bias": "A2 for module authoring; A1 for plan/policy verification; A3 for docs; A4 (apply) only with explicit Gate-D approval",
+        "meta": {
+          "harness_id": "hA-11-infra-iac",
+          "session_type": "infra-iac-session",
+          "governs_loops": [
+            "GL-SI",
+            "GL-BD",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same policy violation or drift source recurs 3+ times \u2192 add an OPA rule or module default that prevents the class"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "Plan artifact + reviewed destroy/replace list on disk",
+        "Policy check green or waived with approvers",
+        "APPLY-REQUEST.md packaged for Gate-D; no apply executed in-session",
+        "One improvement entry appended",
+        "Identity closure: coordinate, plan verdict, next safe action stated"
+      ],
+      "failure_states": [
+        "terraform apply / pulumi up is ALWAYS out of session scope without an approved APPLY-REQUEST through Gate-D",
+        "stop gate(s) 1.3: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1, 3.2, 4.1, 4.2, 4.3: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the IaC target pinned: tool (terraform/opentofu/pulumi/cdk), workspace/stack, and backend state location",
+        "Procedures declared mandatory: fmt+validate before plan, plan reviewed by a second pair of eyes (human or reviewer agent), policy-as-code green, no apply without Gate-D",
+        "RIG coordinate stated before the first HCL edit",
+        "Harness tuple H_iac(state_lock, plan_review, policy_gate, drift_check, improvement) declared",
+        "Format and validate clean: terraform fmt -check -recursive and terraform validate (or pulumi preview typecheck) exit 0 on the changed modules",
+        "Static security scan: checkov / tfsec / trivy config run over changed modules; every finding fixed or suppressed with a written reason and expiry",
+        "No secrets in code or state-pointers: no hardcoded credentials, keys, or tokens (gitleaks over module dir); sensitive values come from vars marked sensitive, Vault/SSM data sources, or env",
+        "Version pins: provider and module versions pinned (required_providers with ~> or =), no floating 'latest' module refs",
+        "Plan captured as artifact: terraform plan -out=tfplan plus terraform show -json tfplan saved; plan reviewed line-by-line for destroys and replacements",
+        "Destroy protection: any resource being destroyed or replaced has an explicit human-acknowledged note; production stateful resources carry prevent_destroy or the exception is documented",
+        "Policy-as-code green: OPA/conftest or terraform-compliance policies run against tfplan.json and pass (or violations carry approved waivers)",
+        "Cost delta estimated: infracost breakdown (or equivalent) run on the plan; monthly delta recorded and flagged if it exceeds the session's stated threshold",
+        "State integrity: remote state backend confirmed (no local state for shared infra), state locking enabled, and terraform plan -refresh-only (or drift detection) shows no unmanaged drift before the change",
+        "Blast radius mapped: the plan's affected resources mapped to the services/environments they serve; shared resources (VPC, DNS, IAM) get an extra caution flag",
+        "Rollback path written: how to un-apply this change (revert commit + plan, or state rm + import instructions for renames) documented before apply is requested",
+        "Apply request packaged (not executed): a Gate-D request containing plan artifact path, destroy summary, cost delta, blast radius, and rollback pointer",
+        "Improvement entry written: one module smell, one policy gap, or one drift source discovered"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hA-11-infra-iac.yaml",
+        "final_rule": [
+          "No plan artifact, no discussion of apply.",
+          "Every destroy is signed before it is possible.",
+          "Secrets in state-code stop the world.",
+          "No improvement entry, no session complete.",
+          "Every infra-iac session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2",
+            "4.1",
+            "4.2",
+            "4.3"
+          ],
+          "degrade": [
+            "1.4",
+            "2.4"
+          ],
+          "stop": [
+            "1.3"
+          ],
+          "notes": "terraform apply / pulumi up is ALWAYS out of session scope without an approved APPLY-REQUEST through Gate-D"
+        }
+      }
+    }
+  ]
+}

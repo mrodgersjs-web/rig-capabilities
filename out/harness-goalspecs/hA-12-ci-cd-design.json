@@ -1,0 +1,315 @@
+{
+  "goals": [
+    {
+      "id": "GL-HA-12-CI-CD-DESIGN",
+      "name": "CI/CD Pipeline Design Session Goal Harness",
+      "description": "CI/CD Pipeline Design Session Goal Harness [ci-cd-design-session] \u2014 compiled from capabilities/harnesses/hA-12-ci-cd-design.yaml",
+      "anchor": "LL3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the pipeline target pinned: CI sys",
+          "description": "Startup phrase spoken and the pipeline target pinned: CI system (GitHub Actions/GitLab CI/Buildkite), repo, and the events the pipeline serves (push, PR, tag, schedule)",
+          "command": "Session log contains CI system, repo path, trigger list",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Procedures declared mandatory: lint before run, least-privil",
+          "description": "Procedures declared mandatory: lint before run, least-privilege permissions, pinned actions, dry-run before enable, no self-modifying CI",
+          "command": "All five procedure names in session preamble",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before the first workflow edit",
+          "description": "RIG coordinate stated before the first workflow edit",
+          "command": "Session log line 'COORD: L3-L5 x D1-D3 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_cicd(pipeline_spec, lint_proof, dry_run, sup",
+          "description": "Harness tuple H_cicd(pipeline_spec, lint_proof, dry_run, supply_chain, improvement) declared",
+          "command": "Tuple declaration present in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Pipeline Spec",
+          "name": "1.1 Pipeline stages specified before YAML: stage graph (lint \u2192 t",
+          "description": "Pipeline stages specified before YAML: stage graph (lint \u2192 typecheck \u2192 test \u2192 build \u2192 package \u2192 deploy-gate) with per-stage failure semantics and parallelism decisions written down",
+          "command": ".rig/cicd/stage-graph.md with stages, dependencies (needs:), and failure policy per stage",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Pipeline Spec",
+          "name": "1.2 Trigger audit: on: block reviewed \u2014 no pull_request_target w",
+          "description": "Trigger audit: on: block reviewed \u2014 no pull_request_target with checkout of untrusted code, no overly broad branch filters, scheduled jobs carry timezone note",
+          "command": ".rig/cicd/trigger-review.md with per-trigger verdict and the pull_request_target check explicitly answered",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Pipeline Spec",
+          "name": "1.3 Caching strategy stated: dependency cache keys include lockf",
+          "description": "Caching strategy stated: dependency cache keys include lockfile hash; cache fallbacks named; no cache poisoning path from PR builds into main-branch caches",
+          "command": "Workflow YAML cache keys grep-verified; poison-path analysis in stage-graph.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Supply Chain & Permissions",
+          "name": "2.1 Actions pinned to commit SHAs: every uses: reference is a fu",
+          "description": "Actions pinned to commit SHAs: every uses: reference is a full-length SHA with a version comment; no @main/@vN floating tags on third-party actions",
+          "command": "grep -nE 'uses: .+@(?! [0-9a-f]{40})' (or ratchet output) over workflow files returns empty; .rig/cicd/pins.txt lists each action+SHA",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Supply Chain & Permissions",
+          "name": "2.2 Least-privilege permissions: top-level permissions: block st",
+          "description": "Least-privilege permissions: top-level permissions: block starts at contents: read (or {}) and each job elevates only what it needs; no write-all, no id-token: write without a named OIDC audience",
+          "command": "Permissions blocks pasted into .rig/cicd/permissions-review.md with per-job justification",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Supply Chain & Permissions",
+          "name": "2.3 Secret hygiene: secrets referenced via environment protectio",
+          "description": "Secret hygiene: secrets referenced via environment protection rules; no secrets echoed, masked-bypass patterns, or passed to untrusted PR contexts; secrets: inherit audited",
+          "command": "grep for secrets. usages tabulated in .rig/cicd/secrets-audit.txt; each use tied to a protected environment or justified",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Supply Chain & Permissions",
+          "name": "2.4 No curl-pipe-shell or unpinned installers: remote install sc",
+          "description": "No curl-pipe-shell or unpinned installers: remote install scripts absent or pinned by version+checksum; package installs use lockfiles",
+          "command": "grep -nE 'curl .*\\| (ba)?sh' over workflows empty or each hit has checksum verification adjacent",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Verification",
+          "name": "3.1 Workflow lint clean: actionlint (plus zizmor for security fi",
+          "description": "Workflow lint clean: actionlint (plus zizmor for security findings) run over every changed workflow file, exit 0 or findings dispositioned",
+          "command": ".rig/cicd/actionlint.txt and zizmor output attached; dispositions listed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Verification",
+          "name": "3.2 Local dry-run: the workflow executed locally with act (or th",
+          "description": "Local dry-run: the workflow executed locally with act (or the job commands run in a clean container matching the runner image) and the critical path is green",
+          "command": ".rig/cicd/dry-run.txt with act output or container run exit codes; deviations from runner environment noted",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Verification",
+          "name": "3.3 Failure-path test: at least one intentional-failure scenario",
+          "description": "Failure-path test: at least one intentional-failure scenario traced (flaky test retry policy, deploy-gate rejection, rollback job) and the pipeline's behavior matches the spec",
+          "command": ".rig/cicd/failure-paths.md with per-scenario expected vs actual",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Verification",
+          "name": "3.4 Timeout & concurrency guards: every job has timeout-minutes;",
+          "description": "Timeout & concurrency guards: every job has timeout-minutes; concurrency groups with cancel-in-progress set deliberately for branch vs main vs deploy workflows",
+          "command": "grep audit in .rig/cicd/guards.txt: every job shows timeout-minutes; concurrency blocks reviewed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Closure",
+          "name": "4.1 Runbook written: how to read a red pipeline, how to re-run, ",
+          "description": "Runbook written: how to read a red pipeline, how to re-run, how to rotate a secret used by the pipeline, how to disable the pipeline in an emergency",
+          "command": ".rig/cicd/RUNBOOK.md with all four sections",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.2",
+          "category": "Closure",
+          "name": "4.2 Improvement entry written: one reusable composite action can",
+          "description": "Improvement entry written: one reusable composite action candidate, one flaky-class observed, or one harness gap",
+          "command": "Appended line to ~/.hermes/jake/improvements.log tagged hA-12-ci-cd-design",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "A pipeline is production code that ships production code. It gets reviewed twice.",
+        "harness_tuple": "H_cicd(pipeline_spec, lint_proof, dry_run, supply_chain, improvement)",
+        "bms_bias": "A2 for workflow authoring; A1 for lint/dry-run verification; A3 for docs; A4 forbidden (no live workflow_dispatch, no deploy)",
+        "meta": {
+          "harness_id": "hA-12-ci-cd-design",
+          "session_type": "ci-cd-design-session",
+          "governs_loops": [
+            "GL-SW",
+            "GL-SI",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same CI fault recurs 3+ times \u2192 composite action, org-level ruleset, or branch-protection change proposed"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "actionlint + zizmor clean or dispositioned; actions SHA-pinned",
+        "Dry-run evidence attached; failure paths traced",
+        "Permissions least-privilege with per-job justification",
+        "One improvement entry appended",
+        "Identity closure: coordinate, pipeline verdict, next safe action stated"
+      ],
+      "failure_states": [
+        "enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally",
+        "stop gate(s) 2.3: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.4, 3.1, 3.2, 3.4, 4.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the pipeline target pinned: CI system (GitHub Actions/GitLab CI/Buildkite), repo, and the events the pipeline serves (push, PR, tag, schedule)",
+        "Procedures declared mandatory: lint before run, least-privilege permissions, pinned actions, dry-run before enable, no self-modifying CI",
+        "RIG coordinate stated before the first workflow edit",
+        "Harness tuple H_cicd(pipeline_spec, lint_proof, dry_run, supply_chain, improvement) declared",
+        "Pipeline stages specified before YAML: stage graph (lint \u2192 typecheck \u2192 test \u2192 build \u2192 package \u2192 deploy-gate) with per-stage failure semantics and parallelism decisions written down",
+        "Trigger audit: on: block reviewed \u2014 no pull_request_target with checkout of untrusted code, no overly broad branch filters, scheduled jobs carry timezone note",
+        "Caching strategy stated: dependency cache keys include lockfile hash; cache fallbacks named; no cache poisoning path from PR builds into main-branch caches",
+        "Actions pinned to commit SHAs: every uses: reference is a full-length SHA with a version comment; no @main/@vN floating tags on third-party actions",
+        "Least-privilege permissions: top-level permissions: block starts at contents: read (or {}) and each job elevates only what it needs; no write-all, no id-token: write without a named OIDC audience",
+        "Secret hygiene: secrets referenced via environment protection rules; no secrets echoed, masked-bypass patterns, or passed to untrusted PR contexts; secrets: inherit audited",
+        "No curl-pipe-shell or unpinned installers: remote install scripts absent or pinned by version+checksum; package installs use lockfiles",
+        "Workflow lint clean: actionlint (plus zizmor for security findings) run over every changed workflow file, exit 0 or findings dispositioned",
+        "Local dry-run: the workflow executed locally with act (or the job commands run in a clean container matching the runner image) and the critical path is green",
+        "Failure-path test: at least one intentional-failure scenario traced (flaky test retry policy, deploy-gate rejection, rollback job) and the pipeline's behavior matches the spec",
+        "Timeout & concurrency guards: every job has timeout-minutes; concurrency groups with cancel-in-progress set deliberately for branch vs main vs deploy workflows",
+        "Runbook written: how to read a red pipeline, how to re-run, how to rotate a secret used by the pipeline, how to disable the pipeline in an emergency",
+        "Improvement entry written: one reusable composite action candidate, one flaky-class observed, or one harness gap"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hA-12-ci-cd-design.yaml",
+        "final_rule": [
+          "Lint before run; dry-run before enable.",
+          "SHA pins or it doesn't ship.",
+          "A secret leak in CI stops the world.",
+          "No improvement entry, no session complete.",
+          "Every ci-cd-design session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.4",
+            "3.1",
+            "3.2",
+            "3.4",
+            "4.2"
+          ],
+          "degrade": [
+            "1.3",
+            "3.3",
+            "4.1"
+          ],
+          "stop": [
+            "2.3"
+          ],
+          "notes": "enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally"
+        }
+      }
+    }
+  ]
+}

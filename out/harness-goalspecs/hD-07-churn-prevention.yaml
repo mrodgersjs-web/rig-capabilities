@@ -1,0 +1,303 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-07-CHURN-PREVENTION",
+      "name": "Churn Prevention Goal Harness",
+      "description": "Churn Prevention Goal Harness [ops-churn-prevention] \u2014 compiled from capabilities/harnesses/hD-07-churn-prevention.yaml",
+      "anchor": "LL1-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "Cohort reproducible, scores versioned, exclusions reason-coded, root causes evidenced",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Save-play doctrine loaded (renewal-playbooks, save-play-libr",
+          "description": "Save-play doctrine loaded (renewal-playbooks, save-play-library, escalation-framework read this session)",
+          "command": "grep -lq 'play' ~/.claude/skills/renewal-playbooks/SKILL.md && echo LOADED in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Operating mode declared: analysis + drafts only; zero custom",
+          "description": "Operating mode declared: analysis + drafts only; zero customer contact without approval",
+          "command": "session log line 'MODE=draft-only' in ~/.hermes/jake/churn/session-<ts>.log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "description": "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+          "command": "coordinate block parseable by jq '.coordinate'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_churn declared with all 8 components",
+          "description": "Harness tuple H_churn declared with all 8 components",
+          "command": "session log contains 'H_churn(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Cohort & Scoring",
+          "name": "1.1 At-risk cohort produced by a reproducible query, not hand-pi",
+          "description": "At-risk cohort produced by a reproducible query, not hand-picked: usage decline, support signal, billing flag, renewal window",
+          "command": "artifacts/churn/<run>/cohort_query.sql + cohort.json with per-account trigger signals; re-running the query reproduces the same account set (hash match)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Cohort & Scoring",
+          "name": "1.2 Health score computed by the versioned scoring script with i",
+          "description": "Health score computed by the versioned scoring script with inputs logged per account",
+          "command": "python3 scripts/health_score.py --cohort cohort.json --out scores.json exit 0; scores.json contains script_version and per-account input values",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Cohort & Scoring",
+          "name": "1.3 False-positive guard: accounts with an active expansion moti",
+          "description": "False-positive guard: accounts with an active expansion motion or resolved ticket are excluded with reason codes",
+          "command": "artifacts/churn/<run>/exclusions.json \u2014 every excluded account has reason_code from the declared enum",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Cohort & Scoring",
+          "name": "1.4 Root-cause evidence per account: usage trend lines, ticket t",
+          "description": "Root-cause evidence per account: usage trend lines, ticket themes, or stakeholder change signals \u2014 no account enters the save queue 'on feel'",
+          "command": "artifacts/churn/<run>/root_cause.jsonl \u2014 one line per account with >= 2 evidence pointers (metric series id, ticket ids, or dated signal)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Play Design",
+          "name": "2.1 Save play matched from the save-play library by segment + ro",
+          "description": "Save play matched from the save-play library by segment + root cause, with the match rule recorded",
+          "command": "artifacts/churn/<run>/play_matches.json \u2014 each account maps to play_id and match_rule; every play_id exists in save-play-library index",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Play Design",
+          "name": "2.2 Commercial guardrail: no discount, concession, or contract c",
+          "description": "Commercial guardrail: no discount, concession, or contract change drafted without an approval placeholder and limit",
+          "command": "drafts containing commercial terms carry 'REQUIRES APPROVAL: <limit>' header; scripts/concession_scan.py exit 0",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Play Design",
+          "name": "2.3 Outreach drafts personalized to the account's actual usage a",
+          "description": "Outreach drafts personalized to the account's actual usage and root cause, reviewed against voice rules",
+          "command": "artifacts/churn/<run>/drafts/<account>.md each reference >= 1 account-specific evidence pointer; voice_check.py exit 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Play Design",
+          "name": "2.4 Escalation path declared per account: when the play fails, w",
+          "description": "Escalation path declared per account: when the play fails, who owns the next move and by when",
+          "command": "play_matches.json entries carry escalation_owner and escalation_by date",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Execution & Tracking",
+          "name": "3.1 CRM tasks created for every account in the save queue with p",
+          "description": "CRM tasks created for every account in the save queue with play_id, owner, and due date",
+          "command": "artifacts/churn/<run>/crm_tasks.json \u2014 task ids returned by Twenty API; count equals save-queue account count",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Execution & Tracking",
+          "name": "3.2 Gate-D approval before any customer-facing send: typed APPRO",
+          "description": "Gate-D approval before any customer-facing send: typed APPROVE <run_id> per account batch",
+          "command": "artifacts/churn/<run>/gate_d.log APPROVE lines; absent them all drafts remain arm: false",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Execution & Tracking",
+          "name": "3.3 Outcome tracking configured: each account has a measurable s",
+          "description": "Outcome tracking configured: each account has a measurable save/kill criterion and a review date",
+          "command": "artifacts/churn/<run>/tracking.yaml \u2014 per account: save_criterion (metric + threshold), kill_criterion, review_date",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Execution & Tracking",
+          "name": "3.4 Learning capture: play effectiveness logged back to the save",
+          "description": "Learning capture: play effectiveness logged back to the save-play library (hit/miss + why)",
+          "command": "append to ~/.hermes/jake/churn/play_outcomes.jsonl with account_hash, play_id, outcome, reason",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Churn prevention session. Save plays are earned by evidence. No discount reflexes, no vibes-based risk lists.",
+        "harness_tuple": "H_churn(cohort, health_score, root_cause, play_match, drafts, tasks, tracking, learning)",
+        "bms_bias": "A1 for cohort/score determinism; A2 for play matching; A3 for outreach drafting; A4 never \u2014 customer contact is Gate-D",
+        "meta": {
+          "harness_id": "hD-07-churn-prevention",
+          "session_type": "ops-churn-prevention",
+          "governs_loops": [
+            "GL-OD-churn",
+            "renewal-playbooks",
+            "save-play-library",
+            "escalation-framework",
+            "risk-scoring-framework"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; a play with 3 consecutive misses is retired or revised in the save-play library"
+          }
+        }
+      },
+      "success_conditions": [
+        "Cohort reproducible, scores versioned, exclusions reason-coded, root causes evidenced",
+        "Every save-queue account has a matched play, CRM task, tracking criterion, and draft (armed only with approval)",
+        "No commercial concession leaves draft state without an approval record",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (plays-staged | partial | blocked), next safe action in session log"
+      ],
+      "failure_states": [
+        "stop gate(s) 2.2, 3.2: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 3.1, 3.3: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Save-play doctrine loaded (renewal-playbooks, save-play-library, escalation-framework read this session)",
+        "Operating mode declared: analysis + drafts only; zero customer contact without approval",
+        "RIG coordinate stated (L1-L4; D1-D3; A1-A3)",
+        "Harness tuple H_churn declared with all 8 components",
+        "At-risk cohort produced by a reproducible query, not hand-picked: usage decline, support signal, billing flag, renewal window",
+        "Health score computed by the versioned scoring script with inputs logged per account",
+        "False-positive guard: accounts with an active expansion motion or resolved ticket are excluded with reason codes",
+        "Root-cause evidence per account: usage trend lines, ticket themes, or stakeholder change signals \u2014 no account enters the save queue 'on feel'",
+        "Save play matched from the save-play library by segment + root cause, with the match rule recorded",
+        "Commercial guardrail: no discount, concession, or contract change drafted without an approval placeholder and limit",
+        "Outreach drafts personalized to the account's actual usage and root cause, reviewed against voice rules",
+        "Escalation path declared per account: when the play fails, who owns the next move and by when",
+        "CRM tasks created for every account in the save queue with play_id, owner, and due date",
+        "Gate-D approval before any customer-facing send: typed APPROVE <run_id> per account batch",
+        "Outcome tracking configured: each account has a measurable save/kill criterion and a review date",
+        "Learning capture: play effectiveness logged back to the save-play library (hit/miss + why)"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-07-churn-prevention.yaml",
+        "final_rule": [
+          "No account enters a save queue without a reproducible cohort query and evidenced root cause.",
+          "No discount is a play. Concessions are stop-tier events with explicit limits.",
+          "No customer contact without typed Gate-D approval for this exact batch.",
+          "Every churn prevention session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "1.4",
+            "2.1",
+            "3.1",
+            "3.3"
+          ],
+          "degrade": [
+            "2.3",
+            "2.4",
+            "3.4"
+          ],
+          "stop": [
+            "2.2",
+            "3.2"
+          ],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

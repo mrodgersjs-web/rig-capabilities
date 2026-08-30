@@ -1,0 +1,300 @@
+{
+  "goals": [
+    {
+      "id": "GL-HA-10-SCHEMA-DESIGN",
+      "name": "Database Schema Design Session Goal Harness",
+      "description": "Database Schema Design Session Goal Harness [schema-design-session] \u2014 compiled from capabilities/harnesses/hA-10-schema-design.yaml",
+      "anchor": "LL2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the schema target pinned: database",
+          "description": "Startup phrase spoken and the schema target pinned: database engine+version, owning service, and whether this is greenfield or an alteration of live tables",
+          "command": "Session log contains engine string (e.g. 'PostgreSQL 16'), service name, and greenfield/alteration flag",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Procedures declared mandatory: access-patterns-first, every ",
+          "description": "Procedures declared mandatory: access-patterns-first, every column typed+constrained deliberately, migrations reversible-by-default, query plans proven on realistic volume",
+          "command": "All four procedure names in session preamble",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before the first DDL line",
+          "description": "RIG coordinate stated before the first DDL line",
+          "command": "Session log line 'COORD: L2-L4 x D1-D3 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_schema(access_patterns, ddl_proposal, migrat",
+          "description": "Harness tuple H_schema(access_patterns, ddl_proposal, migration_safety, query_plan_proof, improvement) declared",
+          "command": "Tuple declaration present in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Design Inputs",
+          "name": "1.1 Access patterns enumerated before tables: the top reads and ",
+          "description": "Access patterns enumerated before tables: the top reads and writes (with rough rates: reads/s, writes/s, growth rows/month) drive the design; the list exists before any CREATE TABLE",
+          "command": ".rig/schema/access-patterns.md with per-query rate estimates; timestamps show it predates the DDL file",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Design Inputs",
+          "name": "1.2 Cardinality & growth estimated: per-table row estimates at 3",
+          "description": "Cardinality & growth estimated: per-table row estimates at 3 and 12 months recorded; any table projected >10M rows gets a partitioning or archival note",
+          "command": ".rig/schema/growth.md with the estimates; large-table notes present where triggered",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "DDL Quality",
+          "name": "2.1 Every column deliberate: non-null by default with explicit N",
+          "description": "Every column deliberate: non-null by default with explicit NULL justification; types sized (varchar(n) not text-by-default, timestamptz not timestamp, numeric for money); no EAV or jsonb without a written escape-hatch reason",
+          "command": ".rig/schema/ddl-review.md with per-column type/nullability verdicts; jsonb/EAV uses each carry a justification",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "DDL Quality",
+          "name": "2.2 Integrity enforced in the schema: primary keys on every tabl",
+          "description": "Integrity enforced in the schema: primary keys on every table, foreign keys with explicit ON DELETE behavior, CHECK constraints for enum-like fields and invariants, UNIQUE where the domain demands it",
+          "command": "DDL grep: every CREATE TABLE has PRIMARY KEY; every FK has ON DELETE; invariant list in ddl-review.md maps to CHECK/UNIQUE clauses",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "DDL Quality",
+          "name": "2.3 Indexes derived from access patterns: each top query in acce",
+          "description": "Indexes derived from access patterns: each top query in access-patterns.md maps to an index (or a written seq-scan justification); no duplicate/redundant indexes; no index on a column never queried",
+          "command": ".rig/schema/index-map.md: query | index | rationale; redundancy checked (pg_stat or manual prefix analysis)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "DDL Quality",
+          "name": "2.4 Naming & convention audit: singular vs plural chosen once, s",
+          "description": "Naming & convention audit: singular vs plural chosen once, snake_case, no reserved words, created_at/updated_at convention consistent with the repo's existing schema",
+          "command": ".rig/schema/conventions.md + DDL conforms; exceptions listed",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Migration Safety",
+          "name": "3.1 Migration files generated and hand-reviewed: alembic/prisma ",
+          "description": "Migration files generated and hand-reviewed: alembic/prisma migrate/atlas output inspected \u2014 no auto-generated surprise (dropped columns, re-created tables) survives review",
+          "command": "Diff between ORM model and generated migration annotated in .rig/schema/migration-review.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Migration Safety",
+          "name": "3.2 Reversibility: every migration has a working downgrade/rollb",
+          "description": "Reversibility: every migration has a working downgrade/rollback executed in the session (migrate up && migrate down && migrate up cycle green on a scratch database)",
+          "command": "Cycle output in .rig/schema/reversibility.txt with scratch DB name and exit codes; irreversible steps explicitly named and justified",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Migration Safety",
+          "name": "3.3 Lock & zero-downtime check for live alterations: no ACCESS E",
+          "description": "Lock & zero-downtime check for live alterations: no ACCESS EXCLUSIVE rewrites without a plan \u2014 big-table ALTERs use CONCURRENTLY indexes, batched backfills, or expand-migrate-contract; lock_timeout and statement_timeout set in the migration",
+          "command": "Migration file contains timeout settings; .rig/schema/lock-analysis.md covers each live-table statement",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Migration Safety",
+          "name": "3.4 Query plans proven: EXPLAIN (ANALYZE, BUFFERS) run for the t",
+          "description": "Query plans proven: EXPLAIN (ANALYZE, BUFFERS) run for the top access patterns against a scratch DB loaded with representative row counts (generated via generate_series or seed script)",
+          "command": ".rig/schema/plans/ contains one plan output per top query; each shows index usage (no unexpected Seq Scan on large tables)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Closure",
+          "name": "4.1 ERD + summary filed: entity diagram (mermaid or dbml) and a ",
+          "description": "ERD + summary filed: entity diagram (mermaid or dbml) and a one-paragraph-per-table purpose note committed under docs/ or db/",
+          "command": "File paths recorded; mermaid block parses (mermaid-cli or viewer check)",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.2",
+          "category": "Closure",
+          "name": "4.2 Improvement entry written: one schema smell avoided, one mig",
+          "description": "Improvement entry written: one schema smell avoided, one migration gotcha, or one harness gap",
+          "command": "Appended line to ~/.hermes/jake/improvements.log tagged hA-10-schema-design",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Schema follows the queries. Every migration is reversible or named irreversible.",
+        "harness_tuple": "H_schema(access_patterns, ddl_proposal, migration_safety, query_plan_proof, improvement)",
+        "bms_bias": "A2 for DDL authoring; A1 for migration-safety and plan verification; A3 for ERD narrative; A4 forbidden",
+        "meta": {
+          "harness_id": "hA-10-schema-design",
+          "session_type": "schema-design-session",
+          "governs_loops": [
+            "GL-SW",
+            "GL-BD",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same migration hazard recurs 3+ times \u2192 add a migration linter rule or template guard"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates",
+        "Migration up/down/up cycle green on a scratch database",
+        "Query plans on realistic volume attached and read",
+        "index-map.md ties every top query to an index or a justification",
+        "One improvement entry appended",
+        "Identity closure: coordinate, migration-safety verdict, next safe action stated"
+      ],
+      "failure_states": [
+        "applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the schema target pinned: database engine+version, owning service, and whether this is greenfield or an alteration of live tables",
+        "Procedures declared mandatory: access-patterns-first, every column typed+constrained deliberately, migrations reversible-by-default, query plans proven on realistic volume",
+        "RIG coordinate stated before the first DDL line",
+        "Harness tuple H_schema(access_patterns, ddl_proposal, migration_safety, query_plan_proof, improvement) declared",
+        "Access patterns enumerated before tables: the top reads and writes (with rough rates: reads/s, writes/s, growth rows/month) drive the design; the list exists before any CREATE TABLE",
+        "Cardinality & growth estimated: per-table row estimates at 3 and 12 months recorded; any table projected >10M rows gets a partitioning or archival note",
+        "Every column deliberate: non-null by default with explicit NULL justification; types sized (varchar(n) not text-by-default, timestamptz not timestamp, numeric for money); no EAV or jsonb without a written escape-hatch reason",
+        "Integrity enforced in the schema: primary keys on every table, foreign keys with explicit ON DELETE behavior, CHECK constraints for enum-like fields and invariants, UNIQUE where the domain demands it",
+        "Indexes derived from access patterns: each top query in access-patterns.md maps to an index (or a written seq-scan justification); no duplicate/redundant indexes; no index on a column never queried",
+        "Naming & convention audit: singular vs plural chosen once, snake_case, no reserved words, created_at/updated_at convention consistent with the repo's existing schema",
+        "Migration files generated and hand-reviewed: alembic/prisma migrate/atlas output inspected \u2014 no auto-generated surprise (dropped columns, re-created tables) survives review",
+        "Reversibility: every migration has a working downgrade/rollback executed in the session (migrate up && migrate down && migrate up cycle green on a scratch database)",
+        "Lock & zero-downtime check for live alterations: no ACCESS EXCLUSIVE rewrites without a plan \u2014 big-table ALTERs use CONCURRENTLY indexes, batched backfills, or expand-migrate-contract; lock_timeout and statement_timeout set in the migration",
+        "Query plans proven: EXPLAIN (ANALYZE, BUFFERS) run for the top access patterns against a scratch DB loaded with representative row counts (generated via generate_series or seed script)",
+        "ERD + summary filed: entity diagram (mermaid or dbml) and a one-paragraph-per-table purpose note committed under docs/ or db/",
+        "Improvement entry written: one schema smell avoided, one migration gotcha, or one harness gap"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hA-10-schema-design.yaml",
+        "final_rule": [
+          "Queries design the schema, not the other way around.",
+          "Up, down, up again \u2014 or it's not a migration, it's a hope.",
+          "No lock analysis, no live-table DDL.",
+          "No improvement entry, no session complete.",
+          "Every schema-design session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2",
+            "3.3",
+            "3.4",
+            "4.2"
+          ],
+          "degrade": [
+            "1.2",
+            "2.4",
+            "4.1"
+          ],
+          "stop": [],
+          "notes": "applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only"
+        }
+      }
+    }
+  ]
+}

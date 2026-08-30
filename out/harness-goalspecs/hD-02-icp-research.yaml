@@ -1,0 +1,280 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-02-ICP-RESEARCH",
+      "name": "ICP Research Goal Harness",
+      "description": "ICP Research Goal Harness [gtm-icp-research] \u2014 compiled from capabilities/harnesses/hD-02-icp-research.yaml",
+      "anchor": "LL1-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "ICP doc shipped at artifacts/icp/<run>/icp.md with evidence anchors, anti-ICP, and kill criteria",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Research question declared before any scraping: which segmen",
+          "description": "Research question declared before any scraping: which segment, which hypothesis, which decision this ICP feeds",
+          "command": "artifacts/icp/<run>/question.md contains segment, hypothesis, decision fields (all non-empty)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 rig-crm and data-sourcing doctrine loaded; Twenty CRM reacha",
+          "description": "rig-crm and data-sourcing doctrine loaded; Twenty CRM reachable",
+          "command": "curl -sf http://localhost:3000/healthz exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L1-L3, D1-D2, A1-A2)",
+          "description": "RIG coordinate stated (L1-L3, D1-D2, A1-A2)",
+          "command": "coordinate block in ~/.hermes/jake/icp/session-<ts>.log parseable by jq",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_icp declared with all 7 components",
+          "description": "Harness tuple H_icp declared with all 7 components",
+          "command": "session log contains 'H_icp(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Source Discipline",
+          "name": "1.1 Source inventory enumerated before analysis: CRM segment que",
+          "description": "Source inventory enumerated before analysis: CRM segment query, closed-won/closed-lost exports, external enrichment provider, review sites (G2/Capterra)",
+          "command": "artifacts/icp/<run>/sources.json lists >= 3 origins each with url_or_query, fetched_at, row_count, license_or_tos_note",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Source Discipline",
+          "name": "1.2 Sample size floor met: >= 30 accounts in the analyzed cohort",
+          "description": "Sample size floor met: >= 30 accounts in the analyzed cohort or an explicit small-sample caveat recorded",
+          "command": "python3 -c \"import json; d=json.load(open('artifacts/icp/<run>/cohort.json')); assert len(d['accounts']) >= 30 or d.get('small_sample_caveat')\" exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Source Discipline",
+          "name": "1.3 Closed-lost and churned accounts included \u2014 ICP built only f",
+          "description": "Closed-lost and churned accounts included \u2014 ICP built only from winners is rejected",
+          "command": "cohort.json outcome field contains both 'won' and 'lost' values; jq '[.accounts[].outcome] | unique | length >= 2' true",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Attribute Extraction",
+          "name": "2.1 Firmographic extraction scripted, not hand-assembled: indust",
+          "description": "Firmographic extraction scripted, not hand-assembled: industry, size band, geography, tech stack signals per account",
+          "command": "python3 scripts/extract_firmographics.py --cohort artifacts/icp/<run>/cohort.json --out firmographics.csv exit 0; csv has >= 4 attribute columns",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Attribute Extraction",
+          "name": "2.2 Buying-trigger signals identified from win/loss notes or cal",
+          "description": "Buying-trigger signals identified from win/loss notes or call transcripts with quote anchors",
+          "command": "artifacts/icp/<run>/triggers.jsonl \u2014 each trigger has >= 2 verbatim quote anchors with source record ids",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Attribute Extraction",
+          "name": "2.3 Anti-ICP defined explicitly: segments to exclude with the da",
+          "description": "Anti-ICP defined explicitly: segments to exclude with the data reason for each exclusion",
+          "command": "artifacts/icp/<run>/anti_icp.md lists >= 2 exclusions each with supporting metric (win_rate, churn_rate, or sales_cycle_days)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Attribute Extraction",
+          "name": "2.4 Attribute-to-outcome correlation computed: which attributes ",
+          "description": "Attribute-to-outcome correlation computed: which attributes actually separate won from lost",
+          "command": "artifacts/icp/<run>/correlation_report.md contains per-attribute win-rate deltas computed by scripts/icp_correlation.py; every claimed attribute shows its delta number",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Validation & Anchoring",
+          "name": "3.1 Every load-bearing claim in the ICP doc carries an evidence ",
+          "description": "Every load-bearing claim in the ICP doc carries an evidence anchor (CRM query id, file path + line, or source URL)",
+          "command": "grep -cE '\\[evidence:' artifacts/icp/<run>/icp.md >= number of ## claim headers; zero unanchored claims",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Validation & Anchoring",
+          "name": "3.2 ICP falsifiability statement: the doc names what future data",
+          "description": "ICP falsifiability statement: the doc names what future data would prove it wrong",
+          "command": "icp.md contains a '## Kill Criteria' section with >= 2 measurable conditions",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Validation & Anchoring",
+          "name": "3.3 CRM segment validation: the ICP definition runs as a Twenty ",
+          "description": "CRM segment validation: the ICP definition runs as a Twenty query and returns a plausible nonzero count",
+          "command": "artifacts/icp/<run>/segment_query.json executed; result count recorded in validation.log; count > 0 and count < total_people",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Validation & Anchoring",
+          "name": "3.4 Independent review dispatch: a second pass (agent or human) ",
+          "description": "Independent review dispatch: a second pass (agent or human) attempts to refute the top 3 ICP attributes",
+          "command": "artifacts/icp/<run>/refute_pass.md with verdict per attribute (confirmed | weakened | rejected) and reasoning",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "ICP research session. The ICP is a falsifiable artifact, not a vibe. Every attribute is anchored to data.",
+        "harness_tuple": "H_icp(question, sources, sample, firmographics, anti_icp, evidence, validation)",
+        "bms_bias": "A1 for data extraction and validation; A2 for pattern synthesis; A3 only for hypothesis framing; A4 never",
+        "meta": {
+          "harness_id": "hD-02-icp-research",
+          "session_type": "gtm-icp-research",
+          "governs_loops": [
+            "GL-OD-icp",
+            "gtm-icp",
+            "segmentation"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; an ICP kill criterion firing in production triggers immediate harness review"
+          }
+        }
+      },
+      "success_conditions": [
+        "ICP doc shipped at artifacts/icp/<run>/icp.md with evidence anchors, anti-ICP, and kill criteria",
+        "Cohort, firmographics, correlation report, and segment validation all present and hashed in proofpacket.json",
+        "Closed-lost data represented; no winners-only ICP accepted",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (validated | provisional | refuted), next safe action in session log"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Research question declared before any scraping: which segment, which hypothesis, which decision this ICP feeds",
+        "rig-crm and data-sourcing doctrine loaded; Twenty CRM reachable",
+        "RIG coordinate stated (L1-L3, D1-D2, A1-A2)",
+        "Harness tuple H_icp declared with all 7 components",
+        "Source inventory enumerated before analysis: CRM segment query, closed-won/closed-lost exports, external enrichment provider, review sites (G2/Capterra)",
+        "Sample size floor met: >= 30 accounts in the analyzed cohort or an explicit small-sample caveat recorded",
+        "Closed-lost and churned accounts included \u2014 ICP built only from winners is rejected",
+        "Firmographic extraction scripted, not hand-assembled: industry, size band, geography, tech stack signals per account",
+        "Buying-trigger signals identified from win/loss notes or call transcripts with quote anchors",
+        "Anti-ICP defined explicitly: segments to exclude with the data reason for each exclusion",
+        "Attribute-to-outcome correlation computed: which attributes actually separate won from lost",
+        "Every load-bearing claim in the ICP doc carries an evidence anchor (CRM query id, file path + line, or source URL)",
+        "ICP falsifiability statement: the doc names what future data would prove it wrong",
+        "CRM segment validation: the ICP definition runs as a Twenty query and returns a plausible nonzero count",
+        "Independent review dispatch: a second pass (agent or human) attempts to refute the top 3 ICP attributes"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-02-icp-research.yaml",
+        "final_rule": [
+          "No ICP attribute ships without an evidence anchor and a win/loss delta.",
+          "A winners-only ICP is a failed session, not a positive result.",
+          "An ICP without kill criteria is a horoscope, not a target.",
+          "Every ICP research session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.3",
+            "3.1",
+            "3.2"
+          ],
+          "degrade": [
+            "2.2",
+            "2.4",
+            "3.3",
+            "3.4"
+          ],
+          "stop": [],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

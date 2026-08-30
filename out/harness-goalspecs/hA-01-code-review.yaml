@@ -1,0 +1,301 @@
+{
+  "goals": [
+    {
+      "id": "GL-HA-01-CODE-REVIEW",
+      "name": "Code Review Session Goal Harness",
+      "description": "Code Review Session Goal Harness [code-review-session] \u2014 compiled from capabilities/harnesses/hA-01-code-review.yaml",
+      "anchor": "LL2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and review target pinned to an exact c",
+          "description": "Startup phrase spoken and review target pinned to an exact commit range (base...head), not a branch name",
+          "command": "git rev-parse <base> <head> output recorded; both SHAs present in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Operating procedures declared mandatory for this session: ev",
+          "description": "Operating procedures declared mandatory for this session: evidence-first, fail-loud, no approval without rebuttal path",
+          "command": "Session preamble contains the phrase 'evidence before verdict'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before first file is opened",
+          "description": "RIG coordinate stated before first file is opened",
+          "command": "Session log line of form 'COORD: L2-L4 x D1-D2 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_codereview(diff_scope, gates, verdict, impro",
+          "description": "Harness tuple H_codereview(diff_scope, gates, verdict, improvement) declared with all four components named",
+          "command": "Session log contains the tuple declaration verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Scope & Baseline",
+          "name": "1.1 Diff scope locked: git diff --stat <base>...<head> captured ",
+          "description": "Diff scope locked: git diff --stat <base>...<head> captured and every changed file falls inside the declared review scope; out-of-scope files are named and excluded explicitly",
+          "command": "Command output saved to .rig/review/diff-stat.txt; exclusion list (possibly empty) written to .rig/review/scope.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Scope & Baseline",
+          "name": "1.2 Pre-existing test baseline captured: the project test runner",
+          "description": "Pre-existing test baseline captured: the project test runner (pytest -q, npm test, go test ./..., or cargo test) executed on <head> before any line of review commentary is written",
+          "command": "Exit code plus last 20 lines of output appended to .rig/review/baseline.txt; non-zero baseline blocks 'approve' verdicts",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Scope & Baseline",
+          "name": "1.3 Static gates run: typecheck (tsc --noEmit / mypy / go vet) a",
+          "description": "Static gates run: typecheck (tsc --noEmit / mypy / go vet) and linter (ruff check / eslint / golangci-lint run) executed; every warning is either zero or individually justified",
+          "command": "Both exit codes recorded; justification list at .rig/review/static-justifications.md with one line per waived warning",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Correctness & Safety",
+          "name": "2.1 Secret and credential sweep: gitleaks detect --source . --no",
+          "description": "Secret and credential sweep: gitleaks detect --source . --no-git plus targeted grep -rnE '(api[_-]?key|secret|token|password)\\s*=' over changed files; zero unreviewed hits",
+          "command": "gitleaks report path .rig/review/gitleaks.json; grep output either empty or each hit annotated 'false-positive: <reason>'",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Correctness & Safety",
+          "name": "2.2 Dangerous-pattern scan on the diff: eval(, exec(, child_proc",
+          "description": "Dangerous-pattern scan on the diff: eval(, exec(, child_process, shell=True, innerHTML, dangerouslySetInnerHTML, os.system in added lines are enumerated and each carries a necessity justification",
+          "command": "git diff -U0 <base>...<head> | grep -nE '<patterns>' output in .rig/review/danger.txt with per-hit justification or a blocking finding",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Correctness & Safety",
+          "name": "2.3 Contract coverage: every added or modified exported function",
+          "description": "Contract coverage: every added or modified exported function, route handler, or CLI command has a corresponding test-file change in the same diff, or a written reason it is untestable-in-unit",
+          "command": "Script output joining git diff --name-only against test paths (tests/, *.test.*, *_test.go) in .rig/review/coverage-map.txt; orphan symbols listed one per line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Correctness & Safety",
+          "name": "2.4 Error-handling audit: every new external call (network, file",
+          "description": "Error-handling audit: every new external call (network, filesystem, subprocess, DB) in the diff has a failure path \u2014 timeout, retry policy, or explicit propagation \u2014 and no bare except/catch-all that swallows",
+          "command": "Per-call table in .rig/review/error-paths.md: callsite file:line | failure behavior | verdict ok/block",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Review Discipline",
+          "name": "3.1 Every changed file received a per-file checklist pass: namin",
+          "description": "Every changed file received a per-file checklist pass: naming, dead code, copy-paste duplication (jscpd or manual), and public-API surface change noted",
+          "command": ".rig/review/file-checklist.md contains one section per file from diff-stat.txt; no file section is empty",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.2",
+          "category": "Review Discipline",
+          "name": "3.2 Findings are triaged with severity (blocker/major/minor/nit)",
+          "description": "Findings are triaged with severity (blocker/major/minor/nit) and an exact file:line anchor; no finding is a bare adjective ('messy', 'unclear')",
+          "command": ".rig/review/findings.md where every finding line matches the pattern 'SEV | path:line | problem | suggested fix'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Review Discipline",
+          "name": "3.3 Author rebuttal path preserved: findings delivered as questi",
+          "description": "Author rebuttal path preserved: findings delivered as questions-or-evidence, and the verdict records the author's response or its absence after the agreed window",
+          "command": "Verdict file .rig/review/verdict.md contains a 'Rebuttals' section; empty section must state 'no response in window <N>h'",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Review Discipline",
+          "name": "3.4 Verdict issued as exactly one of approve / approve-with-nits",
+          "description": "Verdict issued as exactly one of approve / approve-with-nits / changes-requested, and changes-requested lists only blocker+major findings as blocking",
+          "command": "verdict.md frontmatter field 'verdict:' matches one allowed value; blocking list cross-checks against findings.md severities",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Closure",
+          "name": "4.1 Improvement entry written: one recurring author-pattern, one",
+          "description": "Improvement entry written: one recurring author-pattern, one reviewer blind spot, or one harness-gap observed this session",
+          "command": "Appended line to ~/.hermes/jake/improvements.log with harness_id hA-01-code-review and session SHA pair",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the reviewer. I read the diff, not the author's intentions.",
+        "harness_tuple": "H_codereview(diff_scope, gates, verdict, improvement)",
+        "bms_bias": "A1 verification-led; A2 for inline fix proposals; A3 only for style nits; A4 forbidden \u2014 a review session never takes outward action",
+        "meta": {
+          "harness_id": "hA-01-code-review",
+          "session_type": "code-review-session",
+          "governs_loops": [
+            "GL-SW",
+            "GL-VQ",
+            "GL-BD"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions \u2192 harness gate is rewritten with sharper proof, or a linter rule is proposed to absorb the check"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "verdict.md exists with a valid verdict, severity-checked blocking list, and rebuttal section",
+        "findings.md is non-empty-format valid (may contain zero findings, but the file and header exist)",
+        "Baseline test + static gate exit codes recorded and attached to the verdict",
+        "One improvement entry appended to the improvements log",
+        "Identity closure: coordinate, verdict, and next safe action stated in the session tail"
+      ],
+      "failure_states": [
+        "stop on 2.1 (live secret in diff) requires human Gate-D approval before the session continues or the finding is communicated anywhere",
+        "stop gate(s) 2.1: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 2.2, 2.3, 2.4, 3.2, 3.4, 4.1: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and review target pinned to an exact commit range (base...head), not a branch name",
+        "Operating procedures declared mandatory for this session: evidence-first, fail-loud, no approval without rebuttal path",
+        "RIG coordinate stated before first file is opened",
+        "Harness tuple H_codereview(diff_scope, gates, verdict, improvement) declared with all four components named",
+        "Diff scope locked: git diff --stat <base>...<head> captured and every changed file falls inside the declared review scope; out-of-scope files are named and excluded explicitly",
+        "Pre-existing test baseline captured: the project test runner (pytest -q, npm test, go test ./..., or cargo test) executed on <head> before any line of review commentary is written",
+        "Static gates run: typecheck (tsc --noEmit / mypy / go vet) and linter (ruff check / eslint / golangci-lint run) executed; every warning is either zero or individually justified",
+        "Secret and credential sweep: gitleaks detect --source . --no-git plus targeted grep -rnE '(api[_-]?key|secret|token|password)\\s*=' over changed files; zero unreviewed hits",
+        "Dangerous-pattern scan on the diff: eval(, exec(, child_process, shell=True, innerHTML, dangerouslySetInnerHTML, os.system in added lines are enumerated and each carries a necessity justification",
+        "Contract coverage: every added or modified exported function, route handler, or CLI command has a corresponding test-file change in the same diff, or a written reason it is untestable-in-unit",
+        "Error-handling audit: every new external call (network, filesystem, subprocess, DB) in the diff has a failure path \u2014 timeout, retry policy, or explicit propagation \u2014 and no bare except/catch-all that swallows",
+        "Every changed file received a per-file checklist pass: naming, dead code, copy-paste duplication (jscpd or manual), and public-API surface change noted",
+        "Findings are triaged with severity (blocker/major/minor/nit) and an exact file:line anchor; no finding is a bare adjective ('messy', 'unclear')",
+        "Author rebuttal path preserved: findings delivered as questions-or-evidence, and the verdict records the author's response or its absence after the agreed window",
+        "Verdict issued as exactly one of approve / approve-with-nits / changes-requested, and changes-requested lists only blocker+major findings as blocking",
+        "Improvement entry written: one recurring author-pattern, one reviewer blind spot, or one harness-gap observed this session"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hA-01-code-review.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No verdict without a recorded baseline.",
+          "A secret in the diff stops the world; nothing else is negotiable.",
+          "No improvement entry, no session complete.",
+          "Every code-review session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.2",
+            "2.3",
+            "2.4",
+            "3.2",
+            "3.4",
+            "4.1"
+          ],
+          "degrade": [
+            "1.3",
+            "3.1",
+            "3.3"
+          ],
+          "stop": [
+            "2.1"
+          ],
+          "notes": "stop on 2.1 (live secret in diff) requires human Gate-D approval before the session continues or the finding is communicated anywhere"
+        }
+      }
+    }
+  ]
+}

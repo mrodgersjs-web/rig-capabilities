@@ -1,0 +1,284 @@
+{
+  "goals": [
+    {
+      "id": "GL-HD-06-NPS-ANALYSIS",
+      "name": "NPS Analysis Goal Harness",
+      "description": "NPS Analysis Goal Harness [ops-nps-analysis] \u2014 compiled from capabilities/harnesses/hD-06-nps-analysis.yaml",
+      "anchor": "LL2-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "Score computed deterministically and reconciled against platform counts",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Survey cohort declared: wave id, collection window, populati",
+          "description": "Survey cohort declared: wave id, collection window, population definition",
+          "command": "artifacts/nps/<run>/cohort.md with wave_id, window start/end, population query",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Raw export located and never mutated in place; all analysis ",
+          "description": "Raw export located and never mutated in place; all analysis works on a copy",
+          "command": "raw file hash recorded; analysis directory contains copied file with different sha256 path but identical content hash (verified)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated (L2-L4; D2-D3; A1-A2)",
+          "description": "RIG coordinate stated (L2-L4; D2-D3; A1-A2)",
+          "command": "coordinate block in ~/.hermes/jake/nps/session-<ts>.log parseable by jq",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_nps declared with all 7 components",
+          "description": "Harness tuple H_nps declared with all 7 components",
+          "command": "session log contains 'H_nps(' line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Data Integrity",
+          "name": "1.1 Row-count reconciliation: export row count matches survey pl",
+          "description": "Row-count reconciliation: export row count matches survey platform reported response count",
+          "command": "artifacts/nps/<run>/integrity.json with export_rows, platform_rows, delta; delta == 0 or delta explained in cohort.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Data Integrity",
+          "name": "1.2 Score distribution computed deterministically: promoters/pas",
+          "description": "Score distribution computed deterministically: promoters/passives/detractors counts and NPS formula shown",
+          "command": "python3 scripts/nps_score.py --in responses.csv --out score.json exit 0; score.json contains p, n, d counts and nps = round(100*(p-d)/total, 1)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Data Integrity",
+          "name": "1.3 PII redaction pass before any downstream analysis or quoting",
+          "description": "PII redaction pass before any downstream analysis or quoting: emails, phone numbers, internal account ids masked",
+          "command": "python3 scripts/redact_pii.py --in responses.csv --out responses_redacted.csv; grep -cE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+' responses_redacted.csv == 0",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Data Integrity",
+          "name": "1.4 No fabricated or inferred responses: every quoted verbatim t",
+          "description": "No fabricated or inferred responses: every quoted verbatim traces to a row id in the redacted export",
+          "command": "artifacts/nps/<run>/verbatim_map.json maps each quoted string to row_id; all row_ids exist in redacted csv",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Analysis Rigor",
+          "name": "2.1 Segmentation computed with predeclared cuts: plan tier, tenu",
+          "description": "Segmentation computed with predeclared cuts: plan tier, tenure band, company size \u2014 cuts fixed before scores are examined",
+          "command": "artifacts/nps/<run>/segments.yaml lists cuts with definitions; segments.json results reference exactly these cuts",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Analysis Rigor",
+          "name": "2.2 Theme extraction with counts: each theme has frequency and e",
+          "description": "Theme extraction with counts: each theme has frequency and example row ids; themes cover >= 80% of comment volume or residual is labeled 'misc'",
+          "command": "artifacts/nps/<run>/themes.json \u2014 sum(theme counts) + misc >= 0.8 * total_comments",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Analysis Rigor",
+          "name": "2.3 Verbatim evidence per theme: >= 2 direct quotes per reported",
+          "description": "Verbatim evidence per theme: >= 2 direct quotes per reported theme, masked and row-anchored",
+          "command": "themes.json quotes arrays all length >= 2 and all strings present in verbatim_map.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Analysis Rigor",
+          "name": "2.4 Statistical caveats stated: response rate, sample bias risk,",
+          "description": "Statistical caveats stated: response rate, sample bias risk, margin context for small segments",
+          "command": "artifacts/nps/<run>/report.md contains '## Caveats' section with response_rate numeric and per-segment n",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Action Routing",
+          "name": "3.1 Detractor follow-up list produced: detractors with contactab",
+          "description": "Detractor follow-up list produced: detractors with contactable accounts routed as CRM tasks, not just counted",
+          "command": "artifacts/nps/<run>/followups.json with task records created via Twenty API; jq 'length >= 1' true or explicit zero-detractor note",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.2",
+          "category": "Action Routing",
+          "name": "3.2 Recommendations mapped to owners: every '## Recommendations'",
+          "description": "Recommendations mapped to owners: every '## Recommendations' item has owner and due date",
+          "command": "grep -A2 '## Recommendations' report.md shows owner: and due: per bullet; zero ownerless items",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Action Routing",
+          "name": "3.3 Promoter advocacy candidates flagged for the advocacy progra",
+          "description": "Promoter advocacy candidates flagged for the advocacy program (reference/case-study pool)",
+          "command": "artifacts/nps/<run>/advocacy_candidates.json with row anchors; handed to advocate-sourcing roster file",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "NPS analysis session. The data speaks; the analyst quotes. No theme without verbatims, no claim without counts.",
+        "harness_tuple": "H_nps(integrity, pii, segmentation, themes, verbatims, caveats, routing)",
+        "bms_bias": "A1 for data integrity and scoring math; A2 for theme extraction; A3 only for narrative drafting; A4 never",
+        "meta": {
+          "harness_id": "hD-06-nps-analysis",
+          "session_type": "ops-nps-analysis",
+          "governs_loops": [
+            "GL-OD-nps",
+            "voice-of-customer",
+            "customer-insights",
+            "sentiment-analysis"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times; a verbatim that fails row-anchoring triggers immediate audit of the redaction pipeline"
+          }
+        }
+      },
+      "success_conditions": [
+        "Score computed deterministically and reconciled against platform counts",
+        "Report shipped at artifacts/nps/<run>/report.md with segmentation, themes, verbatims, caveats, and owned recommendations",
+        "PII redaction proven; every verbatim row-anchored",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (analyzed | blocked | provisional), next safe action in session log"
+      ],
+      "failure_states": [
+        "stop gate(s) 1.3: halt session; human approval required before continuing",
+        "halt gate(s) 1.1, 1.2, 1.4, 2.1, 2.2, 2.3, 3.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Survey cohort declared: wave id, collection window, population definition",
+        "Raw export located and never mutated in place; all analysis works on a copy",
+        "RIG coordinate stated (L2-L4; D2-D3; A1-A2)",
+        "Harness tuple H_nps declared with all 7 components",
+        "Row-count reconciliation: export row count matches survey platform reported response count",
+        "Score distribution computed deterministically: promoters/passives/detractors counts and NPS formula shown",
+        "PII redaction pass before any downstream analysis or quoting: emails, phone numbers, internal account ids masked",
+        "No fabricated or inferred responses: every quoted verbatim traces to a row id in the redacted export",
+        "Segmentation computed with predeclared cuts: plan tier, tenure band, company size \u2014 cuts fixed before scores are examined",
+        "Theme extraction with counts: each theme has frequency and example row ids; themes cover >= 80% of comment volume or residual is labeled 'misc'",
+        "Verbatim evidence per theme: >= 2 direct quotes per reported theme, masked and row-anchored",
+        "Statistical caveats stated: response rate, sample bias risk, margin context for small segments",
+        "Detractor follow-up list produced: detractors with contactable accounts routed as CRM tasks, not just counted",
+        "Recommendations mapped to owners: every '## Recommendations' item has owner and due date",
+        "Promoter advocacy candidates flagged for the advocacy program (reference/case-study pool)"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hD-06-nps-analysis.yaml",
+        "final_rule": [
+          "No theme ships without counts and at least two row-anchored verbatims.",
+          "PII redaction is a stop-tier gate: unredacted data never moves downstream.",
+          "A recommendation without an owner is a wish, not an action.",
+          "Every NPS analysis session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.4",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.2"
+          ],
+          "degrade": [
+            "2.4",
+            "3.1",
+            "3.3"
+          ],
+          "stop": [
+            "1.3"
+          ],
+          "notes": ""
+        }
+      }
+    }
+  ]
+}

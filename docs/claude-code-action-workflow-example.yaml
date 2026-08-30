@@ -1,0 +1,102 @@
+# =============================================================================
+# PER-REPO ADOPTION FILE — PENDING GATE-D. NOT INSTALLED ANYWHERE.
+#
+# This file lives under docs/ deliberately: it is NOT in .github/workflows/ and
+# GitHub Actions never sees it. Copying it into any repo's workflow directory is
+# an outward action requiring explicit Gate-D approval per RIG doctrine.
+#
+# Source of truth: the REAL documented usage of anthropics/claude-code-action,
+# fetched 2026-08-30 via:
+#   gh api repos/anthropics/claude-code-action/contents/docs/usage.md --jq .content | base64 -d
+# The README (gh api repos/anthropics/claude-code-action/readme) is a hub page
+# that routes to docs/usage.md for "Basic usage, workflow configuration, and
+# input parameters". The workflow block below mirrors that canonical
+# "Claude Assistant" example exactly (action tag @v1, triggers, and every
+# documented commented option); every field is annotated below using the
+# upstream Inputs table verbatim in substance.
+#
+# Gate-D note: unlike the Python SDK lane (docs/HEADLESS.md), this runner-side
+# surface has no can_use_tool callback. Enforcement here is limited to the
+# `settings` JSON and `claude_args` permission flags — convention-grade, not
+# code-grade. Headless Gate-D belongs in the SDK lane.
+# =============================================================================
+
+name: Claude Assistant                          # Workflow display name shown in the Actions tab
+
+on:                                             # GitHub events that run this workflow
+  issue_comment:                                # Comments on issues AND PRs (they share this event)
+    types: [created]                            # Fire when a new comment is created
+  pull_request_review_comment:                  # Inline comments on PR diff lines
+    types: [created]                            # Fire when a new inline review comment is created
+  issues:                                       # Issue lifecycle events
+    types: [opened, assigned, labeled]          # Fire on new issues, on assignment (assignee_trigger), on labeling (label_trigger)
+  pull_request_review:                          # Submitted PR reviews (approve/request-changes/comment)
+    types: [submitted]                          # Fire when a review is submitted
+
+jobs:
+  claude-response:                              # Single job; the action auto-detects interactive vs automation mode from the event context
+    runs-on: ubuntu-latest                      # GitHub-hosted runner; execution happens entirely on your infrastructure, API calls go to your provider
+    steps:
+      - uses: anthropics/claude-code-action@v1  # Pinned to the v1 major tag (README: v1.0 migration guide supersedes v0.x; beta tag is legacy)
+        with:
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}  # Anthropic API key; REQUIRED for direct API (required when not using Bedrock/Vertex). Store as a repo secret, never inline
+
+          # --- Auth alternatives (upstream-documented; keep commented unless adopted): ---
+          # claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}  # OAuth token alternative to anthropic_api_key
+          # anthropic_federation_rule_id: fdrl_...          # Workload identity federation rule ID; with organization_id, authenticates via the workflow's GitHub OIDC token instead of a static key
+          # anthropic_organization_id: <uuid>              # Anthropic organization UUID for workload identity federation
+          # anthropic_service_account_id: svac_...         # Service account the federated token acts as (optional)
+          # anthropic_workspace_id: wrkspc_...             # Federation workspace; optional when the rule targets a single workspace
+          # anthropic_oidc_audience: https://api.anthropic.com  # Audience on the GitHub OIDC token (default shown)
+          # use_bedrock: "false"                           # Use Amazon Bedrock with OIDC instead of direct API
+          # use_vertex: "false"                            # Use Google Vertex AI with OIDC instead of direct API
+
+          # --- Automation prompt (mirror of upstream example comment): ---
+          # prompt: "Review this PR for security issues"   # Instructions for Claude in automation workflows; direct prompt or custom template
+
+          # --- Advanced CLI args (mirror of upstream example comment): ---
+          # claude_args: |                                 # Arguments passed directly to the Claude Code CLI (docs.claude.com CLI reference)
+          #   --max-turns 10                               # Cap agentic turns (replaces the deprecated max_turns input)
+          #   --model claude-4-0-sonnet-20250805           # Model selection (replaces the deprecated model input)
+
+          # --- Plugins (mirror of upstream example comment): ---
+          # plugin_marketplaces: "https://github.com/user/marketplace1.git\nhttps://github.com/user/marketplace2.git"  # Newline-separated marketplace Git URLs, added before plugin install
+          # plugins: "code-review@claude-code-plugins\nfeature-dev@claude-code-plugins"                                 # Newline-separated plugin names, installed before execution
+
+          # --- Trigger configuration (upstream defaults in parens): ---
+          # trigger_phrase: "/claude"              # Phrase scanned in comments/bodies/titles (default: @claude)
+          # assignee_trigger: "claude"             # Assignee username that triggers on issue assignment (only for issue assignment events)
+          # label_trigger: "claude"                # Label applied to an issue that triggers the action
+
+          # --- Access control (upstream Inputs table): ---
+          # additional_permissions: |              # Extra permissions, requires corresponding GitHub token permissions; currently supports 'actions: read' for viewing workflow results
+          #   actions: read
+          # allowed_bots: "dependabot[bot],renovate[bot]"   # Comma-separated bot usernames allowed to trigger, or '*' for all — WARNING: '*' on public repos lets external Apps invoke the action
+          # allowed_non_write_users: ""            # RISKY: usernames allowed without repo write access; only works with a custom github_token
+          # github_token: ${{ secrets.CUSTOM_GITHUB_TOKEN }}  # GitHub token Claude operates with — ONLY include when using your own custom GitHub app
+          # include_comments_by_actor: ""          # Comma-separated actors to INCLUDE in comment context; supports '*[bot]' wildcard; empty = all
+          # exclude_comments_by_actor: ""          # Comma-separated actors to EXCLUDE; if in both lists, exclusion wins
+
+          # --- Branching / delivery behavior: ---
+          # base_branch: main                      # Base branch for new branches Claude creates
+          # branch_prefix: "claude/"               # Prefix for Claude-created branches (default 'claude/'; 'claude-' for dash format)
+          # use_sticky_comment: "false"            # Deliver PR comments in one comment (pull_request-event workflows only)
+          # include_fix_links: "true"              # Add 'Fix this' links in review feedback that open Claude Code with context (default true)
+          # classify_inline_comments: "true"       # Buffer unconfirmed inline comments and classify real-vs-test via Haiku before posting (default true)
+          # track_progress: "false"                # Force tag mode with tracking comments; PR/issue events only, preserves GitHub context
+
+          # --- Settings / signing / environment: ---
+          # settings: ""                           # Claude Code settings as a JSON string or path — the ONLY permission-shaping surface here (e.g. permissions deny rules); see docs/configuration.md upstream
+          # use_commit_signing: "false"            # Sign commits via GitHub API; simple but blocks complex git ops like rebasing
+          # ssh_signing_key: ""                    # SSH private key for signed commits with full git CLI support
+          # bot_id: "41898282"                     # GitHub user ID for git ops; required with ssh_signing_key for verified commits
+          # bot_name: "claude[bot]"                # GitHub username for git ops; required with ssh_signing_key for verified commits
+          # path_to_claude_code_executable: ""     # Custom Claude Code binary path; skips auto-install (Nix/custom containers)
+          # path_to_bun_executable: ""             # Custom Bun binary path; skips auto-install
+
+          # --- DEPRECATED upstream inputs — do NOT use (mode, direct_prompt,
+          #     override_prompt, custom_instructions, max_turns, model,
+          #     fallback_model, allowed_tools, disallowed_tools, mcp_config,
+          #     claude_env). Migrate per upstream table: tools/config now flow
+          #     through claude_args (--allowedTools, --disallowedTools,
+          #     --mcp-config) and settings JSON. ---

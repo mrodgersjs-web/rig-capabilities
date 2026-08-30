@@ -1,0 +1,300 @@
+{
+  "goals": [
+    {
+      "id": "GL-MH-04-DEVIATION-EXPEDITION-SESSION",
+      "name": "Deviation Expedition Session Goal Harness",
+      "description": "Deviation Expedition Session Goal Harness [deviation-expedition-session] \u2014 compiled from capabilities/harnesses/mh-04-deviation-expedition-session.yaml",
+      "anchor": "LL2-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and expedition topic pinned with its b",
+          "description": "Startup phrase spoken and expedition topic pinned with its baseline corpus declared before any tail is generated",
+          "command": "Session log line 'TOPIC: <topic> | BASELINE: <n> scores' with n >= 5; baseline values recorded to .rig/expedition/baseline.txt one per line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Expedition doctrine loaded: the three-tail structure (positi",
+          "description": "Expedition doctrine loaded: the three-tail structure (positive, negative, repaired) and verifier-only termination are recited; the runner scores but never certifies its own run",
+          "command": "Session preamble contains the phrases 'positive tail', 'negative tail', 'repaired tail', and 'verifier-only termination'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before first tail is generated",
+          "description": "RIG coordinate stated before first tail is generated",
+          "command": "Session log line of form 'COORD: L2-L4 x D2-D3 x A1-A3 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_expedition(topic, three_tails, certified_z, ",
+          "description": "Harness tuple H_expedition(topic, three_tails, certified_z, band_routing, verdict) declared with all five components named",
+          "command": "Session log contains the tuple declaration verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Substrate & Baseline",
+          "name": "1.1 MathExec substrate proven live before any scoring: self-test",
+          "description": "MathExec substrate proven live before any scoring: self-test passes including its two planted failures, establishing the estimator can go red this session",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py self-test exits 0 with 'SELF-TEST PASS: 7 checks incl. 2 planted failures' saved to .rig/expedition/mathexec-selftest.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Substrate & Baseline",
+          "name": "1.2 Baseline corpus validated: n >= 5 numeric scores, no all-ide",
+          "description": "Baseline corpus validated: n >= 5 numeric scores, no all-identical values (MAD=0 trap), provenance of the corpus recorded",
+          "command": "python3 -c loading .rig/expedition/baseline.txt asserting len >= 5 and len(set) >= 3; provenance line appended; exit 0 recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Three Tails",
+          "name": "2.1 Positive tail generated: >= 3 candidate artifacts pushed tow",
+          "description": "Positive tail generated: >= 3 candidate artifacts pushed toward +sigma rungs, each with an engine tag and rung label from the deviation ladder",
+          "command": ".rig/expedition/tail-positive.md contains >= 3 candidate blocks each tagged 'engine:' and 'rung:'; python3 count assertion exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Three Tails",
+          "name": "2.2 Negative tail generated: >= 3 anti-candidates (deliberately ",
+          "description": "Negative tail generated: >= 3 anti-candidates (deliberately median/collapsed) produced as contrast material, each tagged with the failure mode it embodies",
+          "command": ".rig/expedition/tail-negative.md contains >= 3 blocks each tagged 'failure_mode:'; python3 count assertion exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Three Tails",
+          "name": "2.3 Repaired tail generated: every negative-tail anti-candidate ",
+          "description": "Repaired tail generated: every negative-tail anti-candidate is rewritten toward the positive direction with the repair mechanism named; no orphan anti-candidates",
+          "command": "python3 -c asserting count of 'repair:' blocks in .rig/expedition/tail-repaired.md equals the negative-tail block count; 1:1 mapping table included",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Certification & Routing",
+          "name": "3.1 Certified z computed per finalist: every tail finalist is sc",
+          "description": "Certified z computed per finalist: every tail finalist is scored via the deviation subcommand and certified_z is the conservative minimum across estimators (MAD, Qn, bootstrap, alternate corpus when present)",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py deviation --score <s> --baseline <b> per finalist; JSON outputs with 'certified_z' saved to .rig/expedition/zscores/; no z taken from a single estimator",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Certification & Routing",
+          "name": "3.2 Adversarial stability for extremes: any finalist with |z| >=",
+          "description": "Adversarial stability for extremes: any finalist with |z| >= 10 passes the substrate's adversarial pass (leave-one-out, perturbation, estimator swap) before its band is trusted",
+          "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py adversarial --score <s> --baseline <b> output showing band-stable verdict saved per extreme finalist",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Certification & Routing",
+          "name": "3.3 Sigma-band routing executed: every certified finalist is rou",
+          "description": "Sigma-band routing executed: every certified finalist is routed through the Deviatrix band table (ceiling_breach >= \u00b130, strong_deviation >= 5, differentiated_ordinary >= 3, etc.) and the routing record {z_cert, band, action, target} is emitted per finalist",
+          "command": "python3 -c importing sigma_band from the substrate (or replicating its thresholds) applied to each certified_z; routing table saved to .rig/expedition/routing.txt with one record per finalist",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Certification & Routing",
+          "name": "3.4 Expedition event recorded: the run is logged to rig-memory-o",
+          "description": "Expedition event recorded: the run is logged to rig-memory-os with the winner's certified z and band",
+          "command": "rig-memory-os memory.record_event(kind=\"expedition_run\", topic=<topic>, winner_sigma=<band>, z_certified=<z>, pass=<bool>) returns an event id recalled byte-for-byte; round-trip in .rig/expedition/memory-roundtrip.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Verdict & Termination",
+          "name": "4.1 Verifier-only termination: the win verdict is issued by a se",
+          "description": "Verifier-only termination: the win verdict is issued by a separate verifier pass (not the generating pass) that re-runs the winner's certified_z from the raw baseline and confirms the band; runner self-certification is void",
+          "command": ".rig/expedition/verdict.md names the verifier pass distinctly from the runner; re-computed certified_z matches gate 3.1 output within float tolerance; diff of recomputation saved",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Verdict & Termination",
+          "name": "4.2 Winner's provenance complete: engine tags, rung ladder, repa",
+          "description": "Winner's provenance complete: engine tags, rung ladder, repair lineage (if from repaired tail), and all three z-JSON files attached to the verdict",
+          "command": "verdict.md links existing files under .rig/expedition/; python3 os.path.exists assertion on every linked path; exit 0 recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.3",
+          "category": "Verdict & Termination",
+          "name": "4.3 Engine-combination pattern proposed: the winning engine comb",
+          "description": "Engine-combination pattern proposed: the winning engine combo is submitted as reusable memory for future expeditions on similar topics",
+          "command": "rig-memory-os memory.propose_memory(content=\"engine_combo\", evidence_refs=[<expedition_run event id>]) acknowledged; ack id in .rig/expedition/proposal.txt",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the expedition runner. Three tails, certified z, verifier terminates \u2014 I never call my own winner.",
+        "harness_tuple": "H_expedition(topic, three_tails, certified_z, band_routing, verdict)",
+        "bms_bias": "A2 generation-led during tail exploration; A1 verification-led at certification; A3 permitted for repair-pass drafting; A4 forbidden \u2014 expeditions never publish winners outward without Gate-D",
+        "meta": {
+          "harness_id": "mh-04-deviation-expedition-session",
+          "session_type": "deviation-expedition-session",
+          "governs_loops": [
+            "GL-SW",
+            "GL-GR",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "the same band flips under adversarial pass 3+ times \u2192 the baseline-corpus minimum is raised in this harness; repeated ceiling-breach claims from one topic class are proposed to meta-sigma-band-router as calibration warnings"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
+        "Three tails on file with correct counts and 1:1 negative-to-repaired mapping",
+        "Every finalist has a certified_z JSON from the deviation subcommand; extremes have adversarial stability proof",
+        "Routing table emitted for all certified finalists",
+        "Verdict issued by the verifier pass with recomputation evidence; provenance links resolve",
+        "expedition_run event recorded and round-trip verified; engine combo proposed",
+        "One improvement entry appended to the improvements log"
+      ],
+      "failure_states": [
+        "No stop gates: a failed expedition certifies nothing and records pass=false. Gate 4.1 failure (verifier disagrees with runner) voids the verdict, not the tails \u2014 the tails are retained and the expedition is re-verified with a fresh verifier pass",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.1, 4.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and expedition topic pinned with its baseline corpus declared before any tail is generated",
+        "Expedition doctrine loaded: the three-tail structure (positive, negative, repaired) and verifier-only termination are recited; the runner scores but never certifies its own run",
+        "RIG coordinate stated before first tail is generated",
+        "Harness tuple H_expedition(topic, three_tails, certified_z, band_routing, verdict) declared with all five components named",
+        "MathExec substrate proven live before any scoring: self-test passes including its two planted failures, establishing the estimator can go red this session",
+        "Baseline corpus validated: n >= 5 numeric scores, no all-identical values (MAD=0 trap), provenance of the corpus recorded",
+        "Positive tail generated: >= 3 candidate artifacts pushed toward +sigma rungs, each with an engine tag and rung label from the deviation ladder",
+        "Negative tail generated: >= 3 anti-candidates (deliberately median/collapsed) produced as contrast material, each tagged with the failure mode it embodies",
+        "Repaired tail generated: every negative-tail anti-candidate is rewritten toward the positive direction with the repair mechanism named; no orphan anti-candidates",
+        "Certified z computed per finalist: every tail finalist is scored via the deviation subcommand and certified_z is the conservative minimum across estimators (MAD, Qn, bootstrap, alternate corpus when present)",
+        "Adversarial stability for extremes: any finalist with |z| >= 10 passes the substrate's adversarial pass (leave-one-out, perturbation, estimator swap) before its band is trusted",
+        "Sigma-band routing executed: every certified finalist is routed through the Deviatrix band table (ceiling_breach >= \u00b130, strong_deviation >= 5, differentiated_ordinary >= 3, etc.) and the routing record {z_cert, band, action, target} is emitted per finalist",
+        "Expedition event recorded: the run is logged to rig-memory-os with the winner's certified z and band",
+        "Verifier-only termination: the win verdict is issued by a separate verifier pass (not the generating pass) that re-runs the winner's certified_z from the raw baseline and confirms the band; runner self-certification is void",
+        "Winner's provenance complete: engine tags, rung ladder, repair lineage (if from repaired tail), and all three z-JSON files attached to the verdict",
+        "Engine-combination pattern proposed: the winning engine combo is submitted as reusable memory for future expeditions on similar topics"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/mh-04-deviation-expedition-session.yaml",
+        "final_rule": [
+          "Three tails or no expedition.",
+          "certified_z is the conservative minimum \u2014 never the flattering estimator.",
+          "The runner never calls its own winner; the verifier terminates.",
+          "Every deviation-expedition session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2",
+            "3.3",
+            "3.4",
+            "4.1",
+            "4.2"
+          ],
+          "degrade": [
+            "4.3"
+          ],
+          "stop": [],
+          "notes": "No stop gates: a failed expedition certifies nothing and records pass=false. Gate 4.1 failure (verifier disagrees with runner) voids the verdict, not the tails \u2014 the tails are retained and the expedition is re-verified with a fresh verifier pass"
+        }
+      }
+    }
+  ]
+}

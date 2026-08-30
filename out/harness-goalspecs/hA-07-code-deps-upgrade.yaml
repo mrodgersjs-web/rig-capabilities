@@ -1,0 +1,312 @@
+{
+  "goals": [
+    {
+      "id": "GL-HA-07-CODE-DEPS-UPGRADE",
+      "name": "Dependency Upgrade Session Goal Harness",
+      "description": "Dependency Upgrade Session Goal Harness [code-deps-upgrade-session] \u2014 compiled from capabilities/harnesses/hA-07-code-deps-upgrade.yaml",
+      "anchor": "LL2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the package manager + manifest/loc",
+          "description": "Startup phrase spoken and the package manager + manifest/lockfile pair named exactly (package.json+pnpm-lock.yaml, pyproject.toml+uv.lock, go.mod+go.sum, Cargo.toml+Cargo.lock)",
+          "command": "Session log names the pair and both paths exist on disk",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Procedures declared mandatory: security-first triage, one ti",
+          "description": "Procedures declared mandatory: security-first triage, one tier per commit, full verify stack between tiers, no force-flags without a written exception",
+          "command": "All four procedure names in session preamble",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated before the first manifest edit",
+          "description": "RIG coordinate stated before the first manifest edit",
+          "command": "Session log line 'COORD: L2-L4 x D1-D2 x A1/A2 x IQRSQPI'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_deps(outdated_census, risk_tiers, staged_upg",
+          "description": "Harness tuple H_deps(outdated_census, risk_tiers, staged_upgrade, verify_stack, improvement) declared",
+          "command": "Tuple declaration present in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Census & Triage",
+          "name": "1.1 Outdated census captured: package-manager outdated command r",
+          "description": "Outdated census captured: package-manager outdated command run (pnpm outdated --format json / uv pip list --outdated / go list -m -u all / cargo outdated) and saved verbatim",
+          "command": ".rig/deps/outdated-before.json exists and parses; session log records package count",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Census & Triage",
+          "name": "1.2 Vulnerability audit captured: pnpm audit / pip-audit / govul",
+          "description": "Vulnerability audit captured: pnpm audit / pip-audit / govulncheck / cargo audit output saved; every HIGH/CRITICAL finding either upgraded this session or tracked with a written reason (no fix available, unaffected code path)",
+          "command": ".rig/deps/audit-before.txt plus .rig/deps/vuln-disposition.md with one line per HIGH/CRITICAL finding",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Census & Triage",
+          "name": "1.3 Risk tiering: every outdated package classified into patch /",
+          "description": "Risk tiering: every outdated package classified into patch / minor / dev-only / runtime-major; runtime majors get individual changelog review, not batch bumps",
+          "command": ".rig/deps/tiers.md with four sections and every census package appearing exactly once",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.4",
+          "category": "Census & Triage",
+          "name": "1.4 Baseline verify stack green: install from clean lockfile (pn",
+          "description": "Baseline verify stack green: install from clean lockfile (pnpm install --frozen-lockfile), tests, typecheck, build \u2014 all exit 0 before any version changes",
+          "command": "Four exit codes + lockfile sha256 in .rig/deps/baseline.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Staged Upgrade",
+          "name": "2.1 Tier order respected: dev-only first, then patch, then minor",
+          "description": "Tier order respected: dev-only first, then patch, then minor, then runtime majors LAST and one-per-commit; each tier committed separately",
+          "command": "git log --oneline shows ordered tier commits; no commit mixes a runtime major with other tiers",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Staged Upgrade",
+          "name": "2.2 Verify stack between tiers: tests + typecheck + build re-run",
+          "description": "Verify stack between tiers: tests + typecheck + build re-run after each tier commit; a red tier triggers revert of that tier commit before proceeding",
+          "command": "Per-tier exit codes in .rig/deps/verify-runs.txt; revert SHAs recorded if any",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Staged Upgrade",
+          "name": "2.3 Runtime majors get changelog-based breaking-change mapping: ",
+          "description": "Runtime majors get changelog-based breaking-change mapping: every major bump cites the upstream changelog entry and lists the repo call-sites it touches (grep evidence)",
+          "command": ".rig/deps/majors.md with one section per major: changelog URL | breaking items | grep output of affected call-sites",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Staged Upgrade",
+          "name": "2.4 No force-flags: --force, --legacy-peer-deps, --skip-verify, ",
+          "description": "No force-flags: --force, --legacy-peer-deps, --skip-verify, --allow-insecure absent from all install/upgrade commands unless each use has a written exception and expiry",
+          "command": "Session command log grep returns empty or exception list in .rig/deps/exceptions.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Verification",
+          "name": "3.1 Lockfile integrity: frozen-lockfile install from a clean nod",
+          "description": "Lockfile integrity: frozen-lockfile install from a clean node_modules (or equivalent) exit 0; lockfile diff reviewed for unexpected transitive downgrades or duplicate majors",
+          "command": "Clean-install exit code + lockfile diff summary (packages added/removed/major-dupes) in .rig/deps/lockfile-review.txt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Verification",
+          "name": "3.2 Post-upgrade audit re-run: vulnerability audit repeated and ",
+          "description": "Post-upgrade audit re-run: vulnerability audit repeated and compared to baseline \u2014 HIGH/CRITICAL count must not increase",
+          "command": ".rig/deps/audit-after.txt and a one-line count comparison in the session tail",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Verification",
+          "name": "3.3 Runtime smoke: the app's own smoke path (dev server boot + h",
+          "description": "Runtime smoke: the app's own smoke path (dev server boot + health endpoint, CLI --help, or top-3 flows) exercised on the upgraded tree",
+          "command": ".rig/deps/smoke.txt with command + exit code per smoke item",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Closure",
+          "name": "4.1 Upgrade ledger written: packages changed per tier, deferred ",
+          "description": "Upgrade ledger written: packages changed per tier, deferred packages with reasons (with next-check date), and remaining vuln count",
+          "command": ".rig/deps/LEDGER.md exists with all three sections; deferred items each carry a date",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.2",
+          "category": "Closure",
+          "name": "4.2 Improvement entry written: one recurring breakage source (pe",
+          "description": "Improvement entry written: one recurring breakage source (peer-dep trap, transitive pin, flaky postinstall) or harness gap",
+          "command": "Appended line to ~/.hermes/jake/improvements.log tagged hA-07-code-deps-upgrade",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Upgrade in tiers, verify between tiers, and let the lockfile tell the truth.",
+        "harness_tuple": "H_deps(outdated_census, risk_tiers, staged_upgrade, verify_stack, improvement)",
+        "bms_bias": "A1 for verification stack; A2 for manifest/lockfile edits; A3 for changelog reading only; A4 forbidden",
+        "meta": {
+          "harness_id": "hA-07-code-deps-upgrade",
+          "session_type": "code-deps-upgrade-session",
+          "governs_loops": [
+            "GL-SW",
+            "GL-VQ",
+            "GL-SI"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same package or breakage class fails 3+ times \u2192 pin policy, override, or renovate/dependabot config rule proposed"
+          }
+        }
+      },
+      "success_conditions": [
+        "All gates passed or degraded-with-log; zero unresolved halt gates",
+        "Tiered commits exist with per-tier verify evidence",
+        "audit-after shows no new HIGH/CRITICAL vs baseline",
+        "Clean frozen-lockfile install proven on final tree",
+        "LEDGER.md filed; deferred items carry dates",
+        "Identity closure: coordinate, vuln delta, next safe action stated"
+      ],
+      "failure_states": [
+        "a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed",
+        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the package manager + manifest/lockfile pair named exactly (package.json+pnpm-lock.yaml, pyproject.toml+uv.lock, go.mod+go.sum, Cargo.toml+Cargo.lock)",
+        "Procedures declared mandatory: security-first triage, one tier per commit, full verify stack between tiers, no force-flags without a written exception",
+        "RIG coordinate stated before the first manifest edit",
+        "Harness tuple H_deps(outdated_census, risk_tiers, staged_upgrade, verify_stack, improvement) declared",
+        "Outdated census captured: package-manager outdated command run (pnpm outdated --format json / uv pip list --outdated / go list -m -u all / cargo outdated) and saved verbatim",
+        "Vulnerability audit captured: pnpm audit / pip-audit / govulncheck / cargo audit output saved; every HIGH/CRITICAL finding either upgraded this session or tracked with a written reason (no fix available, unaffected code path)",
+        "Risk tiering: every outdated package classified into patch / minor / dev-only / runtime-major; runtime majors get individual changelog review, not batch bumps",
+        "Baseline verify stack green: install from clean lockfile (pnpm install --frozen-lockfile), tests, typecheck, build \u2014 all exit 0 before any version changes",
+        "Tier order respected: dev-only first, then patch, then minor, then runtime majors LAST and one-per-commit; each tier committed separately",
+        "Verify stack between tiers: tests + typecheck + build re-run after each tier commit; a red tier triggers revert of that tier commit before proceeding",
+        "Runtime majors get changelog-based breaking-change mapping: every major bump cites the upstream changelog entry and lists the repo call-sites it touches (grep evidence)",
+        "No force-flags: --force, --legacy-peer-deps, --skip-verify, --allow-insecure absent from all install/upgrade commands unless each use has a written exception and expiry",
+        "Lockfile integrity: frozen-lockfile install from a clean node_modules (or equivalent) exit 0; lockfile diff reviewed for unexpected transitive downgrades or duplicate majors",
+        "Post-upgrade audit re-run: vulnerability audit repeated and compared to baseline \u2014 HIGH/CRITICAL count must not increase",
+        "Runtime smoke: the app's own smoke path (dev server boot + health endpoint, CLI --help, or top-3 flows) exercised on the upgraded tree",
+        "Upgrade ledger written: packages changed per tier, deferred packages with reasons (with next-check date), and remaining vuln count",
+        "Improvement entry written: one recurring breakage source (peer-dep trap, transitive pin, flaky postinstall) or harness gap"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hA-07-code-deps-upgrade.yaml",
+        "final_rule": [
+          "Tiers in order; majors alone; verify between.",
+          "The lockfile diff is read, not skimmed.",
+          "A red tier is reverted, not negotiated with.",
+          "No improvement entry, no session complete.",
+          "Every code-deps-upgrade session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "1.4",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2",
+            "3.3",
+            "4.2"
+          ],
+          "degrade": [
+            "2.4",
+            "4.1"
+          ],
+          "stop": [],
+          "notes": "a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed"
+        }
+      }
+    }
+  ]
+}
