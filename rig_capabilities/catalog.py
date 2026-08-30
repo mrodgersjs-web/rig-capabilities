@@ -431,6 +431,18 @@ class Repo:
             suffix = src.suffix or ".md"
             base = (asset_id[:-len(suffix)] if asset_id.endswith(suffix) else asset_id)
             dst = dest_dir / f"{base}{suffix}"
+        # Already-canonical source (src and dst resolve to the same path): a
+        # self-referential register. Copying/rmtree would delete the source, so
+        # short-circuit to a re-index instead.
+        try:
+            same = src.resolve() == dst.resolve()
+        except OSError:
+            same = False
+        if same:
+            sha = self._sha_dir(dst) if dst.is_dir() else self._sha_file(dst)
+            self.build_index()
+            return {"status": "registered", "id": asset_id, "kind": kind,
+                    "path": str(dst.relative_to(self.root)), "sha": sha}
         if dst.exists() and not overwrite:
             raise ValueError(f"canonical asset exists: {dst} — re-run with overwrite=true")
         if src.is_dir():

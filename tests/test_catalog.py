@@ -108,6 +108,20 @@ class CatalogTests(unittest.TestCase):
         installed = self.repo.install("ext-thing", "claude")
         self.assertEqual("installed", installed["status"])
 
+    def test_add_is_idempotent_when_source_is_canonical(self):
+        # Registering a skill whose source path IS the canonical dir must not
+        # delete the source (regression: rmtree(dst) destroyed src when
+        # src.resolve()==dst.resolve(), then copytree ENOENT'd).
+        canon = self.repo.cap_root / "skills" / "demo-skill"
+        self.assertTrue(canon.is_dir())
+        before = (canon / "SKILL.md").read_text()
+        out = self.repo.add("demo-skill", "skill", str(canon), overwrite=True)
+        self.assertIn(out["status"], ("added", "replaced", "registered"))
+        self.assertTrue((canon / "SKILL.md").is_dir() or canon.is_dir())
+        self.assertEqual(before, (canon / "SKILL.md").read_text())
+        resolved = self.repo.resolve("demo-skill")
+        self.assertIsNotNone(resolved)
+
 
 class ProtocolTests(unittest.TestCase):
     def test_handshake_and_tool_call(self):
