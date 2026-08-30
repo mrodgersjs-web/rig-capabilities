@@ -270,3 +270,38 @@ States: wired | dormant | absent | down | hijacked. Suite 14/14.
 3. temporal :7233 wired (native binary), prefect :4200 wired (workers live);
    :8080 is an ssh tunnel — the kestra MCP reaches Kestra through it; no local
    java process owns it.
+
+## Bulk-install curation pass (2026-08-30)
+
+The `skills add` expansions dropped 128 today-born skills into both the
+claude and agents roots. Policy: **off-vertical or duplicate-of-live-plugin
+→ quarantine; when in doubt, keep.** 59 unique skills (116 copies across
+both roots) moved to `~/quarantine/skill-curation-2026-08-30/` (mv only,
+manifest + README with restore instructions):
+- blockchain/VM vulnerability scanners (algorand/cairo/cosmos/solana/
+  substrate/ton/token/entry-point) and crypto-protocol analysis
+  (constant-time-*, zeroize-audit, proverif, wycheproof) — RIG is not Web3;
+- fuzzing-engine operators (afl/libafl/libfuzzer/ossfuzz/atheris/ruzzy/
+  genotoxic/ASan/dwarf) — RIG ships AI services, not native binaries;
+- platform-specific (aspnet-core, winui-app, firebase-apk-scanner);
+- duplicates of LIVE enabled plugin surfaces (figma* ×8 vs figma plugin,
+  vercel/netlify/render/cloudflare-deploy);
+- openai media/SaaS duplicative of RIG tooling (imagegen, screenshot,
+  speech, transcribe, linear, sentry, notion-* ×4, chatgpt-apps,
+  social-studio, yeet, hatch-pet, let-fate-decide, command-any-room,
+  migrate-to-codex, chrome-mcp-troubleshooting).
+
+Kept as genuinely new capability (~70): the security-review family
+(semgrep*, codeql, sarif-parsing, security-threat-model, security-ownership-
+map, supply-chain-risk-auditor, differential-review, variant-analysis,
+vulnerability-triage-brocards, audit-* family, trailmark family, yara,
+burpsuite parser), testing-handbook family (property-based/mutation/
+coverage/fp-check/sharp-edges), spec/skill/harness engineering, gh-cli/
+gh-*, modern-python/cpp, rust-review, jupyter-notebook, playwright.
+
+## Engine passthrough (rig-goal-engine)
+
+`yaml_loader.py` now forwards `failure_states` into `GoalSpec` (the model
+declared the field at `models.py:219`; the loader silently dropped it).
+This gives the 56 compiled harness specs their declared failure semantics.
+The engine dir is not git-versioned; revert = delete the one added line.
