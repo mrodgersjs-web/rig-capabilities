@@ -4,7 +4,7 @@
       "id": "GL-HA-06-CODE-PERF-AUDIT",
       "name": "Code Performance Audit Session Goal Harness",
       "description": "Code Performance Audit Session Goal Harness [code-perf-audit-session] \u2014 compiled from capabilities/harnesses/hA-06-code-perf-audit.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -99,7 +99,7 @@
         {
           "id": "2.2",
           "category": "Profile Evidence",
-          "name": "2.2 Bottleneck ranking derived from the profile, not intuition: ",
+          "name": "2.2 Bottleneck ranking derived from the profile, not intuition:",
           "description": "Bottleneck ranking derived from the profile, not intuition: top-N list cites self-time %, bytes, or rows-scanned from the captured artifact",
           "command": ".rig/perf/bottlenecks.md ranks \u22653 candidates each with a number quoted from the profile artifact",
           "failure_tier": "halt",
@@ -132,7 +132,7 @@
         {
           "id": "3.2",
           "category": "Optimization & Delta",
-          "name": "3.2 No correctness regression: full test suite green after each ",
+          "name": "3.2 No correctness regression: full test suite green after each",
           "description": "No correctness regression: full test suite green after each optimization; any semantic change (cache TTL, ordering, precision) flagged in deltas.md",
           "command": "Exit codes appended per optimization row in deltas.md",
           "failure_tier": "halt",
@@ -238,7 +238,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same bottleneck class appears 3+ times \u2192 promote a lint rule, budget check, or architecture note"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -250,8 +253,9 @@
         "Identity closure: coordinate, headline delta, next safe action stated"
       ],
       "failure_states": [
-        "no profile artifact = no optimization; an unmeasurable claim is a failed audit, not a smaller one",
-        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.3: no progress without gate evidence"
+        "notes: no profile artifact = no optimization; an unmeasurable claim is a failed audit, not a smaller one",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.3: no progress without gate evidence",
+        "degrade gate(s) 2.3, 3.4, 4.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the audit target pinned to exact endpoints/functions/pages plus the metric(s) under audit (latency p95, throughput, bundle KB, query ms)",
@@ -304,8 +308,12 @@
             "4.2"
           ],
           "stop": [],
-          "notes": "no profile artifact = no optimization; an unmeasurable claim is a failed audit, not a smaller one"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: no profile artifact = no optimization; an unmeasurable claim is a failed audit, not a smaller one"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

@@ -4,7 +4,7 @@
       "id": "GL-HA-09-API-DESIGN",
       "name": "API Design Session Goal Harness",
       "description": "API Design Session Goal Harness [api-design-session] \u2014 compiled from capabilities/harnesses/hA-09-api-design.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -22,7 +22,7 @@
         {
           "id": "0.2",
           "category": "Identity Lock",
-          "name": "0.2 Procedures declared mandatory: contract-first, spec-linted, ",
+          "name": "0.2 Procedures declared mandatory: contract-first, spec-linted,",
           "description": "Procedures declared mandatory: contract-first, spec-linted, backward-compat proven, error model uniform",
           "command": "All four procedure names in session preamble",
           "failure_tier": "halt",
@@ -99,7 +99,7 @@
         {
           "id": "2.1",
           "category": "Spec Verification",
-          "name": "2.1 Spec lints clean: spectral lint openapi.yaml (or buf lint / ",
+          "name": "2.1 Spec lints clean: spectral lint openapi.yaml (or buf lint /",
           "description": "Spec lints clean: spectral lint openapi.yaml (or buf lint / graphql-schema-linter) exit 0 with the repo ruleset; every suppressed rule individually justified",
           "command": "Lint exit code + output in .rig/api/lint.txt; suppressions listed with reasons",
           "failure_tier": "halt",
@@ -241,7 +241,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same design fault recurs 3+ times \u2192 fold the fix into the spectral ruleset or spec template"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -253,8 +256,9 @@
         "Identity closure: coordinate, contract verdict, next safe action stated"
       ],
       "failure_states": [
-        "a breaking change without a version/sunset decision is a halt that only the API owner's explicit sign-off can release",
-        "halt gate(s) 1.1, 1.3, 1.4, 2.1, 2.2, 2.4, 3.1, 4.2: no progress without gate evidence"
+        "notes: a breaking change without a version/sunset decision is a halt that only the API owner's explicit sign-off can release",
+        "halt gate(s) 1.1, 1.3, 1.4, 2.1, 2.2, 2.4, 3.1, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.2, 2.3, 3.2, 3.3, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the API surface pinned: protocol (REST/GraphQL/gRPC), owning service, and the consumer list (named clients or 'public')",
@@ -307,8 +311,12 @@
             "4.1"
           ],
           "stop": [],
-          "notes": "a breaking change without a version/sunset decision is a halt that only the API owner's explicit sign-off can release"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: a breaking change without a version/sunset decision is a halt that only the API owner's explicit sign-off can release"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

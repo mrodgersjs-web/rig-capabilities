@@ -4,7 +4,7 @@
       "id": "GL-HD-07-CHURN-PREVENTION",
       "name": "Churn Prevention Goal Harness",
       "description": "Churn Prevention Goal Harness [ops-churn-prevention] \u2014 compiled from capabilities/harnesses/hD-07-churn-prevention.yaml",
-      "anchor": "LL1-D1-A1-I",
+      "anchor": "L1-D1-A1-I",
       "bms_mode": "A1",
       "gate": "Cohort reproducible, scores versioned, exclusions reason-coded, root causes evidenced",
       "gates": [
@@ -232,7 +232,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; a play with 3 consecutive misses is retired or revised in the save-play library"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -243,8 +246,9 @@
         "Identity closure: coordinate, verdict (plays-staged | partial | blocked), next safe action in session log"
       ],
       "failure_states": [
-        "stop gate(s) 2.2, 3.2: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 3.1, 3.3: no progress without gate evidence"
+        "stop gate(s) 2.2, 3.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 3.1, 3.3: no progress without gate evidence",
+        "degrade gate(s) 2.3, 2.4, 3.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Save-play doctrine loaded (renewal-playbooks, save-play-library, escalation-framework read this session)",
@@ -295,8 +299,10 @@
             "2.2",
             "3.2"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

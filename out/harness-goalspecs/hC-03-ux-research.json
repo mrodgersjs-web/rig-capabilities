@@ -1,0 +1,308 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-03-UX-RESEARCH",
+      "name": "UX Research Goal Harness",
+      "description": "UX Research Goal Harness [ux-research-session] \u2014 compiled from capabilities/harnesses/hC-03-ux-research.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 11 capability gates passed with artifacts under artifacts/uxr/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L2-D1-A1",
+          "description": "RIG coordinate stated verbatim: L2-D1-A1",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_ux_research(identity, gat",
+          "description": "Harness tuple declared verbatim: H_ux_research(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Plan & Ethics",
+          "name": "1.1 Research question and falsifiable hypotheses written before",
+          "description": "Research question and falsifiable hypotheses written before any participant contact",
+          "command": "artifacts/uxr/<slug>/plan.md with question, >=3 hypotheses, method, and analysis plan",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Plan & Ethics",
+          "name": "1.2 Participant screener documented: inclusion/exclusion criteri",
+          "description": "Participant screener documented: inclusion/exclusion criteria and recruitment source",
+          "command": "artifacts/uxr/<slug>/screener.md with criteria and per-participant fit scores",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Plan & Ethics",
+          "name": "1.3 Consent captured for every session; recordings/notes stored",
+          "description": "Consent captured for every session; recordings/notes stored with provenance and PII handling declared",
+          "command": "artifacts/uxr/<slug>/consent/ contains one record per participant; PII redaction statement in plan.md",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Collection & Coding",
+          "name": "2.1 Session notes or transcripts stored per participant with tim",
+          "description": "Session notes or transcripts stored per participant with timestamped raw capture",
+          "command": "one file per participant under artifacts/uxr/<slug>/sessions/ with header metadata (date, duration, modality)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Collection & Coding",
+          "name": "2.2 Coding pass completed: observations tagged with a stated cod",
+          "description": "Coding pass completed: observations tagged with a stated codebook",
+          "command": "artifacts/uxr/<slug>/codebook.yaml + coded observations CSV with `observation_id, participant_id, code, quote` columns",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Collection & Coding",
+          "name": "2.3 Theme clustering produced from coded observations (affinity",
+          "description": "Theme clustering produced from coded observations (affinity mapping), not from memory",
+          "command": "artifacts/uxr/<slug>/themes.csv mapping each theme to >=2 observation_ids from >=2 participants",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Collection & Coding",
+          "name": "2.4 Saturation check: last N sessions produced no new themes, N",
+          "description": "Saturation check: last N sessions produced no new themes, N stated",
+          "command": "saturation table in report: new-themes-per-session counts converging to zero; N >= 2",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Synthesis & Traceability",
+          "name": "3.1 Insight statements written in 'we observed X, which means Y,",
+          "description": "Insight statements written in 'we observed X, which means Y, therefore Z' form with evidence links",
+          "command": "report insights section; every insight cites theme IDs from themes.csv",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Synthesis & Traceability",
+          "name": "3.2 Every recommendation traces to at least one insight ID; orph",
+          "description": "Every recommendation traces to at least one insight ID; orphan recommendations removed",
+          "command": "traceability table `recommendation_id -> insight_id -> theme_id` in report; orphan count = 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Synthesis & Traceability",
+          "name": "3.3 Persona or journey-map artifacts updated as a diff, not over",
+          "description": "Persona or journey-map artifacts updated as a diff, not overwritten blindly",
+          "command": "`git diff` (or dated before/after files) for persona/journey artifacts committed with the report",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Synthesis & Traceability",
+          "name": "3.4 Findings readout produced for stakeholders with confidence l",
+          "description": "Findings readout produced for stakeholders with confidence levels per finding",
+          "command": "artifacts/uxr/<slug>/readout.md with per-finding confidence (high/med/low) and evidence density",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "UX research mode: participants are people, insights are traceable, saturation is proven.",
+        "harness_tuple": "H_ux_research_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for thematic synthesis; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-03-ux-research-session",
+          "session_type": "ux-research-session",
+          "governs_loops": [
+            "GL-FS",
+            "GL-BD"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L6"
+            ],
+            "diamonds": [
+              "D1",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 11 capability gates passed with artifacts under artifacts/uxr/<slug>/",
+        "Primary objective achieved: traceable insight-to-recommendation chain delivered",
+        "Consent and provenance records complete for every participant",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "stop gate(s) 1.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1, 3.2: no progress without gate evidence",
+        "degrade gate(s) 2.4, 3.3, 3.4: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L2-D1-A1",
+        "Harness tuple declared verbatim: H_ux_research(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Research question and falsifiable hypotheses written before any participant contact",
+        "Participant screener documented: inclusion/exclusion criteria and recruitment source",
+        "Consent captured for every session; recordings/notes stored with provenance and PII handling declared",
+        "Session notes or transcripts stored per participant with timestamped raw capture",
+        "Coding pass completed: observations tagged with a stated codebook",
+        "Theme clustering produced from coded observations (affinity mapping), not from memory",
+        "Saturation check: last N sessions produced no new themes, N stated",
+        "Insight statements written in 'we observed X, which means Y, therefore Z' form with evidence links",
+        "Every recommendation traces to at least one insight ID; orphan recommendations removed",
+        "Persona or journey-map artifacts updated as a diff, not overwritten blindly",
+        "Findings readout produced for stakeholders with confidence levels per finding"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-03-ux-research.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every ux-research-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.2"
+          ],
+          "degrade": [
+            "2.4",
+            "3.3",
+            "3.4"
+          ],
+          "stop": [
+            "1.3"
+          ],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

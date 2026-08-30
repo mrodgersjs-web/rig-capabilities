@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-02-NEWSLETTER-ISSUE-SESSION",
+      "name": "Newsletter Issue Session Harness",
+      "description": "Newsletter Issue Session Harness [newsletter-issue-session] \u2014 compiled from capabilities/harnesses/hB-02-newsletter-issue-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "All gates pass; subject winner + runner-up recorded with rationale.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm issue format (curated links / single-essay / hybrid)",
+          "description": "Confirm issue format (curated links / single-essay / hybrid) against the publication\u2019s editorial calendar before drafting.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Load the subscriber segment definition; an issue written to",
+          "description": "Load the subscriber segment definition; an issue written to 'everyone' is a session halt.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Confirm send-time window and timezone are recorded; drafting",
+          "description": "Confirm send-time window and timezone are recorded; drafting without a send slot produces orphan content.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Verify the previous issue\u2019s performance numbers are availabl",
+          "description": "Verify the previous issue\u2019s performance numbers are available for the self-improvement loop; if unavailable, log degradation and continue.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Issue brief",
+          "description": "Issue brief states the one promise, the segment, the send window, and the primary link goal.",
+          "command": "$SESS/brief.yaml parses with keys promise, segment, send_window, primary_link_goal; `python3 -c \"import yaml;d=yaml.safe_load(open('$SESS/brief.yaml'));assert all(k in d for k in ['promise','segment','send_window','primary_link_goal'])\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Subject line set",
+          "description": ">=5 subject line candidates, each <=50 chars, none using spam-trigger tokens; winner and runner-up marked.",
+          "command": "$SESS/subjects.txt has >=5 non-empty lines; `awk 'length($0)>50{exit 1}' $SESS/subjects.txt` exits 0; `grep -ciE 'free!!!|act now|100%|risk-free' $SESS/subjects.txt` == 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Preview text pair",
+          "description": "Preview/preheader text complements (not repeats) the chosen subject line, 40-90 chars.",
+          "command": "$SESS/preview.txt exists; char count 40-90 via `python3 -c \"s=open('$SESS/preview.txt').read().strip();assert 40<=len(s)<=90\"`; similarity check `python3 scripts/similar.py $SESS/subjects.txt $SESS/preview.txt --max 0.5` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Link budget",
+          "description": "Total outbound links <=7, every link tagged with UTM parameters, every link resolves.",
+          "command": "`grep -oE 'https?://[^) ]+' $SESS/issue.md | wc -l` <= 7; every URL matches `utm_source` (`grep -L utm_source` empty); `xargs -n1 curl -s -o /dev/null -w '%{http_code}\\n'` all 2xx/3xx",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Skeleton scan",
+          "description": "Issue is scannable: no paragraph >4 lines at 60ch measure, one idea per section, header rhythm every <=250 words.",
+          "command": "`python3 scripts/skeleton_scan.py $SESS/issue.md --max-para-lines 4 --max-words-between-headers 250` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 One-payoff rule",
+          "description": "Body delivers the brief promise in the first 20% and references it again in the final section.",
+          "command": "`python3 scripts/promise_check.py $SESS/brief.yaml $SESS/issue.md` exits 0 (embedding-overlap threshold >=0.7 at both anchor zones)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 List hygiene hooks",
+          "description": "Unsubscribe link, physical mailing address, and permission reminder present in footer block (CAN-SPAM/CASL).",
+          "command": "`grep -c 'unsubscribe' $SESS/issue.md` >=1 AND `grep -ciE '[0-9]+ .*(street|st\\.|ave|road|rd\\.)' $SESS/issue.md` >=1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Plain-text twin",
+          "description": "A plain-text version is generated and semantically equal to the HTML version (no link loss).",
+          "command": "$SESS/issue.txt exists; `python3 scripts/html_text_parity.py $SESS/issue.md $SESS/issue.txt` exits 0 with link_count_delta == 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Rendering proof",
+          "description": "Issue renders without broken images or clipped layout in 2 reference clients (screenshot or DOM assert).",
+          "command": "$SESS/proof/render/ contains gmail.png and applemail.png (or DOM assertion log) with `file` confirming PNG and size >20KB each",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Proof packet seal",
+          "description": "All artifacts hashed; winner subject line recorded for the learning loop.",
+          "command": "$SESS/proof/packet.yaml includes sha256 of issue.md, issue.txt, subjects.txt and field winner_subject; `sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Newsletter operator. Every issue earns its open: one promise in the subject line, one payoff in the body, zero wasted scrolls.",
+        "harness_tuple": "L3-D3-A2-I5",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-02-newsletter-issue",
+          "session_type": "newsletter-issue-session",
+          "governs_loops": [
+            "iqrsqpi.content.newsletter",
+            "GL-OD-newsletter",
+            "lifecycle-cadence.broadcast"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/newsletter-issue-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/newsletter-issue-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "All gates pass; subject winner + runner-up recorded with rationale.",
+        "Every link reachable and UTM-tagged at seal time.",
+        "Footer compliance block present; plain-text twin at link parity.",
+        "Issue file, subjects, and proof packet sealed with reproducible hashes.",
+        "Prior issue metrics (if available) appended to the self-improvement log with one stated lesson."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm issue format (curated links / single-essay / hybrid) against the publication\u2019s editorial calendar before drafting.",
+        "Load the subscriber segment definition; an issue written to 'everyone' is a session halt.",
+        "Confirm send-time window and timezone are recorded; drafting without a send slot produces orphan content.",
+        "Verify the previous issue\u2019s performance numbers are available for the self-improvement loop; if unavailable, log degradation and continue.",
+        "Issue brief states the one promise, the segment, the send window, and the primary link goal.",
+        ">=5 subject line candidates, each <=50 chars, none using spam-trigger tokens; winner and runner-up marked.",
+        "Preview/preheader text complements (not repeats) the chosen subject line, 40-90 chars.",
+        "Total outbound links <=7, every link tagged with UTM parameters, every link resolves.",
+        "Issue is scannable: no paragraph >4 lines at 60ch measure, one idea per section, header rhythm every <=250 words.",
+        "Body delivers the brief promise in the first 20% and references it again in the final section.",
+        "Unsubscribe link, physical mailing address, and permission reminder present in footer block (CAN-SPAM/CASL).",
+        "A plain-text version is generated and semantically equal to the HTML version (no link loss).",
+        "Issue renders without broken images or clipped layout in 2 reference clients (screenshot or DOM assert).",
+        "All artifacts hashed; winner subject line recorded for the learning loop."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-02-newsletter-issue-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "degrade",
+            "CG-04": "halt",
+            "CG-05": "degrade",
+            "CG-06": "halt",
+            "CG-07": "halt",
+            "CG-08": "degrade",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

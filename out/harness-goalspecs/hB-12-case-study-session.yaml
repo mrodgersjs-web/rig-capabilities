@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-12-CASE-STUDY-SESSION",
+      "name": "Case Study Session Harness",
+      "description": "Case Study Session Harness [case-study-session] \u2014 compiled from capabilities/harnesses/hB-12-case-study-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Headline metric script-verified against the evidence locker.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm signed customer approval (or approval-in-progress st",
+          "description": "Confirm signed customer approval (or approval-in-progress status) exists before drafting with real names.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the single headline metric is verifiable from intern",
+          "description": "Confirm the single headline metric is verifiable from internal data or customer-provided evidence.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse composite/fictionalized customers unless labeled as i",
+          "description": "Refuse composite/fictionalized customers unless labeled as illustrative \u2014 mislabeled fiction is a halt.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm the target reader (which buyer persona reads this) b",
+          "description": "Confirm the target reader (which buyer persona reads this) before structuring the narrative.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Evidence locker",
+          "description": "Raw evidence collected: interview transcript/notes, metrics screenshots or exports, before/after data points.",
+          "command": "$SESS/evidence/ contains >=3 files; `find $SESS/evidence -type f | wc -l` >= 3; each hashed in $SESS/proof/evidence.sha256",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Headline metric verification",
+          "description": "The headline metric traces to a specific evidence file and computation, reproducible by a script.",
+          "command": "`python3 scripts/verify_metric.py $SESS/metric.yaml $SESS/evidence/` exits 0 and writes $SESS/proof/metric.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Narrative arc",
+          "description": "Structure follows context -> problem -> failed alternatives -> solution -> measurable outcome -> quote; each section present.",
+          "command": "`python3 scripts/arc_sections.py $SESS/draft.md --require context,problem,alternatives,solution,outcome,quote` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Quote provenance",
+          "description": "Every quoted sentence maps to a transcript timestamp or email reference; paraphrases are not quoted.",
+          "command": "`python3 scripts/quote_provenance.py $SESS/draft.md $SESS/evidence/` exits 0 (every quote resolves)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Claim bound check",
+          "description": "No claim in the draft exceeds what evidence supports (superlatives, 'best', '#1' require evidence or are cut).",
+          "command": "`grep -ciE 'best-in-class|#1|world-class|revolutionary' $SESS/draft.md` == 0 OR each instance cited in $SESS/proof/superlative_waivers.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Before/after specificity",
+          "description": "Outcome section contains >=2 quantified before/after pairs with timeframes.",
+          "command": "`python3 scripts/before_after.py $SESS/draft.md --min-pairs 2` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Persona relevance map",
+          "description": "Draft explicitly addresses the target persona\u2019s stated evaluation criteria (from persona file).",
+          "command": "`python3 scripts/persona_map.py $SESS/draft.md $SESS/persona.yaml` exits 0 (coverage >=0.7)",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Legal/approval status",
+          "description": "Approval record (signed release or email approval) present, or draft is name-scrubbed and flagged pending-approval.",
+          "command": "$SESS/approval/ contains release file OR `grep -c 'PENDING-APPROVAL' $SESS/draft.md` >= 1 AND all proper nouns scrubbed (`python3 scripts/name_scrub_check.py $SESS/draft.md` exits 0)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Format twins",
+          "description": "Long-form version plus a <=150-word sales-snippet version derived from it, numbers identical.",
+          "command": "$SESS/snippet.txt exists; `wc -w $SESS/snippet.txt` <= 150; `python3 scripts/number_parity.py $SESS/draft.md $SESS/snippet.txt` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Proof packet seal",
+          "description": "Draft, snippet, evidence hashes, approval status sealed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Case Study operator. The customer is the hero; the product is the tool. Every number is sourced, every quote is approved, every claim survives a skeptical reader.",
+        "harness_tuple": "L3-D2-A2-I5",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-12-case-study",
+          "session_type": "case-study-session",
+          "governs_loops": [
+            "iqrsqpi.content.casestudy",
+            "GL-OD-proof",
+            "case-studies.pipeline"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/case-study-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/case-study-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Headline metric script-verified against the evidence locker.",
+        "All quotes resolve to provenance; zero unsupported superlatives.",
+        "Approval on file, or draft provably name-scrubbed and flagged.",
+        "Sales snippet derived with number parity.",
+        "Proof packet sealed."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm signed customer approval (or approval-in-progress status) exists before drafting with real names.",
+        "Confirm the single headline metric is verifiable from internal data or customer-provided evidence.",
+        "Refuse composite/fictionalized customers unless labeled as illustrative \u2014 mislabeled fiction is a halt.",
+        "Confirm the target reader (which buyer persona reads this) before structuring the narrative.",
+        "Raw evidence collected: interview transcript/notes, metrics screenshots or exports, before/after data points.",
+        "The headline metric traces to a specific evidence file and computation, reproducible by a script.",
+        "Structure follows context -> problem -> failed alternatives -> solution -> measurable outcome -> quote; each section present.",
+        "Every quoted sentence maps to a transcript timestamp or email reference; paraphrases are not quoted.",
+        "No claim in the draft exceeds what evidence supports (superlatives, 'best', '#1' require evidence or are cut).",
+        "Outcome section contains >=2 quantified before/after pairs with timeframes.",
+        "Draft explicitly addresses the target persona\u2019s stated evaluation criteria (from persona file).",
+        "Approval record (signed release or email approval) present, or draft is name-scrubbed and flagged pending-approval.",
+        "Long-form version plus a <=150-word sales-snippet version derived from it, numbers identical.",
+        "Draft, snippet, evidence hashes, approval status sealed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-12-case-study-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "halt",
+            "CG-06": "degrade",
+            "CG-07": "degrade",
+            "CG-08": "halt",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

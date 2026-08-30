@@ -4,7 +4,7 @@
       "id": "GL-MH-05-ASSET-PRUNING-SESSION",
       "name": "Asset Pruning Session Goal Harness",
       "description": "Asset Pruning Session Goal Harness [asset-pruning-session] \u2014 compiled from capabilities/harnesses/mh-05-asset-pruning-session.yaml",
-      "anchor": "LL3-D1-A1-I",
+      "anchor": "L3-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -55,7 +55,7 @@
         {
           "id": "1.1",
           "category": "Condemnation Evidence",
-          "name": "1.1 Every condemned skill carries a recorded failing done-test: ",
+          "name": "1.1 Every condemned skill carries a recorded failing done-test:",
           "description": "Every condemned skill carries a recorded failing done-test: the skill's own '## Done test' block was executed and exited non-zero against the CURRENT artifact, with output on file \u2014 no skill enters the condemnation set on inspection alone",
           "command": "Per condemned skill: bash -c <extracted done-test> exit code != 0 with stdout/stderr saved to .rig/prune/failures/<skill>.txt; python3 assertion that condemnation set == set of recorded failure files",
           "failure_tier": "halt",
@@ -66,7 +66,7 @@
         {
           "id": "1.2",
           "category": "Condemnation Evidence",
-          "name": "1.2 Restorability proven before any cut: every condemnation-set ",
+          "name": "1.2 Restorability proven before any cut: every condemnation-set",
           "description": "Restorability proven before any cut: every condemnation-set asset is archived (tar of the asset directory plus its catalog row) and the archive's integrity verified",
           "command": "tar -czf .rig/prune/restore/<asset>.tar.gz <asset dir> followed by tar -tzf listing matching the source file list; sha256 of archive recorded in .rig/prune/restore/manifest.txt",
           "failure_tier": "halt",
@@ -110,7 +110,7 @@
         {
           "id": "2.3",
           "category": "Catalog & Drift Pass",
-          "name": "2.3 Usage telemetry check: kill-candidates justified by non-use ",
+          "name": "2.3 Usage telemetry check: kill-candidates justified by non-use",
           "description": "Usage telemetry check: kill-candidates justified by non-use must show a telemetry window \u2014 an asset with zero recorded invocations over the window AND a failing done-test; usage alone never condemns",
           "command": "python3 -c reading the usage telemetry log asserting each non-use condemnation cites a window length and zero-count; table in .rig/prune/usage.txt",
           "failure_tier": "degrade",
@@ -236,7 +236,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "the same condemnation class recurs in 3+ prune sessions \u2192 the producing template (genesis or forge) is patched; restore archives never needed in 10 sessions \u2192 archive cadence is reviewed but never dropped"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -248,9 +251,10 @@
         "One improvement entry appended to the improvements log"
       ],
       "failure_states": [
-        "stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0",
-        "stop gate(s) 3.2: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 3.1, 3.3, 3.4, 4.1: no progress without gate evidence"
+        "notes: stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0",
+        "stop gate(s) 3.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 3.1, 3.3, 3.4, 4.1: no progress without gate evidence",
+        "degrade gate(s) 2.2, 2.3, 2.4, 4.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and pruning scope pinned: the exact asset classes in scope (skills, harnesses, agents, catalogs) and the absolute exclusion list declared before any evaluation begins",
@@ -303,8 +307,12 @@
           "stop": [
             "3.2"
           ],
-          "notes": "stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: stop on 3.2: any deletion attempted without a hash-matched Gate-D approval halts the session AND triggers restore from .rig/prune/restore/ \u2014 an unapproved cut is treated as damage, not progress. A prune session that finds zero condemnable assets is a valid PASS outcome and records cut_count=0"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

@@ -1,0 +1,292 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-05-DESIGN-TOKEN-BUILD",
+      "name": "Design Token Build Goal Harness",
+      "description": "Design Token Build Goal Harness [design-token-build-session] \u2014 compiled from capabilities/harnesses/hC-05-design-token-build.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 10 capability gates passed with deterministic-build proof captured",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L3-D1-A1",
+          "description": "RIG coordinate stated verbatim: L3-D1-A1",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_design_token_build(identi",
+          "description": "Harness tuple declared verbatim: H_design_token_build(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Source of Truth",
+          "name": "1.1 Token source declared: exactly one canonical tokens file (to",
+          "description": "Token source declared: exactly one canonical tokens file (tokens/tokens.json); no parallel token stores",
+          "command": "`find . -name 'tokens*.json' -not -path './node_modules/*'` returns exactly the canonical path (or documented legacy stores with removal dates)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Source of Truth",
+          "name": "1.2 Token schema validation passes: every token has value, type,",
+          "description": "Token schema validation passes: every token has value, type, and tier (global/alias/component)",
+          "command": "`node tokens/validate.mjs tokens/tokens.json` exit 0; validation output captured in session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Source of Truth",
+          "name": "1.3 Naming convention enforced: tier-prefixed dot-paths (color.g",
+          "description": "Naming convention enforced: tier-prefixed dot-paths (color.global.*, color.alias.*, space.*, font.*) with no collisions",
+          "command": "validator duplicate/collision check exit 0; naming rules documented in tokens/README.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Build & Outputs",
+          "name": "2.1 Token build runs deterministically: two consecutive builds p",
+          "description": "Token build runs deterministically: two consecutive builds produce byte-identical outputs",
+          "command": "`node tokens/build.mjs && sha256sum dist/tokens/* > /tmp/t1 && node tokens/build.mjs && sha256sum -c /tmp/t1` exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Build & Outputs",
+          "name": "2.2 All declared output targets generated: CSS custom properties",
+          "description": "All declared output targets generated: CSS custom properties, Tailwind config, and platform exports as scoped",
+          "command": "dist/tokens/ contains tokens.css + tailwind.tokens.js (+ ios/android if scoped); each file's token count equals source count in build log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Build & Outputs",
+          "name": "2.3 Generated-file diff reviewed: every change traces to a sourc",
+          "description": "Generated-file diff reviewed: every change traces to a source token change",
+          "command": "`git diff dist/tokens/` reviewed; changelog.md maps each output delta to source token path",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Build & Outputs",
+          "name": "2.4 Token snapshot tests pass (name stability + value pinning fo",
+          "description": "Token snapshot tests pass (name stability + value pinning for semantic tokens)",
+          "command": "`npm test -- tokens` exit 0; snapshot diff empty or updated with justification in changelog",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Integration & Versioning",
+          "name": "3.1 Consumer smoke test: at least one real component switched fr",
+          "description": "Consumer smoke test: at least one real component switched from hardcoded values to built tokens and renders identically",
+          "command": "before/after screenshot pair in artifacts/token-build/<slug>/; visual diff tool reports no unintended change",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Integration & Versioning",
+          "name": "3.2 Residual hardcoded-value sweep: consumers scanned for litera",
+          "description": "Residual hardcoded-value sweep: consumers scanned for literals that duplicate token values",
+          "command": "`grep -rEo '#[0-9a-fA-F]{6}' src --include='*.tsx' --include='*.css'` results all matched to tokens or exception-listed",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Integration & Versioning",
+          "name": "3.3 Token package version bumped with changelog; publish is loca",
+          "description": "Token package version bumped with changelog; publish is local-only (registry push requires Gate-D)",
+          "command": "tokens/CHANGELOG.md entry with semver bump rationale; `git tag tokens-v<X.Y.Z>` created; no push performed",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Token build mode: single source of truth, deterministic builds, consumers never hardcode.",
+        "harness_tuple": "H_design_token_build_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for taxonomy design; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-05-design-token-build-session",
+          "session_type": "design-token-build-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-SH"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D1"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 10 capability gates passed with deterministic-build proof captured",
+        "Primary objective achieved: canonical tokens build to all declared targets and integrate into a live component",
+        "Two consecutive builds byte-identical (sha256 match recorded)",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.4, 3.1: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.3, 3.2, 3.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L3-D1-A1",
+        "Harness tuple declared verbatim: H_design_token_build(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Token source declared: exactly one canonical tokens file (tokens/tokens.json); no parallel token stores",
+        "Token schema validation passes: every token has value, type, and tier (global/alias/component)",
+        "Naming convention enforced: tier-prefixed dot-paths (color.global.*, color.alias.*, space.*, font.*) with no collisions",
+        "Token build runs deterministically: two consecutive builds produce byte-identical outputs",
+        "All declared output targets generated: CSS custom properties, Tailwind config, and platform exports as scoped",
+        "Generated-file diff reviewed: every change traces to a source token change",
+        "Token snapshot tests pass (name stability + value pinning for semantic tokens)",
+        "Consumer smoke test: at least one real component switched from hardcoded values to built tokens and renders identically",
+        "Residual hardcoded-value sweep: consumers scanned for literals that duplicate token values",
+        "Token package version bumped with changelog; publish is local-only (registry push requires Gate-D)"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-05-design-token-build.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every design-token-build-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "2.4",
+            "3.1"
+          ],
+          "degrade": [
+            "1.3",
+            "2.3",
+            "3.2",
+            "3.3"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

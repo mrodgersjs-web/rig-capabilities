@@ -1,0 +1,293 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-04-DESIGN-CRITIQUE",
+      "name": "Design Critique Goal Harness",
+      "description": "Design Critique Goal Harness [design-critique-session] \u2014 compiled from capabilities/harnesses/hC-04-design-critique.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 10 capability gates passed with artifacts under artifacts/critique/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L4-D2-A3",
+          "description": "RIG coordinate stated verbatim: L4-D2-A3",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_design_critique(identity,",
+          "description": "Harness tuple declared verbatim: H_design_critique(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Setup & Framing",
+          "name": "1.1 Artifact under review frozen: immutable copy hashed before c",
+          "description": "Artifact under review frozen: immutable copy hashed before critique begins",
+          "command": "`sha256sum` of artifact recorded in artifacts/critique/<slug>/FREEZE.txt; critique references the frozen hash",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Setup & Framing",
+          "name": "1.2 Critique rubric selected and stated (heuristic, brand, conve",
+          "description": "Critique rubric selected and stated (heuristic, brand, conversion, or custom) with weighting",
+          "command": "artifacts/critique/<slug>/rubric.yaml with dimensions and weights summing to 100",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Setup & Framing",
+          "name": "1.3 Minimum two distinct reviewer lenses applied (e.g., first-ti",
+          "description": "Minimum two distinct reviewer lenses applied (e.g., first-time user + domain expert, or brand guardian + accessibility)",
+          "command": "lens assignments recorded in rubric.yaml; each lens produces its own findings section",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Evaluation",
+          "name": "2.1 Heuristic evaluation completed against Nielsen's 10 with pas",
+          "description": "Heuristic evaluation completed against Nielsen's 10 with pass/concern/fail per heuristic",
+          "command": "heuristics table in artifacts/critique/<slug>/findings.md; every concern/fail cites a screen or flow step",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Evaluation",
+          "name": "2.2 Every issue carries a severity rating (blocker/major/minor/n",
+          "description": "Every issue carries a severity rating (blocker/major/minor/nit) with a stated impact rationale",
+          "command": "severity column populated for 100% of findings; rationale present for every blocker/major",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Evaluation",
+          "name": "2.3 Visual issues evidenced by annotated screenshots, not prose",
+          "description": "Visual issues evidenced by annotated screenshots, not prose alone",
+          "command": "artifacts/critique/<slug>/shots/ contains one annotated capture per visual finding; filename referenced in findings.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Evaluation",
+          "name": "2.4 Feedback phrasing audit: zero vague directives ('make it pop",
+          "description": "Feedback phrasing audit: zero vague directives ('make it pop', 'feels off'); every item is observable and actionable",
+          "command": "`grep -inE 'make it pop|feels off|more modern|cleaner' artifacts/critique/<slug>/findings.md` returns empty",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Decisions & Follow-through",
+          "name": "3.1 Decision log: every finding dispositioned accept / revise /",
+          "description": "Decision log: every finding dispositioned accept / revise / defer with owner",
+          "command": "decision table in findings.md; 100% of findings have a disposition and named owner",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Decisions & Follow-through",
+          "name": "3.2 Revised artifact produced at a bumped version with changes m",
+          "description": "Revised artifact produced at a bumped version with changes mapped to findings",
+          "command": "v(N+1) artifact + artifacts/critique/<slug>/changelog.md mapping each change to finding IDs",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Decisions & Follow-through",
+          "name": "3.3 Re-critique gate scheduled for blocker/major fixes with a ve",
+          "description": "Re-critique gate scheduled for blocker/major fixes with a verification date or trigger",
+          "command": "follow-up entry in changelog.md with re-check trigger per blocker/major finding",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Design critique mode: attack the work, arm the maker, every verdict is actionable.",
+        "harness_tuple": "H_design_critique_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A2-A3 preferred for divergent lenses; A1 for rubric scoring; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-04-design-critique-session",
+          "session_type": "design-critique-session",
+          "governs_loops": [
+            "GL-VQ",
+            "GL-RI"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 10 capability gates passed with artifacts under artifacts/critique/<slug>/",
+        "Primary objective achieved: dispositioned decision log and revised artifact at bumped version",
+        "Zero vague feedback survived the phrasing audit",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.2: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.3, 2.4, 3.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L4-D2-A3",
+        "Harness tuple declared verbatim: H_design_critique(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Artifact under review frozen: immutable copy hashed before critique begins",
+        "Critique rubric selected and stated (heuristic, brand, conversion, or custom) with weighting",
+        "Minimum two distinct reviewer lenses applied (e.g., first-time user + domain expert, or brand guardian + accessibility)",
+        "Heuristic evaluation completed against Nielsen's 10 with pass/concern/fail per heuristic",
+        "Every issue carries a severity rating (blocker/major/minor/nit) with a stated impact rationale",
+        "Visual issues evidenced by annotated screenshots, not prose alone",
+        "Feedback phrasing audit: zero vague directives ('make it pop', 'feels off'); every item is observable and actionable",
+        "Decision log: every finding dispositioned accept / revise / defer with owner",
+        "Revised artifact produced at a bumped version with changes mapped to findings",
+        "Re-critique gate scheduled for blocker/major fixes with a verification date or trigger"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-04-design-critique.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every design-critique-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "3.1",
+            "3.2"
+          ],
+          "degrade": [
+            "1.3",
+            "2.3",
+            "2.4",
+            "3.3"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

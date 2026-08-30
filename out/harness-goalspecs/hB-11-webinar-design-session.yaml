@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-11-WEBINAR-DESIGN-SESSION",
+      "name": "Webinar Design Session Harness",
+      "description": "Webinar Design Session Harness [webinar-design-session] \u2014 compiled from capabilities/harnesses/hB-11-webinar-design-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Arc time math balances; teaching:pitch ratio proven >=3:1.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the webinar\u2019s one teaching promise and the offer it",
+          "description": "Confirm the webinar\u2019s one teaching promise and the offer it bridges to before any slide work.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm live vs. evergreen; engagement mechanics differ and",
+          "description": "Confirm live vs. evergreen; engagement mechanics differ and must be designed for the actual format.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse 'content-free pitchfest' outlines \u2014 teaching blocks m",
+          "description": "Refuse 'content-free pitchfest' outlines \u2014 teaching blocks must outnumber pitch blocks 3:1.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm the registration-to-attendance assumption (typically",
+          "description": "Confirm the registration-to-attendance assumption (typically 35-45%) used in funnel math.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Promise & offer lock",
+          "description": "Teaching promise and bridged offer locked with funnel assumptions (reg rate, show rate, close assumption).",
+          "command": "$SESS/design.yaml parses with keys promise, offer, assumptions; `python3 -c \"import yaml;d=yaml.safe_load(open('$SESS/design.yaml'));assert 0<d['assumptions']['show_rate']<=1\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Arc structure",
+          "description": "Session arc follows hook -> credibility -> 3 teaching blocks -> bridge -> offer -> Q&A, with minute budgets summing to runtime.",
+          "command": "`python3 scripts/arc_check.py $SESS/arc.yaml --runtime $(python3 -c \"import yaml;print(yaml.safe_load(open('$SESS/design.yaml'))['runtime_min'])\")` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Teaching density",
+          "description": "Each teaching block contains >=1 framework, demonstration, or worked example; teaching:pitch block ratio >=3:1.",
+          "command": "`python3 scripts/teach_density.py $SESS/arc.yaml --min-ratio 3` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Engagement mechanics",
+          "description": ">=4 designed interactions (poll, chat prompt, Q&A call, worksheet moment) placed at >=7-minute intervals.",
+          "command": "`python3 scripts/engagement_map.py $SESS/arc.yaml --min 4 --max-gap 7` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Slide skeleton",
+          "description": "Slide list <=60 slides with type per slide (title/teaching/demo/proof/offer); zero walls-of-text slides (<=40 words each).",
+          "command": "`python3 scripts/slide_lint.py $SESS/slides.yaml --max-slides 60 --max-words 40` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Offer bridge integrity",
+          "description": "Bridge segment explicitly connects the teaching promise\u2019s unresolved gap to the offer; bridge script <=3 minutes.",
+          "command": "`python3 scripts/bridge_check.py $SESS/arc.yaml $SESS/design.yaml` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Registration page parity",
+          "description": "Reg page headline repeats the teaching promise verbatim; reg form <=4 fields; confirmation + reminder sequence (T-24h, T-1h) defined.",
+          "command": "`python3 scripts/message_match.py --source $SESS/design.yaml --page $SESS/regpage.html` exits 0; `python3 -c \"import yaml;assert len(yaml.safe_load(open('$SESS/reminders.yaml'))['sequence'])>=2\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Tech rehearsal checklist",
+          "description": "Platform, backup stream, slides-as-PDF fallback, and presenter one-sheet documented.",
+          "command": "$SESS/rehearsal.md contains all 4 checklist items; `grep -c '\\[ \\]' $SESS/rehearsal.md` >= 4",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Replay & follow-up plan",
+          "description": "Replay window (hours), follow-up email count, and offer deadline defined.",
+          "command": "$SESS/followup.yaml parses with replay_hours, emails[], offer_deadline; validator exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Proof packet seal",
+          "description": "Design, arc, slides, reg page, follow-up hashed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Webinar Design operator. The session must teach something real in 45 minutes and earn its pitch \u2014 value first, offer second, no bait-and-switch.",
+        "harness_tuple": "L3-D3-A2-I5",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-11-webinar-design",
+          "session_type": "webinar-design-session",
+          "governs_loops": [
+            "iqrsqpi.content.webinar",
+            "GL-OD-webinar",
+            "webinars.design"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/webinar-design-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/webinar-design-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Arc time math balances; teaching:pitch ratio proven >=3:1.",
+        "Engagement mechanics placed and verified.",
+        "Bridge segment machine-checked against promise and offer.",
+        "Reg page parity and reminder sequence verified.",
+        "Proof packet sealed including rehearsal checklist."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the webinar\u2019s one teaching promise and the offer it bridges to before any slide work.",
+        "Confirm live vs. evergreen; engagement mechanics differ and must be designed for the actual format.",
+        "Refuse 'content-free pitchfest' outlines \u2014 teaching blocks must outnumber pitch blocks 3:1.",
+        "Confirm the registration-to-attendance assumption (typically 35-45%) used in funnel math.",
+        "Teaching promise and bridged offer locked with funnel assumptions (reg rate, show rate, close assumption).",
+        "Session arc follows hook -> credibility -> 3 teaching blocks -> bridge -> offer -> Q&A, with minute budgets summing to runtime.",
+        "Each teaching block contains >=1 framework, demonstration, or worked example; teaching:pitch block ratio >=3:1.",
+        ">=4 designed interactions (poll, chat prompt, Q&A call, worksheet moment) placed at >=7-minute intervals.",
+        "Slide list <=60 slides with type per slide (title/teaching/demo/proof/offer); zero walls-of-text slides (<=40 words each).",
+        "Bridge segment explicitly connects the teaching promise\u2019s unresolved gap to the offer; bridge script <=3 minutes.",
+        "Reg page headline repeats the teaching promise verbatim; reg form <=4 fields; confirmation + reminder sequence (T-24h, T-1h) defined.",
+        "Platform, backup stream, slides-as-PDF fallback, and presenter one-sheet documented.",
+        "Replay window (hours), follow-up email count, and offer deadline defined.",
+        "Design, arc, slides, reg page, follow-up hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-11-webinar-design-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "degrade",
+            "CG-05": "degrade",
+            "CG-06": "halt",
+            "CG-07": "halt",
+            "CG-08": "degrade",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

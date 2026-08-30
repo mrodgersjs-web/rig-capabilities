@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-13-EMAIL-SEQUENCE-SESSION",
+      "name": "Email Sequence Session Harness",
+      "description": "Email Sequence Session Harness [email-sequence-session] \u2014 compiled from capabilities/harnesses/hB-13-email-sequence-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Trigger, goal, ladder, and cadence all machine-validated.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the sequence trigger (lead magnet / trial / webinar",
+          "description": "Confirm the sequence trigger (lead magnet / trial / webinar / cold-warm) and its entry condition before writing email 1.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the conversion goal and the email-by-email escalatio",
+          "description": "Confirm the conversion goal and the email-by-email escalation ladder are declared up front.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse fake-urgency mechanics (fake deadlines, fake 're:' su",
+          "description": "Refuse fake-urgency mechanics (fake deadlines, fake 're:' subjects) \u2014 session halts if requested.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm suppression rules (customers, active opportunities)",
+          "description": "Confirm suppression rules (customers, active opportunities) are defined before any send logic.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Trigger & goal lock",
+          "description": "Entry trigger, exit conditions, and conversion goal locked in sequence.yaml.",
+          "command": "$SESS/sequence.yaml parses with keys trigger, exit_conditions[], goal; validator exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Escalation ladder",
+          "description": "Email count 4-7; each email declares its ladder role (deliver, teach, story, proof, offer, urgency-honest, breakup); roles are non-repeating except proof.",
+          "command": "`python3 scripts/ladder_check.py $SESS/sequence.yaml --min 4 --max 7` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Cadence justification",
+          "description": "Delay between emails documented with reason; no gap <1 day or >7 days without written justification.",
+          "command": "`python3 scripts/cadence_check.py $SESS/sequence.yaml --min-gap 1 --max-gap 7` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Subject line bank",
+          "description": ">=2 subject candidates per email, <=60 chars, no fake 're:'/'fwd:' prefixes, no spam tokens.",
+          "command": "`python3 scripts/subject_bank.py $SESS/sequence.yaml --min-per-email 2` exits 0; `grep -ciE '^re:|^fwd:' $SESS/subjects.txt` == 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Body format discipline",
+          "description": "Each email 75-200 words, one CTA, PS line optional and <=30 words.",
+          "command": "`python3 scripts/email_format.py $SESS/emails/ --min-words 75 --max-words 200 --max-ctas 1` exits 0 for every file",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Link integrity",
+          "description": "All links across all emails resolve and carry UTM tags with sequence name.",
+          "command": "`grep -rhoE 'https?://[^) ]+' $SESS/emails/ | xargs -n1 curl -s -o /dev/null -w '%{http_code}\\n' | grep -cvE '^[23]'` == 0; `grep -rL utm_campaign $SESS/emails/ | wc -l` == 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Suppression & exit wiring",
+          "description": "Suppression lists and goal-achieved early-exit are declared and mapped to ESP automation fields.",
+          "command": "$SESS/suppression.yaml parses with lists[] and early_exit_field; `python3 scripts/esp_map.py $SESS/suppression.yaml $SESS/esp_fields.json` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Compliance footer",
+          "description": "Unsubscribe link + sender address present in every email; plain-text twins exist for all.",
+          "command": "`grep -rL unsubscribe $SESS/emails/ | wc -l` == 0; `for f in $SESS/emails/*.md; do test -f ${f%.md}.txt || exit 1; done` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Personalization fallback",
+          "description": "Every merge tag has a declared fallback; rendering with empty contact data produces no raw {{...}} tokens.",
+          "command": "`python3 scripts/merge_fallback.py $SESS/emails/ --render-empty` exits 0 (zero unreplaced tokens)",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Proof packet seal",
+          "description": "Sequence yaml, emails, subjects, suppression map hashed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Email Sequence operator. Every email earns the next open; every delay has a reason; every subscriber can leave in one click.",
+        "harness_tuple": "L3-D4-A3-I5",
+        "bms_bias": "A3",
+        "meta": {
+          "harness_id": "hB-13-email-sequence",
+          "session_type": "email-sequence-session",
+          "governs_loops": [
+            "iqrsqpi.content.email",
+            "GL-OD-nurture",
+            "drip-campaigns.sequence"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/email-sequence-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/email-sequence-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Trigger, goal, ladder, and cadence all machine-validated.",
+        "Every email within format band with one CTA and clean link set.",
+        "Suppression and early-exit wiring mapped to ESP fields.",
+        "Compliance footer and plain-text twins present for 100% of emails.",
+        "Proof packet sealed; merge tags render clean on empty data."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the sequence trigger (lead magnet / trial / webinar / cold-warm) and its entry condition before writing email 1.",
+        "Confirm the conversion goal and the email-by-email escalation ladder are declared up front.",
+        "Refuse fake-urgency mechanics (fake deadlines, fake 're:' subjects) \u2014 session halts if requested.",
+        "Confirm suppression rules (customers, active opportunities) are defined before any send logic.",
+        "Entry trigger, exit conditions, and conversion goal locked in sequence.yaml.",
+        "Email count 4-7; each email declares its ladder role (deliver, teach, story, proof, offer, urgency-honest, breakup); roles are non-repeating except proof.",
+        "Delay between emails documented with reason; no gap <1 day or >7 days without written justification.",
+        ">=2 subject candidates per email, <=60 chars, no fake 're:'/'fwd:' prefixes, no spam tokens.",
+        "Each email 75-200 words, one CTA, PS line optional and <=30 words.",
+        "All links across all emails resolve and carry UTM tags with sequence name.",
+        "Suppression lists and goal-achieved early-exit are declared and mapped to ESP automation fields.",
+        "Unsubscribe link + sender address present in every email; plain-text twins exist for all.",
+        "Every merge tag has a declared fallback; rendering with empty contact data produces no raw {{...}} tokens.",
+        "Sequence yaml, emails, subjects, suppression map hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-13-email-sequence-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "degrade",
+            "CG-04": "halt",
+            "CG-05": "degrade",
+            "CG-06": "halt",
+            "CG-07": "halt",
+            "CG-08": "halt",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

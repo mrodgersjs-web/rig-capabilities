@@ -4,7 +4,7 @@
       "id": "GL-HD-01-OUTBOUND-SEQUENCE",
       "name": "Outbound Sequence Goal Harness",
       "description": "Outbound Sequence Goal Harness [gtm-outbound-sequence] \u2014 compiled from capabilities/harnesses/hD-01-outbound-sequence.yaml",
-      "anchor": "LL1-D1-A1-I",
+      "anchor": "L1-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All halt-tier gates passed; degrade-tier gates passed or degradations logged with justification",
       "gates": [
@@ -66,7 +66,7 @@
         {
           "id": "1.1",
           "category": "Audience Construction",
-          "name": "1.1 Target list sourced from an approved origin (Apollo export, ",
+          "name": "1.1 Target list sourced from an approved origin (Apollo export,",
           "description": "Target list sourced from an approved origin (Apollo export, CRM segment query, scraped event list) with provenance recorded per source",
           "command": "artifacts/outbound/<run>/sources.json lists each origin with url_or_query, fetched_at, row_count",
           "failure_tier": "halt",
@@ -99,7 +99,7 @@
         {
           "id": "1.4",
           "category": "Audience Construction",
-          "name": "1.4 ICP fit score computed per recipient using the dept scoring ",
+          "name": "1.4 ICP fit score computed per recipient using the dept scoring",
           "description": "ICP fit score computed per recipient using the dept scoring rubric (5-factor composite)",
           "command": "scored.csv has icp_score column; python3 -c \"import csv; rows=list(csv.DictReader(open('scored.csv'))); assert all(0 <= float(r['icp_score']) <= 100 for r in rows)\" exit 0",
           "failure_tier": "degrade",
@@ -187,7 +187,7 @@
         {
           "id": "3.4",
           "category": "Send Safety",
-          "name": "3.4 ProofPacket sealed: recipient manifest, copy drafts, safety ",
+          "name": "3.4 ProofPacket sealed: recipient manifest, copy drafts, safety",
           "description": "ProofPacket sealed: recipient manifest, copy drafts, safety results hashed together",
           "command": "artifacts/outbound/<run>/proofpacket.json with sha256 of manifest+drafts+safety jsonl; shasum -a 256 -c manifest.sha256 exit 0",
           "failure_tier": "halt",
@@ -241,7 +241,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times across runs; reply-rate regression on a cadence variant feeds back into sequence.yaml defaults"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -252,8 +255,9 @@
         "Identity closure: coordinate, verdict (drafted | armed | blocked), and next safe action stated in session log"
       ],
       "failure_states": [
-        "stop gate(s) 3.1, 3.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.2, 3.4: no progress without gate evidence"
+        "stop gate(s) 3.1, 3.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.2, 3.4: no progress without gate evidence",
+        "degrade gate(s) 1.4, 2.2, 2.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "gstack/rig cold-send doctrine loaded (gtm-cold-send-safety read this session)",
@@ -305,8 +309,10 @@
             "3.1",
             "3.3"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

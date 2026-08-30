@@ -4,7 +4,7 @@
       "id": "GL-MH-02-HARNESS-FORGE-SESSION",
       "name": "Harness Forge Session Goal Harness",
       "description": "Harness Forge Session Goal Harness [harness-forge-session] \u2014 compiled from capabilities/harnesses/mh-02-harness-forge-session.yaml",
-      "anchor": "LL3-D1-A1-I",
+      "anchor": "L3-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -77,7 +77,7 @@
         {
           "id": "1.3",
           "category": "Structure",
-          "name": "1.3 identity_lock well-formed: startup_phrase is a first-person ",
+          "name": "1.3 identity_lock well-formed: startup_phrase is a first-person",
           "description": "identity_lock well-formed: startup_phrase is a first-person sentence and 3-5 gates each carry id and requirement",
           "command": "python3 assertion: 3 <= len(identity_lock.gates) <= 5 and every gate has non-empty 'id' and 'requirement'; recorded to .rig/forge/identity.txt",
           "failure_tier": "halt",
@@ -226,7 +226,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same forge gate fails 3+ times \u2192 the forge checklist absorbs the check as a template constraint; recurring theater-gate shapes are proposed via memory.propose_memory to meta-harness-refuter's taxonomy"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -239,7 +242,7 @@
         "One improvement entry appended to the improvements log"
       ],
       "failure_states": [
-        "No stop gates in forge: a malformed harness is simply not registered; the failure mode is refusal to certify, never emergency halt \u2014 but 2.3 (tier partition mismatch) invalidates any prior certification of the same file and requires re-running 4.x",
+        "notes: No stop gates in forge: a malformed harness is simply not registered; the failure mode is refusal to certify, never emergency halt \u2014 but 2.3 (tier partition mismatch) invalidates any prior certification of the same file and requires re-running 4.x",
         "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 2.4, 3.1, 3.2, 4.1, 4.2, 4.3: no progress without gate evidence"
       ],
       "quality_criteria": [
@@ -289,8 +292,12 @@
           ],
           "degrade": [],
           "stop": [],
-          "notes": "No stop gates in forge: a malformed harness is simply not registered; the failure mode is refusal to certify, never emergency halt \u2014 but 2.3 (tier partition mismatch) invalidates any prior certification of the same file and requires re-running 4.x"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: No stop gates in forge: a malformed harness is simply not registered; the failure mode is refusal to certify, never emergency halt \u2014 but 2.3 (tier partition mismatch) invalidates any prior certification of the same file and requires re-running 4.x"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

@@ -1,0 +1,275 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-08-PODCAST-PREP-SESSION",
+      "name": "Podcast Prep Session Harness",
+      "description": "Podcast Prep Session Harness [podcast-prep-session] \u2014 compiled from capabilities/harnesses/hB-08-podcast-prep-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Through-line locked; every question passes the novelty screen.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the guest (or solo topic) and the episode\u2019s single t",
+          "description": "Confirm the guest (or solo topic) and the episode\u2019s single through-line before research.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm prior appearances reviewed: never ask a question the",
+          "description": "Confirm prior appearances reviewed: never ask a question the guest answered verbatim on another show.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Confirm episode format (interview / solo / panel) and target",
+          "description": "Confirm episode format (interview / solo / panel) and target length before building the run sheet.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Refuse generic question lists ('tell us about your journey')",
+          "description": "Refuse generic question lists ('tell us about your journey') \u2014 every question must cite its origin.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Through-line lock",
+          "description": "Episode through-line and target listener takeaway written in one sentence each.",
+          "command": "$SESS/throughline.yaml parses with keys throughline, takeaway; validator exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Guest dossier",
+          "description": "Dossier contains bio, 3 prior appearances with links, 5 known positions, and 2 contradictions worth probing.",
+          "command": "$SESS/dossier.md has all sections; `grep -cE 'https?://' $SESS/dossier.md` >= 3; `grep -c '^- ' $SESS/dossier.md` >= 10",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Novelty screen",
+          "description": "Every proposed question checked against prior-appearance transcripts; novelty score >=0.7.",
+          "command": "`python3 scripts/question_novelty.py $SESS/questions.md $SESS/prior_transcripts/ --min 0.7` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Question ladder",
+          "description": "Run sheet orders questions warmup -> core -> stretch -> close, with time budget per block summing to target length +/-10%.",
+          "command": "`python3 scripts/run_sheet_math.py $SESS/runsheet.yaml` exits 0 and writes $SESS/proof/run_math.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Follow-up forks",
+          "description": "Each core question has >=2 pre-written follow-up forks (if-guest-says-X paths).",
+          "command": "`python3 -c \"import yaml;r=yaml.safe_load(open('$SESS/runsheet.yaml'));assert all(len(q.get('forks',[]))>=2 for q in r['core'])\"` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Asset & logistics check",
+          "description": "Recording links, backup recorder note, guest one-sheet (bio, socials, headshot path), and promo obligations documented.",
+          "command": "$SESS/logistics.yaml parses with keys record_link, backup_plan, onesheet_path, promo; `test -f $(python3 -c \"import yaml;print(yaml.safe_load(open('$SESS/logistics.yaml'))['onesheet_path'])\")` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Sensitive-topic map",
+          "description": "Topics the guest avoids or that need framing are listed with handling notes.",
+          "command": "$SESS/sensitive.md exists with >=1 entry OR explicit 'none declared' line; `test -s $SESS/sensitive.md` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Intro/outro copy",
+          "description": "60-word intro and outro with CTA drafted, matching show voice.",
+          "command": "`wc -w $SESS/intro.txt` between 45-75; `grep -cE 'https?://|@' $SESS/outro.txt` >= 1",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Proof packet seal",
+          "description": "Dossier, run sheet, novelty report, logistics hashed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Podcast Prep operator. The guest should meet questions they've never answered; the listener should leave with one idea they can use tomorrow.",
+        "harness_tuple": "L2-D3-A1-I4",
+        "bms_bias": "A1",
+        "meta": {
+          "harness_id": "hB-08-podcast-prep",
+          "session_type": "podcast-prep-session",
+          "governs_loops": [
+            "iqrsqpi.content.podcast",
+            "GL-OD-podcast",
+            "call-brief-framework.episode"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/podcast-prep-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/podcast-prep-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Through-line locked; every question passes the novelty screen.",
+        "Run sheet time math balances and core questions carry follow-up forks.",
+        "Logistics verified with the one-sheet file present on disk.",
+        "Intro/outro drafted; sensitive topics mapped or explicitly cleared.",
+        "Proof packet sealed."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the guest (or solo topic) and the episode\u2019s single through-line before research.",
+        "Confirm prior appearances reviewed: never ask a question the guest answered verbatim on another show.",
+        "Confirm episode format (interview / solo / panel) and target length before building the run sheet.",
+        "Refuse generic question lists ('tell us about your journey') \u2014 every question must cite its origin.",
+        "Episode through-line and target listener takeaway written in one sentence each.",
+        "Dossier contains bio, 3 prior appearances with links, 5 known positions, and 2 contradictions worth probing.",
+        "Every proposed question checked against prior-appearance transcripts; novelty score >=0.7.",
+        "Run sheet orders questions warmup -> core -> stretch -> close, with time budget per block summing to target length +/-10%.",
+        "Each core question has >=2 pre-written follow-up forks (if-guest-says-X paths).",
+        "Recording links, backup recorder note, guest one-sheet (bio, socials, headshot path), and promo obligations documented.",
+        "Topics the guest avoids or that need framing are listed with handling notes.",
+        "60-word intro and outro with CTA drafted, matching show voice.",
+        "Dossier, run sheet, novelty report, logistics hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-08-podcast-prep-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "degrade",
+            "CG-06": "halt",
+            "CG-07": "degrade",
+            "CG-08": "degrade",
+            "CG-09": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

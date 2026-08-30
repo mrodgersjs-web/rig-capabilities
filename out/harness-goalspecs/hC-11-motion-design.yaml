@@ -1,0 +1,291 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-11-MOTION-DESIGN",
+      "name": "Motion Design Goal Harness",
+      "description": "Motion Design Goal Harness [motion-design-session] \u2014 compiled from capabilities/harnesses/hC-11-motion-design.yaml",
+      "anchor": "L4-D2-A2-I",
+      "bms_mode": "A2",
+      "gate": "All 10 capability gates passed with artifacts under artifacts/motion/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L4-D2-A3",
+          "description": "RIG coordinate stated verbatim: L4-D2-A3",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_motion_design(identity, g",
+          "description": "Harness tuple declared verbatim: H_motion_design(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Purpose & Spec",
+          "name": "1.1 Motion purpose declared per animation: orientation, feedback",
+          "description": "Motion purpose declared per animation: orientation, feedback, continuity, or personality \u2014 decorative-only motion is cut",
+          "command": "artifacts/motion/<slug>/motion-spec.yaml: `animation, trigger, purpose, duration_token, easing_token` per entry; zero purpose: decorative",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Purpose & Spec",
+          "name": "1.2 Duration and easing drawn from motion tokens only (e.g., dur",
+          "description": "Duration and easing drawn from motion tokens only (e.g., duration.fast/base/slow, easing.standard/emphasized)",
+          "command": "motion-spec.yaml references resolve against tokens/tokens.json motion tier; `node tokens/validate.mjs` exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Purpose & Spec",
+          "name": "1.3 Choreography spec for multi-element sequences: stagger inter",
+          "description": "Choreography spec for multi-element sequences: stagger intervals, orchestration order, and overlap rules",
+          "command": "choreography section in motion-spec.yaml with per-sequence timeline table",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Performance & Safety",
+          "name": "2.1 Frame budget verified: animations hold 60fps (or declared ta",
+          "description": "Frame budget verified: animations hold 60fps (or declared target) on the reference device profile",
+          "command": "performance capture artifact (Chrome DevTools trace or equivalent) in artifacts/motion/<slug>/perf/ with dropped-frame count <= budget",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Performance & Safety",
+          "name": "2.2 Only compositor-friendly properties animated (transform/opac",
+          "description": "Only compositor-friendly properties animated (transform/opacity) or exceptions justified with paint-cost evidence",
+          "command": "`grep -rEn 'animation|transition' artifacts/motion/<slug>/ --include='*.css'` sweep: property list vs allowed set; exceptions documented",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Performance & Safety",
+          "name": "2.3 Reduced-motion variant implemented for every animation: @med",
+          "description": "Reduced-motion variant implemented for every animation: @media (prefers-reduced-motion: reduce) behavior specified and captured",
+          "command": "reduced-motion capture pair per animation (full vs reduced) in artifacts/motion/<slug>/; spec section names the fallback behavior",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Performance & Safety",
+          "name": "2.4 No vestibular triggers: no large parallax, auto-playing moti",
+          "description": "No vestibular triggers: no large parallax, auto-playing motion > 5s loop without pause control, or flash > 3/s",
+          "command": "vestibular checklist in motion-spec.yaml all-pass; any looping animation has a pause/stop control spec",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Handoff & Evidence",
+          "name": "3.1 Implementation mapping delivered: each animation mapped to c",
+          "description": "Implementation mapping delivered: each animation mapped to concrete implementation (CSS keyframes, GSAP timeline, or Lottie) with code-level parameters",
+          "command": "handoff table: animation -> implementation target + parameter dump (durations, easings, delays) matching token values",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Handoff & Evidence",
+          "name": "3.2 Before/after evidence captured: video or WebM of each animat",
+          "description": "Before/after evidence captured: video or WebM of each animation at 1x speed, plus a 0.25x slow-mo for review",
+          "command": "artifacts/motion/<slug>/captures/ contains 1x + 0.25x recordings per animation; filenames match motion-spec keys",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Handoff & Evidence",
+          "name": "3.3 Export assets meet spec where applicable: Lottie JSON valida",
+          "description": "Export assets meet spec where applicable: Lottie JSON validated, dimensions and frame rate declared",
+          "command": "Lottie files parse (`node -e \"JSON.parse(...)\"` exit 0) and carry declared w/h/fr; manifest lists them with sha256",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Motion design mode: every animation is functional, timed by tokens, and safe under reduced-motion.",
+        "harness_tuple": "H_motion_design_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A2-A3 preferred for choreography exploration; A1 for spec/perf verification; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-11-motion-design-session",
+          "session_type": "motion-design-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-SH"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D2"
+            ],
+            "bms_modes": [
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 10 capability gates passed with artifacts under artifacts/motion/<slug>/",
+        "Primary objective achieved: functional, token-timed, reduced-motion-safe motion system with implementation handoff",
+        "Performance capture proves frame budget on reference profile",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.1, 2.3, 2.4, 3.1: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.2, 3.2, 3.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L4-D2-A3",
+        "Harness tuple declared verbatim: H_motion_design(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Motion purpose declared per animation: orientation, feedback, continuity, or personality \u2014 decorative-only motion is cut",
+        "Duration and easing drawn from motion tokens only (e.g., duration.fast/base/slow, easing.standard/emphasized)",
+        "Choreography spec for multi-element sequences: stagger intervals, orchestration order, and overlap rules",
+        "Frame budget verified: animations hold 60fps (or declared target) on the reference device profile",
+        "Only compositor-friendly properties animated (transform/opacity) or exceptions justified with paint-cost evidence",
+        "Reduced-motion variant implemented for every animation: @media (prefers-reduced-motion: reduce) behavior specified and captured",
+        "No vestibular triggers: no large parallax, auto-playing motion > 5s loop without pause control, or flash > 3/s",
+        "Implementation mapping delivered: each animation mapped to concrete implementation (CSS keyframes, GSAP timeline, or Lottie) with code-level parameters",
+        "Before/after evidence captured: video or WebM of each animation at 1x speed, plus a 0.25x slow-mo for review",
+        "Export assets meet spec where applicable: Lottie JSON validated, dimensions and frame rate declared"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-11-motion-design.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every motion-design-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.3",
+            "2.4",
+            "3.1"
+          ],
+          "degrade": [
+            "1.3",
+            "2.2",
+            "3.2",
+            "3.3"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

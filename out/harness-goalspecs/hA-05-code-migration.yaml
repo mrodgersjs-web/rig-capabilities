@@ -4,14 +4,14 @@
       "id": "GL-HA-05-CODE-MIGRATION",
       "name": "Code Migration Session Goal Harness",
       "description": "Code Migration Session Goal Harness [code-migration-session] \u2014 compiled from capabilities/harnesses/hA-05-code-migration.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
         {
           "id": "0.1",
           "category": "Identity Lock",
-          "name": "0.1 Startup phrase spoken and migration pinned to exact from\u2192to ",
+          "name": "0.1 Startup phrase spoken and migration pinned to exact from\u2192to",
           "description": "Startup phrase spoken and migration pinned to exact from\u2192to (library version, framework version, or API contract), with both versions recorded",
           "command": "Session log contains from-version and to-version strings and the source of each (lockfile, manifest)",
           "failure_tier": "halt",
@@ -66,7 +66,7 @@
         {
           "id": "1.2",
           "category": "Census & Plan",
-          "name": "1.2 Breaking-change inventory: the target's changelog/migration ",
+          "name": "1.2 Breaking-change inventory: the target's changelog/migration",
           "description": "Breaking-change inventory: the target's changelog/migration guide consulted and every applicable breaking change mapped to affected callers from the census",
           "command": ".rig/migrate/breaking.md with one row per breaking change: change | affected caller files | codemod-able? | plan",
           "failure_tier": "halt",
@@ -121,7 +121,7 @@
         {
           "id": "2.3",
           "category": "Execution",
-          "name": "2.3 Compat shims are forbidden as terminal state: any temporary ",
+          "name": "2.3 Compat shims are forbidden as terminal state: any temporary",
           "description": "Compat shims are forbidden as terminal state: any temporary adapter carries a TODO with an expiry and is tracked on the shim list; final tree has zero entries",
           "command": ".rig/migrate/shims.md list is empty at closure, or each entry has owner + expiry date and the session is not closable as 'cutover complete'",
           "failure_tier": "halt",
@@ -240,7 +240,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times \u2192 codemod recipe promoted to repo tooling, or census pattern library updated"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -252,8 +255,9 @@
         "Identity closure: coordinate, cutover verdict, next safe action stated"
       ],
       "failure_states": [
-        "a migration that cannot prove rollback degrades to a strangler-partial close, never to a forced big-bang",
-        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence"
+        "notes: a migration that cannot prove rollback degrades to a strangler-partial close, never to a forced big-bang",
+        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence",
+        "degrade gate(s) 2.1, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and migration pinned to exact from\u2192to (library version, framework version, or API contract), with both versions recorded",
@@ -306,8 +310,12 @@
             "4.1"
           ],
           "stop": [],
-          "notes": "a migration that cannot prove rollback degrades to a strangler-partial close, never to a forced big-bang"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: a migration that cannot prove rollback degrades to a strangler-partial close, never to a forced big-bang"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

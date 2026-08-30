@@ -1,0 +1,306 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-02-UI-DESIGN",
+      "name": "UI Design Goal Harness",
+      "description": "UI Design Goal Harness [ui-design-session] \u2014 compiled from capabilities/harnesses/hC-02-ui-design.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 11 capability gates passed with artifacts under artifacts/ui/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L4-D2-A2",
+          "description": "RIG coordinate stated verbatim: L4-D2-A2",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_ui_design(identity, gates",
+          "description": "Harness tuple declared verbatim: H_ui_design(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Brief & Inputs",
+          "name": "1.1 Design brief captured: user, job-to-be-done, success metric,",
+          "description": "Design brief captured: user, job-to-be-done, success metric, and constraints before any artboard opens",
+          "command": "artifacts/ui/<slug>/brief.md exists with all four fields non-empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Brief & Inputs",
+          "name": "1.2 Reference scan completed: at least 3 comparable UIs studied",
+          "description": "Reference scan completed: at least 3 comparable UIs studied and patterns extracted, not copied",
+          "command": "artifacts/ui/<slug>/references.md with per-reference 'pattern extracted' notes and source URLs",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "1.3",
+          "category": "Brief & Inputs",
+          "name": "1.3 Design tokens loaded from the project token source; zero ad-",
+          "description": "Design tokens loaded from the project token source; zero ad-hoc hex values introduced",
+          "command": "`grep -rEo '#[0-9a-fA-F]{6}' artifacts/ui/<slug>/ --include='*.css' --include='*.html' | grep -vFf tokens/allowed-hex.txt` returns empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Layout & Type",
+          "name": "2.1 Spacing conforms to the 8pt grid system; off-grid values are",
+          "description": "Spacing conforms to the 8pt grid system; off-grid values are documented exceptions",
+          "command": "`grep -rEo '(margin|padding|gap): ?[0-9]+px' artifacts/ui/<slug>/` values all divisible by 8 or listed in exceptions.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.2",
+          "category": "Layout & Type",
+          "name": "2.2 Typography scale used from tokens only; no orphan font sizes",
+          "description": "Typography scale used from tokens only; no orphan font sizes",
+          "command": "computed font-size list extracted from rendered page diffed against tokens.json type scale; orphan list empty or justified",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Layout & Type",
+          "name": "2.3 Responsive breakpoints rendered and captured at 375px, 768px",
+          "description": "Responsive breakpoints rendered and captured at 375px, 768px, and 1440px",
+          "command": "three screenshots in artifacts/ui/<slug>/ named mobile-375.png, tablet-768.png, desktop-1440.png",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "States & Accessibility",
+          "name": "3.1 State matrix complete: default, hover, active, focus, disabl",
+          "description": "State matrix complete: default, hover, active, focus, disabled, loading, empty, and error states designed for every interactive element",
+          "command": "artifacts/ui/<slug>/states.md checklist per component; missing states listed as explicit deferrals with reason",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "States & Accessibility",
+          "name": "3.2 Contrast ratios verified: 4.5:1 body text, 3:1 large text an",
+          "description": "Contrast ratios verified: 4.5:1 body text, 3:1 large text and UI chrome",
+          "command": "`node scripts/contrast-check.mjs artifacts/ui/<slug>/` exit 0; ratio table attached to session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "States & Accessibility",
+          "name": "3.3 Focus order and visible focus indicators designed and annota",
+          "description": "Focus order and visible focus indicators designed and annotated",
+          "command": "focus-order annotation layer or states.md section enumerating tab order per screen",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.1",
+          "category": "Review & Handoff Readiness",
+          "name": "4.1 Aesthetic guardian review (Theo) dispatched and verdict rece",
+          "description": "Aesthetic guardian review (Theo) dispatched and verdict received",
+          "command": "Theo dispatch output with pass/veto verdict and specific feedback stored in artifacts/ui/<slug>/theo-review.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Review & Handoff Readiness",
+          "name": "4.2 Final artifact frozen with content hash and version tag",
+          "description": "Final artifact frozen with content hash and version tag",
+          "command": "`sha256sum` of final HTML/Figma export recorded in artifacts/ui/<slug>/FREEZE.txt with version stamp",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "UI design mode: tokens first, states complete, every pixel accounted for.",
+        "harness_tuple": "H_ui_design_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for creative exploration; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-02-ui-design-session",
+          "session_type": "ui-design-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-SH"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 11 capability gates passed with artifacts under artifacts/ui/<slug>/",
+        "Primary objective achieved: complete UI design with full state matrix and three-breakpoint captures",
+        "Token-only palette and type scale verified by command output",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.3, 2.3, 3.1, 3.2, 4.1: no progress without gate evidence",
+        "degrade gate(s) 1.2, 2.1, 2.2, 3.3, 4.2: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L4-D2-A2",
+        "Harness tuple declared verbatim: H_ui_design(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Design brief captured: user, job-to-be-done, success metric, and constraints before any artboard opens",
+        "Reference scan completed: at least 3 comparable UIs studied and patterns extracted, not copied",
+        "Design tokens loaded from the project token source; zero ad-hoc hex values introduced",
+        "Spacing conforms to the 8pt grid system; off-grid values are documented exceptions",
+        "Typography scale used from tokens only; no orphan font sizes",
+        "Responsive breakpoints rendered and captured at 375px, 768px, and 1440px",
+        "State matrix complete: default, hover, active, focus, disabled, loading, empty, and error states designed for every interactive element",
+        "Contrast ratios verified: 4.5:1 body text, 3:1 large text and UI chrome",
+        "Focus order and visible focus indicators designed and annotated",
+        "Aesthetic guardian review (Theo) dispatched and verdict received",
+        "Final artifact frozen with content hash and version tag"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-02-ui-design.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every ui-design-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.3",
+            "2.3",
+            "3.1",
+            "3.2",
+            "4.1"
+          ],
+          "degrade": [
+            "1.2",
+            "2.1",
+            "2.2",
+            "3.3",
+            "4.2"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

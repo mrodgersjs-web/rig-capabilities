@@ -4,7 +4,7 @@
       "id": "GL-HA-12-CI-CD-DESIGN",
       "name": "CI/CD Pipeline Design Session Goal Harness",
       "description": "CI/CD Pipeline Design Session Goal Harness [ci-cd-design-session] \u2014 compiled from capabilities/harnesses/hA-12-ci-cd-design.yaml",
-      "anchor": "LL3-D1-A1-I",
+      "anchor": "L3-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -176,7 +176,7 @@
         {
           "id": "4.1",
           "category": "Closure",
-          "name": "4.1 Runbook written: how to read a red pipeline, how to re-run, ",
+          "name": "4.1 Runbook written: how to read a red pipeline, how to re-run,",
           "description": "Runbook written: how to read a red pipeline, how to re-run, how to rotate a secret used by the pipeline, how to disable the pipeline in an emergency",
           "command": ".rig/cicd/RUNBOOK.md with all four sections",
           "failure_tier": "degrade",
@@ -239,7 +239,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same CI fault recurs 3+ times \u2192 composite action, org-level ruleset, or branch-protection change proposed"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -251,9 +254,10 @@
         "Identity closure: coordinate, pipeline verdict, next safe action stated"
       ],
       "failure_states": [
-        "enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally",
-        "stop gate(s) 2.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.4, 3.1, 3.2, 3.4, 4.2: no progress without gate evidence"
+        "notes: enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally",
+        "stop gate(s) 2.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.4, 3.1, 3.2, 3.4, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.3, 3.3, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the pipeline target pinned: CI system (GitHub Actions/GitLab CI/Buildkite), repo, and the events the pipeline serves (push, PR, tag, schedule)",
@@ -307,8 +311,12 @@
           "stop": [
             "2.3"
           ],
-          "notes": "enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: enabling or triggering a live pipeline against the real repo is an outward action \u2014 deferred to Gate-D; this harness proves the pipeline locally"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

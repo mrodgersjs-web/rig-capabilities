@@ -1,0 +1,317 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-12-DESIGN-HANDOFF",
+      "name": "Design Handoff Goal Harness",
+      "description": "Design Handoff Goal Harness [design-handoff-session] \u2014 compiled from capabilities/harnesses/hC-12-design-handoff.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 12 capability gates passed with artifacts under artifacts/handoff/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L3-D1-A1",
+          "description": "RIG coordinate stated verbatim: L3-D1-A1",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_design_handoff(identity,",
+          "description": "Harness tuple declared verbatim: H_design_handoff(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Freeze & Inventory",
+          "name": "1.1 Design source frozen: immutable export hashed before any spe",
+          "description": "Design source frozen: immutable export hashed before any spec work begins",
+          "command": "artifacts/handoff/<slug>/FREEZE.txt with sha256 of source export + freeze timestamp",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Freeze & Inventory",
+          "name": "1.2 Screen/component inventory complete: every screen, component",
+          "description": "Screen/component inventory complete: every screen, component instance, and flow link enumerated",
+          "command": "artifacts/handoff/<slug>/inventory.yaml: `screen, components[], flows[]` per entry; count matches frozen source",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Freeze & Inventory",
+          "name": "1.3 Asset export complete: icons/illustrations as SVG, raster at",
+          "description": "Asset export complete: icons/illustrations as SVG, raster at @1x/@2x/@3x where needed, all named by convention",
+          "command": "assets/ directory listing vs inventory cross-check passes; manifest with sha256 per asset",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Specification",
+          "name": "2.1 Spec annotations complete: spacing, sizing, and typography s",
+          "description": "Spec annotations complete: spacing, sizing, and typography specified for every element \u2014 no un-annotated region",
+          "command": "annotation coverage report: annotated-element count / total-element count = 100% or gaps listed with owner",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Specification",
+          "name": "2.2 Token mapping table: every design value maps to a code token",
+          "description": "Token mapping table: every design value maps to a code token (color/space/font/motion), gaps filed as token requests",
+          "command": "artifacts/handoff/<slug>/token-map.yaml: `design_value -> token_path` entries; gap list with requested token names",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Specification",
+          "name": "2.3 State matrix delivered per interactive component: default/ho",
+          "description": "State matrix delivered per interactive component: default/hover/active/focus/disabled/loading/empty/error",
+          "command": "states matrix in spec doc; deferrals explicitly marked with reason and owner",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "Specification",
+          "name": "2.4 Responsive behavior specified: per-breakpoint layout rules,",
+          "description": "Responsive behavior specified: per-breakpoint layout rules, not 'make it responsive'",
+          "command": "breakpoint table per screen: container behavior, reflow rules, and min/max constraints",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.5",
+          "category": "Specification",
+          "name": "2.5 Copy deck finalized: all user-facing strings externalized wi",
+          "description": "Copy deck finalized: all user-facing strings externalized with character limits and truncation rules",
+          "command": "copy-deck.yaml with `string_id, text, max_chars, truncation_rule` per string",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Transfer & Control",
+          "name": "3.1 Open-questions log: every ambiguity the builder would hit is",
+          "description": "Open-questions log: every ambiguity the builder would hit is either resolved in-spec or logged with an owner and due date",
+          "command": "open-questions.yaml: `question, owner, due, blocking: true|false` per entry; blocking:true count = 0 at handoff",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Transfer & Control",
+          "name": "3.2 Acceptance walkthrough held: builder confirms they can imple",
+          "description": "Acceptance walkthrough held: builder confirms they can implement from the spec alone; questions captured",
+          "command": "walkthrough notes artifact with attendee, date, and question dispositions",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Transfer & Control",
+          "name": "3.3 Handoff checklist signed by both sides: design-complete and",
+          "description": "Handoff checklist signed by both sides: design-complete and build-ready checkboxes all ticked",
+          "command": "checklist artifact with dual sign-off lines filled (design + build), dated",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Transfer & Control",
+          "name": "3.4 Change control declared: post-handoff design changes re-ente",
+          "description": "Change control declared: post-handoff design changes re-enter this harness as a new revision with its own freeze hash",
+          "command": "change-control section in spec doc; revision counter initialized at R1 with FREEZE.txt hash linked",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Design handoff mode: the builder never guesses \u2014 every pixel, state, and token is specified or flagged.",
+        "harness_tuple": "H_design_handoff_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for spec-document structure; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-12-design-handoff-session",
+          "session_type": "design-handoff-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-SH"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 12 capability gates passed with artifacts under artifacts/handoff/<slug>/",
+        "Primary objective achieved: dual-signed, fully-specified handoff with zero blocking open questions",
+        "Token map has no unresolved gaps without filed token requests",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 3.1, 3.3: no progress without gate evidence",
+        "degrade gate(s) 2.4, 2.5, 3.2, 3.4: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L3-D1-A1",
+        "Harness tuple declared verbatim: H_design_handoff(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Design source frozen: immutable export hashed before any spec work begins",
+        "Screen/component inventory complete: every screen, component instance, and flow link enumerated",
+        "Asset export complete: icons/illustrations as SVG, raster at @1x/@2x/@3x where needed, all named by convention",
+        "Spec annotations complete: spacing, sizing, and typography specified for every element \u2014 no un-annotated region",
+        "Token mapping table: every design value maps to a code token (color/space/font/motion), gaps filed as token requests",
+        "State matrix delivered per interactive component: default/hover/active/focus/disabled/loading/empty/error",
+        "Responsive behavior specified: per-breakpoint layout rules, not 'make it responsive'",
+        "Copy deck finalized: all user-facing strings externalized with character limits and truncation rules",
+        "Open-questions log: every ambiguity the builder would hit is either resolved in-spec or logged with an owner and due date",
+        "Acceptance walkthrough held: builder confirms they can implement from the spec alone; questions captured",
+        "Handoff checklist signed by both sides: design-complete and build-ready checkboxes all ticked",
+        "Change control declared: post-handoff design changes re-enter this harness as a new revision with its own freeze hash"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-12-design-handoff.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every design-handoff-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "3.3"
+          ],
+          "degrade": [
+            "2.4",
+            "2.5",
+            "3.2",
+            "3.4"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

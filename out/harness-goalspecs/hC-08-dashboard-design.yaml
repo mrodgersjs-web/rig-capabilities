@@ -1,0 +1,319 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-08-DASHBOARD-DESIGN",
+      "name": "Dashboard Design Goal Harness",
+      "description": "Dashboard Design Goal Harness [dashboard-design-session] \u2014 compiled from capabilities/harnesses/hC-08-dashboard-design.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 12 capability gates passed with artifacts under artifacts/dashboard/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L3-D1-A2",
+          "description": "RIG coordinate stated verbatim: L3-D1-A2",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_dashboard_design(identity",
+          "description": "Harness tuple declared verbatim: H_dashboard_design(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Decision-First Scoping",
+          "name": "1.1 Metric-to-decision map: every displayed metric names the dec",
+          "description": "Metric-to-decision map: every displayed metric names the decision it drives and the viewer who drives it",
+          "command": "artifacts/dashboard/<slug>/metric-map.yaml: `metric, decision, viewer_role, action_threshold` per widget; zero 'nice to know' metrics",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Decision-First Scoping",
+          "name": "1.2 Data-source verification: every widget bound to a real query",
+          "description": "Data-source verification: every widget bound to a real query/endpoint that returns data, or explicitly mocked with a flag",
+          "command": "per-widget binding table with sample response or query text; mock flags listed in metric-map.yaml",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Decision-First Scoping",
+          "name": "1.3 Chart-type rationale: each visualization choice justified ag",
+          "description": "Chart-type rationale: each visualization choice justified against data shape (trend->line, composition->stacked, distribution->histogram, comparison->bar)",
+          "command": "rationale column in metric-map.yaml citing data shape per chart",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Hierarchy & States",
+          "name": "2.1 Five-second test: the single most important number is identi",
+          "description": "Five-second test: the single most important number is identifiable within 5 seconds of first view",
+          "command": "five-second-test note with reviewer name + timestamp; identified element matches the declared primary metric",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Hierarchy & States",
+          "name": "2.2 Widget states complete: loading, empty, error, and stale-dat",
+          "description": "Widget states complete: loading, empty, error, and stale-data states designed per widget",
+          "command": "states matrix in artifacts/dashboard/<slug>/states.md; stale-data treatment (timestamp or banner) specified",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Hierarchy & States",
+          "name": "2.3 Color semantics disciplined: red/amber/green reserved for st",
+          "description": "Color semantics disciplined: red/amber/green reserved for status meaning; no decorative red",
+          "command": "`grep -rEo '#(e|f)[0-9a-fA-F]{5}'` sweep of styles + screenshot review; violations dispositioned in decision log",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Hierarchy & States",
+          "name": "2.4 Density budget: widget count and grid declared; overflow beh",
+          "description": "Density budget: widget count and grid declared; overflow behavior (scroll vs paginate vs tab) specified",
+          "command": "layout spec in states.md with widget count, breakpoints, and overflow rule",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Interaction & Performance",
+          "name": "3.1 Drill-down path defined for every summary metric: what happe",
+          "description": "Drill-down path defined for every summary metric: what happens on click, down to the row level where applicable",
+          "command": "interaction map per widget in artifacts/dashboard/<slug>/interactions.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.2",
+          "category": "Interaction & Performance",
+          "name": "3.2 Filter state model specified: filter persistence, URL-sharea",
+          "description": "Filter state model specified: filter persistence, URL-shareability, and reset behavior",
+          "command": "filter spec section in interactions.md; shareable-URL behavior demonstrated or specified with example URL",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Interaction & Performance",
+          "name": "3.3 Performance budget: per-dashboard query count and payload si",
+          "description": "Performance budget: per-dashboard query count and payload size budgeted; heavy widgets lazy or deferred",
+          "command": "budget table (queries, KB, render ms) in artifacts/dashboard/<slug>/perf-budget.yaml with per-widget deferral strategy",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.1",
+          "category": "Review & Freeze",
+          "name": "4.1 KPI-dashboard rubric review passed (metric selection, visual",
+          "description": "KPI-dashboard rubric review passed (metric selection, visual hierarchy, calc-method consistency)",
+          "command": "rubric scorecard artifact with per-dimension scores and pass threshold met",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Review & Freeze",
+          "name": "4.2 Final dashboard artifact frozen with hash and capture set at",
+          "description": "Final dashboard artifact frozen with hash and capture set at declared breakpoints",
+          "command": "FREEZE.txt with sha256 + screenshots at 1440px and 1024px in artifacts/dashboard/<slug>/",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Dashboard design mode: every metric earns its pixels by driving a decision.",
+        "harness_tuple": "H_dashboard_design_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for novel visualization patterns; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-08-dashboard-design-session",
+          "session_type": "dashboard-design-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-PA"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 12 capability gates passed with artifacts under artifacts/dashboard/<slug>/",
+        "Primary objective achieved: decision-first dashboard with verified data bindings and complete states",
+        "Metric map shows zero orphan metrics and zero unbound widgets",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 4.1: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.3, 2.4, 3.1, 3.2, 3.3, 4.2: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L3-D1-A2",
+        "Harness tuple declared verbatim: H_dashboard_design(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Metric-to-decision map: every displayed metric names the decision it drives and the viewer who drives it",
+        "Data-source verification: every widget bound to a real query/endpoint that returns data, or explicitly mocked with a flag",
+        "Chart-type rationale: each visualization choice justified against data shape (trend->line, composition->stacked, distribution->histogram, comparison->bar)",
+        "Five-second test: the single most important number is identifiable within 5 seconds of first view",
+        "Widget states complete: loading, empty, error, and stale-data states designed per widget",
+        "Color semantics disciplined: red/amber/green reserved for status meaning; no decorative red",
+        "Density budget: widget count and grid declared; overflow behavior (scroll vs paginate vs tab) specified",
+        "Drill-down path defined for every summary metric: what happens on click, down to the row level where applicable",
+        "Filter state model specified: filter persistence, URL-shareability, and reset behavior",
+        "Performance budget: per-dashboard query count and payload size budgeted; heavy widgets lazy or deferred",
+        "KPI-dashboard rubric review passed (metric selection, visual hierarchy, calc-method consistency)",
+        "Final dashboard artifact frozen with hash and capture set at declared breakpoints"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-08-dashboard-design.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every dashboard-design-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "4.1"
+          ],
+          "degrade": [
+            "1.3",
+            "2.3",
+            "2.4",
+            "3.1",
+            "3.2",
+            "3.3",
+            "4.2"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

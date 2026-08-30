@@ -4,7 +4,7 @@
       "id": "GL-HD-06-NPS-ANALYSIS",
       "name": "NPS Analysis Goal Harness",
       "description": "NPS Analysis Goal Harness [ops-nps-analysis] \u2014 compiled from capabilities/harnesses/hD-06-nps-analysis.yaml",
-      "anchor": "LL2-D2-A1-I",
+      "anchor": "L2-D2-A1-I",
       "bms_mode": "A1",
       "gate": "Score computed deterministically and reconciled against platform counts",
       "gates": [
@@ -22,7 +22,7 @@
         {
           "id": "0.2",
           "category": "Identity Lock",
-          "name": "0.2 Raw export located and never mutated in place; all analysis ",
+          "name": "0.2 Raw export located and never mutated in place; all analysis",
           "description": "Raw export located and never mutated in place; all analysis works on a copy",
           "command": "raw file hash recorded; analysis directory contains copied file with different sha256 path but identical content hash (verified)",
           "failure_tier": "halt",
@@ -215,7 +215,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; a verbatim that fails row-anchoring triggers immediate audit of the redaction pipeline"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -226,8 +229,9 @@
         "Identity closure: coordinate, verdict (analyzed | blocked | provisional), next safe action in session log"
       ],
       "failure_states": [
-        "stop gate(s) 1.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 1.4, 2.1, 2.2, 2.3, 3.2: no progress without gate evidence"
+        "stop gate(s) 1.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 1.4, 2.1, 2.2, 2.3, 3.2: no progress without gate evidence",
+        "degrade gate(s) 2.4, 3.1, 3.3: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Survey cohort declared: wave id, collection window, population definition",
@@ -276,8 +280,10 @@
           "stop": [
             "1.3"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

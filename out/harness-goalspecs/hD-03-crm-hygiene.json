@@ -4,7 +4,7 @@
       "id": "GL-HD-03-CRM-HYGIENE",
       "name": "CRM Hygiene Goal Harness",
       "description": "CRM Hygiene Goal Harness [ops-crm-hygiene] \u2014 compiled from capabilities/harnesses/hD-03-crm-hygiene.yaml",
-      "anchor": "LL1-D1-A1-I",
+      "anchor": "L1-D1-A1-I",
       "bms_mode": "A1",
       "gate": "Backup, schema snapshot, and rollback plan exist and are hashed in proofpacket.json",
       "gates": [
@@ -77,7 +77,7 @@
         {
           "id": "1.3",
           "category": "Safety Baseline",
-          "name": "1.3 Rollback procedure written BEFORE the first mutation: exact ",
+          "name": "1.3 Rollback procedure written BEFORE the first mutation: exact",
           "description": "Rollback procedure written BEFORE the first mutation: exact commands to restore from backup",
           "command": "artifacts/crm/<run>/rollback.md contains executable restore commands referencing backup/ files",
           "failure_tier": "halt",
@@ -165,7 +165,7 @@
         {
           "id": "3.4",
           "category": "Mutation Discipline",
-          "name": "3.4 Audit trail: every executed mutation logged with timestamp, ",
+          "name": "3.4 Audit trail: every executed mutation logged with timestamp,",
           "description": "Audit trail: every executed mutation logged with timestamp, operator, plan-line hash",
           "command": "artifacts/crm/<run>/mutation_audit.jsonl line count equals executed ops; each line sha256-matches a mutation_plan.jsonl line",
           "failure_tier": "halt",
@@ -214,7 +214,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; recurring defect class becomes a standing prevention rule in scope.md defaults"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -225,8 +228,9 @@
         "Identity closure: coordinate, verdict (cleaned | partial | blocked), next safe action in session log"
       ],
       "failure_states": [
-        "stop gate(s) 1.1, 3.2: halt session; human approval required before continuing",
-        "halt gate(s) 1.2, 1.3, 2.1, 2.2, 3.1, 3.3, 3.4: no progress without gate evidence"
+        "stop gate(s) 1.1, 3.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.2, 1.3, 2.1, 2.2, 3.1, 3.3, 3.4: no progress without gate evidence",
+        "degrade gate(s) 2.3, 2.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Twenty CRM reachable and its object inventory enumerated before any analysis",
@@ -275,8 +279,10 @@
             "1.1",
             "3.2"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

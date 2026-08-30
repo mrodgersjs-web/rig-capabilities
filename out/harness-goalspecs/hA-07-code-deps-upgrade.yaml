@@ -4,7 +4,7 @@
       "id": "GL-HA-07-CODE-DEPS-UPGRADE",
       "name": "Dependency Upgrade Session Goal Harness",
       "description": "Dependency Upgrade Session Goal Harness [code-deps-upgrade-session] \u2014 compiled from capabilities/harnesses/hA-07-code-deps-upgrade.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -121,7 +121,7 @@
         {
           "id": "2.3",
           "category": "Staged Upgrade",
-          "name": "2.3 Runtime majors get changelog-based breaking-change mapping: ",
+          "name": "2.3 Runtime majors get changelog-based breaking-change mapping:",
           "description": "Runtime majors get changelog-based breaking-change mapping: every major bump cites the upstream changelog entry and lists the repo call-sites it touches (grep evidence)",
           "command": ".rig/deps/majors.md with one section per major: changelog URL | breaking items | grep output of affected call-sites",
           "failure_tier": "halt",
@@ -132,7 +132,7 @@
         {
           "id": "2.4",
           "category": "Staged Upgrade",
-          "name": "2.4 No force-flags: --force, --legacy-peer-deps, --skip-verify, ",
+          "name": "2.4 No force-flags: --force, --legacy-peer-deps, --skip-verify,",
           "description": "No force-flags: --force, --legacy-peer-deps, --skip-verify, --allow-insecure absent from all install/upgrade commands unless each use has a written exception and expiry",
           "command": "Session command log grep returns empty or exception list in .rig/deps/exceptions.md",
           "failure_tier": "degrade",
@@ -154,7 +154,7 @@
         {
           "id": "3.2",
           "category": "Verification",
-          "name": "3.2 Post-upgrade audit re-run: vulnerability audit repeated and ",
+          "name": "3.2 Post-upgrade audit re-run: vulnerability audit repeated and",
           "description": "Post-upgrade audit re-run: vulnerability audit repeated and compared to baseline \u2014 HIGH/CRITICAL count must not increase",
           "command": ".rig/deps/audit-after.txt and a one-line count comparison in the session tail",
           "failure_tier": "halt",
@@ -176,7 +176,7 @@
         {
           "id": "4.1",
           "category": "Closure",
-          "name": "4.1 Upgrade ledger written: packages changed per tier, deferred ",
+          "name": "4.1 Upgrade ledger written: packages changed per tier, deferred",
           "description": "Upgrade ledger written: packages changed per tier, deferred packages with reasons (with next-check date), and remaining vuln count",
           "command": ".rig/deps/LEDGER.md exists with all three sections; deferred items each carry a date",
           "failure_tier": "degrade",
@@ -238,7 +238,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same package or breakage class fails 3+ times \u2192 pin policy, override, or renovate/dependabot config rule proposed"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -250,8 +253,9 @@
         "Identity closure: coordinate, vuln delta, next safe action stated"
       ],
       "failure_states": [
-        "a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed",
-        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.2: no progress without gate evidence"
+        "notes: a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed",
+        "halt gate(s) 1.1, 1.2, 1.3, 1.4, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 4.2: no progress without gate evidence",
+        "degrade gate(s) 2.4, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the package manager + manifest/lockfile pair named exactly (package.json+pnpm-lock.yaml, pyproject.toml+uv.lock, go.mod+go.sum, Cargo.toml+Cargo.lock)",
@@ -304,8 +308,12 @@
             "4.1"
           ],
           "stop": [],
-          "notes": "a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: a runtime major that cannot pass the verify stack is deferred to the ledger with a date \u2014 never force-installed"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

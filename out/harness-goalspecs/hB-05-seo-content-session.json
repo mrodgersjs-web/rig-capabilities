@@ -1,0 +1,301 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-05-SEO-CONTENT-SESSION",
+      "name": "SEO Content Session Harness",
+      "description": "SEO Content Session Harness [seo-content-session] \u2014 compiled from capabilities/harnesses/hB-05-seo-content-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Cluster mapped, gaps placed, and entity coverage at threshold.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the target query cluster and its dominant intent bef",
+          "description": "Confirm the target query cluster and its dominant intent before any outline work.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the content type (guide / listicle / comparison / de",
+          "description": "Confirm the content type (guide / listicle / comparison / definition) matches what actually ranks for the query.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse keyword-stuffing directives; density targets above 2%",
+          "description": "Refuse keyword-stuffing directives; density targets above 2% trigger a degrade with written objection.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm the page\u2019s place in the site\u2019s internal-link graph i",
+          "description": "Confirm the page\u2019s place in the site\u2019s internal-link graph is known before writing.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Query cluster map",
+          "description": "Primary query + >=4 secondary queries mapped with intent and funnel stage.",
+          "command": "$SESS/cluster.yaml parses; `python3 -c \"import yaml;c=yaml.safe_load(open('$SESS/cluster.yaml'));assert len(c['secondary'])>=4\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 SERP feature audit",
+          "description": "Document which SERP features exist for the primary query (AI overview, PAA, video, images) and the plan to win each applicable one.",
+          "command": "$SESS/serp_features.md lists >=1 feature with a capture tactic; `grep -cE 'PAA|AI overview|featured snippet|video|image pack' $SESS/serp_features.md` >= 1",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Competitor gap extraction",
+          "description": "Top 5 ranking pages analyzed; >=3 content gaps (subtopics none of them cover) identified and placed in outline.",
+          "command": "$SESS/gaps.yaml lists >=3 gaps each mapped to an H2 in outline.md; `python3 scripts/gap_map.py $SESS/gaps.yaml $SESS/outline.md` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Entity coverage",
+          "description": "Draft covers the entity set: primary entity + >=70% of salient related entities extracted from top results.",
+          "command": "`python3 scripts/entity_cover.py $SESS/draft.md $SESS/cluster.yaml --min 0.70` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Heading hierarchy validity",
+          "description": "Exactly one H1 containing primary query variant; H2/H3 nest without skips; no heading is a question the body doesn't answer.",
+          "command": "`grep -c '^# ' $SESS/draft.md` == 1; `python3 scripts/heading_lint.py $SESS/draft.md` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Snippet-target blocks",
+          "description": ">=2 snippet-eligible blocks (40-60 word definitional paragraph or 4-8 row table) placed directly under question H2s.",
+          "command": "`python3 scripts/snippet_blocks.py $SESS/draft.md --min 2` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Internal link weave",
+          "description": ">=4 internal links with descriptive (non-'click here') anchors to pages declared in the link graph; zero broken targets.",
+          "command": "`python3 scripts/ilink_check.py $SESS/draft.md $SESS/link_graph.yaml --min 4` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 E-E-A-T signals",
+          "description": "Author byline with credential line, >=2 outbound citations to authoritative sources, and a dated 'last reviewed' stamp.",
+          "command": "`grep -c 'last reviewed' $SESS/draft.md` >=1; `grep -oE 'https?://[^) ]+' $SESS/draft.md | grep -vE 'internal.domain' | wc -l` >= 2",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Schema markup",
+          "description": "JSON-LD (Article or FAQPage as appropriate) validates with zero errors.",
+          "command": "`python3 scripts/schema_validate.py $SESS/draft.md` exits 0 and writes $SESS/proof/schema.json",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Cannibalization check",
+          "description": "No existing site URL already targets the primary query; if overlap >0.6 with an existing page, consolidate instead of publish.",
+          "command": "`python3 scripts/cannibal_check.py $SESS/cluster.yaml $SESS/site_index.json --max 0.6` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-11",
+          "category": "Capability",
+          "name": "CG-11 Proof packet seal",
+          "description": "Cluster, gaps, draft, schema, and link proofs hashed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the SEO Content operator. I write for the searcher\u2019s next question, structure for the crawler, and never trade accuracy for rank.",
+        "harness_tuple": "L3-D1-A2-I5",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-05-seo-content",
+          "session_type": "seo-content-session",
+          "governs_loops": [
+            "iqrsqpi.content.seo",
+            "GL-OD-organic",
+            "keyword-strategy.execution"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/seo-content-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/seo-content-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Cluster mapped, gaps placed, and entity coverage at threshold.",
+        "Heading hierarchy and internal links machine-verified.",
+        "Zero cannibalization conflict, or consolidation decision recorded.",
+        "Schema validates; E-E-A-T signals present.",
+        "Proof packet sealed with all research and draft artifacts."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the target query cluster and its dominant intent before any outline work.",
+        "Confirm the content type (guide / listicle / comparison / definition) matches what actually ranks for the query.",
+        "Refuse keyword-stuffing directives; density targets above 2% trigger a degrade with written objection.",
+        "Confirm the page\u2019s place in the site\u2019s internal-link graph is known before writing.",
+        "Primary query + >=4 secondary queries mapped with intent and funnel stage.",
+        "Document which SERP features exist for the primary query (AI overview, PAA, video, images) and the plan to win each applicable one.",
+        "Top 5 ranking pages analyzed; >=3 content gaps (subtopics none of them cover) identified and placed in outline.",
+        "Draft covers the entity set: primary entity + >=70% of salient related entities extracted from top results.",
+        "Exactly one H1 containing primary query variant; H2/H3 nest without skips; no heading is a question the body doesn't answer.",
+        ">=2 snippet-eligible blocks (40-60 word definitional paragraph or 4-8 row table) placed directly under question H2s.",
+        ">=4 internal links with descriptive (non-'click here') anchors to pages declared in the link graph; zero broken targets.",
+        "Author byline with credential line, >=2 outbound citations to authoritative sources, and a dated 'last reviewed' stamp.",
+        "JSON-LD (Article or FAQPage as appropriate) validates with zero errors.",
+        "No existing site URL already targets the primary query; if overlap >0.6 with an existing page, consolidate instead of publish.",
+        "Cluster, gaps, draft, schema, and link proofs hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-05-seo-content-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "degrade",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "halt",
+            "CG-06": "degrade",
+            "CG-07": "halt",
+            "CG-08": "degrade",
+            "CG-09": "degrade",
+            "CG-10": "halt",
+            "CG-11": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

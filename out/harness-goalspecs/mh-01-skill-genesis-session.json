@@ -4,7 +4,7 @@
       "id": "GL-MH-01-SKILL-GENESIS-SESSION",
       "name": "Skill Genesis Session Goal Harness",
       "description": "Skill Genesis Session Goal Harness [skill-genesis-session] \u2014 compiled from capabilities/harnesses/mh-01-skill-genesis-session.yaml",
-      "anchor": "LL3-D1-A1-I",
+      "anchor": "L3-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -143,7 +143,7 @@
         {
           "id": "3.4",
           "category": "Done-Test & Planted Failure",
-          "name": "3.4 Planted failure is retained as a permanent regression case: ",
+          "name": "3.4 Planted failure is retained as a permanent regression case:",
           "description": "Planted failure is retained as a permanent regression case: the broken fixture and its expected RED output are committed beside the skill, not discarded",
           "command": "ls artifacts/skills/<name>/ contains the fixture file; git status shows it staged; recorded in .rig/genesis/regression-fixture.txt",
           "failure_tier": "halt",
@@ -165,7 +165,7 @@
         {
           "id": "4.2",
           "category": "Memory & Ship",
-          "name": "4.2 Ship gate: SKILL.md passes the meta-memory-os-bridge bridge ",
+          "name": "4.2 Ship gate: SKILL.md passes the meta-memory-os-bridge bridge",
           "description": "Ship gate: SKILL.md passes the meta-memory-os-bridge bridge check (both memory surfaces named) and the file is written to artifacts/skills/<name>/SKILL.md with no placeholder tokens remaining",
           "command": "grep -c 'memory.record_event' and 'memory.propose_memory' both >= 1; grep -nE 'TODO|PLACEHOLDER|<name>' outside the done-test fixture returns zero hits; exit codes recorded",
           "failure_tier": "halt",
@@ -215,7 +215,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times across genesis sessions \u2192 the genesis template's section is rewritten, or a recurring planted-failure class is absorbed into meta-skill-refuter's mutant taxonomy"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -228,9 +231,10 @@
         "Identity closure: coordinate, shipped skill path, and next safe action stated in the session tail"
       ],
       "failure_states": [
-        "stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect",
-        "stop gate(s) 3.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.4, 4.1, 4.2: no progress without gate evidence"
+        "notes: stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect",
+        "stop gate(s) 3.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.4, 4.1, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and genesis target pinned: skill name, trigger conditions, and the exact directory artifacts/skills/<name>/ declared before any content is written",
@@ -280,8 +284,12 @@
           "stop": [
             "3.3"
           ],
-          "notes": "stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-07-VIDEO-SCRIPT-SESSION",
+      "name": "Video Script Session Harness",
+      "description": "Video Script Session Harness [video-script-session] \u2014 compiled from capabilities/harnesses/hB-07-video-script-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Cold open validated; zero channel-meta openers.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm format (talking head / tutorial / essay / demo) and",
+          "description": "Confirm format (talking head / tutorial / essay / demo) and target runtime before writing.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the retention beat map exists: hook, 3-5 beats, payo",
+          "description": "Confirm the retention beat map exists: hook, 3-5 beats, payoff \u2014 no scripting without structure.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse scripts that open with channel meta ('welcome back')",
+          "description": "Refuse scripts that open with channel meta ('welcome back') \u2014 cold open only.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm spoken-word rate assumption (typically 140-160 wpm)",
+          "description": "Confirm spoken-word rate assumption (typically 140-160 wpm) used for runtime math.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Format & runtime lock",
+          "description": "format.yaml declares format, target runtime (seconds), and wpm assumption.",
+          "command": "$SESS/format.yaml parses with keys format, runtime_s, wpm; `python3 -c \"import yaml;f=yaml.safe_load(open('$SESS/format.yaml'));assert 100<=f['wpm']<=200\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Cold-open hook",
+          "description": "First 60 spoken words state the payoff or open a loop; zero channel-meta tokens.",
+          "command": "`python3 scripts/cold_open.py $SESS/script.md` exits 0; `grep -ciE 'welcome back|if you.re new|smash that' $SESS/script.md` == 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Beat map coverage",
+          "description": "Script sections map 1:1 to the beat map; each beat has a stated viewer question it answers.",
+          "command": "`python3 scripts/beat_map.py $SESS/beats.yaml $SESS/script.md` exits 0 (bijection check)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Runtime math",
+          "description": "Total spoken word count / wpm lands within +/-10% of target runtime.",
+          "command": "`python3 scripts/runtime_math.py $SESS/script.md $SESS/format.yaml --tol 0.10` exits 0 and writes $SESS/proof/runtime.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Rehook cadence",
+          "description": "A rehook (pattern interrupt, open loop, or visual change note) every 60-90 seconds of estimated runtime.",
+          "command": "`python3 scripts/rehook_cadence.py $SESS/script.md --min-gap 60 --max-gap 90` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 B-roll/visual annotation",
+          "description": "Every spoken claim that references a thing has a [VISUAL:] annotation; demo steps have exact on-screen action notes.",
+          "command": "`grep -c '\\[VISUAL:' $SESS/script.md` >= beats count; `python3 scripts/visual_cover.py $SESS/script.md $SESS/beats.yaml` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Speakability pass",
+          "description": "No sentence >25 words in spoken lines; tongue-twister and abbreviation lint clean.",
+          "command": "`python3 scripts/speakability.py $SESS/script.md --max-words 25` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Claim sourcing",
+          "description": "Every statistic or dated claim in the script has a source in research.yaml.",
+          "command": "`python3 scripts/bind_claims.py $SESS/script.md $SESS/research.yaml` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 CTA placement",
+          "description": "Single CTA spoken in the final 10% and echoed in description template; no mid-roll CTA before 50% runtime.",
+          "command": "`python3 scripts/cta_place.py $SESS/script.md $SESS/format.yaml` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Proof packet seal",
+          "description": "Script, beats, runtime proof, and research hashed.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Video Script operator. The first 30 seconds buy the next two minutes; every scene must answer 'why keep watching'.",
+        "harness_tuple": "L3-D3-A2-I5",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-07-video-script",
+          "session_type": "video-script-session",
+          "governs_loops": [
+            "iqrsqpi.content.video",
+            "GL-OD-video",
+            "scriptwriting.longform"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/video-script-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/video-script-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Cold open validated; zero channel-meta openers.",
+        "Beat map bijection and runtime math within tolerance, proven by scripts.",
+        "Rehook cadence and visual annotations verified.",
+        "All claims bound to sources; single CTA correctly placed.",
+        "Proof packet sealed with runtime.json included."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm format (talking head / tutorial / essay / demo) and target runtime before writing.",
+        "Confirm the retention beat map exists: hook, 3-5 beats, payoff \u2014 no scripting without structure.",
+        "Refuse scripts that open with channel meta ('welcome back') \u2014 cold open only.",
+        "Confirm spoken-word rate assumption (typically 140-160 wpm) used for runtime math.",
+        "format.yaml declares format, target runtime (seconds), and wpm assumption.",
+        "First 60 spoken words state the payoff or open a loop; zero channel-meta tokens.",
+        "Script sections map 1:1 to the beat map; each beat has a stated viewer question it answers.",
+        "Total spoken word count / wpm lands within +/-10% of target runtime.",
+        "A rehook (pattern interrupt, open loop, or visual change note) every 60-90 seconds of estimated runtime.",
+        "Every spoken claim that references a thing has a [VISUAL:] annotation; demo steps have exact on-screen action notes.",
+        "No sentence >25 words in spoken lines; tongue-twister and abbreviation lint clean.",
+        "Every statistic or dated claim in the script has a source in research.yaml.",
+        "Single CTA spoken in the final 10% and echoed in description template; no mid-roll CTA before 50% runtime.",
+        "Script, beats, runtime proof, and research hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-07-video-script-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "degrade",
+            "CG-06": "degrade",
+            "CG-07": "degrade",
+            "CG-08": "halt",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

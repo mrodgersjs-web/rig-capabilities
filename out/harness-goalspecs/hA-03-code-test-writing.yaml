@@ -4,7 +4,7 @@
       "id": "GL-HA-03-CODE-TEST-WRITING",
       "name": "Code Test-Writing Session Goal Harness",
       "description": "Code Test-Writing Session Goal Harness [code-test-writing-session] \u2014 compiled from capabilities/harnesses/hA-03-code-test-writing.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -99,7 +99,7 @@
         {
           "id": "2.2",
           "category": "Red-First Discipline",
-          "name": "2.2 RED is for the right reason: each failing test fails on the ",
+          "name": "2.2 RED is for the right reason: each failing test fails on the",
           "description": "RED is for the right reason: each failing test fails on the assertion about behavior, not on import errors, fixture typos, or harness mistakes",
           "command": "red-runs.txt excerpts show assertion failures (AssertionError / expect mismatch), not collection or setup errors",
           "failure_tier": "halt",
@@ -110,7 +110,7 @@
         {
           "id": "2.3",
           "category": "Red-First Discipline",
-          "name": "2.3 No test-only code changes: tests added this session did not ",
+          "name": "2.3 No test-only code changes: tests added this session did not",
           "description": "No test-only code changes: tests added this session did not require weakening production code (no added test hooks, no widened visibility) unless the change itself is gated and logged",
           "command": "git diff --name-only between session start and end split into production vs test files; production edits each carry a justification line",
           "failure_tier": "halt",
@@ -154,7 +154,7 @@
         {
           "id": "3.4",
           "category": "Test Quality",
-          "name": "3.4 Mutation spot-check: at least one deliberate bug planted in ",
+          "name": "3.4 Mutation spot-check: at least one deliberate bug planted in",
           "description": "Mutation spot-check: at least one deliberate bug planted in the unit-under-test (flip a comparison, drop a guard) and the new suite caught it \u2014 then the bug was reverted",
           "command": ".rig/tests/mutation.txt records the planted diff (one hunk), which test(s) failed, and the revert SHA",
           "failure_tier": "halt",
@@ -227,7 +227,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times \u2192 add a fixture/template to the repo or tighten the gate proof"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -239,8 +242,9 @@
         "Identity closure: coordinate, mutation verdict, next safe action stated"
       ],
       "failure_states": [
-        "a test that cannot be made red is treated as a false test \u2014 halt until rewritten, never ship it green-only",
-        "halt gate(s) 1.1, 1.3, 2.1, 2.2, 2.3, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence"
+        "notes: a test that cannot be made red is treated as a false test \u2014 halt until rewritten, never ship it green-only",
+        "halt gate(s) 1.1, 1.3, 2.1, 2.2, 2.3, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.2, 3.1, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the unit-under-test pinned to exact files and exported symbols, not 'the module'",
@@ -291,8 +295,12 @@
             "4.1"
           ],
           "stop": [],
-          "notes": "a test that cannot be made red is treated as a false test \u2014 halt until rewritten, never ship it green-only"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: a test that cannot be made red is treated as a false test \u2014 halt until rewritten, never ship it green-only"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

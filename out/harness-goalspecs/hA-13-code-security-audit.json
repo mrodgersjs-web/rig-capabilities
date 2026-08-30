@@ -4,7 +4,7 @@
       "id": "GL-HA-13-CODE-SECURITY-AUDIT",
       "name": "Code Security Audit Session Goal Harness",
       "description": "Code Security Audit Session Goal Harness [code-security-audit-session] \u2014 compiled from capabilities/harnesses/hA-13-code-security-audit.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -88,7 +88,7 @@
         {
           "id": "2.2",
           "category": "Scanner Evidence",
-          "name": "2.2 Dependency/SCA scan: pip-audit / pnpm audit / govulncheck / ",
+          "name": "2.2 Dependency/SCA scan: pip-audit / pnpm audit / govulncheck /",
           "description": "Dependency/SCA scan: pip-audit / pnpm audit / govulncheck / cargo audit + container scan (trivy/grype) if a Dockerfile exists; results saved with severity counts",
           "command": ".rig/security/sca.txt with counts per severity; Dockerfile scan report if applicable",
           "failure_tier": "halt",
@@ -110,7 +110,7 @@
         {
           "id": "2.4",
           "category": "Scanner Evidence",
-          "name": "2.4 IaC & config scan (when present): checkov/trivy config over ",
+          "name": "2.4 IaC & config scan (when present): checkov/trivy config over",
           "description": "IaC & config scan (when present): checkov/trivy config over Terraform, k8s manifests, Dockerfiles \u2014 privileged containers, 0.0.0.0 bindings, public buckets flagged",
           "command": ".rig/security/iac-scan.txt or a 'no IaC in scope' statement backed by file search",
           "failure_tier": "degrade",
@@ -143,7 +143,7 @@
         {
           "id": "3.3",
           "category": "Manual Taint Review",
-          "name": "3.3 Injection-class sweep: raw SQL concatenation, shell command ",
+          "name": "3.3 Injection-class sweep: raw SQL concatenation, shell command",
           "description": "Injection-class sweep: raw SQL concatenation, shell command construction, template eval, SSRF-reachable URL fetchers, and unsafe deserialization (pickle, yaml.load, unserialize) grepped and each hit dispositioned",
           "command": ".rig/security/injection-sweep.txt with grep outputs + per-hit disposition",
           "failure_tier": "halt",
@@ -240,7 +240,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same vulnerability class recurs 3+ times \u2192 custom semgrep rule, middleware default, or dependency policy proposed to kill the class"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -252,9 +255,10 @@
         "Identity closure: coordinate, audit verdict (clean / findings-tracked / blocked), next safe action stated"
       ],
       "failure_states": [
-        "a live (unrevoked) credential or a reproduced critical finding is a stop: escalate to a human before any further action, and findings never leave the session without Gate-D",
-        "stop gate(s) 2.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4: no progress without gate evidence"
+        "notes: a live (unrevoked) credential or a reproduced critical finding is a stop: escalate to a human before any further action, and findings never leave the session without Gate-D",
+        "stop gate(s) 2.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4: no progress without gate evidence",
+        "degrade gate(s) 2.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the audit scope pinned: repo paths in scope, trust boundaries declared (public endpoints, auth paths, file handling, deserialization), and audit type (full vs diff-scoped)",
@@ -308,8 +312,12 @@
           "stop": [
             "2.3"
           ],
-          "notes": "a live (unrevoked) credential or a reproduced critical finding is a stop: escalate to a human before any further action, and findings never leave the session without Gate-D"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: a live (unrevoked) credential or a reproduced critical finding is a stop: escalate to a human before any further action, and findings never leave the session without Gate-D"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

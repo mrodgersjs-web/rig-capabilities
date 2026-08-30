@@ -1,0 +1,288 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-09-CONTENT-AUDIT-SESSION",
+      "name": "Content Audit Session Harness",
+      "description": "Content Audit Session Harness [content-audit-session] \u2014 compiled from capabilities/harnesses/hB-09-content-audit-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Inventory, joins, rubric, and scores all hash-locked and reproducible.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the inventory source (sitemap, CMS export, or crawl)",
+          "description": "Confirm the inventory source (sitemap, CMS export, or crawl) and its snapshot hash before scoring anything.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the scoring rubric weights are locked before the fir",
+          "description": "Confirm the scoring rubric weights are locked before the first page is judged \u2014 no mid-audit rubric edits.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse verdicts without data: any page lacking both traffic",
+          "description": "Refuse verdicts without data: any page lacking both traffic and impression data is flagged 'insufficient', never guessed.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm prune actions are recommendations only; deletion req",
+          "description": "Confirm prune actions are recommendations only; deletion requires human Gate-D approval.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Inventory snapshot",
+          "description": "Full URL inventory captured with count and sha256; snapshot is the immutable audit basis.",
+          "command": "$SESS/inventory.csv has header url,title,lastmod; line count >0; hash recorded in $SESS/proof/inventory.sha256",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Data join completeness",
+          "description": "Each URL joined to analytics (sessions, 90d) and Search Console (impressions, clicks, position); join coverage >=95% or missing URLs enumerated.",
+          "command": "`python3 scripts/join_check.py $SESS/inventory.csv $SESS/analytics.csv $SESS/gsc.csv --min 0.95` exits 0 and writes $SESS/proof/join_report.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Rubric lock",
+          "description": "Scoring rubric (weights for traffic trend, conversions, links, freshness, strategic fit) frozen with hash.",
+          "command": "$SESS/rubric.yaml parses; weights sum to 1.0 via `python3 -c \"import yaml;r=yaml.safe_load(open('$SESS/rubric.yaml'));assert abs(sum(r['weights'].values())-1.0)<1e-9\"`; hash sealed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Scoring run",
+          "description": "Every URL scored deterministically by the locked rubric; scores reproducible on re-run (byte-identical CSV).",
+          "command": "`python3 scripts/score.py $SESS/joined.csv $SESS/rubric.yaml > $SESS/scores.csv` twice; `sha256sum $SESS/scores.csv` stable across runs",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Verdict assignment",
+          "description": "Each URL assigned exactly one verdict from {keep, refresh, consolidate, prune, insufficient} by threshold rules in rubric.yaml.",
+          "command": "`python3 scripts/verdicts.py $SESS/scores.csv $SESS/rubric.yaml` exits 0; `cut -d, -f3 $SESS/verdicts.csv | sort -u` subset of the 5 verdicts",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Consolidation mapping",
+          "description": "Every consolidate verdict names its canonical target URL; targets themselves are not marked prune.",
+          "command": "`python3 scripts/consolidation_graph.py $SESS/verdicts.csv` exits 0 (no prune targets, no cycles)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Refresh brief generation",
+          "description": "Every refresh verdict gets a one-paragraph brief: what decayed, what to update, target query.",
+          "command": "`python3 scripts/refresh_briefs.py $SESS/verdicts.csv $SESS/joined.csv` exits 0; brief count == refresh count",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Duplicate/cannibal cluster report",
+          "description": "Near-duplicate content clusters (similarity >0.7) enumerated with recommended canonical.",
+          "command": "`python3 scripts/dup_clusters.py $SESS/inventory.csv --threshold 0.7` exits 0 and writes $SESS/clusters.json",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Impact estimate",
+          "description": "Estimated traffic-at-risk for prune set and traffic-upside for refresh set computed and sanity-bounded (<=100% of current totals).",
+          "command": "`python3 scripts/impact.py $SESS/verdicts.csv $SESS/joined.csv` exits 0 and writes $SESS/proof/impact.json",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Ledger & seal",
+          "description": "Full verdict ledger (append-only) written; all inputs and outputs hashed.",
+          "command": "$SESS/ledger.jsonl line count == inventory count; `sha256sum -c $SESS/proof/packet.sha256` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Content Audit operator. Every URL gets a verdict from evidence \u2014 keep, refresh, consolidate, or prune \u2014 and every verdict is reversible from the ledger.",
+        "harness_tuple": "L3-D1-A1-I4",
+        "bms_bias": "A1",
+        "meta": {
+          "harness_id": "hB-09-content-audit",
+          "session_type": "content-audit-session",
+          "governs_loops": [
+            "iqrsqpi.content.audit",
+            "GL-OD-audit",
+            "technical-seo.inventory"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/content-audit-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/content-audit-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Inventory, joins, rubric, and scores all hash-locked and reproducible.",
+        "100% of URLs carry a legal verdict; consolidate graph is acyclic with no prune-target conflicts.",
+        "Refresh briefs generated for every refresh verdict.",
+        "Impact estimates bounded and recorded.",
+        "Ledger sealed; prune list explicitly marked as requiring human approval."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the inventory source (sitemap, CMS export, or crawl) and its snapshot hash before scoring anything.",
+        "Confirm the scoring rubric weights are locked before the first page is judged \u2014 no mid-audit rubric edits.",
+        "Refuse verdicts without data: any page lacking both traffic and impression data is flagged 'insufficient', never guessed.",
+        "Confirm prune actions are recommendations only; deletion requires human Gate-D approval.",
+        "Full URL inventory captured with count and sha256; snapshot is the immutable audit basis.",
+        "Each URL joined to analytics (sessions, 90d) and Search Console (impressions, clicks, position); join coverage >=95% or missing URLs enumerated.",
+        "Scoring rubric (weights for traffic trend, conversions, links, freshness, strategic fit) frozen with hash.",
+        "Every URL scored deterministically by the locked rubric; scores reproducible on re-run (byte-identical CSV).",
+        "Each URL assigned exactly one verdict from {keep, refresh, consolidate, prune, insufficient} by threshold rules in rubric.yaml.",
+        "Every consolidate verdict names its canonical target URL; targets themselves are not marked prune.",
+        "Every refresh verdict gets a one-paragraph brief: what decayed, what to update, target query.",
+        "Near-duplicate content clusters (similarity >0.7) enumerated with recommended canonical.",
+        "Estimated traffic-at-risk for prune set and traffic-upside for refresh set computed and sanity-bounded (<=100% of current totals).",
+        "Full verdict ledger (append-only) written; all inputs and outputs hashed."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-09-content-audit-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "halt",
+            "CG-06": "halt",
+            "CG-07": "degrade",
+            "CG-08": "degrade",
+            "CG-09": "degrade",
+            "CG-10": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

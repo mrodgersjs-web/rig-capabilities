@@ -4,7 +4,7 @@
       "id": "GL-MH-06-INSTALL-VERIFICATION-SESSION",
       "name": "Install Verification Session Goal Harness",
       "description": "Install Verification Session Goal Harness [install-verification-session] \u2014 compiled from capabilities/harnesses/mh-06-install-verification-session.yaml",
-      "anchor": "LL3-D1-A1-I",
+      "anchor": "L3-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events",
       "gates": [
@@ -22,7 +22,7 @@
         {
           "id": "0.2",
           "category": "Identity Lock",
-          "name": "0.2 Verification doctrine loaded: can-go-red proof is mandatory ",
+          "name": "0.2 Verification doctrine loaded: can-go-red proof is mandatory",
           "description": "Verification doctrine loaded: can-go-red proof is mandatory \u2014 a gate that only ever returns green is theater and blocks certification; every certification event is recorded to rig-memory-os",
           "command": "Session preamble contains the phrases 'can-go-red' and 'install_certified'",
           "failure_tier": "halt",
@@ -55,7 +55,7 @@
         {
           "id": "1.1",
           "category": "Source Integrity",
-          "name": "1.1 Source asset pinned by content hash: sha256 of every source ",
+          "name": "1.1 Source asset pinned by content hash: sha256 of every source",
           "description": "Source asset pinned by content hash: sha256 of every source file is computed before install; the source parses/compiles in place (YAML safe_load for harnesses, SKILL.md section check for skills)",
           "command": "sha256sum over source files saved to .rig/install/source-hashes.txt; python3 parse assertion exits 0; both recorded",
           "failure_tier": "halt",
@@ -132,7 +132,7 @@
         {
           "id": "3.3",
           "category": "Can-Go-Red Proof",
-          "name": "3.3 Substrate liveness: the MathExec substrate passes self-test ",
+          "name": "3.3 Substrate liveness: the MathExec substrate passes self-test",
           "description": "Substrate liveness: the MathExec substrate passes self-test this session, anchoring that planted-failure machinery is itself functional on this machine",
           "command": "python3 ~/Developer/needle-haystack/artifacts/meta/mathexec_substrate.py self-test exits 0 with 'SELF-TEST PASS' saved to .rig/install/mathexec.txt",
           "failure_tier": "halt",
@@ -165,7 +165,7 @@
         {
           "id": "4.3",
           "category": "Seal & Record",
-          "name": "4.3 Fleet manifest consistency: if the install targets multiple ",
+          "name": "4.3 Fleet manifest consistency: if the install targets multiple",
           "description": "Fleet manifest consistency: if the install targets multiple destinations, every destination verifies independently; the install manifest (install_manifest.json or session equivalent) lists only destinations that individually passed 2.1-3.2",
           "command": "python3 -c asserting every manifest destination has a corresponding per-destination evidence file; per-destination verdicts in .rig/install/fleet-verdicts.txt",
           "failure_tier": "degrade",
@@ -225,7 +225,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "the same asset fails red-path 2+ times \u2192 it is added to the untrusted-gate list and its done-test is escalated for rewrite; install destinations that repeatedly drift out of sync get a fleet-verdicts tightening in gate 4.3"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -237,9 +240,10 @@
         "One improvement entry appended to the improvements log"
       ],
       "failure_states": [
-        "stop on 3.2: a done-test that cannot go red under sabotage means the install's safety net is fictional \u2014 certification is refused, install_blocked is recorded, and the asset is quarantined until its done-test is rewritten; the sabotage MUST be reverted before the session halts",
-        "stop gate(s) 3.2: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1, 3.3, 4.1, 4.2: no progress without gate evidence"
+        "notes: stop on 3.2: a done-test that cannot go red under sabotage means the install's safety net is fictional \u2014 certification is refused, install_blocked is recorded, and the asset is quarantined until its done-test is rewritten; the sabotage MUST be reverted before the session halts",
+        "stop gate(s) 3.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1, 3.3, 4.1, 4.2: no progress without gate evidence",
+        "degrade gate(s) 4.3, 4.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and install target pinned: asset name, source path, install method (symlink or copy), and every destination directory declared before anything is linked or copied",
@@ -290,8 +294,12 @@
           "stop": [
             "3.2"
           ],
-          "notes": "stop on 3.2: a done-test that cannot go red under sabotage means the install's safety net is fictional \u2014 certification is refused, install_blocked is recorded, and the asset is quarantined until its done-test is rewritten; the sabotage MUST be reverted before the session halts"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: stop on 3.2: a done-test that cannot go red under sabotage means the install's safety net is fictional \u2014 certification is refused, install_blocked is recorded, and the asset is quarantined until its done-test is rewritten; the sabotage MUST be reverted before the session halts"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

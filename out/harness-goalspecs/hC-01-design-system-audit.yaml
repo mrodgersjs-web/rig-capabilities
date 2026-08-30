@@ -1,0 +1,306 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-01-DESIGN-SYSTEM-AUDIT",
+      "name": "Design System Audit Goal Harness",
+      "description": "Design System Audit Goal Harness [design-system-audit-session] \u2014 compiled from capabilities/harnesses/hC-01-design-system-audit.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 11 capability gates passed with evidence on disk under artifacts/ds-audit/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L3-D1-A1",
+          "description": "RIG coordinate stated verbatim: L3-D1-A1",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_design_system_audit(ident",
+          "description": "Harness tuple declared verbatim: H_design_system_audit(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Inventory & Coverage",
+          "name": "1.1 Full component inventory enumerated: every component file, i",
+          "description": "Full component inventory enumerated: every component file, its stories, and its consumers",
+          "command": "command `find src/components -name '*.tsx' | sort > artifacts/ds-audit/inventory.txt` + `wc -l` count recorded in report",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Inventory & Coverage",
+          "name": "1.2 Token coverage measured: percentage of raw hex/px literals v",
+          "description": "Token coverage measured: percentage of raw hex/px literals vs token references across components",
+          "command": "command `grep -rEo '#[0-9a-fA-F]{3,8}' src --include='*.tsx' --include='*.css' | sort | uniq -c | sort -rn > artifacts/ds-audit/raw-literals.txt`; coverage % stated in report",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Inventory & Coverage",
+          "name": "1.3 Duplicate/near-duplicate component detection run with a stat",
+          "description": "Duplicate/near-duplicate component detection run with a stated similarity threshold",
+          "command": "command `npx jscpd src/components --min-tokens 50 --reporters json --output artifacts/ds-audit/jscpd` exit 0; report JSON path recorded",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Consistency & Naming",
+          "name": "2.1 Component naming convention conformance checked against DESI",
+          "description": "Component naming convention conformance checked against DESIGN.md naming rules",
+          "command": "`scripts/audit-naming.sh src/components` exit code 0, or violation list attached with per-violation disposition",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.2",
+          "category": "Consistency & Naming",
+          "name": "2.2 Variant matrix completeness: every interactive component has",
+          "description": "Variant matrix completeness: every interactive component has stories for default/hover/active/focus/disabled/loading/error",
+          "command": "story count per component extracted via `ls src/components/**/*.stories.*` diffed against variant checklist; gap table in report",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Consistency & Naming",
+          "name": "2.3 Doc coverage: each component directory has a README with pro",
+          "description": "Doc coverage: each component directory has a README with props table and usage example",
+          "command": "`find src/components -mindepth 2 -maxdepth 2 -type d` diffed against `find src/components -name README.md`; missing list in report",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Accessibility & Quality Signals",
+          "name": "3.1 Automated a11y scan run against the rendered component catal",
+          "description": "Automated a11y scan run against the rendered component catalog",
+          "command": "`npx axe http://localhost:6006 --save artifacts/ds-audit/axe.json` artifact exists; violation count by impact level in report",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Accessibility & Quality Signals",
+          "name": "3.2 Bundle impact snapshot: component library weight measured an",
+          "description": "Bundle impact snapshot: component library weight measured and recorded",
+          "command": "`npx source-map-explorer dist/*.js --json > artifacts/ds-audit/bundle.json`; total KB recorded in report",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.1",
+          "category": "Findings & Remediation",
+          "name": "4.1 Findings report written with severity-ranked issues, each ma",
+          "description": "Findings report written with severity-ranked issues, each mapped to inventory evidence",
+          "command": "artifacts/ds-audit/report.md exists; `sha256sum` recorded in session log; every finding cites an inventory line or scan artifact",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Findings & Remediation",
+          "name": "4.2 Deprecation list produced: components marked for removal wit",
+          "description": "Deprecation list produced: components marked for removal with migration targets",
+          "command": "artifacts/ds-audit/deprecations.yaml with `component`, `reason`, `migrate_to`, `consumers_count` per entry",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.3",
+          "category": "Findings & Remediation",
+          "name": "4.3 Remediation plan with owner and order produced from findings",
+          "description": "Remediation plan with owner and order produced from findings",
+          "command": "report section 'Remediation Plan' with per-item owner, effort estimate, and dependency order",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Design system audit mode: evidence over vibes, inventory over impression.",
+        "harness_tuple": "H_design_system_audit_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for exploratory token mining; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-01-design-system-audit-session",
+          "session_type": "design-system-audit-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L5"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 11 capability gates passed with evidence on disk under artifacts/ds-audit/",
+        "Primary objective achieved: severity-ranked audit report + remediation plan committed",
+        "No finding lacks a cited evidence artifact (command output, scan JSON, or file diff)",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict (GO/NO-GO), and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.2, 3.1, 4.1: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.1, 2.3, 3.2, 4.2, 4.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L3-D1-A1",
+        "Harness tuple declared verbatim: H_design_system_audit(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Full component inventory enumerated: every component file, its stories, and its consumers",
+        "Token coverage measured: percentage of raw hex/px literals vs token references across components",
+        "Duplicate/near-duplicate component detection run with a stated similarity threshold",
+        "Component naming convention conformance checked against DESIGN.md naming rules",
+        "Variant matrix completeness: every interactive component has stories for default/hover/active/focus/disabled/loading/error",
+        "Doc coverage: each component directory has a README with props table and usage example",
+        "Automated a11y scan run against the rendered component catalog",
+        "Bundle impact snapshot: component library weight measured and recorded",
+        "Findings report written with severity-ranked issues, each mapped to inventory evidence",
+        "Deprecation list produced: components marked for removal with migration targets",
+        "Remediation plan with owner and order produced from findings"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-01-design-system-audit.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every design-system-audit-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.2",
+            "3.1",
+            "4.1"
+          ],
+          "degrade": [
+            "1.3",
+            "2.1",
+            "2.3",
+            "3.2",
+            "4.2",
+            "4.3"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

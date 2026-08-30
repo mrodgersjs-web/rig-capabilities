@@ -1,0 +1,319 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-07-MOBILE-DESIGN",
+      "name": "Mobile Design Goal Harness",
+      "description": "Mobile Design Goal Harness [mobile-design-session] \u2014 compiled from capabilities/harnesses/hC-07-mobile-design.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "All 12 capability gates passed with capture manifest and hashes on disk",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L4-D2-A2",
+          "description": "RIG coordinate stated verbatim: L4-D2-A2",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_mobile_design(identity, g",
+          "description": "Harness tuple declared verbatim: H_mobile_design(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Platform & Constraints",
+          "name": "1.1 Target platform(s) declared with guideline source: iOS HIG a",
+          "description": "Target platform(s) declared with guideline source: iOS HIG and/or Material 3, version pinned",
+          "command": "artifacts/mobile/<slug>/platform.md naming guideline doc + version; every pattern decision cites it",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Platform & Constraints",
+          "name": "1.2 Device matrix declared: minimum 3 sizes including smallest s",
+          "description": "Device matrix declared: minimum 3 sizes including smallest supported and largest",
+          "command": "device matrix table in platform.md; screenshots exist for every matrix row",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Platform & Constraints",
+          "name": "1.3 Safe-area insets respected: no interactive element inside no",
+          "description": "Safe-area insets respected: no interactive element inside notch/home-indicator zones",
+          "command": "safe-area overlay screenshots in artifacts/mobile/<slug>/ showing content inside safe bounds on each matrix device",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Touch & Ergonomics",
+          "name": "2.1 Touch targets meet minimums: 44x44pt (iOS) / 48x48dp (Androi",
+          "description": "Touch targets meet minimums: 44x44pt (iOS) / 48x48dp (Android) including padding, spacing between adjacent targets >= 8pt",
+          "command": "measurement pass over comps: target-size table per screen in artifacts/mobile/<slug>/touch-audit.md; zero sub-minimum targets or filed exceptions",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Touch & Ergonomics",
+          "name": "2.2 Thumb-zone analysis: primary actions in natural reach for on",
+          "description": "Thumb-zone analysis: primary actions in natural reach for one-handed use on the largest matrix device",
+          "command": "thumb-zone map overlay per key screen with primary-action placement marked and justified",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.3",
+          "category": "Touch & Ergonomics",
+          "name": "2.3 Gesture conflicts checked: no custom gesture collides with s",
+          "description": "Gesture conflicts checked: no custom gesture collides with system gestures (edge swipe, home swipe, long-press)",
+          "command": "gesture inventory table in touch-audit.md mapping each custom gesture against the platform reserved list",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Type, States & Resilience",
+          "name": "3.1 Dynamic type / font scaling verified: layouts survive larges",
+          "description": "Dynamic type / font scaling verified: layouts survive largest accessibility text size without truncation of critical content",
+          "command": "screenshots at default + largest text size per key screen; truncation list empty or filed as findings",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Type, States & Resilience",
+          "name": "3.2 Dark mode variant designed for every screen using semantic t",
+          "description": "Dark mode variant designed for every screen using semantic tokens, not inverted hex",
+          "command": "dark captures in artifacts/mobile/<slug>/dark/ per screen; `grep` of styles shows semantic token usage for surfaces",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Type, States & Resilience",
+          "name": "3.3 Offline, loading, empty, and error states designed for every",
+          "description": "Offline, loading, empty, and error states designed for every data-driven screen",
+          "command": "states checklist per screen in artifacts/mobile/<slug>/states.md; missing states are explicit deferrals with reason",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Type, States & Resilience",
+          "name": "3.4 Performance budget honored: hero images sized for device DPR",
+          "description": "Performance budget honored: hero images sized for device DPR, skeletons defined, no blocking web-font flash plan documented",
+          "command": "asset budget table (per-image KB vs budget) + skeleton spec in states.md",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.1",
+          "category": "Evidence & Review",
+          "name": "4.1 Full capture set delivered: every screen x every matrix devi",
+          "description": "Full capture set delivered: every screen x every matrix device x light/dark where applicable",
+          "command": "capture manifest artifacts/mobile/<slug>/manifest.yaml with file path + sha256 per capture; count matches matrix",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Evidence & Review",
+          "name": "4.2 Platform-fidelity review: no desktop-first patterns (hover-d",
+          "description": "Platform-fidelity review: no desktop-first patterns (hover-dependent affordances, tiny tap rows, right-click menus) survive",
+          "command": "`grep` / checklist pass recorded in review section; any found pattern dispositioned in the decision log",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Mobile design mode: thumbs, safe areas, and dynamic type decide the layout \u2014 not desktop habits.",
+        "harness_tuple": "H_mobile_design_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A1-A2 preferred; A3 permitted for platform-pattern exploration; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-07-mobile-design-session",
+          "session_type": "mobile-design-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 12 capability gates passed with capture manifest and hashes on disk",
+        "Primary objective achieved: platform-cited mobile design with complete states and ergonomics evidence",
+        "Touch-target and safe-area audits show zero unfiled violations",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 3.1, 3.3, 4.1: no progress without gate evidence",
+        "degrade gate(s) 2.2, 2.3, 3.2, 3.4, 4.2: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L4-D2-A2",
+        "Harness tuple declared verbatim: H_mobile_design(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Target platform(s) declared with guideline source: iOS HIG and/or Material 3, version pinned",
+        "Device matrix declared: minimum 3 sizes including smallest supported and largest",
+        "Safe-area insets respected: no interactive element inside notch/home-indicator zones",
+        "Touch targets meet minimums: 44x44pt (iOS) / 48x48dp (Android) including padding, spacing between adjacent targets >= 8pt",
+        "Thumb-zone analysis: primary actions in natural reach for one-handed use on the largest matrix device",
+        "Gesture conflicts checked: no custom gesture collides with system gestures (edge swipe, home swipe, long-press)",
+        "Dynamic type / font scaling verified: layouts survive largest accessibility text size without truncation of critical content",
+        "Dark mode variant designed for every screen using semantic tokens, not inverted hex",
+        "Offline, loading, empty, and error states designed for every data-driven screen",
+        "Performance budget honored: hero images sized for device DPR, skeletons defined, no blocking web-font flash plan documented",
+        "Full capture set delivered: every screen x every matrix device x light/dark where applicable",
+        "Platform-fidelity review: no desktop-first patterns (hover-dependent affordances, tiny tap rows, right-click menus) survive"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-07-mobile-design.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every mobile-design-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "3.1",
+            "3.3",
+            "4.1"
+          ],
+          "degrade": [
+            "2.2",
+            "2.3",
+            "3.2",
+            "3.4",
+            "4.2"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}

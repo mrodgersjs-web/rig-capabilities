@@ -1,0 +1,274 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-06-TWITTER-THREAD-SESSION",
+      "name": "Twitter/X Thread Session Harness",
+      "description": "Twitter/X Thread Session Harness [twitter-thread-session] \u2014 compiled from capabilities/harnesses/hB-06-twitter-thread-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Tweet 1 passes the contract check with no filler and no link.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm thread arc type (story / teardown / listicle-lesson",
+          "description": "Confirm thread arc type (story / teardown / listicle-lesson / data drop) before drafting tweet 1.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm thread length target (5-12 tweets); threads >12 requ",
+          "description": "Confirm thread length target (5-12 tweets); threads >12 require a written justification.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse 'thread' formatting for content that fits one tweet \u2014",
+          "description": "Refuse 'thread' formatting for content that fits one tweet \u2014 bloat is a halt.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm whether a link is included; links suppress reach, so",
+          "description": "Confirm whether a link is included; links suppress reach, so their placement is decided up front.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Arc contract",
+          "description": "Thread arc and payoff stated in one sentence; tweet count declared.",
+          "command": "$SESS/arc.yaml parses with keys arc_type, payoff, tweet_count; validator exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Tweet 1 contract",
+          "description": "First tweet <=280 chars, states the payoff or the tension, contains no 'A thread:' filler, and no link.",
+          "command": "`python3 scripts/t1_check.py $SESS/thread.md` exits 0; `head -4 $SESS/thread.md | grep -ci 'a thread' ` == 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Per-tweet atomicity",
+          "description": "Every tweet stands alone (one idea), <=280 chars, numbered consistently, no dangling 'this' references.",
+          "command": "`python3 scripts/thread_atom.py $SESS/thread.md` exits 0 (checks each block: length, atomicity, anaphora lint)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Payoff delivery",
+          "description": "Declared payoff from arc.yaml appears by the penultimate tweet; final tweet is recap + follow/reply CTA <=200 chars.",
+          "command": "`python3 scripts/payoff_check.py $SESS/arc.yaml $SESS/thread.md` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Evidence tweet",
+          "description": ">=1 tweet contains a concrete number, named source, or artifact reference for data/teardown arcs.",
+          "command": "`grep -cE '[0-9]+%|source:|study|v[0-9]+\\.[0-9]+' $SESS/thread.md` >= 1 for data arcs; recorded waiver otherwise",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Link placement rule",
+          "description": "Zero links in tweets 1..N-1; any link lives in final tweet or a declared reply.",
+          "command": "`python3 scripts/link_placement.py $SESS/thread.md` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Media spec",
+          "description": "Any attached image is 1600x900 or 1080x1080, <5MB, alt text written.",
+          "command": "For each asset: `python3 scripts/img_size.py --allow 1600x900,1080x1080 --max-mb 5 $SESS/assets/*` exits 0; alt text lines in $SESS/alt.txt match asset count",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Voice & repetition lint",
+          "description": "No banned tokens; no sentence opener repeated >2x across the thread.",
+          "command": "`grep -ciE 'delve|game changer|thread incoming' $SESS/thread.md` == 0; `python3 scripts/opener_rep.py $SESS/thread.md --max 2` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Proof packet seal",
+          "description": "Thread text, arc, and asset hashes sealed; tweet 1 logged to anti-repeat ledger.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0; ledger append verified by line-count delta == 1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Thread operator. Tweet 1 is a contract; every tweet after pays it off in <=280 characters each; the last tweet earns the follow.",
+        "harness_tuple": "L2-D2-A2-I4",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-06-twitter-thread",
+          "session_type": "twitter-thread-session",
+          "governs_loops": [
+            "iqrsqpi.content.twitter",
+            "GL-OD-shortform",
+            "platform-frameworks.x"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/twitter-thread-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/twitter-thread-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Tweet 1 passes the contract check with no filler and no link.",
+        "Every tweet atomic and within length; payoff delivered before the final tweet.",
+        "Link placement and media specs machine-verified.",
+        "Proof packet sealed; tweet-1 hook in the repetition ledger."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm thread arc type (story / teardown / listicle-lesson / data drop) before drafting tweet 1.",
+        "Confirm thread length target (5-12 tweets); threads >12 require a written justification.",
+        "Refuse 'thread' formatting for content that fits one tweet \u2014 bloat is a halt.",
+        "Confirm whether a link is included; links suppress reach, so their placement is decided up front.",
+        "Thread arc and payoff stated in one sentence; tweet count declared.",
+        "First tweet <=280 chars, states the payoff or the tension, contains no 'A thread:' filler, and no link.",
+        "Every tweet stands alone (one idea), <=280 chars, numbered consistently, no dangling 'this' references.",
+        "Declared payoff from arc.yaml appears by the penultimate tweet; final tweet is recap + follow/reply CTA <=200 chars.",
+        ">=1 tweet contains a concrete number, named source, or artifact reference for data/teardown arcs.",
+        "Zero links in tweets 1..N-1; any link lives in final tweet or a declared reply.",
+        "Any attached image is 1600x900 or 1080x1080, <5MB, alt text written.",
+        "No banned tokens; no sentence opener repeated >2x across the thread.",
+        "Thread text, arc, and asset hashes sealed; tweet 1 logged to anti-repeat ledger."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-06-twitter-thread-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "halt",
+            "CG-05": "degrade",
+            "CG-06": "degrade",
+            "CG-07": "degrade",
+            "CG-08": "degrade",
+            "CG-09": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
       "id": "GL-HD-09-MARKET-RESEARCH",
       "name": "Market Research Goal Harness",
       "description": "Market Research Goal Harness [gtm-market-research] \u2014 compiled from capabilities/harnesses/hD-09-market-research.yaml",
-      "anchor": "LL2-D2-A1-I",
+      "anchor": "L2-D2-A1-I",
       "bms_mode": "A1",
       "gate": "Synthesis shipped with source-tiered claims, corroboration, contradictions, sizing math, and uncertainty labels",
       "gates": [
@@ -77,7 +77,7 @@
         {
           "id": "1.3",
           "category": "Source Discipline",
-          "name": "1.3 Corroboration rule: every load-bearing claim backed by >= 2 ",
+          "name": "1.3 Corroboration rule: every load-bearing claim backed by >= 2",
           "description": "Corroboration rule: every load-bearing claim backed by >= 2 independent sources (not one source citing another)",
           "command": "artifacts/market/<run>/claims.json \u2014 each claim.source_ids length >= 2 and sources verified independent (different publishers)",
           "failure_tier": "halt",
@@ -143,7 +143,7 @@
         {
           "id": "3.2",
           "category": "Synthesis & Honesty",
-          "name": "3.2 Uncertainty labels applied: every forward-looking statement ",
+          "name": "3.2 Uncertainty labels applied: every forward-looking statement",
           "description": "Uncertainty labels applied: every forward-looking statement tagged [FACT | INFERENCE | SPECULATION]",
           "command": "synthesis.md forward-looking lines carry exactly one tag; scripts/uncertainty_lint.py exit 0",
           "failure_tier": "halt",
@@ -154,7 +154,7 @@
         {
           "id": "3.3",
           "category": "Synthesis & Honesty",
-          "name": "3.3 Refute pass: a second pass actively attempts to falsify the ",
+          "name": "3.3 Refute pass: a second pass actively attempts to falsify the",
           "description": "Refute pass: a second pass actively attempts to falsify the top 3 conclusions with counter-evidence",
           "command": "artifacts/market/<run>/refute.md \u2014 per conclusion: attempted falsification, counter-evidence found or not, verdict",
           "failure_tier": "degrade",
@@ -215,7 +215,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; a load-bearing claim later proven wrong triggers a provenance-pipeline audit"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -226,7 +229,8 @@
         "Identity closure: coordinate, verdict (answered | provisional | insufficient-evidence), next safe action in session log"
       ],
       "failure_states": [
-        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2, 3.4: no progress without gate evidence"
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2, 3.4: no progress without gate evidence",
+        "degrade gate(s) 1.4, 2.2, 3.3: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Research question framed as a decision: what decision this research feeds and what would change it",
@@ -274,8 +278,10 @@
             "3.3"
           ],
           "stop": [],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

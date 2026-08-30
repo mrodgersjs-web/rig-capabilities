@@ -4,7 +4,7 @@
       "id": "GL-HA-10-SCHEMA-DESIGN",
       "name": "Database Schema Design Session Goal Harness",
       "description": "Database Schema Design Session Goal Harness [schema-design-session] \u2014 compiled from capabilities/harnesses/hA-10-schema-design.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -22,7 +22,7 @@
         {
           "id": "0.2",
           "category": "Identity Lock",
-          "name": "0.2 Procedures declared mandatory: access-patterns-first, every ",
+          "name": "0.2 Procedures declared mandatory: access-patterns-first, every",
           "description": "Procedures declared mandatory: access-patterns-first, every column typed+constrained deliberately, migrations reversible-by-default, query plans proven on realistic volume",
           "command": "All four procedure names in session preamble",
           "failure_tier": "halt",
@@ -55,7 +55,7 @@
         {
           "id": "1.1",
           "category": "Design Inputs",
-          "name": "1.1 Access patterns enumerated before tables: the top reads and ",
+          "name": "1.1 Access patterns enumerated before tables: the top reads and",
           "description": "Access patterns enumerated before tables: the top reads and writes (with rough rates: reads/s, writes/s, growth rows/month) drive the design; the list exists before any CREATE TABLE",
           "command": ".rig/schema/access-patterns.md with per-query rate estimates; timestamps show it predates the DDL file",
           "failure_tier": "halt",
@@ -121,7 +121,7 @@
         {
           "id": "3.1",
           "category": "Migration Safety",
-          "name": "3.1 Migration files generated and hand-reviewed: alembic/prisma ",
+          "name": "3.1 Migration files generated and hand-reviewed: alembic/prisma",
           "description": "Migration files generated and hand-reviewed: alembic/prisma migrate/atlas output inspected \u2014 no auto-generated surprise (dropped columns, re-created tables) survives review",
           "command": "Diff between ORM model and generated migration annotated in .rig/schema/migration-review.md",
           "failure_tier": "halt",
@@ -165,7 +165,7 @@
         {
           "id": "4.1",
           "category": "Closure",
-          "name": "4.1 ERD + summary filed: entity diagram (mermaid or dbml) and a ",
+          "name": "4.1 ERD + summary filed: entity diagram (mermaid or dbml) and a",
           "description": "ERD + summary filed: entity diagram (mermaid or dbml) and a one-paragraph-per-table purpose note committed under docs/ or db/",
           "command": "File paths recorded; mermaid block parses (mermaid-cli or viewer check)",
           "failure_tier": "degrade",
@@ -228,7 +228,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same migration hazard recurs 3+ times \u2192 add a migration linter rule or template guard"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -240,8 +243,9 @@
         "Identity closure: coordinate, migration-safety verdict, next safe action stated"
       ],
       "failure_states": [
-        "applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only",
-        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence"
+        "notes: applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.3, 3.4, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.2, 2.4, 4.1: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the schema target pinned: database engine+version, owning service, and whether this is greenfield or an alteration of live tables",
@@ -292,8 +296,12 @@
             "4.1"
           ],
           "stop": [],
-          "notes": "applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

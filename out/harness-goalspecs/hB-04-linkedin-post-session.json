@@ -1,0 +1,275 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-04-LINKEDIN-POST-SESSION",
+      "name": "LinkedIn Post Session Harness",
+      "description": "LinkedIn Post Session Harness [linkedin-post-session] \u2014 compiled from capabilities/harnesses/hB-04-linkedin-post-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "Hook passes strength check and is not a repeat pattern from the last 10 hooks.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the post pillar (build-in-public / lesson / contrari",
+          "description": "Confirm the post pillar (build-in-public / lesson / contrarian take / receipt) before drafting.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Load the author voice fingerprint; if the post could be attr",
+          "description": "Load the author voice fingerprint; if the post could be attributed to any generic creator, rewrite.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse engagement-bait mechanics ('comment YES', 'repost if'",
+          "description": "Refuse engagement-bait mechanics ('comment YES', 'repost if') outright \u2014 session degrades if requested.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm whether the post pairs with a visual; decide before",
+          "description": "Confirm whether the post pairs with a visual; decide before writing, not after.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Pillar & angle lock",
+          "description": "Post pillar and one-sentence angle recorded in angle.yaml.",
+          "command": "$SESS/angle.yaml parses with keys pillar, angle; `python3 -c \"import yaml;a=yaml.safe_load(open('$SESS/angle.yaml'));assert a['pillar'] in ['build','lesson','contrarian','receipt']\"` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Hook strength",
+          "description": "First two lines <=210 chars total, contain a number, a proper noun, or a tension statement; no question-hook two posts in a row (check log).",
+          "command": "`python3 scripts/hook_check.py $SESS/post.md --log ~/.rig/logs/linkedin_hooks.jsonl` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Length & format band",
+          "description": "Post 900-1,300 chars for text-only or 400-700 when paired with visual; line breaks every 1-2 sentences.",
+          "command": "`python3 scripts/li_format.py $SESS/post.md --mode $(grep mode $SESS/angle.yaml|cut -d' ' -f2)` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Receipt requirement",
+          "description": "Posts in receipt/lesson pillars contain at least one concrete artifact reference (metric, screenshot reference, date, or named tool version).",
+          "command": "`grep -cE '[0-9]+%|[0-9]+x|v[0-9]+\\.[0-9]+|20[0-9]{2}-[0-9]{2}' $SESS/post.md` >= 1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Voice fingerprint",
+          "description": "Banned-token scan clean; signature-vocab density within profile band.",
+          "command": "`grep -ciE 'delve|thrilled to announce|humbled|game changer' $SESS/post.md` == 0 AND `python3 scripts/voice_fp.py $SESS/post.md` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Close integrity",
+          "description": "Final line is a single conversation prompt <=80 chars; zero external links in body (links go to first comment if required).",
+          "command": "`tail -1 $SESS/post.md | wc -c` <= 80; `grep -cE 'https?://' $SESS/post.md` == 0 OR links documented in $SESS/first_comment.txt",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Hashtag discipline",
+          "description": "0-3 hashtags, all lowercase, none invented-for-this-post (must exist in profile hashtag registry).",
+          "command": "`grep -oE '#[A-Za-z0-9]+' $SESS/post.md | wc -l` <= 3 AND each found via `grep -F` in $SESS/hashtag_registry.txt",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Visual pairing proof",
+          "description": "If mode=visual, the asset exists at spec (1080x1350 or 1200x627) and its sha256 is recorded.",
+          "command": "For visual mode: `file $SESS/asset.png` confirms PNG AND `python3 scripts/img_size.py $SESS/asset.png --allow 1080x1350,1200x627` exits 0; hash in $SESS/proof/asset.sha256",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Proof packet seal",
+          "description": "Post, angle, and asset hashes sealed; hook appended to hook log for anti-repetition.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0; `tail -1 ~/.rig/logs/linkedin_hooks.jsonl | grep -c $(sha256sum $SESS/post.md|cut -d' ' -f1)` >= 1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the LinkedIn operator. Hook in two lines, value in the body, one conversation starter at the end \u2014 no broetry, no engagement bait.",
+        "harness_tuple": "L2-D2-A2-I4",
+        "bms_bias": "A2",
+        "meta": {
+          "harness_id": "hB-04-linkedin-post",
+          "session_type": "linkedin-post-session",
+          "governs_loops": [
+            "iqrsqpi.content.linkedin",
+            "GL-OD-shortform",
+            "content-atelier.shortform"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/linkedin-post-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/linkedin-post-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "Hook passes strength check and is not a repeat pattern from the last 10 hooks.",
+        "Body carries a concrete receipt when the pillar demands one.",
+        "No engagement bait, no body links, hashtags within registry.",
+        "Visual (if any) at exact spec with sealed hash.",
+        "Proof packet sealed and hook log appended."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the post pillar (build-in-public / lesson / contrarian take / receipt) before drafting.",
+        "Load the author voice fingerprint; if the post could be attributed to any generic creator, rewrite.",
+        "Refuse engagement-bait mechanics ('comment YES', 'repost if') outright \u2014 session degrades if requested.",
+        "Confirm whether the post pairs with a visual; decide before writing, not after.",
+        "Post pillar and one-sentence angle recorded in angle.yaml.",
+        "First two lines <=210 chars total, contain a number, a proper noun, or a tension statement; no question-hook two posts in a row (check log).",
+        "Post 900-1,300 chars for text-only or 400-700 when paired with visual; line breaks every 1-2 sentences.",
+        "Posts in receipt/lesson pillars contain at least one concrete artifact reference (metric, screenshot reference, date, or named tool version).",
+        "Banned-token scan clean; signature-vocab density within profile band.",
+        "Final line is a single conversation prompt <=80 chars; zero external links in body (links go to first comment if required).",
+        "0-3 hashtags, all lowercase, none invented-for-this-post (must exist in profile hashtag registry).",
+        "If mode=visual, the asset exists at spec (1080x1350 or 1200x627) and its sha256 is recorded.",
+        "Post, angle, and asset hashes sealed; hook appended to hook log for anti-repetition."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-04-linkedin-post-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "degrade",
+            "CG-04": "halt",
+            "CG-05": "halt",
+            "CG-06": "degrade",
+            "CG-07": "degrade",
+            "CG-08": "degrade",
+            "CG-09": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

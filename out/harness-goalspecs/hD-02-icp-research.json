@@ -4,7 +4,7 @@
       "id": "GL-HD-02-ICP-RESEARCH",
       "name": "ICP Research Goal Harness",
       "description": "ICP Research Goal Harness [gtm-icp-research] \u2014 compiled from capabilities/harnesses/hD-02-icp-research.yaml",
-      "anchor": "LL1-D1-A1-I",
+      "anchor": "L1-D1-A1-I",
       "bms_mode": "A1",
       "gate": "ICP doc shipped at artifacts/icp/<run>/icp.md with evidence anchors, anti-ICP, and kill criteria",
       "gates": [
@@ -121,7 +121,7 @@
         {
           "id": "2.4",
           "category": "Attribute Extraction",
-          "name": "2.4 Attribute-to-outcome correlation computed: which attributes ",
+          "name": "2.4 Attribute-to-outcome correlation computed: which attributes",
           "description": "Attribute-to-outcome correlation computed: which attributes actually separate won from lost",
           "command": "artifacts/icp/<run>/correlation_report.md contains per-attribute win-rate deltas computed by scripts/icp_correlation.py; every claimed attribute shows its delta number",
           "failure_tier": "degrade",
@@ -132,7 +132,7 @@
         {
           "id": "3.1",
           "category": "Validation & Anchoring",
-          "name": "3.1 Every load-bearing claim in the ICP doc carries an evidence ",
+          "name": "3.1 Every load-bearing claim in the ICP doc carries an evidence",
           "description": "Every load-bearing claim in the ICP doc carries an evidence anchor (CRM query id, file path + line, or source URL)",
           "command": "grep -cE '\\[evidence:' artifacts/icp/<run>/icp.md >= number of ## claim headers; zero unanchored claims",
           "failure_tier": "halt",
@@ -154,7 +154,7 @@
         {
           "id": "3.3",
           "category": "Validation & Anchoring",
-          "name": "3.3 CRM segment validation: the ICP definition runs as a Twenty ",
+          "name": "3.3 CRM segment validation: the ICP definition runs as a Twenty",
           "description": "CRM segment validation: the ICP definition runs as a Twenty query and returns a plausible nonzero count",
           "command": "artifacts/icp/<run>/segment_query.json executed; result count recorded in validation.log; count > 0 and count < total_people",
           "failure_tier": "degrade",
@@ -165,7 +165,7 @@
         {
           "id": "3.4",
           "category": "Validation & Anchoring",
-          "name": "3.4 Independent review dispatch: a second pass (agent or human) ",
+          "name": "3.4 Independent review dispatch: a second pass (agent or human)",
           "description": "Independent review dispatch: a second pass (agent or human) attempts to refute the top 3 ICP attributes",
           "command": "artifacts/icp/<run>/refute_pass.md with verdict per attribute (confirmed | weakened | rejected) and reasoning",
           "failure_tier": "degrade",
@@ -213,7 +213,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; an ICP kill criterion firing in production triggers immediate harness review"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -224,7 +227,8 @@
         "Identity closure: coordinate, verdict (validated | provisional | refuted), next safe action in session log"
       ],
       "failure_states": [
-        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2: no progress without gate evidence"
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.3, 3.1, 3.2: no progress without gate evidence",
+        "degrade gate(s) 2.2, 2.4, 3.3, 3.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Research question declared before any scraping: which segment, which hypothesis, which decision this ICP feeds",
@@ -272,8 +276,10 @@
             "3.4"
           ],
           "stop": [],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

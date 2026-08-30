@@ -4,7 +4,7 @@
       "id": "GL-HD-10-COMPETITIVE-INTEL",
       "name": "Competitive Intel Goal Harness",
       "description": "Competitive Intel Goal Harness [gtm-competitive-intel] \u2014 compiled from capabilities/harnesses/hD-10-competitive-intel.yaml",
-      "anchor": "LL1-D2-A1-I",
+      "anchor": "L1-D2-A1-I",
       "bms_mode": "A1",
       "gate": "Feature matrix, pricing snapshots, review mining, and deltas all present with sources and timestamps",
       "gates": [
@@ -218,7 +218,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; a battlecard claim proven wrong in the field triggers same-week refresh of that competitor"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -229,8 +232,9 @@
         "Identity closure: coordinate, verdict (shipped | partial | blocked), next safe action in session log"
       ],
       "failure_states": [
-        "stop gate(s) 3.3: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1: no progress without gate evidence"
+        "stop gate(s) 3.3: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 2.3, 3.1: no progress without gate evidence",
+        "degrade gate(s) 1.3, 1.4, 3.2, 3.4: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Competitor set locked for this run: named list with inclusion rationale; no mid-run scope creep without re-lock",
@@ -279,8 +283,10 @@
           "stop": [
             "3.3"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

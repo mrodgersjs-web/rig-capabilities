@@ -1,0 +1,314 @@
+{
+  "goals": [
+    {
+      "id": "GL-HB-03-LANDING-PAGE-SESSION",
+      "name": "Landing Page Session Harness",
+      "description": "Landing Page Session Harness [landing-page-session] \u2014 compiled from capabilities/harnesses/hB-03-landing-page-session.yaml",
+      "anchor": "L1-D1-A1-intake",
+      "bms_mode": "A1",
+      "gate": "One CTA destination, message-matched headline, and locked offer \u2014 verified by scripts, not review.",
+      "gates": [
+        {
+          "id": "IG-01",
+          "category": "Identity Lock",
+          "name": "IG-01 Confirm the single conversion action (form submit / checkout",
+          "description": "Confirm the single conversion action (form submit / checkout / booking) is named before any copy is written.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-02",
+          "category": "Identity Lock",
+          "name": "IG-02 Confirm the traffic source and its message; page copy must m",
+          "description": "Confirm the traffic source and its message; page copy must message-match the ad/link that feeds it.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-03",
+          "category": "Identity Lock",
+          "name": "IG-03 Refuse multi-goal pages: if the brief contains 2+ unrelated",
+          "description": "Refuse multi-goal pages: if the brief contains 2+ unrelated CTAs, halt and force a split decision.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-04",
+          "category": "Identity Lock",
+          "name": "IG-04 Confirm analytics event names are declared up front; a page",
+          "description": "Confirm analytics event names are declared up front; a page that can't be measured can't be shipped.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-01",
+          "category": "Capability",
+          "name": "CG-01 Offer lock",
+          "description": "Offer statement (who, what, outcome, timeframe, risk-reversal) locked in offer.yaml before design or copy.",
+          "command": "$SESS/offer.yaml parses with keys who, what, outcome, timeframe, risk_reversal; validation script exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-02",
+          "category": "Capability",
+          "name": "CG-02 Message match",
+          "description": "Headline contains the exact keyword phrase or promise token from the traffic source.",
+          "command": "`python3 scripts/message_match.py --source $SESS/source_message.txt --page $SESS/page.html` exits 0 (token overlap >=0.8 on headline)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-03",
+          "category": "Capability",
+          "name": "CG-03 Single CTA discipline",
+          "description": "Exactly one unique CTA destination across the page; CTA appears above the fold and at page end.",
+          "command": "`grep -oE 'href=\"[^\"]+\"' $SESS/page.html | grep cta | sort -u | wc -l` == 1; DOM assert `python3 scripts/cta_positions.py $SESS/page.html` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-04",
+          "category": "Capability",
+          "name": "CG-04 Proof density",
+          "description": ">=3 distinct proof elements (testimonial w/ name+role, metric with source, logo row, or case reference) within the first 2 scroll-depths.",
+          "command": "`python3 scripts/proof_density.py $SESS/page.html --min 3 --within-viewports 2` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-05",
+          "category": "Capability",
+          "name": "CG-05 Objection coverage",
+          "description": "FAQ or objection block addresses the top 3 objections listed in offer.yaml, each with a concrete answer.",
+          "command": "`python3 -c \"import yaml;o=yaml.safe_load(open('$SESS/offer.yaml'));assert len(o.get('objections',[]))>=3\"` AND each objection string found in page text via `grep -F`",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-06",
+          "category": "Capability",
+          "name": "CG-06 Form friction audit",
+          "description": "Form fields <=5 unless offer.yaml justifies more; every field labeled; no placeholder-only labels.",
+          "command": "`python3 scripts/form_audit.py $SESS/page.html --max-fields 5` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-07",
+          "category": "Capability",
+          "name": "CG-07 Performance budget",
+          "description": "Page weight <=1.5MB total, LCP element renders <=2.5s on throttled profile, zero render-blocking third-party scripts without defer/async.",
+          "command": "`python3 scripts/perf_budget.py $SESS/page.html --max-bytes 1572864 --max-lcp 2.5` exits 0 and writes $SESS/proof/perf.json",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-08",
+          "category": "Capability",
+          "name": "CG-08 Mobile layout proof",
+          "description": "Viewport 390x844 screenshot shows no horizontal overflow and CTA visible without scrolling on load.",
+          "command": "$SESS/proof/mobile.png exists (width 390); `python3 scripts/overflow_check.py $SESS/page.html --viewport 390x844` exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-09",
+          "category": "Capability",
+          "name": "CG-09 Accessibility floor",
+          "description": "Contrast >=4.5:1 on body text, all images alt-tagged, form errors announced, focus order linear.",
+          "command": "`python3 scripts/a11y_floor.py $SESS/page.html` exits 0 (axe-core subset, zero critical violations)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 Analytics wiring",
+          "description": "Declared events (view, cta_click, form_submit) fire with correct names in a headless run.",
+          "command": "`python3 scripts/events_probe.py $SESS/page.html --expect view,cta_click,form_submit` exits 0 and writes $SESS/proof/events.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-11",
+          "category": "Capability",
+          "name": "CG-11 SEO/social card",
+          "description": "Title, meta description, og:image, and canonical tag present and non-duplicated.",
+          "command": "`grep -c '<link rel=\"canonical\"' $SESS/page.html` == 1; `python3 scripts/social_card.py $SESS/page.html` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-12",
+          "category": "Capability",
+          "name": "CG-12 Proof packet seal",
+          "description": "HTML, offer, perf and event proofs hashed into sealed packet.",
+          "command": "`sha256sum -c $SESS/proof/packet.sha256` exits 0 covering page.html, offer.yaml, perf.json, events.json, mobile.png",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I am the Landing Page operator. One page, one offer, one action. Every section either advances the click or gets deleted.",
+        "harness_tuple": "L4-D4-A3-I6",
+        "bms_bias": "A3",
+        "meta": {
+          "harness_id": "hB-03-landing-page",
+          "session_type": "landing-page-session",
+          "governs_loops": [
+            "iqrsqpi.content.landing",
+            "GL-OD-conversion",
+            "offer-testing.page"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3",
+              "D4",
+              "D5"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "intake",
+              "question",
+              "research",
+              "synthesize",
+              "quantify",
+              "produce",
+              "iterate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.rig/logs/harnesses/landing-page-session.jsonl",
+            "pattern_cadence": "After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/landing-page-session-patterns.md.",
+            "update_trigger": "If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision: bump the gate's proof, adjust its threshold, or split the gate \u2014 then re-seal with a new version hash."
+          },
+          "doctrine_focus": "content & marketing",
+          "library": "needle-haystack-v0",
+          "batch": "B"
+        }
+      },
+      "success_conditions": [
+        "One CTA destination, message-matched headline, and locked offer \u2014 verified by scripts, not review.",
+        "Performance and mobile proofs on disk and within budget.",
+        "Analytics events fire with declared names in the probe run.",
+        "Zero critical a11y violations; form friction within budget or justified in writing.",
+        "Proof packet sealed; any degrade-tier waiver recorded in $SESS/proof/waivers.md with owner."
+      ],
+      "failure_states": [
+        "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+        "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+        "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+      ],
+      "quality_criteria": [
+        "Confirm the single conversion action (form submit / checkout / booking) is named before any copy is written.",
+        "Confirm the traffic source and its message; page copy must message-match the ad/link that feeds it.",
+        "Refuse multi-goal pages: if the brief contains 2+ unrelated CTAs, halt and force a split decision.",
+        "Confirm analytics event names are declared up front; a page that can't be measured can't be shipped.",
+        "Offer statement (who, what, outcome, timeframe, risk-reversal) locked in offer.yaml before design or copy.",
+        "Headline contains the exact keyword phrase or promise token from the traffic source.",
+        "Exactly one unique CTA destination across the page; CTA appears above the fold and at page end.",
+        ">=3 distinct proof elements (testimonial w/ name+role, metric with source, logo row, or case reference) within the first 2 scroll-depths.",
+        "FAQ or objection block addresses the top 3 objections listed in offer.yaml, each with a concrete answer.",
+        "Form fields <=5 unless offer.yaml justifies more; every field labeled; no placeholder-only labels.",
+        "Page weight <=1.5MB total, LCP element renders <=2.5s on throttled profile, zero render-blocking third-party scripts without defer/async.",
+        "Viewport 390x844 screenshot shows no horizontal overflow and CTA visible without scrolling on load.",
+        "Contrast >=4.5:1 on body text, all images alt-tagged, form errors announced, focus order linear.",
+        "Declared events (view, cta_click, form_submit) fire with correct names in a headless run.",
+        "Title, meta description, og:image, and canonical tag present and non-duplicated.",
+        "HTML, offer, perf and event proofs hashed into sealed packet."
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hB-03-landing-page-session.yaml",
+        "final_rule": [
+          "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {
+            "CG-01": "halt",
+            "CG-02": "halt",
+            "CG-03": "halt",
+            "CG-04": "degrade",
+            "CG-05": "degrade",
+            "CG-06": "halt",
+            "CG-07": "degrade",
+            "CG-08": "halt",
+            "CG-09": "halt",
+            "CG-10": "halt",
+            "CG-11": "degrade",
+            "CG-12": "halt"
+          },
+          "prose": [
+            "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
+            "degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier failure blocks 'clean ship' status \u2014 the Definition of Done must record the waiver explicitly.",
+            "stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish, send, deploy) may follow a stop-tier failure without human Gate-D approval."
+          ]
+        },
+        "gates_without_proof": [
+          "IG-01",
+          "IG-02",
+          "IG-03",
+          "IG-04"
+        ]
+      }
+    }
+  ]
+}

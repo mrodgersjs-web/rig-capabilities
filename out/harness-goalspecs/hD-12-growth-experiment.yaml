@@ -4,14 +4,14 @@
       "id": "GL-HD-12-GROWTH-EXPERIMENT",
       "name": "Growth Experiment Goal Harness",
       "description": "Growth Experiment Goal Harness [gtm-growth-experiment] \u2014 compiled from capabilities/harnesses/hD-12-growth-experiment.yaml",
-      "anchor": "LL1-D1-A1-I",
+      "anchor": "L1-D1-A1-I",
       "bms_mode": "A1",
       "gate": "Pre-registered hypothesis, sizing, guardrails, variant config, and tracking proof all hashed in proofpacket.json",
       "gates": [
         {
           "id": "0.1",
           "category": "Identity Lock",
-          "name": "0.1 Experiment slot declared: which growth loop or funnel stage ",
+          "name": "0.1 Experiment slot declared: which growth loop or funnel stage",
           "description": "Experiment slot declared: which growth loop or funnel stage this experiment targets",
           "command": "artifacts/experiments/<run>/slot.md with loop_id and funnel_stage fields non-empty",
           "failure_tier": "halt",
@@ -221,7 +221,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times; a post-hoc decision-rule change detected in any run triggers harness-wide discipline review"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -232,8 +235,9 @@
         "Identity closure: coordinate, verdict (designed | live | decided), next safe action in session log"
       ],
       "failure_states": [
-        "stop gate(s) 3.2: halt session; human approval required before continuing",
-        "halt gate(s) 1.1, 1.3, 2.1, 2.2, 2.3, 2.4, 3.1, 3.3, 3.4: no progress without gate evidence"
+        "stop gate(s) 3.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.3, 2.1, 2.2, 2.3, 2.4, 3.1, 3.3, 3.4: no progress without gate evidence",
+        "degrade gate(s) 1.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Experiment slot declared: which growth loop or funnel stage this experiment targets",
@@ -282,8 +286,10 @@
           "stop": [
             "3.2"
           ],
-          "notes": ""
-        }
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": []
       }
     }
   ]

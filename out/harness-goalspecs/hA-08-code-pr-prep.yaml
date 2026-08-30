@@ -4,7 +4,7 @@
       "id": "GL-HA-08-CODE-PR-PREP",
       "name": "PR Preparation Session Goal Harness",
       "description": "PR Preparation Session Goal Harness [code-pr-prep-session] \u2014 compiled from capabilities/harnesses/hA-08-code-pr-prep.yaml",
-      "anchor": "LL2-D1-A1-I",
+      "anchor": "L2-D1-A1-I",
       "bms_mode": "A1",
       "gate": "All gates passed or degraded-with-log; zero unresolved halt gates",
       "gates": [
@@ -99,7 +99,7 @@
         {
           "id": "2.2",
           "category": "Self-Review",
-          "name": "2.2 Tests and verification evidence attached: suite, typecheck, ",
+          "name": "2.2 Tests and verification evidence attached: suite, typecheck,",
           "description": "Tests and verification evidence attached: suite, typecheck, lint run on the exact HEAD to be pushed (not an older tree)",
           "command": "Three exit codes + HEAD SHA in .rig/pr/verify.txt; SHA matches git rev-parse HEAD at push time",
           "failure_tier": "halt",
@@ -143,7 +143,7 @@
         {
           "id": "3.3",
           "category": "Description Pack",
-          "name": "3.3 Migration/rollout notes when applicable: DB migrations, env ",
+          "name": "3.3 Migration/rollout notes when applicable: DB migrations, env",
           "description": "Migration/rollout notes when applicable: DB migrations, env var changes, and config changes each get a rollout + rollback line",
           "command": "DESCRIPTION.md 'Rollout' section present when the diff touches migrations/, .env.example, or config; otherwise explicitly 'N/A \u2014 no ops surface'",
           "failure_tier": "halt",
@@ -165,7 +165,7 @@
         {
           "id": "4.2",
           "category": "Closure",
-          "name": "4.2 Improvement entry written: one thing that would have caught ",
+          "name": "4.2 Improvement entry written: one thing that would have caught",
           "description": "Improvement entry written: one thing that would have caught an issue earlier (hook, template, check) or one harness gap",
           "command": "Appended line to ~/.hermes/jake/improvements.log tagged hA-08-code-pr-prep",
           "failure_tier": "halt",
@@ -216,7 +216,10 @@
             "log_path": "~/.hermes/jake/improvements.log",
             "pattern_cadence": 5,
             "update_trigger": "same gate fails 3+ times \u2192 promote to a pre-push hook or PR template field"
-          }
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
         }
       },
       "success_conditions": [
@@ -228,8 +231,9 @@
         "Identity closure: coordinate, PR-readiness verdict, next safe action stated"
       ],
       "failure_states": [
-        "the push itself is an outward action \u2014 execute only on explicit human instruction; everything up to push is in-scope",
-        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.3, 4.1, 4.2: no progress without gate evidence"
+        "notes: the push itself is an outward action \u2014 execute only on explicit human instruction; everything up to push is in-scope",
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.3, 4.1, 4.2: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.3, 3.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
         "Startup phrase spoken and the PR pinned to branch name + base branch + linked issue/ticket ID",
@@ -278,8 +282,12 @@
             "3.2"
           ],
           "stop": [],
-          "notes": "the push itself is an outward action \u2014 execute only on explicit human instruction; everything up to push is in-scope"
-        }
+          "gate_mapping": {},
+          "prose": [
+            "notes: the push itself is an outward action \u2014 execute only on explicit human instruction; everything up to push is in-scope"
+          ]
+        },
+        "gates_without_proof": []
       }
     }
   ]

@@ -1,0 +1,319 @@
+{
+  "goals": [
+    {
+      "id": "GL-HC-10-BRAND-IDENTITY",
+      "name": "Brand Identity Goal Harness",
+      "description": "Brand Identity Goal Harness [brand-identity-session] \u2014 compiled from capabilities/harnesses/hC-10-brand-identity.yaml",
+      "anchor": "L4-D2-A2-I",
+      "bms_mode": "A2",
+      "gate": "All 12 capability gates passed with artifacts under artifacts/brand/<slug>/",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and session type declared before any w",
+          "description": "Startup phrase spoken and session type declared before any work begins",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 RIG operating procedures loaded and declared mandatory for t",
+          "description": "RIG operating procedures loaded and declared mandatory for this session",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate stated verbatim: L5-D3-A3",
+          "description": "RIG coordinate stated verbatim: L5-D3-A3",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple declared verbatim: H_brand_identity(identity,",
+          "description": "Harness tuple declared verbatim: H_brand_identity(identity, gates, dod, failure_protocol, self_improvement)",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 Goal-card for the session written to artifacts/<session>/goa",
+          "description": "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Platform & Positioning",
+          "name": "1.1 Brand platform documented: mission, values, personality slid",
+          "description": "Brand platform documented: mission, values, personality sliders, and anti-traits (what the brand never does)",
+          "command": "artifacts/brand/<slug>/platform.md with all four sections; anti-traits list non-empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Platform & Positioning",
+          "name": "1.2 Competitive visual audit: 10 competitors grid-captured and p",
+          "description": "Competitive visual audit: 10 competitors grid-captured and pattern-mapped to find the open visual lane",
+          "command": "artifacts/brand/<slug>/competitive/ with 10 captures + patterns.md naming the claimed differentiation lane",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Platform & Positioning",
+          "name": "1.3 3-second sortability test: brand artifacts distinguishable f",
+          "description": "3-second sortability test: brand artifacts distinguishable from the competitive set at thumbnail size",
+          "command": "sortability-test note: reviewer, method (thumbnail grid shuffle), result with misidentification count",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Identity System",
+          "name": "2.1 Logo usage rules specified: clearspace formula, minimum size",
+          "description": "Logo usage rules specified: clearspace formula, minimum sizes (px and print), forbidden treatments",
+          "command": "logo-rules section in artifacts/brand/<slug>/guidelines.md with clearspace diagram + misuse gallery",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Identity System",
+          "name": "2.2 Color system role-assigned: primary/secondary/accent/semanti",
+          "description": "Color system role-assigned: primary/secondary/accent/semantic colors with tested foreground-background pairs",
+          "command": "color table with role + hex + token name; pair-contrast results all >= 4.5:1 for text pairs (script output attached)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Identity System",
+          "name": "2.3 Type system complete: primary + secondary faces, full scale,",
+          "description": "Type system complete: primary + secondary faces, full scale, and licensed fallback stack for web/email/system",
+          "command": "type section in guidelines.md: scale table + fallback stacks + license file paths under assets/fonts/",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.4",
+          "category": "Identity System",
+          "name": "2.4 Voice and tone table: 4+ dimensions with do/don't example pa",
+          "description": "Voice and tone table: 4+ dimensions with do/don't example pairs drawn from real brand surfaces",
+          "command": "voice table in guidelines.md; each dimension has a quoted do-example and don't-example",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.5",
+          "category": "Identity System",
+          "name": "2.5 Imagery/art-direction style guide: subject matter, treatment",
+          "description": "Imagery/art-direction style guide: subject matter, treatment, color grading, and banned clich\u00e9s",
+          "command": "imagery section with 3 on-style reference images (local paths) and an explicit banned-list",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Operationalization",
+          "name": "3.1 Asset inventory with naming convention: every logo/color/typ",
+          "description": "Asset inventory with naming convention: every logo/color/type asset versioned and locatable",
+          "command": "artifacts/brand/<slug>/asset-manifest.yaml: path + sha256 + variant tags per asset; naming regex stated and conforming",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Operationalization",
+          "name": "3.2 Brand tokens exported to the canonical token source (tokens/",
+          "description": "Brand tokens exported to the canonical token source (tokens/tokens.json) without duplicating existing keys",
+          "command": "`git diff tokens/tokens.json` shows brand.* tier additions; `node tokens/validate.mjs` exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Operationalization",
+          "name": "3.3 Brand guardian (Theo) veto review completed with verdict rec",
+          "description": "Brand guardian (Theo) veto review completed with verdict recorded",
+          "command": "artifacts/brand/<slug>/theo-verdict.md with pass/veto + specific revision notes if vetoed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Operationalization",
+          "name": "3.4 Pre-publish brand checklist produced for downstream artifact",
+          "description": "Pre-publish brand checklist produced for downstream artifact creators",
+          "command": "checklist artifact with the 6 scorecard dimensions each mapped to a verifiable check",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Brand identity mode: sortable in 3 seconds, consistent in 3 years, veto authority respected.",
+        "harness_tuple": "H_brand_identity_session(identity, gates, dod, failure_protocol, self_improvement)",
+        "bms_bias": "A2-A3 preferred for creative divergence; A1 for token export; A4 only with approval",
+        "meta": {
+          "harness_id": "hC-10-brand-identity-session",
+          "session_type": "brand-identity-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-FS",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A2",
+              "A3"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same gate fails 3+ times across sessions"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All 12 capability gates passed with artifacts under artifacts/brand/<slug>/",
+        "Primary objective achieved: operational brand system \u2014 guidelines + tokens + asset manifest, not just moodboards",
+        "Theo verdict on file; token export validates clean",
+        "One improvement entry appended to ~/.hermes/jake/improvements.log",
+        "Identity closure: coordinate, verdict, and next safe action stated"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.2, 2.1, 2.2, 3.1, 3.2, 3.3: no progress without gate evidence",
+        "degrade gate(s) 1.3, 2.3, 2.4, 2.5, 3.4: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and session type declared before any work begins",
+        "RIG operating procedures loaded and declared mandatory for this session",
+        "RIG coordinate stated verbatim: L5-D3-A3",
+        "Harness tuple declared verbatim: H_brand_identity(identity, gates, dod, failure_protocol, self_improvement)",
+        "Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test",
+        "Brand platform documented: mission, values, personality sliders, and anti-traits (what the brand never does)",
+        "Competitive visual audit: 10 competitors grid-captured and pattern-mapped to find the open visual lane",
+        "3-second sortability test: brand artifacts distinguishable from the competitive set at thumbnail size",
+        "Logo usage rules specified: clearspace formula, minimum sizes (px and print), forbidden treatments",
+        "Color system role-assigned: primary/secondary/accent/semantic colors with tested foreground-background pairs",
+        "Type system complete: primary + secondary faces, full scale, and licensed fallback stack for web/email/system",
+        "Voice and tone table: 4+ dimensions with do/don't example pairs drawn from real brand surfaces",
+        "Imagery/art-direction style guide: subject matter, treatment, color grading, and banned clich\u00e9s",
+        "Asset inventory with naming convention: every logo/color/type asset versioned and locatable",
+        "Brand tokens exported to the canonical token source (tokens/tokens.json) without duplicating existing keys",
+        "Brand guardian (Theo) veto review completed with verdict recorded",
+        "Pre-publish brand checklist produced for downstream artifact creators"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [],
+      "_meta": {
+        "source": "capabilities/harnesses/hC-10-brand-identity.yaml",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "No improvement entry, no session complete.",
+          "Outward action (publish, send, deploy) requires Gate-D approval \u2014 v0 is local-only.",
+          "Every brand-identity-session session leaves the system stronger than it found it."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "2.1",
+            "2.2",
+            "3.1",
+            "3.2",
+            "3.3"
+          ],
+          "degrade": [
+            "1.3",
+            "2.3",
+            "2.4",
+            "2.5",
+            "3.4"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2",
+          "0.3",
+          "0.4",
+          "0.5"
+        ]
+      }
+    }
+  ]
+}
