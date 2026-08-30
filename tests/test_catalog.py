@@ -159,5 +159,73 @@ class ProtocolTests(unittest.TestCase):
             self.assertFalse(by_id[4]["result"]["isError"])
 
 
+
+
+
+
+class LiveTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_hook_wired_vs_dormant(self):
+        from rig_capabilities.live import hook_live
+        asset = {"id": "guard.sh", "kind": "hook", "source": "canonical"}
+        wired = hook_live(asset, "bash ~/.claude/hooks/guard.sh --mode x")
+        self.assertEqual("wired", wired["state"])
+        self.assertTrue(wired["live"])
+        self.assertEqual("dormant", hook_live(asset, "echo nothing")["state"])
+
+    def test_installed_in_roots(self):
+        from rig_capabilities.live import installed_in
+        asset = {"id": "demo-skill", "kind": "skill"}
+        roots = {"skill": {"claude": str(self.tmp / "claude" / "skills")}}
+        self.assertEqual("dormant", installed_in(asset, roots)["state"])
+        d = self.tmp / "claude" / "skills" / "demo-skill"
+        d.mkdir(parents=True)
+        (d / "SKILL.md").write_text("---\nname: demo-skill\n---\nbody here\n")
+        st = installed_in(asset, roots)
+        self.assertEqual("wired", st["state"])
+        self.assertEqual(["claude"], st["roots"])
+
+    def test_cli_presence(self):
+        from rig_capabilities.live import cli_live
+        self.assertEqual("wired", cli_live({"id": "sh"})["state"])
+        self.assertEqual("dormant", cli_live({"id": "rig-nope-xyzzy-9977"})["state"])
+
+    def test_service_down_then_wired(self):
+        import socket
+        from rig_capabilities.live import service_state
+        svc = {"id": "fake", "ports": [49717], "owner_regex": r"python|node",
+               "finger": None}
+        self.assertEqual("down", service_state(svc)["state"])
+        srv = socket.socket()
+        srv.bind(("127.0.0.1", 0))
+        srv.listen(1)
+        port = srv.getsockname()[1]
+        try:
+            svc2 = dict(svc, ports=[port])
+            st = service_state(svc2)
+            self.assertIn(st["state"], ("wired", "hijacked"))
+            self.assertEqual("fake", st["id"])
+        finally:
+            srv.close()
+    def test_live_status_aggregates_canonical(self):
+        from rig_capabilities.live import live_status
+        rep = live_status(self.repo, services=False)
+        canon = [a for a in self.repo.load_index()["assets"]
+                 if a["source"] == "canonical"]
+        self.assertEqual(len(canon), rep["canonical_probed"])
+        self.assertTrue(rep["assets"])
+        for r in rep["assets"]:
+            self.assertIn(r["state"], ("wired", "dormant", "absent"))
+        one = live_status(self.repo, id="guard.sh", services=False)
+        self.assertEqual("guard.sh", one["summary"]["id"])
+
+
 if __name__ == "__main__":
     unittest.main()

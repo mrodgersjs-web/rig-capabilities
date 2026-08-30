@@ -248,3 +248,25 @@ registered path is `reindex` instead. Search then ranks `rig-office-docs`
 skill #1 (score 188) `[canonical]`. Install:
 `install rig-office-docs --harness claude` → `{"status":"installed",
 "target":"/Users/rig128gb/.claude/skills/rig-office-docs","sha":"6ac2c741d0f8"}`.
+
+> **Update:** `add()` self-path self-destruction is fixed (commit `4151dbf`):
+> an already-canonical source short-circuits to re-index with status
+> `registered`; regression test in suite. The paragraph above describes the
+> pre-fix behavior that destroyed the first copy.
+
+## Live-state probe shipped (finding #4 closed)
+`capabilities_live_status` MCP tool + `./bin/rig-capabilities live` — binds
+canonical entries to runtime evidence: hooks registered in live settings.json,
+location-loaded kinds present in install roots, CLIs on PATH, named service
+ports bound AND identity-matched (`owner_regex` OR HTTP fingerprint).
+States: wired | dormant | absent | down | hijacked. Suite 14/14.
+**First-run findings (2026-08-30):**
+1. `service/langfuse = hijacked (owner buzz-rela on :3000)` — **Langfuse is
+   NOT deployed anywhere** (no process, no container, no compose). The scout
+   claim "Langfuse v2 live at :3000" was disk-vs-live drift; this plan's
+   "upgrade Langfuse" item is VOID. Standing up clickhouse/minio/redis is a
+   Mike infra decision, not a silent provision.
+2. `goal-loop-startup.sh` = dormant (on disk, not in any settings.json group).
+3. temporal :7233 wired (native binary), prefect :4200 wired (workers live);
+   :8080 is an ssh tunnel — the kestra MCP reaches Kestra through it; no local
+   java process owns it.

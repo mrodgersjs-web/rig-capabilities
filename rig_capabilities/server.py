@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 from .catalog import KINDS, Repo
+from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
@@ -119,6 +120,26 @@ TOOLS = [
                         "manual additions). Returns new counts."),
         "inputSchema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "capabilities_live_status",
+        "description": (
+            "Runtime evidence for canonical capabilities and named infra "
+            "services — the answer to 'is it actually wired/running', not "
+            "'does a file exist'. Hooks: registered in live settings.json? "
+            "Skills/agents/harnesses: installed into a live harness root? "
+            "Commands: on PATH? Services: port bound AND identity-matched "
+            "(port open but owned by a different process reports 'hijacked'). "
+            "States: wired | dormant | absent | down | hijacked | unknown. "
+            "Call with no args for the fleet report, or pass an id for one asset."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string", "description": "capability id (omit for fleet report)"},
+                "services": {"type": "boolean", "description": "include infra port probes (default true)"},
+            },
+        },
+    },
 ]
 
 
@@ -180,6 +201,10 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         doc = repo.build_index()
         return {"generated_at": doc["generated_at"], "total": doc["count"]}
 
+    def live(args: dict):
+        return live_status(repo, id=args.get("id"),
+                           services=bool(args.get("services", True)))
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -188,5 +213,6 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capability_add": add,
         "capabilities_stats": stats,
         "capabilities_reindex": reindex,
+        "capabilities_live_status": live,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

@@ -9,7 +9,9 @@ Commands:
   get <id>                                print metadata + content head
   add <id> --kind K --path P [--overwrite]   canonicalize an asset into the repo
   install <id> --harness H [--force]      copy canonical asset into a harness root
-  wire [--apply|--verify]                 wire the MCP server into all harnesses
+  live [<id>] [--no-services]             runtime wiring: hooks registered,
+                                          skills installed, CLIs on PATH,
+                                          service ports bound + identity-matched
 """
 from __future__ import annotations
 
@@ -63,6 +65,10 @@ def main() -> int:
     p.add_argument("--apply", action="store_true")
     p.add_argument("--verify", action="store_true")
 
+    p = sub.add_parser("live")
+    p.add_argument("id", nargs="?")
+    p.add_argument("--no-services", action="store_true")
+
     args = ap.parse_args()
 
     if args.cmd == "wire":
@@ -80,6 +86,26 @@ def main() -> int:
     elif args.cmd == "reindex":
         doc = repo.build_index()
         print(f"indexed {doc['count']} capabilities -> {repo.index_path}")
+    elif args.cmd == "live":
+        from rig_capabilities.live import live_status
+        rep = live_status(repo, id=args.id, services=not args.no_services)
+        if args.id:
+            s = rep.get("summary", {})
+            print(json.dumps({"id": rep["assets"][0]["id"] if rep["assets"] else args.id, **s,
+                              "services": rep.get("services")}, indent=1))
+        else:
+            by = {}
+            for r in rep["assets"]:
+                by.setdefault(f"{r['kind']}/{r['state']}", []).append(r["id"])
+            for k in sorted(by):
+                print(f"{k:<16} x{len(by[k])}")
+                if k != "skill/wired":
+                    for i in by[k][:12]:
+                        print(f"    {i}")
+                    if len(by[k]) > 12:
+                        print(f"    ... +{len(by[k]) - 12} more")
+            for s in rep.get("services", []):
+                print(f"service/{s['id']:<9} {s['state']:<9} {s.get('owner', '')}")
     elif args.cmd == "search":
         rows = repo.search(args.query, kind=args.kind, limit=args.limit)
         for r in rows:
