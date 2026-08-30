@@ -5,6 +5,10 @@ hooks, goal harnesses, loops, and commands** — served to every harness
 (Claude Code, Codex, OMP, Hermes, Prime Agent) over one stdlib-only MCP
 server, and managed from one CLI.
 
+Quick health: `./bin/rig-capabilities registry status --fetch` reports every
+registered repo's GitHub home, visibility, last push, and origin match
+against `~/Developer/rig-intelligence/registry/workstation-repositories.json`.
+
 ## Why
 
 The estate had 1,700+ Claude skills, 1,400+ Codex skills, 2,200+ Hermes

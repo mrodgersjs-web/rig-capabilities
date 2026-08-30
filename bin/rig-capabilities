@@ -19,10 +19,8 @@ Commands:
   pack "<intent>" [--budget N] [--max-nodes N] [--min-trust F] [--acl a,b]
                                           context fabric -> provenance-stamped
                                           runtime context pack (markdown)
-  graph <id> [--depth N]                  adjacency expansion
-  concepts <concept>                      concept-index lookup
-  okf-check                               OKF metadata completeness report
   rate <pack-id> useful|partial|wasted [note]
+  registry status [--id ID] [--fetch]   workstation-repo registry health
 """
 from __future__ import annotations
 
@@ -114,6 +112,12 @@ def main() -> int:
     p.add_argument("pack_id")
     p.add_argument("verdict", choices=["useful", "partial", "wasted"])
     p.add_argument("note", nargs="?", default="")
+
+    sub_reg = sub.add_parser("registry")
+    reg_sub = sub_reg.add_subparsers(dest="reg_cmd", required=True)
+    p = reg_sub.add_parser("status")
+    p.add_argument("--id")
+    p.add_argument("--fetch", action="store_true")
 
     args = ap.parse_args()
 
@@ -217,9 +221,13 @@ def main() -> int:
                            max_nodes=args.max_nodes, min_trust=args.min_trust,
                            requester_acl=args.acl.split(",") if args.acl else None)
         print(rep["markdown"])
-        print(f"-- tiers={rep['tiers']} lanes={rep['lanes']} "
-              f"~{rep['estimated_tokens']}tok artifact={rep['artifact']}",
-              file=sys.stderr)
+    elif args.cmd == "rate":
+        from rig_capabilities.fabric import rate
+        print(json.dumps(rate(repo, args.pack_id, args.verdict, args.note)))
+    elif args.cmd == "registry" and args.reg_cmd == "status":
+        from rig_capabilities.registry import status as reg_status
+        rep = reg_status(repo_filter=args.id, fetch=args.fetch)
+        print(json.dumps(rep, indent=1))
     elif args.cmd == "graph":
         from rig_capabilities.fabric import expand
         print(json.dumps(expand(repo, [args.id], depth=args.depth), indent=1))
@@ -230,9 +238,6 @@ def main() -> int:
     elif args.cmd == "okf-check":
         from rig_capabilities.okf import check
         print(json.dumps(check(repo), indent=1))
-    elif args.cmd == "rate":
-        from rig_capabilities.fabric import rate
-        print(json.dumps(rate(repo, args.pack_id, args.verdict, args.note)))
     return 0
 
 

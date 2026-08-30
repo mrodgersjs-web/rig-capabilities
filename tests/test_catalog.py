@@ -376,6 +376,27 @@ class FabricTests(unittest.TestCase):
         build_concepts(self.repo)
         self.assertIn("threat-model", lookup_concept(self.repo, "threat"))
 
+    def test_registry_status_handles_missing(self):
+        from rig_capabilities.registry import status as reg_status
+        rep = reg_status(repo_filter="nonexistent-repo-xyz",
+                         path=str(Path(self._tmp.name) / "no-such-registry.json"))
+
+    def test_registry_status_one_round_trip(self):
+        import json
+        from rig_capabilities.registry import (load_registry, status_one)
+        path = Path(self._tmp.name) / "reg.json"
+        path.write_text(json.dumps({"repositories": [{
+            "id": "demo", "github": "octocat/Hello-World",
+            "local_path": "/nonexistent/path",
+            "expected_origin": "https://github.com/octocat/Hello-World.git",
+            "disposition": "TEST"}]}))
+        rows = load_registry(path)
+        self.assertEqual(1, len(rows))
+        rec = status_one(rows[0], fetch=False)
+        self.assertEqual("demo", rec["id"])
+        self.assertEqual("octocat/Hello-World", rec["github"])
+        self.assertIsNone(rec.get("local_path"))
+        self.assertFalse(rec["live"])
 
 if __name__ == "__main__":
     unittest.main()
