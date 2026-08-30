@@ -3,6 +3,11 @@ name: rig-office-docs
 description: Create, read, and edit Office documents (docx, pptx, xlsx) and PDFs (create via reportlab, extract via pypdf) using the RIG office venv. Use when asked to generate or modify Word, PowerPoint, Excel, or PDF artifacts.
 license: MIT
 tags: [office, docx, pptx, xlsx, pdf, documents, reports, python]
+owner: rig-intelligence
+domain: Document production
+status: Stable
+verified_by: jake
+verified_on: 2026-08-30
 ---
 
 # rig-office-docs

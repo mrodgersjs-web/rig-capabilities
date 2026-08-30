@@ -12,15 +12,22 @@ Commands:
   live [<id>] [--no-services]             runtime wiring: hooks registered,
                                           skills installed, CLIs on PATH,
                                           service ports bound + identity-matched
-  tree [--out PATH]                         rebuild tree/<outcome>/<kind>/<id>
-  route <query> [--per N]                   intent -> outcome lanes + top assets
-  outcomes                                  counts per outcome lane
+  tree [--out PATH]                       rebuild tree/<outcome>/<kind>/<id>
+  route <query> [--per N]                 intent -> outcome lanes + top assets
+  outcomes                                counts per outcome lane
+  fabric-build                            build graph + concepts + embeddings cache
+  pack "<intent>" [--budget N] [--max-nodes N] [--min-trust F] [--acl a,b]
+                                          context fabric -> provenance-stamped
+                                          runtime context pack (markdown)
+  graph <id> [--depth N]                  adjacency expansion
+  concepts <concept>                      concept-index lookup
+  okf-check                               OKF metadata completeness report
+  rate <pack-id> useful|partial|wasted [note]
 """
 from __future__ import annotations
 
 import argparse
 import json
-import os
 import signal
 import subprocess
 import sys
@@ -85,6 +92,29 @@ def main() -> int:
 
     sub.add_parser("outcomes")
 
+    sub.add_parser("fabric-build")
+    sub.add_parser("okf-check")
+
+    p = sub.add_parser("pack")
+    p.add_argument("intent")
+    p.add_argument("--budget", type=int, default=1500)
+    p.add_argument("--max-nodes", dest="max_nodes", type=int, default=12)
+    p.add_argument("--min-trust", dest="min_trust", type=float, default=0.5)
+    p.add_argument("--acl")
+
+    p = sub.add_parser("graph")
+    p.add_argument("id")
+    p.add_argument("--depth", type=int, default=1)
+
+    p = sub.add_parser("concepts")
+    p.add_argument("concept")
+    p.add_argument("--limit", type=int, default=20)
+
+    p = sub.add_parser("rate")
+    p.add_argument("pack_id")
+    p.add_argument("verdict", choices=["useful", "partial", "wasted"])
+    p.add_argument("note", nargs="?", default="")
+
     args = ap.parse_args()
 
     if args.cmd == "wire":
@@ -107,8 +137,8 @@ def main() -> int:
         rep = live_status(repo, id=args.id, services=not args.no_services)
         if args.id:
             s = rep.get("summary", {})
-            print(json.dumps({"id": rep["assets"][0]["id"] if rep["assets"] else args.id, **s,
-                              "services": rep.get("services")}, indent=1))
+            print(json.dumps({"id": rep["assets"][0]["id"] if rep["assets"] else args.id,
+                              **s, "services": rep.get("services")}, indent=1))
         else:
             by = {}
             for r in rep["assets"]:
@@ -171,6 +201,38 @@ def main() -> int:
         counts = outcome_counts(dedupe(repo.load_index()["assets"]))
         for o, c in counts.items():
             print(f"{o:<20} {c['total']:>5}  {c['kinds']}")
+    elif args.cmd == "fabric-build":
+        from rig_capabilities.fabric import (build_concepts, build_embeddings,
+                                             build_graph)
+        print("graph:", build_graph(repo))
+        print("concepts:", build_concepts(repo))
+
+        def prog(d, s, f):
+            print(f"  embedded {d} (cached {s}, failed {f})", flush=True)
+
+        print("embeddings:", build_embeddings(repo, progress=prog))
+    elif args.cmd == "pack":
+        from rig_capabilities.fabric import context_pack
+        rep = context_pack(repo, args.intent, budget_tokens=args.budget,
+                           max_nodes=args.max_nodes, min_trust=args.min_trust,
+                           requester_acl=args.acl.split(",") if args.acl else None)
+        print(rep["markdown"])
+        print(f"-- tiers={rep['tiers']} lanes={rep['lanes']} "
+              f"~{rep['estimated_tokens']}tok artifact={rep['artifact']}",
+              file=sys.stderr)
+    elif args.cmd == "graph":
+        from rig_capabilities.fabric import expand
+        print(json.dumps(expand(repo, [args.id], depth=args.depth), indent=1))
+    elif args.cmd == "concepts":
+        from rig_capabilities.fabric import lookup_concept
+        rows = lookup_concept(repo, args.concept, limit=args.limit)
+        print("\n".join(rows) if rows else "no matches (run fabric-build)")
+    elif args.cmd == "okf-check":
+        from rig_capabilities.okf import check
+        print(json.dumps(check(repo), indent=1))
+    elif args.cmd == "rate":
+        from rig_capabilities.fabric import rate
+        print(json.dumps(rate(repo, args.pack_id, args.verdict, args.note)))
     return 0
 
 

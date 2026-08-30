@@ -15,6 +15,8 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+from .okf import meta as _okf_meta
+
 KINDS = ("skill", "agent", "hook", "harness", "loop", "command")
 KIND_DIR = {
     "skill": "skills",
@@ -100,9 +102,7 @@ def parse_frontmatter(text: str) -> dict:
             m = _FM_KEY.match(ln)
             if m:
                 key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
-                if key in ("name", "title", "description", "summary", "harness_name",
-                           "harness_id", "command", "tags"):
-                    out[key] = val
+                out.setdefault(key, val)   # fenced keys are structural (OKF reads them)
         return out
     # fallback: first plain key: value lines anywhere in the head (toml/json-ish)
     for ln in lines[:80]:
@@ -223,6 +223,7 @@ class Repo:
             "tags": _tags(fm.get("tags")),
             "sha": sha,
             "installable": True,
+            "okf": _okf_meta(fm, "canonical"),
         }
 
     def _assets_from_external(self, root: dict) -> list:
@@ -262,6 +263,7 @@ class Repo:
                 "tags": _tags(fm.get("tags")),
                 "sha": self._sha_file(m),
                 "installable": False,
+                "okf": _okf_meta(fm, "installed"),
             })
         return out
 

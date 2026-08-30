@@ -169,6 +169,55 @@ TOOLS = [
             "required": ["query"],
         },
     },
+    {
+        "name": "capabilities_context_pack",
+        "description": (
+            "CONTEXT FABRIC — the default entry point for any task that "
+            "needs ecosystem knowledge. Fuses BM25 + ollama nomic-embed "
+            "dense + outcome-lane routing + graph expansion into a "
+            "task-minimal, trust- and freshness-filtered context pack with "
+            "per-bundle provenance (source, path, sha, trust, freshness). "
+            "Assembles a runtime context graph and persists it under "
+            ".context/ for feedback (capability_rate_pack). Use instead of "
+            "raw search when the agent should not scavenge the filesystem."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "intent": {"type": "string", "description": "what the agent is about to do"},
+                "budget_tokens": {"type": "integer", "description": "max context tokens (default 1500)"},
+                "max_nodes": {"type": "integer", "description": "max capability nodes (default 12)"},
+                "min_trust": {"type": "number", "description": "okf trust floor 0..1 (default 0.5)"},
+            },
+            "required": ["intent"],
+        },
+    },
+    {
+        "name": "capabilities_graph",
+        "description": (
+            "Capability graph adjacency (declared relates_to + shared-token "
+            "edges) expanded to depth 1-2 from one id. Use to widen or "
+            "verify context around a specific asset."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "id": {"type": "string"},
+                "depth": {"type": "integer", "description": "1 or 2 (default 1)"},
+            },
+            "required": ["id"],
+        },
+    },
+    {
+        "name": "capabilities_concepts",
+        "description": "Concept index lookup: normalized tag/term -> capability ids.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"concept": {"type": "string"},
+                           "limit": {"type": "integer"}},
+            "required": ["concept"],
+        },
+    },
 ]
 
 
@@ -242,6 +291,24 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from .taxonomy import route as _route
         return _route(repo, str(args.get("query", "")),
                       per=int(args.get("per", 5)))
+    def context_pack(args: dict):
+        from .fabric import context_pack as _pack
+        return _pack(repo, str(args.get("intent", "")),
+                     budget_tokens=int(args.get("budget_tokens", 1500)),
+                     max_nodes=int(args.get("max_nodes", 12)),
+                     min_trust=float(args.get("min_trust", 0.5)),
+                     requester_acl=args.get("requester_acl"))
+
+    def graph(args: dict):
+        from .fabric import expand
+        return expand(repo, [str(args.get("id", ""))],
+                      depth=int(args.get("depth", 1)))
+
+    def concepts(args: dict):
+        from .fabric import lookup_concept
+        return {"concept": args.get("concept"),
+                "ids": lookup_concept(repo, str(args.get("concept", "")),
+                                      int(args.get("limit", 20)))}
 
     handlers = {
         "capabilities_search": search,
@@ -254,5 +321,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_live_status": live,
         "capabilities_outcomes": outcomes,
         "capabilities_route": route,
+        "capabilities_context_pack": context_pack,
+        "capabilities_graph": graph,
+        "capabilities_concepts": concepts,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

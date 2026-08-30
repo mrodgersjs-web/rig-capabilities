@@ -11,6 +11,11 @@ description: >-
   compiled language, use the semgrep skill; to parse SARIF that already exists rather than
   produce it, use the sarif-parsing skill.
 allowed-tools: Bash Read Write Edit Glob Grep AskUserQuestion TaskCreate TaskList TaskUpdate TaskGet
+owner: rig-intelligence
+domain: Static analysis
+status: Stable
+verified_by: jake
+verified_on: 2026-08-30
 ---
 
 # CodeQL Analysis

@@ -288,5 +288,94 @@ class TaxonomyTests(unittest.TestCase):
         self._tmp.cleanup()
 
 
+class FabricTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        td = Path(self._tmp.name)
+        self.repo = make_fixture(td)
+        c = self.repo.cap_root / "skills"
+        for sid, fm in (
+            ("threat-model", "description: threat modeling for APIs\n"
+                             "status: Stable\nowner: rig\ndomain: Security\n"
+                             "verified_on: 2026-08-01\n"),
+            ("dead-skill", "description: old withdrawn guidance on threat apis\n"
+                           "status: Deprecated\n"),
+            ("graph-a", "description: alpha node thing\nrelates_to: graph-b\n"),
+            ("graph-b", "description: beta node thing\n"),
+        ):
+            d = c / sid
+            d.mkdir(parents=True, exist_ok=True)
+            (d / "SKILL.md").write_text(f"---\nname: {sid}\n{fm}---\n# {sid}\n"
+                                        "body text long enough to pass the scanner\n")
+        self.repo.build_index()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_okf_trust_formula(self):
+        from datetime import date, timedelta
+        from rig_capabilities.okf import trust, freshness
+        today = date(2026, 8, 30)
+        fresh = date(2026, 8, 1)
+        self.assertEqual(1.0, trust("canonical", "Stable", fresh, today))
+        self.assertEqual(0.2, trust("canonical", "Deprecated", fresh, today))
+        self.assertEqual(0.3, trust("external", "Draft", None, today))
+        old = today - timedelta(days=400)
+        self.assertEqual(0.8, trust("canonical", "Stable", old, today))
+        self.assertEqual("Stale", freshness("Stable", old, today))
+        self.assertEqual("Deprecated", freshness("Deprecated", fresh, today))
+
+    def test_frontmatter_okf_fields_indexed(self):
+        a = [x for x in self.repo.load_index()["assets"]
+             if x["id"] == "threat-model"][0]
+        self.assertEqual("Stable", a["okf"]["status"])
+        self.assertEqual("Security", a["okf"]["domain"])
+        self.assertGreaterEqual(a["okf"]["trust"], 0.9)
+
+    def test_bm25_ranks_specific_first(self):
+        from rig_capabilities.fabric import Corpus
+        assets = self.repo.load_index()["assets"]
+        hits = Corpus(assets).bm25("threat modeling apis")
+        self.assertEqual("threat-model", hits[0][0]["id"])
+
+    def test_graph_declared_edge_symmetric_and_expand(self):
+        from rig_capabilities.fabric import build_graph, expand
+        stats = build_graph(self.repo)
+        self.assertGreaterEqual(stats["edges"], 1)
+        out = expand(self.repo, ["graph-a"], depth=1)
+        self.assertIn("graph-b", out.get("graph-a", []))
+        self.assertIn("graph-a", out.get("graph-b", []))
+
+    def test_pack_filters_deprecated_and_persists(self):
+        from rig_capabilities.fabric import context_pack
+        rep = context_pack(self.repo, "threat model this api",
+                           budget_tokens=400, max_nodes=5)
+        ids = [n["id"] for n in rep["nodes"]]
+        self.assertNotIn("dead-skill", ids)
+        self.assertIn("threat-model", ids)
+        self.assertFalse(rep["tiers"]["dense_ollama"])   # no cache => honest False
+        self.assertTrue(Path(rep["artifact"]).exists())
+        art = json.loads(Path(rep["artifact"]).read_text())
+        self.assertLessEqual(art["estimated_tokens"], 400)
+        for n in art["nodes"]:
+            self.assertIn("sha", n)
+
+    def test_rate_appends(self):
+        from rig_capabilities.fabric import context_pack, rate
+        rep = context_pack(self.repo, "threat model api")
+        rec = rate(self.repo, rep["id"], "useful")
+        self.assertEqual("useful", rec["verdict"])
+        lines = (Path(self.repo.root) / ".context" / "ratings.jsonl"
+                 ).read_text().splitlines()
+        self.assertEqual(1, len(lines))
+        with self.assertRaises(ValueError):
+            rate(self.repo, "pack-nope", "useful")
+
+    def test_concepts_lookup(self):
+        from rig_capabilities.fabric import build_concepts, lookup_concept
+        build_concepts(self.repo)
+        self.assertIn("threat-model", lookup_concept(self.repo, "threat"))
+
+
 if __name__ == "__main__":
     unittest.main()

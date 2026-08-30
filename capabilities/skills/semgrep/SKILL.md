@@ -12,6 +12,11 @@ description: >-
   static analysis. For the same scan without the approval gate, use the
   /static-analysis:semgrep-scan workflow.
 allowed-tools: Bash Read Glob AskUserQuestion TaskCreate TaskList TaskUpdate
+owner: rig-intelligence
+domain: Payments-adjacent static analysis
+status: Stable
+verified_by: jake
+verified_on: 2026-08-30
 ---
 
 # Semgrep Security Scan

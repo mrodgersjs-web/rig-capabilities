@@ -61,6 +61,15 @@ tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 | `capabilities_live_status` | runtime wiring: wired/dormant/absent/down/hijacked |
 | `capabilities_outcomes` | outcome-lane × kind counts over the whole estate |
 | `capabilities_route` | intent → ranked outcome lanes + top capabilities |
+| `capabilities_context_pack` | **context fabric** — BM25 + ollama dense + lanes + graph expansion → token-budgeted, trust/freshness-filtered context pack with per-bundle provenance; persisted under `.context/` |
+| `capabilities_graph` | capability-graph adjacency expansion from one id |
+| `capabilities_concepts` | concept index: normalized term → capability ids |
+
+CLI twins: `pack`, `graph`, `concepts`, `fabric-build`, `okf-check`, `rate`.
+Bundles carry OKF metadata (`owner/domain/status/verified_on/acl/relates_to`);
+trust and freshness are computed deterministically — see
+[docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md) for the layer map and the
+honest-degradation contract.
 
 Wire into all harnesses: `./install.sh` (dry-run) then `./install.sh --apply`;
 check with `./install.sh --verify`. Managed blocks sit between

@@ -6,6 +6,11 @@ description: >-
   alerts", or "process sarif output". Handles filtering, deduplication, format conversion, and
   CI/CD integration of SARIF data. Does NOT run scans — use the Semgrep or CodeQL skills for that.
 allowed-tools: Bash Read Glob Grep
+owner: rig-intelligence
+domain: Static analysis
+status: Stable
+verified_by: jake
+verified_on: 2026-08-30
 ---
 
 # SARIF Parsing Best Practices

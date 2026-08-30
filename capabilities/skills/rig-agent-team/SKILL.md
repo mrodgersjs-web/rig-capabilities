@@ -1,6 +1,11 @@
 ---
 name: rig-agent-team
 description: "Use when Hermes, Jake, PyCode/Pi, Claude Code, Codex, or a coding agent needs the RIG agent-team pattern: five-layer runtime (lattice routing, doctrine/context, contracts, deterministic guardrails, ProofPackets). Live dispatch surfaces: Orca worktrees/terminals, Hermes cron fleet, and mounted Temporal/Kestra/Prefect MCP tools."
+owner: rig-intelligence
+domain: Agent orchestration
+status: Stable
+verified_by: jake
+verified_on: 2026-08-30
 ---
 
 # RIG Agent Team Runtime
