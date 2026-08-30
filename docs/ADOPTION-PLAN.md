@@ -217,3 +217,34 @@ action without explicit Gate-D approval.
   (rm -rf root/home/system, mkfs, dd-to-device, force-push main, fork bomb;
   fail-open on internal error) + `guard-secret-write.sh` (AWS/GitHub/Slack/
   Stripe/Google/PEM credential patterns).
+
+## Doc-skills remediation
+
+Executed 2026-08-30. Compliance verdict (verified same day): the Anthropic
+proprietary `docx`/`pdf`/`xlsx`/`powerpoint`/`pptx` skills in the hermes and
+codex roots are **in breach** (no redistribution license). Action: quarantine
+via `mv` (content never read post-move), replace with clean-room MIT skill
+`rig-office-docs`.
+
+Moved (8 dirs) to `~/quarantine/anthropic-doc-skills/` — see its README:
+`~/.hermes/skills/{docx,pdf,xlsx,powerpoint,pptx}` → `hermes--{docx,pdf,xlsx,powerpoint,pptx}`;
+`~/.codex/skills/productivity/{docx,powerpoint,xlsx}` → `codex--{docx,powerpoint,xlsx}`.
+
+Replacement: `capabilities/skills/rig-office-docs/` (SKILL.md +
+`scripts/make_{docx,pptx,xlsx,pdf}.py`, JSON-spec driven, all invocations
+pinned to `.venvs/office` interpreter: python-docx 1.2.0 / python-pptx 1.0.2 /
+openpyxl 3.1.5 / reportlab 5.0.1 / pypdf 6.16.2).
+
+Smoke evidence (`/tmp/office-smoke/`, generated then reopened in venv python):
+- `smoke.docx` 36958 B → reopened: headings `['Smoke Report','Appendix']`, 1 table
+- `smoke.pptx` 34773 B → reopened: 3 slides, bullets `['first','second','nested']`, 1 table, notes intact
+- `smoke.xlsx` 5027 B → reopened: freeze `A2`, formula `=B2*2` at C2, number format `#,##0.00`, bold header
+- `smoke.pdf` 2372 B → pypdf: 2 pages, title meta `Smoke PDF`, HTML-escaped text and page-2 content verified
+
+Registration: `./bin/rig-capabilities add` is unusable when the source already
+lives at its canonical destination (its overwrite path `rmtree`s the dst, which
+is the src, then the copy ENOENTs — it destroyed the first authored copy); the
+registered path is `reindex` instead. Search then ranks `rig-office-docs`
+skill #1 (score 188) `[canonical]`. Install:
+`install rig-office-docs --harness claude` → `{"status":"installed",
+"target":"/Users/rig128gb/.claude/skills/rig-office-docs","sha":"6ac2c741d0f8"}`.
