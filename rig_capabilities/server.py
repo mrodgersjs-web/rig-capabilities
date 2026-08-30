@@ -140,6 +140,35 @@ TOOLS = [
             },
         },
     },
+    {
+        "name": "capabilities_outcomes",
+        "description": (
+            "Outcome lanes across the whole estate (security-review, "
+            "revenue-gtm, content-publishing, design-ux, media-production, "
+            "docs-knowledge, research-intel, data-analytics, infra-ops, "
+            "code-engineering, business-ops, agent-engineering, misc) with "
+            "per-kind counts. The browse map for the generated tree/ view."
+        ),
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_route",
+        "description": (
+            "Intent router: give a natural-language outcome ('cold email "
+            "outreach for dentists', 'add a failing test harness') and get "
+            "ranked outcome lanes each with the top matching capabilities "
+            "(id/kind/source). Use before search when the task is 'what do "
+            "I have for X?' rather than 'find the string X'."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "query": {"type": "string", "description": "the outcome you want"},
+                "per": {"type": "integer", "description": "capabilities per lane (default 5)"},
+            },
+            "required": ["query"],
+        },
+    },
 ]
 
 
@@ -205,6 +234,15 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return live_status(repo, id=args.get("id"),
                            services=bool(args.get("services", True)))
 
+    def outcomes(args: dict):
+        from .taxonomy import dedupe, outcome_counts
+        return {"lanes": outcome_counts(dedupe(repo.load_index()["assets"]))}
+
+    def route(args: dict):
+        from .taxonomy import route as _route
+        return _route(repo, str(args.get("query", "")),
+                      per=int(args.get("per", 5)))
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -214,5 +252,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_stats": stats,
         "capabilities_reindex": reindex,
         "capabilities_live_status": live,
+        "capabilities_outcomes": outcomes,
+        "capabilities_route": route,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

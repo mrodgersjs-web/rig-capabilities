@@ -227,5 +227,66 @@ class LiveTests(unittest.TestCase):
         self.assertEqual("guard.sh", one["summary"]["id"])
 
 
+class TaxonomyTests(unittest.TestCase):
+    def _a(self, id_, kind="skill", desc=""):
+        return {"id": id_, "kind": kind, "source": "canonical", "abs_path": "/",
+                "name": id_, "description": desc}
+
+    def test_precedence_order(self):
+        from rig_capabilities.taxonomy import classify
+        self.assertEqual("security-review", classify(self._a("semgrep-rule-creator")))
+        # 'email' must not outrank outreach tokens
+        self.assertEqual("revenue-gtm", classify(self._a("darius-cold-email")))
+        # code-review-session: code beats the agent 'session' token
+        self.assertEqual("code-engineering", classify(self._a("code-review-session")))
+        self.assertEqual("media-production", classify(self._a("hyperframes-cli")))
+        self.assertEqual("docs-knowledge", classify(self._a("rig-office-docs")))
+        # kind fallbacks + misc never crash
+        self.assertEqual("agent-engineering", classify(self._a("x", kind="hook")))
+        self.assertEqual("misc", classify(self._a("zzz-nomatch-xyz")))
+
+    def test_tree_build_idempotent_and_complete(self):
+        from rig_capabilities.taxonomy import build_tree, dedupe
+        with tempfile.TemporaryDirectory() as td:
+            repo = make_fixture(Path(td))
+            out = Path(td) / "view"
+            rep = build_tree(repo, out)
+            n = len(dedupe(repo.load_index()["assets"]))
+            self.assertEqual(n, rep["assets"])
+            links = list(out.rglob("*"))
+            self.assertTrue((out / "AGENT-INDEX.md").exists())
+            self.assertTrue(any(p.is_symlink() for p in links))
+            rep2 = build_tree(repo, out)  # rebuild via swap, no leftovers
+            self.assertEqual(rep["assets"], rep2["assets"])
+            self.assertFalse((Path(td) / "view.old").exists())
+            self.assertFalse((Path(td) / "view.new").exists())
+            for p in links:
+                if p.is_symlink() and not (Path(td) / "view.old").exists():
+                    self.assertTrue(p.resolve().exists() or p.exists(),
+                                    f"dangling link {p}")
+
+    def test_route_ranks_lane_first(self):
+        from rig_capabilities.taxonomy import route
+        rep = route(self.repo, "cold email outreach sequence")
+        self.assertEqual("revenue-gtm", rep["lanes"][0]["outcome"])
+        self.assertIn("cold-outreach-sequence",
+                      [c["id"] for c in rep["lanes"][0]["capabilities"]])
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        td = Path(self._tmp.name)
+        self.repo = make_fixture(td)
+        s = self.repo.cap_root / "skills" / "cold-outreach-sequence"
+        s.mkdir(parents=True, exist_ok=True)
+        (s / "SKILL.md").write_text(
+            "---\nname: cold-outreach-sequence\ndescription: multi-touch cold "
+            "email outreach sequences for outbound pipeline\n"
+            "tags: gtm\n---\n# cold\n")
+        self.repo.build_index()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+
 if __name__ == "__main__":
     unittest.main()

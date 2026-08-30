@@ -12,15 +12,22 @@ Commands:
   live [<id>] [--no-services]             runtime wiring: hooks registered,
                                           skills installed, CLIs on PATH,
                                           service ports bound + identity-matched
+  tree [--out PATH]                         rebuild tree/<outcome>/<kind>/<id>
+  route <query> [--per N]                   intent -> outcome lanes + top assets
+  outcomes                                  counts per outcome lane
 """
 from __future__ import annotations
 
 import argparse
 import json
 import os
+import signal
 import subprocess
 import sys
 from pathlib import Path
+
+if hasattr(signal, "SIGPIPE"):
+    signal.signal(signal.SIGPIPE, signal.SIG_DFL)  # `| head` exits quietly
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -68,6 +75,15 @@ def main() -> int:
     p = sub.add_parser("live")
     p.add_argument("id", nargs="?")
     p.add_argument("--no-services", action="store_true")
+
+    p = sub.add_parser("tree")
+    p.add_argument("--out")
+
+    p = sub.add_parser("route")
+    p.add_argument("query")
+    p.add_argument("--per", type=int, default=5)
+
+    sub.add_parser("outcomes")
 
     args = ap.parse_args()
 
@@ -139,6 +155,22 @@ def main() -> int:
         except ValueError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 1
+    elif args.cmd == "tree":
+        from rig_capabilities.taxonomy import build_tree
+        rep = build_tree(repo, Path(args.out) if args.out else None)
+        print(json.dumps(rep, indent=1))
+    elif args.cmd == "route":
+        from rig_capabilities.taxonomy import route
+        rep = route(repo, args.query, per=args.per)
+        for lane in rep["lanes"]:
+            print(f"== {lane['outcome']}  (score {lane['score']})")
+            for c in lane["capabilities"]:
+                print(f"   {c['kind']:<8} {c['id']:<46} {c['description'][:60]}")
+    elif args.cmd == "outcomes":
+        from rig_capabilities.taxonomy import dedupe, outcome_counts
+        counts = outcome_counts(dedupe(repo.load_index()["assets"]))
+        for o, c in counts.items():
+            print(f"{o:<20} {c['total']:>5}  {c['kinds']}")
     return 0
 
 

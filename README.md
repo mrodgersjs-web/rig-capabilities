@@ -37,12 +37,15 @@ capabilities/
   commands/<id>.md
 .index.json                 generated search index (gitignored; rebuild: reindex)
 .install.json               install ledger (committed)
-rig_capabilities/           package: catalog, MCP server, vendored stdio transport
-server.py                   MCP entrypoint (stdio JSON-RPC 2.0, stdlib only)
-bin/rig-capabilities        CLI: stats|reindex|search|list|get|add|install|wire
+rig_capabilities/           package: catalog, live probe, outcome taxonomy, MCP server
+__main__.py                 MCP entrypoint: python -m rig_capabilities (stdio JSON-RPC 2.0)
+bin/rig-capabilities        CLI: stats|reindex|search|list|get|add|install|wire|live|tree|route|outcomes
 wire/wire.py                multi-harness MCP wiring installer (managed markers)
 tests/                      stdlib unittest suite
 ```
+
+Outcome browse view: `tree/` (generated symlink farm, `./bin/rig-capabilities
+tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 
 ## MCP tools
 
@@ -55,6 +58,9 @@ tests/                      stdlib unittest suite
 | `capability_add` | canonicalize any file/dir into the repo |
 | `capabilities_stats` | counts by kind/source + ledger |
 | `capabilities_reindex` | force rescan |
+| `capabilities_live_status` | runtime wiring: wired/dormant/absent/down/hijacked |
+| `capabilities_outcomes` | outcome-lane × kind counts over the whole estate |
+| `capabilities_route` | intent → ranked outcome lanes + top capabilities |
 
 Wire into all harnesses: `./install.sh` (dry-run) then `./install.sh --apply`;
 check with `./install.sh --verify`. Managed blocks sit between
