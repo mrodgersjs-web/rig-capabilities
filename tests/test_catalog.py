@@ -839,5 +839,26 @@ class SkillUpgradesCommandTests(unittest.TestCase):
         self.assertTrue(res["target"].endswith("dual.md"))
 
 
+class IntelRootTests(unittest.TestCase):
+    def test_intel_markdown_indexed_recursively(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        intel = Path(tmp.name) / "intel" / "frontier"
+        intel.mkdir(parents=True, exist_ok=True)
+        (intel / "2026-08-31-topic.md").write_text(
+            "---\nname: research-topic\ndescription: a frontier research note\n---\n"
+            "# Research\nbody long enough to index\n")
+        cfg = json.loads(repo.config_path.read_text())
+        cfg["external_roots"].append({"label": "intel", "kind": "skill",
+                                      "path": str(Path(tmp.name) / "intel"),
+                                      "pattern": "**/*.md"})
+        repo.config_path.write_text(json.dumps(cfg))
+        doc = repo.build_index()
+        hits = [a for a in doc["assets"] if a["id"] == "2026-08-31-topic.md"]
+        self.assertEqual(1, len(hits))
+        self.assertEqual("intel", hits[0]["source"])
+
+
 if __name__ == "__main__":
     unittest.main()
