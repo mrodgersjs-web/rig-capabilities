@@ -1,13 +1,8 @@
----
-outcome: agent-engineering:
-done_when:
-  - file:capabilities/hooks/goal-loop-startup.sh
-  - hook is registered and fires on its trigger fixture
-great_example: examples/great/agent-engineering/goal-loop-startup.sh.md
-quality_floor: 0.6
----
-
 #!/bin/bash
+# outcome: agent-engineering:
+# done_when: file:capabilities/hooks/goal-loop-startup.sh || hook is registered and fires on its trigger fixture
+# great_example: examples/great/agent-engineering/goal-loop-startup.sh.md
+# quality_floor: 0.6
 # Goal Loop Autoload — runs at session start for every Claude Code session
 # Injects goal loop context into the session
 
@@ -38,3 +33,9 @@ cat << EOF
 ╚══════════════════════════════════════════════════════════╝
 
 EOF
+
+# rig-capabilities session boot pack (best-effort, silent, 5s cap)
+RIG_CAP_BOOT="$HOME/Developer/rig-capabilities/bin/rig-boot-pack"
+if [ -x "$RIG_CAP_BOOT" ]; then
+  ( command -v timeout >/dev/null 2>&1 && timeout 5 "$RIG_CAP_BOOT" || "$RIG_CAP_BOOT" ) >/dev/null 2>&1 &
+fi

@@ -542,8 +542,11 @@ _QUAL_KEYS = ("outcome", "great_example", "quality_floor")
 
 
 def _quality_block(text: str) -> dict:
-    """Extract quality-contract fields from a leading --- fence, incl. block lists."""
+    """Quality fields from a leading --- fence, or `# key: value` comments in a
+    shebang script (hooks). Block lists supported in both forms."""
     lines = text.splitlines()
+    if lines and lines[0].startswith("#!"):
+        return _quality_from_comments(lines)
     if not lines or lines[0].strip() != "---":
         return {}
     end = None
@@ -568,6 +571,31 @@ def _quality_block(text: str) -> dict:
                 j = i + 1
                 while j < len(fence) and re.match(r"^\s*-\s+", fence[j]):
                     items.append(re.sub(r"^\s*-\s+", "", fence[j]).strip().strip("\"'"))
+                    j += 1
+                out["done_when"] = items
+                i = j
+                continue
+            if key in _QUAL_KEYS:
+                out[key] = val
+        i += 1
+    return out
+
+
+def _quality_from_comments(lines: list) -> dict:
+    """Parse `# key: value` (+ `#   - item` block lists) from a script's head."""
+    out: dict = {}
+    i = 1  # skip shebang
+    limit = min(len(lines), 40)
+    while i < limit:
+        raw = lines[i]
+        m = re.match(r"^#\s*([A-Za-z0-9_\-]+)\s*:\s*(.*)$", raw)
+        if m:
+            key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
+            if key == "done_when":
+                items = [t.strip() for t in val.split("||") if t.strip()] if val else []
+                j = i + 1
+                while j < limit and re.match(r"^#\s*-\s+", lines[j]):
+                    items.append(re.sub(r"^#\s*-\s+", "", lines[j]).strip())
                     j += 1
                 out["done_when"] = items
                 i = j

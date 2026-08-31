@@ -944,5 +944,46 @@ class CoverageTests(unittest.TestCase):
             self.assertTrue(d["lanes"])
 
 
+class BootPackAndHookTests(unittest.TestCase):
+    def test_script_quality_in_comments(self):
+        from rig_capabilities.catalog import _quality_block
+        script = ("#!/bin/bash\n# outcome: agent-engineering: x\n"
+                  "# done_when: file:a || cmd:true\n# quality_floor: 0.6\n"
+                  "echo hi\n")
+        q = _quality_block(script)
+        self.assertEqual("agent-engineering: x", q["outcome"])
+        self.assertEqual(["file:a", "cmd:true"], q["done_when"])
+        self.assertEqual("0.6", q["quality_floor"])
+
+    def test_migrate_script_keeps_shebang_first(self):
+        from rig_capabilities.quality import migrate_frontmatter
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        p = Path(tmp.name) / "h.sh"
+        p.write_text("#!/bin/bash\necho hi\n")
+        migrate_frontmatter(p, {"outcome": "agent-engineering: y",
+                                "done_when": ["cmd:true"], "quality_floor": 0.6})
+        lines = p.read_text().splitlines()
+        self.assertTrue(lines[0].startswith("#!"))
+        self.assertIn("# outcome: agent-engineering: y", lines)
+
+    def test_canonical_hooks_shebang_first(self):
+        for f in (REPO_ROOT / "capabilities" / "hooks").glob("*.sh"):
+            first = f.read_text().splitlines()[0]
+            self.assertTrue(first.startswith("#!"), f"{f.name} shebang not first")
+
+    def test_boot_pack_writes_artifact(self):
+        import subprocess
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        env = dict(os.environ, RIG_CAP_REPO=str(repo.root), HARNESS_NAME="tester")
+        subprocess.run([sys.executable, str(REPO_ROOT / "bin" / "rig-boot-pack")],
+                       env=env, timeout=30, check=True)
+        out = repo.root / ".context" / "last-boot-pack.json"
+        self.assertTrue(out.exists())
+        self.assertEqual("tester", json.loads(out.read_text())["harness"])
+
+
 if __name__ == "__main__":
     unittest.main()

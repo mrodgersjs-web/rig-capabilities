@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "12.0.0"
+VERSION = "13.0.0"
 
 
 def default_repo() -> Repo:

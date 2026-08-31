@@ -1,13 +1,8 @@
----
-outcome: agent-engineering:
-done_when:
-  - file:capabilities/hooks/guard-dangerous-commands.sh
-  - hook is registered and fires on its trigger fixture
-great_example: examples/great/agent-engineering/guard-dangerous-commands.sh.md
-quality_floor: 0.6
----
-
 #!/bin/sh
+# outcome: agent-engineering:
+# done_when: file:capabilities/hooks/guard-dangerous-commands.sh || hook is registered and fires on its trigger fixture
+# great_example: examples/great/agent-engineering/guard-dangerous-commands.sh.md
+# quality_floor: 0.6
 # rig guard-dangerous-commands — PreToolUse guard for shell tool calls.
 # Canonical source: rig-capabilities repo. Installed copies are wired via hook config.
 #

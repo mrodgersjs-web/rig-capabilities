@@ -93,6 +93,10 @@ def migrate_frontmatter(path: Path, fields: dict) -> bool:
     """
     path = Path(path)
     text = path.read_text()
+    # scripts: comment-metadata after the shebang, never a YAML fence (which
+    # would sit above the shebang and break execution)
+    if text.startswith("#!"):
+        return _migrate_script_comments(path, text, fields)
     fm_lines, body = _split_fence(text)
     existing_keys = set()
     if fm_lines is not None:
@@ -116,6 +120,31 @@ def migrate_frontmatter(path: Path, fields: dict) -> bool:
         new = "---\n" + "".join(additions) + "---\n\n" + text
     else:
         new = "---\n" + "".join(fm_lines) + "".join(additions) + "---\n" + body
+    tmp = path.with_suffix(path.suffix + ".tmp")
+    tmp.write_text(new)
+    tmp.replace(path)
+    return True
+
+
+def _migrate_script_comments(path: Path, text: str, fields: dict) -> bool:
+    lines = text.splitlines()
+    shebang, rest = lines[0], lines[1:]
+    existing = set()
+    for ln in rest[:40]:
+        m = re.match(r"^#\s*([A-Za-z0-9_\-]+)\s*:", ln)
+        if m:
+            existing.add(m.group(1).lower())
+    adds = []
+    for key, val in fields.items():
+        if key.lower() in existing:
+            continue
+        if isinstance(val, (list, tuple)):
+            adds.append(f"# {key}: " + " || ".join(str(v) for v in val))
+        else:
+            adds.append(f"# {key}: {val}")
+    if not adds:
+        return False
+    new = shebang + "\n" + "\n".join(adds) + "\n" + "\n".join(rest) + "\n"
     tmp = path.with_suffix(path.suffix + ".tmp")
     tmp.write_text(new)
     tmp.replace(path)
