@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v9: frontier research corpus ingested as intel assets (source: intel).
+v10: great-examples corpus + reference-implementation injection in packs.
 Stdlib only.
 """
-__version__ = "9.0.0"
+__version__ = "10.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

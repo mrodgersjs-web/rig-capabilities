@@ -275,7 +275,8 @@ class Repo:
                 "tags": _tags(fm.get("tags")),
                 "sha": self._sha_file(m),
                 "installable": False,
-                "okf": _okf_meta(fm, "installed"),
+                "okf": _okf_meta(fm, label if label in ("great",) else "installed"),
+                "quality": _quality_block(text),
             })
         return out
 

@@ -334,6 +334,23 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     parts = [f"# Context pack — {intent}\n"]
     used = len(parts[0]) // 4
     nodes = []
+    # V10: prepend the top lane's reference implementation, if one exists
+    top_lane = lanes[0]["outcome"] if lanes else None
+    ref = None
+    if top_lane:
+        for a in assets:
+            if a.get("source") == "great" and f"/{top_lane}/" in (a.get("path") or ""):
+                ref = a
+                break
+    if ref is not None:
+        rhead = " ".join(repo.content(ref.get("abs_path") or "")[:900].split())[:600]
+        rblock = (f"\n# Reference implementation ({top_lane})\n"
+                  f"> {rhead}\n")
+        parts.append(rblock)
+        used += len(rblock) // 4
+        nodes.append({"id": ref["id"], "kind": "reference", "source": "great",
+                      "sha": ref.get("sha"), "trust": (ref.get("okf") or {}).get("trust"),
+                      "freshness": "Reference", "score": 1.0, "tier": "reference"})
     for aid in chosen:
         a = by_id[aid]
         o = a.get("okf") or {}

@@ -860,5 +860,45 @@ class IntelRootTests(unittest.TestCase):
         self.assertEqual("intel", hits[0]["source"])
 
 
+class GreatExamplesTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+        great = self.repo.root / "examples" / "great" / "revenue-gtm"
+        great.mkdir(parents=True, exist_ok=True)
+        (great / "cold-ex.md").write_text(
+            "---\nname: great-cold\nlane: revenue-gtm\nsource: curated\n---\n"
+            "# Reference\ncold outreach exemplar body long enough\n")
+        cfg = json.loads(self.repo.config_path.read_text())
+        cfg["external_roots"].append({"label": "great", "kind": "skill",
+                                      "path": str(self.repo.root / "examples" / "great"),
+                                      "pattern": "*/*.md"})
+        self.repo.config_path.write_text(json.dumps(cfg))
+        # a gtm skill so the lane routes to revenue-gtm
+        d = self.repo.cap_root / "skills" / "cold-outreach-sequence"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "SKILL.md").write_text("---\nname: cold-outreach-sequence\n"
+                                    "description: multi-touch cold email outreach for outbound pipeline\n"
+                                    "---\n# cold\nbody\n")
+        self.repo.build_index()
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_great_trust_is_high(self):
+        a = [x for x in self.repo.load_index()["assets"]
+             if x["source"] == "great"][0]
+        self.assertEqual(0.8, a["okf"]["trust"])
+
+    def test_pack_injects_reference(self):
+        from rig_capabilities.fabric import context_pack
+        rep = context_pack(self.repo, "cold email outreach to prospects",
+                           budget_tokens=800, max_nodes=5)
+        tiers = [n["tier"] for n in rep["nodes"]]
+        self.assertIn("reference", tiers)
+        self.assertIn("# Reference implementation", rep["markdown"])
+
+
 if __name__ == "__main__":
     unittest.main()

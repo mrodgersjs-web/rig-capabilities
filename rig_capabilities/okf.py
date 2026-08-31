@@ -25,7 +25,7 @@ from datetime import date, datetime
 OKF_KEYS = ("type", "domain", "owner", "status", "verified_by",
             "verified_on", "version", "acl", "relates_to")
 
-_BASE = {"canonical": 0.9, "installed": 0.7}
+_BASE = {"canonical": 0.9, "installed": 0.7, "great": 0.8}
 _EXT_BASE = 0.6
 _PREFIX_BASE = (("fed:", 0.5), ("sql:", 0.55), ("api:", 0.55))
 
