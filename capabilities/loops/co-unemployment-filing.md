@@ -1,3 +1,12 @@
+---
+outcome: business-ops:
+done_when:
+  - file:capabilities/loops/co-unemployment-filing.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/business-ops/co-unemployment-filing.md.md
+quality_floor: 0.6
+---
+
 # Goal Harness: Colorado Unemployment Weekly Filing
 
 **Harness ID:** `co-unemployment-filing`

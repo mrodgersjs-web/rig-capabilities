@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/hooks/tac-plan-gate.sh
+  - hook is registered and fires on its trigger fixture
+great_example: examples/great/agent-engineering/tac-plan-gate.sh.md
+quality_floor: 0.6
+---
+
 #!/usr/bin/env bash
 # PreToolUse: block Write/Edit if TAC mode requires plan and plan-gate is RED.
 # Opt-in via RIG_TAC_ENFORCE=1 (recommended during /tac-build sessions).

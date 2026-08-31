@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/coding-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/coding-harness.md.md
+quality_floor: 0.6
+---
+
 # Coding Goal Harness — H_coding(GL-BI, GL-VQ)
 
 Governs GL-BI (build/investigate) and GL-VQ (verify/quality) loops.

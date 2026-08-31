@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/doer-checker-validator.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/doer-checker-validator.md.md
+quality_floor: 0.6
+---
+
 # 3-Tier Quality Gate Architecture — DOER / CHECKER / VALIDATOR
 
 **Owner:** Jake PAI

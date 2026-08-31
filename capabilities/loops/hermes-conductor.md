@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/hermes-conductor.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/hermes-conductor.md.md
+quality_floor: 0.6
+---
+
 # Hermes Conductor Goal Harness — H_hermes(G)
 
 Every Hermes session starts inside this harness. It is not a reference document.

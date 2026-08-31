@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/ops-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/ops-harness.md.md
+quality_floor: 0.6
+---
+
 # Ops Harness — GL-OF Gate Loop
 
 **Owner:** Jake PAI

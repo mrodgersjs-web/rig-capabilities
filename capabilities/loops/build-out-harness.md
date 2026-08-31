@@ -1,3 +1,12 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/loops/build-out-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/design-ux/build-out-harness.md.md
+quality_floor: 0.6
+---
+
 # Build-Out Harness — GL-BD Gate Loop
 
 **Owner:** Jake PAI

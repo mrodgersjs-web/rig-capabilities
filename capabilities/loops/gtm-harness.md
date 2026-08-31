@@ -1,3 +1,12 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/loops/gtm-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/revenue-gtm/gtm-harness.md.md
+quality_floor: 0.6
+---
+
 # GTM Goal Harness — H_gtm(GL-GG)
 
 Governs GL-GG (go-to-market/growth) loops.

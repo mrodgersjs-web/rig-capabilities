@@ -234,6 +234,7 @@ class Repo:
             "sha": sha,
             "installable": True,
             "okf": _okf_meta(fm, "canonical"),
+            "quality": _quality_block(text),
         }
 
     def _assets_from_external(self, root: dict) -> list:
@@ -519,3 +520,43 @@ def _tags(raw: str | None) -> list:
     if not raw:
         return []
     return [t for t in re.split(r"[,\[\]]+", raw.strip()) if t.strip()][:8]
+
+
+_QUAL_KEYS = ("outcome", "great_example", "quality_floor")
+
+
+def _quality_block(text: str) -> dict:
+    """Extract quality-contract fields from a leading --- fence, incl. block lists."""
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        return {}
+    end = None
+    for i in range(1, min(len(lines), 200)):
+        if lines[i].strip() in ("---", "..."):
+            end = i
+            break
+    if end is None:
+        return {}
+    fence = lines[1:end]
+    out: dict = {}
+    i = 0
+    while i < len(fence):
+        ln = fence[i]
+        m = _FM_KEY.match(ln)
+        if m:
+            key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
+            if key == "done_when":
+                items = []
+                if val:
+                    items = [t.strip().strip("[]\"'") for t in val.split(",") if t.strip()]
+                j = i + 1
+                while j < len(fence) and re.match(r"^\s*-\s+", fence[j]):
+                    items.append(re.sub(r"^\s*-\s+", "", fence[j]).strip().strip("\"'"))
+                    j += 1
+                out["done_when"] = items
+                i = j
+                continue
+            if key in _QUAL_KEYS:
+                out[key] = val
+        i += 1
+    return out

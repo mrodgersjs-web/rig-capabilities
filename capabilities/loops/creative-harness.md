@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/creative-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/creative-harness.md.md
+quality_floor: 0.6
+---
+
 # Creative Goal Harness — H_creative(GL-CB)
 
 Governs GL-CB (creative/brand) loops.

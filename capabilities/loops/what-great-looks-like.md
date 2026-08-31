@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/what-great-looks-like.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/what-great-looks-like.md.md
+quality_floor: 0.6
+---
+
 # What Great Looks Like — 36H GTM Sprint Loop
 
 **Mission:** `jake-36h-gtm-sprint-2026-07-05`

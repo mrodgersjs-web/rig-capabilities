@@ -6,6 +6,12 @@ domain: Security architecture
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
+outcome: security-review: Repository-grounded threat modeling that enumerates trust boundaries, assets, attacker capabilities, abuse paths, and mi
+done_when:
+  - file:capabilities/skills/security-threat-model
+  - the skill's stated outcome is achievable end-to-end
+great_example: examples/great/security-review/security-threat-model.md
+quality_floor: 0.6
 ---
 
 # Threat Model Source Code Repo

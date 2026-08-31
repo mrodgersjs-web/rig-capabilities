@@ -1,3 +1,12 @@
+---
+outcome: code-engineering:
+done_when:
+  - file:capabilities/loops/scraping-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/code-engineering/scraping-harness.md.md
+quality_floor: 0.6
+---
+
 # Scraping Harness — GL-SI Gate Loop
 
 **Owner:** Jake PAI

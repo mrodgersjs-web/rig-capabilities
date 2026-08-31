@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/hooks/goal-loop-startup.sh
+  - hook is registered and fires on its trigger fixture
+great_example: examples/great/agent-engineering/goal-loop-startup.sh.md
+quality_floor: 0.6
+---
+
 #!/bin/bash
 # Goal Loop Autoload — runs at session start for every Claude Code session
 # Injects goal loop context into the session

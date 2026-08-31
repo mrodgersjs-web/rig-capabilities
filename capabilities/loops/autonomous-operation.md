@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/autonomous-operation.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/autonomous-operation.md.md
+quality_floor: 0.6
+---
+
 # Autonomous Operation Harness — H_auto(D,G,B,E,H,I)
 
 **Session type:** unattended multi-day operation holding standing send authority

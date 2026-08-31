@@ -1,6 +1,12 @@
 ---
 name: threat-mitigation-mapping
 description: Map identified threats to appropriate security controls and mitigations. Use when prioritizing security investments, creating remediation plans, or validating control effectiveness.
+outcome: security-review: Map identified threats to appropriate security controls and mitigations. Use when prioritizing security investments, cre
+done_when:
+  - file:capabilities/skills/threat-mitigation-mapping
+  - the skill's stated outcome is achievable end-to-end
+great_example: examples/great/security-review/threat-mitigation-mapping.md
+quality_floor: 0.6
 ---
 
 # Threat Mitigation Mapping

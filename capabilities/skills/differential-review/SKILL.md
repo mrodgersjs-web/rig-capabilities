@@ -7,6 +7,12 @@ domain: Security review
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
+outcome: security-review: Performs security-focused differential review of code changes. Adapts analysis depth to codebase size, uses git blame fo
+done_when:
+  - file:capabilities/skills/differential-review
+  - the skill's stated outcome is achievable end-to-end
+great_example: examples/great/security-review/differential-review.md
+quality_floor: 0.6
 ---
 
 # Differential Security Review

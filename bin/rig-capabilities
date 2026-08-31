@@ -160,6 +160,10 @@ def main() -> int:
     p = sub.add_parser("verify-token")
     p.add_argument("token")
 
+    p = sub.add_parser("quality")
+    p.add_argument("--weakest", type=int, default=20)
+    p.add_argument("--migrate", action="store_true")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
 
@@ -364,6 +368,13 @@ def main() -> int:
     elif args.cmd == "observe":
         from rig_capabilities.observe import status as obs_status
         print(json.dumps(obs_status(repo), indent=1))
+    elif args.cmd == "quality":
+        from rig_capabilities.quality import migrate_canonical, quality_report
+        if args.migrate:
+            print(json.dumps(migrate_canonical(repo), indent=1))
+        rep = quality_report(repo)
+        rep["weakest"] = rep["weakest"][:args.weakest]
+        print(json.dumps(rep, indent=1))
     return 0
 
 

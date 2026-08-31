@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "6.0.0"
+VERSION = "7.0.0"
 
 
 def default_repo() -> Repo:
@@ -261,6 +261,11 @@ TOOLS = [
             "required": ["agent"],
         },
     },
+    {
+        "name": "capabilities_quality_report",
+        "description": "Skill quality-contract coverage: outcome/done_when/great_example/quality_floor per canonical asset, weakest first.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
 ]
 
 
@@ -382,6 +387,10 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from .observe import status as obs_status
         return obs_status(repo)
 
+    def quality_report(_args: dict):
+        from .quality import quality_report as _qr
+        return _qr(repo)
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -402,5 +411,6 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_connectors": connectors,
         "capabilities_observe": observe,
         "capabilities_issue_token": issue_token,
+        "capabilities_quality_report": quality_report,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

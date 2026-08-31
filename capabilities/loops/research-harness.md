@@ -1,3 +1,12 @@
+---
+outcome: research-intel:
+done_when:
+  - file:capabilities/loops/research-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/research-intel/research-harness.md.md
+quality_floor: 0.6
+---
+
 # Research Goal Harness — H_research(GL-RI)
 
 Governs GL-RI (research/investigate) loops.

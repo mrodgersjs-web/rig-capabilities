@@ -1,3 +1,12 @@
+---
+outcome: security-review:
+done_when:
+  - file:capabilities/hooks/guard-secret-write.sh
+  - hook is registered and fires on its trigger fixture
+great_example: examples/great/security-review/guard-secret-write.sh.md
+quality_floor: 0.6
+---
+
 #!/bin/sh
 # rig guard-secret-write — PreToolUse guard for file-write tool calls.
 # Canonical source: rig-capabilities repo.

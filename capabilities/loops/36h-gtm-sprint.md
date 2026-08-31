@@ -1,3 +1,12 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/loops/36h-gtm-sprint.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/revenue-gtm/36h-gtm-sprint.md.md
+quality_floor: 0.6
+---
+
 # 36H GTM Sprint Harness — H_36h(G)
 
 **Mission:** `jake-36h-gtm-sprint-2026-07-05`

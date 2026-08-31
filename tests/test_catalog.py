@@ -756,5 +756,60 @@ class IdpServeTests(unittest.TestCase):
             srv.server_close()
 
 
+class QualityTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_check_asset_scores(self):
+        from rig_capabilities.quality import check_asset
+        full = {"id": "x", "kind": "skill", "quality": {
+            "outcome": "do a thing", "done_when": ["cmd:true"],
+            "great_example": "examples/great/x.md", "quality_floor": 0.6}}
+        r = check_asset(full)
+        self.assertEqual(100, r["score"])
+        self.assertTrue(r["has_done_test"])
+        bare = {"id": "y", "kind": "skill", "quality": {}}
+        rb = check_asset(bare)
+        self.assertEqual(0, rb["score"])
+        self.assertEqual(set(("outcome", "done_when", "great_example", "quality_floor")),
+                         set(rb["missing"]))
+
+    def test_migrate_frontmatter_adds_block_list(self):
+        from rig_capabilities.quality import migrate_frontmatter
+        p = self.repo.cap_root / "skills" / "demo-skill" / "SKILL.md"
+        changed = migrate_frontmatter(p, {"outcome": "demo out",
+                                          "done_when": ["file:x", "cmd:true"],
+                                          "quality_floor": 0.6})
+        self.assertTrue(changed)
+        text = p.read_text()
+        self.assertIn("outcome: demo out", text)
+        self.assertIn("  - file:x", text)
+        # idempotent: second run makes no change
+        self.assertFalse(migrate_frontmatter(p, {"outcome": "other"}))
+        self.assertIn("outcome: demo out", p.read_text())
+
+    def test_index_carries_quality_block(self):
+        from rig_capabilities.quality import migrate_frontmatter
+        p = self.repo.cap_root / "skills" / "demo-skill" / "SKILL.md"
+        migrate_frontmatter(p, {"outcome": "o", "done_when": ["cmd:true"],
+                                "great_example": "e.md", "quality_floor": 0.6})
+        self.repo.build_index()
+        a = [x for x in self.repo.load_index()["assets"]
+             if x["id"] == "demo-skill" and x["source"] == "canonical"][0]
+        self.assertEqual("o", a["quality"]["outcome"])
+        self.assertEqual(["cmd:true"], a["quality"]["done_when"])
+
+    def test_migrate_canonical_fills_all(self):
+        from rig_capabilities.quality import migrate_canonical, quality_report
+        migrate_canonical(self.repo)
+        rep = quality_report(self.repo)
+        self.assertEqual(rep["total"], rep["fully_specified"])
+
+
 if __name__ == "__main__":
     unittest.main()

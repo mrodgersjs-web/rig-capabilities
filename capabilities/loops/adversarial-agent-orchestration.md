@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/adversarial-agent-orchestration.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/adversarial-agent-orchestration.md.md
+quality_floor: 0.6
+---
+
 # Adversarial Agent Orchestration Harness
 
 **Source:** "The Ideal Agentic Setup" by Yaron Been — https://www.youtube.com/watch?v=NRrj6qEymBY

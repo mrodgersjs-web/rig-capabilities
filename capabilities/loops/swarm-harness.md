@@ -1,3 +1,12 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:capabilities/loops/swarm-harness.md
+  - the loop file parses and declares a termination test
+great_example: examples/great/agent-engineering/swarm-harness.md.md
+quality_floor: 0.6
+---
+
 # Swarm Harness — GL-SW / GL-AD Gate Loop
 
 **Owner:** Jake PAI

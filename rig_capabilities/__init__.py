@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v6: org-IdP HMAC requester tokens + Bearer-authenticated serve + federation auth.
+v7: skill quality contract (outcome/done_when/great_example/quality_floor) + report.
 Stdlib only.
 """
-__version__ = "6.0.0"
+__version__ = "7.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

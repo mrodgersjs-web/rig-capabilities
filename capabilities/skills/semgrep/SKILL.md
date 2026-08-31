@@ -17,6 +17,12 @@ domain: Payments-adjacent static analysis
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
+outcome: security-review: >-
+done_when:
+  - file:capabilities/skills/semgrep
+  - the skill's stated outcome is achievable end-to-end
+great_example: examples/great/security-review/semgrep.md
+quality_floor: 0.6
 ---
 
 # Semgrep Security Scan
