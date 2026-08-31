@@ -3,12 +3,10 @@
 The canonical, git-versioned home for RIG capabilities — **skills, agents,
 hooks, goal harnesses, loops, and commands** — served to every harness
 (Claude Code, Codex, OMP, Hermes, Prime Agent) over one stdlib-only MCP
-server, and managed from one CLI. Package version **5.0.0** (v2 fabric →
-v3 drift/ACL/decay → v4 federation/ratings-trust/workspaces → v5 signed
-packs + public catalog + analytics).
+server, and managed from one CLI. Package version **5.1.0**.
 
-Quick health: `./bin/rig-capabilities registry status --fetch` and
-`./bin/rig-capabilities refresh`.
+Quick health: `./bin/rig-capabilities registry status --fetch`,
+`refresh`, `observe`, `connectors`.
 
 ## Why
 
@@ -72,9 +70,11 @@ tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 | `capabilities_refresh` | v3 drift report; apply=true rebuilds a stale index |
 | `capabilities_analytics` | v5 per-asset pack/rating analytics |
 | `capabilities_public_catalog` | v5 assets whose `acl` contains `public` |
+| `capabilities_connectors` | SQL/API connector status + last error |
+| `capabilities_observe` | local traces + Langfuse reachability (honest false if unkeyed) |
 
-CLI twins: `pack --requester`, `refresh`, `trusts`, `analytics`, `publish`,
-`sign`, `verify`. See [docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md).
+CLI twins: `pack --requester`, `refresh`, `serve`, `connectors`, `observe`,
+`publish`, `sign`, `verify`. See [docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md).
 
 Wire into all harnesses: `./install.sh` (dry-run) then `./install.sh --apply`;
 check with `./install.sh --verify`. Managed blocks sit between

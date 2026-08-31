@@ -29,6 +29,9 @@ Commands:
   publish                                 v5 write .public-catalog.json
   sign [--generate-key] [pack-id]         v5 HMAC-sign a pack (or generate key)
   verify <pack-id>                        v5 verify pack signature
+  serve [--port N] [--bind HOST]          HTTP federation surface
+  connectors                              SQL/API connector status
+  observe                                 Langfuse/local trace status
 """
 from __future__ import annotations
 
@@ -139,6 +142,13 @@ def main() -> int:
 
     p = sub.add_parser("verify")
     p.add_argument("pack_id")
+
+    p = sub.add_parser("serve")
+    p.add_argument("--port", type=int, default=8765)
+    p.add_argument("--bind", default="127.0.0.1")
+
+    sub.add_parser("connectors")
+    sub.add_parser("observe")
 
     args = ap.parse_args()
 
@@ -312,6 +322,15 @@ def main() -> int:
                           "has_key": bool(key),
                           "has_signature": bool(art.get("signature"))}))
         return 0 if ok else 1
+    elif args.cmd == "serve":
+        from rig_capabilities.serve import serve as _serve
+        _serve(repo, host=args.bind, port=args.port)
+    elif args.cmd == "connectors":
+        from rig_capabilities.connectors import connector_status
+        print(json.dumps(connector_status(repo), indent=1))
+    elif args.cmd == "observe":
+        from rig_capabilities.observe import status as obs_status
+        print(json.dumps(obs_status(repo), indent=1))
     return 0
 
 

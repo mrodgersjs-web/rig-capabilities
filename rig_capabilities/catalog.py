@@ -143,7 +143,7 @@ class Repo:
         cfg = {"external_roots": (list(DEFAULT_EXTERNAL_ROOTS) if use_defaults else []),
                "install_roots": ({k: dict(v) for k, v in DEFAULT_INSTALL_ROOTS.items()}
                                  if use_defaults else {}),
-               "federates": []}
+               "federates": [], "connectors": [], "observe": {}}
         if isinstance(user.get("external_roots"), list):
             seen = {r["label"] for r in cfg["external_roots"]}
             for r in user["external_roots"]:
@@ -165,7 +165,13 @@ class Repo:
                     cfg["install_roots"][kind] = dict(roots)
         if isinstance(user.get("federates"), list):
             cfg["federates"] = [f for f in user["federates"]
-                                if isinstance(f, dict) and f.get("label") and f.get("path")]
+                                if isinstance(f, dict) and f.get("label")
+                                and (f.get("path") or f.get("url"))]
+        if isinstance(user.get("connectors"), list):
+            cfg["connectors"] = [c for c in user["connectors"]
+                                 if isinstance(c, dict) and c.get("label") and c.get("type")]
+        if isinstance(user.get("observe"), dict):
+            cfg["observe"] = dict(user["observe"])
         return cfg
 
     # -- hashing -----------------------------------------------------------
@@ -291,6 +297,13 @@ class Repo:
                 assets.append(a)
         from .federation import federated_assets
         for a in federated_assets(self):
+            key = (a["id"], a.get("kind"))
+            if key in seen:
+                continue
+            seen.add(key)
+            assets.append(a)
+        from .connectors import connector_assets
+        for a in connector_assets(self):
             key = (a["id"], a.get("kind"))
             if key in seen:
                 continue
@@ -473,6 +486,8 @@ class Repo:
     # -- content -------------------------------------------------------------
 
     def content(self, abs_path: str) -> str:
+        if not abs_path:
+            return ""
         p = Path(abs_path)
         files = [f for f in sorted(p.rglob("*")) if f.is_file()][:20] if p.is_dir() else [p]
         out = []

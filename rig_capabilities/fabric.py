@@ -328,7 +328,7 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
         a = by_id[aid]
         o = a.get("okf") or {}
         t = trust_of(a)
-        head = repo.content(a["abs_path"])[:1400]
+        head = repo.content(a.get("abs_path") or "")[:1400] or (a.get("description") or "")
         excerpt = " ".join(head.split())[:260]
         block = (f"\n## {a['kind']}: {aid}  "
                  f"[trust {t} | {o.get('freshness', 'Unknown')} | "
@@ -366,6 +366,12 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     (art_dir / f"{pack_id}.json").write_text(json.dumps(artifact, indent=1))
     record_observation(repo, pack_id, [n["id"] for n in nodes], requester)
     log_pack(repo, requester, pack_id, intent)
+    from .observe import trace
+    trace(repo, "context_pack",
+          input={"intent": intent, "requester": requester or ""},
+          output={"pack": pack_id, "nodes": [n["id"] for n in nodes],
+                  "tokens": used},
+          metadata={"tiers": artifact["tiers"]})
     artifact.update({"markdown": markdown, "artifact":
                      str(art_dir / f"{pack_id}.json")})
     return artifact
@@ -383,4 +389,7 @@ def rate(repo, pack_id: str, verdict: str, note: str = "") -> dict:
            "ts": datetime.now().isoformat(timespec="seconds")}
     with (Path(repo.root) / ".context" / "ratings.jsonl").open("a") as f:
         f.write(json.dumps(rec) + "\n")
+    from .observe import trace
+    trace(repo, "rate", input={"pack": pack_id, "verdict": verdict},
+          output={"ids": rec["ids"]})
     return rec

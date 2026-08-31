@@ -528,5 +528,120 @@ class VersionLadderTests(unittest.TestCase):
         rec = status_one(rows[0], fetch=False)
         self.assertEqual("demo", rec["id"])
         self.assertFalse(rec["live"])
+
+
+class RestGapTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_sqlite_connector_ingests_rows(self):
+        import sqlite3
+        db = self.tmp / "kb.sqlite"
+        con = sqlite3.connect(db)
+        con.execute("CREATE TABLE docs (id TEXT, name TEXT, description TEXT, tags TEXT)")
+        con.execute("INSERT INTO docs VALUES ('sql-doc','SQL Doc','from sqlite','kb')")
+        con.commit(); con.close()
+        cfg = json.loads(self.repo.config_path.read_text())
+        cfg["connectors"] = [{"label": "kb", "type": "sqlite", "path": str(db),
+                              "query": "SELECT id, name, description, tags FROM docs",
+                              "kind": "skill"}]
+        self.repo.config_path.write_text(json.dumps(cfg))
+        doc = self.repo.build_index()
+        hits = [a for a in doc["assets"] if a["id"] == "sql-doc"]
+        self.assertEqual(1, len(hits))
+        self.assertEqual("sql:kb", hits[0]["source"])
+        self.assertFalse(hits[0]["installable"])
+
+    def test_sqlite_missing_records_error(self):
+        from rig_capabilities.connectors import ingest_sqlite, connector_status
+        ingest_sqlite(self.repo, {"label": "gone", "type": "sqlite",
+                                  "path": str(self.tmp / "nope.sqlite")})
+        st = connector_status(self.repo)
+        self.assertEqual("gone", st["last_error"]["label"])
+
+    def test_http_serve_and_url_federation(self):
+        import threading
+        from rig_capabilities.serve import make_server
+        peer = Repo(self.tmp / "peer")
+        sk = peer.cap_root / "skills" / "net-peer"
+        sk.mkdir(parents=True, exist_ok=True)
+        (sk / "SKILL.md").write_text(
+            "---\nname: net-peer\ndescription: served over http\n"
+            "acl: [public]\n---\n# net\nbody\n")
+        peer.config_path.write_text(json.dumps({"defaults": False, "external_roots": []}))
+        peer.build_index()
+        httpd = make_server(peer, "127.0.0.1", 0)
+        port = httpd.server_address[1]
+        t = threading.Thread(target=httpd.serve_forever, daemon=True)
+        t.start()
+        try:
+            cfg = json.loads(self.repo.config_path.read_text())
+            cfg["federates"] = [{"label": "net", "url": f"http://127.0.0.1:{port}"}]
+            self.repo.config_path.write_text(json.dumps(cfg))
+            doc = self.repo.build_index()
+            hits = [a for a in doc["assets"] if a["id"] == "net-peer"]
+            self.assertEqual(1, len(hits))
+            self.assertEqual("fed:net", hits[0]["source"])
+        finally:
+            httpd.shutdown()
+            httpd.server_close()
+
+    def test_http_connector_reads_json_list(self):
+        import threading
+        from http.server import BaseHTTPRequestHandler, HTTPServer
+
+        payload = json.dumps([{"id": "api-item", "name": "API Item",
+                               "description": "from http api"}]).encode()
+
+        class H(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                return
+
+            def do_GET(self):
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+
+        srv = HTTPServer(("127.0.0.1", 0), H)
+        port = srv.server_address[1]
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            cfg = json.loads(self.repo.config_path.read_text())
+            cfg["connectors"] = [{"label": "docs", "type": "http",
+                                  "url": f"http://127.0.0.1:{port}/",
+                                  "kind": "skill"}]
+            self.repo.config_path.write_text(json.dumps(cfg))
+            doc = self.repo.build_index()
+            hits = [a for a in doc["assets"] if a["id"] == "api-item"]
+            self.assertEqual(1, len(hits))
+            self.assertEqual("api:docs", hits[0]["source"])
+        finally:
+            srv.shutdown()
+            srv.server_close()
+
+    def test_observe_local_traces_langfuse_false(self):
+        from rig_capabilities.fabric import context_pack
+        from rig_capabilities.observe import status as obs_status
+        context_pack(self.repo, "demo capability")
+        st = obs_status(self.repo)
+        self.assertFalse(st["langfuse_configured"])
+        self.assertGreaterEqual(st["local_traces"], 1)
+        traces = (self.repo.root / ".context" / "traces.jsonl").read_text()
+        self.assertIn("context_pack", traces)
+
+    def test_sql_trust_prefix(self):
+        from rig_capabilities.okf import trust
+        self.assertEqual(0.55, trust("sql:kb", "", None))
+        self.assertEqual(0.5, trust("fed:net", "", None))
+        self.assertEqual(0.9, trust("canonical", "", None))
+
+
 if __name__ == "__main__":
     unittest.main()

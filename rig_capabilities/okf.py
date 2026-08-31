@@ -27,7 +27,7 @@ OKF_KEYS = ("type", "domain", "owner", "status", "verified_by",
 
 _BASE = {"canonical": 0.9, "installed": 0.7}
 _EXT_BASE = 0.6
-
+_PREFIX_BASE = (("fed:", 0.5), ("sql:", 0.55), ("api:", 0.55))
 
 def _as_list(v):
     if v is None:
@@ -53,7 +53,9 @@ def _as_date(v) -> date | None:
 
 def trust(source: str, status: str, verified_on: date | None,
           today: date | None = None) -> float:
-    t = _BASE.get(source, _EXT_BASE)
+    t = _BASE.get(source)
+    if t is None:
+        t = next((b for p, b in _PREFIX_BASE if source.startswith(p)), _EXT_BASE)
     s = (status or "").strip().lower()
     if s == "stable":
         t += 0.1

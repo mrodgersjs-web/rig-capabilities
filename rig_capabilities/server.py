@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "5.0.0"
+VERSION = "5.1.0"
 
 
 def default_repo() -> Repo:
@@ -240,6 +240,16 @@ TOOLS = [
         "description": "v5 public catalog: assets whose okf.acl contains 'public'.",
         "inputSchema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "capabilities_connectors",
+        "description": "SQL/API connector status (configured labels/types + last error).",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_observe",
+        "description": "Local traces + Langfuse reachability. langfuse=false when unconfigured.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
 ]
 
 
@@ -347,6 +357,14 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from .surface import write_public_catalog
         return write_public_catalog(repo)
 
+    def connectors(_args: dict):
+        from .connectors import connector_status
+        return connector_status(repo)
+
+    def observe(_args: dict):
+        from .observe import status as obs_status
+        return obs_status(repo)
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -364,5 +382,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_refresh": refresh,
         "capabilities_analytics": analytics,
         "capabilities_public_catalog": public_catalog,
+        "capabilities_connectors": connectors,
+        "capabilities_observe": observe,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)
