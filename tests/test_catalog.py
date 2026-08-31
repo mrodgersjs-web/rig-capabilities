@@ -643,5 +643,118 @@ class RestGapTests(unittest.TestCase):
         self.assertEqual(0.9, trust("canonical", "", None))
 
 
+class IdpServeTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+        from rig_capabilities.surface import generate_key
+        generate_key(self.repo)
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_token_roundtrip(self):
+        from rig_capabilities.idp import issue_token, verify_token
+        t = issue_token(self.repo, "jake", ttl=3600)
+        self.assertTrue(t["ok"])
+        res = verify_token(self.repo, t["token"])
+        self.assertTrue(res["ok"])
+        self.assertEqual("jake", res["agent"])
+
+    def test_token_expired(self):
+        import time
+        from rig_capabilities.idp import issue_token, verify_token
+        t = issue_token(self.repo, "jake", ttl=60)
+        res = verify_token(self.repo, t["token"], now=int(time.time()) + 120)
+        self.assertFalse(res["ok"])
+        self.assertEqual("expired", res["error"])
+
+    def test_token_bad_sig(self):
+        from rig_capabilities.idp import issue_token, verify_token
+        t = issue_token(self.repo, "jake")
+        tampered = t["token"][:-4] + ("aaaa" if not t["token"].endswith("aaaa") else "bbbb")
+        res = verify_token(self.repo, tampered)
+        self.assertFalse(res["ok"])
+
+    def test_token_malformed(self):
+        from rig_capabilities.idp import verify_token
+        self.assertFalse(verify_token(self.repo, "garbage")["ok"])
+
+    def test_pack_token_precedence(self):
+        from rig_capabilities.fabric import context_pack
+        from rig_capabilities.idp import issue_token
+        t = issue_token(self.repo, "jake")["token"]
+        rep = context_pack(self.repo, "demo capability", token=t, requester="someone-else")
+        self.assertEqual("jake", rep["verified_requester"])
+        self.assertEqual("jake", rep["requester"])
+
+    def test_pack_bad_token_rejected(self):
+        from rig_capabilities.fabric import context_pack
+        with self.assertRaises(ValueError):
+            context_pack(self.repo, "demo capability", token="v1.bad.0.bad")
+
+    def test_serve_bearer_protects_index(self):
+        import threading
+        import urllib.request
+        import urllib.error
+        from rig_capabilities.serve import make_server
+        httpd = make_server(self.repo, "127.0.0.1", 0, token="secret-tok")
+        port = httpd.server_address[1]
+        t = threading.Thread(target=httpd.serve_forever, daemon=True)
+        t.start()
+        try:
+            # no header -> 401
+            with self.assertRaises(urllib.error.HTTPError) as cm:
+                urllib.request.urlopen(f"http://127.0.0.1:{port}/index.json", timeout=5)
+            self.assertEqual(401, cm.exception.code)
+            # good header -> 200
+            req = urllib.request.Request(f"http://127.0.0.1:{port}/index.json",
+                                         headers={"Authorization": "Bearer secret-tok"})
+            with urllib.request.urlopen(req, timeout=5) as r:
+                self.assertEqual(200, r.status)
+            # health is public
+            with urllib.request.urlopen(f"http://127.0.0.1:{port}/health", timeout=5) as r:
+                self.assertEqual(200, r.status)
+        finally:
+            httpd.shutdown()
+            httpd.server_close()
+
+    def test_federation_sends_bearer(self):
+        import threading
+        import json as _json
+        from http.server import BaseHTTPRequestHandler, HTTPServer
+        seen = {}
+        payload = _json.dumps({"assets": [{"id": "peer-x", "kind": "skill",
+                                           "name": "Peer X", "description": "peer",
+                                           "sha": "abc", "tags": []}]}).encode()
+
+        class H(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                return
+
+            def do_GET(self):
+                seen["auth"] = self.headers.get("Authorization")
+                self.send_response(200)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(payload)))
+                self.end_headers()
+                self.wfile.write(payload)
+
+        srv = HTTPServer(("127.0.0.1", 0), H)
+        port = srv.server_address[1]
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            cfg = json.loads(self.repo.config_path.read_text())
+            cfg["federates"] = [{"label": "net", "url": f"http://127.0.0.1:{port}",
+                                 "token": "fed-secret"}]
+            self.repo.config_path.write_text(json.dumps(cfg))
+            self.repo.build_index()
+            self.assertEqual("Bearer fed-secret", seen.get("auth"))
+        finally:
+            srv.shutdown()
+            srv.server_close()
+
+
 if __name__ == "__main__":
     unittest.main()

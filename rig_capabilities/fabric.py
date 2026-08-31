@@ -249,12 +249,22 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
                  max_nodes: int = 12, min_trust: float = 0.5,
                  requester_acl: list | None = None,
                  requester: str | None = None,
+                 token: str | None = None,
                  sign: bool = True) -> dict:
     from .federation import log_pack
     from .policy import (acl_allows, effective_trust, permitted_scopes,
                          record_observation, trust_tables)
     from .refresh import auto_refresh
     from .surface import load_key, sign_artifact
+
+    verified_requester = None
+    if token:
+        from .idp import verify_token
+        res = verify_token(repo, token)
+        if not res["ok"]:
+            raise ValueError(f"token rejected: {res.get('error')}")
+        verified_requester = res["agent"]
+        requester = verified_requester  # token > --requester precedence
 
     auto_refresh(repo)
     doc = repo.load_index()
@@ -352,7 +362,7 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     art_dir = Path(repo.root) / ".context"
     art_dir.mkdir(exist_ok=True)
     artifact = {"id": pack_id, "intent": intent, "budget_tokens": budget_tokens,
-                "requester": requester or "",
+                "requester": requester or "", "verified_requester": verified_requester or "",
                 "tiers": {"metadata_filter": True, "sparse_bm25": True,
                           "dense_ollama": dense_ok, "graph": bool(g),
                           "acl_enforced": call_scopes is not None,
@@ -371,7 +381,7 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
           input={"intent": intent, "requester": requester or ""},
           output={"pack": pack_id, "nodes": [n["id"] for n in nodes],
                   "tokens": used},
-          metadata={"tiers": artifact["tiers"]})
+          metadata={"tiers": artifact["tiers"], "verified_requester": verified_requester or ""})
     artifact.update({"markdown": markdown, "artifact":
                      str(art_dir / f"{pack_id}.json")})
     return artifact

@@ -113,6 +113,7 @@ def main() -> int:
     p.add_argument("--min-trust", dest="min_trust", type=float, default=0.5)
     p.add_argument("--acl")
     p.add_argument("--requester")
+    p.add_argument("--token")
 
     p = sub.add_parser("graph")
     p.add_argument("id")
@@ -146,6 +147,18 @@ def main() -> int:
     p = sub.add_parser("serve")
     p.add_argument("--port", type=int, default=8765)
     p.add_argument("--bind", default="127.0.0.1")
+    p.add_argument("--token")
+
+    p = sub.add_parser("serve-token")
+    p.add_argument("--generate", action="store_true")
+
+    p = sub.add_parser("issue-token")
+    p.add_argument("agent")
+    p.add_argument("--ttl", type=int, default=3600)
+    p.add_argument("--mint-key", action="store_true")
+
+    p = sub.add_parser("verify-token")
+    p.add_argument("token")
 
     sub.add_parser("connectors")
     sub.add_parser("observe")
@@ -248,10 +261,14 @@ def main() -> int:
         print("embeddings:", build_embeddings(repo, progress=prog))
     elif args.cmd == "pack":
         from rig_capabilities.fabric import context_pack
-        rep = context_pack(repo, args.intent, budget_tokens=args.budget,
-                           max_nodes=args.max_nodes, min_trust=args.min_trust,
-                           requester_acl=args.acl.split(",") if args.acl else None,
-                           requester=args.requester)
+        try:
+            rep = context_pack(repo, args.intent, budget_tokens=args.budget,
+                               max_nodes=args.max_nodes, min_trust=args.min_trust,
+                               requester_acl=args.acl.split(",") if args.acl else None,
+                               requester=args.requester, token=args.token)
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 1
         print(rep["markdown"])
         print(f"-- tiers={rep['tiers']} lanes={rep['lanes']} "
               f"~{rep['estimated_tokens']}tok artifact={rep['artifact']}",
@@ -324,7 +341,23 @@ def main() -> int:
         return 0 if ok else 1
     elif args.cmd == "serve":
         from rig_capabilities.serve import serve as _serve
-        _serve(repo, host=args.bind, port=args.port)
+        _serve(repo, host=args.bind, port=args.port, token=args.token)
+    elif args.cmd == "serve-token":
+        from rig_capabilities.serve import generate_serve_token, load_serve_token
+        if args.generate:
+            p = generate_serve_token(repo)
+            print(json.dumps({"token_file": str(p)}))
+        else:
+            print(json.dumps({"configured": bool(load_serve_token(repo))}))
+    elif args.cmd == "issue-token":
+        from rig_capabilities.idp import issue_token
+        print(json.dumps(issue_token(repo, args.agent, ttl=args.ttl,
+                                     mint_key=args.mint_key)))
+    elif args.cmd == "verify-token":
+        from rig_capabilities.idp import verify_token
+        res = verify_token(repo, args.token)
+        print(json.dumps(res))
+        return 0 if res["ok"] else 1
     elif args.cmd == "connectors":
         from rig_capabilities.connectors import connector_status
         print(json.dumps(connector_status(repo), indent=1))

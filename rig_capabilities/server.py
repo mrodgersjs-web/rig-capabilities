@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "5.1.0"
+VERSION = "6.0.0"
 
 
 def default_repo() -> Repo:
@@ -189,6 +189,7 @@ TOOLS = [
                 "max_nodes": {"type": "integer", "description": "max capability nodes (default 12)"},
                 "min_trust": {"type": "number", "description": "okf trust floor 0..1 (default 0.5)"},
                 "requester": {"type": "string", "description": "agent id for ACL policy (jake=* )"},
+                "token": {"type": "string", "description": "signed requester token; overrides requester when valid"},
             },
             "required": ["intent"],
         },
@@ -249,6 +250,16 @@ TOOLS = [
         "name": "capabilities_observe",
         "description": "Local traces + Langfuse reachability. langfuse=false when unconfigured.",
         "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_issue_token",
+        "description": "Issue an HMAC requester token (org IdP). Requires a signing key.",
+        "inputSchema": {
+            "type": "object",
+            "properties": {"agent": {"type": "string"},
+                           "ttl": {"type": "integer", "description": "seconds (default 3600)"}},
+            "required": ["agent"],
+        },
     },
 ]
 
@@ -330,7 +341,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
                      max_nodes=int(args.get("max_nodes", 12)),
                      min_trust=float(args.get("min_trust", 0.5)),
                      requester_acl=args.get("requester_acl"),
-                     requester=args.get("requester"))
+                     requester=args.get("requester"),
+                     token=args.get("token"))
 
     def graph(args: dict):
         from .fabric import expand
@@ -356,6 +368,11 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def public_catalog(_args: dict):
         from .surface import write_public_catalog
         return write_public_catalog(repo)
+
+    def issue_token(args: dict):
+        from .idp import issue_token as _issue
+        return _issue(repo, str(args.get("agent", "")), ttl=int(args.get("ttl", 3600)))
+
 
     def connectors(_args: dict):
         from .connectors import connector_status
@@ -384,5 +401,6 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_public_catalog": public_catalog,
         "capabilities_connectors": connectors,
         "capabilities_observe": observe,
+        "capabilities_issue_token": issue_token,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

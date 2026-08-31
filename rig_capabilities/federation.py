@@ -10,6 +10,7 @@ A failed fetch is skipped and recorded in `.context/federation-last-error.json`.
 from __future__ import annotations
 
 import json
+import os
 import urllib.error
 import urllib.request
 from datetime import datetime, timezone
@@ -59,6 +60,9 @@ def _from_url(repo, fed: dict) -> list:
     label = str(fed["label"])
     headers = {"Accept": "application/json",
                "User-Agent": "rig-capabilities-federation/5"}
+    tok = (fed.get("token") or os.environ.get("RIG_CAPABILITIES_FEDERATION_TOKEN") or "").strip()
+    if tok:
+        headers["Authorization"] = f"Bearer {tok}"
     last_err = ""
     for suffix in ("/index.json", "/public-catalog.json"):
         try:

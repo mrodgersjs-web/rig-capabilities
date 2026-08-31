@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v5.1: SQL/API connectors, HTTP federation serve, Langfuse/local traces.
+v6: org-IdP HMAC requester tokens + Bearer-authenticated serve + federation auth.
 Stdlib only.
 """
-__version__ = "5.1.0"
+__version__ = "6.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

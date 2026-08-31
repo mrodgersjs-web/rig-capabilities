@@ -1,32 +1,70 @@
-"""Cross-machine federation server — stdlib http.server.
+"""HTTP federation server with optional Bearer auth.
 
-Exposes:
-  GET /health
-  GET /version
-  GET /public-catalog.json
-  GET /index.json          (full catalog; large)
-  GET /federation.json     (counts + peer health, no asset bodies)
+Public (always):  GET /health /version /public-catalog.json
+Protected:        GET /index.json /federation.json
+  — if a serve token is configured, these require
+    `Authorization: Bearer <token>`.
+  — if no token is configured, they stay open and /health reports auth=false.
 
-Bind defaults to 127.0.0.1. Cross-machine: pass --bind 0.0.0.0 and a
-firewall/ACL of your own — this process does not authenticate.
+Token source: RIG_CAPABILITIES_SERVE_TOKEN or `.serve.token` (gitignored).
 """
 from __future__ import annotations
 
+import hmac
 import json
-from functools import partial
+import os
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
 from urllib.parse import urlparse
 
 from . import VERSION_LADDER, __version__
 from .surface import public_assets, write_public_catalog
+
+_PUBLIC = {"/health", "/", "/version", "/public-catalog.json"}
+_PROTECTED = {"/index.json", "/federation.json"}
+
+
+def load_serve_token(repo) -> str | None:
+    env = os.environ.get("RIG_CAPABILITIES_SERVE_TOKEN")
+    if env and env.strip():
+        return env.strip()
+    p = Path(repo.root) / ".serve.token"
+    if p.exists():
+        try:
+            t = p.read_text().strip()
+        except OSError:
+            return None
+        return t or None
+    return None
+
+
+def generate_serve_token(repo) -> Path:
+    p = Path(repo.root) / ".serve.token"
+    if not p.exists():
+        p.write_text(os.urandom(24).hex())
+        try:
+            p.chmod(0o600)
+        except OSError:
+            pass
+    return p
 
 
 def _json_bytes(obj) -> bytes:
     return json.dumps(obj, ensure_ascii=False).encode()
 
 
+def _bearer_ok(header: str, token: str) -> bool:
+    if not header or not token:
+        return False
+    got = header[7:].strip() if header.lower().startswith("bearer ") else ""
+    if not got or len(got) != len(token):
+        return False
+    return hmac.compare_digest(got.encode(), token.encode())
+
+
 class _Handler(BaseHTTPRequestHandler):
-    repo = None  # set via factory
+    repo = None
+    token = None
 
     def log_message(self, fmt, *args):
         return
@@ -42,12 +80,17 @@ class _Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         path = urlparse(self.path).path.rstrip("/") or "/"
         repo = self.repo
+        if path in _PROTECTED and self.token:
+            if not _bearer_ok(self.headers.get("Authorization") or "", self.token):
+                self._send(401, _json_bytes({"error": "unauthorized"}))
+                return
         if path in ("/health", "/"):
             idx = repo.index_path.exists()
             self._send(200, _json_bytes({
                 "status": "ok" if idx else "degraded",
                 "index": idx,
                 "version": __version__,
+                "auth": bool(self.token),
             }))
             return
         if path == "/version":
@@ -76,21 +119,27 @@ class _Handler(BaseHTTPRequestHandler):
                 "version": __version__,
                 "assets": doc.get("count", 0),
                 "public": len(pub),
+                "auth": bool(self.token),
             }))
             return
         self._send(404, _json_bytes({"error": "not found", "path": path}))
 
 
-def make_server(repo, host: str = "127.0.0.1", port: int = 8765) -> ThreadingHTTPServer:
-    handler = type("Handler", (_Handler,), {"repo": repo})
+def make_server(repo, host: str = "127.0.0.1", port: int = 8765,
+                token: str | None = None) -> ThreadingHTTPServer:
+    tok = token if token is not None else load_serve_token(repo)
+    handler = type("Handler", (_Handler,), {"repo": repo, "token": tok})
     httpd = ThreadingHTTPServer((host, port), handler)
     httpd.allow_reuse_address = True
     return httpd
 
 
-def serve(repo, host: str = "127.0.0.1", port: int = 8765) -> None:
-    httpd = make_server(repo, host, port)
-    print(f"rig-capabilities serve {host}:{port}  (health /index.json /public-catalog.json)")
+def serve(repo, host: str = "127.0.0.1", port: int = 8765,
+          token: str | None = None) -> None:
+    httpd = make_server(repo, host, port, token=token)
+    auth = bool(getattr(httpd.RequestHandlerClass, "token", None))
+    print(f"rig-capabilities serve {host}:{port} auth={auth}  "
+          f"(public: /health /public-catalog.json; protected: /index.json)")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
