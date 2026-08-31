@@ -168,6 +168,8 @@ def main() -> int:
     p = sub.add_parser("reclassify")
     p.add_argument("--apply", action="store_true")
 
+    sub.add_parser("coverage")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
 
@@ -388,6 +390,9 @@ def main() -> int:
             from collections import Counter
             print(json.dumps({"would_reassign": len(ov),
                               "by_lane": dict(Counter(ov.values()))}, indent=1))
+    elif args.cmd == "coverage":
+        import subprocess as _sp
+        _sp.call([sys.executable, str(REPO_ROOT / "scripts" / "coverage_matrix.py")])
     return 0
 
 

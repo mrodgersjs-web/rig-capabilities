@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v11: misc burn-down via embedding lane overlay (898 -> 298).
+v12: RIG coverage matrix + per-agent skill packs + capability requests.
 Stdlib only.
 """
-__version__ = "11.0.0"
+__version__ = "12.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

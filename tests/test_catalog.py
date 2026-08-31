@@ -927,5 +927,22 @@ class LaneOverlayTests(unittest.TestCase):
         self.assertEqual(0.0, _cos([0, 0], [1, 1]))
 
 
+class CoverageTests(unittest.TestCase):
+    def test_roster_has_verticals_and_agents(self):
+        roster = json.loads((REPO_ROOT / "agents" / "roster.json").read_text())
+        self.assertEqual(8, len(roster["verticals"]))
+        self.assertIn("healthcare", roster["verticals"])
+        self.assertGreaterEqual(len(roster["agents"]), 20)
+
+    def test_every_agent_has_pack(self):
+        roster = json.loads((REPO_ROOT / "agents" / "roster.json").read_text())
+        for agent in roster["agents"]:
+            p = REPO_ROOT / "agents" / agent / "pack.json"
+            self.assertTrue(p.exists(), f"missing pack for {agent}")
+            d = json.loads(p.read_text())
+            self.assertEqual(agent, d["agent"])
+            self.assertTrue(d["lanes"])
+
+
 if __name__ == "__main__":
     unittest.main()
