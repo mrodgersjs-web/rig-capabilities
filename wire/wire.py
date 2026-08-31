@@ -53,6 +53,7 @@ MD_BLOCK = f"""{MARK_BEGIN}
 - **Before authoring ANY new skill, agent, hook, harness, loop, or command** (or recommending an install), call `capabilities_search` — it indexes this repo plus every installed harness root (~/.claude, ~/.codex, ~/.hermes, ~/.agents).
 - **Canonicalize, then distribute:** new or vendored assets go into `~/Developer/rig-capabilities/capabilities/<kind>/` via `capability_add` (git-versioned), then reach a harness via `capability_install`. Canonical entries shadow same-named installs elsewhere — one owner per name.
 - **Goal loops & the 56 goal harnesses**: your harness has a local copy under its `harnesses/` root (`~/.claude/harnesses`, `~/.codex/harnesses`, `~/.omp/harnesses`, `~/.prime/agent/harnesses`, `~/.hermes/jake/goal-harnesses`); compiled engine specs live in `~/Developer/rig-capabilities/out/harness-goalspecs/`. Pick one with `capabilities_route("goal harness <outcome>")`.
+- **`/skill-upgrades`**: run the quality→pack→apply→verify upgrade flow — `capabilities_quality_report` for the weakest assets, then `capabilities_context_pack` for the target, then `rig-capabilities test <id>`. Installed as a command in Claude/Codex/OMP/agents and as the `/skill-upgrades` skill in Hermes.
 
 {MARK_END}"""
 

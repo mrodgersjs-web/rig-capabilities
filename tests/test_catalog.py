@@ -811,5 +811,33 @@ class QualityTests(unittest.TestCase):
         self.assertEqual(rep["total"], rep["fully_specified"])
 
 
+class SkillUpgradesCommandTests(unittest.TestCase):
+    def test_command_install_roots_cover_five(self):
+        from rig_capabilities.catalog import DEFAULT_INSTALL_ROOTS
+        cmd = DEFAULT_INSTALL_ROOTS["command"]
+        for h in ("claude", "codex", "hermes", "omp", "agents"):
+            self.assertIn(h, cmd)
+
+    def test_install_kind_disambiguates(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        # two canonical assets, same id, different kind
+        skdir = repo.cap_root / "skills" / "dual"
+        skdir.mkdir(parents=True, exist_ok=True)
+        (skdir / "SKILL.md").write_text("---\nname: dual\ndescription: the skill\n---\n# dual\nbody\n")
+        cmddir = repo.cap_root / "commands"
+        cmddir.mkdir(parents=True, exist_ok=True)
+        (cmddir / "dual.md").write_text("---\nname: dual\ndescription: the command\n---\n# dual cmd\nbody\n")
+        cfg = json.loads(repo.config_path.read_text())
+        cfg.setdefault("install_roots", {})["command"] = {"claude": str(Path(tmp.name) / "cc")}
+        cfg["install_roots"]["skill"] = {"claude": str(Path(tmp.name) / "cs")}
+        repo.config_path.write_text(json.dumps(cfg))
+        repo.build_index()
+        res = repo.install("dual.md", "claude", kind="command")
+        self.assertEqual("command", res["kind"])
+        self.assertTrue(res["target"].endswith("dual.md"))
+
+
 if __name__ == "__main__":
     unittest.main()

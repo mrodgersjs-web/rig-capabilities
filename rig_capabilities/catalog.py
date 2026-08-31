@@ -66,7 +66,8 @@ DEFAULT_INSTALL_ROOTS = {
     "loop": {"claude": "~/.claude/harnesses", "codex": "~/.codex/harnesses",
              "hermes": "~/.hermes/jake/goal-harnesses"},
     "command": {"claude": "~/.claude/commands", "codex": "~/.codex/commands",
-                "hermes": "~/.hermes/commands"},
+                "hermes": "~/.hermes/commands", "omp": "~/.omp/agent/commands",
+                "agents": "~/.agents/commands"},
 }
 
 HEAD_BYTES = 4096
@@ -399,8 +400,10 @@ class Repo:
     def install_roots(self, kind: str) -> dict:
         return self.config()["install_roots"].get(kind, {})
 
-    def install(self, asset_id: str, harness: str, force: bool = False) -> dict:
-        matches = [a for a in self.resolve(asset_id) if a["source"] == "canonical"]
+    def install(self, asset_id: str, harness: str, force: bool = False,
+                kind: str | None = None) -> dict:
+        matches = [a for a in self.resolve(asset_id)
+                   if a["source"] == "canonical" and (kind is None or a["kind"] == kind)]
         if not matches:
             ext = self.resolve(asset_id)
             if ext:

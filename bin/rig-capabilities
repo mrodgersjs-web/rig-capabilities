@@ -83,6 +83,7 @@ def main() -> int:
     p.add_argument("--harness", required=True,
                    choices=["claude", "codex", "hermes", "agents", "omp"])
     p.add_argument("--force", action="store_true")
+    p.add_argument("--kind", choices=KINDS)
 
     p = sub.add_parser("wire")
     p.add_argument("--apply", action="store_true")
@@ -232,8 +233,8 @@ def main() -> int:
                                   overwrite=args.overwrite), indent=1))
     elif args.cmd == "install":
         try:
-            print(json.dumps(repo.install(args.id, args.harness, force=args.force),
-                             indent=1))
+            print(json.dumps(repo.install(args.id, args.harness, force=args.force,
+                                          kind=args.kind), indent=1))
         except ValueError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 1
