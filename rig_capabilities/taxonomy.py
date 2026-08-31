@@ -126,6 +126,8 @@ def _id_hit(aid: str, subs) -> bool:
 
 def classify(asset: dict) -> str:
     """Return the outcome lane for one index asset (deterministic)."""
+    if asset.get("lane"):
+        return asset["lane"]
     aid = asset["id"].lower()
     for outcome, _desc, subs, dregex in RULES:
         if _id_hit(aid, subs):

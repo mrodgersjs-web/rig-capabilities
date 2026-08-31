@@ -318,6 +318,18 @@ class Repo:
 
     def build_index(self) -> dict:
         assets = self.scan()
+        overlay = {}
+        lanes_p = self.root / ".lanes.json"
+        if lanes_p.exists():
+            try:
+                overlay = json.loads(lanes_p.read_text())
+            except json.JSONDecodeError:
+                overlay = {}
+        if overlay:
+            for a in assets:
+                lane = overlay.get(a["id"])
+                if lane:
+                    a["lane"] = lane
         doc = {"generated_at": _now(), "count": len(assets), "assets": assets}
         tmp = self.index_path.with_suffix(".tmp")
         tmp.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")

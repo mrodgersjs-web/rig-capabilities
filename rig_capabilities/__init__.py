@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v10: great-examples corpus + reference-implementation injection in packs.
+v11: misc burn-down via embedding lane overlay (898 -> 298).
 Stdlib only.
 """
-__version__ = "10.0.0"
+__version__ = "11.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

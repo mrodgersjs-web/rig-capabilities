@@ -900,5 +900,32 @@ class GreatExamplesTests(unittest.TestCase):
         self.assertIn("# Reference implementation", rep["markdown"])
 
 
+class LaneOverlayTests(unittest.TestCase):
+    def test_classify_prefers_overlay_lane(self):
+        from rig_capabilities.taxonomy import classify
+        # an asset that keyword-classifies as misc
+        a = {"id": "zzz-unknown-thing", "kind": "skill", "description": "opaque"}
+        self.assertEqual("misc", classify(a))
+        a["lane"] = "revenue-gtm"
+        self.assertEqual("revenue-gtm", classify(a))
+
+    def test_overlay_stamped_at_index(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        (repo.root / ".lanes.json").write_text(json.dumps({"demo-skill": "revenue-gtm"}))
+        doc = repo.build_index()
+        a = [x for x in doc["assets"] if x["id"] == "demo-skill" and x["source"] == "canonical"][0]
+        self.assertEqual("revenue-gtm", a.get("lane"))
+        from rig_capabilities.taxonomy import classify
+        self.assertEqual("revenue-gtm", classify(a))
+
+    def test_cosine_and_centroid_math(self):
+        from rig_capabilities.lanes import _cos
+        self.assertAlmostEqual(1.0, _cos([1, 0], [2, 0]), places=6)
+        self.assertAlmostEqual(0.0, _cos([1, 0], [0, 1]), places=6)
+        self.assertEqual(0.0, _cos([0, 0], [1, 1]))
+
+
 if __name__ == "__main__":
     unittest.main()
