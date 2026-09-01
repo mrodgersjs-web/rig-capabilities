@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v33: installer delivers canonical commands to hermes/omp/agents/prime.
+v34: overlay doctor — tagged/target/ollama, never claims complete on a short file.
 Stdlib only.
 """
-__version__ = "33.0.0"
+__version__ = "34.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -37,4 +37,5 @@ VERSION_LADDER = {
     "31": "gate_d.evaluate library (no SDK)",
     "32": "canonical command/hook public ACL default",
     "33": "commands delivered to hermes/omp/agents/prime",
+    "34": "overlay doctor (honest 62/300)",
 }

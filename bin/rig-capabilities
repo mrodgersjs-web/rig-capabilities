@@ -139,6 +139,7 @@ def main() -> int:
     p = sub.add_parser("concepts-build")
     p.add_argument("--llm", action="store_true")
     p.add_argument("--llm-only", action="store_true")
+    p.add_argument("--status", action="store_true")
     p.add_argument("--n", type=int, default=500)
 
     p = sub.add_parser("rate")
@@ -347,10 +348,13 @@ def main() -> int:
                         for i in rows)
               if rows else "no matches (run fabric-build)")
     elif args.cmd == "concepts-build":
-        if args.llm or args.llm_only:
+        if args.status:
+            from rig_capabilities.concepts_llm import overlay_status
+            print(json.dumps(overlay_status(repo, target=args.n), indent=1))
+        elif args.llm or args.llm_only:
             from rig_capabilities.concepts_llm import build
             print(json.dumps(build(repo, n=args.n), indent=1))
-        if not args.llm_only:
+        if not args.llm_only and not args.status:
             from rig_capabilities.fabric import build_concepts
             print("idf concepts:", build_concepts(repo))
     elif args.cmd == "okf-check":

@@ -104,6 +104,21 @@ def _save(repo, data: dict) -> None:
     tmp.replace(cp)
 
 
+def overlay_status(repo, target: int = 300, url: str = _DEFAULT_URL) -> dict:
+    """Honest coverage: tagged vs target. Never claims complete on a short file."""
+    data = load_llm(repo)
+    tagged = sum(1 for v in data.values() if v)
+    return {
+        "entries": len(data),
+        "tagged": tagged,
+        "target": target,
+        "ratio": round(tagged / target, 3) if target else None,
+        "ollama": _reachable(url),
+        "complete": tagged >= target,
+        "resume": f"concepts-build --llm --n {target}",
+    }
+
+
 def build(repo, model: str = _DEFAULT_MODEL, url: str = _DEFAULT_URL,
           n: int = 500, timeout: int = 10, checkpoint: int = 50) -> dict:
     data = load_llm(repo)

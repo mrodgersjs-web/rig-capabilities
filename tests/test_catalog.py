@@ -1713,5 +1713,30 @@ class PublicAclTests(unittest.TestCase):
         self.assertEqual(explicit["acl"], ["internal"])
 
 
+class OverlayDoctorTests(unittest.TestCase):
+    """V34: overlay_status never claims complete on a short file."""
+
+    def test_empty_overlay_is_incomplete(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        from rig_capabilities.concepts_llm import overlay_status
+        st = overlay_status(repo, target=300)
+        self.assertEqual(st["tagged"], 0)
+        self.assertFalse(st["complete"])
+        self.assertIn("concepts-build", st["resume"])
+
+    def test_partial_overlay_ratio_honest(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        (repo.root / ".concepts.llm.json").write_text(json.dumps({"a|skill|canonical": ["x"]}))
+        from rig_capabilities.concepts_llm import overlay_status
+        st = overlay_status(repo, target=10)
+        self.assertEqual(st["tagged"], 1)
+        self.assertEqual(st["ratio"], 0.1)
+        self.assertFalse(st["complete"])
+
+
 if __name__ == "__main__":
     unittest.main()
