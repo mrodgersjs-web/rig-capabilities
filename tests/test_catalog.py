@@ -1763,7 +1763,7 @@ class ProofchainTests(unittest.TestCase):
         repo = make_fixture(Path(self._tmp.name))
         docs = repo.root / "docs"
         docs.mkdir(parents=True)
-        (docs / "ROADMAP.md").write_text("packet `deadbeef` and sha256:cafebabe00\n")
+        (docs / "ROADMAP.md").write_text("| V | commit | packet | what |\n| 21 | `abcabcab` | `deadbeef` | x |\nsha256:cafebabe00\n")
         proofs = Path(self._tmp.name) / "proof"
         proofs.mkdir()
         (proofs / "a.json").write_text(json.dumps({"proof_hash": "sha256:cafebabe00ffff"}))

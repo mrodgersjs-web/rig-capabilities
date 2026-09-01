@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v35: harness-install copies GoalSpecs; default dry-run.
+v36: proofchain verifies ROADMAP packet prefixes against ~/.rig/proof.
 Stdlib only.
 """
-__version__ = "35.0.0"
+__version__ = "36.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -39,4 +39,5 @@ VERSION_LADDER = {
     "33": "commands delivered to hermes/omp/agents/prime",
     "34": "overlay doctor (honest 62/300)",
     "35": "harness-install GoalSpecs (dry default)",
+    "36": "proofchain ROADMAP prefixes vs ~/.rig/proof",
 }

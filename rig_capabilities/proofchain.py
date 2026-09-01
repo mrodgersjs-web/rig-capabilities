@@ -10,9 +10,27 @@ import re
 from pathlib import Path
 
 PROOF_DIR = Path.home() / ".rig" / "proof"
-PREFIX_RE = re.compile(r"`([0-9a-f]{8})`")
-# also sha256:xxxxxxxx in prose
 SHA_RE = re.compile(r"sha256:([0-9a-f]{8,})")
+
+
+def _packet_prefixes(text: str) -> list[str]:
+    """Third table column is the packet prefix — not the commit column."""
+    out = []
+    for line in text.splitlines():
+        if not line.startswith("|"):
+            continue
+        cols = [c.strip() for c in line.split("|")]
+        # ['', V, commit, packet, what, proof, '']
+        if len(cols) < 5:
+            continue
+        pkt = cols[3].strip("`")
+        if pkt.startswith("sha256:"):
+            pkt = pkt[7:]
+        pkt = pkt.lower()
+        if len(pkt) >= 8 and all(c in "0123456789abcdef" for c in pkt[:8]):
+            out.append(pkt[:8])
+    out.extend(m[:8] for m in SHA_RE.findall(text.lower()))
+    return sorted(set(out))
 
 
 def _hashes(proof_dir: Path) -> set[str]:
@@ -23,6 +41,8 @@ def _hashes(proof_dir: Path) -> set[str]:
         try:
             d = json.loads(p.read_text(encoding="utf-8"))
         except (json.JSONDecodeError, OSError):
+            continue
+        if not isinstance(d, dict):
             continue
         h = str(d.get("proof_hash") or d.get("hash") or "")
         if h.startswith("sha256:"):
@@ -35,8 +55,7 @@ def _hashes(proof_dir: Path) -> set[str]:
 def verify_roadmap(repo, proof_dir: Path | None = None) -> dict:
     md = Path(repo.root) / "docs" / "ROADMAP.md"
     text = md.read_text(encoding="utf-8") if md.exists() else ""
-    prefixes = sorted(set(PREFIX_RE.findall(text.lower())) |
-                      {m[:8] for m in SHA_RE.findall(text.lower())})
+    prefixes = _packet_prefixes(text)
     hashes = _hashes(proof_dir or PROOF_DIR)
     found, missing = [], []
     for pre in prefixes:
