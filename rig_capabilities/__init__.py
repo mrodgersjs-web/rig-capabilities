@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v38: stats.public_assets + gate_d_cases on the dashboard.
+v39: ROADMAP records V28 ARMED and Wave 4 V31–V38.
 Stdlib only.
 """
-__version__ = "38.0.0"
+__version__ = "39.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -42,4 +42,5 @@ VERSION_LADDER = {
     "36": "proofchain ROADMAP prefixes vs ~/.rig/proof",
     "37": "MCP gaps/overlay_status/proofchain/release",
     "38": "stats public_assets + gate_d_cases",
+    "39": "ROADMAP V28 ARMED + Wave 4 rows",
 }

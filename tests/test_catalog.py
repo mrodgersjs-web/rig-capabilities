@@ -1677,7 +1677,7 @@ class RoadmapTests(unittest.TestCase):
         for n in range(1, 31):
             self.assertRegex(text, rf"\| {n} \|")
         self.assertIn("gd_1788227314643", text)
-        self.assertIn("DORMANT", text)
+        self.assertIn("ARMED", text)
 
 
 class GateDLibTests(unittest.TestCase):

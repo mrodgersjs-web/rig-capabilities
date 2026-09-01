@@ -1,9 +1,9 @@
-# rig-capabilities ROADMAP — V1 through V30
+# rig-capabilities ROADMAP — V1 through V40
 
 Evidence table. Packet hashes are `sha256:` prefixes from sealed ProofPackets.
 `—` means no packet was sealed for that increment (pre-packet era or known FALSE later superseded).
 
-V28 zip is **DORMANT**. Tag/GitHub Release waits typed `APPROVE gd_1788227314643`.
+V28 zip is **ARMED** (typed `APPROVE gd_1788227314643` on 2026-09-01). Tag `v28.0.0` → `ff83a6f`. Release: https://github.com/mrodgersjs-web/rig-capabilities/releases/tag/v28.0.0
 
 ## Ladder
 
@@ -37,11 +37,23 @@ V28 zip is **DORMANT**. Tag/GitHub Release waits typed `APPROVE gd_1788227314643
 | 25 | `e2b303f` | `f4973c98` | OMP+Prime hook roots; live-on-presence | packet TRUE; verify hooks 6 |
 | 26 | `b417015` | `f64b7245` | 8 gap harness drafts | packet TRUE; last-row-wins |
 | 27 | `5918f0e` | `bf0b1edb` | traces panel aggregates, no payloads | packet TRUE; live traces 3 |
-| 28 | `ff83a6f` | `4ee229eb` | public zip **builder**; zip armed=false | packet TRUE; publish blocked on `APPROVE gd_1788227314643` |
+| 28 | `ff83a6f` | `4ee229eb` builder / `8af6e5d8` armed | public zip builder then ARMED release | packet TRUE; tag v28.0.0 |
 | 29 | `6fd4502` | `77169382` | Layer-Isolated certify in suite | packet TRUE |
-| 30 | this file | (this increment) | ROADMAP + proof-chain | see below |
+| 30 | `1d8d46a` | `cf9d0b23` | ROADMAP + proof-chain | packet TRUE |
 
-## V30 proof-chain check
+
+| 31 | `8559cc5` | `93dbe1bf` | gate_d.evaluate library (no SDK) | packet TRUE |
+| 32 | `d608fd6` | `09186d4c` | canonical command/hook public ACL (catalog 1→13) | packet TRUE |
+| 33 | `cc42380` | — | commands delivered to hermes/omp/agents/prime | commit |
+| 34 | `730bdfe` | — | overlay doctor 62/300 honest incomplete | commit |
+| 35 | `9fa2a8f` | — | harness-install GoalSpecs dry default | commit |
+| 36 | `ac5a8bb` | — | proofchain 16/16 prefixes found | commit |
+| 37 | `71af6ad` | — | MCP gaps/overlay_status/proofchain/release | commit |
+| 38 | `fa70c71` | — | stats public_assets + gate_d_cases | commit |
+| 39 | this file | (this increment) | ROADMAP Wave 4 rows | see below |
+| 40 | — | — | Wave 4 close | pending |
+
+## Proof-chain check
 
 Commands that must stay green on `main`:
 
@@ -53,13 +65,14 @@ python3 -c "from rig_capabilities.catalog import Repo; from rig_capabilities.cer
 
 Open:
 
-- LLM overlay 62/300 (background build died early; `concepts-build --llm --n 300` is checkpointed).
-- Public ACL catalog count=1. Zip is honest about that.
-- V28 GitHub Release / git tag: **not done**. Type `APPROVE gd_1788227314643`.
-- Blanket "approve all gate d" does **not** arm unrelated pending items (TestFlight, Blackwell reboot, cancel-13-subs, Vercel prod).
+- LLM overlay 62/300 — doctor reports complete=false; resume `concepts-build --llm --n 300`.
+- Public ACL catalog **13** (6 commands + 6 hooks + rig-office-docs). Skills stay private.
+- Unrelated Gate-D (TestFlight, Blackwell reboot, cancel-13-subs, Vercel prod) stays unarmed without `APPROVE <run_id>`.
+- harness-install not `--apply`'d to live `~/.hermes/skills/goal-loop/yaml-specs` this wave (dry default).
 
 ## Plant-failure doctrine (earned)
 
 1. V22: `grep:...:Semgrep` was self-referential (frontmatter carried the pattern). Rewired to `file:.../run-scans.sh`.
 2. V24: `mcp:capabilities_certify` inside done_when re-entered `quality_run` (400s hang). Mutating MCP skipped; reentrancy guard.
 3. V28: a zip that includes `.signing.key` fails PublicZipTests.
+4. V32: federation without a token now returns public hooks — the old empty-list test was lying about the public fallback.
