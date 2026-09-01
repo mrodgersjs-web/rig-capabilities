@@ -1738,5 +1738,41 @@ class OverlayDoctorTests(unittest.TestCase):
         self.assertFalse(st["complete"])
 
 
+class HarnessInstallTests(unittest.TestCase):
+    def test_dry_does_not_write(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        src = repo.root / "out" / "harness-goalspecs"
+        src.mkdir(parents=True)
+        (src / "hA-01.yaml").write_text("id: GL-HA-01\n")
+        dest = Path(self._tmp.name) / "dest"
+        from rig_capabilities.harness_install import harness_install
+        dry = harness_install(repo, dest=dest, apply=False)
+        self.assertEqual(dry["count"], 1)
+        self.assertFalse(dest.exists())
+        live = harness_install(repo, dest=dest, apply=True)
+        self.assertEqual(live["written"], ["hA-01.yaml"])
+        self.assertTrue((dest / "hA-01.yaml").exists())
+
+
+class ProofchainTests(unittest.TestCase):
+    def test_missing_prefix_is_reported(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        docs = repo.root / "docs"
+        docs.mkdir(parents=True)
+        (docs / "ROADMAP.md").write_text("packet `deadbeef` and sha256:cafebabe00\n")
+        proofs = Path(self._tmp.name) / "proof"
+        proofs.mkdir()
+        (proofs / "a.json").write_text(json.dumps({"proof_hash": "sha256:cafebabe00ffff"}))
+        from rig_capabilities.proofchain import verify_roadmap
+        rep = verify_roadmap(repo, proof_dir=proofs)
+        self.assertIn("deadbeef", rep["missing"])
+        self.assertIn("cafebabe", rep["found"])
+        self.assertFalse(rep["ok"])
+
+
 if __name__ == "__main__":
     unittest.main()

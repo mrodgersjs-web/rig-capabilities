@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v34: overlay doctor — tagged/target/ollama, never claims complete on a short file.
+v35: harness-install copies GoalSpecs; default dry-run.
 Stdlib only.
 """
-__version__ = "34.0.0"
+__version__ = "35.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -38,4 +38,5 @@ VERSION_LADDER = {
     "32": "canonical command/hook public ACL default",
     "33": "commands delivered to hermes/omp/agents/prime",
     "34": "overlay doctor (honest 62/300)",
+    "35": "harness-install GoalSpecs (dry default)",
 }

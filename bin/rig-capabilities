@@ -71,6 +71,12 @@ def main() -> int:
     p = sub.add_parser("release")
     p.add_argument("--dry", action="store_true")
 
+    p = sub.add_parser("harness-install")
+    p.add_argument("--dest")
+    p.add_argument("--apply", action="store_true")
+
+    p = sub.add_parser("proofchain")
+
     p = sub.add_parser("search")
     p.add_argument("query")
     p.add_argument("--kind", choices=KINDS)
@@ -225,6 +231,12 @@ def main() -> int:
     elif args.cmd == "release":
         from rig_capabilities.release import build_public_zip
         print(json.dumps(build_public_zip(repo, apply=not args.dry), indent=1))
+    elif args.cmd == "harness-install":
+        from rig_capabilities.harness_install import harness_install
+        print(json.dumps(harness_install(repo, dest=args.dest, apply=args.apply), indent=1))
+    elif args.cmd == "proofchain":
+        from rig_capabilities.proofchain import verify_roadmap
+        print(json.dumps(verify_roadmap(repo), indent=1))
     elif args.cmd == "agent-pack":
         from rig_capabilities.packs import boot_pack, match_agent, resolve_pack
         if args.intent:
