@@ -1363,5 +1363,54 @@ class CertifyTests(unittest.TestCase):
         self.assertFalse(red)
 
 
+class PackTests(unittest.TestCase):
+    """V23: agent packs resolve against the index and lead agent-shaped packs."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+        d = self.repo.root / "agents" / "demo"
+        d.mkdir(parents=True, exist_ok=True)
+        (d / "pack.json").write_text(json.dumps({
+            "agent": "demo", "lanes": ["data-analytics"],
+            "skills": [{"id": "demo-skill", "kind": "skill", "trust": 0.9},
+                       {"id": "ghost-skill", "kind": "skill", "trust": 0.8}]}))
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_resolve_pack_resolves_and_flags_ghost(self):
+        from rig_capabilities.packs import resolve_pack
+        rp = resolve_pack(self.repo, "demo")
+        self.assertTrue(rp["ok"])
+        self.assertEqual(rp["unresolved"], ["ghost-skill"])
+        by = {e["id"]: e for e in rp["entries"]}
+        self.assertTrue(by["demo-skill"]["resolved"])
+        self.assertEqual(by["demo-skill"]["source"], "canonical")
+
+    def test_match_agent_ranks_and_rejects(self):
+        from rig_capabilities.packs import match_agent
+        hits = match_agent(self.repo, "wire demo up to run the thing")
+        self.assertEqual(hits[0]["agent"], "demo")
+        self.assertEqual(match_agent(self.repo, "rotate the api signing key"), [])
+
+    def test_boot_pack_attests_readiness(self):
+        from rig_capabilities.packs import boot_pack
+        bp = boot_pack(self.repo, "demo")
+        self.assertEqual(bp["total"], 2)
+        by = {e["id"]: e for e in bp["entries"]}
+        self.assertIn("live", by["demo-skill"])
+        self.assertEqual(by["ghost-skill"]["live"]["state"], "unresolved")
+        self.assertLessEqual(bp["ready"], bp["total"])
+
+    def test_context_pack_leads_with_agent_pack(self):
+        from rig_capabilities.fabric import context_pack
+        rep = context_pack(self.repo, "wire demo to run the demo flow",
+                           sign=False)
+        self.assertEqual(rep["pack_for"], "demo")
+        self.assertIn("# Agent pack", rep["markdown"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -4,6 +4,7 @@
 Commands:
   stats                                   counts by kind/source + install ledger
   reindex                                 rescan repo + all external roots
+  agent-pack <agent> [--boot] [--intent T]   resolve an agent pack / boot pack / match agent-shaped queries
   search <query> [--kind K] [--limit N]   search every harness root
   list [--kind K] [--source S] [--limit N]
   get <id>                                print metadata + content head
@@ -58,6 +59,10 @@ def main() -> int:
 
     sub.add_parser("stats")
     sub.add_parser("reindex")
+    p = sub.add_parser("agent-pack")
+    p.add_argument("agent", nargs="?")
+    p.add_argument("--boot", action="store_true")
+    p.add_argument("--intent")
 
     p = sub.add_parser("search")
     p.add_argument("query")
@@ -206,6 +211,16 @@ def main() -> int:
 
     if args.cmd == "stats":
         print(json.dumps(repo.stats(), indent=1))
+    elif args.cmd == "agent-pack":
+        from rig_capabilities.packs import boot_pack, match_agent, resolve_pack
+        if args.intent:
+            print(json.dumps(match_agent(repo, args.intent), indent=1))
+        elif args.agent:
+            bp = boot_pack(repo, args.agent) if args.boot else resolve_pack(repo, args.agent)
+            print(json.dumps(bp, indent=1))
+        else:
+            print("agent-pack: give an agent name or --intent", file=sys.stderr)
+            sys.exit(2)
     elif args.cmd == "reindex":
         doc = repo.build_index()
         print(f"indexed {doc['count']} capabilities -> {repo.index_path}")

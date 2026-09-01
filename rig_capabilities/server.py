@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "22.0.0"
+VERSION = "23.0.0"
 
 
 def default_repo() -> Repo:
@@ -283,6 +283,14 @@ TOOLS = [
         },
     },
     {
+        "name": "capabilities_agent_pack",
+        "description": "Agent packs (24 agents): resolved entries against the live index; boot=true adds live state + done-test verdict per entry; intent= matches agent-shaped queries.",
+        "inputSchema": {"type": "object",
+                        "properties": {"agent": {"type": "string"},
+                                       "boot": {"type": "boolean"},
+                                       "intent": {"type": "string"}}},
+    },
+    {
         "name": "capabilities_quality_report",
         "description": "Skill quality-contract coverage: outcome/done_when/great_example/quality_floor per canonical asset, weakest first.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -425,6 +433,14 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
 
 
 
+    def agent_pack(args: dict):
+        from .packs import boot_pack, match_agent, resolve_pack
+        if args.get("intent"):
+            return {"matches": match_agent(repo, str(args["intent"]))}
+        agent = str(args.get("agent", ""))
+        return boot_pack(repo, agent) if args.get("boot") else resolve_pack(repo, agent)
+
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -433,6 +449,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capability_add": add,
         "capabilities_stats": stats,
         "capabilities_reindex": reindex,
+        "capabilities_agent_pack": agent_pack,
         "capabilities_live_status": live,
         "capabilities_outcomes": outcomes,
         "capabilities_route": route,

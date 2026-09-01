@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v22: certify gates + plant-failure proof — no gate is theater.
+v23: agent packs — resolved, boot-tested, and first in agent-shaped context packs.
 Stdlib only.
 """
-__version__ = "22.0.0"
+__version__ = "23.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -26,4 +26,5 @@ VERSION_LADDER = {
     "20": "verified requesters (idp tokens in pack traces)",
     "21": "stats.json + dashboard panel",
     "22": "certify gates + plant-failure self-test",
+    "23": "agent packs + boot packs + pack-first context",
 }

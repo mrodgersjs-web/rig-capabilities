@@ -377,6 +377,22 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
                       "freshness": o.get("freshness", "Unknown"),
                       "score": round(score(aid), 3),
                       "tier": "adjacent" if aid in extra else "core"})
+    # V23: an agent-shaped query leads with the agent's own pack
+    pack_for = None
+    from .packs import match_agent, resolve_pack
+    ma = match_agent(repo, intent, limit=1)
+    if ma and ma[0]["score"] >= 0.5:
+        rp = resolve_pack(repo, ma[0]["agent"])
+        if rp.get("ok") and rp["entries"]:
+            pack_for = rp["agent"]
+            lines = "\n".join(
+                f"- {e['kind']}: {e['id']}"
+                + ("" if e.get("resolved") else "  (UNRESOLVED)")
+                for e in rp["entries"])
+            block = (f"\n# Agent pack — {pack_for} "
+                     f"(lanes: {', '.join(rp['lanes'])})\n{lines}\n")
+            parts.insert(1, block)
+            used += len(block) // 4
     markdown = "".join(parts)
 
     ts = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -390,6 +406,7 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
                           "acl_enforced": call_scopes is not None,
                           "decay": True, "ratings_trust": True},
                 "lanes": [l["outcome"] for l in lanes[:3]],
+                "pack_for": pack_for or "",
                 "nodes": nodes, "estimated_tokens": used}
     key = load_key(repo) if sign else None
     artifact["tiers"]["signed"] = bool(key)
