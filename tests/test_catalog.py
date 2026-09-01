@@ -1332,5 +1332,36 @@ class StatsDashboardTests(unittest.TestCase):
         self.assertNotIn("demo-skill", text)
 
 
+class CertifyTests(unittest.TestCase):
+    """V22: gates that cannot go RED are theater — prove they fire on a copy."""
+
+    def _tmp_repo(self):
+        import shutil
+        tmp = Path(tempfile.mkdtemp(prefix="cap-cert-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        shutil.copytree(REPO_ROOT, tmp / "repo",
+                        ignore=shutil.ignore_patterns(".git", ".venvs",
+                                                      ".apodex", "__pycache__"))
+        return tmp / "repo"
+
+    def test_acl_gate_green_then_planted_red(self):
+        from rig_capabilities.certify import _plant, run_gates
+        root = self._tmp_repo()
+        green = run_gates(Repo(root), only=["acl_jake"])["acl_jake"]["ok"]
+        _plant("acl_jake", root)
+        red = run_gates(Repo(root), only=["acl_jake"])["acl_jake"]["ok"]
+        self.assertTrue(green)
+        self.assertFalse(red)
+
+    def test_index_gate_planted_red(self):
+        from rig_capabilities.certify import _plant, run_gates
+        root = self._tmp_repo()
+        green = run_gates(Repo(root), only=["index_fresh"])["index_fresh"]["ok"]
+        _plant("index_fresh", root)
+        red = run_gates(Repo(root), only=["index_fresh"])["index_fresh"]["ok"]
+        self.assertTrue(green)
+        self.assertFalse(red)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v21: /stats.json + /dashboard on serve — public aggregates, protected payloads.
+v22: certify gates + plant-failure proof — no gate is theater.
 Stdlib only.
 """
-__version__ = "21.0.0"
+__version__ = "22.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -25,4 +25,5 @@ VERSION_LADDER = {
     "19": "LLM concept overlay (honest tiers)",
     "20": "verified requesters (idp tokens in pack traces)",
     "21": "stats.json + dashboard panel",
+    "22": "certify gates + plant-failure self-test",
 }
