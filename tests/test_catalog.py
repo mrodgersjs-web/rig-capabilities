@@ -1667,5 +1667,26 @@ class RoadmapTests(unittest.TestCase):
         self.assertIn("DORMANT", text)
 
 
+class GateDLibTests(unittest.TestCase):
+    """V31: evaluate() is the source of truth, no SDK required."""
+
+    def test_cases_match_expected(self):
+        from rig_capabilities.gate_d import CASES, evaluate
+        for tool, payload, want in CASES:
+            got, rule = evaluate(tool, payload)
+            self.assertEqual(got, want, f"{tool} {payload} -> {got}/{rule}")
+
+    def test_relative_rm_allowed(self):
+        from rig_capabilities.gate_d import evaluate
+        got, rule = evaluate("Bash", {"command": "rm -rf ./build && npm run build"})
+        self.assertEqual(got, "allow")
+
+    def test_sanitize_redacts_akia(self):
+        from rig_capabilities.gate_d import sanitize
+        out = sanitize({"content": "key: AKIAIOSFODNN7EXAMPLE"})
+        self.assertNotIn("AKIAIOSFODNN7EXAMPLE", json.dumps(out))
+        self.assertIn("REDACTED", json.dumps(out))
+
+
 if __name__ == "__main__":
     unittest.main()

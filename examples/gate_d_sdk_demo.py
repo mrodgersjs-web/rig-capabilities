@@ -49,99 +49,27 @@ from claude_agent_sdk import (
     ToolPermissionContext,
 )
 
-# --------------------------------------------------------------------------
-# Rule sets — pattern-for-pattern mirrors of the two house guard hooks.
-# --------------------------------------------------------------------------
-
-# guard-dangerous-commands.sh: (sweep, target) pairs; both must match when
-# target is not None. Kept verbatim from the hook.
-DANGEROUS_COMMAND_RULES: list[tuple[str, str, str | None]] = [
-    (
-        "rm-rf-root-or-home",
-        r"\brm\s+(-[a-zA-Z]*\s+)*-[a-zA-Z]*r[a-zA-Z]*f|\brm\s+(-[a-zA-Z]*\s+)*-[a-zA-Z]*f[a-zA-Z]*r",
-        r"(?<![\w/])/(?=\s|$|\*)|(?<![\w])~(?![A-Za-z0-9_-])|(?<![\w])~/|\$HOME(?![A-Za-z0-9_])|\b(usr|etc|sys|boot|var|Library)\b",
-    ),
-    ("mkfs", r"\bmkfs(\.\w+)?\b", None),
-    ("dd-to-device", r"\bdd\b[^\n]*\bof=/dev/(disk|rdisk|nvme|sd|hd)", None),
-    ("redirect-to-device", r">\s*/dev/(disk|rdisk|nvme\d|sd[a-z]|hd[a-z])", None),
-    ("force-push-main", r"\bgit\s+push\b[^\n]*(--force(?!-with-lease)|-f)\b[^\n]*\b(main|master)\b", None),
-    ("force-push-main-2", r"\bgit\s+push\b[^\n]*\bmain\b[^\n]*(--force(?!-with-lease)|-f)\b", None),
-    ("destructive-git", r"\bgit\s+reset\b[^\n]*--hard[^\n]*\s~/|\bgit\s+clean\b[^\n]*-[a-zA-Z]*f[a-zA-Z]*x", None),
-    ("chmod-r-777-root", r"\bchmod\s+-[a-zA-Z]*R[a-zA-Z]*\s+7{3,4}\s+/(?:\s|$)", None),
-    ("fork-bomb", r":\(\)\s*\{.*\|.*&\s*\};\s*:", None),
-]
-
-# guard-secret-write.sh: deterministic credential prefixes, kept verbatim.
-SECRET_RULES: list[tuple[str, str]] = [
-    ("aws-access-key-id", r"AKIA[0-9A-Z]{16}"),
-    ("pem-private-key", r"-----BEGIN (RSA |EC |OPENSSH |DSA )?PRIVATE KEY( BLOCK)?-----"),
-    ("github-token", r"gh[pursr]_[A-Za-z0-9]{36,255}"),
-    ("slack-token", r"xox[baprs]-[0-9A-Za-z-]{10,}"),
-    ("stripe-live-key", r"sk-(live|proj)-[A-Za-z0-9]{24,}"),
-    ("google-api-key", r"AIza[0-9A-Za-z_-]{35}"),
-]
-
-SHELL_TOOLS = {"Bash"}  # hook 1 targets shell tool calls (command/cmd fields)
+# Rule tables live in rig_capabilities.gate_d (stdlib, no SDK).
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from rig_capabilities.gate_d import CASES, evaluate, sanitize  # noqa: E402
 
 LEDGER = Path(__file__).with_name("gate_d_ledger.jsonl")
+SYNTHETIC_CASES = [(tool, payload) for tool, payload, _ in CASES]
+EXPECTED = [want for _, _, want in CASES]
 
 
-def _strings(value: Any) -> list[str]:
-    """Every string value in a (possibly nested) tool-input payload."""
-    out: list[str] = []
-    if isinstance(value, str):
-        out.append(value)
-    elif isinstance(value, dict):
-        for v in value.values():
-            out.extend(_strings(v))
-    elif isinstance(value, (list, tuple)):
-        for v in value:
-            out.extend(_strings(v))
-    return out
-
-
-def evaluate(tool_name: str, input_data: dict[str, Any]) -> tuple[str, str]:
-    """Return (allow|deny, rule_id). Mirrors the two house hooks."""
-    if tool_name in SHELL_TOOLS:
-        cmd = str(input_data.get("command") or input_data.get("cmd") or "")
-        if cmd:
-            if re.search(r"\bsudo\b.*\brm\b", cmd):
-                return "deny", "sudo-rm"
-            for rule_id, sweep, target in DANGEROUS_COMMAND_RULES:
-                if re.search(sweep, cmd) and (target is None or re.search(target, cmd)):
-                    return "deny", rule_id
-    for rule_id, pat in SECRET_RULES:
-        for s in _strings(input_data):
-            if re.search(pat, s):
-                return "deny", rule_id
-    return "allow", "no-rule-match"
-
-
-def _sanitize(payload: dict[str, Any]) -> dict[str, Any]:
-    """Mask credential matches before anything touches the ledger on disk."""
-    blob = json.dumps(payload)
-    for _, pat in SECRET_RULES:
-        blob = re.sub(pat, "[REDACTED-CREDENTIAL]", blob)
-    return json.loads(blob)
-
-
-def _record(decision: str, rule_id: str, tool_name: str, input_data: dict[str, Any],
-            tool_use_id: str) -> None:
+def _record(decision, rule_id, tool_name, input_data, tool_use_id):
     line = {
         "ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "tool": tool_name,
         "tool_use_id": tool_use_id,
         "decision": decision,
         "rule": rule_id,
-        "tool_input": _sanitize(input_data),
+        "tool_input": sanitize(input_data),
     }
     with LEDGER.open("a", encoding="utf-8") as fh:
         fh.write(json.dumps(line, sort_keys=True) + "\n")
 
-
-# --------------------------------------------------------------------------
-# The gate: exactly the CanUseTool signature the SDK calls.
-# --------------------------------------------------------------------------
 
 async def gate_d(
     tool_name: str,
