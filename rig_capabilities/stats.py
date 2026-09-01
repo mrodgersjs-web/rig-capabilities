@@ -60,11 +60,30 @@ def compute(repo) -> dict:
            if isinstance(f, dict)]
     fed_assets = sum(1 for a in assets if str(a.get("source", "")).startswith("fed:"))
 
+    traces = {"count": 0, "by_name": {}, "recent": []}
+    tp = root / ".context" / "traces.jsonl"
+    if tp.exists():
+        names = Counter()
+        recent = []
+        n = 0
+        for line in tp.read_text(encoding="utf-8").splitlines():
+            if not line.strip():
+                continue
+            n += 1
+            try:
+                ev = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            names[ev.get("name") or "?"] += 1
+            recent.append({"ts": ev.get("ts"), "name": ev.get("name")})
+        traces = {"count": n, "by_name": dict(names), "recent": recent[-20:]}
+
     return {"version": __version__, "generated_at": doc.get("generated_at"),
             "assets": len(assets), "by_source": dict(by_source),
             "by_kind": dict(by_kind), "quality_runs": runs, "rounds": rounds,
             "concepts_llm": {"entries": overlay, "tagged": tagged},
-            "federates": fed, "federated_assets": fed_assets}
+            "federates": fed, "federated_assets": fed_assets,
+            "traces": traces}
 
 
 _HTML = """<!doctype html><html lang=en><meta charset=utf-8>
@@ -91,11 +110,14 @@ async function tick(){try{
   ['fed peers',(s.federates||[]).join(', ')||'none'],
   ['fed assets',s.federated_assets],
   ['llm overlay',s.concepts_llm.tagged+' / '+s.concepts_llm.entries],
+  ['traces',(s.traces&&s.traces.count)||0],
  ];
  const last=(s.quality_runs||[]).slice(-1)[0];
  if(last) rows.push(['done-tests pass rate',(last.pass_rate*100).toFixed(0)+'% · ran '+last.ran]);
  const grad=(s.rounds||[]).filter(r=>!r.dry).reduce((a,r)=>a+(r.graduated||0),0);
  rows.push(['round graduations',grad]);
+ const lastT=((s.traces&&s.traces.recent)||[]).slice(-3).map(e=>e.name).join(', ');
+ if(lastT) rows.push(['last traces',lastT]);
  let h='';for(const [k,val] of rows) h+='<div class=card><div class=k>'+k+'</div><div class=v>'+val+'</div></div>';
  for(const [src,n] of Object.entries(s.by_source).sort((a,b)=>b[1]-a[1]).slice(0,8))
    h+='<div class=card><div class=k>'+src+'</div><div class=v>'+n+'</div></div>';

@@ -1318,7 +1318,8 @@ class StatsDashboardTests(unittest.TestCase):
         d = json.loads(body)
         self.assertEqual(200, code)
         for k in ("version", "assets", "by_source", "by_kind", "quality_runs",
-                  "rounds", "concepts_llm", "federates", "federated_assets"):
+                  "rounds", "concepts_llm", "federates", "federated_assets",
+                  "traces"):
             self.assertIn(k, d)
         self.assertGreater(d["assets"], 0)
 
@@ -1592,6 +1593,29 @@ class GapHarnessTests(unittest.TestCase):
         text = pth.read_text()
         self.assertIn("PHI", text)
         self.assertIn("file:capabilities/harnesses/gap-healthcare-security-review.yaml", text)
+
+
+class TracesPanelTests(unittest.TestCase):
+    """V27: traces on the public panel are aggregates — no payloads."""
+
+    def test_compute_traces_hide_payloads(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        from rig_capabilities.observe import trace
+        from rig_capabilities.stats import compute
+        trace(repo, "context_pack",
+              input={"intent": "secret-query-xyz"},
+              output={"pack": "pack-secret"})
+        d = compute(repo)
+        self.assertGreaterEqual(d["traces"]["count"], 1)
+        self.assertEqual(d["traces"]["by_name"].get("context_pack"), 1)
+        blob = json.dumps(d["traces"])
+        self.assertNotIn("secret-query-xyz", blob)
+        self.assertNotIn("pack-secret", blob)
+        for ev in d["traces"]["recent"]:
+            self.assertNotIn("input", ev)
+            self.assertNotIn("output", ev)
 
 
 if __name__ == "__main__":
