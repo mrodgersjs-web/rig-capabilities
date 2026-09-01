@@ -1674,7 +1674,7 @@ class RoadmapTests(unittest.TestCase):
 
     def test_roadmap_lists_1_to_30(self):
         text = (REPO_ROOT / "docs" / "ROADMAP.md").read_text()
-        for n in range(1, 31):
+        for n in range(1, 41):
             self.assertRegex(text, rf"\| {n} \|")
         self.assertIn("gd_1788227314643", text)
         self.assertIn("ARMED", text)

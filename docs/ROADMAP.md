@@ -50,8 +50,8 @@ V28 zip is **ARMED** (typed `APPROVE gd_1788227314643` on 2026-09-01). Tag `v28.
 | 36 | `ac5a8bb` | — | proofchain 16/16 prefixes found | commit |
 | 37 | `71af6ad` | — | MCP gaps/overlay_status/proofchain/release | commit |
 | 38 | `fa70c71` | — | stats public_assets + gate_d_cases | commit |
-| 39 | this file | (this increment) | ROADMAP Wave 4 rows | see below |
-| 40 | — | — | Wave 4 close | pending |
+| 39 | `8c62c98` | — | ROADMAP V28 ARMED + Wave 4 rows | commit |
+| 40 | (this increment) | — | Wave 4 close: VERSION_LADDER 1–40, suite green | suite |
 
 ## Proof-chain check
 
