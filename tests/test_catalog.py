@@ -1643,5 +1643,18 @@ class PublicZipTests(unittest.TestCase):
         self.assertEqual(cat["count"], man["count"])
 
 
+class WholeRepoCertifyTests(unittest.TestCase):
+    """V29: Layer-Isolated — certify gates minus suite, locked on the live tree."""
+
+    def test_non_suite_gates_green(self):
+        from rig_capabilities.certify import GATES, run_gates
+        only = [k for k in GATES if k != "suite"]
+        self.assertEqual(sorted(only),
+                         ["acl_jake", "done_tests", "idp_integrity", "index_fresh"])
+        res = run_gates(Repo(REPO_ROOT), only=only)
+        for name, row in res.items():
+            self.assertTrue(row["ok"], f"{name} red: {row.get('detail')}")
+
+
 if __name__ == "__main__":
     unittest.main()

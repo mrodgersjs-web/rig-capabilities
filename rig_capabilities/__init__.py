@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v28: public-catalog zip builder — DORMANT until APPROVE gd_1788227314643.
+v29: whole-repo Layer-Isolated certify (gates minus suite) locked in the unit suite.
 Stdlib only.
 """
-__version__ = "28.0.0"
+__version__ = "29.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -32,4 +32,5 @@ VERSION_LADDER = {
     "26": "gap harness drafts from requests.jsonl",
     "27": "traces panel (aggregates, no payloads)",
     "28": "public zip builder (dormant, Gate-D gd_1788227314643)",
+    "29": "Layer-Isolated certify in the unit suite (no nested suite)",
 }
