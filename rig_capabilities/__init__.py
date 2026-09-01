@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v29: whole-repo Layer-Isolated certify (gates minus suite) locked in the unit suite.
+v30: ROADMAP.md evidence table V1–V30 + proof-chain.
 Stdlib only.
 """
-__version__ = "29.0.0"
+__version__ = "30.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -33,4 +33,5 @@ VERSION_LADDER = {
     "27": "traces panel (aggregates, no payloads)",
     "28": "public zip builder (dormant, Gate-D gd_1788227314643)",
     "29": "Layer-Isolated certify in the unit suite (no nested suite)",
+    "30": "ROADMAP evidence table + proof-chain",
 }

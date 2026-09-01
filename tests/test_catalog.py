@@ -1656,5 +1656,16 @@ class WholeRepoCertifyTests(unittest.TestCase):
             self.assertTrue(row["ok"], f"{name} red: {row.get('detail')}")
 
 
+class RoadmapTests(unittest.TestCase):
+    """V30: the ladder is a file, not a speech."""
+
+    def test_roadmap_lists_1_to_30(self):
+        text = (REPO_ROOT / "docs" / "ROADMAP.md").read_text()
+        for n in range(1, 31):
+            self.assertRegex(text, rf"\| {n} \|")
+        self.assertIn("gd_1788227314643", text)
+        self.assertIn("DORMANT", text)
+
+
 if __name__ == "__main__":
     unittest.main()
