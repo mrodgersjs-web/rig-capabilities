@@ -278,6 +278,15 @@ class Repo:
                 "okf": _okf_meta(fm, label if label in ("great",) else "installed"),
                 "quality": _quality_block(text),
             })
+            if root.get("mtime_verified"):
+                # external corpus files are never edited: freshness = file mtime
+                q = out[-1]["quality"]
+                if q is None:
+                    q = out[-1]["quality"] = _quality_block("")
+                if isinstance(q, dict) and not q.get("verified_on"):
+                    import time as _t
+                    q["verified_on"] = _t.strftime(
+                        "%Y-%m-%d", _t.localtime(m.stat().st_mtime))
         return out
 
     def scan(self) -> list:

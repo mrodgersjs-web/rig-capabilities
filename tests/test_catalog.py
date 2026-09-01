@@ -1150,5 +1150,33 @@ class RoundTests(unittest.TestCase):
         self.assertTrue((repo.root / ".context" / "rounds").exists())
 
 
+class CorpusRootTests(unittest.TestCase):
+    def test_mtime_verified_on(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        corpus = Path(tmp.name) / "corpus"
+        (corpus / "sub").mkdir(parents=True)
+        f = corpus / "sub" / "note.md"
+        f.write_text("# scraped note\nno frontmatter, just corpus text\n")
+        cfg = json.loads(repo.config_path.read_text())
+        cfg.setdefault("external_roots", []).append(
+            {"label": "corpus", "kind": "skill", "path": str(corpus),
+             "pattern": "**/*.md", "mtime_verified": True})
+        repo.config_path.write_text(json.dumps(cfg))
+        assets = repo.scan()
+        a = next(x for x in assets if x["source"] == "corpus")
+        import time
+        want = time.strftime("%Y-%m-%d", time.localtime(f.stat().st_mtime))
+        self.assertEqual(want, (a.get("quality") or {}).get("verified_on"))
+
+    def test_live_corpus_root_indexed(self):
+        rows = [a for a in Repo(REPO_ROOT).load_index()["assets"]
+                if a["source"] == "intel-corpus"]
+        self.assertGreater(len(rows), 50)
+        self.assertTrue(all((a.get("quality") or {}).get("verified_on")
+                            for a in rows))
+
+
 if __name__ == "__main__":
     unittest.main()
