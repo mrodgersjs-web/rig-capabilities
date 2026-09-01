@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v19: LLM concept overlay — honest idf/llm tiers via local qwen3:8b topic tags.
+v20: verified requesters — HMAC idp tokens gate and brand context_pack traces.
 Stdlib only.
 """
-__version__ = "19.0.0"
+__version__ = "20.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -23,4 +23,5 @@ VERSION_LADDER = {
     "17": "scraper-corpus intel root (mtime freshness)",
     "18": "live cross-node federation (token_file)",
     "19": "LLM concept overlay (honest tiers)",
+    "20": "verified requesters (idp tokens in pack traces)",
 }
