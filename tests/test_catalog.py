@@ -1463,6 +1463,13 @@ class CommandCanonicalTests(unittest.TestCase):
         self.assertIn("# capabilities-round",
                       (r1 / "capabilities-round.md").read_text())
 
+    def test_command_roots_include_omp_prime(self):
+        self.assertGreaterEqual(len(self.wire.COMMAND_ROOTS), 6)
+        names = [str(p) for p in self.wire.COMMAND_ROOTS]
+        self.assertTrue(any("hermes" in n for n in names))
+        self.assertTrue(any("omp" in n for n in names))
+        self.assertTrue(any("prime" in n for n in names))
+
     def test_server_tools_registered(self):
         from rig_capabilities.server import TOOLS
         names = {t["name"] for t in TOOLS}

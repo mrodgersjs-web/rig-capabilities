@@ -68,7 +68,8 @@ DEFAULT_INSTALL_ROOTS = {
              "hermes": "~/.hermes/jake/goal-harnesses"},
     "command": {"claude": "~/.claude/commands", "codex": "~/.codex/commands",
                 "hermes": "~/.hermes/commands", "omp": "~/.omp/agent/commands",
-                "agents": "~/.agents/commands"},
+                "agents": "~/.agents/commands",
+                "prime-agent": "~/.prime/agent/commands"},
 }
 
 HEAD_BYTES = 4096

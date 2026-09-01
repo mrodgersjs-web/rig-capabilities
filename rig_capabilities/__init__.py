@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v32: canonical commands+hooks default public ACL; skills stay private.
+v33: installer delivers canonical commands to hermes/omp/agents/prime.
 Stdlib only.
 """
-__version__ = "32.0.0"
+__version__ = "33.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -36,4 +36,5 @@ VERSION_LADDER = {
     "30": "ROADMAP evidence table + proof-chain",
     "31": "gate_d.evaluate library (no SDK)",
     "32": "canonical command/hook public ACL default",
+    "33": "commands delivered to hermes/omp/agents/prime",
 }

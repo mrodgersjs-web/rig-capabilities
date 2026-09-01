@@ -241,7 +241,14 @@ def targets() -> list:
 
 # -- canonical commands ----------------------------------------------------
 
-COMMAND_ROOTS = (HOME / ".claude" / "commands", HOME / ".codex" / "commands")
+COMMAND_ROOTS = (
+    HOME / ".claude" / "commands",
+    HOME / ".codex" / "commands",
+    HOME / ".hermes" / "commands",
+    HOME / ".omp" / "agent" / "commands",
+    HOME / ".agents" / "commands",
+    HOME / ".prime" / "agent" / "commands",
+)
 HOOK_ROOTS = (
     HOME / ".claude" / "hooks",
     HOME / ".codex" / "hooks",
@@ -285,7 +292,7 @@ def verify_commands() -> bool:
     good = not missing
     status = "OK" if good else "MISSING"
     extra = f"  (e.g. {missing[0]})" if missing else ""
-    print(f"  [{status}] commands     {len(srcs)} canonical in claude+codex{extra}")
+    print(f"  [{status}] commands     {len(srcs)} canonical in claude+codex+hermes+omp+agents+prime{extra}")
     return good
 
 
