@@ -1322,7 +1322,7 @@ class StatsDashboardTests(unittest.TestCase):
         self.assertEqual(200, code)
         for k in ("version", "assets", "by_source", "by_kind", "quality_runs",
                   "rounds", "concepts_llm", "federates", "federated_assets",
-                  "traces"):
+                  "traces", "public_assets", "gate_d_cases"):
             self.assertIn(k, d)
         self.assertGreater(d["assets"], 0)
 

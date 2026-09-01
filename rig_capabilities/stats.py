@@ -59,6 +59,10 @@ def compute(repo) -> dict:
     fed = [f.get("label") for f in repo.config().get("federates") or []
            if isinstance(f, dict)]
     fed_assets = sum(1 for a in assets if str(a.get("source", "")).startswith("fed:"))
+    from .surface import public_assets
+    from .gate_d import CASES
+    public_n = len(public_assets(repo))
+    gd_n = len(CASES)
 
     traces = {"count": 0, "by_name": {}, "recent": []}
     tp = root / ".context" / "traces.jsonl"
@@ -83,7 +87,8 @@ def compute(repo) -> dict:
             "by_kind": dict(by_kind), "quality_runs": runs, "rounds": rounds,
             "concepts_llm": {"entries": overlay, "tagged": tagged},
             "federates": fed, "federated_assets": fed_assets,
-            "traces": traces}
+            "traces": traces, "public_assets": public_n,
+            "gate_d_cases": gd_n}
 
 
 _HTML = """<!doctype html><html lang=en><meta charset=utf-8>
@@ -111,6 +116,8 @@ async function tick(){try{
   ['fed assets',s.federated_assets],
   ['llm overlay',s.concepts_llm.tagged+' / '+s.concepts_llm.entries],
   ['traces',(s.traces&&s.traces.count)||0],
+  ['public acl',s.public_assets||0],
+  ['gate-d cases',s.gate_d_cases||0],
  ];
  const last=(s.quality_runs||[]).slice(-1)[0];
  if(last) rows.push(['done-tests pass rate',(last.pass_rate*100).toFixed(0)+'% · ran '+last.ran]);

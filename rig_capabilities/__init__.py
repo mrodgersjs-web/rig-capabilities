@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v37: MCP tools for gaps, overlay_status, proofchain, release (local zip only).
+v38: stats.public_assets + gate_d_cases on the dashboard.
 Stdlib only.
 """
-__version__ = "37.0.0"
+__version__ = "38.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -41,4 +41,5 @@ VERSION_LADDER = {
     "35": "harness-install GoalSpecs (dry default)",
     "36": "proofchain ROADMAP prefixes vs ~/.rig/proof",
     "37": "MCP gaps/overlay_status/proofchain/release",
+    "38": "stats public_assets + gate_d_cases",
 }
