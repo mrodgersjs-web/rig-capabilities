@@ -985,5 +985,72 @@ class BootPackAndHookTests(unittest.TestCase):
         self.assertEqual("tester", json.loads(out.read_text())["harness"])
 
 
+class SyncTests(unittest.TestCase):
+    def test_asset_rows_lane_from_overlay(self):
+        from rig_capabilities.sync import asset_rows
+        doc = {"assets": [{"id": "x", "kind": "skill", "source": "canonical",
+                           "sha": "s", "description": "d", "tags": [],
+                           "okf": {}, "quality": {}}]}
+        rows = asset_rows(doc, {"x": "security-review"})
+        self.assertEqual("security-review", rows[0][8])
+
+    def test_pack_and_rating_rows(self):
+        from rig_capabilities.sync import pack_rows, rating_rows
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        ctx = repo.root / ".context"
+        ctx.mkdir(exist_ok=True)
+        (ctx / "pack-z.json").write_text(json.dumps(
+            {"id": "pack-z", "requester": "jake", "intent": "i", "nodes": []}))
+        (ctx / "ratings.jsonl").write_text(json.dumps(
+            {"pack": "pack-z", "verdict": "useful", "ids": ["demo-skill"]}) + "\n")
+        self.assertEqual(1, len(pack_rows(repo)))
+        rows = rating_rows(repo)
+        self.assertEqual("pack-z", rows[0][0])
+        self.assertEqual("useful", rows[0][1])
+
+    def test_discover_dsn_env_override(self):
+        from rig_capabilities.sync import discover_dsn
+        old = os.environ.get("RIG_CAP_DSN")
+        os.environ["RIG_CAP_DSN"] = "postgresql://u:p@h:1/db"
+        try:
+            self.assertEqual("postgresql://u:p@h:1/db", discover_dsn())
+        finally:
+            if old is None:
+                del os.environ["RIG_CAP_DSN"]
+            else:
+                os.environ["RIG_CAP_DSN"] = old
+
+    def test_live_roundtrip(self):
+        import socket
+        try:
+            import psycopg2  # noqa: F401
+        except ImportError:
+            self.skipTest("psycopg2 missing")
+        s = socket.socket()
+        s.settimeout(1)
+        try:
+            s.connect(("127.0.0.1", 5433))
+        except OSError:
+            self.skipTest("rig-dev-db not reachable")
+        finally:
+            s.close()
+        from rig_capabilities.sync import discover_dsn, sync
+        dsn = discover_dsn()
+        if not dsn:
+            self.skipTest("no DSN discoverable")
+        repo = Repo(REPO_ROOT)
+        rep = sync(repo, dsn=dsn)
+        self.assertGreater(rep["assets"], 4000)
+        conn = psycopg2.connect(dsn, connect_timeout=5)
+        try:
+            with conn.cursor() as cur:
+                cur.execute("select count(*) from capabilities.assets")
+                self.assertEqual(rep["assets"], cur.fetchone()[0])
+        finally:
+            conn.close()
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -170,6 +170,9 @@ def main() -> int:
 
     sub.add_parser("coverage")
 
+    p = sub.add_parser("db-sync")
+    p.add_argument("--dsn")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
 
@@ -393,6 +396,9 @@ def main() -> int:
     elif args.cmd == "coverage":
         import subprocess as _sp
         _sp.call([sys.executable, str(REPO_ROOT / "scripts" / "coverage_matrix.py")])
+    elif args.cmd == "db-sync":
+        from rig_capabilities.sync import sync
+        print(json.dumps(sync(repo, dsn=args.dsn), indent=1))
     return 0
 
 

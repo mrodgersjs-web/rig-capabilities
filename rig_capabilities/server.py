@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "13.0.0"
+VERSION = "14.0.0"
 
 
 def default_repo() -> Repo:
@@ -252,6 +252,12 @@ TOOLS = [
         "inputSchema": {"type": "object", "properties": {}},
     },
     {
+        "name": "capabilities_db_sync",
+        "description": "Upsert the capability index (+packs/ratings) into Postgres (rig-dev-db). Optional dsn override.",
+        "inputSchema": {"type": "object",
+                        "properties": {"dsn": {"type": "string"}}},
+    },
+    {
         "name": "capabilities_issue_token",
         "description": "Issue an HMAC requester token (org IdP). Requires a signing key.",
         "inputSchema": {
@@ -391,6 +397,10 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from .quality import quality_report as _qr
         return _qr(repo)
 
+    def db_sync(args: dict):
+        from .sync import sync as _sync
+        return _sync(repo, dsn=args.get("dsn") or None)
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -410,6 +420,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_public_catalog": public_catalog,
         "capabilities_connectors": connectors,
         "capabilities_observe": observe,
+        "capabilities_db_sync": db_sync,
         "capabilities_issue_token": issue_token,
         "capabilities_quality_report": quality_report,
     }
