@@ -10,6 +10,7 @@ done_when:
   - file:examples/great/meta/capabilities-concepts-build.md
   - grep:capabilities/commands/capabilities-concepts-build.md:The overlay is derived data
 great_example: examples/great/meta/capabilities-concepts-build.md
+acl: public
 quality_floor: 0.7
 ---
 

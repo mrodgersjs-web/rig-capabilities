@@ -10,6 +10,7 @@ done_when:
   - file:examples/great/meta/capabilities-round.md
   - grep:capabilities/commands/capabilities-round.md:Never fabricate a round score
 great_example: examples/great/meta/capabilities-round.md
+acl: public
 quality_floor: 0.7
 ---
 

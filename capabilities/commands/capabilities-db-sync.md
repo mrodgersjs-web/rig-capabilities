@@ -10,6 +10,7 @@ done_when:
   - file:examples/great/meta/capabilities-db-sync.md
   - grep:capabilities/commands/capabilities-db-sync.md:The DB is a mirror
 great_example: examples/great/meta/capabilities-db-sync.md
+acl: public
 quality_floor: 0.7
 ---
 

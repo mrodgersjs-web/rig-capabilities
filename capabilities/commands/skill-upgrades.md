@@ -9,6 +9,7 @@ done_when:
   - "mcp:capabilities_quality_report"
   - "the chosen asset's done_when criteria pass via rig-capabilities test"
 great_example: examples/great/meta/skill-upgrades.md
+acl: public
 quality_floor: 0.7
 ---
 

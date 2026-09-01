@@ -1245,15 +1245,18 @@ class FederationLiveTests(unittest.TestCase):
                 self.fail("protected path served without a valid token")
             except urllib.error.HTTPError as e:
                 self.assertEqual(401, e.code)
-        # federation side: empty public fallback, no fake assets, no crash
+        # federation side: public fallback only (hooks/commands), never skills
         self._federate(main, {"label": "peer", "url": base})
-        self.assertEqual([], federated_assets(main))
+        fed = federated_assets(main)
+        self.assertTrue(all(a.get("kind") in ("hook", "command") for a in fed))
+        self.assertFalse(any(a.get("kind") == "skill" for a in fed))
         tf = Path(tmp) / "main" / "repo" / ".context" / "fed"
         tf.mkdir(parents=True, exist_ok=True)
         (tf / "peer.token").write_text("WRONG\n")
         self._federate(main, {"label": "peer", "url": base,
                               "token_file": ".context/fed/peer.token"})
-        self.assertEqual([], federated_assets(main))
+        fed = federated_assets(main)
+        self.assertFalse(any(a.get("kind") == "skill" for a in fed))
 
 
 class VerifiedRequesterTests(unittest.TestCase):
@@ -1686,6 +1689,21 @@ class GateDLibTests(unittest.TestCase):
         out = sanitize({"content": "key: AKIAIOSFODNN7EXAMPLE"})
         self.assertNotIn("AKIAIOSFODNN7EXAMPLE", json.dumps(out))
         self.assertIn("REDACTED", json.dumps(out))
+
+
+class PublicAclTests(unittest.TestCase):
+    """V32: canonical commands/hooks default public; skills do not."""
+
+    def test_fixture_command_not_applicable_skill_stays_private(self):
+        from rig_capabilities.okf import meta
+        skill = meta({"name": "x"}, "canonical", kind="skill")
+        self.assertEqual(skill["acl"], [])
+        cmd = meta({"name": "x"}, "canonical", kind="command")
+        self.assertEqual(cmd["acl"], ["public"])
+        hook = meta({"name": "x"}, "canonical", kind="hook")
+        self.assertEqual(hook["acl"], ["public"])
+        explicit = meta({"acl": "internal"}, "canonical", kind="command")
+        self.assertEqual(explicit["acl"], ["internal"])
 
 
 if __name__ == "__main__":

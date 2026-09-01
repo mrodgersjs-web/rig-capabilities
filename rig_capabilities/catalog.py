@@ -235,7 +235,7 @@ class Repo:
             "tags": _tags(fm.get("tags")),
             "sha": sha,
             "installable": True,
-            "okf": _okf_meta(fm, "canonical"),
+            "okf": _okf_meta(fm, "canonical", kind=kind),
             "quality": _quality_block(text),
         }
 

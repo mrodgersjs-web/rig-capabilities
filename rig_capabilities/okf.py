@@ -89,11 +89,16 @@ def freshness(status: str, verified_on: date | None,
     return "Stable"
 
 
-def meta(fm: dict, source: str, today: date | None = None) -> dict:
+def meta(fm: dict, source: str, today: date | None = None,
+         kind: str | None = None) -> dict:
     """Derive the okf block for one asset from its parsed frontmatter."""
     v_on = _as_date(fm.get("verified_on") or fm.get("verified-on"))
     status = str(fm.get("status") or "")
     d = today or date.today()
+    acl = _as_list(fm.get("acl") or fm.get("visibility"))
+    # installer-delivered commands/hooks are the public contract of this repo
+    if not acl and source == "canonical" and kind in ("command", "hook"):
+        acl = ["public"]
     return {
         "type": str(fm.get("type") or ""),
         "domain": str(fm.get("domain") or ""),
@@ -102,7 +107,7 @@ def meta(fm: dict, source: str, today: date | None = None) -> dict:
         "verified_by": str(fm.get("verified_by") or ""),
         "verified_on": v_on.isoformat() if v_on else "",
         "version": str(fm.get("version") or ""),
-        "acl": _as_list(fm.get("acl") or fm.get("visibility")),
+        "acl": acl,
         "relates_to": _as_list(fm.get("relates_to") or fm.get("relates-to")),
         "trust": trust(source, status, v_on, d),
         "freshness": freshness(status, v_on, d),

@@ -10,6 +10,7 @@ done_when:
   - file:examples/great/meta/capabilities-certify.md
   - grep:capabilities/commands/capabilities-certify.md:No LLM participates in certification
 great_example: examples/great/meta/capabilities-certify.md
+acl: public
 quality_floor: 0.7
 ---
 

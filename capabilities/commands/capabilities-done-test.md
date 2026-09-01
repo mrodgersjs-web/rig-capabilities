@@ -10,6 +10,7 @@ done_when:
   - file:examples/great/meta/capabilities-done-test.md
   - grep:capabilities/commands/capabilities-done-test.md:The grep target must live OUTSIDE
 great_example: examples/great/meta/capabilities-done-test.md
+acl: public
 quality_floor: 0.7
 ---
 
