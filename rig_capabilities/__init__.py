@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v27: traces panel on /stats.json + dashboard — counts and names, never payloads.
+v28: public-catalog zip builder — DORMANT until APPROVE gd_1788227314643.
 Stdlib only.
 """
-__version__ = "27.0.0"
+__version__ = "28.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -31,4 +31,5 @@ VERSION_LADDER = {
     "25": "OMP+Prime hook roots + installer hook delivery + live-on-presence",
     "26": "gap harness drafts from requests.jsonl",
     "27": "traces panel (aggregates, no payloads)",
+    "28": "public zip builder (dormant, Gate-D gd_1788227314643)",
 }

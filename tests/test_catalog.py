@@ -1618,5 +1618,30 @@ class TracesPanelTests(unittest.TestCase):
             self.assertNotIn("output", ev)
 
 
+class PublicZipTests(unittest.TestCase):
+    """V28: public zip is catalog-only, dormant, and secret-free."""
+
+    def test_zip_is_dormant_catalog_only(self):
+        import zipfile
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        repo = make_fixture(Path(self._tmp.name))
+        from rig_capabilities.release import build_public_zip, GATE_D_RUN
+        dry = build_public_zip(repo, apply=False)
+        self.assertFalse(dry["armed"])
+        self.assertEqual(dry["gate_d_run_id"] if "gate_d_run_id" in dry else dry["manifest"]["gate_d_run_id"], GATE_D_RUN)
+        self.assertFalse(Path(dry["path"]).exists())
+        live = build_public_zip(repo, apply=True)
+        self.assertFalse(live["armed"])
+        z = zipfile.ZipFile(live["path"])
+        names = set(z.namelist())
+        self.assertEqual(names, {".public-catalog.json", "MANIFEST.json"})
+        self.assertTrue(all(".signing" not in n and ".token" not in n for n in names))
+        man = json.loads(z.read("MANIFEST.json"))
+        self.assertFalse(man["armed"])
+        cat = json.loads(z.read(".public-catalog.json"))
+        self.assertEqual(cat["count"], man["count"])
+
+
 if __name__ == "__main__":
     unittest.main()
