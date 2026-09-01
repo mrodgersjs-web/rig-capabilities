@@ -11,8 +11,8 @@ verified_on: 2026-08-30
 acl: [public]
 outcome: docs-knowledge: Create, read, and edit Office documents (docx, pptx, xlsx) and PDFs (create via reportlab, extract via pypdf) using the
 done_when:
-  - file:capabilities/skills/rig-office-docs
-  - the skill's stated outcome is achievable end-to-end
+  - file:capabilities/skills/rig-office-docs/SKILL.md
+  - grep:capabilities/skills/rig-office-docs/SKILL.md:Office
 great_example: examples/great/docs-knowledge/rig-office-docs.md
 quality_floor: 0.6
 ---

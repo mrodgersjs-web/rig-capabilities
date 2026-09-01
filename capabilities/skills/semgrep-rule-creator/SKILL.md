@@ -9,8 +9,8 @@ verified_by: jake
 verified_on: 2026-08-30
 outcome: security-review: Creates custom Semgrep rules for detecting security vulnerabilities, bug patterns, and code patterns. Use when writing S
 done_when:
-  - file:capabilities/skills/semgrep-rule-creator
-  - the skill's stated outcome is achievable end-to-end
+  - file:capabilities/skills/semgrep-rule-creator/SKILL.md
+  - grep:capabilities/skills/semgrep-rule-creator/SKILL.md:rule
 great_example: examples/great/security-review/semgrep-rule-creator.md
 quality_floor: 0.6
 ---

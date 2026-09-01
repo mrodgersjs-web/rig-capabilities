@@ -1052,5 +1052,53 @@ class SyncTests(unittest.TestCase):
             conn.close()
 
 
+class DoneTests(unittest.TestCase):
+    def _asset(self, td, sid, done_when_yaml):
+        d = Path(td) / "repo" / "capabilities" / "skills" / sid
+        return d, done_when_yaml
+
+    def _repo_with(self, td, sid, entries):
+        repo = make_fixture(Path(td))
+        d = repo.cap_root / "skills" / sid
+        d.mkdir(parents=True, exist_ok=True)
+        dw = "".join(f"  - {e}\n" for e in entries)
+        (d / "SKILL.md").write_text(
+            f"---\nname: {sid}\ndescription: a capability for checks\n"
+            f"done_when:\n{dw}---\n# {sid}\nneedle text here\n")
+        repo.build_index()
+        return repo
+
+    def test_four_forms_pass_and_fail(self):
+        from rig_capabilities.done_tests import run_asset
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = self._repo_with(tmp.name, "ok-skill", [
+            "cmd:true", "file:capabilities/skills/ok-skill/SKILL.md",
+            "grep:capabilities/skills/ok-skill/SKILL.md:needle",
+            "not-a-form"])
+        r = run_asset(repo, "ok-skill")
+        self.assertTrue(r["pass"])
+        self.assertEqual(1, sum(1 for x in r["results"] if x["ok"] is None))
+        bad = self._repo_with(tmp.name, "bad-skill", ["cmd:false", "file:nope"])
+        r2 = run_asset(bad, "bad-skill")
+        self.assertFalse(r2["pass"])
+
+    def test_quality_run_writes_artifact(self):
+        from rig_capabilities.done_tests import quality_run
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = self._repo_with(tmp.name, "q-skill", ["cmd:true"])
+        rep = quality_run(repo)
+        self.assertEqual(1, rep["ran"])
+        out = list((repo.root / ".context" / "quality-runs").glob("*.json"))
+        self.assertEqual(1, len(out))
+
+    def test_canonical_skills_pass(self):
+        from rig_capabilities.done_tests import run_asset
+        repo = Repo(REPO_ROOT)
+        for sid in ("semgrep", "codeql", "sarif-parsing", "skill-upgrades"):
+            self.assertTrue(run_asset(repo, sid, "canonical")["pass"], sid)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -19,8 +19,8 @@ verified_by: jake
 verified_on: 2026-08-30
 outcome: security-review: >-
 done_when:
-  - file:capabilities/skills/semgrep
-  - the skill's stated outcome is achievable end-to-end
+  - file:capabilities/skills/semgrep/SKILL.md
+  - grep:capabilities/skills/semgrep/SKILL.md:Semgrep
 great_example: examples/great/security-review/semgrep.md
 quality_floor: 0.6
 ---

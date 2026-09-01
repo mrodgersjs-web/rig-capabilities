@@ -173,6 +173,12 @@ def main() -> int:
     p = sub.add_parser("db-sync")
     p.add_argument("--dsn")
 
+    p = sub.add_parser("test")
+    p.add_argument("id")
+
+    p = sub.add_parser("quality-run")
+    p.add_argument("--lane")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
 
@@ -396,6 +402,14 @@ def main() -> int:
     elif args.cmd == "coverage":
         import subprocess as _sp
         _sp.call([sys.executable, str(REPO_ROOT / "scripts" / "coverage_matrix.py")])
+    elif args.cmd == "test":
+        from rig_capabilities.done_tests import run_asset
+        res = run_asset(repo, args.id)
+        print(json.dumps(res, indent=1))
+        return 0 if res["pass"] else 1
+    elif args.cmd == "quality-run":
+        from rig_capabilities.done_tests import quality_run
+        print(json.dumps(quality_run(repo, lane=args.lane), indent=1))
     elif args.cmd == "db-sync":
         from rig_capabilities.sync import sync
         print(json.dumps(sync(repo, dsn=args.dsn), indent=1))

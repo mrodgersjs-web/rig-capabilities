@@ -13,8 +13,8 @@ verified_by: jake
 verified_on: 2026-08-30
 outcome: security-review: >-
 done_when:
-  - file:capabilities/skills/sarif-parsing
-  - the skill's stated outcome is achievable end-to-end
+  - file:capabilities/skills/sarif-parsing/SKILL.md
+  - grep:capabilities/skills/sarif-parsing/SKILL.md:SARIF
 great_example: examples/great/security-review/sarif-parsing.md
 quality_floor: 0.6
 ---

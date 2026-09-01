@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v14: Supabase schema + db-sync (Postgres mirror of the catalog).
+v15: runnable done-tests (cmd/file/grep/mcp) + quality-run scorecards.
 Stdlib only.
 """
-__version__ = "14.0.0"
+__version__ = "15.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -18,4 +18,5 @@ VERSION_LADDER = {
     "12": "coverage matrix + per-agent skill packs + capability requests",
     "13": "session-start boot pack + hook comment-metadata contract",
     "14": "Supabase schema + db-sync",
+    "15": "runnable done-tests + quality-run scorecards",
 }

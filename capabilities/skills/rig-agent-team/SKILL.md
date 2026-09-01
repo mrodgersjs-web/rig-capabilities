@@ -8,8 +8,8 @@ verified_by: jake
 verified_on: 2026-08-30
 outcome: agent-engineering: Use when Hermes, Jake, PyCode/Pi, Claude Code, Codex, or a coding agent needs the RIG agent-team pattern: five-layer run
 done_when:
-  - file:capabilities/skills/rig-agent-team
-  - the skill's stated outcome is achievable end-to-end
+  - file:capabilities/skills/rig-agent-team/SKILL.md
+  - grep:capabilities/skills/rig-agent-team/SKILL.md:agent
 great_example: examples/great/agent-engineering/rig-agent-team.md
 quality_floor: 0.6
 ---

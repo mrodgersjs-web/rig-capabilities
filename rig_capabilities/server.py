@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "14.0.0"
+VERSION = "15.0.0"
 
 
 def default_repo() -> Repo:
@@ -258,6 +258,13 @@ TOOLS = [
                         "properties": {"dsn": {"type": "string"}}},
     },
     {
+        "name": "capabilities_test",
+        "description": "Run an asset's executable done_when checks (cmd/file/grep/mcp). pass=true only when every runnable check succeeds.",
+        "inputSchema": {"type": "object",
+                        "properties": {"id": {"type": "string"}},
+                        "required": ["id"]},
+    },
+    {
         "name": "capabilities_issue_token",
         "description": "Issue an HMAC requester token (org IdP). Requires a signing key.",
         "inputSchema": {
@@ -400,6 +407,10 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def db_sync(args: dict):
         from .sync import sync as _sync
         return _sync(repo, dsn=args.get("dsn") or None)
+    def test_asset(args: dict):
+        from .done_tests import run_asset
+        return run_asset(repo, str(args.get("id", "")))
+
 
     handlers = {
         "capabilities_search": search,
@@ -420,6 +431,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_public_catalog": public_catalog,
         "capabilities_connectors": connectors,
         "capabilities_observe": observe,
+        "capabilities_test": test_asset,
         "capabilities_db_sync": db_sync,
         "capabilities_issue_token": issue_token,
         "capabilities_quality_report": quality_report,
