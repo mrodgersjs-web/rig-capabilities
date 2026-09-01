@@ -65,11 +65,21 @@ def _claude_hook_commands() -> str:
     return "\n".join(out)
 
 
-def hook_live(asset: dict, commands_blob: str) -> dict:
+def hook_live(asset: dict, commands_blob: str, roots: dict | None = None) -> dict:
+    """Wired if Claude registered it OR a copy sits in any hook install root.
+
+    OMP/Prime have no Claude-style hook event bus — file presence in their
+    install root is the honest live signal until they grow one.
+    """
     stem = asset["id"]
     name = re.sub(r"\.(sh|py|ts|js|mjs)$", "", stem)
-    wired = bool(name) and name in commands_blob
-    return _clamp_state(True, wired)
+    claude = bool(name) and name in commands_blob
+    inst = installed_in(asset, roots or {})
+    wired = claude or inst.get("live", False)
+    return _clamp_state(True, wired) | {
+        "roots": inst.get("roots") or [],
+        "claude_registered": claude,
+    }
 
 
 def installed_in(asset: dict, roots: dict) -> dict:
@@ -166,7 +176,7 @@ def live_status(repo, id: str | None = None, services: bool = True) -> dict:
     for a in targets:
         kind = a["kind"]
         if kind == "hook":
-            st = hook_live(a, commands_blob)
+            st = hook_live(a, commands_blob, roots)
         elif kind == "command":
             st = cli_live(a)
         else:

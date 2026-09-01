@@ -1493,5 +1493,59 @@ class CommandCanonicalTests(unittest.TestCase):
 
 
 
+class HookGapTests(unittest.TestCase):
+    """V25: OMP + Prime join the hook install surface."""
+
+    def test_default_hook_roots_include_omp_prime(self):
+        from rig_capabilities.catalog import DEFAULT_INSTALL_ROOTS
+        h = DEFAULT_INSTALL_ROOTS["hook"]
+        self.assertIn("omp", h)
+        self.assertIn("prime-agent", h)
+
+    def test_hook_live_when_file_in_omp_root(self):
+        import shutil
+        tmp = Path(tempfile.mkdtemp(prefix="cap-hook-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        repo = make_fixture(tmp)
+        omp = tmp / "omp" / "hooks"
+        omp.mkdir(parents=True)
+        shutil.copy(repo.cap_root / "hooks" / "guard.sh", omp / "guard.sh")
+        cfg = json.loads(repo.config_path.read_text())
+        cfg["install_roots"]["hook"] = {"omp": str(omp)}
+        repo.config_path.write_text(json.dumps(cfg))
+        from rig_capabilities import live as live_mod
+        fake = tmp / "settings.json"
+        fake.write_text("{}")
+        orig = live_mod._CLAUDE_SETTINGS
+        live_mod._CLAUDE_SETTINGS = fake
+        try:
+            st = live_mod.live_status(repo, id="guard.sh", services=False)
+        finally:
+            live_mod._CLAUDE_SETTINGS = orig
+        self.assertTrue(st["summary"]["live"])
+        self.assertIn("omp", st["summary"]["roots"])
+        self.assertFalse(st["summary"]["claude_registered"])
+
+    def test_sync_hooks_dry_then_apply(self):
+        import importlib.util, shutil
+        spec = importlib.util.spec_from_file_location(
+            "capwire_hooks", REPO_ROOT / "wire" / "wire.py")
+        wire = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(wire)
+        tmp = Path(tempfile.mkdtemp(prefix="cap-hooksync-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        r1, r2 = tmp / "omp", tmp / "prime"
+        wire.HOOK_ROOTS = (r1, r2)
+        acts: list = []
+        wire.sync_hooks(False, acts)
+        self.assertTrue(all("plan" in a for a in acts))
+        acts = []
+        wire.sync_hooks(True, acts)
+        n = len(wire.hook_sources())
+        self.assertEqual(len([a for a in acts if "wired" in a]), 2 * n)
+        self.assertTrue((r1 / "guard-secret-write.sh").exists())
+        self.assertTrue((r2 / "goal-loop-startup.sh").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

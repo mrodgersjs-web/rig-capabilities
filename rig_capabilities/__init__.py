@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v24: six canonical commands, delivered and verified by the installer.
+v25: OMP + Prime hook install roots; installer delivers 6 canonical hooks.
 Stdlib only.
 """
-__version__ = "24.0.0"
+__version__ = "25.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -28,4 +28,5 @@ VERSION_LADDER = {
     "22": "certify gates + plant-failure self-test",
     "23": "agent packs + boot packs + pack-first context",
     "24": "canonical commands + certify MCP tool + installer command delivery",
+    "25": "OMP+Prime hook roots + installer hook delivery + live-on-presence",
 }

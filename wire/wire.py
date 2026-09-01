@@ -242,6 +242,13 @@ def targets() -> list:
 # -- canonical commands ----------------------------------------------------
 
 COMMAND_ROOTS = (HOME / ".claude" / "commands", HOME / ".codex" / "commands")
+HOOK_ROOTS = (
+    HOME / ".claude" / "hooks",
+    HOME / ".codex" / "hooks",
+    HOME / ".hermes" / "hooks",
+    HOME / ".omp" / "hooks",
+    HOME / ".prime" / "agent" / "hooks",
+)
 
 
 def command_sources() -> list:
@@ -282,6 +289,47 @@ def verify_commands() -> bool:
     return good
 
 
+
+def hook_sources() -> list:
+    d = REPO / "capabilities" / "hooks"
+    return sorted(d.glob("*.sh")) if d.exists() else []
+
+
+def sync_hooks(apply: bool, actions: list) -> None:
+    for src in hook_sources():
+        text = src.read_text(encoding="utf-8")
+        for root in HOOK_ROOTS:
+            dst = root / src.name
+            label = str(dst.relative_to(HOME)) if str(dst).startswith(str(HOME)) else str(dst)
+            if dst.exists() and dst.read_text(encoding="utf-8") == text:
+                actions.append(note("ok", f"{label} — current"))
+                continue
+            if not apply:
+                actions.append(note("plan", f"{label} — deliver {src.name}"))
+                continue
+            root.mkdir(parents=True, exist_ok=True)
+            backup(dst, True)
+            tmp = dst.with_name(dst.name + ".tmp")
+            tmp.write_text(text, encoding="utf-8")
+            tmp.replace(dst)
+            dst.chmod(0o755)
+            actions.append(note("wired", label))
+
+
+def verify_hooks() -> bool:
+    srcs = hook_sources()
+    missing = [str(r / s.name) for s in srcs for r in HOOK_ROOTS
+               if not ((r / s.name).exists()
+                       and (r / s.name).read_text(encoding="utf-8")
+                       == s.read_text(encoding="utf-8"))]
+    good = not missing
+    status = "OK" if good else "MISSING"
+    extra = f"  (e.g. {missing[0]})" if missing else ""
+    print(f"  [{status}] hooks        {len(srcs)} canonical in claude+codex+hermes+omp+prime{extra}")
+    return good
+
+
+
 # -- verify -------------------------------------------------------------------
 
 def verify() -> int:
@@ -305,6 +353,7 @@ def verify() -> int:
         print(f"  [{status}] {harness:<12} {path}")
         ok = ok and good
     cmd_ok = verify_commands()
+    hook_ok = verify_hooks()
     # protocol self-test
     probe = subprocess.run(
         [PY, str(SERVER)],
@@ -313,7 +362,7 @@ def verify() -> int:
         capture_output=True, text=True, timeout=30)
     has_tools = '"capabilities_search"' in probe.stdout
     print(f"  [{'OK' if has_tools else 'FAIL'}] protocol   initialize+tools/list handshake")
-    return 0 if (ok and cmd_ok and has_tools) else 1
+    return 0 if (ok and cmd_ok and hook_ok and has_tools) else 1
 
 
 def main() -> int:
@@ -328,6 +377,7 @@ def main() -> int:
     for harness, fn, path in targets():
         fn(path, args.apply, actions)
     sync_commands(args.apply, actions)
+    sync_hooks(args.apply, actions)
     print(f"  {len([a for a in actions if 'wired' in a or 'plan' in a])} target(s) changed/planned")
     return 0
 
