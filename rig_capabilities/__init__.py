@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v25: OMP + Prime hook install roots; installer delivers 6 canonical hooks.
+v26: gap harness drafts from requests.jsonl — 8 verticals, last-row-wins, greppable stakes.
 Stdlib only.
 """
-__version__ = "25.0.0"
+__version__ = "26.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -29,4 +29,5 @@ VERSION_LADDER = {
     "23": "agent packs + boot packs + pack-first context",
     "24": "canonical commands + certify MCP tool + installer command delivery",
     "25": "OMP+Prime hook roots + installer hook delivery + live-on-presence",
+    "26": "gap harness drafts from requests.jsonl",
 }

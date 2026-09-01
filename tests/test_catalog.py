@@ -1547,5 +1547,52 @@ class HookGapTests(unittest.TestCase):
         self.assertTrue((r2 / "goal-loop-startup.sh").exists())
 
 
+class GapHarnessTests(unittest.TestCase):
+    """V26: requests.jsonl cells become draft harnesses that can go RED."""
+
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.tmp = Path(self._tmp.name)
+        self.repo = make_fixture(self.tmp)
+        ctx = self.repo.root / ".context"
+        ctx.mkdir(parents=True, exist_ok=True)
+        (ctx / "requests.jsonl").write_text(
+            json.dumps({"type": "capability_request", "vertical": "healthcare",
+                        "lane": "security-review", "have": 0, "need": 3}) + "\n"
+            + json.dumps({"type": "capability_request", "vertical": "healthcare",
+                          "lane": "security-review", "have": 1, "need": 3}) + "\n"
+            + json.dumps({"type": "capability_request", "vertical": "dental",
+                          "lane": "revenue-gtm", "have": 0, "need": 3}) + "\n"
+        )
+
+    def tearDown(self):
+        self._tmp.cleanup()
+
+    def test_rank_gaps_last_row_wins_and_prefers_lane(self):
+        from rig_capabilities.gaps import load_requests, rank_gaps
+        ranked = rank_gaps(load_requests(self.repo), n=8)
+        by = {r["vertical"]: r for r in ranked}
+        self.assertEqual(by["healthcare"]["have"], 1)
+        self.assertEqual(by["healthcare"]["lane"], "security-review")
+        self.assertEqual(by["dental"]["lane"], "revenue-gtm")
+
+    def test_dry_does_not_write(self):
+        from rig_capabilities.gaps import write_gap_harnesses
+        dest = self.repo.root / "capabilities" / "harnesses"
+        before = set(dest.glob("gap-*.yaml")) if dest.exists() else set()
+        write_gap_harnesses(self.repo, n=8, apply=False)
+        after = set(dest.glob("gap-*.yaml")) if dest.exists() else set()
+        self.assertEqual(before, after)
+
+    def test_apply_writes_grepable_stake(self):
+        from rig_capabilities.gaps import write_gap_harnesses
+        rep = write_gap_harnesses(self.repo, n=8, apply=True)
+        self.assertGreaterEqual(rep["count"], 2)
+        pth = self.repo.root / "capabilities" / "harnesses" / "gap-healthcare-security-review.yaml"
+        text = pth.read_text()
+        self.assertIn("PHI", text)
+        self.assertIn("file:capabilities/harnesses/gap-healthcare-security-review.yaml", text)
+
+
 if __name__ == "__main__":
     unittest.main()

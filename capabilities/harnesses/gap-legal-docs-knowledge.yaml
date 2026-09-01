@@ -1,0 +1,39 @@
+---
+outcome: docs-knowledge:
+done_when:
+  - file:capabilities/harnesses/gap-legal-docs-knowledge.yaml
+  - grep:capabilities/harnesses/gap-legal-docs-knowledge.yaml:privilege
+quality_floor: 0.6
+---
+
+harness_id: gap-legal-docs-knowledge
+harness_name: legal × docs-knowledge gap draft
+status: draft
+source: requests.jsonl
+vertical: legal
+lane: docs-knowledge
+coverage: {have: 0, need: 3, gap: 3}
+session_type: gap-fill-session
+stake: |
+  Attorney-client privilege boundary is named before any artifact is written.
+identity_lock:
+  startup_phrase: "I am filling a measured gap, not inventing coverage."
+gates:
+  - id: G1
+    requirement: "Quote the requests.jsonl cell (vertical=legal lane=docs-knowledge have=0 need=3) before writing any other artifact"
+    proof: "Session log contains the cell verbatim"
+    failure_tier: halt
+  - id: G2
+    requirement: "Attorney-client privilege boundary is named before any artifact is written."
+    proof: "The token privilege appears in the produced artifact AND in this harness body"
+    failure_tier: halt
+  - id: G3
+    requirement: "Produce need-have = 3 concrete next assets (skill, hook, or command), each with a done_when that can go RED"
+    proof: "A list of 3 paths under capabilities/ whose done_when is file: or grep: against something outside their own frontmatter"
+    failure_tier: halt
+definition_of_done:
+  - "G1–G3 halt-green"
+  - "This file remains a draft until a round graduates it"
+final_rule:
+  - "A gap harness that cannot fail is not a fill."
+  - "privilege is load-bearing — deleting it must redden done_when."

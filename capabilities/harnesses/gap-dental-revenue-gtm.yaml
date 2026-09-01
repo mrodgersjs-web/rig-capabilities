@@ -1,0 +1,39 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/harnesses/gap-dental-revenue-gtm.yaml
+  - grep:capabilities/harnesses/gap-dental-revenue-gtm.yaml:claim-denial
+quality_floor: 0.6
+---
+
+harness_id: gap-dental-revenue-gtm
+harness_name: dental × revenue-gtm gap draft
+status: draft
+source: requests.jsonl
+vertical: dental
+lane: revenue-gtm
+coverage: {have: 1, need: 3, gap: 2}
+session_type: gap-fill-session
+stake: |
+  Every recommendation names a claim-denial code or admits none exists.
+identity_lock:
+  startup_phrase: "I am filling a measured gap, not inventing coverage."
+gates:
+  - id: G1
+    requirement: "Quote the requests.jsonl cell (vertical=dental lane=revenue-gtm have=1 need=3) before writing any other artifact"
+    proof: "Session log contains the cell verbatim"
+    failure_tier: halt
+  - id: G2
+    requirement: "Every recommendation names a claim-denial code or admits none exists."
+    proof: "The token claim-denial appears in the produced artifact AND in this harness body"
+    failure_tier: halt
+  - id: G3
+    requirement: "Produce need-have = 2 concrete next assets (skill, hook, or command), each with a done_when that can go RED"
+    proof: "A list of 2 paths under capabilities/ whose done_when is file: or grep: against something outside their own frontmatter"
+    failure_tier: halt
+definition_of_done:
+  - "G1–G3 halt-green"
+  - "This file remains a draft until a round graduates it"
+final_rule:
+  - "A gap harness that cannot fail is not a fill."
+  - "claim-denial is load-bearing — deleting it must redden done_when."

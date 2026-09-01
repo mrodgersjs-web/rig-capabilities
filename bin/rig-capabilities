@@ -64,6 +64,10 @@ def main() -> int:
     p.add_argument("--boot", action="store_true")
     p.add_argument("--intent")
 
+    p = sub.add_parser("gaps")
+    p.add_argument("--n", type=int, default=8)
+    p.add_argument("--dry", action="store_true")
+
     p = sub.add_parser("search")
     p.add_argument("query")
     p.add_argument("--kind", choices=KINDS)
@@ -211,6 +215,9 @@ def main() -> int:
 
     if args.cmd == "stats":
         print(json.dumps(repo.stats(), indent=1))
+    elif args.cmd == "gaps":
+        from rig_capabilities.gaps import write_gap_harnesses
+        print(json.dumps(write_gap_harnesses(repo, n=args.n, apply=not args.dry), indent=1))
     elif args.cmd == "agent-pack":
         from rig_capabilities.packs import boot_pack, match_agent, resolve_pack
         if args.intent:
