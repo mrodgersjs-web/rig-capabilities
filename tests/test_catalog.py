@@ -1178,5 +1178,68 @@ class CorpusRootTests(unittest.TestCase):
                             for a in rows))
 
 
+class FederationLiveTests(unittest.TestCase):
+    def _serve(self, repo, token):
+        import threading
+        from rig_capabilities.serve import make_server
+        httpd = make_server(repo, "127.0.0.1", 0, token=token)
+        th = threading.Thread(target=httpd.serve_forever, daemon=True)
+        th.start()
+        self.addCleanup(lambda: (httpd.shutdown(), th.join(5),
+                                 httpd.server_close()))
+        return f"http://127.0.0.1:{httpd.server_address[1]}"
+
+    def _repos(self, tmp):
+        peer = make_fixture(Path(tmp) / "peer")
+        peer.build_index()
+        main = make_fixture(Path(tmp) / "main")
+        return peer, main
+
+    def _federate(self, main, entry):
+        cfg = json.loads(main.config_path.read_text())
+        cfg["federates"] = [entry]
+        main.config_path.write_text(json.dumps(cfg))
+
+    def test_token_file_pulls_fed_assets(self):
+        from rig_capabilities.federation import federated_assets
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(__import__("shutil").rmtree, tmp, True)
+        peer, main = self._repos(tmp)
+        base = self._serve(peer, "PEERTOK")
+        tf = Path(tmp) / "main" / "repo" / ".context" / "fed"
+        tf.mkdir(parents=True, exist_ok=True)
+        (tf / "peer.token").write_text("PEERTOK\n")
+        self._federate(main, {"label": "peer", "url": base,
+                              "token_file": ".context/fed/peer.token"})
+        fed = federated_assets(main)
+        self.assertTrue(fed)
+        self.assertTrue(all(a["source"] == "fed:peer" for a in fed))
+
+    def test_missing_or_wrong_token_yields_no_assets(self):
+        from rig_capabilities.federation import federated_assets
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(__import__("shutil").rmtree, tmp, True)
+        peer, main = self._repos(tmp)
+        base = self._serve(peer, "PEERTOK")
+        import urllib.error
+        import urllib.request
+        for hdrs in ({}, {"Authorization": "Bearer WRONG"}):
+            req = urllib.request.Request(base + "/index.json", headers=hdrs)
+            try:
+                urllib.request.urlopen(req, timeout=5)
+                self.fail("protected path served without a valid token")
+            except urllib.error.HTTPError as e:
+                self.assertEqual(401, e.code)
+        # federation side: empty public fallback, no fake assets, no crash
+        self._federate(main, {"label": "peer", "url": base})
+        self.assertEqual([], federated_assets(main))
+        tf = Path(tmp) / "main" / "repo" / ".context" / "fed"
+        tf.mkdir(parents=True, exist_ok=True)
+        (tf / "peer.token").write_text("WRONG\n")
+        self._federate(main, {"label": "peer", "url": base,
+                              "token_file": ".context/fed/peer.token"})
+        self.assertEqual([], federated_assets(main))
+
+
 if __name__ == "__main__":
     unittest.main()

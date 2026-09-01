@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v17: scraper-corpus intel root — 73 ICP conference assets indexed, mtime-derived freshness.
+v18: live cross-node federation — HTTP Bearer pull with gitignored token_file, fed: namespacing.
 Stdlib only.
 """
-__version__ = "17.0.0"
+__version__ = "18.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -21,4 +21,5 @@ VERSION_LADDER = {
     "15": "runnable done-tests + quality-run scorecards",
     "16": "1000x round engine (graduate-on-green)",
     "17": "scraper-corpus intel root (mtime freshness)",
+    "18": "live cross-node federation (token_file)",
 }

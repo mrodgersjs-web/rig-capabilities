@@ -61,6 +61,15 @@ def _from_url(repo, fed: dict) -> list:
     headers = {"Accept": "application/json",
                "User-Agent": "rig-capabilities-federation/5"}
     tok = (fed.get("token") or os.environ.get("RIG_CAPABILITIES_FEDERATION_TOKEN") or "").strip()
+    if not tok and fed.get("token_file"):
+        # secrets stay out of git: token lives in a gitignored file
+        tf = Path(str(fed["token_file"])).expanduser()
+        if not tf.is_absolute():
+            tf = Path(repo.root) / tf
+        try:
+            tok = tf.read_text().strip()
+        except OSError:
+            tok = ""
     if tok:
         headers["Authorization"] = f"Bearer {tok}"
     last_err = ""
