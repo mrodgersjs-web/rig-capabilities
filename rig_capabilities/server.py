@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "15.0.0"
+VERSION = "16.0.0"
 
 
 def default_repo() -> Repo:
@@ -265,6 +265,14 @@ TOOLS = [
                         "required": ["id"]},
     },
     {
+        "name": "capabilities_round",
+        "description": "Run a 1000x improvement round in a lane: weakest canonicals get deterministic contract upgrades, applied only with green done-tests. --dry reports without writing.",
+        "inputSchema": {"type": "object",
+                        "properties": {"lane": {"type": "string"},
+                                       "n": {"type": "integer"},
+                                       "dry": {"type": "boolean"}}},
+    },
+    {
         "name": "capabilities_issue_token",
         "description": "Issue an HMAC requester token (org IdP). Requires a signing key.",
         "inputSchema": {
@@ -410,6 +418,11 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def test_asset(args: dict):
         from .done_tests import run_asset
         return run_asset(repo, str(args.get("id", "")))
+    def round_lane(args: dict):
+        from .rounds import run_round
+        return run_round(repo, str(args.get("lane", "misc")),
+                         n=int(args.get("n") or 5), dry=bool(args.get("dry")))
+
 
 
     handlers = {
@@ -432,6 +445,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_connectors": connectors,
         "capabilities_observe": observe,
         "capabilities_test": test_asset,
+        "capabilities_round": round_lane,
         "capabilities_db_sync": db_sync,
         "capabilities_issue_token": issue_token,
         "capabilities_quality_report": quality_report,

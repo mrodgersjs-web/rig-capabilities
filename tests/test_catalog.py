@@ -1100,5 +1100,55 @@ class DoneTests(unittest.TestCase):
             self.assertTrue(run_asset(repo, sid, "canonical")["pass"], sid)
 
 
+class RoundTests(unittest.TestCase):
+    def _repo(self, td, prose_only=True):
+        repo = make_fixture(Path(td))
+        d = repo.cap_root / "skills" / "weak-skill"
+        d.mkdir(parents=True, exist_ok=True)
+        dw = ("  - the outcome is achieved\n" if prose_only
+              else "  - file:capabilities/skills/weak-skill/SKILL.md\n")
+        (d / "SKILL.md").write_text(
+            "---\nname: weak-skill\ndescription: weak\noutcome: misc: weak\n"
+            f"done_when:\n{dw}great_example: examples/great/misc/weak-skill.md\n"
+            "quality_floor: 0.6\n---\n# weak\nbody\n")
+        repo.build_index()
+        return repo
+
+    def test_dry_writes_nothing(self):
+        from rig_capabilities.rounds import run_round
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = self._repo(tmp.name)
+        before = (repo.cap_root / "skills" / "weak-skill" / "SKILL.md").read_text()
+        rep = run_round(repo, "agent-engineering", n=5, dry=True)
+        self.assertEqual(before,
+                         (repo.cap_root / "skills" / "weak-skill" / "SKILL.md").read_text())
+        self.assertTrue(any(a["action"] == "would-apply" for a in rep["actions"]))
+
+    def test_graduation_only_on_green(self):
+        from rig_capabilities.rounds import run_round
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = self._repo(tmp.name)
+        rep = run_round(repo, "agent-engineering", n=5)
+        wk = next(a for a in rep["actions"] if a["id"] == "weak-skill")
+        self.assertEqual("applied", wk["action"])
+        self.assertTrue(wk["graduated"])
+        text = (repo.cap_root / "skills" / "weak-skill" / "SKILL.md").read_text()
+        self.assertIn("file:capabilities/skills/weak-skill/SKILL.md", text)
+        # second round: nothing left to apply
+        rep2 = run_round(repo, "agent-engineering", n=5)
+        wk2 = next(a for a in rep2["actions"] if a["id"] == "weak-skill")
+        self.assertEqual("no-op", wk2["action"])
+
+    def test_live_round_is_clean(self):
+        from rig_capabilities.rounds import pick_candidates, run_round
+        repo = Repo(REPO_ROOT)
+        cands = pick_candidates(repo, "agent-engineering", 3)
+        self.assertTrue(cands)
+        rep = run_round(repo, "misc", n=2, dry=True)
+        self.assertTrue((repo.root / ".context" / "rounds").exists())
+
+
 if __name__ == "__main__":
     unittest.main()

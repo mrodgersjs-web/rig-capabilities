@@ -179,6 +179,11 @@ def main() -> int:
     p = sub.add_parser("quality-run")
     p.add_argument("--lane")
 
+    p = sub.add_parser("round")
+    p.add_argument("lane")
+    p.add_argument("--n", type=int, default=5)
+    p.add_argument("--dry", action="store_true")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
 
@@ -410,6 +415,9 @@ def main() -> int:
     elif args.cmd == "quality-run":
         from rig_capabilities.done_tests import quality_run
         print(json.dumps(quality_run(repo, lane=args.lane), indent=1))
+    elif args.cmd == "round":
+        from rig_capabilities.rounds import run_round
+        print(json.dumps(run_round(repo, args.lane, n=args.n, dry=args.dry), indent=1))
     elif args.cmd == "db-sync":
         from rig_capabilities.sync import sync
         print(json.dumps(sync(repo, dsn=args.dsn), indent=1))
