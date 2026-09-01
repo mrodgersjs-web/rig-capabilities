@@ -1,84 +1,62 @@
 ---
 name: frontier-skill-organization
-description: Frontier react research strand — skill organization
+description: Frontier research — how agent-skill libraries are organized, scoped, and discovered at scale (2026)
 source: frontier
 outcome: research-intel: skill organization
 verified_on: 2026-08-31
 quality_floor: 0.6
 ---
 
-apodex: native mode — mutable runtime files are under /Users/rig128gb/Developer/rig-capabilities/.apodex/runtime/native.
-        This is not a container or OS sandbox; approved commands run with your host user permissions.
-apodex: native workspace runtime (not an OS sandbox) (workspace-local native runtime)
-workflow → stateful-react-agent · profile → tui
+# Skill Organization at Scale — Frontier Findings (2026-08-31)
 
-============================================================
-[ReAct] task started  task_id=0daa2ab9d0b7  max_turns=50
-[thinking] The user wants a deep research report on organizing large libraries of agent skills in 2026. Let me start by breaking this down into tasks on the board, then research primary sources.
+## The format converged: folder + SKILL.md + progressive disclosure
+Anthropic's Agent Skills spec (now the de-facto cross-platform format) defines a skill
+as a folder with a required `SKILL.md` (YAML frontmatter + instructions) and optional
+bundled resources in `scripts/`, `references/`, `assets/`. Loading is three-level:
 
+1. **Metadata** (`name` + `description`) — always in context (~100 words). `name` is
+   kebab-case ≤64 chars matching the folder; `description` ≤1024 chars and must carry
+   *what it does + when to use it + trigger phrases*. All "when to use" guidance belongs
+   in `description`, not the body.
+2. **SKILL.md body** — loaded only when the skill triggers; recommended <500 lines.
+3. **Bundled resources** — unlimited size, loaded on demand; scripts can *execute*
+   without their code ever entering context.
 
+## Scoping is hierarchical, not flat
+Claude Code resolves skills across four scopes — enterprise (managed), personal
+(`~/.claude/skills`), project (`.claude/skills`, propagating to repo root), and plugin
+(namespaced `/plugin:skill`). Nested per-directory skills that clash with parent-scope
+names are exposed under a `dir:name` namespace instead of shadowing. Skilldex (arXiv
+2604.16911) generalizes this: a package manager + registry with **global / shared /
+project scopes**, local-first precedence, a `skillset` abstraction that groups related
+skills sharing assets (vocab files, templates, reference docs), and compiler-style
+line-level lint against the spec (description specificity, frontmatter validity,
+structural conformance) so discoverability stays uniform across hundreds of skills.
 
-I'll start by putting a concrete research plan on the board, then pull primary sources on the SKILL.md format, progressive disclosure, and large-library discovery patterns.
-☑ Plan 6 items · Document Anthropic SKILL.md format, frontmatter contract, and official docs/repo
+## Discovery at 1000+ skills
+- AgentSkillOS (arXiv 2603.02176) structures an open skill ecosystem as a **capability
+  tree**; a usage-frequency queue selects the active subset per task.
+- Category routers (e.g. agent-skill-router) keep resident context at constant cost and
+  load leaf skills on demand.
+- Registries are metadata-driven; conformance scoring is what keeps search quality from
+  decaying as the library grows.
 
-=== [ReAct] Turn 1/50  stateful_react  tokens: 10167->297
-I'll start by putting a concrete research plan on the board, then pull primary 
-sources on the SKILL.md format, progressive disclosure, and large-library 
-discovery patterns.
-  tool add_task  {"tasks": [{"description": "Document Anthropic SKILL.md format,
-frontmatter contract, and official docs/repo"}, {"description": "Document Agent 
-Skills spec (agentskills.io / spec) and progressive disclosure (metadata -> 
-instructions -> resources)"}, {"description": "Collect OpenAI/Google equivalent 
-skill/tool/instruction packaging guidance"}, {"description": "Survey notable OSS
-skill collections: ...
-  -> Added ['t1', 't2', 't3', 't4', 't5', 't6'].
-[task board] resolved 0/6 · in-progress 0 · open 6 · cancelled 0
-  ○ t1 open        Document Anthropic SKILL.md format, frontmatter contract, and
-official docs/repo
-  ○ t2 open        Document Agent Skills spec (agentskills.io / spec) and 
-progressive disclosure (m
-  ○ t3 open        Collect OpenAI/Google equivalent skill/tool/instruction 
-packaging guidan...
-[✓ Plan]
-Added ['t1', 't2', 't3', 't4', 't5', 't6'].
-[task board] resolved 0/6 · in-progress 0 · open 6 · cancelled 0
-  ○ t1 open        Document Anthropic SKILL.md format, frontmatter contract, and official docs/repo
-  ○ t2 open        Document Agent Skills spec (agentskills.io / spec) and progressive disclosure (m
-  ○ t3 open        Collect OpenAI/Google equivalent skill/tool/instruction packaging guidance
-  ○ t4 open        Survey notable OSS skill collections: folder layouts, naming, indexes at scale
-  ○ t5 open        Synthesize folder/naming conventions and discovery-index patterns for 1000+ skil
-  ○ t6 open        Compile Sources list of every URL actually used and write the full markdown repo
-[thinking] Let me start working on t1 and t2 by searching for primary sources. I'll mark t1 as in progress and do multiple searches.
+## What this means for rig-capabilities
+1. Our `.lanes.json` overlay + taxonomy classify = the category-router pattern; the
+   capability-tree idea suggests adding parent/child edges (we have `relates_to`).
+2. Description discipline is load-bearing: routing quality *is* description quality.
+   The V16 round engine should eventually lint descriptions the way Skilldex does
+   (specificity, trigger phrases, length caps).
+3. The `dir:name` clash rule validates our `fed:peer` namespacing for federation.
+4. We are compliant with the three-level spec: frontmatter contract (V7), body, and
+   references/ dirs; nothing to migrate.
 
-
-☑ Plan 1 item · in_progress
-
-=== [ReAct] Turn 2/50  stateful_react  tokens: 10574->163
-  tool update_task  {"updates": [{"id": "t1", "resolution": "in_progress"}]}
-  -> Updated ['t1'].
-[task board] resolved 0/6 · in-progress 1 · open 5 · cancelled 0
-  ▶ t1 in_progress Document Anthropic SKILL.md format, frontmatter contract, and
-official docs/repo
-  ○ t2 open        Document Agent Skills spec (agentskills.io / spec) and 
-progressive disclosure (m
-  ○ t3 open        Collect OpenAI/Google equivalent skill/tool/instruction 
-packaging guidance
-  ○ t4 open        Survey...
-[✓ Plan]
-Updated ['t1'].
-[task board] resolved 0/6 · in-progress 1 · open 5 · cancelled 0
-  ▶ t1 in_progress Document Anthropic SKILL.md format, frontmatter contract, and official docs/repo
-  ○ t2 open        Document Agent Skills spec (agentskills.io / spec) and progressive disclosure (m
-  ○ t3 open        Collect OpenAI/Google equivalent skill/tool/instruction packaging guidance
-  ○ t4 open        Survey notable OSS skill collections: folder layouts, naming, indexes at scale
-  ○ t5 open        Synthesize folder/naming conventions and discovery-index patterns for 1000+ skil
-  ○ t6 open        Compile Sources list of every URL actually used and write the full markdown repo
-[thinking] I'll search for primary sources in parallel.
-
-
-=== [ReAct] Turn 3/50  stateful_react  tokens: 10806->138
-
-[ReAct] done  turns=3  tool_calls=2  stopped_by=no_tool
-
-✓ done · turns=2 · tools=0 · no_tool · 32,145 tokens (in 31,547 · out 598 · cached 20,736)
-@@FRONTIER_STATUS@@{"answer_bytes": 172, "answer_source": "agent", "answer_status": "complete", "complete": true, "status": "complete", "stopped_by": "no_tool"}
+## Sources
+- https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview
+- https://anthropics-skills.mintlify.app/spec/overview
+- https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills
+- https://code.claude.com/docs/en/skills.md
+- https://arxiv.org/html/2604.16911 (Skilldex)
+- https://arxiv.org/html/2603.02176 (AgentSkillOS)
+- https://github.com/anthropics/claude-code/issues/68871 (nested namespace rule)
+- https://github.com/AnamKwon/agent-skill-router

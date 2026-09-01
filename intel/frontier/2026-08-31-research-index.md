@@ -9,18 +9,15 @@ quality_floor: 0.6
 
 # Frontier research index — 2026-08-31
 
-Four FrontierAgent `react` strands were run against this repo
-(`frontier --mode react`, model `z-ai/glm-5.3-flash`, local Scrapling web
-backend). Each strand did live web research plus repo inspection. Raw traces
-(reasoning, tool calls, web fetches) are under `.apodex/runs/20260831-17*-react-*/`
-(`trace.jsonl` + `trajectories/*/react_agent.jsonl`).
-
-**Tooling note (verified):** FrontierAgent `react` in `--native` mode on this
-box does not emit a clean isolated report file — file writes are gated, and
-`--no-tui -p` streams the full trajectory to stdout with a short final-answer
-pointer (`answer_bytes` ~110–140). The durable research lives in the run
-traces; this index distills the takeaways that are directly actionable for
-rig-capabilities and already reflected in its design.
+Four research strands ran on 2026-08-31: skill organization, routing,
+self-improvement loops, and evaluation. The FrontierAgent `react` delivery path
+failed twice (16:56 and 18:57 runs both ended `stopped_by=no_tool` at turn 3,
+final answers 107–172 bytes; raw traces under `.apodex/runs/` and
+`.context/frontier/*.log`). The four strand deliverables in this directory were
+therefore produced directly from multi-provider web research against primary
+sources (Anthropic spec pages, arXiv 2602.x–2608.x, GitHub) the same evening;
+each ends with a Sources section of the URLs actually used, and each supersedes
+any earlier extracted-log drafts.
 
 ## Strand 1 — skill library organization
 - Anthropic Agent Skills: one `SKILL.md` per skill dir, YAML frontmatter
@@ -55,6 +52,8 @@ rig-capabilities and already reflected in its design.
 
 ## How this feeds the build
 V7 quality contract, V10 great-examples, V15 done-tests, V16 round engine, and
-V22 certification are the concrete implementations of these findings. Re-run the
-strands with `frontier --mode react` when clean prose deliverables are needed;
-harvest from the trace, not stdout.
+V22 certification are the concrete implementations of these findings. As of this
+evening V15 and V16 are shipped; the strand files carry the per-finding "What
+this means for rig-capabilities" mappings (RRF + token-budget packing in
+context_pack, pack-level routing, trace-mined round drafts, paired
+with/withheld certification in V22, regression counts in quality-runs).
