@@ -93,6 +93,22 @@ class _Handler(BaseHTTPRequestHandler):
                 "auth": bool(self.token),
             }))
             return
+        if path == "/stats.json":
+            from .stats import compute
+            try:
+                self._send(200, _json_bytes(compute(repo)))
+            except Exception as e:  # noqa: BLE001 — panel must never 500 silently
+                self._send(500, _json_bytes({"error": type(e).__name__}))
+            return
+        if path == "/dashboard":
+            from .stats import dashboard_html
+            body = dashboard_html().encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+            return
         if path == "/version":
             self._send(200, _json_bytes({"version": __version__,
                                          "ladder": VERSION_LADDER}))

@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v20: verified requesters — HMAC idp tokens gate and brand context_pack traces.
+v21: /stats.json + /dashboard on serve — public aggregates, protected payloads.
 Stdlib only.
 """
-__version__ = "20.0.0"
+__version__ = "21.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -24,4 +24,5 @@ VERSION_LADDER = {
     "18": "live cross-node federation (token_file)",
     "19": "LLM concept overlay (honest tiers)",
     "20": "verified requesters (idp tokens in pack traces)",
+    "21": "stats.json + dashboard panel",
 }

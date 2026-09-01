@@ -1290,5 +1290,47 @@ class VerifiedRequesterTests(unittest.TestCase):
                 f".{iss['exp']}.", f".{iss['exp'] - 120}."))  # tampered exp
 
 
+class StatsDashboardTests(unittest.TestCase):
+    def setUp(self):
+        import threading
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.repo = make_fixture(Path(self._tmp.name))
+        self.repo.build_index()
+        from rig_capabilities.serve import make_server
+        self.httpd = make_server(self.repo, "127.0.0.1", 0, token="TOK")
+        th = threading.Thread(target=self.httpd.serve_forever, daemon=True)
+        th.start()
+        self.addCleanup(lambda: (self.httpd.shutdown(), th.join(5),
+                                 self.httpd.server_close()))
+        self.base = f"http://127.0.0.1:{self.httpd.server_address[1]}"
+
+    def _get(self, p, tok=None):
+        import urllib.request
+        hdrs = {"Authorization": f"Bearer {tok}"} if tok else {}
+        with urllib.request.urlopen(
+                urllib.request.Request(self.base + p, headers=hdrs),
+                timeout=5) as r:
+            return r.status, r.read()
+
+    def test_stats_public_and_shaped(self):
+        code, body = self._get("/stats.json")
+        d = json.loads(body)
+        self.assertEqual(200, code)
+        for k in ("version", "assets", "by_source", "by_kind", "quality_runs",
+                  "rounds", "concepts_llm", "federates", "federated_assets"):
+            self.assertIn(k, d)
+        self.assertGreater(d["assets"], 0)
+
+    def test_dashboard_html_no_asset_data(self):
+        code, body = self._get("/dashboard")
+        text = body.decode()
+        self.assertEqual(200, code)
+        self.assertIn("<!doctype html>", text.lower())
+        self.assertIn("/stats.json", text)
+        # aggregates-only: no asset ids leak into the shell
+        self.assertNotIn("demo-skill", text)
+
+
 if __name__ == "__main__":
     unittest.main()
