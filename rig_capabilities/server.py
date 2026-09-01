@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "23.0.0"
+VERSION = "24.0.0"
 
 
 def default_repo() -> Repo:
@@ -283,6 +283,12 @@ TOOLS = [
         },
     },
     {
+        "name": "capabilities_certify",
+        "description": "Run the deterministic certification gates (suite/index_fresh/done_tests/idp_integrity/acl_jake). plant=true proves each gate fires via copy-tree plant-failure.",
+        "inputSchema": {"type": "object",
+                        "properties": {"plant": {"type": "boolean"}}},
+    },
+    {
         "name": "capabilities_agent_pack",
         "description": "Agent packs (24 agents): resolved entries against the live index; boot=true adds live state + done-test verdict per entry; intent= matches agent-shaped queries.",
         "inputSchema": {"type": "object",
@@ -433,6 +439,11 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
 
 
 
+    def certify(args: dict):
+        from .certify import certify as _certify
+        from .certify import self_test
+        return self_test(repo) if args.get("plant") else _certify(repo)
+
     def agent_pack(args: dict):
         from .packs import boot_pack, match_agent, resolve_pack
         if args.get("intent"):
@@ -449,6 +460,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capability_add": add,
         "capabilities_stats": stats,
         "capabilities_reindex": reindex,
+        "capabilities_certify": certify,
         "capabilities_agent_pack": agent_pack,
         "capabilities_live_status": live,
         "capabilities_outcomes": outcomes,

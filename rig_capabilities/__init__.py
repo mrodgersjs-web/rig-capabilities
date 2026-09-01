@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v23: agent packs — resolved, boot-tested, and first in agent-shaped context packs.
+v24: six canonical commands, delivered and verified by the installer.
 Stdlib only.
 """
-__version__ = "23.0.0"
+__version__ = "24.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -27,4 +27,5 @@ VERSION_LADDER = {
     "21": "stats.json + dashboard panel",
     "22": "certify gates + plant-failure self-test",
     "23": "agent packs + boot packs + pack-first context",
+    "24": "canonical commands + certify MCP tool + installer command delivery",
 }

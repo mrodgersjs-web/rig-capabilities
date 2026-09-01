@@ -239,6 +239,49 @@ def targets() -> list:
     ]
 
 
+# -- canonical commands ----------------------------------------------------
+
+COMMAND_ROOTS = (HOME / ".claude" / "commands", HOME / ".codex" / "commands")
+
+
+def command_sources() -> list:
+    d = REPO / "capabilities" / "commands"
+    return sorted(d.glob("*.md")) if d.exists() else []
+
+
+def sync_commands(apply: bool, actions: list) -> None:
+    for src in command_sources():
+        text = src.read_text(encoding="utf-8")
+        for root in COMMAND_ROOTS:
+            dst = root / src.name
+            label = str(dst.relative_to(HOME)) if str(dst).startswith(str(HOME)) else str(dst)
+            if dst.exists() and dst.read_text(encoding="utf-8") == text:
+                actions.append(note("ok", f"{label} — current"))
+                continue
+            if not apply:
+                actions.append(note("plan", f"{label} — deliver {src.name}"))
+                continue
+            root.mkdir(parents=True, exist_ok=True)
+            backup(dst, True)
+            tmp = dst.with_suffix(".md.tmp")
+            tmp.write_text(text, encoding="utf-8")
+            tmp.replace(dst)
+            actions.append(note("wired", label))
+
+
+def verify_commands() -> bool:
+    srcs = command_sources()
+    missing = [str(r / s.name) for s in srcs for r in COMMAND_ROOTS
+               if not ((r / s.name).exists()
+                       and (r / s.name).read_text(encoding="utf-8")
+                       == s.read_text(encoding="utf-8"))]
+    good = not missing
+    status = "OK" if good else "MISSING"
+    extra = f"  (e.g. {missing[0]})" if missing else ""
+    print(f"  [{status}] commands     {len(srcs)} canonical in claude+codex{extra}")
+    return good
+
+
 # -- verify -------------------------------------------------------------------
 
 def verify() -> int:
@@ -261,6 +304,7 @@ def verify() -> int:
         status = "OK" if good else "MISSING"
         print(f"  [{status}] {harness:<12} {path}")
         ok = ok and good
+    cmd_ok = verify_commands()
     # protocol self-test
     probe = subprocess.run(
         [PY, str(SERVER)],
@@ -269,7 +313,7 @@ def verify() -> int:
         capture_output=True, text=True, timeout=30)
     has_tools = '"capabilities_search"' in probe.stdout
     print(f"  [{'OK' if has_tools else 'FAIL'}] protocol   initialize+tools/list handshake")
-    return 0 if (ok and has_tools) else 1
+    return 0 if (ok and cmd_ok and has_tools) else 1
 
 
 def main() -> int:
@@ -283,6 +327,7 @@ def main() -> int:
     print(f"rig-capabilities wiring — {'APPLY' if args.apply else 'DRY RUN'} (server: {SERVER})")
     for harness, fn, path in targets():
         fn(path, args.apply, actions)
+    sync_commands(args.apply, actions)
     print(f"  {len([a for a in actions if 'wired' in a or 'plan' in a])} target(s) changed/planned")
     return 0
 

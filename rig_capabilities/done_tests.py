@@ -60,6 +60,16 @@ def _run_form(repo, form: str, arg, mcp_call=None) -> dict:
             "ok": ok, "detail": detail}
 
 
+# Handlers that mutate the estate — never invoked from done-tests.
+# mcp:capabilities_certify used to re-enter quality_run (V24 hang).
+MCP_MUTATING = frozenset({
+    "capabilities_certify", "capabilities_round", "capabilities_db_sync",
+    "capabilities_reindex", "capabilities_issue_token",
+})
+
+_IN_QUALITY_RUN = False
+
+
 def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
     a = None
     for x in repo.load_index()["assets"]:
@@ -71,7 +81,9 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
                 "results": [{"form": "lookup", "ok": False, "detail": "asset not found"}]}
     entries = (a.get("quality") or {}).get("done_when") or []
     mcp_call = None
-    if any(str(e).startswith("mcp:") for e in entries):
+    needs_mcp = any(str(e).startswith("mcp:") and
+                    str(e)[4:] not in MCP_MUTATING for e in entries)
+    if needs_mcp:
         from .server import build_server
         srv = build_server(repo)
         def mcp_call(tool, args):  # noqa: E301
@@ -82,6 +94,10 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
         if form == "unknown":
             results.append({"form": str(e), "ok": None, "detail": "unrunnable"})
             continue
+        if form == "mcp" and arg in MCP_MUTATING:
+            results.append({"form": str(e), "ok": None,
+                            "detail": "mutating mcp not invoked from done-tests"})
+            continue
         results.append(_run_form(repo, form, arg, mcp_call))
     runnable = [r for r in results if r["ok"] is not None]
     return {"id": asset_id, "pass": bool(runnable) and all(r["ok"] for r in runnable),
@@ -90,6 +106,19 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
 
 def quality_run(repo, lane: str | None = None) -> dict:
     """Run done-tests for every canonical with any; write scorecard artifact."""
+    global _IN_QUALITY_RUN
+    if _IN_QUALITY_RUN:
+        return {"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "lane": lane,
+                "ran": 0, "passed": 0, "pass_rate": None,
+                "failures": ["reentrant"], "reentrant": True}
+    _IN_QUALITY_RUN = True
+    try:
+        return _quality_run(repo, lane)
+    finally:
+        _IN_QUALITY_RUN = False
+
+
+def _quality_run(repo, lane: str | None = None) -> dict:
     doc = repo.load_index()
     from .lanes import load_overlay
     from .taxonomy import classify

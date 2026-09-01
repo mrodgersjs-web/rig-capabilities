@@ -1412,5 +1412,86 @@ class PackTests(unittest.TestCase):
         self.assertIn("# Agent pack", rep["markdown"])
 
 
+class CommandCanonicalTests(unittest.TestCase):
+    """V24: six canonical commands, contracts intact, delivered by the installer."""
+
+    def setUp(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location(
+            "capwire", REPO_ROOT / "wire" / "wire.py")
+        self.wire = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(self.wire)
+
+    def test_all_commands_carry_full_contract(self):
+        srcs = list((REPO_ROOT / "capabilities" / "commands").glob("*.md"))
+        self.assertEqual(len(srcs), 6)
+        for f in srcs:
+            text = f.read_text()
+            for key in ("outcome:", "done_when:", "great_example:", "quality_floor:"):
+                self.assertIn(key, text, f"{f.name} missing {key}")
+            for line in text.splitlines():
+                if line.startswith("great_example:"):
+                    ref = line.split(":", 1)[1].strip()
+                    self.assertTrue((REPO_ROOT / ref).exists(),
+                                    f"{f.name} great_example absent: {ref}")
+
+    def test_sync_commands_dry_then_apply_then_repairs(self):
+        import shutil
+        tmp = Path(tempfile.mkdtemp(prefix="cap-cmd-"))
+        self.addCleanup(shutil.rmtree, tmp, True)
+        r1, r2 = tmp / "claude", tmp / "codex"
+        self.wire.COMMAND_ROOTS = (r1, r2)
+        acts: list = []
+        self.wire.sync_commands(False, acts)
+        self.assertTrue(all("plan" in a for a in acts))
+        self.assertFalse((r1 / "capabilities-round.md").exists())
+        acts = []
+        self.wire.sync_commands(True, acts)
+        n = len(self.wire.command_sources())
+        self.assertEqual(len([a for a in acts if "wired" in a]), 2 * n)
+        self.assertTrue((r1 / "capabilities-round.md").exists())
+        self.assertTrue((r2 / "skill-upgrades.md").exists())
+        acts = []
+        self.wire.sync_commands(True, acts)
+        self.assertEqual(len([a for a in acts if "current" in a]), 2 * n)
+        (r1 / "capabilities-round.md").write_text("tampered")
+        self.wire.sync_commands(True, acts)
+        self.assertIn("# capabilities-round",
+                      (r1 / "capabilities-round.md").read_text())
+
+    def test_server_tools_registered(self):
+        from rig_capabilities.server import TOOLS
+        names = {t["name"] for t in TOOLS}
+        self.assertIn("capabilities_certify", names)
+        self.assertIn("capabilities_agent_pack", names)
+
+    def test_command_done_when_never_mutates(self):
+        banned = ("mcp:capabilities_certify", "mcp:capabilities_round",
+                  "mcp:capabilities_db_sync", "mcp:capabilities_reindex",
+                  "mcp:capabilities_issue_token")
+        for f in (REPO_ROOT / "capabilities" / "commands").glob("*.md"):
+            text = f.read_text()
+            for b in banned:
+                self.assertNotIn(b, text, f"{f.name} invokes mutating {b}")
+
+    def test_quality_run_skips_mutating_mcp(self):
+        from rig_capabilities.done_tests import MCP_MUTATING, parse_form, run_asset
+        self.assertIn("capabilities_certify", MCP_MUTATING)
+        form, arg = parse_form("mcp:capabilities_certify")
+        self.assertEqual((form, arg), ("mcp", "capabilities_certify"))
+
+    def test_quality_run_reentrancy_guard(self):
+        from rig_capabilities import done_tests as dt
+        dt._IN_QUALITY_RUN = True
+        try:
+            from rig_capabilities.catalog import Repo
+            rep = dt.quality_run(Repo(REPO_ROOT))
+            self.assertTrue(rep.get("reentrant"))
+            self.assertIsNone(rep["pass_rate"])
+        finally:
+            dt._IN_QUALITY_RUN = False
+
+
+
 if __name__ == "__main__":
     unittest.main()
