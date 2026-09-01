@@ -108,10 +108,13 @@ def workspace_dir(repo, agent: str) -> Path:
     return d
 
 
-def log_pack(repo, agent: str | None, pack_id: str, intent: str) -> None:
+def log_pack(repo, agent: str | None, pack_id: str, intent: str,
+             meta: dict | None = None) -> None:
     if not agent:
         return
     rec = {"ts": datetime.now(timezone.utc).isoformat(timespec="seconds"),
            "pack": pack_id, "intent": intent}
+    if meta:
+        rec.update(meta)
     with (workspace_dir(repo, agent) / "log.jsonl").open("a") as f:
         f.write(json.dumps(rec) + "\n")

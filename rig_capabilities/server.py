@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "18.0.0"
+VERSION = "19.0.0"
 
 
 def default_repo() -> Repo:
@@ -377,9 +377,9 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
 
     def concepts(args: dict):
         from .fabric import lookup_concept
-        return {"concept": args.get("concept"),
-                "ids": lookup_concept(repo, str(args.get("concept", "")),
-                                      int(args.get("limit", 20)))}
+        res = lookup_concept(repo, str(args.get("concept", "")),
+                             int(args.get("limit", 20)))
+        return {"concept": args.get("concept"), **res}
 
     def refresh(args: dict):
         from .refresh import auto_refresh, drift_report

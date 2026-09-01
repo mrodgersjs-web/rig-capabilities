@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v18: live cross-node federation — HTTP Bearer pull with gitignored token_file, fed: namespacing.
+v19: LLM concept overlay — honest idf/llm tiers via local qwen3:8b topic tags.
 Stdlib only.
 """
-__version__ = "18.0.0"
+__version__ = "19.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -22,4 +22,5 @@ VERSION_LADDER = {
     "16": "1000x round engine (graduate-on-green)",
     "17": "scraper-corpus intel root (mtime freshness)",
     "18": "live cross-node federation (token_file)",
+    "19": "LLM concept overlay (honest tiers)",
 }

@@ -374,7 +374,22 @@ class FabricTests(unittest.TestCase):
     def test_concepts_lookup(self):
         from rig_capabilities.fabric import build_concepts, lookup_concept
         build_concepts(self.repo)
-        self.assertIn("threat-model", lookup_concept(self.repo, "threat"))
+        res = lookup_concept(self.repo, "threat")
+        self.assertIn("threat-model", res["ids"])
+        self.assertIn("threat-model", res["tiers"]["idf"])
+        self.assertEqual([], res["tiers"]["llm"])  # no LLM overlay in fixture
+
+    def test_concepts_llm_tier(self):
+        import json as _json
+        from rig_capabilities.fabric import build_concepts, lookup_concept
+        build_concepts(self.repo)
+        (Path(self._tmp.name) / "repo" / ".concepts.llm.json").write_text(
+            _json.dumps({"security-threat-model|skill|canonical":
+                         ["risk-modeling", "threat"]}))
+        res = lookup_concept(self.repo, "risk-modeling")
+        self.assertIn("security-threat-model", res["tiers"]["llm"])
+        self.assertEqual([], res["tiers"]["idf"])
+        self.assertIn("security-threat-model", res["ids"])
 
     def test_registry_status_handles_missing(self):
         from rig_capabilities.registry import status as reg_status
@@ -1239,6 +1254,40 @@ class FederationLiveTests(unittest.TestCase):
         self._federate(main, {"label": "peer", "url": base,
                               "token_file": ".context/fed/peer.token"})
         self.assertEqual([], federated_assets(main))
+
+
+class VerifiedRequesterTests(unittest.TestCase):
+    def setUp(self):
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        self.repo = make_fixture(Path(self._tmp.name))
+        self.repo.build_index()
+
+    def _token(self, agent="jake", ttl=3600):
+        from rig_capabilities.idp import issue_token
+        return issue_token(self.repo, agent, ttl=ttl, mint_key=True)
+
+    def test_valid_token_verified_and_traced(self):
+        from rig_capabilities.fabric import context_pack
+        iss = self._token()
+        self.assertTrue(iss["ok"])
+        art = context_pack(self.repo, "threat model", token=iss["token"],
+                           requester="unverified-sue")
+        self.assertEqual("jake", art["verified_requester"])
+        self.assertEqual("jake", art["requester"])  # token > --requester
+        line = json.loads((Path(self.repo.root) / ".context" / "agents"
+                           / "jake" / "log.jsonl").read_text().splitlines()[-1])
+        self.assertEqual("jake", line["verified_requester"])
+
+    def test_bad_or_expired_token_rejected(self):
+        from rig_capabilities.fabric import context_pack
+        with self.assertRaises(ValueError):
+            context_pack(self.repo, "x", token="v1.bogus.999.deadbeef")
+        iss = self._token(ttl=60)
+        import time as _t
+        with self.assertRaises(ValueError):
+            context_pack(self.repo, "x", token=iss["token"].replace(
+                f".{iss['exp']}.", f".{iss['exp'] - 120}."))  # tampered exp
 
 
 if __name__ == "__main__":

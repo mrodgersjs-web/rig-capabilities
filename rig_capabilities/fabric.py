@@ -151,22 +151,27 @@ def build_concepts(repo) -> dict:
     return {"concepts": len(conc)}
 
 
-def lookup_concept(repo, concept: str, limit: int = 20) -> list:
-    """Concept index lookup. Multi-word queries union across words."""
+def lookup_concept(repo, concept: str, limit: int = 20) -> dict:
+    """Concept index lookup, honest tiers: idf = literal token match (strong),
+    llm = local-model topic tag (weaker). ids = idf-first union."""
     cp = Path(repo.root) / ".concepts.json"
-    if not cp.exists():
-        return []
-    idx = json.loads(cp.read_text())
-    key = concept.lower().strip()
-    if key in idx:
-        return idx[key][:limit]
-    seen, out = set(), []
-    for w in key.split():
-        for i in idx.get(w, []):
-            if i not in seen:
-                seen.add(i)
-                out.append(i)
-    return out[:limit]
+    idf: list = []
+    if cp.exists():
+        idx = json.loads(cp.read_text())
+        key = concept.lower().strip()
+        if key in idx:
+            idf = idx[key][:limit]
+        else:
+            seen = set()
+            for w in key.split():
+                for i in idx.get(w, []):
+                    if i not in seen:
+                        seen.add(i)
+                        idf.append(i)
+            idf = idf[:limit]
+    from .concepts_llm import lookup as llm_lookup
+    llm = [i for i in llm_lookup(repo, concept, limit=limit) if i not in idf]
+    return {"ids": (idf + llm)[:limit], "tiers": {"idf": idf, "llm": llm}}
 
 
 # ----------------------------------------------------------------- dense tier
@@ -392,7 +397,8 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
         artifact["signature"] = sign_artifact(artifact, key)
     (art_dir / f"{pack_id}.json").write_text(json.dumps(artifact, indent=1))
     record_observation(repo, pack_id, [n["id"] for n in nodes], requester)
-    log_pack(repo, requester, pack_id, intent)
+    log_pack(repo, requester, pack_id, intent,
+             meta={"verified_requester": verified_requester} if verified_requester else None)
     from .observe import trace
     trace(repo, "context_pack",
           input={"intent": intent, "requester": requester or ""},
