@@ -1475,6 +1475,9 @@ class CommandCanonicalTests(unittest.TestCase):
         names = {t["name"] for t in TOOLS}
         self.assertIn("capabilities_certify", names)
         self.assertIn("capabilities_agent_pack", names)
+        for n in ("capabilities_gaps", "capabilities_overlay_status",
+                  "capabilities_proofchain", "capabilities_release"):
+            self.assertIn(n, names)
 
     def test_command_done_when_never_mutates(self):
         banned = ("mcp:capabilities_certify", "mcp:capabilities_round",

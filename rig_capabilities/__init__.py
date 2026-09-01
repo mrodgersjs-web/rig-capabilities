@@ -1,9 +1,9 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v36: proofchain verifies ROADMAP packet prefixes against ~/.rig/proof.
+v37: MCP tools for gaps, overlay_status, proofchain, release (local zip only).
 Stdlib only.
 """
-__version__ = "36.0.0"
+__version__ = "37.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -40,4 +40,5 @@ VERSION_LADDER = {
     "34": "overlay doctor (honest 62/300)",
     "35": "harness-install GoalSpecs (dry default)",
     "36": "proofchain ROADMAP prefixes vs ~/.rig/proof",
+    "37": "MCP gaps/overlay_status/proofchain/release",
 }

@@ -9,7 +9,7 @@ from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "36.0.0"
+VERSION = "37.0.0"
 
 
 def default_repo() -> Repo:
@@ -297,6 +297,30 @@ TOOLS = [
                                        "intent": {"type": "string"}}},
     },
     {
+        "name": "capabilities_gaps",
+        "description": "Rank coverage-gap cells and optionally write draft harnesses. apply=false is dry.",
+        "inputSchema": {"type": "object",
+                        "properties": {"n": {"type": "integer"},
+                                       "apply": {"type": "boolean"}}},
+    },
+    {
+        "name": "capabilities_overlay_status",
+        "description": "LLM overlay coverage (tagged/target/ollama). Never claims complete on a short file.",
+        "inputSchema": {"type": "object",
+                        "properties": {"target": {"type": "integer"}}},
+    },
+    {
+        "name": "capabilities_proofchain",
+        "description": "Verify ROADMAP packet prefixes against ~/.rig/proof hashes.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_release",
+        "description": "Build the public-catalog zip locally. apply=false dry. Does not git-tag or GitHub-release.",
+        "inputSchema": {"type": "object",
+                        "properties": {"apply": {"type": "boolean"}}},
+    },
+    {
         "name": "capabilities_quality_report",
         "description": "Skill quality-contract coverage: outcome/done_when/great_example/quality_floor per canonical asset, weakest first.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -451,6 +475,24 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         agent = str(args.get("agent", ""))
         return boot_pack(repo, agent) if args.get("boot") else resolve_pack(repo, agent)
 
+    def gaps(args: dict):
+        from .gaps import write_gap_harnesses
+        return write_gap_harnesses(repo, n=int(args.get("n") or 8),
+                                   apply=bool(args.get("apply")))
+
+    def overlay_status(args: dict):
+        from .concepts_llm import overlay_status as _st
+        return _st(repo, target=int(args.get("target") or 300))
+
+    def proofchain(_args: dict):
+        from .proofchain import verify_roadmap
+        return verify_roadmap(repo)
+
+    def release_zip(args: dict):
+        from .release import build_public_zip
+        return build_public_zip(repo, apply=bool(args.get("apply")))
+
+
 
     handlers = {
         "capabilities_search": search,
@@ -478,5 +520,9 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_db_sync": db_sync,
         "capabilities_issue_token": issue_token,
         "capabilities_quality_report": quality_report,
+        "capabilities_gaps": gaps,
+        "capabilities_overlay_status": overlay_status,
+        "capabilities_proofchain": proofchain,
+        "capabilities_release": release_zip,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)
