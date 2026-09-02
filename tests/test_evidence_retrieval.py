@@ -74,23 +74,36 @@ class RetrievalTests(unittest.TestCase):
                          "registry must not be accumulated from the corpus rows")
 
     def test_gate_is_not_theater(self):
-        """Out-of-band plant: disable the beats-baseline clause, a tie passes."""
+        """Out-of-band plant: on the SAME tie probe, the real checker refuses
+        (rc 2, bm25 does not beat keyword) and the planted one goes blind (rc 0).
+        Proving both halves is what makes it RED->restore, not just 'planted 0'."""
         src = R.read_text(encoding="utf-8")
         anchor = "    if not (bm25_mrr > kw_mrr):"
         self.assertIn(anchor, src)
         with tempfile.TemporaryDirectory() as td:
+            tie = Path(td) / "tie.json"
+            tie.write_text(
+                '[{"query":"experience lesson records","gold":"experience-lesson-records"}]',
+                encoding="utf-8")
+
+            def bench(script):
+                return subprocess.run(
+                    [sys.executable, str(script), "benchmark",
+                     "--matrix", str(FX / "corpus.json"), "--probes", str(tie),
+                     "--hit-floor", "0.1"], cwd=REPO, capture_output=True, text=True)
+
+            # RED: the real, unmodified checker refuses a tie.
+            real = bench(R)
+            self.assertEqual(real.returncode, 2,
+                             "real checker must refuse a bm25==keyword tie")
+            self.assertIn("does not beat", real.stdout)
+
+            # BLIND: disable the beats-baseline clause and the same tie passes.
             planted = Path(td) / "retrieve.py"
             planted.write_text(src.replace(anchor, "    if False:  # PLANT"),
                                encoding="utf-8")
-            # a tie probe: an exact-name query where bm25 == keyword
-            tie = Path(td) / "tie.json"
-            tie.write_text('[{"query":"experience lesson records","gold":"experience-lesson-records"}]',
-                           encoding="utf-8")
-            p = subprocess.run(
-                [sys.executable, str(planted), "benchmark",
-                 "--matrix", str(FX / "corpus.json"), "--probes", str(tie),
-                 "--hit-floor", "0.1"], cwd=REPO, capture_output=True, text=True)
-            self.assertEqual(p.returncode, 0, "planted gate should go blind on a tie")
+            self.assertEqual(bench(planted).returncode, 0,
+                             "planted gate should go blind on the same tie probe")
 
 
 if __name__ == "__main__":

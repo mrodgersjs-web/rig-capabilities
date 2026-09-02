@@ -274,7 +274,12 @@ class Repo:
             "description": (fm.get("description") or fm.get("summary") or "")[:400],
             "tags": _tags(fm.get("tags")),
             "sha": sha,
-            "installable": True,
+            # Installable only when the kind actually has a harness install root.
+            # `data` has none (it is a descriptor+fixtures package, not something
+            # you drop into a harness), so it reports installable=False and the
+            # install/release paths refuse it cleanly instead of offering a target
+            # that does not exist.
+            "installable": bool(self.install_roots(kind)),
             "okf": _okf_meta(fm, "canonical", kind=kind),
             "quality": _quality_block(text),
         }

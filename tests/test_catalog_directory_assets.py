@@ -103,6 +103,19 @@ class DirectoryAssetTests(unittest.TestCase):
         for a in data:
             self.assertTrue((REPO_ROOT / a["path"] / "DATA.md").is_file(), a["id"])
 
+    def test_data_assets_are_not_installable(self):
+        """A data asset has no harness install root, so it must not advertise
+        installability — otherwise install/release offer a target that is empty."""
+        for a in self._canonical():
+            if a["kind"] == "data":
+                self.assertFalse(a["installable"],
+                                 f"{a['id']} claims installable with no root")
+
+    def test_installable_kinds_stay_installable(self):
+        """Non-vacuity: the rule did not flip everything to non-installable."""
+        skills = [a for a in self._canonical() if a["kind"] == "skill"]
+        self.assertTrue(skills and all(a["installable"] for a in skills))
+
     def test_a_data_directory_without_its_descriptor_is_not_scanned(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
