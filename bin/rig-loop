@@ -1,0 +1,393 @@
+#!/usr/bin/env python3
+"""rig-loop — Loop-Skill Contract v11 CLI (stdlib only).
+
+  rig-loop activate <loop-id> [--intent T] [--mode auto|walk] [--cwd DIR] [--harness H] [--if-inactive]
+  rig-loop status [--json] [--run RUN_ID]
+  rig-loop stage <STAGE> pass|fail|park [--artifact PATH] [--score N] [--note T] [--force]
+  rig-loop artifact <STAGE> <PATH>          bind a stage artifact path
+  rig-loop path                              print the run's artifacts dir
+  rig-loop counter <name> [--set N|--inc]    e.g. qr_passes
+  rig-loop check add "<cmd>" | check run
+  rig-loop plant "<name>" --red "<cmd>" --green "<cmd>"
+  rig-loop gate-d request --action T | gate-d approve --phrase "APPROVE <run_id>" [--by mike]
+  rig-loop seal | park --reason T | resume <run_id> | close [--reason T]
+  rig-loop hook <session-start|prompt|pre-tool|post-tool|stop> [--format claude|codex|pi|text] [--skill ID]
+  rig-loop wire [--apply] [--verify] [--remove] [--harness H ...]
+  rig-loop doctor [--json]
+  rig-loop list | specs
+  rig-loop test <loop-id> [--json]
+  rig-loop compile <loop-id>                 write loop.json beside loop.yaml
+  rig-loop scaffold <loop-id> --name N [--source PATH] [--summary T]
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from rig_capabilities import loops as L  # noqa: E402
+
+
+def _need_run(args) -> dict:
+    run = L.find_active(getattr(args, "cwd", None) or os.getcwd(), getattr(args, "run", None))
+    if not run:
+        sys.exit("rig-loop: no active loop run for this directory. Start one: rig-loop activate <loop-id>")
+    return run
+
+
+def _print(obj, as_json=True):
+    print(json.dumps(obj, indent=2, sort_keys=True) if as_json else obj)
+
+
+def cmd_activate(a):
+    run = L.activate(a.loop_id, cwd=a.cwd, intent=a.intent or "", mode=a.mode, harness=a.harness or "",
+                     session_id=a.session_id or "", if_inactive=a.if_inactive)
+    spec = L.load_spec(run["loop_id"])
+    print(L.banner(run, spec))
+    print(f"[rig-loop] artifacts dir: {L.artifacts_dir(run)}")
+    return 0
+
+
+def cmd_status(a):
+    run = _need_run(a)
+    spec = L.load_spec(run["loop_id"])
+    if a.json:
+        _print(run)
+    else:
+        print(L.banner(run, spec))
+        for st in spec["stages"]:
+            s = run["stage_status"].get(st["id"], "·")
+            print(f"  {st['id']:<3} {st.get('name',''):<14} {s:<6} {run['stage_artifacts'].get(st['id'], '')}")
+        if run["checks"]:
+            print("  checks:", "; ".join(f"{c['cmd']} -> {c['last']['exit'] if c.get('last') else '?'}" for c in run["checks"]))
+        if run["planted"]:
+            print("  planted:", "; ".join(f"{p['name']} red={p['red_ok']} green={p['green_ok']}" for p in run["planted"]))
+        if run["gate_d"].get("requested"):
+            print("  gate-d:", run["gate_d"])
+    return 0
+
+
+def cmd_stage(a):
+    run = _need_run(a)
+    spec = L.load_spec(run["loop_id"])
+    try:
+        run = L.mark_stage(run, spec, a.stage, a.status, artifact=a.artifact, score=a.score, note=a.note or "", force=a.force)
+    except L.SpecError as exc:
+        print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+        return 2
+    print(f"[rig-loop] {a.stage} -> {a.status} · run {run['run_id']} status={run['status']} iteration={run['iteration']}")
+    if run["status"] == "active":
+        print(L.banner(run, spec))
+    elif run.get("park_reason"):
+        print(f"[rig-loop] {run['status'].upper()}: {run['park_reason']}")
+    return 0
+
+
+def cmd_artifact(a):
+    run = _need_run(a)
+    run["stage_artifacts"][a.stage] = str(Path(a.path).expanduser().resolve())
+    L.log_event(run, "artifact", stage=a.stage, path=run["stage_artifacts"][a.stage])
+    L.save_run(run)
+    print(run["stage_artifacts"][a.stage])
+    return 0
+
+
+def cmd_path(a):
+    print(L.artifacts_dir(_need_run(a)))
+    return 0
+
+
+def cmd_counter(a):
+    run = _need_run(a)
+    if a.set is not None:
+        run["counters"][a.name] = int(a.set)
+    else:
+        run["counters"][a.name] = int(run["counters"].get(a.name, 0)) + 1
+    L.log_event(run, "counter", name=a.name, value=run["counters"][a.name])
+    L.save_run(run)
+    print(f"{a.name}={run['counters'][a.name]}")
+    return 0
+
+
+def cmd_check(a):
+    run = _need_run(a)
+    if a.action == "add":
+        L.add_check(run, a.cmd, a.cwd or run["cwd"])
+        print(f"[rig-loop] check added: {a.cmd}")
+        return 0
+    if a.action == "rm":
+        idx = int(a.cmd or -1)
+        if not 0 <= idx < len(run["checks"]):
+            sys.exit(f"rig-loop: check index out of range (0..{len(run['checks'])-1})")
+        gone = run["checks"].pop(idx)
+        L.log_event(run, "check_rm", cmd=gone["cmd"])
+        L.save_run(run)
+        print(f"[rig-loop] check removed: {gone['cmd']}")
+        return 0
+    if a.action == "list":
+        for i, c in enumerate(run["checks"]):
+            last = c.get("last") or {}
+            print(f"  [{i}] exit={last.get('exit', '?')} {c['cmd']}")
+        return 0
+    results = L.run_checks(run)
+    for r in results:
+        print(f"  exit {r['exit']:<3} {r['cmd']}")
+    return 0 if all(r["exit"] == 0 for r in results) else 1
+
+
+def cmd_plant(a):
+    run = _need_run(a)
+    rec = L.plant(run, a.name, a.red, a.green, a.cwd or run["cwd"])
+    print(f"[rig-loop] planted '{a.name}': red_ok={rec['red_ok']} (exit {rec['red_exit']}) green_ok={rec['green_ok']} (exit {rec['green_exit']})")
+    return 0 if rec["red_ok"] and rec["green_ok"] else 1
+
+
+def cmd_gate_d(a):
+    run = _need_run(a)
+    try:
+        if a.action == "request":
+            gd = L.gate_d_request(run, a.action_text or "")
+            print(f"[rig-loop] Gate-D requested for run {run['run_id']}: {gd['requested']}\n"
+                  f"[rig-loop] Mike approves with: rig-loop gate-d approve --phrase \"APPROVE {run['run_id']}\"")
+        else:
+            gd = L.gate_d_approve(run, a.phrase or "", by=a.by)
+            print(f"[rig-loop] Gate-D APPROVED by {gd['by']} at {gd['at']}")
+    except L.SpecError as exc:
+        print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+        return 2
+    return 0
+
+
+def cmd_seal(a):
+    run = _need_run(a)
+    spec = L.load_spec(run["loop_id"])
+    try:
+        packet = L.seal(run, spec, signer=a.signer)
+    except L.SpecError as exc:
+        print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+        return 2
+    print(f"[rig-loop] sealed {packet['proof_id']} -> {L.load_run(run['run_id'])['proof']['path']} proof_hash={packet['proof_hash'][:16]}…")
+    return 0
+
+
+def cmd_park(a):
+    run = L.park(_need_run(a), a.reason)
+    print(f"[rig-loop] parked {run['run_id']}: {a.reason}")
+    return 0
+
+
+def cmd_resume(a):
+    run = L.resume(a.run_id)
+    print(L.banner(run, L.load_spec(run["loop_id"])))
+    return 0
+
+
+def cmd_close(a):
+    run = L.close(_need_run(a), a.reason or "closed")
+    print(f"[rig-loop] closed {run['run_id']}")
+    return 0
+
+
+def cmd_qr(a):
+    run = _need_run(a)
+    rec = L.qr_pass(run, a.new_unknowns, a.note or "")
+    dry = "DRY" if rec["new_unknowns"] == 0 else f"{rec['new_unknowns']} new unknown(s) — loop again"
+    print(f"[rig-loop] Q⇄R pass {rec['n']} recorded: {dry}")
+    return 0
+
+
+def cmd_slice(a):
+    run = _need_run(a)
+    if a.action == "start":
+        if not a.name:
+            sys.exit("rig-loop: slice start needs a name")
+        try:
+            child = L.slice_start(run, a.name, a.loop)
+        except L.SpecError as exc:
+            print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+            return 2
+        spec = L.load_spec(child["loop_id"])
+        print(f"[rig-loop] slice started: {child['run_id']} (child of {run['run_id']}) — it is now the active run for {run['cwd']}")
+        print(L.banner(child, spec))
+        return 0
+    for k in L.slice_list(run):
+        print(f"  {k['run_id']:<60} {k['status']:<9} {k['intent']}")
+    if not run.get("children"):
+        print("  (no slices yet) — rig-loop slice start \"<name>\"")
+    return 0
+
+
+def cmd_verify(a):
+    run = _need_run(a)
+    spec = L.load_spec(run["loop_id"])
+    if a.dry_run:
+        print(L.build_verifier_prompt(run, spec))
+        return 0
+    try:
+        rec = L.verify(run, spec, a.family, cmd_override=a.cmd, timeout=a.timeout)
+    except L.SpecError as exc:
+        print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+        return 2
+    print(f"[rig-loop] verifier {rec['family']} → {rec['verdict']} (exit {rec['exit']}, {rec['secs']}s) · output: {rec['output']}")
+    for g in rec["gaps"]:
+        print(f"    - {g}")
+    return 0 if rec["verdict"] in ("PERFECT", "VERIFIED", "PARTIAL") else 1
+
+
+def cmd_handoff(a):
+    run = _need_run(a)
+    p = L.handoff(run, L.load_spec(run["loop_id"]), to=a.to)
+    print(f"[rig-loop] handoff written: {p}" + (f" (copy: {a.to})" if a.to else ""))
+    return 0
+
+
+def cmd_calibration(a):
+    _print(L.calibration_summary(a.loop))
+    return 0
+
+
+def cmd_hook(a):
+    raw = sys.stdin.read() if not sys.stdin.isatty() else ""
+    try:
+        payload = json.loads(raw) if raw.strip() else {}
+    except Exception:  # noqa: BLE001
+        payload = {}
+    try:
+        result = L.dispatch_hook(a.event, payload, skill=a.skill, run_id=a.run)
+    except Exception as exc:  # noqa: BLE001 — a broken hook must never break the agent
+        if a.format == "pi":
+            print(json.dumps({"block": False, "reason": "", "inject": "", "error": str(exc)}))
+        return 0
+    out, err, code = L.render_hook(a.event, result, a.format)
+    if out:
+        print(out)
+    if err:
+        print(err, file=sys.stderr)
+    return code
+
+
+def cmd_wire(a):
+    if a.verify:
+        _print(L.verify_wiring())
+        return 0
+    rep = L.wire(apply=a.apply, harnesses=a.harness or None, remove=a.remove)
+    _print(rep)
+    if not a.apply:
+        print("(dry-run — re-run with --apply)", file=sys.stderr)
+    return 0
+
+
+def cmd_doctor(a):
+    rep = L.doctor()
+    if a.json:
+        _print(rep)
+        return 0 if rep["ok"] else 1
+    print(f"rig-loop engine {rep['engine']} · schema {rep['schema']} · pyyaml={rep['pyyaml']} · cli_on_path={rep['cli_on_path']}")
+    print(f"state: {rep['state_root']}  active runs: {len(rep['active_runs'])}")
+    print("hooks wired:")
+    for h, v in rep["wiring"].items():
+        print(f"  {h:<12} {'WIRED' if v.get('wired') else 'MISSING':<8} {v.get('path')} {v.get('events','')} {v.get('note','')}")
+    print("loop-skills installed (SKILL.md + loop.yaml):")
+    for sid, v in rep["loop_skills"].items():
+        cells = " ".join(f"{h}={'Y' if ok else '-'}" for h, ok in v["installed"].items())
+        print(f"  {sid:<32} v{v.get('version')} stages={len(v['stages'])}  {cells}")
+    if rep["spec_errors"]:
+        print("SPEC ERRORS:")
+        for e in rep["spec_errors"]:
+            print(f"  {e['id']}: {e['error']}")
+    if rep.get("missing_installs"):
+        print("MISSING INSTALLS: " + ", ".join(rep["missing_installs"]))
+    print("OK" if rep["ok"] else "NOT OK")
+    return 0 if rep["ok"] else 1
+
+
+def cmd_list(a):
+    act = L._read_active()
+    runs_dir = L.state_root() / "runs"
+    rows = []
+    for d in sorted(runs_dir.iterdir(), reverse=True)[:30]:
+        r = L.load_run(d.name)
+        if r:
+            rows.append(f"  {r['run_id']:<60} {r['status']:<9} {L.progress(r, L.load_spec(r['loop_id']))[0]} stages · {r['cwd']}")
+    print("active by cwd:", json.dumps(act.get("by_cwd", {}), indent=2))
+    print("\n".join(rows) or "  (no runs)")
+    return 0
+
+
+def cmd_specs(a):
+    for s in L.list_specs({k: v for k, v in L.SKILL_ROOTS.items()} if a.all else None):
+        print(f"  {s['id']:<32} {s.get('root'):<10} {'ERROR ' + s['error'] if 'error' in s else ' '.join(s['stages'])}")
+    return 0
+
+
+def cmd_test(a):
+    rep = L.run_loop_tests(a.loop_id)
+    if a.json:
+        _print(rep)
+    else:
+        print(f"rig-loop test {a.loop_id}: {'PASS' if rep['ok'] else 'FAIL'} — {rep.get('summary', rep.get('error'))}")
+        for c in rep.get("cases", []):
+            print(f"  [{'ok' if c['ok'] else 'FAIL'}] {c['name']}")
+            if not c["ok"]:
+                for s in c["steps"]:
+                    if not s["ok"]:
+                        print(f"      step {s['i']} {s['step']}: got {json.dumps(s['got'])[:220]} expect {s['expect']}")
+    return 0 if rep["ok"] else 1
+
+
+def cmd_compile(a):
+    print(L.compile_spec(a.loop_id))
+    return 0
+
+
+def cmd_scaffold(a):
+    print(L.scaffold(a.loop_id, a.name, a.source or "", a.summary or ""))
+    return 0
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser(prog="rig-loop", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = ap.add_subparsers(dest="cmd", required=True)
+
+    p = sub.add_parser("activate"); p.add_argument("loop_id"); p.add_argument("--intent"); p.add_argument("--mode", default="auto")
+    p.add_argument("--cwd"); p.add_argument("--harness"); p.add_argument("--session-id"); p.add_argument("--if-inactive", action="store_true"); p.set_defaults(fn=cmd_activate)
+    p = sub.add_parser("status"); p.add_argument("--json", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_status)
+    p = sub.add_parser("stage"); p.add_argument("stage"); p.add_argument("status", choices=["pass", "fail", "park"]); p.add_argument("--artifact")
+    p.add_argument("--score", type=int); p.add_argument("--note"); p.add_argument("--force", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_stage)
+    p = sub.add_parser("artifact"); p.add_argument("stage"); p.add_argument("path"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_artifact)
+    p = sub.add_parser("path"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_path)
+    p = sub.add_parser("counter"); p.add_argument("name"); p.add_argument("--set", type=int); p.add_argument("--inc", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_counter)
+    p = sub.add_parser("check"); p.add_argument("action", choices=["add", "run", "rm", "list"]); p.add_argument("cmd", nargs="?"); p.add_argument("--cwd"); p.add_argument("--run"); p.set_defaults(fn=cmd_check)
+    p = sub.add_parser("plant"); p.add_argument("name"); p.add_argument("--red", required=True); p.add_argument("--green", required=True); p.add_argument("--cwd"); p.add_argument("--run"); p.set_defaults(fn=cmd_plant)
+    p = sub.add_parser("gate-d"); p.add_argument("action", choices=["request", "approve"]); p.add_argument("--action", dest="action_text"); p.add_argument("--phrase"); p.add_argument("--by", default="mike"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_gate_d)
+    p = sub.add_parser("seal"); p.add_argument("--signer", default=os.environ.get("RIG_AGENT", "rig-loop")); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_seal)
+    p = sub.add_parser("park"); p.add_argument("--reason", required=True); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_park)
+    p = sub.add_parser("resume"); p.add_argument("run_id"); p.set_defaults(fn=cmd_resume)
+    p = sub.add_parser("close"); p.add_argument("--reason"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_close)
+    p = sub.add_parser("qr"); p.add_argument("action", choices=["pass"]); p.add_argument("--new-unknowns", type=int, required=True); p.add_argument("--note"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_qr)
+    p = sub.add_parser("slice"); p.add_argument("action", choices=["start", "list"]); p.add_argument("name", nargs="?"); p.add_argument("--loop", default="iqrsqpi-v20-slice"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_slice)
+    p = sub.add_parser("verify"); p.add_argument("--family", required=True, choices=sorted(L.VERIFIER_FAMILIES)); p.add_argument("--cmd", help="override verifier command; {prompt_file} and {cwd} are substituted"); p.add_argument("--timeout", type=int, default=900); p.add_argument("--dry-run", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_verify)
+    p = sub.add_parser("handoff"); p.add_argument("--to"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_handoff)
+    p = sub.add_parser("calibration"); p.add_argument("--loop"); p.set_defaults(fn=cmd_calibration)
+    p = sub.add_parser("hook"); p.add_argument("event", choices=sorted(L.HOOKS)); p.add_argument("--format", default="claude", choices=["claude", "codex", "pi", "text"]); p.add_argument("--skill"); p.add_argument("--run"); p.set_defaults(fn=cmd_hook)
+    p = sub.add_parser("wire"); p.add_argument("--apply", action="store_true"); p.add_argument("--verify", action="store_true"); p.add_argument("--remove", action="store_true"); p.add_argument("--harness", action="append", choices=list(L.HARNESSES)); p.set_defaults(fn=cmd_wire)
+    p = sub.add_parser("doctor"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_doctor)
+    p = sub.add_parser("list"); p.set_defaults(fn=cmd_list)
+    p = sub.add_parser("specs"); p.add_argument("--all", action="store_true"); p.set_defaults(fn=cmd_specs)
+    p = sub.add_parser("test"); p.add_argument("loop_id"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_test)
+    p = sub.add_parser("compile"); p.add_argument("loop_id"); p.set_defaults(fn=cmd_compile)
+    p = sub.add_parser("scaffold"); p.add_argument("loop_id"); p.add_argument("--name", required=True); p.add_argument("--source"); p.add_argument("--summary"); p.set_defaults(fn=cmd_scaffold)
+
+    a = ap.parse_args(argv)
+    try:
+        return int(a.fn(a) or 0)
+    except L.SpecError as exc:
+        print(f"rig-loop: {exc}", file=sys.stderr)
+        return 2
+
+
+if __name__ == "__main__":
+    sys.exit(main())
