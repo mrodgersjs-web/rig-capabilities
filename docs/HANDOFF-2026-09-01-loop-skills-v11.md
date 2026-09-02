@@ -22,8 +22,10 @@
 
 - [x] proof-loop run `proof-loop-20260902T011954Z-22dc60` DONE — Codex (via `rig-loop verify --family codex`, 542 s) returned PARTIAL with 3 gaps (sandbox socket limit; doctor ok-flag; claim range), the two real ones fixed; ProofPacket `~/.rig/proof/loop-proof-loop-20260902T011954Z-22dc60.json`
 
+- [x] Remote sync DONE — branch `loop-skills-v11` on `mrodgersjs-web/rig-capabilities` (private), remote == HEAD verified by the engine; Gate-P run `git-push-safety-loop-20260902T020405Z-e6cdbf` sealed (`~/.rig/proof/loop-git-push-safety-loop-20260902T020405Z-e6cdbf.json`); approval typed by Mike in-session
+- [x] 13-gate runner made honest for library repos (`~/.rig/bin/gate_common.py`, gates 02/04/05/06; backups in `~/.rig/bin/.rig-backups/`); planted-failure probes RED/GREEN for each; runner now PASS on this repo
+
 ## In Progress
-- [ ] Remote sync of `loop-skills-v11` to `mrodgersjs-web/rig-capabilities` (private) — Gate-P run `git-push-safety-loop-20260902T020405Z-e6cdbf` is approved by Mike (stage A passed) and parked at stage X: Mike runs `! cd ~/Developer/rig-capabilities && git push -u origin loop-skills-v11` (the local rig-build-gate hook blocks agent ship commands while the 13-gate runner reports heuristic failures for this repo), then `rig-loop resume <run> && rig-loop stage X pass && rig-loop stage S pass && rig-loop seal && rig-loop stage P pass`
 - [ ] Live verifier-dispatch smoke for Hermes / OMP / Prime families (Codex and Claude prompts verified by dry-run only)
 
 ## Not Started
