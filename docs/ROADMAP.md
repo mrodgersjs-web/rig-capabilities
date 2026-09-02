@@ -61,6 +61,7 @@ V28 zip is **ARMED** (typed `APPROVE gd_1788227314643` on 2026-09-01). Tag `v28.
 | 47 | (this increment) | `ce0c1d48` | P5b dormant-by-default Fable 5.1 model route | fable_dormant |
 | 48 | (this increment) | `f0373537` | P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer | stage_order |
 | 49 | (this increment) | `0fd7f073` | P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools, skills/harnesses/loop registered | register |
+| 50 | `f63cb1f..94fbf77` | `24f585aa949d` | Discover AI increment: frontmatter-visibility gate (canonical + 3,758 external assets), directory assets require SKILL.md (a `.pyc` was indexed as a LOOP), round exit_code reaches CLI rc + MCP isError, `done_when` ran/unrunnable accounting, exemplar-resolution ratchet (74 dangling named), paired-run / skill-contract / acceptance-identity / lifecycle / topology surfaces, 6 exemplars | suite |
 
 ## Proof-chain check
 

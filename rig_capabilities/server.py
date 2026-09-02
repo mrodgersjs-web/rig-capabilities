@@ -4,12 +4,16 @@ import json
 import os
 from pathlib import Path
 
+from . import __version__
 from .catalog import KINDS, Repo
 from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "40.0.0"
+# One source. This constant duplicated `rig_capabilities.__version__` and then
+# went stale by nine shipped rungs, so every MCP `initialize` handshake
+# advertised 40.0.0. `tests.test_version_coherence` pins the equality.
+VERSION = __version__
 
 
 # The default corpus scope for `capabilities_converge`. The live corpus roots are

@@ -1,9 +1,11 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v40: Wave 4 close — VERSION_LADDER 1–40.
+v50: Discover AI capability increment — catalog truncation guard, phantom-asset
+scanner fix, round verdict propagation, evidence/contract/identity/lifecycle/topology
+surfaces. VERSION_LADDER 1–50.
 Stdlib only.
 """
-__version__ = "40.0.0"
+__version__ = "50.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -44,4 +46,22 @@ VERSION_LADDER = {
     "38": "stats public_assets + gate_d_cases",
     "39": "ROADMAP V28 ARMED + Wave 4 rows",
     "40": "Wave 4 close",
+    # 41–49 were documented in docs/ROADMAP.md with their own proof packets but
+    # never entered the ladder, so `/version`, `stats`, the release zip name and
+    # the MCP `initialize` handshake all advertised 40.0.0 for nine shipped
+    # increments. `tests.test_catalog.RoadmapTests` now pins the three in a
+    # cycle, so the constant and the document cannot drift apart again.
+    "41": "P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS",
+    "42": "P2 deterministic corpus scanner + source inventory + classify rules",
+    "43": "P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate",
+    "44": "P3b Known Expert OS phase harness + claim-typed evidence ledger",
+    "45": "P4 worktree leases, rotating canary, dispatcher packet, mechanical denial",
+    "46": "P5 E_stage promotion gate + golden replay corpus",
+    "47": "P5b dormant-by-default Fable 5.1 model route",
+    "48": "P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer",
+    "49": "P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools",
+    "50": "Discover AI increment: frontmatter-visibility gate (canonical + external), "
+          "directory assets need SKILL.md, round exit_code -> CLI rc + MCP isError, "
+          "done_when ran/unrunnable accounting, exemplar-resolution ratchet, "
+          "paired-run/skill-contract/acceptance-identity/lifecycle/topology surfaces",
 }
