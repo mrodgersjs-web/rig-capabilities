@@ -10,7 +10,7 @@ Gates (all deterministic):
   suite           unittest suite exits 0
   index_fresh     scan() (id,kind) set equals .index.json's
   done_tests      quality_run: >=50 ran, pass_rate == 1.0
-  idp_integrity   token issue→verify roundtrip ok; tampered token rejected
+  idp_integrity   idp.guard_report: issue→verify roundtrip on a gate-owned root; 3 forgeries refused
   acl_jake        policy grants jake "*", default stays "public"
   register        capability_register.csv validates; booked-KPI row weighted 5
   corpus_refusal  committed snapshot unclassified rate <= 0.10
@@ -20,17 +20,21 @@ Gates (all deterministic):
   stage_order     recorded IQRSQPI pass is in canonical seven-stage order
   evidence_ledger every fixture row clears rule 3 — no unverified résumé claim
 
-The seven fable-2031 gates are hermetic (law L1): each delegates to the gate
-function owned by its module, and every one of those resolves ONLY from files
-under repo.root — committed fixtures in tests/fixtures/fable2031/ plus the
-root capability_register.csv. Live state (~/.rig, ~/.hermes, ~/Downloads) is
-audited by CLI verbs, never by a certify gate.
+All twelve gates are hermetic (law L1): the seven fable-2031 ones delegate to the gate
+function owned by their module, resolving ONLY from files under repo.root — committed
+fixtures in tests/fixtures/fable2031/ plus the root capability_register.csv. Live state
+(~/.rig, ~/.hermes, ~/Downloads) is audited by CLI verbs, never by a certify gate.
+`idp_integrity` was the replay-breaking exception: it read a gitignored `.signing.key`,
+so a `git archive` of a good commit went RED for a reason no commit could fix; it now
+exercises the scheme on a root it creates itself (see `_g_idp`).
 Law L3: no gate here runs the suite except `suite` itself; the seven new gates
 each cost milliseconds so `self_test`'s per-gate copytree stays cheap.
 """
 from __future__ import annotations
 
+import base64
 import json
+import os
 import secrets
 import shutil
 import subprocess
@@ -66,18 +70,42 @@ def _g_done_tests(repo) -> tuple[bool, str]:
 
 
 def _g_idp(repo) -> tuple[bool, str]:
-    from .idp import issue_token, verify_token
-    iss = issue_token(repo, "jake")
-    if not iss.get("ok"):
-        return False, f"issue failed: {iss.get('error')}"
-    tok = iss["token"]
-    if not verify_token(repo, tok)["ok"]:
-        return False, "roundtrip rejected"
-    parts = tok.split(".")
-    tampered = f"{parts[0]}.{parts[1]}.{int(parts[2]) + 10}.{parts[3]}"
-    if verify_token(repo, tampered)["ok"]:
-        return False, "tampered token ACCEPTED"
-    return True, "roundtrip ok, tamper rejected"
+    """Delegate to the owning module — see `idp.guard_report` for why the logic
+    lives beside `verify_token` rather than here.
+
+    Hermetic (law L1): the scheme is exercised on a root this gate creates and
+    destroys, never on `repo.root/.signing.key`. That gitignored secret fused
+    "the scheme verifies" with "this machine happens to hold a key", so a
+    `git archive` replay of a good commit went RED with `issue failed: no signing
+    key` (observed at 7b413c4, 10/11 green). Key provisioning is an operator
+    action, so it is reported as detail and never judged.
+    """
+    from .catalog import Repo
+    from .idp import guard_report, issue_token
+    from .surface import generate_key, load_key
+    saved = os.environ.pop("RIG_CAPABILITIES_SIGNING_KEY", None)
+    try:
+        with tempfile.TemporaryDirectory(prefix="idp-gate-") as tmp:
+            root = Path(tmp)
+            probe = Repo(root)
+            generate_key(probe)
+            if not load_key(probe):
+                return False, "scheme cannot load a key it just generated"
+            other = root / "other-tenant"
+            other.mkdir()
+            (other / ".signing.key").write_bytes(os.urandom(32).hex().encode())
+            foreign = issue_token(Repo(other), "jake")
+            if not foreign.get("ok"):
+                return False, f"cross-check issue failed: {foreign.get('error')}"
+            rep = guard_report(probe, foreign["token"])
+            if not rep.get("ok"):
+                return False, str(rep.get("detail"))
+            live = "live key present" if load_key(repo) else \
+                "live key absent (provisioning, not verdict)"
+            return True, f"{rep['detail']} | {live}"
+    finally:
+        if saved is not None:
+            os.environ["RIG_CAPABILITIES_SIGNING_KEY"] = saved
 
 
 def _g_acl(repo) -> tuple[bool, str]:
@@ -209,10 +237,26 @@ def _plant(name: str, tmp_root: Path) -> str:
         return (f"unsatisfiable grep ({term}) injected into {target.get('id')} "
                 f"(was {len(before)} checks)")
     if name == "idp_integrity":
-        kp = tmp_root / ".signing.key"
-        if kp.exists():
-            kp.write_text("")
-        return "signing key zeroed (issue must fail)"
+        # Blind the refusal inside the OWNING module, not here. A plant that
+        # edited `certify.py` would never execute: `self_test` runs inside the
+        # process that already holds this module in `sys.modules`, so the copy's
+        # text change is invisible and the gate reads GREEN forever — a plant that
+        # cannot go RED is the exact theater the done_tests plant documents. Only a
+        # lazily-imported module can be planted. The needle is assembled from
+        # fragments so this file never contains it verbatim.
+        p = tmp_root / "rig_capabilities" / "idp.py"
+        lines = p.read_text().splitlines(keepends=True)
+        # Fragments: this file must never contain the line it hunts for, or the
+        # assertion counts its own plant (the done_tests self-reference trap).
+        hit = "".join(["compare", "_digest"])
+        idxs = [i for i, ln in enumerate(lines)
+                if ln.strip().startswith("if ") and hit in ln]
+        assert len(idxs) == 1, f"signature check not uniquely located ({len(idxs)})"
+        pad = lines[idxs[0]][:len(lines[idxs[0]]) - len(lines[idxs[0]].lstrip())]
+        lines[idxs[0]] = pad + "if False:  # planted: accept any signature\n"
+        p.write_text("".join(lines))
+        return ("signature comparison removed from idp.verify_token "
+                "(3 forgeries must still be refused)")
     if name == "acl_jake":
         (tmp_root / "acl_policy.json").write_text(
             json.dumps({"agents": {"jake": ["public"], "default": ["public"]}}))
@@ -291,6 +335,43 @@ def _restore(name: str, tmp_root: Path, backup: Path) -> None:
     shutil.copytree(backup, tmp_root, ignore=IGNORE)
 
 
+def _gate_probe(work: Path, name: str, pkg: Path) -> bool | None:
+    """Run ONE gate against `work` in a fresh interpreter.
+
+    `self_test` runs in the process that imported `rig_capabilities.certify`, so
+    the first in-process probe caches every gate module it touches in
+    `sys.modules`. After that, a plant that edits a `.py` file cannot execute:
+    `after` re-reads the cached bytecode, the gate stays GREEN, and
+    `red_when_planted` is False — the plant is theater, which is precisely the
+    failure mode this file's done_tests plant warns about. A subprocess is the
+    only honest way to ask "what would a new process compute from these files?".
+
+    Returns None when the probe cannot run, so the caller can fall back rather
+    than report a phantom RED.
+    """
+    code = (
+        "import json,sys;"
+        "sys.path.insert(0, sys.argv[1]);"
+        "from rig_capabilities.catalog import Repo;"
+        "from rig_capabilities.certify import run_gates;"
+        "r = run_gates(Repo(sys.argv[2]), only=[sys.argv[3]]);"
+        "print(json.dumps(r[sys.argv[3]]['ok']))"
+    )
+    try:
+        p = subprocess.run([sys.executable, "-c", code, str(pkg), str(work), name],
+                           capture_output=True, text=True, timeout=600,
+                           cwd=str(work))
+    except subprocess.TimeoutExpired:
+        return None
+    out = (p.stdout or "").strip().splitlines()
+    if not out:
+        return None
+    try:
+        return bool(json.loads(out[-1]))
+    except json.JSONDecodeError:
+        return None
+
+
 def self_test(repo, only: list[str] | None = None) -> dict:
     """For every gate (or just `only`): green on copy → plant → RED → restore → GREEN.
 
@@ -315,8 +396,13 @@ def self_test(repo, only: list[str] | None = None) -> dict:
             r1 = Repo(work)
             before = run_gates(r1, only=[name])[name]["ok"]
             note = _plant(name, work)
-            # fresh Repo: gates must see post-plant state, like a new process
-            after = run_gates(Repo(work), only=[name])[name]["ok"]
+            # The plant may only bite in a process that has not already cached the
+            # module it edits, so the planted state is measured in a subprocess.
+            # before/restored stay in-process: they read the same files either way.
+            after = _gate_probe(work, name, work)
+            if after is None:
+                note += " | probe could not run; plant unproven"
+                after = True
             _restore(name, work, backup)
             r2 = Repo(work)
             restored = run_gates(r2, only=[name])[name]["ok"]

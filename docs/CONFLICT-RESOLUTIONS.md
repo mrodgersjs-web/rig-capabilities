@@ -1,4 +1,4 @@
-# CONFLICT-RESOLUTIONS — eight source-vs-reality conflicts, each with its receipt
+# CONFLICT-RESOLUTIONS — ten source-vs-reality conflicts, each with its receipt
 
 Every receipt below was re-read from disk on 2026-09-01 on branch-checked working state.
 Where the approved plan's cited line number has moved, this file records the **current**
@@ -153,4 +153,45 @@ and `sync()` pushed the shared DB 4737 → 4750. The surplus is 15 rows — the 
 `test_live_roundtrip` (4735 != 4750) stays RED here on the same argument, with A14 in
 `docs/ASSUMPTIONS.md` carrying the observation that would prove it a real bug instead. No
 shared row was deleted to buy a green.
+
+## 9. `idp_integrity` read a gitignored secret, so a good commit failed its own replay
+
+**Receipt:** the plan's §206 chain requires the gate matrix to be re-run from a verifier tree
+materialised by `git -C <repo> archive <sha> | tar -x -C <tmp>`. Replayed at `7b413c4`, 10 of
+11 non-suite gates went GREEN and `idp_integrity` went **RED** with `issue failed: no signing
+key`. Cause: `_g_idp` signed through `surface.load_key`, which reads `repo.root/.signing.key`
+— an untracked file (`.gitignore`, `git ls-files` has no key). The gate fused two unrelated
+facts: "the HMAC scheme verifies" and "this machine happens to hold a key". The second is not
+a property of the commit, so no commit could ever satisfy it in a replay.
+
+**Resolution:** the gate now exercises the scheme on a root it creates and destroys
+(`idp.guard_report`), refusing three forgeries — bumped `exp`, edited principal, foreign key —
+and ends in a must-not-accept posture. Whether the deployment holds a persistent key is
+reported as detail (`live key absent (provisioning, not verdict)`), never as a verdict, because
+provisioning is an operator action. An earlier version of this fix asserted only that a good
+token verifies; when planted it stayed GREEN and printed "tamper rejected", because the honest
+packet has no forged token to catch. That is why the gate carries three negatives.
+
+## 10. A plant that edits an imported module cannot ever go RED
+
+**Receipt:** after moving the logic, the `idp_integrity` plant reported
+`red_when_planted: False` — the gate stayed GREEN under the plant, i.e. the plant was theater,
+the exact failure the `done_tests` plant comment warns about in this file. Two independent
+reasons, both found here:
+
+1. The plant first edited `rig_capabilities/certify.py`, which the running `self_test` process
+   had already imported. `sys.modules` served the pre-plant code object, so the copy's text
+   change was never executed.
+2. The plant's search string was a literal in the plant body, so it matched **itself** and the
+   `count == 1` assertion fired (`tamper check moved — plant would be theater`) — the same
+   self-reference trap that made the fixed `zz-plant-…` token in the `done_tests` plant
+   satisfiable for four versions.
+
+**Resolution:** (a) plants may only edit modules that are lazily imported — the refusal now
+lives in the owning module `idp.verify_token`, which `certify` imports inside the gate body;
+(b) needles are assembled from fragments (`"".join(["compare", "_digest"])`) so the plant file
+never contains the line it hunts; (c) `self_test` measures the planted state through
+`_gate_probe`, a subprocess with `sys.path` pointed at the copy, because "what would a new
+process compute from these files?" is the only question a plant can answer. All 11 gates
+now prove green → RED → green.
 
