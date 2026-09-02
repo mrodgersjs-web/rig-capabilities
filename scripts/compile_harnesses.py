@@ -8,8 +8,12 @@ out/harness-goalspecs/ named by harness stem.
 
 Stdlib-only by design: a small indent parser covers the YAML subset used by
 the harness files (block mappings/sequences, flow sequences, quoted/plain
-scalars incl. multi-line folded continuations, cross-line quote state so `#`
-inside a quoted scalar is content, not a comment), and emitted files carry
+scalars incl. multi-line folded continuations, `|`/`>` block scalars, and
+cross-line quote state so `#`
+inside a quoted scalar is content, not a comment, and `---` alone at column 0
+as a document marker — every harness is two documents, catalog frontmatter
+then harness body, which land in one map because no key is shared), and
+emitted files carry
 JSON content — a strict subset of YAML 1.2 accepted by yaml.safe_load
 (PyYAML 6.0.3 in the engine venv; per-file structural fidelity vs PyYAML is
 proven by scripts/validate_engine.py Phase 1).
@@ -198,6 +202,23 @@ def _split_flow(inner: str):
     return [p.strip() for p in parts]
 
 
+DOC_MARKER = "---"
+
+
+def _is_doc_marker(raw: str) -> bool:
+    """True for a YAML document-start marker sitting alone at column 0.
+
+    Every harness file is a two-document YAML: document one is the catalog
+    frontmatter (`outcome` / `done_when` / `great_example` / `quality_floor`),
+    document two is the harness body. The marker is structural, so it is
+    dropped at tokenize time and both documents land in one map — no key is
+    shared between them in any file of the estate. An indented `---` (a rule
+    inside a block scalar) is content and never matches: `rstrip` alone keeps
+    the column-0 requirement.
+    """
+    return raw.rstrip() == DOC_MARKER
+
+
 def _tokenize(text: str):
     toks = []
     in_fold = False           # inside a multi-line quoted scalar value
@@ -210,6 +231,8 @@ def _tokenize(text: str):
             if not in_q:
                 in_fold = False
         else:
+            if _is_doc_marker(raw):
+                continue      # never reached mid-scalar: in_fold owns those lines
             s, in_q, qc, fold_open = _strip_comment(raw, False, "")
             if fold_open and in_q:
                 in_fold = True
@@ -244,8 +267,34 @@ def _continuation(toks, i, key_indent, in_q, qc):
     return (" ".join(parts) if parts else None), i, in_q, qc
 
 
+BLOCK_INDICATORS = ("|", "|-", "|+", ">", ">-", ">+")
+
+
+def _absorb_block(toks, i, key_indent, indicator):
+    """Absorb a `|` / `>` block scalar's content lines.
+
+    Block-scalar lines are content, not structure: a line carrying `: ` inside
+    a literal block is prose, so the `_looks_key` guard that bounds a plain
+    scalar must not stop the absorb here. `|` keeps line breaks, `>` folds to
+    spaces; a trailing `-` strips the final newline, `+` keeps it (as does the
+    default clip). Blank lines are already gone from the token stream, so one
+    indentation level per block is the covered subset.
+    """
+    parts = []
+    while i < len(toks) and toks[i][0] > key_indent:
+        parts.append(toks[i][1])
+        i += 1
+    if not parts:
+        return indicator, i
+    sep = "\n" if indicator[0] == "|" else " "
+    text = sep.join(parts)
+    return (text if indicator.endswith("-") else text + "\n"), i
+
+
 def _fold_after_scalar(toks, i, key_indent, value):
     """Fold continuation lines into `value` if any exist at deeper indent."""
+    if value.strip() in BLOCK_INDICATORS:
+        return _absorb_block(toks, i, key_indent, value.strip())
     in_q, qc = _scan_quotes(value, False, "")
     if in_q:
         fold, i, _, _ = _continuation(toks, i, key_indent, in_q, qc)
