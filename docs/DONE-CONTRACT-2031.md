@@ -97,15 +97,21 @@ over production command records only (canary excluded), exit 0. `TAC=/Users/rig1
 (never bare `tac`).
 
 ## Proof path
-- Roadmap ladder: `docs/ROADMAP.md` rows `| 41 |`…`| 49 |` (five-column shape); packet column `—`
-  until P7 seals real hashes — `proofchain` skips `—` rows, so the increment is honest-but-unproven
-  until a `sha256:`/8-hex prefix appears there.
+- Roadmap ladder: `docs/ROADMAP.md` rows `| 41 |`…`| 49 |` (five-column shape) carry sealed 8-hex
+  prefixes (`2325e199`…`0fd7f073`), one packet per row under one task chain
+  (`task_id=fable-2031-roadmap`, `previous_hash` genesis→ordered). Each payload names the row, the
+  guard gate, and every command with its exit code and output sha256 over logs committed at
+  `fe93d0f`. `proofchain` reports 28 prefixes, 0 missing. A row with `—` is skipped, so a `—` row is
+  honest-but-unproven — which is why the evidence was captured and committed before any hash was written.
 - Sealed packets: `afproof.seal_packet` under `~/.rig/proof/fable2031/`, `previous_hash` chained
   per `task_id` (`"genesis"` for a task's first packet); discovered by `proofchain._hashes()` via
   `rglob("*.json")`. `verify_seal` mismatch → `(False,'seal_mismatch')` → no PASS may derive from it.
 - Weekly evidence: `.context/realign/<week>/` (register diff, `convergence_report.md`,
-  `proof/*.json`, `doctrine-update-phrase.md`, `operators-weekly.md`); until P7 `run_week` returns
-  `sealed: false` rather than fabricating a hash.
+  `proof/*.json`, `doctrine-update-phrase.md`, `operators-weekly.md`). `run_week(..., seal=True)`
+  (`realign --apply --seal`) hashes those files, lands a real `proof_hash`, and records it in the
+  week's `proof/sealing.json` — written after the hashing, excluded from its own hash list, and the
+  only file in the directory permitted to state `sealed: true`. An unsealed run keeps `sealed: false`
+  with a `seal_reason` naming the missing step; a seal failure writes no receipt.
 - Fabrication record: `<LEASE_DIR>/fabrication-ledger.jsonl` (one `O_APPEND` line per verdict);
   a ledger append failure raises rather than dropping an event.
 - Sentinel: `~/.rig/convergence/sentinel-prime/proofpackets/` packets stamped
