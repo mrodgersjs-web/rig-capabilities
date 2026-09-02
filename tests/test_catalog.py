@@ -1417,7 +1417,7 @@ class PackTests(unittest.TestCase):
 
 
 class CommandCanonicalTests(unittest.TestCase):
-    """V24: six canonical commands, contracts intact, delivered by the installer."""
+    """V24: canonical commands, contracts intact, delivered by the installer."""
 
     def setUp(self):
         import importlib.util
@@ -1428,7 +1428,10 @@ class CommandCanonicalTests(unittest.TestCase):
 
     def test_all_commands_carry_full_contract(self):
         srcs = list((REPO_ROOT / "capabilities" / "commands").glob("*.md"))
-        self.assertEqual(len(srcs), 6)
+        # Floor, not census: an exact count turned every legitimate addition into
+        # a failure, while the per-file contract loop below is what actually
+        # guards quality. Eight commands as of V41 (register + corpus added).
+        self.assertGreaterEqual(len(srcs), 6)
         for f in srcs:
             text = f.read_text()
             for key in ("outcome:", "done_when:", "great_example:", "quality_floor:"):
@@ -1663,7 +1666,10 @@ class WholeRepoCertifyTests(unittest.TestCase):
         from rig_capabilities.certify import GATES, run_gates
         only = [k for k in GATES if k != "suite"]
         self.assertEqual(sorted(only),
-                         ["acl_jake", "done_tests", "idp_integrity", "index_fresh"])
+                         ["acl_jake", "canary_detection", "corpus_refusal",
+                          "done_tests", "evidence_ledger", "fable_dormant",
+                          "idp_integrity", "index_fresh", "lease_exclusivity",
+                          "register", "stage_order"])
         res = run_gates(Repo(REPO_ROOT), only=only)
         for name, row in res.items():
             self.assertTrue(row["ok"], f"{name} red: {row.get('detail')}")

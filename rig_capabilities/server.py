@@ -325,6 +325,51 @@ TOOLS = [
         "description": "Skill quality-contract coverage: outcome/done_when/great_example/quality_floor per canonical asset, weakest first.",
         "inputSchema": {"type": "object", "properties": {}},
     },
+    {
+        "name": "capabilities_fabrication",
+        "description": (
+            "Read-only anti-fabrication report: the fabrication ledger "
+            "aggregated over a trailing window (total, fabricated, by_agent, "
+            "by_verdict, fabrication_rate — null when the ledger is absent, "
+            "never a rate invented from nothing) plus the verdict ladder as "
+            "data: who may say what, and that only dispatcher.admit run by a "
+            "different-family verifier may ever emit PASS. Seals nothing, "
+            "writes nothing, logs nothing."
+        ),
+        "inputSchema": {"type": "object",
+                        "properties": {
+                            "since_days": {"type": "integer", "minimum": 1,
+                                           "maximum": 3650,
+                                           "description": "trailing window (default 30)"}},
+                        },
+    },
+    {
+        "name": "capabilities_register",
+        "description": (
+            "Read-only M0-M5 capability register report: row count, every "
+            "validation failure with its reason, the convergence scoreboard "
+            "(e_cap / C_t / A_t as exact decimal strings, active vs scored "
+            "rows, degenerate targets named), the booked_qualified_conversations "
+            "row status with the week's qualified-booking count exactly as "
+            "register.load_bookings resolves it (an unresolved qualification "
+            "evidence path counts zero and says why), and dC_t versus the "
+            "newest sealed week under .context/realign/ — null, never zero, "
+            "when no prior week is sealed. Writes no register, runs no week."
+        ),
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_evidence",
+        "description": (
+            "Read-only Evidence Ledger report: every claim with the reasons "
+            "this ledger can give it (unknown type/use, confidence out of "
+            "range, evidence path that does not resolve) and the ids rule 3 "
+            "permits on a resume — computed by evidence_ledger.resume_claims, "
+            "so an inferred or planned claim can never be reported resumable. "
+            "Writes no ledger rows."
+        ),
+        "inputSchema": {"type": "object", "properties": {}},
+    },
 ]
 
 
@@ -466,7 +511,11 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def certify(args: dict):
         from .certify import certify as _certify
         from .certify import self_test
-        return self_test(repo) if args.get("plant") else _certify(repo)
+        # self_test copies the tree once per gate and `suite` runs the whole
+        # unittest module per copy (law L3): pass `only` through so a caller
+        # can plant-failure-prove the gates it means to break.
+        return (self_test(repo, only=args.get("only")) if args.get("plant")
+                else _certify(repo))
 
     def agent_pack(args: dict):
         from .packs import boot_pack, match_agent, resolve_pack
@@ -491,6 +540,73 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def release_zip(args: dict):
         from .release import build_public_zip
         return build_public_zip(repo, apply=bool(args.get("apply")))
+
+    # ---- fable2031 read-only surface (P7) --------------------------------
+    # These three handlers are literally read-only: no seal_packet, no
+    # write_sentinel_evidence, no log_fabrication, no realign.run_week, no
+    # model_route.apply. tests/fable2031_tools.py monkeypatches those to
+    # raise, so wiring a writer in here fails a test instead of mutating
+    # live state from an MCP call.
+
+    def fabrication(args: dict):
+        from .afproof import fabrication_rates, verdict_ladder
+        days = int(args.get("since_days") or 30)
+        return {"read_only": True,
+                "rates": fabrication_rates(since_days=days),
+                "verdict_ladder": verdict_ladder()}
+
+    def register_state(_args: dict):
+        from .convergence import delta, metrics, sealed_series
+        from .realign import week_id
+        from .register import (BOOKED_ID, RegisterError, bookings_path,
+                               load_bookings, load_register, require_booked_row,
+                               row_errors)
+        rows = load_register(repo)
+        try:
+            require_booked_row(rows)
+            booked = {"id": BOOKED_ID, "row_present": True, "error": None}
+        except RegisterError as exc:
+            booked = {"id": BOOKED_ID, "row_present": False, "error": str(exc)}
+        week = week_id()
+        booked["week"] = week
+        booked["artifact"] = str(bookings_path(repo, week))
+        try:
+            doc = load_bookings(bookings_path(repo, week))
+            booked["qualified"] = doc["count"]
+            booked["records_total"] = doc["total"]
+            booked["invalid"] = doc["invalid"]
+        except RegisterError as exc:
+            booked["qualified"] = None
+            booked["error"] = booked["error"] or str(exc)
+        board = metrics(rows)
+        prior = sealed_series(repo)
+        step = None if not prior else delta(prior[-1].get("c_t"), board["c_t"])
+        return {"read_only": True,
+                "rows_total": len(rows),
+                "row_errors": row_errors(rows),
+                "metrics": board,
+                "booked_qualified_conversations": booked,
+                "sealed_weeks": [w.get("week") for w in prior],
+                "delta_c_t": None if step is None else
+                {"previous": step["prev"], "current": step["cur"],
+                 "delta": None if step["delta"] is None else str(step["delta"])}}
+
+    def evidence_state(_args: dict):
+        from .evidence_ledger import (LEDGER_PATH, load_ledger, resume_claims,
+                                      validate_claim)
+        rows = load_ledger(repo)
+        resumable = {r.get("id") for r in resume_claims(rows, root=repo.root)}
+        return {"read_only": True,
+                "ledger": str(repo.root / LEDGER_PATH),
+                "rows_total": len(rows),
+                "resume_eligible": sorted(i for i in resumable if i),
+                "claims": [{"id": r.get("id"), "type": r.get("type"),
+                            "confidence": r.get("confidence"),
+                            "allowed_use": r.get("allowed_use"),
+                            "resume": bool(r.get("id") in resumable),
+                            "errors": validate_claim(r, root=repo.root)}
+                           for r in rows]}
+
 
 
 
@@ -524,5 +640,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_overlay_status": overlay_status,
         "capabilities_proofchain": proofchain,
         "capabilities_release": release_zip,
+        "capabilities_fabrication": fabrication,
+        "capabilities_register": register_state,
+        "capabilities_evidence": evidence_state,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)

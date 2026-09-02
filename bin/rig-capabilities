@@ -33,6 +33,20 @@ Commands:
   serve [--port N] [--bind HOST]          HTTP federation surface
   connectors                              SQL/API connector status
   observe                                 Langfuse/local trace status
+  corpus scan|classify|truncation         card-corpus scan, classification, truncation seam
+  register validate|diff|flags            capability register: row errors, diff, flagged owners
+  converge [--week W] [--root DIR]        C_t + A_t; --week scores one week through the gate
+  realign [--week W] [--apply]            weekly Realign driver; dry unless --apply
+  expert-os phases|advance [--phase N]    Known Expert OS: 1-10 gated, 11 truncated, 12 absent
+  evidence validate|resume                Evidence Ledger rule 3; --ledger PATH checks a fixture
+  lease <sub> [args]                      worktree leases; passthrough, exit 2 = denial
+  canary mint|current|rotate --task T     planted failing canary, rotated per dispatch
+  dispatch-verify PACKET [--verify]       admission verdict; 0 PASS, 2 FABRICATED
+  estage score|compare|verdict            E_stage loss, golden-set compare, promotion verdict
+  model-route [plan|verify|audit-*]       Fable 5.1 route: plan by default, --apply needs Gate-D
+  fabrication [--since-days N]            fabrication ledger rates + the verdict ladder
+  certify [--only GATE]                   run every gate against this repo, write a report
+  self-test [--only GATE]                 green -> plant -> RED -> restore, one gate at a time
 """
 from __future__ import annotations
 
@@ -50,6 +64,18 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 from rig_capabilities.catalog import KINDS, Repo  # noqa: E402
+
+
+def _scan_failure(exc: BaseException) -> int:
+    """A dying corpus scan reports its own name — never a traceback, never a fake ok.
+
+    The live roots (~/Downloads, ~/mnt/RIGLake) can time out mid-walk, so an operator
+    gets the exception name plus the bound-the-scan hint, and the exit code stays red.
+    """
+    print(json.dumps({"ok": False, "error": f"{type(exc).__name__}: {exc}",
+                      "hint": "bound the scan: --root tests/fixtures/fable2031/corpus"},
+                     indent=1))
+    return 1
 
 
 def main() -> int:
@@ -210,6 +236,123 @@ def main() -> int:
 
     sub.add_parser("connectors")
     sub.add_parser("observe")
+    # ---- fable-2031 capability system -------------------------------------- #
+    p = sub.add_parser("corpus")
+    p.add_argument("corpus_cmd", nargs="?", default="scan",
+                   choices=["scan", "classify", "truncation"])
+    p.add_argument("path", nargs="?", help="card file for classify / truncation")
+    p.add_argument("--root", action="append", dest="roots",
+                   help="repeatable; bounds the scan (the live roots are slow)")
+    p.add_argument("--manifest")
+
+    p = sub.add_parser("register")
+    p.add_argument("register_cmd", nargs="?", default="validate",
+                   choices=["validate", "diff", "flags"])
+    p.add_argument("paths", nargs="*", help="PREV CUR register CSVs for diff")
+    p.add_argument("--csv", help="register CSV (default capability_register.csv)")
+
+    p = sub.add_parser("converge")
+    p.add_argument("--week", help="ISO week YYYY-Www; omit for plain C_t/A_t metrics")
+    p.add_argument("--csv", help="register CSV (default capability_register.csv)")
+    p.add_argument("--root", action="append", dest="roots")
+    p.add_argument("--bookings", help="bookings JSON (default data/fable2031/bookings-WEEK.json)")
+    p.add_argument("--previous", help="previous register CSV")
+
+    p = sub.add_parser("realign")
+    p.add_argument("--week", help="ISO week YYYY-Www (default: this week)")
+    p.add_argument("--dry", action="store_true",
+                   help="explicit no-op — dry is already the default")
+    p.add_argument("--apply", action="store_true", help="the only mode that writes")
+    p.add_argument("--root", action="append", dest="roots",
+                   help="repeatable; bounds the corpus scan the week is scored on")
+
+    p = sub.add_parser("expert-os")
+    p.add_argument("expert_os_cmd", nargs="?", default="phases",
+                   choices=["phases", "advance"])
+    p.add_argument("--phase", type=int)
+    p.add_argument("--evidence", help="JSON file mapping deliverable slug -> artifact")
+
+    p = sub.add_parser("evidence")
+    p.add_argument("evidence_cmd", nargs="?", default="validate",
+                   choices=["validate", "resume"])
+    p.add_argument("--ledger", help="ledger CSV (default evidence_ledger.csv)")
+
+    p = sub.add_parser("lease")
+    p.add_argument("lease_args", nargs=argparse.REMAINDER,
+                   help="acquire|release|list|expire|assert — passed through verbatim")
+
+    p = sub.add_parser("canary")
+    p.add_argument("canary_cmd", choices=["mint", "current", "rotate"])
+    p.add_argument("--task", required=True)
+
+    p = sub.add_parser("dispatch-verify")
+    p.add_argument("packet", nargs="?", help="handoff packet JSON")
+    p.add_argument("--packet", dest="packet_opt", help="alias of the positional PACKET")
+    p.add_argument("--offline", dest="offline", action="store_true",
+                   help="explicit no-op — the offline prefilter is already the default")
+    p.add_argument("--verify", action="store_true",
+                   help="full ladder; needs --checkout, and never emits a fake PASS")
+    p.add_argument("--checkout", help="tree materialised at the claimed commit")
+    p.add_argument("--verifier-family", default="gpt")
+    p.add_argument("--dispatcher-family", default="claude")
+
+    p = sub.add_parser("estage")
+    p.add_argument("estage_cmd", choices=["score", "compare", "verdict"])
+    p.add_argument("files", nargs="*",
+                   help="run/replay JSON: 1 for score, BASE CAND for compare "
+                        "(with --manifest first, use --baseline/--candidate instead)")
+    p.add_argument("--manifest", help="golden manifest for verdict")
+    p.add_argument("--baseline", help="baseline replay doc (also positional)")
+    p.add_argument("--candidate", help="candidate replay doc (also positional)")
+    p.add_argument("--forced-tool-choice", action="store_true",
+                   help="pass the audit verdict: a reachable forced-tool-choice harness blocks promotion")
+    p.add_argument("--blocking-gate-regression", action="store_true")
+
+    p = sub.add_parser("model-route")
+    p.add_argument("route_cmd", nargs="?", default="plan",
+                   choices=["plan", "verify", "audit-fallbacks", "audit-tool-choice"])
+    p.add_argument("--apply", action="store_true",
+                   help="write the three route targets; needs --gate-d and --max-budget-usd")
+    p.add_argument("--gate-d", dest="gate_d",
+                   help="APPROVE <run_id> token naming an approved Gate-D run")
+    p.add_argument("--max-budget-usd", dest="max_budget", type=float)
+    p.add_argument("--root", action="append", dest="roots",
+                   help="audit target: litellm root/dir for audit-fallbacks, harness roots otherwise")
+
+    p = sub.add_parser("fabrication")
+    p.add_argument("--since-days", dest="since_days", type=int, default=30)
+
+    p = sub.add_parser("certify")
+    p.add_argument("--only", action="append", help="gate name (repeatable)")
+
+    p = sub.add_parser("self-test")
+    p.add_argument("--only", action="append", help="gate name (repeatable)")
+    # ---- documented script spellings --------------------------------------- #
+    # The plan and the canonical assets spell these with `--json` and with long
+    # flag names, so every one of those forms has to parse. Output is JSON either
+    # way: `--json` is an accepted no-op, not a second format waiting to drift.
+    for _name in ("corpus", "register", "converge", "realign", "expert-os", "evidence",
+                  "canary", "dispatch-verify", "estage", "model-route", "fabrication",
+                  "certify", "self-test"):
+        sub.choices[_name].add_argument(
+            "--json", action="store_true",
+            help="output is already JSON; accepted for scripts")
+    sub.choices["corpus"].add_argument("--roots", action="append", dest="roots",
+                                       help="alias of --root")
+    sub.choices["register"].add_argument(
+        "--validate", dest="register_cmd", action="store_const", const="validate",
+        default=argparse.SUPPRESS, help="alias of the default subcommand")
+    sub.choices["converge"].add_argument("--register", dest="csv",
+                                        help="alias of --csv")
+    sub.choices["realign"].add_argument(
+        "--bookings", help="score one week against an explicit bookings JSON (reads only)")
+    sub.choices["evidence"].add_argument(
+        "--validate", dest="evidence_cmd", action="store_const", const="validate",
+        default=argparse.SUPPRESS, help="alias of the default subcommand")
+    sub.choices["estage"].add_argument(
+        "--studio", help="studio the verdict is for (verdict only; a mismatch is a reason)")
+    sub.choices["model-route"].add_argument("--gate-d-run-id", dest="gate_d_run_id",
+                                           help="alias of --gate-d")
 
     args = ap.parse_args()
 
@@ -480,6 +623,339 @@ def main() -> int:
     elif args.cmd == "db-sync":
         from rig_capabilities.sync import sync
         print(json.dumps(sync(repo, dsn=args.dsn), indent=1))
+    elif args.cmd == "corpus":
+        from rig_capabilities import corpus
+        if args.corpus_cmd == "scan":
+            try:
+                rep = corpus.corpus_report(
+                    roots=args.roots, manifest=args.manifest or corpus.SOURCE_MANIFEST)
+            except Exception as exc:  # a live-root scan reports, it never tracebacks
+                return _scan_failure(exc)
+            print(json.dumps(rep, indent=1))
+            return 0 if rep.get("ok") else 1
+        if not args.path or not Path(args.path).is_file():
+            print(json.dumps({"ok": False, "error": f"card_missing:{args.path or ''}"},
+                             indent=1))
+            return 2
+        text = Path(args.path).read_text(encoding="utf-8", errors="replace")
+        if args.corpus_cmd == "truncation":
+            truncated, anchor = corpus.detect_truncation(text)
+            print(json.dumps({"path": args.path, "truncated": truncated,
+                              "end_anchor": anchor}, indent=1))
+            return 0
+        meta, body = corpus.split_frontmatter(text)
+        out = corpus.classify({"path": str(Path(args.path).resolve()), "body": body,
+                               "title": meta.get("title") or Path(args.path).stem,
+                               "tags": meta.get("tags") or []})
+        out["card"] = args.path
+        print(json.dumps(out, indent=1))
+        return 0 if not out.get("unclassified") else 1
+    elif args.cmd == "register":
+        from rig_capabilities import register as reg
+        if args.register_cmd == "diff":
+            if len(args.paths) != 2:
+                print(json.dumps({"ok": False, "error": "diff_requires_two_csvs"}, indent=1))
+                return 2
+            out = reg.diff_register(reg.load_register(repo, args.paths[0]),
+                                    reg.load_register(repo, args.paths[1]))
+            out["previous"], out["current"] = args.paths[0], args.paths[1]
+            print(json.dumps(out, indent=1))
+            return 0
+        rows = reg.load_register(repo, args.csv)
+        flagged = reg.flagged_owners(rows)
+        if args.register_cmd == "flags":
+            print(json.dumps({"rows": len(rows), "flagged_owners": flagged,
+                              "ok": not flagged}, indent=1))
+            return 0 if not flagged else 1
+        errors = reg.row_errors(rows)
+        try:
+            reg.require_booked_row(rows)
+            booked = {"ok": True}
+        except reg.RegisterError as exc:
+            booked = {"ok": False, "reason": str(exc)}
+        ok = not errors and not flagged and booked["ok"]
+        print(json.dumps({"rows": len(rows), "row_errors": errors,
+                          "flagged_owners": flagged,
+                          "booked_qualified_conversation": booked, "ok": ok}, indent=1))
+        return 0 if ok else 1
+    elif args.cmd == "converge":
+        from rig_capabilities import convergence as conv
+        from rig_capabilities import register as reg
+        if not args.week:
+            rows = reg.load_register(repo, args.csv)
+            print(json.dumps({"rows": len(rows), **conv.metrics(rows)}, indent=1))
+            return 0
+        try:
+            rep = conv.score_week(repo, roots=args.roots, week=args.week,
+                                  bookings_path=args.bookings, previous=args.previous)
+        except Exception as exc:
+            return _scan_failure(exc)
+        print(json.dumps(rep, indent=1))
+        return 0 if rep.get("gate", {}).get("verdict") in ("PASS", "BASELINE_ONLY") else 1
+    elif args.cmd == "realign":
+        from rig_capabilities import realign
+        if args.bookings:
+            # run_week() has no bookings override, so scoring against an explicit
+            # bookings artifact goes through the gate directly. Reads only — with
+            # no artifact-writing path here, nothing is claimed as written.
+            from rig_capabilities import convergence as conv
+            try:
+                scored = conv.score_week(repo, roots=args.roots, week=args.week,
+                                         bookings_path=args.bookings)
+            except Exception as exc:
+                return _scan_failure(exc)
+            scored["wrote"] = False
+            scored["note"] = ("bookings override scored through the weekly gate; "
+                              "the artifact-writing path takes no override")
+            print(json.dumps(scored, indent=1))
+            verdict = scored.get("gate", {}).get("verdict")
+            return 0 if verdict in ("PASS", "BASELINE_ONLY") else 1
+        try:
+            out = realign.run_week(repo, week=args.week, apply=args.apply, roots=args.roots)
+        except Exception as exc:
+            return _scan_failure(exc)
+        print(json.dumps(out, indent=1))
+        # BASELINE_ONLY is a complete first measurement, not a failure; FAIL is.
+        return 0 if out.get("verdict") in ("PASS", "BASELINE_ONLY") else 1
+    elif args.cmd == "expert-os":
+        from rig_capabilities import expert_os
+        if args.expert_os_cmd == "phases":
+            # Flat phase -> status map: 11 is truncated and 12 absent at source,
+            # and neither may ever be reported as gated.
+            print(json.dumps({str(n): s for n, s in expert_os.PHASE_STATUS.items()},
+                             indent=1))
+            return 0
+        if args.phase is None:
+            print(json.dumps({"ok": False, "error": "phase_required"}, indent=1))
+            return 2
+        deliverables = None
+        if args.evidence:
+            if not Path(args.evidence).is_file():
+                print(json.dumps({"ok": False,
+                                  "error": f"evidence_file_missing:{args.evidence}"}, indent=1))
+                return 2
+            deliverables = json.loads(Path(args.evidence).read_text(encoding="utf-8"))
+        try:
+            out = expert_os.advance(args.phase, deliverables)
+        except ValueError as exc:
+            print(json.dumps({"ok": False, "phase": args.phase, "error": str(exc)}, indent=1))
+            return 2
+        out["phase"] = args.phase
+        try:
+            out["title"] = expert_os.title(args.phase)
+        except ValueError:
+            out["title"] = None          # no title is authored for an absent phase
+        try:
+            out["deliverables"] = list(expert_os.deliverable_slugs(args.phase))
+        except ValueError:
+            out["deliverables"] = None
+        print(json.dumps(out, indent=1))
+        return 0 if out.get("ok") else 1
+    elif args.cmd == "evidence":
+        from rig_capabilities import evidence_ledger as ev
+        rows = ev.load_ledger(repo, args.ledger)
+        source = args.ledger or ev.LEDGER_PATH
+        if not rows:
+            print(json.dumps({"ok": False, "ledger": source, "rows": 0,
+                              "error": "ledger_empty_or_missing"}, indent=1))
+            return 1
+        if args.evidence_cmd == "resume":
+            claims = ev.resume_claims(rows, root=REPO_ROOT)
+            print(json.dumps({"ledger": source, "rows": len(rows),
+                              "resume_eligible": len(claims),
+                              "ids": [c.get("id") for c in claims]}, indent=1))
+            return 0 if claims else 1
+        invalid = []
+        for row in rows:
+            errors = ev.validate_claim(row, root=REPO_ROOT)
+            if errors:
+                invalid.append({"id": row.get("id") or "?", "errors": errors})
+        print(json.dumps({"ledger": source, "rows": len(rows), "invalid": invalid,
+                          "ok": not invalid}, indent=1))
+        return 0 if not invalid else 1
+    elif args.cmd == "lease":
+        # Verbatim passthrough: the module owns the denial exit code (2) and the
+        # reason JSON (lease_held_by, state_root) — nothing here may swallow either.
+        return subprocess.call([sys.executable, "-m", "rig_capabilities.lease",
+                                *args.lease_args], cwd=str(REPO_ROOT))
+    elif args.cmd == "canary":
+        from rig_capabilities import canary
+        try:
+            if args.canary_cmd == "mint":
+                spec = canary.mint(args.task)
+            elif args.canary_cmd == "rotate":
+                spec = canary.rotate(args.task)
+            else:
+                spec = canary.current(args.task)
+        except Exception as exc:
+            print(json.dumps({"ok": False, "task_id": args.task,
+                              "error": f"{type(exc).__name__}: {exc}"}, indent=1))
+            return 2
+        if isinstance(spec, dict):
+            print(json.dumps(spec, indent=1, sort_keys=True))
+            return 0
+        print(json.dumps({"task_id": args.task, "canary": None,
+                          "reason": "canary_never_minted"}, indent=1, sort_keys=True))
+        return 1
+    elif args.cmd == "dispatch-verify":
+        from rig_capabilities import dispatcher
+        source = args.packet_opt or args.packet
+        if not source or not Path(source).is_file():
+            print(json.dumps({"ok": False, "error": f"packet_missing:{source or ''}"},
+                             indent=1))
+            return 2
+        if args.verify and args.offline:
+            print(json.dumps({"ok": False, "packet": source,
+                              "error": "offline_and_verify_conflict"}, indent=1))
+            return 2
+        try:
+            packet = json.loads(Path(source).read_text(encoding="utf-8"))
+            out = dispatcher.admit(packet, args.checkout,
+                                   family_of_verifier=args.verifier_family,
+                                   family_of_dispatcher=args.dispatcher_family,
+                                   reexec=None, offline=not args.verify)
+        except dispatcher.AdmissionError as exc:
+            print(json.dumps({"ok": False, "packet": source, "error": str(exc)}, indent=1))
+            return 2
+        except json.JSONDecodeError as exc:
+            print(json.dumps({"ok": False, "packet": source,
+                              "error": f"packet_not_json:{exc}"}, indent=1))
+            return 2
+        out["mode"] = "offline_prefilter" if args.offline or not args.verify else "full_ladder"
+        out["tac_bound"] = dispatcher.normalize_records(packet)
+        print(json.dumps(out, indent=1))
+        verdict = out.get("verdict")
+        if verdict == "PASS":
+            return 0
+        if verdict in ("FABRICATED", "ISOLATION_BREACH"):
+            return 2
+        return 1
+    elif args.cmd == "estage":
+        from rig_capabilities import estage
+
+        def _doc(path):
+            return json.loads(Path(path).read_text(encoding="utf-8"))
+
+        def _scored(spec):
+            missions = spec.get("missions") if isinstance(spec, dict) else None
+            runs = spec.get("runs") if isinstance(spec, dict) else spec
+            out = []
+            for raw in runs or []:
+                run = dict(raw)
+                mid = run.get("mission_id") or run.get("id")
+                if "mission" not in run and isinstance(missions, dict) and mid in missions:
+                    run["mission"] = missions[mid]   # the doc carries the declared ceilings
+                out.append({"mission_id": mid, "e_stage": estage.e_stage(run)})
+            return out
+
+        def _fail(reason):
+            print(json.dumps({"ok": False, "error": str(reason)}, indent=1))
+            return 2
+
+        pair = args.files or [a for a in (args.baseline, args.candidate) if a]
+        try:
+            if args.estage_cmd == "score":
+                if len(args.files) != 1:
+                    return _fail("score_takes_one_run_file")
+                scored = _scored(_doc(args.files[0]))
+                if not scored:
+                    return _fail("no_runs_declared")
+                print(json.dumps({"file": args.files[0], "runs": scored,
+                                  "mean_e_stage": sum(r["e_stage"] for r in scored) / len(scored),
+                                  "weights": estage.E_STAGE_WEIGHTS}, indent=1))
+                return 0
+            if args.estage_cmd == "compare":
+                if len(pair) != 2:
+                    return _fail("compare_takes_baseline_and_candidate")
+                cmp = estage.compare(_doc(pair[0]), _doc(pair[1]))
+                print(json.dumps({"baseline": pair[0], "candidate": pair[1], **cmp}, indent=1))
+                return 0 if cmp.get("strictly_lower_everywhere") else 1
+            if not args.manifest:
+                return _fail("manifest_required")
+            if len(pair) != 2:
+                return _fail("verdict_takes_baseline_and_candidate_replays")
+            manifest = estage.load_manifest(args.manifest)
+            candidate = _doc(pair[1])
+            spend = {"candidate_family": manifest.get("candidate_family"),
+                     "verifier_family": manifest.get("verifier_family"),
+                     "manifest_signature": estage.manifest_signature(manifest),
+                     "replay_signature": candidate.get(estage.SIGNATURE_FIELD),
+                     "studio": manifest.get("studio"),
+                     "blocking_gate_regression": args.blocking_gate_regression,
+                     "forced_tool_choice": args.forced_tool_choice}
+            cmp = estage.compare(_doc(pair[0]), candidate)
+            verdict = estage.promotion_verdict(args.studio or manifest.get("studio"),
+                                               cmp, spend)
+            print(json.dumps({
+                "verdict_studio": args.studio or manifest.get("studio"),
+                "manifest_studio": manifest.get("studio"), "status": manifest.get("status"),
+                "promotion_gate": manifest.get("promotion_gate"),
+                "candidate_provenance": candidate.get("provenance"),
+                "candidate_synthetic": candidate.get("synthetic"),
+                "rebaseline_required": estage.rebaseline_required(
+                    manifest.get("recorded_under"), manifest.get("candidate_family")),
+                "mean_baseline": cmp.get("mean_baseline"),
+                "mean_candidate": cmp.get("mean_candidate"),
+                **verdict}, indent=1))
+            return 0 if verdict.get("promote") else 1
+        except estage.GoldenSetInvalid as exc:
+            return _fail(exc)
+    elif args.cmd == "model-route":
+        token = args.gate_d or args.gate_d_run_id
+        if args.apply and not token:
+            # Dormant-by-default is the load-bearing safety property, so this refusal
+            # returns before the route module is even imported: zero writes.
+            print(json.dumps({"ok": False, "writes": 0, "action": "route-projection",
+                              "reason": "gate_d_required",
+                              "hint": "re-run with --gate-d APPROVE <run_id> --max-budget-usd N "
+                                      "once ~/.rig/proof/gate-d-<run_id>.json is APPROVED"},
+                             indent=1))
+            return 2
+        from rig_capabilities import model_route
+        if args.apply:
+            if args.max_budget is None:
+                print(json.dumps({"ok": False, "writes": 0, "reason": "max_budget_required"},
+                                 indent=1))
+                return 2
+            try:
+                out = model_route.apply(repo, gate_d_run_id=token,
+                                        max_budget_usd=args.max_budget)
+            except model_route.RouteGateError as exc:
+                print(json.dumps({"ok": False, "writes": 0, "reason": str(exc)}, indent=1))
+                return 1
+            print(json.dumps(out, indent=1))
+            return 0 if out.get("ok", True) else 1
+        if args.route_cmd == "plan":
+            out = model_route.plan(repo)
+        elif args.route_cmd == "verify":
+            out = model_route.verify(repo)
+        elif args.route_cmd == "audit-fallbacks":
+            out = model_route.audit_fallback_ladders(args.roots[0] if args.roots else None)
+        else:
+            out = model_route.audit_forced_tool_choice(
+                args.roots or [str(REPO_ROOT / "capabilities")])
+        print(json.dumps(out, indent=1))
+        return 0 if out.get("ok", True) else 1
+    elif args.cmd == "fabrication":
+        from rig_capabilities import afproof
+        rates = afproof.fabrication_rates(since_days=args.since_days)
+        print(json.dumps({"rates": rates, "ladder": afproof.verdict_ladder()}, indent=1))
+        return 0 if not rates.get("fabricated") else 1
+    elif args.cmd == "certify":
+        from rig_capabilities.certify import certify as run_certify, run_gates
+        if args.only:
+            gates = run_gates(repo, only=args.only)
+            rep = {"gates": gates, "only": args.only,
+                   "verdict": bool(gates) and all(g["ok"] for g in gates.values())}
+        else:
+            rep = run_certify(repo)
+        print(json.dumps(rep, indent=1))
+        return 0 if rep.get("verdict") else 1
+    elif args.cmd == "self-test":
+        from rig_capabilities.certify import self_test
+        rep = self_test(repo, only=args.only)
+        print(json.dumps(rep, indent=1))
+        return 0 if rep.get("verdict") else 1
     return 0
 
 
