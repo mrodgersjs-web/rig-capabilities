@@ -1,0 +1,167 @@
+{
+ "41": [
+  {
+   "cmd": "python3 -m unittest tests.fable2031_corpus.TruncationLedgerTests -v",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-41-1.log",
+   "note": "P1 truncation ledger and P2 inventory agree in both directions",
+   "stdout_sha256": "55c72ff40afff51d2f4faaf0eac6234d72c85b140adc1119dfb942b62a8e638e"
+  },
+  {
+   "cmd": "./bin/rig-capabilities self-test --only done_tests",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-41-2.log",
+   "note": "every advertised done_when check actually executes",
+   "stdout_sha256": "711cab6c08e0b14e68e48c9e2b4c6e1fb2c1fa89a7c5bf07e566096ed3399b68"
+  }
+ ],
+ "42": [
+  {
+   "cmd": "./bin/rig-capabilities corpus scan --root tests/fixtures/fable2031/corpus",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-42-1.log",
+   "note": "deterministic scan of the fixture corpus",
+   "stdout_sha256": "421fbbed68758e3b3724a74f14a605dbdc6ef35a118b28cc3e20361011d4181e"
+  },
+  {
+   "cmd": "./bin/rig-capabilities self-test --only corpus_refusal",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-42-2.log",
+   "note": "the 10% halt fires on a planted corpus",
+   "stdout_sha256": "622c590c6b11dd63e4689245598e5fe0756a60d78c5b247aec72f7b9a5111bd9"
+  }
+ ],
+ "43": [
+  {
+   "cmd": "./bin/rig-capabilities register validate",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-43-1.log",
+   "note": "register schema + booked row",
+   "stdout_sha256": "9c4f2d4e7f442b9aa4c6edfd9af5c8a1b4ed9f2f3defebaca41406156f0c2016"
+  },
+  {
+   "cmd": "./bin/rig-capabilities converge --week 2026-W36 --root tests/fixtures/fable2031/corpus",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-43-2.log",
+   "note": "weekly gate over C_t/A_t",
+   "stdout_sha256": "76b2fb25e91ab6aaf1e1485dcc43a982061ae221623cb6a7251f2fedaa5ecedc"
+  },
+  {
+   "cmd": "./bin/rig-capabilities self-test --only register",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-43-3.log",
+   "note": "register gate plant-failure",
+   "stdout_sha256": "f9ccf4a6083a9950284da9a76e7d81dbba4166b5cafd1ad7d7ff6a3deeb46862"
+  }
+ ],
+ "44": [
+  {
+   "cmd": "./bin/rig-capabilities expert-os phases",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-44-1.log",
+   "note": "12 phase statuses",
+   "stdout_sha256": "f3e39a09bc40e4f93033ab516256b22b9a3e5b5cc23519065c33b944bbc8b2c2"
+  },
+  {
+   "cmd": "./bin/rig-capabilities evidence validate --ledger tests/fixtures/fable2031/evidence-ledger-valid.csv",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-44-2.log",
+   "note": "rule 3 on a clean ledger",
+   "stdout_sha256": "c6122853320e00c7430b7b3823e3972933ef5f6f3a9b885d346002d276015b41"
+  },
+  {
+   "cmd": "./bin/rig-capabilities self-test --only evidence_ledger",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-44-3.log",
+   "note": "evidence gate plant-failure",
+   "stdout_sha256": "71108f22716a3b98ea21b4d49683682f58bdaf2c016ed4db2ede3f51b6770ffe"
+  }
+ ],
+ "45": [
+  {
+   "cmd": "./bin/rig-capabilities self-test --only canary_detection",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-45-1.log",
+   "note": "planted-failure canary is caught",
+   "stdout_sha256": "1da5ffbe06d11293d6f7c5f8b8fed4eea72317a8d2b0ffda5504b11826c82ec2"
+  },
+  {
+   "cmd": "./bin/rig-capabilities self-test --only lease_exclusivity",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-45-2.log",
+   "note": "double-acquire is denied",
+   "stdout_sha256": "be210773461f137c9e54780448d684dff9ecbd41e1b0d174052509b1b4d99467"
+  }
+ ],
+ "46": [
+  {
+   "cmd": "./bin/rig-capabilities self-test --only idp_integrity",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-46-1.log",
+   "note": "token integrity gate",
+   "stdout_sha256": "a65e072ab015b31cbeda7eda94805df707b9f21451fe0d4df2a183123a7e82d0"
+  },
+  {
+   "cmd": "python3 -m unittest tests.fable2031_estage -v",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-46-2.log",
+   "note": "promotion evaluator over the golden replay sets",
+   "stdout_sha256": "9e5f7a81bf5ef807374a73e06b4dee4e64a12ba63cbe7a9c4ab7c9a3248a57b8"
+  }
+ ],
+ "47": [
+  {
+   "cmd": "./bin/rig-capabilities self-test --only fable_dormant",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-47-1.log",
+   "note": "Fable 5.1 absent from every ladder",
+   "stdout_sha256": "36cb077a031b9e8260262a6450a1888958a25f387e327fd557fbada887116cc5"
+  },
+  {
+   "cmd": "./bin/rig-capabilities model-route --plan 2>&1 | head -60",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-47-2.log",
+   "note": "route plan is read-only",
+   "stdout_sha256": "83b4fa4b49ac53c0700e7b3137e64ec63db15a30b5ce0f6d5bf56c7f96ffe841"
+  }
+ ],
+ "48": [
+  {
+   "cmd": "./bin/rig-capabilities self-test --only stage_order",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-48-1.log",
+   "note": "seven-stage machine in order",
+   "stdout_sha256": "68cf022f88dcef55f934c6d582062ba42c7358f1f5204e1505b6bff8d85413a3"
+  },
+  {
+   "cmd": "python3 -m unittest tests.fable2031_iqrsqpi -v",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-48-2.log",
+   "note": "stage machine + IQRSQPI v10",
+   "stdout_sha256": "0c3121716f22ac1616e47e07093886f5e9c110231da70449801ecac1d951b727"
+  }
+ ],
+ "49": [
+  {
+   "cmd": "./bin/rig-capabilities self-test --only index_fresh",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-49-1.log",
+   "note": "index freshness",
+   "stdout_sha256": "006a95453560c62298975a5f811eef6888601e6bcb2dabd1062fa63145de4946"
+  },
+  {
+   "cmd": "python3 -m unittest tests.fable2031_tools -v",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-49-2.log",
+   "note": "read-only MCP tools",
+   "stdout_sha256": "476f5ecf281a0ab7f0e4c7c1557e6ee45e16690195541d85ff2036f7102d7053"
+  },
+  {
+   "cmd": "python3 -m unittest tests.fable2031_cli.CliVerbTests -v",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/roadmap-evidence/row-49-3.log",
+   "note": "fourteen CLI verbs",
+   "stdout_sha256": "8686c1cb699f900bbc35ef7ec15573cff02456c55f1372c1968b297ac3b6cbb4"
+  }
+ ]
+}
