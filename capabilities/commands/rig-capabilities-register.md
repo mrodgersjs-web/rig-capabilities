@@ -1,6 +1,6 @@
 ---
 name: rig-capabilities-register
-description: Operate the M0–M5 capability register — validate rows, diff a week, name flagged owners, recompute C_t/A_t, and run the weekly Realign gate, which is dry by default.
+description: Operate the M0–M5 capability register — validate rows, diff a week, name flagged owners, recompute C_t/A_t, run the weekly Realign gate (dry by default), and hold the six-slot skill contract gate (A, I, C, P, pi, E + out_of_scope) that names every asset missing activation, applicability or permissions.
 argument-hint: "[validate|diff|flags|converge|realign]"
 allowed-tools: Read, Bash
 category: meta
@@ -11,6 +11,13 @@ done_when:
   - cmd:test 1 -eq $(python3 -c 'from rig_capabilities.register import gate_register as G; print(1 if G(".")[0] else 0)')
   - cmd:test 0 -eq $(python3 -c 'from rig_capabilities.register import load_bookings as L; print(L("data/fable2031/bookings-2026-W36.json")["count"])')
   - cmd:python3 -m unittest tests.fable2031_register
+  - file:rig_capabilities/skill_contract.py
+  - cmd:python3 -m rig_capabilities.skill_contract examples/fixtures/skill-contract/complete.md; test $? -eq 0
+  - cmd:python3 -m rig_capabilities.skill_contract examples/fixtures/skill-contract/bad >/dev/null 2>&1; rc=$?; test $rc -eq 1
+  - cmd:python3 -m rig_capabilities.skill_contract examples/fixtures/skill-contract/bad/activation_absent.md 2>&1 | grep -q ABSENT; test $? -eq 0
+  - cmd:python3 -m rig_capabilities.skill_contract examples/fixtures/skill-contract/bad/activation_empty.md 2>&1 | grep -q EMPTY; test $? -eq 0
+  - cmd:python3 -m rig_capabilities.skill_contract examples/fixtures/skill-contract/bad/activation_empty.md 2>&1 | grep -q ABSENT; test $? -eq 1
+  - cmd:python3 -m unittest tests.test_skill_contract
 great_example: capabilities/commands/rig-capabilities-register.md
 acl: public
 quality_floor: 0.7
@@ -113,3 +120,62 @@ register must be inside the register.
 A zero-booking week is a complete, honest FAIL once a baseline exists — never a retry loop, and
 never a register edited until it clears. If the gate will not go green, the register stays as it
 is and the report says why.
+
+## The skill contract gate: six slots, three verdicts, named boundaries
+
+The sixth verb above is not CLI-wired (`bin/rig-capabilities` does not answer
+`skill-contract`; it would reply `invalid choice` — a gap to report, not a verb to
+advertise). The check itself is a module entry point, and the `done_when` lines call it
+directly: `python3 -m rig_capabilities.skill_contract <file|dir>` (module
+`rig_capabilities/skill_contract.py`).
+
+A skill is a six-tuple **s = ⟨A activation, I instruction, C applicability,
+P permitted tools, π control flow, E expected effects⟩** — an interface
+specification, not prose (arXiv:2608.29596, video `Kbxg-_CXs78`). RIG already records
+part of it: `done_when` *is* E, `allowed-tools` on commands *is* P. Missing everywhere
+else in the estate: A, C, a named P, π — and the boundary conditions a SKILL.md
+silently compresses away, because a SKILL.md is a lossy compression of ONE successful
+run and the dropped conditions are what invalidate reuse elsewhere (arXiv:2608.11888,
+video `TA5QzGTQU_U). Frontmatter keys, all required:
+
+| slot | key | required shape |
+|------|-----|----------------|
+| A | `activation:` | one non-null predicate string — state+goal, not a topic |
+| I | `instruction:` | one non-null string |
+| C | `applies_when:` | mapping carrying the run boundary: `env`, `runtime`, `deps`, `params`, `budget`, `scale` — all six |
+| P | `permissions:` | non-empty list of tool tokens |
+| π | `flow:` | ordered list, ≥2 steps (one step is an outcome, not a control flow) |
+| E | `done_when:` | non-empty list of checks |
+| boundary | `out_of_scope:` | non-empty list — what this skill must NOT do / what falls outside the run that produced it |
+
+Three verdicts per violated slot, never one: `ABSENT` (key never written), `EMPTY`
+(key written, value never filled), `MALFORMED` (content, wrong shape — a scalar where
+a list belongs, a boundary map missing fields, a one-step flow). Collapsing ABSENT and
+EMPTY would mislabel the most common authoring bug as a key nobody ever wrote; the
+distinction is pinned by `tests/test_skill_contract.py` and by two done-when greps
+against single-slot fixtures that must print the two different words. Exit codes:
+`0` zero findings · `1` any finding, every one named · `2` bad path or unsupported
+kind. The eight fixtures under `examples/fixtures/skill-contract/` (one complete,
+seven bad — one per failure shape) are permanent regression cases.
+
+**Loader gate:** `skill_contract.loadable(path)` returns False unless A and C are
+complete — the loading rule that a skill with no evaluable activation predicate or no
+declared applicability may not be loaded. Any loader may call it; this slice adds no
+loader edit.
+
+**Declared fork:** these keys are additive on top of the de-facto `anthropics/skills`
+SKILL.md format and RIG's own quality contract (outcome/done_when/great_example/
+quality_floor). The fork is declared here, not silently introduced — assets in this
+repo validate against the fixture corpus, and estate-wide conformance is a named gap,
+not a done fact.
+
+**Honest state as of 2026-09-02 (quote this, not optimism):**
+`python3 -m rig_capabilities.skill_contract capabilities/skills capabilities/harnesses`
+reports **725 findings across 115 files, all of them ABSENT** — zero current assets
+declare any of the six slots or the boundary list, exactly as the matrix row predicted
+(its RED case, "an indexed asset is loadable with no activation predicate or no
+declared boundary conditions", is today's whole estate). The register's `done_when`
+therefore verifies the *machinery* (fixture GREEN, seven bad shapes RED, the
+absent-vs-empty distinction grepped from output), not estate conformance; making the
+115 real assets carry their slots is the follow-on round, and no number here may be
+written as though it had happened.

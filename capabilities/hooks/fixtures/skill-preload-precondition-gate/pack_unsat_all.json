@@ -1,0 +1,34 @@
+{
+  "task": {
+    "id": "pack-unsat-all",
+    "goal": "ship the pre-load gate",
+    "requirements": { "artifact-path": "build/" },
+    "counterparts": [{ "id": "rig-capabilities", "version": "2.4.1" }]
+  },
+  "candidates": [
+    {
+      "id": "cargo-migration",
+      "version": "1.1.0",
+      "activation": "a cargo workspace needs its lockfile rebuilt",
+      "applies_when": [{ "field": "repo_kind", "equals": "cargo" }],
+      "defaults": { "artifact-path": "build/" },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    },
+    {
+      "id": "modern-python-only",
+      "version": "2.0.0",
+      "activation": "a typing-first refactor is underway",
+      "applies_when": [{ "field": "python_version", "version_band": ">=3.11,<4" }],
+      "defaults": { "artifact-path": "build/" },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    },
+    {
+      "id": "podman-compose-run",
+      "version": "0.4.0",
+      "activation": "a compose file must be brought up under podman",
+      "applies_when": [{ "field": "container_runtime", "equals": "podman" }],
+      "defaults": { "artifact-path": "build/" },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "task": {
+    "id": "pack-conflict-counterpart",
+    "goal": "canonicalise a skill already installed in a harness root",
+    "requirements": { "artifact-path": "build/" },
+    "counterparts": [{ "id": "rig-capabilities", "version": "1.4.0" }]
+  },
+  "state": {
+    "repo_kind": "npm",
+    "python_version": "3.13.1"
+  },
+  "candidates": [
+    {
+      "id": "capability-canonicaliser",
+      "version": "2.2.0",
+      "activation": "an asset outside capabilities/ must be canonicalised",
+      "applies_when": [{ "field": "python_version", "version_band": ">=3.9,<4" }],
+      "defaults": { "artifact-path": "build/" },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    }
+  ]
+}

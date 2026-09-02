@@ -1,0 +1,24 @@
+{
+  "task": {
+    "id": "pack-band-empty",
+    "goal": "backport the parser to the old runtime",
+    "requirements": { "artifact-path": "build/" },
+    "counterparts": [{ "id": "rig-capabilities", "version": "2.4.1" }]
+  },
+  "state": {
+    "repo_kind": "npm",
+    "python_version": "3.13.1"
+  },
+  "candidates": [
+    {
+      "id": "legacy-parser-shim",
+      "version": "0.2.0",
+      "activation": "the parser must run on a legacy runtime",
+      "applies_when": [
+        { "field": "python_version", "version_band": "<3.0,>=3.12" }
+      ],
+      "defaults": { "artifact-path": "build/" },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    }
+  ]
+}

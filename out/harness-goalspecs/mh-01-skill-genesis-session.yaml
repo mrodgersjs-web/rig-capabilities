@@ -152,6 +152,28 @@
           "weight": 1.0
         },
         {
+          "id": "3.5",
+          "category": "Paired-Run & Retained-Negative Evidence",
+          "name": "3.5 That the skill is BETTER is earned from a PAIRED run, never",
+          "description": "That the skill is BETTER is earned from a PAIRED run, never from a green done-test alone: baseline (skill off) and variant (skill on) execute the same task with model, agent framework, tools, repo, container, input data and verifier frozen. The ledger row records both sides' config_hash, the single named differs_in key, the external verifier verdict, and both cost axes (tokens, wall_ms). Configs identical hash-for-hash, or differing in two or more keys, are rejected outright; >=2x cost versus baseline on either axis is an efficiency regression even when the variant passes",
+          "command": "python3 rig_capabilities/paired_runs.py check .rig/genesis/paired-runs.jsonl exits 0 and echoes the claimed pair's correctness delta and token/wall multipliers; the planted fixtures examples/fixtures/paired-runs/two_variables.jsonl and examples/fixtures/paired-runs/no_pair.jsonl each exit 1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.6",
+          "category": "Paired-Run & Retained-Negative Evidence",
+          "name": "3.6 Negatives are retained, not deleted: the near-miss, silent-r",
+          "description": "Negatives are retained, not deleted: the near-miss, silent-regression, and bloated-vs-clean variants that lost the pair stay in the ledger as the negative half of the evidence \u2014 eval data that shrinks the search space by proving what does not work. Diff the recorded id sets against the previous ledger: any id that vanished is a deleted data point, however inconvenient its red was",
+          "command": "python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/ledger_dropped_negative.jsonl --baseline examples/fixtures/paired-runs/baseline_ledger.jsonl exits 1 naming retained_negative_missing; the same command on ledger_keeps_negative.jsonl exits 0; the checker never rewrites the ledger it audits",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
           "id": "4.1",
           "category": "Memory & Ship",
           "name": "4.1 Rig Memory OS integration section authored and exercised: th",
@@ -227,13 +249,15 @@
         "Done-test demonstrated GREEN on the real artifact and RED on the planted failure, both exit codes on file",
         "Planted-failure fixture committed as a permanent regression case",
         "skill_genesis event recorded to rig-memory-os and verified by round-trip recall",
+        "Paired-run ledger proves the skill claim: exactly one named difference between the two configs, both config hashes recorded, correctness AND cost deltas echoed by the checker",
+        "Every negative variant retained: baseline-vs-current id diff empty, retention check exits 0, ledger bytes untouched",
         "One improvement entry appended to the improvements log",
         "Identity closure: coordinate, shipped skill path, and next safe action stated in the session tail"
       ],
       "failure_states": [
         "notes: stop on 3.3: a done-test that cannot go red is theater \u2014 the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect",
         "stop gate(s) 3.3: session halts; human Gate-D approval required before any continuation or outward action",
-        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.4, 4.1, 4.2: no progress without gate evidence",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 3.2, 3.4, 3.5, 3.6, 4.1, 4.2: no progress without gate evidence",
         "degrade gate(s) 1.2: continue with deficit logged in the Definition of Done waiver"
       ],
       "quality_criteria": [
@@ -250,6 +274,8 @@
         "Done-test goes GREEN on the real artifact: the extracted block is executed against the freshly authored skill and exits 0",
         "Planted-failure proof: a deliberately broken fixture (truncated artifact, missing required section, or wrong estimator name) is run through the same done-test and the test MUST go RED with a non-zero exit and an informative message",
         "Planted failure is retained as a permanent regression case: the broken fixture and its expected RED output are committed beside the skill, not discarded",
+        "That the skill is BETTER is earned from a PAIRED run, never from a green done-test alone: baseline (skill off) and variant (skill on) execute the same task with model, agent framework, tools, repo, container, input data and verifier frozen. The ledger row records both sides' config_hash, the single named differs_in key, the external verifier verdict, and both cost axes (tokens, wall_ms). Configs identical hash-for-hash, or differing in two or more keys, are rejected outright; >=2x cost versus baseline on either axis is an efficiency regression even when the variant passes",
+        "Negatives are retained, not deleted: the near-miss, silent-regression, and bloated-vs-clean variants that lost the pair stay in the ledger as the negative half of the evidence \u2014 eval data that shrinks the search space by proving what does not work. Diff the recorded id sets against the previous ledger: any id that vanished is a deleted data point, however inconvenient its red was",
         "Rig Memory OS integration section authored and exercised: the skill documents memory.record_event and memory.propose_memory, and the genesis itself records an event through the canonical bridge",
         "Ship gate: SKILL.md passes the meta-memory-os-bridge bridge check (both memory surfaces named) and the file is written to artifacts/skills/<name>/SKILL.md with no placeholder tokens remaining"
       ],
@@ -267,11 +293,13 @@
       ],
       "_meta": {
         "source": "capabilities/harnesses/mh-01-skill-genesis-session.yaml",
-        "source_sha256": "9fb53cc1950fbd8dc963831c340d09be58e48cd7473c23216b5aed79ce058c9d",
+        "source_sha256": "33a42b957c23052c6c7eeb2b74dd935d87fe92c259936836647958ac2919a83f",
         "final_rule": [
           "No done-test, no skill.",
           "A test that can't go red is not a test \u2014 it is decoration.",
           "The planted failure ships with the skill, forever.",
+          "No with/without pair, no upgrade claim. One free variable, or it proves nothing.",
+          "A discarded negative is a deleted experiment. The ledger keeps both halves.",
           "No memory event, no session complete.",
           "Every skill-genesis session leaves the system stronger than it found it."
         ],
@@ -284,6 +312,8 @@
             "3.1",
             "3.2",
             "3.4",
+            "3.5",
+            "3.6",
             "4.1",
             "4.2"
           ],

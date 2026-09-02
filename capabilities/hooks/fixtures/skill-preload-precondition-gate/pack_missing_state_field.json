@@ -1,0 +1,25 @@
+{
+  "task": {
+    "id": "pack-missing-state-field",
+    "goal": "run the container suite locally",
+    "requirements": { "artifact-path": "build/" },
+    "counterparts": []
+  },
+  "state": {
+    "repo_kind": "npm",
+    "python_version": "3.13.1"
+  },
+  "candidates": [
+    {
+      "id": "container-suite-runner",
+      "version": "1.0.0",
+      "activation": "the suite needs a container runtime to run",
+      "applies_when": [
+        { "field": "container_runtime", "equals": "docker" },
+        { "field": "python_version", "version_band": ">=3.9,<4" }
+      ],
+      "defaults": { "artifact-path": "build/", "output-format": "json" },
+      "counterparts": []
+    }
+  ]
+}

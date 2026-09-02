@@ -2,7 +2,12 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/harnesses/mh-02-harness-forge-session.yaml
-  - a session of this type completes with its gate green
+  - cmd:eval "$(grep -m1 '^    config_pass:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
+  - cmd:eval "$(grep -m1 '^    config_block:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
+  - cmd:eval "$(grep -m1 '^    admission_pass:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
+  - cmd:eval "$(grep -m1 '^    admission_block:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
+  - cmd:eval "$(grep -m1 '^    freeze_pass:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
+  - cmd:eval "$(grep -m1 '^    freeze_block:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)"
 great_example: examples/great/agent-engineering/mh-02-harness-forge-session.yaml.md
 quality_floor: 0.6
 ---
@@ -18,6 +23,128 @@ coordinate_space:
 harness_tuple: H_harnessforge(session_type, five_sections, gates, proof_density, certification)
 primary_diamonds: [D1, D3]
 bms_bias: "A1 verification-led — every forged gate's proof is executed, not read; A2 for prose drafting of requirements; A3 forbidden for proof strings; A4 forbidden — a forged harness is inert until certified"
+anti_patterns:
+  - "Editing a byte outside mutable_classes during a forge session — the learnable surface is declared before the run, not discovered during it"
+  - "Re-declaring mutable_surface.loop mid-session to escape the inner-loop byte freeze"
+  - "Sealing mutable_surface.config.sha256 over a slot vector that was not derived from the gates it is supposed to identify"
+  - "Certifying a forged harness whose admission or freeze fixture has never been proven to go RED"
+  - "Widening mutable_classes from inside the session that the widened surface would authorize"
+
+# ── declared learnable surface ────────────────────────────────────────────
+# MH-02 forges harnesses but never trains weights: the learnable object is the
+# harness text, so the mutable surface, the configuration identity, and the
+# inner/outer loop boundary must be declared in the harness itself.
+# LIMITATION (measured 2026-09-02, recorded not hidden): scripts/compile_harnesses.py
+# copies into the compiled GoalSpec only whitelisted keys plus gate `proof`
+# strings; this section is dropped from out/harness-goalspecs/. Enforcement
+# therefore lives in gates 5.1-5.3 and the front-matter fixtures, whose commands
+# PARSE this section back out of this file at run time — the declaration is
+# load-bearing even though the compiler does not carry it. Widening this section
+# is a Gate-D act (gate 5.2 tier stop).
+mutable_surface:
+  loop: inner
+  triple:
+    model: "frozen weights — MH-02 writes no weight update; the model is never the learnable object"
+    harness: capabilities/harnesses/mh-02-harness-forge-session.yaml
+    state: .rig/forge/session-state.json
+  config:
+    canonical: "sha256 over the slots vector rendered name|type|value in declaration order, each line newline-terminated, UTF-8"
+    slots:
+      - slot:gate_count_band|int|8-15
+      - slot:identity_gate_band|int|3-5
+      - slot:final_rule_min|int|3
+      - slot:quality_floor|float|0.6
+      - slot:proof_command_token|set|python3,bash,git,grep,ls,exit,sha256,diff
+      - slot:theater_banned_adjectives|set|appropriate,sufficient,good
+      - slot:tier_vocabulary|set|halt,degrade,stop
+      - slot:mathexec_substrate|file|needle-haystack/artifacts/meta/mathexec_substrate.py
+      - slot:memory_event_kind|string|harness_forged
+      - slot:pattern_cadence|int|5
+      - slot:model_frozen|bool|true
+      - slot:inner_loop_byte_freeze|bool|true
+      - slot:surface_widening_needs_gate_d|bool|true
+      - slot:certify_by_execution|bool|true
+    sha256: 3248135d7a1dcc74e7fd32517ce78a7bdd295d5e3651e5861d6e572d506eff30
+  mutable_classes:
+    - class: artifact
+      scope: inner
+      path: capabilities/harnesses/
+      note: "the harness being forged is the artifact; a forge session rewrites it every round"
+    - class: evidence
+      scope: inner
+      path: .rig/forge/
+      note: "gate proof records this session writes"
+    - class: self
+      scope: outer
+      path: capabilities/harnesses/mh-02-harness-forge-session.yaml
+      gate_d: "surface widening — an outer-loop harness-evolution round with typed human approval; forbidden to an inner-loop session of this type"
+    - class: exemplar
+      scope: outer
+      path: examples/great/agent-engineering/mh-02-harness-forge-session.yaml.md
+      gate_d: "worked example is written by the round that changed the harness, not by the session being scored"
+    - class: compiler
+      scope: never
+      path: scripts/compile_harnesses.py
+      reason: "the compiler is the contract this harness is scored against"
+    - class: runtime
+      scope: never
+      path: rig_capabilities/
+      reason: "runtime code is machinery, not an artifact of a forge session"
+    - class: refuter-fixtures
+      scope: never
+      path: tests/
+      reason: "the refuter's fixtures must not be authored by the thing they refute"
+    - class: derived
+      scope: never
+      path: out/harness-goalspecs/
+      reason: "regenerated by the compiler, never hand-edited"
+    - class: ignore
+      scope: never
+      path: .gitignore
+  session_state:
+    path: .rig/forge/session-state.json
+    fields: [session_id:string, loop:inner-or-outer, harness:string, harness_sha256_at_start:string, config_sha256:string]
+    record_before_first_write: sha256sum capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -d" " -f1 > .rig/forge/harness-start.sha256
+  checks:
+    config_identity: python3 -c 'import sys,hashlib;sys.path.insert(0,"scripts");import compile_harnesses as CH;c=CH.parse_yaml_subset(open(sys.argv[1]).read()).get("mutable_surface",{}).get("config",{});sl=[str(x) for x in c.get("slots",[])];got=hashlib.sha256((chr(10).join(sl)+chr(10)).encode()).hexdigest();pin=str(c.get("sha256","")).strip();ok=bool(sl) and pin==got;print("CONFIG_IDENTITY slots="+str(len(sl))+" computed="+got[:16]+" sealed="+pin[:16]+" verdict="+("PASS" if ok else "RED slot vector and sealed hash differ"));sys.exit(0 if ok else 1)'
+    surface_admission: python3 -c 'import sys;A=sys.argv;Y=A[1];P=list(A[2:]);sys.path.insert(0,"scripts");import compile_harnesses as CH;m=CH.parse_yaml_subset(open(Y).read()).get("mutable_surface",{});L=str(m.get("loop","inner")).strip();c=[(str(e.get("scope","never")),str(e.get("path",""))) for e in m.get("mutable_classes",[]) if str(e.get("path",""))];ok=lambda p,q:p==q or p.startswith(q if q.endswith("/") else q+"/");hit=lambda p:[(len(q),s) for s,q in c if ok(p,q)];top=lambda p:max(hit(p))[1] if hit(p) else "undeclared";bad=[(p,top(p)) for p in P if not(top(p)=="inner" or (top(p)=="outer" and L=="outer"))];print("SURFACE_ADMISSION loop="+L+" map="+str([(p,top(p)) for p in P])+" rejected="+str(bad));sys.exit(1 if bad else 0)'
+    inner_loop_byte_freeze: python3 -c 'import sys,os,hashlib;A=sys.argv;Y=A[1];S=A[2];sys.path.insert(0,"scripts");import compile_harnesses as CH;L=str(CH.parse_yaml_subset(open(Y).read()).get("mutable_surface",{}).get("loop","inner")).strip();f=os.path.join(S,"harness-start.sha256");st=open(f).read().split()[0] if os.path.isfile(f) else "MISSING";now=hashlib.sha256(open(Y,"rb").read()).hexdigest();ok=L=="outer" or st==now;print("BYTE_FREEZE loop="+L+" start="+st[:12]+" end="+now[:12]+" verdict="+("PASS" if ok else "RED inner-loop session changed its own harness bytes"));sys.exit(0 if ok else 1)'
+  fixtures:
+    config_pass: eval "$(grep -m1 '^    config_identity:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" capabilities/harnesses/mh-02-harness-forge-session.yaml
+    config_block: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/x.yaml";sed 's/slot:gate_count_band|int|8-15/slot:gate_count_band|int|8-20/' "$W/x.yaml" > "$W/y.yaml";eval "$(grep -m1 '^    config_identity:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/y.yaml";rc=$?;rm -rf "$W";test $rc -eq 1
+    admission_pass: eval "$(grep -m1 '^    surface_admission:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" capabilities/harnesses/mh-02-harness-forge-session.yaml capabilities/harnesses/hn-01-forged-session.yaml .rig/forge/gate-5.3.txt
+    admission_block: eval "$(grep -m1 '^    surface_admission:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" capabilities/harnesses/mh-02-harness-forge-session.yaml capabilities/harnesses/mh-02-harness-forge-session.yaml rig_capabilities/rounds.py scripts/compile_harnesses.py; rc=$?; test $rc -eq 1
+    freeze_pass: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";sha256sum "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 0
+    freeze_block: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";sha256sum "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";sed 's/slot:pattern_cadence|int|5/slot:pattern_cadence|int|9/' "$W/h.yaml" > "$W/t" && mv "$W/t" "$W/h.yaml";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 1
+  provenance:
+    videos:
+      - id: LEsKxMfRFjA
+        verified_quote: "we have to store it here in an executable architecture, and this is a file system of the harness itself"
+        implication: "the mutable surface is declared in the harness file, not in a sidecar an optimizer can ignore"
+      - id: LEsKxMfRFjA
+        verified_quote: "the harness here at the time K is exactly the harness at K plus one"
+        implication: "each accepted change is one identifiable step, which is what config.sha256 makes checkable"
+      - id: USEk7F9GIZk
+        verified_quote: "we reduce the complexity of this harness into into into 96 runtime sockets"
+        implication: "the configuration is a vector of typed slots; the identity is the hash of that vector"
+      - id: lNlMXsUQggc
+        verified_quote: "the LLM at the core of the agent is frozen we do not have supervised finetuning or any reinforcement learning nothing"
+        implication: "the model is declared frozen in mutable_surface.triple, so only the harness text is learnable here"
+      - id: Z90xlttVx3Y
+        verified_quote: "an individual EI agent can be abstracted as a loop function over a foundational model your llm the harness configuration that you found beautiful and the runtime state of an agent here at a particular time t"
+        implication: "the (model, harness, state) triple is structured in mutable_surface.triple and checked by gate 0.5"
+    papers:
+      - "arXiv 2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design"
+      - "arXiv 2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement"
+      - "arXiv 2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+      - "arXiv 2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence"
+    repos:
+      - Yaxin9Luo/AutoDesign
+      - HKUDS/HELIX
+      - openJiuwen-ai/jiuwenswarm
+    link_rule: "titles above are verbatim from the link verdict log, and every repo slug there reports exists: true — a link that is not in that log is not cited here"
+    limitation: "two links carried in the source dossiers failed verification (one paper id absent from the verdict log, one GitHub slug that does not resolve), so neither is named in this file; no gate, slot, or claim above depends on either"
+
 identity_lock:
   startup_phrase: "I am the forge. Every gate I write must name its executable proof or it does not exist."
   gates:
@@ -33,6 +160,9 @@ identity_lock:
     - id: "0.4"
       requirement: "Harness tuple H_harnessforge(session_type, five_sections, gates, proof_density, certification) declared with all five components named"
       proof: "Session log contains the tuple declaration verbatim"
+    - id: "0.5"
+      requirement: "Runtime triple and loop role declared and the harness bytes pinned before the first write: mutable_surface.triple carries a non-empty model, harness and state, the harness path resolves on disk, mutable_surface.loop is exactly inner or outer, and the sha256 of the harness file at session start is recorded"
+      proof: "python3 -c asserting triple keys non-empty, os.path.isfile(triple.harness), loop in {inner,outer}; then sha256sum capabilities/harnesses/mh-02-harness-forge-session.yaml written to .rig/forge/harness-start.sha256; both recorded to .rig/forge/triple.txt"
 capability_gates:
   - category: "Structure"
     gates:
@@ -90,26 +220,46 @@ capability_gates:
         requirement: "File landed and registered: artifacts/harnesses/<id>.yaml exists on disk, parses, and harness_catalog.json is updated (or an explicit catalog-update handoff is recorded)"
         proof: "ls and yaml.safe_load succeed on the final path; catalog diff or handoff note saved to .rig/forge/registration.txt"
         failure_tier: halt
+  - category: "Learnable Surface"
+    gates:
+      - id: "5.1"
+        requirement: "Configuration identity is sealed: mutable_surface.config.slots is a non-empty vector of typed name|type|value slots and sha256 over that vector in declaration order equals the sealed mutable_surface.config.sha256 — without it two runs of this YAML cannot be told apart"
+        proof: "eval \"$(grep -m1 '^    config_identity:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)\" capabilities/harnesses/mh-02-harness-forge-session.yaml exits 0 with CONFIG_IDENTITY verdict=PASS; fixture config_block proves RED on a one-slot edit; output in .rig/forge/config-identity.txt"
+        failure_tier: halt
+      - id: "5.2"
+        requirement: "The declared surface rejects before it scores: every path a proposed diff touches must match a mutable_classes entry whose scope is this harness's loop; undeclared, scope=outer while loop=inner, and scope=never paths are refused and never scored"
+        proof: "eval \"$(grep -m1 '^    surface_admission:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)\" against the declared surface; fixture admission_block exits 0 having seen SURFACE_ADMISSION reject own-bytes, rig_capabilities/ and the compiler; admission_pass shows the artifact path admitted; output in .rig/forge/surface-admission.txt"
+        failure_tier: stop
+      - id: "5.3"
+        requirement: "Inner-loop byte freeze: this harness declares loop inner, so the sha256 of its own file recorded at session start must equal the sha256 at session end — a session of this type that rewrote its own harness bytes has left the inner loop and its output cannot be attributed"
+        proof: "eval \"$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)\" against a temp copy and its recorded start hash; fixture freeze_block exits 0 having seen BYTE_FREEZE verdict=RED on a planted byte edit; freeze_pass proves GREEN unchanged; output in .rig/forge/byte-freeze.txt"
+        failure_tier: stop
 definition_of_done:
   - "All gates passed or degraded-with-log; zero unresolved halt gates, zero stop events"
   - "Forged YAML parses with complete envelope, five canonical sections, 8-15 fully-fielded gates"
   - "Tier partition between gate failure_tier fields and failure_protocol lists proven by set equality"
   - "At least one mathexec gate and one memory.record_event gate present in the forged harness and both exercised live"
+  - "mutable_surface.config.sha256 re-sealed over the slot vector the forged gates actually enforce (config_identity exit 0)"
+  - "surface_admission run against the forged mutable_classes: an undeclared path and a scope=outer path are both refused while loop=inner"
+  - "inner_loop_byte_freeze run against the forged harness: recorded start sha equals end sha, or the session declares outer and carries the Gate-D approval"
   - "final_rule closes with the required phrase"
   - "harness_forged event recorded to rig-memory-os and verified by round-trip recall"
   - "One improvement entry appended to the improvements log"
 failure_protocol:
-  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "2.4", "3.1", "3.2", "4.1", "4.2", "4.3"]
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "2.3", "2.4", "3.1", "3.2", "4.1", "4.2", "4.3", "5.1"]
   degrade_gates: []
-  stop_gates: []
-  notes: "No stop gates in forge: a malformed harness is simply not registered; the failure mode is refusal to certify, never emergency halt — but 2.3 (tier partition mismatch) invalidates any prior certification of the same file and requires re-running 4.x"
+  stop_gates: ["5.2", "5.3"]
+  notes: "Forge halts rather than stops for malformed YAML: a harness that does not parse is simply not registered. Two stop gates exist because they mark boundaries only a human may cross — 5.2 (a proposed change steps outside the declared mutable surface, including any widening of mutable_classes itself) and 5.3 (an inner-loop session changed the bytes of its own harness, so behavior can no longer be attributed to a fixed configuration). Both require typed Gate-D approval before the session continues. 2.3 (tier partition mismatch) additionally invalidates any prior certification of the same file and requires re-running 4.x"
 self_improvement:
   log_path: "~/.hermes/jake/improvements.log"
   pattern_cadence: 5
+  authority: "outer-loop only — an improvement to this harness is a diff inside mutable_classes.class self, which is scope outer and gate_d; a forge session may improve its artifact and its evidence, never its own contract"
+  evidence: "each improvement entry names the config sha256 before and after, so a change in behaviour is attributable to a change in the slot vector rather than to drift"
   update_trigger: "same forge gate fails 3+ times → the forge checklist absorbs the check as a template constraint; recurring theater-gate shapes are proposed via memory.propose_memory to meta-harness-refuter's taxonomy"
 final_rule:
   - "A gate without an executable proof is a wish, not a gate."
   - "8 to 15 gates, each with id, requirement, proof, tier — no exceptions."
   - "The forge certifies by execution, never by reading."
+  - "What the optimizer may change is written down before the run; what it may not is written down too."
   - "Every harness-forge session leaves the system stronger than it found it."
 governs_loops: [GL-BD, GL-VQ, GL-GG]

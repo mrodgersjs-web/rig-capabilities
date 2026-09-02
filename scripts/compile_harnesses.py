@@ -661,8 +661,24 @@ def _sha_of(path: Path) -> str:
 
 # ── commands ─────────────────────────────────────────────────────────────
 
-def cmd_compile(_: argparse.Namespace) -> int:
-    sources = sorted(HARNESS_DIR.glob("*.yaml"))
+def cmd_compile(args) -> int:
+    wanted = list(getattr(args, "files", None) or [])
+    if wanted:
+        # A single-harness compile must exist: recompile one edited YAML
+        # without dragging in every sibling's half-finished work.
+        sources = []
+        for w in wanted:
+            cand = Path(w)
+            if not cand.exists():
+                cand = HARNESS_DIR / (Path(w).name if Path(w).suffix
+                                      else str(w) + ".yaml")
+            if not cand.exists():
+                print(f"FAIL: no harness file for {w!r}", file=sys.stderr)
+                return 1
+            sources.append(cand)
+        sources.sort()
+    else:
+        sources = sorted(HARNESS_DIR.glob("*.yaml"))
     if not sources:
         print(f"FAIL: no harness files in {HARNESS_DIR}", file=sys.stderr)
         return 1
@@ -718,7 +734,9 @@ def cmd_parse(args: argparse.Namespace) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     sub = ap.add_subparsers(dest="cmd")
-    sub.add_parser("compile")
+    p_compile = sub.add_parser("compile")
+    p_compile.add_argument("files", nargs="*",
+                           help="harness files (or stems) to compile; default: all")
     sub.add_parser("list")
     p = sub.add_parser("parse")
     p.add_argument("file")

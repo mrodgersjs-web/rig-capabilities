@@ -1,0 +1,43 @@
+{
+  "task": {
+    "id": "pack-conflict-artifact-path",
+    "goal": "publish the audit artifact the release lane consumes",
+    "requirements": {
+      "artifact-path": "build/",
+      "output-format": "json"
+    },
+    "counterparts": [{ "id": "rig-capabilities", "version": "2.4.1" }]
+  },
+  "state": {
+    "repo_kind": "npm",
+    "container_runtime": "docker",
+    "python_version": "3.13.1"
+  },
+  "candidates": [
+    {
+      "id": "webpack-bundle-audit",
+      "version": "1.7.0",
+      "activation": "a webpack bundle needs its size audited",
+      "applies_when": [
+        { "field": "repo_kind", "equals": "npm" },
+        { "field": "container_runtime", "exists": true }
+      ],
+      "defaults": {
+        "artifact-path": "dist/",
+        "output-format": "json"
+      },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    },
+    {
+      "id": "vite-bundle-audit",
+      "version": "1.2.0",
+      "activation": "a vite bundle needs its size audited",
+      "applies_when": [{ "field": "repo_kind", "equals": "npm" }],
+      "defaults": {
+        "artifact-path": "build/reports/",
+        "output-format": "json"
+      },
+      "counterparts": [{ "id": "rig-capabilities", "version_band": ">=2.0,<3.0" }]
+    }
+  ]
+}

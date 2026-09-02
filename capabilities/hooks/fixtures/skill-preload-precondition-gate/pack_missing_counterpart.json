@@ -1,0 +1,25 @@
+{
+  "task": {
+    "id": "pack-missing-counterpart",
+    "goal": "score the lead queue before outreach",
+    "requirements": { "artifact-path": "build/" },
+    "counterparts": [{ "id": "rig-capabilities", "version": "2.4.1" }]
+  },
+  "state": {
+    "repo_kind": "npm",
+    "python_version": "3.13.1"
+  },
+  "candidates": [
+    {
+      "id": "lead-scorer",
+      "version": "3.0.1",
+      "activation": "a fresh lead queue needs ranking before outreach",
+      "applies_when": [{ "field": "python_version", "version_band": ">=3.9,<4" }],
+      "defaults": { "artifact-path": "build/", "output-format": "json" },
+      "counterparts": [
+        { "id": "rig-capabilities", "version_band": ">=2.0,<3.0" },
+        { "id": "rig-doctor", "version_band": ">=1.2,<2.0" }
+      ]
+    }
+  ]
+}

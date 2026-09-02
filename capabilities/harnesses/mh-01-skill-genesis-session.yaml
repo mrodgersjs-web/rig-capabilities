@@ -3,6 +3,15 @@ outcome: agent-engineering:
 done_when:
   - file:capabilities/harnesses/mh-01-skill-genesis-session.yaml
   - a session of this type completes with its gate green
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/valid_pair.jsonl; test $? -eq 0
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/two_variables.jsonl; rc=$?; test $rc -eq 1
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/no_pair.jsonl; rc=$?; test $rc -eq 1
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/same_config.jsonl; rc=$?; test $rc -eq 1
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/cost_regression.jsonl; rc=$?; test $rc -eq 1
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/ledger_dropped_negative.jsonl --baseline examples/fixtures/paired-runs/baseline_ledger.jsonl; rc=$?; test $rc -eq 1
+  - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/ledger_keeps_negative.jsonl --baseline examples/fixtures/paired-runs/baseline_ledger.jsonl; test $? -eq 0
+  - file:rig_capabilities/paired_runs.py
+  - file:examples/fixtures/paired-runs/valid_pair.jsonl
 great_example: examples/great/agent-engineering/mh-01-skill-genesis-session.yaml.md
 quality_floor: 0.6
 ---
@@ -76,6 +85,16 @@ capability_gates:
         requirement: "Planted failure is retained as a permanent regression case: the broken fixture and its expected RED output are committed beside the skill, not discarded"
         proof: "ls artifacts/skills/<name>/ contains the fixture file; git status shows it staged; recorded in .rig/genesis/regression-fixture.txt"
         failure_tier: halt
+  - category: "Paired-Run & Retained-Negative Evidence"
+    gates:
+      - id: "3.5"
+        requirement: "That the skill is BETTER is earned from a PAIRED run, never from a green done-test alone: baseline (skill off) and variant (skill on) execute the same task with model, agent framework, tools, repo, container, input data and verifier frozen. The ledger row records both sides' config_hash, the single named differs_in key, the external verifier verdict, and both cost axes (tokens, wall_ms). Configs identical hash-for-hash, or differing in two or more keys, are rejected outright; >=2x cost versus baseline on either axis is an efficiency regression even when the variant passes"
+        proof: "python3 rig_capabilities/paired_runs.py check .rig/genesis/paired-runs.jsonl exits 0 and echoes the claimed pair's correctness delta and token/wall multipliers; the planted fixtures examples/fixtures/paired-runs/two_variables.jsonl and examples/fixtures/paired-runs/no_pair.jsonl each exit 1"
+        failure_tier: halt
+      - id: "3.6"
+        requirement: "Negatives are retained, not deleted: the near-miss, silent-regression, and bloated-vs-clean variants that lost the pair stay in the ledger as the negative half of the evidence — eval data that shrinks the search space by proving what does not work. Diff the recorded id sets against the previous ledger: any id that vanished is a deleted data point, however inconvenient its red was"
+        proof: "python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/ledger_dropped_negative.jsonl --baseline examples/fixtures/paired-runs/baseline_ledger.jsonl exits 1 naming retained_negative_missing; the same command on ledger_keeps_negative.jsonl exits 0; the checker never rewrites the ledger it audits"
+        failure_tier: halt
   - category: "Memory & Ship"
     gates:
       - id: "4.1"
@@ -92,10 +111,12 @@ definition_of_done:
   - "Done-test demonstrated GREEN on the real artifact and RED on the planted failure, both exit codes on file"
   - "Planted-failure fixture committed as a permanent regression case"
   - "skill_genesis event recorded to rig-memory-os and verified by round-trip recall"
+  - "Paired-run ledger proves the skill claim: exactly one named difference between the two configs, both config hashes recorded, correctness AND cost deltas echoed by the checker"
+  - "Every negative variant retained: baseline-vs-current id diff empty, retention check exits 0, ledger bytes untouched"
   - "One improvement entry appended to the improvements log"
   - "Identity closure: coordinate, shipped skill path, and next safe action stated in the session tail"
 failure_protocol:
-  halt_gates: ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "3.4", "4.1", "4.2"]
+  halt_gates: ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "3.4", "3.5", "3.6", "4.1", "4.2"]
   degrade_gates: ["1.2"]
   stop_gates: ["3.3"]
   notes: "stop on 3.3: a done-test that cannot go red is theater — the session halts, the skill is quarantined, and no ship claim may be made until the test is rewritten to fail on the planted defect"
@@ -107,6 +128,8 @@ final_rule:
   - "No done-test, no skill."
   - "A test that can't go red is not a test — it is decoration."
   - "The planted failure ships with the skill, forever."
+  - "No with/without pair, no upgrade claim. One free variable, or it proves nothing."
+  - "A discarded negative is a deleted experiment. The ledger keeps both halves."
   - "No memory event, no session complete."
   - "Every skill-genesis session leaves the system stronger than it found it."
 governs_loops: [GL-BD, GL-VQ, GL-SI]
