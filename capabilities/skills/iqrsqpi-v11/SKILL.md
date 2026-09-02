@@ -122,8 +122,28 @@ typed it — that is Mike's discipline, stated honestly.
 - The production-studio IQRSQPI (`rig-iqrsqpi`: Intake/Synthesize/Quantify/Produce/Iterate) is the same spine for creative briefs; v11 uses the canonical I1/Q1/R/S/Q2/P/I2 codes from the RIG lattice.
 - v11 does not replace goal harnesses (hA/hB/…); a harness can name `iqrsqpi-v11` as its spine.
 
+## What the engine actually enforces (verified adversarially, 2026-09-01)
+
+- **Halt-tier gates block; degrade-tier gates do not.** A stage passes only when every
+  halt-tier gate is green. A red `degrade` gate (Q2's drift ceiling) lets the stage pass but
+  stamps `DEGRADED: …` into the stage note, the history and the ProofPacket.
+- **Park is a pause, not a skip.** `stage X park` then `resume` leaves X unmet.
+- **Closing loop discards iteration evidence.** A fail from Q2/P reopens S and clears planted
+  failures, the seal, and check results; the new iteration must re-prove and re-seal.
+- **Proof binding is re-verified after P.** Every stage after P (and the final pass) checks the
+  packet still exists, hash-matches, is from this iteration, and that every artifact it recorded
+  is byte-identical; otherwise P is reopened and you must re-seal.
+- **Every path a write touches is checked**, including MultiEdit `edits[]` and `apply_patch`
+  envelopes; a write-class call with no determinable path is denied before S (fail-closed).
+- **The outward guard is pattern-based, not a sandbox.** It tolerates git/gh global options
+  (`git -C dir push`, `git -c k=v push`) but a determined agent can evade any regex; the guard
+  is a tripwire, Gate-D is the doctrine.
+- **`--run` never crosses directories.** A hook told to use a specific run still has to be in
+  that run's directory tree.
+
 ## Honesty notes
 
 - Hermes gateway hooks cannot block or inject; there the loop is enforced only by `rig-loop stage … pass` refusing red gates.
 - `qr_passes` is agent-reported; the artifacts are what the gate reads.
 - `--force` on `stage pass` exists for emergencies and is recorded as **FORCED** in history and the ProofPacket.
+- Shell writes are caught by redirect/`tee`/`sed -i` heuristics only; Python or editor writes inside a shell command are not seen.

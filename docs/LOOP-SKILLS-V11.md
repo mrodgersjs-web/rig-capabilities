@@ -80,6 +80,23 @@ capabilities/skills/<id>/
 Remaining doctrines convert with `rig-loop scaffold <id> --name … --source <doctrine.md>`
 then fill stages/gates/cases (see BACKLOG in `docs/ROADMAP.md`).
 
+## Enforcement semantics (precise)
+
+- `halt` gates block a pass; `degrade` gates never block but are stamped `DEGRADED` into the
+  stage note, history and ProofPacket. Say "no stage advances on a red halt-tier gate".
+- `park` is a pause: a parked stage is still unmet after `resume`.
+- A closing-loop iteration clears planted failures, the seal and check results.
+- After P passes, every later stage re-verifies proof binding (packet hash, iteration, every
+  recorded artifact byte-identical); a stale proof reopens P.
+- Write checks cover every path a call touches (single field, `edits[]`, `files[]`,
+  apply_patch envelopes) and fail closed when a write-class tool declares no path.
+- The outward guard is a regex tripwire tolerant of git/gh global options; it is not a sandbox.
+- An explicit `--run` must own the caller's cwd.
+
+Independent verification: commit 3a87acc was reviewed adversarially by a Codex verifier; its
+seven findings drove the semantics above and are covered by regression cases in
+`capabilities/skills/iqrsqpi-v11/tests/cases.json` and `tests/test_loops.py`.
+
 ## Honesty
 
 - The engine cannot prove a human typed the Gate-D phrase; it records who/when/phrase.

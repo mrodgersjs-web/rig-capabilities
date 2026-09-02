@@ -159,6 +159,59 @@ class RunTests(TempState):
         self.assertEqual(run["status"], "done")
 
 
+class VerifierFindingsTests(TempState):
+    """Regressions for the independent (Codex) verification findings on 3a87acc."""
+
+    def test_degrade_gate_failure_is_recorded_not_silent(self):
+        run = L.activate("iqrsqpi-v11", cwd=str(self.cwd), harness="ut")
+        spec = L.load_spec("iqrsqpi-v11")
+        st = {"id": "X", "gate": [{"type": "min_counter", "counter": "nope", "min": 1, "failure_tier": "degrade"}]}
+        spec2 = dict(spec)
+        spec2["stages"] = [st]
+        run = L.mark_stage(run, spec2, "X", "pass")
+        self.assertEqual(run["stage_status"]["X"], "pass")
+        self.assertTrue(run["history"][-1]["degraded"])
+        self.assertIn("DEGRADED", run["stage_notes"]["X"])
+
+    def test_explicit_run_id_cannot_attach_to_foreign_cwd(self):
+        run = L.activate("proof-loop", cwd=str(self.cwd), harness="ut")
+        other = self.root / "other"
+        other.mkdir()
+        self.assertIsNone(L.find_active(str(other), run["run_id"]))
+        self.assertIsNotNone(L.find_active(str(self.cwd / "deeper"), run["run_id"]))
+        res = L.dispatch_hook("stop", {"cwd": str(other)}, run_id=run["run_id"])
+        self.assertEqual(res["action"], "allow")
+
+    def test_write_paths_cover_multiedit_and_apply_patch(self):
+        paths = L._write_paths({"edits": [{"file_path": "a.py"}, {"file_path": "b.py"}]}, {})
+        self.assertEqual(paths, ["a.py", "b.py"])
+        patch = "*** Begin Patch\n*** Update File: src/x.py\n@@\n*** Add File: y.md\n*** End Patch\n"
+        self.assertEqual(L._write_paths({"patch": patch}, {}), ["src/x.py", "y.md"])
+        self.assertEqual(L._write_paths({"content": "x"}, {}), [])
+
+    def test_outward_patterns_tolerate_git_global_options(self):
+        pats = L.DEFAULT_OUTWARD_PATTERNS
+        import re as _re
+        hit = lambda cmd: any(_re.search(p, cmd, _re.I) for p in pats)  # noqa: E731
+        for cmd in ("git push", "git -C . push origin main", "git -c a=b --no-pager push",
+                    "/usr/bin/git push --force", "gh --repo o/r pr merge 1", "GIT_DIR=x git push"):
+            self.assertTrue(hit(cmd), cmd)
+        for cmd in ("git status", "git log --oneline", "echo pushed", "gh pr view 1"):
+            self.assertFalse(hit(cmd), cmd)
+
+    def test_closing_loop_resets_iteration_evidence(self):
+        run = L.activate("proof-loop", cwd=str(self.cwd), harness="ut")
+        spec = L.load_spec("proof-loop")
+        run = L.mark_stage(run, spec, "C", "pass", force=True)
+        L.plant(run, "p", "false", "true", str(self.cwd))
+        run["proof"] = {"path": "old", "hash": "x", "iteration": 1}
+        L.save_run(run)
+        run = L.mark_stage(L.load_run(run["run_id"]), spec, "E", "fail")
+        self.assertEqual(run["iteration"], 2)
+        self.assertEqual(run["planted"], [])
+        self.assertIsNone(run["proof"])
+
+
 class HookRenderTests(TempState):
     def test_render_formats(self):
         deny = {"action": "deny", "reason": "no"}

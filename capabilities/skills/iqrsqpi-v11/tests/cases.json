@@ -11,6 +11,16 @@
     ]
   },
   {
+    "name": "multi-file and patch payloads are checked per path; unknown target fails closed",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "MultiEdit", "tool_input": {"edits": [{"file_path": "<cwd>/docs/plans/a.md"}, {"file_path": "<cwd>/src/b.py"}]}}, "expect": {"action": "deny", "reason_contains": "src/b.py"}},
+      {"hook": {"event": "pre-tool", "tool_name": "apply_patch", "tool_input": {"patch": "*** Begin Patch\n*** Update File: src/c.py\n@@\n-x\n+y\n*** End Patch\n"}}, "expect": {"action": "deny", "reason_contains": "src/c.py"}},
+      {"hook": {"event": "pre-tool", "tool_name": "apply_patch", "tool_input": {"patch": "*** Begin Patch\n*** Add File: docs/plans/d.md\n+hello\n*** End Patch\n"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"content": "no path given"}}, "expect": {"action": "deny", "reason_contains": "fail-closed"}}
+    ]
+  },
+  {
     "name": "shell redirect write blocked before S, harmless shell allowed",
     "steps": [
       {"activate": {}},
@@ -35,6 +45,16 @@
     "steps": [
       {"activate": {}},
       {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": false, "reason_contains": "prior stage I1"}}
+    ]
+  },
+  {
+    "name": "park then resume does not skip the parked stage",
+    "steps": [
+      {"activate": {}},
+      {"stage": {"id": "I1", "status": "park", "note": "waiting on Mike"}, "expect": {"ok": true, "run_status": "parked"}},
+      {"resume": {}, "expect": {"run_status": "active"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": false, "reason_contains": "prior stage I1"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/app.py"}}, "expect": {"action": "deny", "reason_contains": "stage I1"}}
     ]
   },
   {
@@ -84,10 +104,14 @@
     ]
   },
   {
-    "name": "outward action blocked until typed Gate-D approval",
+    "name": "outward action blocked until typed Gate-D approval, including git global options",
     "steps": [
       {"activate": {}},
       {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git push origin main"}}, "expect": {"action": "deny", "reason_contains": "OUTWARD ACTION BLOCKED"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git -C . push origin main"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git -c core.hooksPath=/dev/null --no-pager push --force origin main"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "cd repo && /usr/bin/git push"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "gh --repo x/y pr merge 12"}}, "expect": {"action": "deny"}},
       {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "curl -X POST https://api.instantly.ai/send"}}, "expect": {"action": "deny"}},
       {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "curl -X POST http://localhost:8000/health"}}, "expect": {"action": "allow"}},
       {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git status && git commit -m x"}}, "expect": {"action": "allow"}},
@@ -99,7 +123,7 @@
     ]
   },
   {
-    "name": "closing loop returns to S on Q2 fail and escalates after max iterations",
+    "name": "closing loop returns to S on Q2 fail, discards iteration evidence, escalates after max",
     "steps": [
       {"activate": {}},
       {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
@@ -111,7 +135,10 @@
       {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
       {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
       {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"plant": {"name": "p1", "red": "false", "green": "true"}, "expect": {"red_ok": true, "green_ok": true}},
+      {"assert": {"field": "planted"}, "expect": {"len": 1}},
       {"stage": {"id": "Q2", "status": "fail", "note": "tests red"}, "expect": {"ok": true, "iteration": 2, "run_status": "active"}},
+      {"assert": {"field": "planted"}, "expect": {"len": 0}},
       {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "prior stage S"}},
       {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
       {"stage": {"id": "Q2", "status": "fail"}, "expect": {"ok": true, "iteration": 3}},
@@ -130,7 +157,7 @@
     ]
   },
   {
-    "name": "quality needs green checks + planted failure; seal only after Q2; I2 closes the run",
+    "name": "quality needs green checks + planted failure; seal only after Q2; tampered proof reopens P; I2 closes the run",
     "steps": [
       {"activate": {}},
       {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
@@ -157,6 +184,15 @@
       {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true}},
       {"hook": {"event": "stop"}, "expect": {"action": "block", "reason_contains": "stage I2"}},
       {"write": {"path": "integrate.md", "content": "## Shipped\n- a.py\n## Not-shipped\n- none\n## Hand-offs\n- none\n## Next-slice\n- b\n"}},
+      {"write": {"path": "<proof>", "content": "{\"tampered\": true}\n"}},
+      {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "altered since seal"}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": false}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "spec.md", "content": "## Approach\nAUTO changed after seal\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
+      {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "changed since seal"}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true}},
       {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}},
       {"hook": {"event": "stop"}, "expect": {"action": "allow"}}
     ]

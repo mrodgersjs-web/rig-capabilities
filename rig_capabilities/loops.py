@@ -36,7 +36,9 @@ MARKER = "RIG_LOOP_MANAGED"
 REPO = Path(__file__).resolve().parent.parent
 HOME = Path.home()
 CLI = REPO / "bin" / "rig-loop"
-STAGE_OK = ("pass", "park")
+# Only `pass` completes a stage. A parked stage stays unmet after `resume` (a park is
+# an honest pause, never a skip).
+STAGE_OK = ("pass",)
 
 HARNESSES = ("claude", "codex", "hermes", "omp", "prime-agent")
 SKILL_ROOTS = {
@@ -69,9 +71,14 @@ DEFAULT_PLAN_GLOBS = [
     "*/.rig/state/*", "*/scratchpad/*", "*.plan.md",
 ]
 # Outward / irreversible shell patterns. Blocked unless the run carries a Gate-D approval.
+# Pattern-based (best effort, not a sandbox): git/gh global options such as `-C dir`,
+# `-c k=v`, `--git-dir=…` are tolerated between the binary and the subcommand.
+_GIT_OPTS = (r"(?:\s+(?:-[Cc]|--git-dir|--work-tree|--namespace|--exec-path|--config-env)\s+\S+"
+             r"|\s+--?[\w-]+(?:=\S+)?)*")
+_GH_OPTS = r"(?:\s+(?:-R|--repo|--hostname)\s+\S+|\s+--?[\w-]+(?:=\S+)?)*"
 DEFAULT_OUTWARD_PATTERNS = [
-    r"\bgit\s+push\b",
-    r"\bgh\s+(pr\s+merge|release\s+create|repo\s+create|repo\s+delete)\b",
+    rf"\bgit{_GIT_OPTS}\s+push\b",
+    rf"\bgh{_GH_OPTS}\s+(pr\s+merge|release\s+create|repo\s+create|repo\s+delete)\b",
     r"\bvercel\b[^|;&]*(--prod|\bdeploy\b)",
     r"\bnpm\s+publish\b", r"\bdocker\s+push\b", r"\bkubectl\s+apply\b", r"\bterraform\s+apply\b",
     r"\bcurl\b(?![^|;&]*(localhost|127\.0\.0\.1))[^|;&]*-X\s*(POST|PUT|DELETE|PATCH)\b",
@@ -309,11 +316,23 @@ def clear_active(run: dict) -> None:
     _write_active(a)
 
 
+def _owns_cwd(run: dict, cwd: str | None) -> bool:
+    if cwd is None:
+        return True
+    try:
+        c = Path(cwd).resolve()
+        return c == Path(run["cwd"]) or Path(run["cwd"]) in c.parents
+    except Exception:  # noqa: BLE001
+        return False
+
+
 def find_active(cwd: str | None = None, run_id: str | None = None) -> dict | None:
-    """Active run for this cwd (or nearest parent), else the latest active run."""
+    """Active run for this cwd (or nearest parent), else the latest active run.
+    An explicit run_id still has to own the cwd — a hook can never be pointed at
+    another directory's run."""
     if run_id:
         r = load_run(run_id)
-        return r if r and r.get("status") == "active" else None
+        return r if r and r.get("status") == "active" and _owns_cwd(r, cwd) else None
     a = _read_active()
     if cwd:
         c = str(Path(cwd).resolve())
@@ -474,10 +493,34 @@ def _gate_planted_failure(run, spec, st, g):
     return len(good) >= int(g.get("min", 1)), f"{len(good)} planted failures proven RED→GREEN (min {g.get('min',1)})"
 
 
-def _gate_sealed(run, spec, st, g):
+def proof_binding_ok(run: dict) -> tuple[bool, str]:
+    """The sealed packet must still exist, hash-match, belong to this iteration, and every
+    artifact it recorded must be byte-identical now. Anything else is a stale proof."""
     pr = run.get("proof") or {}
-    ok = bool(pr.get("path")) and Path(pr["path"]).exists() and pr.get("hash") == sha256_file(Path(pr["path"]))
-    return ok, ("ProofPacket sealed " + pr.get("path", "") if ok else "not sealed — run: rig-loop seal")
+    if not pr.get("path"):
+        return False, "not sealed — run: rig-loop seal"
+    p = Path(pr["path"])
+    if not p.exists():
+        return False, f"ProofPacket missing: {p}"
+    if pr.get("hash") != sha256_file(p):
+        return False, f"ProofPacket altered since seal: {p}"
+    if pr.get("iteration") != run.get("iteration"):
+        return False, f"ProofPacket is from iteration {pr.get('iteration')} (now {run.get('iteration')}) — re-seal"
+    try:
+        packet = json.loads(p.read_text())
+    except Exception as exc:  # noqa: BLE001
+        return False, f"ProofPacket unreadable: {exc}"
+    for sid, a in (packet.get("artifacts") or {}).items():
+        ap = Path(a["path"])
+        if not ap.exists():
+            return False, f"artifact for stage {sid} deleted since seal: {ap}"
+        if sha256_file(ap) != a["sha256"]:
+            return False, f"artifact for stage {sid} changed since seal: {ap} — re-seal"
+    return True, "ProofPacket sealed and bound " + str(p)
+
+
+def _gate_sealed(run, spec, st, g):
+    return proof_binding_ok(run)
 
 
 def _gate_gate_d(run, spec, st, g):
@@ -562,7 +605,17 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
     if artifact:
         run["stage_artifacts"][sid] = str(Path(artifact).expanduser().resolve())
     gate_results: list[dict] = []
+    degraded: list[dict] = []
     if status == "pass":
+        ids = [s["id"] for s in spec["stages"]]
+        # once P has passed, every later stage re-verifies the proof binding
+        if "P" in ids and ids.index(sid) > ids.index("P") and run["stage_status"].get("P") == "pass":
+            bound, why = proof_binding_ok(run)
+            if not bound and not force:
+                run["stage_status"].pop("P", None)
+                log_event(run, "proof_stale", stage=sid, detail=why)
+                save_run(run)
+                raise SpecError(f"cannot mark {sid}: {why} — P reopened; re-seal then `rig-loop stage P pass`")
         gate_ok, gate_results = evaluate_gate(run, spec, st)
         if not gate_ok and not force:
             red = [r for r in gate_results if not r["ok"] and r["tier"] != "degrade"]
@@ -570,6 +623,10 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
             save_run(run)
             raise SpecError(f"stage {sid} gate RED — refusing pass: " +
                             " | ".join(f"{r['type']}: {r['detail']}" for r in red))
+        degraded = [r for r in gate_results if not r["ok"] and r["tier"] == "degrade"]
+        if degraded:
+            note = (note + " " if note else "") + "[DEGRADED: " + "; ".join(f"{r['type']}: {r['detail']}" for r in degraded) + "]"
+            log_event(run, "gate_degraded", stage=sid, results=degraded)
         if force:
             note = (note + " " if note else "") + "[FORCED — recorded as forced pass]"
     run["stage_status"][sid] = status
@@ -578,7 +635,7 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
     if note:
         run["stage_notes"][sid] = note
     run["history"].append({"ts": utc_now(), "stage": sid, "status": status, "iteration": run["iteration"],
-                           "forced": bool(force and status == "pass"), "gate": gate_results})
+                           "forced": bool(force and status == "pass"), "degraded": degraded, "gate": gate_results})
     log_event(run, "stage", stage=sid, status=status, forced=bool(force))
     if status == "fail":
         _apply_closing_loop(run, spec, sid)
@@ -609,6 +666,13 @@ def _apply_closing_loop(run: dict, spec: dict, failed: str) -> None:
         ids = [s["id"] for s in spec["stages"]]
         for sid in ids[ids.index(to):]:
             run["stage_status"].pop(sid, None)
+        # evidence is per iteration: a new iteration must re-prove its planted failures and
+        # re-seal; registered checks stay but their last results are discarded
+        run["planted"] = []
+        run["proof"] = None
+        for c in run["checks"]:
+            c["last"] = None
+        run["iteration_started_at"] = utc_now()
         log_event(run, "closing_loop", from_stage=failed, to=to, iteration=run["iteration"])
     else:
         run["stage_status"].pop(failed, None)
@@ -678,6 +742,8 @@ def seal(run: dict, spec: dict, signer: str = "rig-loop") -> dict:
         raise SpecError(f"cannot seal: red checks {red}")
     arts = {}
     for st in spec["stages"]:
+        if st["id"] == "P" or (st.get("artifact") or "").endswith("proof.json"):
+            continue  # the packet cannot bind its own copy
         p = _resolve_artifact(run, st, None)
         if p.exists() and p.is_file():
             arts[st["id"]] = {"path": str(p), "sha256": sha256_file(p)}
@@ -702,7 +768,8 @@ def seal(run: dict, spec: dict, signer: str = "rig-loop") -> dict:
     _atomic_write(out, json.dumps(packet, indent=2, sort_keys=True))
     # keep a copy beside the stage artifacts so the P stage artifact resolves
     _atomic_write(artifacts_dir(run) / "proof.json", json.dumps(packet, indent=2, sort_keys=True))
-    run["proof"] = {"path": str(out), "hash": sha256_file(out), "proof_hash": packet["proof_hash"]}
+    run["proof"] = {"path": str(out), "hash": sha256_file(out), "proof_hash": packet["proof_hash"],
+                    "iteration": run["iteration"]}
     log_event(run, "seal", path=str(out))
     save_run(run)
     return packet
@@ -751,15 +818,47 @@ def _norm_tool(name: str) -> str:
     return n
 
 
+_PATCH_FILE_RX = re.compile(r"^\*\*\*\s+(?:Add|Update|Delete|Move to)\s+File:\s*(.+?)\s*$", re.M)
+
+
+def _write_paths(inp: dict, payload: dict) -> list[str]:
+    """Every file a write-class tool call touches: single path fields, MultiEdit-style
+    `edits[]`, `files[]`, and apply_patch envelopes (`*** Update File: …`)."""
+    paths: list[str] = []
+    for k in ("file_path", "path", "filePath", "notebook_path", "target"):
+        v = inp.get(k) or payload.get(k)
+        if isinstance(v, str) and v:
+            paths.append(v)
+    for k in ("edits", "files", "changes"):
+        for item in inp.get(k) or []:
+            if isinstance(item, dict):
+                v = item.get("file_path") or item.get("path") or item.get("filePath")
+                if isinstance(v, str) and v:
+                    paths.append(v)
+            elif isinstance(item, str):
+                paths.append(item)
+    for k in ("patch", "diff", "input"):
+        v = inp.get(k)
+        if isinstance(v, str) and "*** " in v:
+            paths.extend(_PATCH_FILE_RX.findall(v))
+    out: list[str] = []
+    for p in paths:
+        if p not in out:
+            out.append(p)
+    return out
+
+
 def normalize_payload(payload: dict) -> dict:
     inp = payload.get("tool_input") or payload.get("input") or payload.get("args") or {}
     if not isinstance(inp, dict):
         inp = {}
+    paths = _write_paths(inp, payload)
     return {
         "tool": _norm_tool(payload.get("tool_name") or payload.get("tool") or payload.get("toolName") or ""),
         "raw_tool": payload.get("tool_name") or payload.get("tool") or payload.get("toolName") or "",
         "input": inp,
-        "path": inp.get("file_path") or inp.get("path") or inp.get("filePath") or payload.get("path") or "",
+        "paths": paths,
+        "path": paths[0] if paths else "",
         "command": inp.get("command") or inp.get("cmd") or payload.get("command") or "",
         "cwd": payload.get("cwd") or os.getcwd(),
         "session_id": payload.get("session_id") or "",
@@ -873,30 +972,40 @@ def hook_pre_tool(run: dict | None, spec: dict | None, p: dict, skill: str | Non
         log_event(run, "tool", tool=tool, cmd=p["command"][:200])
         save_run(run)
         return {"action": "allow"}
-    # ---- writes: stage write policy
-    if tool == "Write" and p["path"]:
-        path = str(Path(os.path.expanduser(p["path"])))
+    # ---- writes: stage write policy (every path the call touches; fail closed when unknown)
+    if tool == "Write":
         if not st:
             return {"action": "allow"}
         pol = st.get("write_policy") or {"mode": "open"}
         mode = pol.get("mode", "open")
         allow_globs = DEFAULT_PLAN_GLOBS + (pol.get("extra_allow") or []) + [str(artifacts_dir(run)) + "/*"]
-        if mode == "artifacts_only" and not _glob_any(path, allow_globs):
-            log_event(run, "deny", tool=tool, reason="write-before-stage", stage=st["id"], path=path)
+        if not p["paths"] and mode == "artifacts_only":
+            log_event(run, "deny", tool=tool, reason="write-unknown-target", stage=st["id"], raw_tool=p["raw_tool"])
             save_run(run)
             return {"action": "deny", "reason": (
-                f"[rig-loop {run['loop_id']}] WRITE BLOCKED at stage {st['id']} {st.get('name','')}: {path}. "
-                f"{pol.get('deny_message') or 'Only plan/spec artifacts may be written until this stage passes.'} "
-                f"Write the stage artifact ({_resolve_artifact(run, st, None)}) then run `rig-loop stage {st['id']} pass`.")}
-        if mode == "declared":
-            globs = _declared_globs(run, spec)
-            if globs and not _glob_any(path, globs + allow_globs):
-                if path not in run["drift"]:
-                    run["drift"].append(path)
-                    log_event(run, "drift", path=path, stage=st["id"])
-        if path not in run["files_written"]:
-            run["files_written"].append(path)
-        log_event(run, "tool", tool=tool, path=path, stage=st["id"])
+                f"[rig-loop {run['loop_id']}] WRITE BLOCKED at stage {st['id']} {st.get('name','')}: tool "
+                f"{p['raw_tool'] or 'write'} did not declare a target path, so it cannot be checked (fail-closed). "
+                f"Use a single-file write to the stage artifact ({_resolve_artifact(run, st, None)}).")}
+        for raw in p["paths"]:
+            path = str(Path(os.path.expanduser(raw)))
+            if not Path(path).is_absolute():
+                path = str(Path(p["cwd"]) / path)
+            if mode == "artifacts_only" and not _glob_any(path, allow_globs):
+                log_event(run, "deny", tool=tool, reason="write-before-stage", stage=st["id"], path=path)
+                save_run(run)
+                return {"action": "deny", "reason": (
+                    f"[rig-loop {run['loop_id']}] WRITE BLOCKED at stage {st['id']} {st.get('name','')}: {path}. "
+                    f"{pol.get('deny_message') or 'Only plan/spec artifacts may be written until this stage passes.'} "
+                    f"Write the stage artifact ({_resolve_artifact(run, st, None)}) then run `rig-loop stage {st['id']} pass`.")}
+            if mode == "declared":
+                globs = _declared_globs(run, spec)
+                if globs and not _glob_any(path, globs + allow_globs):
+                    if path not in run["drift"]:
+                        run["drift"].append(path)
+                        log_event(run, "drift", path=path, stage=st["id"])
+            if path not in run["files_written"]:
+                run["files_written"].append(path)
+            log_event(run, "tool", tool=tool, path=path, stage=st["id"])
         save_run(run)
     return {"action": "allow"}
 
@@ -1193,8 +1302,10 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
     ok = True
 
     def sub(s: str) -> str:
+        cur = load_run(run["run_id"]) if run else None
+        proof_path = ((cur or {}).get("proof") or {}).get("path", "") if cur else ""
         return (s.replace("<cwd>", str(cwd)).replace("<artifacts>", str(artifacts_dir(run)) if run else "")
-                 .replace("<run_id>", run["run_id"] if run else ""))
+                 .replace("<run_id>", run["run_id"] if run else "").replace("<proof>", proof_path))
 
     for i, step in enumerate(case.get("steps", [])):
         expect = step.get("expect") or {}
@@ -1264,6 +1375,9 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
                     got = {"ok": False, "refused": str(exc)[:200]}
             elif "park" in step:
                 run = park(load_run(run["run_id"]), step["park"])
+                got = {"ok": True, "run_status": run["status"]}
+            elif "resume" in step:
+                run = resume(run["run_id"])
                 got = {"ok": True, "run_status": run["status"]}
             elif "sh" in step:
                 r = _run_cmd(sub(step["sh"]), str(cwd), 60)
