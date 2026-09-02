@@ -1,0 +1,31 @@
+{
+  "contract": "rig.verifier.v1",
+  "verdict": "regression",
+  "evidence_refs": [
+    {"ref": "gate.log#L9", "bears_on": "Doer claim that the suite is green"}
+  ],
+  "findings": [
+    {
+      "target": "rig_capabilities/parser.py",
+      "action": "modify",
+      "patch_delta": "-1 line: guard dropped in parse()",
+      "diagnosed_reason": "test_empty_key_rejected was green at parent sha256:ab12",
+      "route": "doer"
+    }
+  ],
+  "independence": {
+    "validator_model_family": "claude",
+    "doer_model_family": "gpt",
+    "evidence_route": "gate-runner log + clean checkout, not the Doer self_report"
+  },
+  "validator_model_family": "claude",
+  "doer_model_family": "gpt",
+  "evidence_route": "gate-runner log + clean checkout, not the Doer self_report",
+  "attempts_declared": 3,
+  "attempts_executed": 4,
+  "environment": {"temperature": 0.2, "config_sha": "sha256:7f3a", "node": "rig-256gb-lan"},
+  "what_would_change_verdict": "green at the parent too means target-missed, not regression",
+  "confidence": 0.9,
+  "confidence_basis": "4 of 4 attempts reproduced the break; deterministic exit code",
+  "halt": false
+}
