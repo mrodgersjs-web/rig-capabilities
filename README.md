@@ -80,6 +80,33 @@ Wire into all harnesses: `./install.sh` (dry-run) then `./install.sh --apply`;
 check with `./install.sh --verify`. Managed blocks sit between
 `RIG CAPABILITIES MANAGED` markers — same discipline as jake-pai-mcp.
 
+## Loop-skills (v11) — doctrine as code-gated loops
+
+Every RIG doctrine ships as a **loop-skill**: `capabilities/skills/<id>/{SKILL.md, loop.yaml,
+tests/cases.json}`. The `rig-loop` engine (`bin/rig-loop`, stdlib) decides stage gates from
+files and exit codes, refuses out-of-order advance, runs the Builder→Verifier closing loop,
+enforces a kill switch, denies outward actions until a typed `APPROVE <run_id>`, and seals a
+ProofPacket. Hooks fire on every prompt / tool call / stop in Claude, Codex, OMP and Prime
+(`rig-loop wire --apply`); in Hermes the CLI gate is the mechanism. Contract:
+[docs/LOOP-SKILLS-V11.md](docs/LOOP-SKILLS-V11.md).
+
+| loop-skill | spine |
+|---|---|
+| `iqrsqpi-v11` (reference) | I1 Q1 R S Q2 P I2 |
+| `gate-d-loop` | C D R A X P |
+| `proof-loop` | C E N V P |
+| `adversarial-verification-loop` | G R N K P |
+| `north-star-lock-loop` | L D S C P |
+| `phase-discipline-loop` | O B V T C P |
+| `git-push-safety-loop` | V D L A X S P |
+
+```
+rig-loop activate iqrsqpi-v11 --intent "..."   # start; hooks now enforce stages
+rig-loop stage I1 pass                          # refused while the gate is red
+rig-loop test iqrsqpi-v11                       # planted-failure cases (non-vacuity)
+rig-loop doctor                                 # wiring + install state across 5 harnesses
+```
+
 ## Doctrine
 
 1. **Search before you build or install.** The corpus is huge; most ideas

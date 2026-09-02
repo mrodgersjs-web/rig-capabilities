@@ -1,0 +1,73 @@
+# Honest-completion + Proof-or-it-didn't-happen as one loop. Wraps a claim of "done":
+# claim -> command evidence (checks green NOW) -> planted failure (non-vacuity)
+# -> independent verify (different family) -> sealed ProofPacket.
+schema: rig.loop-skill.v11
+id: proof-loop
+name: Proof loop
+version: 11.0.0
+doctrine_source:
+  - ~/.claude/rules/honest-completion-doctrine.md
+  - ~/RIG-Doctrine-Repo/doctrines/PROOF-OR-IT-DIDNT-HAPPEN.md
+  - ~/RIG-Doctrine-Repo/doctrines/HONEST-COMPLETION-DOCTRINE.md
+coordinate: {level: 2, diamond: D1, bms_mode: A1, step: P}
+family: governance
+packet: ProofPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 3, max_wall_minutes: 180, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: C
+    name: Claim
+    artifact: claim.md
+    gate:
+      - type: file_contains
+        path: claim.md
+        patterns: ["^## Claim", "^## Done-test", "^## Artifacts"]
+      - type: regex
+        path: claim.md
+        pattern: '^\s*[-*]\s*(cmd|file|grep|mcp):\S'
+        hint: "## Done-test needs executable lines (`- cmd:…` `- file:…` `- grep:…`); a vacuous done-test is refused"
+      - type: regex_absent
+        path: claim.md
+        pattern: '- cmd:(echo|true)\s*$'
+  - id: E
+    name: Evidence
+    artifact: evidence.md
+    gate:
+      - type: checks_green
+        min: 1
+      - type: file_contains
+        path: evidence.md
+        patterns: ["^## Commands", "^## Output"]
+  - id: N
+    name: Non-vacuity
+    artifact: planted.md
+    gate:
+      - type: planted_failure
+        min: 1
+      - type: file_contains
+        path: planted.md
+        patterns: ["^## Planted-defect", "^## Red", "^## Green"]
+  - id: V
+    name: Verify
+    artifact: verify.md
+    gate:
+      - type: file_contains
+        path: verify.md
+        patterns: ["^## Verifier", "^## Verdict", "^## Gaps"]
+      - type: regex
+        path: verify.md
+        pattern: '^## Verdict[^\n]*\n[^\n]*\b(PERFECT|VERIFIED|PARTIAL)\b'
+        hint: "Verdict must be PERFECT / VERIFIED / PARTIAL (FEEDBACK or FAILED = stage fail, closing loop)"
+      - type: regex
+        path: verify.md
+        pattern: '^## Verifier[^\n]*\n(?:[^\n]*\n)*?[^\n]*\b(family|model|agent)\b'
+        hint: "name the independent verifier — never the builder's own family"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [E, N, V], to: C, max_iterations: 3, on_exhaust: escalate}

@@ -76,3 +76,35 @@ Open:
 2. V24: `mcp:capabilities_certify` inside done_when re-entered `quality_run` (400s hang). Mutating MCP skipped; reentrancy guard.
 3. V28: a zip that includes `.signing.key` fails PublicZipTests.
 4. V32: federation without a token now returns public hooks — the old empty-list test was lying about the public fallback.
+
+## V41 — Loop-Skill Contract v11 (2026-09-01) — see LOOP-SKILLS-V11.md
+
+Landed: `rig-loop` engine (`rig_capabilities/loops.py`, `bin/rig-loop`), 7 loop-skills
+(iqrsqpi-v11 reference + gate-d-loop, proof-loop, adversarial-verification-loop,
+north-star-lock-loop, phase-discipline-loop, git-push-safety-loop), hooks wired in
+claude/codex/omp/prime-agent (+ hermes telemetry hook), skills installed in all 5 harnesses.
+
+### Wave 2 backlog — remaining doctrines to convert (`rig-loop scaffold <id> --name … --source …`)
+
+| candidate loop-skill | source |
+|---|---|
+| deterministic-before-agentic-loop | RIG-Doctrine-Repo/doctrines/DETERMINISTIC-BEFORE-AGENTIC.md |
+| reproducibility-pinning-loop | RIG-Doctrine-Repo/doctrines/REPRODUCIBILITY-AND-PINNING.md |
+| intent-lock-loop (or fold into north-star-lock-loop L stage) | RIG-Doctrine-Repo/doctrines/INTENT.md |
+| grill-me-loop | ~/.claude/rules/grill-me.md, GRILL-ME-KNOWLEDGE-EXTRACTION.md |
+| execution-doctrine-loop (Ritual A/B, R1–R10) | ~/.claude/rules/execution-doctrine.md |
+| playwright-verify-loop | ~/.claude/rules/playwright-verify-doctrine.md |
+| design-teardown-loop | ~/.claude/rules/design-teardown-doctrine.md |
+| gtm-cold-send-safety-loop (8 checks, fail-closed) | ~/.claude/rules/gtm-cold-send-safety-doctrine.md |
+| conference-linkedin-loop (PREP≠FIRE, L7 idempotency) | ~/.claude/rules/conference-linkedin-doctrine.md |
+| strategy-teaser-loop (gold-gate + 4 mandatory checks) | ~/.claude/rules/rig-strategy-teaser-doctrine.md |
+| jake-enforcement-sop-loop (mission anchor / operator override) | ~/.rig/agent-doctrine/JAKE_ENFORCEMENT_SOP.md |
+| tac-closed-loop (Builder+Verifier confidence ladder) | ~/.claude/rules/tac-doctrine.md |
+| agent-teams-loop (recon → build → adversarial verify) | ~/.claude/rules/agent-teams-doctrine.md |
+| context-health-loop (60% ceiling, handoff) | ~/.claude/rules/context-health.md, structured-handoff.md |
+| session-protocol-loop | ~/.claude/rules/session-protocol.md, process-doctrine.md |
+| rig-13-gates-loop (app compiler gates 00–12) | ~/.rig/agent-doctrine/rig-agent-doctrine/RIG_APP_COMPILER_13_GATES.md |
+
+Engine follow-ups: MCP tools (`loop_status`, `loop_activate`) on the rig-capabilities server;
+`live.py` probe for rig-loop wiring; Codex hook-trust acceptance on next start; retire the
+mission runner `~/.rig/missions/4day-2026-08-26/bin/iqrsqpi_v11.py` in favour of `rig-loop`.

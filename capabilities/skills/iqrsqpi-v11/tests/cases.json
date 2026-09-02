@@ -1,0 +1,164 @@
+[
+  {
+    "name": "refuses code write before intent, allows plan artifacts",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/app.py"}}, "expect": {"action": "deny", "reason_contains": "WRITE BLOCKED at stage I1"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Edit", "tool_input": {"file_path": "<cwd>/README.md"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<artifacts>/intent.md"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/docs/plans/2026-09-01-x.md"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Read", "tool_input": {"file_path": "<cwd>/src/app.py"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "shell redirect write blocked before S, harmless shell allowed",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "cat > <cwd>/src/x.py <<EOF\nprint(1)\nEOF"}}, "expect": {"action": "deny", "reason_contains": "SHELL WRITE BLOCKED"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "sed -i '' 's/a/b/' <cwd>/src/x.py"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git log --oneline -5 > /tmp/log.txt 2>/dev/null"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "pytest -q tests/ 2>&1 | tail -5"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "refuses I1 pass without executable done-test",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\nship x\n## METRIC\nbuyer books\n## DONE-TEST\nit works\n## OUT-OF-SCOPE\ny\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": false, "reason_contains": "DONE-TEST needs at least one executable line"}},
+      {"write": {"path": "intent.md", "content": "## GOAL\nship x\n## METRIC\nbuyer books\n## DONE-TEST\n- cmd:python3 -m pytest -q\n## OUT-OF-SCOPE\ny\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true, "status": "pass"}}
+    ]
+  },
+  {
+    "name": "refuses out-of-order advance",
+    "steps": [
+      {"activate": {}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": false, "reason_contains": "prior stage I1"}}
+    ]
+  },
+  {
+    "name": "open BLOCKING question refuses Q1, answered question passes",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [BLOCKING] which database?\n- [ASSUMED] auth is out of scope (assumption: v1 is single-user)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": false, "reason_contains": "open BLOCKING"}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [BLOCKING] which database? -> ANSWER: sqlite (Mike, 2026-09-01)\n- [ASSUMED] auth is out of scope (assumption: v1 is single-user)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "research needs sources and two Q-R passes",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [ASSUMED] x (assumption: y)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "research.md", "content": "## Findings\n- sqlite is fine\n## Sources\n- https://sqlite.org/whentouse.html\n## Gaps\n- none\n"}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "qr_passes=0"}},
+      {"counter": {"name": "qr_passes", "value": 2}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "code writes allowed after S, drift outside spec Files recorded",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [ASSUMED] x (assumption: y)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- https://example.com\n## Gaps\n- none\n"}},
+      {"counter": {"name": "qr_passes", "value": 2}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "deny", "reason_contains": "stage S"}},
+      {"write": {"path": "spec.md", "content": "## Approach\nAUTO build a\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO parser\n## Test-plan\n- pytest\n## Rollback\n- git revert\n"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/other/b.py"}}, "expect": {"action": "allow"}},
+      {"assert": {"field": "drift"}, "expect": {"len": 1}},
+      {"assert": {"field": "files_written"}, "expect": {"len": 2}}
+    ]
+  },
+  {
+    "name": "outward action blocked until typed Gate-D approval",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git push origin main"}}, "expect": {"action": "deny", "reason_contains": "OUTWARD ACTION BLOCKED"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "curl -X POST https://api.instantly.ai/send"}}, "expect": {"action": "deny"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "curl -X POST http://localhost:8000/health"}}, "expect": {"action": "allow"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git status && git commit -m x"}}, "expect": {"action": "allow"}},
+      {"gate_d": {"approve": "APPROVE wrong"}, "expect": {"ok": false}},
+      {"gate_d": {"request": "push branch loop-skills-v11 to private origin"}},
+      {"gate_d": {"approve": "APPROVE nope"}, "expect": {"ok": false, "reason_contains": "phrase mismatch"}},
+      {"gate_d": {"approve": "APPROVE <run_id>"}, "expect": {"ok": true, "approved": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git push origin loop-skills-v11"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "closing loop returns to S on Q2 fail and escalates after max iterations",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [ASSUMED] x (assumption: y)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- https://example.com\n## Gaps\n- none\n"}},
+      {"counter": {"name": "qr_passes", "value": 2}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "Q2", "status": "fail", "note": "tests red"}, "expect": {"ok": true, "iteration": 2, "run_status": "active"}},
+      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "prior stage S"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "Q2", "status": "fail"}, "expect": {"ok": true, "iteration": 3}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "Q2", "status": "fail"}, "expect": {"ok": true, "run_status": "escalated"}}
+    ]
+  },
+  {
+    "name": "stop hook blocks NOT-DONE twice then yields honestly",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "stop"}, "expect": {"action": "block", "reason_contains": "NOT DONE"}},
+      {"hook": {"event": "stop"}, "expect": {"action": "block"}},
+      {"hook": {"event": "stop"}, "expect": {"action": "inject"}},
+      {"hook": {"event": "prompt"}, "expect": {"action": "inject"}}
+    ]
+  },
+  {
+    "name": "quality needs green checks + planted failure; seal only after Q2; I2 closes the run",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
+      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "questions.md", "content": "## Questions\n- [ASSUMED] x (assumption: y)\n"}},
+      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- https://example.com\n## Gaps\n- none\n"}},
+      {"counter": {"name": "qr_passes", "value": 2}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": false, "reason_contains": "stages not passed"}},
+      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "files written"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "allow"}},
+      {"check_add": "test -f <cwd>/src/a.py"},
+      {"write": {"path": "<cwd>/src/a.py", "content": "print(1)\n"}},
+      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "planted"}},
+      {"plant": {"name": "delete-a-py", "red": "test -f <cwd>/src/missing.py", "green": "test -f <cwd>/src/a.py"}, "expect": {"red_ok": true, "green_ok": true}},
+      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "quality.md"}},
+      {"write": {"path": "quality.md", "content": "## Checks\n- test -f src/a.py -> 0\n## Planted-failure\n- delete-a-py RED then GREEN\n## Verifier\n- family: codex (gpt) — independent of builder (claude)\n"}},
+      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": false, "reason_contains": "not sealed"}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true}},
+      {"hook": {"event": "stop"}, "expect": {"action": "block", "reason_contains": "stage I2"}},
+      {"write": {"path": "integrate.md", "content": "## Shipped\n- a.py\n## Not-shipped\n- none\n## Hand-offs\n- none\n## Next-slice\n- b\n"}},
+      {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}},
+      {"hook": {"event": "stop"}, "expect": {"action": "allow"}}
+    ]
+  }
+]

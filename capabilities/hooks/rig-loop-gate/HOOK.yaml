@@ -1,0 +1,11 @@
+# outcome: agent-engineering:
+# done_when: file:capabilities/hooks/rig-loop-gate/HOOK.yaml || handler.handle returns None without an active loop run
+# great_example: examples/great/agent-engineering/iqrsqpi-v11.md
+# quality_floor: 0.7
+name: rig-loop-gate
+description: "rig-loop (Loop-Skill Contract v11) bridge for Hermes gateway sessions. Records agent:start/agent:end against the active loop run and logs NOT-DONE when an agent ends mid-loop. Gateway hooks cannot block or inject; enforcement in Hermes is CLI-level (rig-loop stage ... pass is code-gated). RIG_LOOP_MANAGED"
+events:
+  - session:start
+  - agent:start
+  - agent:end
+priority: 90

@@ -1,0 +1,43 @@
+[
+  {
+    "name": "order gate needs reversibility tags and blocks code writes",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/x.py"}}, "expect": {"action": "deny", "reason_contains": "Order the phases"}},
+      {"write": {"path": "phases.md", "content": "## Phases\n1. schema\n2. api\n## Dependencies\napi->schema\n## Reversibility\nfine\n"}},
+      {"stage": {"id": "O", "status": "pass"}, "expect": {"ok": false, "reason_contains": "reversible"}},
+      {"write": {"path": "phases.md", "content": "## Phases\n1. schema\n2. api\n## Dependencies\napi->schema\n## Reversibility\n- schema: one-way (migration)\n- api: reversible\n"}},
+      {"stage": {"id": "O", "status": "pass"}, "expect": {"ok": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/x.py"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "verify red loops back to build; commit needs sha; seal",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "phases.md", "content": "## Phases\n1. a\n## Dependencies\nnone\n## Reversibility\n- a: reversible\n"}},
+      {"stage": {"id": "O", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": false, "reason_contains": "files written"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/x.py"}}, "expect": {"action": "allow"}},
+      {"write": {"path": "<cwd>/src/x.py", "content": "x=1\n"}},
+      {"write": {"path": "build.md", "content": "## Phase\na\n## Changed\n- src/x.py\n"}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
+      {"check_add": "test -f <cwd>/src/y.py"},
+      {"write": {"path": "verify.md", "content": "## Checks\n- t\n## Planted-failure\n- p\n"}},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": false, "reason_contains": "red"}},
+      {"stage": {"id": "V", "status": "fail"}, "expect": {"ok": true, "iteration": 2}},
+      {"write": {"path": "<cwd>/src/y.py", "content": "y=1\n"}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
+      {"plant": {"name": "rm-y", "red": "test -f <cwd>/src/z.py", "green": "test -f <cwd>/src/y.py"}},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "tree.md", "content": "## Tree-verified\n- git diff --stat: 2 files changed\n"}},
+      {"stage": {"id": "T", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "commit.md", "content": "## Commit\npending\n## Decision-log\n- x: reversible\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": false, "reason_contains": "commit sha"}},
+      {"write": {"path": "commit.md", "content": "## Commit\nabc1234 feat: a\n## Decision-log\n- x: reversible\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  }
+]

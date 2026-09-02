@@ -1,0 +1,36 @@
+[
+  {
+    "name": "code write denied before lock; banned metric refused; proper card unlocks",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/site/index.html"}}, "expect": {"action": "deny", "reason_contains": "Goal Card"}},
+      {"write": {"path": "goal-card.md", "content": "## GOAL\nwin customers\n## METRIC\nfidelity to falter.wild.plus 9/10\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\nx\n## ACTIVE-PROJECT\nsite\n## EFFORT-BUDGET\n4h\n"}},
+      {"stage": {"id": "L", "status": "pass"}, "expect": {"ok": false, "reason_contains": "banned working-metrics"}},
+      {"write": {"path": "goal-card.md", "content": "## GOAL\nwin IdeaWake more enterprise customers\n## METRIC\nwould this buyer book a call\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\nwebgl art\n## ACTIVE-PROJECT\nsite\n## EFFORT-BUDGET\n4h\n"}},
+      {"stage": {"id": "L", "status": "pass"}, "expect": {"ok": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/site/index.html"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "unreconciled MATCH:no blocks scope stage; close needs yes/no; seal",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "goal-card.md", "content": "## GOAL\ng\n## METRIC\nbuyer books\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## ACTIVE-PROJECT\np\n## EFFORT-BUDGET\n2h\n"}},
+      {"stage": {"id": "L", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "drift-log.md", "content": "## Checks\n- 10:00 NOW: shader polish | MATCH: no\n"}},
+      {"stage": {"id": "D", "status": "pass"}, "expect": {"ok": false, "reason_contains": "drift_checks=0"}},
+      {"counter": {"name": "drift_checks", "value": 1}},
+      {"stage": {"id": "D", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "scope.md", "content": "## Scope-changes\nnone\n"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": false, "reason_contains": "RECONCILED"}},
+      {"write": {"path": "drift-log.md", "content": "## Checks\n- 10:00 NOW: shader polish | MATCH: no RECONCILED: returned to landing copy\n"}},
+      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "close-card.md", "content": "## Goal-met\nmaybe\n## Parked\n-\n## Next-action\n-\n## Proliferation-delta\n0\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": false}},
+      {"write": {"path": "close-card.md", "content": "## Goal-met\nno — landing copy shipped, demo not\n## Parked\n- demo\n## Next-action\n- demo\n## Proliferation-delta\n0 new repos\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  }
+]

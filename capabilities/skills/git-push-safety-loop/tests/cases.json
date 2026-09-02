@@ -1,0 +1,260 @@
+[
+  {
+    "name": "git push denied before approval; STOP verdict refuses leak stage",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Bash",
+          "tool_input": {
+            "command": "git push --force origin main"
+          }
+        },
+        "expect": {
+          "action": "deny",
+          "reason_contains": "OUTWARD ACTION BLOCKED"
+        }
+      },
+      {
+        "write": {
+          "path": "visibility.md",
+          "content": "## Repo\nmrodgersjs-web/x\n## Visibility\nPUBLIC\n## Remote\norigin\n## Branch\nmain\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "divergence.md",
+          "content": "## Overwrite\n- abc123 teaser: full source private, access on purchase\n## Deliberate-teaser\nyes\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "D",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "leak.md",
+          "content": "## Private-source-to-public\nyes\n## Verdict\nSTOP\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "L",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "PROCEED"
+        }
+      },
+      {
+        "park": "GATE-P STOP: public teaser overwrite \u2014 fork to Mike",
+        "expect": {
+          "run_status": "parked"
+        }
+      }
+    ]
+  },
+  {
+    "name": "private clean push: remote==HEAD refused before push, proven by git after, sweep, seal",
+    "steps": [
+      {
+        "sh": "git -c core.hooksPath=/dev/null init -q -b main remote.git --bare && git -c core.hooksPath=/dev/null init -q -b main work && cd work && git config user.email t@t && git config user.name t && echo a > a.txt && git -c core.hooksPath=/dev/null add a.txt && git -c core.hooksPath=/dev/null commit -q -m init && git remote add origin ../remote.git && git -c core.hooksPath=/dev/null push -q -u origin main",
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "activate": {
+          "cwd": "<cwd>/work"
+        }
+      },
+      {
+        "write": {
+          "path": "visibility.md",
+          "content": "## Repo\nlocal/work\n## Visibility\nPRIVATE\n## Remote\norigin\n## Branch\nmain\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "divergence.md",
+          "content": "## Overwrite\nnone\n## Deliberate-teaser\nno\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "D",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "leak.md",
+          "content": "## Private-source-to-public\nno\n## Verdict\nPROCEED\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "L",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "A",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "Gate-D not approved"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Bash",
+          "tool_input": {
+            "command": "git push origin main"
+          }
+        },
+        "expect": {
+          "action": "deny"
+        }
+      },
+      {
+        "gate_d": {
+          "request": "push main to origin"
+        }
+      },
+      {
+        "gate_d": {
+          "approve": "APPROVE <run_id>"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "A",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "sh": "cd work && echo b > b.txt && git -c core.hooksPath=/dev/null add b.txt && git -c core.hooksPath=/dev/null commit -q -m b",
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "push.md",
+          "content": "## Command\ngit push origin main\n## Remote-equals-HEAD\nyes\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "X",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "git fetch"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Bash",
+          "tool_input": {
+            "command": "git push origin main"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "sh": "cd work && git -c core.hooksPath=/dev/null push -q origin main",
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "X",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "sweep.md",
+          "content": "## Secret-sweep\n- gh secret-scanning: none; history grep: none\n## Result\nclean\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "S",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "seal": {},
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "P",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true,
+          "run_status": "done"
+        }
+      }
+    ]
+  }
+]

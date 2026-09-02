@@ -1,0 +1,87 @@
+# Phase discipline as a loop: order phases by dependency -> build one coherent phase
+# -> adversarial-verify -> verify the real tree -> commit on green -> seal. Never advance on red.
+schema: rig.loop-skill.v11
+id: phase-discipline-loop
+name: Phase discipline loop
+version: 11.0.0
+doctrine_source:
+  - ~/RIG-Doctrine-Repo/doctrines/PHASE-DISCIPLINE.md
+  - ~/.claude/rules/rig-build-doctrine.md   # rule 7
+coordinate: {level: 3, diamond: D1, bms_mode: A1, step: S}
+family: governance
+packet: PlanPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 3, max_wall_minutes: 480, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: O
+    name: Order
+    artifact: phases.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Order the phases before building: phases.md with ## Phases (dependency order), ## Dependencies, ## Reversibility (reversible|one-way per phase)."
+    gate:
+      - type: file_contains
+        path: phases.md
+        patterns: ["^## Phases", "^## Dependencies", "^## Reversibility"]
+      - type: regex
+        path: phases.md
+        pattern: '\b(reversible|one-way)\b'
+        hint: "tag each phase reversible or one-way; bias to the reversible option on autonomous one-way doors"
+  - id: B
+    name: Build
+    artifact: build.md
+    write_policy: {mode: open}
+    gate:
+      - type: files_written_min
+        min: 1
+      - type: file_contains
+        path: build.md
+        patterns: ["^## Phase", "^## Changed"]
+  - id: V
+    name: Verify
+    artifact: verify.md
+    write_policy: {mode: open}
+    gate:
+      - type: checks_green
+        min: 1
+      - type: planted_failure
+        min: 1
+      - type: file_contains
+        path: verify.md
+        patterns: ["^## Checks", "^## Planted-failure"]
+  - id: T
+    name: Tree
+    artifact: tree.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: tree.md
+        patterns: ["^## Tree-verified"]
+      - type: regex
+        path: tree.md
+        pattern: '^## Tree-verified[^\n]*\n(?:[^\n]*\n)*?[^\n]*\b(git diff --stat|git status|ls -la|wc -l|sha256)\b'
+        hint: "paste the real-tree command (git diff --stat / git status / sha256) and its output — verify the artifact, not the report"
+  - id: C
+    name: Commit
+    artifact: commit.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: commit.md
+        patterns: ["^## Commit", "^## Decision-log"]
+      - type: regex
+        path: commit.md
+        pattern: '^## Commit[^\n]*\n[^\n]*\b[0-9a-f]{7,40}\b'
+        hint: "the commit sha on green"
+      - type: cmd
+        command: "git rev-parse --verify HEAD >/dev/null"
+        failure_tier: degrade
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [V, T], to: B, max_iterations: 3, on_exhaust: escalate}

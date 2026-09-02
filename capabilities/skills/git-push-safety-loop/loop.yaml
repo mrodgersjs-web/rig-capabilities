@@ -1,0 +1,84 @@
+# Gate-P (git push safety) as a loop: visibility -> divergence -> leak test -> typed
+# approval -> push with remote==HEAD proven by command -> secret sweep -> seal.
+# The pre-tool hook denies `git push` until approval is on the run.
+schema: rig.loop-skill.v11
+id: git-push-safety-loop
+name: Git push safety loop (Gate-P)
+version: 11.0.0
+doctrine_source:
+  - ~/.claude/rules/git-push-safety.md
+  - ~/RIG-Doctrine-Repo/doctrines/GIT-PUSH-SAFETY.md
+coordinate: {level: 2, diamond: D1, bms_mode: A1, step: I2}
+family: governance
+packet: PushPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 2, max_wall_minutes: 120, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: V
+    name: Visibility
+    artifact: visibility.md
+    gate:
+      - type: file_contains
+        path: visibility.md
+        patterns: ["^## Repo", "^## Visibility", "^## Remote", "^## Branch"]
+      - type: regex
+        path: visibility.md
+        pattern: '(?i)^## Visibility[^\n]*\n[^\n]*\b(public|private)\b'
+        hint: "gh repo view <owner>/<repo> --json visibility — say PUBLIC or PRIVATE"
+  - id: D
+    name: Divergence
+    artifact: divergence.md
+    gate:
+      - type: file_contains
+        path: divergence.md
+        patterns: ["^## Overwrite", "^## Deliberate-teaser"]
+      - type: regex
+        path: divergence.md
+        pattern: '(?i)^## Deliberate-teaser[^\n]*\n[^\n]*\b(yes|no)\b'
+        hint: "git log --oneline HEAD..<remote>/<branch>: is what you'd overwrite a deliberate teaser/paywall state? yes|no"
+  - id: L
+    name: Leak-test
+    artifact: leak.md
+    gate:
+      - type: file_contains
+        path: leak.md
+        patterns: ["^## Private-source-to-public", "^## Verdict"]
+      - type: regex
+        path: leak.md
+        pattern: '^## Verdict[^\n]*\n[^\n]*\bPROCEED\b'
+        hint: "Verdict PROCEED only when (public AND (teaser OR leak)) is false; otherwise STOP and park for Mike"
+  - id: A
+    name: Approve
+    artifact: approval.md
+    gate:
+      - type: gate_d_approved
+  - id: X
+    name: Push
+    artifact: push.md
+    gate:
+      - type: file_contains
+        path: push.md
+        patterns: ["^## Command", "^## Remote-equals-HEAD"]
+      - type: cmd
+        command: "git fetch -q && test \"$(git rev-parse HEAD)\" = \"$(git rev-parse @{u})\""
+        timeout: 60
+  - id: S
+    name: Sweep
+    artifact: sweep.md
+    gate:
+      - type: file_contains
+        path: sweep.md
+        patterns: ["^## Secret-sweep", "^## Result"]
+      - type: regex
+        path: sweep.md
+        pattern: '^## Result[^\n]*\n[^\n]*\b(clean|rotated)\b'
+        hint: "clean, or rotated:<which credential, masked>"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [X], to: V, max_iterations: 2, on_exhaust: escalate}

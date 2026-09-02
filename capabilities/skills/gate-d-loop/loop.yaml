@@ -1,0 +1,74 @@
+# Gate-D as a loop-skill. Wraps ONE outward or irreversible action (send, publish,
+# deploy, push, spend, credential change, destructive cleanup, private-data export).
+# The pre-tool hook denies the outward shell command until Mike's typed
+# `APPROVE <run_id>` is on the run; the stages force classify -> dormant -> request
+# -> approve -> execute -> proof.
+schema: rig.loop-skill.v11
+id: gate-d-loop
+name: Gate-D loop
+version: 11.0.0
+doctrine_source:
+  - ~/.claude/rules/rig-unified-doctrine.md   # §10 Gate-D approval
+  - ~/RIG-Doctrine-Repo/doctrines/GATE-D.md
+  - ~/.claude/CLAUDE.md                        # Gate-D boundaries
+coordinate: {level: 3, diamond: D1, bms_mode: A1, step: I2}
+family: governance
+packet: GateDPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 2, max_wall_minutes: 240, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: C
+    name: Classify
+    artifact: classify.md
+    gate:
+      - type: file_contains
+        path: classify.md
+        patterns: ["^## Action", "^## Class", "^## Blast-radius", "^## Rollback"]
+      - type: regex
+        path: classify.md
+        pattern: '^## Class[^\n]*\n[^\n]*\b(send|publish|deploy|push|merge|spend|credential|destructive|export|dns)\b'
+        hint: "## Class must name one of: send publish deploy push merge spend credential destructive export dns"
+  - id: D
+    name: Dormant
+    artifact: dormant.md
+    gate:
+      - type: file_contains
+        path: dormant.md
+        patterns: ["^## Staged", "^## Zero-outbound-proof"]
+      - type: regex
+        path: dormant.md
+        pattern: '^## Zero-outbound-proof[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+\S'
+        hint: "paste the command + output that proves nothing has gone out yet (sent=0, dry-run, staged only)"
+  - id: R
+    name: Request
+    artifact: request.md
+    gate:
+      - type: file_contains
+        path: request.md
+        patterns: ["^## Request", "^## Exact-target", "^## Reversible"]
+      - type: gate_d_requested
+  - id: A
+    name: Approve
+    artifact: approval.md
+    gate:
+      - type: gate_d_approved
+  - id: X
+    name: Execute
+    artifact: execute.md
+    gate:
+      - type: file_contains
+        path: execute.md
+        patterns: ["^## Command", "^## Output", "^## Verified-as-seen"]
+      - type: regex
+        path: execute.md
+        pattern: '^## Verified-as-seen[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+\S'
+        hint: "how the result was verified the way Mike would see it (browser screenshot, provider UI, remote == HEAD)"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [X, P], to: D, max_iterations: 2, on_exhaust: escalate}

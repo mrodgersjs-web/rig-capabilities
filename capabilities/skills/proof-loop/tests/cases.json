@@ -1,0 +1,52 @@
+[
+  {
+    "name": "vacuous done-test refused; executable one accepted",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "claim.md", "content": "## Claim\nx works\n## Done-test\n- cmd:true\n## Artifacts\n- a\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": false}},
+      {"write": {"path": "claim.md", "content": "## Claim\nx works\n## Done-test\n- cmd:test -f <cwd>/a.txt\n## Artifacts\n- a.txt\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "evidence needs green checks now; red check refuses; stop hook blocks",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "claim.md", "content": "## Claim\nx\n## Done-test\n- cmd:test -f <cwd>/a.txt\n## Artifacts\n- a.txt\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "evidence.md", "content": "## Commands\n- test -f a.txt\n## Output\n- exit 0\n"}},
+      {"check_add": "test -f <cwd>/a.txt"},
+      {"stage": {"id": "E", "status": "pass"}, "expect": {"ok": false, "reason_contains": "red"}},
+      {"hook": {"event": "stop"}, "expect": {"action": "block", "reason_contains": "NOT DONE"}},
+      {"write": {"path": "<cwd>/a.txt", "content": "ok\n"}},
+      {"stage": {"id": "E", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "full path with planted failure, independent verdict, seal; FAILED verdict loops back",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "<cwd>/a.txt", "content": "ok\n"}},
+      {"write": {"path": "claim.md", "content": "## Claim\nx\n## Done-test\n- cmd:test -f <cwd>/a.txt\n## Artifacts\n- a.txt\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "evidence.md", "content": "## Commands\n- test -f a.txt\n## Output\n- exit 0\n"}},
+      {"check_add": "test -f <cwd>/a.txt"},
+      {"stage": {"id": "E", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "planted.md", "content": "## Planted-defect\nremove a.txt\n## Red\nexit 1\n## Green\nexit 0\n"}},
+      {"stage": {"id": "N", "status": "pass"}, "expect": {"ok": false, "reason_contains": "planted"}},
+      {"plant": {"name": "no-a", "red": "test -f <cwd>/nope.txt", "green": "test -f <cwd>/a.txt"}, "expect": {"red_ok": true, "green_ok": true}},
+      {"stage": {"id": "N", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "verify.md", "content": "## Verifier\n- family: gemini\n## Verdict\nFAILED\n## Gaps\n- x\n"}},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": false, "reason_contains": "Verdict must be"}},
+      {"stage": {"id": "V", "status": "fail"}, "expect": {"ok": true, "iteration": 2}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "E", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "N", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "verify.md", "content": "## Verifier\n- family: gemini (independent of builder claude)\n## Verdict\nVERIFIED\n## Gaps\n- none\n"}},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  }
+]

@@ -558,6 +558,10 @@ def _quality_block(text: str) -> dict:
     lines = text.splitlines()
     if lines and lines[0].startswith("#!"):
         return _quality_from_comments(lines)
+    # comment-headed files without a shebang: YAML manifests (`# key: value`) and
+    # TypeScript/JS extensions (`// key: value`) — same contract, different comment leader
+    if lines and (lines[0].startswith("#") or lines[0].startswith("//")):
+        return _quality_from_comments(lines, start=0)
     if not lines or lines[0].strip() != "---":
         return {}
     end = None
@@ -592,21 +596,23 @@ def _quality_block(text: str) -> dict:
     return out
 
 
-def _quality_from_comments(lines: list) -> dict:
-    """Parse `# key: value` (+ `#   - item` block lists) from a script's head."""
+def _quality_from_comments(lines: list, start: int = 1) -> dict:
+    """Parse `# key: value` or `// key: value` (+ `#   - item` block lists) from a
+    script's head. `start=1` skips a shebang line."""
     out: dict = {}
-    i = 1  # skip shebang
+    i = start
     limit = min(len(lines), 40)
+    lead = r"(?:#|//)"
     while i < limit:
         raw = lines[i]
-        m = re.match(r"^#\s*([A-Za-z0-9_\-]+)\s*:\s*(.*)$", raw)
+        m = re.match(rf"^{lead}\s*([A-Za-z0-9_\-]+)\s*:\s*(.*)$", raw)
         if m:
             key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
             if key == "done_when":
                 items = [t.strip() for t in val.split("||") if t.strip()] if val else []
                 j = i + 1
-                while j < limit and re.match(r"^#\s*-\s+", lines[j]):
-                    items.append(re.sub(r"^#\s*-\s+", "", lines[j]).strip())
+                while j < limit and re.match(rf"^{lead}\s*-\s+", lines[j]):
+                    items.append(re.sub(rf"^{lead}\s*-\s+", "", lines[j]).strip())
                     j += 1
                 out["done_when"] = items
                 i = j
