@@ -1,0 +1,14 @@
+#!/bin/sh
+# rig-lease — exclusive worktree leases (anti-fabrication harness, Mechanism 1).
+#
+#   rig-lease acquire --task T --worktree PATH --branch B [--ttl-s N]
+#   rig-lease release --task T --token LT-...
+#   rig-lease list
+#   rig-lease expire [--now-offset-s N]
+#   rig-lease assert  --task T --toplevel PATH --branch B [--cwd DIR]
+#
+# State root: $RIG_LEASE_STATE_ROOT (default ~/.rig/leases).
+# Exit 0 on success, 2 on denial (no lease → no work; do not relocate).
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PYTHONPATH="$ROOT${PYTHONPATH:+:$PYTHONPATH}" \
+  exec python3 -m rig_capabilities.lease "$@"
