@@ -1,0 +1,90 @@
+{
+  "schema": "rig.iqrsqpi.run.v1",
+  "note": "Recorded IQRSQPI v10 pass used by the certify `stage_order` gate. Stages are in canonical order (Intent > Question > Research > Solution > Quality > Proof > Integrate) written in the two vocabularies the real harnesses actually use. Reordering any two entries MUST turn the gate RED. Artifacts/claims are structural facts about this repo, each with a source; no number here is unsourced.",
+  "walk_id": "fable-2031",
+  "artifact_dir": ".context/iqrsqpi/fable-2031",
+  "generator": "claude-fable-5-1",
+  "verifier": "gpt-56",
+  "verifier_family": "openai",
+  "generator_family": "anthropic",
+  "stages": [
+    {
+      "stage": "I",
+      "artifacts": ["00-intake"],
+      "claims": [
+        {
+          "claim": "seven canonical stages in the v10 order",
+          "value": 7,
+          "source": "rig_capabilities/iqrsqpi_v10.py:STAGES"
+        },
+        {
+          "claim": "the pass declares a declared budget and a named approver before any paid action",
+          "source": "docs/DONE-CONTRACT-2031.md (authored in phase P0 of the approved plan)"
+        }
+      ]
+    },
+    {
+      "stage": "question",
+      "artifacts": ["00-intake", "01-reality"],
+      "claims": [
+        {
+          "claim": "three source cards are truncated at source and their missing content is never synthesised",
+          "value": 3,
+          "source": "docs/TRUNCATED-SOURCES.md (authored in phase P1 of the approved plan)"
+        }
+      ]
+    },
+    {
+      "stage": "R",
+      "artifacts": ["01-reality"],
+      "claims": [
+        {
+          "claim": "harness YAMLs on disk whose coordinate_space declares iqrsqpi_steps, scanned deterministically",
+          "value": 64,
+          "source": "capabilities/harnesses"
+        }
+      ]
+    },
+    {
+      "stage": "synthesize",
+      "artifacts": ["02-decision"],
+      "claims": [
+        {
+          "claim": "the coordinate anchor keeps the RAW first step token, so the emitted anchor for the hB vocabulary ends in the word intake",
+          "source": "out/harness-goalspecs/hB-01-blog-post-session.json:goals[0].anchor"
+        }
+      ]
+    },
+    {
+      "stage": "Q2",
+      "artifacts": ["02-decision", "proof"],
+      "claims": [
+        {
+          "claim": "compiled goal specs on disk — fewer than the YAML count because the gap drafts carry no coordinate_space",
+          "value": 56,
+          "source": "out/harness-goalspecs"
+        }
+      ]
+    },
+    {
+      "stage": "produce",
+      "artifacts": ["proof"],
+      "claims": [
+        {
+          "claim": "the short-step vocabulary I, Q, R, S, Q2, P, I2 is what the hA harness family actually writes",
+          "source": "capabilities/harnesses/hA-01-code-review.yaml:coordinate_space.iqrsqpi_steps"
+        }
+      ]
+    },
+    {
+      "stage": "I2",
+      "artifacts": ["proof"],
+      "claims": [
+        {
+          "claim": "the word vocabulary intake..iterate is what the hB harness family actually writes",
+          "source": "capabilities/harnesses/hB-01-blog-post-session.yaml:coordinate_space.iqrsqpi_steps"
+        }
+      ]
+    }
+  ]
+}
