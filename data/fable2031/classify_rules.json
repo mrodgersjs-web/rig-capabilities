@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "note": "Ordered classification rules for the fable-2031 corpus. Data, not a model: first match wins, no match stays unclassified. Vocabularies are the register's (SUBSYSTEMS x STUDIOS x TYPES). Nine specific rules map the nine source cards by the phrase that makes them unique; the tag tail covers the wider Build Cards vocabulary. Nothing here guesses at a truncated region.",
+  "vocabularies": {
+    "subsystems": ["chassis", "powertrain", "transmission", "turbo", "tires", "seatbelts", "fuel", "spark", "navigation", "sound", "shocks", "steering", "aero", "scrutineering"],
+    "studios": ["Design", "App", "GTM", "LinkedIn", "Strategy", "CompanyOSFactory"],
+    "types": ["workflow", "harness", "doctrine", "tool", "repo", "dataset", "asset", "offer"]
+  },
+  "rules": [
+    {
+      "id": "prompt-pack-extraction-chain",
+      "match": {"field": "title", "contains": ["prompt pack"]},
+      "subsystem": "navigation",
+      "studio": "Strategy",
+      "type": "workflow",
+      "note": "Card 1: the sweep-then-extract-then-design chain is how RIG decides where a capability lives."
+    },
+    {
+      "id": "dispatcher-system-prompt",
+      "match": {"field": "title", "contains": ["dispatcher system prompt"]},
+      "subsystem": "seatbelts",
+      "studio": "App",
+      "type": "workflow",
+      "note": "Card 7: the frozen prompt is the restraint that keeps a dispatched task from grading its own work."
+    },
+    {
+      "id": "anti-fabrication-harness",
+      "match": {"field": "title", "contains": ["anti-fabrication"]},
+      "subsystem": "seatbelts",
+      "studio": "App",
+      "type": "harness",
+      "note": "Card 8: leases, canary, cross-family re-execution — the harness that catches a lie by re-running it."
+    },
+    {
+      "id": "fleet-model-routing",
+      "match": {"field": "title", "contains": ["fleet install", "routing policy", "model routing"]},
+      "subsystem": "powertrain",
+      "studio": "App",
+      "type": "doctrine",
+      "note": "Card 2: which model drives the fleet, under what dormancy and fallback law."
+    },
+    {
+      "id": "capability-criteria-register",
+      "match": {"field": "title", "contains": ["capability criteria", "register schema", "m0-m5"]},
+      "subsystem": "scrutineering",
+      "studio": "Strategy",
+      "type": "doctrine",
+      "note": "Card 4: the ladder, the row schema, and the law that no phase advances on a calendar."
+    },
+    {
+      "id": "gap-register",
+      "match": {"field": "title", "contains": ["gap register"]},
+      "subsystem": "shocks",
+      "studio": "GTM",
+      "type": "dataset",
+      "note": "Card 6: the honest inventory of what is missing, ranked by blast radius x revenue proximity."
+    },
+    {
+      "id": "realign-loop",
+      "match": {"field": "title", "contains": ["realign"]},
+      "subsystem": "transmission",
+      "studio": "Strategy",
+      "type": "harness",
+      "note": "Card 3: the weekly cadence that puts strategy into execution and brings learnings back."
+    },
+    {
+      "id": "car-chassis-outward",
+      "match": {"field": "title", "contains": ["1000x car", "chassis"]},
+      "subsystem": "chassis",
+      "studio": "CompanyOSFactory",
+      "type": "offer",
+      "note": "Card 5: every subsystem turned outward, scrutineering sold as the commercial object."
+    },
+    {
+      "id": "known-expert-os",
+      "match": {"field": "title", "contains": ["known expert os"]},
+      "subsystem": "steering",
+      "studio": "GTM",
+      "type": "harness",
+      "note": "Card 9: the phase system that turns validated expertise into intake and offer."
+    },
+    {
+      "id": "build-card",
+      "match": {"field": "title", "contains": ["build card"]},
+      "subsystem": "transmission",
+      "studio": "Strategy",
+      "type": "harness",
+      "note": "Any card whose title declares it is a build card is executable intent."
+    },
+    {
+      "id": "scrutineering-surface",
+      "match": {"field": "title", "contains": ["scrutin"]},
+      "subsystem": "scrutineering",
+      "studio": "Strategy",
+      "type": "workflow",
+      "note": "Certificate, verification, and independent-signature work."
+    },
+    {
+      "id": "convergence-scorecard",
+      "match": {"field": "title", "contains": ["convergence", "scorecard"]},
+      "subsystem": "navigation",
+      "studio": "Strategy",
+      "type": "tool",
+      "note": "Weekly measurement surface: where C_t and A_t actually get read."
+    },
+    {
+      "id": "fuel-budget",
+      "match": {"field": "title", "contains": ["fuel", "token spend", "budget card"]},
+      "subsystem": "fuel",
+      "studio": "App",
+      "type": "dataset",
+      "note": "Consumption and affordability of the model fleet."
+    },
+    {
+      "id": "tag-harness-design",
+      "match": {"field": "tags", "contains": ["harness design"]},
+      "subsystem": "transmission",
+      "studio": "App",
+      "type": "harness",
+      "note": "Tag tail: harness-design doctrine becomes the deterministic control layer."
+    },
+    {
+      "id": "tag-llm-infrastructure",
+      "match": {"field": "tags", "contains": ["llm infrastructure"]},
+      "subsystem": "powertrain",
+      "studio": "App",
+      "type": "tool",
+      "note": "Tag tail: the model fleet and its plumbing."
+    },
+    {
+      "id": "tag-ai-gtm",
+      "match": {"field": "tags", "contains": ["ai gtm"]},
+      "subsystem": "steering",
+      "studio": "GTM",
+      "type": "doctrine",
+      "note": "Tag tail: go-to-market motion that opens the intake column."
+    },
+    {
+      "id": "tag-rig-brand",
+      "match": {"field": "tags", "contains": ["rig/brand"]},
+      "subsystem": "aero",
+      "studio": "LinkedIn",
+      "type": "asset",
+      "note": "Tag tail: the public surface — what a stranger sees in three seconds."
+    },
+    {
+      "id": "tag-improve-jake",
+      "match": {"field": "tags", "contains": ["improve jake"]},
+      "subsystem": "spark",
+      "studio": "App",
+      "type": "workflow",
+      "note": "Tag tail: ignition and self-improvement telemetry on the agent itself."
+    },
+    {
+      "id": "tag-rig-operating-procedures",
+      "match": {"field": "tags", "contains": ["rig operating procedures"]},
+      "subsystem": "chassis",
+      "studio": "CompanyOSFactory",
+      "type": "doctrine",
+      "note": "Tag tail: the frame the factory runs on."
+    }
+  ]
+}
