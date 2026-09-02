@@ -92,6 +92,25 @@ class AfProofTests(unittest.TestCase):
         self.assertEqual(afproof.verify_seal({"payload": {}}),
                          (False, "seal_mismatch"))
 
+    def test_verify_seal_separates_wrong_type_from_tampering(self):
+        """A Path passed by mistake must not be reported as tampered evidence.
+
+        seal_mismatch on a non-dict accuses real evidence of being forged when the
+        caller simply handed over the wrong object; the two verdicts send the reader
+        to different repairs.
+        """
+        pkt = afproof.seal_packet("wrongtype", {"a": 1}, task_id="wt")
+        path = (afproof.packet_dir()
+                / f"wt__{pkt['proof_hash'][:16]}.json")
+        self.assertEqual(afproof.verify_seal(path), (False, "seal_unreadable"))
+        self.assertEqual(afproof.verify_seal(None), (False, "seal_unreadable"))
+        self.assertEqual(afproof.verify_seal("not a packet"),
+                         (False, "seal_unreadable"))
+        # the same file read as a dict still verifies, so nothing about the packet
+        # itself changed — only the caller's mistake is being named
+        self.assertEqual(afproof.verify_seal(json.loads(
+            path.read_text(encoding="utf-8"))), (True, "ok"))
+
     # ---- sentinel -------------------------------------------------------
 
     def test_write_sentinel_evidence_stamps_honesty(self):
@@ -175,10 +194,17 @@ class AfProofTests(unittest.TestCase):
                             for inv in ladder["invariants"]))
 
     def test_real_home_tree_untouched_by_writes(self):
+        home_rig = (Path.home() / ".rig").resolve()
+        real_ledger = home_rig / "leases" / afproof.LEDGER.name
+        # Snapshot first: the real ledger legitimately holds entries once the
+        # pipeline catches a fabricated citation, and doctrine says that append must
+        # never be dropped. Asserting the file does not exist would fail every run
+        # from the first honest log onward. The isolation property is that THIS test
+        # adds nothing to it.
+        before = real_ledger.stat().st_size if real_ledger.exists() else None
         pkt = afproof.seal_packet("probe", {"x": 1}, task_id="probe-task")
         afproof.log_fabrication("probe", "FABRICATED", "probe-task")
         afproof.write_sentinel_evidence("probe-task", pkt)
-        home_rig = (Path.home() / ".rig").resolve()
         packet_file = (afproof.packet_dir()
                        / f"probe-task__{pkt['proof_hash'][:16]}.json")
         self.assertTrue(packet_file.is_file())
@@ -187,7 +213,12 @@ class AfProofTests(unittest.TestCase):
             self.assertNotIn(home_rig, p.parents)
         self.assertFalse((Path(self._home_proof) / afproof.PACKET_SUBDIR
                           / packet_file.name).exists())
-        self.assertFalse((home_rig / "leases" / afproof.LEDGER.name).exists())
+        after = real_ledger.stat().st_size if real_ledger.exists() else None
+        self.assertEqual(before, after,
+                         "probe write leaked into the real ~/.rig fabrication ledger")
+        # and the probe landed where the override pointed, so the equality above is
+        # not vacuous through a silently shared path
+        self.assertIn("probe-task", afproof.ledger_path().read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

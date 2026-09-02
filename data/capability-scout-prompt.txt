@@ -1,0 +1,29 @@
+Capability scout, weekly. Work only in the rig-capabilities repo.
+
+1. Run: python3 scripts/weekly_capability_scout.py stage --since-days 9
+   If it exits non-zero, read .context/capability-scout/<week>/week.json and report the
+   rejections; do not retry the scrape more than twice.
+
+2. Read that week's brief.md and queue.json. For each queued video, read its transcript
+   and produce one row per agent capability: name; mechanism as inputs -> decision rule
+   -> output; the verbatim transcript quote; the paper id, which MUST appear in
+   week.json arxiv_verified; the open-source repo, which MUST appear in week.json
+   repos_verified, or the literal "none"; the RIG target, which MUST be a real path
+   under capabilities/ that you listed, or NEW.
+
+3. Deduplicate across videos: the same capability cited in two videos is one row with
+   both video ids.
+
+4. Propose the asset changes as DRAFT files under .context/capability-scout/<week>/drafts/.
+   Do not edit capabilities/, do not install anything, do not touch another harness's
+   config, do not publish, send, push, deploy, or merge. Do not attempt to reach
+   channel-membership-only videos.
+
+5. Write .context/capability-scout/<week>/REPORT.md: rows accepted; every quote that was
+   NOT a verbatim substring of its transcript, reported as a fabrication; every citation
+   you wanted to use that week.json had rejected; and the one-line status that this run
+   installed nothing.
+
+A capability that cannot be stated as a mechanism is a topic, not a capability: drop it.
+A quote you cannot paste from the transcript does not exist: report it, do not paraphrase
+it into existence.

@@ -102,6 +102,10 @@ def main() -> int:
     p.add_argument("--apply", action="store_true")
 
     p = sub.add_parser("proofchain")
+    p = sub.add_parser("goal-spec")
+    p.add_argument("--stem", default="", help="compiled goal stem, e.g. hA-01-code-review")
+    p.add_argument("--session-type", default="", help="resolve the goal for a session type")
+
 
     p = sub.add_parser("search")
     p.add_argument("query")
@@ -233,6 +237,12 @@ def main() -> int:
     p.add_argument("lane")
     p.add_argument("--n", type=int, default=5)
     p.add_argument("--dry", action="store_true")
+    p.add_argument("--budget", type=int, default=None,
+                   help="cap on done-test evaluations this round may spend")
+    p.add_argument("--strategy", choices=("informative", "weakest"),
+                   default="informative",
+                   help="informative = need x Bernoulli variance (default); "
+                        "weakest = the original score-ascending order")
 
     sub.add_parser("connectors")
     sub.add_parser("observe")
@@ -383,6 +393,10 @@ def main() -> int:
     elif args.cmd == "proofchain":
         from rig_capabilities.proofchain import verify_roadmap
         print(json.dumps(verify_roadmap(repo), indent=1))
+    elif args.cmd == "goal-spec":
+        from rig_capabilities.goal_spec import serve as _serve_goal
+        print(json.dumps(_serve_goal(repo, stem=args.stem,
+                                     session_type=args.session_type), indent=1))
     elif args.cmd == "agent-pack":
         from rig_capabilities.packs import boot_pack, match_agent, resolve_pack
         if args.intent:
@@ -622,7 +636,9 @@ def main() -> int:
         print(json.dumps(quality_run(repo, lane=args.lane), indent=1))
     elif args.cmd == "round":
         from rig_capabilities.rounds import run_round
-        print(json.dumps(run_round(repo, args.lane, n=args.n, dry=args.dry), indent=1))
+        print(json.dumps(run_round(repo, args.lane, n=args.n, dry=args.dry,
+                                   budget=args.budget,
+                                   strategy=args.strategy), indent=1))
     elif args.cmd == "db-sync":
         from rig_capabilities.sync import sync
         print(json.dumps(sync(repo, dsn=args.dsn), indent=1))

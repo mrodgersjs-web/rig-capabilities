@@ -409,21 +409,45 @@ def _failure_protocol(h: dict) -> dict:
     }
 
 
+def _coerce_gate(g):
+    """A gate written as a bare string is a defect, not a build-killer.
+
+    Such a gate has no id and no proof, so nothing can ever check it — but the
+    old code called `.get` on it and the resulting AttributeError took the whole
+    compile down with it, hiding every other harness. Normalise it to a
+    requirement-only gate and flag it so compile_harness can name the file.
+    """
+    if isinstance(g, dict):
+        return dict(g), False
+    return {"requirement": str(g)}, True
+
+
 def collect_source_gates(h: dict):
     """Yield (gate_dict, category, auto_id) for every gate in a harness."""
     idl = h.get("identity_lock") or {}
     for n, g in enumerate(idl.get("gates") or [], 1):
-        yield g, "Identity Lock", f"IG-{n:02d}"
+        gate, bare = _coerce_gate(g)
+        gate["_bare"] = bare
+        yield gate, "Identity Lock", f"IG-{n:02d}"
     for n, s in enumerate(idl.get("identity_gates") or [], 1):
+        # Documented shape B/C: identity_gates is a flat list of strings, so a
+        # plain string here is the expected form, not a defect.
         yield {"id": f"IG-{n:02d}", "requirement": str(s)}, "Identity Lock", f"IG-{n:02d}"
     cg = h.get("capability_gates") or []
-    if cg and all("gates" not in c for c in cg):  # shape C: flat gate list
+    # Shape detection must not be fooled by a bare string that happens to
+    # contain the word "gates": only dicts can hold a nested gate list.
+    grouped = bool(cg) and all(isinstance(c, dict) and "gates" in c for c in cg)
+    if not grouped:  # shape C: capability_gates is itself the flat gate list
         for g in cg:
-            yield g, str(g.get("category", "Capability")), None
+            gate, bare = _coerce_gate(g)
+            gate["_bare"] = bare
+            yield gate, str(gate.get("category", "Capability")), None
     else:
         for cat in cg:
             for g in cat.get("gates") or []:
-                yield g, str(cat.get("category", "")), None
+                gate, bare = _coerce_gate(g)
+                gate["_bare"] = bare
+                yield gate, str(cat.get("category", "")), None
 
 
 _NORM = None
@@ -463,7 +487,7 @@ def _norm_steps(steps: list) -> list:
 
 
 
-def compile_harness(stem: str, h: dict) -> dict:
+def compile_harness(stem: str, h: dict, source_sha: str = "") -> dict:
     """Map one parsed harness dict to an engine-loadable GoalSpec goal payload."""
     errors = []
     cs = h.get("coordinate_space") or {}
@@ -472,6 +496,13 @@ def compile_harness(stem: str, h: dict) -> dict:
     bms = _as_list(cs.get("bms_modes"))
     steps = _as_list(cs.get("iqrsqpi_steps"))
     if not (levels and diamonds and bms and steps):
+        if str(h.get("status", "")).strip().lower() == "draft":
+            # Gap drafts are drafted from requests.jsonl with no coordinates
+            # declared. Inventing L/D/BMS axes to satisfy the compiler would put a
+            # fabricated anchor into a loadable goal, so a draft is skipped with
+            # the reason named — not silently compiled, not counted as a failure.
+            return {"payload": None, "errors": [], "skip": "draft: no coordinate_space",
+                    "n_gates": 0, "n_blocking": 0, "n_weighted": 0, "n_no_proof": 0}
         errors.append("coordinate_space missing an axis")
         anchor = "L1-D1-A1-I"
     else:
@@ -493,7 +524,11 @@ def compile_harness(stem: str, h: dict) -> dict:
         tier_of[gid] = tier
 
     gates, no_proof = [], 0
-    for g, category, auto_id in collect_source_gates(h):
+    for n, (g, category, auto_id) in enumerate(collect_source_gates(h), 1):
+        if g.get("_bare"):
+            errors.append(f"{category} gate #{n} is a bare string: no id, no proof, "
+                          f"nothing to check ({str(g.get('requirement'))[:60]!r})")
+            continue
         gid = str(g.get("id") or auto_id or "")
         req = str(g.get("requirement", ""))
         if not gid or not req:
@@ -580,15 +615,48 @@ def compile_harness(stem: str, h: dict) -> dict:
         "steps": _norm_steps(steps),
         "_meta": {
             "source": f"capabilities/harnesses/{stem}.yaml",
+            # The pin that lets goal_spec.py answer "is this goal still current?"
+            # Without it a stale compiled spec is indistinguishable from a fresh
+            # one, and an agent would execute gates that no longer exist.
+            "source_sha256": source_sha,
             "final_rule": final_rule,
             "failure_protocol": fp,
             "gates_without_proof": [g["id"] for g in gates if g["command"] is None],
+            # phase_gates carry a verbatim gate but no machine proof, so they are
+            # advisory: promoted into gates[] they would be executed as if checkable
+            # and would inflate gates_without_proof. Emitted verbatim, flagged.
+            "phase_gates": [
+                {"phase": p.get("phase"), "title": str(p.get("title", "")),
+                 "status": str(p.get("status", "")),
+                 "gate": str(p.get("gate_verbatim") or p.get("gate") or ""),
+                 "executable": False}
+                for p in (_as_list((h.get("flow_map") or {}).get("phase_gates"))
+                          or _as_list(h.get("phase_gates"))) if isinstance(p, dict)],
+            # The anti-fabrication boundary, verbatim. A session that sees only the
+            # gated phases will author the missing ones; carrying these rows keeps
+            # "Phase 11 is objective-only, Phase 12 does not exist on the card"
+            # visible to whoever loads the goal.
+            "phases_beyond_source": [
+                {"phase": p.get("phase"), "title": str(p.get("title", "")),
+                 "status": str(p.get("status", "")),
+                 "objective_on_disk": str(p.get("objective_on_disk") or ""),
+                 "rule": str(p.get("rule") or "")}
+                for p in _as_list(h.get("phases_beyond_source")) if isinstance(p, dict)],
         },
     }
-    return {"payload": payload, "errors": errors, "n_gates": len(gates),
+    return {"payload": payload, "errors": errors, "skip": None, "n_gates": len(gates),
             "n_blocking": sum(1 for g in gates if g["required"]),
             "n_weighted": sum(1 for g in gates if not g["required"]),
             "n_no_proof": no_proof}
+
+
+def _sha_of(path: Path) -> str:
+    """sha256 of a harness source, pinned into the compiled spec it produced."""
+    import hashlib
+    try:
+        return hashlib.sha256(path.read_bytes()).hexdigest()
+    except OSError:
+        return ""
 
 
 # ── commands ─────────────────────────────────────────────────────────────
@@ -599,7 +667,7 @@ def cmd_compile(_: argparse.Namespace) -> int:
         print(f"FAIL: no harness files in {HARNESS_DIR}", file=sys.stderr)
         return 1
     OUT_DIR.mkdir(parents=True, exist_ok=True)
-    ok, failed = 0, []
+    ok, failed, skipped = 0, [], []
     total_gates = no_proof_total = 0
     for src in sources:
         try:
@@ -607,7 +675,10 @@ def cmd_compile(_: argparse.Namespace) -> int:
         except Exception as e:
             failed.append((src.name, f"parse error: {e}"))
             continue
-        res = compile_harness(src.stem, h)
+        res = compile_harness(src.stem, h, _sha_of(src))
+        if res.get("skip"):
+            skipped.append((src.name, res["skip"]))
+            continue
         if res["errors"]:
             failed.append((src.name, "; ".join(res["errors"])))
             continue
@@ -623,10 +694,13 @@ def cmd_compile(_: argparse.Namespace) -> int:
               f"blocking={res['n_blocking']:3d} weighted={res['n_weighted']:2d} "
               f"no_proof={res['n_no_proof']}")
     print(f"\ncompiled {ok}/{len(sources)} harness specs -> {OUT_DIR} "
-          f"(gates: {total_gates}, without-proof: {no_proof_total})")
+          f"(gates: {total_gates}, without-proof: {no_proof_total}, "
+          f"skipped: {len(skipped)})")
+    for name, why in skipped:
+        print(f"SKIP {name}: {why}")
     for name, why in failed:
         print(f"FAIL {name}: {why}")
-    return 0 if not failed and ok == len(sources) else 1
+    return 0 if not failed and ok + len(skipped) == len(sources) else 1
 
 
 def cmd_list(_: argparse.Namespace) -> int:

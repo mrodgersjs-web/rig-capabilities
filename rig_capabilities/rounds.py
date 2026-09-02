@@ -17,6 +17,7 @@ import time
 from pathlib import Path
 
 from .quality import FIELDS, check_asset, migrate_frontmatter
+from . import selection
 
 
 def pick_candidates(repo, lane: str, n: int = 5) -> list:
@@ -96,36 +97,73 @@ def _apply(repo, asset, plan: dict) -> bool:
     return changed
 
 
-def run_round(repo, lane: str, n: int = 5, dry: bool = False) -> dict:
-    cands = pick_candidates(repo, lane, n)
-    actions = []
-    for c in cands:
+def run_round(repo, lane: str, n: int = 5, dry: bool = False,
+              budget: int | None = None, strategy: str = "informative") -> dict:
+    """One round: select -> deterministic contract upgrade -> done-test gate.
+
+    `strategy="informative"` (default) ranks by need x Bernoulli variance so the
+    round spends its evaluations where a change can be observed; "weakest" keeps the
+    original score-ascending order so an old round stays reproducible. `budget` caps
+    done-test evaluations and is enforced, not advisory.
+
+    Graduation needs green done-tests AND no regressed held-out check. An upgrade
+    applied with the budget spent is `applied-unevaluated` — on disk, never run, and
+    not counted as graduated.
+    """
+    sel = selection.select(repo, lane, n, budget, strategy)
+    rows = sel["rows_by_id"]
+    limit = sel["eval_budget_effective"]
+    actions, spent = [], 0
+    for c in sel["selected"]:
+        entry = {"id": c["id"], "before": c["score"], "value": c["value"],
+                 "selection": c["reason"], "action": "no-op", "plan": None}
         asset = next(a for a in repo.load_index()["assets"]
                      if a["id"] == c["id"] and a["kind"] == c["kind"]
                      and a["source"] == c["source"])
         plan = _upgrade_plan(asset)
-        entry = {"id": c["id"], "before": c["score"], "plan": plan,
-                 "action": "no-op"}
-        if plan and not dry:
-            changed = _apply(repo, asset, plan)
-            entry["action"] = "applied" if changed else "write-failed"
-        elif plan and dry:
+        entry["plan"] = plan
+        if not plan:
+            actions.append(entry)
+            continue
+        if dry:
             entry["action"] = "would-apply"
-        if not dry and entry["action"] == "applied":
-            from .done_tests import run_asset
-            repo.build_index()  # index must see the new frontmatter
-            fresh = next(a for a in repo.load_index()["assets"]
-                         if a["id"] == c["id"] and a["kind"] == c["kind"]
-                         and a["source"] == c["source"])
-            r = run_asset(repo, c["id"], source="canonical")
-            after = check_asset(fresh)["score"]
-            entry.update({"after": after, "done_tests": r["pass"],
-                          "graduated": bool(r["pass"])})
-            if not r["pass"]:
-                entry["action"] = "applied-but-red"  # honest; not graduated
+            actions.append(entry)
+            continue
+        entry["action"] = "applied" if _apply(repo, asset, plan) else "write-failed"
+        if entry["action"] != "applied":
+            actions.append(entry)
+            continue
+        if spent >= limit:
+            entry["action"] = "applied-unevaluated"
+            actions.append(entry)
+            continue
+        from .done_tests import run_asset
+        repo.build_index()  # index must see the new frontmatter
+        fresh = next(a for a in repo.load_index()["assets"]
+                     if a["id"] == c["id"] and a["kind"] == c["kind"]
+                     and a["source"] == c["source"])
+        r = run_asset(repo, c["id"], source="canonical")
+        spent += 1
+        bad = selection.regressed_checks(rows[c["id"]], r.get("results"))
+        entry.update({"after": check_asset(fresh)["score"],
+                      "done_tests": r["pass"], "regressed_checks": bad,
+                      "graduated": bool(r["pass"]) and not bad})
+        if bad:
+            entry["action"] = "applied-regressed"
+        elif not r["pass"]:
+            entry["action"] = "applied-but-red"  # honest; not graduated
         actions.append(entry)
     rep = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "lane": lane,
-           "dry": dry, "candidates": len(cands), "actions": actions,
+           "dry": dry, "strategy": sel["strategy"],
+           "selection_fallback": sel.get("fallback", ""),
+           "uncertain_candidates": sel.get("uncertain_candidates", 0),
+           "eval_budget": sel["eval_budget"],
+           "eval_budget_effective": limit, "eval_spent": spent,
+           "candidates": len(sel["selected"]), "deferred": sel["deferred"],
+           "actions": actions,
+           "unevaluated": sum(1 for a in actions
+                              if a["action"] == "applied-unevaluated"),
+           "regressed": sum(1 for a in actions if a.get("regressed_checks")),
            "graduated": sum(1 for a in actions if a.get("graduated"))}
     out = Path(repo.root) / ".context" / "rounds"
     out.mkdir(parents=True, exist_ok=True)

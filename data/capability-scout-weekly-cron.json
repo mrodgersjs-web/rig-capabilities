@@ -1,0 +1,32 @@
+{
+  "schema": "capability-scout-cron-v1",
+  "id": "capability-scout-weekly",
+  "state": "DORMANT",
+  "enabled": false,
+  "created": "2026-09-02",
+  "gate_d_required": true,
+  "gate_d_run_id": "f2031-scout-weekly-1",
+  "gate_d_note": "Nothing here has been executed against the scheduler. Creating the automation is an outward action: it installs a recurring job on this machine. It is created only after Mike types APPROVE f2031-scout-weekly-1 and ~/.rig/proof/gate-d-f2031-scout-weekly-1.json exists with status APPROVED. The create command carries --disabled so even creation leaves the job off; enabling it is a second, separate approval.",
+  "dry_by_default": true,
+  "cadence": "0 17 * * 1",
+  "cadence_note": "Mondays 17:00 America/Denver. Weekly satisfies 'at least once a week'; the scrape window is 9 days, so a missed run cannot leave a gap.",
+  "timezone": "America/Denver",
+  "since_days": 9,
+  "mechanism": {
+    "stage_1_deterministic": "python3 scripts/weekly_capability_scout.py stage --since-days 9   # scrape + citation verification; writes only .context/capability-scout/<week>/",
+    "stage_2_agent": "An Orca automation/terminal session reads that week's brief.md + queue.json and emits DRAFTS only, per data/capability-scout-prompt.txt.",
+    "stage_3_human": "Mike reviews the drafts; rig-capabilities test must pass on each; installing and committing are separate actions."
+  },
+  "orca_command": "orca automations create --name \"Capability scout (weekly)\" --trigger \"0 17 * * 1\" --timezone America/Denver --disabled --repo path:/Users/rig128gb/Developer/rig-capabilities --precheck \"test -f data/capability-scout-sources.json\" --provider claude --prompt \"$(cat data/capability-scout-prompt.txt)\"",
+  "orca_command_note": "Staged, never executed. The precheck fails the run if the channel registry is missing or has no enabled source, so a broken registry cannot silently produce an empty week. --prompt takes the text of data/capability-scout-prompt.txt; there is no --prompt-file flag.",
+  "never": [
+    "install a skill, agent, hook, harness, loop or command into any harness root",
+    "publish, post, send, email, or DM anything",
+    "git push, deploy, merge, or tag",
+    "attempt to access channel-membership-only videos by any means",
+    "cite a paper or repository that is not in week.json's verified sets",
+    "enable an automation without a separate approval"
+  ],
+  "termination": "A run ends when stage has written week.json + queue.json + brief.md and the agent pass has written drafts plus a REPORT naming every rejected citation. There is no autonomous promotion path: the loop closes on a human reviewing drafts.",
+  "proof_of_running": ".context/capability-scout/<ISO week>/week.json with schema capability-scout-week-v1"
+}

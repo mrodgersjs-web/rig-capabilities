@@ -174,12 +174,18 @@ def verify_seal(packet: dict) -> tuple[bool, str]:
     """Recompute the payload digest and compare.
 
     Mismatch (or a missing proof_hash / payload) -> (False, 'seal_mismatch').
-    A failed seal is inert: no PASS may EVER derive from a packet that fails
-    this check — a ROADMAP prefix or a Sentinel card resting on a red seal is
-    treated as unsealed evidence, not weak evidence.
+    Input that was never a packet — a path, a string, None -> (False,
+    'seal_unreadable'). The two reasons are deliberately distinct: passing a
+    Path is a caller bug, and reporting it as 'seal_mismatch' makes an
+    untouched packet look tampered with, which is the one false accusation this
+    function must never make about evidence.
+
+    A failed seal is inert either way: no PASS may EVER derive from a packet
+    that fails this check — a ROADMAP prefix or a Sentinel card resting on a
+    red seal is treated as unsealed evidence, not weak evidence.
     """
     if not isinstance(packet, dict):
-        return False, "seal_mismatch"
+        return False, "seal_unreadable"
     h = packet.get("proof_hash")
     if not isinstance(h, str) or not h:
         return False, "seal_mismatch"

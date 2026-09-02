@@ -282,11 +282,15 @@ TOOLS = [
     },
     {
         "name": "capabilities_round",
-        "description": "Run a 1000x improvement round in a lane: weakest canonicals get deterministic contract upgrades, applied only with green done-tests. --dry reports without writing.",
+        "description": "Run a 1000x improvement round in a lane: canonical assets get deterministic contract upgrades, applied only with green done-tests. Default strategy is informative-first (need x Bernoulli variance), so evaluations go where a change can be observed; strategy='weakest' restores the old score-ascending order. budget caps done-test evaluations and is enforced; skipped candidates come back in 'deferred'. dry=true reports without writing.",
         "inputSchema": {"type": "object",
                         "properties": {"lane": {"type": "string"},
                                        "n": {"type": "integer"},
-                                       "dry": {"type": "boolean"}}},
+                                       "dry": {"type": "boolean"},
+                                       "budget": {"type": "integer"},
+                                       "strategy": {"type": "string",
+                                                    "enum": ["informative",
+                                                             "weakest"]}}},
     },
     {
         "name": "capabilities_issue_token",
@@ -329,6 +333,19 @@ TOOLS = [
         "name": "capabilities_proofchain",
         "description": "Verify ROADMAP packet prefixes against ~/.rig/proof hashes.",
         "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_goal_spec",
+        "description": (
+            "Pull the compiled goal spec — the engine-loadable form of a harness. "
+            "No args: every goal with gate counts and staleness. stem: one goal. "
+            "session_type: resolve by what the session is ('code-review'). "
+            "verdict STALE means the harness changed since it was compiled: "
+            "recompile before executing the gates it names."
+        ),
+        "inputSchema": {"type": "object",
+                        "properties": {"stem": {"type": "string"},
+                                       "session_type": {"type": "string"}}},
     },
     {
         "name": "capabilities_release",
@@ -570,7 +587,10 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def round_lane(args: dict):
         from .rounds import run_round
         return run_round(repo, str(args.get("lane", "misc")),
-                         n=int(args.get("n") or 5), dry=bool(args.get("dry")))
+                         n=int(args.get("n") or 5), dry=bool(args.get("dry")),
+                         budget=(int(args["budget"]) if args.get("budget")
+                                 is not None else None),
+                         strategy=str(args.get("strategy") or "informative"))
 
 
 
@@ -794,6 +814,19 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return out
 
 
+    def goal_spec_tool(args: dict):
+        """Serve compiled goals. Read-only, repo-rooted, staleness-aware.
+
+        Exposing a goal without a staleness verdict would let an agent run gates
+        that the harness no longer declares, so the source hash pinned at compile
+        time is checked against the live file on every read.
+        """
+        from . import goal_spec
+        return goal_spec.serve(Path(repo.root),
+                               stem=str(args.get("stem") or ""),
+                               session_type=str(args.get("session_type") or ""))
+
+
     handlers = {
         "capabilities_search": search,
         "capabilities_get": get,
@@ -829,5 +862,6 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_evidence": evidence_state,
         "capabilities_converge": converge_state,
         "capabilities_dispatch_verify": dispatch_verify,
+        "capabilities_goal_spec": goal_spec_tool,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)
