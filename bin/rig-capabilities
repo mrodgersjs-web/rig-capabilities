@@ -44,6 +44,7 @@ Commands:
   dispatch-verify PACKET [--verify]       admission: 0 PASS, 2 FABRICATED, 3 prefilter-clears (never verified)
   estage score|compare|verdict            E_stage loss, golden-set compare, promotion verdict
   model-route [plan|verify|audit-*]       Fable 5.1 route: plan by default, --apply needs Gate-D
+  wire-mcp [plan|verify] [--apply]        harness MCP wiring: plan default, --apply needs Gate-D
   fabrication [--since-days N]            fabrication ledger rates + the verdict ladder
   certify [--only GATE]                   run every gate against this repo, write a report
   self-test [--only GATE]                 green -> plant -> RED -> restore, one gate at a time
@@ -76,6 +77,29 @@ def _scan_failure(exc: BaseException) -> int:
                       "hint": "bound the scan: --root tests/fixtures/fable2031/corpus"},
                      indent=1))
     return 1
+
+
+def _join_gate_d_tokens(argv: list[str]) -> list[str]:
+    """Make the literal `--gate-d APPROVE <run_id>` spelling parse.
+
+    The hints print that exact phrase, but it arrives as three argv tokens and
+    the bare run id would land on the subcommand positional, turning an
+    instructed command into an argparse usage error. Join the phrase into the
+    flag's single value. Only touches spellings that currently die in argparse,
+    so no working invocation changes behaviour.
+    """
+    out: list[str] = []
+    i = 0
+    while i < len(argv):
+        if (argv[i] in ("--gate-d", "--gate-d-run-id")
+                and argv[i + 1:i + 2] == ["APPROVE"]
+                and argv[i + 2:i + 3] and not argv[i + 2].startswith("-")):
+            out.append(argv[i] + "=APPROVE " + argv[i + 2])
+            i += 3
+            continue
+        out.append(argv[i])
+        i += 1
+    return out
 
 
 def main() -> int:
@@ -332,6 +356,16 @@ def main() -> int:
     p.add_argument("--root", action="append", dest="roots",
                    help="audit target: litellm root/dir for audit-fallbacks, harness roots otherwise")
 
+    p = sub.add_parser("wire-mcp")
+    p.add_argument("wire_cmd", nargs="?", default="plan",
+                   choices=["plan", "verify"])
+    p.add_argument("--apply", action="store_true",
+                   help="write the four harness MCP configs; needs --gate-d")
+    p.add_argument("--gate-d", dest="gate_d",
+                   help="APPROVE <run_id> token naming an approved Gate-D run")
+    p.add_argument("--target", action="append", dest="targets",
+                   help="restrict the write to this target (repeatable)")
+
     p = sub.add_parser("fabrication")
     p.add_argument("--since-days", dest="since_days", type=int, default=30)
 
@@ -346,7 +380,7 @@ def main() -> int:
     # way: `--json` is an accepted no-op, not a second format waiting to drift.
     for _name in ("corpus", "register", "converge", "realign", "expert-os", "evidence",
                   "canary", "dispatch-verify", "estage", "model-route", "fabrication",
-                  "certify", "self-test"):
+                  "certify", "self-test", "wire-mcp"):
         sub.choices[_name].add_argument(
             "--json", action="store_true",
             help="output is already JSON; accepted for scripts")
@@ -366,8 +400,10 @@ def main() -> int:
         "--studio", help="studio the verdict is for (verdict only; a mismatch is a reason)")
     sub.choices["model-route"].add_argument("--gate-d-run-id", dest="gate_d_run_id",
                                            help="alias of --gate-d")
+    sub.choices["wire-mcp"].add_argument("--gate-d-run-id", dest="gate_d_run_id",
+                                         help="alias of --gate-d")
 
-    args = ap.parse_args()
+    args = ap.parse_args(_join_gate_d_tokens(sys.argv[1:]))
 
     if args.cmd == "wire":
         cmd = [sys.executable, str(REPO_ROOT / "wire" / "wire.py")]
@@ -972,6 +1008,31 @@ def main() -> int:
         else:
             out = model_route.audit_forced_tool_choice(
                 args.roots or [str(REPO_ROOT / "capabilities")])
+        print(json.dumps(out, indent=1))
+        return 0 if out.get("ok", True) else 1
+    elif args.cmd == "wire-mcp":
+        token = (args.gate_d or args.gate_d_run_id or "").strip()
+        if token.startswith("APPROVE "):
+            # Accept the literal approval phrase as well as the bare run_id.
+            token = token[len("APPROVE "):].strip()
+        if args.apply and not token:
+            # Dormant-by-default is the load-bearing safety property, so this refusal
+            # returns before the wire module is even imported: zero writes.
+            print(json.dumps({"ok": False, "writes": 0, "action": "mcp-wire",
+                              "reason": "gate_d_required",
+                              "hint": "re-run with --gate-d <run_id> once ~/.rig/proof/gate-d-<run_id>.json is APPROVED and names these targets"},
+                             indent=1))
+            return 2
+        from rig_capabilities import mcp_wire
+        if args.apply:
+            try:
+                out = mcp_wire.apply(token, targets_only=args.targets or None)
+            except mcp_wire.WireGateError as exc:
+                print(json.dumps({"ok": False, "writes": 0, "reason": str(exc)}, indent=1))
+                return 2
+            print(json.dumps(out, indent=1))
+            return 0 if out.get("all_wired") else 1
+        out = mcp_wire.verify() if args.wire_cmd == "verify" else mcp_wire.plan()
         print(json.dumps(out, indent=1))
         return 0 if out.get("ok", True) else 1
     elif args.cmd == "fabrication":

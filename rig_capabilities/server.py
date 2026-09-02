@@ -453,6 +453,33 @@ TOOLS = [
                                                  "(default claude)"}},
         },
     },
+    {
+        "name": "capabilities_wire_mcp",
+        "description": (
+            "Wire the rig-capabilities MCP server into the four harnesses that "
+            "lack it (cursor, gemini, opencode, goose): one entry, in each "
+            "config dialect, from one spec. action='plan' (default) returns "
+            "per-target states and unified diffs and writes nothing; "
+            "action='verify' is the idempotency proof. action='apply' writes "
+            "only what the plan changed AND only under a Gate-D approval that "
+            "names this action and every target written: without a non-empty "
+            "gate_d_run_id it returns gate_d_required and writes nothing; a "
+            "gate refusal (missing file, wrong action, target not approved) "
+            "comes back as {ok: false, reason}. Already-wired targets are "
+            "skipped, so the call is idempotent by construction."
+        ),
+        "inputSchema": {"type": "object", "properties": {
+            "action": {"type": "string", "enum": ["plan", "verify", "apply"],
+                       "description": "default plan; apply is dormant without "
+                                      "gate_d_run_id"},
+            "gate_d_run_id": {"type": "string",
+                              "description": "approved Gate-D run naming "
+                                             "action mcp-wire (apply only)"},
+            "targets": {"type": "array", "items": {"type": "string"},
+                        "description": "restrict the write to these targets "
+                                       "(cursor, gemini, opencode, goose)"}},
+        },
+    },
 ]
 
 
@@ -826,6 +853,34 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
                                stem=str(args.get("stem") or ""),
                                session_type=str(args.get("session_type") or ""))
 
+    def wire_mcp(args: dict):
+        """Project the server entry into four harness configs.
+
+        Dormant-by-default: apply needs a Gate-D run id naming this action,
+        and the refusal mirrors the CLI shape so neither surface can drift
+        into silently writing a config.
+        """
+        from . import mcp_wire
+        action = str(args.get("action") or "plan")
+        run_id = str(args.get("gate_d_run_id") or "").strip()
+        if run_id.startswith("APPROVE "):
+            # Accept the literal approval phrase as well as the bare run_id.
+            run_id = run_id[len("APPROVE "):].strip()
+        if action == "apply":
+            if not run_id:
+                return {"ok": False, "writes": 0, "action": "mcp-wire",
+                        "reason": "gate_d_required",
+                        "hint": "re-run with gate_d_run_id naming an approved "
+                                "Gate-D run that lists the targets to write"}
+            targets = [str(t) for t in (args.get("targets") or [])] or None
+            try:
+                return mcp_wire.apply(run_id, targets_only=targets)
+            except mcp_wire.WireGateError as exc:
+                return {"ok": False, "writes": 0, "reason": str(exc)}
+        if action == "verify":
+            return mcp_wire.verify()
+        return mcp_wire.plan()
+
 
     handlers = {
         "capabilities_search": search,
@@ -863,5 +918,6 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_converge": converge_state,
         "capabilities_dispatch_verify": dispatch_verify,
         "capabilities_goal_spec": goal_spec_tool,
+        "capabilities_wire_mcp": wire_mcp,
     }
     return McpStdioServer(NAME, VERSION, TOOLS, handlers)
