@@ -216,13 +216,21 @@ class Repo:
 
     def _asset_from_canonical(self, kind: str, entry: Path) -> dict | None:
         if entry.is_dir():
-            if entry.name.startswith("."):
+            if entry.name.startswith(".") or entry.name == "__pycache__":
                 return None
             main = entry / "SKILL.md"
             if not main.exists():
-                cands = [f for f in sorted(entry.rglob("*")) if f.is_file()]
-                main = cands[0] if cands else None
-            text = _pick_main_text(main) if main else ""
+                # A directory is an asset only when it is a packaged skill.
+                # Otherwise every support folder under a kind becomes a phantom
+                # asset whose "main text" is whatever `rglob` found first:
+                # `capabilities/hooks/fixtures` indexed as a hook, and
+                # `capabilities/loops/__pycache__` indexed as a LOOP — a .pyc
+                # read with errors="replace" easily clears the 10-character
+                # text floor, so compiled bytecode was being served as a
+                # capability. Anything that wants to be an asset states it has
+                # a SKILL.md; support directories do not.
+                return None
+            text = _pick_main_text(main)
             sha = self._sha_dir(entry)
             path_disp = str(entry.relative_to(self.root))
         elif entry.is_file():

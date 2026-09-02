@@ -75,11 +75,15 @@ python3 -c "from rig_capabilities.catalog import Repo; from rig_capabilities.cer
 Open:
 
 - LLM overlay 62/300 — doctor reports complete=false; resume `concepts-build --llm --n 300`.
-- Public ACL catalog **17** canonical (10 commands + 6 hooks + rig-office-docs); 18 on this
-  workstation, the extra one being `iqrsqpi.md` from an external harness root. 12 of 13 canonical
+- Public ACL catalog **20** canonical (10 commands + 9 hooks + rig-office-docs); 21 on this
+  workstation, the extra one being `iqrsqpi.md` from an external harness root. 13 of 14 canonical
   skills stay private — `rig-office-docs` is the one skill that has always been public. Counts are
   `surface.public_assets(Repo('.'))` filtered to `source == "canonical"`; the canonical figure is
-  reproducible from the tree, the workstation figure is not, so the sentence names both.
+  reproducible from the tree, the workstation figure is not, so the sentence names both. The three
+  hooks added by the Discover AI increment (working-memory-commit-gate, rail-registry-four-way-gate,
+  skill-preload-precondition-gate) are what moved 6 to 9, and `tests/fable2031_claims.py` failed
+  loudly until this sentence was corrected — that is the gate doing its job, not the sentence
+  drifting again.
 - Unrelated Gate-D (TestFlight, Blackwell reboot, cancel-13-subs, Vercel prod) stays unarmed without `APPROVE <run_id>`.
 - harness-install not `--apply`'d to live `~/.hermes/skills/goal-loop/yaml-specs` this wave (dry default).
 
