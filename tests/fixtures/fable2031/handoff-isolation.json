@@ -1,141 +1,129 @@
 {
-  "schema": "rig.dispatch.handoff.v1",
-  "task_id": "f31-dispatch-isolation",
-  "lease_token": "lease-isolation-0001",
-  "worktree_path": "rig_capabilities",
   "branch": "fable-2031",
-  "commit_sha": "d2bbec27476b9bd7552f0354b7177bbd3b6afb45",
-  "working_tree_clean": false,
-  "files_changed": [
-    {
-      "path": "rig_capabilities/dispatcher.py",
-      "sha256": "613b0d89fc4d4625a584c30a92a6af8e614b7df4fb211dac55663232c64ac3bd",
-      "bytes": 31430
-    },
-    {
-      "path": "tests/fable2031_dispatch.py",
-      "sha256": "f799c011760040af9b48cd32def3ecc28ba1263d87466a3c900a345a6f2447ee",
-      "bytes": 25416
-    }
-  ],
-  "commands": [
-    {
-      "cmd": "python3 -c \"import ast; ast.parse(open('rig_capabilities/dispatcher.py').read())\"",
-      "exit_code": 0,
-      "stdout_sha256": "613b0d89fc4d4625a584c30a92a6af8e614b7df4fb211dac55663232c64ac3bd",
-      "log_path": "rig_capabilities/dispatcher.py",
-      "attempt": 1,
-      "wall_clock_ms": 38,
-      "cwd": "."
-    },
-    {
-      "cmd": "python3 -m unittest tests.fable2031_dispatch",
-      "exit_code": 0,
-      "stdout_sha256": "f799c011760040af9b48cd32def3ecc28ba1263d87466a3c900a345a6f2447ee",
-      "log_path": "tests/fable2031_dispatch.py",
-      "attempt": 1,
-      "wall_clock_ms": 45,
-      "cwd": "."
-    },
-    {
-      "cmd": "python3 tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
-      "exit_code": 1,
-      "stdout_sha256": "59880f616efe491bdb6b6093182185295b0227efad19c2159846305623fae3fa",
-      "log_path": "tests/fixtures/fable2031/dispatch-captured/canary-run.log",
-      "attempt": 1,
-      "wall_clock_ms": 52,
-      "cwd": ".",
-      "role": "canary"
-    }
-  ],
   "canary": {
-    "test_name": "canary.c26024401-3f7a91c2",
+    "nonexistent_path_probe": "NOT_FOUND",
     "observed": "FAIL",
-    "nonexistent_path_probe": "NOT_FOUND"
-  },
-  "tests": {
-    "passed": 31,
-    "failed": 1,
-    "skipped": 0,
-    "failing_test_names": [
-      "canary.c26024401-3f7a91c2"
-    ]
-  },
-  "retries": [],
-  "unresolved": [
-    "canary test is planted to fail and was not repaired",
-    "phantom path probe returns NOT_FOUND by construction"
-  ],
-  "rollback_path": "git -C rig_capabilities checkout --force d2bbec27",
-  "outcomes": [
-    {
-      "id": "dispatcher_module_syntax_verified",
-      "status": "PASS",
-      "evidence": {
-        "command_indices": [
-          0
-        ]
-      }
-    },
-    {
-      "id": "dispatcher_suite_executed",
-      "status": "PASS",
-      "evidence": {
-        "command_indices": [
-          1
-        ]
-      }
-    }
-  ],
-  "proof_packet": "tests/fixtures/fable2031/proof/fable2031-honest.json",
-  "reflog": [
-    "d2bbec27476b9bd7552f0354b7177bbd3b6afb45 fable-2031@{0}: commit: dispatcher handoff packet",
-    "d2bbec27476b9bd7552f0354b7177bbd3b6afb45 fable-2031@{1}: checkout: moving from main to fable-2031",
-    "d2bbec27476b9bd7552f0354b7177bbd3b6afb45 loop-skills-v11@{2}: commit: off-lease edit during dispatch"
-  ],
-  "mtimes": [
-    {
-      "path": "rig_capabilities/dispatcher.py",
-      "mtime": "2026-09-01T16:58:12-06:00"
-    },
-    {
-      "path": "tests/fable2031_dispatch.py",
-      "mtime": "2026-09-01T16:58:31-06:00"
-    },
-    {
-      "path": "docs/ROADMAP.md",
-      "mtime": "2026-09-01T16:59:02-06:00"
-    }
-  ],
-  "dispatch_spec": {
-    "canary": {
-      "task_id": "f31-dispatch-honest",
-      "canary_id": "c26024401-3f7a91c2",
-      "test_name": "canary.c26024401-3f7a91c2",
-      "file": "tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
-      "phantom_path": "tests/fixtures/fable2031/dispatch-captured/c26024401-3f7a91c2-phantom-probe-does-not-exist.md",
-      "canary_command": "python3 tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
-      "expected_observed": "FAIL",
-      "expected_probe": "NOT_FOUND",
-      "secret_sha256": "c05f01ca755e5deb5d7a6cbdaa7ed4dfcc97b95d5531f6288512fddedda5f652",
-      "minted_at": 1788300000.0,
-      "state_root": "tests/fixtures/fable2031/dispatch-captured",
-      "outside_worktree": true,
-      "tac_admissible": false,
-      "note": "truthful non-zero is admission evidence; never feed to TAC"
-    },
-    "planted_failure": true,
-    "required_command_kinds": [
-      "suite",
-      "build",
-      "linter",
-      "clean_state_recheck"
-    ]
+    "test_name": "canary.c26024401-3f7a91c2"
   },
   "capture_window": [
     "2026-09-01T16:39:01-06:00",
     "2026-09-01T17:05:00-06:00"
   ],
-  "fixture_note": "Synthetic P4 unit-test packet. Paths, SHA-256 values and commit_sha are real and re-verifiable (git HEAD d2bbec27); the ./.rig/proof/<task_id>/*.log captures, the lease state root and the git reflog / mtime evidence are constructed stand-ins for the unit test, repo-relativised so no path outside the repo is referenced. Breach style: the lease is rig_capabilities/; the reflog names another branch and docs/ROADMAP.md was written outside the leased worktree. | 2026-09-01 worktree-denial slice: tests/fable2031_dispatch.py pins re-anchored to f799c0117600 (25416B) after mandated test-class append; no other cells changed.",
-  "claim": "SUBMITTED_FOR_VERIFICATION"
+  "claim": "SUBMITTED_FOR_VERIFICATION",
+  "commands": [
+    {
+      "attempt": 1,
+      "cmd": "python3 -c \"print('rig-fixture-log-alpha')\"",
+      "cwd": ".",
+      "exit_code": 0,
+      "log_path": "tests/fixtures/fable2031/command-logs/alpha.log",
+      "stdout_sha256": "692869136b4b2dadd5f3ef2965c78e86b44a01cca4d3c0a7857a22572ba627bd",
+      "wall_clock_ms": 12
+    },
+    {
+      "attempt": 1,
+      "cmd": "python3 -c \"print('rig-fixture-log-beta')\"",
+      "cwd": ".",
+      "exit_code": 0,
+      "log_path": "tests/fixtures/fable2031/command-logs/beta.log",
+      "stdout_sha256": "6611e98e8c642c4dec1e30bfaa16c270032e9857ded23ade43f02ff773b21304",
+      "wall_clock_ms": 14
+    },
+    {
+      "attempt": 1,
+      "cmd": "python3 tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
+      "cwd": ".",
+      "exit_code": 1,
+      "log_path": "tests/fixtures/fable2031/dispatch-captured/canary-run.log",
+      "role": "canary",
+      "stdout_sha256": "d1a0d1a28891cbd4454d445ce15df95e95a474f0591be408d22f1e849366f50b",
+      "wall_clock_ms": 21
+    }
+  ],
+  "commit_sha": "0000000000000000000000000000000000000000",
+  "dispatch_spec": {
+    "canary": {
+      "canary_command": "python3 tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
+      "canary_id": "c26024401-3f7a91c2",
+      "expected_observed": "FAIL",
+      "expected_probe": "NOT_FOUND",
+      "file": "tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
+      "minted_at": 1788300000.0,
+      "note": "truthful non-zero is admission evidence; never feed to TAC",
+      "outside_worktree": true,
+      "phantom_path": "tests/fixtures/fable2031/dispatch-captured/c26024401-3f7a91c2-phantom-probe-does-not-exist.md",
+      "secret_sha256": "c05f01ca755e5deb5d7a6cbdaa7ed4dfcc97b95d5531f6288512fddedda5f652",
+      "state_root": "tests/fixtures/fable2031/dispatch-captured",
+      "tac_admissible": false,
+      "task_id": "f31-dispatch-isolation",
+      "test_name": "canary.c26024401-3f7a91c2"
+    }
+  },
+  "files_changed": [
+    {
+      "bytes": 22,
+      "path": "tests/fixtures/fable2031/command-logs/alpha.log",
+      "sha256": "692869136b4b2dadd5f3ef2965c78e86b44a01cca4d3c0a7857a22572ba627bd"
+    },
+    {
+      "bytes": 21,
+      "path": "tests/fixtures/fable2031/command-logs/beta.log",
+      "sha256": "6611e98e8c642c4dec1e30bfaa16c270032e9857ded23ade43f02ff773b21304"
+    },
+    {
+      "exists": false,
+      "path": "docs/ROADMAP.md"
+    }
+  ],
+  "fixture_note": "Synthetic unit-test packet. Every declared hash is TRUE over fixture-owned files under tests/fixtures/fable2031/ (command-logs/, dispatch-captured/), so editing rig_capabilities/ or tests/ cannot turn this packet FABRICATED by accident. commit_sha is a placeholder: these offline unit tests never replay against a materialised tree. The declared defect is the only untrue thing in here.",
+  "lease_token": "lease-isolation-0005",
+  "mtimes": [
+    {
+      "mtime": "2026-09-01T16:59:02-06:00",
+      "path": "docs/ROADMAP.md"
+    }
+  ],
+  "outcomes": [
+    {
+      "evidence": {
+        "command_indices": [
+          0
+        ]
+      },
+      "id": "fixture_log_alpha_recorded",
+      "status": "PASS"
+    },
+    {
+      "evidence": {
+        "command_indices": [
+          1
+        ]
+      },
+      "id": "fixture_log_beta_recorded",
+      "status": "PASS"
+    }
+  ],
+  "proof_packet": "tests/fixtures/fable2031/proof/fable2031-honest.json",
+  "reflog": [
+    "0000000000000000000000000000000000000000 fable-2031@{0}: commit: fixture handoff packet",
+    "1111111111111111111111111111111111111111 loop-skills-v11@{2}: commit: off-lease edit during dispatch"
+  ],
+  "retries": [],
+  "rollback_path": "git -C . checkout --force HEAD -- tests/fixtures/fable2031/command-logs",
+  "schema": "rig.dispatch.handoff.v1",
+  "task_id": "f31-dispatch-isolation",
+  "tests": {
+    "failed": 1,
+    "failing_test_names": [
+      "canary.c26024401-3f7a91c2"
+    ],
+    "passed": 2,
+    "skipped": 0
+  },
+  "unresolved": [
+    "canary test is planted to fail and was not repaired",
+    "phantom path probe returns NOT_FOUND by construction"
+  ],
+  "working_tree_clean": true,
+  "worktree_path": "rig_capabilities"
 }

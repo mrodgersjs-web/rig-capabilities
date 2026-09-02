@@ -53,14 +53,14 @@ V28 zip is **ARMED** (typed `APPROVE gd_1788227314643` on 2026-09-01). Tag `v28.
 | 39 | `8c62c98` | — | ROADMAP V28 ARMED + Wave 4 rows | commit |
 | 40 | (this increment) | — | Wave 4 close: VERSION_LADDER 1–40, suite green | suite |
 | 41 | (this increment) | — | P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS | suite |
-| 42 | (pending) | — | P2 deterministic corpus scanner + source inventory + classify rules | suite |
-| 43 | (pending) | — | P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate | suite |
-| 44 | (pending) | — | P3b Known Expert OS phase harness + claim-typed evidence ledger | suite |
-| 45 | (pending) | — | P4 worktree leases, rotating canary, dispatcher packet, mechanical denial | suite |
-| 46 | (pending) | — | P5 E_stage promotion gate + golden replay corpus | suite |
-| 47 | (pending) | — | P5b dormant-by-default Fable 5.1 model route | suite |
-| 48 | (pending) | — | P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer | suite |
-| 49 | (pending) | — | P7/P8 certify-gate wiring, CLI verbs, skills/harnesses/loop, end-to-end proof | packet |
+| 42 | (this increment) | — | P2 deterministic corpus scanner + source inventory + classify rules | suite |
+| 43 | (this increment) | — | P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate | suite |
+| 44 | (this increment) | — | P3b Known Expert OS phase harness + claim-typed evidence ledger | suite |
+| 45 | (this increment) | — | P4 worktree leases, rotating canary, dispatcher packet, mechanical denial | canary_detection |
+| 46 | (this increment) | — | P5 E_stage promotion gate + golden replay corpus | suite |
+| 47 | (this increment) | — | P5b dormant-by-default Fable 5.1 model route | fable_dormant |
+| 48 | (this increment) | — | P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer | stage_order |
+| 49 | (this increment) | — | P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools, skills/harnesses/loop registered | register |
 
 ## Proof-chain check
 

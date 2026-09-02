@@ -1,0 +1,392 @@
+{
+  "goals": [
+    {
+      "id": "GL-RIG-REALIGN-V1",
+      "name": "RIG Realign Loop v1 Weekly Convergence Goal Harness",
+      "description": "RIG Realign Loop v1 Weekly Convergence Goal Harness [realign-week] \u2014 compiled from capabilities/harnesses/rig-realign-v1.yaml",
+      "anchor": "L4-D1-A1-Intent",
+      "bms_mode": "A1",
+      "gate": "Register validates with zero row errors and the booked_qualified_conversations row present",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the ISO week key pinned by realign",
+          "description": "Startup phrase spoken and the ISO week key pinned by realign.week_id() (format %G-W%V), not typed by hand",
+          "command": "python3 -c \"from rig_capabilities.realign import week_id; print(week_id())\" output recorded in the session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Coordinate stated before any artifact is opened: L4-L5 x D1-",
+          "description": "Coordinate stated before any artifact is opened: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10 (Intent Question Research Solution Quality Proof Integrate)",
+          "command": "Session log line of form 'COORD: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10'",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 Harness tuple H_realign(week, register_delta, gate_verdict,",
+          "description": "Harness tuple H_realign(week, register_delta, gate_verdict, doctrine_phrase) declared with all four components named",
+          "command": "Session log contains the tuple declaration verbatim",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 The run is declared dry or applied before it starts; `realig",
+          "description": "The run is declared dry or applied before it starts; `realign` without `--apply` writes nothing, and saying 'dry' does not make a write dry",
+          "command": "run_week(..., apply=False) returns dry_run true and wrote false; that JSON line is quoted in the session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Register integrity",
+          "name": "1.1 The register is re-read from disk, not carried in memory fro",
+          "description": "The register is re-read from disk, not carried in memory from last week: capability_register.csv validates with zero row errors, the booked_qualified_conversations row is present at weight 5 in Studio GTM, and every scored row names evidence_paths and enables_product_classes",
+          "command": "./bin/rig-capabilities register validate exits 0; register.row_errors returns []; register.require_booked_row raises nothing",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Register integrity",
+          "name": "1.2 Rows at maturity M4 or above without a named verifier are fl",
+          "description": "Rows at maturity M4 or above without a named verifier are flagged to their owner and excluded from any improvement claim \u2014 an unverified M4 is a scoring bug, not progress",
+          "command": "register.flagged_owners output printed in full, empty or not; every flagged owner named in the report",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "2.1",
+          "category": "Corpus halt",
+          "name": "2.1 The corpus is scanned once, deterministically, with no model",
+          "description": "The corpus is scanned once, deterministically, with no model in the classification path, and the unclassified rate is reported against the halt of 0.10 before any score is written",
+          "command": "convergence.corpus_report(roots=<bounded>) output quoted: raw, unique, unclassified, unclassified_rate, halt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Corpus halt",
+          "name": "2.2 unclassified_rate > 0.10 stops the week: no C_t, no A_t, no",
+          "description": "unclassified_rate > 0.10 stops the week: no C_t, no A_t, no delta is published, and the classifier is rebuilt against the held-out set instead",
+          "command": "score_week raises CorpusHalt/CorpusRefusal and run_week returns verdict CORPUS_REFUSAL with reason unclassified_rate_above_halt; zero artifacts written",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Corpus halt",
+          "name": "2.3 An unreported rate is not a zero rate: a corpus scan that di",
+          "description": "An unreported rate is not a zero rate: a corpus scan that dies reports corpus_error and the week FAILs rather than inheriting last week's number",
+          "command": "run_week output carries corpus_error with the exception type and message, and scored.corpus.error is populated; the report quotes it",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Convergence math",
+          "name": "3.1 C_t and A_t are recomputed in exact arithmetic from the regi",
+          "description": "C_t and A_t are recomputed in exact arithmetic from the register on disk: E_cap = sum of w_i times (1 minus min(M_i,T_i)/T_i) over active non-duplicate rows with T_i greater than zero, C_t = 1 - E_cap/sum(w_i), A_t = weighted share of rows in bands A1 or A2",
+          "command": "convergence.e_cap/c_t/a_t Decimal strings quoted verbatim in convergence_report.md, not rounded to a vibe",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Convergence math",
+          "name": "3.2 Rows with target_M_2031 equal to zero contribute zero and ar",
+          "description": "Rows with target_M_2031 equal to zero contribute zero and are listed under degenerate_targets \u2014 they are never silently divided by",
+          "command": "metrics.degenerate_targets printed (possibly empty) in the proof JSON",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.3",
+          "category": "Convergence math",
+          "name": "3.3 Score movement passes the anti-gaming gate: RobustMADZ = 0.6",
+          "description": "Score movement passes the anti-gaming gate: RobustMADZ = 0.6745 * (score - median) / MAD over the C_t series of prior sealed weeks; a MAD of zero is reported mad_zero, not treated as a perfect score",
+          "command": "convergence.robust_madz output per scored week; flag mad_zero quoted when MAD is zero",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.4",
+          "category": "Convergence math",
+          "name": "3.4 Any flag at or above 5 sigma goes to deep review and blocks",
+          "description": "Any flag at or above 5 sigma goes to deep review and blocks the PASS while unresolved; a capability jumping three maturity levels in one week is a scoring bug",
+          "command": "weekly_gate causes list contains the named sigma block and the verdict is not PASS until it is resolved by a re-derived row with evidence",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "The five PASS conditions",
+          "name": "4.1 PASS requires all five: delta C_t strictly greater than zero",
+          "description": "PASS requires all five: delta C_t strictly greater than zero, delta A_t greater than or equal to zero, unclassified_rate at or below 0.10, at least one qualified booked conversation, and no unresolved flag at or above 5 sigma",
+          "command": ".context/realign/<week>/proof/weekly-gate.json names every failed condition in causes; PASS with a non-empty causes list is treated as a bug and filed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "The five PASS conditions",
+          "name": "4.2 A booking counts only when its qualification_evidence_path r",
+          "description": "A booking counts only when its qualification_evidence_path resolves to a file on disk: load_bookings reports the count and lists invalid records; a generic booked_call row without evidence is zero",
+          "command": ".context/realign/<week>/proof/bookings.json with count, total, and invalid quoted; bookings count in weekly-gate.json equals the loaded count",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.3",
+          "category": "The five PASS conditions",
+          "name": "4.3 No prior sealed week means BASELINE_ONLY \u2014 this week's numbe",
+          "description": "No prior sealed week means BASELINE_ONLY \u2014 this week's numbers are a baseline, never a delta, and never reported as an improvement",
+          "command": "weekly_gate verdict is BASELINE_ONLY when previous metrics are absent; the report header carries the word BASELINE_ONLY",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.1",
+          "category": "Honest output",
+          "name": "5.1 The five artifacts are written under .context/realign/<week>",
+          "description": "The five artifacts are written under .context/realign/<week>/: the register diff, convergence_report.md, the proof JSON directory, doctrine-update-phrase.md (Artifact 27), and operators-weekly.md",
+          "command": "run_week(apply=True) returns wrote true with exactly those five artifact paths relative to the repo root, and each file exists",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.2",
+          "category": "Honest output",
+          "name": "5.2 sealed stays false with seal_reason naming the missing seali",
+          "description": "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists \u2014 a hash is never typed in by hand to make a week look sealed",
+          "command": "every proof JSON in the week directory carries sealed false; grep for a truthy sealed value in the week directory returns nothing",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.3",
+          "category": "Honest output",
+          "name": "5.3 A real zero-booking week is reported FAIL with its cause nam",
+          "description": "A real zero-booking week is reported FAIL with its cause named, is complete, and is never retried or back-filled; the Doctrine Update Phrase on a FAIL must name the cause rather than describe intentions",
+          "command": "weekly-gate.json verdict FAIL with causes naming booked_qualified_conversations; doctrine-update-phrase.md contains that cause verbatim",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "5.4",
+          "category": "Honest output",
+          "name": "5.4 Escalations fire on the streaks, not on mood: three consecut",
+          "description": "Escalations fire on the streaks, not on mood: three consecutive FAIL weeks means LOOP_REBUILD_REQUIRED (the loop is the worst-performing harness); three weeks where C_t rises with zero bookings means WEIGHTS_INVALID",
+          "command": "weekly_gate escalations array quoted; the escalation appears in Operator's Weekly as the week's headline, not in a footnote",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "6.1",
+          "category": "Termination authority",
+          "name": "6.1 The week is not done because it feels done: Sentinel Prime h",
+          "description": "The week is not done because it feels done: Sentinel Prime holds fleet termination authority and is specification-only today, so fleet status stays BLOCKED_PENDING_SENTINEL even when a task-level verdict is PASS",
+          "command": "the week's closing line states fleet status BLOCKED_PENDING_SENTINEL and quotes sentinel_prime_status SPECIFICATION_ONLY from the evidence packet",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "6.2",
+          "category": "Termination authority",
+          "name": "6.2 System-build PASS never implies business PASS: a green certi",
+          "description": "System-build PASS never implies business PASS: a green certify on the loop says nothing about bookings, revenue, or convergence, and no sentence in the week's output may imply otherwise",
+          "command": "Operator's Weekly lists gate verdict, causes, and bookings count from the proof JSON; no line asserts a booking or a revenue figure that load_bookings did not report",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I score the week against the register. The register is data on disk; the gate is allowed to say FAIL.",
+        "harness_tuple": "H_realign(week, register_delta, gate_verdict, doctrine_phrase)",
+        "bms_bias": "A1 deterministic scoring \u2014 the gate is code, not opinion; A2 only for writing the Doctrine Update Phrase; A3 forbidden for any score it publishes; A4 forbidden \u2014 the loop writes five artifacts under .context/realign/ and takes zero outward action",
+        "meta": {
+          "harness_id": "rig-realign-v1",
+          "session_type": "realign-week",
+          "governs_loops": [
+            "GL-RIG-REALIGN-V1"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L4",
+              "L5"
+            ],
+            "primary_diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "Intent",
+              "Question",
+              "Research",
+              "Solution",
+              "Quality",
+              "Proof",
+              "Integrate"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "update_trigger": "same weekly-gate cause repeats 3+ weeks \u2192 the cause is a register or classifier defect and is fixed there, not re-phrased in the report"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "Register validates with zero row errors and the booked_qualified_conversations row present",
+        "Corpus unclassified rate reported and at or below the 0.10 halt, or the week is CORPUS_REFUSAL with nothing written",
+        "C_t, A_t quoted as Decimal strings with degenerate_targets listed",
+        "weekly_gate verdict is PASS, FAIL with named causes, BASELINE_ONLY, or a named escalation \u2014 never silence",
+        "Five artifacts exist under .context/realign/<week>/ with sealed false and a named seal_reason",
+        "Fleet status reported BLOCKED_PENDING_SENTINEL while Sentinel Prime is specification-only"
+      ],
+      "failure_states": [
+        "notes: no PASS is written by this harness \u2014 the verdict comes from convergence.weekly_gate and the only emitter of PASS over a claimed commit is dispatcher.admit run by a different model family",
+        "halt gate(s) 1.1, 2.1, 2.2, 2.3, 3.1, 4.1, 4.2, 5.1, 6.1, 6.2: no progress without gate evidence",
+        "degrade gate(s) 1.2, 3.2, 3.3, 5.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the ISO week key pinned by realign.week_id() (format %G-W%V), not typed by hand",
+        "Coordinate stated before any artifact is opened: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10 (Intent Question Research Solution Quality Proof Integrate)",
+        "Harness tuple H_realign(week, register_delta, gate_verdict, doctrine_phrase) declared with all four components named",
+        "The run is declared dry or applied before it starts; `realign` without `--apply` writes nothing, and saying 'dry' does not make a write dry",
+        "The register is re-read from disk, not carried in memory from last week: capability_register.csv validates with zero row errors, the booked_qualified_conversations row is present at weight 5 in Studio GTM, and every scored row names evidence_paths and enables_product_classes",
+        "Rows at maturity M4 or above without a named verifier are flagged to their owner and excluded from any improvement claim \u2014 an unverified M4 is a scoring bug, not progress",
+        "The corpus is scanned once, deterministically, with no model in the classification path, and the unclassified rate is reported against the halt of 0.10 before any score is written",
+        "unclassified_rate > 0.10 stops the week: no C_t, no A_t, no delta is published, and the classifier is rebuilt against the held-out set instead",
+        "An unreported rate is not a zero rate: a corpus scan that dies reports corpus_error and the week FAILs rather than inheriting last week's number",
+        "C_t and A_t are recomputed in exact arithmetic from the register on disk: E_cap = sum of w_i times (1 minus min(M_i,T_i)/T_i) over active non-duplicate rows with T_i greater than zero, C_t = 1 - E_cap/sum(w_i), A_t = weighted share of rows in bands A1 or A2",
+        "Rows with target_M_2031 equal to zero contribute zero and are listed under degenerate_targets \u2014 they are never silently divided by",
+        "Score movement passes the anti-gaming gate: RobustMADZ = 0.6745 * (score - median) / MAD over the C_t series of prior sealed weeks; a MAD of zero is reported mad_zero, not treated as a perfect score",
+        "Any flag at or above 5 sigma goes to deep review and blocks the PASS while unresolved; a capability jumping three maturity levels in one week is a scoring bug",
+        "PASS requires all five: delta C_t strictly greater than zero, delta A_t greater than or equal to zero, unclassified_rate at or below 0.10, at least one qualified booked conversation, and no unresolved flag at or above 5 sigma",
+        "A booking counts only when its qualification_evidence_path resolves to a file on disk: load_bookings reports the count and lists invalid records; a generic booked_call row without evidence is zero",
+        "No prior sealed week means BASELINE_ONLY \u2014 this week's numbers are a baseline, never a delta, and never reported as an improvement",
+        "The five artifacts are written under .context/realign/<week>/: the register diff, convergence_report.md, the proof JSON directory, doctrine-update-phrase.md (Artifact 27), and operators-weekly.md",
+        "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists \u2014 a hash is never typed in by hand to make a week look sealed",
+        "A real zero-booking week is reported FAIL with its cause named, is complete, and is never retried or back-filled; the Doctrine Update Phrase on a FAIL must name the cause rather than describe intentions",
+        "Escalations fire on the streaks, not on mood: three consecutive FAIL weeks means LOOP_REBUILD_REQUIRED (the loop is the worst-performing harness); three weeks where C_t rises with zero bookings means WEIGHTS_INVALID",
+        "The week is not done because it feels done: Sentinel Prime holds fleet termination authority and is specification-only today, so fleet status stays BLOCKED_PENDING_SENTINEL even when a task-level verdict is PASS",
+        "System-build PASS never implies business PASS: a green certify on the loop says nothing about bookings, revenue, or convergence, and no sentence in the week's output may imply otherwise"
+      ],
+      "anti_patterns": [
+        "Publishing a delta C_t with no prior sealed week: that is a baseline wearing a delta's clothes",
+        "Counting a booking whose qualification evidence path does not resolve",
+        "Rounding an exact Decimal to a number that reads better in Operator's Weekly",
+        "Retrying a zero-booking week until it turns green",
+        "Writing gate text for a truncated source section because an empty gate looks unfinished"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/rig-realign-v1.yaml",
+        "final_rule": [
+          "A weekly review that produces prose is a diary.",
+          "BASELINE_ONLY is honest and is not a PASS.",
+          "Zero bookings is a verdict, never a gap to fill in.",
+          "Nothing is sealed until a hash exists; sealed false is the truthful default.",
+          "Three FAIL weeks names the loop, not the week."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "2.1",
+            "2.2",
+            "2.3",
+            "3.1",
+            "4.1",
+            "4.2",
+            "5.1",
+            "6.1",
+            "6.2"
+          ],
+          "degrade": [
+            "1.2",
+            "3.2",
+            "3.3",
+            "5.3"
+          ],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": [
+            "notes: no PASS is written by this harness \u2014 the verdict comes from convergence.weekly_gate and the only emitter of PASS over a claimed commit is dispatcher.admit run by a different model family"
+          ]
+        },
+        "gates_without_proof": []
+      }
+    }
+  ]
+}

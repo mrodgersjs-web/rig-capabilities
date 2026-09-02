@@ -93,6 +93,21 @@ def _pick_main_text(path: Path) -> str:
         return ""
 
 
+def _unquote(val: str) -> str:
+    """Strip a *paired* surrounding quote only.
+
+    `.strip("\"'")` looks equivalent and is not: `cmd:python3 -c 'print(1)'`
+    has no leading quote and a load-bearing trailing one, and stripping it
+    hands `/bin/sh` an unterminated string. So a `done_when` cmd that ran in
+    the shell by hand fails the gate for a reason that has nothing to do with
+    the asset. Only remove quotes that wrap the whole value.
+    """
+    v = val.strip()
+    if len(v) >= 2 and v[0] == v[-1] and v[0] in ("'", '"'):
+        return v[1:-1]
+    return val
+
+
 def parse_frontmatter(text: str) -> dict:
     """Minimal YAML-ish frontmatter: key: value pairs in a leading --- fence.
     Also captures top-level `name/description` lines for toml/json assets."""
@@ -104,14 +119,14 @@ def parse_frontmatter(text: str) -> dict:
                 break
             m = _FM_KEY.match(ln)
             if m:
-                key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
+                key, val = m.group(1).lower(), _unquote(m.group(2))
                 out.setdefault(key, val)   # fenced keys are structural (OKF reads them)
         return out
     # fallback: first plain key: value lines anywhere in the head (toml/json-ish)
     for ln in lines[:80]:
         m = _FM_KEY.match(ln.strip())
         if m:
-            key, val = m.group(1).lower().strip("\"'"), m.group(2).strip().strip("\"',")
+            key, val = m.group(1).lower(), _unquote(m.group(2).rstrip(","))
             if key in ("name", "title", "description", "summary", "prompt") and key not in out:
                 if val:
                     out["description" if key == "prompt" else key] = val
@@ -574,14 +589,14 @@ def _quality_block(text: str) -> dict:
         ln = fence[i]
         m = _FM_KEY.match(ln)
         if m:
-            key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
+            key, val = m.group(1).lower(), _unquote(m.group(2))
             if key == "done_when":
                 items = []
                 if val:
-                    items = [t.strip().strip("[]\"'") for t in val.split(",") if t.strip()]
+                    items = [_unquote(t.strip().strip("[]")) for t in val.split(",") if t.strip()]
                 j = i + 1
                 while j < len(fence) and re.match(r"^\s*-\s+", fence[j]):
-                    items.append(re.sub(r"^\s*-\s+", "", fence[j]).strip().strip("\"'"))
+                    items.append(_unquote(re.sub(r"^\s*-\s+", "", fence[j])))
                     j += 1
                 out["done_when"] = items
                 i = j
@@ -601,7 +616,7 @@ def _quality_from_comments(lines: list) -> dict:
         raw = lines[i]
         m = re.match(r"^#\s*([A-Za-z0-9_\-]+)\s*:\s*(.*)$", raw)
         if m:
-            key, val = m.group(1).lower(), m.group(2).strip().strip("\"'")
+            key, val = m.group(1).lower(), _unquote(m.group(2))
             if key == "done_when":
                 items = [t.strip() for t in val.split("||") if t.strip()] if val else []
                 j = i + 1

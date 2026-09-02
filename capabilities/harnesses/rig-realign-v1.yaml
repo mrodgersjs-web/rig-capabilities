@@ -1,0 +1,132 @@
+---
+outcome: "meta: the week is scored on a weighted register, not narrated — a weekly review that produces prose is a diary"
+done_when:
+  - file:capabilities/harnesses/rig-realign-v1.yaml
+  - grep:capabilities/harnesses/rig-realign-v1.yaml:BASELINE_ONLY
+  - grep:capabilities/harnesses/rig-realign-v1.yaml:IQRSQPI-10
+great_example: capabilities/harnesses/rig-realign-v1.yaml
+quality_floor: 0.7
+---
+
+harness_id: rig-realign-v1
+harness_name: RIG Realign Loop v1 Weekly Convergence Goal Harness
+session_type: realign-week
+status: canonical
+source_card: "BUILD CARD — RIG Realign Loop v1: Weekly Strategy → Research → Design → Execution → Learnings with Convergence Scoring"
+coordinate_space:
+  levels: [L4, L5]
+  primary_diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [Intent, Question, Research, Solution, Quality, Proof, Integrate]
+harness_tuple: H_realign(week, register_delta, gate_verdict, doctrine_phrase)
+bms_bias: "A1 deterministic scoring — the gate is code, not opinion; A2 only for writing the Doctrine Update Phrase; A3 forbidden for any score it publishes; A4 forbidden — the loop writes five artifacts under .context/realign/ and takes zero outward action"
+identity_lock:
+  startup_phrase: "I score the week against the register. The register is data on disk; the gate is allowed to say FAIL."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the ISO week key pinned by realign.week_id() (format %G-W%V), not typed by hand"
+      proof: "python3 -c \"from rig_capabilities.realign import week_id; print(week_id())\" output recorded in the session log"
+    - id: "0.2"
+      requirement: "Coordinate stated before any artifact is opened: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10 (Intent Question Research Solution Quality Proof Integrate)"
+      proof: "Session log line of form 'COORD: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10'"
+    - id: "0.3"
+      requirement: "Harness tuple H_realign(week, register_delta, gate_verdict, doctrine_phrase) declared with all four components named"
+      proof: "Session log contains the tuple declaration verbatim"
+    - id: "0.4"
+      requirement: "The run is declared dry or applied before it starts; `realign` without `--apply` writes nothing, and saying 'dry' does not make a write dry"
+      proof: "run_week(..., apply=False) returns dry_run true and wrote false; that JSON line is quoted in the session log"
+capability_gates:
+  - category: "Register integrity"
+    gates:
+      - id: "1.1"
+        requirement: "The register is re-read from disk, not carried in memory from last week: capability_register.csv validates with zero row errors, the booked_qualified_conversations row is present at weight 5 in Studio GTM, and every scored row names evidence_paths and enables_product_classes"
+        proof: "./bin/rig-capabilities register validate exits 0; register.row_errors returns []; register.require_booked_row raises nothing"
+      - id: "1.2"
+        requirement: "Rows at maturity M4 or above without a named verifier are flagged to their owner and excluded from any improvement claim — an unverified M4 is a scoring bug, not progress"
+        proof: "register.flagged_owners output printed in full, empty or not; every flagged owner named in the report"
+  - category: "Corpus halt"
+    gates:
+      - id: "2.1"
+        requirement: "The corpus is scanned once, deterministically, with no model in the classification path, and the unclassified rate is reported against the halt of 0.10 before any score is written"
+        proof: "convergence.corpus_report(roots=<bounded>) output quoted: raw, unique, unclassified, unclassified_rate, halt"
+      - id: "2.2"
+        requirement: "unclassified_rate > 0.10 stops the week: no C_t, no A_t, no delta is published, and the classifier is rebuilt against the held-out set instead"
+        proof: "score_week raises CorpusHalt/CorpusRefusal and run_week returns verdict CORPUS_REFUSAL with reason unclassified_rate_above_halt; zero artifacts written"
+      - id: "2.3"
+        requirement: "An unreported rate is not a zero rate: a corpus scan that dies reports corpus_error and the week FAILs rather than inheriting last week's number"
+        proof: "run_week output carries corpus_error with the exception type and message, and scored.corpus.error is populated; the report quotes it"
+  - category: "Convergence math"
+    gates:
+      - id: "3.1"
+        requirement: "C_t and A_t are recomputed in exact arithmetic from the register on disk: E_cap = sum of w_i times (1 minus min(M_i,T_i)/T_i) over active non-duplicate rows with T_i greater than zero, C_t = 1 - E_cap/sum(w_i), A_t = weighted share of rows in bands A1 or A2"
+        proof: "convergence.e_cap/c_t/a_t Decimal strings quoted verbatim in convergence_report.md, not rounded to a vibe"
+      - id: "3.2"
+        requirement: "Rows with target_M_2031 equal to zero contribute zero and are listed under degenerate_targets — they are never silently divided by"
+        proof: "metrics.degenerate_targets printed (possibly empty) in the proof JSON"
+      - id: "3.3"
+        requirement: "Score movement passes the anti-gaming gate: RobustMADZ = 0.6745 * (score - median) / MAD over the C_t series of prior sealed weeks; a MAD of zero is reported mad_zero, not treated as a perfect score"
+        proof: "convergence.robust_madz output per scored week; flag mad_zero quoted when MAD is zero"
+      - id: "3.4"
+        requirement: "Any flag at or above 5 sigma goes to deep review and blocks the PASS while unresolved; a capability jumping three maturity levels in one week is a scoring bug"
+        proof: "weekly_gate causes list contains the named sigma block and the verdict is not PASS until it is resolved by a re-derived row with evidence"
+  - category: "The five PASS conditions"
+    gates:
+      - id: "4.1"
+        requirement: "PASS requires all five: delta C_t strictly greater than zero, delta A_t greater than or equal to zero, unclassified_rate at or below 0.10, at least one qualified booked conversation, and no unresolved flag at or above 5 sigma"
+        proof: ".context/realign/<week>/proof/weekly-gate.json names every failed condition in causes; PASS with a non-empty causes list is treated as a bug and filed"
+      - id: "4.2"
+        requirement: "A booking counts only when its qualification_evidence_path resolves to a file on disk: load_bookings reports the count and lists invalid records; a generic booked_call row without evidence is zero"
+        proof: ".context/realign/<week>/proof/bookings.json with count, total, and invalid quoted; bookings count in weekly-gate.json equals the loaded count"
+      - id: "4.3"
+        requirement: "No prior sealed week means BASELINE_ONLY — this week's numbers are a baseline, never a delta, and never reported as an improvement"
+        proof: "weekly_gate verdict is BASELINE_ONLY when previous metrics are absent; the report header carries the word BASELINE_ONLY"
+  - category: "Honest output"
+    gates:
+      - id: "5.1"
+        requirement: "The five artifacts are written under .context/realign/<week>/: the register diff, convergence_report.md, the proof JSON directory, doctrine-update-phrase.md (Artifact 27), and operators-weekly.md"
+        proof: "run_week(apply=True) returns wrote true with exactly those five artifact paths relative to the repo root, and each file exists"
+      - id: "5.2"
+        requirement: "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists — a hash is never typed in by hand to make a week look sealed"
+        proof: "every proof JSON in the week directory carries sealed false; grep for a truthy sealed value in the week directory returns nothing"
+      - id: "5.3"
+        requirement: "A real zero-booking week is reported FAIL with its cause named, is complete, and is never retried or back-filled; the Doctrine Update Phrase on a FAIL must name the cause rather than describe intentions"
+        proof: "weekly-gate.json verdict FAIL with causes naming booked_qualified_conversations; doctrine-update-phrase.md contains that cause verbatim"
+      - id: "5.4"
+        requirement: "Escalations fire on the streaks, not on mood: three consecutive FAIL weeks means LOOP_REBUILD_REQUIRED (the loop is the worst-performing harness); three weeks where C_t rises with zero bookings means WEIGHTS_INVALID"
+        proof: "weekly_gate escalations array quoted; the escalation appears in Operator's Weekly as the week's headline, not in a footnote"
+  - category: "Termination authority"
+    gates:
+      - id: "6.1"
+        requirement: "The week is not done because it feels done: Sentinel Prime holds fleet termination authority and is specification-only today, so fleet status stays BLOCKED_PENDING_SENTINEL even when a task-level verdict is PASS"
+        proof: "the week's closing line states fleet status BLOCKED_PENDING_SENTINEL and quotes sentinel_prime_status SPECIFICATION_ONLY from the evidence packet"
+      - id: "6.2"
+        requirement: "System-build PASS never implies business PASS: a green certify on the loop says nothing about bookings, revenue, or convergence, and no sentence in the week's output may imply otherwise"
+        proof: "Operator's Weekly lists gate verdict, causes, and bookings count from the proof JSON; no line asserts a booking or a revenue figure that load_bookings did not report"
+definition_of_done:
+  - "Register validates with zero row errors and the booked_qualified_conversations row present"
+  - "Corpus unclassified rate reported and at or below the 0.10 halt, or the week is CORPUS_REFUSAL with nothing written"
+  - "C_t, A_t quoted as Decimal strings with degenerate_targets listed"
+  - "weekly_gate verdict is PASS, FAIL with named causes, BASELINE_ONLY, or a named escalation — never silence"
+  - "Five artifacts exist under .context/realign/<week>/ with sealed false and a named seal_reason"
+  - "Fleet status reported BLOCKED_PENDING_SENTINEL while Sentinel Prime is specification-only"
+failure_protocol:
+  halt_gates: ["1.1", "2.1", "2.2", "2.3", "3.1", "4.1", "4.2", "5.1", "6.1", "6.2"]
+  degrade_gates: ["1.2", "3.2", "3.3", "5.3"]
+  notes: "no PASS is written by this harness — the verdict comes from convergence.weekly_gate and the only emitter of PASS over a claimed commit is dispatcher.admit run by a different model family"
+anti_patterns:
+  - "Publishing a delta C_t with no prior sealed week: that is a baseline wearing a delta's clothes"
+  - "Counting a booking whose qualification evidence path does not resolve"
+  - "Rounding an exact Decimal to a number that reads better in Operator's Weekly"
+  - "Retrying a zero-booking week until it turns green"
+  - "Writing gate text for a truncated source section because an empty gate looks unfinished"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same weekly-gate cause repeats 3+ weeks → the cause is a register or classifier defect and is fixed there, not re-phrased in the report"
+final_rule:
+  - "A weekly review that produces prose is a diary."
+  - "BASELINE_ONLY is honest and is not a PASS."
+  - "Zero bookings is a verdict, never a gap to fill in."
+  - "Nothing is sealed until a hash exists; sealed false is the truthful default."
+  - "Three FAIL weeks names the loop, not the week."
+governs_loops: [GL-RIG-REALIGN-V1]

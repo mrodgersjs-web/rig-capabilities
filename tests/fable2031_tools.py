@@ -1,4 +1,4 @@
-"""ReadOnlyToolTests: the three fable2031 MCP tools read and never write."""
+"""ReadOnlyToolTests: the five fable2031 MCP tools read and never write."""
 from __future__ import annotations
 
 import json
@@ -13,13 +13,14 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 FIX = REPO_ROOT / "tests" / "fixtures" / "fable2031"
 
-from rig_capabilities import afproof, evidence_ledger, model_route, realign
-from rig_capabilities import register
+from rig_capabilities import afproof, canary, dispatcher, evidence_ledger
+from rig_capabilities import model_route, realign, register
 from rig_capabilities.catalog import Repo
 from rig_capabilities.server import TOOLS, build_server
 
 NEW_TOOLS = ("capabilities_fabrication", "capabilities_register",
-             "capabilities_evidence")
+             "capabilities_evidence", "capabilities_converge",
+             "capabilities_dispatch_verify")
 # Every writer these tools are forbidden to reach. Patched to raise before
 # each handler call, so a future edit that wires a writer in fails HERE.
 FORBIDDEN = (
@@ -30,9 +31,16 @@ FORBIDDEN = (
     ("model_route", "apply"),
     ("register", "write_register"),
     ("evidence_ledger", "write_ledger"),
+    # The prefilter must not materialise the claimed tree or turn the canary:
+    # both are the full ladder's business, and a tool that did either would be
+    # reporting on a checkout it built itself.
+    ("dispatcher", "verifier_checkout_plan"),
+    ("canary", "mint"),
+    ("canary", "rotate"),
 )
 _MODULES = {"afproof": afproof, "realign": realign, "model_route": model_route,
-            "register": register, "evidence_ledger": evidence_ledger}
+            "register": register, "evidence_ledger": evidence_ledger,
+            "dispatcher": dispatcher, "canary": canary}
 
 
 def _boom(module: str, name: str):
@@ -50,7 +58,7 @@ class ReadOnlyToolTests(unittest.TestCase):
 
     # ---- registration ---------------------------------------------------
 
-    def test_three_tools_registered_with_valid_schemas(self):
+    def test_five_tools_registered_with_valid_schemas(self):
         for name in NEW_TOOLS:
             self.assertIn(name, self.schema, f"{name} missing from TOOLS")
             schema = self.schema[name]
@@ -105,7 +113,7 @@ class ReadOnlyToolTests(unittest.TestCase):
             setattr(target, name, _boom(module, name))
             self.addCleanup(setattr, target, name, original)
 
-    def test_no_writer_is_reachable_from_the_three_handlers(self):
+    def test_no_writer_is_reachable_from_any_handler(self):
         self._forbid_writers()
         for name in NEW_TOOLS:
             with self.subTest(tool=name):
@@ -235,6 +243,117 @@ class ReadOnlyToolTests(unittest.TestCase):
             self.assertIs(planned["resume"], False)
             self.assertEqual(planned["errors"], ["unverified_claim_on_resume"])
             json.dumps(out, sort_keys=True)
+
+    # ---- capabilities_converge ------------------------------------------
+
+    def test_converge_answers_empty_args_from_the_fixture_scope_and_says_so(self):
+        """The live corpus roots include ~/mnt/RIGLake, a stale mount whose walk
+        dies with TimeoutError after ~160 s. A tool called with `{}` cannot
+        default to them, so it scores the committed 20-card corpus and labels the
+        answer instead of pretending it scanned the real corpus."""
+        self._forbid_writers()
+        out = self.srv.handlers["capabilities_converge"]({})
+        self.assertIs(out["read_only"], True)
+        self.assertEqual(out["corpus_scope"], "fixture_snapshot")
+        self.assertIs(out["live_corpus_scanned"], False)
+        self.assertEqual(out["verdict"], "BASELINE_ONLY",
+                         "no prior sealed week exists, so no dC_t PASS is available")
+        self.assertIn("booked_qualified_conversations", out["gate"]["causes"])
+        self.assertEqual(out["score"]["bookings"]["count"], 0)
+        json.dumps(out, sort_keys=True)
+
+    def test_converge_reports_a_dead_mount_as_data(self):
+        """~/mnt/RIGLake reports `is_dir() == True` and its walk then dies with
+        TimeoutError around 160 s. Injecting the failure keeps the assertion
+        honest and instant: the tool must answer with data, not raise."""
+        from rig_capabilities import corpus as corpus_mod
+        def dying(*_a, **_k):
+            raise TimeoutError("[Errno 60] Operation timed out: '/mnt/RIGLake'")
+        original = corpus_mod.corpus_report
+        corpus_mod.corpus_report = dying
+        self.addCleanup(setattr, corpus_mod, "corpus_report", original)
+        self._forbid_writers()
+        out = self.srv.handlers["capabilities_converge"]({"roots": ["~/mnt/RIGLake"]})
+        self.assertIs(out["read_only"], True)
+        self.assertIn("corpus_scan_failed:TimeoutError", out["error"])
+        self.assertIn("stale mount", out["hint"])
+        self.assertNotIn("verdict", out)
+
+    def test_converge_survives_a_scoring_failure_without_raising(self):
+        from rig_capabilities import convergence
+        def boom(*_a, **_k):
+            raise RuntimeError("register unreadable")
+        original = convergence.score_week
+        convergence.score_week = boom
+        self.addCleanup(setattr, convergence, "score_week", original)
+        self._forbid_writers()
+        out = self.srv.handlers["capabilities_converge"]({})
+        self.assertIs(out["read_only"], True)
+        self.assertIn("register unreadable", out["error"])
+
+    def test_converge_operator_scope_is_labelled_as_such(self):
+        self._forbid_writers()
+        out = self.srv.handlers["capabilities_converge"](
+            {"roots": ["tests/fixtures/fable2031/corpus"]})
+        self.assertEqual(out["corpus_scope"], "operator_supplied")
+        self.assertIs(out["live_corpus_scanned"], True)
+        self.assertIsNotNone(out["verdict"])
+
+    # ---- capabilities_dispatch_verify ------------------------------------
+
+    def test_dispatch_verify_empty_args_return_the_ladder_not_an_error(self):
+        self._forbid_writers()
+        out = self.srv.handlers["capabilities_dispatch_verify"]({})
+        self.assertIs(out["read_only"], True)
+        self.assertEqual(out["mode"], "no_packet")
+        self.assertIsNone(out["verdict"])
+        self.assertEqual(len(out["fixtures"]), 5)
+        honest = [f for f in out["fixtures"] if "honest" in f["packet"]]
+        self.assertEqual([f["expected_exit"] for f in honest], [3],
+                         "the honest packet must not advertise exit 0")
+
+    def test_dispatch_verify_rejects_every_bad_packet_offline(self):
+        self._forbid_writers()
+        for name in ("handoff-fabricated.json", "handoff-phantom.json",
+                     "handoff-tampered.json", "handoff-isolation.json"):
+            with self.subTest(packet=name):
+                out = self.srv.handlers["capabilities_dispatch_verify"](
+                    {"packet": f"tests/fixtures/fable2031/{name}"})
+                self.assertIn(out["verdict"],
+                              ("FABRICATED", "ISOLATION_BREACH", "BLOCKED"))
+                self.assertIs(out["checkout_performed"], False)
+                self.assertIs(out["reexecution_performed"], False)
+
+    def test_dispatch_verify_cannot_emit_pass_even_if_admit_regresses(self):
+        """The rung's whole purpose is that an offline run cannot verify. If
+        `admit` ever regresses to handing out PASS, the tool reports a violation
+        rather than forwarding the word."""
+        original = dispatcher.admit
+        def lying_admit(packet, checkout, **_kw):
+            return {"verdict": "PASS", "reasons": [], "checks": {},
+                    "verifier_family": "gpt", "packet_sha256": "0" * 64}
+        dispatcher.admit = lying_admit
+        self.addCleanup(setattr, dispatcher, "admit", original)
+        out = self.srv.handlers["capabilities_dispatch_verify"](
+            {"packet": "tests/fixtures/fable2031/handoff-honest.json"})
+        self.assertEqual(out["verdict"], "BLOCKED")
+        self.assertEqual(out["invariant_violation"], "offline_pass_emitted")
+
+    def test_dispatch_verify_missing_packet_is_data(self):
+        for arg in ({}, {"packet": "tests/fixtures/fable2031/nope.json"}):
+            out = self.srv.handlers["capabilities_dispatch_verify"](
+                dict(arg, packet="tests/fixtures/fable2031/nope.json"))
+            self.assertEqual(out["error"], "packet_missing")
+            self.assertEqual(out["expected_exit"], 2)
+
+    def test_dispatch_verify_declares_the_offline_rung_in_the_ladder(self):
+        from rig_capabilities.afproof import verdict_ladder
+        ladder = verdict_ladder()
+        rung2 = next(r for r in ladder["rungs"] if r["name"] == "dispatcher_admit")
+        self.assertIn("PASS", rung2["never_emits_offline"])
+        self.assertIn("PREFILTER_CLEAR", rung2["offline_emits"])
+        self.assertTrue(any("PREFILTER_CLEAR" in i for i in ladder["invariants"]))
+
 
     # -- the modules the tool reports through, read straight --------------
     @staticmethod

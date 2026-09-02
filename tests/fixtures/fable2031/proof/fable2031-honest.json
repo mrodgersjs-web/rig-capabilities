@@ -1,0 +1,21 @@
+{
+ "kind": "dispatch-task-evidence",
+ "task_id": "f31-dispatch-honest",
+ "fixture_note": "Synthetic P4 unit-test packet, deliberately NOT consumed by any test: its job is to show the shape a real dispatch evidence packet takes without importing anyone's history. The commit is an ANCESTOR of this branch's HEAD rather than a pinned tip, so the fixture stays true across commits; the referenced files are fixture-owned so no live source edit can invalidate it. The lease state root, git reflog and mtime evidence remain constructed stand-ins for the unit test, repo-relativised so nothing outside the repo is referenced. afroproof.seal_packet produces the real one under the state root.",
+ "body": {
+  "commit": "d2b7185",
+  "commit_rule": "must be reachable from HEAD of the branch under verification; asserted by tests/fable2031_dispatch.py, never by this file",
+  "commands_captured": 2,
+  "canary": {
+   "test_name": "canary.c26024401-3f7a91c2",
+   "observed": "FAIL",
+   "test_path": "tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py",
+   "run_log": "tests/fixtures/fable2031/dispatch-captured/canary-run.log"
+  },
+  "evidence_logs": [
+   "tests/fixtures/fable2031/command-logs/alpha.log",
+   "tests/fixtures/fable2031/command-logs/beta.log"
+  ],
+  "sealed_by": "tests/fixtures/fable2031/proof — fixture stand-in for the dispatch state root (afproof seals the real one)"
+ }
+}

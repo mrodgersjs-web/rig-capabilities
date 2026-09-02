@@ -302,13 +302,17 @@ def verdict_ladder() -> dict:
             {"rung": 2,
              "name": "dispatcher_admit",
              "callable": "rig_capabilities/dispatcher.py::admit",
-             "role": "the ONLY emitter of PASS; must be run by a "
+             "role": "the ONLY emitter of PASS, and only when run by a "
                      "different-family verifier over a `git archive` tree "
-                     "materialised at the exact claimed commit",
+                     "materialised at the exact claimed commit; called "
+                     "offline it is a prefilter and answers PREFILTER_CLEAR",
              "requires": ["verifier family != dispatcher family",
                           "git archive tree at the claimed commit",
                           "verify_seal(packet) is True"],
-             "emits": list(DISPATCHER_VERDICTS)},
+             "emits": list(DISPATCHER_VERDICTS),
+             "offline_emits": ["PREFILTER_CLEAR", "FABRICATED",
+                               "ISOLATION_BREACH", "BLOCKED"],
+             "never_emits_offline": ["PASS"]},
             {"rung": 3,
              "name": "sentinel_prime_fleet",
              "role": "holds fleet termination authority in SPEC form only; "
@@ -323,5 +327,7 @@ def verdict_ladder() -> dict:
             "no PASS derives from a packet whose verify_seal returns False",
             "Sentinel Prime is unimplemented: fleet termination is never "
             "claimed, only BLOCKED_PENDING_SENTINEL",
+            "an offline admit() answers PREFILTER_CLEAR, never PASS: nothing "
+            "was re-executed, so nothing may be reported as verified",
         ],
     }

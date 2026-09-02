@@ -426,6 +426,43 @@ def collect_source_gates(h: dict):
                 yield g, str(cat.get("category", "")), None
 
 
+_NORM = None
+
+
+def _norm_steps(steps: list) -> list:
+    """Canonicalise the emitted iqrsqpi step vocabulary, never the anchor.
+
+    Resolves the runtime lazily and degrades to raw tokens if it cannot be
+    imported, so a missing package degrades the emission rather than killing
+    the build. An unknown token is kept as-is and stays visible downstream;
+    silently dropping it would hide a vocabulary error.
+    """
+    global _NORM
+    if _NORM is None:
+        # Loaded by explicit file path: this script's sys.path[0] is scripts/, so a
+        # plain `import rig_capabilities` fails here, and `pip install -e` also puts
+        # a *different* checkout's rig_capabilities on the path. Loading by path
+        # binds the runtime that lives beside the harnesses being compiled.
+        try:
+            import importlib.util as _iu
+            mod = (Path(__file__).resolve().parent.parent
+                   / "rig_capabilities" / "iqrsqpi_v10.py")
+            spec = _iu.spec_from_file_location("_iqrsqpi_v10", mod)
+            ns = _iu.module_from_spec(spec)
+            spec.loader.exec_module(ns)
+            _NORM = ns.normalize_stage
+        except Exception:
+            _NORM = False
+    out = []
+    for s in steps:
+        try:
+            out.append(_NORM(str(s)))
+        except Exception:
+            out.append(str(s))
+    return out
+
+
+
 def compile_harness(stem: str, h: dict) -> dict:
     """Map one parsed harness dict to an engine-loadable GoalSpec goal payload."""
     errors = []
@@ -534,7 +571,13 @@ def compile_harness(stem: str, h: dict) -> dict:
         "anti_patterns": [str(x) for x in _as_list(h.get("anti_patterns"))],
         "anti_generic_threshold": float(h.get("anti_generic_threshold", 80.0)),
         "approval_required": bool(fp["stop"]) or any(g["failure_tier"] == "stop" for g in gates),
-        "steps": [],
+        # Emitted steps carry canonical stage names; the ANCHOR above keeps the raw
+        # iqrsqpi_steps[0] forever. Every harness in the estate anchors on 'I' or
+        # 'intake', both of which normalize_stage maps to 'Intent', so routing the
+        # anchor through normalize_stage would rewrite all 56 coordinates — anchor
+        # drift is a regression, not an upgrade. If the runtime is unimportable the
+        # emitted list stays raw rather than failing the build.
+        "steps": _norm_steps(steps),
         "_meta": {
             "source": f"capabilities/harnesses/{stem}.yaml",
             "final_rule": final_rule,

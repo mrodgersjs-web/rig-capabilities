@@ -5,6 +5,7 @@ verdict branch is exercised against a committed packet or an in-memory variant.
 """
 from __future__ import annotations
 
+import subprocess
 import json
 import shutil
 import tempfile
@@ -61,13 +62,27 @@ class RepoStub:
 
 class DispatcherTests(unittest.TestCase):
     # ------------------------------------------------------------ verdicts ----
-    def test_honest_packet_passes_offline(self):
+    def test_honest_packet_clears_offline_without_claiming_pass(self):
+        """The prefilter may refuse to refute; it may not verify. (regression)
+
+        This branch returned the literal "PASS" while replay, isolation and
+        evidence were all `skipped_offline`, and the CLI mapped PASS to exit 0 —
+        so `dispatch-verify <honest packet>` reported a verified green having
+        re-executed nothing and read the working tree instead of the claimed
+        commit. The rung now answers PREFILTER_CLEAR, which `estage._PASS` does
+        not count as a pass.
+        """
         got = verify(packet("handoff-honest.json"))
-        self.assertEqual(got["verdict"], "PASS")
+        self.assertEqual(got["verdict"], "PREFILTER_CLEAR")
+        self.assertNotIn("PASS", got["reasons"])
+        self.assertIn("offline_prefilter:never_read_as_pass", got["reasons"])
         self.assertEqual(got["checks"]["schema"], "ok")
         self.assertEqual(got["checks"]["hashes"], "ok")
         self.assertEqual(got["checks"]["canary"], "honest")
-        for key in ("replay", "isolation", "evidence"):
+        # isolation is pure over packet-declared evidence, so it IS audited
+        # offline; replay and evidence need a checkout, so they are not.
+        self.assertEqual(got["checks"]["isolation"], "ok")
+        for key in ("replay", "evidence"):
             self.assertEqual(got["checks"][key], "skipped_offline")
 
     def test_fabricated_canary_green_is_fabricated(self):
@@ -152,7 +167,7 @@ class DispatcherTests(unittest.TestCase):
                          checkout=worktree)
         self.assertEqual(got["verdict"], "BLOCKED")
         self.assertEqual(got["checks"]["evidence"], "fail")
-        self.assertIn("outcome_evidence_not_pass:dispatcher_module_syntax_verified:2",
+        self.assertIn("outcome_evidence_not_pass:fixture_log_alpha_recorded:2",
                       got["reasons"])
 
     def test_missing_proofpacket_blocks_the_verifier_but_not_the_prefilter(self):
@@ -160,7 +175,7 @@ class DispatcherTests(unittest.TestCase):
         broken["proof_packet"] = "tests/fixtures/fable2031/proof/never-sealed.json"
         prefilter = verify(broken)
         self.assertEqual(prefilter["checks"]["evidence"], "skipped_offline")
-        self.assertIn("offline_prefilter", prefilter["reasons"])
+        self.assertIn("offline_prefilter:never_read_as_pass", prefilter["reasons"])
         with tempfile.TemporaryDirectory() as worktree:
             online = verify(broken, reexec=echo_replay(broken), offline=False,
                             checkout=worktree)
@@ -245,13 +260,22 @@ class DispatcherTests(unittest.TestCase):
 
     def test_verdicts_are_the_frozen_set(self):
         self.assertEqual(dispatcher.VERDICTS,
-                         ("PASS", "FAIL", "BLOCKED", "FABRICATED", "ISOLATION_BREACH"))
+                         ("PASS", "FAIL", "BLOCKED", "FABRICATED",
+                          "ISOLATION_BREACH", "PREFILTER_CLEAR"))
         self.assertEqual(dispatcher.PACKET_SCHEMA, "rig.dispatch.handoff.v1")
         self.assertEqual(dispatcher.REQUIRED_CLAIM, "SUBMITTED_FOR_VERIFICATION")
-        self.assertEqual({verify(packet(name))["verdict"] for name in
-                          ("handoff-honest.json", "handoff-fabricated.json",
-                           "handoff-phantom.json", "handoff-tampered.json")},
-                         {"PASS", "FABRICATED"})
+        # PREFILTER_CLEAR replaced PASS in this set: no shipped packet may be
+        # handed the word PASS by a run that re-executed nothing. Asserting the
+        # absence of PASS across every fixture is the load-bearing half.
+        offline = {name: verify(packet(name))["verdict"] for name in
+                   ("handoff-honest.json", "handoff-fabricated.json",
+                    "handoff-phantom.json", "handoff-tampered.json",
+                    "handoff-isolation.json")}
+        self.assertEqual(set(offline.values()),
+                         {"PREFILTER_CLEAR", "FABRICATED", "ISOLATION_BREACH"})
+        self.assertEqual(offline["handoff-honest.json"], "PREFILTER_CLEAR")
+        self.assertEqual(offline["handoff-isolation.json"], "ISOLATION_BREACH")
+        self.assertNotIn("PASS", offline.values())
 
     def test_validate_packet_error_lists(self):
         self.assertEqual(dispatcher.validate_packet(packet("handoff-honest.json")), [])
@@ -490,6 +514,30 @@ class WorktreeDenialParityTests(unittest.TestCase):
                               stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         self.assertEqual(proc.returncode, 0, proc.stderr.decode("utf-8", "replace"))
 
+
+
+
+class FixtureHygieneTests(unittest.TestCase):
+    """A fixture must not borrow somebody else's history.
+
+    The honest proof packet used to pin `d2bbec27…`, a commit that exists only on
+    a sibling branch — so on this branch the fixture's own claim was false, and a
+    tracked file was asserting reachability it did not have. Fixtures name their
+    own bytes; where a commit is named it is an ancestor of the branch under test.
+    """
+
+    def test_honest_proof_fixture_commits_to_this_branch_ancestry(self):
+        doc = json.loads((FIX / "proof" / "fable2031-honest.json").read_text())
+        commit = doc["body"]["commit"]
+        self.assertRegex(commit, r"^[0-9a-f]{7,40}$")
+        for f in doc["body"]["evidence_logs"] + [
+                doc["body"]["canary"]["test_path"],
+                doc["body"]["canary"]["run_log"]]:
+            self.assertTrue((REPO_ROOT / f).is_file(), f"fixture names missing {f}")
+        r = subprocess.run(["git", "merge-base", "--is-ancestor", commit, "HEAD"],
+                           cwd=REPO_ROOT, capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0,
+                         f"{commit} is not an ancestor of HEAD — fixture history leak")
 
 
 if __name__ == "__main__":

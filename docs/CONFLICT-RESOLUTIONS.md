@@ -146,3 +146,11 @@ absent from the scanned index, which makes the mirror a mirror and the assertion
 construction; or (b) add a `branch` column, key the upsert on it, and assert equality
 per-branch, which lets both branches coexist in one database.
 
+**Follow-up (2026-09-02, after Wave-3 registration):** the contention is unchanged and now
+larger. Registering this branch's eight canonical assets moved the local scan 4723 → 4735,
+and `sync()` pushed the shared DB 4737 → 4750. The surplus is 15 rows — the sibling branch's
+`rig-loop` assets plus earlier branch unions — none of them `fable-2031`'s, so
+`test_live_roundtrip` (4735 != 4750) stays RED here on the same argument, with A14 in
+`docs/ASSUMPTIONS.md` carrying the observation that would prove it a real bug instead. No
+shared row was deleted to buy a green.
+

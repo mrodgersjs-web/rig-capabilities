@@ -41,7 +41,7 @@ Commands:
   evidence validate|resume                Evidence Ledger rule 3; --ledger PATH checks a fixture
   lease <sub> [args]                      worktree leases; passthrough, exit 2 = denial
   canary mint|current|rotate --task T     planted failing canary, rotated per dispatch
-  dispatch-verify PACKET [--verify]       admission verdict; 0 PASS, 2 FABRICATED
+  dispatch-verify PACKET [--verify]       admission: 0 PASS, 2 FABRICATED, 3 prefilter-clears (never verified)
   estage score|compare|verdict            E_stage loss, golden-set compare, promotion verdict
   model-route [plan|verify|audit-*]       Fable 5.1 route: plan by default, --apply needs Gate-D
   fabrication [--since-days N]            fabrication ledger rates + the verdict ladder
@@ -829,6 +829,11 @@ def main() -> int:
             return 0
         if verdict in ("FABRICATED", "ISOLATION_BREACH"):
             return 2
+        if verdict == "PREFILTER_CLEAR":
+            # Exit 3, never 0. `estage` scores a non-zero exit as not-passed, and
+            # 0 is reserved for a verdict that re-executed the claimed commands.
+            # Anything reading "rc==0 means verified" cannot mis-read this rung.
+            return 3
         return 1
     elif args.cmd == "estage":
         from rig_capabilities import estage

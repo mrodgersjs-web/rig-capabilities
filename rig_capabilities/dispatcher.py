@@ -48,7 +48,12 @@ import re
 from pathlib import Path
 
 PACKET_SCHEMA = "rig.dispatch.handoff.v1"
-VERDICTS = ("PASS", "FAIL", "BLOCKED", "FABRICATED", "ISOLATION_BREACH")
+# PREFILTER_CLEAR is deliberately NOT a PASS-equivalent: `estage._PASS` counts
+# PASS/PASSED/GREEN/OK as a pass, so naming this verdict GREEN or OK would let an
+# un-re-executed prefilter score as success. It is a distinct token that reads as
+# "nothing was refuted yet", never as "verified".
+VERDICTS = ("PASS", "FAIL", "BLOCKED", "FABRICATED", "ISOLATION_BREACH",
+            "PREFILTER_CLEAR")
 REQUIRED_CLAIM = "SUBMITTED_FOR_VERIFICATION"
 
 TAC_SCHEMA = "tac.claim.v1"
@@ -478,6 +483,19 @@ def admit(packet, checkout, *, family_of_verifier, family_of_dispatcher,
         return decided("BLOCKED", errors, checks)
     checks["schema"] = "ok"
 
+    # Stage order is canary → hashes → isolation. The canary checks are pure over
+    # packet-declared fields and catch the loudest lie (a planted failure reported
+    # green); running them first means a decoy is reported under its own style
+    # rather than under whichever byte hash happened to be stale. With hashes
+    # first, all three red-team decoys collapsed to `file_sha_mismatch` and the
+    # detection gate's distinct-reason requirement went RED — coverage looked
+    # like one style detected three times.
+    reasons = _canary_reasons(packet)
+    if reasons:
+        checks["canary"] = "fail"
+        return decided("FABRICATED", reasons, checks)
+    checks["canary"] = "honest"
+
     reasons = _hash_reasons(packet)
     if reasons:
         checks["hashes"] = "fail"
@@ -485,14 +503,28 @@ def admit(packet, checkout, *, family_of_verifier, family_of_dispatcher,
     checks["hashes"] = "ok"
 
     if offline:
-        reasons = _canary_reasons(packet)
-        if reasons:
-            checks["canary"] = "fail"
-            return decided("FABRICATED", reasons, checks)
-        checks["canary"] = "honest"
-        checks.update(replay="skipped_offline", isolation="skipped_offline",
-                      evidence="skipped_offline")
-        return decided("PASS", ["offline_prefilter"], checks)
+        # The offline branch is a prefilter, not a verdict. It used to return the
+        # literal "PASS" — a green that re-executed nothing and read a leased
+        # checkout's files as if they were the claimed commit's. `admit` may only
+        # emit PASS after replaying the claimed commands over a tree materialised
+        # at that commit, so this rung answers PREFILTER_CLEAR: nothing was
+        # refuted, nothing was verified.
+        # The isolation audit reads only what the packet itself declares (reflog
+        # lines, mtimes, lease branch and path) — no filesystem, no git. It was
+        # previously skipped offline, so a packet with an off-lease reflog or an
+        # off-lease mtime cleared the prefilter. Fail-closed evidence needs no
+        # checkout, so it is checked here too.
+        isolated, reason = audit_isolation(packet.get("reflog"), packet.get("mtimes"),
+                                           packet.get("branch"),
+                                           packet.get("worktree_path"))
+        if not isolated:
+            checks["isolation"] = "fail"
+            return decided("ISOLATION_BREACH",
+                           [reason] + _offenders(packet), checks)
+        checks["isolation"] = "ok"
+        checks.update(replay="skipped_offline", evidence="skipped_offline")
+        return decided("PREFILTER_CLEAR",
+                       ["offline_prefilter:never_read_as_pass"], checks)
 
     reasons, verdict = _replay_reasons(packet, checkout, reexec)
     if reasons:
@@ -501,12 +533,8 @@ def admit(packet, checkout, *, family_of_verifier, family_of_dispatcher,
     checked = _production_commands(packet)
     checks["replay"] = f"ok:{len(checked)}"
 
-    reasons = _canary_reasons(packet)
-    if reasons:
-        checks["canary"] = "fail"
-        return decided("FABRICATED", reasons, checks)
-    checks["canary"] = "honest"
-
+    # The canary was already adjudicated before the hash stage; re-checking it
+    # here only duplicated a verdict that can no longer change.
     isolated, reason = audit_isolation(packet.get("reflog"), packet.get("mtimes"),
                                        packet.get("branch"), packet.get("worktree_path"))
     if not isolated:
@@ -579,7 +607,7 @@ def _canary_reasons(packet) -> list[str]:
         for entry in packet.get("files_changed") or []:
             path = entry.get("path") if isinstance(entry, dict) else entry
             if str(path) == phantom:
-                reasons.append(f"phantom_file_claimed_changed:{phantom}")
+                reasons.append(f"phantom_path_claimed_changed:{phantom}")
     failed = tests.get("failed")
     names = tests.get("failing_test_names")
     if _is_int(failed) and isinstance(names, list) and failed != len(names):

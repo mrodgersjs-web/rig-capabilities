@@ -134,3 +134,39 @@ Then register the Orca worktree in `workstation-repositories.json` as a temporar
 `PRODUCT_WORKTREE` entry first — that registry edit is its own Gate-D action, never an
 implementation detail, and until it lands the guard at `rig_repo_guard.py:124/:127` will
 (deny and) rightly deny writes there.
+
+## A12 — The live corpus roots are mounted and scannable when a week is scored
+
+`corpus.CORPUS_ROOTS` points at mounted corpora, so an operator can score a real week with
+`realign --root` / `capabilities_converge({"roots": …})` and the unbounded default stays
+available to the CLI, where a minutes-long scan is acceptable.
+
+**Falsifier:** a root that `is_dir()` reports true for then dies mid-walk. Observed on this
+build: `~/mnt/RIGLake` passes `is_dir()` and its walk raises `TimeoutError` at ~130–160 s.
+That is why no read-only MCP tool may default to those roots — `capabilities_converge({})`
+scores the committed 20-card fixture and labels the answer `corpus_scope: "fixture_snapshot"`
+with `live_corpus_scanned: false`. If a mount is repaired, the label changes; a tool that
+quietly inherited the live default would report a snapshot as a corpus.
+
+## A13 — A `done_when` check means what its file says
+
+Frontmatter list items are stored as written, so a `cmd:` whose value ends in a closing
+quote keeps that quote. `catalog._unquote()` strips only *paired* surrounding quotes; the
+previous `.strip("\"'")` deleted the closing quote of any single-quoted `python3 -c '…'`.
+
+**Falsifier:** an indexed `cmd:` item has an odd number of quote characters, or a check
+passes as authored but fails under `run_asset`. That happened here — two realign checks died
+with `unexpected EOF while looking for matching ''`, and a third pre-existing asset
+(`skill-upgrades.md`) was already mangled. Assert: zero odd-quote `cmd:` items in
+`.index.json` after `reindex`.
+
+## A14 — `test_live_roundtrip` failing on this branch is contention, not regression
+
+`sync()` is upsert-only (`rig_capabilities/sync.py:83-124`), so `capabilities.assets` in the
+shared `rig-dev-db` is the union of every branch that ever synced; the assertion
+`scan == count(*)` can only hold for whichever branch synced last.
+
+**Falsifier:** the surplus rows turn out to belong to *this* branch — i.e. `git ls-files`
+plus `.index.json` account for them, or `reindex` on a clean `fable-2031` worktree reproduces
+the DB count. Then it is a real sync bug in this branch's lane and must be fixed here, not
+documented. See conflict 8 for the receipts (4735 scanned here vs 4750 in the DB; 15 surplus).

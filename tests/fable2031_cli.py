@@ -340,12 +340,21 @@ class CliVerbTests(unittest.TestCase):
                             "a canary that never rotates detects nothing")
 
     # ------------------------------------------------------------- dispatch-verify
-    def test_dispatch_verify_offline_prefilter_passes_the_honest_packet(self):
+    def test_dispatch_verify_offline_prefilter_never_exits_zero(self):
+        """Exit 3, not 0: the prefilter re-executes nothing, so it may not verify.
+
+        It used to exit 0 with verdict PASS on the honest packet, which is exactly
+        the "green without evidence" this node exists to prevent. `isolation` is
+        the one ladder rung that IS adjudicated offline — it reads only the
+        reflog/mtimes the packet itself declares — so it must not read as skipped.
+        """
         rc, out = self._json("dispatch-verify",
                              "tests/fixtures/fable2031/handoff-honest.json")
-        self.assertEqual(rc, 0, out)
-        self.assertEqual(out["verdict"], "PASS")
+        self.assertEqual(rc, 3, out)
+        self.assertEqual(out["verdict"], "PREFILTER_CLEAR")
         self.assertEqual(out["mode"], "offline_prefilter")
+        self.assertEqual(out["checks"]["isolation"], "ok")
+        self.assertEqual(out["checks"]["replay"], "skipped_offline")
         self.assertTrue(out["tac_bound"]["canary_records_excluded"])
         self.assertGreaterEqual(out["tac_bound"]["dropped_canary_records"], 1)
 
