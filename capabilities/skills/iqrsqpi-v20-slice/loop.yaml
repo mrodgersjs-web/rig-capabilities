@@ -1,0 +1,62 @@
+# IQRSQPI v20 slice — the child loop the Build stage runs once per slice.
+# One slice fits one context window: Build -> Verify (checks + planted failure) -> Commit.
+# Opened by `rig-loop slice start "<name>"` from an active iqrsqpi-v20 run; while open it is
+# the active run for the directory, so hooks enforce the slice, not the parent.
+schema: rig.loop-skill.v11
+id: iqrsqpi-v20-slice
+name: IQRSQPI v20 slice
+version: 20.0.0
+doctrine_source:
+  - ~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md
+coordinate: {level: 2, diamond: D1, bms_mode: A1, step: S}
+family: governance
+packet: SlicePacket
+modes:
+  auto: {}
+kill_switch:
+  max_iterations: 3
+  max_wall_minutes: 240
+  max_stop_blocks: 2
+  max_tool_calls: 300
+outward_policy:
+  require_gate_d: true
+stages:
+  - id: B
+    name: Build
+    artifact: slice.md
+    write_policy: {mode: open}
+    gate:
+      - type: files_written_min
+        min: 1
+      - type: file_contains
+        path: slice.md
+        patterns: ["^## Slice", "^## Changed"]
+  - id: V
+    name: Verify
+    artifact: verify.md
+    write_policy: {mode: open}
+    gate:
+      - type: checks_green
+        min: 1
+      - type: planted_failure
+        min: 1
+      - type: file_contains
+        path: verify.md
+        patterns: ["^## Checks", "^## Planted-failure"]
+  - id: C
+    name: Commit
+    artifact: commit.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: commit.md
+        patterns: ["^## Commit"]
+      - type: regex
+        path: commit.md
+        pattern: '^## Commit[^\n]*\n[^\n]*\b[0-9a-f]{7,40}\b'
+        hint: "the commit sha on green (commit the slice before closing it)"
+closing_loop:
+  from: [V]
+  to: B
+  max_iterations: 3
+  on_exhaust: escalate

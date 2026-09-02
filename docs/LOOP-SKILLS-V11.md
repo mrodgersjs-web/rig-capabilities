@@ -69,6 +69,8 @@ capabilities/skills/<id>/
 
 | id | spine | replaces / encodes |
 |---|---|---|
+| `iqrsqpi-v20` (`/iqrsqpi`) | I1 Q1⇄R S B Q2 P I2 | v20: done-tests executed, Q⇄R dryness, slices as child runs, cross-family verifier dispatch, calibration, handoff — `docs/IQRSQPI-V20-DESIGN.md` |
+| `iqrsqpi-v20-slice` | B V C | one context-sized slice (child of v20) |
 | `iqrsqpi-v11` | I1 Q1 R S Q2 P I2 | IQRSQPI (unified doctrine §5, IQRSQPI-ENGINEERING); v10 stays the single-pass sibling |
 | `gate-d-loop` | C D R A X P | Gate-D (§10, GATE-D.md) |
 | `proof-loop` | C E N V P | Honest Completion + Proof-or-it-didn't-happen |

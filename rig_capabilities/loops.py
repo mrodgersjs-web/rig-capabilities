@@ -355,8 +355,27 @@ def find_active(cwd: str | None = None, run_id: str | None = None) -> dict | Non
     return None
 
 
+def detect_harness() -> str:
+    """Best-effort builder family from the environment (used for GEV independence)."""
+    env = os.environ
+    if env.get("RIG_AGENT"):
+        return env["RIG_AGENT"].lower()
+    if env.get("CLAUDECODE") or env.get("CLAUDE_SESSION_ID") or env.get("CLAUDE_CODE_ENTRYPOINT"):
+        return "claude"
+    if env.get("CODEX_SANDBOX") or env.get("CODEX_HOME") or env.get("CODEX_THREAD_ID"):
+        return "codex"
+    if env.get("HERMES_HOME") or env.get("HERMES_SESSION_ID"):
+        return "hermes"
+    if env.get("PRIME_AGENT_HOME") or env.get("PRIME_AGENT_DIR"):
+        return "prime-agent"
+    if env.get("OMP_HOME") or env.get("OMP_AGENT_DIR") or env.get("PI_AGENT_DIR"):
+        return "omp"
+    return "unknown"
+
+
 def activate(loop_id: str, cwd: str | None = None, intent: str = "", mode: str = "auto",
-             harness: str = "", session_id: str = "", if_inactive: bool = False) -> dict:
+             harness: str = "", session_id: str = "", if_inactive: bool = False,
+             parent_run_id: str | None = None) -> dict:
     spec = load_spec(loop_id)
     cwd = str(Path(cwd or os.getcwd()).resolve())
     if if_inactive:
@@ -366,6 +385,14 @@ def activate(loop_id: str, cwd: str | None = None, intent: str = "", mode: str =
     modes = spec.get("modes") or {"auto": {}}
     if mode not in modes:
         raise SpecError(f"mode '{mode}' not in {sorted(modes)}")
+    parent = None
+    if parent_run_id:
+        parent = load_run(parent_run_id)
+        if not parent or parent.get("status") != "active":
+            raise SpecError(f"parent run {parent_run_id} is not active")
+        mx = int((parent.get("kill_switch") or {}).get("max_children", 12))
+        if len(parent.get("children") or []) >= mx:
+            raise SpecError(f"parent run already has {mx} children (kill switch max_children)")
     run_id = _new_run_id(spec["id"])
     d = _run_dir(run_id)
     (d / "artifacts").mkdir(parents=True, exist_ok=True)
@@ -374,22 +401,43 @@ def activate(loop_id: str, cwd: str | None = None, intent: str = "", mode: str =
         "schema": "rig.loop-run.v11",
         "run_id": run_id, "loop_id": spec["id"], "loop_version": spec.get("version"),
         "spec_path": spec["_path"], "mode": mode, "mode_opts": modes.get(mode) or {},
-        "cwd": cwd, "harness": harness, "session_id": session_id, "intent": intent,
+        "cwd": cwd, "harness": (harness or detect_harness()), "session_id": session_id, "intent": intent,
         "started_at": utc_now(), "updated_at": utc_now(), "status": "active",
         "stage_status": {}, "stage_artifacts": {}, "stage_score": {}, "stage_notes": {},
         "history": [], "counters": {}, "checks": [], "planted": [], "files_written": [],
-        "drift": [], "iteration": 1, "stop_blocks": 0, "events": 0,
+        "drift": [], "iteration": 1, "stop_blocks": 0, "events": 0, "tool_calls": 0,
+        "qr_passes": [], "verifications": [], "children": [], "parent_run_id": parent_run_id,
+        "predicted": None,
         "gate_d": {"requested": None, "approved": False, "by": None, "at": None, "phrase": None},
         "proof": None, "kill_switch": {"max_iterations": int(ks.get("max_iterations", 3)),
                                         "max_wall_minutes": int(ks.get("max_wall_minutes", 240)),
-                                        "max_stop_blocks": int(ks.get("max_stop_blocks", 2))},
+                                        "max_stop_blocks": int(ks.get("max_stop_blocks", 2)),
+                                        "max_tool_calls": int(ks.get("max_tool_calls", 800)),
+                                        "max_children": int(ks.get("max_children", 12))},
         "coordinate": spec.get("coordinate"), "packet": spec.get("packet"),
     }
     save_run(run)
-    log_event(run, "activate", loop=spec["id"], mode=mode, harness=harness, intent=intent)
+    log_event(run, "activate", loop=spec["id"], mode=mode, harness=run["harness"], intent=intent,
+              parent=parent_run_id)
     save_run(run)
+    if parent:
+        parent.setdefault("children", []).append(run_id)
+        log_event(parent, "child_start", child=run_id, intent=intent)
+        save_run(parent)
     set_active(run)
     return run
+
+
+def _restore_parent(run: dict) -> None:
+    """When a child run leaves the active state, the parent becomes active for the cwd again."""
+    pid = run.get("parent_run_id")
+    if not pid:
+        return
+    parent = load_run(pid)
+    if parent and parent.get("status") == "active":
+        log_event(parent, "child_end", child=run["run_id"], status=run.get("status"))
+        save_run(parent)
+        set_active(parent)
 
 
 def artifacts_dir(run: dict) -> Path:
@@ -488,9 +536,28 @@ def _gate_checks_green(run, spec, st, g):
     return (not red), ("all checks green" if not red else f"red: {[r['cmd'] for r in red]}")
 
 
+def _children(run: dict) -> list[dict]:
+    return [c for c in (load_run(cid) for cid in (run.get("children") or [])) if c]
+
+
+def all_planted(run: dict) -> list[dict]:
+    """A parent's evidence includes what its slice runs proved."""
+    out = list(run["planted"])
+    for c in _children(run):
+        out.extend(c.get("planted") or [])
+    return out
+
+
+def all_files_written(run: dict) -> list[str]:
+    out = list(run["files_written"])
+    for c in _children(run):
+        out.extend(f for f in (c.get("files_written") or []) if f not in out)
+    return out
+
+
 def _gate_planted_failure(run, spec, st, g):
-    good = [p for p in run["planted"] if p.get("red_ok") and p.get("green_ok")]
-    return len(good) >= int(g.get("min", 1)), f"{len(good)} planted failures proven RED→GREEN (min {g.get('min',1)})"
+    good = [p for p in all_planted(run) if p.get("red_ok") and p.get("green_ok")]
+    return len(good) >= int(g.get("min", 1)), f"{len(good)} planted failures proven RED→GREEN (min {g.get('min',1)}, slices included)"
 
 
 def proof_binding_ok(run: dict) -> tuple[bool, str]:
@@ -549,8 +616,88 @@ def _gate_drift_within(run, spec, st, g):
 
 
 def _gate_files_written_min(run, spec, st, g):
-    n = len(run["files_written"])
-    return n >= int(g.get("min", 1)), f"{n} files written this run (min {g.get('min',1)})"
+    n = len(all_files_written(run))
+    return n >= int(g.get("min", 1)), f"{n} files written this run incl. slices (min {g.get('min',1)})"
+
+
+def _gate_qr_dry(run, spec, st, g):
+    passes = run.get("qr_passes") or []
+    mn = int(g.get("min", 2))
+    if len(passes) < mn:
+        return False, f"{len(passes)} Q⇄R passes recorded (min {mn}); record each with: rig-loop qr pass --new-unknowns N"
+    last = int(passes[-1].get("new_unknowns", 1))
+    return last == 0, (f"dry after {len(passes)} passes" if last == 0
+                       else f"last Q⇄R pass still surfaced {last} new load-bearing unknown(s) — not dry")
+
+
+def _gate_children_done(run, spec, st, g):
+    ids = run.get("children") or []
+    mn = int(g.get("min", 1))
+    kids = [(cid, (load_run(cid) or {}).get("status", "missing")) for cid in ids]
+    if len(kids) < mn:
+        return False, f"{len(kids)} slice run(s) (min {mn}); open one with: rig-loop slice start \"<name>\""
+    open_ = [f"{cid}={s}" for cid, s in kids if s != "done"]
+    return (not open_), ("all slices done: " + ", ".join(cid for cid, _ in kids) if not open_
+                          else f"slices not done: {open_}")
+
+
+def _gate_independent_verdict(run, spec, st, g):
+    accept = [v.upper() for v in (g.get("accept") or ["PERFECT", "VERIFIED", "PARTIAL"])]
+    builder = (run.get("harness") or "unknown").lower()
+    good = [v for v in (run.get("verifications") or [])
+            if v.get("verdict", "").upper() in accept and v.get("family", "").lower() != builder]
+    mn = int(g.get("min", 1))
+    if len(good) >= mn:
+        return True, f"independent verdict {good[-1]['verdict']} from {good[-1]['family']} (builder {builder})"
+    seen = [f"{v.get('family')}:{v.get('verdict')}" for v in run.get("verifications") or []]
+    return False, (f"no accepted verdict from a family other than the builder ({builder}); seen {seen or 'none'}. "
+                   f"Run: rig-loop verify --family <codex|claude|hermes|omp|prime-agent>")
+
+
+_CONF_RX = re.compile(r"^##\s*CONFIDENCE[^\n]*\n\s*(0(?:\.\d+)?|1(?:\.0+)?)\s*$", re.M)
+
+
+def _gate_confidence_declared(run, spec, st, g):
+    p = _resolve_artifact(run, st, g.get("path"))
+    if not p.exists():
+        return False, f"{p} missing"
+    m = _CONF_RX.search(p.read_text(errors="replace"))
+    if not m:
+        return False, "declare `## CONFIDENCE` followed by a probability 0–1 that the DONE-TEST will pass first time"
+    run["predicted"] = float(m.group(1))
+    return True, f"predicted confidence {run['predicted']}"
+
+
+_DONE_TEST_RX = re.compile(r"^\s*[-*]\s*(cmd|file|grep|mcp):(\S.*)$", re.M)
+
+
+def register_done_tests(run: dict, spec: dict, st: dict) -> list[str]:
+    """Turn `- cmd:/file:/grep:` DONE-TEST lines of the stage artifact into checks tagged
+    done_test, so Intent is executed at Quality/Proof instead of merely syntax-checked."""
+    p = _resolve_artifact(run, st, None)
+    if not p.exists():
+        return []
+    added = []
+    existing = {c["cmd"] for c in run["checks"]}
+    for form, arg in _DONE_TEST_RX.findall(p.read_text(errors="replace")):
+        arg = arg.strip()
+        if form == "cmd":
+            cmd = arg
+        elif form == "file":
+            cmd = f"test -s {arg}"
+        elif form == "grep":
+            path, _, rx = arg.partition(":")
+            cmd = f"grep -Eq '{rx}' {path}"
+        else:
+            continue
+        if cmd in existing:
+            continue
+        run["checks"].append({"cmd": cmd, "cwd": run["cwd"], "added": utc_now(), "last": None, "done_test": True})
+        run.setdefault("done_tests", []).append(cmd)
+        added.append(cmd)
+    if added:
+        log_event(run, "done_tests_registered", count=len(added))
+    return added
 
 
 GATE_TYPES = {
@@ -560,7 +707,9 @@ GATE_TYPES = {
     "planted_failure": _gate_planted_failure, "sealed": _gate_sealed, "gate_d_approved": _gate_gate_d,
     "gate_d_requested": _gate_gate_d_requested,
     "cmd": _gate_cmd, "stage_passed": _gate_stage_passed, "drift_within": _gate_drift_within,
-    "files_written_min": _gate_files_written_min,
+    "files_written_min": _gate_files_written_min, "qr_dry": _gate_qr_dry,
+    "children_done": _gate_children_done, "independent_verdict": _gate_independent_verdict,
+    "confidence_declared": _gate_confidence_declared,
 }
 
 
@@ -629,6 +778,10 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
             log_event(run, "gate_degraded", stage=sid, results=degraded)
         if force:
             note = (note + " " if note else "") + "[FORCED — recorded as forced pass]"
+        if st.get("register_done_tests"):
+            added = register_done_tests(run, spec, st)
+            if added:
+                note = (note + " " if note else "") + f"[done-tests registered: {len(added)}]"
     run["stage_status"][sid] = status
     if score is not None:
         run["stage_score"][sid] = int(score)
@@ -643,10 +796,12 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
         run["status"] = "parked"
         run["park_reason"] = note or "parked"
         clear_active(run)
+        _restore_parent(run)
     elif current_stage(run, spec) is None:
         run["status"] = "done"
         log_event(run, "done")
         clear_active(run)
+        _restore_parent(run)
     save_run(run)
     return run
 
@@ -661,6 +816,7 @@ def _apply_closing_loop(run: dict, spec: dict, failed: str) -> None:
             run["park_reason"] = f"closing loop exhausted ({mx} iterations) at {failed} — escalate to Mike"
             log_event(run, "escalate", stage=failed, iterations=run["iteration"] - 1)
             clear_active(run)
+            _restore_parent(run)
             return
         to = cl.get("to")
         ids = [s["id"] for s in spec["stages"]]
@@ -759,6 +915,9 @@ def seal(run: dict, spec: dict, signer: str = "rig-loop") -> dict:
         "planted_failures": run["planted"], "files_written": run["files_written"],
         "scope_drift": run["drift"], "gate_d": run["gate_d"], "events": run["events"],
         "history": run["history"], "verdict": "GO",
+        "verifications": run.get("verifications") or [], "children": slice_list(run),
+        "qr_passes": run.get("qr_passes") or [], "predicted": run.get("predicted"),
+        "calibration": record_calibration(run), "tool_calls": run.get("tool_calls", 0),
     }
     body = json.dumps(packet, indent=2, sort_keys=True)
     packet["proof_hash"] = hashlib.sha256(body.encode()).hexdigest()
@@ -781,6 +940,7 @@ def park(run: dict, reason: str) -> dict:
     log_event(run, "park", reason=reason)
     save_run(run)
     clear_active(run)
+    _restore_parent(run)
     return run
 
 
@@ -804,7 +964,200 @@ def close(run: dict, reason: str = "closed") -> dict:
     log_event(run, "close", reason=reason)
     save_run(run)
     clear_active(run)
+    _restore_parent(run)
     return run
+
+
+# --------------------------------------------------------------------------- v20: Q⇄R, slices, verify, handoff, calibration
+def qr_pass(run: dict, new_unknowns: int, note: str = "") -> dict:
+    rec = {"n": len(run.get("qr_passes") or []) + 1, "at": utc_now(), "new_unknowns": int(new_unknowns), "note": note}
+    run.setdefault("qr_passes", []).append(rec)
+    run["counters"]["qr_passes"] = rec["n"]
+    log_event(run, "qr_pass", **{k: v for k, v in rec.items() if k != "at"})
+    save_run(run)
+    return rec
+
+
+def slice_start(parent: dict, name: str, loop_id: str = "iqrsqpi-v20-slice") -> dict:
+    return activate(loop_id, cwd=parent["cwd"], intent=name, mode="auto", harness=parent.get("harness", ""),
+                    parent_run_id=parent["run_id"])
+
+
+def slice_list(parent: dict) -> list[dict]:
+    out = []
+    for cid in parent.get("children") or []:
+        c = load_run(cid) or {}
+        out.append({"run_id": cid, "intent": c.get("intent"), "status": c.get("status", "missing"),
+                    "stages": c.get("stage_status", {})})
+    return out
+
+
+VERIFIER_FAMILIES = {
+    "claude": ["claude", "-p", "--output-format", "text", "--max-turns", "12", "{prompt}"],
+    "codex": ["codex", "exec", "--sandbox", "workspace-write", "--cd", "{cwd}", "{prompt}"],
+    "hermes": ["hermes", "chat", "-q", "{prompt}", "--oneshot"],
+    "omp": ["omp", "-p", "--no-session", "{prompt}"],
+    "prime-agent": ["prime-agent", "-p", "{prompt}"],
+}
+_VERDICT_RX = re.compile(r"VERDICT:\s*(PERFECT|VERIFIED|PARTIAL|FEEDBACK|FAILED)\b", re.I)
+
+
+def build_verifier_prompt(run: dict, spec: dict) -> str:
+    arts = []
+    for st in spec["stages"]:
+        p = _resolve_artifact(run, st, None)
+        if p.exists() and p.is_file() and p.suffix == ".md":
+            arts.append(f"\n### {st['id']} {st.get('name','')} — {p}\n" + p.read_text(errors="replace")[:6000])
+    checks = "\n".join(f"- `{c['cmd']}`" + (" (done-test)" if c.get("done_test") else "") for c in run["checks"]) or "- none"
+    files = "\n".join(f"- {f}" for f in run["files_written"][:60]) or "- none recorded"
+    return (
+        f"You are an INDEPENDENT VERIFIER for a RIG loop run. You are a different model family from the builder "
+        f"({run.get('harness')}); you have the artifacts and the tree, never the builder's reasoning. Do NOT modify tracked files.\n"
+        f"Run id: {run['run_id']} · loop: {run['loop_id']} · cwd: {run['cwd']}\nIntent: {run.get('intent')}\n\n"
+        f"Registered checks (run each yourself, report exit codes verbatim):\n{checks}\n\nFiles the builder wrote:\n{files}\n\n"
+        f"Artifacts:{''.join(arts)}\n\n"
+        "Verify against the contract in the artifacts: does the code/work satisfy the DONE-TEST and the Acceptance criteria? "
+        "Probe adversarially for a way the checks could be green while the intent is unmet. "
+        "Output exactly: a line `VERDICT: PERFECT|VERIFIED|PARTIAL|FEEDBACK|FAILED`, then `GAPS:` bullets with file:line evidence "
+        "(or `- none`), then `EVIDENCE:` with the command outputs you ran. Be specific; do not pad."
+    )
+
+
+def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, timeout: int = 900) -> dict:
+    """Dispatch a headless verifier of another family, parse its VERDICT, record it on the run."""
+    family = family.lower()
+    if family == (run.get("harness") or "").lower():
+        raise SpecError(f"verifier family '{family}' equals the builder family — GEV separation requires a different family")
+    prompt = build_verifier_prompt(run, spec)
+    d = _run_dir(run["run_id"])
+    ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    prompt_path = d / f"verify-{family}-{ts}.prompt.md"
+    out_path = d / f"verify-{family}-{ts}.md"
+    _atomic_write(prompt_path, prompt)
+    t0 = time.time()
+    override = cmd_override or os.environ.get("RIG_LOOP_VERIFIER_CMD")
+    try:
+        if override:
+            cmd = override.replace("{prompt_file}", str(prompt_path)).replace("{cwd}", run["cwd"])
+            r = subprocess.run(cmd, shell=True, cwd=run["cwd"], capture_output=True, text=True, timeout=timeout,
+                               stdin=subprocess.DEVNULL)
+        else:
+            if family not in VERIFIER_FAMILIES:
+                raise SpecError(f"unknown verifier family {family}; options: {sorted(VERIFIER_FAMILIES)}")
+            argv = [a.replace("{prompt}", prompt).replace("{cwd}", run["cwd"]) for a in VERIFIER_FAMILIES[family]]
+            r = subprocess.run(argv, cwd=run["cwd"], capture_output=True, text=True, timeout=timeout,
+                               stdin=subprocess.DEVNULL)
+        output, exit_code = (r.stdout or "") + ("\n[stderr]\n" + r.stderr if r.stderr else ""), r.returncode
+    except subprocess.TimeoutExpired:
+        output, exit_code = f"[timeout after {timeout}s]", 124
+    except FileNotFoundError as exc:
+        output, exit_code = f"[verifier binary not found: {exc}]", 127
+    _atomic_write(out_path, output)
+    m = _VERDICT_RX.search(output)
+    verdict = m.group(1).upper() if m else "NO_VERDICT"
+    gaps = []
+    gm = re.search(r"GAPS:\s*\n((?:[ \t]*[-*].*\n?)+)", output)
+    if gm:
+        gaps = [ln.strip().lstrip("-* ").strip() for ln in gm.group(1).splitlines() if ln.strip()][:12]
+    rec = {"family": family, "verdict": verdict, "exit": exit_code, "at": utc_now(), "secs": round(time.time() - t0, 1),
+           "output": str(out_path), "prompt": str(prompt_path), "gaps": gaps, "iteration": run["iteration"]}
+    run.setdefault("verifications", []).append(rec)
+    log_event(run, "verify", family=family, verdict=verdict, exit=exit_code)
+    save_run(run)
+    return rec
+
+
+def render_handoff(run: dict, spec: dict) -> str:
+    st = current_stage(run, spec)
+    done, total = progress(run, spec)
+    kids = slice_list(run)
+    lines = [
+        "# Session Handoff", "",
+        f"**Date**: {utc_now()[:10]}", f"**Project**: {run['cwd']}",
+        f"**Session Goal**: {run.get('intent') or '(no intent recorded)'}",
+        f"**Loop**: {run['loop_id']} run `{run['run_id']}` · mode {run['mode']} · iteration {run['iteration']} · status {run['status']}",
+        f"**Status**: {'COMPLETE' if run['status'] == 'done' else 'PARTIAL' if done else 'NOT STARTED'} — {done}/{total} stages", "",
+        "## Completed",
+    ]
+    for s in spec["stages"]:
+        if run["stage_status"].get(s["id"]) == "pass":
+            art = run["stage_artifacts"].get(s["id"]) or str(_resolve_artifact(run, s, None))
+            lines.append(f"- [x] {s['id']} {s.get('name','')} — artifact: {art}")
+    lines += ["", "## In Progress"]
+    if st:
+        ok, results = evaluate_gate(run, spec, st)
+        red = [f"{r['type']}: {r['detail']}" for r in results if not r["ok"]]
+        lines.append(f"- [ ] {st['id']} {st.get('name','')} — artifact: {_resolve_artifact(run, st, None)}")
+        lines.append(f"  - Next step: {'`rig-loop stage ' + st['id'] + ' pass`' if ok else 'clear: ' + '; '.join(red)}")
+    lines += ["", "## Not Started"]
+    for s in spec["stages"]:
+        if run["stage_status"].get(s["id"]) != "pass" and (not st or s["id"] != st["id"]):
+            lines.append(f"- [ ] {s['id']} {s.get('name','')}")
+    if kids:
+        lines += ["", "## Slices"] + [f"- {k['run_id']} — {k['intent']} — {k['status']}" for k in kids]
+    lines += ["", "## Decisions Made", "| Decision | Rationale | Reversible? |", "|----------|-----------|-------------|"]
+    for sid, note in (run.get("stage_notes") or {}).items():
+        lines.append(f"| {sid}: {note[:80]} | recorded in run history | yes |")
+    if run["gate_d"].get("requested"):
+        lines.append(f"| Gate-D: {run['gate_d']['requested'][:80]} | approved={run['gate_d'].get('approved')} | n/a |")
+    lines += ["", "## Context for Next Session",
+              f"- Key insight: resume with `rig-loop resume {run['run_id']}` (state: {_run_dir(run['run_id'])})",
+              f"- Files to read first: {', '.join(run['stage_artifacts'].values()) or str(artifacts_dir(run))}",
+              f"- Tests to run first: {', '.join(c['cmd'] for c in run['checks']) or '(none registered)'}",
+              f"- Risk: {run.get('park_reason') or ('scope drift ' + str(len(run['drift'])) + ' file(s)' if run['drift'] else 'none recorded')}",
+              "", "## Build Health",
+              f"- Files modified this session: {len(run['files_written'])}",
+              f"- Tests passing: {'yes' if run['checks'] and all((c.get('last') or {}).get('exit') == 0 for c in run['checks']) else 'unknown — run rig-loop check run'}",
+              "- Verifications: " + (", ".join(v["family"] + "=" + v["verdict"] for v in (run.get("verifications") or [])) or "none"),
+              f"- Context health at close: {'GREEN' if run['tool_calls'] < run['kill_switch']['max_tool_calls'] // 2 else 'YELLOW'}", ""]
+    return "\n".join(lines)
+
+
+def handoff(run: dict, spec: dict, to: str | None = None) -> Path:
+    text = render_handoff(run, spec)
+    out = artifacts_dir(run) / "handoff.md"
+    _atomic_write(out, text)
+    if to:
+        _atomic_write(Path(os.path.expanduser(to)), text)
+    log_event(run, "handoff", path=str(out), copy=to)
+    save_run(run)
+    return out
+
+
+def calibration_path() -> Path:
+    return state_root() / "calibration.jsonl"
+
+
+def record_calibration(run: dict) -> dict | None:
+    if run.get("predicted") is None:
+        return None
+    dts = [c for c in run["checks"] if c.get("done_test")]
+    if not dts:
+        return None
+    actual = 1.0 if all((c.get("last") or {}).get("exit") == 0 for c in dts) else 0.0
+    rec = {"at": utc_now(), "loop": run["loop_id"], "run": run["run_id"], "predicted": run["predicted"],
+           "actual": actual, "brier": round((run["predicted"] - actual) ** 2, 4), "done_tests": len(dts)}
+    with open(calibration_path(), "a") as f:
+        f.write(json.dumps(rec, sort_keys=True) + "\n")
+    run["calibration"] = rec
+    return rec
+
+
+def calibration_summary(loop_id: str | None = None) -> dict:
+    p = calibration_path()
+    rows = []
+    if p.exists():
+        for ln in p.read_text().splitlines():
+            try:
+                r = json.loads(ln)
+                if not loop_id or r.get("loop") == loop_id:
+                    rows.append(r)
+            except Exception:  # noqa: BLE001
+                continue
+    n = len(rows)
+    return {"runs": n, "mean_brier": round(sum(r["brier"] for r in rows) / n, 4) if n else None,
+            "hit_rate": round(sum(r["actual"] for r in rows) / n, 3) if n else None,
+            "mean_predicted": round(sum(r["predicted"] for r in rows) / n, 3) if n else None, "recent": rows[-5:]}
 
 
 # --------------------------------------------------------------------------- hook policy
@@ -903,7 +1256,8 @@ def banner(run: dict, spec: dict) -> str:
     else:
         gates = "; ".join(f"{g['type']}" + (f"({g.get('path','')})" if g.get("path") else "") for g in st.get("gate") or []) or "none"
         nxt = f"stage {st['id']} {st.get('name','')} ({done+1}/{total}) — artifact: {_resolve_artifact(run, st, None)} — gates: {gates}"
-    lines = [f"[rig-loop] {spec.get('name', run['loop_id'])} · run {run['run_id']} · mode {run['mode']} · iteration {run['iteration']}/{run['kill_switch']['max_iterations']} · gate-d {gd}",
+    parent = f" · child of {run['parent_run_id']}" if run.get("parent_run_id") else ""
+    lines = [f"[rig-loop] {spec.get('name', run['loop_id'])} · run {run['run_id']}{parent} · mode {run['mode']} · iteration {run['iteration']}/{run['kill_switch']['max_iterations']} · gate-d {gd} · tool-calls {run.get('tool_calls', 0)}/{run['kill_switch'].get('max_tool_calls', 800)}",
              f"[rig-loop] NOW: {nxt}",
              f"[rig-loop] advance with: rig-loop stage {st['id'] if st else '<id>'} pass [--artifact PATH]  · status: rig-loop status  · park: rig-loop park --reason \"...\""]
     if run["drift"]:
@@ -942,6 +1296,14 @@ def hook_pre_tool(run: dict | None, spec: dict | None, p: dict, skill: str | Non
         return {"action": "allow"}
     st = current_stage(run, spec)
     tool = p["tool"]
+    # ---- kill switch: tool-call budget
+    run["tool_calls"] = int(run.get("tool_calls", 0)) + 1
+    mx = int(run["kill_switch"].get("max_tool_calls", 800))
+    if run["tool_calls"] > mx:
+        park(run, f"kill switch: tool-call budget {mx} exceeded at stage {st['id'] if st else 'complete'}")
+        return {"action": "deny", "reason": (
+            f"[rig-loop {run['loop_id']}] KILL SWITCH — {mx} tool calls reached; run {run['run_id']} parked. "
+            f"Write a handoff (`rig-loop resume {run['run_id']} && rig-loop handoff`) and re-plan with Mike.")}
     # ---- shell: outward / irreversible actions need Gate-D
     if tool == "Bash" and p["command"]:
         pol = spec.get("outward_policy") or {}
@@ -1337,7 +1699,8 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
             elif "stage" in step:
                 s = step["stage"]
                 try:
-                    run = mark_stage(load_run(run["run_id"]), spec, s["id"], s.get("status", "pass"),
+                    cur_run = load_run(run["run_id"])
+                    run = mark_stage(cur_run, load_spec(cur_run["loop_id"]), s["id"], s.get("status", "pass"),
                                      artifact=sub(s["artifact"]) if s.get("artifact") else None,
                                      note=s.get("note", ""), force=bool(s.get("force")))
                     got = {"ok": True, "status": run["stage_status"].get(s["id"]), "run_status": run["status"], "iteration": run["iteration"]}
@@ -1379,15 +1742,49 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
             elif "resume" in step:
                 run = resume(run["run_id"])
                 got = {"ok": True, "run_status": run["status"]}
+            elif "qr" in step:
+                rec = qr_pass(load_run(run["run_id"]), int(step["qr"].get("new_unknowns", 0)))
+                got = {"ok": True, "n": rec["n"]}
+            elif "slice" in step:
+                sl = step["slice"]
+                if sl.get("start"):
+                    try:
+                        run = slice_start(load_run(run["run_id"]), sl["start"], sl.get("loop", "iqrsqpi-v20-slice"))
+                        got = {"ok": True, "run": run["run_id"], "child": True}
+                    except SpecError as exc:
+                        got = {"ok": False, "refused": str(exc)}
+                elif sl.get("parent"):
+                    run = load_run(run["parent_run_id"])
+                    got = {"ok": True, "run": run["run_id"]}
+            elif "verify" in step:
+                v = step["verify"]
+                mock = v.get("mock")
+                override = f"printf 'VERDICT: {mock}\\nGAPS:\\n- none\\n'" if mock else v.get("cmd")
+                try:
+                    cur_run = load_run(run["run_id"])
+                    rec = verify(cur_run, load_spec(cur_run["loop_id"]), v.get("family", "codex"), cmd_override=override, timeout=60)
+                    got = {"ok": True, "verdict": rec["verdict"], "family": rec["family"]}
+                except SpecError as exc:
+                    got = {"ok": False, "refused": str(exc)}
+            elif "handoff" in step:
+                cur_run = load_run(run["run_id"])
+                p = handoff(cur_run, load_spec(cur_run["loop_id"]))
+                got = {"ok": p.exists(), "path": str(p)}
             elif "sh" in step:
                 r = _run_cmd(sub(step["sh"]), str(cwd), 60)
                 got = {"ok": r["exit"] == 0, "exit": r["exit"], "tail": (r["stdout"] + r["stderr"])[-160:]}
+            elif "set" in step:
+                run = load_run(run["run_id"])
+                run[step["set"]["field"]] = step["set"]["value"]
+                save_run(run)
+                got = {"ok": True}
             elif "assert" in step:
                 run = load_run(run["run_id"])
                 a = step["assert"]
                 val = run.get(a["field"])
                 got = {"ok": True, "value": val if not isinstance(val, (list, dict)) else None,
-                       "len": len(val) if isinstance(val, (list, dict)) else None}
+                       "len": len(val) if isinstance(val, (list, dict)) else None,
+                       "active": (find_active(str(cwd)) or {}).get("run_id")}
             else:
                 got = {"ok": False, "error": f"unknown step {list(step)}"}
         except Exception as exc:  # noqa: BLE001
@@ -1398,6 +1795,12 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
                 step_ok &= (got.get("ok") is v)
             elif k == "reason_contains":
                 step_ok &= (v in got.get("reason", "") or v in got.get("refused", ""))
+            elif k == "active_is":
+                active = (find_active(str(cwd)) or {}).get("run_id")
+                cur = load_run(run["run_id"]) if run else None
+                want = {"self": (cur or {}).get("run_id"), "parent": (cur or {}).get("parent_run_id"), "none": None}[v]
+                step_ok &= (active == want)
+                got["active"] = active
             else:
                 step_ok &= (got.get(k) == v)
         if expect and not step_ok:

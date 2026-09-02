@@ -3,7 +3,7 @@
 v41: Loop-Skill Contract v11 — doctrines as code-gated loops with cross-harness hooks.
 Stdlib only.
 """
-__version__ = "41.0.0"
+__version__ = "42.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -45,4 +45,5 @@ VERSION_LADDER = {
     "39": "ROADMAP V28 ARMED + Wave 4 rows",
     "40": "Wave 4 close",
     "41": "Loop-Skill Contract v11: rig-loop engine, IQRSQPI v11 + 6 core doctrine loop-skills, hooks wired in 5 harnesses",
+    "42": "IQRSQPI v20: done-tests executed, Q<->R dryness gate, child slice runs, cross-family verifier dispatch, calibration ledger, handoff; /iqrsqpi in 5 harnesses",
 }

@@ -1430,7 +1430,7 @@ class CommandCanonicalTests(unittest.TestCase):
 
     def test_all_commands_carry_full_contract(self):
         srcs = list((REPO_ROOT / "capabilities" / "commands").glob("*.md"))
-        self.assertEqual(len(srcs), 6)
+        self.assertEqual(len(srcs), 7, sorted(f.name for f in srcs))
         for f in srcs:
             text = f.read_text()
             for key in ("outcome:", "done_when:", "great_example:", "quality_floor:"):

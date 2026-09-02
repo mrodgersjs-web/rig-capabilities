@@ -1,0 +1,32 @@
+[
+  {
+    "name": "slice build needs a written file; verify needs green check + planted failure; commit needs a sha",
+    "steps": [
+      {"activate": {"intent": "slice s1"}},
+      {"write": {"path": "slice.md", "content": "## Slice\ns1\n## Changed\n- src/a.py\n"}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": false, "reason_contains": "files written"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "allow"}},
+      {"write": {"path": "<cwd>/src/a.py", "content": "print(1)\n"}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "verify.md", "content": "## Checks\n- t\n## Planted-failure\n- p\n"}},
+      {"check_add": "test -f <cwd>/src/nope.py"},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": false, "reason_contains": "red"}},
+      {"stage": {"id": "V", "status": "fail"}, "expect": {"ok": true, "iteration": 2}},
+      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "<cwd>/src/nope.py", "content": "x\n"}},
+      {"plant": {"name": "rm-nope", "red": "test -f <cwd>/src/zz.py", "green": "test -f <cwd>/src/nope.py"}},
+      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "commit.md", "content": "## Commit\npending\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": false, "reason_contains": "commit sha"}},
+      {"write": {"path": "commit.md", "content": "## Commit\nabc1234 feat: s1\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  },
+  {
+    "name": "outward action inside a slice still needs Gate-D",
+    "steps": [
+      {"activate": {"intent": "slice s2"}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "git push origin main"}}, "expect": {"action": "deny", "reason_contains": "OUTWARD ACTION BLOCKED"}}
+    ]
+  }
+]

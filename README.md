@@ -92,6 +92,8 @@ ProofPacket. Hooks fire on every prompt / tool call / stop in Claude, Codex, OMP
 
 | loop-skill | spine |
 |---|---|
+| `iqrsqpi-v20` (`/iqrsqpi`) | I1 Q1⇄R(dry) S B(slices) Q2(other-family verdict) P(calibration) I2(handoff) |
+| `iqrsqpi-v20-slice` | B V C — child loop per context-sized slice |
 | `iqrsqpi-v11` (reference) | I1 Q1 R S Q2 P I2 |
 | `gate-d-loop` | C D R A X P |
 | `proof-loop` | C E N V P |

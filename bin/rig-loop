@@ -191,6 +191,64 @@ def cmd_close(a):
     return 0
 
 
+def cmd_qr(a):
+    run = _need_run(a)
+    rec = L.qr_pass(run, a.new_unknowns, a.note or "")
+    dry = "DRY" if rec["new_unknowns"] == 0 else f"{rec['new_unknowns']} new unknown(s) — loop again"
+    print(f"[rig-loop] Q⇄R pass {rec['n']} recorded: {dry}")
+    return 0
+
+
+def cmd_slice(a):
+    run = _need_run(a)
+    if a.action == "start":
+        if not a.name:
+            sys.exit("rig-loop: slice start needs a name")
+        try:
+            child = L.slice_start(run, a.name, a.loop)
+        except L.SpecError as exc:
+            print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+            return 2
+        spec = L.load_spec(child["loop_id"])
+        print(f"[rig-loop] slice started: {child['run_id']} (child of {run['run_id']}) — it is now the active run for {run['cwd']}")
+        print(L.banner(child, spec))
+        return 0
+    for k in L.slice_list(run):
+        print(f"  {k['run_id']:<60} {k['status']:<9} {k['intent']}")
+    if not run.get("children"):
+        print("  (no slices yet) — rig-loop slice start \"<name>\"")
+    return 0
+
+
+def cmd_verify(a):
+    run = _need_run(a)
+    spec = L.load_spec(run["loop_id"])
+    if a.dry_run:
+        print(L.build_verifier_prompt(run, spec))
+        return 0
+    try:
+        rec = L.verify(run, spec, a.family, cmd_override=a.cmd, timeout=a.timeout)
+    except L.SpecError as exc:
+        print(f"rig-loop: REFUSED — {exc}", file=sys.stderr)
+        return 2
+    print(f"[rig-loop] verifier {rec['family']} → {rec['verdict']} (exit {rec['exit']}, {rec['secs']}s) · output: {rec['output']}")
+    for g in rec["gaps"]:
+        print(f"    - {g}")
+    return 0 if rec["verdict"] in ("PERFECT", "VERIFIED", "PARTIAL") else 1
+
+
+def cmd_handoff(a):
+    run = _need_run(a)
+    p = L.handoff(run, L.load_spec(run["loop_id"]), to=a.to)
+    print(f"[rig-loop] handoff written: {p}" + (f" (copy: {a.to})" if a.to else ""))
+    return 0
+
+
+def cmd_calibration(a):
+    _print(L.calibration_summary(a.loop))
+    return 0
+
+
 def cmd_hook(a):
     raw = sys.stdin.read() if not sys.stdin.isatty() else ""
     try:
@@ -307,6 +365,11 @@ def main(argv=None) -> int:
     p = sub.add_parser("park"); p.add_argument("--reason", required=True); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_park)
     p = sub.add_parser("resume"); p.add_argument("run_id"); p.set_defaults(fn=cmd_resume)
     p = sub.add_parser("close"); p.add_argument("--reason"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_close)
+    p = sub.add_parser("qr"); p.add_argument("action", choices=["pass"]); p.add_argument("--new-unknowns", type=int, required=True); p.add_argument("--note"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_qr)
+    p = sub.add_parser("slice"); p.add_argument("action", choices=["start", "list"]); p.add_argument("name", nargs="?"); p.add_argument("--loop", default="iqrsqpi-v20-slice"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_slice)
+    p = sub.add_parser("verify"); p.add_argument("--family", required=True, choices=sorted(L.VERIFIER_FAMILIES)); p.add_argument("--cmd", help="override verifier command; {prompt_file} and {cwd} are substituted"); p.add_argument("--timeout", type=int, default=900); p.add_argument("--dry-run", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_verify)
+    p = sub.add_parser("handoff"); p.add_argument("--to"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_handoff)
+    p = sub.add_parser("calibration"); p.add_argument("--loop"); p.set_defaults(fn=cmd_calibration)
     p = sub.add_parser("hook"); p.add_argument("event", choices=sorted(L.HOOKS)); p.add_argument("--format", default="claude", choices=["claude", "codex", "pi", "text"]); p.add_argument("--skill"); p.add_argument("--run"); p.set_defaults(fn=cmd_hook)
     p = sub.add_parser("wire"); p.add_argument("--apply", action="store_true"); p.add_argument("--verify", action="store_true"); p.add_argument("--remove", action="store_true"); p.add_argument("--harness", action="append", choices=list(L.HARNESSES)); p.set_defaults(fn=cmd_wire)
     p = sub.add_parser("doctor"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_doctor)

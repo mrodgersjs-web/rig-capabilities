@@ -15,9 +15,15 @@
 - [x] Tests: `tests/test_loops.py` (18) — full suite 135 green; 24 planted-failure cases across 7 loops PASS
 - [x] Commits: `3a87acc`, `a758b67`
 
+## Completed (second slice — IQRSQPI v20)
+- [x] `iqrsqpi-v20` + `iqrsqpi-v20-slice` loop-skills; engine verbs `qr pass`, `slice start/list`, `verify --family`, `handoff`, `calibration`; done-tests registered at I1 and executed at Q2/P; tool-call kill switch; parent/child runs with evidence roll-up — files: `rig_capabilities/loops.py`, `bin/rig-loop`, `capabilities/skills/iqrsqpi-v20*/`, `docs/IQRSQPI-V20-DESIGN.md`
+- [x] `/iqrsqpi` command — `capabilities/commands/iqrsqpi.md` + `~/.rig/universal-slash-commands/commands/iqrsqpi.md`; installed in Claude, Codex, Hermes, `.agents`, OMP, Prime
+- [x] Codex adversarial review of 3a87acc → 7 findings fixed (28f0d9a); installer backup fix (3b25dfb)
+
 ## In Progress
-- [ ] proof-loop run `proof-loop-20260902T011954Z-22dc60` (cwd = this repo) at stage **V** — waiting on the Codex independent verdict; then `rig-loop seal && rig-loop stage P pass && rig-loop close`
+- [ ] proof-loop run `proof-loop-20260902T011954Z-22dc60` (cwd = this repo, parked) at stage **V** — Codex verifier dispatched via `rig-loop verify` (v20 engine); on a PARTIAL/VERIFIED verdict: `rig-loop resume <id>`, write `verify.md`, `stage V pass`, `seal`, `stage P pass`, `close`
 - [ ] Remote sync of `loop-skills-v11` to `mrodgersjs-web/rig-capabilities` (private) — run `git-push-safety-loop`; Mike types `rig-loop gate-d approve --phrase "APPROVE <run_id>"`
+- [ ] Live verifier-dispatch smoke for Hermes / OMP / Prime families (Codex and Claude prompts verified by dry-run only)
 
 ## Not Started
 - [ ] Wave-2 conversions (16 doctrines) — see `docs/ROADMAP.md` V41 table; use `rig-loop scaffold`

@@ -20,7 +20,8 @@ sys.path.insert(0, str(REPO_ROOT))
 from rig_capabilities import loops as L  # noqa: E402
 
 CANONICAL = ["iqrsqpi-v11", "gate-d-loop", "proof-loop", "adversarial-verification-loop",
-             "north-star-lock-loop", "phase-discipline-loop", "git-push-safety-loop"]
+             "north-star-lock-loop", "phase-discipline-loop", "git-push-safety-loop",
+             "iqrsqpi-v20", "iqrsqpi-v20-slice"]
 
 
 class TempState(unittest.TestCase):
@@ -210,6 +211,114 @@ class VerifierFindingsTests(TempState):
         self.assertEqual(run["iteration"], 2)
         self.assertEqual(run["planted"], [])
         self.assertIsNone(run["proof"])
+
+
+class V20Tests(TempState):
+    def _through_s(self):
+        run = L.activate("iqrsqpi-v20", cwd=str(self.cwd), harness="claude")
+        spec = L.load_spec("iqrsqpi-v20")
+        art = L.artifacts_dir(run)
+        out = self.cwd / "out.txt"
+        (art / "intent.md").write_text(f"## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f {out}\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3\n## CONFIDENCE\n0.6\n")
+        run = L.mark_stage(run, spec, "I1", "pass")
+        (art / "questions.md").write_text("## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n")
+        run = L.mark_stage(run, spec, "Q1", "pass")
+        (art / "research.md").write_text("## Findings\n- f\n## Sources\n- s (HIGH)\n## Gaps\n- none\n")
+        L.qr_pass(run, 2); L.qr_pass(run, 0)
+        run = L.mark_stage(L.load_run(run["run_id"]), spec, "R", "pass")
+        (art / "spec.md").write_text(f"## Approach\nAUTO\n## Acceptance\nGiven a When b Then c\n## Files\n- {self.cwd}/src/*\n## Slices\n- s1 — done: test -f out.txt\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n")
+        run = L.mark_stage(run, spec, "S", "pass")
+        return run, spec, out
+
+    def test_done_tests_are_registered_and_executed_with_calibration(self):
+        run, spec, out = self._through_s()
+        self.assertEqual([c for c in run["checks"] if c.get("done_test")][0]["cmd"], f"test -f {out}")
+        self.assertEqual(run["predicted"], 0.6)
+        results = L.run_checks(run)
+        self.assertEqual(results[0]["exit"], 1, "done-test red before the work exists")
+        out.write_text("x")
+        results = L.run_checks(L.load_run(run["run_id"]))
+        self.assertEqual(results[0]["exit"], 0)
+        run = L.load_run(run["run_id"])
+        run["stage_status"].update({"B": "pass", "Q2": "pass"})
+        L.save_run(run)
+        packet = L.seal(run, spec, signer="ut")
+        self.assertEqual(packet["calibration"]["actual"], 1.0)
+        self.assertAlmostEqual(packet["calibration"]["brier"], 0.16)
+        summ = L.calibration_summary("iqrsqpi-v20")
+        self.assertEqual(summ["runs"], 1)
+
+    def test_slice_child_becomes_active_then_parent_restored_and_evidence_rolls_up(self):
+        run, spec, out = self._through_s()
+        child = L.slice_start(run, "s1")
+        self.assertEqual(L.find_active(str(self.cwd))["run_id"], child["run_id"])
+        cspec = L.load_spec(child["loop_id"])
+        res = L.dispatch_hook("pre-tool", {"cwd": str(self.cwd), "tool_name": "Write", "tool_input": {"file_path": str(out)}})
+        self.assertEqual(res["action"], "allow")
+        out.write_text("x")
+        (L.artifacts_dir(child) / "slice.md").write_text("## Slice\ns1\n## Changed\n- out.txt\n")
+        child = L.mark_stage(L.load_run(child["run_id"]), cspec, "B", "pass")
+        L.add_check(child, f"test -f {out}", str(self.cwd))
+        L.plant(child, "p", f"test -f {out}.zz", f"test -f {out}", str(self.cwd))
+        (L.artifacts_dir(child) / "verify.md").write_text("## Checks\n- c\n## Planted-failure\n- p\n")
+        child = L.mark_stage(L.load_run(child["run_id"]), cspec, "V", "pass")
+        (L.artifacts_dir(child) / "commit.md").write_text("## Commit\nabc1234 s1\n")
+        child = L.mark_stage(child, cspec, "C", "pass")
+        self.assertEqual(child["status"], "done")
+        self.assertEqual(L.find_active(str(self.cwd))["run_id"], run["run_id"], "parent restored")
+        parent = L.load_run(run["run_id"])
+        self.assertEqual(len(L.all_planted(parent)), 1)
+        self.assertIn(str(out), L.all_files_written(parent))
+        ok, _ = L._gate_children_done(parent, spec, {}, {"min": 1})
+        self.assertTrue(ok)
+
+    def test_verify_dispatch_parses_verdict_and_refuses_same_family(self):
+        run, spec, out = self._through_s()
+        with self.assertRaises(L.SpecError):
+            L.verify(run, spec, "claude", cmd_override="echo VERDICT: VERIFIED")
+        rec = L.verify(run, spec, "codex", cmd_override="printf 'VERDICT: PARTIAL\\nGAPS:\\n- a.py:3 unchecked input\\n'")
+        self.assertEqual(rec["verdict"], "PARTIAL")
+        self.assertEqual(rec["gaps"], ["a.py:3 unchecked input"])
+        self.assertTrue(Path(rec["output"]).exists())
+        rec2 = L.verify(L.load_run(run["run_id"]), spec, "hermes", cmd_override="echo nothing useful")
+        self.assertEqual(rec2["verdict"], "NO_VERDICT")
+        ok, detail = L._gate_independent_verdict(L.load_run(run["run_id"]), spec, {}, {"min": 1})
+        self.assertTrue(ok, detail)
+        prompt = L.build_verifier_prompt(run, spec)
+        self.assertIn("VERDICT:", prompt)
+        self.assertIn("intent.md", prompt)
+
+    def test_handoff_renders_structured_document(self):
+        run, spec, out = self._through_s()
+        p = L.handoff(run, spec)
+        text = p.read_text()
+        for h in ("# Session Handoff", "## Completed", "## In Progress", "## Not Started", "## Decisions Made",
+                  "## Context for Next Session", "## Build Health"):
+            self.assertIn(h, text)
+        self.assertIn("- [x] S Solution", text)
+        self.assertIn("rig-loop resume", text)
+
+    def test_tool_call_budget_parks_and_denies(self):
+        run = L.activate("iqrsqpi-v20-slice", cwd=str(self.cwd), harness="ut")
+        run["tool_calls"] = 300
+        L.save_run(run)
+        res = L.dispatch_hook("pre-tool", {"cwd": str(self.cwd), "tool_name": "Bash", "tool_input": {"command": "ls"}})
+        self.assertEqual(res["action"], "deny")
+        self.assertEqual(L.load_run(run["run_id"])["status"], "parked")
+
+    def test_detect_harness_from_env(self):
+        old = dict(os.environ)
+        try:
+            for k in list(os.environ):
+                if k.startswith(("CLAUDE", "CODEX", "HERMES", "PRIME", "OMP", "PI_", "RIG_AGENT")):
+                    os.environ.pop(k)
+            os.environ["CODEX_HOME"] = "/x"
+            self.assertEqual(L.detect_harness(), "codex")
+            os.environ["RIG_AGENT"] = "hermes"
+            self.assertEqual(L.detect_harness(), "hermes")
+        finally:
+            os.environ.clear()
+            os.environ.update(old)
 
 
 class HookRenderTests(TempState):

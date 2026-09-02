@@ -108,3 +108,13 @@ claude/codex/omp/prime-agent (+ hermes telemetry hook), skills installed in all 
 Engine follow-ups: MCP tools (`loop_status`, `loop_activate`) on the rig-capabilities server;
 `live.py` probe for rig-loop wiring; Codex hook-trust acceptance on next start; retire the
 mission runner `~/.rig/missions/4day-2026-08-26/bin/iqrsqpi_v11.py` in favour of `rig-loop`.
+
+## V42 — IQRSQPI v20 (2026-09-01) — see IQRSQPI-V20-DESIGN.md
+
+Landed: `iqrsqpi-v20` + `iqrsqpi-v20-slice` loop-skills; engine additions (`qr pass`, `slice start`,
+`verify --family`, `handoff`, `calibration`, tool-call kill switch, done-test registration at I1,
+parent/child runs with evidence roll-up); `/iqrsqpi` slash command in Claude, Codex, Hermes, `.agents`,
+OMP and Prime Agent. 34 planted-failure cases across 9 loops; 146 unit tests.
+
+Follow-ups: verifier dispatch for Hermes/OMP/Prime needs a live smoke per harness (Codex and Claude
+smoked); `/iqrsqpi` walk mode UX; MCP tools `loop_verify` / `loop_handoff`.

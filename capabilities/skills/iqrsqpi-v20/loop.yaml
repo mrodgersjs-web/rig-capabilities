@@ -1,0 +1,158 @@
+# IQRSQPI v20 — the fractal, self-verifying loop (Loop-Skill Contract v11 spec).
+# New over v11: done-tests from Intent are executed; Q<->R runs until DRY; the spec carries
+# BDD acceptance + slices; Build is child slice runs (own kill switch); Quality needs a
+# cross-family verifier verdict produced by dispatch; Proof records calibration; Integrate
+# renders the handoff. Design: docs/IQRSQPI-V20-DESIGN.md
+schema: rig.loop-skill.v11
+id: iqrsqpi-v20
+name: IQRSQPI v20
+version: 20.0.0
+doctrine_source:
+  - ~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md
+  - ~/Developer/rig-capabilities/capabilities/skills/iqrsqpi-v11/loop.yaml
+  - ~/.claude/rules/rig-unified-doctrine.md
+coordinate: {level: 3, diamond: D2, bms_mode: A1, step: I1}
+family: governance
+packet: IQRSQPIRunPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch:
+  max_iterations: 3
+  max_wall_minutes: 720
+  max_stop_blocks: 2
+  max_tool_calls: 800
+  max_children: 12
+outward_policy:
+  require_gate_d: true
+stages:
+  - id: I1
+    name: Intent
+    artifact: intent.md
+    register_done_tests: true
+    write_policy:
+      mode: artifacts_only
+      deny_message: "No code before the goal card. Write intent.md: ## GOAL, ## METRIC, ## DONE-TEST (executable lines — they WILL be run at Quality/Proof), ## OUT-OF-SCOPE, ## COORDINATE, ## CONFIDENCE (0-1)."
+    gate:
+      - type: file_contains
+        path: intent.md
+        patterns: ["^## GOAL", "^## METRIC", "^## DONE-TEST", "^## OUT-OF-SCOPE", "^## COORDINATE", "^## CONFIDENCE"]
+      - type: regex
+        path: intent.md
+        pattern: '^\s*[-*]\s*(cmd|file|grep|mcp):\S'
+        hint: "DONE-TEST needs at least one executable line: `- cmd:<shell>` / `- file:<path>` / `- grep:<path>:<regex>`"
+      - type: regex_absent
+        path: intent.md
+        pattern: '\b(TBD|TODO|\?\?\?)\b'
+      - type: confidence_declared
+        path: intent.md
+  - id: Q1
+    name: Question
+    artifact: questions.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)`."
+    gate:
+      - type: file_contains
+        path: questions.md
+        patterns: ["^## Panel", "^## Questions", '^\s*[-*]\s*\[(BLOCKING|ASSUMED)\]']
+      - type: regex
+        path: questions.md
+        pattern: '(?s)^## Panel.*?\[lens:[^\]]+\].*?\[lens:[^\]]+\].*?\[lens:[^\]]+\]'
+        hint: "at least three persona lenses under ## Panel, e.g. `- [lens:security-engineer]`"
+      - type: no_unanswered_blocking
+        path: questions.md
+  - id: R
+    name: Research
+    artifact: research.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Research until dry. research.md: ## Findings, ## Sources (each graded (HIGH|MED|LOW)), ## Gaps. Record every Q<->R pass: `rig-loop qr pass --new-unknowns N`; the gate needs >=2 passes and a last pass with 0."
+    gate:
+      - type: file_contains
+        path: research.md
+        patterns: ["^## Findings", "^## Sources", "^## Gaps"]
+      - type: regex
+        path: research.md
+        pattern: '^## Sources[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+[^\n]*\((HIGH|MED|LOW)\)'
+        hint: "every source line under ## Sources carries a grade: `- <source> (HIGH|MED|LOW)`"
+      - type: qr_dry
+        min: 2
+  - id: S
+    name: Solution
+    artifact: spec.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Spec before code. spec.md: ## Approach, ## Acceptance (Given/When/Then), ## Files (globs = scope fence), ## Slices (ordered, each `- <name> — done: <cmd>`), ## Det-vs-Prob (AUTO/DRAFT/FLAG), ## Test-plan, ## Rollback."
+    gate:
+      - type: file_contains
+        path: spec.md
+        patterns: ["^## Approach", "^## Acceptance", "^## Files", "^## Slices", "^## Det-vs-Prob", "^## Test-plan", "^## Rollback"]
+      - type: regex
+        path: spec.md
+        pattern: '(?i)\bGiven\b[\s\S]*?\bWhen\b[\s\S]*?\bThen\b'
+        hint: "## Acceptance needs at least one Given / When / Then criterion"
+      - type: regex
+        path: spec.md
+        pattern: '^## Files[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+\S'
+        hint: "## Files must list at least one path or glob"
+      - type: regex
+        path: spec.md
+        pattern: '^## Slices[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+[^\n]*done:\s*\S'
+        hint: "## Slices needs at least one `- <name> — done: <cmd>` line (a slice fits one context window)"
+      - type: regex
+        path: spec.md
+        pattern: '\b(AUTO|DRAFT|FLAG)\b'
+        hint: "tag the deterministic/probabilistic boundary: AUTO / DRAFT / FLAG"
+  - id: B
+    name: Build
+    artifact: build.md
+    write_policy: {mode: declared}
+    gate:
+      - type: children_done
+        min: 1
+      - type: file_contains
+        path: build.md
+        patterns: ["^## Slices-done", "^## Changed"]
+  - id: Q2
+    name: Quality
+    artifact: quality.md
+    write_policy: {mode: declared}
+    gate:
+      - type: files_written_min
+        min: 1
+      - type: checks_green
+        min: 1
+      - type: planted_failure
+        min: 1
+      - type: independent_verdict
+        min: 1
+      - type: drift_within
+        max: 10
+        failure_tier: degrade
+      - type: file_contains
+        path: quality.md
+        patterns: ["^## Checks", "^## Planted-failure", "^## Verifier"]
+  - id: P
+    name: Proof
+    artifact: proof.json
+    write_policy: {mode: declared}
+    gate:
+      - type: stage_passed
+        stage: Q2
+      - type: sealed
+  - id: I2
+    name: Integrate
+    artifact: integrate.md
+    write_policy: {mode: declared}
+    gate:
+      - type: file_contains
+        path: integrate.md
+        patterns: ["^## Shipped", "^## Not-shipped", "^## Hand-offs", "^## Next-slice"]
+      - type: file_exists
+        path: handoff.md
+closing_loop:
+  from: [B, Q2, P]
+  to: S
+  max_iterations: 3
+  on_exhaust: escalate
