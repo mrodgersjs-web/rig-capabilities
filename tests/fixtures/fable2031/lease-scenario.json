@@ -1,0 +1,81 @@
+{
+  "schema": "rig.lease.scenario.v1",
+  "ttl_s": 3600,
+  "note": "Hermetic replay for the lease_exclusivity gate. Ops run in order against a throwaway RIG_LEASE_STATE_ROOT chosen by the replay, never ~/.rig/leases. Worktrees resolve from candidates in order (prefer the tree under test, fall back to the canonical registered checkout) so the scenario also replays inside a certify copy that has no .git. Expectations are pinned: flipping op 2 from denied to granted turns the gate RED.",
+  "worktrees": {
+    "primary": {
+      "candidates": [
+        "@REPO_ROOT@",
+        "@CANONICAL_REPO@"
+      ],
+      "branch": "fable-2031"
+    },
+    "phantom": {
+      "candidates": [
+        "@STATE_ROOT@/not-a-worktree"
+      ],
+      "branch": "fable-2031"
+    }
+  },
+  "ops": [
+    {
+      "i": 1,
+      "op": "acquire",
+      "task": "alpha",
+      "worktree": "primary",
+      "expect": "granted"
+    },
+    {
+      "i": 2,
+      "op": "acquire",
+      "task": "beta",
+      "worktree": "primary",
+      "expect": "denied",
+      "reason": "worktree_leased",
+      "lease_held_by": "alpha"
+    },
+    {
+      "i": 3,
+      "op": "acquire",
+      "task": "gamma",
+      "worktree": "phantom",
+      "expect": "denied",
+      "reason": "worktree_absent"
+    },
+    {
+      "i": 4,
+      "op": "release",
+      "task": "alpha",
+      "lease_token": "not-the-granted-token",
+      "expect": "denied",
+      "reason": "lease_token_mismatch"
+    },
+    {
+      "i": 5,
+      "op": "release",
+      "task": "alpha",
+      "lease_token": "@op:1.lease_token",
+      "expect": "released"
+    },
+    {
+      "i": 6,
+      "op": "acquire",
+      "task": "beta",
+      "worktree": "primary",
+      "expect": "granted"
+    },
+    {
+      "i": 7,
+      "op": "expire",
+      "now_offset_s": 7200,
+      "expect": "expired"
+    },
+    {
+      "i": 8,
+      "op": "acquire",
+      "task": "beta",
+      "worktree": "primary",
+      "expect": "granted"
+    }
+  ]
+}

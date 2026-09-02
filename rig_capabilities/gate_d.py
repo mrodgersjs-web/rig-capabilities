@@ -26,6 +26,17 @@ DANGEROUS_COMMAND_RULES: list[tuple[str, str, str | None]] = [
     ("destructive-git", r"\bgit\s+reset\b[^\n]*--hard[^\n]*\s~/|\bgit\s+clean\b[^\n]*-[a-zA-Z]*f[a-zA-Z]*x", None),
     ("chmod-r-777-root", r"\bchmod\s+-[a-zA-Z]*R[a-zA-Z]*\s+7{3,4}\s+/(?:\s|$)", None),
     ("fork-bomb", r":\(\)\s*\{.*\|.*&\s*\};\s*:", None),
+    # Law L2 (conflict receipt 6): agents never create checkouts; verifier trees
+    # are materialised with `git archive <sha> | tar -x`. Deny-only — read-only
+    # worktree inspection (list/remove/prune/status) must keep passing. Mirrored
+    # pattern-for-pattern in capabilities/hooks/guard-dangerous-commands.sh.
+    # `git wt add` is deliberately absent: no `wt` alias is defined in any git
+    # config surface (checked system, global and repo config — verified, not guessed).
+    (
+        "unmanaged-worktree-add",
+        r"\bgit\b(?:\s+(?:-C\s+\S+|-c\s+\S+|--git-dir[=\s]\S+|--exec-path[=\s]\S+|--work-tree[=\s]\S+|--namespace[=\s]\S+|--no-optional-locks))*\s+worktree\s+add\b",
+        None,
+    ),
 ]
 
 # Mirrors capabilities/hooks/guard-secret-write.sh
@@ -47,6 +58,14 @@ CASES: list[tuple[str, dict[str, Any], str]] = [
     ("Write", {"file_path": "id.pem", "content": "-----BEGIN RSA PRIVATE KEY-----\nMIIE...\n"}, "deny"),
     ("Bash", {"command": "rm -rf ./build && npm run build"}, "allow"),
     ("Edit", {"file_path": "README.md", "new_string": "Shipped 2026-08-30."}, "allow"),
+    # unmanaged-worktree-add: denies must name the rule; these allows are the
+    # boundary — read-only worktree inspection is not a fabrication surface.
+    ("Bash", {"command": "git worktree add /tmp/x -b feat"}, "deny"),
+    ("Bash", {"command": "git -C /repo worktree add /tmp/x -b lane"}, "deny"),
+    ("Bash", {"command": "git --git-dir=/repo/.git worktree add /tmp/x --detach"}, "deny"),
+    ("Bash", {"command": "git worktree list --porcelain"}, "allow"),
+    ("Bash", {"command": "git worktree remove ./scratch/wt-verify"}, "allow"),
+    ("Bash", {"command": "git worktree status"}, "allow"),
 ]
 
 
