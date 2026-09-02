@@ -58,6 +58,16 @@ def packet_dir() -> Path:
     return proof_root() / PACKET_SUBDIR
 
 
+def packet_name(task_id, proof_hash: str) -> str:
+    """`<slug>__<hash16>.json`, the one filename formula for a sealed packet.
+
+    Public because a receipt has to name the packet it points at. Duplicating this
+    formula elsewhere means the first rename silently orphans every stored pointer.
+    """
+    return (f"{'standalone' if task_id is None else _slug(task_id)}"
+            f"__{str(proof_hash)[:16]}.json")
+
+
 def sentinel_dir() -> Path:
     """SENTINEL_DIR at call time; RIG_PROOF_ROOT overrides."""
     root = os.environ.get("RIG_PROOF_ROOT")
@@ -155,7 +165,7 @@ def seal_packet(kind: str, body: dict, *, task_id: str | None = None) -> dict:
         "payload": payload,
         "proof_hash": digest,
     }
-    name = f"{'standalone' if task_id is None else _slug(task_id)}__{digest[:16]}.json"
+    name = packet_name(task_id, digest)
     _write_json(packet_dir() / name, packet)
     return packet
 

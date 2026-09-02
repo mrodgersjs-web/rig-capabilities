@@ -768,10 +768,43 @@ class SealingTests(unittest.TestCase):
             self.assertTrue(path.is_file(), entry["path"])
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),
                              entry["sha256"], entry["path"])
-        packets = list((self.proof_root / "fable2031").glob("realign-2026-W36__*.json"))
-        self.assertEqual(len(packets), 1)
-        ok, why = afproof.verify_seal(json.loads(packets[0].read_text()))
+        # The receipt must name the packet, and that packet — not the receipt — is what
+        # verifies. Anyone holding the receipt can therefore recompute the seal without
+        # reimplementing afproof's filename formula.
+        self.assertTrue(receipt["sealed"])
+        self.assertEqual(receipt["proof_packet"], res["proof_packet"],
+                         "the driver reported a different packet than the receipt")
+        packet = json.loads(Path(receipt["proof_packet"]).read_text(encoding="utf-8"))
+        ok, why = afproof.verify_seal(packet)
         self.assertTrue(ok, why)
+        self.assertEqual(packet["payload"]["artifacts"], receipt["artifacts"])
+        self.assertEqual(packet["payload"]["week"], "2026-W36")
+        # a receipt is not a packet: verifying it as one must fail, not silently pass
+        self.assertEqual(afproof.verify_seal(receipt), (False, "seal_mismatch"))
+
+    def test_sealing_twice_never_hashes_a_receipt(self):
+        """The bug this guard was born from: pass 2 hashed pass 1's receipt, then
+        overwrote it, so the receipt listed a hash for its own path that did not match
+        the file. Re-sealing must hash exactly the content, both times."""
+        first = self._run(seal=True)
+        second = self._run(seal=True)
+        self.assertTrue(second["sealed"], second["seal_reason"])
+        for res in (first, second):
+            rec = json.loads((self.base / "proof" / "sealing.json")
+                             .read_text(encoding="utf-8"))
+            self.assertNotIn("proof/sealing.json",
+                             [a["path"] for a in rec["artifacts"]])
+            for entry in rec["artifacts"]:
+                self.assertEqual(
+                    hashlib.sha256((self.base / entry["path"]).read_bytes())
+                    .hexdigest(), entry["sha256"], entry["path"])
+            ok, why = afproof.verify_seal(
+                json.loads(Path(res["proof_packet"]).read_text(encoding="utf-8")))
+            self.assertTrue(ok, why)
+        # the chain links rather than resets: pass 2 names pass 1's hash
+        packet2 = json.loads(Path(second["proof_packet"])
+                             .read_text(encoding="utf-8"))
+        self.assertEqual(packet2["previous_hash"], first["proof_hash"])
 
     def test_the_receipt_binds_the_artifact_bytes(self):
         """Tamper an artifact after sealing: the recorded hash stops matching."""

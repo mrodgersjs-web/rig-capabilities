@@ -180,13 +180,18 @@ def run_week(repo, week: str | None = None, apply: bool = False,
 def _seal(root, week: str, scored: dict) -> dict:
     """Hash the week's artifacts and land a real proof_hash through `afproof`.
 
-    The receipt is written AFTER the hashing on purpose: a seal that hashes its own
-    receipt cannot be recomputed by anyone else. So `proof/sealing.json` is the seal's
-    evidence, not sealed content, and it is the only place a truthy `sealed` appears in
-    the week directory. A failure leaves the week honestly unsealed and says so.
+    The receipt is written AFTER the hashing on purpose, and it is never sealed
+    content. Both halves matter. A seal that hashes its own receipt cannot be
+    recomputed by anyone else — and sealing twice proved the concrete failure: the
+    second pass hashed the first pass's `proof/sealing.json`, then overwrote that same
+    file, so the new receipt recorded a hash for its own path that no longer matched
+    the bytes under it. A receipt that cannot re-verify its own listing is worse than
+    no receipt. So the receipt is the only place a truthy `sealed` appears in the week
+    directory, and it appears in no hash list at all.
     """
     base = week_dir(root, week)
-    files = sorted(p for p in base.rglob("*") if p.is_file())
+    files = sorted(p for p in base.rglob("*")
+                   if p.is_file() and p != base / SEAL_RECEIPT)
     body = {
         "week": week,
         "verdict": scored["gate"]["verdict"],
@@ -195,19 +200,26 @@ def _seal(root, week: str, scored: dict) -> dict:
         "artifacts": [{"path": str(p.relative_to(base)), "sha256": _sha_of(p)}
                       for p in files],
     }
+    task_id = f"realign-{week}"
     try:
         from . import afproof
-        packet = afproof.seal_packet("realign-week", body, task_id=f"realign-{week}")
+        packet = afproof.seal_packet("realign-week", body, task_id=task_id)
+        located = str(afproof.packet_dir() / afproof.packet_name(
+            task_id, packet["proof_hash"]))
     except Exception as exc:                       # never a fake seal
         return {"sealed": False,
                 "seal_reason": f"seal_failed:{type(exc).__name__}: {exc}"}
-    _write_json(base / "proof" / "sealing.json", {
+    _write_json(base / SEAL_RECEIPT, {
         "sealed": True, "proof_hash": packet["proof_hash"],
         "previous_hash": packet["previous_hash"], "sealed_at": packet["sealed_at"],
+        # The pointer, not a guess at the formula: an auditor holding this receipt must
+        # be able to find the packet and recompute the hash without reimplementing
+        # afproof's naming. The packet verifies; the receipt is not the packet.
+        "proof_packet": located,
         "artifacts": body["artifacts"]})
     return {"sealed": True, "proof_hash": packet["proof_hash"],
             "seal_reason": "sealed", "seal_receipt": SEAL_RECEIPT,
-            "sealed_artifacts": len(body["artifacts"])}
+            "proof_packet": located, "sealed_artifacts": len(body["artifacts"])}
 
 
 # ------------------------------------------------------------------ rendering
