@@ -1,0 +1,43 @@
+---
+outcome: agent-engineering:
+done_when:
+  - file:examples/fixtures/harness-assembly-contract/harness_valid.yaml
+quality_floor: 0.6
+---
+
+harness_id: fixture-assembly-valid
+harness_name: Assembly Contract Fixture Harness
+session_type: fixture-session
+identity_lock:
+  startup_phrase: "I bind sockets, not implementations."
+  gates:
+    - id: "0.1"
+      requirement: "Fixture session pinned to this harness id before any artifact is written"
+      proof: "Session log line names fixture-assembly-valid"
+capability_gates:
+  - category: "Scope"
+    gates:
+      - id: "1.1"
+        requirement: "Fixture scope locked before any finding is recorded"
+        proof: "Scope table written to .rig/asm/scope.md"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Every finding is anchored to a path listed in .rig/asm/scope.md"
+        proof: "Findings table at .rig/asm/findings.json with one row per in-scope path"
+        failure_tier: halt
+  - category: "Authority"
+    gates:
+      - id: "2.1"
+        requirement: "Outward actions require a recorded permission decision bound to a named atom"
+        proof: "Permission ledger line appended to .rig/asm/permission.log naming the bound atom"
+        failure_tier: stop
+      - id: "3.1"
+        requirement: "Verdict enumerates every row of .rig/asm/findings.json and states the swap points exercised"
+        proof: "Verdict file .rig/asm/verdict.md; blocking list cross-checks the findings table row by row"
+        failure_tier: halt
+definition_of_done:
+  - "All gates green or degraded-with-log"
+  - "Permission ledger names the bound atom for every stop decision"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "3.1"]
+  stop_gates: ["2.1"]

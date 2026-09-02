@@ -1,0 +1,210 @@
+{
+  "bindings": [
+    {
+      "bound_atom": "fixture-assembly-valid::0.1",
+      "interface": {
+        "data_kind": "session-log",
+        "failure_tier": "unspecified",
+        "kind": "capability"
+      },
+      "port": "p::0.1",
+      "swappable": false,
+      "via": "identity_lock.gates[0]"
+    },
+    {
+      "bound_atom": "fixture-assembly-valid::1.1",
+      "interface": {
+        "data_kind": "artifact",
+        "failure_tier": "halt",
+        "kind": "capability"
+      },
+      "port": "p::1.1",
+      "swappable": true,
+      "via": "capability_gates[0].gates[0]"
+    },
+    {
+      "bound_atom": "fixture-assembly-valid::1.2",
+      "interface": {
+        "data_kind": "artifact",
+        "failure_tier": "halt",
+        "kind": "capability"
+      },
+      "port": "p::1.2",
+      "swappable": true,
+      "via": "capability_gates[0].gates[1]"
+    },
+    {
+      "bound_atom": "fixture-assembly-valid::2.1",
+      "interface": {
+        "data_kind": "artifact",
+        "failure_tier": "stop",
+        "kind": "permission"
+      },
+      "port": "p::2.1",
+      "swappable": false,
+      "via": "capability_gates[1].gates[0]"
+    },
+    {
+      "bound_atom": "fixture-assembly-valid::3.1",
+      "interface": {
+        "data_kind": "artifact",
+        "failure_tier": "halt",
+        "kind": "capability"
+      },
+      "port": "p::3.1",
+      "swappable": true,
+      "via": "capability_gates[1].gates[1]"
+    }
+  ],
+  "edges": [
+    {
+      "artifact": null,
+      "data_kind": "sequence",
+      "from_port": "p::0.1",
+      "from_stage": "0.1",
+      "hook_order": 1,
+      "to_port": "p::1.1",
+      "to_stage": "1.1"
+    },
+    {
+      "artifact": ".rig/asm/scope.md",
+      "data_kind": "artifact",
+      "from_port": "p::1.1",
+      "from_stage": "1.1",
+      "hook_order": 2,
+      "to_port": "p::1.2",
+      "to_stage": "1.2"
+    },
+    {
+      "artifact": null,
+      "data_kind": "sequence",
+      "from_port": "p::1.1",
+      "from_stage": "1.1",
+      "hook_order": 2,
+      "to_port": "p::1.2",
+      "to_stage": "1.2"
+    },
+    {
+      "artifact": null,
+      "data_kind": "sequence",
+      "from_port": "p::1.2",
+      "from_stage": "1.2",
+      "hook_order": 3,
+      "to_port": "p::2.1",
+      "to_stage": "2.1"
+    },
+    {
+      "artifact": ".rig/asm/findings.json",
+      "data_kind": "artifact",
+      "from_port": "p::1.2",
+      "from_stage": "1.2",
+      "hook_order": 4,
+      "to_port": "p::3.1",
+      "to_stage": "3.1"
+    },
+    {
+      "artifact": null,
+      "data_kind": "sequence",
+      "from_port": "p::2.1",
+      "from_stage": "2.1",
+      "hook_order": 4,
+      "to_port": "p::3.1",
+      "to_stage": "3.1"
+    }
+  ],
+  "fingerprint": "sha256:8aee983c110573e96d77d795bbe4bde2c01a0fa99d19697a663b488e4a3409ee",
+  "harness": "fixture-assembly-valid",
+  "ports": [
+    {
+      "category": "Identity Lock",
+      "consumes": [],
+      "data_kind": "session-log",
+      "failure_tier": "unspecified",
+      "kind": "capability",
+      "port": "p::0.1",
+      "produces": [],
+      "requires": "Fixture session pinned to this harness id before any artifact is written",
+      "stage": "0.1"
+    },
+    {
+      "category": "Scope",
+      "consumes": [],
+      "data_kind": "artifact",
+      "failure_tier": "halt",
+      "kind": "capability",
+      "port": "p::1.1",
+      "produces": [
+        ".rig/asm/scope.md"
+      ],
+      "requires": "Fixture scope locked before any finding is recorded",
+      "stage": "1.1"
+    },
+    {
+      "category": "Scope",
+      "consumes": [
+        ".rig/asm/scope.md"
+      ],
+      "data_kind": "artifact",
+      "failure_tier": "halt",
+      "kind": "capability",
+      "port": "p::1.2",
+      "produces": [
+        ".rig/asm/findings.json"
+      ],
+      "requires": "Every finding is anchored to a path listed in .rig/asm/scope.md",
+      "stage": "1.2"
+    },
+    {
+      "category": "Authority",
+      "consumes": [],
+      "data_kind": "artifact",
+      "failure_tier": "stop",
+      "kind": "permission",
+      "port": "p::2.1",
+      "produces": [
+        ".rig/asm/permission.log"
+      ],
+      "requires": "Outward actions require a recorded permission decision bound to a named atom",
+      "stage": "2.1"
+    },
+    {
+      "category": "Authority",
+      "consumes": [
+        ".rig/asm/findings.json"
+      ],
+      "data_kind": "artifact",
+      "failure_tier": "halt",
+      "kind": "capability",
+      "port": "p::3.1",
+      "produces": [
+        ".rig/asm/verdict.md"
+      ],
+      "requires": "Verdict enumerates every row of .rig/asm/findings.json and states the swap points exercised",
+      "stage": "3.1"
+    }
+  ],
+  "schema": "harness-assembly-contract/v1",
+  "source": "examples/fixtures/harness-assembly-contract/harness_valid.yaml",
+  "stages": [
+    "0.1",
+    "1.1",
+    "1.2",
+    "2.1",
+    "3.1"
+  ],
+  "swap_points": [
+    {
+      "interface": {
+        "data_kind": "artifact",
+        "failure_tier": "halt",
+        "kind": "capability"
+      },
+      "port_count": 3,
+      "ports": [
+        "p::1.1",
+        "p::1.2",
+        "p::3.1"
+      ]
+    }
+  ]
+}

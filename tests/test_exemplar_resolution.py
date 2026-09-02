@@ -53,6 +53,12 @@ NEW_ASSETS = (
     "capabilities-done-test.md",
     "rig-capabilities-register.md",
     "experience-lesson-records",
+    "evaluator-forge-from-exemplars",
+    "task-authority-over-skill-authority.sh",
+    "harness-assembly-contract.md",
+    "immutable-surface-guard.sh",
+    "attempt-identity-ledger-and-equal-weight",
+    "evidence-retrieval-citations-gate",
 )
 
 

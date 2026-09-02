@@ -368,3 +368,59 @@ def verify() -> dict:
             "pending": [r["target"] for r in p["targets"] if r.get("changes")],
             "blocked": p["blocked"],
             "idempotent": not p["writable"]}
+
+
+# A realistic empty config in each target's dialect: the container key present
+# but with no servers yet — what a fresh harness install actually looks like.
+# `project` deliberately refuses to CREATE a missing container (it will not guess
+# where to put one), so seeding a bare "{}" would test that refusal, not the
+# capability pull; the self-test wants the resolvable path.
+_EMPTY = {
+    "cursor": '{\n  "mcpServers": {}\n}\n',
+    "gemini": '{\n  "mcpServers": {}\n}\n',
+    "opencode": '{\n  "mcp": {}\n}\n',
+    "goose": "extensions:\n",
+}
+
+
+def selftest() -> dict:
+    """Dry proof that every target could pull the server if wired — no writes.
+
+    For each target: seed a realistic empty config in that target's own dialect
+    (container present, no servers), project the entry, and confirm `has_entry`
+    reads it back. That round-trip is the real question behind 'can this agent
+    pull rig-capabilities' — a dialect whose projection does not parse back would
+    silently drop the server. JSON seeds are also confirmed to stay valid JSON.
+    Also confirms the launch spec resolves (interpreter + server file exist).
+    Nothing here reads or writes a live harness config.
+    """
+    launch_ok = Path(PYTHON).exists() and SERVER.is_file()
+    results = []
+    ok = launch_ok
+    for name, _live in targets():
+        seed = _EMPTY[name]
+        try:
+            after, ops = project(name, seed)
+            wired = any(o.get("action") in ("wire", "already_wired") for o in ops)
+            round_trips = has_entry(name, after)
+            valid = True
+            if DIALECT[name] != "yaml":
+                try:
+                    json.loads(after)
+                except json.JSONDecodeError:
+                    valid = False
+        except Exception as exc:                      # noqa: BLE001 — report, never raise
+            results.append({"target": name, "resolvable": False,
+                            "reason": f"{type(exc).__name__}:{exc}"})
+            ok = False
+            continue
+        good = wired and round_trips and valid
+        results.append({"target": name, "resolvable": good and launch_ok,
+                        "round_trips": round_trips, "valid_after": valid,
+                        "op": ops[0].get("action") if ops else None})
+        ok = ok and good
+    return {"schema": "rig.mcp-wire-selftest.v1", "engine": ENGINE_VERSION,
+            "launch": {"command": PYTHON, "server": str(SERVER),
+                       "resolvable": launch_ok},
+            "targets": results,
+            "all_resolvable": ok}

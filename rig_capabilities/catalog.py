@@ -17,7 +17,7 @@ from pathlib import Path
 
 from .okf import meta as _okf_meta
 
-KINDS = ("skill", "agent", "hook", "harness", "loop", "command")
+KINDS = ("skill", "agent", "hook", "harness", "loop", "command", "data")
 KIND_DIR = {
     "skill": "skills",
     "agent": "agents",
@@ -25,8 +25,18 @@ KIND_DIR = {
     "harness": "harnesses",
     "loop": "loops",
     "command": "commands",
+    "data": "data",
 }
 DIR_KIND = {v: k for k, v in KIND_DIR.items()}
+
+# A directory under a kind is an asset only when it carries this descriptor —
+# the phantom-asset guard. `skill` uses SKILL.md; `data` uses DATA.md (a data
+# asset is a directory of fixtures + a validator + a descriptor, exactly like a
+# skill, so it packages the same way). A kind absent here is a single-file kind.
+DIR_DESCRIPTOR = {
+    "skill": "SKILL.md",
+    "data": "DATA.md",
+}
 
 # kind -> file extension used when the canonical asset is a single file
 KIND_EXTS = {
@@ -36,6 +46,7 @@ KIND_EXTS = {
     "command": {".md"},
     "agent": {".md", ".toml", ".json"},
     "skill": {".md"},
+    "data": {".md", ".json"},
 }
 
 DEFAULT_EXTERNAL_ROOTS = [
@@ -218,17 +229,22 @@ class Repo:
         if entry.is_dir():
             if entry.name.startswith(".") or entry.name == "__pycache__":
                 return None
-            main = entry / "SKILL.md"
+            descriptor = DIR_DESCRIPTOR.get(kind)
+            if descriptor is None:
+                # This kind packages as single files, not directories — a folder
+                # under it is support, never an asset.
+                return None
+            main = entry / descriptor
             if not main.exists():
-                # A directory is an asset only when it is a packaged skill.
-                # Otherwise every support folder under a kind becomes a phantom
-                # asset whose "main text" is whatever `rglob` found first:
-                # `capabilities/hooks/fixtures` indexed as a hook, and
-                # `capabilities/loops/__pycache__` indexed as a LOOP — a .pyc
-                # read with errors="replace" easily clears the 10-character
-                # text floor, so compiled bytecode was being served as a
-                # capability. Anything that wants to be an asset states it has
-                # a SKILL.md; support directories do not.
+                # A directory is an asset only when it carries its kind's
+                # descriptor (skill -> SKILL.md, data -> DATA.md). Otherwise every
+                # support folder under a kind becomes a phantom asset whose "main
+                # text" is whatever `rglob` found first: `capabilities/hooks/
+                # fixtures` indexed as a hook, `capabilities/loops/__pycache__` as
+                # a LOOP — a .pyc read with errors="replace" clears the
+                # 10-character floor, so bytecode was served as a capability.
+                # Anything that wants to be an asset states it has a descriptor;
+                # support directories do not.
                 return None
             text = _pick_main_text(main)
             sha = self._sha_dir(entry)

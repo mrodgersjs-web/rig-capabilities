@@ -358,7 +358,7 @@ def main() -> int:
 
     p = sub.add_parser("wire-mcp")
     p.add_argument("wire_cmd", nargs="?", default="plan",
-                   choices=["plan", "verify"])
+                   choices=["plan", "verify", "selftest"])
     p.add_argument("--apply", action="store_true",
                    help="write the four harness MCP configs; needs --gate-d")
     p.add_argument("--gate-d", dest="gate_d",
@@ -1038,6 +1038,10 @@ def main() -> int:
                 return 2
             print(json.dumps(out, indent=1))
             return 0 if out.get("all_wired") else 1
+        if args.wire_cmd == "selftest":
+            out = mcp_wire.selftest()
+            print(json.dumps(out, indent=1))
+            return 0 if out.get("all_resolvable") else 1
         out = mcp_wire.verify() if args.wire_cmd == "verify" else mcp_wire.plan()
         print(json.dumps(out, indent=1))
         return 0 if out.get("ok", True) else 1

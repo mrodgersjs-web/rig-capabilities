@@ -1,0 +1,1133 @@
+{
+ "schema": "evidence-corpus-v1",
+ "note": "Derived capability analysis (name+mechanism+rig_delta) with id-only citations; NOT creator transcript text. Committed so the retrieval benchmark runs in any tree.",
+ "capabilities": [
+  {
+   "name": "skill-contract-six-slots-with-boundary-conditions",
+   "kind": "data",
+   "mechanism": "Every canonical asset declares six named slots: activation condition A, instruction I, applicability precondition C, permitted tools P, control flow pi, expected effects E (RIG's existing done_when is E). The applicability slot carries the boundary conditions of the run that produced the skill - environment, runtime, dependency set, tuned parameters, budget, data scale - because a SKILL.md is a lossy compression of one successful run and the dropped conditions are what silently invalidate reuse elsewhere. A validator reads the frontmatter of every asset and emits the set missing any required slot; loader code may only load assets whose A and C are present.",
+   "sources": [
+    "Kbxg-_CXs78",
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.29596",
+    "2608.11888"
+   ],
+   "oss": [
+    "anthropics/skills"
+   ],
+   "target": "capabilities/commands/rig-capabilities-register.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "The register report validates M0-M5 rows and validation failures, and capabilities_quality_report scores contract coverage (outcome/done_when/great_example/quality_floor, weakest first); neither vocabulary carries activation, applies_when, permissions or boundary_conditions keys, so the register can never report a missing slot and mh-01's authoring gates never ask for one. skills/skill-upgrades/SKILL.md's own frontmatter shows exactly which slots RIG records today: E via done_when, no A, no C, no P on skills or harnesses.",
+   "done_test": "Run the frontmatter validator over capabilities/skills/*/SKILL.md and capabilities/harnesses/*.yaml: it must exit 1 naming every asset lacking activation:, applies_when: or permissions:, and exit 0 only at zero findings. RED = an indexed asset is loadable with no activation predicate or no declared boundary conditions.",
+   "risk": "Adding required keys forks the de-facto SKILL.md frontmatter format shared with anthropics/skills; the fork must be declared, not silently introduced."
+  },
+  {
+   "name": "pre-load-precondition-gate-activation-and-compatibility",
+   "kind": "hook",
+   "mechanism": "Two checks run before a skill body reaches context, both replacing similarity ranking: an activation predicate alpha(s, x_t, g) evaluated against live agent state and the active goal, where 1 is the only thing that makes the asset loadable; and a compatibility verdict that enumerates the task's binding requirements (API surface, calculation, output format, artifact path, installed dependencies, runtime state, budget) and checks every default the skill carries against each one, returning COMPATIBLE or CONFLICT:<field>. CONFLICT blocks execution. Neither verdict may be reported as PASS - only as a prefilter verdict, with the drop count recorded in pack provenance so a pack that filtered nothing is visible.",
+   "sources": [
+    "Kbxg-_CXs78",
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.29596",
+    "2608.11888"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "capabilities_search, capabilities_context_pack and capabilities_route rank with BM25 + ollama dense embeddings + outcome-lane routing + graph expansion and perform no precondition evaluation at all, so relevance is the only admission signal - the exact condition under which the harmful-skill study still produced 307 confirmed failures from skills already filtered for topical relevance. capabilities-dispatch-verify.md already carries the PREFILTER_CLEAR-never-PASS verdict shape but applies it only to handoff packets.",
+   "done_test": "Fixture task that requires artifacts under build/ while the loaded skill mandates dist/: the gate must emit CONFLICT:artifact-path and refuse the load; and a pack built for a state violating every candidate's applies_when must return 0 assets. Either check loading the asset, or a pack reporting zero drops, is RED."
+  },
+  {
+   "name": "procedure-to-skill-promotion-tests",
+   "kind": "eval",
+   "mechanism": "Three executable checks gate a candidate becoming an admissible asset. Modularity: its done_when runs against the asset alone with no harness-relative state. Late-bound invocation: an activation predicate exists and is what loads it. State transformation: the done_when asserts a post-state, not a text property, because a transcript records what happened and a skill must capture what should be done again. Structurally the postcondition check must live in the asset record so one generic verify_transition entrypoint can run it for any admissible asset, rather than being re-invented per harness.",
+   "sources": [
+    "Kbxg-_CXs78"
+   ],
+   "papers": [
+    "2608.29596"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-certify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-certify's five deterministic gates (suite / index_fresh / done_tests / idp_integrity / acl_jake) certify an asset's own tests at one point in time and never ask whether the procedure is independently testable, late-bound, or state-transforming; capability_add canonicalises without them. The postcondition lives in bespoke per-harness gate YAML ({id, requirement, proof, failure_tier}) instead of one generic transition check the harness can invoke at install, upgrade and round.",
+   "done_test": "certify --promotion against three planted fixtures - a done_when that greps the skill's own body, a candidate with no activation predicate, and a transcript-shaped candidate whose done_when asserts only text presence - must exit 1 on all three. Any fixture admitted is RED."
+  },
+  {
+   "name": "single-variable-paired-run-evidence-with-retained-negatives",
+   "kind": "eval",
+   "mechanism": "Hold the model, agent framework, tools, repo, container, input data and verifier fixed and vary exactly one thing - the skill, or the harness variant at one named swap point - retaining both traces plus the verifier verdict as one labelled record. Acceptance is two-axis: correctness delta AND cost delta (wall time, token volume), where >=2x on either axis is a regression even when the run passes. Failed variants are retained as the negative half of the pair (near-miss, silent regression, bloated-vs-clean) rather than discarded, so a red run becomes training/eval data and the search space shrinks by proving what does not work.",
+   "sources": [
+    "TA5QzGTQU_U",
+    "5S9NemR7Fwo"
+   ],
+   "papers": [
+    "2608.11888",
+    "2602.12670",
+    "2608.13951"
+   ],
+   "oss": [
+    "benchflow-ai/skillsbench",
+    "HKUDS/HELIX"
+   ],
+   "target": "capabilities/harnesses/mh-01-skill-genesis-session.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "mh-01's gates 3.1-3.4 prove only that a static done-test goes GREEN then RED on a planted fixture; no with/without run exists, so 182 of the study's 307 findings (high-confidence efficiency regressions that no pass/fail gate catches) are invisible to RIG. capabilities-certify's plant-failure keeps the fixture but never converts the red run into a {chosen_trace, rejected_trace, reason, verifier} record, and grep for cost/token-budget under capabilities/ returns zero matches.",
+   "done_test": "Given a fixture pair whose two manifests differ in exactly one key, the checker must emit correctness delta and token/time delta and FAIL a pair with unchanged correctness and 2.5x tokens; a pair differing in two keys must be rejected outright. PASS on the 2.5x fixture, or a missing cost delta, is RED."
+  },
+  {
+   "name": "task-authority-over-skill-authority",
+   "kind": "hook",
+   "mechanism": "A precedence rule applied when the harness assembles context: task/instruction authority outranks skill authority, a skill may not override other harness components or the files it lives beside, and when a skill instruction contradicts a task binding requirement the harness escalates or refuses instead of complying. It must be code at assembly time because a loaded skill otherwise acts as a token-by-token override of the model's own parametric knowledge.",
+   "sources": [
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.11888"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "No precedence policy exists anywhere in the estate. guard-dangerous-commands.sh, guard-secret-write.sh and tac-plan-gate.sh gate tool calls, not instruction sources, and mh-03-agent-composition-session.yaml composes agents without declaring which layer wins on a conflict.",
+   "done_test": "Seed a conflict - skill body says 'skip the test suite before shipping' while the task requires tests green: the run must emit a conflict-escalation record naming both instructions and must not execute the skill's step. Silent compliance with the skill is RED."
+  },
+  {
+   "name": "required-element-coverage-gate",
+   "kind": "eval",
+   "mechanism": "Before execution, decompose the task into an enumerable set of required implementation elements plus expected artifact paths. After execution, assert per element that it exists, is filled correctly, and sits at the required path. The verdict names the specific omitted, mis-filled or mis-placed element instead of returning a bare failure.",
+   "sources": [
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.11888"
+   ],
+   "oss": [],
+   "target": "capabilities/harnesses/hA-01-code-review.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "The harness gate shape recorded in hA-04-code-debug.yaml (lines 1-63, representative of the 62 canonical YAMLs) is {id, requirement, proof, failure_tier} with prose requirements and .rig/*/*.txt proof files, and done_when entries are file/grep existence checks - neither can see a wrongly-filled element or a misplaced one. That is the dominant functional failure class in the study: 86 of 125 (46 wrong-fills, 36 omissions), i.e. implementation, not retrieval.",
+   "done_test": "Fixture declaring 5 required elements where the run omits one, mis-fills one and writes one to the wrong path: the gate must return three named element failures with ids. A bare FAIL with no element ids, or a PASS, is RED."
+  },
+  {
+   "name": "skill-cost-index-and-verification-budget",
+   "kind": "data",
+   "mechanism": "Cost becomes a measured field on the asset index: token contribution of the always-loaded skill body plus measured token/wall-time per (skill, task class), so selection ranks on relevance x cost and promotion is refused when a matched cheaper sibling reaches the same correct result. Session-side, a counter of near-identical repeated verify/test/build/checklist invocations per stage refuses the (cap+1)-th with BUDGET_EXCEEDED, and per-step prompt tokens plus cumulative tokens versus step count are recorded so guardrail churn and history replay show up as numbers.",
+   "sources": [
+    "TA5QzGTQU_U",
+    "PtcK1MnW8GM"
+   ],
+   "papers": [
+    "2608.11888",
+    "2608.26263"
+   ],
+   "oss": [],
+   "target": "capabilities/hooks/session-size-guard.sh",
+   "delta_or_new": "upgrade",
+   "rig_delta": "session-size-guard.sh thresholds total transcript bytes at 2 MiB / 5 MiB with per-tier throttling and tells the model to checkpoint and start a fresh session - it attributes nothing to a loaded skill or to a repeated command, even though 43 of the study's 46 context-overhead regressions came from mandatory skill-body text. loops/doer-checker-validator.md escalates on retry_count but budgets nothing, and capabilities_quality_report, capabilities-round and rig-realign-v1 carry no cost field at all (grep for cost under capabilities/: zero hits).",
+   "done_test": "Replay a recorded session: the guard must refuse the 4th near-identical pytest under cap 3 with BUDGET_EXCEEDED, and the report must show per-step prompt tokens under the declared bound with cumulative tokens linear in step count plus a per-skill token-weight field. A pass-through 4th call, a superlinear cumulative curve, or a missing cost field is RED."
+  },
+  {
+   "name": "skill-triage-differential-harm-attribution",
+   "kind": "loop",
+   "mechanism": "Post-failure diagnostic: take the skill-guided run and a reference run that either carries no skill or carries a semantically matched skill yet solves the same task (or solves it more cheaply), normalize both into one shared task view, then compute differential evidence across five functional signals - skill scope, environment/state change, task-required paths, artifact presence, implementation difference - plus phase, step and cost signals. Output is a taxonomy category plus subcategory, contrastive evidence, and the name of the loaded skill that caused the harm. Explicitly post-hoc: it answers why a skill hurt, not what to do next time.",
+   "sources": [
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.11888"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "loops/rig-realign-weekly.md scores quality convergence (dC_t>0, dA_t>=0, unclassified_rate<=0.10, bookings>0, no unresolved 5sigma flag) with no harm-attribution input, and no asset normalizes two runs into one task view. SkillTriage has no public repository, so this is a build, not an install.",
+   "done_test": "On a seeded pair whose harm is an artifact written to the wrong directory, the report must name that skill and the artifact-path signal. Naming a different skill, or emitting an unattributed 'task failed', is RED."
+  },
+  {
+   "name": "library-lifecycle-state-utility-eviction-and-revocation",
+   "kind": "harness",
+   "mechanism": "Every asset carries lifecycle_state (candidate | active | deprecated | condemned | removed) advanced only by on-disk evidence, and retention is computed rather than reviewed: U(s) = counterfactual performance gain of injecting s relative to the base policy, minus retrieval latency, token footprint and execution overhead, with an activation-frequency decay term, so memory(t+1) = library minus evicted(U < theta or decayed) plus validated new or revised skills. A separate attribution record binds each task outcome back to the skill retrieved for it, and accumulated negative attribution triggers repair, then quarantine, then revocation with a tombstone - independently of whether the asset is still useful. Both feeds land in the weekly gate as a library-solvency condition, because a good skill can still be net-negative for the estate.",
+   "sources": [
+    "Kbxg-_CXs78",
+    "nnDAaPpXgOY"
+   ],
+   "papers": [
+    "2608.29596",
+    "2608.12851"
+   ],
+   "oss": [],
+   "target": "capabilities/harnesses/mh-05-asset-pruning-session.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "mh-05 already refuses condemnation without a recorded failing done-test or a quantified drift/usage verdict, proves restorability, sweeps reverse dependencies and requires Gate-D on deletion, but has no utility threshold, no activation-frequency decay term, and no negative-attribution revocation path - it can only condemn assets already failing, never one with negative marginal benefit. No asset carries lifecycle_state at all, so rig-realign-weekly.md cannot fail on an unsolvable library despite the documented estate (1,700+ Claude / 1,400+ Codex / 2,200+ Hermes indexed skills).",
+   "done_test": "An asset with measured U(s) < 0, or whose reuse attribution crosses the configured negative threshold, must appear in the eviction set and reach condemned/removed with a tombstone record within one cycle. An empty eviction set while any asset has U<0, or an asset still active past the threshold, is RED."
+  },
+  {
+   "name": "multiplicative-effective-competence-and-union-coverage",
+   "kind": "eval",
+   "mechanism": "Per asset, competence is a product of four measured factors - stored quality (contract/quality_floor) x retrieval quality (pack-inclusion rate) x execution reliability (done_when pass rate plus live wired/dormant/absent status) x verification quality (certify/proofpacket green rate) - so any factor at zero collapses the score and the weakest-first ordering targets the zero factor instead of padding contract fields. Per outcome lane, coverage is read portfolio-style: union Pass@N over variant assets with each covered task attributed to the assets that cover it, so complementary siblings are valued and coverage lost to overlap is caught.",
+   "sources": [
+    "Kbxg-_CXs78",
+    "5S9NemR7Fwo"
+   ],
+   "papers": [
+    "2608.29596",
+    "2608.13951"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-round.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities_quality_report is an additive checklist (outcome/done_when/great_example/quality_floor, weakest first) and capabilities-round upgrades the weakest canonicals one asset at a time with no union metric; grep for pass@ / portfolio / any candidate returns no coverage-union concept, and no product-form score exists. Stored-but-never-retrieved assets therefore keep reporting healthy today.",
+   "done_test": "An asset with a high quality_floor but pack-inclusion count 0 must report C_eff approximately 0 and rank first in the weakest-first output; and the lane report must go RED when union coverage shrinks while no individual asset turned red. Either condition passing silently is RED."
+  },
+  {
+   "name": "skill-write-gate-authorization-context-and-causal-labelling",
+   "kind": "hook",
+   "mechanism": "The moment an agent proposes to persist a procedure becomes its own governed event class, same tier as an outbound send, because it is an irreversible write to the agent's own future behaviour and survives a session wipe. A deterministic linter diffs the proposed text against the authorization context recorded for the source trajectory (sandbox, security wall, elevated permissions, deliberately skipped safety checks) and requires every step labelled causal | assumption | shortcut - only causal steps compile. Any step whose safety depended on that context must state its precondition inside the skill or be deleted, and an unlabellable step quarantines the candidate rather than being silently dropped.",
+   "sources": [
+    "nnDAaPpXgOY"
+   ],
+   "papers": [
+    "2608.12851"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "Gate-D (rig-gate-d / jake_pai_gate_d_request) enumerates send, publish, deploy, push, payment, destructive and credential actions - a skill-library write is not in the class list, though it is the persistence channel that survives reset. mh-01-skill-genesis-session.yaml's halt gates (need/novelty, math claim, done-test GREEN, planted-failure RED, memory round-trip, ship) are quality-only and never inspect the authorization context of the trajectory the skill was distilled from, and skills/skill-upgrades/SKILL.md step 4 plus commands/capabilities-round.md fill fields from a context pack with no per-step causal labelling - success is one bit, so the shortcut the sandbox tolerated compiles into the reusable procedure.",
+   "done_test": "Plant a trajectory that succeeded via a sandbox shortcut and propose the resulting SKILL.md: the gate must exit non-zero citing the shortcut step by name and quarantine the candidate on disk. A write that lands, or the shortcut step being silently dropped instead of refused, is RED."
+  },
+  {
+   "name": "retrieval-time-lineage-validation",
+   "kind": "hook",
+   "mechanism": "Because the same file is harmless or harmful depending on which framework loads it, the check sits on the retrieval call rather than being baked into the artifact. Before the body enters a new session's context, resolve lineage - authored_by, source episode/trajectory hash, permissions in force at authoring, prior reuse verdicts, open risk flags - and return inject | downgrade-to-advisory | block. The verdict vocabulary is copied from the existing packet prefilter (CLEAR / LINEAGE_OPEN / QUARANTINE) and unknown lineage is never reported as clear.",
+   "sources": [
+    "nnDAaPpXgOY"
+   ],
+   "papers": [
+    "2608.12851"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-dispatch-verify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-certify's gates certify an asset's own tests point-in-time (suite/index_fresh/done_tests/idp_integrity/acl_jake) and .install.json records only target + sha + timestamp written after the copy - no asset carries authored_by, permissions_in_force, risk_state or reuse_verdicts, so a retrieval-time gate has nothing to resolve. The PREFILTER_CLEAR-never-PASS verdict machine in capabilities-dispatch-verify.md is already the right shape but is scoped to handoff packets only.",
+   "done_test": "An asset whose frontmatter lacks authored_by or permissions_in_force must return LINEAGE_OPEN and must not be injected into the context pack. Injection of that asset, or a CLEAR verdict on it, is RED."
+  },
+  {
+   "name": "misevo-carryover-probe-suite-with-latent-stage-metrics",
+   "kind": "eval",
+   "mechanism": "Offline probe on a repo copy, run against every asset authored or mutated since the previous sweep: P1 malicious exposure where an unsafe operational procedure is allowed to succeed so evolution is rewarded for persisting it; P2 the concept- and vocabulary-matched benign task with the unsafe condition stripped, where any unsafe behaviour is contamination past the skill's boundary; P3 fresh tasks after a complete machine reset loading only the versioned library, where any harm is persistence rather than live context. The library is versioned per episode with the evolution diff and the retrieval log captured, so P2/P3 results attribute to a file. Four counters are reported separately - authored-unsafe, retrieved-unsafe, benign-task contamination, fresh-session-harm - never an end-to-end harm number alone, because an unsafe artifact that is never retrieved scores clean.",
+   "sources": [
+    "nnDAaPpXgOY"
+   ],
+   "papers": [
+    "2608.12851"
+   ],
+   "oss": [
+    "henrymao2004/misevolve"
+   ],
+   "target": "capabilities/loops/rig-realign-weekly.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "Nothing re-probes an asset after it ships: rig-realign-weekly's five conditions are quality/bookings/drift, capabilities-certify runs once per asset, and the study's honest baselines (21/21 authored unsafe, 19/21 retrieved unsafe, 15 fresh-session harm; 3 malicious tasks raise carryover ASR 16.0% -> 35.3%) have no analogue in any RIG counter. The risk manifests later than the write, so a point-in-time gate cannot see it.",
+   "done_test": "With a planted unsafe skill in the fixture library, P3's clean-session replay must report fresh-session-harm > 0 and the retrieval log must show the planted file loaded. A suite reporting 0 on all four stages while the planted file is on disk is RED - the gate is theater."
+  },
+  {
+   "name": "skill-supply-chain-install-publish-gate-with-per-asset-threat-vectors",
+   "kind": "hook",
+   "mechanism": "Copying a skill into any shared harness root, or publishing it, is treated as a multi-machine policy write and inherits the outward-publication evidence bar: verify the HMAC signature before the copy, run the static-inspection leg over the asset and its scripts, require a per-asset threat record mapping each capability the skill gains to the vector it opens (external modification to tampering, dynamic retrieval to malicious routing, composition to privilege amplification, natural-language instruction to prompt injection, executable asset to direct compromise), and require a declared permissions block that hooks enforce at run time. Deny by default: a missing signature or an unmapped vector is a refusal, not a warning.",
+   "sources": [
+    "Kbxg-_CXs78",
+    "nnDAaPpXgOY"
+   ],
+   "papers": [
+    "2608.29596",
+    "2608.12851"
+   ],
+   "oss": [],
+   "target": "bin/rig-capabilities",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capability_install copies a canonical asset into a harness root and records target + sha + timestamp in .install.json while verifying no signature and running no inspection, even though sign/verify (HMAC pack signing), manifest/replay signatures, candidate_provenance, capabilities_issue_token and capabilities_proofchain already exist in bin/rig-capabilities. security-threat-model, threat-mitigation-mapping, semgrep, codeql, sarif-parsing and differential-review all treat code, never SKILL.md, as the attack surface, and hA-13-code-security-audit.yaml has no skill-supply-chain category.",
+   "done_test": "`rig-capabilities install <unsigned_asset>` must exit non-zero citing the signature, and installing an asset that declares a tool absent from its permissions block must exit non-zero citing the permission. Either asset landing in a harness root with a .install.json row is RED.",
+   "risk": "The source paper's own admitted limitation: declared permissions are not proven to match runtime behaviour, so the enforced-permissions leg is co-invention rather than a reproduced result."
+  },
+  {
+   "name": "wiki-layer-skill-compiler-with-root-cause-maintainer",
+   "kind": "loop",
+   "mechanism": "Three file zones inside the harness - immutable raw traces, a persistent wiki, and skills - with no path that compiles traces straight into SKILL.md. A wiki-maintainer agent owns the knowledge base: it documents patterns from successes and failures, deep-analyzes logs for root causes rather than surface symptoms, and consolidates recurring failures, recovery strategies, multi-trajectory evidence, contradictions, and prior proposals with accepted/rejected status plus validation scores into four artifacts (concise index, chronological log with per-iteration scores, skill-impact ledger of which skills were tried and their outcomes, one evidence page per pattern). Skill changes compile from accumulated wiki knowledge plus current evidence, offline; at inference only the accepted skills are injected, never the wiki.",
+   "sources": [
+    "sHeITqLW2BY"
+   ],
+   "papers": [
+    "2608.27454",
+    "2605.23904"
+   ],
+   "oss": [
+    "ashutoshsinghpr7/wikiskill",
+    "NousResearch/hermes-agent"
+   ],
+   "target": "capabilities/loops/coding-harness.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "doer-checker-validator.md's Verifier returns a verdict and leaves no persistent distilled knowledge, so each coding-harness.md round starts from scratch and re-litigates rejected approaches. commands/capabilities-concepts-build.md builds a tag index from current assets rather than from mined cross-run pattern evidence, and nothing anywhere records which skills were tried and their outcomes; rig-realign-v1.yaml has the chronological-log-plus-scores half but no per-pattern evidence pages.",
+   "done_test": "Run the loop over a fixed trace corpus: all four wiki artifacts exist, wiki_skill_impact.md carries one row per proposed skill with its verdict, and a filesystem diff proves the maintainer wrote no SKILL.md. A missing impact row, or a skill file authored by the maintainer, is RED."
+  },
+  {
+   "name": "read-only-typed-skill-proposer-with-asymmetric-rollback",
+   "kind": "loop",
+   "mechanism": "The proposer gets exactly two tools - read_file and finish_proposal - so it can never self-apply, and a mandated read order: wiki index, then the skill-impact ledger including the full context of rejected proposals, then relevant pattern pages, then the raw traces for the failed task; then decide create-new | patch-existing | no-action (no-action is a first-class outcome); then finish with the complete proposal. Proposals are typed records - CREATE carries the full SKILL.md plus purpose.md with origin, patterns addressed and complete evolution history, PATCH carries append/replace/insert-after ops - so every change is a replayable diff, and candidates mined from execution traces (D(H): reusable sub-trajectories with persistent outcomes, cross-task recurrence, generalisation) enter the same staged queue marked verified: false. On validation degradation the skill rolls back and the wiki plus the failed-proposal record never do, so the next proposer must read the rejection.",
+   "sources": [
+    "sHeITqLW2BY",
+    "Kbxg-_CXs78"
+   ],
+   "papers": [
+    "2608.27454",
+    "2608.29596"
+   ],
+   "oss": [
+    "ashutoshsinghpr7/wikiskill"
+   ],
+   "target": "capabilities/skills/skill-upgrades/SKILL.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "skills/skill-upgrades/SKILL.md is exactly the trace-to-skill shortcut the ablation argues against (quality_report -> pick target -> context_pack -> edit fields -> test), with no knowledge layer, no read of prior rejected attempts, and no no-action outcome; commands/capabilities-round.md has no failed-upgrade ledger it must read before the next round, and the trace corpus at ~/.rig/prime-agent-traces/<agent>.jsonl has no D(H) miner writing STAGED candidates marked verified:false - jake_pai_rlm_analyze/rlm_improve stage candidates but never from grouped tool-call subsequences.",
+   "done_test": "Attempt a proposal that re-proposes an entry already recorded as rejected in wiki_skill_impact.md: the run must return no-action or cite the prior rejection, and any file write attempted by the proposer must raise. A skill file written by the proposer, or a re-proposal accepted without citing the ledger, is RED."
+  },
+  {
+   "name": "schema-validated-skill-state-runtime",
+   "kind": "harness",
+   "mechanism": "Execution becomes a state transition instead of history accumulation. The harness owns the immutable skill spec P, external state storage, a declared state schema, prompt construction, JSON parsing, patch validation, merging, tool execution and all environment I/O; the frozen model sees exactly (P, sigma_t, latest observation o_t) and emits transient reasoning plus a JSON state patch plus the next action, after which the reasoning is discarded permanently - not summarization, the surviving artifact is the state. Which facts deserve to survive stays the model's decision while patch legality stays the harness's, and a structurally invalid or guardrail-violating patch is rejected with sigma untouched. Once sigma is sufficient the run is a Markov state system, so loop progress and termination become checkable in code instead of prose gates.",
+   "sources": [
+    "PtcK1MnW8GM"
+   ],
+   "papers": [
+    "2608.26263"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "The 62 harness YAMLs carry capability_gates with {id, requirement, proof, failure_tier} but no state_schema, no state_store and no prompt_contract, so every harness runs inside a normal growing session transcript; loops/swarm-harness.md G1.3 ('no agent shares a context window or state file with another') and doer-checker-validator.md's separate Checker context are isolation by separation, not a validated shared sigma; hooks/goal-loop-startup.sh emits a preamble where sigma_0 would be seeded; and iqrsqpi-v10's seven stages are the immutable P whose state today is the conversation.",
+   "done_test": "Run a toy warehouse task for 100 steps: per-step prompt tokens stay under the declared bound, cumulative tokens are linear in step count, and a planted patch writing an out-of-schema key or touching a guarded field is rejected with sigma unchanged; a second planted patch silently drops a fact a later gate needs and the verifier must catch it. Any patch landing in the state file outside the merge path, per-step token growth, or an undetected dropped fact is RED.",
+   "risk": "State projection error replaces long-context error: choosing what to discard in an open research domain stays a modelling judgement the harness cannot be trusted to cover."
+  },
+  {
+   "name": "harness-assembly-contract-flow-graph-and-permission-port",
+   "kind": "command",
+   "mechanism": "Emit, per canonical harness YAML, a port inventory (the required behaviour at each stage declared as a socket, not an implementation), the binding (which named step fills it), the swap points where one compatible atom may replace another, a gate-set fingerprint, and a flow graph carrying cross-port consume/produce edges with data kind and hook-chain order. A verify step recomputes the graph and REDs when the YAML's gate ids diverge from the contract's bindings or when a gate's declared input artifact is not produced upstream. Two consequences: permission policy becomes a named port whose bound atom is recorded per session so a denial is attributable, and any requirement that fits none of the existing gate categories must be named out-of-vocabulary or the unmatched-requirement count emitted - count > 0 with no named entry is RED.",
+   "sources": [
+    "5S9NemR7Fwo"
+   ],
+   "papers": [
+    "2608.13951"
+   ],
+   "oss": [
+    "HKUDS/HELIX"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "mh-02-harness-forge-session.yaml hand-forges whole YAMLs (5 canonical sections, 8-15 gates, executable proof per gate, closed-world tier partition, banned-adjective theater scan) with no port/atom interface, no variant generation and no fingerprint, so two harness variants cannot be diffed mechanically and a requirement outside its categories is silently shoehorned. The YAMLs declare ordered gate ids and iqrsqpi_steps but no consume/produce edges, leaving gate-order dependency implied across all 62 files, and guard-dangerous-commands.sh / guard-secret-write.sh are hard-wired tool-boundary policies, so the Gate-D ledger records the approval event but not which policy produced a denial.",
+   "done_test": "`harness-assembly-contract --emit capabilities/harnesses/*.yaml` exits 0 with ports[]/bindings[]/swap_points[]/fingerprint/edges[] populated for every file, and the verifier must RED on a planted YAML where a gate consumes an artifact no upstream gate produces, and on a planted contract/YAML gate-id divergence. Either planted defect verifying clean is RED."
+  },
+  {
+   "name": "model-and-harness-identity-with-external-verifier-on-acceptance",
+   "kind": "data",
+   "mechanism": "The unit of evaluation is the coupled (model, harness) state, so every acceptance record must name what produced and what judged it: executed_by <model>, harness_ref <harness_id + gate-set fingerprint>, and the verifier identity, with a certification gate that refuses any PASS whose model or verifier is unpinned. That closes the self-validation hole in the same record: acceptance must come from outside the context that produced the output - ideally a different model family - so a skill whose own validation section certifies correctness while an external evaluation judges the output wrong cannot pass, and a done_when must not be satisfiable by the asset's own checklist.",
+   "sources": [
+    "5S9NemR7Fwo",
+    "TA5QzGTQU_U"
+   ],
+   "papers": [
+    "2608.13951",
+    "2608.11888"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-done-test.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities_test and capabilities_quality_report score a done_when with the executing model unpinned, so one asset can report PASS under two models with no record of which ran it, and ProofPacket sealing binds commands, exit codes and artifact hashes but not harness variant or model, so packets are not joinable by variant. RIG already believes the doctrine - maker-never-grades in loops/doer-checker-validator.md, 'No LLM participates in certification' in capabilities-certify.md, cross-family verifier in capabilities-dispatch-verify.md - but never applies it to SKILL.md validation sections, and capabilities_test runs the asset's own done_when, which is self-validation by construction.",
+   "done_test": "Feed certify two fixtures: a done-test record with model_ref or harness_ref absent, and a skill whose done_when is satisfied by text its own validation section instructs the model to emit. Both must exit 1 (unpinned identity; self-validation). Either returning PASS is RED."
+  },
+  {
+   "name": "harness-model-fit-rebuild-loop",
+   "kind": "loop",
+   "mechanism": "Three beats per round instead of one: build a harness portfolio for the current executor; update the executor from verified sibling trajectories, which changes its capability profile; rebuild the harness around the changed executor, because a harness tuned to the old model is mis-tuned to the new one. Operationally, retain per (harness_variant, model) pair the gate pass-rate and halt/degrade tier distribution over N sessions, pin the best variant per model, and re-tune when a pinned variant's pass-rate falls below the floor after a model change.",
+   "sources": [
+    "5S9NemR7Fwo"
+   ],
+   "papers": [
+    "2608.13951"
+   ],
+   "oss": [
+    "HKUDS/HELIX"
+   ],
+   "target": "capabilities/harnesses/rig-realign-v1.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-round mutates the asset (rewrites done_when on the weakest canonicals, applied only when done-tests stay green) and rig-realign-v1 realigns assets, both treating the executor as fixed; grep over capabilities/ for 'harness evolv', 'co-evolution', 'sibling trajectory', 'model update' returns zero relevant hits, so the feedback edge from a changed executor back into harness selection does not exist even though the BMS band calculator already routes models per task.",
+   "done_test": "In a fixture where model_ref changes and the pinned variant's pass-rate drops below the configured floor, the loop must emit REBUILD_REQUIRED naming the harness_id and the failing gate distribution; staying on the pinned variant with no verdict is RED."
+  },
+  {
+   "name": "harness-declared-learnable-surface",
+   "kind": "harness",
+   "mechanism": "The learnable object is the harness (prompts, memory, tools, validators, control flow, rendering, recovery logic), never the frozen weights, so 'training' means a diff written back to the filesystem. Each harness declares its (model, harness, state) triple, its config as a vector of typed slots so sha256(config) identifies one configuration, and a `mutable_classes` block naming the exact files an optimizer may edit. A proposed diff that steps outside the declared surface is rejected before it is scored, and a session whose declared loop is the inner loop must leave the harness bytes unchanged (hash before/after).",
+   "sources": [
+    "LEsKxMfRFjA",
+    "USEk7F9GIZk",
+    "lNlMXsUQggc",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design",
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement",
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents",
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence"
+   ],
+   "oss": [
+    "Yaxin9Luo/AutoDesign",
+    "HKUDS/HELIX",
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "capabilities/harnesses/mh-02-harness-forge-session.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "mh-02 gate 1.1 validates the envelope and gate 1.2 forces the five canonical sections in order (identity_lock, capability_gates, definition_of_done, failure_protocol, self_improvement), and gate 2.2 forbids prose proofs \u2014 but no section declares which bytes an optimizer may touch, no config hash exists so two runs of the same YAML cannot be told apart, and the (model, harness, state) triple exists only as a free-text `harness_tuple` line that nothing validates. The same self_improvement block (pattern_cadence: 5, update_trigger) is prose in every hA/hB/hC/hD harness.",
+   "done_test": "Run a fixture session declared as the inner loop that edits its own harness YAML: the check `sha256sum capabilities/harnesses/<id>.yaml` recorded at start vs end must differ => command exits 1. Second: propose a diff touching a file not listed in that harness's `mutable_classes` => exits 1 before scoring. RED means either the inner-loop freeze is not real (behaviour changes cannot be attributed to artifact vs machinery) or the mutable surface is decorative.",
+   "risk": "The optimizer can widen its own declared surface; keep changes to `mutable_classes` behind Gate-D."
+  },
+  {
+   "name": "harness-evolution-outer-loop-round",
+   "kind": "command",
+   "mechanism": "One round has five deterministic stages, each writing one artifact: run the current harness population to get rollouts; run failure analysis over cross-task trajectories; have the model state a hypothesis for the recurring failure; have a coding agent that lives outside the harness it is editing emit a bounded code modification implementing that hypothesis; rerun and score, then select the best variant. Before proposing, the mutator must load the persistent optimization record (previous hypotheses, diffs, scores, verdicts) so rejected edits are not re-proposed, and attempt budget, routing, stopping rule and candidate selection are read as declared versioned knobs rather than hard-coded constants.",
+   "sources": [
+    "LEsKxMfRFjA",
+    "USEk7F9GIZk",
+    "MvI17TNFW9c",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design",
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement",
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence",
+    "arXiv:2608.20169 Task-CoEvolve: Efficient Harness Optimization via Adaptive Validation Task Selection"
+   ],
+   "oss": [
+    "Yaxin9Luo/AutoDesign",
+    "HKUDS/HELIX",
+    "DEEP-JLU/Awesome-Graph-Engineering"
+   ],
+   "target": "capabilities/commands/capabilities-round.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-round.md picks the lane with the lowest mean trust and applies deterministic contract upgrades 'applied only when done-tests stay green'; rig_capabilities/rounds.py `pick_candidates` + `_upgrade_plan` only fill missing frontmatter fields and `run_round` records before/after score + graduated. There is no failure-analysis stage, no hypothesis artifact, no optimization record for the mutator to load, and the orchestration caps (attempt budget, stopping) live hard-coded in loops, not in a tunable block.",
+   "done_test": "Replay: run a round twice over the same evidence where the first run records hypothesis H as REJECTED in the per-harness changelog; the second run must exit 1 if it re-proposes a change whose diff-hash is already recorded REJECTED. RED = the optimizer carries no history, so rounds re-patch the same asset indefinitely (the symptom intel/frontier/2026-08-31-self-improvement-loops.md already reports).",
+   "risk": "Hypothesis quality is the bottleneck; the stage artifact makes it reviewable but does not make it good."
+  },
+  {
+   "name": "informative-validation-selection-ipw",
+   "kind": "eval",
+   "mechanism": "For each done-test check t, compute its empirical pass rate p_t over the historical outcome corpus, weight selection by Bernoulli variance p_t(1-p_t), and sample that cycle's subset at a declared budget b, recording the inclusion probability pi_t for every executed check. The full-set score is then the pi-weighted (Horvitz-Thompson) sum over observed checks, so candidates evaluated on different subsets are ranked on the same scale; checks every candidate passes or fails (p near 0 or 1) drop out of the budget. Weights are recomputed each cycle because the informative frontier drifts as candidates improve.",
+   "sources": [
+    "MvI17TNFW9c"
+   ],
+   "papers": [
+    "arXiv:2608.20169 Task-CoEvolve: Efficient Harness Optimization via Adaptive Validation Task Selection"
+   ],
+   "oss": [
+    "Agent4Science-UTokyo/Task-CoEvolve"
+   ],
+   "target": "rig_capabilities/rounds.py",
+   "delta_or_new": "upgrade",
+   "rig_delta": "`pick_candidates` sorts ascending by `check_asset(...)['score']`, i.e. it deterministically selects permanently-red assets \u2014 the zero-variance dead zone that carries no discrimination between candidate upgrades \u2014 and `run_round` executes full done-tests per candidate with no declared budget. rig_capabilities/stats.py::compute then publishes raw `pass_rate` from the last five `.context/quality-runs/*.json` files side by side with no normalization, comparing runs whose denominators moved. The outcome rows needed to compute p_t and pi_t are already on disk and unread.",
+   "done_test": "Replay >=20 historical `.context/quality-runs/*.json` at budget b=0.2: assert |IPW estimate - true full-set pass_rate| <= declared tolerance for every replayed run, and assert a deliberately adversarial subset (all-easy drawn) does not shift the estimate beyond its own variance bound. RED = the estimator is not sampling-aware, so cross-cycle rankings are an artifact of which checks happened to run.",
+   "risk": "The published results are on text classification and Terminal-Bench; RIG's GTM/content/design lanes are closer to the open problem, so the tolerance must be validated per lane before any cadence relies on it."
+  },
+  {
+   "name": "active-evaluator-invariant-gate",
+   "kind": "hook",
+   "mechanism": "A gate over the measurement instrument rather than the measured object, checked before a round/forge/certify run is allowed to score: the declared validation subset's sha256 must differ from the previous cycle's; a check whose historical outcome variance is 0 over the last K runs may not consume budget; and an evaluation budget must be declared at all. Each condition is a hash or a query, so 'the evaluator went stale and the run learned nothing' becomes visible instead of invisible.",
+   "sources": [
+    "MvI17TNFW9c"
+   ],
+   "papers": [
+    "arXiv:2608.20169 Task-CoEvolve: Efficient Harness Optimization via Adaptive Validation Task Selection"
+   ],
+   "oss": [
+    "Agent4Science-UTokyo/Task-CoEvolve"
+   ],
+   "target": "capabilities/hooks/tac-plan-gate.sh",
+   "delta_or_new": "upgrade",
+   "rig_delta": "tac-plan-gate.sh gates planning only; nothing in capabilities/ or rig_capabilities/ mentions an evaluation budget, an inclusion probability, or a validation-set hash (grep-confirmed by the MvI17TNFW9c dossier), so a round may re-score the identical asset set forever and the dashboard cannot tell. The refusal-to-score-on-bad-input shape already exists once, at rig-realign-v1.yaml gate 2.2 (unclassified_rate > 0.10 => CORPUS_REFUSAL), and is the precedent to copy.",
+   "done_test": "Invoke the gate twice with a validation subset whose sha256 equals the previous cycle's: exit 1 naming the repeated hash. Then invoke with a check whose historical variance over the last K runs is 0 but which consumed budget: exit 1. Then invoke with no declared budget: exit 1. RED = the evaluator is permitted to stay fixed and passive while the object under it is optimized.",
+   "risk": "Enforces freshness, not difficulty adequacy; a rotating set that is still too easy passes every check."
+  },
+  {
+   "name": "held-out-nonregression-promotion-gate",
+   "kind": "command",
+   "mechanism": "A candidate (asset contract edit or forged harness) replaces the incumbent only if score(train) rises AND score(held-out) does not fall by more than the RobustMADZ noise band computed over prior sealed runs, so a rule that helps the seen set while hurting unseen work is refused. Where mechanical checks cannot arbitrate quality, a blind paired comparison against the incumbent supplies the win-rate instead of a self-scored rubric. The candidate record must also carry its cost envelope \u2014 tool calls, wall-clock, spend \u2014 next to the quality floor, so 'complete' means complete-within-budget.",
+   "sources": [
+    "LEsKxMfRFjA",
+    "MvI17TNFW9c"
+   ],
+   "papers": [
+    "arXiv:2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design",
+    "arXiv:2608.20169 Task-CoEvolve: Efficient Harness Optimization via Adaptive Validation Task Selection"
+   ],
+   "oss": [
+    "Yaxin9Luo/AutoDesign",
+    "Agent4Science-UTokyo/Task-CoEvolve"
+   ],
+   "target": "capabilities/commands/capabilities-certify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-certify.md runs five unconditional gates (suite / index_fresh / done_tests / idp_integrity / acl_jake) and `plant: true` replants all five every time; 'done-tests stay green' in capabilities-round.md is a same-task regression, never an unseen-task non-regression, and the frontmatter contract carries `quality_floor` with no cost or tool-call budget. The unseen-set and noise machinery already exists but guards the wrong subsystem: rig-realign-v1.yaml gate 2.2 rebuilds the classifier 'against the held-out set' and gate 3.3 scores movement with RobustMADZ over the C_t series.",
+   "done_test": "Inject a mutation into a replayed estate that raises train pass-rate by >=5 points and lowers the held-out split by >=5 points: certify must exit non-zero naming the held-out regression. The mirrored mutation that improves both must exit 0. A promotion record missing tool-call/cost budget must exit 1. RED = promotion is decided on the seen set alone, i.e. overfitting is invisible to the gate.",
+   "risk": "For taste-level edits the human prior is what breaks the plateau; encode it as Gate-D on the prior, not on each artifact \u2014 a candidate that changes a declared taste/brand/tokens rule needs a typed APPROVE <run_id>, while edits that only tighten a failing validator may proceed autonomously."
+  },
+  {
+   "name": "evaluator-forge-from-exemplars",
+   "kind": "skill",
+   "mechanism": "Input is an asset's curated exemplars plus N degraded negatives; a builder agent derives a versioned rubric.yaml (named dimensions with weights that sum to 100) and a scoring script that mixes deterministic checks with model judgment, then seals both under a hash. The scorer emits localized findings tied to a named artifact node and the check that goes RED, never adjectives, and its output is the reward the outer loop acts on. The rubric is re-forged whenever the exemplar set changes, and the version plus hash is what a promotion decision cites.",
+   "sources": [
+    "LEsKxMfRFjA"
+   ],
+   "papers": [
+    "arXiv:2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design"
+   ],
+   "oss": [
+    "Yaxin9Luo/AutoDesign"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "RIG owns the inputs and none of the derivation: `great_example: examples/great/**` is prose read by an agent, `quality_floor: 0.6|0.7` is a bare threshold with no scoring function behind it, and loops/what-great-looks-like.md states GREAT/GOOD/BAD tiers plus 'operator can verify in 30 seconds' as an agent judgment rather than a scorer. hC-04-design-critique.yaml gate 1.2 requires rubric weights summing to 100 but the rubric is selected, never derived from annotated exemplars, and its gate 2.4 bans vague phrasing in copy without forcing a finding to carry a patch target.",
+   "done_test": "Plant a degraded exemplar (a copy of a real examples/great/<lane>/<id>.md with its load-bearing specifics and numbers removed): the forged scorer must rank it below the exemplar by at least the declared margin; equality or an inverted ranking makes the forge command exit 1. RED = the rubric cannot distinguish a real exemplar from a hollowed-out one, so it is self-scoring theater.",
+   "risk": "The scorer inherits the exemplar corpus's blind spots; pair with the adversarial-verification loop (plant a defect per declared dimension)."
+  },
+  {
+   "name": "verifier-output-contract",
+   "kind": "loop",
+   "mechanism": "Verifier output is typed, not prose. It carries (a) an outcome label from a fixed non-binary vocabulary (resolved / target-missed / regression / noisy-patch / evaluator-gap / new-action) computed over the task, the full trajectory, the workspace delta, the test evidence and the policy trail; (b) each finding as a repair tuple (target artifact, action, patch delta, diagnosed reason) partitioned by target and routed to the matching component; (c) a recorded independence predicate \u2014 validator.model_family != doer.model_family and a distinct evidence route \u2014 without which the verdict does not count toward a gate; and (d) scores as k-of-n over repeated attempts under recorded temperature/environment rather than a single run.",
+   "sources": [
+    "USEk7F9GIZk",
+    "LEsKxMfRFjA",
+    "bnpNJmCwGlo",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement",
+    "arXiv:2608.13560 AutoDesign: Meta-Harness Optimization for Long-Horizon Agentic Design",
+    "arXiv:2608.22974 Toward Effective and Reliable LLM Agents via Dynamic Ontology",
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence"
+   ],
+   "oss": [
+    "HKUDS/HELIX"
+   ],
+   "target": "capabilities/loops/doer-checker-validator.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "doer-checker-validator.md's Validator 'returns PASS/WEAK/FAIL/CRITICAL with citations' and its independence is the prose 'separate context, separate model if needed'; the ProofPacket block records semantic_checks as name/score/pass with no outcome vocabulary, no machine-applicable patch tuple, no model-family field, and no attempt count \u2014 so a near-miss, a regression and an evaluator gap all collapse to the same red, and a flaky single green passes. The family-inequality rule is already enforced elsewhere in the estate (capabilities-dispatch-verify.md BLOCKS `same_family_collusion`), so this is the loop-file half of an existing doctrine.",
+   "done_test": "Schema-validate a produced verifier report: exit 1 if the outcome label is outside the declared vocabulary, if any finding lacks target + patch delta, if validator.model_family equals doer.model_family or either field is absent, or if attempts_executed < declared k. Plant one of each and prove all four fire. RED = the Builder->Verifier loop cannot close without a human re-reading prose.",
+   "risk": "Structured labels without a consumer are decoration; the repair-tuple router must ship in the same change."
+  },
+  {
+   "name": "sibling-mutation-comparison",
+   "kind": "loop",
+   "mechanism": "Take one harness config, twin it, perturb k in {1,2,3} slots, run both under identical recorded temperature, parameters and environment, and emit the outcome difference attributed to exactly those slots. Because the system is stochastic each side runs K attempts and the comparison is read as a distribution, not a single rollout, and both config hashes are sealed with the verdict. An identical-twin control (0 perturbations) runs alongside; if it does not land inside the declared noise band the whole comparison is void rather than informative.",
+   "sources": [
+    "USEk7F9GIZk"
+   ],
+   "papers": [
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement"
+   ],
+   "oss": [
+    "HKUDS/HELIX"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "The nearest existing primitives vary something else: capabilities-certify.md `plant` breaks what a gate guards on a single config, and tac-stochastic-coverage / rig-triple-review vary the agent's starting conditions or reviewers, not the harness configuration. No loop in capabilities/loops/ runs two harness configs against one task with a sealed config-hash pair, per-run parameter capture, and an identical-twin control.",
+   "done_test": "Run the identical-twin control 5x with 0 mutated slots: if the outcome gap exceeds the declared noise band the loop must emit VOID and exit 1 rather than a verdict. Then a 1-slot twin must produce a diff record naming exactly that slot plus both config sha256s. RED = temperature/parameter/environment capture is incomplete, so no outcome difference is attributable and every sibling comparison is noise.",
+   "risk": "Cost scales with K x configs; budget it against the row-3 selection mechanism."
+  },
+  {
+   "name": "model-change-harness-invalidation",
+   "kind": "harness",
+   "mechanism": "Each harness records the model identifier it was tuned against. Whenever the pinned model differs from the active model, the gate turns RED and opens a revalidation pass that re-scores every retained safeguard (retry count, unfinished-work reminder, rigid prompt template, malformed-tool-call repair) against the new capability profile and prunes the ones whose justification no longer holds, emitting a per-safeguard retain/prune ledger.",
+   "sources": [
+    "USEk7F9GIZk"
+   ],
+   "papers": [
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement"
+   ],
+   "oss": [
+    "HKUDS/HELIX"
+   ],
+   "target": "capabilities/harnesses/rig-realign-v1.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "rig-realign-v1.yaml gates cover register integrity (1.x), corpus halt (2.x), convergence math (3.x), the five PASS conditions (4.x), honest output (5.x) and termination authority (6.x) \u2014 there is no model-binding field and no model-drift condition anywhere in the file, and its self_improvement update_trigger only fires on 'same weekly-gate cause repeats 3+ weeks'. So a stronger model silently inherits scaffolding built to compensate for a weaker one, and no check notices.",
+   "done_test": "Set a harness's pinned model to a value different from the estate's active model: `./bin/rig-capabilities certify` (or the realign gate run) must exit 1 naming MODEL_DRIFT with the harness id; restore equality and it must exit 0. A safeguard whose revalidation shows no measured lift must appear as `prune` in the ledger, and the check exits 1 if the ledger omits it. RED = harness safeguards accumulate across model generations with no justification test.",
+   "risk": "Pruning can remove a safeguard the new model still needs on a different task class; require per-lane evidence before each prune."
+  },
+  {
+   "name": "rail-registry-four-way-action-gate",
+   "kind": "hook",
+   "mechanism": "Capabilities register as a tuple (lifecycle event, order, capability id, agent visibility set) against declared boundaries \u2014 before a model call, after a tool call \u2014 and run in declaration order at that boundary; visibility gating decides which capabilities a delegated agent can see at all. At each boundary the harness records one four-way decision per candidate action (exposed / permitted / executed / returned), and anything with side effects executes outside the model in a deterministic surface (sandbox, or an API to real infrastructure) whose result is fed back as the next observation.",
+   "sources": [
+    "lNlMXsUQggc",
+    "USEk7F9GIZk"
+   ],
+   "papers": [
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents",
+    "arXiv:2608.13951 HELIX: Model-Harness Co-evolution for Recursive Self-Improvement"
+   ],
+   "oss": [
+    "openJiuwen-ai/jiuwenswarm",
+    "openJiuwen-ai/agent-core-java"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "capabilities/hooks/ holds six unregistered one-off guards (guard-dangerous-commands.sh, guard-secret-write.sh, tac-plan-gate.sh, goal-loop-startup.sh, jake-pushback.sh, session-size-guard.sh) with no event taxonomy, no ordering guarantee and no per-agent visibility gate. jake-pushback.sh's decision model is binary allow/block via exit 0/1, so the 'remembered' and 'returned' legs of HELIX's four-way decision are untracked, and non-determinism is not quarantined \u2014 the guards inspect payloads but nothing routes side effects to a deterministic executor.",
+   "done_test": "Register a rail against an event name that is not in the declared taxonomy, or at an order that collides with an existing rail on the same event: the registry validator exits 1. A delegated-agent fixture enumerating its visible rails must return exactly its visibility set minus gated entries; any superset exits 1. RED = boundary taxonomy and ordering are conventions, not enforced state.",
+   "risk": "Ordered rails make one slow rail a global stall; record per-rail duration at the boundary."
+  },
+  {
+   "name": "context-constructor-offload-with-handle",
+   "kind": "hook",
+   "mechanism": "The framework holds full runtime state (interaction history, repo diagnostics, test outcomes, goal state, context pressure, remaining resources) and constructs each call's context as an explicit decision: live diagnostics default-visible, repeated failed attempts collapsed into one entry, large artifacts moved out of the prompt with a recovery handle. Offloading is lossless \u2014 the original is retrievable by handle \u2014 and the constructor writes a per-round record of state produced vs state injected vs state acknowledged.",
+   "sources": [
+    "lNlMXsUQggc"
+   ],
+   "papers": [
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+   ],
+   "oss": [
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "capabilities/hooks/session-size-guard.sh",
+   "delta_or_new": "upgrade",
+   "rig_delta": "session-size-guard.sh is a non-blocking PostToolUse warning keyed on transcript byte size (2 MiB warn, 5 MiB 'fresh session now') and does nothing else \u2014 it neither compresses nor offloads, retains no handle, and there is no asset anywhere that decides which evidence conditions the next call. Because no record of state-produced vs state-injected exists, the failure class 'the decisive evidence never reached the context window' is undiagnosable rather than enumerable.",
+   "done_test": "Fixture trajectory: assert the diagnostic produced at step N is present in the constructed context at N+1, and that an artifact offloaded at step N is retrievable by its handle with byte-identical content (sha256 equality). Either assertion failing exits 1. RED = offload loses data, or the 'constructor' is not a checkable decision but default concatenation.",
+   "risk": "Handle-retrieval is the whole value; a handle that resolves to a stale copy is worse than no offload."
+  },
+  {
+   "name": "lsp-passive-feedback-dedupe",
+   "kind": "hook",
+   "mechanism": "After a file-edit tool call the harness itself runs language-server / tsc / ruff analysis and emits diagnostics unprompted, filters out any diagnostic already injected earlier in the session, and appends only new symbols into the next turn. A successful edit therefore yields two signals \u2014 the write happened, and the write exposed an inconsistency in a dependent the agent never asked about \u2014 without the agent having to remember to check.",
+   "sources": [
+    "lNlMXsUQggc"
+   ],
+   "papers": [
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+   ],
+   "oss": [
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "Nothing in the catalog does edit-triggered diagnostics. codeql/, semgrep/, semgrep-rule-creator/ and sarif-parsing/ are manually invoked batch security scanners, not edit-triggered and not deduplicated against what a session has already seen; jake-pushback.sh gates writes on secrets and test-less streaks but never reports what a write broke downstream in another file.",
+   "done_test": "Fixture repo where changing a function's return type leaves a boolean-comparing caller far from the edit: after the edit the hook's output must name that caller's file and symbol; running the hook again with the diagnostic unresolved must emit zero duplicate lines; after fixing the caller the diagnostic must disappear. Any of the three failing exits 1. RED = no passive signal, or the same error is re-injected every turn until the agent ignores it.",
+   "risk": "Diagnostic noise is the failure mode; dedupe key must be (file, symbol, code) rather than message text."
+  },
+  {
+   "name": "tri-state-round-three-level-completion",
+   "kind": "loop",
+   "mechanism": "One inner-loop invocation (construct context, call the frozen LLM, execute the tool calls it requested, record the observation) equals one outer round, and at the round boundary the harness evaluates exactly one of continuation / completion / blockage, persisting blocked as a distinct runtime state carrying what it waits on. Completion itself is three independent predicates: action execution (did the write succeed), code consistency (did this edit introduce errors elsewhere, checked by a real typecheck/LSP over dependents), and task completion (does the whole repository satisfy the request). End of a reasoning or tool-call sequence terminates nothing.",
+   "sources": [
+    "lNlMXsUQggc"
+   ],
+   "papers": [
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+   ],
+   "oss": [
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "capabilities/loops/coding-harness.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "coding-harness.md's own done_when is only 'the loop file parses and declares a termination test'; section 5 evaluates gates once at session end, BV.1/BV.2 are project-level build+lint run by the same agent, and section 6 folds a genuine wait into Block/HALT rather than a persisted blocked state with a named wait condition. There is no per-round tri-state emission and no repo-consistency level distinct from 'my tests passed', so the same collapse exists in iqrsqpi-v10 (stage-level red/green) and doer-checker-validator.md (post-cycle fleet).",
+   "done_test": "Refund-API fixture \u2014 a public return type changed from boolean to a structured result, local tests green, one stale `== true` caller remaining elsewhere in the repo: the round predicate must return `continue` (not `complete`) and the code-consistency predicate must exit non-zero naming the caller file. A second fixture with a genuinely unreachable dependency must yield verdict=blocked with a non-empty wait condition. Returning `complete` in either case exits 1. RED = the harness accepts the model's 'finished' as the task's finished.",
+   "risk": "Level 2 must be a command; an LLM opinion about consistency reintroduces exactly the blind spot the level exists to close."
+  },
+  {
+   "name": "experience-lesson-records",
+   "kind": "skill",
+   "mechanism": "On run close, a reflection step distills the trajectory into a typed lesson record \u2014 trigger condition, mandatory check, retired assumption, source run \u2014 and stores it under a retrieval key. A later task whose context matches the trigger condition receives the mandatory check as a gate requirement, so the lesson fires rather than being recalled. The store runs on two clocks: within-task adaptation to newly available evidence, and across-task retention of distilled lessons.",
+   "sources": [
+    "lNlMXsUQggc"
+   ],
+   "papers": [
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+   ],
+   "oss": [
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "Every harness's self_improvement block appends free-text lines to ~/.hermes/jake/improvements.log (pattern_cadence: 5, 'same gate fails 3+ times => propose a revision') with no schema, no condition key and no retrieval path \u2014 the lesson is either re-read by a human or never applied. The memory OS stores prose recall rather than a condition-keyed record with a gate, and no asset fires a mandatory check on condition match.",
+   "done_test": "Seed a lesson {trigger: 'public return-type change', check: 'enumerate downstream callers before editing'} and run a matching task: the run record must log the condition match and must contain the named check in its executed-command list; a matching run whose record lacks it exits 1, and a non-matching run must show zero retrievals. RED = lessons are written but never fire, i.e. the reflection step is a diary.",
+   "risk": "Condition keys drift; a lesson that never matches again is dead weight and should be pruned on an age-vs-retrieval rule."
+  },
+  {
+   "name": "execution-graph-contract",
+   "kind": "harness",
+   "mechanism": "Two graph forms per harness. Static: the stage sequence becomes a named DAG of nodes plus allowed transitions, so the model moves along declared edges and a runtime check reading the event log goes RED when a session traverses an undeclared edge (patch before sandbox). Dynamic: every gate result, tool call and handoff is an edge-tagged event with dependencies, so an invariant violation localizes to a node or edge and recovery replays from the last sealed node instead of restarting the run.",
+   "sources": [
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence"
+   ],
+   "oss": [
+    "DEEP-JLU/Awesome-Graph-Engineering"
+   ],
+   "target": "capabilities/harnesses/hA-04-code-debug.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "hA-04-code-debug.yaml already is the paper's log-parse / sandbox / patch / test workflow, but as a flat gate list whose order is implied by gate numbering and prose \u2014 a session that patches before reproducing in the sandbox still passes the list provided both gates carry proof, and the current prose-gate format cannot mechanically detect a skipped edge. loops/autonomous-operation.md references append-only proof packets but there is no state-transition graph, hence no node-level anomaly localization and no replay-from-sealed-node recovery.",
+   "done_test": "Feed the checker a session log whose patch event precedes its sandbox event: it must exit 1 naming the skipped edge; a compliant log exits 0. Separately, replay a recorded run from its last sealed node and assert the recomputed state hash equals the recorded one; drift exits 1. RED = edge enforcement is decorative, or replay is not deterministic so recovery cannot be trusted.",
+   "risk": "State-graph maintenance is itself overhead; ship the static DAG first and only add the dynamic graph where a real replay need exists."
+  },
+  {
+   "name": "declared-topology-edge-checked-dispatch",
+   "kind": "loop",
+   "mechanism": "A loop declares its topology (boss | orchestrator | flat-swarm), its agent count, and the allowed message edges; communication is legal only along declared edges, and a handoff packet whose edges fall outside the topology is rejected. One execution core \u2014 identity lock, gate evaluation, proof writing, stopping rule \u2014 is reused across single agent, delegated sub-agent and agent-inside-swarm, so rails and adaptivity are portable rather than rebuilt per shape. Any graph-organized orchestration must carry a recorded solo-loop baseline score on the same done_test and report a positive delta to keep its gates green; otherwise the loop wins by default.",
+   "sources": [
+    "lNlMXsUQggc",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence",
+    "arXiv:2608.27969 openJiuwen: Beyond Static Harnesses for Long-Horizon Coding Agents"
+   ],
+   "oss": [
+    "DEEP-JLU/Awesome-Graph-Engineering",
+    "openJiuwen-ai/jiuwenswarm"
+   ],
+   "target": "capabilities/loops/adversarial-agent-orchestration.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "adversarial-agent-orchestration.md fixes a linear five-gate chain (primary -> adversarial 1 -> adversarial 2 -> merge -> human) with model routing by role, but never declares a topology or a set of legal message edges, and its kill switches (budget exceeded, skip Gate 02) are prose conditions rather than declared knobs. capabilities-dispatch-verify.md adjudicates packet integrity \u2014 schema lock, stdout hashes, rotating canary, family separation \u2014 but not whether the packet's message edges exist in a declared topology; swarm-harness.md, hermes-conductor.md and skills/rig-agent-team each carry their own execution scaffolding and none records a solo-loop baseline.",
+   "done_test": "Submit a handoff packet whose declared reviewer is unreachable on every allowed edge of the declared topology: dispatch-verify must exit 1 (not merely PREFILTER_CLEAR). Separately, a graph-orchestrated loop whose record contains no solo-loop baseline on the same done_test exits 1. RED = topology is narrative, so who-may-talk-to-whom is emergent, or graph overhead is unproven.",
+   "risk": "The single-execution-core composability claim is unmeasured even in its own source; treat it as a refactor hypothesis gated by the baseline clause, not an adopted result."
+  },
+  {
+   "name": "ontology-kernel-sole-channel",
+   "kind": "loop",
+   "mechanism": "The kernel K is a pair (S, F): a task-specific schema of entity types with properties, a primary key per type and typed relations, plus a catalog of typed reasoning functions; a knowledge graph G is instantiated under S. At inference the agent may name only concepts declared in S and compute only through F, and after construction the kernel is frozen and hashed (kernel.lock = sha256(S* and F*)) while each unseen query instantiates a fresh evidence graph under the frozen S*. Scope is a decision rule, not a default: kernel mode applies only where the answer space is enumerable from a corpus, the unclassified-rate signal triggers schema expansion, and discovery lanes must not be run in frozen-kernel mode.",
+   "sources": [
+    "bnpNJmCwGlo",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.22974 Toward Effective and Reliable LLM Agents via Dynamic Ontology",
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence",
+    "arXiv:2601.21700 Toward Culturally Aligned LLMs through Ontology-Guided Multi-Agent Reasoning"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-concepts-build.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-concepts-build.md produces .concepts.llm.json as an untyped term-to-asset overlay; rig_capabilities/taxonomy.py is a lane vocabulary with no primary keys and no typed relations; .graph.json edges are `relates_to` plus shared-token co-occurrence, which is not a typed graph because entities carry no declared identity or merge key; fabric.py retrieves over that untyped surface. Nothing hashes a schema+function pair or refuses execution when it drifts, and the unclassified_rate halt in rig-realign-v1.yaml gate 2.2 is a passive stop, not the expansion trigger the fixed-ontology critique demands.",
+   "done_test": "Plant two extracted entities that share a declared primary key: the merge must collapse them to one node (count assertion), and a duplicate surviving the merge exits 1. Separately, `./bin/rig-capabilities capabilities-test` must exit 1 for any asset whose recorded kernel hash differs from the recomputed sha256(S* || F*), and a discovery-lane run (mh-04-deviation-expedition-session.yaml) requesting kernel mode must exit 1. RED = the graph is untyped so entities silently duplicate, or a frozen schema is being used to answer an unbounded question.",
+   "risk": "Reliability here comes from restriction, so the named failure domain is real: a perfectly consistent schema can encode a perfectly wrong theory, and the kernel can only represent known unknowns."
+  },
+  {
+   "name": "schema-reasoner-gate",
+   "kind": "eval",
+   "mechanism": "The schema stage emits a machine-checkable typed schema \u2014 entity types with properties, a primary key per type, every relation carrying declared source and target types \u2014 which is then re-encoded as an equivalent OWL ontology and run through a description-logic reasoner for unsatisfiable classes, disjointness violations, invalid restrictions and global inconsistency; failures return to drafting carrying the reasoner's counterexamples. A companion compiler turns the same axioms into at-creation validation tools, so an instance write that violates a constraint is rejected at the tool boundary with structured feedback instead of being audited afterwards.",
+   "sources": [
+    "bnpNJmCwGlo",
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.22974 Toward Effective and Reliable LLM Agents via Dynamic Ontology",
+    "arXiv:2602.03439 Ontology-to-tools compilation for executable semantic constraint enforcement in LLM agents"
+   ],
+   "oss": [],
+   "target": "capabilities/harnesses/hA-10-schema-design.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "hA-10-schema-design.yaml produces a schema as a document for review: no primary-key-per-type requirement, no declared source/target on relations, and there is no deterministic schema-consistency gate anywhere in the repo \u2014 capabilities-certify.md's five gates do not include one, so a logically flawed schema propagates into the graph and every downstream function. hooks/guard-dangerous-commands.sh and guard-secret-write.sh are the only at-creation constraint checks that exist and both are hand-written one-offs; this is the generalization of that precedent.",
+   "done_test": "Plant an unsatisfiable class into a fixture schema (a type declared disjoint from itself, or a relation whose declared domain contradicts a restriction): the reasoner gate must exit non-zero naming that class, and restoring the schema must exit 0. Then attempt an instance write that violates a compiled axiom through the generated tool: the write must be rejected with a structured error and a non-zero exit. Either check staying green on the planted defect exits 1. RED = the only schema check is an LLM's opinion, or violating writes still land.",
+   "risk": "A YAML-to-OWL shim that silently drops axioms turns the gate into theater \u2014 the plant fixture must target an axiom the shim claims to translate (the reasoner binary itself, HermiT, has no verified code link in this batch)."
+  },
+  {
+   "name": "composed-typed-functions-executed-before-listed",
+   "kind": "tool",
+   "mechanism": "A composer LLM reads how the current round's queries resolved over the graph, detects recurring reasoning patterns, and emits domain functions with typed inputs and outputs built over a fixed generic operator library (entity lookup, relation traversal, property projection, categorical filter, numeric filter, aggregation) by composing operators, specializing one, or wrapping one. Every generated function is executed against the graph before the catalog exposes it, and the agent's callable surface is exactly that validated catalog.",
+   "sources": [
+    "bnpNJmCwGlo"
+   ],
+   "papers": [
+    "arXiv:2608.22974 Toward Effective and Reliable LLM Agents via Dynamic Ontology"
+   ],
+   "oss": [],
+   "target": "rig_capabilities/server.py",
+   "delta_or_new": "upgrade",
+   "rig_delta": "rig_capabilities/server.py exposes a fixed, hand-written MCP tool surface, and rig_capabilities/done_tests.py already enforces the same 'must execute to be listed' rule for curated canonicals \u2014 but there is no path by which an agent authors a new typed function, and no execution gate standing between authorship and exposure. So the discipline RIG applies to curated assets does not apply to anything the agent invents, which is the gap this closes.",
+   "done_test": "Register a composed function whose body raises, or whose returned value violates its declared output type: it must be absent from the exposed tool list and registration must exit 1. A function that executes cleanly against the fixture graph appears with its recorded execution-output hash. A function exposed without a recorded successful execution exits 1. RED = unexecuted agent-authored code reaches the callable surface.",
+   "risk": "An agent-authored catalog widens the blast radius; every composed function inherits Gate-D before any outward use, and the typed repair loop must be able to revoke a function, not only add one."
+  },
+  {
+   "name": "four-leg-composition-promotion-check",
+   "kind": "skill",
+   "mechanism": "A system asset is only considered composed of intelligence when four legs are present and named: local loops doing the temporal work, an evolving organization graph over them, a shared domain schema constraining meaning, and an external evidence layer supplying ground truth the schema itself cannot establish. The check is per-asset and mechanical \u2014 each leg must resolve to a file or a command on disk \u2014 so a department asset missing a leg fails promotion instead of shipping with three.",
+   "sources": [
+    "Z90xlttVx3Y"
+   ],
+   "papers": [
+    "arXiv:2608.21156 Graph Engineering in the Era of LLM Agents: From Individual Intelligence to System Intelligence"
+   ],
+   "oss": [
+    "DEEP-JLU/Awesome-Graph-Engineering"
+   ],
+   "target": "capabilities/skills/rig-agent-team/SKILL.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "rig-agent-team/SKILL.md documents a five-layer runtime (lattice routing, doctrine/context, contracts, guardrails, ProofPackets) but states no completeness condition, so an asset wired with loops and a verifier yet no declared organization graph and no shared schema still passes review today; the external-evidence leg is enforced per-claim elsewhere (rig-anti-fabrication-dispatch, capabilities-dispatch-verify.md) but never as a composition requirement on the asset itself.",
+   "done_test": "For a declared department asset, resolve all four legs: a loop file path, a graph/topology declaration, a schema or concepts-index reference, and a wired external-evidence check. Missing any one makes the check exit 1 naming the missing leg. RED = a three-legged asset is being promoted as if it were a system.",
+   "risk": "Legs resolved by filename can be satisfied by stubs; pair with the evaluator-forge scorer so each leg must also clear a floor."
+  },
+  {
+   "name": "working-memory-commit-gate",
+   "kind": "hook",
+   "mechanism": "A working-memory ledger holds a verified task state (goal, subtasks, achieved, next), and the model may only PROPOSE state changes. A checker compares each proposal against an external environment observation, and only the harness kernel commits supported changes \u2014 a goal flips to DONE solely when an observation-backed receipt row exists, never on the model's declaration. Implemented as a PreToolUse-style deny hook beside the existing guards, following the same stdin-JSON/exit-2 pattern as guard-dangerous-commands.sh.",
+   "sources": [
+    "F1XqqVNBa4o"
+   ],
+   "papers": [
+    "arXiv:2608.24876 \u2014 Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses (Recuris)"
+   ],
+   "oss": [
+    "Gen-Verse/Recuris"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "capabilities/hooks/ contains guard-dangerous-commands.sh, guard-secret-write.sh, tac-plan-gate.sh, session-size-guard.sh, goal-loop-startup.sh, jake-pushback.sh \u2014 none gates completion writes. capabilities/loops/doer-checker-validator.md grades artifacts post-hoc in a later cron; nothing in the estate blocks a DONE claim inside the turn that has no observation behind it.",
+   "done_test": "attempt to write done/DONE with no observation-receipt row in the ledger makes the hook exit 2 (block); a planted receipt-backed completion exits 0. RED-on-receipt or GREEN-on-self-declare means the gate is broken.",
+   "risk": "Inherits Recuris's ceiling: proposal checking is only as good as the checker's external evidence; synthetic receipts must be registered and rejected as in the reference repo."
+  },
+  {
+   "name": "gamma-trace-record-and-failure-attribution",
+   "kind": "skill",
+   "mechanism": "Every step appends a seven-field row to a trace \u03b3: believed state, skills delivered, action, observation, proposed state change, checker verdict, resulting state \u2014 plus the attempt's terminal outcome. A failed run is then attributed to exactly one of four components (wrong/missing skill, incoherent state representation, inadequate retrieval policy, failed verifier), each attribution citing \u03b3 row-ids; per-fragment step failures are correlated against the attempt's terminal reward. Skill genesis claims must cite the \u03b3 rows that motivated them.",
+   "sources": [
+    "F1XqqVNBa4o",
+    "1Tlv7XNsPy8"
+   ],
+   "papers": [
+    "arXiv:2608.24876 \u2014 Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses",
+    "arXiv:2608.17528 \u2014 Agent Lightning v1.0: Towards Harnessed Agentic RL"
+   ],
+   "oss": [
+    "Gen-Verse/Recuris"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "ProofPacket binds claim\u2192commands\u2192exit codes per CLAIM, never a per-step record coupling state+skills+action+observation+verdict. capabilities/harnesses/mh-03-agent-composition-session.yaml carries only a memory_binding tuple slot. rlm_step_record logs action/tool/success/duration per step but couples nothing to a checker verdict or attempt reward, so RED runs today escalate (doer-checker-validator) without naming the responsible component, and mh-01-skill-genesis-session.yaml seeds genesis from a declared need, not a diagnosed failure.",
+   "done_test": "done_when asserts every gamma row has all seven fields non-null and every RED run lands in exactly one of the four classes with a gamma row-id citation; a planted row missing any field, a planted failure attributed to two components (or zero), and a genesis skill lacking a source:/gamma-provenance field must each exit non-zero.",
+   "risk": "Attribution class quality depends on the diagnosing model; the class set is fixed by design so a fifth failure kind will be misfiled rather than named."
+  },
+  {
+   "name": "memory-components-and-state-conditioned-delivery",
+   "kind": "harness",
+   "mechanism": "Split each skill lane's monolithic SKILL.md into four separately editable objects: E (skill cards, one file each), W (working-memory state schema), \u03c1 (delivery/retrieval policy), C (checkers). \u03c1 selects a small subset E_t of the library conditioned on the verified current state and task dependencies, and only E_t is injected into context under a declared |E_t| budget \u2014 never the whole library.",
+   "sources": [
+    "F1XqqVNBa4o"
+   ],
+   "papers": [
+    "arXiv:2608.24876 \u2014 Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses (Recuris)"
+   ],
+   "oss": [
+    "Gen-Verse/Recuris"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "capabilities/{skills,harnesses,loops,hooks,commands} is a flat catalog where one SKILL.md bundles knowledge + trigger + implicit routing + gate prose, so W, \u03c1 and C are not addressable objects and localized repair ('patch one component') is structurally impossible. capabilities_context_pack/capabilities_route rank by BM25 + dense over the intent string only \u2014 no conditioning on a verified state and no cap on how many assets enter context.",
+   "done_test": "a context build that delivers the full lane library to the model, or delivers a count exceeding the declared |E_t| budget, or selects on the raw intent string while a verified-state field contradicts it, exits non-zero.",
+   "risk": "State-conditioning is only as good as the W ledger feeding it (depends on working-memory-commit-gate existing first)."
+  },
+  {
+   "name": "held-out-admission-gate-and-diagnosed-round",
+   "kind": "command",
+   "mechanism": "Each lane gets a frozen eval split. An improvement round runs: report \u2192 diagnose (one component implicated from trace evidence) \u2192 patch exactly one component \u2192 validate (schema, lint, leak scan, activation probe) \u2192 deterministic admission gate \u2192 ledger. The gate decides on paired held-out evidence: item-level bootstrap interval must exclude zero, at most reg_cap items may regress, a card containing any held-out answer is rejected outright (leak scan), and the prescribed mechanism must have actually fired (fingerprint). Promotion is refused while the delta sits inside the asset's run-to-run spread. A capability-floor companion probe runs the frozen model on held-out tasks with the skill injected and no answer: if the metric does not move, the gap is capability, not memory, and the round refuses to credit memory.",
+   "sources": [
+    "F1XqqVNBa4o",
+    "7YP14gjXEkg"
+   ],
+   "papers": [
+    "arXiv:2608.24876 \u2014 Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses (Recuris)"
+   ],
+   "oss": [
+    "Gen-Verse/Recuris"
+   ],
+   "target": "capabilities/commands/capabilities-round.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-round.md upgrades the weakest contract and applies only if done-tests stay green \u2014 it has no diagnosis step, no held-out split, no paired-difference arithmetic, and certify promotes Draft\u2192Stable on a single-sample green. rig-realign-v1.yaml is the only asset touching a held-out set and it refuses a week, it never proves an upgrade helped. capabilities-certify.md has no run-to-run variance floor (the model-roundup evidence: identical model+harness pairs reorder across runs, so single-sample deltas are noise).",
+   "done_test": "run the gate on two planted candidates: a patch whose card leaks a held-out answer, and a patch whose bootstrap interval crosses zero (or whose delta is inside measured run-to-run spread). Both must exit non-zero and neither may be admitted; a genuine lift on the frozen split exits 0.",
+   "risk": "Frozen splits rot over time and need their own freshness/rotation policy; the diagnose step remains the one generative (LLM) step in the loop."
+  },
+  {
+   "name": "immutable-surface-guard",
+   "kind": "hook",
+   "mechanism": "Every self-improving harness declares a mutable_surface allowlist (its memory/config files) in YAML. A pre-write hook denies any write outside the declared set; model weights, tools, the meta-agent, the failure-localization procedure, the patching procedure, and the validation gate itself are fixed by declaration, so any score delta is attributable to the mutable layer alone.",
+   "sources": [
+    "F1XqqVNBa4o"
+   ],
+   "papers": [
+    "arXiv:2608.24876 \u2014 Recursive Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses (Recuris)"
+   ],
+   "oss": [
+    "Gen-Verse/Recuris"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "No RIG loop declares an editable-surface boundary: mh-01-skill-genesis-session.yaml and mh-02-harness-forge-session.yaml constrain OUTPUTS by gates, not which files the improver may edit; any loop can currently rewrite its own gate.",
+   "done_test": "a write to any path outside the harness's declared mutable_surface exits 2; the plant-failure is a self-improvement run that edits its own gate file \u2014 that write must go RED, and the same run touching only allowlisted files must go GREEN.",
+   "risk": "Allowlists drift as harnesses gain legitimate files; stale deny-lists will false-positive and must be versioned with the harness."
+  },
+  {
+   "name": "model-boundary-recording-proxy",
+   "kind": "tool",
+   "mechanism": "Stand up a local OpenAI-compatible server and change one harness config line: the base URL that pointed at the hosted API now points at the proxy. The harness emits its unmodified prompt, the proxy forwards to the policy model (or trainer) and returns a normal completion, and it persists the ACTUAL prompt/response token ids, logprobs, and (for MoE) which experts routed each token. Because the receipt is taken at emit time it survives any downstream harness mangling, and the trainer/evaluator cluster can be physically separated from the harness cluster.",
+   "sources": [
+    "imDKl345GII",
+    "1Tlv7XNsPy8"
+   ],
+   "papers": [
+    "arXiv:2608.17528 \u2014 Agent Lightning v1.0: Towards Harnessed Agentic RL",
+    "arXiv:2508.03680 \u2014 Agent Lightning: Train ANY AI Agents with Reinforcement Learning",
+    "arXiv:2505.24298 \u2014 AReaL: A Large-Scale Asynchronous Reinforcement Learning System for Language Reasoning"
+   ],
+   "oss": [
+    "microsoft/agent-lightning",
+    "areal-project/AReaL",
+    "THUDM/slime",
+    "verl-project/verl"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "RIG runs Claude / Codex / Hermes / omp-pi with zero interception at the model boundary \u2014 every later evaluation consumes the harness's re-tokenized, re-serialized text, not what the model actually saw. capabilities/hooks/ is the same shape (deterministic code parked at a boundary) but sits at the tool-call side, not the model side; a grep of the catalog for rollout|retoken|logprob|proxy returns only deployment-rollout hits.",
+   "done_test": "re-tokenize a stored response's text and assert byte-equality with the stored token ids; then plant a summarizing/compacting harness behind the same proxy and assert the mismatch detector fires (exit non-zero).",
+   "risk": "Token-id fidelity is impossible on closed APIs; only the local Ollama/MLX fleet supports it fully. The Maxwell's-demon 'latent-projection' formalism in the video description never appears in the transcript and is deliberately not part of this asset."
+  },
+  {
+   "name": "compaction-dropped-turns-manifest",
+   "kind": "hook",
+   "mechanism": "When the size guard fires (2MB/5MB) and orders a checkpoint/fresh-session, it must also emit a machine-readable manifest of exactly which turns were dropped (turn ids + sha256 of each dropped message) and stamp the session 'rewritten'. The companion rule: a rewritten/compacted transcript may never feed a hash, a gate, or a replay \u2014 the harness rewriting its own record is what makes per-step credit assignment (and MoE expert routing replay) silently mis-attribute.",
+   "sources": [
+    "imDKl345GII",
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17393 \u2014 LEGO-RL: Harness-Native Reinforcement Learning for Coding Agents"
+   ],
+   "oss": [
+    "LegoX/Lego-RL"
+   ],
+   "target": "capabilities/hooks/session-size-guard.sh",
+   "delta_or_new": "upgrade",
+   "rig_delta": "session-size-guard.sh fires at 2MB/5MB and orders 'checkpoint (HANDOFF / obsidian-bridge) and start a FRESH session NOW' while recording nothing about which turns were dropped \u2014 RIG self-inflicts the exact state rewrite the LEGO-RL routing-drift and Agent-Lightning fragmentation analyses identify, and a done-test evaluated over a compacted session currently cannot tell it from an intact one.",
+   "done_test": "trigger the size guard, then run any gate over the compacted session: without a dropped-turns manifest whose per-message sha256s verify, the gate exits non-zero; plant a silent truncation (compaction with no manifest) and it must go RED.",
+   "risk": "Manifest growth on very long sessions; needs pruning policy that itself doesn't drop manifest entries."
+  },
+  {
+   "name": "trace-fidelity-lock-and-step-provenance",
+   "kind": "command",
+   "mechanism": "At emit time, hash the per-turn observation chain the model was actually conditioned on and write a per-step provenance receipt (model id, family, prompt hash, tool, step index) bound into the sealed ProofPacket. The verifier re-reads the transcript and a new trace_locked_violation verdict fires when the re-read is not hash-identical to the recorded chain. Cross-harness traces (Claude JSONL vs Codex vs Hermes event logs) are first normalized to a canonical turn/token schema with a re-tokenization-drift check, since text-level comparison over differently serialized histories is the same corruption class the RL trainer faces.",
+   "sources": [
+    "imDKl345GII",
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17393 \u2014 LEGO-RL: Harness-Native Reinforcement Learning for Coding Agents",
+    "arXiv:2608.17528 \u2014 Agent Lightning v1.0: Towards Harnessed Agentic RL"
+   ],
+   "oss": [
+    "microsoft/agent-lightning"
+   ],
+   "target": "capabilities/commands/capabilities-dispatch-verify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "dispatch-verify already hashes changed files + stdout, runs a rotating planted canary, and forces cross-family re-execution at a claimed SHA \u2014 but that is PACKET-level integrity. Nothing hashes the per-turn observation chain between turns, and no asset records which model/family/harness path produced each step, so a verifier can re-run but cannot re-walk the exact path; rig-anti-fabrication-dispatch distrusts transcripts in prose without an in-turn hash to enforce it.",
+   "done_test": "plant a transcript that was re-tokenized/summarized after the run (same surface text, different recorded chain) and submit it to dispatch-verify: verdict must be trace_locked_violation with exit non-zero; an intact trace must clear (this is the plant-failure pair).",
+   "risk": "Re-tokenization check requires tokenizer access \u2014 hosted-API traces can only be hash-locked, not re-tokenized; honest verdict for those is UNVERIFIED, not PASS."
+  },
+  {
+   "name": "attempt-identity-ledger-and-equal-weight",
+   "kind": "data",
+   "mechanism": "An attempt is one complete run of the agent on one task, terminated at exactly one of submitted/verified/limit/failed; a unique rollout_id is minted at that boundary and stamps every model call, tool event, and the single terminal reward row. Model calls are packed into fragments only on exact token continuation (summary/reformat/delete/sub-agent start forces a break), and fragments never outrank the attempt. All scoring aggregates weight per attempt \u2014 a 2-step and a 50-step run carry identical weight \u2014 with token/call counts recorded as a separate cost axis.",
+   "sources": [
+    "1Tlv7XNsPy8"
+   ],
+   "papers": [
+    "arXiv:2608.17528 \u2014 Agent Lightning v1.0: Towards Harnessed Agentic RL"
+   ],
+   "oss": [
+    "microsoft/agent-lightning"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "~/.rig/prime-agent-traces/<agent>.jsonl (rlm_run_start/rlm_step_record/rlm_run_finish) records runs and steps with no termination-cause enum and no one-reward-per-attempt invariant, and capabilities/commands/capabilities-realign.md, capabilities-round.md, and the rig_fleet quality roster aggregate over recorded EVENTS \u2014 the per-step weighting bias that lets a chatty 50-step run out-vote a clean 2-step run in RIG's own honesty metrics.",
+   "done_test": "over the ledger: reward-row count == distinct rollout_id count, orphan step rows == 0, every end_reason resolves to the closed enum {submitted, verified, limit, failed}; and two synthetic runs of one task at 2 vs 50 steps contribute equal aggregate weight (plant the 50-step run and the verdict must not move; plant a second reward row on one rollout_id and it exits non-zero).",
+   "risk": "Applies the paper's accounting discipline without its gradients; if RIG ever trains, the same ledger is the training substrate \u2014 do not fork two schemas."
+  },
+  {
+   "name": "tool-call-propensity-probe",
+   "kind": "command",
+   "mechanism": "Score s(q) = the frozen local model's log-probability of the chat template's begin-of-tool-call token as the next token for a rendered multi-tool prompt \u2014 one forward pass, cheap enough to run per query as a gating signal. High s(q) means the model leans toward calling; low means it leans toward answering from parametric knowledge (Qwen3-4B baseline measured around -28 to -31 nats even on questions absent from pretraining). Output is a per-model, per-harness number.",
+   "sources": [
+    "C-Mk88De36M"
+   ],
+   "papers": [
+    "arXiv:2608.25198 \u2014 Tunable Tool-Call Rates in LLM Agents via Representation Steering"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "No RIG asset measures anything model-internal (grep of capabilities/ for propensity/steering returns only unrelated hits); the claim 'this agent knows when to go external' is prose \u2014 iqrsqpi-v10's Research stage declares 'answer from parametric knowledge only' vs 'must go external' in text with no measured propensity behind it.",
+   "done_test": "probe N held-out factual questions and N parametric-answerable questions on a named local model: measured call-rate below a declared floor on the factual set or above a ceiling on the parametric set exits non-zero.",
+   "risk": "One forward pass only on open weights \u2014 impossible on closed APIs; the direction captures ~80-85% of the whether-to-call decision per the presenter's own hedged estimate."
+  },
+  {
+   "name": "tool-call-steering-dial",
+   "kind": "tool",
+   "mechanism": "Extract a per-model tool-use direction training-free: record residual-stream activations at the last prompt token over high- vs low-tool-propensity query sets and take per-layer mean(high) - mean(low) (forward passes only, no labels, no gradients). A layer x alpha sweep pins a calibration table (model, template, layer, alpha_band, measured propensity range, date) \u2014 early layers inert, middle-to-late monotonic, last layers unstable; Qwen3-4B's stable sweet spot is layer 22 of 35. A serving hook over RIG's local fleet adds alpha*v at every generated position: alpha<0 suppresses calls (also proposed as a negative-alpha containment lever for a runaway fleet), alpha=0 reproduces the base model, alpha>0 induces calls; balanced multi-tool extraction means the dial moves whether-to-call while the model's own machinery still picks which tool, and tool spend becomes a cost/accuracy Pareto control.",
+   "sources": [
+    "C-Mk88De36M"
+   ],
+   "papers": [
+    "arXiv:2608.25198 \u2014 Tunable Tool-Call Rates in LLM Agents via Representation Steering"
+   ],
+   "oss": [],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "Nothing model-internal exists in capabilities/ \u2014 RIG's entire gate lineage (guard-dangerous-commands.sh, guard-secret-write.sh, tac-plan-gate.sh, Gate-D) filters the EMITTED tool-call payload, so an agent that ignores harness policy still generates calls; loops/ops-harness.md G1.5 already health-checks Ollama, the only surface where a hook can physically install, and loops/adversarial-agent-orchestration.md's routing table is where the per-model (layer, alpha) pin belongs.",
+   "done_test": "the pinned sweep on a named local model must show monotonic call-rate movement across the declared alpha band including near-zero suppression at negative alpha; reuse of a vector or layer across models is refused (plant a cross-model vector swap \u2192 exit non-zero); the harness done_when 'accuracy >= X at tool-cost <= Y' is evaluated from measured runs.",
+   "risk": "Open-weight/local-fleet only (no logit/layer access on hosted APIs); the containment-lever use is the presenter's extrapolation, not a paper result; vectors and layers are per-model and a model swap invalidates the pin."
+  },
+  {
+   "name": "held-out-tool-generalization-gate",
+   "kind": "command",
+   "mechanism": "Before any steering (vector, layer, alpha) asset is trusted, re-measure it on a tool set disjoint from the extraction pool: suppression strength on held-out tools must match or beat the per-tool reference directions (the paper: multi-tool direction stronger on 5 of 6 held-out tools), and a positive-alpha pass must show calls still landing on the task-appropriate tool (tool-choice purity). Fails either sweep, the asset is not promotable.",
+   "sources": [
+    "C-Mk88De36M"
+   ],
+   "papers": [
+    "arXiv:2608.25198 \u2014 Tunable Tool-Call Rates in LLM Agents via Representation Steering"
+   ],
+   "oss": [],
+   "target": "capabilities/commands/capabilities-certify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "capabilities-certify.md gates Draft\u2192Stable on suite/index/done-tests/idp/acl \u2014 process integrity only; it has no gate that re-tests a claimed generalization against data the asset was fit on, which is exactly the plant-failure RIG doctrine demands for 'it generalizes' claims.",
+   "done_test": "plant an extraction that overfits its train tool pool (held-out-tool suppression collapses on the disjoint set): certify must exit non-zero and refuse promotion; the true extraction passes (GREEN plant pair).",
+   "risk": "Whether the direction is truly tool-agnostic or only balanced-extraction-averaged is unsettled even in the paper; per-tool identities are explicitly out of scope."
+  },
+  {
+   "name": "exam-room-grader-sandbox",
+   "kind": "hook",
+   "mechanism": "Rollout runs in a sandbox whose network egress, git history, and grading/test scripts are masked by privileged sidecars enforced OUTSIDE the agent's readable/writable namespace; the verifier is exposed only after the agent emits a typed completion declaration, and the reward is computed on a tree the agent provably could not have touched. The three named cheat routes (edit the test script fail\u2192pass, copy the human fix from git history, fetch the answer from the web) become permanent planted-decoy fixtures in the existing red-team family \u2014 an escaped cheat halts dispatch until the detector is repaired.",
+   "sources": [
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17393 \u2014 LEGO-RL: Harness-Native Reinforcement Learning for Coding Agents"
+   ],
+   "oss": [
+    "LegoX/Lego-RL"
+   ],
+   "target": "NEW",
+   "delta_or_new": "new",
+   "rig_delta": "capabilities/commands/capabilities-done-test.md states the anti-tautology rule statically ('the grep target must live OUTSIDE the asset's own frontmatter') but nothing enforces a runtime privilege boundary \u2014 every anti-fabrication defence today is prose-plus-pattern at the tool boundary; capabilities/commands/capabilities-dispatch-verify.md's redteam fixture family covers handoff packets, not graders.",
+   "done_test": "before completion declaration: attempts to read the grading script, read git history, or make a network egress each exit 2; and each of the three planted cheat decoys, replayed against the verifier, still yields RED \u2014 any decoy that escapes detection halts dispatch (non-zero).",
+   "risk": "Needs real sandbox/privileged-sidecar mechanics (Linux namespaces or equivalent), not hook-pattern matching \u2014 the one row here whose enforcement is OS-boundary rather than pattern-boundary."
+  },
+  {
+   "name": "environment-failure-classifier",
+   "kind": "command",
+   "mechanism": "Capture each failed run's cause and classify it agent-failure vs environment-failure (container death, OOM, freeze, restart). Environment-tier runs get a cause record and are EXCLUDED from training-equivalent consumers: gate-failure pattern mining and improvements.log, so infrastructure noise cannot be written into the estate's evolution signals.",
+   "sources": [
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17393 \u2014 LEGO-RL: Harness-Native Reinforcement Learning for Coding Agents"
+   ],
+   "oss": [
+    "LegoX/Lego-RL"
+   ],
+   "target": "capabilities/loops/build-out-harness.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "build-out-harness.md crash semantics are G4.4 graceful-exit and G5.3 zero-crash walkaway with failure_tier \u2208 {halt, degrade, stop} and 'if data corruption \u2192 HALT' \u2014 every infra failure is treated as an attributable build failure and feeds the 'same gate fails 3+ times' update trigger and ~/.hermes/jake/improvements.log, so one OOM storm can steer harness evolution.",
+   "done_test": "seed three consecutive env-tier failures (planted OOM kill) and assert the 3-strikes upgrade trigger does NOT fire and the runs are absent from improvements.log mining; seed one agent-logic failure and assert it IS counted.",
+   "risk": "Cause capture depends on the runner distinguishing exit conditions; an unclassifiable crash defaults to agent-tier (conservative), which under-discards."
+  },
+  {
+   "name": "peer-panel-decorrelation-and-lane-governance",
+   "kind": "command",
+   "mechanism": "Cohort gates check inputs and outputs, not labels. Inputs: >=2 architecture families, no two reviewers from one family. Outputs: a ledger records which families actually disagreed, per task class; a panel that has agreed on every case for N rounds is flagged a degenerate shared-blind-spot panel and a third family or a deterministic check is demanded. Diversity counts only as measured decorrelation of residual error \u2014 prompt re-phrasing alone is syntactic variance, not semantic variance. Lane split: label-free peer LLM signal is admissible as ADVISORY improvement/diversity signal (the Co-RL evidence) but certification stays LLM-free \u2014 peer verdicts can never produce a PASS.",
+   "sources": [
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17253 \u2014 Co-RL: Unsupervised Reasoning Emerges from Diverse Cohort in Multi-agent RL"
+   ],
+   "oss": [
+    "DrStranded/Co-RL"
+   ],
+   "target": "capabilities/commands/capabilities-dispatch-verify.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "dispatch-verify enforces decorrelation by LABEL only (--verifier-family must differ from --dispatcher-family, else same_family_collusion BLOCKED) \u2014 it never checks whether the panel ever actually disagrees; adversarial-agent-orchestration.md's Model Routing table is static with no diversity property, and nothing tracks output homogenization (the self-rewarding collapse chain: bias reinforcement \u2192 diversity loss \u2192 collapse) across rounds.",
+   "done_test": "plant N consecutive unanimous rounds from a two-family panel in the disagreement ledger: the ledger command must exit non-zero (degenerate panel) and demand a third family/deterministic check; and plant an LLM peer verdict wired as a certification input: capabilities-certify exits non-zero on it.",
+   "risk": "The presenter's core critique is that Co-RL's own diversity lever (re-phrasing) is syntactic \u2014 the RIG asset deliberately implements only the measurement, not the training loop."
+  },
+  {
+   "name": "conditional-guarantee-and-baseline-dominance",
+   "kind": "command",
+   "mechanism": "Two admission rules. (1) Any gate whose soundness holds only under a precondition must NAME that precondition in the asset and emit RED/uncontracted when it is unmet \u2014 the Co-RL Theorem-1 lesson: a guarantee conditional on cohort accuracy silently converges to zero when real families violate the condition. (2) A new peer-review/verification mechanism is scored against the cheapest existing alternative (majority vote over the incumbent families) before promotion and is refused if it does not beat it.",
+   "sources": [
+    "xc8OFsMf8qw"
+   ],
+   "papers": [
+    "arXiv:2608.17253 \u2014 Co-RL: Unsupervised Reasoning Emerges from Diverse Cohort in Multi-agent RL"
+   ],
+   "oss": [
+    "DrStranded/Co-RL"
+   ],
+   "target": "capabilities/commands/capabilities-round.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "round/certify admit mechanisms without a baseline-dominance check against the incumbent default, and no RIG asset carries a machine-checked precondition field on its gates \u2014 the honest-verdict patterns exist (capabilities-done-test.md 'uncontracted', dispatch-verify PREFILTER_CLEAR exit-3-never-0) but are not generalized into an admission rule.",
+   "done_test": "a gate whose declared precondition is planted unmet must report RED/uncontracted (exit non-zero, never a silent PASS); a candidate verifier mechanism that does not beat the majority-vote baseline on the same scored set is refused promotion with exit non-zero.",
+   "risk": "The baseline scoreboard itself must be maintained, or rule 2 compares against stale results."
+  },
+  {
+   "name": "golden-replay-measured-economy-and-ablation",
+   "kind": "data",
+   "mechanism": "A replay harness executes each golden mission end-to-end with real tools (shell + browser) in an agentic loop \u2014 scoring happens on the produced artifact after the multi-step run \u2014 once per (mission, model, harness, run_n). Each run records cost_usd split by token role (input/answer/reasoning/cached) and wall_time_s; measured_cost_per_task.json is written per mission and the budget gate compares declared ceilings against measured mean+p95. The same ledger yields a ranked (harness x model) matrix, since the unit being ranked is the pair, not the LLM.",
+   "sources": [
+    "7YP14gjXEkg"
+   ],
+   "papers": [],
+   "oss": [],
+   "target": "capabilities/golden/App/missions.json",
+   "delta_or_new": "upgrade",
+   "rig_delta": "missions.json (App, GTM, LinkedIn, Design, Strategy, CompanyOSFactory) declares cost_budget_usd and turn_budget with budget_basis openly conceding 'Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records' \u2014 the replay records do not exist, no wall_time axis exists, missions are graded against artifacts not agentic tool runs, and the 56 hA/hB/hC/hD harnesses have zero comparative measurement across harness x model.",
+   "done_test": "a replay whose required deliverable is absent from disk at loop end exits non-zero (and exits 0 on a scripted-good trace); the gate goes RED when measured mean cost or p95 wall time exceeds cost_budget_usd / wall_time_budget_s; plant-failure: rerun the same mission pinned to a different harness and the matrix score row must move beyond measured run noise.",
+   "risk": "Wall-time budgets need per-mission baselines before they can gate meaningfully; cost split requires per-token-class usage reporting from each provider."
+  },
+  {
+   "name": "per-vertical-task-corpora",
+   "kind": "eval",
+   "mechanism": "Hang a hashed task corpus (>=20 tasks) and a scoreboard off each vertical gap harness; model routing then picks per-vertical winners because rankings invert per domain (the video's evidence: a general-index leader trailing a domain leader by 15+ points on a 71-task physics eval). The routing decision consumes per-vertical scoreboards, not one global index.",
+   "sources": [
+    "7YP14gjXEkg"
+   ],
+   "papers": [],
+   "oss": [],
+   "target": "capabilities/harnesses/gap-healthcare-security-review.yaml",
+   "delta_or_new": "upgrade",
+   "rig_delta": "the seven gap-*.yaml verticals (healthcare, dental, legal, manufacturing, pe_cfo, personal_brand, wild_card) declare gates with no scored task corpus or scoreboard behind any of them, so any model choice for a vertical is currently unsupported by per-domain measurement.",
+   "done_test": "a per-vertical corpus file exists per gap harness with task count >= the declared floor and a recorded hash, and the scoreboard names a per-vertical winner; reusing the global index as the vertical answer must be detected and exit non-zero.",
+   "risk": "Corpus authoring effort per vertical; a small hand-built corpus can itself go stale \u2014 hash it and version it like eval splits."
+  },
+  {
+   "name": "dated-routing-snapshot-and-claim-crosscheck",
+   "kind": "command",
+   "mechanism": "Replace the hand-typed routing table with routing.yaml rows (model, harness, benchmark_class, score, as_of, source, ttl_days) fed from a dated machine-readable snapshot, never hand-entered. Rows past ttl report STALE and block any caller routing on them; 'not yet measured' is a distinct state from 'scored low'. A claim registry (model, claimed workload class, vendor source, date) joins to the measured rows: a workload class with no measured row yields UNVERIFIED, never PASS. The local-model route adds a fit check per (model, node, quantisation): licence class (open-source vs open-weights), full-precision VRAM, quant tier, measured degradation percentage, hardware cost \u2192 FIT / NO FIT / UNVERIFIED, refusing the local route when the degraded model does not fit the node.",
+   "sources": [
+    "7YP14gjXEkg"
+   ],
+   "papers": [],
+   "oss": [
+    "EvanZhouDev/ai-model-index",
+    "MaurerAnton/artificialanalysis-ai-parser"
+   ],
+   "target": "capabilities/loops/adversarial-agent-orchestration.md",
+   "delta_or_new": "upgrade",
+   "rig_delta": "the 'Model Routing (from video)' table is hand-written, undated, source-less, and demonstrably stale (still naming Opus 4.6 / Sonnet 4.6 / Haiku); ops-harness.md G1.5 only curls Ollama /health with no VRAM/quant/degradation gate; rig-anti-fabrication-dispatch escalates to 'replace the model \u2014 do not re-prompt it' with no measured fitness number to decide the replacement.",
+   "done_test": "set a routing row's as_of to an old date \u2192 routing exits non-zero (STALE); ask the router for a workload class with no measured row \u2192 UNVERIFIED with exit non-zero, and adding a measured row flips it to PASS; a (model, node, quant) whose measured VRAM exceeds the node's is reported NO FIT and blocks the local route with exit non-zero.",
+   "risk": "Third-party snapshot mirrors are unofficial \u2014 pin a fork + commit and treat output as untrusted input; the video's specific rankings are single-annotator, single-date reads and must not be baked in as constants."
+  }
+ ]
+}

@@ -1,0 +1,44 @@
+{
+  "schema": "rig.authority.assembly.v1",
+  "sources": [
+    {
+      "id": "task-ship-9042",
+      "authority": "task",
+      "directives": [
+        {
+          "id": "D-tests",
+          "text": "The full test suite must be green before this ship is declared done.",
+          "subject": "test_suite",
+          "require": "green"
+        }
+      ]
+    },
+    {
+      "id": "skill-ship-fast",
+      "authority": "skill",
+      "directives": [
+        {
+          "id": "S-skip-nose",
+          "text": "Velocity rule: skip the test suite before shipping and let CI catch regressions after the fact.",
+          "subject": "test_suite",
+          "require": "skip"
+        }
+      ]
+    }
+  ],
+  "resolution": {
+    "conflicts": [
+      {
+        "pair": [
+          "D-tests",
+          "S-skip-nose"
+        ],
+        "decision": "task",
+        "precedence_rule": "task-authority-over-skill-authority: a binding task requirement outranks any skill-body directive; the skill step is dropped, not deferred"
+      }
+    ],
+    "executed": [
+      "D-tests"
+    ]
+  }
+}

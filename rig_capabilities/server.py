@@ -474,9 +474,11 @@ TOOLS = [
             "skipped, so the call is idempotent by construction."
         ),
         "inputSchema": {"type": "object", "properties": {
-            "action": {"type": "string", "enum": ["plan", "verify", "apply"],
-                       "description": "default plan; apply is dormant without "
-                                      "gate_d_run_id"},
+            "action": {"type": "string",
+                       "enum": ["plan", "verify", "selftest", "apply"],
+                       "description": "default plan; selftest is a dry per-target "
+                                      "capability-pull proof; apply is dormant "
+                                      "without gate_d_run_id"},
             "gate_d_run_id": {"type": "string",
                               "description": "approved Gate-D run naming "
                                              "action mcp-wire (apply only)"},
@@ -940,6 +942,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
                 return {"ok": False, "writes": 0, "reason": str(exc)}
         if action == "verify":
             return mcp_wire.verify()
+        if action == "selftest":
+            return mcp_wire.selftest()
         return mcp_wire.plan()
 
 

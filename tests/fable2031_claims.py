@@ -59,7 +59,13 @@ class PublicCatalogClaimTests(unittest.TestCase):
         self.assertEqual(skills, ["rig-office-docs"])
         m = re.search(r"(\d+) of (\d+) canonical\s+skills stay private", self.text)
         self.assertIsNotNone(m, "the skills-private clause is missing")
-        canonical_skills = sum(1 for p in (REPO_ROOT / "capabilities" / "skills").iterdir() if p.is_dir())
+        # A skill is a directory that carries SKILL.md — the same rule
+        # `catalog._asset_from_canonical` and `test_catalog_directory_assets`
+        # enforce. Counting bare directories would let an undescriptored WIP
+        # folder (which is NOT an indexed asset) inflate the private-skill claim.
+        canonical_skills = sum(
+            1 for p in (REPO_ROOT / "capabilities" / "skills").iterdir()
+            if p.is_dir() and (p / "SKILL.md").is_file())
         self.assertEqual(int(m.group(2)), canonical_skills)
         self.assertEqual(int(m.group(1)), canonical_skills - len(skills))
 

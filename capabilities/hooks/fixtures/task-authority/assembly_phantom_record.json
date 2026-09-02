@@ -1,0 +1,47 @@
+{
+  "schema": "rig.authority.assembly.v1",
+  "sources": [
+    {
+      "id": "task-build-77",
+      "authority": "task",
+      "directives": [
+        {
+          "id": "D-pkg",
+          "text": "Install with either pnpm or npm; both are acceptable.",
+          "subject": "package_manager",
+          "require": [
+            "pnpm",
+            "npm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "skill-frontend",
+      "authority": "skill",
+      "directives": [
+        {
+          "id": "S-pnpm",
+          "text": "Always install dependencies with pnpm.",
+          "subject": "package_manager",
+          "require": "pnpm"
+        }
+      ]
+    }
+  ],
+  "resolution": {
+    "conflicts": [
+      {
+        "pair": [
+          "D-pkg",
+          "S-pnpm"
+        ],
+        "decision": "task",
+        "precedence_rule": "task authority honored \u2014 although nothing here actually contradicted"
+      }
+    ],
+    "executed": [
+      "S-pnpm"
+    ]
+  }
+}

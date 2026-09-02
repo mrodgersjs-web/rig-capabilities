@@ -41,10 +41,14 @@ class DirectoryAssetTests(unittest.TestCase):
                 if a["source"] == "canonical"]
 
     def test_no_support_directory_is_an_asset(self):
+        from rig_capabilities.catalog import DIR_DESCRIPTOR
         bad = []
         for a in self._canonical():
             p = REPO_ROOT / a["path"]
-            if p.is_dir() and not (p / "SKILL.md").is_file():
+            if not p.is_dir():
+                continue
+            desc = DIR_DESCRIPTOR.get(a["kind"])
+            if desc is None or not (p / desc).is_file():
                 bad.append(f"{a['id']} ({a['kind']}) at {a['path']}")
         self.assertEqual(bad, [], f"phantom directory assets: {bad}")
 
@@ -88,6 +92,29 @@ class DirectoryAssetTests(unittest.TestCase):
         # whatever the reader returns for binary, it must not look like prose
         # that could carry frontmatter: no decodable `name:` key survives
         self.assertNotIn("name:", text)
+
+    def test_data_assets_are_directories_with_a_descriptor(self):
+        """The `data` kind packages like a skill: a directory is a data asset
+        only when it carries DATA.md. Non-vacuity for the descriptor generaliser."""
+        from rig_capabilities.catalog import DIR_DESCRIPTOR
+        self.assertEqual(DIR_DESCRIPTOR.get("data"), "DATA.md")
+        data = [a for a in self._canonical() if a["kind"] == "data"]
+        self.assertGreaterEqual(len(data), 1, "no data asset indexed")
+        for a in data:
+            self.assertTrue((REPO_ROOT / a["path"] / "DATA.md").is_file(), a["id"])
+
+    def test_a_data_directory_without_its_descriptor_is_not_scanned(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            d = root / "capabilities" / "data"
+            (d / "real-asset").mkdir(parents=True)
+            (d / "real-asset" / "DATA.md").write_text(BODY, encoding="utf-8")
+            (d / "support").mkdir()                 # no DATA.md -> not an asset
+            (d / "support" / "notes.json").write_text('{"x": 1}', encoding="utf-8")
+            ids = [(a["kind"], a["id"]) for a in Repo(str(root)).build_index()["assets"]]
+        self.assertIn(("data", "real-asset"), ids)
+        self.assertFalse(any(i == "support" for _, i in ids),
+                         f"support dir indexed as data: {ids}")
 
 
 if __name__ == "__main__":
