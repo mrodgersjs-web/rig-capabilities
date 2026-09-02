@@ -1,0 +1,52 @@
+{
+  "schema": "rail-registry-v1",
+  "events": ["pre_model_call", "post_tool_call"],
+  "rails": [
+    {
+      "id": "ghost-rail",
+      "event": "on_tween_call",
+      "order": 1,
+      "capability": "untaxonomy-boundary-probe",
+      "visibility": ["main"],
+      "gated": []
+    },
+    {
+      "id": "rail-exposed",
+      "event": "post_tool_call",
+      "order": 1,
+      "capability": "visibility-gate",
+      "leg": "exposed",
+      "visibility": ["main"],
+      "gated": []
+    },
+    {
+      "id": "rail-permitted",
+      "event": "post_tool_call",
+      "order": 2,
+      "capability": "tool-allowlist",
+      "leg": "permitted",
+      "visibility": ["main"],
+      "gated": [],
+      "allow_tools": ["Read"]
+    },
+    {
+      "id": "rail-executed",
+      "event": "post_tool_call",
+      "order": 3,
+      "capability": "deterministic-executor",
+      "leg": "executed",
+      "visibility": ["main"],
+      "gated": [],
+      "executors": ["sandbox:python"]
+    },
+    {
+      "id": "rail-returned",
+      "event": "post_tool_call",
+      "order": 4,
+      "capability": "observation-channel",
+      "leg": "returned",
+      "visibility": ["main"],
+      "gated": []
+    }
+  ]
+}
