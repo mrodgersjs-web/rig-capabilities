@@ -613,11 +613,20 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return run_asset(repo, str(args.get("id", "")))
     def round_lane(args: dict):
         from .rounds import run_round
-        return run_round(repo, str(args.get("lane", "misc")),
-                         n=int(args.get("n") or 5), dry=bool(args.get("dry")),
-                         budget=(int(args["budget"]) if args.get("budget")
-                                 is not None else None),
-                         strategy=str(args.get("strategy") or "informative"))
+        rep = run_round(repo, str(args.get("lane", "misc")),
+                        n=int(args.get("n") or 5), dry=bool(args.get("dry")),
+                        budget=(int(args["budget"]) if args.get("budget")
+                                is not None else None),
+                        strategy=str(args.get("strategy") or "informative"))
+        code = int(rep.get("exit_code") or 0)
+        if code:
+            # A refused round (replay guard, blocked lane, red gate) must not come
+            # back as `isError: false`. The whole report is serialised into the
+            # error text so the caller still sees the verdict, the diff-hash and
+            # the record line that refused it.
+            raise ToolError(f"round refused (exit_code={code}): "
+                            + json.dumps(rep, ensure_ascii=False, default=str))
+        return rep
 
 
 
