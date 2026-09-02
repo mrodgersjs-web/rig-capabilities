@@ -69,9 +69,14 @@ raw model id would miss the actual wiring.
 `—` as "no packet was sealed for that increment". `proofchain._packet_prefixes` reads
 `cols[3]` and collects only `sha256:`/8-hex values, so an `—` cell is silently skipped.
 
-**Resolution:** new rows `| 41 |`…`| 49 |` ship in the same five-column shape with packet
-column `—` until P7 seals real hashes. Until then the increment is honest-but-unproven —
-`proofchain` will not flag it, and this file is the place that says so out loud.
+**Resolution (shipped):** rows `| 41 |`…`| 49 |` keep the same five-column shape, and each `—` was
+replaced with a real 8-hex prefix only *after* its evidence was captured and committed. The mechanic
+that made this a conflict is unchanged — `proofchain` still skips `—` silently — which is exactly why
+the order matters: backfilling the column before the logs existed would have produced a green
+`missing: []` over nothing. Current state: 28 prefixes, `missing: []`, nine packets on one task chain
+(`fable-2031-roadmap`, `2325e199`…`0fd7f073`), each naming its guard gate and every command's exit
+code and output sha256 over logs committed at `fe93d0f`. A future row that ships `—` is again
+honest-but-unproven, and this section is still the place that says so out loud.
 
 ## 5. `tac` on PATH is coreutils, not the TAC CLI
 
