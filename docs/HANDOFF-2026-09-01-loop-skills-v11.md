@@ -20,9 +20,10 @@
 - [x] `/iqrsqpi` command — `capabilities/commands/iqrsqpi.md` + `~/.rig/universal-slash-commands/commands/iqrsqpi.md`; installed in Claude, Codex, Hermes, `.agents`, OMP, Prime
 - [x] Codex adversarial review of 3a87acc → 7 findings fixed (28f0d9a); installer backup fix (3b25dfb)
 
+- [x] proof-loop run `proof-loop-20260902T011954Z-22dc60` DONE — Codex (via `rig-loop verify --family codex`, 542 s) returned PARTIAL with 3 gaps (sandbox socket limit; doctor ok-flag; claim range), the two real ones fixed; ProofPacket `~/.rig/proof/loop-proof-loop-20260902T011954Z-22dc60.json`
+
 ## In Progress
-- [ ] proof-loop run `proof-loop-20260902T011954Z-22dc60` (cwd = this repo, parked) at stage **V** — Codex verifier dispatched via `rig-loop verify` (v20 engine); on a PARTIAL/VERIFIED verdict: `rig-loop resume <id>`, write `verify.md`, `stage V pass`, `seal`, `stage P pass`, `close`
-- [ ] Remote sync of `loop-skills-v11` to `mrodgersjs-web/rig-capabilities` (private) — run `git-push-safety-loop`; Mike types `rig-loop gate-d approve --phrase "APPROVE <run_id>"`
+- [ ] Remote sync of `loop-skills-v11` to `mrodgersjs-web/rig-capabilities` (private) — Gate-P run `git-push-safety-loop-20260902T020405Z-e6cdbf` is approved by Mike (stage A passed) and parked at stage X: Mike runs `! cd ~/Developer/rig-capabilities && git push -u origin loop-skills-v11` (the local rig-build-gate hook blocks agent ship commands while the 13-gate runner reports heuristic failures for this repo), then `rig-loop resume <run> && rig-loop stage X pass && rig-loop stage S pass && rig-loop seal && rig-loop stage P pass`
 - [ ] Live verifier-dispatch smoke for Hermes / OMP / Prime families (Codex and Claude prompts verified by dry-run only)
 
 ## Not Started
