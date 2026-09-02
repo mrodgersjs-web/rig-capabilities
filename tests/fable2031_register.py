@@ -14,6 +14,8 @@ from decimal import Decimal
 from pathlib import Path
 import sys
 from unittest import mock
+import hashlib
+import os
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -21,6 +23,7 @@ FIX = REPO_ROOT / "tests" / "fixtures" / "fable2031"
 
 from rig_capabilities import convergence as CV  # noqa: E402
 from rig_capabilities import realign, register as R  # noqa: E402
+from rig_capabilities import afproof  # noqa: E402
 
 PREV_CSV = FIX / "register-previous.csv"
 CUR_CSV = FIX / "register-current.csv"
@@ -713,6 +716,86 @@ class ConvergenceTests(unittest.TestCase):
             first = realign.run_week(fresh, "2026-W36", apply=True)
         self.assertEqual(first["verdict"], "BASELINE_ONLY")
         self.assertIn("unclassified_rate_unreported", first["causes"])
+
+
+
+
+
+class SealingTests(unittest.TestCase):
+    """V52: a week is sealed with a recomputable hash, or it is honestly unsealed.
+
+    `sealed: false` used to carry the reason "afproof_not_landed (P7)". V48 landed
+    `afproof`, which turned that sentence into a false claim sitting inside the week's
+    own artifacts. Sealing is now real and explicit, and every rung of it is checked
+    against bytes on disk — including the rung that says a seal must survive tampering.
+    """
+
+    def setUp(self):
+        self.root = tmp_repo(rows=[row(), booked()])
+        self.addCleanup(shutil.rmtree, self.root, ignore_errors=True)
+        self.proof_root = Path(tempfile.mkdtemp(prefix="f31-proof-"))
+        self.addCleanup(shutil.rmtree, self.proof_root, ignore_errors=True)
+        os.environ["RIG_PROOF_ROOT"] = str(self.proof_root)
+        self.addCleanup(os.environ.pop, "RIG_PROOF_ROOT", None)
+        self.base = self.root / ".context" / "realign" / "2026-W36"
+
+    def _run(self, **over):
+        with mock.patch.object(CV, "corpus_report", return_value=dict(CORPUS_CLEAN)):
+            return realign.run_week(self.root, "2026-W36", apply=True, **over)
+
+    def test_unsealed_run_names_the_step_not_the_missing_module(self):
+        res = self._run()
+        self.assertFalse(res["sealed"])
+        self.assertEqual(res["seal_reason"], realign.SEAL_PENDING)
+        self.assertNotIn("P7", res["seal_reason"])
+        prose = (self.base / "operators-weekly.md").read_text(encoding="utf-8")
+        self.assertIn("sealed: false", prose)
+        self.assertNotIn("P7 pending", prose)
+        for doc in self.base.rglob("*.json"):
+            self.assertNotIn('"sealed": true', doc.read_text(encoding="utf-8"))
+
+    def test_seal_lands_a_hash_the_chain_recomputes(self):
+        res = self._run(seal=True)
+        self.assertTrue(res["sealed"], res.get("seal_reason"))
+        self.assertEqual(res["seal_reason"], "sealed")
+        receipt = json.loads((self.base / "proof" / "sealing.json")
+                             .read_text(encoding="utf-8"))
+        self.assertTrue(receipt["sealed"])
+        self.assertEqual(receipt["proof_hash"], res["proof_hash"])
+        self.assertGreaterEqual(len(receipt["artifacts"]), 5)
+        for entry in receipt["artifacts"]:
+            path = self.base / entry["path"]
+            self.assertTrue(path.is_file(), entry["path"])
+            self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(),
+                             entry["sha256"], entry["path"])
+        packets = list((self.proof_root / "fable2031").glob("realign-2026-W36__*.json"))
+        self.assertEqual(len(packets), 1)
+        ok, why = afproof.verify_seal(json.loads(packets[0].read_text()))
+        self.assertTrue(ok, why)
+
+    def test_the_receipt_binds_the_artifact_bytes(self):
+        """Tamper an artifact after sealing: the recorded hash stops matching."""
+        self._run(seal=True)
+        report = self.base / "convergence_report.md"
+        receipt = json.loads((self.base / "proof" / "sealing.json")
+                             .read_text(encoding="utf-8"))
+        entry = [a for a in receipt["artifacts"]
+                 if a["path"] == "convergence_report.md"][0]
+        report.write_text(report.read_text(encoding="utf-8") + "\nREWRITTEN\n",
+                          encoding="utf-8")
+        self.assertNotEqual(hashlib.sha256(report.read_bytes()).hexdigest(),
+                            entry["sha256"])
+
+    def test_seal_failure_writes_no_receipt_and_says_so(self):
+        with mock.patch.object(afproof, "seal_packet",
+                               side_effect=RuntimeError("proof root read-only")):
+            res = self._run(seal=True)
+        self.assertFalse(res["sealed"])
+        self.assertIn("seal_failed:RuntimeError", res["seal_reason"])
+        self.assertNotIn("proof_hash", res)
+        self.assertFalse((self.base / "proof" / "sealing.json").exists())
+        self.assertTrue(res["wrote"])
+        self.assertTrue((self.base / "convergence_report.md").is_file())
 
 
 if __name__ == "__main__":

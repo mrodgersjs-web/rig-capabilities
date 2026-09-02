@@ -42,14 +42,36 @@ def _route_hashes() -> dict:
             for p in ROUTE_TARGETS if p.is_file()}
 
 
+def _tree_fingerprint(base: Path) -> dict:
+    """path → mtime_ns for everything under `base`; {} when the directory is absent.
+
+    The read-only verbs used to be checked with "the output directory does not exist".
+    That proxy expired the first time anyone legitimately ran `realign --apply`: the
+    directory is production output, not a test fixture. The contract worth asserting is
+    narrower and stronger — this invocation created no file and touched no byte — and a
+    before/after fingerprint catches both, which absence cannot.
+    """
+    if not base.is_dir():
+        return {}
+    return {str(p.relative_to(base)): p.stat().st_mtime_ns
+            for p in sorted(base.rglob("*"))}
+
+
 class CliVerbTests(unittest.TestCase):
     """Exit codes and payload keys for every verb this slice adds."""
 
     @classmethod
     def setUpClass(cls):
         # canary/lease state goes to a throwaway root: ~/.rig/leases stays untouched.
+        # So does the week directory. `realign`/`converge` read *prior* weeks out of
+        # `.context/realign/`, so a class that pins nothing gets a different verdict
+        # the first time anyone legitimately runs `realign --apply` in this repo — a
+        # read-only test silently flipped from BASELINE_ONLY to FAIL that way. State a
+        # verb reads must be state the test controls.
         cls.state_root = tempfile.mkdtemp(prefix="fable2031-cli-")
-        cls.env = dict(os.environ, RIG_LEASE_STATE_ROOT=cls.state_root)
+        cls.env = dict(os.environ,
+                       RIG_LEASE_STATE_ROOT=cls.state_root,
+                       RIG_REALIGN_ROOT=str(Path(cls.state_root) / "realign"))
 
     @classmethod
     def tearDownClass(cls):
@@ -70,7 +92,44 @@ class CliVerbTests(unittest.TestCase):
             self.fail(f"{argv[0]}: stdout is not JSON (exit {rc})\n{out[:400]}\n{err[:400]}")
 
     def _context_week(self, week=WEEK) -> Path:
-        return REPO_ROOT / ".context" / "realign" / week
+        return Path(self.env["RIG_REALIGN_ROOT"]) / week
+
+    def _week_fingerprint(self, week=WEEK) -> dict:
+        return _tree_fingerprint(self._context_week(week))
+
+    def test_the_week_root_moves_when_the_env_says_so(self):
+        # The isolation above only exists because the driver honours the override. If
+        # someone hardcodes `.context/realign` again, these tests silently go back to
+        # reading production weeks — so the pin itself is under test.
+        week = "2026-W41"
+        rc, out = self._json("realign", "--week", week, "--root", CORPUS_FIXTURE)
+        self.assertEqual(rc, 0, out)
+        self.assertEqual(out["artifacts"][0],
+                         str(self._context_week(week) / "convergence_report.md"),
+                         "RIG_REALIGN_ROOT was ignored; the driver read a live week")
+        self.assertFalse(self._context_week(week).exists(), "dry run wrote to the root")
+
+    def test_a_prior_week_changes_the_verdict_and_nothing_else(self):
+        # Proves the coupling these tests dodge: with a prior week on disk, the same dry
+        # command is a real FAIL (no delta) rather than BASELINE_ONLY — and still writes
+        # no byte. Its own root, so planting a prior week cannot leak into a sibling test
+        # the way it leaked into production-scoped expectations before.
+        root = tempfile.mkdtemp(prefix="fable2031-prior-")
+        self.addCleanup(shutil.rmtree, root, ignore_errors=True)
+        env = dict(self.env, RIG_REALIGN_ROOT=root)
+        prior = Path(root) / WEEK
+        (prior / "proof").mkdir(parents=True)
+        (prior / "proof" / "convergence.json").write_text(
+            json.dumps({"week": WEEK, "c_t": "0.9", "a_t": "0.9"}), encoding="utf-8")
+        target = "2026-W42"
+        before = _tree_fingerprint(Path(root) / target)
+        rc, out = self._json("realign", "--week", target, "--root", CORPUS_FIXTURE,
+                             env=env)
+        self.assertEqual(rc, 1, out)
+        self.assertEqual(out["verdict"], "FAIL")
+        self.assertIn("c_t_not_improving", out["causes"])
+        self.assertEqual(out["prior_weeks"], [WEEK])
+        self.assertEqual(_tree_fingerprint(Path(root) / target), before)
 
     # ---------------------------------------------------------------- the surface
     def test_every_verb_advertising_itself(self):
@@ -175,13 +234,14 @@ class CliVerbTests(unittest.TestCase):
         self.assertEqual(out["degenerate_targets"], [])
 
     def test_converge_week_without_a_prior_seals_nothing_but_passes(self):
+        before = self._week_fingerprint()
         rc, out = self._json("converge", "--week", WEEK, "--root", CORPUS_FIXTURE)
         self.assertEqual(rc, 0, out["gate"])
         self.assertEqual(out["gate"]["verdict"], "BASELINE_ONLY")
         self.assertIn("booked_qualified_conversations", out["gate"]["causes"])
         self.assertEqual(out["bookings"]["count"], 0)
-        self.assertFalse(self._context_week().exists(),
-                         "converge must never write the week's artifacts")
+        self.assertEqual(self._week_fingerprint(), before,
+                         "converge wrote or touched a week artifact")
 
     def test_converge_flags_a_failing_week(self):
         # A prior week + zero qualifying bookings is a real FAIL, not a baseline.
@@ -193,6 +253,7 @@ class CliVerbTests(unittest.TestCase):
 
     # -------------------------------------------------------------------- realign
     def test_realign_is_dry_by_default_and_prints_the_baseline_verdict(self):
+        before = self._week_fingerprint()
         rc, out = self._json("realign", "--week", WEEK, "--root", CORPUS_FIXTURE)
         self.assertEqual(rc, 0, out)
         self.assertTrue(out["dry_run"])
@@ -201,7 +262,7 @@ class CliVerbTests(unittest.TestCase):
         self.assertFalse(out["sealed"], out["seal_reason"])
         self.assertEqual(out["verdict"], "BASELINE_ONLY")
         self.assertEqual(out["row_errors"], [])
-        self.assertFalse(self._context_week().exists(),
+        self.assertEqual(self._week_fingerprint(), before,
                          "dry realign wrote .context/realign — it may only read")
 
     def test_realign_dry_flag_is_a_noop_alias(self):
@@ -211,9 +272,10 @@ class CliVerbTests(unittest.TestCase):
         self.assertEqual(out["verdict"], "BASELINE_ONLY")
 
     def test_realign_dry_writes_nothing_even_named_for_another_week(self):
+        before = self._week_fingerprint("2026-W35")
         rc, out = self._json("realign", "--week", "2026-W35", "--root", CORPUS_FIXTURE)
         self.assertEqual(rc, 0, out)
-        self.assertFalse((REPO_ROOT / ".context" / "realign" / "2026-W35").exists())
+        self.assertEqual(self._week_fingerprint("2026-W35"), before)
 
     # ------------------------------------------------------------------ expert-os
     def test_expert_os_phases_is_a_flat_status_map(self):
@@ -511,13 +573,14 @@ class CliVerbTests(unittest.TestCase):
     def test_realign_bookings_override_scores_without_writing(self):
         # run_week has no bookings override, so the override path goes through the
         # weekly gate and must say plainly that it wrote nothing.
+        before = self._week_fingerprint()
         rc, out = self._json("realign", "--week", WEEK, "--root", CORPUS_FIXTURE,
                              "--bookings", str(FIX / "bookings-valid.json"))
         self.assertEqual(rc, 0, out)
         self.assertEqual(out["bookings"]["count"], 2)
         self.assertFalse(out["wrote"])
         self.assertTrue(out["note"])
-        self.assertFalse(self._context_week().exists())
+        self.assertEqual(self._week_fingerprint(), before)
 
     def test_model_route_run_id_alias_still_refuses_and_writes_nothing(self):
         before = _route_hashes()

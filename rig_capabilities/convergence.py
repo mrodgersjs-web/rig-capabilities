@@ -40,6 +40,22 @@ MATURITY_JUMP_LEVELS = 3
 REALIGN_DIR = ".context/realign"
 AUTO_REPORT = "auto"
 
+
+def realign_root(repo) -> Path:
+    """The parent of the week directories, resolved at call time.
+
+    `RIG_REALIGN_ROOT` relocates it exactly as `RIG_PROOF_ROOT` relocates the proof tree
+    and `RIG_LEASE_STATE_ROOT` the lease ledger. Without it, a verb that reads *prior*
+    weeks out of the live repo can never be tested twice with the same answer: the first
+    legitimate `realign --apply` created a prior week and silently turned a read-only
+    test's expected BASELINE_ONLY into a real FAIL. Production default is unchanged.
+    """
+    override = os.environ.get("RIG_REALIGN_ROOT")
+    if override:
+        return Path(override).expanduser()
+    return _repo_root(repo) / REALIGN_DIR
+
+
 ZERO = Decimal(0)
 ONE = Decimal(1)
 
@@ -467,7 +483,7 @@ def _corpus_refusal():
 
 def sealed_series(repo, exclude_week: str | None = None) -> list[dict]:
     """C_t of prior weeks under `.context/realign/`, oldest first."""
-    root = _repo_root(repo) / REALIGN_DIR
+    root = realign_root(repo)
     out = []
     if not root.is_dir():
         return out
@@ -594,7 +610,7 @@ def _previous_rows(repo, previous, week: str):
 
 
 def _sealed_rows(repo, week: str):
-    path = _repo_root(repo) / REALIGN_DIR / week / "proof" / "register-rows.json"
+    path = realign_root(repo) / week / "proof" / "register-rows.json"
     if not path.is_file():
         return None
     try:
