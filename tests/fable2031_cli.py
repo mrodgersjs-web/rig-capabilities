@@ -368,12 +368,16 @@ class CliVerbTests(unittest.TestCase):
             self.assertTrue(out["reasons"])
 
     def test_dispatch_verify_cannot_emit_a_pass_it_has_not_earned(self):
+        # `--verify` used to run the ladder with no re-executor at all, so every
+        # packet — honest ones included — died at `reexecutor_missing` and PASS was
+        # unreachable. Now the refusal is named up front: no tree, no verification.
+        # Exit 2 is the admission-refusal code, never 0, and no verdict is emitted.
         rc, out = self._json("dispatch-verify",
                              "tests/fixtures/fable2031/handoff-honest.json", "--verify")
-        self.assertEqual(rc, 1, out)
-        self.assertEqual(out["verdict"], "BLOCKED")
-        self.assertEqual(out["reasons"], ["checkout_missing"])
-        self.assertEqual(out["mode"], "full_ladder")
+        self.assertEqual(rc, 2, out)
+        self.assertFalse(out.get("ok"))
+        self.assertEqual(out["error"], "checkout_required_for_verify")
+        self.assertNotIn("verdict", out)
 
         rc, out, _ = self._run("dispatch-verify",
                                "tests/fixtures/fable2031/handoff-honest.json",

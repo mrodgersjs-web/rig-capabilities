@@ -1430,8 +1430,12 @@ class CommandCanonicalTests(unittest.TestCase):
         srcs = list((REPO_ROOT / "capabilities" / "commands").glob("*.md"))
         # Floor, not census: an exact count turned every legitimate addition into
         # a failure, while the per-file contract loop below is what actually
-        # guards quality. Eight commands as of V41 (register + corpus added).
+        # guards quality. Eight commands since V50 (register + corpus + realign +
+        # dispatch-verify), so the two the 2031 build owes are asserted by name —
+        # a floor alone would pass with the new commands absent.
         self.assertGreaterEqual(len(srcs), 6)
+        for owed in ("capabilities-realign.md", "capabilities-dispatch-verify.md"):
+            self.assertIn(owed, [f.name for f in srcs], f"{owed} not on the surface")
         for f in srcs:
             text = f.read_text()
             for key in ("outcome:", "done_when:", "great_example:", "quality_floor:"):

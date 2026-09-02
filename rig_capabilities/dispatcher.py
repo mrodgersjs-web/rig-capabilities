@@ -106,9 +106,10 @@ def packet_sha256(packet) -> str:
     return hashlib.sha256(_canonical(packet)).hexdigest()
 
 
-def _resolve(path) -> Path:
+def _resolve(path, base: Path | None = None) -> Path:
+    """Absolute paths pass through; relative ones land in `base`, else this repo."""
     candidate = Path(str(path)).expanduser()
-    return candidate if candidate.is_absolute() else _repo_root() / candidate
+    return candidate if candidate.is_absolute() else (base or _repo_root()) / candidate
 
 
 def _sha_of(path: Path) -> str:
@@ -496,7 +497,15 @@ def admit(packet, checkout, *, family_of_verifier, family_of_dispatcher,
         return decided("FABRICATED", reasons, checks)
     checks["canary"] = "honest"
 
-    reasons = _hash_reasons(packet)
+    tree = _checkout_tree(checkout)
+    if tree is not None and not tree.is_dir():
+        # The verifier could not materialise the named tree. Missing bytes in a tree
+        # that was never produced are not evidence of a lie — they are the inability
+        # to check, which is BLOCKED. FABRICATED is an accusation about the worker and
+        # is only earned once there is a real tree to look the declared bytes up in.
+        checks["hashes"] = "skipped"
+        return decided("BLOCKED", [f"checkout_absent:{tree}"], checks)
+    reasons = _hash_reasons(packet, tree)
     if reasons:
         checks["hashes"] = "fail"
         return decided("FABRICATED", reasons, checks)
@@ -569,13 +578,87 @@ def _production_commands(packet) -> list[dict]:
             if isinstance(entry, dict) and not _is_canary_command(entry, spec)]
 
 
-def _hash_reasons(packet) -> list[str]:
-    """Recompute every declared SHA. A mismatch — or absent bytes — is fabricated."""
+def subprocess_replay(packet, tree, *, timeout_s: float = 60.0) -> list[dict]:
+    """Re-run every PRODUCTION command inside the materialised tree.
+
+    This is the kill shot's hands. Without it the full ladder was unreachable:
+    `bin/rig-capabilities dispatch-verify --verify` and the read-only MCP tool both
+    passed `reexec=None`, so `_replay_reasons` answered `reexecutor_missing` and the
+    verdict could only ever be BLOCKED — a PASS was not merely withheld, it was
+    impossible, which is a fail-closed bug wearing fail-closed clothing. The rung the
+    whole doctrine rests on ("if it cannot be reproduced from a clean checkout at the
+    claimed SHA, it did not happen") had never once run outside a test fixture.
+
+    Deliberately naive, on purpose: `cwd=tree`, no PATH surgery, no PYTHONPATH
+    pointing back at the working checkout, no environment carry-over. A command that
+    only passes because the verifier's *own* tree is importable has not been verified
+    — it has been contaminated. Per-command timeout so one hung probe degrades to
+    exit -1 (divergence) rather than hanging the verifier.
+
+    Canary-role commands are never re-executed: their truth is a *planted failure*,
+    adjudicated from the packet against the minted spec, not from a rerun.
+    """
+    import subprocess  # noqa: PLC0415 — dispatcher is otherwise import-cheap
+    out: list[dict] = []
+    for entry in _production_commands(packet):
+        cmd = str(entry.get("cmd") or "")
+        cwd = _replay_cwd(entry.get("cwd"), tree)
+        try:
+            proc = subprocess.run(cmd, shell=True, cwd=cwd,
+                                  capture_output=True, text=True,
+                                  timeout=timeout_s,
+                                  env={"PATH": "/usr/bin:/bin",
+                                       "HOME": str(Path.home()), "LANG": "C",
+                                       "LC_ALL": "C", "TMPDIR": "/tmp"})
+            code, stdout = proc.returncode, proc.stdout
+        except subprocess.TimeoutExpired:
+            code, stdout = -1, ""
+        except OSError:
+            code, stdout = -1, ""
+        out.append({"cmd": cmd, "exit_code": int(code),
+                    "stdout_sha256": hashlib.sha256(stdout.encode()).hexdigest()})
+    return out
+
+
+def _replay_cwd(claimed, tree):
+    """A command's declared cwd, honoured only if it stays inside the verifier tree.
+
+    `cwd: "."` means the tree. An absolute cwd, or one that escapes via `..`, points
+    the re-execution at somebody's real working copy and voids the whole exercise, so
+    it collapses back to the tree and the resulting divergence does the talking.
+    """
+    root = Path(str(tree)).resolve()
+    rel = str(claimed or ".").strip() or "."
+    cand = Path(rel).expanduser()
+    if cand.is_absolute():
+        return str(root)
+    resolved = (root / cand).resolve()
+    return str(resolved) if str(resolved).startswith(str(root)) else str(root)
+
+
+def _checkout_tree(checkout) -> Path | None:
+    """The directory a checkout names — a path or a `{"path": …}` mapping."""
+    tree = checkout.get("path") if isinstance(checkout, dict) else checkout
+    return Path(str(tree)).expanduser() if str(tree or "").strip() else None
+
+
+def _hash_reasons(packet, base: Path | None = None) -> list[str]:
+    """Recompute every declared SHA. A mismatch — or absent bytes — is fabricated.
+
+    The bytes are looked up in the tree the caller named. Full-ladder verification
+    passes the tree materialised at the claimed commit, so the hash rung and the replay
+    rung judge the same artefacts; they used to judge different ones, because hashes
+    were resolved against the *verifier's own working copy*, meaning a PASS partly
+    attested to files that need not exist at that commit. With no tree named (the plain
+    prefilter) the packet's relative paths are read against this repo, and `mode` says
+    the ladder never ran.
+    """
     reasons: list[str] = []
+    base = base if isinstance(base, Path) else None
     for entry in packet.get("files_changed") or []:
         if not isinstance(entry, dict) or entry.get("exists") is False:
             continue  # declared phantom: there are deliberately no bytes to hash
-        path = _resolve(entry.get("path") or "")
+        path = _resolve(entry.get("path") or "", base)
         if not path.is_file():
             reasons.append(f"file_missing:{entry.get('path')}")
         elif _sha_of(path) != str(entry.get("sha256") or "").lower():
@@ -584,7 +667,7 @@ def _hash_reasons(packet) -> list[str]:
     for entry in packet.get("commands") or []:
         if not isinstance(entry, dict) or _is_canary_command(entry, spec):
             continue  # the canary log lives in the lease state root, not the tree
-        log = _resolve(entry.get("log_path") or "")
+        log = _resolve(entry.get("log_path") or "", base)
         if not log.is_file():
             reasons.append(f"log_missing:{entry.get('log_path')}")
         elif _sha_of(log) != str(entry.get("stdout_sha256") or "").lower():

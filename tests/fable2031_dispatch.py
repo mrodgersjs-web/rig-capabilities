@@ -6,6 +6,7 @@ verdict branch is exercised against a committed packet or an in-memory variant.
 from __future__ import annotations
 
 import subprocess
+import hashlib
 import json
 import shutil
 import tempfile
@@ -51,6 +52,30 @@ def echo_replay(target):
 
 def stub_replay(rows):
     return lambda _packet, _tree: rows
+
+
+class CachedTree:
+    """One real tree at HEAD, materialised by Law L2 and reused by every test.
+
+    The hash rung now looks up declared bytes in the tree the caller names, so a test
+    checkout has to be a real checkout: an empty temp directory used to be enough
+    because hashes were resolved against the working copy. A fake tree that passes is
+    the exact failure mode the rung exists to prevent, so these tests pay for one
+    `git archive` per process instead of pretending.
+    """
+
+    _path = None
+
+    def __enter__(self) -> str:
+        if CachedTree._path is None:
+            dest = tempfile.mkdtemp(prefix="fable2031-tree-")
+            subprocess.run(f"git -C {REPO_ROOT} archive HEAD | tar -x -C {dest}",
+                           shell=True, check=True)
+            CachedTree._path = dest
+        return CachedTree._path
+
+    def __exit__(self, *_exc) -> bool:
+        return False
 
 
 class RepoStub:
@@ -117,7 +142,7 @@ class DispatcherTests(unittest.TestCase):
 
     def test_isolation_breach_verdict_online(self):
         lone = packet("handoff-isolation.json")
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             got = verify(lone, reexec=echo_replay(lone), offline=False,
                          checkout=worktree)
         self.assertEqual(got["verdict"], "ISOLATION_BREACH")
@@ -128,7 +153,7 @@ class DispatcherTests(unittest.TestCase):
 
     def test_honest_packet_passes_online_with_replay(self):
         honest = packet("handoff-honest.json")
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             got = verify(honest, reexec=echo_replay(honest), offline=False,
                          checkout=worktree)
         self.assertEqual(got["verdict"], "PASS")
@@ -162,7 +187,7 @@ class DispatcherTests(unittest.TestCase):
     def test_outcome_without_pass_evidence_is_blocked(self):
         broken = packet("handoff-honest.json")
         broken["outcomes"][0]["evidence"]["command_indices"] = [2]  # canary: exit 1
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             got = verify(broken, reexec=echo_replay(broken), offline=False,
                          checkout=worktree)
         self.assertEqual(got["verdict"], "BLOCKED")
@@ -176,7 +201,7 @@ class DispatcherTests(unittest.TestCase):
         prefilter = verify(broken)
         self.assertEqual(prefilter["checks"]["evidence"], "skipped_offline")
         self.assertIn("offline_prefilter:never_read_as_pass", prefilter["reasons"])
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             online = verify(broken, reexec=echo_replay(broken), offline=False,
                             checkout=worktree)
         self.assertEqual(online["verdict"], "BLOCKED")
@@ -192,7 +217,7 @@ class DispatcherTests(unittest.TestCase):
             "stdout_sha256": broken["commands"][1]["stdout_sha256"],
             "log_path": broken["commands"][1]["log_path"], "attempt": 1,
             "wall_clock_ms": 12, "cwd": "."})
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             got = verify(broken, reexec=echo_replay(broken), offline=False,
                          checkout=worktree)
         self.assertEqual(got["verdict"], "FAIL")
@@ -206,7 +231,7 @@ class DispatcherTests(unittest.TestCase):
                     for entry in dispatcher._production_commands(honest)]
         diverged[0]["stdout_sha256"] = "0" * 64
         diverged[1]["exit_code"] = 1
-        with tempfile.TemporaryDirectory() as worktree:
+        with CachedTree() as worktree:
             got = verify(honest, reexec=stub_replay(diverged), offline=False,
                          checkout=worktree)
         self.assertEqual(got["verdict"], "FABRICATED")
@@ -437,6 +462,189 @@ class DispatcherTests(unittest.TestCase):
         ok, detail = dispatcher.gate_canary_detection(None)
         self.assertFalse(ok)
         self.assertIn("gate_error", detail)
+
+
+
+class SubprocessReplayTests(unittest.TestCase):
+    """The kill shot's hands: a real re-executor, and a divergence it must catch.
+
+    Before `subprocess_replay` existed, `--verify` passed `reexec=None`, so
+    `_replay_reasons` always answered `reexecutor_missing` and PASS was unreachable
+    outside a fixture. These tests run the real thing against a real tree.
+    """
+
+    def _tree(self, tmp: str) -> str:
+        """A tree that is NOT this checkout: no package, no conftest, nothing to leak."""
+        tree = Path(tmp) / "tree"
+        tree.mkdir()
+        (tree / "payload.txt").write_text("recorded output\n", encoding="utf-8")
+        return str(tree)
+
+    def _packet(self, cmd: str, *, exit_code=0, stdout_sha=None, cwd=".", log="l.log"):
+        return {
+            "schema": dispatcher.PACKET_SCHEMA,
+            "claim": dispatcher.REQUIRED_CLAIM,
+            "task_id": "f31-replay-selftest", "lease_token": "lt-1",
+            "worktree_path": "/tmp/whatever", "branch": "fable-2031",
+            "commit_sha": COMMIT, "working_tree_clean": True,
+            "files_changed": [],
+            "commands": [{"cmd": cmd, "exit_code": exit_code,
+                          "stdout_sha256": stdout_sha or ("0" * 64),
+                          "log_path": log, "cwd": cwd}],
+            "tests": {"passed": 1, "failed": 0, "skipped": 0,
+                      "failing_test_names": []},
+        }
+
+    def test_matching_output_is_reproduced_byte_for_byte(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            want = hashlib.sha256(b"recorded output\n").hexdigest()
+            got = dispatcher.subprocess_replay(
+                self._packet("cat payload.txt", stdout_sha=want), tree)
+            self.assertEqual(len(got), 1)
+            self.assertEqual(got[0]["exit_code"], 0)
+            self.assertEqual(got[0]["stdout_sha256"], want)
+
+    def test_divergent_output_is_not_silently_accepted(self):
+        """The plant: the claim hashes a payload the tree does not contain."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            got = dispatcher.subprocess_replay(
+                self._packet("cat payload.txt",
+                             stdout_sha=hashlib.sha256(b"claimed output\n").hexdigest()),
+                tree)
+            self.assertNotEqual(got[0]["stdout_sha256"],
+                                hashlib.sha256(b"claimed output\n").hexdigest())
+
+    def test_nonzero_exit_is_reported_not_swallowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            got = dispatcher.subprocess_replay(
+                self._packet("exit 7", stdout_sha="0" * 64), tree)
+            self.assertEqual(got[0]["exit_code"], 7)
+
+    def test_hung_command_degrades_to_divergence(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            got = dispatcher.subprocess_replay(
+                self._packet("sleep 5", stdout_sha="0" * 64), tree, timeout_s=0.3)
+            self.assertEqual(got[0]["exit_code"], -1)
+
+    def test_absolute_cwd_cannot_escape_the_verifier_tree(self):
+        """A packet could point cwd at the real working copy; the replay must refuse."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            root = str(Path(tree).resolve())   # macOS: /var -> /private/var
+            self.assertEqual(dispatcher._replay_cwd(str(REPO_ROOT), tree), root)
+            self.assertEqual(dispatcher._replay_cwd("../../..", tree), root)
+            self.assertEqual(dispatcher._replay_cwd("subdir/../.", tree), root)
+            self.assertEqual(dispatcher._replay_cwd(".", tree), root)
+
+    def test_canary_command_is_never_re_executed(self):
+        """Canary truth is a planted failure judged from the packet, not a rerun."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tree = self._tree(tmp)
+            probe = "python3 tests/fixtures/fable2031/dispatch-captured/canary.py"
+            pkt = self._packet(probe, stdout_sha="0" * 64)
+            pkt["commands"].append(dict(pkt["commands"][0], cmd="cat payload.txt",
+                                        role="production"))
+            pkt["dispatch_spec"] = {"canary": {
+                "test_name": "canary.abc", "phantom_path": "tests/ghost.py",
+                "canary_command": probe}}
+            got = dispatcher.subprocess_replay(pkt, tree)
+            self.assertEqual([row["cmd"] for row in got], ["cat payload.txt"])
+
+    def _ladder(self, tmp, *, claimed=b"claimed output\n", actual=b"actual output\n"):
+        """A tree where the hand-back log is truthful and the code disagrees with it.
+
+        `claim.txt` is the log the packet attaches (its hash proves the claim), while
+        `payload.txt` is what the command at this commit really prints. Keeping those
+        two separate is what lets a test isolate the replay rung: every declared hash
+        verifies, and only a re-execution can catch that the claim is not reproducible.
+        """
+        tree = Path(tmp) / "tree"
+        tree.mkdir()
+        (tree / "claim.txt").write_bytes(claimed)
+        (tree / "payload.txt").write_bytes(actual)
+        canary_test = "canary.f31-replay-selftest"
+        pkt = {
+            "schema": dispatcher.PACKET_SCHEMA, "claim": dispatcher.REQUIRED_CLAIM,
+            "task_id": "f31-replay-selftest", "lease_token": "lt-1",
+            "worktree_path": str(tree), "branch": "fable-2031",
+            "commit_sha": COMMIT, "working_tree_clean": True,
+            "files_changed": [{"path": str(tree / "claim.txt"),
+                               "sha256": hashlib.sha256(claimed).hexdigest()}],
+            "commands": [{"cmd": "cat payload.txt", "exit_code": 0,
+                          "stdout_sha256": hashlib.sha256(claimed).hexdigest(),
+                          "log_path": str(tree / "claim.txt"), "cwd": "."}],
+            "tests": {"passed": 1, "failed": 1, "skipped": 0,
+                      "failing_test_names": [canary_test]},
+            "reflog": ["0" * 40 + " fable-2031@{0}: commit: replay ladder fixture"],
+            "mtimes": [{"path": str(tree / "payload.txt")}],
+            "unresolved": [], "retries": [],
+            "outcomes": [{"id": "replay-rung", "status": "PASS",
+                          "evidence": {"command_indices": [0]}}],
+            "proof_packet": "tests/fixtures/fable2031/proof/fable2031-honest.json",
+            "dispatch_spec": {"canary": {
+                "test_name": canary_test, "phantom_path": str(tree / "ghost.py"),
+                "canary_command": "python3 -c 'raise SystemExit(1)'"}},
+            "canary": {"test_name": canary_test, "observed": "FAIL",
+                       "nonexistent_path_probe": "NOT_FOUND", "role": "canary"},
+        }
+        return str(tree), pkt
+
+    def test_truthful_hashes_but_unreproducible_output_is_fabricated(self):
+        """The kill shot alone catches this: hashes pass, the rerun does not."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tree, pkt = self._ladder(tmp)
+            self.assertEqual(dispatcher._hash_reasons(pkt, tree), [])
+            got = dispatcher.admit(pkt, tree, family_of_verifier="gpt",
+                                   family_of_dispatcher="claude",
+                                   reexec=dispatcher.subprocess_replay, offline=False)
+            self.assertEqual(got["verdict"], "FABRICATED", got["reasons"])
+            self.assertEqual(got["reasons"], ["replay_stdout_sha_divergence:0"])
+            self.assertEqual(got["checks"]["hashes"], "ok")
+
+    def test_reproducible_output_clears_the_ladder(self):
+        """Same tree, honest claim: the only difference is what the code prints."""
+        with tempfile.TemporaryDirectory() as tmp:
+            tree, pkt = self._ladder(tmp, claimed=b"actual output\n")
+            got = dispatcher.admit(pkt, tree, family_of_verifier="gpt",
+                                   family_of_dispatcher="claude",
+                                   reexec=dispatcher.subprocess_replay, offline=False)
+            self.assertEqual(got["verdict"], "PASS", got["reasons"])
+            self.assertEqual(got["checks"]["replay"], "ok:1")
+
+    def test_honest_packet_passes_the_ladder_against_a_real_tree(self):
+        """The rung that used to be unreachable: PASS, with commands actually rerun."""
+        tree = tempfile.mkdtemp(prefix="fable2031-ladder-")
+        subprocess.run(f"git -C {REPO_ROOT} archive HEAD | tar -x -C {tree}",
+                       shell=True, check=True)
+        out = verify(packet("handoff-honest.json"), offline=False, checkout=tree,
+                     reexec=dispatcher.subprocess_replay)
+        self.assertEqual(out["verdict"], "PASS", out["reasons"])
+        self.assertEqual(out["checks"]["replay"], "ok:2")
+
+    def test_verify_without_checkout_refuses_instead_of_faking_blocked(self):
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "bin" / "rig-capabilities"),
+             "dispatch-verify", str(FIX / "handoff-honest.json"), "--verify"],
+            capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 2, proc.stderr)
+        self.assertIn("checkout_required_for_verify", proc.stdout)
+
+    def test_cli_full_ladder_exits_zero_on_a_reproduced_packet(self):
+        tree = tempfile.mkdtemp(prefix="fable2031-cli-")
+        subprocess.run(f"git -C {REPO_ROOT} archive HEAD | tar -x -C {tree}",
+                       shell=True, check=True)
+        proc = subprocess.run(
+            [sys.executable, str(REPO_ROOT / "bin" / "rig-capabilities"),
+             "dispatch-verify", str(FIX / "handoff-honest.json"), "--verify",
+             "--checkout", tree, "--verifier-family", "gpt",
+             "--dispatcher-family", "claude"],
+            capture_output=True, text=True)
+        self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
+        self.assertEqual(json.loads(proc.stdout)["verdict"], "PASS")
 
 
 class WorktreeDenialParityTests(unittest.TestCase):

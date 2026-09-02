@@ -809,11 +809,24 @@ def main() -> int:
                               "error": "offline_and_verify_conflict"}, indent=1))
             return 2
         try:
+            if args.verify and not args.checkout:
+                print(json.dumps({"ok": False, "packet": source,
+                                  "error": "checkout_required_for_verify",
+                                  "hint": ("materialise the claimed tree with "
+                                           "dispatcher.verifier_checkout_plan: "
+                                           "git -C <repo> archive <sha> | tar -x -C <dir>")},
+                                 indent=1))
+                return 2
             packet = json.loads(Path(source).read_text(encoding="utf-8"))
+            # --verify without a re-executor used to mean BLOCKED forever: the kill
+            # shot had never actually run outside a fixture. Now the ladder re-runs
+            # the production commands inside the materialised tree.
             out = dispatcher.admit(packet, args.checkout,
                                    family_of_verifier=args.verifier_family,
                                    family_of_dispatcher=args.dispatcher_family,
-                                   reexec=None, offline=not args.verify)
+                                   reexec=(None if not args.checkout
+                                           else dispatcher.subprocess_replay),
+                                   offline=not args.verify)
         except dispatcher.AdmissionError as exc:
             print(json.dumps({"ok": False, "packet": source, "error": str(exc)}, indent=1))
             return 2
