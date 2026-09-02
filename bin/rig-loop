@@ -118,6 +118,20 @@ def cmd_check(a):
         L.add_check(run, a.cmd, a.cwd or run["cwd"])
         print(f"[rig-loop] check added: {a.cmd}")
         return 0
+    if a.action == "rm":
+        idx = int(a.cmd or -1)
+        if not 0 <= idx < len(run["checks"]):
+            sys.exit(f"rig-loop: check index out of range (0..{len(run['checks'])-1})")
+        gone = run["checks"].pop(idx)
+        L.log_event(run, "check_rm", cmd=gone["cmd"])
+        L.save_run(run)
+        print(f"[rig-loop] check removed: {gone['cmd']}")
+        return 0
+    if a.action == "list":
+        for i, c in enumerate(run["checks"]):
+            last = c.get("last") or {}
+            print(f"  [{i}] exit={last.get('exit', '?')} {c['cmd']}")
+        return 0
     results = L.run_checks(run)
     for r in results:
         print(f"  exit {r['exit']:<3} {r['cmd']}")
@@ -286,7 +300,7 @@ def main(argv=None) -> int:
     p = sub.add_parser("artifact"); p.add_argument("stage"); p.add_argument("path"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_artifact)
     p = sub.add_parser("path"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_path)
     p = sub.add_parser("counter"); p.add_argument("name"); p.add_argument("--set", type=int); p.add_argument("--inc", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_counter)
-    p = sub.add_parser("check"); p.add_argument("action", choices=["add", "run"]); p.add_argument("cmd", nargs="?"); p.add_argument("--cwd"); p.add_argument("--run"); p.set_defaults(fn=cmd_check)
+    p = sub.add_parser("check"); p.add_argument("action", choices=["add", "run", "rm", "list"]); p.add_argument("cmd", nargs="?"); p.add_argument("--cwd"); p.add_argument("--run"); p.set_defaults(fn=cmd_check)
     p = sub.add_parser("plant"); p.add_argument("name"); p.add_argument("--red", required=True); p.add_argument("--green", required=True); p.add_argument("--cwd"); p.add_argument("--run"); p.set_defaults(fn=cmd_plant)
     p = sub.add_parser("gate-d"); p.add_argument("action", choices=["request", "approve"]); p.add_argument("--action", dest="action_text"); p.add_argument("--phrase"); p.add_argument("--by", default="mike"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_gate_d)
     p = sub.add_parser("seal"); p.add_argument("--signer", default=os.environ.get("RIG_AGENT", "rig-loop")); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_seal)
