@@ -116,6 +116,23 @@ class DirectoryAssetTests(unittest.TestCase):
         skills = [a for a in self._canonical() if a["kind"] == "skill"]
         self.assertTrue(skills and all(a["installable"] for a in skills))
 
+    def test_a_loose_file_under_data_is_not_an_asset(self):
+        """`data` is directory-only. A stray capabilities/data/foo.json must not
+        index as a single-file data asset — the phantom-asset trap, one dialect
+        over."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            d = root / "capabilities" / "data"
+            (d / "real").mkdir(parents=True)
+            (d / "real" / "DATA.md").write_text(BODY, encoding="utf-8")
+            (d / "stray.json").write_text(
+                '{"note":"a loose data file that is not an asset but clears the floor"}',
+                encoding="utf-8")
+            ids = [(a["kind"], a["id"]) for a in Repo(str(root)).build_index()["assets"]]
+        self.assertIn(("data", "real"), ids)
+        self.assertFalse(any(i == "stray.json" for _, i in ids),
+                         f"loose data file indexed: {ids}")
+
     def test_a_data_directory_without_its_descriptor_is_not_scanned(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

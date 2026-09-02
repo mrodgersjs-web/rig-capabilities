@@ -46,7 +46,10 @@ KIND_EXTS = {
     "command": {".md"},
     "agent": {".md", ".toml", ".json"},
     "skill": {".md"},
-    "data": {".md", ".json"},
+    # `data` is intentionally absent: it is a directory-descriptor kind (DATA.md),
+    # so a loose file under capabilities/data/ must NEVER index as a single-file
+    # asset. `KIND_EXTS.get("data", set())` is empty, so the single-file branch of
+    # _asset_from_canonical rejects every stray .json/.md there.
 }
 
 DEFAULT_EXTERNAL_ROOTS = [
