@@ -8,11 +8,17 @@ as absent — while the file on disk has all of them. `./bin/rig-capabilities te
 <id>` then answers pass=false with zero results: the gate is not red, it is
 unloaded, which is worse than red.
 
-Read-only. Run: python3 scripts/frontmatter_visibility.py   (exit 1 = any victim)
+Read-only. Covers canonical `capabilities/**` and every non-canonical file asset
+the index serves (external harness roots), because those are handed to agents by
+the same `get`/`search`/`test` surface.
+
+Run: python3 scripts/frontmatter_visibility.py   (exit 1 = any victim)
 """
 from __future__ import annotations
 
+import json
 import sys
+import re
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
@@ -60,17 +66,47 @@ def scan() -> tuple[list, list, int]:
                 print(f"  UNLOADED, NOT TRUNCATION {rel}: {lost}")
     return hidden, other, clean
 
+def scan_external() -> tuple[list, list, int]:
+    """The same test over non-canonical file assets served from external roots."""
+    idx_p = ROOT / ".index.json"          # gitignored; the gate degrades to canonical-only
+    if not idx_p.exists():
+        return [], [], 0
+    idx = json.loads(idx_p.read_text(encoding="utf-8"))
+    hidden, other, clean = [], 0, 0
+    for a in idx.get("assets", []):
+        if a.get("source") == "canonical":
+            continue
+        p = Path(a.get("abs_path") or (ROOT / a.get("path", "")))
+        if not p.is_file():
+            continue                      # skill packages are directories
+        raw = p.read_text(encoding="utf-8", errors="replace")
+        end = fm_end(raw)
+        if end < 0:
+            continue
+        loaded = catalog._quality_block(catalog._pick_main_text(p))
+        lost = [f for f in FIELDS if re.search(rf"^{f}\s*:", raw[:end], re.M) and not loaded.get(f)]
+        label = f"{a.get('source')}:{a.get('id')}"
+        if not lost:
+            clean += 1
+        elif end >= catalog.HEAD_BYTES:
+            hidden.append((label, end, len(raw), lost))
+        else:
+            other += 1
+            print(f"  UNLOADED, NOT TRUNCATION (external) {label}: {lost}")
+    return hidden, other, clean
+
 
 def main() -> int:
     hidden, other, clean = scan()
-    print(f"\nHEAD_BYTES={catalog.HEAD_BYTES}  clean={clean}  "
-          f"other_unloaded={other}  truncation_hidden={len(hidden)}")
-    for rel, end, size, lost in sorted(hidden, key=lambda x: -x[1]):
+    xhidden, xother, xclean = scan_external()
+    print(f"\nHEAD_BYTES={catalog.HEAD_BYTES}  clean={clean + xclean}  "
+          f"other_unloaded={other + xother}  truncation_hidden={len(hidden) + len(xhidden)}")
+    for rel, end, size, lost in sorted(hidden + xhidden, key=lambda x: -x[1]):
         print(f"  {rel}  fm_end={end} bytes={size} lost={','.join(lost)}")
-    if hidden:
+    if hidden or xhidden:
         print("VERDICT: these assets' gates cannot be loaded by the catalog; "
               "move long programs out of frontmatter into a checker the cmd: invokes.")
-    return 1 if (hidden or other) else 0
+    return 1 if (hidden or other or xhidden or xother) else 0
 
 
 if __name__ == "__main__":
