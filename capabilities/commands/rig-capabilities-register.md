@@ -58,8 +58,10 @@ result to describe as green.
    **Dry by default** — it scores and returns, writing nothing (`wrote: false`, `would_write: […]`).
    `apply=True` writes the five artifacts under `.context/realign/<ISO-week>/`:
    `register-diff.json`, `convergence_report.md`, `proof/*.json`,
-   `doctrine-update-phrase.md`, `operators-weekly.md`. It reports `sealed: false` with the driver's
-   own `seal_reason`; no run invents a hash it has not computed. Scan roots matter for timing: bare
+   `doctrine-update-phrase.md`, `operators-weekly.md`. An unsealed run reports `sealed: false` with
+   the driver's own `seal_reason`; `apply=True, seal=True` hashes the week, lands a real `proof_hash`
+   through `afproof`, and writes the `proof/sealing.json` receipt (CLI: `--apply --seal`). No run
+   invents a hash it has not computed. Scan roots matter for timing: bare
    walks the live roots (~61 s here, ending in a `TimeoutError` on `~/mnt/RIGLake`), while
    `roots=["tests/fixtures/fable2031/corpus"]` (verb: `--root`) is repo-only and sub-second — keep
    it inside any 15 s `cmd:` budget.
@@ -90,11 +92,12 @@ register must be inside the register.
   `maturity_M0_5: 0`, `proof_status: none` — a weighted placeholder for a KPI, not evidence of a
   conversation. No booked call and no revenue number exists on this disk; nothing here may be
   written as though one did.
-- **There is no prior sealed week.** `.context/realign/` does not exist yet and
-  `convergence.sealed_series('.')` returns `[]`, so `ΔC_t` is undefined by construction.
-- Therefore `realign` for `2026-W36` reports `verdict: BASELINE_ONLY`, `ok: false`,
-  `bookings: 0`, `sealed: false`, and the causes depend on which roots it scanned. Bare
-  (`run_week('.', '2026-W36')`) it reports
+- **The first sealed week exists; a second does not.** `.context/realign/2026-W36/` is on disk, so
+  `convergence.sealed_series('.')` returns one entry (`c_t 0.4442528735632183908045977011494253`,
+  `verdict BASELINE_ONLY`, `bookings 0`) and a later week has a baseline to move from.
+- Therefore `realign` for `2026-W36` reported `verdict: BASELINE_ONLY`, `ok: false`, `bookings: 0`,
+  and causes that depended on which roots it scanned. Bare
+  (`run_week('.', '2026-W36')`) it reported
   `causes: [unclassified_rate_unreported, booked_qualified_conversations]`; pointed at the
   repo-only corpus (`--root tests/fixtures/fable2031/corpus`) the rate is reported at `0.05` and
   the single remaining cause is `booked_qualified_conversations`. Neither form PASSes, and neither

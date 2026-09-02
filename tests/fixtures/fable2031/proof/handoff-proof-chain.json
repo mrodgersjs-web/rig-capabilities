@@ -1,0 +1,145 @@
+{
+ "branch": "fable-2031",
+ "canary": {
+  "canary_id": "c233012-46d16f5c",
+  "capture_probe": "python3 /Users/rig128gb/.rig/leases/f31-proof-chain/canary/test_c233012_46d16f5c.py",
+  "exit_code": 1,
+  "failure_class": "AssertionError",
+  "nonexistent_path_probe": "NOT_FOUND",
+  "observed": "FAIL",
+  "role": "canary",
+  "state_root": "/Users/rig128gb/.rig/leases",
+  "test_name": "canary.c233012-46d16f5c"
+ },
+ "capture_window": {
+  "capture_method": "subprocess",
+  "duration_s": 31.967,
+  "end": 1788327040.4777868,
+  "start": 1788327008.511
+ },
+ "claim": "SUBMITTED_FOR_VERIFICATION",
+ "commands": [
+  {
+   "attempt": 1,
+   "cmd": "./bin/rig-capabilities corpus --root tests/fixtures/fable2031/corpus --json",
+   "cwd": ".",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/proof-chain/prod-1.log",
+   "stdout_sha256": "421fbbed68758e3b3724a74f14a605dbdc6ef35a118b28cc3e20361011d4181e",
+   "wall_clock_ms": 90
+  },
+  {
+   "attempt": 1,
+   "cmd": "./bin/rig-capabilities register --json",
+   "cwd": ".",
+   "exit_code": 0,
+   "log_path": "tests/fixtures/fable2031/proof-chain/prod-2.log",
+   "stdout_sha256": "9c4f2d4e7f442b9aa4c6edfd9af5c8a1b4ed9f2f3defebaca41406156f0c2016",
+   "wall_clock_ms": 53
+  },
+  {
+   "attempt": 1,
+   "cmd": "python3 /Users/rig128gb/.rig/leases/f31-proof-chain/canary/test_c233012_46d16f5c.py",
+   "cwd": ".",
+   "exit_code": 1,
+   "log_path": "tests/fixtures/fable2031/proof-chain/canary.log",
+   "role": "canary",
+   "stdout_sha256": "9132cbcc7b3117205644449ec080c7ed69dd27abff825e0ef60468104754f03c",
+   "wall_clock_ms": 240
+  }
+ ],
+ "commit_sha": "e8cc70230904e64cb67c1cdb6d55fcd7799253e1",
+ "dispatch_spec": {
+  "canary": {
+   "canary_command": "python3 /Users/rig128gb/.rig/leases/f31-proof-chain/canary/test_c233012_46d16f5c.py",
+   "canary_id": "c233012-46d16f5c",
+   "expected_observed": "FAIL",
+   "expected_probe": "NOT_FOUND",
+   "file": "/Users/rig128gb/.rig/leases/f31-proof-chain/canary/test_c233012_46d16f5c.py",
+   "minted_at": 1788327012.247,
+   "note": "truthful non-zero is admission evidence; never feed to TAC",
+   "outside_worktree": true,
+   "phantom_path": "/Users/rig128gb/.rig/leases/f31-proof-chain/canary/c233012-46d16f5c-phantom-probe-does-not-exist.md",
+   "secret_sha256": "e7d4142b085d214563442a58f5bb3dd67f50943edd283e159b2b01bfef97b20e",
+   "state_root": "/Users/rig128gb/.rig/leases",
+   "tac_admissible": false,
+   "task_id": "f31-proof-chain",
+   "test_name": "canary.c233012-46d16f5c"
+  }
+ },
+ "files_changed": [
+  {
+   "bytes": 322,
+   "path": "tests/fixtures/fable2031/proof-chain/prod-1.log",
+   "sha256": "421fbbed68758e3b3724a74f14a605dbdc6ef35a118b28cc3e20361011d4181e"
+  },
+  {
+   "bytes": 124,
+   "path": "tests/fixtures/fable2031/proof-chain/prod-2.log",
+   "sha256": "9c4f2d4e7f442b9aa4c6edfd9af5c8a1b4ed9f2f3defebaca41406156f0c2016"
+  },
+  {
+   "bytes": 636,
+   "path": "tests/fixtures/fable2031/proof-chain/canary.log",
+   "sha256": "9132cbcc7b3117205644449ec080c7ed69dd27abff825e0ef60468104754f03c"
+  }
+ ],
+ "lease_token": "lt-C08x00C71dWtmqMrgd4mjA",
+ "mtimes": [
+  {
+   "mtime": "2026-09-01T23:30:12-0600",
+   "path": "tests/fixtures/fable2031/proof-chain/prod-1.log"
+  },
+  {
+   "mtime": "2026-09-01T23:30:12-0600",
+   "path": "tests/fixtures/fable2031/proof-chain/prod-2.log"
+  },
+  {
+   "mtime": "2026-09-01T23:30:12-0600",
+   "path": "tests/fixtures/fable2031/proof-chain/canary.log"
+  }
+ ],
+ "outcomes": [
+  {
+   "evidence": {
+    "command_indices": [
+     0
+    ]
+   },
+   "id": "corpus_scan_reproduces",
+   "status": "PASS"
+  },
+  {
+   "evidence": {
+    "command_indices": [
+     1
+    ]
+   },
+   "id": "register_validates",
+   "status": "PASS"
+  }
+ ],
+ "proof_packet": "/Users/rig128gb/.rig/proof/fable2031/f31-proof-chain__0ea8dcbcedabb184.json",
+ "reflog": [
+  "e8cc702 HEAD@{0}: commit: V52 evidence: captured proof-chain logs for task f31-proof-chain",
+  "ae9d26f HEAD@{1}: commit: V52: the kill shot grows hands \u2014 a real re-executor, and hashes bound to the tree",
+  "08ef0d3 HEAD@{2}: commit: v51: idp_integrity stops reading a gitignored key; plants run in a fresh interpreter",
+  "7b413c4 HEAD@{3}: commit: v50: register Wave 3, kill the offline-PASS fail-open, fix frontmatter quote mangling",
+  "d2b7185 HEAD@{4}: commit: fix(compile_harnesses): honour the YAML document marker; 56/64 harnesses compile again"
+ ],
+ "retries": [],
+ "rollback_path": "git reset --hard ae9d26f",
+ "schema": "rig.dispatch.handoff.v1",
+ "task_id": "f31-proof-chain",
+ "tests": {
+  "failed": 1,
+  "failing_test_names": [
+   "canary.c233012-46d16f5c"
+  ],
+  "passed": 354,
+  "skipped": 0
+ },
+ "unresolved": [],
+ "working_tree_clean": true,
+ "worktree_path": "/Users/rig128gb/Developer/rig-capabilities"
+}

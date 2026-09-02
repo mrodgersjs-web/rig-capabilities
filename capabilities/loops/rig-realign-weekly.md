@@ -61,11 +61,18 @@ and `~/.hermes/cron/jobs.json` / `~/.hermes/scripts/rig-weekly-evolution.sh` are
 ## BASELINE_ONLY semantics
 
 With no prior sealed week (`previous_metrics` null), the verdict is **`BASELINE_ONLY`**: this week's C_t/A_t
-are a baseline, never a delta, never an improvement. The first real week therefore reports, honestly:
+are a baseline, never a delta, never an improvement. The first real week reported, honestly, on
+2026-W36:
 
 ```
-verdict: BASELINE_ONLY · causes: [booked_qualified_conversations] · bookings: 0 · sealed: false
+verdict: BASELINE_ONLY · causes: [unclassified_rate_unreported, booked_qualified_conversations] · bookings: 0
 ```
+
+`causes` depends on which roots were scanned: bare roots cannot report an unclassified rate, and an
+unreported rate is not a zero rate, so it appears as its own cause. W36 is now on disk under
+`.context/realign/`, so a later week has a prior week and is no longer BASELINE_ONLY — scored against
+the same unchanged register it is `FAIL` with `causes: [booked_qualified_conversations,
+c_t_not_improving]` and `d_c_t: 0E-34`, which is the honest reading of a week that did not move.
 
 A zero-booking week against a real baseline is **FAIL with its cause named** — complete, never retried, never
 back-filled. Escalations fire on streaks, not mood: three consecutive FAIL weeks → `LOOP_REBUILD_REQUIRED`
@@ -80,7 +87,12 @@ back-filled. Escalations fire on streaks, not mood: three consecutive FAIL weeks
 4. `doctrine-update-phrase.md` — Artifact 27, the phrase committed back to the system (on FAIL it names the cause);
 5. `operators-weekly.md` — Operator's Weekly, quoting the proof JSON, not the conversation.
 
-Every artifact carries `sealed: false` with a named `seal_reason` until `afproof` lands a real `proof_hash`.
+Sealing is explicit, not default: `realign --apply --seal` hashes the week's files, lands a real
+`proof_hash` through `afproof`, and records it in `proof/sealing.json` — written **after** the hashing
+and excluded from its own hash list, so the receipt can be recomputed by anyone. That receipt is the only
+file in the week directory permitted to state `sealed: true`, and it states it only beside a hash
+`afproof.verify_seal` recomputes. Without `--seal` every artifact says `sealed: false` and names the
+missing step in `seal_reason`; a seal failure leaves the week unsealed and says so in words.
 `./bin/rig-capabilities realign` is dry; `--apply` is the only mode that writes.
 
 ## What may never be claimed
@@ -90,7 +102,8 @@ Every artifact carries `sealed: false` with a named `seal_reason` until `afproof
   zero, so today the truthful report is zero.
 - **No convergence improvement** may be claimed without a prior sealed week: `BASELINE_ONLY` is not a rise,
   and quoting C_t next to the word "improved" without a ΔC_t in the gate JSON is a fabrication.
-- **No sealing** may be implied: `sealed: false` stays until a hash exists; a typed-in hash is forgery.
+- **No sealing** may be implied: a typed-in hash is forgery, and so is prose that claims a seal the
+  receipt does not carry. The receipt decides — read `proof/sealing.json`, not the artifact text.
 - **No fleet completion**: Sentinel Prime holds termination authority and is specification-only, so fleet
   status stays `BLOCKED_PENDING_SENTINEL` even when a task-level verdict is PASS.
 - **No system-build bleed into business claims**: a green `certify` on this loop says nothing about bookings,

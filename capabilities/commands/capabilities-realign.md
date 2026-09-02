@@ -36,14 +36,20 @@ and `convergence.weekly_gate` — not this conversation — issues the verdict.
    unclassified_rate ≤ 0.10, bookings > 0, and no unresolved flag ≥ 5σ. Anything else prints
    named `causes` — quote them, do not paraphrase them away.
 4. With no prior sealed week the verdict is **BASELINE_ONLY**: this week's C_t/A_t are a baseline,
-   never a delta, and must never be described as an improvement. Today's honest first-week line is
-   `verdict BASELINE_ONLY · causes [booked_qualified_conversations] · bookings 0 · sealed false`.
+   never a delta, and must never be described as an improvement. The first real week (2026-W36)
+   reported `verdict BASELINE_ONLY · causes [unclassified_rate_unreported, booked_qualified_conversations]
+   · bookings 0`. `causes` depends on the roots scanned — bare roots cannot report an unclassified rate,
+   and an unreported rate is not a zero rate. W36 is now on disk, so a later week has a prior week:
+   scored against an unchanged register it reads `FAIL` with `c_t_not_improving` and `d_c_t 0E-34`.
 5. A zero-booking week against a real baseline is FAIL with its cause named — complete, never
    retried, never back-filled. Three FAIL weeks escalate to LOOP_REBUILD_REQUIRED; three weeks of
    rising C_t with zero bookings escalate to WEIGHTS_INVALID.
 6. Quote the five artifact paths written under `.context/realign/<YYYY-Www>/` (register diff,
-   convergence report, proof JSON, Doctrine Update Phrase, Operator's Weekly). Each carries
-   `sealed: false` with a named seal reason until a real `proof_hash` exists.
+   convergence report, proof JSON, Doctrine Update Phrase, Operator's Weekly). An unsealed run says
+   `sealed: false` with a `seal_reason` naming the missing step; `--apply --seal` hashes the week,
+   lands a real `proof_hash` through `afproof`, and records it in `proof/sealing.json` — the one file
+   allowed to state `sealed: true`, written after the hashing and excluded from its own hash list so
+   anyone can recompute it.
 
 Bookings are ZERO by evidence: a record counts only when its `qualification_evidence_path`
 resolves to a file on disk. No output of this command may state or imply a booking, a meeting, a

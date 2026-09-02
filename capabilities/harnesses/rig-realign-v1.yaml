@@ -86,8 +86,8 @@ capability_gates:
         requirement: "The five artifacts are written under .context/realign/<week>/: the register diff, convergence_report.md, the proof JSON directory, doctrine-update-phrase.md (Artifact 27), and operators-weekly.md"
         proof: "run_week(apply=True) returns wrote true with exactly those five artifact paths relative to the repo root, and each file exists"
       - id: "5.2"
-        requirement: "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists — a hash is never typed in by hand to make a week look sealed"
-        proof: "every proof JSON in the week directory carries sealed false; grep for a truthy sealed value in the week directory returns nothing"
+        requirement: "Sealing is explicit and recomputable: run_week(seal=True) lands a proof_hash through afproof and records it in proof/sealing.json, which is written after the hashing and excluded from its own hash list. Without seal the week says sealed false with a seal_reason naming the missing step. A hash typed in by hand is forgery, and so is prose claiming a seal the receipt does not carry"
+        proof: "proof/sealing.json exists only when sealing ran, names its packet, and every artifact hash it lists matches the bytes on disk; afproof.verify_seal of that packet returns (True,'ok'); the week's other proof JSONs carry no truthy sealed value; a second --seal run leaves no receipt entry pointing at proof/sealing.json"
       - id: "5.3"
         requirement: "A real zero-booking week is reported FAIL with its cause named, is complete, and is never retried or back-filled; the Doctrine Update Phrase on a FAIL must name the cause rather than describe intentions"
         proof: "weekly-gate.json verdict FAIL with causes naming booked_qualified_conversations; doctrine-update-phrase.md contains that cause verbatim"
@@ -107,7 +107,7 @@ definition_of_done:
   - "Corpus unclassified rate reported and at or below the 0.10 halt, or the week is CORPUS_REFUSAL with nothing written"
   - "C_t, A_t quoted as Decimal strings with degenerate_targets listed"
   - "weekly_gate verdict is PASS, FAIL with named causes, BASELINE_ONLY, or a named escalation — never silence"
-  - "Five artifacts exist under .context/realign/<week>/ with sealed false and a named seal_reason"
+  - "Five artifacts exist under .context/realign/<week>/; an unsealed run says sealed false with a named seal_reason, a sealed run carries proof/sealing.json whose listed hashes match disk and whose packet afproof.verify_seal recomputes"
   - "Fleet status reported BLOCKED_PENDING_SENTINEL while Sentinel Prime is specification-only"
 failure_protocol:
   halt_gates: ["1.1", "2.1", "2.2", "2.3", "3.1", "4.1", "4.2", "5.1", "6.1", "6.2"]
@@ -127,6 +127,6 @@ final_rule:
   - "A weekly review that produces prose is a diary."
   - "BASELINE_ONLY is honest and is not a PASS."
   - "Zero bookings is a verdict, never a gap to fill in."
-  - "Nothing is sealed until a hash exists; sealed false is the truthful default."
+  - "Nothing is sealed until a hash exists, and the receipt — not the prose — is where the hash lives."
   - "Three FAIL weeks names the loop, not the week."
 governs_loops: [GL-RIG-REALIGN-V1]

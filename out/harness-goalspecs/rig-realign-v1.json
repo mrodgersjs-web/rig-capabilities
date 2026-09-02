@@ -198,9 +198,9 @@
         {
           "id": "5.2",
           "category": "Honest output",
-          "name": "5.2 sealed stays false with seal_reason naming the missing seali",
-          "description": "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists \u2014 a hash is never typed in by hand to make a week look sealed",
-          "command": "every proof JSON in the week directory carries sealed false; grep for a truthy sealed value in the week directory returns nothing",
+          "name": "5.2 Sealing is explicit and recomputable: run_week(seal=True) la",
+          "description": "Sealing is explicit and recomputable: run_week(seal=True) lands a proof_hash through afproof and records it in proof/sealing.json, which is written after the hashing and excluded from its own hash list. Without seal the week says sealed false with a seal_reason naming the missing step. A hash typed in by hand is forgery, and so is prose claiming a seal the receipt does not carry",
+          "command": "proof/sealing.json exists only when sealing ran, names its packet, and every artifact hash it lists matches the bytes on disk; afproof.verify_seal of that packet returns (True,'ok'); the week's other proof JSONs carry no truthy sealed value; a second --seal run leaves no receipt entry pointing at proof/sealing.json",
           "failure_tier": "halt",
           "required": true,
           "required_verdict": "GO",
@@ -301,7 +301,7 @@
         "Corpus unclassified rate reported and at or below the 0.10 halt, or the week is CORPUS_REFUSAL with nothing written",
         "C_t, A_t quoted as Decimal strings with degenerate_targets listed",
         "weekly_gate verdict is PASS, FAIL with named causes, BASELINE_ONLY, or a named escalation \u2014 never silence",
-        "Five artifacts exist under .context/realign/<week>/ with sealed false and a named seal_reason",
+        "Five artifacts exist under .context/realign/<week>/; an unsealed run says sealed false with a named seal_reason, a sealed run carries proof/sealing.json whose listed hashes match disk and whose packet afproof.verify_seal recomputes",
         "Fleet status reported BLOCKED_PENDING_SENTINEL while Sentinel Prime is specification-only"
       ],
       "failure_states": [
@@ -327,7 +327,7 @@
         "A booking counts only when its qualification_evidence_path resolves to a file on disk: load_bookings reports the count and lists invalid records; a generic booked_call row without evidence is zero",
         "No prior sealed week means BASELINE_ONLY \u2014 this week's numbers are a baseline, never a delta, and never reported as an improvement",
         "The five artifacts are written under .context/realign/<week>/: the register diff, convergence_report.md, the proof JSON directory, doctrine-update-phrase.md (Artifact 27), and operators-weekly.md",
-        "sealed stays false with seal_reason naming the missing sealing step until a real proof_hash exists \u2014 a hash is never typed in by hand to make a week look sealed",
+        "Sealing is explicit and recomputable: run_week(seal=True) lands a proof_hash through afproof and records it in proof/sealing.json, which is written after the hashing and excluded from its own hash list. Without seal the week says sealed false with a seal_reason naming the missing step. A hash typed in by hand is forgery, and so is prose claiming a seal the receipt does not carry",
         "A real zero-booking week is reported FAIL with its cause named, is complete, and is never retried or back-filled; the Doctrine Update Phrase on a FAIL must name the cause rather than describe intentions",
         "Escalations fire on the streaks, not on mood: three consecutive FAIL weeks means LOOP_REBUILD_REQUIRED (the loop is the worst-performing harness); three weeks where C_t rises with zero bookings means WEIGHTS_INVALID",
         "The week is not done because it feels done: Sentinel Prime holds fleet termination authority and is specification-only today, so fleet status stays BLOCKED_PENDING_SENTINEL even when a task-level verdict is PASS",
@@ -357,7 +357,7 @@
           "A weekly review that produces prose is a diary.",
           "BASELINE_ONLY is honest and is not a PASS.",
           "Zero bookings is a verdict, never a gap to fill in.",
-          "Nothing is sealed until a hash exists; sealed false is the truthful default.",
+          "Nothing is sealed until a hash exists, and the receipt \u2014 not the prose \u2014 is where the hash lives.",
           "Three FAIL weeks names the loop, not the week."
         ],
         "failure_protocol": {
