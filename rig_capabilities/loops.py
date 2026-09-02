@@ -1625,7 +1625,10 @@ def doctor() -> dict:
     rep["spec_errors"] = bad
     a = _read_active()
     rep["active_runs"] = {k: v for k, v in a.get("by_cwd", {}).items()}
-    rep["ok"] = (not bad) and all(v["wired"] for v in rep["wiring"].values())
+    rep["missing_installs"] = [f"{sid}@{h}" for sid, v in rep["loop_skills"].items()
+                               for h, ok in v["installed"].items() if not ok]
+    # ok means: every spec parses, every harness is wired, every loop-skill is installed everywhere
+    rep["ok"] = (not bad) and all(v["wired"] for v in rep["wiring"].values()) and not rep["missing_installs"]
     return rep
 
 

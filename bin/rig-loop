@@ -298,6 +298,8 @@ def cmd_doctor(a):
         print("SPEC ERRORS:")
         for e in rep["spec_errors"]:
             print(f"  {e['id']}: {e['error']}")
+    if rep.get("missing_installs"):
+        print("MISSING INSTALLS: " + ", ".join(rep["missing_installs"]))
     print("OK" if rep["ok"] else "NOT OK")
     return 0 if rep["ok"] else 1
 

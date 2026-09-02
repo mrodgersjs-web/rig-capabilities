@@ -306,6 +306,18 @@ class V20Tests(TempState):
         self.assertEqual(res["action"], "deny")
         self.assertEqual(L.load_run(run["run_id"])["status"], "parked")
 
+    def test_doctor_not_ok_when_a_loop_skill_is_missing_from_a_harness(self):
+        old_roots = dict(L.SKILL_ROOTS)
+        try:
+            for h in L.HARNESSES:
+                L.SKILL_ROOTS[h] = self.root / "empty" / h
+            rep = L.doctor()
+            self.assertFalse(rep["ok"])
+            self.assertIn("iqrsqpi-v20@claude", rep["missing_installs"])
+        finally:
+            L.SKILL_ROOTS.clear()
+            L.SKILL_ROOTS.update(old_roots)
+
     def test_detect_harness_from_env(self):
         old = dict(os.environ)
         try:
