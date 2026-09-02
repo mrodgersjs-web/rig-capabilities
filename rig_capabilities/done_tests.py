@@ -100,8 +100,15 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
             continue
         results.append(_run_form(repo, form, arg, mcp_call))
     runnable = [r for r in results if r["ok"] is not None]
+    # `pass: true` must say how much of it was actually executed. An entry the runner
+    # cannot parse (house convention allows prose done_when rows, and mutating MCP
+    # entries are deliberately never invoked) is skipped, so without this count a
+    # green verdict silently hides the checks that never ran.
+    unrunnable = [{"form": r.get("form"), "detail": r.get("detail")}
+                  for r in results if r["ok"] is None]
     return {"id": asset_id, "pass": bool(runnable) and all(r["ok"] for r in runnable),
-            "results": results}
+            "ran": len(runnable), "unrunnable": len(unrunnable),
+            "unrunnable_forms": unrunnable, "results": results}
 
 
 def quality_run(repo, lane: str | None = None) -> dict:
