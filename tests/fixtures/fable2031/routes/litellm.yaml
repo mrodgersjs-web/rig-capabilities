@@ -1,0 +1,54 @@
+model_list:
+  - model_name: rig-local-first
+    litellm_params:
+      model: openai/qwen3.8:27b
+      api_base: http://192.168.68.53:11434/v1
+      api_key: local-only
+      timeout: 120
+
+  - model_name: rig-blackwell-flash
+    litellm_params:
+      model: openai/blackwell-qwen38-flash
+      api_base: http://192.168.68.90:8011/v1
+      api_key: local-only
+      timeout: 120
+
+  - model_name: rig-anthropic
+    litellm_params:
+      model: anthropic/claude-opus-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+      timeout: 180
+
+  - model_name: rig-gpt-56
+    litellm_params:
+      model: openai/gpt-5.6-sol
+      api_key: os.environ/OPENAI_API_KEY
+      timeout: 180
+
+  - model_name: rig-kimi
+    litellm_params:
+      model: openrouter/moonshotai/kimi-k3
+      api_key: os.environ/OPENROUTER_API_KEY
+      timeout: 180
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 0
+  allowed_fails: 0
+  cooldown_time: 30
+  timeout: 180
+  fallbacks:
+    - rig-local-first:
+        - rig-blackwell-flash
+        - rig-anthropic
+        - rig-gpt-56
+        - rig-kimi
+  context_window_fallbacks:
+    - rig-local-first:
+        - rig-blackwell-flash
+        - rig-anthropic
+        - rig-gpt-56
+        - rig-kimi
+
+litellm_settings:
+  drop_params: true

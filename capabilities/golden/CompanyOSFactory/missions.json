@@ -1,0 +1,167 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "CompanyOSFactory",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "missions": [
+    {
+      "id": "companyosfactory-mh-01-skill-genesis-session",
+      "title": "Skill genesis golden run",
+      "origin": "capabilities/harnesses/mh-01-skill-genesis-session.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/mh-01-skill-genesis-session.yaml",
+        "seed: forge one goal harness whose every gate names an executable proof"
+      ],
+      "input_sha256": "838952a092fe7cc2f51eef9588eddd37c94f6518a481b70b8a3ab973002692cd",
+      "cost_budget_usd": 7.0,
+      "turn_budget": 30,
+      "gates": [
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "idp_integrity",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "companyosfactory-mh-03-agent-composition-session",
+      "title": "Agent composition golden run",
+      "origin": "capabilities/harnesses/mh-03-agent-composition-session.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/mh-03-agent-composition-session.yaml",
+        "seed: compose one agent from verified capabilities and prove its install red-path"
+      ],
+      "input_sha256": "cf2cc5009a950f140fc9e682a7e98f767aa1aaa76e9311ea6defd80969991fac",
+      "cost_budget_usd": 9.0,
+      "turn_budget": 40,
+      "gates": [
+        {
+          "id": "acl_jake",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "companyosfactory-mh-05-asset-pruning-session",
+      "title": "Asset pruning golden run",
+      "origin": "capabilities/harnesses/mh-05-asset-pruning-session.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/mh-05-asset-pruning-session.yaml",
+        "seed: prune unverifiable catalog assets with a dry-run amputation report"
+      ],
+      "input_sha256": "574402262e964d355ee675fb1bf24e62da31b004e81fb525ce4a3598eb7b9608",
+      "cost_budget_usd": 5.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "idp_integrity",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:0013a7effde694c45d1cdfdc9df4c089ad359b6ea4f0de355d3dc8f782e80eef"
+}

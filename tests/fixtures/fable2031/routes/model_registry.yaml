@@ -1,0 +1,84 @@
+version: 2026-07-24.3
+registry_role: shared_model_routing_source_for_codex_claude_hermes
+last_reviewed_at: 2026-07-24T18:37:22+00:00
+
+sources:
+  hermes_config:
+    path: /Users/rig128gb/.hermes/config.yaml
+    generated_by: hermes-config-guard
+    generated_at: 2026-06-21T01:14:22.615362+00:00
+  fleet_proof:
+    path: /Users/rig128gb/.rig/proof/fleet-proofpacket-model-bringup-post.json
+    generated_at: 2026-07-14T22:06:44.360061+00:00
+    proof_hash: b9f0ecbd6f772a24
+    status_summary: { GREEN: 8, MODEL_NOT_FOUND: 1 }
+    freshness_rule: regenerate_before_claiming_live_node_status
+
+policy:
+  default_order:
+    - blackwell_vllm_lan
+    - anthropic_or_openai_paid_manual
+  rules:
+    - LAN-first for RIG nodes; Tailscale is explicit fallback evidence, not primary truth.
+    - Do not pull, load, restart, dispatch remote agents, rotate credentials, publish, push, or merge without Mike approval.
+
+agent_surfaces:
+  hermes:
+    primary_source: /Users/rig128gb/.hermes/cache/model_catalog.json
+    default_provider: rig-qwen38-lan
+    default_model: qwen3.8:27b
+    proof_harness: /Users/rig128gb/.hermes/bin/rig-agent-model-harness
+    rule: keep provider model lists in sync with Hermes model_catalog providers where possible.
+
+providers:
+  blackwell-daily:
+    lane: Blackwell
+    route: LAN
+    api: openai_compatible_chat_completions
+    base_url: http://192.168.68.90:8011/v1
+    default_model: blackwell-qwen38-flash
+    context_window: 262144
+    usable_input_budget: 240000
+    max_output_tokens: 8192
+    cost_per_mtok: { input: 0.0, output: 0.0 }
+    models:
+      - blackwell-qwen38-flash
+    performance:
+      measured_stream_decode_tokens_per_second_median: 208.20
+      independently_verified_this_run: true
+    promotion_gate: ACTIVE_BLACKWELL_QWEN38_FLASH on 2026-08-27; inventory, exact chat, tool call, 262K context, five-run 200+ stream gate, and boot restore passed.
+    proof: /Users/rig128gb/.rig/proof/qwen38-blackwell-hotswap-20260826/proofpacket.json
+
+  anthropic-cloud:
+    lane: Anthropic
+    route: cloud
+    api: anthropic_messages
+    default_model: claude-opus-5
+    context_window: 1000000
+    max_output_tokens: 32768
+    default: true
+    cost_per_mtok: { input: 5.0, output: 25.0 }
+    models:
+      - claude-opus-5
+    promotion_gate: ACTIVE_DEFAULT_PAID_ROUTE; daily driver per the routing policy card.
+    proof: /Users/rig128gb/.rig/proof/anthropic-cloud-daily-20260826/proofpacket.json
+
+fable_training_candidates:
+  research_timebox: 2026-06-20
+  status: rig-256gb_27b_gguf_loaded_and_smoked
+  approval_phrase: user_approved_get_these_setup
+  models:
+    - id: TeichAI/Qwen3.6-27B-Fable-5-Experimental-GGUF
+      url: https://huggingface.co/TeichAI/Qwen3.6-27B-Fable-5-Experimental-GGUF
+      size: 27B
+      format: GGUF
+      preferred_quant: Q4_K_M first, then benchmark Q5_K_M/Q8_0 if memory headroom allows
+      target_lanes:
+        - rig-256gb
+      runtime_hint: Ollama or llama.cpp OpenAI-compatible server
+      promotion_gate: PASSED on rig-256gb LAN with clean blob-backed Ollama alias fable-qwen3.6-27b:Q4_K_M; fleet ProofPacket must be regenerated before fresh live claims.
+
+benchmarks_required_before_promotion:
+  - fresh fleet proof with LAN evidence and separate fallback route evidence
+  - model inventory contains the exact promoted model id
+  - chat probe returns non-empty assistant content

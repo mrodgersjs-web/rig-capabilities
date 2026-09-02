@@ -1,0 +1,168 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "Strategy",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "truncation_policy": "Three of the nine source cards are truncated at source; no mission may score content that is not on disk. Phase 11 body and Phase 12 do not exist.",
+  "missions": [
+    {
+      "id": "strategy-2031-capability-map",
+      "title": "2031 capability map golden run",
+      "origin": "rig_capabilities.corpus.scan_corpus",
+      "band": "A3",
+      "origin_kind": "driver",
+      "inputs": [
+        "rig_capabilities.corpus.scan_corpus",
+        "seed: scan the nine-card corpus, classify every card, and build a validatable register"
+      ],
+      "input_sha256": "d7d953dc4bc12716ceb0fca1a4b0fdad1e3fa8e69c9b5369e18901ee3d8edec3",
+      "cost_budget_usd": 8.0,
+      "turn_budget": 40,
+      "gates": [
+        {
+          "id": "corpus_refusal",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "register",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "strategy-realign-week",
+      "title": "Weekly Realign golden run",
+      "origin": "rig_capabilities.realign.run_week",
+      "band": "A3",
+      "origin_kind": "driver",
+      "inputs": [
+        "rig_capabilities.realign.run_week",
+        "seed: score one ISO week against the prior sealed week with real bookings"
+      ],
+      "input_sha256": "4af33cd36bb1f1b5f904b2281b26c16be142df21ac28f189b377e71c02f9536c",
+      "cost_budget_usd": 4.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "stage_order",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "register",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "strategy-known-expert-os-phase",
+      "title": "Known Expert OS phase golden run",
+      "origin": "rig_capabilities.expert_os.advance",
+      "band": "A2",
+      "origin_kind": "driver",
+      "inputs": [
+        "rig_capabilities.expert_os.advance",
+        "seed: advance Phases 1-10 against their verbatim gates; 11 truncated, 12 absent"
+      ],
+      "input_sha256": "242dac73f1ab768bccc2e6b26748e1990b994bde65a58f59a50bd3bd9bc25e75",
+      "cost_budget_usd": 3.0,
+      "turn_budget": 20,
+      "gates": [
+        {
+          "id": "evidence_ledger",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.25
+        },
+        {
+          "id": "stage_order",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.15
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.1
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:90f1c462f52958a542f93bd6d7f43a02485449c4000c2638ccc9760915f36550"
+}

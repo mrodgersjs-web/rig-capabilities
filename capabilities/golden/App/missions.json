@@ -1,0 +1,149 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "App",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "missions": [
+    {
+      "id": "app-hA-04-code-debug",
+      "title": "Code debug golden run",
+      "origin": "capabilities/harnesses/hA-04-code-debug.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hA-04-code-debug.yaml",
+        "seed: reproduce one failing deterministic test, fix at the source, keep the suite green"
+      ],
+      "input_sha256": "1d3ccc8ebfa9223eee1461ebcf1a8243c4b982bde547cfa049f83836d680b6b6",
+      "cost_budget_usd": 4.0,
+      "turn_budget": 20,
+      "gates": [
+        {
+          "id": "suite",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "app-hA-09-api-design",
+      "title": "API design golden run",
+      "origin": "capabilities/harnesses/hA-09-api-design.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hA-09-api-design.yaml",
+        "seed: design one resource-shaped API contract with error and pagination semantics"
+      ],
+      "input_sha256": "fe7c7dba377ae1c067ae2130ab096c94831a2ac8ce62ba97e6c9cc3004b2cc4f",
+      "cost_budget_usd": 5.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "app-hA-13-code-security-audit",
+      "title": "Security audit golden run",
+      "origin": "capabilities/harnesses/hA-13-code-security-audit.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hA-13-code-security-audit.yaml",
+        "seed: audit one service surface for injection, authorization, and secret-leak paths"
+      ],
+      "input_sha256": "01a945dc234890791a2f0f61fde631b7dc4bebb26dbd8263c9ca9bf979ecec2d",
+      "cost_budget_usd": 6.0,
+      "turn_budget": 30,
+      "gates": [
+        {
+          "id": "suite",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "acl_jake",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:494273df6014b1cd9653d789562fb48f42b6b51fceb56c79b2db6a620b886de9"
+}

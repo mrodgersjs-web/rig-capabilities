@@ -1,0 +1,149 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "Design",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "missions": [
+    {
+      "id": "design-hC-01-design-system-audit",
+      "title": "Design system audit golden run",
+      "origin": "capabilities/harnesses/hC-01-design-system-audit.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hC-01-design-system-audit.yaml",
+        "seed: audit one canonical design-system surface and emit token gaps with proofs"
+      ],
+      "input_sha256": "3f7bd904241fdf45c0c0e07f370a2879fc819a5a065bb1aa8c7b27bccbb736af",
+      "cost_budget_usd": 6.0,
+      "turn_budget": 30,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "design-hC-05-design-token-build",
+      "title": "Design token build golden run",
+      "origin": "capabilities/harnesses/hC-05-design-token-build.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hC-05-design-token-build.yaml",
+        "seed: translate one approved design surface into a token set with named gaps"
+      ],
+      "input_sha256": "e6967f5d1c41c128395280cc2715905dd3f81ad84008215a9afea87756b9e437",
+      "cost_budget_usd": 4.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "design-hC-08-dashboard-design",
+      "title": "Dashboard design golden run",
+      "origin": "capabilities/harnesses/hC-08-dashboard-design.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hC-08-dashboard-design.yaml",
+        "seed: lay out one data-dense operational screen against the locked token set"
+      ],
+      "input_sha256": "f509b02d8f792c0910486fed1721c15bd0801a0e81f830f76367ca0261064607",
+      "cost_budget_usd": 8.0,
+      "turn_budget": 40,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:d40773c282c97b53654f8fbaba0d162b54558faa51e648ac5c414b16f9cde64f"
+}

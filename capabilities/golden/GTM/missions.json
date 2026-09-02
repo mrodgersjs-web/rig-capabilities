@@ -1,0 +1,151 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "GTM",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "tool_choice_audit": "REQUIRED",
+  "tool_choice_note": "Card breaking change 1: forced tool use returns an error. GTM (Salesforce/Apollo) is flagged unsigned in the fleet card, so any reachable harness that pins tool_choice blocks promotion for this Studio.",
+  "missions": [
+    {
+      "id": "gtm-hD-01-outbound-sequence",
+      "title": "Outbound sequence golden run",
+      "origin": "capabilities/harnesses/hD-01-outbound-sequence.yaml",
+      "band": "A4",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hD-01-outbound-sequence.yaml",
+        "seed: draft one gated outbound sequence for one ICP; no send without Gate-D"
+      ],
+      "input_sha256": "25f6ea7c7b59c5d6051de33139c5fef70b6e4aef9e95a3540df2d62fd3dd909c",
+      "cost_budget_usd": 3.0,
+      "turn_budget": 18,
+      "gates": [
+        {
+          "id": "acl_jake",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "gtm-hD-02-icp-research",
+      "title": "ICP research golden run",
+      "origin": "capabilities/harnesses/hD-02-icp-research.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hD-02-icp-research.yaml",
+        "seed: derive one ICP definition from register evidence with named falsifiers"
+      ],
+      "input_sha256": "e02fd657039865f620d0253781c8776085c10e03d50bb3f690897b43ae64e3cb",
+      "cost_budget_usd": 5.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "gtm-hD-09-market-research",
+      "title": "Market research golden run",
+      "origin": "capabilities/harnesses/hD-09-market-research.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hD-09-market-research.yaml",
+        "seed: size one vertical from sourced evidence and name the buyer role"
+      ],
+      "input_sha256": "6f0db1afd006bb3388d9425fa538758b32fd6525c5e206a8c47c55d33f29de32",
+      "cost_budget_usd": 8.0,
+      "turn_budget": 36,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:04ce638ac34053512fddc5064820edaaa356c49497277c8fd413244b24c67078"
+}

@@ -1,0 +1,149 @@
+{
+  "schema": "rig.golden.missions.v1",
+  "studio": "LinkedIn",
+  "status": "DORMANT",
+  "manifest_version": "v1",
+  "promotion_gate": "DORMANT_PER_STUDIO_UNTIL_E_STAGE_LOWER_THAN_OPUS5",
+  "source_card": "Claude Fable 5.1 — RIG Fleet Install, Routing Policy & Breaking-Change Audit (shipped Sept 1, 2026)",
+  "model_id": "claude-fable-5-1",
+  "candidate_family": "fable",
+  "verifier_family": "opus",
+  "baseline_model": "Opus 5 (high effort)",
+  "baseline_family": "opus",
+  "recorded_under": null,
+  "baseline_recorded": false,
+  "auto_fallback_to_earlier_family": false,
+  "e_stage_weights": {
+    "fail": 0.6,
+    "cost": 0.25,
+    "turns": 0.15
+  },
+  "budget_basis": "Declared ceilings per mission, not measured spend; measured cost_usd and turns arrive only in replay records",
+  "measures": {
+    "quality_contract": "rig_capabilities.quality.check_asset()['score'] / 100",
+    "okf_trust": "rig_capabilities.okf.trust() — declared range [0..1]"
+  },
+  "missions": [
+    {
+      "id": "linkedin-hB-04-linkedin-post-session",
+      "title": "LinkedIn post golden run",
+      "origin": "capabilities/harnesses/hB-04-linkedin-post-session.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hB-04-linkedin-post-session.yaml",
+        "seed: draft one founder-voice post from a named source with a citation line"
+      ],
+      "input_sha256": "00f38f6fdb1d3b33f370a2dde4d27aafdbaf7051b7aa49ef9630a6b983ce2f01",
+      "cost_budget_usd": 2.0,
+      "turn_budget": 12,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "linkedin-hB-05-seo-content-session",
+      "title": "SEO content golden run",
+      "origin": "capabilities/harnesses/hB-05-seo-content-session.yaml",
+      "band": "A2",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hB-05-seo-content-session.yaml",
+        "seed: produce one search-intent page outline with heading and source plan"
+      ],
+      "input_sha256": "74ab07577c54b554305df81fc146cfc735b7b8f2378f4cf3828fba66b6f9d7d5",
+      "cost_budget_usd": 4.0,
+      "turn_budget": 20,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    },
+    {
+      "id": "linkedin-hB-09-content-audit-session",
+      "title": "Content audit golden run",
+      "origin": "capabilities/harnesses/hB-09-content-audit-session.yaml",
+      "band": "A3",
+      "origin_kind": "harness",
+      "inputs": [
+        "capabilities/harnesses/hB-09-content-audit-session.yaml",
+        "seed: audit a published corpus for decay and name the remediation order"
+      ],
+      "input_sha256": "151a19aebc63a06a6685efc94b5fa34d8de7a94f473b7644cab309bf37dba636",
+      "cost_budget_usd": 5.0,
+      "turn_budget": 24,
+      "gates": [
+        {
+          "id": "index_fresh",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.3
+        },
+        {
+          "id": "done_tests",
+          "blocking": true,
+          "scored": false,
+          "weight": 0.2
+        },
+        {
+          "id": "quality_contract",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.3
+        },
+        {
+          "id": "okf_trust",
+          "blocking": false,
+          "scored": true,
+          "weight": 0.2
+        }
+      ]
+    }
+  ],
+  "manifest_signature": "sha256:652ac648ebc5828ec098815ad2228ee92aa72a17dd21bf3350545b074bed1261"
+}

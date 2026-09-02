@@ -1,0 +1,58 @@
+model:
+  provider: rig-qwen38-lan
+  name: qwen3.8:27b
+  context_length: 262144
+
+providers:
+  rig-opus5:
+    name: Claude Opus 5 · Anthropic subscription gateway
+    base_url: http://127.0.0.1:8768
+    api_mode: anthropic_messages
+    discover_models: false
+    key_cmd: /bin/cat /Users/rig128gb/.omp/auth-gateway.token
+    default_model: anthropic/claude-opus-5
+    context_length: 1000000
+    models:
+      anthropic/claude-opus-5:
+        context_length: 1000000
+        max_tokens: 4096
+        supports_tools: true
+  rig-fable5:
+    name: Claude Fable 5 · Anthropic subscription gateway
+    base_url: http://127.0.0.1:8768
+    api_mode: anthropic_messages
+    discover_models: false
+    key_cmd: /bin/cat /Users/rig128gb/.omp/auth-gateway.token
+    default_model: anthropic/claude-fable-5
+    context_length: 1000000
+    models:
+      anthropic/claude-fable-5:
+        context_length: 1000000
+        max_tokens: 512
+        supports_tools: true
+  rig-qwen38-lan:
+    name: Qwen3.8 27B (LAN)
+    base_url: http://192.168.68.53:11434/v1
+    api_mode: chat_completions
+    discover_models: false
+    default_model: qwen3.8:27b
+    context_length: 262144
+    models:
+      qwen3.8:27b:
+        context_length: 262144
+        supports_tools: true
+fallback_providers: []
+toolsets:
+  - browser
+  - terminal
+agent:
+  max_turns: 60
+  temperature: 0.3
+model_aliases:
+  opus5:
+    provider: rig-opus5
+    model: anthropic/claude-opus-5
+_config_version: 39
+cron:
+  enabled: false
+  timezone: America/Denver
