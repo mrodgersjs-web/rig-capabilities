@@ -77,7 +77,7 @@ Open:
 
 - LLM overlay 62/300 — doctor reports complete=false; resume `concepts-build --llm --n 300`.
 - Public ACL catalog **20** canonical (10 commands + 9 hooks + rig-office-docs); 21 on this
-  workstation, the extra one being `iqrsqpi.md` from an external harness root. 13 of 14 canonical
+  workstation, the extra one being `iqrsqpi.md` from an external harness root. 14 of 15 canonical
   skills stay private — `rig-office-docs` is the one skill that has always been public. Counts are
   `surface.public_assets(Repo('.'))` filtered to `source == "canonical"`; the canonical figure is
   reproducible from the tree, the workstation figure is not, so the sentence names both. The three

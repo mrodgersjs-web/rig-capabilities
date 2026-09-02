@@ -52,6 +52,7 @@ NEW_ASSETS = (
     "capabilities-round.md",
     "capabilities-done-test.md",
     "rig-capabilities-register.md",
+    "experience-lesson-records",
 )
 
 
