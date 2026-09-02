@@ -5,6 +5,7 @@ import os
 from pathlib import Path
 
 from . import __version__
+from . import surface_tools
 from .catalog import KINDS, Repo
 from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
@@ -484,6 +485,53 @@ TOOLS = [
                                        "(cursor, gemini, opencode, goose)"}},
         },
     },
+    {
+        "name": "capabilities_asset_hygiene",
+        "description": (
+            "What the estate cannot see about itself, in one call. Runs three "
+            "committed scanners through their own main() and reports: every "
+            "declared great_example path that does not resolve (with "
+            "declared/resolved/dangling), any asset whose frontmatter is longer "
+            "than catalog.HEAD_BYTES and therefore invisible to the loader "
+            "(clean/other_unloaded/truncation_hidden), and the six-slot skill "
+            "contract tally over `scope` (default `capabilities`). "
+            "`ran` means all three reported; `clean` means none of them found "
+            "debt. Debt is named in `debt`, never folded into a pass and never "
+            "into a refusal. Read-only: no writes, no network, no model."
+        ),
+        "inputSchema": {"type": "object", "properties": {
+            "scope": {"type": "string",
+                      "description": "repo-relative subtree for the contract "
+                                     "scan; default capabilities. Anything "
+                                     "outside the repo is refused."}},
+        },
+    },
+    {
+        "name": "capabilities_verdict",
+        "description": (
+            "One verdict from one verdict module, through that module's own CLI "
+            "path, so the answer cannot disagree with `./bin/rig-capabilities`. "
+            "check: paired_runs (adjudicate a paired-run ledger: argv = [ledger]; "
+            "verdicts CORRELATED/DETERMINISTIC/MIXED/INCONCLUSIVE), skill_contract "
+            "(argv = [path...]; six-slot A/I/C/P/pi/E declarations), "
+            "acceptance_identity (argv = [record]; stamps who ran and who "
+            "verified, and refuses self-verification — it never writes the stamp "
+            "here), lifecycle (argv = [plan, --example|--assets F, --now D, "
+            "[--plant P]]), topology (argv = [validate, path, [--mutate M, "
+            "[--expect PREFIX]] | [dispatch, path, src, dst, payload]). "
+            "Relative paths are repo-relative. `ran` is not `clean`: exit 1 "
+            "means it ran and found debt, exit >=2 means it refused. Read-only."
+        ),
+        "inputSchema": {"type": "object", "properties": {
+            "check": {"type": "string",
+                      "enum": ["paired_runs", "skill_contract",
+                               "acceptance_identity", "lifecycle", "topology"]},
+            "argv": {"type": "array", "items": {"type": "string"},
+                     "description": "tokens the named module expects, minus the "
+                                    "program name; repo-relative paths only"}},
+            "required": ["check"],
+        },
+    },
 ]
 
 
@@ -895,7 +943,26 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return mcp_wire.plan()
 
 
+    def asset_hygiene(args: dict):
+        out = surface_tools.asset_hygiene(repo, args)
+        if not out.get("ran"):
+            # A scanner that refused is not a clean estate. Same rule as `round`:
+            # the refusal has to reach the surface that a cron reads.
+            raise ToolError(f"asset_hygiene refused: {out.get('reason')}")
+        return out
+
+    def verdict(args: dict):
+        out = surface_tools.verdict(repo, args)
+        if not out.get("ran"):
+            raise ToolError(
+                f"{out.get('check') or 'verdict'} refused "
+                f"(exit_code={out.get('exit_code')}): {out.get('reason')}")
+        return out
+
+
     handlers = {
+        "capabilities_asset_hygiene": asset_hygiene,
+        "capabilities_verdict": verdict,
         "capabilities_search": search,
         "capabilities_get": get,
         "capabilities_list": lst,

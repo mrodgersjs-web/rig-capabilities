@@ -3,9 +3,15 @@
 v50: Discover AI capability increment — catalog truncation guard, phantom-asset
 scanner fix, round verdict propagation, evidence/contract/identity/lifecycle/topology
 surfaces. VERSION_LADDER 1–50.
+
+50.1.0 adds the two read-only surface tools that put those verdicts where an
+agent can actually call them: `capabilities_asset_hygiene` and
+`capabilities_verdict` (`rig_capabilities/surface_tools.py`). Minor, not a new
+ladder rung: no ROADMAP row or proof packet rides on it yet, so the major stays
+pinned to rung 50 by `tests.test_version_coherence`.
 Stdlib only.
 """
-__version__ = "50.0.0"
+__version__ = "50.1.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
