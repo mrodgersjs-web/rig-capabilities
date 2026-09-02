@@ -136,9 +136,14 @@ over production command records only (canary excluded), exit 0. `TAC=/Users/rig1
   `~/.rig/config/omp-flash-default.yml`, `~/.rig/route-table.json`, `~/.omp/agent/config.yml`.
 - Gate-D denial rolls back itself: dry-run artifacts remain, state reads
   `BLOCKED_PENDING_GATE_D`, nothing partial is applied.
-- The weekly cron ships as dormant in-repo `.context/realign/cron-job.json`;
-  `~/.hermes/cron/jobs.json` and `~/.hermes/scripts/rig-weekly-evolution.sh` are never modified,
-  so there is no scheduler state to unwind.
+- The weekly cron ships dormant as the tracked spec `data/fable2031/realign-cron-dormant.json`
+  (`enabled: false`, `gate_d_required: true`, `dry_by_default: true`, `state: "DORMANT"`), with the
+  gitignored `.context/realign/cron-job.json` kept as a local staging pointer. Nothing reads either
+  file: `~/.hermes/cron/jobs.json` and `~/.hermes/scripts/rig-weekly-evolution.sh` are never modified,
+  so there is no scheduler state to unwind — rollback is deleting a JSON that no daemon polls.
+- Dormancy is stated inside the artifact rather than only in prose, because the first version of this
+  line claimed the spec was "in-repo" while it lived in a gitignored directory: a fresh clone could not
+  see the cadence, the gate, or the honest-state block at all.
 - Verifier trees are throwaway `/tmp` dirs from `git archive <sha> | tar -x`; delete the dir.
   No clones, no worktrees, no registry entries exist to remove (L2).
 

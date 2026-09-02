@@ -1,0 +1,42 @@
+{
+ "activation_note": "Staged only. This file is NOT a registration. Activation is a separate Gate-D action: Mike types APPROVE <run_id> for a gate-d run whose action names this job, after a real baseline week exists (~/.rig/proof/gate-d-<run_id>.json with status APPROVED). Until then the Hermes fleet stays frozen and neither ~/.hermes/cron/jobs.json nor ~/.hermes/scripts/rig-weekly-evolution.sh is modified by this branch. A recurring job that scores zero weeks is a diary with a timer; it is armed only once BASELINE_ONLY has been replaced by a sealed prior week.",
+ "cadence": "0 17 * * 0",
+ "cadence_note": "Sunday 17:00 local, after the week's last realign input lands; ISO week key is computed by realign.week_id(), never by the cron string.",
+ "command": "cd /Users/rig128gb/Developer/rig-capabilities && ./bin/rig-capabilities realign --apply",
+ "dry_by_default": true,
+ "dry_run_command": "cd /Users/rig128gb/Developer/rig-capabilities && ./bin/rig-capabilities realign",
+ "enabled": false,
+ "escalations": [
+  "LOOP_REBUILD_REQUIRED after three consecutive FAIL weeks",
+  "WEIGHTS_INVALID after three weeks of rising C_t with zero bookings"
+ ],
+ "gate_d_required": true,
+ "harness": "capabilities/harnesses/rig-realign-v1.yaml",
+ "honest_state": {
+  "bookings": "ZERO by evidence \u2014 a record counts only when its qualification_evidence_path resolves to a file on disk; a zero-booking week is FAIL with its cause named, complete, never retried",
+  "corpus": "unreported unclassified_rate is not zero: the week FAILs rather than inheriting last week's number; rate > 0.10 is CORPUS_REFUSAL with nothing written",
+  "first_week": "BASELINE_ONLY when no prior sealed week exists \u2014 never reported as an improvement, no delta C_t may be claimed",
+  "fleet_status": "BLOCKED_PENDING_SENTINEL while Sentinel Prime is specification-only, even when a task-level verdict is PASS"
+ },
+ "id": "rig-realign-weekly",
+ "loop_spec": "capabilities/loops/rig-realign-weekly.md",
+ "loop_spec_state": {
+  "cadence": "0 17 * * 0",
+  "gate_d_required": true,
+  "note": "The committed loop/command specs are the contract; this file is a local staging pointer and is gitignored by design.",
+  "state": "DORMANT"
+ },
+ "name": "RIG Realign Loop v1 \u2014 weekly convergence scoring",
+ "not_read_by": [
+  "~/.hermes/cron/jobs.json",
+  "~/.hermes/scripts/rig-weekly-evolution.sh",
+  "launchd",
+  "this repo's own code"
+ ],
+ "staging_pointer": ".context/realign/cron-job.json (gitignored; a local pointer, not the contract)",
+ "state": "DORMANT",
+ "tracked_canonical_copy": "data/fable2031/realign-cron-dormant.json",
+ "why_tracked": "A dormant job that exists only in a gitignored directory ships nothing: a fresh clone cannot see the cadence, the gate, or the honest state. The tracked copy is the contract; enabled:false and gate_d_required:true make dormancy explicit in the artifact itself.",
+ "working_directory": "/Users/rig128gb/Developer/rig-capabilities",
+ "writes": ".context/realign/<YYYY-Www>/ \u2014 five artifacts (register-diff.json, convergence_report.md, proof/*.json, doctrine-update-phrase.md, operators-weekly.md), each with sealed: false until afproof lands a real proof_hash"
+}
