@@ -456,7 +456,11 @@ class Repo:
                 raise ValueError(f"target exists and differs ({dst}); re-run with force=true "
                                  "(existing copy is backed up)")
             ts = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
-            bak = dst.with_name(f"{dst.name}.bak-{ts}")
+            # Backups live in a dot-directory beside the target: a sibling `<name>.bak-<ts>`
+            # inside a skills root is loaded by every harness as a duplicate skill.
+            bak_dir = target_dir / ".rig-backups"
+            bak_dir.mkdir(parents=True, exist_ok=True)
+            bak = bak_dir / f"{dst.name}.bak-{ts}"
             dst.rename(bak)
             action = "replaced"
         if src.is_dir():

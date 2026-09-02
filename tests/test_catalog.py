@@ -93,8 +93,10 @@ class CatalogTests(unittest.TestCase):
             self.repo.install("guard.sh", "claude")
         out = self.repo.install("guard.sh", "claude", force=True)
         self.assertEqual("replaced", out["status"])
-        baks = list((self.tmp / "claude" / "hooks").glob("guard.sh.bak-*"))
+        baks = list((self.tmp / "claude" / "hooks" / ".rig-backups").glob("guard.sh.bak-*"))
         self.assertEqual(1, len(baks))
+        # never a sibling backup: a `<name>.bak-*` inside a skills/hooks root is loaded as a duplicate
+        self.assertEqual([], list((self.tmp / "claude" / "hooks").glob("guard.sh.bak-*")))
 
     def test_external_requires_canonicalize(self):
         with self.assertRaises(ValueError) as cm:
