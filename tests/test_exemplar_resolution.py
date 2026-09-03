@@ -59,6 +59,13 @@ NEW_ASSETS = (
     "immutable-surface-guard.sh",
     "attempt-identity-ledger-and-equal-weight",
     "evidence-retrieval-citations-gate",
+    # RIG Lattice System bundle — six assets, six real exemplars.
+    "rig-lattice-system",
+    "rig-deviation-engines",
+    "rig-idea-generator",
+    "rig-lattice-system.md",
+    "rig-lattice-router.md",
+    "mh-07-lattice-application-session.yaml",
 )
 
 
