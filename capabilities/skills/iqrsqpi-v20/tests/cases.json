@@ -2,123 +2,1019 @@
   {
     "name": "I1 needs a declared confidence and registers the done-tests as checks",
     "steps": [
-      {"activate": {}},
-      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/app.py"}}, "expect": {"action": "deny", "reason_contains": "CONFIDENCE"}},
-      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/out.txt\n- file:<cwd>/out.txt\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"}},
-      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": false, "reason_contains": "CONFIDENCE"}},
-      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/out.txt\n- file:<cwd>/out.txt\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## CONFIDENCE\n0.7\n"}},
-      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
-      {"assert": {"field": "checks"}, "expect": {"len": 2}},
-      {"assert": {"field": "predicted"}, "expect": {"value": 0.7}}
+      {
+        "activate": {}
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/src/app.py"
+          }
+        },
+        "expect": {
+          "action": "deny",
+          "reason_contains": "CONFIDENCE"
+        }
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/out.txt\n- file:<cwd>/out.txt\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "CONFIDENCE"
+        }
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/out.txt\n- file:<cwd>/out.txt\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## UNCERTAINTY-LEVEL\n1\n## QUESTION-QUOTA\n3\n## CONFIDENCE\n0.7\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "assert": {
+          "field": "checks"
+        },
+        "expect": {
+          "len": 2
+        }
+      },
+      {
+        "assert": {
+          "field": "predicted"
+        },
+        "expect": {
+          "value": 0.7
+        }
+      }
     ]
   },
   {
-    "name": "Q1 needs a persona panel; R needs graded sources and a DRY Q-R loop",
+    "name": "Q1 needs 3 lenses and >=300 tagged questions; R needs graded sources, a ## Corpus log (>=10 effective queries) and a DRY Q-R loop",
     "steps": [
-      {"activate": {}},
-      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## CONFIDENCE\n0.5\n"}},
-      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "questions.md", "content": "## Panel\n- [lens:security-engineer]\n## Questions\n- [ASSUMED] x (assumption: y)\n"}},
-      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": false, "reason_contains": "three persona lenses"}},
-      {"write": {"path": "questions.md", "content": "## Panel\n- [lens:security-engineer]\n- [lens:sre]\n- [lens:founder]\n## Questions\n- [ASSUMED] x (assumption: y)\n"}},
-      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- https://example.com\n## Gaps\n- none\n"}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "grade"}},
-      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- https://example.com (HIGH)\n## Gaps\n- none\n"}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "passes recorded"}},
-      {"qr": {"new_unknowns": 3}},
-      {"qr": {"new_unknowns": 1}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "not dry"}},
-      {"qr": {"new_unknowns": 0}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}}
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## UNCERTAINTY-LEVEL\n1\n## QUESTION-QUOTA\n3\n## CONFIDENCE\n0.5\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:security-engineer]\n## Questions\n- [ASSUMED] x (assumption: y)\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "three persona lenses"
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:security-engineer]\n- [lens:sre]\n- [lens:founder]\n## Questions\n- [ASSUMED] x (assumption: y)\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "300"
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:security-engineer]\n- [lens:sre]\n- [lens:founder]\n## Questions\n- [ASSUMED] q1 (assumption: a1)\n- [ASSUMED] q2 (assumption: a2)\n- [ASSUMED] q3 (assumption: a3)\n- [ASSUMED] q4 (assumption: a4)\n- [ASSUMED] q5 (assumption: a5)\n- [ASSUMED] q6 (assumption: a6)\n- [ASSUMED] q7 (assumption: a7)\n- [ASSUMED] q8 (assumption: a8)\n- [ASSUMED] q9 (assumption: a9)\n- [ASSUMED] q10 (assumption: a10)\n- [ASSUMED] q11 (assumption: a11)\n- [ASSUMED] q12 (assumption: a12)\n- [ASSUMED] q13 (assumption: a13)\n- [ASSUMED] q14 (assumption: a14)\n- [ASSUMED] q15 (assumption: a15)\n- [ASSUMED] q16 (assumption: a16)\n- [ASSUMED] q17 (assumption: a17)\n- [ASSUMED] q18 (assumption: a18)\n- [ASSUMED] q19 (assumption: a19)\n- [ASSUMED] q20 (assumption: a20)\n- [ASSUMED] q21 (assumption: a21)\n- [ASSUMED] q22 (assumption: a22)\n- [ASSUMED] q23 (assumption: a23)\n- [ASSUMED] q24 (assumption: a24)\n- [ASSUMED] q25 (assumption: a25)\n- [ASSUMED] q26 (assumption: a26)\n- [ASSUMED] q27 (assumption: a27)\n- [ASSUMED] q28 (assumption: a28)\n- [ASSUMED] q29 (assumption: a29)\n- [ASSUMED] q30 (assumption: a30)\n- [ASSUMED] q31 (assumption: a31)\n- [ASSUMED] q32 (assumption: a32)\n- [ASSUMED] q33 (assumption: a33)\n- [ASSUMED] q34 (assumption: a34)\n- [ASSUMED] q35 (assumption: a35)\n- [ASSUMED] q36 (assumption: a36)\n- [ASSUMED] q37 (assumption: a37)\n- [ASSUMED] q38 (assumption: a38)\n- [ASSUMED] q39 (assumption: a39)\n- [ASSUMED] q40 (assumption: a40)\n- [ASSUMED] q41 (assumption: a41)\n- [ASSUMED] q42 (assumption: a42)\n- [ASSUMED] q43 (assumption: a43)\n- [ASSUMED] q44 (assumption: a44)\n- [ASSUMED] q45 (assumption: a45)\n- [ASSUMED] q46 (assumption: a46)\n- [ASSUMED] q47 (assumption: a47)\n- [ASSUMED] q48 (assumption: a48)\n- [ASSUMED] q49 (assumption: a49)\n- [ASSUMED] q50 (assumption: a50)\n- [ASSUMED] q51 (assumption: a51)\n- [ASSUMED] q52 (assumption: a52)\n- [ASSUMED] q53 (assumption: a53)\n- [ASSUMED] q54 (assumption: a54)\n- [ASSUMED] q55 (assumption: a55)\n- [ASSUMED] q56 (assumption: a56)\n- [ASSUMED] q57 (assumption: a57)\n- [ASSUMED] q58 (assumption: a58)\n- [ASSUMED] q59 (assumption: a59)\n- [ASSUMED] q60 (assumption: a60)\n- [ASSUMED] q61 (assumption: a61)\n- [ASSUMED] q62 (assumption: a62)\n- [ASSUMED] q63 (assumption: a63)\n- [ASSUMED] q64 (assumption: a64)\n- [ASSUMED] q65 (assumption: a65)\n- [ASSUMED] q66 (assumption: a66)\n- [ASSUMED] q67 (assumption: a67)\n- [ASSUMED] q68 (assumption: a68)\n- [ASSUMED] q69 (assumption: a69)\n- [ASSUMED] q70 (assumption: a70)\n- [ASSUMED] q71 (assumption: a71)\n- [ASSUMED] q72 (assumption: a72)\n- [ASSUMED] q73 (assumption: a73)\n- [ASSUMED] q74 (assumption: a74)\n- [ASSUMED] q75 (assumption: a75)\n- [ASSUMED] q76 (assumption: a76)\n- [ASSUMED] q77 (assumption: a77)\n- [ASSUMED] q78 (assumption: a78)\n- [ASSUMED] q79 (assumption: a79)\n- [ASSUMED] q80 (assumption: a80)\n- [ASSUMED] q81 (assumption: a81)\n- [ASSUMED] q82 (assumption: a82)\n- [ASSUMED] q83 (assumption: a83)\n- [ASSUMED] q84 (assumption: a84)\n- [ASSUMED] q85 (assumption: a85)\n- [ASSUMED] q86 (assumption: a86)\n- [ASSUMED] q87 (assumption: a87)\n- [ASSUMED] q88 (assumption: a88)\n- [ASSUMED] q89 (assumption: a89)\n- [ASSUMED] q90 (assumption: a90)\n- [ASSUMED] q91 (assumption: a91)\n- [ASSUMED] q92 (assumption: a92)\n- [ASSUMED] q93 (assumption: a93)\n- [ASSUMED] q94 (assumption: a94)\n- [ASSUMED] q95 (assumption: a95)\n- [ASSUMED] q96 (assumption: a96)\n- [ASSUMED] q97 (assumption: a97)\n- [ASSUMED] q98 (assumption: a98)\n- [ASSUMED] q99 (assumption: a99)\n- [ASSUMED] q100 (assumption: a100)\n- [ASSUMED] q101 (assumption: a101)\n- [ASSUMED] q102 (assumption: a102)\n- [ASSUMED] q103 (assumption: a103)\n- [ASSUMED] q104 (assumption: a104)\n- [ASSUMED] q105 (assumption: a105)\n- [ASSUMED] q106 (assumption: a106)\n- [ASSUMED] q107 (assumption: a107)\n- [ASSUMED] q108 (assumption: a108)\n- [ASSUMED] q109 (assumption: a109)\n- [ASSUMED] q110 (assumption: a110)\n- [ASSUMED] q111 (assumption: a111)\n- [ASSUMED] q112 (assumption: a112)\n- [ASSUMED] q113 (assumption: a113)\n- [ASSUMED] q114 (assumption: a114)\n- [ASSUMED] q115 (assumption: a115)\n- [ASSUMED] q116 (assumption: a116)\n- [ASSUMED] q117 (assumption: a117)\n- [ASSUMED] q118 (assumption: a118)\n- [ASSUMED] q119 (assumption: a119)\n- [ASSUMED] q120 (assumption: a120)\n- [ASSUMED] q121 (assumption: a121)\n- [ASSUMED] q122 (assumption: a122)\n- [ASSUMED] q123 (assumption: a123)\n- [ASSUMED] q124 (assumption: a124)\n- [ASSUMED] q125 (assumption: a125)\n- [ASSUMED] q126 (assumption: a126)\n- [ASSUMED] q127 (assumption: a127)\n- [ASSUMED] q128 (assumption: a128)\n- [ASSUMED] q129 (assumption: a129)\n- [ASSUMED] q130 (assumption: a130)\n- [ASSUMED] q131 (assumption: a131)\n- [ASSUMED] q132 (assumption: a132)\n- [ASSUMED] q133 (assumption: a133)\n- [ASSUMED] q134 (assumption: a134)\n- [ASSUMED] q135 (assumption: a135)\n- [ASSUMED] q136 (assumption: a136)\n- [ASSUMED] q137 (assumption: a137)\n- [ASSUMED] q138 (assumption: a138)\n- [ASSUMED] q139 (assumption: a139)\n- [ASSUMED] q140 (assumption: a140)\n- [ASSUMED] q141 (assumption: a141)\n- [ASSUMED] q142 (assumption: a142)\n- [ASSUMED] q143 (assumption: a143)\n- [ASSUMED] q144 (assumption: a144)\n- [ASSUMED] q145 (assumption: a145)\n- [ASSUMED] q146 (assumption: a146)\n- [ASSUMED] q147 (assumption: a147)\n- [ASSUMED] q148 (assumption: a148)\n- [ASSUMED] q149 (assumption: a149)\n- [ASSUMED] q150 (assumption: a150)\n- [ASSUMED] q151 (assumption: a151)\n- [ASSUMED] q152 (assumption: a152)\n- [ASSUMED] q153 (assumption: a153)\n- [ASSUMED] q154 (assumption: a154)\n- [ASSUMED] q155 (assumption: a155)\n- [ASSUMED] q156 (assumption: a156)\n- [ASSUMED] q157 (assumption: a157)\n- [ASSUMED] q158 (assumption: a158)\n- [ASSUMED] q159 (assumption: a159)\n- [ASSUMED] q160 (assumption: a160)\n- [ASSUMED] q161 (assumption: a161)\n- [ASSUMED] q162 (assumption: a162)\n- [ASSUMED] q163 (assumption: a163)\n- [ASSUMED] q164 (assumption: a164)\n- [ASSUMED] q165 (assumption: a165)\n- [ASSUMED] q166 (assumption: a166)\n- [ASSUMED] q167 (assumption: a167)\n- [ASSUMED] q168 (assumption: a168)\n- [ASSUMED] q169 (assumption: a169)\n- [ASSUMED] q170 (assumption: a170)\n- [ASSUMED] q171 (assumption: a171)\n- [ASSUMED] q172 (assumption: a172)\n- [ASSUMED] q173 (assumption: a173)\n- [ASSUMED] q174 (assumption: a174)\n- [ASSUMED] q175 (assumption: a175)\n- [ASSUMED] q176 (assumption: a176)\n- [ASSUMED] q177 (assumption: a177)\n- [ASSUMED] q178 (assumption: a178)\n- [ASSUMED] q179 (assumption: a179)\n- [ASSUMED] q180 (assumption: a180)\n- [ASSUMED] q181 (assumption: a181)\n- [ASSUMED] q182 (assumption: a182)\n- [ASSUMED] q183 (assumption: a183)\n- [ASSUMED] q184 (assumption: a184)\n- [ASSUMED] q185 (assumption: a185)\n- [ASSUMED] q186 (assumption: a186)\n- [ASSUMED] q187 (assumption: a187)\n- [ASSUMED] q188 (assumption: a188)\n- [ASSUMED] q189 (assumption: a189)\n- [ASSUMED] q190 (assumption: a190)\n- [ASSUMED] q191 (assumption: a191)\n- [ASSUMED] q192 (assumption: a192)\n- [ASSUMED] q193 (assumption: a193)\n- [ASSUMED] q194 (assumption: a194)\n- [ASSUMED] q195 (assumption: a195)\n- [ASSUMED] q196 (assumption: a196)\n- [ASSUMED] q197 (assumption: a197)\n- [ASSUMED] q198 (assumption: a198)\n- [ASSUMED] q199 (assumption: a199)\n- [ASSUMED] q200 (assumption: a200)\n- [ASSUMED] q201 (assumption: a201)\n- [ASSUMED] q202 (assumption: a202)\n- [ASSUMED] q203 (assumption: a203)\n- [ASSUMED] q204 (assumption: a204)\n- [ASSUMED] q205 (assumption: a205)\n- [ASSUMED] q206 (assumption: a206)\n- [ASSUMED] q207 (assumption: a207)\n- [ASSUMED] q208 (assumption: a208)\n- [ASSUMED] q209 (assumption: a209)\n- [ASSUMED] q210 (assumption: a210)\n- [ASSUMED] q211 (assumption: a211)\n- [ASSUMED] q212 (assumption: a212)\n- [ASSUMED] q213 (assumption: a213)\n- [ASSUMED] q214 (assumption: a214)\n- [ASSUMED] q215 (assumption: a215)\n- [ASSUMED] q216 (assumption: a216)\n- [ASSUMED] q217 (assumption: a217)\n- [ASSUMED] q218 (assumption: a218)\n- [ASSUMED] q219 (assumption: a219)\n- [ASSUMED] q220 (assumption: a220)\n- [ASSUMED] q221 (assumption: a221)\n- [ASSUMED] q222 (assumption: a222)\n- [ASSUMED] q223 (assumption: a223)\n- [ASSUMED] q224 (assumption: a224)\n- [ASSUMED] q225 (assumption: a225)\n- [ASSUMED] q226 (assumption: a226)\n- [ASSUMED] q227 (assumption: a227)\n- [ASSUMED] q228 (assumption: a228)\n- [ASSUMED] q229 (assumption: a229)\n- [ASSUMED] q230 (assumption: a230)\n- [ASSUMED] q231 (assumption: a231)\n- [ASSUMED] q232 (assumption: a232)\n- [ASSUMED] q233 (assumption: a233)\n- [ASSUMED] q234 (assumption: a234)\n- [ASSUMED] q235 (assumption: a235)\n- [ASSUMED] q236 (assumption: a236)\n- [ASSUMED] q237 (assumption: a237)\n- [ASSUMED] q238 (assumption: a238)\n- [ASSUMED] q239 (assumption: a239)\n- [ASSUMED] q240 (assumption: a240)\n- [ASSUMED] q241 (assumption: a241)\n- [ASSUMED] q242 (assumption: a242)\n- [ASSUMED] q243 (assumption: a243)\n- [ASSUMED] q244 (assumption: a244)\n- [ASSUMED] q245 (assumption: a245)\n- [ASSUMED] q246 (assumption: a246)\n- [ASSUMED] q247 (assumption: a247)\n- [ASSUMED] q248 (assumption: a248)\n- [ASSUMED] q249 (assumption: a249)\n- [ASSUMED] q250 (assumption: a250)\n- [ASSUMED] q251 (assumption: a251)\n- [ASSUMED] q252 (assumption: a252)\n- [ASSUMED] q253 (assumption: a253)\n- [ASSUMED] q254 (assumption: a254)\n- [ASSUMED] q255 (assumption: a255)\n- [ASSUMED] q256 (assumption: a256)\n- [ASSUMED] q257 (assumption: a257)\n- [ASSUMED] q258 (assumption: a258)\n- [ASSUMED] q259 (assumption: a259)\n- [ASSUMED] q260 (assumption: a260)\n- [ASSUMED] q261 (assumption: a261)\n- [ASSUMED] q262 (assumption: a262)\n- [ASSUMED] q263 (assumption: a263)\n- [ASSUMED] q264 (assumption: a264)\n- [ASSUMED] q265 (assumption: a265)\n- [ASSUMED] q266 (assumption: a266)\n- [ASSUMED] q267 (assumption: a267)\n- [ASSUMED] q268 (assumption: a268)\n- [ASSUMED] q269 (assumption: a269)\n- [ASSUMED] q270 (assumption: a270)\n- [ASSUMED] q271 (assumption: a271)\n- [ASSUMED] q272 (assumption: a272)\n- [ASSUMED] q273 (assumption: a273)\n- [ASSUMED] q274 (assumption: a274)\n- [ASSUMED] q275 (assumption: a275)\n- [ASSUMED] q276 (assumption: a276)\n- [ASSUMED] q277 (assumption: a277)\n- [ASSUMED] q278 (assumption: a278)\n- [ASSUMED] q279 (assumption: a279)\n- [ASSUMED] q280 (assumption: a280)\n- [ASSUMED] q281 (assumption: a281)\n- [ASSUMED] q282 (assumption: a282)\n- [ASSUMED] q283 (assumption: a283)\n- [ASSUMED] q284 (assumption: a284)\n- [ASSUMED] q285 (assumption: a285)\n- [ASSUMED] q286 (assumption: a286)\n- [ASSUMED] q287 (assumption: a287)\n- [ASSUMED] q288 (assumption: a288)\n- [ASSUMED] q289 (assumption: a289)\n- [ASSUMED] q290 (assumption: a290)\n- [ASSUMED] q291 (assumption: a291)\n- [ASSUMED] q292 (assumption: a292)\n- [ASSUMED] q293 (assumption: a293)\n- [ASSUMED] q294 (assumption: a294)\n- [ASSUMED] q295 (assumption: a295)\n- [ASSUMED] q296 (assumption: a296)\n- [ASSUMED] q297 (assumption: a297)\n- [ASSUMED] q298 (assumption: a298)\n- [ASSUMED] q299 (assumption: a299)\n- [ASSUMED] q300 (assumption: a300)"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- https://example.com\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "grade"
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- https://example.com (HIGH)\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "passes recorded"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 3
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 1
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "not dry"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 0
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "Corpus"
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- https://example.com (HIGH)\n## Corpus\n- corpus:rig_brain \"topic 1\" -> hits: 2\n- corpus:rig_brain \"topic 2\" -> hits: 3\n- corpus:rig_brain \"topic 3\" -> hits: 4\n- corpus:rig_brain \"topic 4\" -> hits: 5\n- corpus:rig_brain \"topic 5\" -> hits: 6\n- corpus:rig_brain \"topic 6\" -> hits: 7\n- corpus:rig_brain \"topic 7\" -> hits: 8\n- corpus:rig_brain \"topic 8\" -> hits: 9\n- corpus:rig_brain \"topic 9\" -> hits: 10\n- corpus:rig_brain \"topic 10\" -> hits: 11\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      }
     ]
   },
   {
     "name": "S needs acceptance + slices; B runs child slices whose evidence rolls up; the parent is restored when a slice closes",
     "steps": [
-      {"activate": {}},
-      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/src/a.py\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## CONFIDENCE\n0.8\n"}},
-      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "questions.md", "content": "## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n"}},
-      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- s (MED)\n## Gaps\n- none\n"}},
-      {"qr": {"new_unknowns": 1}},
-      {"qr": {"new_unknowns": 0}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
-      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": false, "reason_contains": "Slices"}},
-      {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Slices\n- s1 — done: test -f src/a.py\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
-      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "build.md", "content": "## Slices-done\n- none yet\n## Changed\n- none\n"}},
-      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": false, "reason_contains": "slice run(s)"}},
-      {"slice": {"start": "s1"}, "expect": {"ok": true, "child": true}},
-      {"assert": {"field": "parent_run_id"}, "expect": {"active_is": "self"}},
-      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "allow"}},
-      {"write": {"path": "<cwd>/src/a.py", "content": "print(1)\n"}},
-      {"write": {"path": "slice.md", "content": "## Slice\ns1\n## Changed\n- src/a.py\n"}},
-      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
-      {"check_add": "test -f <cwd>/src/a.py"},
-      {"plant": {"name": "rm-a", "red": "test -f <cwd>/src/zz.py", "green": "test -f <cwd>/src/a.py"}, "expect": {"red_ok": true, "green_ok": true}},
-      {"write": {"path": "verify.md", "content": "## Checks\n- ok\n## Planted-failure\n- rm-a\n"}},
-      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "commit.md", "content": "## Commit\nabc1234 feat: s1\n"}},
-      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}},
-      {"slice": {"parent": true}},
-      {"assert": {"field": "children"}, "expect": {"len": 1, "active_is": "self"}},
-      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
-      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/b.py"}}, "expect": {"action": "allow"}}
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/src/a.py\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## UNCERTAINTY-LEVEL\n1\n## QUESTION-QUOTA\n3\n## CONFIDENCE\n0.8\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n- [ASSUMED] generated q2 (assumption: a2)\n- [ASSUMED] generated q3 (assumption: a3)\n- [ASSUMED] generated q4 (assumption: a4)\n- [ASSUMED] generated q5 (assumption: a5)\n- [ASSUMED] generated q6 (assumption: a6)\n- [ASSUMED] generated q7 (assumption: a7)\n- [ASSUMED] generated q8 (assumption: a8)\n- [ASSUMED] generated q9 (assumption: a9)\n- [ASSUMED] generated q10 (assumption: a10)\n- [ASSUMED] generated q11 (assumption: a11)\n- [ASSUMED] generated q12 (assumption: a12)\n- [ASSUMED] generated q13 (assumption: a13)\n- [ASSUMED] generated q14 (assumption: a14)\n- [ASSUMED] generated q15 (assumption: a15)\n- [ASSUMED] generated q16 (assumption: a16)\n- [ASSUMED] generated q17 (assumption: a17)\n- [ASSUMED] generated q18 (assumption: a18)\n- [ASSUMED] generated q19 (assumption: a19)\n- [ASSUMED] generated q20 (assumption: a20)\n- [ASSUMED] generated q21 (assumption: a21)\n- [ASSUMED] generated q22 (assumption: a22)\n- [ASSUMED] generated q23 (assumption: a23)\n- [ASSUMED] generated q24 (assumption: a24)\n- [ASSUMED] generated q25 (assumption: a25)\n- [ASSUMED] generated q26 (assumption: a26)\n- [ASSUMED] generated q27 (assumption: a27)\n- [ASSUMED] generated q28 (assumption: a28)\n- [ASSUMED] generated q29 (assumption: a29)\n- [ASSUMED] generated q30 (assumption: a30)\n- [ASSUMED] generated q31 (assumption: a31)\n- [ASSUMED] generated q32 (assumption: a32)\n- [ASSUMED] generated q33 (assumption: a33)\n- [ASSUMED] generated q34 (assumption: a34)\n- [ASSUMED] generated q35 (assumption: a35)\n- [ASSUMED] generated q36 (assumption: a36)\n- [ASSUMED] generated q37 (assumption: a37)\n- [ASSUMED] generated q38 (assumption: a38)\n- [ASSUMED] generated q39 (assumption: a39)\n- [ASSUMED] generated q40 (assumption: a40)\n- [ASSUMED] generated q41 (assumption: a41)\n- [ASSUMED] generated q42 (assumption: a42)\n- [ASSUMED] generated q43 (assumption: a43)\n- [ASSUMED] generated q44 (assumption: a44)\n- [ASSUMED] generated q45 (assumption: a45)\n- [ASSUMED] generated q46 (assumption: a46)\n- [ASSUMED] generated q47 (assumption: a47)\n- [ASSUMED] generated q48 (assumption: a48)\n- [ASSUMED] generated q49 (assumption: a49)\n- [ASSUMED] generated q50 (assumption: a50)\n- [ASSUMED] generated q51 (assumption: a51)\n- [ASSUMED] generated q52 (assumption: a52)\n- [ASSUMED] generated q53 (assumption: a53)\n- [ASSUMED] generated q54 (assumption: a54)\n- [ASSUMED] generated q55 (assumption: a55)\n- [ASSUMED] generated q56 (assumption: a56)\n- [ASSUMED] generated q57 (assumption: a57)\n- [ASSUMED] generated q58 (assumption: a58)\n- [ASSUMED] generated q59 (assumption: a59)\n- [ASSUMED] generated q60 (assumption: a60)\n- [ASSUMED] generated q61 (assumption: a61)\n- [ASSUMED] generated q62 (assumption: a62)\n- [ASSUMED] generated q63 (assumption: a63)\n- [ASSUMED] generated q64 (assumption: a64)\n- [ASSUMED] generated q65 (assumption: a65)\n- [ASSUMED] generated q66 (assumption: a66)\n- [ASSUMED] generated q67 (assumption: a67)\n- [ASSUMED] generated q68 (assumption: a68)\n- [ASSUMED] generated q69 (assumption: a69)\n- [ASSUMED] generated q70 (assumption: a70)\n- [ASSUMED] generated q71 (assumption: a71)\n- [ASSUMED] generated q72 (assumption: a72)\n- [ASSUMED] generated q73 (assumption: a73)\n- [ASSUMED] generated q74 (assumption: a74)\n- [ASSUMED] generated q75 (assumption: a75)\n- [ASSUMED] generated q76 (assumption: a76)\n- [ASSUMED] generated q77 (assumption: a77)\n- [ASSUMED] generated q78 (assumption: a78)\n- [ASSUMED] generated q79 (assumption: a79)\n- [ASSUMED] generated q80 (assumption: a80)\n- [ASSUMED] generated q81 (assumption: a81)\n- [ASSUMED] generated q82 (assumption: a82)\n- [ASSUMED] generated q83 (assumption: a83)\n- [ASSUMED] generated q84 (assumption: a84)\n- [ASSUMED] generated q85 (assumption: a85)\n- [ASSUMED] generated q86 (assumption: a86)\n- [ASSUMED] generated q87 (assumption: a87)\n- [ASSUMED] generated q88 (assumption: a88)\n- [ASSUMED] generated q89 (assumption: a89)\n- [ASSUMED] generated q90 (assumption: a90)\n- [ASSUMED] generated q91 (assumption: a91)\n- [ASSUMED] generated q92 (assumption: a92)\n- [ASSUMED] generated q93 (assumption: a93)\n- [ASSUMED] generated q94 (assumption: a94)\n- [ASSUMED] generated q95 (assumption: a95)\n- [ASSUMED] generated q96 (assumption: a96)\n- [ASSUMED] generated q97 (assumption: a97)\n- [ASSUMED] generated q98 (assumption: a98)\n- [ASSUMED] generated q99 (assumption: a99)\n- [ASSUMED] generated q100 (assumption: a100)\n- [ASSUMED] generated q101 (assumption: a101)\n- [ASSUMED] generated q102 (assumption: a102)\n- [ASSUMED] generated q103 (assumption: a103)\n- [ASSUMED] generated q104 (assumption: a104)\n- [ASSUMED] generated q105 (assumption: a105)\n- [ASSUMED] generated q106 (assumption: a106)\n- [ASSUMED] generated q107 (assumption: a107)\n- [ASSUMED] generated q108 (assumption: a108)\n- [ASSUMED] generated q109 (assumption: a109)\n- [ASSUMED] generated q110 (assumption: a110)\n- [ASSUMED] generated q111 (assumption: a111)\n- [ASSUMED] generated q112 (assumption: a112)\n- [ASSUMED] generated q113 (assumption: a113)\n- [ASSUMED] generated q114 (assumption: a114)\n- [ASSUMED] generated q115 (assumption: a115)\n- [ASSUMED] generated q116 (assumption: a116)\n- [ASSUMED] generated q117 (assumption: a117)\n- [ASSUMED] generated q118 (assumption: a118)\n- [ASSUMED] generated q119 (assumption: a119)\n- [ASSUMED] generated q120 (assumption: a120)\n- [ASSUMED] generated q121 (assumption: a121)\n- [ASSUMED] generated q122 (assumption: a122)\n- [ASSUMED] generated q123 (assumption: a123)\n- [ASSUMED] generated q124 (assumption: a124)\n- [ASSUMED] generated q125 (assumption: a125)\n- [ASSUMED] generated q126 (assumption: a126)\n- [ASSUMED] generated q127 (assumption: a127)\n- [ASSUMED] generated q128 (assumption: a128)\n- [ASSUMED] generated q129 (assumption: a129)\n- [ASSUMED] generated q130 (assumption: a130)\n- [ASSUMED] generated q131 (assumption: a131)\n- [ASSUMED] generated q132 (assumption: a132)\n- [ASSUMED] generated q133 (assumption: a133)\n- [ASSUMED] generated q134 (assumption: a134)\n- [ASSUMED] generated q135 (assumption: a135)\n- [ASSUMED] generated q136 (assumption: a136)\n- [ASSUMED] generated q137 (assumption: a137)\n- [ASSUMED] generated q138 (assumption: a138)\n- [ASSUMED] generated q139 (assumption: a139)\n- [ASSUMED] generated q140 (assumption: a140)\n- [ASSUMED] generated q141 (assumption: a141)\n- [ASSUMED] generated q142 (assumption: a142)\n- [ASSUMED] generated q143 (assumption: a143)\n- [ASSUMED] generated q144 (assumption: a144)\n- [ASSUMED] generated q145 (assumption: a145)\n- [ASSUMED] generated q146 (assumption: a146)\n- [ASSUMED] generated q147 (assumption: a147)\n- [ASSUMED] generated q148 (assumption: a148)\n- [ASSUMED] generated q149 (assumption: a149)\n- [ASSUMED] generated q150 (assumption: a150)\n- [ASSUMED] generated q151 (assumption: a151)\n- [ASSUMED] generated q152 (assumption: a152)\n- [ASSUMED] generated q153 (assumption: a153)\n- [ASSUMED] generated q154 (assumption: a154)\n- [ASSUMED] generated q155 (assumption: a155)\n- [ASSUMED] generated q156 (assumption: a156)\n- [ASSUMED] generated q157 (assumption: a157)\n- [ASSUMED] generated q158 (assumption: a158)\n- [ASSUMED] generated q159 (assumption: a159)\n- [ASSUMED] generated q160 (assumption: a160)\n- [ASSUMED] generated q161 (assumption: a161)\n- [ASSUMED] generated q162 (assumption: a162)\n- [ASSUMED] generated q163 (assumption: a163)\n- [ASSUMED] generated q164 (assumption: a164)\n- [ASSUMED] generated q165 (assumption: a165)\n- [ASSUMED] generated q166 (assumption: a166)\n- [ASSUMED] generated q167 (assumption: a167)\n- [ASSUMED] generated q168 (assumption: a168)\n- [ASSUMED] generated q169 (assumption: a169)\n- [ASSUMED] generated q170 (assumption: a170)\n- [ASSUMED] generated q171 (assumption: a171)\n- [ASSUMED] generated q172 (assumption: a172)\n- [ASSUMED] generated q173 (assumption: a173)\n- [ASSUMED] generated q174 (assumption: a174)\n- [ASSUMED] generated q175 (assumption: a175)\n- [ASSUMED] generated q176 (assumption: a176)\n- [ASSUMED] generated q177 (assumption: a177)\n- [ASSUMED] generated q178 (assumption: a178)\n- [ASSUMED] generated q179 (assumption: a179)\n- [ASSUMED] generated q180 (assumption: a180)\n- [ASSUMED] generated q181 (assumption: a181)\n- [ASSUMED] generated q182 (assumption: a182)\n- [ASSUMED] generated q183 (assumption: a183)\n- [ASSUMED] generated q184 (assumption: a184)\n- [ASSUMED] generated q185 (assumption: a185)\n- [ASSUMED] generated q186 (assumption: a186)\n- [ASSUMED] generated q187 (assumption: a187)\n- [ASSUMED] generated q188 (assumption: a188)\n- [ASSUMED] generated q189 (assumption: a189)\n- [ASSUMED] generated q190 (assumption: a190)\n- [ASSUMED] generated q191 (assumption: a191)\n- [ASSUMED] generated q192 (assumption: a192)\n- [ASSUMED] generated q193 (assumption: a193)\n- [ASSUMED] generated q194 (assumption: a194)\n- [ASSUMED] generated q195 (assumption: a195)\n- [ASSUMED] generated q196 (assumption: a196)\n- [ASSUMED] generated q197 (assumption: a197)\n- [ASSUMED] generated q198 (assumption: a198)\n- [ASSUMED] generated q199 (assumption: a199)\n- [ASSUMED] generated q200 (assumption: a200)\n- [ASSUMED] generated q201 (assumption: a201)\n- [ASSUMED] generated q202 (assumption: a202)\n- [ASSUMED] generated q203 (assumption: a203)\n- [ASSUMED] generated q204 (assumption: a204)\n- [ASSUMED] generated q205 (assumption: a205)\n- [ASSUMED] generated q206 (assumption: a206)\n- [ASSUMED] generated q207 (assumption: a207)\n- [ASSUMED] generated q208 (assumption: a208)\n- [ASSUMED] generated q209 (assumption: a209)\n- [ASSUMED] generated q210 (assumption: a210)\n- [ASSUMED] generated q211 (assumption: a211)\n- [ASSUMED] generated q212 (assumption: a212)\n- [ASSUMED] generated q213 (assumption: a213)\n- [ASSUMED] generated q214 (assumption: a214)\n- [ASSUMED] generated q215 (assumption: a215)\n- [ASSUMED] generated q216 (assumption: a216)\n- [ASSUMED] generated q217 (assumption: a217)\n- [ASSUMED] generated q218 (assumption: a218)\n- [ASSUMED] generated q219 (assumption: a219)\n- [ASSUMED] generated q220 (assumption: a220)\n- [ASSUMED] generated q221 (assumption: a221)\n- [ASSUMED] generated q222 (assumption: a222)\n- [ASSUMED] generated q223 (assumption: a223)\n- [ASSUMED] generated q224 (assumption: a224)\n- [ASSUMED] generated q225 (assumption: a225)\n- [ASSUMED] generated q226 (assumption: a226)\n- [ASSUMED] generated q227 (assumption: a227)\n- [ASSUMED] generated q228 (assumption: a228)\n- [ASSUMED] generated q229 (assumption: a229)\n- [ASSUMED] generated q230 (assumption: a230)\n- [ASSUMED] generated q231 (assumption: a231)\n- [ASSUMED] generated q232 (assumption: a232)\n- [ASSUMED] generated q233 (assumption: a233)\n- [ASSUMED] generated q234 (assumption: a234)\n- [ASSUMED] generated q235 (assumption: a235)\n- [ASSUMED] generated q236 (assumption: a236)\n- [ASSUMED] generated q237 (assumption: a237)\n- [ASSUMED] generated q238 (assumption: a238)\n- [ASSUMED] generated q239 (assumption: a239)\n- [ASSUMED] generated q240 (assumption: a240)\n- [ASSUMED] generated q241 (assumption: a241)\n- [ASSUMED] generated q242 (assumption: a242)\n- [ASSUMED] generated q243 (assumption: a243)\n- [ASSUMED] generated q244 (assumption: a244)\n- [ASSUMED] generated q245 (assumption: a245)\n- [ASSUMED] generated q246 (assumption: a246)\n- [ASSUMED] generated q247 (assumption: a247)\n- [ASSUMED] generated q248 (assumption: a248)\n- [ASSUMED] generated q249 (assumption: a249)\n- [ASSUMED] generated q250 (assumption: a250)\n- [ASSUMED] generated q251 (assumption: a251)\n- [ASSUMED] generated q252 (assumption: a252)\n- [ASSUMED] generated q253 (assumption: a253)\n- [ASSUMED] generated q254 (assumption: a254)\n- [ASSUMED] generated q255 (assumption: a255)\n- [ASSUMED] generated q256 (assumption: a256)\n- [ASSUMED] generated q257 (assumption: a257)\n- [ASSUMED] generated q258 (assumption: a258)\n- [ASSUMED] generated q259 (assumption: a259)\n- [ASSUMED] generated q260 (assumption: a260)\n- [ASSUMED] generated q261 (assumption: a261)\n- [ASSUMED] generated q262 (assumption: a262)\n- [ASSUMED] generated q263 (assumption: a263)\n- [ASSUMED] generated q264 (assumption: a264)\n- [ASSUMED] generated q265 (assumption: a265)\n- [ASSUMED] generated q266 (assumption: a266)\n- [ASSUMED] generated q267 (assumption: a267)\n- [ASSUMED] generated q268 (assumption: a268)\n- [ASSUMED] generated q269 (assumption: a269)\n- [ASSUMED] generated q270 (assumption: a270)\n- [ASSUMED] generated q271 (assumption: a271)\n- [ASSUMED] generated q272 (assumption: a272)\n- [ASSUMED] generated q273 (assumption: a273)\n- [ASSUMED] generated q274 (assumption: a274)\n- [ASSUMED] generated q275 (assumption: a275)\n- [ASSUMED] generated q276 (assumption: a276)\n- [ASSUMED] generated q277 (assumption: a277)\n- [ASSUMED] generated q278 (assumption: a278)\n- [ASSUMED] generated q279 (assumption: a279)\n- [ASSUMED] generated q280 (assumption: a280)\n- [ASSUMED] generated q281 (assumption: a281)\n- [ASSUMED] generated q282 (assumption: a282)\n- [ASSUMED] generated q283 (assumption: a283)\n- [ASSUMED] generated q284 (assumption: a284)\n- [ASSUMED] generated q285 (assumption: a285)\n- [ASSUMED] generated q286 (assumption: a286)\n- [ASSUMED] generated q287 (assumption: a287)\n- [ASSUMED] generated q288 (assumption: a288)\n- [ASSUMED] generated q289 (assumption: a289)\n- [ASSUMED] generated q290 (assumption: a290)\n- [ASSUMED] generated q291 (assumption: a291)\n- [ASSUMED] generated q292 (assumption: a292)\n- [ASSUMED] generated q293 (assumption: a293)\n- [ASSUMED] generated q294 (assumption: a294)\n- [ASSUMED] generated q295 (assumption: a295)\n- [ASSUMED] generated q296 (assumption: a296)\n- [ASSUMED] generated q297 (assumption: a297)\n- [ASSUMED] generated q298 (assumption: a298)\n- [ASSUMED] generated q299 (assumption: a299)\n- [ASSUMED] generated q300 (assumption: a300)\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- s (MED)\n## Corpus\n- corpus:rig_brain \"topic 1\" -> hits: 2\n- corpus:rig_brain \"topic 2\" -> hits: 3\n- corpus:rig_brain \"topic 3\" -> hits: 4\n- corpus:rig_brain \"topic 4\" -> hits: 5\n- corpus:rig_brain \"topic 5\" -> hits: 6\n- corpus:rig_brain \"topic 6\" -> hits: 7\n- corpus:rig_brain \"topic 7\" -> hits: 8\n- corpus:rig_brain \"topic 8\" -> hits: 9\n- corpus:rig_brain \"topic 9\" -> hits: 10\n- corpus:rig_brain \"topic 10\" -> hits: 11\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 1
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 0
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "spec.md",
+          "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "S",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "Slices"
+        }
+      },
+      {
+        "write": {
+          "path": "spec.md",
+          "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Slices\n- s1 \u2014 done: test -f src/a.py\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "S",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "build.md",
+          "content": "## Slices-done\n- none yet\n## Changed\n- none\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "B",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "slice run(s)"
+        }
+      },
+      {
+        "slice": {
+          "start": "s1"
+        },
+        "expect": {
+          "ok": true,
+          "child": true
+        }
+      },
+      {
+        "assert": {
+          "field": "parent_run_id"
+        },
+        "expect": {
+          "active_is": "self"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/src/a.py"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "write": {
+          "path": "<cwd>/src/a.py",
+          "content": "print(1)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "slice.md",
+          "content": "## Slice\ns1\n## Changed\n- src/a.py\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "B",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "check_add": "test -f <cwd>/src/a.py"
+      },
+      {
+        "plant": {
+          "name": "rm-a",
+          "red": "test -f <cwd>/src/zz.py",
+          "green": "test -f <cwd>/src/a.py"
+        },
+        "expect": {
+          "red_ok": true,
+          "green_ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "verify.md",
+          "content": "## Checks\n- ok\n## Planted-failure\n- rm-a\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "commit.md",
+          "content": "## Commit\nabc1234 feat: s1\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "C",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true,
+          "run_status": "done"
+        }
+      },
+      {
+        "slice": {
+          "parent": true
+        }
+      },
+      {
+        "assert": {
+          "field": "children"
+        },
+        "expect": {
+          "len": 1,
+          "active_is": "self"
+        }
+      },
+      {
+        "stage": {
+          "id": "B",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/src/b.py"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      }
     ]
   },
   {
     "name": "Q2 needs a cross-family verdict from dispatch; P seals with calibration; I2 needs the handoff",
     "steps": [
-      {"activate": {}},
-      {"write": {"path": "intent.md", "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/src/a.py\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## CONFIDENCE\n0.9\n"}},
-      {"stage": {"id": "I1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "questions.md", "content": "## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n"}},
-      {"stage": {"id": "Q1", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "research.md", "content": "## Findings\n- f\n## Sources\n- s (LOW)\n## Gaps\n- none\n"}},
-      {"qr": {"new_unknowns": 1}},
-      {"qr": {"new_unknowns": 0}},
-      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "spec.md", "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Slices\n- s1 — done: test -f src/a.py\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"}},
-      {"stage": {"id": "S", "status": "pass"}, "expect": {"ok": true}},
-      {"slice": {"start": "s1"}},
-      {"hook": {"event": "pre-tool", "tool_name": "Write", "tool_input": {"file_path": "<cwd>/src/a.py"}}, "expect": {"action": "allow"}},
-      {"write": {"path": "<cwd>/src/a.py", "content": "print(1)\n"}},
-      {"write": {"path": "slice.md", "content": "## Slice\ns1\n## Changed\n- src/a.py\n"}},
-      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
-      {"check_add": "test -f <cwd>/src/a.py"},
-      {"plant": {"name": "rm-a", "red": "test -f <cwd>/src/zz.py", "green": "test -f <cwd>/src/a.py"}},
-      {"write": {"path": "verify.md", "content": "## Checks\n- ok\n## Planted-failure\n- rm-a\n"}},
-      {"stage": {"id": "V", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "commit.md", "content": "## Commit\nabc1234 feat: s1\n"}},
-      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}},
-      {"slice": {"parent": true}},
-      {"write": {"path": "build.md", "content": "## Slices-done\n- s1\n## Changed\n- src/a.py\n"}},
-      {"stage": {"id": "B", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "quality.md", "content": "## Checks\n- done-test green\n## Planted-failure\n- rm-a (slice s1)\n## Verifier\n- family: codex via rig-loop verify\n"}},
-      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "no accepted verdict"}},
-      {"verify": {"family": "test", "mock": "VERIFIED"}, "expect": {"ok": false, "reason_contains": "GEV"}},
-      {"verify": {"family": "codex", "mock": "FAILED"}, "expect": {"ok": true, "verdict": "FAILED"}},
-      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "codex:FAILED"}},
-      {"verify": {"family": "codex", "mock": "VERIFIED"}, "expect": {"ok": true, "verdict": "VERIFIED"}},
-      {"stage": {"id": "Q2", "status": "pass"}, "expect": {"ok": true}},
-      {"seal": {}, "expect": {"ok": true}},
-      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true}},
-      {"write": {"path": "integrate.md", "content": "## Shipped\n- a\n## Not-shipped\n- none\n## Hand-offs\n- none\n## Next-slice\n- b\n"}},
-      {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": false, "reason_contains": "handoff.md"}},
-      {"handoff": {}, "expect": {"ok": true}},
-      {"stage": {"id": "I2", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f <cwd>/src/a.py\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## UNCERTAINTY-LEVEL\n1\n## QUESTION-QUOTA\n3\n## CONFIDENCE\n0.9\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n- [ASSUMED] generated q2 (assumption: a2)\n- [ASSUMED] generated q3 (assumption: a3)\n- [ASSUMED] generated q4 (assumption: a4)\n- [ASSUMED] generated q5 (assumption: a5)\n- [ASSUMED] generated q6 (assumption: a6)\n- [ASSUMED] generated q7 (assumption: a7)\n- [ASSUMED] generated q8 (assumption: a8)\n- [ASSUMED] generated q9 (assumption: a9)\n- [ASSUMED] generated q10 (assumption: a10)\n- [ASSUMED] generated q11 (assumption: a11)\n- [ASSUMED] generated q12 (assumption: a12)\n- [ASSUMED] generated q13 (assumption: a13)\n- [ASSUMED] generated q14 (assumption: a14)\n- [ASSUMED] generated q15 (assumption: a15)\n- [ASSUMED] generated q16 (assumption: a16)\n- [ASSUMED] generated q17 (assumption: a17)\n- [ASSUMED] generated q18 (assumption: a18)\n- [ASSUMED] generated q19 (assumption: a19)\n- [ASSUMED] generated q20 (assumption: a20)\n- [ASSUMED] generated q21 (assumption: a21)\n- [ASSUMED] generated q22 (assumption: a22)\n- [ASSUMED] generated q23 (assumption: a23)\n- [ASSUMED] generated q24 (assumption: a24)\n- [ASSUMED] generated q25 (assumption: a25)\n- [ASSUMED] generated q26 (assumption: a26)\n- [ASSUMED] generated q27 (assumption: a27)\n- [ASSUMED] generated q28 (assumption: a28)\n- [ASSUMED] generated q29 (assumption: a29)\n- [ASSUMED] generated q30 (assumption: a30)\n- [ASSUMED] generated q31 (assumption: a31)\n- [ASSUMED] generated q32 (assumption: a32)\n- [ASSUMED] generated q33 (assumption: a33)\n- [ASSUMED] generated q34 (assumption: a34)\n- [ASSUMED] generated q35 (assumption: a35)\n- [ASSUMED] generated q36 (assumption: a36)\n- [ASSUMED] generated q37 (assumption: a37)\n- [ASSUMED] generated q38 (assumption: a38)\n- [ASSUMED] generated q39 (assumption: a39)\n- [ASSUMED] generated q40 (assumption: a40)\n- [ASSUMED] generated q41 (assumption: a41)\n- [ASSUMED] generated q42 (assumption: a42)\n- [ASSUMED] generated q43 (assumption: a43)\n- [ASSUMED] generated q44 (assumption: a44)\n- [ASSUMED] generated q45 (assumption: a45)\n- [ASSUMED] generated q46 (assumption: a46)\n- [ASSUMED] generated q47 (assumption: a47)\n- [ASSUMED] generated q48 (assumption: a48)\n- [ASSUMED] generated q49 (assumption: a49)\n- [ASSUMED] generated q50 (assumption: a50)\n- [ASSUMED] generated q51 (assumption: a51)\n- [ASSUMED] generated q52 (assumption: a52)\n- [ASSUMED] generated q53 (assumption: a53)\n- [ASSUMED] generated q54 (assumption: a54)\n- [ASSUMED] generated q55 (assumption: a55)\n- [ASSUMED] generated q56 (assumption: a56)\n- [ASSUMED] generated q57 (assumption: a57)\n- [ASSUMED] generated q58 (assumption: a58)\n- [ASSUMED] generated q59 (assumption: a59)\n- [ASSUMED] generated q60 (assumption: a60)\n- [ASSUMED] generated q61 (assumption: a61)\n- [ASSUMED] generated q62 (assumption: a62)\n- [ASSUMED] generated q63 (assumption: a63)\n- [ASSUMED] generated q64 (assumption: a64)\n- [ASSUMED] generated q65 (assumption: a65)\n- [ASSUMED] generated q66 (assumption: a66)\n- [ASSUMED] generated q67 (assumption: a67)\n- [ASSUMED] generated q68 (assumption: a68)\n- [ASSUMED] generated q69 (assumption: a69)\n- [ASSUMED] generated q70 (assumption: a70)\n- [ASSUMED] generated q71 (assumption: a71)\n- [ASSUMED] generated q72 (assumption: a72)\n- [ASSUMED] generated q73 (assumption: a73)\n- [ASSUMED] generated q74 (assumption: a74)\n- [ASSUMED] generated q75 (assumption: a75)\n- [ASSUMED] generated q76 (assumption: a76)\n- [ASSUMED] generated q77 (assumption: a77)\n- [ASSUMED] generated q78 (assumption: a78)\n- [ASSUMED] generated q79 (assumption: a79)\n- [ASSUMED] generated q80 (assumption: a80)\n- [ASSUMED] generated q81 (assumption: a81)\n- [ASSUMED] generated q82 (assumption: a82)\n- [ASSUMED] generated q83 (assumption: a83)\n- [ASSUMED] generated q84 (assumption: a84)\n- [ASSUMED] generated q85 (assumption: a85)\n- [ASSUMED] generated q86 (assumption: a86)\n- [ASSUMED] generated q87 (assumption: a87)\n- [ASSUMED] generated q88 (assumption: a88)\n- [ASSUMED] generated q89 (assumption: a89)\n- [ASSUMED] generated q90 (assumption: a90)\n- [ASSUMED] generated q91 (assumption: a91)\n- [ASSUMED] generated q92 (assumption: a92)\n- [ASSUMED] generated q93 (assumption: a93)\n- [ASSUMED] generated q94 (assumption: a94)\n- [ASSUMED] generated q95 (assumption: a95)\n- [ASSUMED] generated q96 (assumption: a96)\n- [ASSUMED] generated q97 (assumption: a97)\n- [ASSUMED] generated q98 (assumption: a98)\n- [ASSUMED] generated q99 (assumption: a99)\n- [ASSUMED] generated q100 (assumption: a100)\n- [ASSUMED] generated q101 (assumption: a101)\n- [ASSUMED] generated q102 (assumption: a102)\n- [ASSUMED] generated q103 (assumption: a103)\n- [ASSUMED] generated q104 (assumption: a104)\n- [ASSUMED] generated q105 (assumption: a105)\n- [ASSUMED] generated q106 (assumption: a106)\n- [ASSUMED] generated q107 (assumption: a107)\n- [ASSUMED] generated q108 (assumption: a108)\n- [ASSUMED] generated q109 (assumption: a109)\n- [ASSUMED] generated q110 (assumption: a110)\n- [ASSUMED] generated q111 (assumption: a111)\n- [ASSUMED] generated q112 (assumption: a112)\n- [ASSUMED] generated q113 (assumption: a113)\n- [ASSUMED] generated q114 (assumption: a114)\n- [ASSUMED] generated q115 (assumption: a115)\n- [ASSUMED] generated q116 (assumption: a116)\n- [ASSUMED] generated q117 (assumption: a117)\n- [ASSUMED] generated q118 (assumption: a118)\n- [ASSUMED] generated q119 (assumption: a119)\n- [ASSUMED] generated q120 (assumption: a120)\n- [ASSUMED] generated q121 (assumption: a121)\n- [ASSUMED] generated q122 (assumption: a122)\n- [ASSUMED] generated q123 (assumption: a123)\n- [ASSUMED] generated q124 (assumption: a124)\n- [ASSUMED] generated q125 (assumption: a125)\n- [ASSUMED] generated q126 (assumption: a126)\n- [ASSUMED] generated q127 (assumption: a127)\n- [ASSUMED] generated q128 (assumption: a128)\n- [ASSUMED] generated q129 (assumption: a129)\n- [ASSUMED] generated q130 (assumption: a130)\n- [ASSUMED] generated q131 (assumption: a131)\n- [ASSUMED] generated q132 (assumption: a132)\n- [ASSUMED] generated q133 (assumption: a133)\n- [ASSUMED] generated q134 (assumption: a134)\n- [ASSUMED] generated q135 (assumption: a135)\n- [ASSUMED] generated q136 (assumption: a136)\n- [ASSUMED] generated q137 (assumption: a137)\n- [ASSUMED] generated q138 (assumption: a138)\n- [ASSUMED] generated q139 (assumption: a139)\n- [ASSUMED] generated q140 (assumption: a140)\n- [ASSUMED] generated q141 (assumption: a141)\n- [ASSUMED] generated q142 (assumption: a142)\n- [ASSUMED] generated q143 (assumption: a143)\n- [ASSUMED] generated q144 (assumption: a144)\n- [ASSUMED] generated q145 (assumption: a145)\n- [ASSUMED] generated q146 (assumption: a146)\n- [ASSUMED] generated q147 (assumption: a147)\n- [ASSUMED] generated q148 (assumption: a148)\n- [ASSUMED] generated q149 (assumption: a149)\n- [ASSUMED] generated q150 (assumption: a150)\n- [ASSUMED] generated q151 (assumption: a151)\n- [ASSUMED] generated q152 (assumption: a152)\n- [ASSUMED] generated q153 (assumption: a153)\n- [ASSUMED] generated q154 (assumption: a154)\n- [ASSUMED] generated q155 (assumption: a155)\n- [ASSUMED] generated q156 (assumption: a156)\n- [ASSUMED] generated q157 (assumption: a157)\n- [ASSUMED] generated q158 (assumption: a158)\n- [ASSUMED] generated q159 (assumption: a159)\n- [ASSUMED] generated q160 (assumption: a160)\n- [ASSUMED] generated q161 (assumption: a161)\n- [ASSUMED] generated q162 (assumption: a162)\n- [ASSUMED] generated q163 (assumption: a163)\n- [ASSUMED] generated q164 (assumption: a164)\n- [ASSUMED] generated q165 (assumption: a165)\n- [ASSUMED] generated q166 (assumption: a166)\n- [ASSUMED] generated q167 (assumption: a167)\n- [ASSUMED] generated q168 (assumption: a168)\n- [ASSUMED] generated q169 (assumption: a169)\n- [ASSUMED] generated q170 (assumption: a170)\n- [ASSUMED] generated q171 (assumption: a171)\n- [ASSUMED] generated q172 (assumption: a172)\n- [ASSUMED] generated q173 (assumption: a173)\n- [ASSUMED] generated q174 (assumption: a174)\n- [ASSUMED] generated q175 (assumption: a175)\n- [ASSUMED] generated q176 (assumption: a176)\n- [ASSUMED] generated q177 (assumption: a177)\n- [ASSUMED] generated q178 (assumption: a178)\n- [ASSUMED] generated q179 (assumption: a179)\n- [ASSUMED] generated q180 (assumption: a180)\n- [ASSUMED] generated q181 (assumption: a181)\n- [ASSUMED] generated q182 (assumption: a182)\n- [ASSUMED] generated q183 (assumption: a183)\n- [ASSUMED] generated q184 (assumption: a184)\n- [ASSUMED] generated q185 (assumption: a185)\n- [ASSUMED] generated q186 (assumption: a186)\n- [ASSUMED] generated q187 (assumption: a187)\n- [ASSUMED] generated q188 (assumption: a188)\n- [ASSUMED] generated q189 (assumption: a189)\n- [ASSUMED] generated q190 (assumption: a190)\n- [ASSUMED] generated q191 (assumption: a191)\n- [ASSUMED] generated q192 (assumption: a192)\n- [ASSUMED] generated q193 (assumption: a193)\n- [ASSUMED] generated q194 (assumption: a194)\n- [ASSUMED] generated q195 (assumption: a195)\n- [ASSUMED] generated q196 (assumption: a196)\n- [ASSUMED] generated q197 (assumption: a197)\n- [ASSUMED] generated q198 (assumption: a198)\n- [ASSUMED] generated q199 (assumption: a199)\n- [ASSUMED] generated q200 (assumption: a200)\n- [ASSUMED] generated q201 (assumption: a201)\n- [ASSUMED] generated q202 (assumption: a202)\n- [ASSUMED] generated q203 (assumption: a203)\n- [ASSUMED] generated q204 (assumption: a204)\n- [ASSUMED] generated q205 (assumption: a205)\n- [ASSUMED] generated q206 (assumption: a206)\n- [ASSUMED] generated q207 (assumption: a207)\n- [ASSUMED] generated q208 (assumption: a208)\n- [ASSUMED] generated q209 (assumption: a209)\n- [ASSUMED] generated q210 (assumption: a210)\n- [ASSUMED] generated q211 (assumption: a211)\n- [ASSUMED] generated q212 (assumption: a212)\n- [ASSUMED] generated q213 (assumption: a213)\n- [ASSUMED] generated q214 (assumption: a214)\n- [ASSUMED] generated q215 (assumption: a215)\n- [ASSUMED] generated q216 (assumption: a216)\n- [ASSUMED] generated q217 (assumption: a217)\n- [ASSUMED] generated q218 (assumption: a218)\n- [ASSUMED] generated q219 (assumption: a219)\n- [ASSUMED] generated q220 (assumption: a220)\n- [ASSUMED] generated q221 (assumption: a221)\n- [ASSUMED] generated q222 (assumption: a222)\n- [ASSUMED] generated q223 (assumption: a223)\n- [ASSUMED] generated q224 (assumption: a224)\n- [ASSUMED] generated q225 (assumption: a225)\n- [ASSUMED] generated q226 (assumption: a226)\n- [ASSUMED] generated q227 (assumption: a227)\n- [ASSUMED] generated q228 (assumption: a228)\n- [ASSUMED] generated q229 (assumption: a229)\n- [ASSUMED] generated q230 (assumption: a230)\n- [ASSUMED] generated q231 (assumption: a231)\n- [ASSUMED] generated q232 (assumption: a232)\n- [ASSUMED] generated q233 (assumption: a233)\n- [ASSUMED] generated q234 (assumption: a234)\n- [ASSUMED] generated q235 (assumption: a235)\n- [ASSUMED] generated q236 (assumption: a236)\n- [ASSUMED] generated q237 (assumption: a237)\n- [ASSUMED] generated q238 (assumption: a238)\n- [ASSUMED] generated q239 (assumption: a239)\n- [ASSUMED] generated q240 (assumption: a240)\n- [ASSUMED] generated q241 (assumption: a241)\n- [ASSUMED] generated q242 (assumption: a242)\n- [ASSUMED] generated q243 (assumption: a243)\n- [ASSUMED] generated q244 (assumption: a244)\n- [ASSUMED] generated q245 (assumption: a245)\n- [ASSUMED] generated q246 (assumption: a246)\n- [ASSUMED] generated q247 (assumption: a247)\n- [ASSUMED] generated q248 (assumption: a248)\n- [ASSUMED] generated q249 (assumption: a249)\n- [ASSUMED] generated q250 (assumption: a250)\n- [ASSUMED] generated q251 (assumption: a251)\n- [ASSUMED] generated q252 (assumption: a252)\n- [ASSUMED] generated q253 (assumption: a253)\n- [ASSUMED] generated q254 (assumption: a254)\n- [ASSUMED] generated q255 (assumption: a255)\n- [ASSUMED] generated q256 (assumption: a256)\n- [ASSUMED] generated q257 (assumption: a257)\n- [ASSUMED] generated q258 (assumption: a258)\n- [ASSUMED] generated q259 (assumption: a259)\n- [ASSUMED] generated q260 (assumption: a260)\n- [ASSUMED] generated q261 (assumption: a261)\n- [ASSUMED] generated q262 (assumption: a262)\n- [ASSUMED] generated q263 (assumption: a263)\n- [ASSUMED] generated q264 (assumption: a264)\n- [ASSUMED] generated q265 (assumption: a265)\n- [ASSUMED] generated q266 (assumption: a266)\n- [ASSUMED] generated q267 (assumption: a267)\n- [ASSUMED] generated q268 (assumption: a268)\n- [ASSUMED] generated q269 (assumption: a269)\n- [ASSUMED] generated q270 (assumption: a270)\n- [ASSUMED] generated q271 (assumption: a271)\n- [ASSUMED] generated q272 (assumption: a272)\n- [ASSUMED] generated q273 (assumption: a273)\n- [ASSUMED] generated q274 (assumption: a274)\n- [ASSUMED] generated q275 (assumption: a275)\n- [ASSUMED] generated q276 (assumption: a276)\n- [ASSUMED] generated q277 (assumption: a277)\n- [ASSUMED] generated q278 (assumption: a278)\n- [ASSUMED] generated q279 (assumption: a279)\n- [ASSUMED] generated q280 (assumption: a280)\n- [ASSUMED] generated q281 (assumption: a281)\n- [ASSUMED] generated q282 (assumption: a282)\n- [ASSUMED] generated q283 (assumption: a283)\n- [ASSUMED] generated q284 (assumption: a284)\n- [ASSUMED] generated q285 (assumption: a285)\n- [ASSUMED] generated q286 (assumption: a286)\n- [ASSUMED] generated q287 (assumption: a287)\n- [ASSUMED] generated q288 (assumption: a288)\n- [ASSUMED] generated q289 (assumption: a289)\n- [ASSUMED] generated q290 (assumption: a290)\n- [ASSUMED] generated q291 (assumption: a291)\n- [ASSUMED] generated q292 (assumption: a292)\n- [ASSUMED] generated q293 (assumption: a293)\n- [ASSUMED] generated q294 (assumption: a294)\n- [ASSUMED] generated q295 (assumption: a295)\n- [ASSUMED] generated q296 (assumption: a296)\n- [ASSUMED] generated q297 (assumption: a297)\n- [ASSUMED] generated q298 (assumption: a298)\n- [ASSUMED] generated q299 (assumption: a299)\n- [ASSUMED] generated q300 (assumption: a300)\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- s (LOW)\n## Corpus\n- corpus:rig_brain \"topic 1\" -> hits: 2\n- corpus:rig_brain \"topic 2\" -> hits: 3\n- corpus:rig_brain \"topic 3\" -> hits: 4\n- corpus:rig_brain \"topic 4\" -> hits: 5\n- corpus:rig_brain \"topic 5\" -> hits: 6\n- corpus:rig_brain \"topic 6\" -> hits: 7\n- corpus:rig_brain \"topic 7\" -> hits: 8\n- corpus:rig_brain \"topic 8\" -> hits: 9\n- corpus:rig_brain \"topic 9\" -> hits: 10\n- corpus:rig_brain \"topic 10\" -> hits: 11\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 1
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 0
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. fixture probe 1\nQ2. fixture probe 2\nQ3. fixture probe 3\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "spec.md",
+          "content": "## Approach\nAUTO\n## Acceptance\n- Given a, When b, Then c\n## Files\n- <cwd>/src/*\n## Slices\n- s1 \u2014 done: test -f src/a.py\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "S",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "slice": {
+          "start": "s1"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/src/a.py"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "write": {
+          "path": "<cwd>/src/a.py",
+          "content": "print(1)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "slice.md",
+          "content": "## Slice\ns1\n## Changed\n- src/a.py\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "B",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "check_add": "test -f <cwd>/src/a.py"
+      },
+      {
+        "plant": {
+          "name": "rm-a",
+          "red": "test -f <cwd>/src/zz.py",
+          "green": "test -f <cwd>/src/a.py"
+        }
+      },
+      {
+        "write": {
+          "path": "verify.md",
+          "content": "## Checks\n- ok\n## Planted-failure\n- rm-a\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "commit.md",
+          "content": "## Commit\nabc1234 feat: s1\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "C",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true,
+          "run_status": "done"
+        }
+      },
+      {
+        "slice": {
+          "parent": true
+        }
+      },
+      {
+        "write": {
+          "path": "build.md",
+          "content": "## Slices-done\n- s1\n## Changed\n- src/a.py\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "B",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "quality.md",
+          "content": "## Checks\n- done-test green\n## Planted-failure\n- rm-a (slice s1)\n## Verifier\n- family: codex via rig-loop verify\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q2",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "no accepted verdict"
+        }
+      },
+      {
+        "verify": {
+          "family": "test",
+          "mock": "VERIFIED"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "GEV"
+        }
+      },
+      {
+        "verify": {
+          "family": "codex",
+          "mock": "FAILED"
+        },
+        "expect": {
+          "ok": true,
+          "verdict": "FAILED"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q2",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "codex:FAILED"
+        }
+      },
+      {
+        "verify": {
+          "family": "codex",
+          "mock": "VERIFIED"
+        },
+        "expect": {
+          "ok": true,
+          "verdict": "VERIFIED"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q2",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "seal": {},
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "P",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "integrate.md",
+          "content": "## Shipped\n- a\n## Not-shipped\n- none\n## Hand-offs\n- none\n## Next-slice\n- b\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I2",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "handoff.md"
+        }
+      },
+      {
+        "handoff": {},
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "I2",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true,
+          "run_status": "done"
+        }
+      }
     ]
   },
   {
     "name": "tool-call budget kill switch parks the run and denies the call",
     "steps": [
-      {"activate": {}},
-      {"set": {"field": "tool_calls", "value": 800}},
-      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "ls"}}, "expect": {"action": "deny", "reason_contains": "KILL SWITCH"}},
-      {"assert": {"field": "status"}, "expect": {"value": "parked"}}
+      {
+        "activate": {}
+      },
+      {
+        "set": {
+          "field": "tool_calls",
+          "value": 800
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Bash",
+          "tool_input": {
+            "command": "ls"
+          }
+        },
+        "expect": {
+          "action": "deny",
+          "reason_contains": "KILL SWITCH"
+        }
+      },
+      {
+        "assert": {
+          "field": "status"
+        },
+        "expect": {
+          "value": "parked"
+        }
+      }
+    ]
+  },
+  {
+    "name": "R question floor scales with uncertainty level (level 2 -> 475)",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:true\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3-D2-A1\n## UNCERTAINTY-LEVEL\n2\n## CONFIDENCE\n0.85\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "questions.md",
+          "content": "## Panel\n- [lens:security-engineer]\n- [lens:sre]\n- [lens:founder]\n## Questions\n- [BLOCKING] q1? -> ANSWER: a1\n- [ASSUMED] q2 (assumption: a2)\n- [BLOCKING] q3? -> ANSWER: a3\n- [ASSUMED] q4 (assumption: a4)\n- [BLOCKING] q5? -> ANSWER: a5\n- [ASSUMED] q6 (assumption: a6)\n- [BLOCKING] q7? -> ANSWER: a7\n- [ASSUMED] q8 (assumption: a8)\n- [BLOCKING] q9? -> ANSWER: a9\n- [ASSUMED] q10 (assumption: a10)\n- [BLOCKING] q11? -> ANSWER: a11\n- [ASSUMED] q12 (assumption: a12)\n- [BLOCKING] q13? -> ANSWER: a13\n- [ASSUMED] q14 (assumption: a14)\n- [BLOCKING] q15? -> ANSWER: a15\n- [ASSUMED] q16 (assumption: a16)\n- [BLOCKING] q17? -> ANSWER: a17\n- [ASSUMED] q18 (assumption: a18)\n- [BLOCKING] q19? -> ANSWER: a19\n- [ASSUMED] q20 (assumption: a20)\n- [BLOCKING] q21? -> ANSWER: a21\n- [ASSUMED] q22 (assumption: a22)\n- [BLOCKING] q23? -> ANSWER: a23\n- [ASSUMED] q24 (assumption: a24)\n- [BLOCKING] q25? -> ANSWER: a25\n- [ASSUMED] q26 (assumption: a26)\n- [BLOCKING] q27? -> ANSWER: a27\n- [ASSUMED] q28 (assumption: a28)\n- [BLOCKING] q29? -> ANSWER: a29\n- [ASSUMED] q30 (assumption: a30)\n- [BLOCKING] q31? -> ANSWER: a31\n- [ASSUMED] q32 (assumption: a32)\n- [BLOCKING] q33? -> ANSWER: a33\n- [ASSUMED] q34 (assumption: a34)\n- [BLOCKING] q35? -> ANSWER: a35\n- [ASSUMED] q36 (assumption: a36)\n- [BLOCKING] q37? -> ANSWER: a37\n- [ASSUMED] q38 (assumption: a38)\n- [BLOCKING] q39? -> ANSWER: a39\n- [ASSUMED] q40 (assumption: a40)\n- [BLOCKING] q41? -> ANSWER: a41\n- [ASSUMED] q42 (assumption: a42)\n- [BLOCKING] q43? -> ANSWER: a43\n- [ASSUMED] q44 (assumption: a44)\n- [BLOCKING] q45? -> ANSWER: a45\n- [ASSUMED] q46 (assumption: a46)\n- [BLOCKING] q47? -> ANSWER: a47\n- [ASSUMED] q48 (assumption: a48)\n- [BLOCKING] q49? -> ANSWER: a49\n- [ASSUMED] q50 (assumption: a50)\n- [BLOCKING] q51? -> ANSWER: a51\n- [ASSUMED] q52 (assumption: a52)\n- [BLOCKING] q53? -> ANSWER: a53\n- [ASSUMED] q54 (assumption: a54)\n- [BLOCKING] q55? -> ANSWER: a55\n- [ASSUMED] q56 (assumption: a56)\n- [BLOCKING] q57? -> ANSWER: a57\n- [ASSUMED] q58 (assumption: a58)\n- [BLOCKING] q59? -> ANSWER: a59\n- [ASSUMED] q60 (assumption: a60)\n- [BLOCKING] q61? -> ANSWER: a61\n- [ASSUMED] q62 (assumption: a62)\n- [BLOCKING] q63? -> ANSWER: a63\n- [ASSUMED] q64 (assumption: a64)\n- [BLOCKING] q65? -> ANSWER: a65\n- [ASSUMED] q66 (assumption: a66)\n- [BLOCKING] q67? -> ANSWER: a67\n- [ASSUMED] q68 (assumption: a68)\n- [BLOCKING] q69? -> ANSWER: a69\n- [ASSUMED] q70 (assumption: a70)\n- [BLOCKING] q71? -> ANSWER: a71\n- [ASSUMED] q72 (assumption: a72)\n- [BLOCKING] q73? -> ANSWER: a73\n- [ASSUMED] q74 (assumption: a74)\n- [BLOCKING] q75? -> ANSWER: a75\n- [ASSUMED] q76 (assumption: a76)\n- [BLOCKING] q77? -> ANSWER: a77\n- [ASSUMED] q78 (assumption: a78)\n- [BLOCKING] q79? -> ANSWER: a79\n- [ASSUMED] q80 (assumption: a80)\n- [BLOCKING] q81? -> ANSWER: a81\n- [ASSUMED] q82 (assumption: a82)\n- [BLOCKING] q83? -> ANSWER: a83\n- [ASSUMED] q84 (assumption: a84)\n- [BLOCKING] q85? -> ANSWER: a85\n- [ASSUMED] q86 (assumption: a86)\n- [BLOCKING] q87? -> ANSWER: a87\n- [ASSUMED] q88 (assumption: a88)\n- [BLOCKING] q89? -> ANSWER: a89\n- [ASSUMED] q90 (assumption: a90)\n- [BLOCKING] q91? -> ANSWER: a91\n- [ASSUMED] q92 (assumption: a92)\n- [BLOCKING] q93? -> ANSWER: a93\n- [ASSUMED] q94 (assumption: a94)\n- [BLOCKING] q95? -> ANSWER: a95\n- [ASSUMED] q96 (assumption: a96)\n- [BLOCKING] q97? -> ANSWER: a97\n- [ASSUMED] q98 (assumption: a98)\n- [BLOCKING] q99? -> ANSWER: a99\n- [ASSUMED] q100 (assumption: a100)\n- [BLOCKING] q101? -> ANSWER: a101\n- [ASSUMED] q102 (assumption: a102)\n- [BLOCKING] q103? -> ANSWER: a103\n- [ASSUMED] q104 (assumption: a104)\n- [BLOCKING] q105? -> ANSWER: a105\n- [ASSUMED] q106 (assumption: a106)\n- [BLOCKING] q107? -> ANSWER: a107\n- [ASSUMED] q108 (assumption: a108)\n- [BLOCKING] q109? -> ANSWER: a109\n- [ASSUMED] q110 (assumption: a110)\n- [BLOCKING] q111? -> ANSWER: a111\n- [ASSUMED] q112 (assumption: a112)\n- [BLOCKING] q113? -> ANSWER: a113\n- [ASSUMED] q114 (assumption: a114)\n- [BLOCKING] q115? -> ANSWER: a115\n- [ASSUMED] q116 (assumption: a116)\n- [BLOCKING] q117? -> ANSWER: a117\n- [ASSUMED] q118 (assumption: a118)\n- [BLOCKING] q119? -> ANSWER: a119\n- [ASSUMED] q120 (assumption: a120)\n- [BLOCKING] q121? -> ANSWER: a121\n- [ASSUMED] q122 (assumption: a122)\n- [BLOCKING] q123? -> ANSWER: a123\n- [ASSUMED] q124 (assumption: a124)\n- [BLOCKING] q125? -> ANSWER: a125\n- [ASSUMED] q126 (assumption: a126)\n- [BLOCKING] q127? -> ANSWER: a127\n- [ASSUMED] q128 (assumption: a128)\n- [BLOCKING] q129? -> ANSWER: a129\n- [ASSUMED] q130 (assumption: a130)\n- [BLOCKING] q131? -> ANSWER: a131\n- [ASSUMED] q132 (assumption: a132)\n- [BLOCKING] q133? -> ANSWER: a133\n- [ASSUMED] q134 (assumption: a134)\n- [BLOCKING] q135? -> ANSWER: a135\n- [ASSUMED] q136 (assumption: a136)\n- [BLOCKING] q137? -> ANSWER: a137\n- [ASSUMED] q138 (assumption: a138)\n- [BLOCKING] q139? -> ANSWER: a139\n- [ASSUMED] q140 (assumption: a140)\n- [BLOCKING] q141? -> ANSWER: a141\n- [ASSUMED] q142 (assumption: a142)\n- [BLOCKING] q143? -> ANSWER: a143\n- [ASSUMED] q144 (assumption: a144)\n- [BLOCKING] q145? -> ANSWER: a145\n- [ASSUMED] q146 (assumption: a146)\n- [BLOCKING] q147? -> ANSWER: a147\n- [ASSUMED] q148 (assumption: a148)\n- [BLOCKING] q149? -> ANSWER: a149\n- [ASSUMED] q150 (assumption: a150)\n- [BLOCKING] q151? -> ANSWER: a151\n- [ASSUMED] q152 (assumption: a152)\n- [BLOCKING] q153? -> ANSWER: a153\n- [ASSUMED] q154 (assumption: a154)\n- [BLOCKING] q155? -> ANSWER: a155\n- [ASSUMED] q156 (assumption: a156)\n- [BLOCKING] q157? -> ANSWER: a157\n- [ASSUMED] q158 (assumption: a158)\n- [BLOCKING] q159? -> ANSWER: a159\n- [ASSUMED] q160 (assumption: a160)\n- [BLOCKING] q161? -> ANSWER: a161\n- [ASSUMED] q162 (assumption: a162)\n- [BLOCKING] q163? -> ANSWER: a163\n- [ASSUMED] q164 (assumption: a164)\n- [BLOCKING] q165? -> ANSWER: a165\n- [ASSUMED] q166 (assumption: a166)\n- [BLOCKING] q167? -> ANSWER: a167\n- [ASSUMED] q168 (assumption: a168)\n- [BLOCKING] q169? -> ANSWER: a169\n- [ASSUMED] q170 (assumption: a170)\n- [BLOCKING] q171? -> ANSWER: a171\n- [ASSUMED] q172 (assumption: a172)\n- [BLOCKING] q173? -> ANSWER: a173\n- [ASSUMED] q174 (assumption: a174)\n- [BLOCKING] q175? -> ANSWER: a175\n- [ASSUMED] q176 (assumption: a176)\n- [BLOCKING] q177? -> ANSWER: a177\n- [ASSUMED] q178 (assumption: a178)\n- [BLOCKING] q179? -> ANSWER: a179\n- [ASSUMED] q180 (assumption: a180)\n- [BLOCKING] q181? -> ANSWER: a181\n- [ASSUMED] q182 (assumption: a182)\n- [BLOCKING] q183? -> ANSWER: a183\n- [ASSUMED] q184 (assumption: a184)\n- [BLOCKING] q185? -> ANSWER: a185\n- [ASSUMED] q186 (assumption: a186)\n- [BLOCKING] q187? -> ANSWER: a187\n- [ASSUMED] q188 (assumption: a188)\n- [BLOCKING] q189? -> ANSWER: a189\n- [ASSUMED] q190 (assumption: a190)\n- [BLOCKING] q191? -> ANSWER: a191\n- [ASSUMED] q192 (assumption: a192)\n- [BLOCKING] q193? -> ANSWER: a193\n- [ASSUMED] q194 (assumption: a194)\n- [BLOCKING] q195? -> ANSWER: a195\n- [ASSUMED] q196 (assumption: a196)\n- [BLOCKING] q197? -> ANSWER: a197\n- [ASSUMED] q198 (assumption: a198)\n- [BLOCKING] q199? -> ANSWER: a199\n- [ASSUMED] q200 (assumption: a200)\n- [BLOCKING] q201? -> ANSWER: a201\n- [ASSUMED] q202 (assumption: a202)\n- [BLOCKING] q203? -> ANSWER: a203\n- [ASSUMED] q204 (assumption: a204)\n- [BLOCKING] q205? -> ANSWER: a205\n- [ASSUMED] q206 (assumption: a206)\n- [BLOCKING] q207? -> ANSWER: a207\n- [ASSUMED] q208 (assumption: a208)\n- [BLOCKING] q209? -> ANSWER: a209\n- [ASSUMED] q210 (assumption: a210)\n- [BLOCKING] q211? -> ANSWER: a211\n- [ASSUMED] q212 (assumption: a212)\n- [BLOCKING] q213? -> ANSWER: a213\n- [ASSUMED] q214 (assumption: a214)\n- [BLOCKING] q215? -> ANSWER: a215\n- [ASSUMED] q216 (assumption: a216)\n- [BLOCKING] q217? -> ANSWER: a217\n- [ASSUMED] q218 (assumption: a218)\n- [BLOCKING] q219? -> ANSWER: a219\n- [ASSUMED] q220 (assumption: a220)\n- [BLOCKING] q221? -> ANSWER: a221\n- [ASSUMED] q222 (assumption: a222)\n- [BLOCKING] q223? -> ANSWER: a223\n- [ASSUMED] q224 (assumption: a224)\n- [BLOCKING] q225? -> ANSWER: a225\n- [ASSUMED] q226 (assumption: a226)\n- [BLOCKING] q227? -> ANSWER: a227\n- [ASSUMED] q228 (assumption: a228)\n- [BLOCKING] q229? -> ANSWER: a229\n- [ASSUMED] q230 (assumption: a230)\n- [BLOCKING] q231? -> ANSWER: a231\n- [ASSUMED] q232 (assumption: a232)\n- [BLOCKING] q233? -> ANSWER: a233\n- [ASSUMED] q234 (assumption: a234)\n- [BLOCKING] q235? -> ANSWER: a235\n- [ASSUMED] q236 (assumption: a236)\n- [BLOCKING] q237? -> ANSWER: a237\n- [ASSUMED] q238 (assumption: a238)\n- [BLOCKING] q239? -> ANSWER: a239\n- [ASSUMED] q240 (assumption: a240)\n- [BLOCKING] q241? -> ANSWER: a241\n- [ASSUMED] q242 (assumption: a242)\n- [BLOCKING] q243? -> ANSWER: a243\n- [ASSUMED] q244 (assumption: a244)\n- [BLOCKING] q245? -> ANSWER: a245\n- [ASSUMED] q246 (assumption: a246)\n- [BLOCKING] q247? -> ANSWER: a247\n- [ASSUMED] q248 (assumption: a248)\n- [BLOCKING] q249? -> ANSWER: a249\n- [ASSUMED] q250 (assumption: a250)\n- [BLOCKING] q251? -> ANSWER: a251\n- [ASSUMED] q252 (assumption: a252)\n- [BLOCKING] q253? -> ANSWER: a253\n- [ASSUMED] q254 (assumption: a254)\n- [BLOCKING] q255? -> ANSWER: a255\n- [ASSUMED] q256 (assumption: a256)\n- [BLOCKING] q257? -> ANSWER: a257\n- [ASSUMED] q258 (assumption: a258)\n- [BLOCKING] q259? -> ANSWER: a259\n- [ASSUMED] q260 (assumption: a260)\n- [BLOCKING] q261? -> ANSWER: a261\n- [ASSUMED] q262 (assumption: a262)\n- [BLOCKING] q263? -> ANSWER: a263\n- [ASSUMED] q264 (assumption: a264)\n- [BLOCKING] q265? -> ANSWER: a265\n- [ASSUMED] q266 (assumption: a266)\n- [BLOCKING] q267? -> ANSWER: a267\n- [ASSUMED] q268 (assumption: a268)\n- [BLOCKING] q269? -> ANSWER: a269\n- [ASSUMED] q270 (assumption: a270)\n- [BLOCKING] q271? -> ANSWER: a271\n- [ASSUMED] q272 (assumption: a272)\n- [BLOCKING] q273? -> ANSWER: a273\n- [ASSUMED] q274 (assumption: a274)\n- [BLOCKING] q275? -> ANSWER: a275\n- [ASSUMED] q276 (assumption: a276)\n- [BLOCKING] q277? -> ANSWER: a277\n- [ASSUMED] q278 (assumption: a278)\n- [BLOCKING] q279? -> ANSWER: a279\n- [ASSUMED] q280 (assumption: a280)\n- [BLOCKING] q281? -> ANSWER: a281\n- [ASSUMED] q282 (assumption: a282)\n- [BLOCKING] q283? -> ANSWER: a283\n- [ASSUMED] q284 (assumption: a284)\n- [BLOCKING] q285? -> ANSWER: a285\n- [ASSUMED] q286 (assumption: a286)\n- [BLOCKING] q287? -> ANSWER: a287\n- [ASSUMED] q288 (assumption: a288)\n- [BLOCKING] q289? -> ANSWER: a289\n- [ASSUMED] q290 (assumption: a290)\n- [BLOCKING] q291? -> ANSWER: a291\n- [ASSUMED] q292 (assumption: a292)\n- [BLOCKING] q293? -> ANSWER: a293\n- [ASSUMED] q294 (assumption: a294)\n- [BLOCKING] q295? -> ANSWER: a295\n- [ASSUMED] q296 (assumption: a296)\n- [BLOCKING] q297? -> ANSWER: a297\n- [ASSUMED] q298 (assumption: a298)\n- [BLOCKING] q299? -> ANSWER: a299\n- [ASSUMED] q300 (assumption: a300)\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Q1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "research.md",
+          "content": "## Findings\n- f\n## Sources\n- https://example.com (HIGH)\n## Corpus\n- corpus:rig_brain \"topic 1\" -> hits: 2\n- corpus:rig_brain \"topic 2\" -> hits: 3\n- corpus:rig_brain \"topic 3\" -> hits: 4\n- corpus:rig_brain \"topic 4\" -> hits: 5\n- corpus:rig_brain \"topic 5\" -> hits: 6\n- corpus:rig_brain \"topic 6\" -> hits: 7\n- corpus:rig_brain \"topic 7\" -> hits: 8\n- corpus:rig_brain \"topic 8\" -> hits: 9\n- corpus:rig_brain \"topic 9\" -> hits: 10\n- corpus:rig_brain \"topic 10\" -> hits: 11\n## Gaps\n- none\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-a.md",
+          "content": "# wave-a\nF1. thing (https://example.com/a1) (HIGH)\nF2. thing (https://example.com/a2) (HIGH)\nF3. thing (https://example.com/a3) (HIGH)\nF4. thing (https://example.com/a4) (HIGH)\nF5. thing (https://example.com/a5) (HIGH)\nF6. thing (https://example.com/a6) (MED)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-b.md",
+          "content": "# wave-b\nF1. thing (https://example.com/b1) (HIGH)\nF2. thing (https://example.com/b2) (HIGH)\nF3. thing (https://example.com/b3) (HIGH)\nF4. thing (https://example.com/b4) (HIGH)\nF5. thing (https://example.com/b5) (HIGH)\nF6. thing (https://example.com/b6) (HIGH)\n"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/wave-c.md",
+          "content": "# wave-c\nF1. x (https://example.com/c1) (HIGH)\nF2. x (https://example.com/c2) (HIGH)\nF3. x (https://example.com/c3) (HIGH)\nF4. x (https://example.com/c4) (HIGH)\nF5. x (https://example.com/c5) (MED)\nF6. x (https://example.com/c6) (MED)\n"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 3
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 2
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. probe 1 for the level table\nQ2. probe 2 for the level table\nQ3. probe 3 for the level table\nQ4. probe 4 for the level table\nQ5. probe 5 for the level table\nQ6. probe 6 for the level table\nQ7. probe 7 for the level table\nQ8. probe 8 for the level table\nQ9. probe 9 for the level table\nQ10. probe 10 for the level table\nQ11. probe 11 for the level table\nQ12. probe 12 for the level table\nQ13. probe 13 for the level table\nQ14. probe 14 for the level table\nQ15. probe 15 for the level table\nQ16. probe 16 for the level table\nQ17. probe 17 for the level table\nQ18. probe 18 for the level table\nQ19. probe 19 for the level table\nQ20. probe 20 for the level table\nQ21. probe 21 for the level table\nQ22. probe 22 for the level table\nQ23. probe 23 for the level table\nQ24. probe 24 for the level table\nQ25. probe 25 for the level table\nQ26. probe 26 for the level table\nQ27. probe 27 for the level table\nQ28. probe 28 for the level table\nQ29. probe 29 for the level table\nQ30. probe 30 for the level table\nQ31. probe 31 for the level table\nQ32. probe 32 for the level table\nQ33. probe 33 for the level table\nQ34. probe 34 for the level table\nQ35. probe 35 for the level table\nQ36. probe 36 for the level table\nQ37. probe 37 for the level table\nQ38. probe 38 for the level table\nQ39. probe 39 for the level table\nQ40. probe 40 for the level table\nQ41. probe 41 for the level table\nQ42. probe 42 for the level table\nQ43. probe 43 for the level table\nQ44. probe 44 for the level table\nQ45. probe 45 for the level table\nQ46. probe 46 for the level table\nQ47. probe 47 for the level table\nQ48. probe 48 for the level table\nQ49. probe 49 for the level table\nQ50. probe 50 for the level table\nQ51. probe 51 for the level table\nQ52. probe 52 for the level table\nQ53. probe 53 for the level table\nQ54. probe 54 for the level table\nQ55. probe 55 for the level table\nQ56. probe 56 for the level table\nQ57. probe 57 for the level table\nQ58. probe 58 for the level table\nQ59. probe 59 for the level table\nQ60. probe 60 for the level table\nQ61. probe 61 for the level table\nQ62. probe 62 for the level table\nQ63. probe 63 for the level table\nQ64. probe 64 for the level table\nQ65. probe 65 for the level table\nQ66. probe 66 for the level table\nQ67. probe 67 for the level table\nQ68. probe 68 for the level table\nQ69. probe 69 for the level table\nQ70. probe 70 for the level table\nQ71. probe 71 for the level table\nQ72. probe 72 for the level table\nQ73. probe 73 for the level table\nQ74. probe 74 for the level table\nQ75. probe 75 for the level table\nQ76. probe 76 for the level table\nQ77. probe 77 for the level table\nQ78. probe 78 for the level table\nQ79. probe 79 for the level table\nQ80. probe 80 for the level table\nQ81. probe 81 for the level table\nQ82. probe 82 for the level table\nQ83. probe 83 for the level table\nQ84. probe 84 for the level table\nQ85. probe 85 for the level table\nQ86. probe 86 for the level table\nQ87. probe 87 for the level table\nQ88. probe 88 for the level table\nQ89. probe 89 for the level table\nQ90. probe 90 for the level table\nQ91. probe 91 for the level table\nQ92. probe 92 for the level table\nQ93. probe 93 for the level table\nQ94. probe 94 for the level table\nQ95. probe 95 for the level table\nQ96. probe 96 for the level table\nQ97. probe 97 for the level table\nQ98. probe 98 for the level table\nQ99. probe 99 for the level table\nQ100. probe 100 for the level table\nQ101. probe 101 for the level table\nQ102. probe 102 for the level table\nQ103. probe 103 for the level table\nQ104. probe 104 for the level table\nQ105. probe 105 for the level table\nQ106. probe 106 for the level table\nQ107. probe 107 for the level table\nQ108. probe 108 for the level table\nQ109. probe 109 for the level table\nQ110. probe 110 for the level table\nQ111. probe 111 for the level table\nQ112. probe 112 for the level table\nQ113. probe 113 for the level table\nQ114. probe 114 for the level table\nQ115. probe 115 for the level table\nQ116. probe 116 for the level table\nQ117. probe 117 for the level table\nQ118. probe 118 for the level table\nQ119. probe 119 for the level table\nQ120. probe 120 for the level table\nQ121. probe 121 for the level table\nQ122. probe 122 for the level table\nQ123. probe 123 for the level table\nQ124. probe 124 for the level table\nQ125. probe 125 for the level table\nQ126. probe 126 for the level table\nQ127. probe 127 for the level table\nQ128. probe 128 for the level table\nQ129. probe 129 for the level table\nQ130. probe 130 for the level table\nQ131. probe 131 for the level table\nQ132. probe 132 for the level table\nQ133. probe 133 for the level table\nQ134. probe 134 for the level table\nQ135. probe 135 for the level table\nQ136. probe 136 for the level table\nQ137. probe 137 for the level table\nQ138. probe 138 for the level table\nQ139. probe 139 for the level table\nQ140. probe 140 for the level table\nQ141. probe 141 for the level table\nQ142. probe 142 for the level table\nQ143. probe 143 for the level table\nQ144. probe 144 for the level table\nQ145. probe 145 for the level table\nQ146. probe 146 for the level table\nQ147. probe 147 for the level table\nQ148. probe 148 for the level table\nQ149. probe 149 for the level table\nQ150. probe 150 for the level table\nQ151. probe 151 for the level table\nQ152. probe 152 for the level table\nQ153. probe 153 for the level table\nQ154. probe 154 for the level table\nQ155. probe 155 for the level table\nQ156. probe 156 for the level table\nQ157. probe 157 for the level table\nQ158. probe 158 for the level table\nQ159. probe 159 for the level table\nQ160. probe 160 for the level table\nQ161. probe 161 for the level table\nQ162. probe 162 for the level table\nQ163. probe 163 for the level table\nQ164. probe 164 for the level table\nQ165. probe 165 for the level table\nQ166. probe 166 for the level table\nQ167. probe 167 for the level table\nQ168. probe 168 for the level table\nQ169. probe 169 for the level table\nQ170. probe 170 for the level table\nQ171. probe 171 for the level table\nQ172. probe 172 for the level table\nQ173. probe 173 for the level table\nQ174. probe 174 for the level table\nQ175. probe 175 for the level table\nQ176. probe 176 for the level table\nQ177. probe 177 for the level table\nQ178. probe 178 for the level table\nQ179. probe 179 for the level table\nQ180. probe 180 for the level table\nQ181. probe 181 for the level table\nQ182. probe 182 for the level table\nQ183. probe 183 for the level table\nQ184. probe 184 for the level table\nQ185. probe 185 for the level table\nQ186. probe 186 for the level table\nQ187. probe 187 for the level table\nQ188. probe 188 for the level table\nQ189. probe 189 for the level table\nQ190. probe 190 for the level table\nQ191. probe 191 for the level table\nQ192. probe 192 for the level table\nQ193. probe 193 for the level table\nQ194. probe 194 for the level table\nQ195. probe 195 for the level table\nQ196. probe 196 for the level table\nQ197. probe 197 for the level table\nQ198. probe 198 for the level table\nQ199. probe 199 for the level table\nQ200. probe 200 for the level table\nQ201. probe 201 for the level table\nQ202. probe 202 for the level table\nQ203. probe 203 for the level table\nQ204. probe 204 for the level table\nQ205. probe 205 for the level table\nQ206. probe 206 for the level table\nQ207. probe 207 for the level table\nQ208. probe 208 for the level table\nQ209. probe 209 for the level table\nQ210. probe 210 for the level table\nQ211. probe 211 for the level table\nQ212. probe 212 for the level table\nQ213. probe 213 for the level table\nQ214. probe 214 for the level table\nQ215. probe 215 for the level table\nQ216. probe 216 for the level table\nQ217. probe 217 for the level table\nQ218. probe 218 for the level table\nQ219. probe 219 for the level table\nQ220. probe 220 for the level table\nQ221. probe 221 for the level table\nQ222. probe 222 for the level table\nQ223. probe 223 for the level table\nQ224. probe 224 for the level table\nQ225. probe 225 for the level table\nQ226. probe 226 for the level table\nQ227. probe 227 for the level table\nQ228. probe 228 for the level table\nQ229. probe 229 for the level table\nQ230. probe 230 for the level table\nQ231. probe 231 for the level table\nQ232. probe 232 for the level table\nQ233. probe 233 for the level table\nQ234. probe 234 for the level table\nQ235. probe 235 for the level table\nQ236. probe 236 for the level table\nQ237. probe 237 for the level table\nQ238. probe 238 for the level table\nQ239. probe 239 for the level table\nQ240. probe 240 for the level table\nQ241. probe 241 for the level table\nQ242. probe 242 for the level table\nQ243. probe 243 for the level table\nQ244. probe 244 for the level table\nQ245. probe 245 for the level table\nQ246. probe 246 for the level table\nQ247. probe 247 for the level table\nQ248. probe 248 for the level table\nQ249. probe 249 for the level table\nQ250. probe 250 for the level table\nQ251. probe 251 for the level table\nQ252. probe 252 for the level table\nQ253. probe 253 for the level table\nQ254. probe 254 for the level table\nQ255. probe 255 for the level table\nQ256. probe 256 for the level table\nQ257. probe 257 for the level table\nQ258. probe 258 for the level table\nQ259. probe 259 for the level table\nQ260. probe 260 for the level table\nQ261. probe 261 for the level table\nQ262. probe 262 for the level table\nQ263. probe 263 for the level table\nQ264. probe 264 for the level table\nQ265. probe 265 for the level table\nQ266. probe 266 for the level table\nQ267. probe 267 for the level table\nQ268. probe 268 for the level table\nQ269. probe 269 for the level table\nQ270. probe 270 for the level table\nQ271. probe 271 for the level table\nQ272. probe 272 for the level table\nQ273. probe 273 for the level table\nQ274. probe 274 for the level table\nQ275. probe 275 for the level table\nQ276. probe 276 for the level table\nQ277. probe 277 for the level table\nQ278. probe 278 for the level table\nQ279. probe 279 for the level table\nQ280. probe 280 for the level table\nQ281. probe 281 for the level table\nQ282. probe 282 for the level table\nQ283. probe 283 for the level table\nQ284. probe 284 for the level table\nQ285. probe 285 for the level table\nQ286. probe 286 for the level table\nQ287. probe 287 for the level table\nQ288. probe 288 for the level table\nQ289. probe 289 for the level table\nQ290. probe 290 for the level table\nQ291. probe 291 for the level table\nQ292. probe 292 for the level table\nQ293. probe 293 for the level table\nQ294. probe 294 for the level table\nQ295. probe 295 for the level table\nQ296. probe 296 for the level table\nQ297. probe 297 for the level table\nQ298. probe 298 for the level table\nQ299. probe 299 for the level table\nQ300. probe 300 for the level table\nQ301. probe 301 for the level table\nQ302. probe 302 for the level table\nQ303. probe 303 for the level table\nQ304. probe 304 for the level table\nQ305. probe 305 for the level table\nQ306. probe 306 for the level table\nQ307. probe 307 for the level table\nQ308. probe 308 for the level table\nQ309. probe 309 for the level table\nQ310. probe 310 for the level table\nQ311. probe 311 for the level table\nQ312. probe 312 for the level table\nQ313. probe 313 for the level table\nQ314. probe 314 for the level table\nQ315. probe 315 for the level table\nQ316. probe 316 for the level table\nQ317. probe 317 for the level table\nQ318. probe 318 for the level table\nQ319. probe 319 for the level table\nQ320. probe 320 for the level table\nQ321. probe 321 for the level table\nQ322. probe 322 for the level table\nQ323. probe 323 for the level table\nQ324. probe 324 for the level table\nQ325. probe 325 for the level table\nQ326. probe 326 for the level table\nQ327. probe 327 for the level table\nQ328. probe 328 for the level table\nQ329. probe 329 for the level table\nQ330. probe 330 for the level table\nQ331. probe 331 for the level table\nQ332. probe 332 for the level table\nQ333. probe 333 for the level table\nQ334. probe 334 for the level table\nQ335. probe 335 for the level table\nQ336. probe 336 for the level table\nQ337. probe 337 for the level table\nQ338. probe 338 for the level table\nQ339. probe 339 for the level table\nQ340. probe 340 for the level table\nQ341. probe 341 for the level table\nQ342. probe 342 for the level table\nQ343. probe 343 for the level table\nQ344. probe 344 for the level table\nQ345. probe 345 for the level table\nQ346. probe 346 for the level table\nQ347. probe 347 for the level table\nQ348. probe 348 for the level table\nQ349. probe 349 for the level table\nQ350. probe 350 for the level table\nQ351. probe 351 for the level table\nQ352. probe 352 for the level table\nQ353. probe 353 for the level table\nQ354. probe 354 for the level table\nQ355. probe 355 for the level table\nQ356. probe 356 for the level table\nQ357. probe 357 for the level table\nQ358. probe 358 for the level table\nQ359. probe 359 for the level table\nQ360. probe 360 for the level table\nQ361. probe 361 for the level table\nQ362. probe 362 for the level table\nQ363. probe 363 for the level table\nQ364. probe 364 for the level table\nQ365. probe 365 for the level table\nQ366. probe 366 for the level table\nQ367. probe 367 for the level table\nQ368. probe 368 for the level table\nQ369. probe 369 for the level table\nQ370. probe 370 for the level table\nQ371. probe 371 for the level table\nQ372. probe 372 for the level table\nQ373. probe 373 for the level table\nQ374. probe 374 for the level table\nQ375. probe 375 for the level table\nQ376. probe 376 for the level table\nQ377. probe 377 for the level table\nQ378. probe 378 for the level table\nQ379. probe 379 for the level table\nQ380. probe 380 for the level table\nQ381. probe 381 for the level table\nQ382. probe 382 for the level table\nQ383. probe 383 for the level table\nQ384. probe 384 for the level table\nQ385. probe 385 for the level table\nQ386. probe 386 for the level table\nQ387. probe 387 for the level table\nQ388. probe 388 for the level table\nQ389. probe 389 for the level table\nQ390. probe 390 for the level table\nQ391. probe 391 for the level table\nQ392. probe 392 for the level table\nQ393. probe 393 for the level table\nQ394. probe 394 for the level table\nQ395. probe 395 for the level table\nQ396. probe 396 for the level table\nQ397. probe 397 for the level table\nQ398. probe 398 for the level table\nQ399. probe 399 for the level table\nQ400. probe 400 for the level table\nQ401. probe 401 for the level table\nQ402. probe 402 for the level table\nQ403. probe 403 for the level table\nQ404. probe 404 for the level table\nQ405. probe 405 for the level table\nQ406. probe 406 for the level table\nQ407. probe 407 for the level table\nQ408. probe 408 for the level table\nQ409. probe 409 for the level table\nQ410. probe 410 for the level table\nQ411. probe 411 for the level table\nQ412. probe 412 for the level table\nQ413. probe 413 for the level table\nQ414. probe 414 for the level table\nQ415. probe 415 for the level table\nQ416. probe 416 for the level table\nQ417. probe 417 for the level table\nQ418. probe 418 for the level table\nQ419. probe 419 for the level table\nQ420. probe 420 for the level table\nQ421. probe 421 for the level table\nQ422. probe 422 for the level table\nQ423. probe 423 for the level table\nQ424. probe 424 for the level table\nQ425. probe 425 for the level table\nQ426. probe 426 for the level table\nQ427. probe 427 for the level table\nQ428. probe 428 for the level table\nQ429. probe 429 for the level table\nQ430. probe 430 for the level table\nQ431. probe 431 for the level table\nQ432. probe 432 for the level table\nQ433. probe 433 for the level table\nQ434. probe 434 for the level table\nQ435. probe 435 for the level table\nQ436. probe 436 for the level table\nQ437. probe 437 for the level table\nQ438. probe 438 for the level table\nQ439. probe 439 for the level table\nQ440. probe 440 for the level table\nQ441. probe 441 for the level table\nQ442. probe 442 for the level table\nQ443. probe 443 for the level table\nQ444. probe 444 for the level table\nQ445. probe 445 for the level table\nQ446. probe 446 for the level table\nQ447. probe 447 for the level table\nQ448. probe 448 for the level table\nQ449. probe 449 for the level table\nQ450. probe 450 for the level table\nQ451. probe 451 for the level table\nQ452. probe 452 for the level table\nQ453. probe 453 for the level table\nQ454. probe 454 for the level table\nQ455. probe 455 for the level table\nQ456. probe 456 for the level table\nQ457. probe 457 for the level table\nQ458. probe 458 for the level table\nQ459. probe 459 for the level table\nQ460. probe 460 for the level table\nQ461. probe 461 for the level table\nQ462. probe 462 for the level table\nQ463. probe 463 for the level table\nQ464. probe 464 for the level table\nQ465. probe 465 for the level table\nQ466. probe 466 for the level table\nQ467. probe 467 for the level table\nQ468. probe 468 for the level table\nQ469. probe 469 for the level table\nQ470. probe 470 for the level table\nQ471. probe 471 for the level table\nQ472. probe 472 for the level table\nQ473. probe 473 for the level table\nQ474. probe 474 for the level table\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "floor 475"
+        }
+      },
+      {
+        "write": {
+          "path": "../research/questions-fx.md",
+          "content": "Q1. probe 1 for the level table\nQ2. probe 2 for the level table\nQ3. probe 3 for the level table\nQ4. probe 4 for the level table\nQ5. probe 5 for the level table\nQ6. probe 6 for the level table\nQ7. probe 7 for the level table\nQ8. probe 8 for the level table\nQ9. probe 9 for the level table\nQ10. probe 10 for the level table\nQ11. probe 11 for the level table\nQ12. probe 12 for the level table\nQ13. probe 13 for the level table\nQ14. probe 14 for the level table\nQ15. probe 15 for the level table\nQ16. probe 16 for the level table\nQ17. probe 17 for the level table\nQ18. probe 18 for the level table\nQ19. probe 19 for the level table\nQ20. probe 20 for the level table\nQ21. probe 21 for the level table\nQ22. probe 22 for the level table\nQ23. probe 23 for the level table\nQ24. probe 24 for the level table\nQ25. probe 25 for the level table\nQ26. probe 26 for the level table\nQ27. probe 27 for the level table\nQ28. probe 28 for the level table\nQ29. probe 29 for the level table\nQ30. probe 30 for the level table\nQ31. probe 31 for the level table\nQ32. probe 32 for the level table\nQ33. probe 33 for the level table\nQ34. probe 34 for the level table\nQ35. probe 35 for the level table\nQ36. probe 36 for the level table\nQ37. probe 37 for the level table\nQ38. probe 38 for the level table\nQ39. probe 39 for the level table\nQ40. probe 40 for the level table\nQ41. probe 41 for the level table\nQ42. probe 42 for the level table\nQ43. probe 43 for the level table\nQ44. probe 44 for the level table\nQ45. probe 45 for the level table\nQ46. probe 46 for the level table\nQ47. probe 47 for the level table\nQ48. probe 48 for the level table\nQ49. probe 49 for the level table\nQ50. probe 50 for the level table\nQ51. probe 51 for the level table\nQ52. probe 52 for the level table\nQ53. probe 53 for the level table\nQ54. probe 54 for the level table\nQ55. probe 55 for the level table\nQ56. probe 56 for the level table\nQ57. probe 57 for the level table\nQ58. probe 58 for the level table\nQ59. probe 59 for the level table\nQ60. probe 60 for the level table\nQ61. probe 61 for the level table\nQ62. probe 62 for the level table\nQ63. probe 63 for the level table\nQ64. probe 64 for the level table\nQ65. probe 65 for the level table\nQ66. probe 66 for the level table\nQ67. probe 67 for the level table\nQ68. probe 68 for the level table\nQ69. probe 69 for the level table\nQ70. probe 70 for the level table\nQ71. probe 71 for the level table\nQ72. probe 72 for the level table\nQ73. probe 73 for the level table\nQ74. probe 74 for the level table\nQ75. probe 75 for the level table\nQ76. probe 76 for the level table\nQ77. probe 77 for the level table\nQ78. probe 78 for the level table\nQ79. probe 79 for the level table\nQ80. probe 80 for the level table\nQ81. probe 81 for the level table\nQ82. probe 82 for the level table\nQ83. probe 83 for the level table\nQ84. probe 84 for the level table\nQ85. probe 85 for the level table\nQ86. probe 86 for the level table\nQ87. probe 87 for the level table\nQ88. probe 88 for the level table\nQ89. probe 89 for the level table\nQ90. probe 90 for the level table\nQ91. probe 91 for the level table\nQ92. probe 92 for the level table\nQ93. probe 93 for the level table\nQ94. probe 94 for the level table\nQ95. probe 95 for the level table\nQ96. probe 96 for the level table\nQ97. probe 97 for the level table\nQ98. probe 98 for the level table\nQ99. probe 99 for the level table\nQ100. probe 100 for the level table\nQ101. probe 101 for the level table\nQ102. probe 102 for the level table\nQ103. probe 103 for the level table\nQ104. probe 104 for the level table\nQ105. probe 105 for the level table\nQ106. probe 106 for the level table\nQ107. probe 107 for the level table\nQ108. probe 108 for the level table\nQ109. probe 109 for the level table\nQ110. probe 110 for the level table\nQ111. probe 111 for the level table\nQ112. probe 112 for the level table\nQ113. probe 113 for the level table\nQ114. probe 114 for the level table\nQ115. probe 115 for the level table\nQ116. probe 116 for the level table\nQ117. probe 117 for the level table\nQ118. probe 118 for the level table\nQ119. probe 119 for the level table\nQ120. probe 120 for the level table\nQ121. probe 121 for the level table\nQ122. probe 122 for the level table\nQ123. probe 123 for the level table\nQ124. probe 124 for the level table\nQ125. probe 125 for the level table\nQ126. probe 126 for the level table\nQ127. probe 127 for the level table\nQ128. probe 128 for the level table\nQ129. probe 129 for the level table\nQ130. probe 130 for the level table\nQ131. probe 131 for the level table\nQ132. probe 132 for the level table\nQ133. probe 133 for the level table\nQ134. probe 134 for the level table\nQ135. probe 135 for the level table\nQ136. probe 136 for the level table\nQ137. probe 137 for the level table\nQ138. probe 138 for the level table\nQ139. probe 139 for the level table\nQ140. probe 140 for the level table\nQ141. probe 141 for the level table\nQ142. probe 142 for the level table\nQ143. probe 143 for the level table\nQ144. probe 144 for the level table\nQ145. probe 145 for the level table\nQ146. probe 146 for the level table\nQ147. probe 147 for the level table\nQ148. probe 148 for the level table\nQ149. probe 149 for the level table\nQ150. probe 150 for the level table\nQ151. probe 151 for the level table\nQ152. probe 152 for the level table\nQ153. probe 153 for the level table\nQ154. probe 154 for the level table\nQ155. probe 155 for the level table\nQ156. probe 156 for the level table\nQ157. probe 157 for the level table\nQ158. probe 158 for the level table\nQ159. probe 159 for the level table\nQ160. probe 160 for the level table\nQ161. probe 161 for the level table\nQ162. probe 162 for the level table\nQ163. probe 163 for the level table\nQ164. probe 164 for the level table\nQ165. probe 165 for the level table\nQ166. probe 166 for the level table\nQ167. probe 167 for the level table\nQ168. probe 168 for the level table\nQ169. probe 169 for the level table\nQ170. probe 170 for the level table\nQ171. probe 171 for the level table\nQ172. probe 172 for the level table\nQ173. probe 173 for the level table\nQ174. probe 174 for the level table\nQ175. probe 175 for the level table\nQ176. probe 176 for the level table\nQ177. probe 177 for the level table\nQ178. probe 178 for the level table\nQ179. probe 179 for the level table\nQ180. probe 180 for the level table\nQ181. probe 181 for the level table\nQ182. probe 182 for the level table\nQ183. probe 183 for the level table\nQ184. probe 184 for the level table\nQ185. probe 185 for the level table\nQ186. probe 186 for the level table\nQ187. probe 187 for the level table\nQ188. probe 188 for the level table\nQ189. probe 189 for the level table\nQ190. probe 190 for the level table\nQ191. probe 191 for the level table\nQ192. probe 192 for the level table\nQ193. probe 193 for the level table\nQ194. probe 194 for the level table\nQ195. probe 195 for the level table\nQ196. probe 196 for the level table\nQ197. probe 197 for the level table\nQ198. probe 198 for the level table\nQ199. probe 199 for the level table\nQ200. probe 200 for the level table\nQ201. probe 201 for the level table\nQ202. probe 202 for the level table\nQ203. probe 203 for the level table\nQ204. probe 204 for the level table\nQ205. probe 205 for the level table\nQ206. probe 206 for the level table\nQ207. probe 207 for the level table\nQ208. probe 208 for the level table\nQ209. probe 209 for the level table\nQ210. probe 210 for the level table\nQ211. probe 211 for the level table\nQ212. probe 212 for the level table\nQ213. probe 213 for the level table\nQ214. probe 214 for the level table\nQ215. probe 215 for the level table\nQ216. probe 216 for the level table\nQ217. probe 217 for the level table\nQ218. probe 218 for the level table\nQ219. probe 219 for the level table\nQ220. probe 220 for the level table\nQ221. probe 221 for the level table\nQ222. probe 222 for the level table\nQ223. probe 223 for the level table\nQ224. probe 224 for the level table\nQ225. probe 225 for the level table\nQ226. probe 226 for the level table\nQ227. probe 227 for the level table\nQ228. probe 228 for the level table\nQ229. probe 229 for the level table\nQ230. probe 230 for the level table\nQ231. probe 231 for the level table\nQ232. probe 232 for the level table\nQ233. probe 233 for the level table\nQ234. probe 234 for the level table\nQ235. probe 235 for the level table\nQ236. probe 236 for the level table\nQ237. probe 237 for the level table\nQ238. probe 238 for the level table\nQ239. probe 239 for the level table\nQ240. probe 240 for the level table\nQ241. probe 241 for the level table\nQ242. probe 242 for the level table\nQ243. probe 243 for the level table\nQ244. probe 244 for the level table\nQ245. probe 245 for the level table\nQ246. probe 246 for the level table\nQ247. probe 247 for the level table\nQ248. probe 248 for the level table\nQ249. probe 249 for the level table\nQ250. probe 250 for the level table\nQ251. probe 251 for the level table\nQ252. probe 252 for the level table\nQ253. probe 253 for the level table\nQ254. probe 254 for the level table\nQ255. probe 255 for the level table\nQ256. probe 256 for the level table\nQ257. probe 257 for the level table\nQ258. probe 258 for the level table\nQ259. probe 259 for the level table\nQ260. probe 260 for the level table\nQ261. probe 261 for the level table\nQ262. probe 262 for the level table\nQ263. probe 263 for the level table\nQ264. probe 264 for the level table\nQ265. probe 265 for the level table\nQ266. probe 266 for the level table\nQ267. probe 267 for the level table\nQ268. probe 268 for the level table\nQ269. probe 269 for the level table\nQ270. probe 270 for the level table\nQ271. probe 271 for the level table\nQ272. probe 272 for the level table\nQ273. probe 273 for the level table\nQ274. probe 274 for the level table\nQ275. probe 275 for the level table\nQ276. probe 276 for the level table\nQ277. probe 277 for the level table\nQ278. probe 278 for the level table\nQ279. probe 279 for the level table\nQ280. probe 280 for the level table\nQ281. probe 281 for the level table\nQ282. probe 282 for the level table\nQ283. probe 283 for the level table\nQ284. probe 284 for the level table\nQ285. probe 285 for the level table\nQ286. probe 286 for the level table\nQ287. probe 287 for the level table\nQ288. probe 288 for the level table\nQ289. probe 289 for the level table\nQ290. probe 290 for the level table\nQ291. probe 291 for the level table\nQ292. probe 292 for the level table\nQ293. probe 293 for the level table\nQ294. probe 294 for the level table\nQ295. probe 295 for the level table\nQ296. probe 296 for the level table\nQ297. probe 297 for the level table\nQ298. probe 298 for the level table\nQ299. probe 299 for the level table\nQ300. probe 300 for the level table\nQ301. probe 301 for the level table\nQ302. probe 302 for the level table\nQ303. probe 303 for the level table\nQ304. probe 304 for the level table\nQ305. probe 305 for the level table\nQ306. probe 306 for the level table\nQ307. probe 307 for the level table\nQ308. probe 308 for the level table\nQ309. probe 309 for the level table\nQ310. probe 310 for the level table\nQ311. probe 311 for the level table\nQ312. probe 312 for the level table\nQ313. probe 313 for the level table\nQ314. probe 314 for the level table\nQ315. probe 315 for the level table\nQ316. probe 316 for the level table\nQ317. probe 317 for the level table\nQ318. probe 318 for the level table\nQ319. probe 319 for the level table\nQ320. probe 320 for the level table\nQ321. probe 321 for the level table\nQ322. probe 322 for the level table\nQ323. probe 323 for the level table\nQ324. probe 324 for the level table\nQ325. probe 325 for the level table\nQ326. probe 326 for the level table\nQ327. probe 327 for the level table\nQ328. probe 328 for the level table\nQ329. probe 329 for the level table\nQ330. probe 330 for the level table\nQ331. probe 331 for the level table\nQ332. probe 332 for the level table\nQ333. probe 333 for the level table\nQ334. probe 334 for the level table\nQ335. probe 335 for the level table\nQ336. probe 336 for the level table\nQ337. probe 337 for the level table\nQ338. probe 338 for the level table\nQ339. probe 339 for the level table\nQ340. probe 340 for the level table\nQ341. probe 341 for the level table\nQ342. probe 342 for the level table\nQ343. probe 343 for the level table\nQ344. probe 344 for the level table\nQ345. probe 345 for the level table\nQ346. probe 346 for the level table\nQ347. probe 347 for the level table\nQ348. probe 348 for the level table\nQ349. probe 349 for the level table\nQ350. probe 350 for the level table\nQ351. probe 351 for the level table\nQ352. probe 352 for the level table\nQ353. probe 353 for the level table\nQ354. probe 354 for the level table\nQ355. probe 355 for the level table\nQ356. probe 356 for the level table\nQ357. probe 357 for the level table\nQ358. probe 358 for the level table\nQ359. probe 359 for the level table\nQ360. probe 360 for the level table\nQ361. probe 361 for the level table\nQ362. probe 362 for the level table\nQ363. probe 363 for the level table\nQ364. probe 364 for the level table\nQ365. probe 365 for the level table\nQ366. probe 366 for the level table\nQ367. probe 367 for the level table\nQ368. probe 368 for the level table\nQ369. probe 369 for the level table\nQ370. probe 370 for the level table\nQ371. probe 371 for the level table\nQ372. probe 372 for the level table\nQ373. probe 373 for the level table\nQ374. probe 374 for the level table\nQ375. probe 375 for the level table\nQ376. probe 376 for the level table\nQ377. probe 377 for the level table\nQ378. probe 378 for the level table\nQ379. probe 379 for the level table\nQ380. probe 380 for the level table\nQ381. probe 381 for the level table\nQ382. probe 382 for the level table\nQ383. probe 383 for the level table\nQ384. probe 384 for the level table\nQ385. probe 385 for the level table\nQ386. probe 386 for the level table\nQ387. probe 387 for the level table\nQ388. probe 388 for the level table\nQ389. probe 389 for the level table\nQ390. probe 390 for the level table\nQ391. probe 391 for the level table\nQ392. probe 392 for the level table\nQ393. probe 393 for the level table\nQ394. probe 394 for the level table\nQ395. probe 395 for the level table\nQ396. probe 396 for the level table\nQ397. probe 397 for the level table\nQ398. probe 398 for the level table\nQ399. probe 399 for the level table\nQ400. probe 400 for the level table\nQ401. probe 401 for the level table\nQ402. probe 402 for the level table\nQ403. probe 403 for the level table\nQ404. probe 404 for the level table\nQ405. probe 405 for the level table\nQ406. probe 406 for the level table\nQ407. probe 407 for the level table\nQ408. probe 408 for the level table\nQ409. probe 409 for the level table\nQ410. probe 410 for the level table\nQ411. probe 411 for the level table\nQ412. probe 412 for the level table\nQ413. probe 413 for the level table\nQ414. probe 414 for the level table\nQ415. probe 415 for the level table\nQ416. probe 416 for the level table\nQ417. probe 417 for the level table\nQ418. probe 418 for the level table\nQ419. probe 419 for the level table\nQ420. probe 420 for the level table\nQ421. probe 421 for the level table\nQ422. probe 422 for the level table\nQ423. probe 423 for the level table\nQ424. probe 424 for the level table\nQ425. probe 425 for the level table\nQ426. probe 426 for the level table\nQ427. probe 427 for the level table\nQ428. probe 428 for the level table\nQ429. probe 429 for the level table\nQ430. probe 430 for the level table\nQ431. probe 431 for the level table\nQ432. probe 432 for the level table\nQ433. probe 433 for the level table\nQ434. probe 434 for the level table\nQ435. probe 435 for the level table\nQ436. probe 436 for the level table\nQ437. probe 437 for the level table\nQ438. probe 438 for the level table\nQ439. probe 439 for the level table\nQ440. probe 440 for the level table\nQ441. probe 441 for the level table\nQ442. probe 442 for the level table\nQ443. probe 443 for the level table\nQ444. probe 444 for the level table\nQ445. probe 445 for the level table\nQ446. probe 446 for the level table\nQ447. probe 447 for the level table\nQ448. probe 448 for the level table\nQ449. probe 449 for the level table\nQ450. probe 450 for the level table\nQ451. probe 451 for the level table\nQ452. probe 452 for the level table\nQ453. probe 453 for the level table\nQ454. probe 454 for the level table\nQ455. probe 455 for the level table\nQ456. probe 456 for the level table\nQ457. probe 457 for the level table\nQ458. probe 458 for the level table\nQ459. probe 459 for the level table\nQ460. probe 460 for the level table\nQ461. probe 461 for the level table\nQ462. probe 462 for the level table\nQ463. probe 463 for the level table\nQ464. probe 464 for the level table\nQ465. probe 465 for the level table\nQ466. probe 466 for the level table\nQ467. probe 467 for the level table\nQ468. probe 468 for the level table\nQ469. probe 469 for the level table\nQ470. probe 470 for the level table\nQ471. probe 471 for the level table\nQ472. probe 472 for the level table\nQ473. probe 473 for the level table\nQ474. probe 474 for the level table\nQ475. probe 475 for the level table\n"
+        }
+      },
+      {
+        "qr": {
+          "new_unknowns": 0
+        }
+      },
+      {
+        "stage": {
+          "id": "R",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      }
     ]
   }
 ]

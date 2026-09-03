@@ -6,7 +6,7 @@
 schema: rig.loop-skill.v11
 id: iqrsqpi-v20
 name: IQRSQPI v20
-version: 20.0.0
+version: 20.1.0
 doctrine_source:
   - ~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md
   - ~/Developer/rig-capabilities/capabilities/skills/iqrsqpi-v11/loop.yaml
@@ -32,11 +32,11 @@ stages:
     register_done_tests: true
     write_policy:
       mode: artifacts_only
-      deny_message: "No code before the goal card. Write intent.md: ## GOAL, ## METRIC, ## DONE-TEST (executable lines — they WILL be run at Quality/Proof), ## OUT-OF-SCOPE, ## COORDINATE, ## CONFIDENCE (0-1)."
+      deny_message: "No code before the goal card. Write intent.md: ## GOAL, ## METRIC, ## DONE-TEST (executable lines — they WILL be run at Quality/Proof), ## OUT-OF-SCOPE, ## COORDINATE, ## CONFIDENCE (0-1), ## UNCERTAINTY-LEVEL (1-5: how uncertain you are about THIS topic; it sets the research question floor: L1=300, L2=475, L3=650, L4=825, L5=1000 — override with ## QUESTION-QUOTA)."
     gate:
       - type: file_contains
         path: intent.md
-        patterns: ["^## GOAL", "^## METRIC", "^## DONE-TEST", "^## OUT-OF-SCOPE", "^## COORDINATE", "^## CONFIDENCE"]
+        patterns: ["^## GOAL", "^## METRIC", "^## DONE-TEST", "^## OUT-OF-SCOPE", "^## COORDINATE", "^## CONFIDENCE", "^## UNCERTAINTY-LEVEL"]
       - type: regex
         path: intent.md
         pattern: '^\s*[-*]\s*(cmd|file|grep|mcp):\S'
@@ -46,12 +46,16 @@ stages:
         pattern: '\b(TBD|TODO|\?\?\?)\b'
       - type: confidence_declared
         path: intent.md
+      - type: regex
+        path: intent.md
+        pattern: '^## UNCERTAINTY-LEVEL[^\n]*\n\s*[1-5]\b'
+        hint: "UNCERTAINTY-LEVEL is a bare line, 1 (familiar topic) to 5 (unknown territory); ask the human if unsure — it scales the question bank"
   - id: Q1
     name: Question
     artifact: questions.md
     write_policy:
       mode: artifacts_only
-      deny_message: "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)`."
+      deny_message: "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)` — AND at least 300 tagged questions in total (corpus-grade bar)."
     gate:
       - type: file_contains
         path: questions.md
@@ -62,12 +66,17 @@ stages:
         hint: "at least three persona lenses under ## Panel, e.g. `- [lens:security-engineer]`"
       - type: no_unanswered_blocking
         path: questions.md
+      - type: regex_count
+        path: questions.md
+        pattern: '^\s*[-*]\s*\[(BLOCKING|ASSUMED)\]'
+        min: 300
+        hint: "corpus-grade bar: at least 300 tagged questions ([BLOCKING]+[ASSUMED] combined); generate across the persona lenses"
   - id: R
     name: Research
     artifact: research.md
     write_policy:
       mode: artifacts_only
-      deny_message: "Research until dry. research.md: ## Findings, ## Sources (each graded (HIGH|MED|LOW)), ## Gaps. Record every Q<->R pass: `rig-loop qr pass --new-unknowns N`; the gate needs >=2 passes and a last pass with 0."
+      deny_message: "Research is a corpus: internal first, external SCRAPED second. research.md needs ## Findings, ## Sources (graded), ## Corpus (>=10 `- corpus:<tool> \"<query>\" -> hits: N` lines, N>0, via rig_brain/recall/mcp memory surfaces), ## Gaps — PLUS research/wave-<slug>.md files scraped from real URLs (>=6 links each; NO_WEB_ACCESS as line 1 fails) and research/questions-<slug>.md banks: combined unique `Q<n>.` lines must meet the floor set by Intent's UNCERTAINTY-LEVEL (300 at L1 … 1000 at L5). Record every pass: `rig-loop qr pass --new-unknowns N`; >=2 passes, last with 0."
     gate:
       - type: file_contains
         path: research.md
@@ -76,6 +85,17 @@ stages:
         path: research.md
         pattern: '^## Sources[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+[^\n]*\((HIGH|MED|LOW)\)'
         hint: "every source line under ## Sources carries a grade: `- <source> (HIGH|MED|LOW)`"
+      - type: file_contains
+        path: research.md
+        patterns: ["^## Corpus"]
+      - type: regex_count
+        path: research.md
+        pattern: '^\s*[-*]\s+corpus:(rig_brain|harness_recall|recall|mcp:[a-z0-9_-]+)\s+\"[^"]+\"\s*->\s*hits:\s*[1-9][0-9]*'
+        min: 10
+        hint: "corpus-grade research: >=10 corpus queries with hits>=1 recorded under ## Corpus before web sources count"
+      - type: corpus_scraped
+        min_urls_per_wave: 6
+      - type: questions_min
       - type: qr_dry
         min: 2
   - id: S

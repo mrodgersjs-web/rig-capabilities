@@ -219,11 +219,15 @@ class V20Tests(TempState):
         spec = L.load_spec("iqrsqpi-v20")
         art = L.artifacts_dir(run)
         out = self.cwd / "out.txt"
-        (art / "intent.md").write_text(f"## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f {out}\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3\n## CONFIDENCE\n0.6\n")
+        (art / "intent.md").write_text(f"## GOAL\ng\n## METRIC\nm\n## DONE-TEST\n- cmd:test -f {out}\n## OUT-OF-SCOPE\no\n## COORDINATE\nL3\n## UNCERTAINTY-LEVEL\n1\n## QUESTION-QUOTA\n3\n## CONFIDENCE\n0.6\n")
         run = L.mark_stage(run, spec, "I1", "pass")
-        (art / "questions.md").write_text("## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n")
+        (art / "questions.md").write_text("## Panel\n- [lens:a]\n- [lens:b]\n- [lens:c]\n## Questions\n- [ASSUMED] x (assumption: y)\n" + "\n".join(f"- [ASSUMED] x{i} (assumption: y{i})" for i in range(1, 300)) + "\n")
         run = L.mark_stage(run, spec, "Q1", "pass")
-        (art / "research.md").write_text("## Findings\n- f\n## Sources\n- s (HIGH)\n## Gaps\n- none\n")
+        (art / "research.md").write_text("## Findings\n- f\n## Sources\n- s (HIGH)\n## Corpus\n" + "\n".join(f'- corpus:rig_brain "t{i}" -> hits: {i}' for i in range(1, 11)) + "\n## Gaps\n- none\n")
+        res = art.parent / "research"; res.mkdir(exist_ok=True)
+        for w in ("wave-a", "wave-b"):
+            (res / f"{w}.md").write_text("\n".join(f"F{i}. t (https://example.com/{w}{i})" for i in range(1, 7)) + "\n")
+        (res / "questions-ut.md").write_text("\n".join(f"Q{i}. ut probe {i}" for i in range(1, 4)) + "\n")
         L.qr_pass(run, 2); L.qr_pass(run, 0)
         run = L.mark_stage(L.load_run(run["run_id"]), spec, "R", "pass")
         (art / "spec.md").write_text(f"## Approach\nAUTO\n## Acceptance\nGiven a When b Then c\n## Files\n- {self.cwd}/src/*\n## Slices\n- s1 — done: test -f out.txt\n## Det-vs-Prob\n- AUTO\n## Test-plan\n- t\n## Rollback\n- r\n")

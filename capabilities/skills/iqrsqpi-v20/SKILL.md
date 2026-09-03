@@ -1,8 +1,8 @@
 ---
 name: iqrsqpi-v20
-description: "RIG doctrine — IQRSQPI v20, the fractal self-verifying loop. Intent (executable done-tests + declared confidence) → Question (persona panel) ⇄ Research (until DRY) → Solution (BDD acceptance + slices) → Build (child slice runs, each with its own kill switch) → Quality (checks green, planted failure, cross-family verifier dispatched by the engine) → Proof (seal + calibration) → Integrate (handoff). Every gate is code. Successor of iqrsqpi-v11; use for any meaningful build, fix, migration or research deliverable."
+description: "RIG doctrine — IQRSQPI v20, the fractal self-verifying loop. Intent (executable done-tests + declared confidence) → Question (persona panel, ≥300 tagged questions) ⇄ Research (corpus-grade: local corpus first, ≥10 effective queries recorded, until DRY) → Solution (BDD acceptance + slices) → Build (child slice runs, each with its own kill switch) → Quality (checks green, planted failure, cross-family verifier dispatched by the engine) → Proof (seal + calibration) → Integrate (handoff). Every gate is code. Successor of iqrsqpi-v11; use for any meaningful build, fix, migration or research deliverable."
 when_to_use: "Say '/iqrsqpi', 'v20', 'run the loop', 'slice it', 'verify with another model', 'gated build', or start any work that must survive sessions and ship with proof. Use iqrsqpi-v11 for small single-context tasks, iqrsqpi-v10 for throwaway ideation."
-version: 20.0.0
+version: 20.1.0
 owner: rig-intelligence
 domain: Agent engineering / operating doctrine
 status: Stable
@@ -14,6 +14,8 @@ done_when:
   - "cmd:python3 bin/rig-loop test iqrsqpi-v20-slice"
   - "file:capabilities/skills/iqrsqpi-v20/loop.yaml"
   - "grep:capabilities/skills/iqrsqpi-v20/loop.yaml:independent_verdict"
+  - "grep:capabilities/skills/iqrsqpi-v20/loop.yaml:min: 300"
+  - "grep:capabilities/skills/iqrsqpi-v20/loop.yaml:^## Corpus"
 great_example: examples/great/agent-engineering/iqrsqpi-v11.md
 quality_floor: 0.8
 metadata:
@@ -66,9 +68,9 @@ rig-loop path                                                 # artifacts dir
 
 | Stage | Artifact | Gate (code checks) | Advance |
 |---|---|---|---|
-| **I1 Intent** | `intent.md` | `## GOAL` `## METRIC` `## DONE-TEST` (≥1 `- cmd:` / `- file:` / `- grep:` — **registered as checks and executed later**) `## OUT-OF-SCOPE` `## COORDINATE` `## CONFIDENCE` (0–1, your probability the done-test passes first time); no TBD | `rig-loop stage I1 pass` |
-| **Q1 Question** | `questions.md` | `## Panel` with ≥3 `- [lens:<persona>]`; `## Questions` lines tagged `[BLOCKING]` (must carry `-> ANSWER:`) or `[ASSUMED]` | `rig-loop stage Q1 pass` |
-| **R Research** | `research.md` | `## Findings` `## Sources` (each `(HIGH\|MED\|LOW)`) `## Gaps`; **DRY**: ≥2 recorded passes and the last reported 0 new load-bearing unknowns | per pass `rig-loop qr pass --new-unknowns N`; `rig-loop stage R pass` |
+| **I1 Intent** | `intent.md` | `## GOAL` `## METRIC` `## DONE-TEST` (≥1 `- cmd:` / `- file:` / `- grep:` — **registered as checks and executed later**) `## OUT-OF-SCOPE` `## COORDINATE` `## CONFIDENCE` (0–1, your probability the done-test passes first time) `## UNCERTAINTY-LEVEL` (1–5, how uncertain you are about the topic — ask the human if unsure; it sets the research question floor); no TBD | `rig-loop stage I1 pass` |
+| **Q1 Question** | `questions.md` | `## Panel` with ≥3 `- [lens:<persona>]`; `## Questions` lines tagged `[BLOCKING]` (must carry `-> ANSWER:`) or `[ASSUMED]`; **≥300 tagged questions total** (corpus-grade bar, counted by the engine) | `rig-loop stage Q1 pass` |
+| **R Research** | `research.md` + `research/` corpus | `## Findings` `## Sources` (each `(HIGH\|MED\|LOW)`) `## Corpus` (≥10 effective queries — `- corpus:<tool> "<query>" -> hits: N`, hits≥1, from rig_brain / harness_recall / recall / mcp:<server> — **before web sources count**) `## Gaps`; **scraped waves**: `research/wave-<slug>.md` with ≥6 real URLs each (a `NO_WEB_ACCESS` wave fails; count scales with uncertainty level, level+1 waves); **question bank**: `research/questions-<slug>.md` with combined unique `Q<n>.` lines ≥ the level floor — **L1=300, L2=475, L3=650, L4=825, L5=1000** (`## QUESTION-QUOTA` in intent.md overrides); **DRY**: ≥2 recorded passes, last with 0 new unknowns | per pass `rig-loop qr pass --new-unknowns N`; `rig-loop stage R pass` |
 | **S Solution** | `spec.md` | `## Approach` `## Acceptance` (Given/When/Then) `## Files` (scope fence) `## Slices` (`- <name> — done: <cmd>`, each fits one context) `## Det-vs-Prob` `## Test-plan` `## Rollback` | `rig-loop stage S pass` — code writes unlock |
 | **B Build** | `build.md` | ≥1 slice run and **all slices done**; `## Slices-done` `## Changed` | `rig-loop slice start "<name>"` → child loop B→V→C (below) → `rig-loop stage B pass` |
 | **Q2 Quality** | `quality.md` | files written (slices count); every check green **now** incl. done-tests; ≥1 planted failure (slices count); **independent verdict** from a family ≠ builder in PERFECT/VERIFIED/PARTIAL; drift ≤10 (degrade); `## Checks` `## Planted-failure` `## Verifier` | `rig-loop verify --family codex` (or claude/hermes/omp/prime-agent) then `rig-loop stage Q2 pass` |
@@ -111,7 +113,7 @@ shows mean Brier and hit rate. Over-confident loops are a doctrine finding, not 
 
 ## What the engine enforces (precise)
 
-Everything v11 enforces (halt gates block, degrade gates stamp DEGRADED, park is a pause,
+Everything v11 enforces (halt gates block, degrade gates stamp DEGRADED, park is a pause, **≥300 questions at Q1 and a corpus query log at R are counted by the engine (`regex_count` gates), not asserted by the agent**,
 closing loop discards iteration evidence, proof binding re-verified after P, every write path
 checked, outward tripwire, `--run` cwd ownership) plus: done-tests executed at Q2/P; Q⇄R
 dryness from recorded passes; ≥1 slice with all slices done before Q2; cross-family verdict
@@ -120,7 +122,7 @@ from dispatch; tool-call budget parks the run and denies the call; handoff requi
 ## Honesty notes
 
 - Dispatch proves a different family produced a verdict; it does not prove the verifier was competent. Objective checks stay primary.
-- `qr pass --new-unknowns` and the panel are agent-written; the gate makes them explicit and auditable.
+- `qr pass --new-unknowns` and the panel are agent-written; the gate makes them explicit and auditable. The corpus query log is agent-written too — the gate counts lines with hits≥1, it cannot verify the queries were good. Web sources never substitute for corpus coverage: query rig_brain/harness_recall first, then the open web.
 - Calibration is only as honest as the done-tests written at I1.
 - Hermes: CLI-level gating only (gateway hooks cannot block or inject).
 - `/ultraplan` remains the v11 conversational walker; `/iqrsqpi` is this engine-gated loop.

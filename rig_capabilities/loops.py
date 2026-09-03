@@ -620,6 +620,15 @@ def _gate_files_written_min(run, spec, st, g):
     return n >= int(g.get("min", 1)), f"{n} files written this run incl. slices (min {g.get('min',1)})"
 
 
+def _gate_regex_count(run, spec, st, g):
+    p = _resolve_artifact(run, st, g.get("path"))
+    if not p.exists():
+        return False, f"{p} missing"
+    n = len(re.findall(g["pattern"], p.read_text(errors="replace"), re.M))
+    mn = int(g.get("min", 1))
+    return n >= mn, f"{n} matches of /{g['pattern']}/ in {p.name} (min {mn}){'' if n >= mn else ' — ' + str(g.get('hint',''))}"
+
+
 def _gate_qr_dry(run, spec, st, g):
     passes = run.get("qr_passes") or []
     mn = int(g.get("min", 2))
@@ -667,6 +676,72 @@ def _gate_confidence_declared(run, spec, st, g):
     run["predicted"] = float(m.group(1))
     return True, f"predicted confidence {run['predicted']}"
 
+# ---- uncertainty-scaled research corpus gates (v20.1) -------------------------------
+UNCERTAINTY_QUESTIONS = {1: 300, 2: 475, 3: 650, 4: 825, 5: 1000}  # level -> question floor
+_UNC_RX = re.compile(r"^##\s*UNCERTAINTY-LEVEL[^\n]*\n\s*([1-5])\b", re.M)
+_QUOTA_RX = re.compile(r"^##\s*(?:QUESTION-QUOTA|QUESTION-BANK)[^\n]*\n\s*(\d+)", re.M)
+_Q_LINE_RX = re.compile(r"^\s*(?:[-*]\s*)?\**Q\d+[.\):]\s+\S")
+
+
+def _intent_text(run: dict, st: dict) -> str:
+    p = _resolve_artifact(run, st, "intent.md")
+    return p.read_text(errors="replace") if p.exists() else ""
+
+
+def uncertainty_level(run: dict, st: dict) -> int:
+    """Topic uncertainty 1..5, declared at Intent as `## UNCERTAINTY-LEVEL`.
+    Falls back to the declared CONFIDENCE (level = inverted confidence band)."""
+    text = _intent_text(run, st)
+    m = _UNC_RX.search(text)
+    if m:
+        return int(m.group(1))
+    c = _CONF_RX.search(text)
+    if not c:
+        return 3
+    conf = float(c.group(1))
+    return 1 if conf >= 0.8 else 2 if conf >= 0.6 else 3 if conf >= 0.4 else 4 if conf >= 0.2 else 5
+
+
+def _research_files(run: dict, patterns: list[str]) -> list[Path]:
+    out: list[Path] = []
+    for base in (artifacts_dir(run).parent / "research", artifacts_dir(run)):
+        if base.exists():
+            for pat in patterns:
+                out += sorted(base.glob(pat))
+    return out
+
+
+def _gate_questions_min(run, spec, st, g):
+    lvl = uncertainty_level(run, st)
+    qm = _QUOTA_RX.search(_intent_text(run, st))
+    need = int(qm.group(1)) if qm else UNCERTAINTY_QUESTIONS[lvl]
+    seen: set[str] = set()
+    for f in _research_files(run, ["questions*.md", "QUESTIONS*.md"]):
+        for line in f.read_text(errors="replace").splitlines():
+            if _Q_LINE_RX.match(line):
+                seen.add(re.sub(r"^\s*(?:[-*]\s*)?\**Q\d+[.\):]\s+", "", line).strip().lower().rstrip("."))
+    n = len({q for q in seen if q})
+    run["counters"]["questions"] = n
+    src = "declared QUESTION-QUOTA" if qm else f"uncertainty level {lvl}"
+    return n >= need, f"{n} unique questions (floor {need} from {src})"
+
+
+def _gate_corpus_scraped(run, spec, st, g):
+    """Research must be SCRAPED, not remembered: wave files with real URLs, count scaling
+    with uncertainty level. NO_WEB_ACCESS on line 1 fails the wave."""
+    lvl = uncertainty_level(run, st)
+    need_waves = max(int(g.get("min", 2)), lvl + int(g.get("wave_floor", 1)))
+    min_urls = int(g.get("min_urls_per_wave", 6))
+    waves = _research_files(run, ["wave-*.md"])
+    thin = []
+    for w in waves:
+        text = w.read_text(errors="replace")
+        if text.split("\n", 1)[0].strip() == "NO_WEB_ACCESS":
+            thin.append(f"{w.name}:no-web")
+        elif len(re.findall(r"https?://", text)) < min_urls:
+            thin.append(f"{w.name}:{len(re.findall('https?://', text))}<{min_urls} urls")
+    ok = len(waves) >= need_waves and not thin
+    return ok, f"{len(waves)}/{need_waves} scraped waves (level {lvl})" + (f"; thin: {thin}" if thin else "")
 
 _DONE_TEST_RX = re.compile(r"^\s*[-*]\s*(cmd|file|grep|mcp):(\S.*)$", re.M)
 
@@ -708,8 +783,10 @@ GATE_TYPES = {
     "gate_d_requested": _gate_gate_d_requested,
     "cmd": _gate_cmd, "stage_passed": _gate_stage_passed, "drift_within": _gate_drift_within,
     "files_written_min": _gate_files_written_min, "qr_dry": _gate_qr_dry,
+    "regex_count": _gate_regex_count,
     "children_done": _gate_children_done, "independent_verdict": _gate_independent_verdict,
     "confidence_declared": _gate_confidence_declared,
+    "questions_min": _gate_questions_min, "corpus_scraped": _gate_corpus_scraped,
 }
 
 
