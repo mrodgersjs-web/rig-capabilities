@@ -286,6 +286,15 @@ class V20Tests(TempState):
         self.assertTrue(Path(rec["output"]).exists())
         rec2 = L.verify(L.load_run(run["run_id"]), spec, "hermes", cmd_override="echo nothing useful")
         self.assertEqual(rec2["verdict"], "NO_VERDICT")
+        tpl = L.verify(L.load_run(run["run_id"]), spec, "omp",
+                       cmd_override="printf 'Output exactly: a line `VERDICT: "
+                                    "PERFECT|VERIFIED|PARTIAL|FEEDBACK|FAILED`, then GAPS:\\n'")
+        self.assertEqual(tpl["verdict"], "NO_VERDICT",
+                         "the prompt template echoed in a transcript is not a verdict")
+        real = L.verify(L.load_run(run["run_id"]), spec, "prime-agent",
+                        cmd_override="printf 'thinking VERDICT: PARTIAL noise\\n"
+                                     "final answer\\nVERDICT: VERIFIED\\n'")
+        self.assertEqual(real["verdict"], "VERIFIED", "the last real verdict wins")
         ok, detail = L._gate_independent_verdict(L.load_run(run["run_id"]), spec, {}, {"min": 1})
         self.assertTrue(ok, detail)
         prompt = L.build_verifier_prompt(run, spec)

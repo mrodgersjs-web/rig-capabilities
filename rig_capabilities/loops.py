@@ -1076,7 +1076,11 @@ VERIFIER_FAMILIES = {
     "omp": ["omp", "-p", "--no-session", "{prompt}"],
     "prime-agent": ["prime-agent", "-p", "{prompt}"],
 }
-_VERDICT_RX = re.compile(r"VERDICT:\s*(PERFECT|VERIFIED|PARTIAL|FEEDBACK|FAILED)\b", re.I)
+# A real verdict is one word after the colon; the prompt template lists
+# `VERDICT: PERFECT|VERIFIED|…` and gets echoed into verifier transcripts —
+# the lookahead refuses the template, and the LAST match wins (codex echoes
+# its own instructions before answering).
+_VERDICT_RX = re.compile(r"VERDICT:\s*(PERFECT|VERIFIED|PARTIAL|FEEDBACK|FAILED)(?![|\w])", re.I)
 
 
 def build_verifier_prompt(run: dict, spec: dict) -> str:
@@ -1130,8 +1134,9 @@ def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, 
     except FileNotFoundError as exc:
         output, exit_code = f"[verifier binary not found: {exc}]", 127
     _atomic_write(out_path, output)
-    m = _VERDICT_RX.search(output)
-    verdict = m.group(1).upper() if m else "NO_VERDICT"
+    ms = _VERDICT_RX.findall(output)
+    m = ms[-1] if ms else None
+    verdict = (m if isinstance(m, str) else m.group(1)).upper() if m else "NO_VERDICT"
     gaps = []
     gm = re.search(r"GAPS:\s*\n((?:[ \t]*[-*].*\n?)+)", output)
     if gm:
