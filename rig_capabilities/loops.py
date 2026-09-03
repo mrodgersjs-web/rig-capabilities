@@ -676,6 +676,60 @@ def _gate_confidence_declared(run, spec, st, g):
     run["predicted"] = float(m.group(1))
     return True, f"predicted confidence {run['predicted']}"
 
+def _gate_questions_quality(run, spec, st, g):
+    """Anti-gaming on the question bank: the 300+ bar counts REAL questions —
+    unique after normalization, each >= min_words, and >= min_blocking_pct BLOCKING."""
+    p = _resolve_artifact(run, st, g.get("path"))
+    if not p.exists():
+        return False, f"{p} missing"
+    min_words = int(g.get("min_words", 5))
+    min_pct = int(g.get("min_blocking_pct", 5))
+    qs = []
+    for line in p.read_text(errors="replace").splitlines():
+        m = re.match(r"^\s*[-*]\s*\[(BLOCKING|ASSUMED)\]\s*(.*)$", line, re.I)
+        if m:
+            qs.append((m.group(1).upper(), m.group(2)))
+    def norm(t: str) -> str:
+        t = re.split(r"(?:->|→)\s*ANSWER\s*:", t)[0]
+        t = re.sub(r"\(assumption:[^)]*\)", "", t)
+        return re.sub(r"\s+", " ", t).strip().lower()
+    bodies = [norm(t) for _, t in qs]
+    words = [len(b.split()) for b in bodies]
+    dup = len(bodies) - len(set(bodies))
+    short = sum(1 for w in words if w < min_words)
+    blocking = sum(1 for t, _ in qs if t == "BLOCKING")
+    pct = round(100.0 * blocking / len(qs)) if qs else 0
+    run["counters"]["questions_duplicates"] = dup
+    run["counters"]["questions_short"] = short
+    fails = []
+    if dup:
+        fails.append(f"{dup} duplicate question(s) after normalization")
+    if short:
+        fails.append(f"{short} question(s) under {min_words} words")
+    if pct < min_pct:
+        fails.append(f"{pct}% BLOCKING (min {min_pct}%) — a bank of pure ASSUMED is not research")
+    return (not fails), ("question bank quality ok" if not fails else "; ".join(fails))
+
+
+def _gate_gate_d_threshold(run, spec, st, g):
+    """Human-agent collaboration gate: when declared UNCERTAINTY-LEVEL >= threshold
+    (default 4) or a QUESTION-QUOTA override is present, the human must type the
+    Gate-D approval before Intent passes. The human sets the research budget; the
+    agent may not scale it silently."""
+    lvl = uncertainty_level(run, st)
+    quota = bool(_QUOTA_RX.search(_intent_text(run, st)))
+    thr = int(g.get("threshold", 4))
+    if not (lvl >= thr or quota):
+        return True, f"uncertainty L{lvl} below L{thr} and no quota override — human approval not required"
+    gd = run["gate_d"]
+    if gd.get("approved"):
+        why = " + QUESTION-QUOTA override" if quota else ""
+        return True, f"human approved ({gd.get('by')}) for uncertainty L{lvl}{why}"
+    return False, (f"uncertainty L{lvl}{' + QUESTION-QUOTA override' if quota else ''} needs Mike's typed approval — "
+                   f"run: rig-loop gate-d request --action \"confirm UNCERTAINTY-LEVEL {lvl} and its question floor\", "
+                   f"then Mike: rig-loop gate-d approve --phrase \"APPROVE {run['run_id']}\"")
+
+
 # ---- uncertainty-scaled research corpus gates (v20.1) -------------------------------
 UNCERTAINTY_QUESTIONS = {1: 300, 2: 475, 3: 650, 4: 825, 5: 1000}  # level -> question floor
 _UNC_RX = re.compile(r"^##\s*UNCERTAINTY-LEVEL[^\n]*\n\s*([1-5])\b", re.M)
@@ -786,6 +840,7 @@ GATE_TYPES = {
     "regex_count": _gate_regex_count,
     "children_done": _gate_children_done, "independent_verdict": _gate_independent_verdict,
     "confidence_declared": _gate_confidence_declared,
+    "questions_quality": _gate_questions_quality, "gate_d_threshold": _gate_gate_d_threshold,
     "questions_min": _gate_questions_min, "corpus_scraped": _gate_corpus_scraped,
 }
 
@@ -1347,6 +1402,47 @@ def banner(run: dict, spec: dict) -> str:
     if run["mode_opts"].get("stop_after_stage"):
         lines.append("[rig-loop] WALK mode: stop after each stage pass and wait for Mike's confirmation.")
     return "\n".join(lines)
+
+
+def human_brief(run: dict, spec: dict) -> str:
+    """One-screen human brief: where the run stands, what is RED, what Mike must
+    decide, and the exact next command. The collaboration surface."""
+    L = [f"[brief] {spec.get('name', run['loop_id'])} v{spec.get('version', '?')} · run {run['run_id']} · {run['status']} · iter {run['iteration']}/{run['kill_switch']['max_iterations']} · {run['mode']}"]
+    for s in spec["stages"]:
+        L.append(f"  {s['id']:<3} {s.get('name', ''):<14} {run['stage_status'].get(s['id'], '·')}")
+    st = current_stage(run, spec)
+    if st is None:
+        L.append("[brief] all stages passed — close the run: rig-loop close")
+        return "\n".join(L)
+    _, results = evaluate_gate(run, spec, st)
+    red = [r for r in results if not r["ok"] and r["tier"] != "degrade"]
+    deg = [r for r in results if not r["ok"] and r["tier"] == "degrade"]
+    L.append(f"[brief] FRONTIER {st['id']} {st.get('name', '')}: {len(results) - len(red) - len(deg)}/{len(results)} gates green")
+    for r in red[:5]:
+        L.append(f"  RED {r['type']}: {r['detail'][:200]}")
+    for r in deg[:3]:
+        L.append(f"  DEGRADED {r['type']}: {r['detail'][:160]}")
+    gd = run["gate_d"]
+    if gd.get("approved"):
+        L.append(f"[brief] Gate-D approved by {gd.get('by')} at {gd.get('at')} — outward actions unlocked.")
+    elif gd.get("requested"):
+        L.append(f"[brief] MIKE MUST DECIDE: {gd.get('requested', '')}")
+        L.append(f"  approve: rig-loop gate-d approve --phrase \"APPROVE {run['run_id']}\"")
+    checks_red = [c for c in run["checks"] if c.get("last") and c["last"].get("exit") not in (0, None)]
+    if checks_red:
+        L.append(f"[brief] {len(checks_red)} registered check(s) RED:")
+        for c in checks_red[:4]:
+            L.append(f"  {c['cmd'][:160]}")
+    try:
+        cal = calibration_summary(run["loop_id"])
+        if cal.get("runs"):
+            L.append(f"[brief] calibration: {cal['runs']} sealed run(s) · mean Brier {cal['mean_brier']} · hit {cal['hit_rate']} · this run declared {run.get('predicted', '—')}")
+    except Exception:  # noqa: BLE001
+        pass
+    ks = run["kill_switch"]
+    L.append(f"[brief] budget: tool-calls {run.get('tool_calls', 0)}/{ks.get('max_tool_calls', 800)} · children {len(run.get('children') or [])}/{ks.get('max_children', 12)}")
+    L.append(f"[brief] next: rig-loop stage {st['id']} pass · park: rig-loop park --reason \"...\"")
+    return "\n".join(L)
 
 
 def hook_session_start(run: dict | None, spec: dict | None, p: dict) -> dict:

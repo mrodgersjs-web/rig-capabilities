@@ -6,7 +6,7 @@
 schema: rig.loop-skill.v11
 id: iqrsqpi-v20
 name: IQRSQPI v20
-version: 20.1.0
+version: 20.2.0
 doctrine_source:
   - ~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md
   - ~/Developer/rig-capabilities/capabilities/skills/iqrsqpi-v11/loop.yaml
@@ -50,12 +50,15 @@ stages:
         path: intent.md
         pattern: '^## UNCERTAINTY-LEVEL[^\n]*\n\s*[1-5]\b'
         hint: "UNCERTAINTY-LEVEL is a bare line, 1 (familiar topic) to 5 (unknown territory); ask the human if unsure — it scales the question bank"
+      - type: gate_d_threshold
+        threshold: 4
+        hint: "collaboration gate: L4/L5 uncertainty or a QUESTION-QUOTA override means the HUMAN sets the research budget — typed Gate-D approval required at Intent"
   - id: Q1
     name: Question
     artifact: questions.md
     write_policy:
       mode: artifacts_only
-      deny_message: "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)` — AND at least 300 tagged questions in total (corpus-grade bar)."
+      deny_message: "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)` — AND at least 300 tagged questions in total, each >=5 words, unique, >=5% BLOCKING (anti-gaming, engine-counted)."
     gate:
       - type: file_contains
         path: questions.md
@@ -71,6 +74,11 @@ stages:
         pattern: '^\s*[-*]\s*\[(BLOCKING|ASSUMED)\]'
         min: 300
         hint: "corpus-grade bar: at least 300 tagged questions ([BLOCKING]+[ASSUMED] combined); generate across the persona lenses"
+      - type: questions_quality
+        path: questions.md
+        min_words: 5
+        min_blocking_pct: 5
+        hint: "anti-gaming: questions must be unique after normalization, each >=5 words, and >=5% BLOCKING — duplicates, one-worders, or a pure-ASSUMED bank all fail"
   - id: R
     name: Research
     artifact: research.md
