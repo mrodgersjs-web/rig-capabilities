@@ -119,6 +119,9 @@ def sync(repo, dsn: str | None = None) -> dict:
     try:
         apply_ddl(repo, conn)
         with conn.cursor() as cur:
+            # sync owns the mirror: rebuild so repo-side deletions disappear
+            # (ponytail: full reload each sync; incremental prune if volume matters)
+            cur.execute("truncate capabilities.assets, capabilities.packs, capabilities.ratings")
             assets = _upsert_many(cur, SQL_ASSET, asset_rows(doc, overlay))
             packs = _upsert_many(cur, SQL_PACK, pack_rows(repo))
             ratings = _upsert_many(cur, SQL_RATING, rating_rows(repo))
