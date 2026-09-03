@@ -1,0 +1,60 @@
+{
+  "axis": "Visible economic incentive structure. Money paths are followable.",
+  "codename": "LUMINA",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "lu1_revenue_path_per_capability",
+      "mode": "count_min",
+      "pattern": "(attach (rate|premium).+\\$|\\$\\d+\\s*per (unit|controller|seat)|ASP premium|seat price|\\$\\d+/mo)",
+      "question": "REQUIRED: each capability has explicit revenue impact $/%?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "lu2_margin_protection_named",
+      "mode": "regex",
+      "pattern": "(margin (expansion|protection|preservation)|GM\\s+\\d+%|gross margin|EBITDA\\s+\\d+%|software margin)",
+      "question": "REQUIRED: margin protection or expansion explicitly named?",
+      "required": true
+    },
+    {
+      "id": "lu3_arr_path_named",
+      "mode": "regex",
+      "pattern": "(software ARR.+\\$|\\$\\d+M ARR by Y\\d|ARR (grows|reaches|hits) \\$\\d|recurring revenue)",
+      "question": "REQUIRED: software ARR path with year/amount?",
+      "required": true
+    },
+    {
+      "id": "lu4_unit_economics",
+      "mode": "regex",
+      "pattern": "(\\$\\d+\\s*per\\s+(unit|controller|asset|seat)|per-unit (premium|economics)|unit margin)",
+      "question": "REQUIRED: unit economics shown ($/unit, %/attach)?",
+      "required": true
+    },
+    {
+      "id": "lu5_no_revenue_handwave",
+      "mode": "absent",
+      "patterns": [
+        "\\b(significant revenue|meaningful revenue|substantial revenue|considerable revenue|material revenue)(?!\\s*[($\\d])\\b"
+      ],
+      "question": "REQUIRED: no 'significant revenue', 'meaningful revenue' without numbers?",
+      "required": true
+    },
+    {
+      "id": "lu6_5_year_plan",
+      "mode": "regex",
+      "pattern": "(Year 3|Y3|2028).+\\$\\d+M",
+      "question": "REQUIRED: revenue projection to Y3 minimum?",
+      "required": true
+    },
+    {
+      "id": "lu7_roi_explicit",
+      "mode": "regex",
+      "pattern": "\\d+(\\.\\d+)?\\s*[x×]\\s+ROI\\s+on\\s+\\$\\d",
+      "question": "REQUIRED: ROI multiple stated with denominator?",
+      "required": true
+    }
+  ],
+  "slug": "bioluminescent_attraction"
+}

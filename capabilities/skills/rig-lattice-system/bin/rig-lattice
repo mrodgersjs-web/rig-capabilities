@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# rig-lattice — CLI entry point. Resolves the skill dir from this script's
+# own location, so it works from any cwd and from any installed harness root.
+set -euo pipefail
+SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+exec python3 -c 'import sys; sys.path.insert(0, sys.argv.pop(1)); import rig_lattice.__main__ as m; sys.exit(m.main())' "$SKILL_DIR" "$@"

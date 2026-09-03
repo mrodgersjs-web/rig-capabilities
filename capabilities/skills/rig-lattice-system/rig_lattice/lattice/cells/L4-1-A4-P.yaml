@@ -1,0 +1,27 @@
+cell_id: L4-1-A4-P
+coordinate:
+  level: L4
+  diamond: 1_Physical
+  diamond_owns: operations, assets, logistics, facilities, devices, payments, inventory,
+    scheduling, infrastructure
+  bms_mode: A4
+  bms_name: LLM_AGENT_FREE
+process:
+  sequence: IQRSQPI
+  step_code: P
+  step_name: Proof
+  step_purpose: Bind sources, gates, signer, timestamp, hash
+routing:
+  archetype: A4.6
+  fallback_archetype: null
+  escalation_policy: UNKNOWN_OR_LOW_CONFIDENCE
+bms:
+  threshold: <0.25
+execution:
+  deterministic: false
+  model_in_decision_path: true
+  approval_required: true
+  approval_policy: mandatory
+  audit_required: true
+  proof_required: true
+cost_band: $50

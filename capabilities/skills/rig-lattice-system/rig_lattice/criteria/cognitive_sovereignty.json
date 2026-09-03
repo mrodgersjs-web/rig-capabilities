@@ -1,0 +1,78 @@
+{
+  "axis": "Steelman every plausible attack with explicit rebuttal. 'Attacks survived' index.",
+  "codename": "SHIELD",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "sh1_at_least_3_attacks_listed",
+      "mode": "count_min",
+      "pattern": "(attack|concern|risk|objection|counter-argument|rebuttal):|.+would (argue|say|claim|push back)",
+      "question": "REQUIRED: at least 3 plausible attacks/concerns explicitly listed?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "sh2_owner_family_attack",
+      "mode": "regex",
+      "pattern": "(Hill family|ownership|family business).{0,200}(why now|risk|concern|conservative|cost of not moving)",
+      "question": "REQUIRED: Hill family / ownership 'why now' attack addressed?",
+      "required": true
+    },
+    {
+      "id": "sh3_buyer_attack",
+      "mode": "regex",
+      "pattern": "(too much|expensive|premium|justify|cost of|\\$\\d+).{0,400}(Helios|Topcon|comparable|peer benchmark|industry average)",
+      "question": "REQUIRED: buyer / Gijs 'too much' attack addressed with comparable?",
+      "required": true
+    },
+    {
+      "id": "sh4_customer_attack",
+      "mode": "regex",
+      "pattern": "(OEMs? (don.t|won.t|will not) pay|customers? (don.t|won.t) pay|software (attach|premium)).{0,500}(Topcon|Wabtec|Allison|Cummins|Trimble|precedent|established|paid premium)",
+      "question": "REQUIRED: customer 'OEMs don't pay for software' attack addressed with precedent?",
+      "required": true
+    },
+    {
+      "id": "sh5_engineering_attack",
+      "mode": "regex",
+      "pattern": "(<\\s*\\d+\\s*ms|fits in|silicon spec|model size|CL-?\\d{4}|benchmark|<\\s*\\d+\\s*%\\s*false[- ]positive|by Month \\d benchmark)",
+      "question": "REQUIRED: engineering feasibility attack addressed with spec/benchmark?",
+      "required": true
+    },
+    {
+      "id": "sh6_competitor_attack",
+      "mode": "regex",
+      "pattern": "(Parker|Bosch).{0,400}(cannot|won.t|structural|CMMC|defense|integration risk|not certified|36-month head start|organizational antibody)",
+      "question": "REQUIRED: competitor (Parker/Bosch) 'ships this fast' attack addressed with structural barrier?",
+      "required": true
+    },
+    {
+      "id": "sh7_attacks_survived_index",
+      "mode": "regex",
+      "pattern": "(attacks? (survived|defended)|defense against|rebuttal index|objection log|steel-?man)",
+      "question": "Is there an 'attacks survived' index or explicit list of defended attacks?"
+    },
+    {
+      "id": "sh8_no_dismissive_handling",
+      "mode": "absent",
+      "patterns": [
+        "(not a (real )?concern|easily addressed|simply (a matter|a question)|nothing to worry about)"
+      ],
+      "question": "Zero dismissive phrases ('not a real concern', 'easily addressed')?"
+    },
+    {
+      "id": "sh9_concession_made",
+      "mode": "regex",
+      "pattern": "(we (accept|acknowledge|concede)|acceptable (downside|tradeoff)|HED holds defense, Parker takes commercial|fast-follower|second place)",
+      "question": "At least one concession or acceptable downside is acknowledged?"
+    },
+    {
+      "id": "sh10_explicit_decision_owner",
+      "mode": "regex",
+      "pattern": "(your choice|your call|optional|opt-out|board decision|board approves|decision is yours|the choice is)",
+      "question": "REQUIRED: the human/board retains the decision; no coercive framing?",
+      "required": true
+    }
+  ],
+  "slug": "cognitive_sovereignty"
+}

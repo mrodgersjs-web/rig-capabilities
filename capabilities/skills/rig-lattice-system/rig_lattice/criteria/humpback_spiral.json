@@ -1,0 +1,45 @@
+{
+  "axis": "Spiral tightens around best path. Anneal exploration → exploitation.",
+  "codename": "HUMPBACK",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "hu1_three_phase_arc",
+      "mode": "regex",
+      "pattern": "(?s)Foundation.{20,2000}Activation.{20,2000}Scale",
+      "question": "REQUIRED: Foundation → Activation → Scale phases present?",
+      "required": true
+    },
+    {
+      "id": "hu2_decreasing_exploration",
+      "mode": "regex",
+      "pattern": "(narrow.+to|focus.+from|consolidate|exploitation|productize|monetize)",
+      "question": "REQUIRED: later phases narrow vs broaden?",
+      "required": true
+    },
+    {
+      "id": "hu3_milestones_per_phase",
+      "mode": "count_min",
+      "pattern": "(Foundation|Activation|Scale).{0,800}(Month \\d|deliver|launch|ship|sign|complete)",
+      "question": "REQUIRED: each phase has ≥2 specific milestones?",
+      "required": true,
+      "threshold": 6
+    },
+    {
+      "id": "hu4_phase_review_gate",
+      "mode": "count_min",
+      "pattern": "(phase \\d (review|gate)|board[- ]ready|go/no[- ]go|Month-?9 review|day[- ]?90 review)",
+      "question": "REQUIRED: explicit phase review / go-no-go decision points?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "hu5_resource_intensity_curve",
+      "mode": "regex",
+      "pattern": "(\\$\\d+K/mo.+\\$\\d+K/mo.+\\$\\d+K/mo|m1-?\\d.+m\\d-?\\d.+m\\d|retainer rolls off|step[s]? down|advisory tier)",
+      "question": "REQUIRED: retainer steps down across phases (intensity curve)?",
+      "required": true
+    }
+  ],
+  "slug": "humpback_spiral"
+}

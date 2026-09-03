@@ -1,0 +1,66 @@
+{
+  "axis": "Generate-mutate-select. Show alternatives considered and rejected. Selection visible.",
+  "codename": "DARWIN",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "d1_alternatives_listed",
+      "mode": "count_min",
+      "pattern": "(alternative \\d?|option [A-Z]|path [A-Z]|approach \\d|scenario \\d)",
+      "question": "REQUIRED: at least 2 alternative paths considered and named?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "d2_explicit_rejection",
+      "mode": "regex",
+      "pattern": "(rejected because|not chosen|chose .+ over|preferred .+ to|over (alternative|option|path).+because)",
+      "question": "REQUIRED: at least one alternative explicitly rejected with reason?",
+      "required": false
+    },
+    {
+      "id": "d3_three_tiers_present",
+      "mode": "count_min",
+      "pattern": "(Diagnostic.+Foundation|\\$95,?000|Activation.+\\$185|\\$185,?000|Transformation.+\\$485|\\$485,?000)",
+      "question": "REQUIRED: 3 engagement tiers (Diagnostic + Foundation, Activation, Transformation)?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "d4_downside_base_upside",
+      "mode": "regex",
+      "pattern": "(downside.{0,80}base.{0,80}upside|DOWNSIDE.*BASE.*UPSIDE)",
+      "question": "REQUIRED: downside / base / upside scenarios shown with revenue numbers?",
+      "required": true
+    },
+    {
+      "id": "d5_counterfactual_named",
+      "mode": "regex",
+      "pattern": "(do nothing|status quo|counterfactual|if HED doesn.t|no[- ]move scenario)",
+      "question": "REQUIRED: counterfactual 'do nothing' scenario quantified?",
+      "required": true
+    },
+    {
+      "id": "d6_winners_refined",
+      "mode": "regex",
+      "pattern": "(refined|tightened|sharpened|narrowed|specified|iterated)",
+      "question": "At least one section shows refinement of a winning approach (vs full rewrite)?"
+    },
+    {
+      "id": "d7_pre_mortem",
+      "mode": "regex",
+      "pattern": "(pre-?mortem|failure modes?|composite probability|ranked risks?)",
+      "question": "REQUIRED: pre-mortem with ranked failure modes?",
+      "required": true
+    },
+    {
+      "id": "d8_explicit_kill_for_each_phase",
+      "mode": "count_min",
+      "pattern": "(Month \\d.+(kill|terminate|rescope|pause)|no.+by Month \\d|terminate.+by month)",
+      "question": "REQUIRED: each phase has its own kill criterion (not just one global)?",
+      "required": true,
+      "threshold": 2
+    }
+  ],
+  "slug": "darwinian_selection"
+}

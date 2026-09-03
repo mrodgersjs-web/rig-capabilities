@@ -1,0 +1,79 @@
+{
+  "axis": "Detect AI-slop patterns: templated openings, em-dash overuse, three-pillar lists, false-balance phrasing.",
+  "codename": "AntiSlopAuditor",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "as1_no_template_opening",
+      "mode": "absent",
+      "patterns": [
+        "^.{0,200}\\b(In an era where|It is widely (recognized|acknowledged)|As we (look to|move into)|In today.s (rapidly|fast-paced))\\b"
+      ],
+      "question": "Zero template openings ('In an era where', 'It is widely recognized')?",
+      "required": true
+    },
+    {
+      "id": "as2_no_three_pillars_template",
+      "mode": "absent",
+      "patterns": [
+        "\\b(three pillars|three core (principles|tenets|reasons)|3 ways to|three things you need)\\b"
+      ],
+      "question": "No 'three pillars / three reasons / three things' template?",
+      "required": true
+    },
+    {
+      "id": "as3_no_false_balance",
+      "mode": "absent",
+      "patterns": [
+        "\\b(on (the )?one hand,?.*on the other hand|that said|with that being said|all things considered)\\b"
+      ],
+      "question": "No 'on one hand … on the other hand' false-balance hedging?",
+      "required": true
+    },
+    {
+      "id": "as4_em_dash_density",
+      "mode": "ratio_min",
+      "pattern": "—",
+      "question": "Em-dash density ≤ 3/kw (overuse is an AI-slop signal)?",
+      "required": false,
+      "threshold": -3.0
+    },
+    {
+      "id": "as5_no_fluffy_closings",
+      "mode": "absent",
+      "patterns": [
+        "\\b(In closing|To wrap up|As a final thought|To bring this together|To put a bow on)\\b"
+      ],
+      "question": "No fluffy closings ('In closing', 'To wrap up', 'As a final thought')?",
+      "required": true
+    },
+    {
+      "id": "as6_no_template_section_headers",
+      "mode": "absent",
+      "patterns": [
+        "^##\\s+(Introduction|Conclusion|Overview)\\s*$"
+      ],
+      "question": "No '## Introduction', '## Conclusion', '## Overview' template-cloned headers?",
+      "required": false
+    },
+    {
+      "id": "as7_no_listicle_marker",
+      "mode": "absent",
+      "patterns": [
+        "\\bHere are \\d+ (things|ways|reasons|tips|tricks|lessons) (you|every|the|to)\\b"
+      ],
+      "question": "No 'Here are N X you need to Y' listicle scaffolding?",
+      "required": true
+    },
+    {
+      "id": "as8_no_drumroll_phrasing",
+      "mode": "absent",
+      "patterns": [
+        "\\b(drum ?roll please|and the answer is|here.s the kicker|wait for it)\\b"
+      ],
+      "question": "No drum-roll / reveal phrasing ('Drumroll please', 'And the answer is')?",
+      "required": false
+    }
+  ],
+  "slug": "anti_slop_auditor"
+}

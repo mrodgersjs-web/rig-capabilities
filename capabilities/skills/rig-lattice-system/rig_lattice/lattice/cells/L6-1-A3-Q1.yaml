@@ -1,0 +1,27 @@
+cell_id: L6-1-A3-Q1
+coordinate:
+  level: L6
+  diamond: 1_Physical
+  diamond_owns: operations, assets, logistics, facilities, devices, payments, inventory,
+    scheduling, infrastructure
+  bms_mode: A3
+  bms_name: AGENT_BOUNDED
+process:
+  sequence: IQRSQPI
+  step_code: Q1
+  step_name: Question
+  step_purpose: Convert intent to operational question
+routing:
+  archetype: A3.2
+  fallback_archetype: A4.A3.2
+  escalation_policy: UNKNOWN_OR_LOW_CONFIDENCE
+bms:
+  threshold: 0.25-0.44
+execution:
+  deterministic: false
+  model_in_decision_path: true
+  approval_required: true
+  approval_policy: mandatory
+  audit_required: true
+  proof_required: true
+cost_band: $1

@@ -1,0 +1,418 @@
+{
+  "goals": [
+    {
+      "id": "GL-MH-07-LATTICE-APPLICATION-SESSION",
+      "name": "Lattice Application Session Goal Harness",
+      "description": "Lattice Application Session Goal Harness [lattice-application-session] \u2014 compiled from capabilities/harnesses/mh-07-lattice-application-session.yaml",
+      "anchor": "L1-D1-A1-I1",
+      "bms_mode": "A1",
+      "gate": "All halt gates passed; zero unresolved halt gates and zero stop events",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Startup phrase spoken and the target application pinned: rep",
+          "description": "Startup phrase spoken and the target application pinned: repo path, the module or files in scope, and the declared non-goals stated before any file is opened",
+          "command": "Session log line 'TARGET: <repo>/<module>' plus 'SCOPE: <files>' and 'NON-GOALS: <list>'; python3 assertion that each line is present and non-empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 The installed lattice payload is intact before it is trusted",
+          "description": "The installed lattice payload is intact before it is trusted: doctor reports ok with 588 cells, 84 primaries, 28 archetypes, 40 engines and a fresh criteria compile",
+          "command": "bin/rig-lattice doctor --json | python3 -c \"import json,sys; d=json.load(sys.stdin); assert d['ok'] is True\"; output recorded to the session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.3",
+          "category": "Identity Lock",
+          "name": "0.3 RIG coordinate space recited before the first edit: 7 levels",
+          "description": "RIG coordinate space recited before the first edit: 7 levels x 3 diamonds x 4 BMS modes x 7 IQRSQPI steps = 588 cells, 84 primaries, 28 archetypes",
+          "command": "Session log line 'COORD-SPACE: L1-L7 x D1-D3 x A1-A4 x IQRSQPI = 588' verified by grep against the log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.4",
+          "category": "Identity Lock",
+          "name": "0.4 Harness tuple H_latticeapply(target_app, coordinate, bms_mod",
+          "description": "Harness tuple H_latticeapply(target_app, coordinate, bms_mode, engine_verdict, planted_failure, proofpacket) declared with all six components named",
+          "command": "Session log contains the tuple declaration verbatim; python3 assertion that all six component names appear",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.5",
+          "category": "Identity Lock",
+          "name": "0.5 A1-first commitment recorded: the session declares that ever",
+          "description": "A1-first commitment recorded: the session declares that every unit of work is attempted in the A1 deterministic band and that escalation requires a recorded failure",
+          "command": "Session log line 'A1-first: escalation requires a failing command and its exit code'; grep asserts the line exists before the first edit timestamp",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Coordinate",
+          "name": "1.1 G1 Coordinate before code \u2014 the session log contains a canon",
+          "description": "G1 Coordinate before code \u2014 the session log contains a canonical cell id matching ^L[1-7]-D[1-3]-A[1-4]-(I1|Q1|R|S|Q2|P|I2)$ and the BMSResult that produced its mode, both recorded before any file is edited",
+          "command": "python3 -c re.match on the logged cell id against ^L[1-7]-D[1-3]-A[1-4]-(I1|Q1|R|S|Q2|P|I2)$ and assert the log offset of the CELL line is lower than the offset of the first EDIT line; bin/rig-lattice lattice cell <id> --json exits 0 and its cell_id equals the logged id",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Coordinate",
+          "name": "1.2 The BMS band is derived, not asserted: the logged mode equal",
+          "description": "The BMS band is derived, not asserted: the logged mode equals bms score's mode for the logged criteria and level",
+          "command": "bin/rig-lattice bms score --failure-cost F --reversibility R --mechanism-clarity M --level L --json | python3 -c asserting d['mode'] equals the mode recorded in the session log; both values printed",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.3",
+          "category": "Coordinate",
+          "name": "1.3 Scope is closed-world: the files edited during the session a",
+          "description": "Scope is closed-world: the files edited during the session are a subset of the SCOPE declared in gate 0.1",
+          "command": "git diff --name-only compared by python3 set containment against the SCOPE list; the symmetric difference must be empty or the session takes a new coordinate through 1.1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "A1-First Execution",
+          "name": "2.1 G2 A1-first \u2014 every unit of work was attempted in the A1 ban",
+          "description": "G2 A1-first \u2014 every unit of work was attempted in the A1 band (deterministic code, no model in the decision path) before any escalation",
+          "command": "Session log carries one 'A1-ATTEMPT: <command>' line per unit of work with its exit code; python3 assertion that the count of A1-ATTEMPT lines is >= the count of units declared in the plan",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "A1-First Execution",
+          "name": "2.2 Escalation is evidence-bound: every A2/A3/A4 escalation name",
+          "description": "Escalation is evidence-bound: every A2/A3/A4 escalation names the A1 attempt it followed and that attempt's non-zero exit code",
+          "command": "python3 -c parsing each 'ESCALATE: A1->A<n> after <command> exit=<code>' line and asserting code != 0 and that the named command appears in an earlier A1-ATTEMPT line; zero unbound escalations required",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "A1-First Execution",
+          "name": "2.3 No silent A3 downgrade: if A3 was reached, archetype_runner",
+          "description": "No silent A3 downgrade: if A3 was reached, archetype_runner raised NotImplementedError and the session escalated to the A4 human gate rather than running the A1 path and labelling it A3",
+          "command": "python3 -c \"import sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.lattice.wire import archetype_runner; \\ntry:\\n    archetype_runner('A3'); raise SystemExit('A3 did not refuse')\\nexcept NotImplementedError as e: print('A3 refuses:', e)\"; output recorded",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.4",
+          "category": "A1-First Execution",
+          "name": "2.4 G3 Refactor budget \u2014 the diff stays inside BMS_BUDGET_USD[mo",
+          "description": "G3 Refactor budget \u2014 the diff stays inside BMS_BUDGET_USD[mode] and the declared file scope; any spend beyond the band's budget is a new coordinate",
+          "command": "python3 -c asserting the session's recorded spend <= BMS_BUDGET_USD[mode] read from rig_lattice.lattice.bms; for A1 the assertion is spend == 0.00 because no model is in the decision path",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.1",
+          "category": "Engine Verdict",
+          "name": "3.1 G4 Engine verdict \u2014 the artifact is audited by all 40 engine",
+          "description": "G4 Engine verdict \u2014 the artifact is audited by all 40 engines and NO physics HARD_BLOCK is left unaddressed: every blocking physics gate carries a DISPOSITION line in the session log naming a patch or a reason of 20+ characters. Measured 2026-09-02: a zero-physics-block absolute is not satisfiable by any artifact in evidence \u2014 upstream's own examples/example_strict_passing.md scores 37/44 passing and BDF +13.4 yet still blocks 3 physics gates (bell_entanglement, casimir_force, hawking_horizon), and a 17-line code module blocks 6. A halt gate nothing can pass is theater, so the operative test is addressed-ness, not absence. The global hard_blocks field counts all 44 packs and is NOT the gate.",
+          "command": "bin/rig-lattice audit <artifact> --json > audit.json; then python3 -c \"import json,re,sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.core.registry import ENGINE_REGISTRY; phys={e.slug for e in ENGINE_REGISTRY if e.layer=='physics'}; d=json.load(open('audit.json')); assert len(d['engines'])>=40, len(d['engines']); blocked=[s for s,r in d['engines'].items() if s in phys and r['status']=='HARD_BLOCK']; log=open('session.log').read(); disp={m.group(1) for m in re.finditer(r'DISPOSITION:\\s*(\\S+)\\s+(?:patched|reason)\\s*[:=]?\\s*(.{20,})', log)}; missing=[s for s in blocked if s not in disp]; print('physics blocked:', blocked); print('undispositioned:', missing); assert not missing, missing\"; audit.json is kept next to the artifact",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Engine Verdict",
+          "name": "3.2 Every engine below threshold carries either a patch or a nam",
+          "description": "Every engine below threshold carries either a patch or a named reason \u2014 no engine is left silently short",
+          "command": "python3 -c walking the audit JSON's engines, collecting slugs whose status is not PASS, and asserting each appears in the session log's DISPOSITION lines with either 'patched' or a reason string of 20+ characters",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Engine Verdict",
+          "name": "3.3 Calibration was not moved to pass: calibration.yaml and the",
+          "description": "Calibration was not moved to pass: calibration.yaml and the criteria packs are byte-identical to their committed state",
+          "command": "git diff --exit-code -- capabilities/skills/rig-lattice-system/rig_lattice/calibration.yaml capabilities/skills/rig-lattice-system/rig_lattice/criteria/; exit 0 required",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Refutation & Proof",
+          "name": "4.1 G5 Planted failure \u2014 one deliberate defect is introduced int",
+          "description": "G5 Planted failure \u2014 one deliberate defect is introduced into the new logic, the session's own check is shown going RED, then the defect is reverted and the check shown GREEN again",
+          "command": "Session log carries both command outputs: the planted run with a non-zero exit code and the restored run with exit 0, plus the diff of the planted defect; python3 assertion that the two exit codes differ and the second is 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Refutation & Proof",
+          "name": "4.2 The planted failure targeted the logic this session wrote, n",
+          "description": "The planted failure targeted the logic this session wrote, not an unrelated file",
+          "command": "python3 -c asserting the planted diff's file path is a member of the SCOPE list from gate 0.1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.3",
+          "category": "Refutation & Proof",
+          "name": "4.3 G6 Sealed proof \u2014 a ProofPacket is written carrying the comm",
+          "description": "G6 Sealed proof \u2014 a ProofPacket is written carrying the command list, each exit code, and the artifact sha256",
+          "command": "python3 -c \"import sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.deviator.pipeline.proof_packet import PROOF_DIR; print(PROOF_DIR)\" then assert the packet file exists, parses as JSON, and its artifact hash equals shasum -a 256 of the shipped artifact",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.4",
+          "category": "Refutation & Proof",
+          "name": "4.4 The payload's own suite is green at session close, from the",
+          "description": "The payload's own suite is green at session close, from the installed copy that did the work",
+          "command": "python3 capabilities/skills/rig-lattice-system/tests/run_all.py; exit 0 and the RESULT line recorded to the session log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.1",
+          "category": "Gate-D & Improvement",
+          "name": "5.1 Outward or irreversible actions are refused without typed hu",
+          "description": "Outward or irreversible actions are refused without typed human approval: the approval client returns (False, 'approval_required_no_client') when no reviewer is configured",
+          "command": "env -u RIG_DV_AUTO_APPROVE python3 -c \"import sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.deviator.pipeline.approval_client import request_approval as r; ok,reason=r('x'); assert ok is False and reason=='approval_required_no_client', (ok,reason); print(ok,reason)\"",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.2",
+          "category": "Gate-D & Improvement",
+          "name": "5.2 A scope change, a threshold change, or an A4 execution requi",
+          "description": "A scope change, a threshold change, or an A4 execution requires typed Gate-D approval recorded in the session log before it proceeds",
+          "command": "grep the session log for 'GATE-D: APPROVE <run_id>' preceding any SCOPE-CHANGE, THRESHOLD-CHANGE or A4-EXECUTE line; python3 assertion on line ordering",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "5.3",
+          "category": "Gate-D & Improvement",
+          "name": "5.3 One improvement entry is appended naming the gate that fired",
+          "description": "One improvement entry is appended naming the gate that fired and what the session learned",
+          "command": "python3 assertion that the improvements log gained exactly one entry whose text names a gate id from this harness; the entry is printed",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I route before I build. The coordinate and the band exist before the first edit, or there is no session.",
+        "harness_tuple": "H_latticeapply(target_app, coordinate, bms_mode, engine_verdict, planted_failure, proofpacket)",
+        "bms_bias": "A1 \u2014 every unit of work is attempted in the deterministic band with no model in the decision path; A2 only after a recorded A1 failure with its exit code; A3 forbidden (no agent runtime ships in this bundle, archetype_runner raises); A4 is a human gate, never a model call",
+        "meta": {
+          "harness_id": "mh-07-lattice-application-session",
+          "session_type": "lattice-application-session",
+          "governs_loops": [
+            "GL-BD",
+            "GL-VQ"
+          ],
+          "coordinate_space": {
+            "levels": [
+              "L1",
+              "L2",
+              "L3",
+              "L4",
+              "L5",
+              "L6",
+              "L7"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "iqrsqpi_steps": [
+              "I1",
+              "Q1",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {
+            "log_path": "~/.hermes/jake/improvements.log",
+            "pattern_cadence": 5,
+            "authority": "outer-loop only \u2014 this harness may improve the session's checklist and its evidence, never its own gate list from inside a session it governs",
+            "evidence": "each entry names the gate id that fired, the target application, and the cell id the session ran under, so a recurring failure is attributable to a coordinate band rather than to vibes",
+            "update_trigger": "the same gate fails 3+ times across sessions \u2192 the check is absorbed into the lattice payload as a test in tests/test_bundle_integrity.py, so the next session inherits it as code rather than as a reminder"
+          },
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "All halt gates passed; zero unresolved halt gates and zero stop events",
+        "A canonical cell id and its BMSResult were recorded before the first file edit (G1)",
+        "Every unit of work carries an A1-ATTEMPT line with an exit code, and every escalation names the A1 failure it followed (G2)",
+        "The diff stayed inside the declared scope and the mode's budget (G3)",
+        "rig-lattice audit reports hard_blocks == 0 and every below-threshold engine has a patch or a named reason (G4)",
+        "A planted defect was shown RED and the restored state GREEN, both outputs in the log (G5)",
+        "A ProofPacket exists with commands, exit codes and the artifact sha256 (G6)",
+        "capabilities/skills/rig-lattice-system/tests/run_all.py exits 0 at session close",
+        "calibration.yaml and criteria/ are unchanged \u2014 no threshold was moved to pass",
+        "final_rule closes with the required phrases"
+      ],
+      "failure_states": [
+        "notes: The session halts on any coordinate, execution, verdict or proof gate: work without a coordinate is unattributable, and an artifact with a tripped physics gate is not shippable regardless of the other 30 engines. Two stop gates mark boundaries only a human may cross \u2014 5.1 (an outward or irreversible action with no configured reviewer) and 5.2 (a scope change, a calibration change, or an A4 execution). Both require typed Gate-D approval before the session continues. 3.3 additionally invalidates any engine verdict produced after a threshold was touched: re-run 3.1 and 3.2 against the restored calibration.",
+        "stop gate(s) 5.1, 5.2: session halts; human Gate-D approval required before any continuation or outward action",
+        "halt gate(s) 1.1, 1.2, 1.3, 2.1, 2.2, 2.3, 2.4, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4: no progress without gate evidence",
+        "degrade gate(s) 5.3: continue with deficit logged in the Definition of Done waiver"
+      ],
+      "quality_criteria": [
+        "Startup phrase spoken and the target application pinned: repo path, the module or files in scope, and the declared non-goals stated before any file is opened",
+        "The installed lattice payload is intact before it is trusted: doctor reports ok with 588 cells, 84 primaries, 28 archetypes, 40 engines and a fresh criteria compile",
+        "RIG coordinate space recited before the first edit: 7 levels x 3 diamonds x 4 BMS modes x 7 IQRSQPI steps = 588 cells, 84 primaries, 28 archetypes",
+        "Harness tuple H_latticeapply(target_app, coordinate, bms_mode, engine_verdict, planted_failure, proofpacket) declared with all six components named",
+        "A1-first commitment recorded: the session declares that every unit of work is attempted in the A1 deterministic band and that escalation requires a recorded failure",
+        "G1 Coordinate before code \u2014 the session log contains a canonical cell id matching ^L[1-7]-D[1-3]-A[1-4]-(I1|Q1|R|S|Q2|P|I2)$ and the BMSResult that produced its mode, both recorded before any file is edited",
+        "The BMS band is derived, not asserted: the logged mode equals bms score's mode for the logged criteria and level",
+        "Scope is closed-world: the files edited during the session are a subset of the SCOPE declared in gate 0.1",
+        "G2 A1-first \u2014 every unit of work was attempted in the A1 band (deterministic code, no model in the decision path) before any escalation",
+        "Escalation is evidence-bound: every A2/A3/A4 escalation names the A1 attempt it followed and that attempt's non-zero exit code",
+        "No silent A3 downgrade: if A3 was reached, archetype_runner raised NotImplementedError and the session escalated to the A4 human gate rather than running the A1 path and labelling it A3",
+        "G3 Refactor budget \u2014 the diff stays inside BMS_BUDGET_USD[mode] and the declared file scope; any spend beyond the band's budget is a new coordinate",
+        "G4 Engine verdict \u2014 the artifact is audited by all 40 engines and NO physics HARD_BLOCK is left unaddressed: every blocking physics gate carries a DISPOSITION line in the session log naming a patch or a reason of 20+ characters. Measured 2026-09-02: a zero-physics-block absolute is not satisfiable by any artifact in evidence \u2014 upstream's own examples/example_strict_passing.md scores 37/44 passing and BDF +13.4 yet still blocks 3 physics gates (bell_entanglement, casimir_force, hawking_horizon), and a 17-line code module blocks 6. A halt gate nothing can pass is theater, so the operative test is addressed-ness, not absence. The global hard_blocks field counts all 44 packs and is NOT the gate.",
+        "Every engine below threshold carries either a patch or a named reason \u2014 no engine is left silently short",
+        "Calibration was not moved to pass: calibration.yaml and the criteria packs are byte-identical to their committed state",
+        "G5 Planted failure \u2014 one deliberate defect is introduced into the new logic, the session's own check is shown going RED, then the defect is reverted and the check shown GREEN again",
+        "The planted failure targeted the logic this session wrote, not an unrelated file",
+        "G6 Sealed proof \u2014 a ProofPacket is written carrying the command list, each exit code, and the artifact sha256",
+        "The payload's own suite is green at session close, from the installed copy that did the work",
+        "Outward or irreversible actions are refused without typed human approval: the approval client returns (False, 'approval_required_no_client') when no reviewer is configured",
+        "A scope change, a threshold change, or an A4 execution requires typed Gate-D approval recorded in the session log before it proceeds",
+        "One improvement entry is appended naming the gate that fired and what the session learned"
+      ],
+      "anti_patterns": [
+        "Editing a file before a canonical cell id and its BMSResult are in the session log \u2014 the coordinate is declared before the work, not reconstructed after it",
+        "Escalating from A1 to A2 because the task 'feels ambiguous' rather than because a recorded A1 attempt failed with an exit code",
+        "Reporting an A3 result produced by the A1 code path \u2014 a silent downgrade is the exact green-that-cannot-go-red this harness refuses",
+        "Widening the declared file scope mid-session instead of taking a new coordinate through G1",
+        "Calling the artifact done while a physics gate is at HARD_BLOCK, or while an engine below threshold has neither a patch nor a named reason",
+        "Sealing a ProofPacket whose commands were never executed, or whose artifact sha256 was computed over a different file than the one shipped",
+        "Moving a calibration threshold so a failing gate passes"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/mh-07-lattice-application-session.yaml",
+        "source_sha256": "ebd9cf708ef858763b89b52b99e4ede99a9aa0f825e45631121511cbd1e841d6",
+        "final_rule": [
+          "The coordinate exists before the code, or there is no session.",
+          "A1-first is not a preference \u2014 escalation costs a recorded failure with an exit code.",
+          "A gate that cannot go RED is theater: plant the defect, watch it fail, restore it.",
+          "An engine below threshold gets a patch or a named reason. Never silence.",
+          "No outward action without a typed human approval.",
+          "Every lattice-application session leaves the target measurably better and the proof on disk."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.2",
+            "1.3",
+            "2.1",
+            "2.2",
+            "2.3",
+            "2.4",
+            "3.1",
+            "3.2",
+            "3.3",
+            "4.1",
+            "4.2",
+            "4.3",
+            "4.4"
+          ],
+          "degrade": [
+            "5.3"
+          ],
+          "stop": [
+            "5.1",
+            "5.2"
+          ],
+          "gate_mapping": {},
+          "prose": [
+            "notes: The session halts on any coordinate, execution, verdict or proof gate: work without a coordinate is unattributable, and an artifact with a tripped physics gate is not shippable regardless of the other 30 engines. Two stop gates mark boundaries only a human may cross \u2014 5.1 (an outward or irreversible action with no configured reviewer) and 5.2 (a scope change, a calibration change, or an A4 execution). Both require typed Gate-D approval before the session continues. 3.3 additionally invalidates any engine verdict produced after a threshold was touched: re-run 3.1 and 3.2 against the restored calibration."
+          ]
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

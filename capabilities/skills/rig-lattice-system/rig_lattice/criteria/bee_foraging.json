@@ -1,0 +1,61 @@
+{
+  "axis": "Resource allocation across paths: each candidate gets effort proportional to its yield, with scouts probing new sources.",
+  "codename": "BeeForagingAllocator",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "bf1_explicit_allocation",
+      "mode": "count_min",
+      "pattern": "\\b(\\d+\\.\\d+\\s*FTE|\\d+\\s*hours/week|\\d+%\\s+(of\\s+)?(budget|resources|engineering)|\\$\\d+K\\s+for|allocate \\d)",
+      "question": "REQUIRED: explicit resource allocation across ≥2 paths (FTE, $, hours)?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "bf2_proportional_to_yield",
+      "mode": "regex",
+      "pattern": "(because (revenue|attach|ROI|payback)|allocated based on|prioritized by (impact|value|ROI)|each .+ generates \\$)",
+      "question": "REQUIRED: allocation tied to expected yield (revenue, attach rate, ROI)?",
+      "required": true
+    },
+    {
+      "id": "bf3_scout_paths_named",
+      "mode": "count_min",
+      "pattern": "(scout|explore|experiment|pilot|probe|test path|side bet|optionality)",
+      "question": "REQUIRED: at least 1 exploratory / scout path alongside primary path?",
+      "required": true,
+      "threshold": 1
+    },
+    {
+      "id": "bf4_resource_reallocation_rule",
+      "mode": "regex",
+      "pattern": "(reallocate|shift resources|pivot to|move .+ to (Path|alternative)|if .+ <\\s*\\d+% .+ redirect)",
+      "question": "REQUIRED: explicit rule for reallocating resources when a path underperforms?",
+      "required": true
+    },
+    {
+      "id": "bf5_starvation_floor_acknowledged",
+      "mode": "regex",
+      "pattern": "(minimum|floor|baseline allocation|never below|maintain at least)",
+      "question": "Optional: minimum resource floor (no path starved below threshold)?",
+      "required": false
+    },
+    {
+      "id": "bf6_no_uniform_split",
+      "mode": "absent",
+      "patterns": [
+        "\\b(split (resources |budget |attention )?50/50|equal allocation across|uniform split)\\b"
+      ],
+      "question": "REQUIRED: not a uniform 50/50 split (allocation is informed, not lazy)?",
+      "required": true
+    },
+    {
+      "id": "bf7_yield_measurement_loop",
+      "mode": "regex",
+      "pattern": "(measure (yield|attach|conversion).+(weekly|monthly|quarterly)|review allocation|recalibrate (resources|effort)|update based on)",
+      "question": "REQUIRED: loop for measuring yield and updating allocation?",
+      "required": true
+    }
+  ],
+  "slug": "bee_foraging"
+}

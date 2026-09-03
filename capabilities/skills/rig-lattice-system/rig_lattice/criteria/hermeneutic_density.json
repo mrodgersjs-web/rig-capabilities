@@ -1,0 +1,66 @@
+{
+  "axis": "Pays back more on reread. Footnotes that reward. Second read finds things the first missed.",
+  "codename": "WELLSPRING",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "w1_footnotes_present",
+      "mode": "count_min",
+      "pattern": "\\[\\d+\\]|footnote\\s+\\d+",
+      "question": "REQUIRED: at least 5 numbered footnotes [1], [2], etc.?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "w2_appendix_or_layered",
+      "mode": "regex",
+      "pattern": "(appendix|supplementary|see also|further reading|in detail|sensitivity (analysis|table)|driver tree|reference table)",
+      "question": "REQUIRED: explicit appendix / supplementary detail section?",
+      "required": true
+    },
+    {
+      "id": "w3_data_tables",
+      "mode": "count_min",
+      "pattern": "(:\\s*\\$\\d+M\\s*/\\s*\\$\\d+M\\s*/\\s*\\$\\d+M|Year 1.+Year 2.+Year 3|\\d+%\\s*/\\s*\\d+%\\s*/\\s*\\d+%)",
+      "question": "REQUIRED: at least 2 structured tables/lists with data per row?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "w4_progressive_disclosure",
+      "mode": "count_min",
+      "pattern": "(at a glance|overview|detail|deep dive|by the numbers|drilldown|underneath|specifically)",
+      "question": "REQUIRED: ≥3 sections with depth tier (overview → detail)?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "w5_cross_references",
+      "mode": "regex",
+      "pattern": "(see (Section|Table|Figure|Appendix|item)\\s*\\d|cf\\.|as outlined in)",
+      "question": "At least one internal cross-reference (see Section 3, Table 2)?"
+    },
+    {
+      "id": "w6_methodology_visible",
+      "mode": "regex",
+      "pattern": "(triangulat|bottom-up|top-down|sourced from|computed as|derived from|methodology)",
+      "question": "REQUIRED: methodology / how-numbers-derived shown for one major claim?",
+      "required": true
+    },
+    {
+      "id": "w7_sensitivity_or_band",
+      "mode": "regex",
+      "pattern": "(sensitivity (band|table|analysis)|downside.+base.+upside|low/mid/high|range:|\\d+\\s*to\\s*\\d+\\s*%)",
+      "question": "REQUIRED: sensitivity bands or ranges shown (not just point estimates)?",
+      "required": true
+    },
+    {
+      "id": "w8_no_executive_only",
+      "mode": "regex",
+      "pattern": "(?s)Rollout.+(Foundation|Activation|Scale).{2000,}",
+      "question": "REQUIRED: doc not just exec summary — has body sections >2000 chars total?",
+      "required": true
+    }
+  ],
+  "slug": "hermeneutic_density"
+}

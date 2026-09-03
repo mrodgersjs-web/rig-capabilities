@@ -1,0 +1,62 @@
+{
+  "axis": "Path diversity. Don't collapse to one path before evidence justifies.",
+  "codename": "SWARM",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "sw1_multiple_paths",
+      "mode": "count_min",
+      "pattern": "(path [A-Z\\d]|option [A-Z\\d]|alternative \\d|scenario \\d|wedge \\d)",
+      "question": "REQUIRED: ≥3 distinct strategic paths surfaced?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "sw2_evidence_per_path",
+      "mode": "count_min",
+      "pattern": "(downside.+\\$|base.+\\$|upside.+\\$|scenario.+\\$)",
+      "question": "REQUIRED: each path has its own evidence/scenario number?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "sw3_no_premature_collapse",
+      "mode": "absent",
+      "patterns": [
+        "\\b(the only path|the one strategy|the sole option|the (single|one) way to|no other (way|option))\\b"
+      ],
+      "question": "REQUIRED: no 'the only path' / 'the one strategy' framing?",
+      "required": true
+    },
+    {
+      "id": "sw4_explicit_path_comparison",
+      "mode": "regex",
+      "pattern": "(faster but|cheaper but|safer but|higher risk but|lower upside but|trades? off)",
+      "question": "REQUIRED: paths compared on at least 2 dimensions?",
+      "required": true
+    },
+    {
+      "id": "sw5_kill_per_path",
+      "mode": "count_min",
+      "pattern": "(if .+ (fails|misses).+(rescope|pivot|kill|abandon)|kill criteria|terminate if|switch path if)",
+      "question": "REQUIRED: each path has its own kill criterion?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "sw6_explicit_uncertainty",
+      "mode": "regex",
+      "pattern": "(uncertain|unclear|TBD|to be determined|depends on|conditional on)",
+      "question": "At least one explicit uncertainty acknowledged?"
+    },
+    {
+      "id": "sw7_diverse_revenue_paths",
+      "mode": "count_min",
+      "pattern": "(hardware revenue|software (revenue|ARR)|defense.+revenue|commercial.+revenue|attach revenue|fleet (platform|net) revenue)",
+      "question": "REQUIRED: at least 2 revenue path types (hardware vs software, defense vs commercial)?",
+      "required": true,
+      "threshold": 3
+    }
+  ],
+  "slug": "pheromone_swarm"
+}

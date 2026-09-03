@@ -1,0 +1,27 @@
+cell_id: L1-1-A2-S
+coordinate:
+  level: L1
+  diamond: 1_Physical
+  diamond_owns: operations, assets, logistics, facilities, devices, payments, inventory,
+    scheduling, infrastructure
+  bms_mode: A2
+  bms_name: HYBRID
+process:
+  sequence: IQRSQPI
+  step_code: S
+  step_name: Solution
+  step_purpose: Produce artifact
+routing:
+  archetype: A2.4
+  fallback_archetype: A3.A2.4
+  escalation_policy: UNKNOWN_OR_LOW_CONFIDENCE
+bms:
+  threshold: 0.45-0.74
+execution:
+  deterministic: false
+  model_in_decision_path: true
+  approval_required: false
+  approval_policy: conditional
+  audit_required: true
+  proof_required: true
+cost_band: $0.05

@@ -1,0 +1,43 @@
+{
+  "axis": "5-mode reproduction. Synthesis combines broadcast + brood + bud + fragment + deprecate.",
+  "codename": "REEF",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "re1_synthesis_evident",
+      "mode": "regex",
+      "pattern": "(combines?|synthes(is|ize)|integrates?|merges?|brings together|unifies?|composite)",
+      "question": "REQUIRED: doc shows synthesis (combines elements from multiple ideas)?",
+      "required": true
+    },
+    {
+      "id": "re2_explicit_modes",
+      "mode": "count_min",
+      "pattern": "(broadcast|brood|bud|fragment|deprecate|hybrid|integrate|peel off|spin out)",
+      "question": "REQUIRED: at least 2 different combination modes named?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "re3_internal_external_split",
+      "mode": "regex",
+      "pattern": "(internal.+external|HED-specific.+industry-wide|RIG.+HED|in-?house.+market)",
+      "question": "REQUIRED: distinguishes internal (RIG) vs external (HED) deployment?",
+      "required": true
+    },
+    {
+      "id": "re4_spawn_offsets",
+      "mode": "regex",
+      "pattern": "(spin-?off|second line|second product line|sibling product|adjacent product|Forge.+spin|new (line|product) (in|by) Y\\d)",
+      "question": "At least one spin-off / second product line named?"
+    },
+    {
+      "id": "re5_kill_weak",
+      "mode": "regex",
+      "pattern": "(prune|kill|deprecate|drop|abandon).+(weak|low signal|underperform|stale)",
+      "question": "REQUIRED: weak elements pruned explicitly?",
+      "required": true
+    }
+  ],
+  "slug": "coral_reef_synthesis"
+}

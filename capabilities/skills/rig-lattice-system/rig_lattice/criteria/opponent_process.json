@@ -1,0 +1,62 @@
+{
+  "axis": "Affective contrast. Hard claim immediately followed by its counter. Aftertaste durable.",
+  "codename": "REBOUND",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "r1_contrast_connectives",
+      "mode": "count_min",
+      "pattern": "\\b(but|however|on the other hand|yet|whereas|despite|although|even though)\\b",
+      "question": "REQUIRED: ≥6 contrast connectives ('but', 'however', 'yet', 'whereas')?",
+      "required": true,
+      "threshold": 6
+    },
+    {
+      "id": "r2_explicit_devils_advocate",
+      "mode": "regex",
+      "pattern": "(devil.?s advocate|the counter[- ]argument|the rebuttal|opposing view|steel[- ]man)",
+      "question": "REQUIRED: explicit devil's advocate section?",
+      "required": true
+    },
+    {
+      "id": "r3_acknowledged_risk_per_bet",
+      "mode": "count_min",
+      "pattern": "(risk:|risk is|the risk|risks include|downside risk|known risk|unknown risk)",
+      "question": "REQUIRED: each major bet acknowledges its specific risk?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "r4_concession_present",
+      "mode": "regex",
+      "pattern": "(we (accept|concede|acknowledge|admit)|HED accepts|acceptable tradeoff|we give up|we lose .+ but gain)",
+      "question": "REQUIRED: at least one concession (HED accepts X to win Y)?",
+      "required": true
+    },
+    {
+      "id": "r5_strong_then_qualifier",
+      "mode": "count_min",
+      "pattern": "(\\$\\d|\\d+%|guaranteed|category-creating|will|must).{0,80}(but|however|provided|if|unless|under condition|conditional on)",
+      "question": "REQUIRED: at least 3 strong claims immediately followed by qualifier?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "r6_named_painful_truth",
+      "mode": "regex",
+      "pattern": "(Parker (takes|wins|leads) commercial|Bosch (wins|leads).+commercial|HED holds (only |just )defense|fast[- ]follower position|second place)",
+      "question": "REQUIRED: at least one painful truth stated (Parker might win commercial, etc.)?",
+      "required": true
+    },
+    {
+      "id": "r7_no_unbroken_hype",
+      "mode": "absent",
+      "patterns": [
+        "([^.!?\\n]*\\.){5,}(?![\\s\\S]*\\b(but|however|yet|whereas|risk|however))"
+      ],
+      "question": "REQUIRED: no unbroken hype paragraph (>400 chars without contrast)?",
+      "required": true
+    }
+  ],
+  "slug": "opponent_process"
+}

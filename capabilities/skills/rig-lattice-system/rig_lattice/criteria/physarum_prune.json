@@ -1,0 +1,54 @@
+{
+  "axis": "Reinforce winning paths. Prune losing ones explicitly.",
+  "codename": "SLIME",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "sl1_explicit_kills",
+      "mode": "count_min",
+      "pattern": "(we (will not|won.t) pursue|kill (idea|path|option)|abandon|drop|deprecate|prune)",
+      "question": "REQUIRED: at least 2 paths/ideas explicitly killed?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "sl2_kill_with_reason",
+      "mode": "regex",
+      "pattern": "(killed because|abandoned because|dropped because|deprecated because|pruned because|rejected because)",
+      "question": "REQUIRED: each kill has explicit reason?",
+      "required": true
+    },
+    {
+      "id": "sl3_winning_paths_reinforced",
+      "mode": "regex",
+      "pattern": "(double down|invest more in|concentrate on|focus on|all-in on|primary bet|core bet)",
+      "question": "REQUIRED: winning path gets disproportionate investment language?",
+      "required": true
+    },
+    {
+      "id": "sl4_no_everything_equal",
+      "mode": "regex",
+      "pattern": "(primary|core|leading|preferred) (bet|path|option|strategy)",
+      "question": "REQUIRED: doc doesn't treat all options equally (must prefer one)?",
+      "required": true
+    },
+    {
+      "id": "sl5_resource_allocation_named",
+      "mode": "count_min",
+      "pattern": "\\b(0\\.[1-9]\\s*FTE|0\\.\\d+\\s*headcount|\\d+%\\s+(of\\s+)?(budget|resources|engineering)|\\$\\d+K\\s+for)\\b",
+      "question": "REQUIRED: explicit resource allocation across paths (FTE, $)?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "sl6_no_hedging_on_focus",
+      "mode": "absent",
+      "patterns": [
+        "\\b(we.ll do both|pursue both|cover all bases|cast a wide net|spread efforts)\\b"
+      ],
+      "question": "REQUIRED: no 'we'll do both' on mutually exclusive options?",
+      "required": true
+    }
+  ],
+  "slug": "physarum_prune"
+}

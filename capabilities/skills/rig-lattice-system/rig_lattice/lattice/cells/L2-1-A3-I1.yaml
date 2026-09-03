@@ -1,0 +1,27 @@
+cell_id: L2-1-A3-I1
+coordinate:
+  level: L2
+  diamond: 1_Physical
+  diamond_owns: operations, assets, logistics, facilities, devices, payments, inventory,
+    scheduling, infrastructure
+  bms_mode: A3
+  bms_name: AGENT_BOUNDED
+process:
+  sequence: IQRSQPI
+  step_code: I1
+  step_name: Intent
+  step_purpose: Classify the request/event
+routing:
+  archetype: A3.1
+  fallback_archetype: A4.A3.1
+  escalation_policy: UNKNOWN_OR_LOW_CONFIDENCE
+bms:
+  threshold: 0.25-0.44
+execution:
+  deterministic: false
+  model_in_decision_path: true
+  approval_required: true
+  approval_policy: mandatory
+  audit_required: true
+  proof_required: true
+cost_band: $1

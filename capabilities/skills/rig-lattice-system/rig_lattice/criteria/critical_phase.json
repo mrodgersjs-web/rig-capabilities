@@ -1,0 +1,56 @@
+{
+  "axis": "Cross critical temperature, reorganize regime. Commitment statements. Past this point, no retreat. Burn the boats.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "pass_sigma": 8.0,
+    "per_optional_bonus": 1.5
+  },
+  "codename": "CRITICAL",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "c1_commitment_phrase",
+      "mode": "count_min",
+      "pattern": "\\b(we (will|commit|are committing|are betting|are staking)|past this point|cannot retreat|burn the boats|no going back|crossing the threshold|once we cross)\\b",
+      "question": "REQUIRED: At least 2 commitment phrases ('we will', 'we commit', 'past this point', 'no retreat')?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "c2_explicit_reframe_post_phase",
+      "mode": "regex",
+      "pattern": "(after (month|Q[1-4]|Year) \\d.+(category|operating system|different|reframed|new (kind|category))|once Forge ships|once.+is live|after.+is in market|by.+we are)",
+      "question": "Is there an explicit 'after Month X, we are a different company' or regime-shift statement?"
+    },
+    {
+      "id": "c3_no_optionality_dilution",
+      "mode": "absent",
+      "patterns": [
+        "\\b(we may consider|we might (look|consider|explore)|one option would be|potentially we|maybe we|could possibly)\\b"
+      ],
+      "question": "Optional: doc avoids 'we may', 'we might consider', 'one option is' as load-bearing language?"
+    },
+    {
+      "id": "c4_skin_in_game",
+      "mode": "regex",
+      "pattern": "(production-or-nothing|extend at no additional fee|refund pro-rata|outcome guarantee|tied to outcomes|success fee|equity stake|we (extend|refund|stake))",
+      "question": "REQUIRED: There is skin-in-the-game (production-or-nothing, refund, extend free, success-tied)?",
+      "required": true
+    },
+    {
+      "id": "c5_named_no_pivot_point",
+      "mode": "regex",
+      "pattern": "(once.+ships|once.+is live|after CMMC|after Month 8|after first OEM pilot|by Y3|category claimed)",
+      "question": "Optional: Doc names a specific moment after which pivoting is too expensive?"
+    },
+    {
+      "id": "c6_what_we_will_not_do",
+      "mode": "count_min",
+      "pattern": "\\bwe (will not|won.t|do not|don.t)\\b",
+      "question": "Optional: Explicit 'we will not' (e.g., 'we will not sprint', 'we will not hand off a deck')?",
+      "threshold": 1
+    }
+  ],
+  "slug": "critical_phase"
+}

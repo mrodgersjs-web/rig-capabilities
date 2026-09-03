@@ -1,0 +1,92 @@
+{
+  "axis": "Maximum distance from generic-AI median. Zero consultant tokens. Every generic noun replaced with concrete object.",
+  "codename": "GRAVITON",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "g1_no_leverage",
+      "mode": "absent",
+      "patterns": [
+        "\\bleverage\\b"
+      ],
+      "question": "Zero use of 'leverage'?",
+      "required": true
+    },
+    {
+      "id": "g2_no_synergy_holistic",
+      "mode": "absent",
+      "patterns": [
+        "\\b(synergy|holistic|synergies)\\b"
+      ],
+      "question": "Zero use of 'synergy' or 'holistic'?",
+      "required": true
+    },
+    {
+      "id": "g3_no_landscape_filler",
+      "mode": "absent",
+      "patterns": [
+        "\\b(in today.s (landscape|world|environment|market)|rapidly evolving|unprecedented times|fast-paced world)\\b"
+      ],
+      "question": "Zero use of 'in today's landscape / rapidly evolving / unprecedented times'?",
+      "required": true
+    },
+    {
+      "id": "g4_no_excited_announce",
+      "mode": "absent",
+      "patterns": [
+        "\\bwe are (excited|pleased|thrilled) to (announce|share|introduce)\\b"
+      ],
+      "question": "Zero use of 'we are excited to announce / pleased to share'?",
+      "required": true
+    },
+    {
+      "id": "g5_no_thought_leadership",
+      "mode": "absent",
+      "patterns": [
+        "\\b(thought leadership|best practices|world-class|cutting-edge|state-of-the-art)\\b"
+      ],
+      "question": "Zero use of 'thought leadership / best practices / world-class'?",
+      "required": true
+    },
+    {
+      "id": "g6_no_furthermore_moreover",
+      "mode": "absent",
+      "patterns": [
+        "\\b(furthermore|moreover|in addition,|additionally,)\\b"
+      ],
+      "question": "Zero use of 'furthermore' or 'moreover' as connectives?",
+      "required": true
+    },
+    {
+      "id": "g7_no_robust_seamless",
+      "mode": "absent",
+      "patterns": [
+        "\\b(robust solution|seamlessly|seamless integration|robust framework)\\b"
+      ],
+      "question": "Zero use of 'robust' or 'seamless' as flavor adjectives?",
+      "required": true
+    },
+    {
+      "id": "g8_concrete_proper_nouns",
+      "mode": "count_min",
+      "pattern": "\\b(HED|Hill family|Gijs|Pierce|Oshkosh|CAT|Manitowoc|Deere|Helios|Topcon|Bosch|Parker|Grayhill|RIG|Rodgers)\\b",
+      "question": "At least 8 named entities (HED, Hill family, Gijs, Pierce, Oshkosh, etc.)?",
+      "threshold": 8
+    },
+    {
+      "id": "g9_specific_skus",
+      "mode": "count_min",
+      "pattern": "\\b(CL-?\\d+|HK series|Forge (Edge|Solo|Team|Vault|Sight|Net)|J1939|CODESYS|NVIS|CMMC)\\b",
+      "question": "At least 3 specific HED SKUs/products named (CL-714, CL-4002, HK, CL-712, Forge Edge)?",
+      "threshold": 3
+    },
+    {
+      "id": "g10_unique_phrases",
+      "mode": "count_min",
+      "pattern": "(operating system|knowledge graph|fleet intelligence|CAN-bus|edge inference|firmware-and-knowledge)",
+      "question": "At least 2 unique HED-specific compound phrases (e.g., 'fleet intelligence operating system')?",
+      "threshold": 2
+    }
+  ],
+  "slug": "gravity_escape"
+}

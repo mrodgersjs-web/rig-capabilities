@@ -1,0 +1,77 @@
+{
+  "axis": "d-prime above 1.8. Zero filler. Every word carries weight.",
+  "codename": "PRISM",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "ps1_no_essentially_basically",
+      "mode": "absent",
+      "patterns": [
+        "\\b(essentially,|basically,|actually,|really, |quite|rather|somewhat|fairly|relatively)\\b"
+      ],
+      "question": "REQUIRED: zero use of 'essentially', 'basically', 'actually', 'really' as fillers?",
+      "required": true
+    },
+    {
+      "id": "ps2_no_very",
+      "mode": "absent",
+      "patterns": [
+        "\\bvery\\s+(important|significant|critical|good|bad|large|small|robust)\\b"
+      ],
+      "question": "REQUIRED: zero use of 'very' as intensifier?",
+      "required": true
+    },
+    {
+      "id": "ps3_no_clearly_obviously",
+      "mode": "absent",
+      "patterns": [
+        "\\b(clearly,|obviously,|as (everyone|we all) (know|knows)|needless to say)\\b"
+      ],
+      "question": "REQUIRED: zero 'clearly', 'obviously', 'as everyone knows'?",
+      "required": true
+    },
+    {
+      "id": "ps4_short_sentence_density",
+      "mode": "ratio_min",
+      "pattern": "[.!?]+",
+      "question": "REQUIRED: average sentence length ≤ 22 words (terseness)?",
+      "required": true,
+      "threshold": 25.0
+    },
+    {
+      "id": "ps5_no_throat_clearing",
+      "mode": "absent",
+      "patterns": [
+        "\\b(It should be noted|It is worth (mentioning|noting)|It is important to (note|emphasize|recognize))\\b"
+      ],
+      "question": "REQUIRED: zero throat-clearing openers ('It should be noted', 'It is worth mentioning')?",
+      "required": true
+    },
+    {
+      "id": "ps6_no_hedge_overload",
+      "mode": "count_min",
+      "pattern": "\\b(perhaps|may possibly|could possibly|might potentially|maybe|presumably)\\b",
+      "question": "REQUIRED: ≤3 hedging words ('perhaps', 'may', 'might', 'could possibly')?",
+      "required": true,
+      "threshold": 0
+    },
+    {
+      "id": "ps7_concrete_verbs",
+      "mode": "count_min",
+      "pattern": "\\b(ship|deliver|audit|build|deploy|sign|run|operate|train|launch|monetize|claim|own|control)\\b",
+      "question": "REQUIRED: at least 8 action verbs (ship, deliver, audit, build, deploy, sign)?",
+      "required": true,
+      "threshold": 5
+    },
+    {
+      "id": "ps8_no_redundant_pairings",
+      "mode": "absent",
+      "patterns": [
+        "\\b(plans? and strateg|goals? and objective|aims? and ambition|hopes? and aspiration|methods? and approach)\\b"
+      ],
+      "question": "REQUIRED: zero redundant pairings ('plans and strategies', 'goals and objectives')?",
+      "required": true
+    }
+  ],
+  "slug": "signal_to_noise"
+}

@@ -1,0 +1,53 @@
+{
+  "axis": "Penetrate impassable barrier. Anti-orthodoxy commits. Refuse what industry accepts.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "max_sigma": 25.0,
+    "pass_sigma": 15.0,
+    "per_optional_bonus": 2.5
+  },
+  "codename": "TUNNEL",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "tu1_explicit_refusal",
+      "mode": "count_min",
+      "pattern": "(we (do not|don.t|will not|won.t|refuse|reject)|not (a|an) (chatbot|Copilot|pilot|CoE|consulting deck))",
+      "question": "REQUIRED: explicit refusal of a standard industry move?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "tu2_no_industry_default",
+      "mode": "absent",
+      "patterns": [
+        "\\b(AI Center of Excellence|AI CoE|Copilot bolt-on|Copilot rollout)\\b"
+      ],
+      "question": "REQUIRED: not pitching AI CoE / Copilot bolt-on?",
+      "required": true
+    },
+    {
+      "id": "tu3_barrier_named",
+      "mode": "regex",
+      "pattern": "(barrier|moat|orthodoxy|defense.{0,40}requires|impassable|locked out|gatekeep)",
+      "question": "REQUIRED: the industry barrier being penetrated is named?",
+      "required": true
+    },
+    {
+      "id": "tu4_anti_consensus_bet",
+      "mode": "regex",
+      "pattern": "(contrary to|disagree with consensus|industry is wrong|conventional wisdom is|most firms (assume|think))",
+      "question": "REQUIRED: at least one anti-consensus bet explicit?",
+      "required": true
+    },
+    {
+      "id": "tu5_evidence_for_penetration",
+      "mode": "regex",
+      "pattern": "(\\d+\\s*(months|years)\\s*(inside|embedded|deployed)|track record|data advantage|actual implementation|implementation data|n\\s*=\\s*\\d+)",
+      "question": "REQUIRED: why this approach can penetrate (track record, data advantage, deployment evidence)?",
+      "required": true
+    }
+  ],
+  "slug": "quantum_tunnel"
+}

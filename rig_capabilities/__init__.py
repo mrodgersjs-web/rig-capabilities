@@ -9,7 +9,7 @@ published numbers and shifts the 2031 rungs to 43–51; docs/ROADMAP.md, the
 ladder below and `tests.test_version_coherence` are pinned in a cycle.
 Stdlib only.
 """
-__version__ = "47.0.0"
+__version__ = "52.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",

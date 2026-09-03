@@ -1,0 +1,48 @@
+slug: compounding_edge
+codename: CompoundingEdge
+layer: cognitive
+axis: "Edge that compounds: each cycle strengthens without additional input. No flat moats."
+questions:
+  - id: ce1_compounding_loop_named
+    question: "REQUIRED: at least one explicit compounding loop named?"
+    required: true
+    mode: count_min
+    pattern: '(compound|network effect|each new.+improves|fleet learning|knowledge graph (grows|compounds)|gets smarter|each cohort.+helps|each customer.+(reduces|improves) cost|data flywheel)'
+    threshold: 1
+  - id: ce2_compounding_mechanism_explained
+    question: "REQUIRED: mechanism by which the edge compounds is explained (not just claimed)?"
+    required: true
+    mode: regex
+    pattern: '(because each|the reason this compounds|the mechanism is|the loop works|every new .+ adds|every iteration|grows because)'
+  - id: ce3_decay_or_competitor_clock
+    question: "REQUIRED: competitor catch-up timing or moat decay rate stated?"
+    required: true
+    mode: regex
+    pattern: '(\d+[- ]month (head start|window|lead)|\d+[- ]year (moat|advantage)|moat (closes|tightens|erodes)|catch-?up time|to replicate would require|window closes)'
+  - id: ce4_named_assets_compound
+    question: "REQUIRED: ≥2 named assets that compound (knowledge graph, fleet data, customer base, brand, certifications)?"
+    required: true
+    mode: count_min
+    pattern: '\b(knowledge graph|fleet (data|learning|net)|customer base|installed base|brand equity|certifications|CMMC|patent portfolio|talent flywheel|content library|API ecosystem)\b'
+    threshold: 2
+  - id: ce5_no_flat_moat
+    question: "REQUIRED: no 'we have first-mover advantage' without a compounding mechanism?"
+    required: true
+    mode: absent
+    patterns:
+      - '\b(first[- ]mover advantage|early[- ]mover|head start)(?![^.]{0,200}(compound|grows|each|loop|flywheel|network effect))'
+  - id: ce6_compounding_outcome_quantified
+    question: "REQUIRED: compounding outcome is quantified ($/year, % growth, count growth)?"
+    required: true
+    mode: regex
+    pattern: '(attach rate (grows|increases) from \d+%? to \d+%?|\$\d+M? by Y\d|ARR (grows|reaches) \$|\d+ OEMs? by Y\d|\d+% YoY)'
+  - id: ce7_zero_input_growth
+    question: "Optional: explicit claim that growth happens without additional input?"
+    required: false
+    mode: regex
+    pattern: '(without additional (input|investment|sales effort)|past the \d+% inflection|self-?sustaining|zero[- ]touch|autonomous expansion)'
+  - id: ce8_negative_compounding_acknowledged
+    question: "Optional: negative compounding (cost of not moving) explicitly named?"
+    required: false
+    mode: regex
+    pattern: '(margin compression|moat (closes|erodes|dissipates)|catches up|fast[- ]follower position|cost of not moving|window closes by)'

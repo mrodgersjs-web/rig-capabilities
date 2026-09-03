@@ -1,0 +1,69 @@
+{
+  "axis": "No two artifacts occupy the same state. No boilerplate duplication. Each section unique.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "pass_sigma": 8.0,
+    "per_optional_bonus": 1.0
+  },
+  "codename": "PAULI",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "p1_no_repeated_paragraph_headers",
+      "mode": "absent",
+      "patterns": [
+        "^(Executive Summary|Introduction|Background|Conclusion|Summary)[\\s\\S]{50,}^(Executive Summary|Introduction|Background|Conclusion|Summary)\\b"
+      ],
+      "question": "REQUIRED: No section header appears twice in the document?",
+      "required": true
+    },
+    {
+      "id": "p2_no_repeated_sentence_starters",
+      "mode": "count_min",
+      "pattern": "^(We will|Our)\\b",
+      "question": "Are repeated sentence starters ('We will', 'Our') used <8x each?",
+      "threshold": 0
+    },
+    {
+      "id": "p3_no_generic_summary_filler",
+      "mode": "absent",
+      "patterns": [
+        "\\b(In conclusion|To summarize|In summary,|In closing,|As mentioned earlier|As stated above)\\b"
+      ],
+      "question": "Zero use of stock executive-summary closing phrases ('In conclusion', 'To summarize', 'In summary')?"
+    },
+    {
+      "id": "p4_unique_phase_descriptions",
+      "mode": "count_min",
+      "pattern": "(Foundation.+(audit|interviews|literacy)|Activation.+(spec generator|configurator|first.+pilot)|Scale.+(Vault|Forge Net|category claim))",
+      "question": "Each major phase (Foundation/Activation/Scale) has distinct deliverables, not just rephrased same content?",
+      "threshold": 3
+    },
+    {
+      "id": "p5_no_paragraph_repeats",
+      "mode": "absent",
+      "patterns": [
+        "([^\\n]{80,}?)\\n[\\s\\S]{0,2000}\\1"
+      ],
+      "question": "REQUIRED: No paragraph (≥80 chars) appears twice verbatim?",
+      "required": true
+    },
+    {
+      "id": "p6_distinct_tier_descriptions",
+      "mode": "count_min",
+      "pattern": "(Diagnostic.+Foundation|Activation.+\\$185|Transformation.+\\$485|tier.+months)",
+      "question": "Each engagement tier (Diagnostic, Activation, Transformation) has different deliverables enumerated?",
+      "threshold": 3
+    },
+    {
+      "id": "p7_no_redundant_value_props",
+      "mode": "absent",
+      "patterns": [
+        "(we will deliver[\\s\\S]{20,200}){5,}"
+      ],
+      "question": "Optional: zero use of 'we will deliver' more than 4x?"
+    }
+  ],
+  "slug": "pauli_exclusion"
+}

@@ -1,0 +1,45 @@
+{
+  "axis": "Winners refine gently. Mediocre rewrites hard.",
+  "codename": "CLONAL",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "cl1_refinement_language",
+      "mode": "count_min",
+      "pattern": "(refined|tightened|sharpened|narrowed|specified|hardened|iterated)",
+      "question": "REQUIRED: ≥3 'refined / tightened / sharpened' markers on strong sections?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "cl2_rewrite_signaled",
+      "mode": "regex",
+      "pattern": "(from scratch|rewritten|first principles|fresh sheet|start over|reset|reframed)",
+      "question": "At least one section signals it's a from-scratch rewrite?"
+    },
+    {
+      "id": "cl3_versioning_visible",
+      "mode": "regex",
+      "pattern": "\\b(v[1-9]|version \\d|iteration \\d|cycle \\d|wave \\d)\\b",
+      "question": "REQUIRED: version progression visible (v1/v2/v3 or iteration)?",
+      "required": true
+    },
+    {
+      "id": "cl4_explicit_diff",
+      "mode": "regex",
+      "pattern": "(what changed|since v\\d|since (last|prior)|diff from|update from|v\\d+ \\(.+\\))",
+      "question": "REQUIRED: explicit diff from prior version OR 'what changed' note?",
+      "required": true
+    },
+    {
+      "id": "cl5_no_template_clone",
+      "mode": "absent",
+      "patterns": [
+        "(- \\w+:.+\\n- \\w+:.+\\n- \\w+:.+\\n- \\w+:.+\\n- \\w+:.+\\n- \\w+:.+){2,}"
+      ],
+      "question": "REQUIRED: no template-cloned bullets (3 sections with identical structure)?",
+      "required": true
+    }
+  ],
+  "slug": "clonal_refinement"
+}

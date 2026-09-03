@@ -1,0 +1,63 @@
+{
+  "axis": "Genuine non-local correlation. Claim + evidence + falsification co-located in each major paragraph.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "pass_sigma": 12.0,
+    "per_optional_bonus": 1.5
+  },
+  "codename": "BELL",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "bl1_claim_evidence_colocated",
+      "mode": "count_min",
+      "pattern": "(\\$\\d|\\d+%|\\d+\\s*(units|OEMs|customers|engineers)).{0,600}(source|cite|footnote|\\[\\d+\\]|per (Research|Mordor|Grand|10-K)|Q[1-4]\\s*FY?\\s*\\d)",
+      "question": "REQUIRED: At least 3 paragraphs contain a claim AND its evidence within 600 chars?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "anchor": "(by Y3|Year 3.+\\$|attach rate.+\\d+%|software ARR.+\\$)",
+      "id": "bl2_claim_falsification_colocated",
+      "mode": "proximity",
+      "question": "REQUIRED: At least 2 paragraphs contain a claim AND a dated falsification within 800 chars?",
+      "required": true,
+      "target": "(kill criteria|wrong if|terminate if|no .+ by month|<.+by Q\\d|by 202\\d)",
+      "window_chars": 800
+    },
+    {
+      "id": "bl3_dated_kills_present",
+      "mode": "count_min",
+      "pattern": "(kill criteria.+by month \\d|terminate.+by|no .+ by month|<.+by Q\\d|extend at no additional fee|refund pro-rata|by 202\\d)",
+      "question": "REQUIRED: ≥3 kill criteria with specific dates present anywhere?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "bl4_falsification_calendar",
+      "mode": "regex",
+      "pattern": "(falsification calendar|trigger date|kill criteria.*\\n.*by month|review checkpoint.+date)",
+      "question": "Is there a 'Falsification Calendar' or trigger-table section?"
+    },
+    {
+      "id": "bl5_load_bearing_claim_named",
+      "mode": "regex",
+      "pattern": "(if .+(fails|misses).+reassess|the bet hinges on|load-bearing|the assumption.+if false|if .+ proves false|the deal-breaker)",
+      "question": "Is the one claim that, if false, kills the thesis explicitly identified?"
+    },
+    {
+      "id": "bl6_three_way_link_in_exec",
+      "mode": "regex",
+      "pattern": "(?s)^.{0,2000}(\\$\\d|\\d+%).{0,400}(source|cite|per|footnote|\\[\\d).{0,400}(kill|wrong if|terminate if|fall short)",
+      "question": "Does the executive summary (first 2000 chars) contain claim+evidence+falsification together?"
+    },
+    {
+      "id": "bl7_per_phase_metric_table",
+      "mode": "regex",
+      "pattern": "(Foundation.+Activation.+Scale|Phase 1.+Phase 2.+Phase 3|Month [1-3].+Month [4-9].+Month 1[0-8])",
+      "question": "Is there an explicit phase-by-phase metric table or list?"
+    }
+  ],
+  "slug": "bell_entanglement"
+}

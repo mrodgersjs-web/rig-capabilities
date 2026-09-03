@@ -1,0 +1,56 @@
+{
+  "axis": "Effects cannot precede causes. Causal ordering preserved. No 'as shown above' for content below.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "pass_sigma": 8.0,
+    "per_optional_bonus": 1.0
+  },
+  "codename": "LUMEN",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "l1_no_forward_reference_as_already_proven",
+      "mode": "absent",
+      "patterns": [
+        "(as (shown|established|proven|demonstrated) above)[\\s\\S]{0,800}(will (show|demonstrate|prove)|we.ll (demonstrate|show))"
+      ],
+      "question": "REQUIRED: No 'as shown above', 'as established', 'as proven' followed within 800 chars by 'will demonstrate' or 'we'll show'?",
+      "required": true
+    },
+    {
+      "id": "l2_evidence_before_claim_when_quoted",
+      "mode": "absent",
+      "patterns": [
+        "\\[(TBD|SOURCE|CITATION|PLACEHOLDER|TODO)\\]"
+      ],
+      "question": "REQUIRED: Citations have brackets/footnotes that point to a real number (no [TBD] or [SOURCE])?",
+      "required": true
+    },
+    {
+      "id": "l3_phase_order_correct",
+      "mode": "regex",
+      "pattern": "(?s)Foundation[\\s\\S]{20,2000}Activation[\\s\\S]{20,2000}Scale",
+      "question": "Are phases ordered Foundation → Activation → Scale (not jumbled)?"
+    },
+    {
+      "id": "l4_dates_in_chronological_order",
+      "mode": "regex",
+      "pattern": "(?s)2026[\\s\\S]{20,3000}2027[\\s\\S]{20,3000}(2028|2030|2033)",
+      "question": "Optional: Are year mentions in chronological order across the doc (2026 before 2027 before 2028)?"
+    },
+    {
+      "id": "l5_no_premature_conclusion",
+      "mode": "regex",
+      "pattern": "(?s)(rollout|phases|engagement tiers)[\\s\\S]+(future state|year 5|conclusion|the question)",
+      "question": "Optional: Does conclusion appear AFTER body (not before)?"
+    },
+    {
+      "id": "l6_cause_before_effect_in_economic",
+      "mode": "regex",
+      "pattern": "(attach rate|capability built|first.+ships).{0,400}(\\$\\d+M|\\$\\d+\\.\\d+M)",
+      "question": "Optional: In economic projections, attach-rate or capability driver named BEFORE revenue number?"
+    }
+  ],
+  "slug": "speed_of_lumen"
+}

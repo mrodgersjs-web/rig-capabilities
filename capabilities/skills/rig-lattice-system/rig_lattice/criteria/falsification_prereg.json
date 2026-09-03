@@ -1,0 +1,61 @@
+{
+  "axis": "Pre-registered falsification: every load-bearing claim has a dated condition that would prove it wrong.",
+  "codename": "FalsificationPrereg",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "fp1_falsification_section",
+      "mode": "regex",
+      "pattern": "(falsification calendar|kill criteria|trigger calendar|review checkpoint|go/no-?go calendar)",
+      "question": "REQUIRED: explicit 'Falsification Calendar' or 'Kill Criteria' section?",
+      "required": true
+    },
+    {
+      "id": "fp2_three_dated_kills",
+      "mode": "count_min",
+      "pattern": "(kill criteri|terminate if|rescope if|wrong if|fails if).{0,400}(by month \\d|Q[1-4]\\s+\\d{4}|\\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\\w*\\s+\\d+)",
+      "question": "REQUIRED: at least 3 kill criteria with specific calendar dates?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "fp3_load_bearing_named",
+      "mode": "regex",
+      "pattern": "(load-?bearing|the (bet|thesis|projection) hinges on|if this fails the (whole|entire|core)|the deal-breaker|if .+ proves false)",
+      "question": "REQUIRED: at least one claim is identified as load-bearing?",
+      "required": true
+    },
+    {
+      "id": "fp4_quantitative_thresholds",
+      "mode": "count_min",
+      "pattern": "(kill criteri|terminate if|rescope if|wrong if).{0,200}(<\\s*\\d+|>\\s*\\d+|\\d+%|\\$\\d)",
+      "question": "REQUIRED: kill criteria specify quantitative thresholds (<, >, %, $)?",
+      "required": true,
+      "threshold": 2
+    },
+    {
+      "id": "fp5_named_review_event",
+      "mode": "regex",
+      "pattern": "(Month-?\\d+ review|phase \\d (review|gate|checkpoint)|board (review|check-?in|approval)|day-?90 review|go/no-?go)",
+      "question": "Optional: at least one named review event (Month-9 review, board check-in, phase gate)?",
+      "required": false
+    },
+    {
+      "id": "fp6_no_vague_kill",
+      "mode": "absent",
+      "patterns": [
+        "(if things go badly|if (it )?doesn.t work out|eventually if|some day if|hopefully not but)"
+      ],
+      "question": "REQUIRED: no vague kill criteria ('if things go badly', 'eventually if X')?",
+      "required": true
+    },
+    {
+      "id": "fp7_reversibility_acknowledged",
+      "mode": "regex",
+      "pattern": "(rescope|extend at no additional fee|refund pro-?rata|off-?ramp|exit clause|pivot to)",
+      "question": "Optional: explicit reversibility / off-ramp language?",
+      "required": false
+    }
+  ],
+  "slug": "falsification_prereg"
+}

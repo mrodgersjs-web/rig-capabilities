@@ -1,0 +1,68 @@
+{
+  "axis": "Expose fake understanding. Every claim explains HOW, not just WHAT.",
+  "codename": "XRAY",
+  "layer": "cognitive",
+  "questions": [
+    {
+      "id": "x1_how_density",
+      "mode": "ratio_min",
+      "pattern": "\\b(how|why|because|via|through|using|mechanism|method|approach|by means of)\\b",
+      "question": "REQUIRED: at least 12 'how/why/mechanism/because' markers per 1000 words?",
+      "required": true,
+      "threshold": 8.0
+    },
+    {
+      "id": "x2_no_buzzword_namedrops",
+      "mode": "absent",
+      "patterns": [
+        "\\b(deep learning|neural network|transformer model|large language model|LLM)\\b(?![^.]{0,200}(model|inference|fine-?tune|RAG|context window|tokens))"
+      ],
+      "question": "REQUIRED: no AI/ML buzzwords used without mechanism (deep learning, neural net, transformer)?",
+      "required": true
+    },
+    {
+      "id": "x3_specific_signal_for_predictive",
+      "mode": "regex",
+      "pattern": "(CAN (traffic|message|frame|bus)|hydraulic pressure|sensor (drift|threshold)|current spike|temperature gradient|J1939 signal|controller area network)",
+      "question": "REQUIRED: predictive diagnostics explained with specific signal (CAN traffic, current spike, etc.)?",
+      "required": true
+    },
+    {
+      "id": "x4_named_model_type",
+      "mode": "regex",
+      "pattern": "(autoencoder|isolation forest|gradient boost|random forest|XGBoost|LightGBM|LSTM|conv neural|kalman filter|statistical anomaly|threshold model|rule-based)",
+      "question": "REQUIRED: when ML claimed, model TYPE named (autoencoder, isolation forest, etc.)?",
+      "required": false
+    },
+    {
+      "id": "x5_false_positive_rate",
+      "mode": "regex",
+      "pattern": "(false[- ]positive|FPR|precision|recall|accuracy|ROC|AUC|<\\s*\\d+\\s*%\\s*error|<\\s*\\d+\\s*%\\s*FP)",
+      "question": "REQUIRED: false-positive rate or error bound stated?",
+      "required": false
+    },
+    {
+      "id": "x6_inference_latency_named",
+      "mode": "regex",
+      "pattern": "(<\\s*\\d+\\s*ms|latency|inference time|runs in|fits in|memory budget|RAM footprint|MCU|microcontroller)",
+      "question": "REQUIRED: inference latency or compute budget named?",
+      "required": true
+    },
+    {
+      "id": "x7_failure_mode_diagnosed",
+      "mode": "regex",
+      "pattern": "(could fail (if|when|because)|fails (if|when|because)|failure mode:|fail open|fail closed|graceful degradation|fallback)",
+      "question": "REQUIRED: at least one failure mode explained mechanically (why it could fail)?",
+      "required": true
+    },
+    {
+      "id": "x8_no_unexplained_passive",
+      "mode": "absent",
+      "patterns": [
+        "\\b(was determined|has been shown|is believed|is understood|are considered|will be)\\b"
+      ],
+      "question": "Optional: no key claims in passive voice without agent ('was determined', 'has been shown')?"
+    }
+  ],
+  "slug": "feynman_xray"
+}

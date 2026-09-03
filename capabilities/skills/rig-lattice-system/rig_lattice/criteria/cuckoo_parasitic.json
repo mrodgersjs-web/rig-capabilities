@@ -1,0 +1,52 @@
+{
+  "axis": "Inject parasitic high-deviation candidate. Force-feed at least one outlier.",
+  "codename": "CUCKOO",
+  "layer": "nature",
+  "questions": [
+    {
+      "id": "cu1_radical_option_present",
+      "mode": "regex",
+      "pattern": "(radical|uncomfortable|provocative|outlier|aggressive option|bold (move|bet)|category[- ]creating)",
+      "question": "REQUIRED: at least one radical / uncomfortable option proposed?",
+      "required": true
+    },
+    {
+      "id": "cu2_demolish_orthodoxy",
+      "mode": "count_min",
+      "pattern": "(orthodoxy|conventional wisdom|industry assumes|the (standard|usual|typical) (way|approach|playbook))",
+      "question": "REQUIRED: at least one industry orthodoxy explicitly demolished?",
+      "required": true,
+      "threshold": 1
+    },
+    {
+      "id": "cu3_first_principles",
+      "mode": "regex",
+      "pattern": "(first principles?|from scratch|fresh sheet|reset (assumption|premise)|tabula rasa)",
+      "question": "REQUIRED: first-principles rebuild present?",
+      "required": true
+    },
+    {
+      "id": "cu4_no_safe_default",
+      "mode": "absent",
+      "patterns": [
+        "\\b(industry[- ]standard approach|conventional methodology|tried[- ]and[- ]true|safe bet|low[- ]risk option)\\b"
+      ],
+      "question": "REQUIRED: doc avoids category-default safe-play framing?",
+      "required": true
+    },
+    {
+      "id": "cu5_specific_inversion",
+      "mode": "regex",
+      "pattern": "(instead of|rather than|not .+ but|we (reject|refuse) .+ in favor of|inversion of)",
+      "question": "At least one specific inversion (instead of X, we do Y)?"
+    },
+    {
+      "id": "cu6_reframe_named",
+      "mode": "regex",
+      "pattern": "(the real (category|business|game) is|not (just )?better|reframe:|the actual (problem|category|wedge))",
+      "question": "REQUIRED: reframe explicitly named (the real category is, not just better X)?",
+      "required": true
+    }
+  ],
+  "slug": "cuckoo_parasitic"
+}

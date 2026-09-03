@@ -1,0 +1,74 @@
+{
+  "axis": "No unreachable-floor claims. Strip zero/perfect/always/100%/never. All absolutist phrasing wrapped in conditions.",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "pass_sigma": 10.0,
+    "per_optional_bonus": 1.5
+  },
+  "codename": "KELVIN",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "k1_no_zero_downtime",
+      "mode": "absent",
+      "patterns": [
+        "\\bzero downtime\\b"
+      ],
+      "question": "REQUIRED: Zero use of 'zero downtime'?",
+      "required": true
+    },
+    {
+      "id": "k2_no_perfect",
+      "mode": "absent",
+      "patterns": [
+        "\\b(perfect (uptime|reliability|delivery|results|accuracy)|perfectly reliable)\\b"
+      ],
+      "question": "REQUIRED: Zero use of unqualified 'perfect' as performance claim?",
+      "required": true
+    },
+    {
+      "id": "k3_no_always_promises",
+      "mode": "absent",
+      "patterns": [
+        "\\b(always works|never fails|never break|always available|always on)\\b"
+      ],
+      "question": "REQUIRED: Zero use of 'always works', 'never fails', 'always available'?",
+      "required": true
+    },
+    {
+      "id": "k4_no_unqualified_100pct",
+      "mode": "absent",
+      "patterns": [
+        "100% (reliable|accurate|guaranteed|effective|complete|secure)\\b"
+      ],
+      "question": "REQUIRED: Zero use of unqualified '100%' performance claims?",
+      "required": true
+    },
+    {
+      "id": "k5_no_unconditional_guarantee",
+      "mode": "absent",
+      "patterns": [
+        "\\bguaranteed\\b(?![^.]{0,100}(if|unless|condition|scope|month|terminate|refund))"
+      ],
+      "question": "Are 'guaranteed' uses bounded by explicit conditions/scope?"
+    },
+    {
+      "id": "k6_no_cannot_be_argued",
+      "mode": "absent",
+      "patterns": [
+        "\\b(cannot be argued|undeniable|irrefutable|self-evident|obviously the (best|only))\\b"
+      ],
+      "question": "Zero use of debate-stoppers ('cannot be argued', 'undeniable', 'irrefutable')?"
+    },
+    {
+      "anchor": "\\bno truck rolls\\b",
+      "id": "k7_absolute_claims_qualified",
+      "mode": "proximity",
+      "question": "Optional: where 'no truck rolls' or similar appears, is it bounded ('once OTA deployed', 'for signed firmware')?",
+      "target": "(once|when|after|with|under|provided|via)",
+      "window_chars": 200
+    }
+  ],
+  "slug": "absolute_zero"
+}

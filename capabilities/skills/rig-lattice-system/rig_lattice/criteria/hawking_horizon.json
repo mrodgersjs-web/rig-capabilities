@@ -1,0 +1,55 @@
+{
+  "axis": "Information must leak through opaque boundary. Proof of access ('we have', 'we built', 'we own').",
+  "calibration": {
+    "direction": "gate",
+    "hard_block_sigma": -30.0,
+    "max_sigma": 25.0,
+    "pass_sigma": 15.0,
+    "per_optional_bonus": 2.5
+  },
+  "codename": "HORIZON-GATE",
+  "layer": "physics",
+  "questions": [
+    {
+      "id": "hg1_we_have_present",
+      "mode": "count_min",
+      "pattern": "\\bwe (have|own|built|deliver|ship|operate|run|control|hold)\\b",
+      "question": "REQUIRED: at least 6 'we have / we own / we built / we deliver' proofs?",
+      "required": true,
+      "threshold": 6
+    },
+    {
+      "id": "hg2_specific_assets",
+      "mode": "count_min",
+      "pattern": "\\b(Smartvid|McGraw Hill|Fictiv|FAIR Health|AICPA|Gartner|Forrester|Nature|JAMA|ADA|Dentrix|Open Dental|Primavera|Procore|eaglesoft|EDI 856|ASN)\\b",
+      "question": "REQUIRED: at least 3 specific assets named (tools, systems, data sources, named vendors)?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "hg3_named_capabilities",
+      "mode": "count_min",
+      "pattern": "\\b(probability model|coding accuracy|scheduling|reconciliation|claims processing|lead scoring|signal detection)\\b",
+      "question": "REQUIRED: capabilities named with specific performance claims?",
+      "required": true,
+      "threshold": 3
+    },
+    {
+      "id": "hg4_no_we_could",
+      "mode": "absent",
+      "patterns": [
+        "\\b(we plan to (eventually|someday|some day)|we hope to|we aim to (one day|eventually))\\b"
+      ],
+      "question": "REQUIRED: ratio of 'we have / we built' > 'we could / we plan to'?",
+      "required": true
+    },
+    {
+      "id": "hg5_explicit_proofs",
+      "mode": "count_min",
+      "pattern": "\\b(practice|firm|company|GC|client|operator).+(saw|reduced|improved|saved|recovered|deployed|adopted)\\b",
+      "question": "At least 2 practice/firm/company attestations or named wins?",
+      "threshold": 1
+    }
+  ],
+  "slug": "hawking_horizon"
+}
