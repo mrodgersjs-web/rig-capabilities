@@ -1,0 +1,65 @@
+# Adversarial verification (non-vacuity) as a loop: name the guard -> plant a defect and
+# watch the gate go RED -> restore and watch it go GREEN -> keep the planted failure as a
+# regression fixture -> seal.
+schema: rig.loop-skill.v11
+id: adversarial-verification-loop
+name: Adversarial verification loop
+version: 11.0.0
+doctrine_source:
+  - ~/RIG-Doctrine-Repo/doctrines/ADVERSARIAL-VERIFICATION.md
+  - ~/.claude/rules/rig-build-doctrine.md   # rule 3
+coordinate: {level: 2, diamond: D1, bms_mode: A1, step: Q2}
+family: governance
+packet: RedTeamPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 3, max_wall_minutes: 120, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: G
+    name: Guard
+    artifact: guard.md
+    gate:
+      - type: file_contains
+        path: guard.md
+        patterns: ["^## Gate-under-test", "^## What-it-guards", "^## Green-command"]
+      - type: regex
+        path: guard.md
+        pattern: '^## Green-command[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s*cmd:\S'
+        hint: "the guard's green command as `- cmd:<shell>`"
+  - id: R
+    name: Red
+    artifact: red.md
+    gate:
+      - type: planted_failure
+        min: 1
+      - type: file_contains
+        path: red.md
+        patterns: ["^## Planted-defect", "^## Red-output"]
+  - id: N
+    name: Green
+    artifact: green.md
+    gate:
+      - type: checks_green
+        min: 1
+      - type: file_contains
+        path: green.md
+        patterns: ["^## Restored", "^## Green-output"]
+  - id: K
+    name: Keep
+    artifact: fixture.md
+    gate:
+      - type: file_contains
+        path: fixture.md
+        patterns: ["^## Regression-fixture"]
+      - type: regex
+        path: fixture.md
+        pattern: '^## Regression-fixture[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s*(file|cmd):\S'
+        hint: "where the planted failure lives as a permanent test: `- file:<path>` or `- cmd:<test command>`"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [R, N], to: G, max_iterations: 3, on_exhaust: escalate}

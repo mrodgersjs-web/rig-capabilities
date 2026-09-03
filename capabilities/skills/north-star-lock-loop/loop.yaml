@@ -1,0 +1,86 @@
+# North-Star Lock (+ Anchor doctrine) as a loop: lock a goal card -> drift-check every
+# checkpoint -> scope changes only with a named cost -> close against the card -> seal.
+schema: rig.loop-skill.v11
+id: north-star-lock-loop
+name: North-Star Lock loop
+version: 11.0.0
+doctrine_source:
+  - ~/.claude/rules/north-star-doctrine.md
+  - ~/.claude/rules/north-star-lock.md
+  - ~/.claude/rules/anchor-doctrine.md
+coordinate: {level: 3, diamond: D2, bms_mode: A1, step: I1}
+family: governance
+packet: IntentLockPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+kill_switch: {max_iterations: 3, max_wall_minutes: 720, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: L
+    name: Lock
+    artifact: goal-card.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "No build while the Goal Card is blank. Write goal-card.md: ## GOAL (outcome in Mike's words) ## METRIC (buyer/outcome terms) ## DONE-TEST (executable) ## OUT-OF-SCOPE ## ACTIVE-PROJECT ## EFFORT-BUDGET."
+    gate:
+      - type: file_contains
+        path: goal-card.md
+        patterns: ["^## GOAL", "^## METRIC", "^## DONE-TEST", "^## OUT-OF-SCOPE", "^## ACTIVE-PROJECT", "^## EFFORT-BUDGET"]
+      - type: regex
+        path: goal-card.md
+        pattern: '^\s*[-*]\s*(cmd|file|grep|mcp):\S'
+        hint: "DONE-TEST must be executable"
+      - type: regex_absent
+        path: goal-card.md
+        pattern: '(?i)^## METRIC[^\n]*\n[^\n]*\b(fidelity|looks like|award|x/10|n/10)\b'
+        hint: "banned working-metrics (fidelity to X, looks like, award-tier) may not be THE METRIC"
+  - id: D
+    name: Drift-check
+    artifact: drift-log.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: drift-log.md
+        patterns: ["^## Checks"]
+      - type: regex
+        path: drift-log.md
+        pattern: 'NOW:[^\n]*\|\s*MATCH:\s*(yes|no)'
+        hint: "each check line: `- <ts> NOW: <what I am optimizing> | MATCH: yes|no`"
+      - type: min_counter
+        counter: drift_checks
+        min: 1
+  - id: S
+    name: Scope-alarm
+    artifact: scope.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: scope.md
+        patterns: ["^## Scope-changes"]
+      - type: regex
+        path: scope.md
+        pattern: '^## Scope-changes[^\n]*\n(?:[^\n]*\n)*?[^\n]*\b(none|named-cost:)'
+        hint: "each scope change carries `named-cost: <what is given up>` or the section says `none`"
+      - type: regex_absent
+        path: drift-log.md
+        pattern: 'MATCH:\s*no(?![^\n]*RECONCILED)'
+        hint: "every `MATCH: no` line must end with RECONCILED: <re-lock or return>"
+  - id: C
+    name: Close
+    artifact: close-card.md
+    write_policy: {mode: open}
+    gate:
+      - type: file_contains
+        path: close-card.md
+        patterns: ["^## Goal-met", "^## Parked", "^## Next-action", "^## Proliferation-delta"]
+      - type: regex
+        path: close-card.md
+        pattern: '^## Goal-met[^\n]*\n[^\n]*\b(yes|no)\b'
+        hint: "Goal-met: yes|no — with proof if yes, with the honest gap if no"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    gate:
+      - type: sealed
+closing_loop: {from: [C], to: D, max_iterations: 3, on_exhaust: escalate}

@@ -1,0 +1,133 @@
+# IQRSQPI v11 — Loop-Skill Contract v11 spec (machine-read by rig-loop).
+# One artifact + deterministic gates per stage. The engine refuses `stage X pass`
+# while any gate is red, refuses out-of-order advance, runs the closing loop on
+# Q2/P failure (back to S, max 3 iterations, then escalate), and kills the run on
+# wall-clock. Hooks read this file on every prompt / tool call / stop.
+schema: rig.loop-skill.v11
+id: iqrsqpi-v11
+name: IQRSQPI v11
+version: 11.0.0
+doctrine_source:
+  - ~/.claude/rules/rig-unified-doctrine.md   # §5 IQRSQPI — the seven-step operating loop
+  - ~/RIG-Doctrine-Repo/doctrines/IQRSQPI-ENGINEERING.md
+  - ~/.claude/skills/iqrsqpi-v10/SKILL.md      # v10 single-pass sibling
+  - ~/.rig/missions/4day-2026-08-26/bin/iqrsqpi_v11.py   # first state-machine runner (2026-08-26)
+coordinate: {level: 3, diamond: D2, bms_mode: A1, step: I1}
+family: governance
+packet: IQRSQPIRunPacket
+modes:
+  auto: {}                       # code gates decide; human gates only at I1 (blocking questions) and I2 (Gate-D)
+  walk: {stop_after_stage: true} # the interactive walker: stop after every stage pass and wait for Mike
+kill_switch:
+  max_iterations: 3              # closing-loop iterations before escalation
+  max_wall_minutes: 480          # run is parked after 8h wall clock
+  max_stop_blocks: 2             # the Stop hook blocks "done" at most twice, then yields with a NOT-DONE banner
+outward_policy:
+  require_gate_d: true           # git push / deploy / send / spend blocked until `APPROVE <run_id>` is recorded
+stages:
+  - id: I1
+    name: Intent
+    artifact: intent.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "No code before the goal card. Write intent.md with ## GOAL, ## METRIC, ## DONE-TEST (executable lines), ## OUT-OF-SCOPE, ## COORDINATE."
+    gate:
+      - type: file_contains
+        path: intent.md
+        patterns: ["^## GOAL", "^## METRIC", "^## DONE-TEST", "^## OUT-OF-SCOPE", "^## COORDINATE"]
+      - type: regex
+        path: intent.md
+        pattern: '^\s*[-*]\s*(cmd|file|grep|mcp):\S'
+        hint: "DONE-TEST needs at least one executable line: `- cmd:<shell>` / `- file:<path>` / `- grep:<path>:<regex>` / `- mcp:<tool>`"
+      - type: regex_absent
+        path: intent.md
+        pattern: '\b(TBD|TODO|\?\?\?)\b'
+  - id: Q1
+    name: Question
+    artifact: questions.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Questions before code. Write questions.md: every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)`."
+    gate:
+      - type: file_contains
+        path: questions.md
+        patterns: ["^## Questions", '^\s*[-*]\s*\[(BLOCKING|ASSUMED)\]']
+      - type: no_unanswered_blocking
+        path: questions.md
+  - id: R
+    name: Research
+    artifact: research.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Research before code. Write research.md with ## Findings, ## Sources (no source, no number), ## Gaps; record each Q<->R pass with `rig-loop counter qr_passes --inc`."
+    gate:
+      - type: file_contains
+        path: research.md
+        patterns: ["^## Findings", "^## Sources", "^## Gaps"]
+      - type: regex
+        path: research.md
+        pattern: '^## Sources[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+\S'
+        hint: "list at least one source under ## Sources"
+      - type: min_counter
+        counter: qr_passes
+        min: 2
+  - id: S
+    name: Solution
+    artifact: spec.md
+    write_policy:
+      mode: artifacts_only
+      deny_message: "Spec before code. Write spec.md with ## Approach, ## Files (paths/globs you will touch), ## Det-vs-Prob (AUTO/DRAFT/FLAG per line), ## Test-plan, ## Rollback."
+    gate:
+      - type: file_contains
+        path: spec.md
+        patterns: ["^## Approach", "^## Files", "^## Det-vs-Prob", "^## Test-plan", "^## Rollback"]
+      - type: regex
+        path: spec.md
+        pattern: '^## Files[^\n]*\n(?:[^\n]*\n)*?\s*[-*]\s+\S'
+        hint: "## Files must list at least one path or glob"
+      - type: regex
+        path: spec.md
+        pattern: '\b(AUTO|DRAFT|FLAG)\b'
+        hint: "tag the deterministic/probabilistic boundary: AUTO / DRAFT / FLAG"
+  - id: Q2
+    name: Quality
+    artifact: quality.md
+    write_policy: {mode: declared}   # code writes allowed; paths outside spec ## Files are recorded as scope drift
+    gate:
+      - type: files_written_min
+        min: 1
+      - type: checks_green
+        min: 1
+      - type: planted_failure
+        min: 1
+      - type: drift_within
+        max: 10
+        failure_tier: degrade
+      - type: file_contains
+        path: quality.md
+        patterns: ["^## Checks", "^## Planted-failure", "^## Verifier"]
+      - type: regex
+        path: quality.md
+        pattern: '^## Verifier[^\n]*\n(?:[^\n]*\n)*?[^\n]*\b(family|model|agent)\b'
+        hint: "name the independent verifier (a different model family than the builder)"
+  - id: P
+    name: Proof
+    artifact: proof.json
+    write_policy: {mode: declared}
+    gate:
+      - type: stage_passed
+        stage: Q2
+      - type: sealed
+  - id: I2
+    name: Integrate
+    artifact: integrate.md
+    write_policy: {mode: declared}
+    gate:
+      - type: file_contains
+        path: integrate.md
+        patterns: ["^## Shipped", "^## Not-shipped", "^## Hand-offs", "^## Next-slice"]
+closing_loop:
+  from: [Q2, P]
+  to: S
+  max_iterations: 3
+  on_exhaust: escalate

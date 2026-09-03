@@ -93,8 +93,10 @@ class CatalogTests(unittest.TestCase):
             self.repo.install("guard.sh", "claude")
         out = self.repo.install("guard.sh", "claude", force=True)
         self.assertEqual("replaced", out["status"])
-        baks = list((self.tmp / "claude" / "hooks").glob("guard.sh.bak-*"))
+        baks = list((self.tmp / "claude" / "hooks" / ".rig-backups").glob("guard.sh.bak-*"))
         self.assertEqual(1, len(baks))
+        # never a sibling backup: a `<name>.bak-*` inside a skills/hooks root is loaded as a duplicate
+        self.assertEqual([], list((self.tmp / "claude" / "hooks").glob("guard.sh.bak-*")))
 
     def test_external_requires_canonicalize(self):
         with self.assertRaises(ValueError) as cm:
@@ -1430,10 +1432,9 @@ class CommandCanonicalTests(unittest.TestCase):
         srcs = list((REPO_ROOT / "capabilities" / "commands").glob("*.md"))
         # Floor, not census: an exact count turned every legitimate addition into
         # a failure, while the per-file contract loop below is what actually
-        # guards quality. Eight commands since V50 (register + corpus + realign +
-        # dispatch-verify), so the two the 2031 build owes are asserted by name —
-        # a floor alone would pass with the new commands absent.
-        self.assertGreaterEqual(len(srcs), 6)
+        # guards quality. The two commands the 2031 build owes are asserted by
+        # name — a floor alone would pass with them absent.
+        self.assertGreaterEqual(len(srcs), 7)
         for owed in ("capabilities-realign.md", "capabilities-dispatch-verify.md"):
             self.assertIn(owed, [f.name for f in srcs], f"{owed} not on the surface")
         for f in srcs:

@@ -1,0 +1,33 @@
+[
+  {
+    "name": "guard needs a cmd: green command",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "guard.md", "content": "## Gate-under-test\ntest a\n## What-it-guards\na exists\n## Green-command\ntest -f a\n"}},
+      {"stage": {"id": "G", "status": "pass"}, "expect": {"ok": false, "reason_contains": "green command"}},
+      {"write": {"path": "guard.md", "content": "## Gate-under-test\ntest a\n## What-it-guards\na exists\n## Green-command\n- cmd:test -f <cwd>/a.txt\n"}},
+      {"stage": {"id": "G", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "a plant whose red command passes is recorded red_ok=false and R stays red",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "<cwd>/a.txt", "content": "x\n"}},
+      {"write": {"path": "guard.md", "content": "## Gate-under-test\nt\n## What-it-guards\ng\n## Green-command\n- cmd:test -f <cwd>/a.txt\n"}},
+      {"stage": {"id": "G", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "red.md", "content": "## Planted-defect\nd\n## Red-output\no\n"}},
+      {"plant": {"name": "theater", "red": "test -f <cwd>/a.txt", "green": "test -f <cwd>/a.txt"}, "expect": {"red_ok": false, "green_ok": true}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "planted"}},
+      {"plant": {"name": "real", "red": "test -f <cwd>/deleted.txt", "green": "test -f <cwd>/a.txt"}, "expect": {"red_ok": true, "green_ok": true}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "green.md", "content": "## Restored\nyes\n## Green-output\nexit 0\n"}},
+      {"check_add": "test -f <cwd>/a.txt"},
+      {"stage": {"id": "N", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "fixture.md", "content": "## Regression-fixture\n- file:tests/test_a_exists.py\n"}},
+      {"stage": {"id": "K", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  }
+]

@@ -1,0 +1,51 @@
+[
+  {
+    "name": "outward command denied until typed approval; approve before request refused",
+    "steps": [
+      {"activate": {}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "gh pr merge 12 --squash"}}, "expect": {"action": "deny", "reason_contains": "OUTWARD ACTION BLOCKED"}},
+      {"gate_d": {"approve": "APPROVE <run_id>"}, "expect": {"ok": false, "reason_contains": "no Gate-D request"}},
+      {"gate_d": {"request": "merge PR 12"}},
+      {"gate_d": {"approve": "approve <run_id>"}, "expect": {"ok": false}},
+      {"gate_d": {"approve": "APPROVE <run_id>"}, "expect": {"ok": true}},
+      {"hook": {"event": "pre-tool", "tool_name": "Bash", "tool_input": {"command": "gh pr merge 12 --squash"}}, "expect": {"action": "allow"}}
+    ]
+  },
+  {
+    "name": "classify needs a recognised class; dormant needs zero-outbound proof",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "classify.md", "content": "## Action\npush\n## Class\nsomething\n## Blast-radius\nlow\n## Rollback\nrevert\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": false, "reason_contains": "## Class must name"}},
+      {"write": {"path": "classify.md", "content": "## Action\npush branch\n## Class\npush\n## Blast-radius\nprivate repo\n## Rollback\ngit push --delete\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "dormant.md", "content": "## Staged\n- branch x\n## Zero-outbound-proof\n"}},
+      {"stage": {"id": "D", "status": "pass"}, "expect": {"ok": false}},
+      {"write": {"path": "dormant.md", "content": "## Staged\n- branch x\n## Zero-outbound-proof\n- `git log origin/main..HEAD` shows 0 pushed commits\n"}},
+      {"stage": {"id": "D", "status": "pass"}, "expect": {"ok": true}}
+    ]
+  },
+  {
+    "name": "full path: request recorded, approval gates A, execute needs verified-as-seen, seal closes",
+    "steps": [
+      {"activate": {}},
+      {"write": {"path": "classify.md", "content": "## Action\npush branch\n## Class\npush\n## Blast-radius\nprivate repo\n## Rollback\ndelete remote branch\n"}},
+      {"stage": {"id": "C", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "dormant.md", "content": "## Staged\n- branch x\n## Zero-outbound-proof\n- git log origin/main..HEAD (local only)\n"}},
+      {"stage": {"id": "D", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "request.md", "content": "## Request\npush x\n## Exact-target\nmrodgersjs-web/rig-capabilities x\n## Reversible\nyes\n"}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": false, "reason_contains": "no Gate-D request"}},
+      {"gate_d": {"request": "push x"}},
+      {"stage": {"id": "R", "status": "pass"}, "expect": {"ok": true}},
+      {"stage": {"id": "A", "status": "pass"}, "expect": {"ok": false, "reason_contains": "Gate-D not approved"}},
+      {"gate_d": {"approve": "APPROVE <run_id>"}, "expect": {"ok": true}},
+      {"stage": {"id": "A", "status": "pass"}, "expect": {"ok": true}},
+      {"write": {"path": "execute.md", "content": "## Command\ngit push origin x\n## Output\nok\n## Verified-as-seen\n"}},
+      {"stage": {"id": "X", "status": "pass"}, "expect": {"ok": false, "reason_contains": "Verified-as-seen"}},
+      {"write": {"path": "execute.md", "content": "## Command\ngit push origin x\n## Output\nok\n## Verified-as-seen\n- git rev-parse origin/x == HEAD\n"}},
+      {"stage": {"id": "X", "status": "pass"}, "expect": {"ok": true}},
+      {"seal": {}, "expect": {"ok": true}},
+      {"stage": {"id": "P", "status": "pass"}, "expect": {"ok": true, "run_status": "done"}}
+    ]
+  }
+]

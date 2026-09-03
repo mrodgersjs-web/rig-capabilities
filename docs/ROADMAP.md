@@ -1,4 +1,4 @@
-# rig-capabilities ROADMAP — V1 through V49
+# rig-capabilities ROADMAP — V1 through V52
 
 Evidence table. Packet hashes are `sha256:` prefixes from sealed ProofPackets.
 `—` means no packet was sealed for that increment (pre-packet era or known FALSE later superseded).
@@ -52,16 +52,18 @@ V28 zip is **ARMED** (typed `APPROVE gd_1788227314643` on 2026-09-01). Tag `v28.
 | 38 | `fa70c71` | — | stats public_assets + gate_d_cases | commit |
 | 39 | `8c62c98` | — | ROADMAP V28 ARMED + Wave 4 rows | commit |
 | 40 | (this increment) | — | Wave 4 close: VERSION_LADDER 1–40, suite green | suite |
-| 41 | (this increment) | `2325e199` | P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS | suite |
-| 42 | (this increment) | `eab48154` | P2 deterministic corpus scanner + source inventory + classify rules | suite |
-| 43 | (this increment) | `db9df40e` | P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate | suite |
-| 44 | (this increment) | `7e03b534` | P3b Known Expert OS phase harness + claim-typed evidence ledger | suite |
-| 45 | (this increment) | `6a00f2eb` | P4 worktree leases, rotating canary, dispatcher packet, mechanical denial | canary_detection |
-| 46 | (this increment) | `a7583a4c` | P5 E_stage promotion gate + golden replay corpus | suite |
-| 47 | (this increment) | `ce0c1d48` | P5b dormant-by-default Fable 5.1 model route | fable_dormant |
-| 48 | (this increment) | `f0373537` | P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer | stage_order |
-| 49 | (this increment) | `0fd7f073` | P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools, skills/harnesses/loop registered | register |
-| 50 | `f63cb1f..94fbf77` | `24f585aa949d` | Discover AI increment: frontmatter-visibility gate (canonical + 3,758 external assets), directory assets require SKILL.md (a `.pyc` was indexed as a LOOP), round exit_code reaches CLI rc + MCP isError, `done_when` ran/unrunnable accounting, exemplar-resolution ratchet (74 dangling named), paired-run / skill-contract / acceptance-identity / lifecycle / topology surfaces, 6 exemplars | suite |
+| 41 | `3a87acc` | — | Loop-Skill Contract v11: rig-loop engine, IQRSQPI v11 + 6 core doctrine loop-skills, hooks wired in 5 harnesses | loop_contract |
+| 42 | `d2bbec2` | — | IQRSQPI v20: done-tests executed, Q<->R dryness gate, child slice runs, cross-family verifier dispatch, calibration ledger, handoff | loop_contract |
+| 43 | (this increment) | `2325e199` | P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS | suite |
+| 44 | (this increment) | `eab48154` | P2 deterministic corpus scanner + source inventory + classify rules | suite |
+| 45 | (this increment) | `db9df40e` | P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate | suite |
+| 46 | (this increment) | `7e03b534` | P3b Known Expert OS phase harness + claim-typed evidence ledger | suite |
+| 47 | (this increment) | `6a00f2eb` | P4 worktree leases, rotating canary, dispatcher packet, mechanical denial | canary_detection |
+| 48 | (this increment) | `a7583a4c` | P5 E_stage promotion gate + golden replay corpus | suite |
+| 49 | (this increment) | `ce0c1d48` | P5b dormant-by-default Fable 5.1 model route | fable_dormant |
+| 50 | (this increment) | `f0373537` | P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer | stage_order |
+| 51 | (this increment) | `0fd7f073` | P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools, skills/harnesses/loop registered | register |
+| 52 | `f63cb1f..94fbf77` | `24f585aa949d` | Discover AI increment: frontmatter-visibility gate (canonical + 3,758 external assets), directory assets require SKILL.md (a `.pyc` was indexed as a LOOP), round exit_code reaches CLI rc + MCP isError, `done_when` ran/unrunnable accounting, exemplar-resolution ratchet (74 dangling named), paired-run / skill-contract / acceptance-identity / lifecycle / topology surfaces, 6 exemplars | suite |
 
 ## Proof-chain check
 
@@ -95,3 +97,45 @@ Open:
 2. V24: `mcp:capabilities_certify` inside done_when re-entered `quality_run` (400s hang). Mutating MCP skipped; reentrancy guard.
 3. V28: a zip that includes `.signing.key` fails PublicZipTests.
 4. V32: federation without a token now returns public hooks — the old empty-list test was lying about the public fallback.
+
+## V41 — Loop-Skill Contract v11 (2026-09-01) — see LOOP-SKILLS-V11.md
+
+Landed: `rig-loop` engine (`rig_capabilities/loops.py`, `bin/rig-loop`), 7 loop-skills
+(iqrsqpi-v11 reference + gate-d-loop, proof-loop, adversarial-verification-loop,
+north-star-lock-loop, phase-discipline-loop, git-push-safety-loop), hooks wired in
+claude/codex/omp/prime-agent (+ hermes telemetry hook), skills installed in all 5 harnesses.
+
+### Wave 2 backlog — remaining doctrines to convert (`rig-loop scaffold <id> --name … --source …`)
+
+| candidate loop-skill | source |
+|---|---|
+| deterministic-before-agentic-loop | RIG-Doctrine-Repo/doctrines/DETERMINISTIC-BEFORE-AGENTIC.md |
+| reproducibility-pinning-loop | RIG-Doctrine-Repo/doctrines/REPRODUCIBILITY-AND-PINNING.md |
+| intent-lock-loop (or fold into north-star-lock-loop L stage) | RIG-Doctrine-Repo/doctrines/INTENT.md |
+| grill-me-loop | ~/.claude/rules/grill-me.md, GRILL-ME-KNOWLEDGE-EXTRACTION.md |
+| execution-doctrine-loop (Ritual A/B, R1–R10) | ~/.claude/rules/execution-doctrine.md |
+| playwright-verify-loop | ~/.claude/rules/playwright-verify-doctrine.md |
+| design-teardown-loop | ~/.claude/rules/design-teardown-doctrine.md |
+| gtm-cold-send-safety-loop (8 checks, fail-closed) | ~/.claude/rules/gtm-cold-send-safety-doctrine.md |
+| conference-linkedin-loop (PREP≠FIRE, L7 idempotency) | ~/.claude/rules/conference-linkedin-doctrine.md |
+| strategy-teaser-loop (gold-gate + 4 mandatory checks) | ~/.claude/rules/rig-strategy-teaser-doctrine.md |
+| jake-enforcement-sop-loop (mission anchor / operator override) | ~/.rig/agent-doctrine/JAKE_ENFORCEMENT_SOP.md |
+| tac-closed-loop (Builder+Verifier confidence ladder) | ~/.claude/rules/tac-doctrine.md |
+| agent-teams-loop (recon → build → adversarial verify) | ~/.claude/rules/agent-teams-doctrine.md |
+| context-health-loop (60% ceiling, handoff) | ~/.claude/rules/context-health.md, structured-handoff.md |
+| session-protocol-loop | ~/.claude/rules/session-protocol.md, process-doctrine.md |
+| rig-13-gates-loop (app compiler gates 00–12) | ~/.rig/agent-doctrine/rig-agent-doctrine/RIG_APP_COMPILER_13_GATES.md |
+
+Engine follow-ups: MCP tools (`loop_status`, `loop_activate`) on the rig-capabilities server;
+`live.py` probe for rig-loop wiring; Codex hook-trust acceptance on next start; retire the
+mission runner `~/.rig/missions/4day-2026-08-26/bin/iqrsqpi_v11.py` in favour of `rig-loop`.
+
+## V42 — IQRSQPI v20 (2026-09-01) — see IQRSQPI-V20-DESIGN.md
+
+Landed: `iqrsqpi-v20` + `iqrsqpi-v20-slice` loop-skills; engine additions (`qr pass`, `slice start`,
+`verify --family`, `handoff`, `calibration`, tool-call kill switch, done-test registration at I1,
+parent/child runs with evidence roll-up); `/iqrsqpi` slash command in Claude, Codex, Hermes, `.agents`,
+OMP and Prime Agent. 34 planted-failure cases across 9 loops; 146 unit tests.
+
+Follow-ups: verifier dispatch for Hermes/OMP/Prime needs a live smoke per harness (Codex and Claude
+smoked); `/iqrsqpi` walk mode UX; MCP tools `loop_verify` / `loop_handoff`.

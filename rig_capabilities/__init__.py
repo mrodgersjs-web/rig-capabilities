@@ -1,17 +1,15 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v50: Discover AI capability increment — catalog truncation guard, phantom-asset
-scanner fix, round verdict propagation, evidence/contract/identity/lifecycle/topology
-surfaces. VERSION_LADDER 1–50.
+v52: the 2031 capability increment set, realigned onto main's published ladder.
+VERSION_LADDER 1–52.
 
-50.1.0 adds the two read-only surface tools that put those verdicts where an
-agent can actually call them: `capabilities_asset_hygiene` and
-`capabilities_verdict` (`rig_capabilities/surface_tools.py`). Minor, not a new
-ladder rung: no ROADMAP row or proof packet rides on it yet, so the major stays
-pinned to rung 50 by `tests.test_version_coherence`.
+The 2031 rungs were authored as 41–50 while main independently published
+Loop-Skill Contract v11 and IQRSQPI v20 as 41/42. Realignment keeps main's
+published numbers and shifts the 2031 rungs to 43–51; docs/ROADMAP.md, the
+ladder below and `tests.test_version_coherence` are pinned in a cycle.
 Stdlib only.
 """
-__version__ = "50.1.0"
+__version__ = "47.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -47,26 +45,26 @@ VERSION_LADDER = {
     "33": "commands delivered to hermes/omp/agents/prime",
     "34": "overlay doctor (honest 62/300)",
     "35": "harness-install GoalSpecs (dry default)",
-    "36": "proofchain ROADMAP prefixes vs ~/.rig/proof",
+    "36": "proofchain 16/16 prefixes found",
     "37": "MCP gaps/overlay_status/proofchain/release",
     "38": "stats public_assets + gate_d_cases",
     "39": "ROADMAP V28 ARMED + Wave 4 rows",
     "40": "Wave 4 close",
-    # 41–49 were documented in docs/ROADMAP.md with their own proof packets but
-    # never entered the ladder, so `/version`, `stats`, the release zip name and
-    # the MCP `initialize` handshake all advertised 40.0.0 for nine shipped
-    # increments. `tests.test_catalog.RoadmapTests` now pins the three in a
-    # cycle, so the constant and the document cannot drift apart again.
-    "41": "P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS",
-    "42": "P2 deterministic corpus scanner + source inventory + classify rules",
-    "43": "P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate",
-    "44": "P3b Known Expert OS phase harness + claim-typed evidence ledger",
-    "45": "P4 worktree leases, rotating canary, dispatcher packet, mechanical denial",
-    "46": "P5 E_stage promotion gate + golden replay corpus",
-    "47": "P5b dormant-by-default Fable 5.1 model route",
-    "48": "P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer",
-    "49": "P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools",
-    "50": "Discover AI increment: frontmatter-visibility gate (canonical + external), "
+    "41": "Loop-Skill Contract v11: rig-loop engine, IQRSQPI v11 + 6 core doctrine loop-skills, hooks wired in 5 harnesses",
+    "42": "IQRSQPI v20: done-tests executed, Q<->R dryness gate, child slice runs, cross-family verifier dispatch, calibration ledger, handoff; /iqrsqpi in 5 harnesses",
+    # The 2031 rungs shipped on the fable-2031 branch numbered 41–50, colliding
+    # with the two rungs main had already published. Realignment keeps main's
+    # numbers; the branch's rungs shift +2.
+    "43": "P0/P1 intent + question layer: DONE-CONTRACT-2031, TRUNCATED-SOURCES, CONFLICT-RESOLUTIONS, ASSUMPTIONS",
+    "44": "P2 deterministic corpus scanner + source inventory + classify rules",
+    "45": "P3 M0–M5 capability register + C_t/A_t/RobustMADZ + weekly gate",
+    "46": "P3b Known Expert OS phase harness + claim-typed evidence ledger",
+    "47": "P4 worktree leases, rotating canary, dispatcher packet, mechanical denial",
+    "48": "P5 E_stage promotion gate + golden replay corpus",
+    "49": "P5b dormant-by-default Fable 5.1 model route",
+    "50": "P6 IQRSQPI v10 executable stage machine + anti-fabrication proof layer",
+    "51": "P7/P8 certify-gate wiring (12 gates), 14 CLI verbs, 5 read-only tools",
+    "52": "Discover AI increment: frontmatter-visibility gate (canonical + external), "
           "directory assets need SKILL.md, round exit_code -> CLI rc + MCP isError, "
           "done_when ran/unrunnable accounting, exemplar-resolution ratchet, "
           "paired-run/skill-contract/acceptance-identity/lifecycle/topology surfaces",
