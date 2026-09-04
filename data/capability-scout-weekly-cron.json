@@ -1,12 +1,12 @@
 {
   "schema": "capability-scout-cron-v1",
   "id": "capability-scout-weekly",
-  "state": "DORMANT",
-  "enabled": false,
+  "state": "ACTIVE",
+  "enabled": true,
   "created": "2026-09-02",
   "gate_d_required": true,
   "gate_d_run_id": "f2031-scout-weekly-1",
-  "gate_d_note": "Nothing here has been executed against the scheduler. Creating the automation is an outward action: it installs a recurring job on this machine. It is created only after Mike types APPROVE f2031-scout-weekly-1 and ~/.rig/proof/gate-d-f2031-scout-weekly-1.json exists with status APPROVED. The create command carries --disabled so even creation leaves the job off; enabling it is a second, separate approval.",
+  "gate_d_note": "Activated 2026-09-04 under Gate-D run f2031-scout-weekly-1: created --disabled per the two-approval doctrine (approval 1: 2026-09-02 verbal staging; approval 2: 2026-09-04 typed 'I approve all gate d'), then enabled. Proof token: ~/.rig/proof/gate-d-f2031-scout-weekly-1.json.",
   "dry_by_default": true,
   "cadence": "0 17 * * 1",
   "cadence_note": "Mondays 17:00 America/Denver. Weekly satisfies 'at least once a week'; the scrape window is 9 days, so a missed run cannot leave a gap.",
@@ -28,5 +28,7 @@
     "enable an automation without a separate approval"
   ],
   "termination": "A run ends when stage has written week.json + queue.json + brief.md and the agent pass has written drafts plus a REPORT naming every rejected citation. There is no autonomous promotion path: the loop closes on a human reviewing drafts.",
-  "proof_of_running": ".context/capability-scout/<ISO week>/week.json with schema capability-scout-week-v1"
+  "proof_of_running": ".context/capability-scout/<ISO week>/week.json with schema capability-scout-week-v1",
+  "activated": "2026-09-04",
+  "automation_id": "ba6ba3b5-98dc-476b-a5ef-e9c8572d0a00"
 }

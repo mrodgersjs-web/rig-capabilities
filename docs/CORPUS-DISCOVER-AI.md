@@ -114,8 +114,10 @@ in `capabilities/` today. Each row carries sources, verified papers, verified OS
 
 `scripts/weekly_capability_scout.py stage` re-runs capture plus citation verification
 deterministically and queues the agent pass; the cron spec
-`data/capability-scout-weekly-cron.json` is **DORMANT** and its activation is staged
-under Gate-D run id `f2031-scout-weekly-1`. Proven runs to date:
+`data/capability-scout-weekly-cron.json` is **ACTIVE** (Orca automation
+`ba6ba3b5-98dc-476b-a5ef-e9c8572d0a00`, Mondays 17:00 America/Denver, next 2026-09-07), activated
+2026-09-04 under Gate-D run id `f2031-scout-weekly-1` (two-approval doctrine satisfied).
+Proven runs to date:
 
 | run | window | queued | arXiv | repos |
 |---|---|---|---|---|
