@@ -82,24 +82,30 @@ then is `shlex.split` + argv plus a spec-signature check, not an input filter.
 **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
 lines that actually matter (142, 1178) under 17 duplicate rows.
 
-## The "org UI toggle" — closed as refused, 2026-09-05
+## The "org UI toggle" — not attempted, 2026-09-05
 
-Checked what that setting actually is before touching anything:
+The todo line named an org UI toggle without naming the setting. What this session could
+observe, and what it could not:
 
-| probe | result |
+| check | observed |
 |---|---|
-| `snyk --version` | 1.1307.0; scans work (OAuth in configstore, `api_token_length=0` — no REST token) |
-| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF (auth is live for scans) |
-| `snyk projects` / `snyk orgs` | `Unknown command` — the CLI cannot enumerate org/project config in 1.1307 |
-| REST `/rest/orgs` | unavailable without an API token, which is unset |
-| browser relay | CDP `Network.enable` refused; org settings page not inspectable this session |
-| artifact `.context/snyk-code-review.json` | `displayed_count: 149` of 272 is a CLI display grouping, not a setting |
+| `snyk --version` | 1.1307.0 |
+| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF — scan auth works (configstore holds `INTERNAL_OAUTH_TOKEN_STORAGE` only) |
+| `snyk config get API` | length 0 — no REST API token in this machine's config |
+| `snyk projects`, `snyk orgs` | `Unknown command` — this CLI version cannot enumerate org/project configuration |
+| browser inspection of org settings | refused: CDP `Network.enable` — "Debugger is not attached to the tab" |
+| `.context/snyk-code-review.json` `displayed_count: 149` of 272 | CLI display grouping in the artifact, **not** evidence of an org setting |
 
-Nothing on disk names an org toggle that would change these 26 findings, and the only bulk
-org setting that would — issue ignores — is exactly what line 82 of this file refuses to do:
+Not attempted: the REST org-settings call (no token to call it with — endpoint behaviour was
+never observed, so nothing is claimed about it), and the browser UI (transport refused).
+
+Decision, and its limit: no setting that would change these 26 findings was identifiable from
+any evidence reachable in this session, so nothing was toggled and no Gate-D request was filed
+for one. The only bulk org setting known to exist here — issue ignores — is the one line 82
+refuses:
 
 > **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
 > exec primitives.
 
-So: no suppression, no Gate-D request for suppression. If a display/filter toggle is genuinely
-wanted, name it (org → project → settings) and it gets a request with the setting and the value.
+Open, not closed: if a display or filter setting is genuinely wanted, name it and the request
+will state the setting and the desired value.
