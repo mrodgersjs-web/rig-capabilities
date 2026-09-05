@@ -105,7 +105,7 @@ def sibling_license(payload: Path) -> tuple[str | None, Path | None]:
                  "COPYING", "COPYING.txt", "NOTICE"):
         for cand in (base / name, base / name.lower()):
             if cand.is_file():
-                text = cand.read_text(encoding="utf-8", errors="replace")[:4000]
+                text = cand.read_text(encoding="utf-8", errors="replace")
                 for needle, spdx in SPDX:
                     if needle in text:
                         return spdx, cand

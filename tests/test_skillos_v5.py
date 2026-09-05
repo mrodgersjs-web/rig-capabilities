@@ -1003,6 +1003,10 @@ class LicenceGate(unittest.TestCase):
             # two-line heading (License, then Version 2.x alone on the next line)
             ("Apache\nSoftware License Version 2.0 not applicable\n", None),
             ("Apache License\nVersion 2.0, January 2004\n", "Apache-2.0"),
+            # the grant may sit past the old 4000-char read window in a full licence text
+            ("TERMS AND CONDITIONS\n" * 400
+             + '   Licensed under the Apache License, Version 2.0 (the "License");\n',
+             "Apache-2.0"),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:
