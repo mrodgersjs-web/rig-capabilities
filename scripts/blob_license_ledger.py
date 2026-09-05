@@ -39,7 +39,10 @@ SPDX_RE = (
                 r"\s*,\s*to\s+any\s+person"), "MIT"),
     # Apache: version 2.x ONLY — an Apache "3.0" text must not resolve to Apache-2.0.
     (re.compile(
-        r"(?mi)^\s*(?:The\s+)?Apache\s+(?:Software\s+)?License[,:]?\s*(?:Version\s+2(?:\.0)?)?\s*$"
+        # horizontal whitespace only inside a title; the ONLY vertical form allowed is the
+        # canonical two-line heading with "Version 2.x" on its own next line.
+        r"(?mi)^[ \t]*(?:The[ \t]+)?Apache[ \t]+(?:Software[ \t]+)?License[,:]?[ \t]*"
+        r"(?:Version[ \t]+2(?:\.0)?[ \t]*$|$\n[ \t]*Version[ \t]+2(?:\.0)?\b)"
         r"|^\W*Licensed\s+under\s+the\s+Apache\s+License,\s*Version\s+2(?:\.0)?"
         r"\s*\(the\s+[\u201c\"']License[\u201d\"']\)\s*;?\s*$"
     ), "Apache-2.0"),

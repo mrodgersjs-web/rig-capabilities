@@ -15,7 +15,8 @@
 | `recipe_group_count` / `fetch` / `verified` | 6 / 6 / 163 |
 | `licence_problems` | none |
 
-Three `missing_evidence` groups carry the whole red:
+Three `missing_evidence` groups carry 4,572 of the red; the remaining 130 rows are the one
+failing recipe group counted in §2 (293 recipe rows − 163 verified):
 
 | count | why |
 |---|---|

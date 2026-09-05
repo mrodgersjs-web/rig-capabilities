@@ -968,6 +968,10 @@ class LicenceGate(unittest.TestCase):
             ("Apache License, Version 3.0\n", None),
             ('Licensed under the Apache License, Version 3.0 (the "License");\n', None),
             ("Apache Software License Version 3\n", None),
+            # title words may not span lines; the ONLY vertical form is the canonical
+            # two-line heading (License, then Version 2.x alone on the next line)
+            ("Apache\nSoftware License Version 2.0 not applicable\n", None),
+            ("Apache License\nVersion 2.0, January 2004\n", "Apache-2.0"),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:
