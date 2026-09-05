@@ -955,6 +955,19 @@ class LicenceGate(unittest.TestCase):
              "LEGAL SERVICES.\n", "CC0-1.0"),
             ("CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE\n"
              "LEGAL SERVICES is a false claim.\n", None),
+            # suffix denials: a grant prefix is not a grant
+            ("Permission is hereby granted? No; all rights reserved.\n", None),
+            ("Permission to use, copy, modify, and distribute this software\n"
+             "is hereby granted is false.\n", None),
+            ("CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE "
+             "LEGAL SERVICES. according to this false notice\n", None),
+            # ...but the canonical continuation clears across any line wrap
+            ("Permission is hereby granted,\nfree of charge, to any person obtaining\n"
+             "a copy of this software\n", "MIT"),
+            # Apache 3.0 is not Apache-2.0: never mislabel a version we don't grant
+            ("Apache License, Version 3.0\n", None),
+            ('Licensed under the Apache License, Version 3.0 (the "License");\n', None),
+            ("Apache Software License Version 3\n", None),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:

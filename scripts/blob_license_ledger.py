@@ -30,29 +30,33 @@ OUT = ROOT / "docs/skillos/blob-license-ledger.json"
 # TITLE is evidence only when it owns its whole line (the shape real headings take), or the
 # text carries the canonical grant SENTENCE of that licence (verbatim boilerplate nobody
 # negates mid-phrase). Prose that merely names a licence grants nothing.
-SPDX = (
-    # MIT's canonical grant sentence, kept verbatim; its title lives in SPDX_RE anchored.
-    ("Permission is hereby granted", "MIT"),
-)
+SPDX: tuple = ()  # no raw substring needles survive — every branch is a regex now
 SPDX_RE = (
-    (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"), "MIT"),
+    # MIT grant sentence, spelled with its canonical continuation so a negated prefix
+    # (`granted? No; all rights reserved.`) cannot match; \s+ spans line wraps.
+    (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"
+                r"|Permission\s+is\s+hereby\s+granted\s*,\s*free\s+of\s+charge\s*"
+                r"\s*,\s*to\s+any\s+person"), "MIT"),
+    # Apache: version 2.x ONLY — an Apache "3.0" text must not resolve to Apache-2.0.
     (re.compile(
-        r"(?mi)^\s*(?:The\s+)?Apache\s+(?:Software\s+)?License[,:]?\s*(?:Version\s+[23](?:\.0)?)?\s*$"
-        r"|^\W*Licensed\s+under\s+the\s+Apache\s+License,\s*Version\s+[23](?:\.0)?"
+        r"(?mi)^\s*(?:The\s+)?Apache\s+(?:Software\s+)?License[,:]?\s*(?:Version\s+2(?:\.0)?)?\s*$"
+        r"|^\W*Licensed\s+under\s+the\s+Apache\s+License,\s*Version\s+2(?:\.0)?"
         r"\s*\(the\s+[\u201c\"']License[\u201d\"']\)\s*;?\s*$"
     ), "Apache-2.0"),
+    # CC corporation clause: the sentence must END the line — `SERVICES. <denial>` is prose.
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?CC0\s+1\.0\s+Universal"
         r"(?:\s*[-\u2013\u2014:]\s*Statement of Purpose)?\s*$"
         r"|^\s*(?:The\s+)?CC0\s*$"
         r"|^\s*CC0\s+Public\s+Domain\s+Dedication\s*$"
         r"|^\s*CREATIVE\s+COMMONS\s+CORPORATION\s+IS\s+NOT\s+A\s+LAW\s+FIRM"
-        r"\s+AND\s+DOES\s+NOT\s+PROVIDE\s+LEGAL\s+SERVICES\s*\.(?:\s|$)"
+        r"\s+AND\s+DOES\s+NOT\s+PROVIDE\s+LEGAL\s+SERVICES\s*\.\s*$"
     ), "CC0-1.0"),
+    # ISC: the grant must terminate with punctuation — `granted is false` does not.
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?ISC\s+License\s*$"
         r"|Permission\s+to\s+use,\s+copy,[^.]*distribute\s+this\s+software"
-        r"[^.]*is\s+hereby\s+granted"
+        r"[^.]*is\s+hereby\s+granted\s*[.,;]"
     ), "ISC"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?BSD\s*[-\s]?[1-3]\s*[-\s]?Clause\s+License\s*$"
