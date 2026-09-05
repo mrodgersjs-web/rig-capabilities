@@ -831,6 +831,36 @@ class LicenceGate(unittest.TestCase):
                 ledger.classify(root / "out" / "payload")["archive_allowed"])
             self.assertTrue(ledger.classify(root / "out")["archive_allowed"])
 
+    def test_repo_grant_is_not_extended_to_restored_bytes(self):
+        """A single restored file has no sibling LICENSE by construction; without its own
+        frontmatter declaration the only prior lane was the repo MIT fallback — which is a
+        claim about repo files, not about whatever bytes an old blob holds."""
+        spec = importlib.util.spec_from_file_location(
+            "blob_license_ledger", REPO / "scripts/blob_license_ledger.py")
+        ledger = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ledger)
+        content = b"# vendored without any licence evidence\n"
+        digest = hashlib.sha256(content).hexdigest()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            blob = root / skillos.WAREHOUSE / digest[:2] / digest
+            blob.parent.mkdir(parents=True)
+            blob.write_bytes(content)
+            got = restore_blob(Repo(root), digest, root / "out")
+            self.assertTrue(got["ok"], got)
+            # default (live-tree) lane: repo fallback clears repo files
+            self.assertTrue(ledger.classify(root / "out" / "payload")["archive_allowed"])
+            # store lane: same bytes, no evidence traveling with them -> denied
+            denied = ledger.classify(root / "out" / "payload", repo_fallback=False)
+            self.assertFalse(denied["archive_allowed"])
+            self.assertIn("not extended to stored bytes", denied["basis"])
+        # a declaration inside the bytes still clears even with the fallback denied
+        declared = b"---\nlicense: MIT\n---\nfile\n"
+        with tempfile.TemporaryDirectory() as td:
+            p = Path(td) / "payload"
+            p.write_bytes(declared)
+            self.assertTrue(ledger.classify(p, repo_fallback=False)["archive_allowed"])
+
     def _ledger_mod(self):
         spec = importlib.util.spec_from_file_location(
             "blob_license_ledger", REPO / "scripts/blob_license_ledger.py")
@@ -968,6 +998,7 @@ class LicenceGate(unittest.TestCase):
             ("Apache License, Version 3.0\n", None),
             ('Licensed under the Apache License, Version 3.0 (the "License");\n', None),
             ("Apache Software License Version 3\n", None),
+            ("Apache License\nVersion 2.0 is not applicable\n", None),
             # title words may not span lines; the ONLY vertical form is the canonical
             # two-line heading (License, then Version 2.x alone on the next line)
             ("Apache\nSoftware License Version 2.0 not applicable\n", None),

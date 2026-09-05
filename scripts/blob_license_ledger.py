@@ -42,7 +42,10 @@ SPDX_RE = (
         # horizontal whitespace only inside a title; the ONLY vertical form allowed is the
         # canonical two-line heading with "Version 2.x" on its own next line.
         r"(?mi)^[ \t]*(?:The[ \t]+)?Apache[ \t]+(?:Software[ \t]+)?License[,:]?[ \t]*"
-        r"(?:Version[ \t]+2(?:\.0)?[ \t]*$|$\n[ \t]*Version[ \t]+2(?:\.0)?\b)"
+        # the version line must END after the version, or carry only the canonical
+        # ", <Month> <year>" date — denial prose ("2.0 is not applicable") matches neither.
+        r"(?:Version[ \t]+2(?:\.0)?[ \t]*$"
+        r"|$\n[ \t]*Version[ \t]+2(?:\.0)?(?:[ \t]*$|,[ \t]*[A-Z][a-z]+[ \t]+\d{4}[ \t]*$))"
         r"|^\W*Licensed\s+under\s+the\s+Apache\s+License,\s*Version\s+2(?:\.0)?"
         r"\s*\(the\s+[\u201c\"']License[\u201d\"']\)\s*;?\s*$"
     ), "Apache-2.0"),
@@ -123,13 +126,19 @@ def upstream_marked(payload: Path) -> str | None:
     return None
 
 
-def classify(payload: Path) -> dict:
+def classify(payload: Path, repo_fallback: bool = True) -> dict:
     """Priority: the asset's own declaration, then a licence file beside it, then the
     upstream marker, then the repo's own grant.
 
     Order is the security property. A neighbour LICENSE is evidence about the directory, not
     the file: scanning it first meant a vendored file declaring `license: GPL-3.0` inherited a
     permissive neighbour's licence and got archived.
+
+    `repo_fallback=False` is for RESTORED store snapshots: a single restored file has no
+    sibling LICENSE and no PROVENANCE by construction, and a restored bundle's missing
+    marker/license is the bundle's own fact. Extending the repo's MIT grant there invents
+    evidence for bytes the repo never held — the grant covers repo files, not warehouse
+    archaeology. Licence evidence must travel WITH the blob or the blob stays denied.
     """
     desc = payload if payload.is_file() else next(
         (p for p in (payload / "SKILL.md", payload / "index.md") if p.is_file()), None)
@@ -144,6 +153,11 @@ def classify(payload: Path) -> dict:
     marked = upstream_marked(payload)
     if marked:
         return {"license": None, "basis": f"upstream marked ({marked}), no licence found",
+                "archive_allowed": False}
+    if not repo_fallback:
+        return {"license": None,
+                "basis": "restored snapshot carries no frontmatter licence, no licence file "
+                         "and no upstream marker; the repo grant is not extended to stored bytes",
                 "archive_allowed": False}
     return {"license": "MIT", "basis": "repo LICENSE (MIT, RIG / mrodgersjs-web); "
                                        "no upstream marker in or beside the asset",
@@ -217,7 +231,7 @@ def main(root: Path = ROOT) -> int:
                 # bundle unpacks into the dir; a file lands at <tmp>/payload — classify the
                 # bytes themselves, or a vendored file's frontmatter is never read.
                 verdict = classify(Path(td) if got.get("kind") == "bundle"
-                                   else Path(td) / "payload")
+                                   else Path(td) / "payload", repo_fallback=False)
         entries.append({
             "kind": kind, "id": aid, "catalog_sha": store.get("catalog_sha"),
             "blob_sha256": digest, "payload_scope": store.get("payload_scope"),
