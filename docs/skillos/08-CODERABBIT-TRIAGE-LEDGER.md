@@ -98,3 +98,35 @@ Ledger tracking the triage, source validation, and disposition of all 58 CodeRab
 | 56 | `examples/great/revenue-gtm/hD-02-icp-research.yaml.md:25` | Major | `jq` query counts null/empty outcomes | **VALID-FIX** | Added `-e` and null/empty filter: `jq -e '[.accounts[].outcome | select(. != null and . != "")] | unique | length >= 2'`. |
 | 57 | `examples/great/misc/hD-12-growth-experiment.yaml.md:17` | Major | `jq` query does not exit nonzero on false | **VALID-FIX** | Added `-e` flag to `jq -e 'all(.[]; .fired_on_staging)'`. |
 | 58 | `examples/great/revenue-gtm/hD-01-outbound-sequence.yaml.md:25` | Minor | JSONL safety gate query iterates over values instead of record objects | **VALID-FIX** | Updated to `jq -s -e 'length > 0 and all(.[]; .passed >= 8)' artifacts/outbound/dental-ops-2026-09/safety_gate.jsonl`. |
+
+---
+
+## Provenance, and the PR surface (checked after `984d60f` was pushed)
+
+The 58 findings above came from the **local `coderabbit` CLI** (`~/.local/bin/coderabbit`,
+review of `fable-2031` against base `0beeb46`). They are not PR review comments, and the
+difference matters: the PR surface has produced **no findings at all**.
+
+| evidence | value |
+|---|---|
+| artifact | `.context/coderabbit/pr1-latest.md` — 152,913 bytes, pulled from `issues/1/comments` |
+| comments by `coderabbitai[bot]` | 1, at 2026-09-05T04:31:59Z |
+| inline review comments (`pulls/1/comments`) | 0 |
+| reviews (`pulls/1/reviews`) | 0 |
+| check runs on `984d60fc…` | 0 |
+| verdict in that single comment | **Review skipped — "Too many files! This PR contains 1938 files, which is 1788 over the limit of 150."** |
+| configuration it used | defaults; profile CHILL; Plan Free; Run ID `10710aa0-d969-486e-9656-11b0ae64c457` |
+| range it would have reviewed | `e18305fa…` → `984d60fc…` |
+| PR size today | base `main`, 1972 changed files, +176,813 / −1,195 |
+| `.coderabbit.yaml` in repo | absent — so the 150-file default governs |
+
+So "check CodeRabbit findings on the pushed commit" answers honestly: **there are none, because
+the review never ran.** The 1938-file PR is the reason, and that is a PR-shape problem, not a
+findings problem. Two lawful routes to a real PR review:
+
+1. Open a second PR based on `984d60f`, so the diff is the 11-path increment (under the limit,
+   reviewable with no config change). Available as soon as the pending push lands.
+2. Add `.coderabbit.yaml` with a higher `reviews.changed_files_threshold` — the Free plan may
+   cap that regardless of the file.
+
+Route 1 needs no permission change and is the one to take.

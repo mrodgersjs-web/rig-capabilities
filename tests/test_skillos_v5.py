@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.util
 import json
 import os
 import shutil
@@ -21,6 +22,7 @@ from rig_capabilities.skillos import (
     UNIVERSE,
     WITNESS_DIR,
     check_universe,
+    restore_blob,
     doors_count,
     orphan_replay,
     provenance,
@@ -147,6 +149,48 @@ class SkillosV5(unittest.TestCase):
             self.assertEqual(result["exit_code"], 1)
             self.assertEqual(
                 sum(group["count"] for group in result["missing_evidence"]), 1)
+
+    def test_restock_never_rewrites_pinned_receipts(self):
+        """A pinned recipe is historical evidence, not a cache entry."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "docs/skillos").mkdir(parents=True)
+            pinned = {"status": "recipe", "type": "git", "kind": "skill",
+                      "url": "https://example.invalid/stale.git",
+                      "commit": "b" * 40, "path": "skills/stale/SKILL.md",
+                      "payload_scope": "file", "catalog_sha": "c" * 12,
+                      "snapshot_sha": "c" * 12, "n_files": 1,
+                      "tree_manifest": "d" * 64}
+            rows = [
+                {"kind": "skill", "id": "pinned", "sha": "c" * 12, "store": pinned},
+                {"kind": "skill", "id": "gone", "sha": "e" * 12,
+                 "store": {"status": "unresolved", "payload_scope": "unknown",
+                           "catalog_sha": "e" * 12, "reason": "no evidence"}},
+            ]
+            (root / "docs/skillos/universe.jsonl").write_text(
+                "".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows))
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [
+                    {"kind": "skill", "id": "pinned", "sha": "c" * 12,
+                     "source": "canonical", "path": "nowhere"},
+                    {"kind": "skill", "id": "gone", "sha": "e" * 12,
+                     "source": "claude-skills", "path": "gone/SKILL.md"},
+                ],
+            }))
+            with mock.patch.object(skillos, "_fetch_git_recipe") as fetch:
+                result = skillos.restock_stores(Repo(root))
+            fetch.assert_not_called()          # no candidate has an origin to prove
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["blobbed"], 0)
+            self.assertEqual(result["recipe_verified"], 0)
+            after = [json.loads(line) for line in
+                     (root / "docs/skillos/universe.jsonl").read_text().splitlines()]
+            self.assertEqual([(r["kind"], r["id"], r["sha"]) for r in after],
+                             [("skill", "pinned", "c" * 12),
+                              ("skill", "gone", "e" * 12)])
+            self.assertEqual(after[0]["store"], pinned)   # never re-pointed at today's tree
+            self.assertEqual(after[1]["store"]["status"], "unresolved")
 
     def test_orphan_leak_plant(self):
         corpus = REPO / "docs/skillos/orphan"
@@ -371,6 +415,119 @@ class SkillosV5(unittest.TestCase):
             self.assertFalse(gate["ok_stores"], gate)
             self.assertEqual(
                 gate["recipe_failures"][0]["error"], "tree manifest mismatch")
+
+
+class LicenceGate(unittest.TestCase):
+    """Clearance binds to the stored bytes: `blob_sha256` + snapshot SHA12, never asset id."""
+
+    SHA = "3f4017d3a3e2"
+    DIGEST = "a" * 64
+
+    def _row(self, digest=None):
+        return {"kind": "skill", "id": "a", "sha": self.SHA,
+                "store": {"status": "blob", "payload_scope": "file",
+                          "catalog_sha": self.SHA,
+                          "blob_sha256": digest or self.DIGEST}}
+
+    def _ledger(self, root, entries):
+        (root / "docs/skillos").mkdir(parents=True, exist_ok=True)
+        (root / skillos.BLOB_LEDGER).write_text(json.dumps({"entries": entries}))
+
+    def test_cleared_content_is_granted(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._ledger(root, [{"kind": "skill", "id": "a", "blob_sha256": self.DIGEST,
+                                 "catalog_sha": self.SHA, "archive_allowed": True}])
+            allowed, problems = skillos._licence_map(root)
+            self.assertEqual(allowed, {self.DIGEST: self.SHA})
+            self.assertEqual(problems, [])
+
+    def test_missing_or_unparseable_ledger_clears_nothing(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            allowed, problems = skillos._licence_map(root)
+            self.assertEqual(allowed, {})
+            self.assertTrue(problems)
+            self.assertFalse(skillos._universe_store_valid(root, self._row(), licence=allowed))
+            (root / "docs/skillos").mkdir(parents=True)
+            (root / skillos.BLOB_LEDGER).write_text("{")
+            allowed, problems = skillos._licence_map(root)
+            self.assertEqual(allowed, {})
+            self.assertIn("unreadable", problems[0])
+
+    def test_grant_for_other_content_does_not_bless_the_stored_blob(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            # same asset id, different bytes — the old grant must not carry over
+            self._ledger(root, [{"kind": "skill", "id": "a",
+                                 "blob_sha256": "b" * 64, "catalog_sha": self.SHA,
+                                 "archive_allowed": True}])
+            allowed, _ = skillos._licence_map(root)
+            self.assertFalse(skillos._universe_store_valid(root, self._row(), licence=allowed))
+            # and a grant tied to a different snapshot of these bytes is refused too
+            self._ledger(root, [{"kind": "skill", "id": "a",
+                                 "blob_sha256": self.DIGEST, "catalog_sha": "0" * 12,
+                                 "archive_allowed": True}])
+            allowed, _ = skillos._licence_map(root)
+            self.assertFalse(skillos._universe_store_valid(root, self._row(), licence=allowed))
+
+    def test_malformed_conflicting_or_denied_entries_fail_closed(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            self._ledger(root, [
+                {"kind": "skill", "id": "a", "blob_sha256": "nothex",
+                 "catalog_sha": self.SHA, "archive_allowed": True},
+                {"kind": "skill", "id": "b", "blob_sha256": "c" * 64,
+                 "catalog_sha": "short", "archive_allowed": True},
+                {"kind": "skill", "id": "c", "blob_sha256": "d" * 64,
+                 "catalog_sha": self.SHA, "archive_allowed": "true"},
+                {"kind": "skill", "id": "d", "blob_sha256": self.DIGEST,
+                 "catalog_sha": self.SHA, "archive_allowed": True},
+                {"kind": "skill", "id": "d", "blob_sha256": self.DIGEST,
+                 "catalog_sha": "9" * 12, "archive_allowed": True},
+            ])
+            allowed, problems = skillos._licence_map(root)
+            self.assertEqual(allowed, {})
+            self.assertEqual(len(problems), 4, problems)   # 2 malformed, 1 non-bool, 1 conflict
+
+    def test_uncleared_canonical_content_never_reaches_the_warehouse(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            payload = root / "cap" / "SKILL.md"
+            payload.parent.mkdir()
+            payload.write_text("ours\n")
+            asset = {"kind": "skill", "id": "x", "source": "canonical",
+                     "abs_path": str(payload), "sha": self.SHA}
+            store = skillos._store_for(root, asset, licence={})
+            self.assertEqual(store["status"], "unresolved")
+            self.assertIn("licence ledger", store["reason"])
+            self.assertFalse((root / skillos.WAREHOUSE).exists())
+            # cleared for these exact bytes → filed, and the grant is what makes it valid
+            digest = skillos._content_digest(payload)
+            store = skillos._store_for(root, asset, licence={digest: self.SHA})
+            self.assertEqual(store["status"], "blob")
+            self.assertTrue((root / store["blob"]).is_file())
+
+    def test_stored_file_licence_is_read_from_its_own_bytes(self):
+        """A file blob restores to <tmp>/payload — classifying the directory instead would
+        read no frontmatter and wave a vendored file through as repo MIT."""
+        spec = importlib.util.spec_from_file_location(
+            "blob_license_ledger", REPO / "scripts/blob_license_ledger.py")
+        ledger = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(ledger)
+        content = b"---\nlicense: GPL-3.0\n---\nvendored thing\n"
+        digest = hashlib.sha256(content).hexdigest()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            blob = root / skillos.WAREHOUSE / digest[:2] / digest
+            blob.parent.mkdir(parents=True)
+            blob.write_bytes(content)
+            got = restore_blob(Repo(root), digest, root / "out")
+            self.assertTrue(got["ok"], got)
+            self.assertEqual(got["kind"], "file")
+            self.assertFalse(
+                ledger.classify(root / "out" / "payload")["archive_allowed"])
+            self.assertTrue(ledger.classify(root / "out")["archive_allowed"])
 
 if __name__ == "__main__":
     unittest.main()

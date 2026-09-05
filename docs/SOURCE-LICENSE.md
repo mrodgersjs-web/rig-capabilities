@@ -53,6 +53,30 @@ fact about the corpus.
   licence read, not assumed**, and any vendored file must carry its provenance.
   Nothing in this increment vendors code.
 
+## Canonical assets: the warehouse archive gate
+
+A snapshot row may be archived as a content-addressed blob under
+`docs/skillos/warehouse/` only with a stated basis in
+`docs/skillos/blob-license-ledger.json`, written by `scripts/blob_license_ledger.py`.
+External assets are never archived under this rule — they get a tested retrieval recipe,
+or nothing.
+
+- An asset that declares a licence (frontmatter `license:`, or a licence file in or beside
+  the payload) is judged on what it declares: permissive SPDX → archivable, anything else →
+  not.
+- An asset that points at an upstream source (a URL in the payload or its siblings) but
+  carries no licence text is treated as possibly vendored and **denied** — `needs_review`,
+  and then either the upstream licence is cited or the blob comes out.
+- Only when neither applies does the root `LICENSE` (MIT, RIG / mrodgersjs-web) carry the
+  entry. That is a claim about this repo's authorship of `capabilities/**` and
+  `rig_capabilities/**`, not independent evidence: the absence of an upstream marker is the
+  absence of a counter-signal, and it does not prove authorship.
+
+Flip condition: any canonical asset later shown to be vendored gets
+`archive_allowed: false` in the ledger and its blob leaves the warehouse in the same commit
+that records the finding. Clearance binds to bytes — the ledger keys `blob_sha256` to the
+snapshot SHA12 — so editing an asset re-opens the question instead of riding on an old grant.
+
 ## Enforcement
 
 `tests/test_source_license.py` fails the suite if any transcript, caption, or
@@ -60,6 +84,13 @@ fact about the corpus.
 deliberately a *tracked-files* check, not a gitignore check: gitignore drifts, the
 index is what ships. Its own plant-failure — staging a fake transcript and watching it
 go red — is the regression story recorded with the test.
+
+Clearance is enforced in code, not prose. `_licence_map` in `rig_capabilities/skillos.py`
+fails closed on an absent, unparseable, malformed, non-boolean or self-contradictory ledger,
+and `dump`/`restock` consult it *before* the blob write, so content that is not cleared never
+reaches the warehouse. `tests/test_skillos_v5.py::LicenceGate` carries the plant-failures,
+including the case where an old grant would otherwise bless different bytes filed under the
+same asset id.
 
 ## Retention
 

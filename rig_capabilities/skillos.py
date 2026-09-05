@@ -21,6 +21,7 @@ from .catalog import DIR_DESCRIPTOR, Repo
 SKILLOS = Path("docs/skillos")
 UNIVERSE = SKILLOS / "universe.jsonl"
 RECEIPTS = SKILLOS / "receipts.jsonl"
+BLOB_LEDGER = SKILLOS / "blob-license-ledger.json"
 WAREHOUSE = SKILLOS / "warehouse"
 WITNESS_DIR = SKILLOS / "witness" / "canonical"
 ORPHAN_DIR = SKILLOS / "orphan"
@@ -81,6 +82,13 @@ def _payload_tree_manifest(payload: Path) -> str:
 def _sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
+
+
+def _content_digest(payload: Path | None) -> str:
+    """The digest `_store_for` would file a payload under — without filing it."""
+    if payload is None:
+        return ""
+    return _sha256(_bundle_bytes(payload) if payload.is_dir() else payload.read_bytes())
 
 def _blob_path(root: Path, digest: str) -> Path:
     return root / WAREHOUSE / digest[:2] / digest
@@ -218,8 +226,14 @@ def _git_recipe_for(payload: Path, asset: dict) -> dict | None:
     return recipe if _recipe_descriptor_error(recipe) is None else None
 
 
-def _store_for(root: Path, asset: dict) -> dict:
-    """Canonical → blob. External → verified git recipe or unresolved. Never invent recipes."""
+def _store_for(root: Path, asset: dict, licence: dict | None = None) -> dict:
+    """Canonical → blob. External → verified git recipe or unresolved. Never invent recipes.
+
+    `licence` maps ledger-cleared `blob_sha256` → `catalog_sha`. Archival IS the write, so
+    an asset whose content is not cleared for that content is never filed — the row falls
+    back to `unresolved` and nothing lands in the warehouse. `None` means the caller has
+    already applied its own licence check (restock).
+    """
     catalog_sha = asset.get("sha") or ""
     source = asset.get("source") or ""
     kind = asset.get("kind") or ""
@@ -232,6 +246,13 @@ def _store_for(root: Path, asset: dict) -> dict:
             data = payload.read_bytes()
             scope = "file"
         digest = _sha256(data)
+        if licence is not None and licence.get(digest) != catalog_sha:
+            return {
+                "status": "unresolved",
+                "payload_scope": scope,
+                "catalog_sha": catalog_sha,
+                "reason": "licence ledger does not clear this content for archiving",
+            }
         dest = _blob_path(root, digest)
         dest.parent.mkdir(parents=True, exist_ok=True)
         if not dest.exists():
@@ -268,9 +289,10 @@ def dump_universe(repo: Repo) -> dict:
     rows = []
     counts: dict[str, int] = {}
     root = Path(repo.root)
+    licence, licence_problems = _licence_map(root)
     for a in assets:
         kind, aid = a.get("kind") or "", a.get("id") or ""
-        store = _store_for(root, a)
+        store = _store_for(root, a, licence=licence)
         counts[store["status"]] = counts.get(store["status"], 0) + 1
         rows.append({
             "kind": kind,
@@ -289,6 +311,7 @@ def dump_universe(repo: Repo) -> dict:
         "n": len(rows),
         "path": str(dest),
         "store_counts": counts,
+        "licence_problems": licence_problems,
         "restorable": restorable,
         "recipe_rows": counts.get("recipe", 0),
         "v5_all_stores_restorable": False,
@@ -309,10 +332,54 @@ def _load_jsonl(path: Path) -> list:
     return out
 
 
-def _universe_store_valid(root: Path, row: dict) -> bool:
+def _licence_map(root: Path) -> tuple[dict, list[str]]:
+    """`blob_sha256 -> catalog_sha` that the ledger clears for local archive.
+
+    Keyed by content, never by `(kind,id)`: an older 'allowed' entry must not bless a
+    different blob filed under the same asset id, so an entry only counts when the
+    stored blob's sha256 AND its catalog_sha line up with the ledger row. Malformed,
+    duplicated or unreadable entries deny (fail-closed) and are named in the second
+    return value. Ledger absent → nothing is cleared.
+    """
+    path = root / BLOB_LEDGER
+    if not path.is_file():
+        return {}, ["licence ledger absent — run scripts/blob_license_ledger.py"]
+    try:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as e:
+        return {}, [f"licence ledger unreadable: {type(e).__name__}"]
+    allowed: dict[str, str] = {}
+    problems: list[str] = []
+    for e in (doc.get("entries") or []):
+        if not isinstance(e, dict):
+            problems.append("entry is not an object")
+            continue
+        digest = e.get("blob_sha256") or ""
+        catalog = e.get("catalog_sha") or ""
+        if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
+            problems.append(f"malformed blob_sha256 for {_key(e.get('kind') or '?', e.get('id') or '?')}")
+            continue
+        if len(catalog) != 12 or any(c not in "0123456789abcdef" for c in catalog):
+            problems.append(f"malformed catalog_sha for {digest[:12]}")
+            continue
+        if e.get("archive_allowed") is not True:
+            if "archive_allowed" in e and not isinstance(e["archive_allowed"], bool):
+                problems.append(f"non-boolean archive_allowed for {_key(e.get('kind') or '?', e.get('id') or '?')}")
+            continue
+        if digest in allowed and allowed[digest] != catalog:
+            allowed.pop(digest, None)
+            problems.append(f"duplicate blob_sha256 {digest[:12]} with conflicting catalog_sha")
+            continue
+        allowed[digest] = catalog
+    return allowed, problems
+
+
+def _universe_store_valid(root: Path, row: dict, licence: dict | None = None) -> bool:
     store = row.get("store") or {}
     if store.get("status") != "blob":
         return False
+    if licence is not None and licence.get(store.get("blob_sha256") or "") != row.get("sha"):
+        return False                      # restores, but not licensed as THIS content
     rec = {
         "kind": row.get("kind"),
         "id": row.get("id"),
@@ -441,6 +508,79 @@ def _verify_recipe_rows(rows: list[dict]) -> dict:
     }
 
 
+def restock_stores(repo: Repo) -> dict:
+    """Attach proven stores to the frozen snapshot without touching identity.
+
+    Only rows with no store evidence (`unresolved`, `unresolved_bundle`, `missing_store`)
+    are candidates. Already-pinned `recipe` and warehouse `blob` rows are historical
+    evidence and are never re-derived — a recipe that has since gone unfetchable stays
+    pinned exactly as recorded and is reported red by `check --stores`, not quietly
+    re-pointed at today's tree. `(kind,id,sha)` is never rewritten; a `store` is written
+    only when it is proven RIGHT NOW to restore the snapshot SHA12 (blob restored from the
+    warehouse, or recipe fetched over HTTPS and verified).
+    """
+    root = Path(repo.root)
+    uni = _load_jsonl(root / UNIVERSE)
+    if not uni:
+        return {"ok": False, "error": "universe.jsonl missing — run skillos dump",
+                "exit_code": 1}
+    OPEN = {"unresolved", "unresolved_bundle", "missing_store", ""}
+    live = {_key(a.get("kind") or "", a.get("id") or ""): a
+            for a in (repo.load_index().get("assets") or [])}
+    licence, licence_problems = _licence_map(root)
+    pending: list[tuple[int, dict]] = []
+    blobbed = 0
+    licence_skipped = 0
+    for i, row in enumerate(uni):
+        if ((row.get("store") or {}).get("status") or "") not in OPEN:
+            continue                          # pinned receipts are immutable
+        key = _key(row.get("kind") or "", row.get("id") or "")
+        a = live.get(key)
+        if a is None or (a.get("sha") or "") != row.get("sha"):
+            continue                          # identity must match the frozen snapshot
+        derived = _store_for(root, a, licence=licence)
+        if a.get("source") == "canonical" and derived.get("status") != "blob":
+            licence_skipped += 1               # ledger declined the archival
+        if derived.get("status") == "blob":
+            if _universe_store_valid(root, {**row, "store": derived}, licence=licence):
+                row["store"] = derived
+                blobbed += 1
+        elif derived.get("status") == "recipe":
+            pending.append((i, derived))
+    recipe_verified = 0
+    failures: list[dict] = []
+    if pending:
+        probe = [{**uni[i], "store": st} for i, st in pending]
+        report = _verify_recipe_rows(probe)
+        valid = report.get("valid_keys") or set()
+        failures = list(report.get("recipe_failures") or [])
+        for (i, st), row in zip(pending, probe):
+            if _key(row.get("kind") or "", row.get("id") or "") in valid:
+                uni[i]["store"] = st
+                recipe_verified += 1
+    dest = root / UNIVERSE
+    tmp = dest.with_suffix(".jsonl.tmp")
+    tmp.write_text("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in uni))
+    tmp.replace(dest)
+    counts: dict[str, int] = {}
+    for r in uni:
+        s = (r.get("store") or {}).get("status") or "missing_store"
+        counts[s] = counts.get(s, 0) + 1
+    return {
+        "ok": True,
+        "n": len(uni),
+        "blobbed": blobbed,
+        "licence_skipped": licence_skipped,
+        "licence_problems": licence_problems,
+        "recipe_verified": recipe_verified,
+        "recipe_refused": len(pending) - recipe_verified,
+        "recipe_refusals": failures[:20],
+        "store_counts": counts,
+        "identity_unchanged": True,
+        "exit_code": 0,
+    }
+
+
 def check_universe(repo: Repo, plant_drop: str | None = None,
                    stores: bool = False) -> dict:
     root = Path(repo.root)
@@ -484,13 +624,17 @@ def check_universe(repo: Repo, plant_drop: str | None = None,
     store_counts: dict[str, int] = {}
     valid = 0
     recipes = []
+    licence, licence_problems = _licence_map(root)
+    licence_denied = []
     for row in uni:
         st = (row.get("store") or {}).get("status") or "missing_store"
         store_counts[st] = store_counts.get(st, 0) + 1
         if st == "recipe":
             recipes.append(row)
-        elif _universe_store_valid(root, row):
+        elif _universe_store_valid(root, row, licence=licence):
             valid += 1
+        elif st == "blob":
+            licence_denied.append(_key(row.get("kind") or "", row.get("id") or ""))
     recipe_report = {
         "recipe_group_count": 0,
         "recipe_fetch_count": 0,
@@ -519,6 +663,8 @@ def check_universe(repo: Repo, plant_drop: str | None = None,
         "missing_without_receipt": missing,
         "bad_receipts": bad_receipts,
         "store_counts": store_counts,
+        "licence_denied": licence_denied,
+        "licence_problems": licence_problems,
         "unresolved": unresolved,
         "missing_evidence": _missing_evidence(uni),
         "valid_store_count": valid,
@@ -787,12 +933,12 @@ def witness_strict(repo: Repo, plant_remove: str | None = None) -> dict:
     missing_fx = [i for i in wanted if not (d / f"{i}.json").is_file()]
     if plant_remove:
         missing_fx.append(plant_remove)
-    if missing_fx:
-        return {"ok": False, "missing_fixtures": missing_fx, "exit_code": 1}
+    # Missing fixtures must not mask malformed ones: report both, stay red.
+    present = [i for i in wanted if (d / f"{i}.json").is_file()]
     fails = []
     ran = []
     bad_fx = []
-    for aid in wanted:
+    for aid in present:
         path = d / f"{aid}.json"
         try:
             doc = json.loads(path.read_text())
@@ -808,13 +954,14 @@ def witness_strict(repo: Repo, plant_remove: str | None = None) -> dict:
                     "unrunnable": res.get("unrunnable")})
         if not res.get("pass"):
             fails.append(aid)
-    if bad_fx or fails:
+    if bad_fx or fails or missing_fx:
         return {"ok": False, "bad_fixtures": bad_fx, "fails": fails,
-                "ran": len(ran), "exit_code": 1}
+                "missing_fixtures": missing_fx, "ran": len(ran), "exit_code": 1}
     return {
         "ok": True,
         "ran": len(ran),
         "fails": [],
+        "missing_fixtures": [],
         "unrunnable_any": sum(1 for r in ran if r.get("unrunnable")),
         "exit_code": 0,
     }
@@ -867,6 +1014,8 @@ def dispatch(repo: Repo, cmd: str, **kw) -> dict:
     if cmd == "check":
         return check_universe(repo, plant_drop=kw.get("plant_drop"),
                               stores=bool(kw.get("stores")))
+    if cmd == "restock":
+        return restock_stores(repo)
     if cmd == "restore":
         digest = kw.get("sha") or ""
         root = Path(repo.root).resolve()

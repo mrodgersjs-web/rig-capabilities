@@ -7,10 +7,11 @@ Mike can hire the estate through **exactly 50 Jobs-To-Be-Done doors**. Every ind
 ## METRIC
 
 - Operator menu size = **50** doors (not 2,650 skill names).
-- **Conserved universe U**: every record in `.index.json` at snapshot time, keyed by `(kind,id)` (catalog shadows on that pair, not bare `id`). Live dump 2026-09-04 = **4919** assets. Denominator = snapshot file `docs/skillos/universe.jsonl`, not a live walk of drifting external roots.
+- **Conserved universe U**: every record in `.index.json` at snapshot time, keyed by `(kind,id)` (catalog shadows on that pair, not bare `id`). Frozen snapshot `docs/skillos/universe.jsonl` = **5004** rows at `984d60f`; identity digest = `sha256("\n".join(sorted(f"{kind}\t{id}\t{sha}")) + "\n")` over those triples — stable across `store`-only restock writes — `c3c5879fd6f3a23b64a2c2aa7295d00e2cba38ac66c5e7e0d10287ac037bb9af`. History measured from the committed files, not asserted: 4919 (2026-09-04 live walk), 4993 at `71af341`, 5004 at `984d60f` — net +11 keys, with 188 triples retired / 199 introduced (91 exemplar renames, ~95 edited canonical assets, +11 new keys). Denominator = that file, never a live walk of drifting external roots, and it is never re-dumped to make a gate go green.
 - **Conservation (v20)**: every `(kind,id)` in U has a bidirectional *executable* witness to ≥1 door, or the release is red.
 - **Conservation (v5)**: U is frozen to `docs/skillos/universe.jsonl` (`kind,id,source,path,sha,store`). `store` is either a content-addressed blob under `docs/skillos/warehouse/<sha>` (only when the asset's licence allows local archive) or an immutable retrieval recipe (`git url + commit + path` or equivalent) whose restore command is tested. Path+hash alone is **not** a receipt. Witness compiler is red if any snapshot key disappears without a restorable receipt. Executable witnesses required for canonical skills at v5; all of U by v20. **v5 is not closed while `skillos check --stores` is red.**
 - **Orphan-replay**: historical long-tail intents still produce the same observable outcome after compression, or the release is red.
+- Store-gate evidence, per-source missing receipts, and the two lawful closing routes: `09-STORE-RESOLUTION-REGISTER.md`.
 - Buyer/outcome terms only. Refused: "looks like Tessl", "award-tier", "1000x" as a score, LLM-judge review % as truth.
 
 ## DONE-TEST (v20)
