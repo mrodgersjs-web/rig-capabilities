@@ -124,16 +124,19 @@ def test_flagged_invocations_were_found() -> None:
     )
 
 
-def test_the_workflow_is_in_scope() -> None:
-    """The file the original bug shipped in must be one of the files scanned.
+def test_workflow_docs_are_in_scope() -> None:
+    """Scan scope must keep covering the tracked codeql workflow docs.
 
-    It lives outside the skill tree, which is why the markdown linters missed it.
+    Their prose invocations are real call sites: drop them from the scan and a bad script
+    flag ships again behind passing tests. (The `.js` this check once named was never
+    committed; `rglob` only yields paths that exist, so both of its asserts were
+    unfalsifiable on a clean checkout.)
     """
-    workflow = PLUGIN_ROOT / "workflows" / "codeql-build.js"
-    assert workflow.exists(), f"{workflow} is gone — update this check to match"
-    assert workflow in _doc_files(), (
-        f"{workflow.name} is no longer scanned, so a bad flag in the workflow would ship again"
-    )
+    docs = sorted((PLUGIN_ROOT / "skills" / "codeql" / "workflows").glob("*.md"))
+    assert docs, "codeql workflow docs moved — update this check to match"
+    scanned = set(_doc_files())
+    for doc in docs:
+        assert doc in scanned, f"{doc.name} is no longer scanned, so a bad flag in it ships again"
 
 
 @pytest.mark.parametrize(

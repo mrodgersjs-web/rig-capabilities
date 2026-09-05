@@ -593,6 +593,36 @@ class LicenceGate(unittest.TestCase):
             self.assertEqual(allowed, {self.DIGEST: self.SHA})
             self.assertEqual(problems, [])
 
+    def _root_with_one_blob_row(self, root: Path, entries) -> None:
+        (root / "docs/skillos").mkdir(parents=True, exist_ok=True)
+        (root / skillos.UNIVERSE).write_text(json.dumps(self._row()) + "\n")
+        (root / skillos.BLOB_LEDGER).write_text(json.dumps({"entries": entries}))
+        (root / ".index.json").write_text(json.dumps({
+            "generated_epoch": 9999999999,
+            "assets": [{"kind": "skill", "id": "a", "sha": self.SHA}],
+        }))
+
+    def test_denied_and_unrestorable_blobs_are_reported_apart(self):
+        """A denied blob needs a ledger decision; a cleared-but-broken blob needs its bytes."""
+        cleared = [{"kind": "skill", "id": "a", "blob_sha256": self.DIGEST,
+                    "catalog_sha": self.SHA, "archive_allowed": True}]
+        denied = [dict(cleared[0], archive_allowed=False)]
+        with tempfile.TemporaryDirectory() as td_a, tempfile.TemporaryDirectory() as td_b:
+            root = Path(td_a)
+            self._root_with_one_blob_row(root, denied)
+            red = skillos.check_universe(Repo(root))
+            self.assertEqual(red["licence_denied"], ["skill/a"],
+                             "ledger refusal must be named as a licence decision")
+            self.assertEqual(red["unrestorable_blobs"], [])
+
+            root = Path(td_b)
+            self._root_with_one_blob_row(root, cleared)   # cleared, but no warehouse blob filed
+            red = skillos.check_universe(Repo(root))
+            self.assertEqual(red["licence_denied"], [],
+                             "cleared content must not be pushed at the ledger")
+            self.assertEqual(red["unrestorable_blobs"], ["skill/a"])
+            self.assertEqual(red["valid_store_count"], 0)
+
     def test_missing_or_unparseable_ledger_clears_nothing(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -735,6 +765,46 @@ class LicenceGate(unittest.TestCase):
             self.assertFalse(
                 ledger.classify(root / "out" / "payload")["archive_allowed"])
             self.assertTrue(ledger.classify(root / "out")["archive_allowed"])
+
+    def _ledger_mod(self):
+        spec = importlib.util.spec_from_file_location(
+            "blob_license_ledger", REPO / "scripts/blob_license_ledger.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+    def test_generator_survives_an_unresolvable_payload(self):
+        """`_rel` runs for every entry; a missing payload gives _content_digest "" and _rel None."""
+        ledger = self._ledger_mod()
+        self.assertEqual(ledger._rel(None), "")
+        self.assertEqual(ledger._rel(REPO / "LICENSE"), "LICENSE")
+
+    def test_generator_runs_without_the_frozen_universe(self):
+        """universe.jsonl is generated; its absence must only drop drift detection."""
+        ledger = self._ledger_mod()
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "docs/skillos").mkdir(parents=True)
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [
+                    {"kind": "skill", "id": "present", "sha": self.SHA, "source": "canonical",
+                     "abs_path": str(root / "capabilities/skills/present/SKILL.md")},
+                    {"kind": "skill", "id": "ghost", "sha": self.SHA, "source": "canonical",
+                     "abs_path": str(root / "capabilities/skills/ghost/SKILL.md")},
+                ],
+            }))
+            (root / "capabilities/skills/present").mkdir(parents=True)
+            (root / "capabilities/skills/present/SKILL.md").write_text(
+                "---\nname: present\n---\nbody\n")
+            self.assertEqual(ledger.main(root), 0)
+            doc = json.loads((root / "docs/skillos/blob-license-ledger.json").read_text())
+            self.assertEqual(doc["stored_blobs"], 0)
+            by_id = {e["id"]: e for e in doc["entries"]}
+            self.assertTrue(by_id["present"]["archive_allowed"])
+            self.assertFalse(by_id["ghost"]["archive_allowed"])
+            self.assertEqual(by_id["ghost"]["path"], "")   # the _rel(None) crash site
+            self.assertIn("skill/ghost", doc["needs_review"])
 
 if __name__ == "__main__":
     unittest.main()

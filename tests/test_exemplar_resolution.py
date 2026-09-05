@@ -90,7 +90,10 @@ class ExemplarResolutionTests(unittest.TestCase):
         if not index.is_file():
             from rig_capabilities.catalog import Repo
             Repo(str(REPO_ROOT)).build_index()
-            cls.assertTrue(index.is_file(), "build_index wrote no index")
+            if not index.is_file():
+                # assertTrue is an instance method; calling it on the class would raise
+                # AttributeError and mask the real fault.
+                raise RuntimeError(f"build_index wrote no index at {index}")
 
     def test_detector_fires_on_a_planted_dangling_entry(self):
         clean = _run()

@@ -134,6 +134,24 @@ def _select_victim(root: Path) -> tuple[dict, dict, Path]:
     raise RuntimeError("no unique, licensed universe blob is available to withdraw")
 
 
+def _prune_to_victim(root: Path, row: dict) -> None:
+    """Shrink the gate root to the one row under test.
+
+    The real snapshot carries 293 recipe rows across 6 groups, and `stores=True` fetches every
+    one of their pinned origins. Proof 'a' is about the licence verdict, so those rows are both
+    irrelevant and the only thing that would put the plant on the network.
+    """
+    universe = root / UNIVERSE.relative_to(ROOT)
+    universe.write_text(json.dumps(row) + "\n", encoding="utf-8")
+    index_path = root / INDEX.relative_to(ROOT)
+    index_doc = json.loads(index_path.read_text(encoding="utf-8"))
+    index_doc["assets"] = [
+        a for a in (index_doc.get("assets") or [])
+        if (a.get("kind"), a.get("id")) == (row["kind"], row["id"])
+    ]
+    index_path.write_text(json.dumps(index_doc), encoding="utf-8")
+
+
 def _proof(problems: list[str], label: str, ok: bool, detail: str) -> None:
     print(f"{'PASS' if ok else 'RED'} {label}: {detail}")
     if not ok:
@@ -146,6 +164,7 @@ def _prove_ledger_gate(temp_base: Path, problems: list[str]) -> None:
     copied_ledger = gate_root / LEDGER.relative_to(ROOT)
     pristine_ledger = copied_ledger.read_bytes()
     row, victim, source_blob = _select_victim(gate_root)
+    _prune_to_victim(gate_root, row)
     digest = victim["blob_sha256"]
     key = f"{row['kind']}/{row['id']}"
     complaint = f"non-boolean archive_allowed for {key}"
@@ -163,6 +182,9 @@ def _prove_ledger_gate(temp_base: Path, problems: list[str]) -> None:
     copied_ledger.write_text(json.dumps(tampered), encoding="utf-8")
 
     allowed, map_problems = skillos._licence_map(gate_root)
+    # stores=True is what makes the store-gate exit code meaningful (without it the exit code
+    # derives from key coverage, so a denied blob would still exit 0). The root was pruned to the
+    # one blob row, so no recipe origins remain to fetch and the plant stays hermetic.
     gate = skillos.check_universe(skillos.Repo(gate_root), stores=True)
     red = (
         changed == 1
@@ -183,7 +205,7 @@ def _prove_ledger_gate(temp_base: Path, problems: list[str]) -> None:
 
     copied_ledger.write_bytes(pristine_ledger)
     restored_allowed, restored_map_problems = skillos._licence_map(gate_root)
-    restored_gate = skillos.check_universe(skillos.Repo(gate_root), stores=False)
+    restored_gate = skillos.check_universe(skillos.Repo(gate_root), stores=True)
     restored = (
         digest in restored_allowed
         and complaint not in restored_map_problems

@@ -752,6 +752,7 @@ def check_universe(repo: Repo, plant_drop: str | None = None,
     recipes = []
     licence, licence_problems = _licence_map(root)
     licence_denied = []
+    unrestorable_blobs = []
     for row in uni:
         st = (row.get("store") or {}).get("status") or "missing_store"
         store_counts[st] = store_counts.get(st, 0) + 1
@@ -760,7 +761,15 @@ def check_universe(repo: Repo, plant_drop: str | None = None,
         elif _universe_store_valid(root, row, licence=licence):
             valid += 1
         elif st == "blob":
-            licence_denied.append(_key(row.get("kind") or "", row.get("id") or ""))
+            key = _key(row.get("kind") or "", row.get("id") or "")
+            store = row.get("store") or {}
+            # Two different faults: the ledger refuses these bytes, versus bytes that are
+            # cleared but absent/corrupt in the warehouse. Editing the ledger fixes the first
+            # and must not be the response to the second.
+            if licence.get(store.get("blob_sha256") or "") != row.get("sha"):
+                licence_denied.append(key)
+            else:
+                unrestorable_blobs.append(key)
     recipe_report = {
         "recipe_group_count": 0,
         "recipe_fetch_count": 0,
@@ -790,6 +799,7 @@ def check_universe(repo: Repo, plant_drop: str | None = None,
         "bad_receipts": bad_receipts,
         "store_counts": store_counts,
         "licence_denied": licence_denied,
+        "unrestorable_blobs": unrestorable_blobs,
         "licence_problems": licence_problems,
         "unresolved": unresolved,
         "missing_evidence": _missing_evidence(uni),

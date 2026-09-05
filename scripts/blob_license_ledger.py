@@ -32,7 +32,9 @@ PERMISSIVE = {"MIT", "Apache-2.0", "ISC", "CC0-1.0", "0BSD"}
 UPSTREAM = re.compile(r"https?://\S+")
 
 
-def _rel(p: Path) -> str:
+def _rel(p: Path | None) -> str:
+    if p is None:
+        return ""
     try:
         return str(Path(p).resolve().relative_to(ROOT))
     except ValueError:
@@ -98,7 +100,7 @@ def classify(payload: Path) -> dict:
             "archive_allowed": True}
 
 
-def main() -> int:
+def main(root: Path = ROOT) -> int:
     """Classify every LIVE canonical asset by prospective digest.
 
     Inventory comes from the index, not from what happens to be filed in the warehouse:
@@ -106,13 +108,16 @@ def main() -> int:
     that read only stored blobs could never licence anything new. Nothing here writes to
     the warehouse — the digest is what `_store_for` WOULD file.
     """
-    repo = Repo(ROOT)
+    repo = Repo(root)
     canonical = [a for a in (repo.load_index().get("assets") or [])
                  if (a.get("source") or "") == "canonical"]
     pinned: dict[str, dict] = {}
     row_paths: dict[str, str] = {}
     stored = 0
-    for line in (ROOT / UNIVERSE).read_text().splitlines():
+    # universe.jsonl is a generated snapshot. Inventory comes from the index, so a missing
+    # universe must only disable pinned-drift detection — it must not stop the ledger.
+    uni_path = root / UNIVERSE
+    for line in (uni_path.read_text().splitlines() if uni_path.is_file() else []):
         if not line.strip():
             continue
         row = json.loads(line)
@@ -153,7 +158,7 @@ def main() -> int:
             continue
         kind, _, aid = key.partition("/")
         with tempfile.TemporaryDirectory() as td:
-            got = restore_blob(Repo(ROOT), digest, Path(td))
+            got = restore_blob(Repo(root), digest, Path(td))
             if not got.get("ok"):
                 verdict = {"license": None,
                            "basis": f"stored blob unrestorable: {got.get('error')}",
@@ -183,7 +188,7 @@ def main() -> int:
         "stored_content_drift": sorted(drift),
         "entries": entries,
     }
-    OUT.write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n")
+    (root / OUT.relative_to(ROOT)).write_text(json.dumps(doc, indent=1, sort_keys=True) + "\n")
     print(json.dumps({
         "canonical_assets": doc["canonical_assets"],
         "stored_blobs": doc["stored_blobs"],
@@ -191,10 +196,14 @@ def main() -> int:
         "needs_review_count": len(needs_review),
         "needs_review": doc["needs_review"][:10],
         "stored_content_drift": drift[:10],
-        "out": str(OUT),
+        "out": str(root / OUT.relative_to(ROOT)),
     }, indent=1))
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    import argparse
+    ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    ap.add_argument("--root", type=Path, default=ROOT,
+                    help="checkout to classify (default: this repo)")
+    raise SystemExit(main(ap.parse_args().root.resolve()))
