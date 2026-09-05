@@ -32,19 +32,27 @@ SPDX = (("Apache License", "Apache-2.0"),
         ("ISC License", "ISC"),
         ("CC0", "CC0-1.0"))
 SPDX_RE = (
-    (re.compile(r"\bThe\s+ISC\s+License\b|\bISC\s+License\b|\bISC\b"), "ISC"),
-    (re.compile(r"\bBSD\s+[-\s]?[1-3]?\s*Clause\b|\bBSD\s+License\b|\bBSD\b"),
-     "BSD (uncatalogued)"),
+    # The bare acronyms are not evidence of a licence. `ISC` inside `MISC` was the original
+    # false positive, but a word-bounded `ISC` is barely better: "not ISC licensed" would read
+    # as permissive and get archived. A licence claim has to look like a licence — the title,
+    # the opening sentence of the canonical ISC text, or a BSD clause/license form.
+    (re.compile(
+        r"\bThe\s+ISC\s+License\b|\bISC\s+License\b"
+        r"|Permission\s+to\s+use,\s+copy,[^.\n]*distribute\s+this\s+software"
+    ), "ISC"),
+    (re.compile(r"\bBSD\s*[-\s]?[1-3]\s*[-\s]?Clause\b|\bBSD\s+License\b"), "BSD (uncatalogued)"),
 )
 PERMISSIVE = {"MIT", "Apache-2.0", "ISC", "CC0-1.0", "0BSD"}
 UPSTREAM = re.compile(r"https?://\S+")
 
 
-def _rel(p: Path | None) -> str:
+def _rel(p: Path | None, root: Path = ROOT) -> str:
     if p is None:
         return ""
     try:
-        return str(Path(p).resolve().relative_to(ROOT))
+        # resolve both sides: on macOS /var is a symlink to /private/var, so an unresolved
+        # root makes relative_to() fail on paths that genuinely are inside it.
+        return str(Path(p).resolve().relative_to(Path(root).resolve()))
     except ValueError:
         return str(p)
 
@@ -158,7 +166,7 @@ def main(root: Path = ROOT) -> int:
             verdict = classify(payload)
         entries.append({
             "kind": a.get("kind"), "id": a.get("id"), "catalog_sha": a.get("sha"),
-            "blob_sha256": digest, "payload_scope": scope, "path": _rel(payload),
+            "blob_sha256": digest, "payload_scope": scope, "path": _rel(payload, root),
             **verdict,
         })
         if not verdict["archive_allowed"]:

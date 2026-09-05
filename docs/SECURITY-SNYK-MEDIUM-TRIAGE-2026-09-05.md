@@ -108,3 +108,17 @@ Issue-ignore suppression remains refused. The controlling statement is the actua
 
 Open, not closed: a future request must name the setting and desired value, then verify the
 authenticated route before drawing any conclusion about the org configuration.
+
+## Where the probe stops, and why
+
+The hunt for an org-settings toggle ends here on evidence, not on effort:
+
+| probe | result |
+|---|---|
+| `snyk code test` scoped to this repo | succeeded — this is the evidence base for every row above |
+| `snyk api --json` on CLI 1.1307.0 | `Error: Unknown command "api"` — no generic REST escape hatch exists in this CLI |
+
+Endpoint guessing was not attempted, and OAuth material was not extracted to manufacture access
+to an interface this CLI does not expose. An invented `GET /org/<id>/settings` and a forged bearer
+token would produce a number that reads as evidence and is nothing of the kind. The item stays
+**blocked**, with the reason named: the setting has never been identified, only inferred to exist.

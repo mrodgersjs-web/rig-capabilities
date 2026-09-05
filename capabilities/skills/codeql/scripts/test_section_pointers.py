@@ -48,6 +48,22 @@ def _doc_files() -> list[Path]:
     )
 
 
+def _shipped_files() -> list[Path]:
+    """Everything that ships and gets read by a machine, not just docs.
+
+    The marketplace-path hazard lives in executable payloads — a `.py` script or `.sh` helper
+    with a hardcoded `SKILL_DIR` breaks exactly like the workflow that started this. Scanning
+    only `.md`/`.js` would let a bad literal land in the scripts themselves.
+    """
+    return sorted(
+        p
+        for p in PLUGIN_ROOT.rglob("*")
+        if p.suffix in {".md", ".js", ".py", ".sh"}
+        and not SKIP_DIRS.intersection(p.parts)
+        and not p.name.startswith("test_")
+    )
+
+
 def _slug(heading: str) -> str:
     """GitHub's anchor rule: lowercase, drop punctuation, spaces to hyphens."""
     text = heading.strip().lower()
@@ -98,14 +114,14 @@ def test_no_shipped_file_hardcodes_a_marketplace_path() -> None:
     127, and every rung reported a build failure for a project that builds. Nothing else in this
     suite would notice it being written back down, because CI runs from the one repo where the
     literal does resolve. The file that shipped it was never committed; the hazard is not
-    file-specific, so it is now checked across every tracked markdown and script.
+    file-specific, so it is checked across every tracked markdown, workflow, script and helper.
     """
     offenders = []
-    for path in _doc_files():
+    for path in _shipped_files():
         if path == Path(__file__).resolve():
             continue        # this check's own prose names the literal
         for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
-            if "plugins/static-analysis" in line and not line.lstrip().startswith("//"):
+            if "plugins/static-analysis" in line and not line.lstrip().startswith(("//", "#")):
                 offenders.append(f"{path.relative_to(PLUGIN_ROOT)}: {line.strip()}")
     assert not offenders, (
         "shipped files name their own path inside a marketplace checkout, which only resolves "

@@ -804,6 +804,11 @@ class LicenceGate(unittest.TestCase):
             self.assertTrue(by_id["present"]["archive_allowed"])
             self.assertFalse(by_id["ghost"]["archive_allowed"])
             self.assertEqual(by_id["ghost"]["path"], "")   # the _rel(None) crash site
+            # The ledger is committed, so a path must be checkout-relative even when `--root`
+            # is a symlinked temp dir (macOS /var -> /private/var): resolving only the payload
+            # would make relative_to() fail and leak the temp path into a tracked file.
+            self.assertEqual(by_id["present"]["path"],
+                             "capabilities/skills/present/SKILL.md")
             self.assertIn("skill/ghost", doc["needs_review"])
 
     def test_own_declaration_outranks_a_permissive_neighbour(self):
@@ -831,6 +836,37 @@ class LicenceGate(unittest.TestCase):
             (d / "LICENSE").write_text("ISC License\n\nPermission to use, copy, or distribute "
                                        "this software is hereby granted.\n")
             self.assertEqual(ledger.sibling_license(d)[0], "ISC")
+
+    def test_a_licence_claim_must_look_like_a_licence(self):
+        """Word-bounding was not enough: `not ISC licensed` is a denial, not a grant.
+
+        Canonical ISC text often has no title at all, so the detector has to recognise the
+        opening sentence as well as the heading — otherwise tightening the needle would drop
+        real ISC blobs into `archive_allowed: false` and lose licensed content.
+        """
+        ledger = self._ledger_mod()
+        cases = [
+            # canonical ISC, no title line — must still clear
+            ("Permission to use, copy, modify, and/or distribute this software for any\n"
+             "purpose with or without fee is hereby granted.\n", "ISC"),
+            # mentions the acronym to deny it
+            ("This software is proprietary and trade secret, not ISC licensed.\n", None),
+            # a clause form is a licence; the bare acronym is not
+            ("BSD 3-Clause License\n\nRedistribution and reproduction in source, with or\n"
+             "without modification, is permitted provided conditions are met.\n",
+             "BSD (uncatalogued)"),
+            ("Copyright belongs to upstream; see the BSD file for terms.\n", None),
+        ]
+        for text, want in cases:
+            with tempfile.TemporaryDirectory() as td:
+                d = Path(td)
+                (d / "LICENSE").write_text(text)
+                got = ledger.sibling_license(d)[0]
+                if want is None:
+                    self.assertEqual(got, "unrecognised licence text",
+                                     f"over-claimed as {got!r}: {text[:40]!r}")
+                else:
+                    self.assertEqual(got, want, f"{text[:40]!r}")
 
 if __name__ == "__main__":
     unittest.main()
