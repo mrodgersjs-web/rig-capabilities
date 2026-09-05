@@ -82,6 +82,16 @@ def _report() -> dict:
 
 
 class ExemplarResolutionTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # `.index.json` is a generated artifact and is gitignored, so a clean checkout has no
+        # index and every reader below would die on a missing file instead of testing anything.
+        index = REPO_ROOT / ".index.json"
+        if not index.is_file():
+            from rig_capabilities.catalog import Repo
+            Repo(str(REPO_ROOT)).build_index()
+            cls.assertTrue(index.is_file(), "build_index wrote no index")
+
     def test_detector_fires_on_a_planted_dangling_entry(self):
         clean = _run()
         self.assertEqual(clean.returncode, 0, clean.stdout[-200:])

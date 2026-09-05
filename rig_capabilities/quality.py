@@ -18,6 +18,23 @@ FIELDS = ("outcome", "done_when", "great_example", "quality_floor")
 _WEIGHT = {"outcome": 30, "done_when": 30, "great_example": 25, "quality_floor": 15}
 _FENCE = re.compile(r"^---\s*$")
 
+def _slug(s: str) -> str:
+    """Stable exemplar filename stem; extensions remain part of asset identity."""
+    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
+
+
+def _assert_unique_exemplar_slugs(asset_ids) -> None:
+    """Refuse a batch whose distinct asset ids normalize to the same slug."""
+    seen = {}
+    for asset_id in asset_ids:
+        slug = _slug(asset_id)
+        previous = seen.get(slug)
+        if previous is not None and previous != asset_id:
+            raise ValueError(
+                f"exemplar slug collision: {previous!r} and {asset_id!r} -> {slug!r}"
+            )
+        seen[slug] = asset_id
+
 
 def check_asset(a: dict) -> dict:
     """Score one indexed asset's quality-field completeness (0..100)."""
@@ -165,10 +182,11 @@ def migrate_canonical(repo) -> dict:
     """Seed outcome/done_when/great_example/quality_floor on every canonical asset."""
     from .taxonomy import route
     doc = repo.load_index()
+    canonical = [a for a in doc.get("assets") or []
+                 if a.get("source") == "canonical"]
+    _assert_unique_exemplar_slugs(a["id"] for a in canonical)
     changed = 0
-    for a in doc.get("assets") or []:
-        if a.get("source") != "canonical":
-            continue
+    for a in canonical:
         abs_path = a.get("abs_path")
         if not abs_path:
             continue
@@ -186,7 +204,7 @@ def migrate_canonical(repo) -> dict:
             lane_name = "misc"
         rel = a.get("path", a["id"])
         done = [d.replace("{path}", rel) for d in _KIND_DONE.get(a["kind"], ["file:" + rel])]
-        great = f"examples/great/{lane_name}/{Path(a['id']).stem}.md"
+        great = f"examples/great/{lane_name}/{_slug(a['id'])}.md"
         fields = {"outcome": f"{lane_name}: {a.get('description','')[:120]}".strip(),
                   "done_when": done,
                   "great_example": great,

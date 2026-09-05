@@ -52,7 +52,13 @@ import re
 import time
 from pathlib import Path
 
-from .quality import FIELDS, check_asset, migrate_frontmatter
+from .quality import (
+    FIELDS,
+    _assert_unique_exemplar_slugs,
+    _slug,
+    check_asset,
+    migrate_frontmatter,
+)
 from . import selection
 
 ROUNDS_DIR = ".context/rounds"
@@ -119,7 +125,7 @@ def _upgrade_plan(asset) -> dict:
         plan["quality_floor"] = 0.6
     if not q.get("great_example"):
         lane = (q.get("outcome") or "").split(":")[0].strip() or "misc"
-        plan["great_example"] = f"examples/great/{lane}/{Path(asset['id']).stem}.md"
+        plan["great_example"] = f"examples/great/{lane}/{_slug(asset['id'])}.md"
     return plan
 
 
@@ -419,6 +425,10 @@ def run_round(repo, lane: str, n: int = 5, dry: bool = False,
     test_catalog read them) plus: stages, record, rejected, replay_rejected,
     stopped_reason, knobs, exit_code.
     """
+    assets = repo.load_index()["assets"]
+    _assert_unique_exemplar_slugs(
+        a["id"] for a in assets if a.get("source") == "canonical"
+    )
     ts = time.strftime("%Y-%m-%dT%H:%M:%S")
     knobs = load_knobs(repo)
     vals = knobs["values"]
@@ -437,7 +447,7 @@ def run_round(repo, lane: str, n: int = 5, dry: bool = False,
 
     for c in sel["selected"]:
         entry = _entry(c)
-        asset = next(a for a in repo.load_index()["assets"]
+        asset = next(a for a in assets
                      if a["id"] == c["id"] and a["kind"] == c["kind"]
                      and a["source"] == c["source"])
         plan = _upgrade_plan(asset)

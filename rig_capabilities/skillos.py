@@ -346,32 +346,52 @@ def _licence_map(root: Path) -> tuple[dict, list[str]]:
         return {}, ["licence ledger absent — run scripts/blob_license_ledger.py"]
     try:
         doc = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError) as e:
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as e:
         return {}, [f"licence ledger unreadable: {type(e).__name__}"]
+    if not isinstance(doc, dict):
+        return {}, ["licence ledger document is not an object"]
+    entries = doc.get("entries")
+    if not isinstance(entries, list):
+        return {}, ["licence ledger entries is not a list"]
+
     allowed: dict[str, str] = {}
     problems: list[str] = []
-    for e in (doc.get("entries") or []):
-        if not isinstance(e, dict):
+    seen: set[str] = set()
+    conflicted: set[str] = set()
+    invalid_shape = False
+    for entry in entries:
+        if not isinstance(entry, dict):
             problems.append("entry is not an object")
+            invalid_shape = True
             continue
-        digest = e.get("blob_sha256") or ""
-        catalog = e.get("catalog_sha") or ""
-        if len(digest) != 64 or any(c not in "0123456789abcdef" for c in digest):
-            problems.append(f"malformed blob_sha256 for {_key(e.get('kind') or '?', e.get('id') or '?')}")
+        digest = entry.get("blob_sha256") or ""
+        catalog = entry.get("catalog_sha") or ""
+        if (not isinstance(digest, str) or len(digest) != 64
+                or any(c not in "0123456789abcdef" for c in digest)):
+            problems.append(
+                f"malformed blob_sha256 for "
+                f"{_key(entry.get('kind') or '?', entry.get('id') or '?')}")
             continue
-        if len(catalog) != 12 or any(c not in "0123456789abcdef" for c in catalog):
+        if digest in seen:
+            conflicted.add(digest)
+            allowed.pop(digest, None)
+            problems.append(f"duplicate blob_sha256 {digest[:12]}")
+        else:
+            seen.add(digest)
+        if (not isinstance(catalog, str) or len(catalog) != 12
+                or any(c not in "0123456789abcdef" for c in catalog)):
             problems.append(f"malformed catalog_sha for {digest[:12]}")
             continue
-        if e.get("archive_allowed") is not True:
-            if "archive_allowed" in e and not isinstance(e["archive_allowed"], bool):
-                problems.append(f"non-boolean archive_allowed for {_key(e.get('kind') or '?', e.get('id') or '?')}")
+        if entry.get("archive_allowed") is not True:
+            if ("archive_allowed" in entry
+                    and not isinstance(entry["archive_allowed"], bool)):
+                problems.append(
+                    f"non-boolean archive_allowed for "
+                    f"{_key(entry.get('kind') or '?', entry.get('id') or '?')}")
             continue
-        if digest in allowed and allowed[digest] != catalog:
-            allowed.pop(digest, None)
-            problems.append(f"duplicate blob_sha256 {digest[:12]} with conflicting catalog_sha")
-            continue
-        allowed[digest] = catalog
-    return allowed, problems
+        if digest not in conflicted:
+            allowed[digest] = catalog
+    return ({}, problems) if invalid_shape else (allowed, problems)
 
 
 def _universe_store_valid(root: Path, row: dict, licence: dict | None = None) -> bool:
@@ -520,52 +540,158 @@ def restock_stores(repo: Repo) -> dict:
     warehouse, or recipe fetched over HTTPS and verified).
     """
     root = Path(repo.root)
-    uni = _load_jsonl(root / UNIVERSE)
+    dest = root / UNIVERSE
+    if not dest.is_file():
+        return {"ok": False, "error": "universe.jsonl missing — run skillos dump",
+                "exit_code": 1}
+    try:
+        original = dest.read_bytes()
+        physical_lines = original.splitlines(keepends=True)
+        row_lines = []
+        uni = []
+        for line_no, line in enumerate(physical_lines):
+            if not line.strip():
+                continue
+            row = json.loads(line.decode("utf-8"))
+            if not isinstance(row, dict):
+                raise ValueError(f"universe row {len(uni) + 1} is not an object")
+            row_lines.append(line_no)
+            uni.append(row)
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError, ValueError) as exc:
+        return {"ok": False, "error": f"universe.jsonl unreadable: {exc}",
+                "exit_code": 1}
     if not uni:
         return {"ok": False, "error": "universe.jsonl missing — run skillos dump",
                 "exit_code": 1}
+
+    def frozen_bytes(rows: list[dict], identity_only: bool = False) -> bytes:
+        if identity_only:
+            values = ([row.get("kind"), row.get("id"), row.get("sha")]
+                      for row in rows)
+        else:
+            values = ({key: value for key, value in row.items() if key != "store"}
+                      for row in rows)
+        return b"".join(
+            json.dumps(value, ensure_ascii=False, sort_keys=True,
+                       separators=(",", ":")).encode("utf-8") + b"\n"
+            for value in values
+        )
+
+    identity_before = frozen_bytes(uni, identity_only=True)
+    rows_before = frozen_bytes(uni)
     OPEN = {"unresolved", "unresolved_bundle", "missing_store", ""}
     live = {_key(a.get("kind") or "", a.get("id") or ""): a
             for a in (repo.load_index().get("assets") or [])}
     licence, licence_problems = _licence_map(root)
     pending: list[tuple[int, dict]] = []
+    changed: set[int] = set()
     blobbed = 0
     licence_skipped = 0
     for i, row in enumerate(uni):
         if ((row.get("store") or {}).get("status") or "") not in OPEN:
             continue                          # pinned receipts are immutable
         key = _key(row.get("kind") or "", row.get("id") or "")
-        a = live.get(key)
-        if a is None or (a.get("sha") or "") != row.get("sha"):
+        asset = live.get(key)
+        if asset is None or (asset.get("sha") or "") != row.get("sha"):
             continue                          # identity must match the frozen snapshot
-        derived = _store_for(root, a, licence=licence)
-        if a.get("source") == "canonical" and derived.get("status") != "blob":
+        derived = _store_for(root, asset, licence=licence)
+        if asset.get("source") == "canonical" and derived.get("status") != "blob":
             licence_skipped += 1               # ledger declined the archival
         if derived.get("status") == "blob":
             if _universe_store_valid(root, {**row, "store": derived}, licence=licence):
                 row["store"] = derived
+                changed.add(i)
                 blobbed += 1
         elif derived.get("status") == "recipe":
             pending.append((i, derived))
+
     recipe_verified = 0
     failures: list[dict] = []
     if pending:
-        probe = [{**uni[i], "store": st} for i, st in pending]
-        report = _verify_recipe_rows(probe)
+        probe = [{**uni[i], "store": store} for i, store in pending]
+        try:
+            report = _verify_recipe_rows(probe)
+        except Exception as exc:
+            return {
+                "ok": False,
+                "n": len(uni),
+                "error": f"recipe verification failed; universe unchanged: {exc}",
+                "identity_unchanged": True,
+                "exit_code": 1,
+            }
         valid = report.get("valid_keys") or set()
         failures = list(report.get("recipe_failures") or [])
-        for (i, st), row in zip(pending, probe):
+        fetch_failures = [failure for failure in failures if "keys" in failure]
+        if fetch_failures:
+            return {
+                "ok": False,
+                "n": len(uni),
+                "error": "recipe fetch failed; universe unchanged",
+                "recipe_refusals": fetch_failures[:20],
+                "identity_unchanged": True,
+                "exit_code": 1,
+            }
+        for (i, store), row in zip(pending, probe):
             if _key(row.get("kind") or "", row.get("id") or "") in valid:
-                uni[i]["store"] = st
+                uni[i]["store"] = store
+                changed.add(i)
                 recipe_verified += 1
-    dest = root / UNIVERSE
-    tmp = dest.with_suffix(".jsonl.tmp")
-    tmp.write_text("".join(json.dumps(r, separators=(",", ":")) + "\n" for r in uni))
-    tmp.replace(dest)
+
+    identity_after = frozen_bytes(uni, identity_only=True)
+    rows_after = frozen_bytes(uni)
+    if (len(uni) != len(row_lines) or identity_after != identity_before
+            or rows_after != rows_before):
+        return {
+            "ok": False,
+            "n": len(uni),
+            "error": "restock invariant failed; universe unchanged",
+            "identity_unchanged": identity_after == identity_before,
+            "exit_code": 1,
+        }
+
+    output_lines = list(physical_lines)
+    for row_no in changed:
+        original_line = output_lines[row_lines[row_no]]
+        if original_line.endswith(b"\r\n"):
+            ending = b"\r\n"
+        elif original_line.endswith(b"\n"):
+            ending = b"\n"
+        elif original_line.endswith(b"\r"):
+            ending = b"\r"
+        else:
+            ending = b""
+        output_lines[row_lines[row_no]] = (
+            json.dumps(uni[row_no], ensure_ascii=False,
+                       separators=(",", ":")).encode("utf-8") + ending
+        )
+    output = b"".join(output_lines)
+    if output != original:
+        tmp_path = None
+        try:
+            with tempfile.NamedTemporaryFile(
+                    mode="wb", dir=dest.parent, prefix=f".{dest.name}.",
+                    suffix=".tmp", delete=False) as tmp:
+                tmp_path = Path(tmp.name)
+                tmp.write(output)
+                tmp.flush()
+                os.fsync(tmp.fileno())
+            os.chmod(tmp_path, dest.stat().st_mode & 0o777)
+            os.replace(tmp_path, dest)
+        except OSError as exc:
+            if tmp_path is not None:
+                tmp_path.unlink(missing_ok=True)
+            return {
+                "ok": False,
+                "n": len(uni),
+                "error": f"atomic universe write failed: {exc}",
+                "identity_unchanged": True,
+                "exit_code": 1,
+            }
+
     counts: dict[str, int] = {}
-    for r in uni:
-        s = (r.get("store") or {}).get("status") or "missing_store"
-        counts[s] = counts.get(s, 0) + 1
+    for row in uni:
+        status = (row.get("store") or {}).get("status") or "missing_store"
+        counts[status] = counts.get(status, 0) + 1
     return {
         "ok": True,
         "n": len(uni),
@@ -941,11 +1067,12 @@ def witness_strict(repo: Repo, plant_remove: str | None = None) -> dict:
     for aid in present:
         path = d / f"{aid}.json"
         try:
-            doc = json.loads(path.read_text())
-        except json.JSONDecodeError:
+            doc = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, UnicodeDecodeError, json.JSONDecodeError):
             bad_fx.append(aid)
             continue
-        if (doc.get("kind") != "skill" or doc.get("id") != aid
+        if (not isinstance(doc, dict) or doc.get("kind") != "skill"
+                or doc.get("id") != aid
                 or doc.get("check") != "rig-capabilities test"):
             bad_fx.append(aid)
             continue

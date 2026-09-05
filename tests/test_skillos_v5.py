@@ -52,9 +52,12 @@ class SkillosV5(unittest.TestCase):
             digest.update(hashlib.sha256(data).hexdigest()[:12].encode())
         return digest.hexdigest()[:12]
 
-    def _git_source(self, base: Path, files: dict[str, bytes]) -> tuple[Path, str]:
+    def _git_source(
+            self, base: Path, files: dict[str, bytes],
+            url: str = "https://example.invalid/source.git",
+    ) -> tuple[Path, str]:
         source = base / "source"
-        source.mkdir()
+        source.mkdir(parents=True)
         for name, data in files.items():
             path = source / name
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -63,6 +66,10 @@ class SkillosV5(unittest.TestCase):
                "GIT_CONFIG_SYSTEM": os.devnull, "HOME": str(base)}
         git = ["git", "-c", "core.hooksPath=" + os.devnull]
         subprocess.run([*git, "init", "--quiet", str(source)], check=True, env=env)
+        subprocess.run(
+            [*git, "-C", str(source), "remote", "add", "origin", url],
+            check=True, env=env,
+        )
         subprocess.run([*git, "-C", str(source), "add", "."], check=True, env=env)
         subprocess.run(
             [*git, "-C", str(source),
@@ -72,7 +79,9 @@ class SkillosV5(unittest.TestCase):
             check=True, env=env,
         )
         commit = subprocess.check_output(
-            ["git", "-C", str(source), "rev-parse", "HEAD"], text=True).strip()
+            [*git, "-C", str(source), "rev-parse", "HEAD"],
+            env=env, text=True,
+        ).strip()
         return source, commit
 
     def _file_recipe(self, path: str, data: bytes, commit: str) -> dict:
@@ -107,17 +116,27 @@ class SkillosV5(unittest.TestCase):
         self.assertTrue(p["ok"], p)
 
     def test_plant_drop_keys_red(self):
-        uni = REPO / UNIVERSE
-        if not uni.is_file() or uni.stat().st_size < 10:
-            self.skipTest("universe.jsonl not dumped yet")
-        green = check_universe(self.repo)
-        self.assertTrue(green["ok_keys"], green)
-        row = json.loads(uni.read_text().splitlines()[0])
-        drop = f"{row['kind']}/{row['id']}"
-        red = check_universe(self.repo, plant_drop=drop)
-        self.assertFalse(red["ok_keys"], red)
-        self.assertEqual(red["exit_code"], 1)
-        self.assertIn(drop, red["missing_without_receipt"])
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            skillos_dir = root / "docs/skillos"
+            skillos_dir.mkdir(parents=True)
+            row = {
+                "kind": "skill", "id": "kept", "sha": "a" * 12,
+                "store": {"status": "unresolved", "payload_scope": "unknown",
+                          "catalog_sha": "a" * 12, "reason": "no evidence"},
+            }
+            (skillos_dir / "universe.jsonl").write_text(json.dumps(row) + "\n")
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [{"kind": "skill", "id": "kept"}],
+            }))
+            repo = Repo(root)
+            green = check_universe(repo)
+            self.assertTrue(green["ok_keys"], green)
+            red = check_universe(repo, plant_drop="skill/kept")
+            self.assertFalse(red["ok_keys"], red)
+            self.assertEqual(red["exit_code"], 1)
+            self.assertIn("skill/kept", red["missing_without_receipt"])
 
     def test_store_gate_red_while_unresolved(self):
         with tempfile.TemporaryDirectory() as td:
@@ -192,6 +211,122 @@ class SkillosV5(unittest.TestCase):
             self.assertEqual(after[0]["store"], pinned)   # never re-pointed at today's tree
             self.assertEqual(after[1]["store"]["status"], "unresolved")
 
+    def test_restock_verifies_recipe_and_preserves_refused_row_bytes(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            good_url = "https://example.invalid/good.git"
+            bad_url = "https://example.invalid/bad.git"
+            good_source, _ = self._git_source(
+                root / "good-fixture", {"good.txt": b"good\n"}, good_url)
+            bad_source, _ = self._git_source(
+                root / "bad-fixture", {"bad.txt": b"bad\n"}, bad_url)
+            good_payload = good_source / "good.txt"
+            bad_payload = bad_source / "bad.txt"
+            assets = [
+                {"kind": "skill", "id": "good", "source": "test-external",
+                 "path": str(good_payload), "abs_path": str(good_payload),
+                 "sha": Repo._sha_file(good_payload)},
+                {"kind": "skill", "id": "bad", "source": "test-external",
+                 "path": str(bad_payload), "abs_path": str(bad_payload),
+                 "sha": Repo._sha_file(bad_payload)},
+            ]
+            rows = [
+                {"kind": a["kind"], "id": a["id"], "source": a["source"],
+                 "path": a["path"], "sha": a["sha"],
+                 "store": {"status": "unresolved", "payload_scope": "unknown",
+                           "catalog_sha": a["sha"], "reason": "no evidence"}}
+                for a in assets
+            ]
+            skillos_dir = root / "docs/skillos"
+            skillos_dir.mkdir(parents=True)
+            good_line = json.dumps(rows[0], separators=(",", ":")).encode() + b"\n"
+            refused_line = json.dumps(
+                rows[1], separators=(", ", ": ")).encode() + b"\n"
+            universe = skillos_dir / "universe.jsonl"
+            universe.write_bytes(good_line + refused_line)
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": assets,
+            }))
+
+            def fetch(url, _commit, work):
+                # The bad URL deliberately returns the wrong checkout. Fetch succeeds,
+                # but immutable-recipe verification must reject its absent commit.
+                shutil.copytree(good_source, work)
+                return {"ok": True, "exit_code": 0}
+
+            with mock.patch.object(skillos, "_fetch_git_recipe", side_effect=fetch):
+                result = skillos.restock_stores(Repo(root))
+
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["recipe_verified"], 1)
+            self.assertEqual(result["recipe_refused"], 1)
+            after_bytes = universe.read_bytes()
+            after_lines = after_bytes.splitlines(keepends=True)
+            self.assertEqual(after_lines[1], refused_line)
+            after = [json.loads(line) for line in after_lines]
+            self.assertEqual(after[0]["store"]["status"], "recipe")
+            self.assertEqual(after[1], rows[1])
+            self.assertEqual(
+                [(r["kind"], r["id"], r["sha"]) for r in after],
+                [(r["kind"], r["id"], r["sha"]) for r in rows],
+            )
+
+    def test_restock_network_error_leaves_universe_byte_identical(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            assets = []
+            sources = {}
+            for aid in ("first", "offline"):
+                url = f"https://example.invalid/{aid}.git"
+                source, _ = self._git_source(
+                    root / f"{aid}-fixture", {f"{aid}.txt": aid.encode()}, url)
+                payload = source / f"{aid}.txt"
+                assets.append({
+                    "kind": "skill", "id": aid, "source": "test-external",
+                    "path": str(payload), "abs_path": str(payload),
+                    "sha": Repo._sha_file(payload),
+                })
+                sources[url] = source
+            rows = [
+                {"kind": a["kind"], "id": a["id"], "source": a["source"],
+                 "path": a["path"], "sha": a["sha"],
+                 "store": {"status": "unresolved", "payload_scope": "unknown",
+                           "catalog_sha": a["sha"], "reason": "no evidence"}}
+                for a in assets
+            ]
+            skillos_dir = root / "docs/skillos"
+            skillos_dir.mkdir(parents=True)
+            universe = skillos_dir / "universe.jsonl"
+            before = b"".join(
+                json.dumps(row, separators=(", ", ": ")).encode() + b"\n"
+                for row in rows)
+            universe.write_bytes(before)
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": assets,
+            }))
+
+            def fetch(url, _commit, work):
+                if url.endswith("/offline.git"):
+                    raise ConnectionError("network offline")
+                shutil.copytree(sources[url], work)
+                return {"ok": True, "exit_code": 0}
+
+            with mock.patch.object(skillos, "_fetch_git_recipe", side_effect=fetch):
+                result = skillos.restock_stores(Repo(root))
+
+            self.assertFalse(result["ok"], result)
+            self.assertEqual(result["exit_code"], 1)
+            self.assertEqual(universe.read_bytes(), before)
+            after = [json.loads(line) for line in universe.read_text().splitlines()
+                     if line.strip()]
+            self.assertEqual(len(after), len(rows))
+            self.assertEqual(
+                [(r["kind"], r["id"], r["sha"]) for r in after],
+                [(r["kind"], r["id"], r["sha"]) for r in rows],
+            )
+
     def test_orphan_leak_plant(self):
         corpus = REPO / "docs/skillos/orphan"
         red = orphan_replay(self.repo, corpus, plant_leak=True)
@@ -212,55 +347,71 @@ class SkillosV5(unittest.TestCase):
             self.assertEqual(red.get("exit_code"), 1)
             self.assertEqual(red.get("duplicate_universe_keys"), ["skill/x"])
 
-    def test_malformed_witness_json_red(self):
-        path = REPO / WITNESS_DIR / "iqrsqpi-v10.json"
-        if not path.is_file():
-            self.skipTest("witness fixtures missing")
-        bak = path.read_text()
-        try:
-            path.write_text("{")
-            red = witness_strict(self.repo)
+    def test_malformed_witness_json_red_even_with_missing_witnesses(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            witness_dir = root / WITNESS_DIR
+            witness_dir.mkdir(parents=True)
+            (witness_dir / "iqrsqpi-v10.json").write_text("{")
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [
+                    {"kind": "skill", "id": "iqrsqpi-v10", "source": "canonical"},
+                    {"kind": "skill", "id": "missing", "source": "canonical"},
+                ],
+            }))
+            red = witness_strict(Repo(root))
             self.assertFalse(red["ok"], red)
             self.assertIn("iqrsqpi-v10", red.get("bad_fixtures") or [])
-        finally:
-            path.write_text(bak)
+            self.assertIn("missing", red.get("missing_fixtures") or [])
 
-    def test_swapped_witness_id_red(self):
-        path = REPO / WITNESS_DIR / "iqrsqpi-v10.json"
-        if not path.is_file():
-            self.skipTest("witness fixtures missing")
-        bak = path.read_text()
-        try:
-            path.write_text(json.dumps({
+    def test_swapped_witness_id_red_even_with_missing_witnesses(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            witness_dir = root / WITNESS_DIR
+            witness_dir.mkdir(parents=True)
+            (witness_dir / "iqrsqpi-v10.json").write_text(json.dumps({
                 "kind": "skill", "id": "not-this-skill",
                 "check": "rig-capabilities test",
             }))
-            red = witness_strict(self.repo)
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [
+                    {"kind": "skill", "id": "iqrsqpi-v10", "source": "canonical"},
+                    {"kind": "skill", "id": "missing", "source": "canonical"},
+                ],
+            }))
+            red = witness_strict(Repo(root))
             self.assertFalse(red["ok"], red)
             self.assertIn("iqrsqpi-v10", red.get("bad_fixtures") or [])
-        finally:
-            path.write_text(bak)
+            self.assertIn("missing", red.get("missing_fixtures") or [])
 
     def test_forged_receipt_does_not_authorize_drop(self):
-        uni = REPO / UNIVERSE
-        recp = REPO / "docs/skillos/receipts.jsonl"
-        if not uni.is_file():
+        src = REPO / UNIVERSE
+        if not src.is_file():
             self.skipTest("universe.jsonl not dumped yet")
-        row = json.loads(uni.read_text().splitlines()[0])
+        first = src.read_text().splitlines()[0]
+        row = json.loads(first)
         drop = f"{row['kind']}/{row['id']}"
         fake = json.dumps({
             "kind": row["kind"], "id": row["id"],
             "snapshot_sha": "deadbeefdead",
             "store": {"status": "blob", "blob_sha256": "0" * 64},
         })
-        bak = recp.read_text() if recp.is_file() else ""
-        try:
-            recp.write_text(fake + "\n")
-            red = check_universe(self.repo, plant_drop=drop)
+        # built from the row, not from REPO/.index.json: that file is generated and gitignored,
+        # so a clean checkout has no index to read.
+        assets = [{"kind": row["kind"], "id": row["id"]}]
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "docs/skillos").mkdir(parents=True)
+            (root / UNIVERSE).write_text(first + "\n")
+            (root / "docs/skillos/receipts.jsonl").write_text(fake + "\n")
+            (root / ".index.json").write_text(
+                json.dumps({"generated_epoch": 9999999999, "assets": assets}))
+            red = check_universe(Repo(root), plant_drop=drop)
             self.assertFalse(red["ok_keys"], red)
             self.assertIn(drop, red["missing_without_receipt"])
-        finally:
-            recp.write_text(bak)
+            self.assertIn(drop, red["bad_receipts"])
 
     def test_provenance_plant_cli_source_red(self):
         with tempfile.TemporaryDirectory() as td:
@@ -489,6 +640,62 @@ class LicenceGate(unittest.TestCase):
             allowed, problems = skillos._licence_map(root)
             self.assertEqual(allowed, {})
             self.assertEqual(len(problems), 4, problems)   # 2 malformed, 1 non-bool, 1 conflict
+
+
+    def test_every_duplicate_digest_is_permanently_denied(self):
+        cases = {
+            "allowed_then_denied": [
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True},
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": False},
+            ],
+            "third_entry_cannot_readd": [
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True},
+                {"blob_sha256": self.DIGEST, "catalog_sha": "9" * 12,
+                 "archive_allowed": True},
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True},
+            ],
+            "identical_duplicate": [
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True},
+                {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True},
+            ],
+        }
+        for name, entries in cases.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as td:
+                root = Path(td)
+                self._ledger(root, entries)
+                allowed, problems = skillos._licence_map(root)
+                self.assertEqual(allowed, {})
+                self.assertTrue(
+                    any(self.DIGEST[:12] in problem for problem in problems),
+                    problems,
+                )
+
+    def test_malformed_ledger_shapes_fail_closed_without_raising(self):
+        valid = {"blob_sha256": self.DIGEST, "catalog_sha": self.SHA,
+                 "archive_allowed": True}
+        cases = {
+            "document_not_object": (
+                [], "licence ledger document is not an object"),
+            "entries_not_list": (
+                {"entries": {}}, "licence ledger entries is not a list"),
+            "entry_not_object": (
+                {"entries": [valid, "not-an-object"]}, "entry is not an object"),
+        }
+        for name, (doc, expected_problem) in cases.items():
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as td:
+                root = Path(td)
+                path = root / skillos.BLOB_LEDGER
+                path.parent.mkdir(parents=True)
+                path.write_text(json.dumps(doc))
+                allowed, problems = skillos._licence_map(root)
+                self.assertEqual(allowed, {})
+                self.assertIn(expected_problem, problems)
 
     def test_uncleared_canonical_content_never_reaches_the_warehouse(self):
         with tempfile.TemporaryDirectory() as td:

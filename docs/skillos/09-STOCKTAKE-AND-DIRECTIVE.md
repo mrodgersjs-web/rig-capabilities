@@ -1,15 +1,5 @@
 # Stocktake and directive — store gate at `984d60f`+
 
-Rewritten file. This document, `scripts/license_gate_witness/denied-SKILL.md`, and
-`scripts/check_license_gate_plant.py` existed in this working tree earlier today and are
-absent from both `HEAD` and disk as of this writing. Observable record: `git reflog` shows
-three `commit (amend)` entries on `fable-2031` after the first commit (`9b8341f` →
-`ad002c2` → `233e622` → `a6ef217`); this session issued one of them. The amended commit's
-staged set is not one this session assembled, while `rig_capabilities/skillos.py` and its
-tests survived into it. No actor is claimed — git does not record who ran the command, and
-the cause is not determinable from what is on disk. Everything below is re-measured against
-the live tree; nothing is carried over from the lost draft.
-
 ## 1. Live gate state
 
 `./bin/rig-capabilities skillos check --stores` → exit 1.
@@ -35,8 +25,8 @@ Three `missing_evidence` groups carry the whole red:
 
 The third row is the licence gate working. The refused asset is `skill/rig-lattice-system`
 (`source: canonical`, `payload_scope: bundle`): its bytes are not cleared by the ledger, so
-`_store_for()` declines to write it and the row stays `unresolved` with a named reason. Blob
-count is 139, not 140, by design — a licence-denied asset must not count as stored.
+`_store_for()` declines to write it and the row stays `unresolved` with a named reason. The
+139 blobs counted by the gate exclude this licence-denied asset.
 
 ## 2. The one failing recipe group
 
@@ -65,7 +55,7 @@ needs licence evidence that does not exist. GitHub ownership is not a licence.
 |---|---|---|
 | A — publish the pinned history (push `0a543755` so it is reachable from a published ref on the remote the recipe names) | **130 rows** — the one failing recipe group, `keys: 130` | Gate-P + Gate-D on a *different* repo |
 | B — vendor the external corpora into a licence-backed, origin-clean checkout | **4,571 rows** — 2,425 `descriptor_only` + 2,146 with no origin-backed tree | licence evidence per corpus, then `skillos restock` |
-| C — resolve `skill/rig-lattice-system` (canonical bundle the ledger refuses) | **1 row** | licence evidence for that content, then regenerate the ledger from it (`scripts/blob_license_ledger.py`) — **or** an immutable retrieval recipe whose restore command is tested. Writing a ledger entry without evidence is a gate bypass, and reclassifying the asset to dodge it is the same bypass by another name |
+| C — resolve `skill/rig-lattice-system` (canonical bundle the ledger refuses) | **1 row** | licence evidence for that content, followed by a regenerated ledger (`scripts/blob_license_ledger.py`) — **or** an immutable retrieval recipe whose restore command is tested. A hand-written ledger row without evidence is a gate bypass |
 
 130 + 4,571 + 1 = 4,702 = `invalid_store_count`. Route B cannot absorb route C: vendoring an
 external corpus says nothing about the licence of our own canonical bundle. Route C cannot
@@ -94,10 +84,10 @@ Proof the gate can fail: `python3 scripts/check_license_gate_plant.py` → exit 
 ## 5. Reproduce
 
 ```
-python3 -m pytest tests/test_skillos_v5.py -q          # 20 passed, 4 subtests
+python3 -m pytest tests/test_skillos_v5.py -q
 python3 scripts/check_license_gate_plant.py            # exit 0, RED→GREEN shown above
 ./bin/rig-capabilities skillos check --stores          # exit 1, numbers in §1
-./bin/rig-capabilities skillos check --receipts        # recipe receipts restore
+./bin/rig-capabilities skillos check                   # exit 0; keys/receipts valid, stores remain red
 ```
 
 ## 6. Directive
@@ -107,8 +97,14 @@ python3 scripts/check_license_gate_plant.py            # exit 0, RED→GREEN sho
    Receipts and `store` are the only mutable fields; `(kind,id,sha)` is frozen.
 3. Route A is the smaller lift — 130 rows for one push to another repo, under Gate-P/Gate-D
    there. Route B requires per-corpus licence evidence before any vendoring. Route C requires
-   licence evidence for `skill/rig-lattice-system` (then a regenerated ledger) or a tested
-   retrieval recipe; a hand-written ledger row is not a route, it is a bypass.
-4. Branch history moved under this session once today (three amends in the reflog, one of them
-   this session's). `git status` and `git log` before committing here; a lane worktree
-   (`.lanes.json`) removes the shared-index hazard entirely.
+   licence evidence for `skill/rig-lattice-system`, followed by a regenerated ledger, or an
+   immutable retrieval recipe whose restore command is tested. A hand-written ledger row is a bypass.
+4. Verify `git status` and `git log` before committing on a shared branch. Give each concurrent
+   agent its own Git worktree checkout of the same commit. `.lanes.json` does not do this — it is a
+   semantic `asset id -> outcome lane` overlay (`{"ads-meta": "data-analytics", …}`). Neither it nor
+   `.index.json` is tracked here. The hazard is the per-root `.index.json`: two agents sharing one
+   root share one index, and whichever `reindex` lands last decides the other's key-gate result.
+   Measured here: the shared root's index reached
+   5006 assets by absorbing four untracked canonical assets, while a fresh clone of the same
+   commit yields 5004 with 140 canonical. Regenerate anything content-addressed (license ledger,
+   witnesses) only in a worktree whose tracked tree is the intended candidate.

@@ -18,6 +18,11 @@ import sys
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parent.parent
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from rig_capabilities.quality import _assert_unique_exemplar_slugs, _slug
+
 VAULT = Path.home() / "Documents" / "JakeStudio" / "Agent Vaults"
 OUT = REPO / "examples" / "great"
 
@@ -34,11 +39,18 @@ def _empty_items(text: str) -> bool:
     return bool(re.search(r"##\s*Items\s*\(0\)", text)) and "### " not in text
 
 
-def _slug(s: str) -> str:
-    return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:60]
-
-
 def seed() -> dict:
+    # Validate every generated asset filename before creating any output.
+    canon = []
+    idx_path = REPO / ".index.json"
+    if idx_path.exists():
+        idx = json.loads(idx_path.read_text())
+        canon = [a for a in idx["assets"]
+                 if a.get("source") == "canonical"
+                 and (a.get("okf") or {}).get("trust", 0) >= 0.9]
+        canon.sort(key=lambda a: -(a.get("okf") or {}).get("trust", 0))
+        _assert_unique_exemplar_slugs(a["id"] for a in canon)
+
     OUT.mkdir(parents=True, exist_ok=True)
     per_lane: dict = {}
     written = 0
@@ -66,34 +78,27 @@ def seed() -> dict:
         written += 1
 
     # curated pointers to high-trust canonical assets
-    idx_path = REPO / ".index.json"
-    if idx_path.exists():
-        idx = json.loads(idx_path.read_text())
-        canon = [a for a in idx["assets"]
-                 if a.get("source") == "canonical"
-                 and (a.get("okf") or {}).get("trust", 0) >= 0.9]
-        canon.sort(key=lambda a: -(a.get("okf") or {}).get("trust", 0))
-        for a in canon:
-            lane = (a.get("quality") or {}).get("outcome", "").split(":", 1)[0].strip() \
-                or "meta"
-            lane_dir = OUT / lane
-            lane_dir.mkdir(parents=True, exist_ok=True)
-            if len(list(lane_dir.glob("*.md"))) >= 5:
-                continue
-            slug = _slug(a["id"])
-            dst = lane_dir / f"{slug}.md"
-            if dst.exists():
-                continue
-            fm = (f"---\nname: great-{slug}\nlane: {lane}\nsource: canonical-curated\n"
-                  f"exemplar_of: {a['id']}\ndescription: Reference exemplar — "
-                  f"{a.get('description','')[:140]}\n---\n\n")
-            dst.write_text(fm + f"# {a['id']} — reference\n\n"
-                           f"Canonical asset `{a['id']}` ({a['kind']}, trust "
-                           f"{(a.get('okf') or {}).get('trust')}). "
-                           f"Path: `{a.get('path')}`.\n\n"
-                           f"> {a.get('description','')}\n")
-            per_lane[lane] = per_lane.get(lane, 0) + 1
-            written += 1
+    for a in canon:
+        lane = (a.get("quality") or {}).get("outcome", "").split(":", 1)[0].strip() \
+            or "meta"
+        lane_dir = OUT / lane
+        lane_dir.mkdir(parents=True, exist_ok=True)
+        if len(list(lane_dir.glob("*.md"))) >= 5:
+            continue
+        slug = _slug(a["id"])
+        dst = lane_dir / f"{slug}.md"
+        if dst.exists():
+            continue
+        fm = (f"---\nname: great-{slug}\nlane: {lane}\nsource: canonical-curated\n"
+              f"exemplar_of: {a['id']}\ndescription: Reference exemplar — "
+              f"{a.get('description','')[:140]}\n---\n\n")
+        dst.write_text(fm + f"# {a['id']} — reference\n\n"
+                       f"Canonical asset `{a['id']}` ({a['kind']}, trust "
+                       f"{(a.get('okf') or {}).get('trust')}). "
+                       f"Path: `{a.get('path')}`.\n\n"
+                       f"> {a.get('description','')}\n")
+        per_lane[lane] = per_lane.get(lane, 0) + 1
+        written += 1
 
     return {"written": written, "skipped_empty_vault": skipped_empty,
             "per_lane": per_lane}

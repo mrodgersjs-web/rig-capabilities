@@ -82,30 +82,29 @@ then is `shlex.split` + argv plus a spec-signature check, not an input filter.
 **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
 lines that actually matter (142, 1178) under 17 duplicate rows.
 
-## The "org UI toggle" — not attempted, 2026-09-05
+## The org-setting probe — inconclusive, 2026-09-05
 
-The todo line named an org UI toggle without naming the setting. What this session could
-observe, and what it could not:
+The todo line named an org UI toggle without naming the setting. These probes did not
+establish whether such a toggle exists:
 
-| check | observed |
-|---|---|
-| `snyk --version` | 1.1307.0 |
-| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF — scan auth works (configstore holds `INTERNAL_OAUTH_TOKEN_STORAGE` only) |
-| `snyk config get API` | length 0 — no REST API token in this machine's config |
-| `snyk projects`, `snyk orgs` | `Unknown command` — this CLI version cannot enumerate org/project configuration |
-| browser inspection of org settings | refused: CDP `Network.enable` — "Debugger is not attached to the tab" |
-| `.context/snyk-code-review.json` `displayed_count: 149` of 272 | CLI display grouping in the artifact, **not** evidence of an org setting |
+| check | observed | not established |
+|---|---|---|
+| `snyk --version` | 1.1307.0 | org configuration |
+| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF | the successful scan proves OAuth credentials exist outside the legacy API-token key, but not where they are stored or which REST calls they authorize |
+| `snyk config get API` | length 0 | it returned no legacy API token; it does **not** prove REST access is unavailable |
+| `snyk projects`, `snyk orgs` | `Unknown command` | this CLI version did not enumerate org/project configuration |
+| browser inspection of org settings | attach refused at CDP `Network.enable`: "Debugger is not attached to the tab" | the UI was not observed; the refusal proves nothing about available org toggles |
+| `.context/snyk-code-review.json` `displayed_count: 149` of 272 | CLI display grouping in the artifact | any org setting |
 
-Not attempted: the REST org-settings call (no token to call it with — endpoint behaviour was
-never observed, so nothing is claimed about it), and the browser UI (transport refused).
+The REST org-settings call was not attempted, so its availability is **unknown**. The browser
+UI was not observed. The combined result is **inconclusive**: no toggle was changed, but these
+probes do not show that a relevant toggle is absent or unreachable.
 
-Decision, and its limit: no setting that would change these 26 findings was identifiable from
-any evidence reachable in this session, so nothing was toggled and no Gate-D request was filed
-for one. The only bulk org setting known to exist here — issue ignores — is the one line 82
-refuses:
+Issue-ignore suppression remains refused. The controlling statement is the actual
+`Not done here` line at line 82:
 
 > **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
-> exec primitives.
+> lines that actually matter (142, 1178) under 17 duplicate rows.
 
-Open, not closed: if a display or filter setting is genuinely wanted, name it and the request
-will state the setting and the desired value.
+Open, not closed: a future request must name the setting and desired value, then verify the
+authenticated route before drawing any conclusion about the org configuration.

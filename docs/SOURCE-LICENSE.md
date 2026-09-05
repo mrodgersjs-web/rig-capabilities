@@ -64,9 +64,11 @@ or nothing.
 - An asset that declares a licence (frontmatter `license:`, or a licence file in or beside
   the payload) is judged on what it declares: permissive SPDX → archivable, anything else →
   not.
-- An asset that points at an upstream source (a URL in the payload or its siblings) but
-  carries no licence text is treated as possibly vendored and **denied** — `needs_review`,
-  and then either the upstream licence is cited or the blob comes out.
+- `upstream_marked(payload)` checks only `PROVENANCE.md` and `PROVENANCE` in the
+  payload directory (the file's parent, or the directory itself). It does not scan payload
+  text, other sibling files, or parent directories. If either marker exists and no licence
+  is found, the asset is treated as possibly vendored and **denied** — `needs_review`;
+  then either the upstream licence is cited or the blob comes out.
 - Only when neither applies does the root `LICENSE` (MIT, RIG / mrodgersjs-web) carry the
   entry. That is a claim about this repo's authorship of `capabilities/**` and
   `rig_capabilities/**`, not independent evidence: the absence of an upstream marker is the

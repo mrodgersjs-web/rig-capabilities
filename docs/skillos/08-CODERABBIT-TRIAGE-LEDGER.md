@@ -114,19 +114,22 @@ difference matters: the PR surface has produced **no findings at all**.
 | inline review comments (`pulls/1/comments`) | 0 |
 | reviews (`pulls/1/reviews`) | 0 |
 | check runs on `984d60fc…` | 0 |
-| verdict in that single comment | **Review skipped — "Too many files! This PR contains 1938 files, which is 1788 over the limit of 150."** |
-| configuration it used | defaults; profile CHILL; Plan Free; Run ID `10710aa0-d969-486e-9656-11b0ae64c457` |
+| verdict in that single comment | **Review skipped** — the captured comment reports: "This PR contains 1938 files, which is 1788 over the limit of 150." |
+| captured limit evidence | `.context/coderabbit/pr1-latest.md:4-26` reports the skip, says to reduce to 150 files or fewer, identifies the plan as Free, and says a paid plan raises the limit |
 | range it would have reviewed | `e18305fa…` → `984d60fc…` |
-| PR size today | base `main`, 1972 changed files, +176,813 / −1,195 |
-| `.coderabbit.yaml` in repo | absent — so the 150-file default governs |
+| `.coderabbit.yaml` in the working tree | absent; the artifact, not that absence, is the evidence for the limit applied to this run |
 
 So "check CodeRabbit findings on the pushed commit" answers honestly: **there are none, because
-the review never ran.** The 1938-file PR is the reason, and that is a PR-shape problem, not a
-findings problem. Two lawful routes to a real PR review:
+the captured review was skipped.** The comment attributes the skip to its 1938-file input and
+reports a 150-file limit for that Free-plan run; it does not establish a universal plan limit.
 
-1. Open a second PR based on `984d60f`, so the diff is the 11-path increment (under the limit,
-   reviewable with no config change). Available as soon as the pending push lands.
-2. Add `.coderabbit.yaml` with a higher `reviews.changed_files_threshold` — the Free plan may
-   cap that regardless of the file.
+GitHub PR bases are branches, not commits. Two correctly shaped routes to a delta review are:
 
-Route 1 needs no permission change and is the one to take.
+1. Create a temporary base branch pinned at `984d60f` and a head branch pinned at the new SHA,
+   then open the PR between those branches. This requires two approved pushes to refs other
+   than `fable-2031`.
+2. Open the delta PR against `fable-2031` **before** advancing `fable-2031`, while that base
+   branch still points at `984d60f`.
+
+After `fable-2031` advances to the head SHA, a PR from that same head against `fable-2031`
+has zero diff. Any push or PR creation remains subject to its normal approval gates.

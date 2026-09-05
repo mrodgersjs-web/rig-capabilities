@@ -9,6 +9,6 @@ license: unknown
 Deliberately unlicensed. Nothing here is cleared for archiving: there is no
 `LICENSE`, no SPDX header, and no upstream grant.
 
-The store gate must refuse to write this asset into
-`docs/skillos/warehouse/`, and `skillos check --stores` must not count it as
-valid even if a ledger entry is forged after the fact.
+The plant copies these exact bytes into a canonical-shaped temporary asset,
+passes that asset through `_store_for`, and requires an unresolved result with
+no file created under the temporary `docs/skillos/warehouse/`.
