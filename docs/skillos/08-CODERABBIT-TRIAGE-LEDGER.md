@@ -288,7 +288,11 @@ of live content no longer blesses different stored bytes (`skill/codeql` likewis
 `needs_review`). **The stable blob lane moved with the artifact:** `_licence_map` is
 digest-bound, so the two universe rows referencing denied hashes dropped too — bare
 `skillos check` now reports `valid_store_count` **137**, not the 139 measured above under the
-old artifact. Every "139 stable" figure in this section is explicitly a pre-regen measurement.
+old artifact. Every "139 stable" figure in this section is explicitly a pre-regen measurement,
+and so is the 4,702–4,864 invalid range quoted above: under the committed artifact the blob
+lane is 137, so the range is **4,704–4,867** (invalid = 5004 − 137 − rows verified that run).
+`09-STOCKTAKE-AND-DIRECTIVE.md` §1 is the authoritative snapshot; Round 6 below is where that
+cross-surface drift was caught and closed.
 
 A future hardening (not this delta): cache verified fetch results per url+commit with a TTL
 so the gate's reported number is reproducible, and raise or parallelize-aware the 60 s cap.
@@ -300,3 +304,23 @@ so the gate's reported number is reproducible, and raise or parallelize-aware th
 | R5-1 | Stale internal reference "line 82" after the shlex rewrite shifted the quoted paragraph | **VALID — fixed.** The controlling statement is now named by its heading (`**Not done here:**` paragraph), not by a line number that any edit invalidates. |
 | R5-2 | Trust-boundary text said commands come from `loop.yaml` or CLI args, while the table itself listed `RIG_LOOP_VERIFIER_CMD` | **VALID — fixed.** The env var is named as a third input channel and the accepted risk is restated as "files, argv, **or environment** on this machine" — the same principal that can execute anything here. (The same edit briefly broke the table's blank-line and duplicated a row; both repaired, table re-read after.) |
 | R5-3 | "302 max" vs "140 + 163 = 303", and rows-vs-groups units | **VALID — already cured pre-review.** The addendum was amended (unpushed) to 139 stable blobs: totals 302 = 139 + 163 exactly; 6 URL+commit groups are named as groups, and 163/1/94 as verified *rows* per run. This round reviewed the pre-amend text. |
+
+## Round 6 — delta reviewed at `7f69703` (1 major, 1 minor)
+
+22 files reviewed, `fable-2031 → cr-base-984d60f` (transcript kept at `.local/cr19.log`). Both
+findings are against `docs/skillos/09-STOCKTAKE-AND-DIRECTIVE.md`, both correct, both taken. The
+review ran *after* the last commit, so these were the only open findings in the tree.
+
+| # | finding | disposition |
+|---|---|---|
+| R6-1 | **Major** — receipt counts and route counts inconsistent: at 163 recipe-verified rows the post-regen formula gives 4,704, not the 4,702 §3 equated to `invalid_store_count` (130 + 4,571 + 1) | **VALID — fixed by publishing one authoritative snapshot and accounting for the two rows.** §1 no longer carries a pre-regen table plus a superseding caveat; it carries one post-regen measurement at `7f69703` with both lanes side by side (offline: valid 137, invalid 4,867, rc 0; `--stores`: valid 300 = 137 + 163, invalid 4,704, rc 1) and a five-row breakdown of the red. The missing 2 are the drift-denied `blob` rows, which are *not* in `unresolved` (4,572 = 2,425 + 2,146 + 1) and so were absent from every route: `skill/codeql` and `skill/evidence-retrieval-citations-gate` hold a `blob` receipt whose stored digest carries `archive_allowed: false`. Route C now covers 3 rows and the identity is `130 + 4,571 + 3 = 4,704`. The reviewer's second half was right too — the group attributions do name universe rows, so the hedge that said so was deleted and the blob-receipt lane is stated separately: `blob 139` counts receipts, `valid 137` counts receipts the ledger clears, and the ledger's own 142/139/`needs_review` totals are quoted beside them. |
+| R6-2 | Minor — §5 claimed §1's numbers were reproducible without requiring a clean worktree or defining `.index.json` state, while §6 recorded 5006 assets in a shared root against 5004 in a fresh clone at the same commit | **VALID — fixed, and the drift is worse than the finding says.** §5 is now a `git worktree add --detach` + `reindex` recipe and states which inputs make the store lane deterministic: `universe.jsonl`, `blob-license-ledger.json` and the **139 tracked blobs** under `docs/skillos/warehouse/` are all committed, so the blob lane reproduces exactly; `.index.json` is gitignored, per-root, and rebuilt from the external harness roots. Re-measured at `7f69703`: the shared root and a fresh worktree now *both* read 5005 with 140 canonical — the 5006/5004 pair was a point-in-time reading, which is the argument for pinning the index rather than quoting a total. §5 therefore separates reproducible fields (`n` 5004, `blob` 139, offline `valid` 137, the two `licence_denied` ids) from the network-dependent recipe lane and from the reindex total, whose only reproducible assertion is `ok_keys: true`. |
+
+### A third defect, found by running §5 rather than reading it
+
+§4 quoted the plant script's old success text (`planted on agent/rig-lattice-router.md -> …`,
+`restored -> re-granted=True problems=(none)`). `f9caddf` had already replaced that output with
+five named proofs — the doc was quoting a run that can no longer happen. §4 now quotes the five
+`PASS` lines the script actually prints at this commit. Every command in §5 was executed in the
+clean worktree before the rewrite: `33 passed, 10 subtests`; plant exit 0 with all five proofs and
+a clean canonical tree; `check` rc 0; `check --stores` rc 1.

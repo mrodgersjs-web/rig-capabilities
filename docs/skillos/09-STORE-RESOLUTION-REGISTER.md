@@ -20,11 +20,18 @@ Gate state after this register: **still RED**, honestly.
 
 | current field | live value |
 |---|---|
-| `valid_store_count` | **302** — 139 blobs + 163 recipe-verified rows |
-| `invalid_store_count` | **4702** |
+| `valid_store_count` | **300** — 137 licence-cleared blobs + 163 recipe-verified rows |
+| `invalid_store_count` | **4704** |
 | `store_counts` | blob 139, recipe 293, unresolved_bundle 2425, unresolved 2147 |
+| `licence_denied` | `skill/codeql`, `skill/evidence-retrieval-citations-gate` — `blob` receipts whose *stored* bytes the ledger refuses |
+| `unrestorable_blobs` | `[]` — nothing cleared is missing from the warehouse |
 | recipe groups / fetches / verified rows | 6 / 6 / 163 |
 | `licence_problems` | `[]` |
+
+Measured post-regen at `7f69703` in a clean worktree. The recipe lane is a live network probe, so
+`valid` = 137 + rows verified that run and `invalid` = 4867 − that number; the blob lane is offline
+and stable at 137 of 139 receipts. `09-STOCKTAKE-AND-DIRECTIVE.md` §1 carries the offline column
+beside this one and §5 the worktree recipe that reproduces both.
 
 `./bin/rig-capabilities skillos restock` produced the delta: 93 `great` exemplars moved
 from `unresolved_bundle` to a verified `git` recipe. They are files of this repository
@@ -59,12 +66,14 @@ full count of rows with no currently restorable store.
 | no origin-backed store | 2,146 | origin/status classification only |
 | pinned recipe, fetch fails | 130 | `git fetch` cannot retrieve the pinned commit |
 | licence-refused canonical bundle | 1 | the licence ledger does not clear these bytes for archiving |
+| stored-drift `blob` receipts | 2 | the ledger denies the *stored* digest (`archive_allowed: false`); the live content is cleared, the archived bytes are not |
 
-Therefore **4,702** rows have no currently restorable store:
-4,571 unresolved-origin/status + 130 pinned-but-unfetchable + 1 licence-refused.
+Therefore **4,704** rows have no currently restorable store:
+4,571 unresolved-origin/status + 130 pinned-but-unfetchable + 1 licence-refused + 2 stored-drift.
 The universe's raw store statuses contain 2,425 `unresolved_bundle` and 2,147 `unresolved`;
-the latter includes the one licence-refused row. The probe assigns no cause beyond the
-reported origin/status classifications.
+the latter includes the one licence-refused row. The two drift rows sit in `blob` 139, **not** in
+`unresolved` — which is exactly why the earlier 4,702 came up two short of the gate's own count.
+The probe assigns no cause beyond the reported origin/status classifications.
 
 For the 4,571 unresolved-origin/status rows, two lawful routes exist, both owner decisions:
 
@@ -176,13 +185,15 @@ uncleared content instead of filing it. Nothing unlicensed ever reaches
 `docs/skillos/warehouse/`. To keep that from freezing the pipeline, the generator inventories
 **live canonical assets** (140 distinct `(kind,id)`, tracked-only) and computes the digest
 `_store_for` would file, without writing. Stored content whose live bytes have since drifted is
-reported by the generated `stored_content_drift` field rather than prose — today exactly one row,
-`skill/evidence-retrieval-citations-gate`, carried as `content: "stored_snapshot"`. File blobs are
+reported by the generated `stored_content_drift` field rather than prose — today two rows,
+`skill/codeql` and `skill/evidence-retrieval-citations-gate`, both carried as
+`content: "stored_snapshot"` and both denied. File blobs are
 classified at `<tmp>/payload`, not at the directory, which is where frontmatter is readable.
 
 Executed today: the denied blob `92aad1c6…` was removed from the warehouse and its universe
 row returned to `unresolved` (identity `(kind,id,sha)` untouched). `check --stores` reports
-**302 of 5004** stores restorable — 139 licence-cleared blobs, 163 recipe-verified — and
-stays red until every remaining row is either cleared with a licence basis or given a tested
-immutable recipe. `github.com/mrodgersjs-web/rig-gtm-studio-v2@0a54375…` (130 rows) is still
-red: that commit is unpublished, so no recipe can fetch it and none was invented.
+**300 of 5004** stores restorable — 137 licence-cleared blobs of the 139 filed, 163
+recipe-verified — and stays red until every remaining row is either cleared with a licence basis
+or given a tested immutable recipe. `github.com/mrodgersjs-web/rig-gtm-studio-v2@0a54375…`
+(130 rows) is still red: that commit is unpublished, so no recipe can fetch it and none was
+invented.
