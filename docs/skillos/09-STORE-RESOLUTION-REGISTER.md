@@ -97,11 +97,23 @@ Evidence gathered, not assumed:
   observation `cc37fdd8`; branch has moved), with
   `git merge-base --is-ancestor 0a54375 feat/studio-monorepo` true. Never pushed.
 - No `LICENSE` file at that repo root → no licence-cleared blob path either.
+- 2026-09-05: the one branch-push closure route was Gate-P-scanned and **fails**:
+  gitleaks over `0a54375 --not --remotes=origin` (68 commits, ~117 MB) reports 1,639
+  findings over a 72-commit / 7,390-object blast radius (gitleaks exits 0 with leaks —
+  the report, not the rc, is the evidence). Redacted triage: 1,623 generic-api-key hits
+  over 157 distinct strings in proof/registry JSONs (class unverified); two
+  linkedin-client-secret (16-char) + two jwt-shape hits in test/probe files would be
+  NEWLY exposed; one **sk_live-prefixed** string is already reachable on published refs
+  of that private repo (rotate-or-prove-fake owed regardless of any push). Route
+  BLOCKED, no Gate-D filed, push not executed. This group stays red.
+  Detail: `~/.rig/state/loops/runs/git-push-safety-loop-20260905T184000Z-p19/artifacts/`.
 
-So the pinned recipe stays pinned and red. Closing it needs either a push of that
-commit to an HTTPS origin (Gate-D, and it is a different repository) or a licence
-grant. Not: re-pointing the row at a commit that happens to be published today — that
-would rewrite a receipt to make a gate go green.
+
+So the pinned recipe stays pinned and red, and the push route is itself blocked by
+the secret scan above: reviving it needs a human class verdict on the flagged strings
+first — rotating or proving-fake includes the sk_live-shaped string already published
+on that repo's live refs. Not: re-pointing the row at a commit that happens to be
+published today — that would rewrite a receipt to make a gate go green.
 
 ## Deliberately not done
 
