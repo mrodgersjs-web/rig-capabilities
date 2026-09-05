@@ -335,7 +335,7 @@ def main() -> int:
     if problems:
         print(f"RED: licence gate plant failed ({len(problems)} complaint(s))")
         return 1
-    print("OK: all four licence/store plant proofs passed in isolated temporary roots")
+    print("OK: all licence/store plant proofs passed in isolated temporary roots")
     return 0
 
 
