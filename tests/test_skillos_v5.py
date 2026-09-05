@@ -838,24 +838,47 @@ class LicenceGate(unittest.TestCase):
             self.assertEqual(ledger.sibling_license(d)[0], "ISC")
 
     def test_a_licence_claim_must_look_like_a_licence(self):
-        """Word-bounding was not enough: `not ISC licensed` is a denial, not a grant.
+        """Two remediations fell to denials before this one.
 
-        Canonical ISC text often has no title at all, so the detector has to recognise the
-        opening sentence as well as the heading — otherwise tightening the needle would drop
-        real ISC blobs into `archive_allowed: false` and lose licensed content.
+        The unanchored substring needle `ISC License` accepted `not ISC License` on sight;
+        word-bounding then accepted `not ISC licensed`. A title is evidence only when it owns
+        its line. Canonical ISC text often has no title at all, so the opening sentence stays
+        as an alternative — otherwise tightening the needle would drop real ISC blobs into
+        `archive_allowed: false` and lose licensed content.
         """
         ledger = self._ledger_mod()
         cases = [
             # canonical ISC, no title line — must still clear
             ("Permission to use, copy, modify, and/or distribute this software for any\n"
              "purpose with or without fee is hereby granted.\n", "ISC"),
-            # mentions the acronym to deny it
+            # titles only when they own the line
+            ("ISC License\n\nPermission to use, copy, or distribute this software\n"
+             "is hereby granted.\n", "ISC"),
+            ("The ISC License\n", "ISC"),
+            # denials, in both historic shapes: the substring layer accepted
+            # `not ISC License` on sight; word-bounding alone accepted `not ISC licensed`
             ("This software is proprietary and trade secret, not ISC licensed.\n", None),
-            # a clause form is a licence; the bare acronym is not
+            ("not ISC License\n", None),
+            # clause titles are licences; prose naming one is not
             ("BSD 3-Clause License\n\nRedistribution and reproduction in source, with or\n"
              "without modification, is permitted provided conditions are met.\n",
              "BSD (uncatalogued)"),
+            ("BSD-2-Clause License\n", "BSD (uncatalogued)"),
+            ("All rights reserved; see the BSD License for terms.\n", None),
             ("Copyright belongs to upstream; see the BSD file for terms.\n", None),
+            # MIT: title owns the line; denial prose grants nothing
+            ("MIT License\n", "MIT"),
+            ("not MIT License\n", None),
+            ("This file ships under commercial terms, not MIT License at all.\n", None),
+            # Apache: heading, one-line title, and header notice; negation does not
+            ("Apache License\nVersion 2.0, January 2004\n", "Apache-2.0"),
+            ("The Apache License, Version 2.0 applies.\n\n", None),
+            ("   * Licensed under the Apache License, Version 2.0\n", "Apache-2.0"),
+            ("The bundled tool is not Apache License compatible.\n", None),
+            # CC0: `CC0` as a bare substring was the loosest needle of all
+            ("CC0 1.0 Universal\n\nStatement of Purpose\n", "CC0-1.0"),
+            ("not CC0\n", None),
+            ("Rights are reserved; this is not CC0 and not public domain.\n", None),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:

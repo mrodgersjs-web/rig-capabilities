@@ -22,25 +22,38 @@ from rig_capabilities.skillos import (UNIVERSE, _content_digest, _payload_path,
                                       restore_blob)
 
 OUT = ROOT / "docs/skillos/blob-license-ledger.json"
-# Each needle must name a licence, not merely contain its letters: bare "ISC" matches inside
-# MISC, and bare "BSD" inside unrelated prose. A loose hit resolves to a PERMISSIVE id and
-# clears vendored bytes for archiving, so every pattern is title-anchored or word-bounded.
-SPDX = (("Apache License", "Apache-2.0"),
-        ("Permission is hereby granted", "MIT"),
-        ("MIT License", "MIT"),
-        ("BSD License", "BSD (uncatalogued)"),
-        ("ISC License", "ISC"),
-        ("CC0", "CC0-1.0"))
+# Each needle must name a licence, not merely contain its letters. Three false-positive
+# classes have been caught here, each by a narrower fix that the next denial then broke:
+# `ISC` inside `MISC`; word-bounded `not ISC licensed`; and unanchored title substrings where
+# `not ISC License` / `not MIT License` / `not CC0` read as grants. A false hit resolves to a
+# PERMISSIVE id and clears vendored bytes for archiving, so the rule is now uniform: a licence
+# TITLE is evidence only when it owns its whole line (the shape real headings take), or the
+# text carries the canonical grant SENTENCE of that licence (verbatim boilerplate nobody
+# negates mid-phrase). Prose that merely names a licence grants nothing.
+SPDX = (
+    # MIT's canonical grant sentence, kept verbatim; its title lives in SPDX_RE anchored.
+    ("Permission is hereby granted", "MIT"),
+)
 SPDX_RE = (
-    # The bare acronyms are not evidence of a licence. `ISC` inside `MISC` was the original
-    # false positive, but a word-bounded `ISC` is barely better: "not ISC licensed" would read
-    # as permissive and get archived. A licence claim has to look like a licence — the title,
-    # the opening sentence of the canonical ISC text, or a BSD clause/license form.
+    (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"), "MIT"),
     (re.compile(
-        r"\bThe\s+ISC\s+License\b|\bISC\s+License\b"
+        r"(?mi)^\s*(?:The\s+)?Apache\s+(?:Software\s+)?License[,:]?\s*(?:Version\s+[23](?:\.0)?)?\s*$"
+        r"|^\W*Licensed\s+under\s+the\s+Apache\s+License"
+    ), "Apache-2.0"),
+    (re.compile(
+        r"(?mi)^\s*(?:The\s+)?CC0\s+1\.0\s+Universal"
+        r"|^\s*CC0\s*$"
+        r"|^\s*CC0\s+Public\s+Domain\s+Dedication"
+        r"|^\s*CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM"
+    ), "CC0-1.0"),
+    (re.compile(
+        r"(?mi)^\s*(?:The\s+)?ISC\s+License\s*$"
         r"|Permission\s+to\s+use,\s+copy,[^.\n]*distribute\s+this\s+software"
     ), "ISC"),
-    (re.compile(r"\bBSD\s*[-\s]?[1-3]\s*[-\s]?Clause\b|\bBSD\s+License\b"), "BSD (uncatalogued)"),
+    (re.compile(
+        r"(?mi)^\s*(?:The\s+)?BSD\s*[-\s]?[1-3]\s*[-\s]?Clause\s+License\s*$"
+        r"|^\s*(?:The\s+)?BSD\s+License\s*$"
+    ), "BSD (uncatalogued)"),
 )
 PERMISSIVE = {"MIT", "Apache-2.0", "ISC", "CC0-1.0", "0BSD"}
 UPSTREAM = re.compile(r"https?://\S+")
