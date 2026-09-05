@@ -5,12 +5,15 @@ Deduplicating the docs replaced inline copies with pointers: the workflow says
 command, and build-database.md links back to SKILL.md for the fresh-shell rule
 rather than repeating it. That trade is only worth making if the pointers are real.
 
-The repo validator resolves file paths, not section names or anchors, so a heading
-renamed by one character leaves a pointer aimed at nothing and every check still
-green. Both forms are covered here:
+The repo validator resolves file paths, not section anchors, so a heading renamed by one
+character leaves a pointer aimed at nothing and every check still green:
 
     [text](../SKILL.md#each-bash-call-is-a-fresh-shell)   markdown anchor
-    Follow "Method 1: Autobuild" in <path>/build-database.md   prose pointer
+
+An earlier lane also parsed prose pointers (`Follow "Method 1" in x.md`) out of a build
+workflow that was never committed. Across the 106 tracked docs that form matched once, and
+the one match was a path inside backticks — a false positive. Dead code is worse than no
+code here: it makes the file look like it checks more than it does.
 """
 
 from __future__ import annotations
@@ -25,20 +28,14 @@ SKILL_ROOT = SCRIPTS_DIR.parent
 PLUGIN_ROOT = SKILL_ROOT.parent.parent
 SKIP_DIRS = {".pytest_cache", "__pycache__", ".venv", ".ruff_cache"}
 
-WORKFLOW_JS = PLUGIN_ROOT / "workflows" / "codeql-build.js"
 
-# `codeql-build.js` cannot know where the skill is installed, so its pointers are written
-# against a variable the Detect agent resolves at runtime — `${SKILL_DIR}/references/x.md` in
-# a template literal, `$SKILL_DIR/references/x.md` in the one prompt that runs before it is
-# known. Both spellings mean this directory.
+
 RUNTIME_ROOT_VAR = "SKILL_DIR"
-RUNTIME_PREFIX = re.compile(r"^\$\{?" + RUNTIME_ROOT_VAR + r"\}?/")
 
 HEADING = re.compile(r"^#{1,6}\s+(.+?)\s*$", re.MULTILINE)
 # [label](path.md#anchor) — only links carrying an anchor.
 ANCHOR_LINK = re.compile(r"\[[^\]]*\]\(([^)#\s]+\.md)#([A-Za-z0-9_-]+)\)")
-# `"Section Name" in <something>.md`, the form the workflow prompts use.
-PROSE_POINTER = re.compile(r"[\"“]([^\"”\n]{3,80})[\"”]\s+in\s+(\S+?\.md)\b")
+
 
 
 def _doc_files() -> list[Path]:
@@ -62,94 +59,57 @@ def _headings(path: Path) -> list[str]:
     return HEADING.findall(path.read_text(encoding="utf-8"))
 
 
-def _js_constants(source: str) -> dict[str, str]:
-    """Resolve the path constants a workflow builds its pointers from.
-
-    Read from the source rather than hardcoded, so renaming SKILL_DIR does not quietly
-    turn every pointer in that file into an unresolvable string this check skips.
-    """
-    values: dict[str, str] = {}
-    for name, raw in re.findall(r"const (\w+) = [`'\"]([^`'\"]+)[`'\"]", source):
-        values[name] = re.sub(r"\$\{(\w+)\}", lambda m: values.get(m.group(1), m.group(0)), raw)
-    return values
-
-
-def _resolve(target: str, source_file: Path, constants: dict[str, str]) -> Path | None:
+def _resolve(target: str, source_file: Path) -> Path | None:
     """Turn a pointer's path into a real file, or None if it is not one we can check."""
-    resolved = re.sub(r"\$\{(\w+)\}", lambda m: constants.get(m.group(1), m.group(0)), target)
-    # `${SKILL_DIR}/references/x.md` is a real pointer whose root is only known at runtime.
-    # Rewriting it onto this checkout keeps it checkable; without this it reads as an
-    # unresolvable string and every pointer in the workflow is skipped in silence.
-    resolved = RUNTIME_PREFIX.sub(f"{SKILL_ROOT}/", resolved)
-    if "${" in resolved or "{baseDir}" in resolved:
+    if "${" in target or "{baseDir}" in target:
         return None
-    candidates = [Path(resolved), PLUGIN_ROOT.parent.parent / resolved]
-    if not resolved.startswith("/"):
-        candidates.insert(0, (source_file.parent / resolved).resolve())
+    candidates = [Path(target), PLUGIN_ROOT.parent.parent / target]
+    if not target.startswith("/"):
+        candidates.insert(0, (source_file.parent / target).resolve())
     for candidate in candidates:
         if candidate.is_file():
             return candidate
     return None
 
 
-def _collect() -> tuple[list[tuple[Path, str, Path, str]], list[tuple[Path, str, Path, str]]]:
+def _collect() -> list[tuple[Path, str, Path, str]]:
     anchors: list[tuple[Path, str, Path, str]] = []
-    prose: list[tuple[Path, str, Path, str]] = []
     for path in _doc_files():
-        text = path.read_text(encoding="utf-8")
-        constants = _js_constants(text) if path.suffix == ".js" else {}
-        for target, anchor in ANCHOR_LINK.findall(text):
-            resolved = _resolve(target, path, constants)
+        for target, anchor in ANCHOR_LINK.findall(path.read_text(encoding="utf-8")):
+            resolved = _resolve(target, path)
             if resolved is not None:
                 anchors.append((path, anchor, resolved, target))
-        for section, target in PROSE_POINTER.findall(text):
-            resolved = _resolve(target, path, constants)
-            if resolved is not None:
-                prose.append((path, section, resolved, target))
-    return anchors, prose
+    return anchors
 
 
-ANCHORS, PROSE = _collect()
+ANCHORS = _collect()
 
 
 def test_pointers_were_found() -> None:
-    """Guard the guard: two regexes matching nothing would pass this file in silence."""
+    """Guard the guard: a scanner matching nothing would pass this file in silence."""
     assert ANCHORS, f"no anchored markdown links found under {PLUGIN_ROOT} — the scanner broke"
-    assert PROSE, f"no prose section pointers found under {PLUGIN_ROOT} — the scanner broke"
 
 
-def test_the_workflows_pointers_are_still_checked() -> None:
-    """The global guard above is satisfied by markdown alone.
+def test_no_shipped_file_hardcodes_a_marketplace_path() -> None:
+    """A marketplace-relative skill path resolves only inside a checkout of the marketplace.
 
-    Every pointer in `codeql-build.js` carries a `${SKILL_DIR}` prefix, so one change to how
-    that prefix is spelled makes all of them unresolvable — and `_resolve` returning None
-    reports that as "nothing to check here", indistinguishable from a file with no pointers.
+    A shipped build workflow once carried `SKILL_DIR = 'plugins/static-analysis/skills/codeql'`.
+    Installed elsewhere, its first block sourced a `build_log.sh` that was not there, exited
+    127, and every rung reported a build failure for a project that builds. Nothing else in this
+    suite would notice it being written back down, because CI runs from the one repo where the
+    literal does resolve. The file that shipped it was never committed; the hazard is not
+    file-specific, so it is now checked across every tracked markdown and script.
     """
-    from_workflow = [entry for entry in PROSE if entry[0] == WORKFLOW_JS]
-    assert len(from_workflow) >= 4, (
-        f"only {len(from_workflow)} prose pointers resolved out of {WORKFLOW_JS.name} — its "
-        f"paths are no longer being checked against the sections they name"
-    )
-
-
-def test_the_workflow_does_not_hardcode_a_path_into_this_repo() -> None:
-    """A repo-relative skill path resolves only in a checkout of the marketplace.
-
-    `codeql-build.js` shipped `const SKILL_DIR = 'plugins/static-analysis/skills/codeql'`.
-    Installed, the first build block sourced a `build_log.sh` that was not there, exited 127,
-    and every rung of the ladder reported a build failure for a project that builds. The path
-    is now resolved at runtime by the Detect phase; nothing else in this suite would notice it
-    being written back down, because CI runs from the repo where the literal does resolve.
-    """
-    source = WORKFLOW_JS.read_text(encoding="utf-8")
-    offenders = [
-        line.strip()
-        for line in source.splitlines()
-        if "plugins/static-analysis" in line and not line.lstrip().startswith("//")
-    ]
+    offenders = []
+    for path in _doc_files():
+        if path == Path(__file__).resolve():
+            continue        # this check's own prose names the literal
+        for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            if "plugins/static-analysis" in line and not line.lstrip().startswith("//"):
+                offenders.append(f"{path.relative_to(PLUGIN_ROOT)}: {line.strip()}")
     assert not offenders, (
-        "the workflow names its own path inside this repository, which only resolves when the "
-        "run starts in a checkout of it:\n  " + "\n  ".join(offenders)
+        "shipped files name their own path inside a marketplace checkout, which only resolves "
+        "when the run starts there:\n  " + "\n  ".join(offenders)
     )
 
 
@@ -166,18 +126,4 @@ def test_anchor_link_lands_on_a_heading(source: Path, anchor: str, target: Path,
     )
 
 
-@pytest.mark.parametrize(
-    ("source", "section", "target", "raw"),
-    PROSE,
-    ids=[f"{s.relative_to(PLUGIN_ROOT)}->{sec}" for s, sec, _, raw in PROSE],
-)
-def test_prose_pointer_names_a_real_section(
-    source: Path, section: str, target: Path, raw: str
-) -> None:
-    """Prefix match: "Method 4: No-Build Fallback" may point at a heading that goes on
-    to say "(Last Resort)". A pointer that is not even a prefix is aimed at nothing."""
-    headings = _headings(target)
-    assert any(h.startswith(section) for h in headings), (
-        f'{source.relative_to(PLUGIN_ROOT)} points at "{section}" in {raw}, which has no '
-        f"heading starting with that. Headings: {'; '.join(headings)}"
-    )
+
