@@ -217,7 +217,7 @@ class Stage(unittest.TestCase):
 
 
 class Registry(unittest.TestCase):
-    """The tracked files are the contract the cron reads; they must parse and stay dormant."""
+    """The tracked cron must retain its staging and execution safeguards."""
 
     def test_sources_registry_has_an_enabled_channel(self):
         srcs = wc.load_sources()
@@ -226,11 +226,15 @@ class Registry(unittest.TestCase):
             self.assertTrue(s["channel"].startswith("https://"))
             self.assertTrue(s["slug"])
 
-    def test_cron_spec_is_dormant_and_gate_d(self):
+    def test_cron_spec_retains_gate_d_and_dry_run_safeguards(self):
         doc = json.loads((REPO / "data" / "capability-scout-weekly-cron.json")
                          .read_text(encoding="utf-8"))
-        self.assertEqual(doc["state"], "DORMANT")
-        self.assertFalse(doc["enabled"])
+        self.assertEqual(doc["state"], "ACTIVE")
+        self.assertIs(doc["enabled"], True)
+        self.assertTrue(doc["gate_d_run_id"])
+        self.assertTrue(doc["automation_id"])
+        self.assertIn(doc["gate_d_run_id"], doc["gate_d_note"])
+        self.assertIn("~/.rig/proof/", doc["gate_d_note"])
         self.assertTrue(doc["gate_d_required"])
         self.assertTrue(doc["dry_by_default"])
         self.assertIn("--disabled", doc["orca_command"])

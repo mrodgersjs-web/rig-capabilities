@@ -7,7 +7,7 @@ domain: Security review
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
-outcome: security-review: Performs security-focused differential review of code changes. Adapts analysis depth to codebase size, uses git blame fo
+outcome: "security-review: every changed hunk is judged against its blast radius, the bugs previously fixed there, and its test coverage, so a diff ships with its security exposure named"
 done_when:
   - file:capabilities/skills/differential-review/SKILL.md
   - grep:capabilities/skills/differential-review/SKILL.md:differential
@@ -236,4 +236,4 @@ These patterns require adversarial analysis even in quick triage.
 **For experienced users:** Use this page's Quick Reference and Decision Tree to navigate directly to needed content.
 
 ---
-*Source: [trailofbits/skills](https://github.com/trailofbits/skills) (CC-BY-SA-4.0), installed via `skills` CLI 2026-08-30. Modifications: none. This attribution is the CC-BY-SA credit notice.*
+*Source: [trailofbits/skills](https://github.com/trailofbits/skills) (CC-BY-SA-4.0), installed via `skills` CLI 2026-08-30. Modifications: RIG frontmatter (outcome, done_when, great_example, quality_floor) added, 2026-09-05. This attribution is the CC-BY-SA credit notice.*

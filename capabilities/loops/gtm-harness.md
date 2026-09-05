@@ -2,7 +2,7 @@
 outcome: revenue-gtm:
 done_when:
   - file:capabilities/loops/gtm-harness.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/gtm-harness.md
 great_example: examples/great/revenue-gtm/gtm-harness.md.md
 quality_floor: 0.6
 ---

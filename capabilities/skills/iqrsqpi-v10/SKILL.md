@@ -7,11 +7,12 @@ domain: Agent engineering / operating doctrine
 status: Stable
 verified_by: jake
 verified_on: 2026-09-01
-outcome: agent-engineering: The seven-stage IQRSQPI pass is decided by code — stage order, per-stage artifacts, sourced numbers, and Builder≠Checker — never by the walker's own narration
+outcome: "agent-engineering: The seven-stage IQRSQPI pass is decided by code — stage order, per-stage artifacts, sourced numbers, and Builder≠Checker — never by the walker's own narration"
 done_when:
   - file:rig_capabilities/iqrsqpi_v10.py
   - grep:rig_capabilities/iqrsqpi_v10.py:verifier_is_generator
   - cmd:python3 -c "from rig_capabilities.iqrsqpi_v10 import normalize_stage as n; assert n('I')=='Intent' and n('I2')=='Integrate' and n('I5')=='Integrate' and n('Q2')=='Quality'"; test $? -eq 0
+great_example: examples/great/agent-engineering/iqrsqpi-v10.md
 quality_floor: 0.6
 ---
 

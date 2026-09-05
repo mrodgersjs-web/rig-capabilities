@@ -2,7 +2,7 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/harnesses/mh-01-skill-genesis-session.yaml
-  - a session of this type completes with its gate green
+  - cmd:./bin/rig-capabilities goal-spec --stem mh-01-skill-genesis-session
   - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/valid_pair.jsonl; test $? -eq 0
   - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/two_variables.jsonl; rc=$?; test $rc -eq 1
   - cmd:python3 rig_capabilities/paired_runs.py check examples/fixtures/paired-runs/no_pair.jsonl; rc=$?; test $rc -eq 1

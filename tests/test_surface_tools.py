@@ -148,14 +148,13 @@ class AssetHygieneTests(unittest.TestCase):
         v = dict(re.findall(r"(\w+)=(\d+)", vis.stdout))
         self.assertEqual(c["frontmatter_truncation_hidden"], int(v["truncation_hidden"]))
 
-    def test_debt_is_named_not_hidden_behind_a_pass(self):
-        """74 dangling exemplars is a known ratchet. `clean` must say false and
-        `debt` must name the number — a green here would mean the debt vanished
-        or the tool stopped looking."""
-        self.assertGreater(self.out["surfaces"]["counts"]["dangling_great_example"], 0)
-        self.assertIs(self.out["clean"], False)
-        self.assertEqual(self.out["debt"]["dangling_great_example"],
-                         self.out["surfaces"]["counts"]["dangling_great_example"])
+    def test_resolved_exemplar_estate_stays_complete(self):
+        counts = self.out["surfaces"]["counts"]
+        self.assertEqual(counts["declared_great_example"], 140)
+        self.assertEqual(counts["resolved_great_example"], 140)
+        self.assertEqual(counts["dangling_great_example"], 0)
+        self.assertIs(self.out["surfaces"]["exemplars"]["clean"], True)
+        self.assertNotIn("dangling_great_example", self.out["debt"])
 
     def test_a_scanner_whose_shape_moved_is_a_refusal_not_a_zero(self):
         quiet = types.SimpleNamespace(main=lambda argv=None: 0)   # prints nothing

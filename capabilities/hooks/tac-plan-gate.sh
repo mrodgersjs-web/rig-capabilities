@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/tac-plan-gate.sh || hook is registered and fires on its trigger fixture
+# done_when: cmd:python3 scripts/hook_fires.py tac-plan-gate.sh
 # great_example: examples/great/agent-engineering/tac-plan-gate.sh.md
 # quality_floor: 0.6
 # PreToolUse: block Write/Edit if TAC mode requires plan and plan-gate is RED.

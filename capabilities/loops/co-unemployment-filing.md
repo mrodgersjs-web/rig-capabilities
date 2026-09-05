@@ -2,7 +2,7 @@
 outcome: business-ops:
 done_when:
   - file:capabilities/loops/co-unemployment-filing.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/co-unemployment-filing.md
 great_example: examples/great/business-ops/co-unemployment-filing.md.md
 quality_floor: 0.6
 ---

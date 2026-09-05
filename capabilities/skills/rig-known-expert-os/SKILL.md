@@ -7,11 +7,12 @@ domain: Agent engineering / career-strategy operating system
 status: Stable
 verified_by: jake
 verified_on: 2026-09-01
-outcome: agent-engineering: Expertise construction advances phase-by-phase against the card's verbatim gates, every publishable claim sits in the Evidence Ledger at L3+ depth, and no truncated or absent phase can ever be declared passed
+outcome: "agent-engineering: Expertise construction advances phase-by-phase against the card's verbatim gates, every publishable claim sits in the Evidence Ledger at L3+ depth, and no truncated or absent phase can ever be declared passed"
 done_when:
   - file:rig_capabilities/expert_os.py
   - grep:rig_capabilities/evidence_ledger.py:unverified_claim_on_resume
   - cmd:./bin/rig-capabilities expert-os phases --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['12']=='absent_at_source'"; test $? -eq 0
+great_example: examples/great/agent-engineering/rig-known-expert-os.md
 quality_floor: 0.6
 ---
 

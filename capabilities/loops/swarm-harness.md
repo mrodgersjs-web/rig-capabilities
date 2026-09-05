@@ -2,7 +2,7 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/swarm-harness.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/swarm-harness.md
 great_example: examples/great/agent-engineering/swarm-harness.md.md
 quality_floor: 0.6
 ---

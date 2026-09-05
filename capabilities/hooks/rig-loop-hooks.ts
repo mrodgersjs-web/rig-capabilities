@@ -1,6 +1,6 @@
 // rig-loop hooks — pi extension for OMP and Prime Agent.        RIG_LOOP_MANAGED
 // outcome: agent-engineering:
-// done_when: file:capabilities/hooks/rig-loop-hooks.ts || extension loads and tool_call is blocked when a loop stage forbids it
+// done_when: cmd:python3 scripts/hook_fires.py rig-loop-hooks.ts
 // great_example: examples/great/agent-engineering/iqrsqpi-v11.md
 // quality_floor: 0.7
 //

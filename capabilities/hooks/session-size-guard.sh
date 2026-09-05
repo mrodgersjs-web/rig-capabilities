@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/session-size-guard.sh || hook is registered and fires on its trigger fixture
+# done_when: file:capabilities/hooks/session-size-guard.sh || cmd:python3 scripts/hook_fires.py session-size-guard.sh
 # great_example: examples/great/agent-engineering/session-size-guard.sh.md
 # quality_floor: 0.6
 # session-size-guard.sh — PostToolUse guardrail (non-blocking).

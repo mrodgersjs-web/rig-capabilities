@@ -2,7 +2,7 @@
 outcome: revenue-gtm:
 done_when:
   - file:capabilities/loops/36h-gtm-sprint.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/36h-gtm-sprint.md
 great_example: examples/great/revenue-gtm/36h-gtm-sprint.md.md
 quality_floor: 0.6
 ---

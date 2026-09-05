@@ -268,6 +268,22 @@ def main() -> int:
                    help="informative = need x Bernoulli variance (default); "
                         "weakest = the original score-ascending order")
 
+    p = sub.add_parser("skillos")
+    p.add_argument("skillos_cmd",
+                   choices=["dump", "check", "restore", "doors",
+                            "witness-write", "witness", "orphan-replay",
+                            "provenance"])
+    p.add_argument("--count", action="store_true")
+    p.add_argument("--strict", action="store_true")
+    p.add_argument("--corpus")
+    p.add_argument("--deny", default="tesslio/cli")
+    p.add_argument("--sha")
+    p.add_argument("--dest")
+    p.add_argument("--plant-drop")
+    p.add_argument("--plant-remove")
+    p.add_argument("--plant-leak", action="store_true")
+    p.add_argument("--stores", action="store_true")
+
     sub.add_parser("connectors")
     sub.add_parser("observe")
     # ---- fable-2031 capability system -------------------------------------- #
@@ -431,8 +447,10 @@ def main() -> int:
         print(json.dumps(verify_roadmap(repo), indent=1))
     elif args.cmd == "goal-spec":
         from rig_capabilities.goal_spec import serve as _serve_goal
-        print(json.dumps(_serve_goal(repo, stem=args.stem,
-                                     session_type=args.session_type), indent=1))
+        _gs = _serve_goal(repo, stem=args.stem,
+                          session_type=args.session_type)
+        print(json.dumps(_gs, indent=1))
+        return 0 if _gs.get("verdict") == "OK" else 1
     elif args.cmd == "agent-pack":
         from rig_capabilities.packs import boot_pack, match_agent, resolve_pack
         if args.intent:
@@ -1065,6 +1083,21 @@ def main() -> int:
         rep = self_test(repo, only=args.only)
         print(json.dumps(rep, indent=1))
         return 0 if rep.get("verdict") else 1
+    elif args.cmd == "skillos":
+        from rig_capabilities.skillos import dispatch as skillos_dispatch
+        rep = skillos_dispatch(
+            repo, args.skillos_cmd,
+            plant_drop=args.plant_drop,
+            plant_remove=args.plant_remove,
+            plant_leak=args.plant_leak,
+            sha=args.sha,
+            dest=args.dest,
+            corpus=args.corpus,
+            deny=args.deny,
+            stores=args.stores,
+        )
+        print(json.dumps(rep, indent=1))
+        return int(rep.get("exit_code", 0 if rep.get("ok", True) else 1))
     return 0
 
 

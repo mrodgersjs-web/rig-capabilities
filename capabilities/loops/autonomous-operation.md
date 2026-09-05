@@ -2,7 +2,7 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/autonomous-operation.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/autonomous-operation.md
 great_example: examples/great/agent-engineering/autonomous-operation.md.md
 quality_floor: 0.6
 ---

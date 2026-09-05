@@ -2,7 +2,7 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/coding-harness.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/coding-harness.md
 great_example: examples/great/agent-engineering/coding-harness.md.md
 quality_floor: 0.6
 ---

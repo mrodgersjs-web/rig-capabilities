@@ -2,7 +2,7 @@
 outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/what-great-looks-like.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/what-great-looks-like.md
 great_example: examples/great/agent-engineering/what-great-looks-like.md.md
 quality_floor: 0.6
 ---

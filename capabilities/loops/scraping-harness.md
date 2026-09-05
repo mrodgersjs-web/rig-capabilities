@@ -2,7 +2,7 @@
 outcome: code-engineering:
 done_when:
   - file:capabilities/loops/scraping-harness.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/scraping-harness.md
 great_example: examples/great/code-engineering/scraping-harness.md.md
 quality_floor: 0.6
 ---

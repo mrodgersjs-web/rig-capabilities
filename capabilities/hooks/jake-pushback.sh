@@ -1,6 +1,6 @@
 #!/bin/bash
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/jake-pushback.sh || hook is registered and fires on its trigger fixture
+# done_when: file:capabilities/hooks/jake-pushback.sh || cmd:python3 scripts/hook_fires.py jake-pushback.sh
 # great_example: examples/great/agent-engineering/jake-pushback.sh.md
 # quality_floor: 0.6
 # jake-pushback.sh — PreToolUse hook: Jake's in-session enforcement.

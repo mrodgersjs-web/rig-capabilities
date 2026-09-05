@@ -84,7 +84,8 @@ def _report() -> dict:
 class ExemplarResolutionTests(unittest.TestCase):
     def test_detector_fires_on_a_planted_dangling_entry(self):
         clean = _run()
-        self.assertEqual(clean.returncode, 1, "the estate has dangling exemplars")
+        self.assertEqual(clean.returncode, 0, clean.stdout[-200:])
+        self.assertEqual(_report()["missing"], [])
         planted = _run("--plant", "semgrep-rule-creator")
         self.assertEqual(planted.returncode, 1, planted.stdout[-200:])
         self.assertIn("(planted)", planted.stdout,

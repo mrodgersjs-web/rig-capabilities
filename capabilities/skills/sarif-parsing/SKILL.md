@@ -11,7 +11,7 @@ domain: Static analysis
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
-outcome: security-review: >-
+outcome: "security-review: SARIF from any scanner is parsed, deduplicated, and filtered into one comparable finding set without rerunning a scan"
 done_when:
   - file:capabilities/skills/sarif-parsing/SKILL.md
   - grep:capabilities/skills/sarif-parsing/SKILL.md:SARIF

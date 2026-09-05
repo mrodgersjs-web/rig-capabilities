@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/rig-loop-hook.sh || echo '{}' | bash capabilities/hooks/rig-loop-hook.sh pre-tool claude
+# done_when: cmd:python3 scripts/hook_fires.py rig-loop-hook.sh
 # great_example: examples/great/agent-engineering/iqrsqpi-v11.md
 # quality_floor: 0.7
 # rig-loop hook entry for Claude Code / Codex (Claude-compatible hook schema).

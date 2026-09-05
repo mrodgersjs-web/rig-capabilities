@@ -7,7 +7,7 @@ category: meta
 outcome: "meta: continuously raise the quality bar of the RIG capability estate"
 done_when:
   - "mcp:capabilities_quality_report"
-  - "the chosen asset's done_when criteria pass via rig-capabilities test"
+  - cmd:./bin/rig-capabilities test iqrsqpi-v10
 great_example: examples/great/meta/skill-upgrades.md
 acl: public
 quality_floor: 0.7

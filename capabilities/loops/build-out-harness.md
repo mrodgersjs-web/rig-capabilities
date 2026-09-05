@@ -2,7 +2,7 @@
 outcome: design-ux:
 done_when:
   - file:capabilities/loops/build-out-harness.md
-  - the loop file parses and declares a termination test
+  - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/build-out-harness.md
 great_example: examples/great/design-ux/build-out-harness.md.md
 quality_floor: 0.6
 ---

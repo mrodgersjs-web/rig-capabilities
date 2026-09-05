@@ -16,7 +16,7 @@ domain: Static analysis
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
-outcome: security-review: >-
+outcome: "security-review: a codebase's interprocedural taint paths are enumerated by CodeQL and every finding lands in SARIF with its dataflow path, never a pattern guess"
 done_when:
   - file:capabilities/skills/codeql/SKILL.md
   - grep:capabilities/skills/codeql/SKILL.md:CodeQL

@@ -6,7 +6,7 @@ domain: Security architecture
 status: Stable
 verified_by: jake
 verified_on: 2026-08-30
-outcome: security-review: Repository-grounded threat modeling that enumerates trust boundaries, assets, attacker capabilities, abuse paths, and mi
+outcome: "security-review: a repository's trust boundaries, assets, attacker capabilities, and abuse paths are enumerated into a Markdown threat model grounded in the code"
 done_when:
   - file:capabilities/skills/security-threat-model/SKILL.md
   - grep:capabilities/skills/security-threat-model/SKILL.md:threat

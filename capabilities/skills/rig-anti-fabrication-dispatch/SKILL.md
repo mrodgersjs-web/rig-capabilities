@@ -7,7 +7,7 @@ domain: Agent orchestration / anti-fabrication
 status: Stable
 verified_by: jake
 verified_on: 2026-09-01
-outcome: agent-engineering: Dispatched agent work is admitted only from re-executed evidence — the dispatcher holds no authority to declare anything complete, and a fabricated run is mechanically decidable, not judged
+outcome: "agent-engineering: Dispatched agent work is admitted only from re-executed evidence — the dispatcher holds no authority to declare anything complete, and a fabricated run is mechanically decidable, not judged"
 done_when:
   - cmd:./bin/rig-capabilities dispatch-verify --packet tests/fixtures/fable2031/handoff-fabricated.json --offline; test $? -eq 2
   - file:rig_capabilities/dispatcher.py

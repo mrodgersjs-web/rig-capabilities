@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 import sys  # noqa: E402
@@ -24,18 +25,28 @@ sys.path.insert(0, str(REPO_ROOT))
 from rig_capabilities.catalog import Repo  # noqa: E402
 from rig_capabilities.done_tests import run_asset  # noqa: E402
 
-# An asset known to carry one prose row (verified against the index, and
-# re-verified by test_prose_row_is_the_one_unrunnable_form below).
-PROSE_ASSET = "mh-05-asset-pruning-session.yaml"
+# Controlled prose fixture: catalog improvements must not erase this negative case.
+PROSE_ASSET = "prose-fixture"
 CLEAN_ASSET = "adversarial-agent-orchestration.md"
 
 
 class RanAccountingTests(unittest.TestCase):
     def setUp(self):
         self.repo = Repo(REPO_ROOT)
+        self.fixture_repo = SimpleNamespace(
+            root=REPO_ROOT,
+            load_index=lambda: {"assets": [{
+                "id": PROSE_ASSET, "source": "canonical",
+                "quality": {"done_when": [
+                    "file:pyproject.toml",
+                    "a session of this type completes with its gate green",
+                ]},
+            }]},
+        )
 
     def _verdict(self, asset_id: str) -> dict:
-        out = run_asset(self.repo, asset_id)
+        out = run_asset(self.fixture_repo if asset_id == PROSE_ASSET else self.repo,
+                        asset_id)
         self.assertIn("ran", out, "verdict lost its `ran` field")
         self.assertIn("unrunnable", out, "verdict lost its `unrunnable` field")
         results = out["results"]
