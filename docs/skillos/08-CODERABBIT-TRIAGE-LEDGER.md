@@ -324,3 +324,17 @@ five named proofs — the doc was quoting a run that can no longer happen. §4 n
 `PASS` lines the script actually prints at this commit. Every command in §5 was executed in the
 clean worktree before the rewrite: `33 passed, 10 subtests`; plant exit 0 with all five proofs and
 a clean canonical tree; `check` rc 0; `check --stores` rc 1.
+
+## Round 7 — re-review at `85971b2`, the revision that ships the Round-6 fixes
+
+`coderabbit review --committed --base cr-base-984d60f`, same 22-file range: **No new findings**,
+with the two Round-6 items listed as previous. Transcript at `.local/cr20.log`.
+
+One caveat about that command's companion, `coderabbit review findings`: it prints the **stored**
+findings of the last run that produced any — still cr19's two, at their original line numbers
+(`09-STOCKTAKE-AND-DIRECTIVE.md:20-21` and `:96`). It is a cache, not a live open-state, and
+neither claim exists at those lines any more. The clean verdict is the round-7 run itself.
+
+Local gate state at the same revision: `certify` **12/12 green**, full suite `613 passed, 79
+subtests` excluding `tests/fixtures/` (the planted canary there fails by contract), and
+`skillos check` unchanged at valid 137 / invalid 4,867 — the doc edits moved no number.
