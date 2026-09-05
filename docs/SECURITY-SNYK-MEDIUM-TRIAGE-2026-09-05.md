@@ -77,7 +77,10 @@ before the shell sees it, so a `cwd` containing `$(…)` executes. Same trust do
 sets `cwd` can execute anyway), and the override is opt-in per machine rather than default.
 Flip condition: if `rig-loop` ever accepts specs or run records from an untrusted producer
 (cross-machine dispatch of foreign `loop.yaml`), this stops being accepted risk — the fix
-then is `shlex.split` + argv plus a spec-signature check, not an input filter.
+then it is provenance, not tokenizing: `shlex.split` is not itself a security control —
+it only turns `&&` and `|` into ordinary argv words, and any later shell re-expansion undoes
+that. Verify a signature on trusted specs before retaining shell execution, or move the spec
+to a shell-free command schema (argv list, no shell), so operators are never operators.
 
 **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
 lines that actually matter (142, 1178) under 17 duplicate rows.
