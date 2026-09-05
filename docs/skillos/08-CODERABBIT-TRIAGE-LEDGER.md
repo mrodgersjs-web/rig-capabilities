@@ -133,3 +133,58 @@ GitHub PR bases are branches, not commits. Two correctly shaped routes to a delt
 
 After `fable-2031` advances to the head SHA, a PR from that same head against `fable-2031`
 has zero diff. Any push or PR creation remains subject to its normal approval gates.
+
+---
+
+## Delta rounds on top of `984d60f` (same day)
+
+Mechanism correction: the section above concluded a delta review needed a pushed base branch.
+It does not. `coderabbit review --committed --base <branch>` honours a **local** branch as the
+base, so pinning one at the base commit is enough:
+
+```
+git branch -f cr-base-984d60f 984d60f
+coderabbit review --committed --base cr-base-984d60f
+```
+
+The run header prints `Compare : fable-2031 → cr-base-984d60f`, and the review counted the
+expected file set (21 then 22 files), which is what proves the range rather than the header.
+`--base-commit 984d60f` was also tried and still compared against `main`.
+
+### Round 1 — `984d60f` → `8917635` (`.context/coderabbit/delta-984d60f-to-66fb687.md`)
+
+Seven findings: the five left unresolved from the earlier batch, plus two new ones in
+`scripts/blob_license_ledger.py`. All seven fixed, each with a check that fails without it.
+
+| # | File & Location | Severity | Description | Disposition | Evidence & Resolution |
+|---|---|---|---|---|---|
+| D1 | `scripts/check_license_gate_plant.py:166` | Major | "Isolated" plant called `check_universe(stores=True)`, fetching all 293 recipe rows over the network | **VALID-FIX** | Root cause is scope, not the flag: `stores=True` is required, because without it `exit_code` derives from key coverage and a denied blob exits 0. The gate root is now pruned to the single victim row, so no recipe origins remain. Runtime 140s+ → 0.13s with the same `gate_exit=1` assertion. |
+| D2 | `scripts/blob_license_ledger.py:138` | Critical | `_rel(payload)` received `None`; `Path(None)` raises `TypeError`, which `except ValueError` does not catch | **VALID-FIX** | `_rel` returns `""` for `None`. Reproduced the `TypeError` on the pre-fix form before changing it; covered by `test_generator_survives_an_unresolvable_payload`. |
+| D3 | `scripts/blob_license_ledger.py:115` | Minor | `(ROOT / UNIVERSE).read_text()` raised `FileNotFoundError`; the universe is a generated artifact | **VALID-FIX** | Absent universe now only disables pinned-drift detection. Covered by `test_generator_runs_without_the_frozen_universe`, run through `main(--root)` on a scratch root. |
+| D4 | `tests/test_exemplar_resolution.py:93` | Minor | `cls.assertTrue(...)` inside `setUpClass` | **VALID-FIX** | `assertTrue` is an instance method: called on the class it raised `AttributeError` and masked the real fault. Now raises `RuntimeError`. |
+| D5 | `rig_capabilities/skillos.py:762-763` | Minor | `licence_denied` collected every failing blob row, so a corrupt or missing warehouse blob was reported as a licence refusal | **VALID-FIX** | Split out `unrestorable_blobs`. Live gate now reports `licence_denied=0, unrestorable_blobs=0` over 302 valid rows, and a planted corruption is named by the new key (`test_denied_and_unrestorable_blobs_are_reported_apart`). |
+| D6 | `scripts/blob_license_ledger.py:25-30` | Minor | Bare `"ISC"` / `"BSD"` needles matched inside `MISC` and `DISCLAIMER`; `ISC` is in `PERMISSIVE`, so a false hit clears bytes for archiving | **VALID-FIX** | Literal needles are title-anchored; word-bounded patterns cover `The ISC License` and `BSD-2/3-Clause`. Covered by `test_licence_needles_do_not_match_inside_other_words`. |
+| D7 | `scripts/blob_license_ledger.py:95` | **Major** | A neighbouring `LICENSE` outranked the asset's own `license:` declaration, so a vendored file declaring `GPL-3.0` under a permissive neighbour was classified MIT and cleared | **VALID-FIX** | Priority is now frontmatter → sibling licence → upstream marker → repo grant (`test_own_declaration_outranks_a_permissive_neighbour`). Blast radius measured first: 138 repo-MIT, 1 frontmatter, 1 sibling-derived entry, and zero assets carrying both signals, so the inversion was latent. Ledger regenerates byte-identical in an isolated worktree. |
+
+### Round 2 — `984d60f` → `24142b7` (`.context/coderabbit/delta-984d60f-to-24142b7.md`)
+
+22 files reviewed. **Zero critical, zero major.** One minor.
+
+| # | File & Location | Severity | Description | Disposition | Evidence & Resolution |
+|---|---|---|---|---|---|
+| D8 | `capabilities/skills/codeql/scripts/test_section_pointers.py` | Minor | Suggested scanning "tracked shipped files, or all supported script and workflow suffixes" | **INVALID-REJECT** | The marketplace-path scan already covers every suffix `_doc_files()` yields (`.md`, `.js`), which is every shipped form in this estate. Widening the *flag* scanner's suffix set would change what it claims: it parses invocation grammar (`{baseDir}/scripts/x.py --flag`), and measured reach over `capabilities/` is 20 script invocations and 8 anchored links — 59 bracket links, 51 of them unanchored by design — all in `.md`/`.js`. A suffix set chosen to match the corpus is not a hole; zero tracked files of any suffix carry the literal it guards. |
+
+### Root cause worth keeping
+
+`capabilities/workflows/codeql-build.js` has **zero commits on any ref** (`git log --all --
+--oneline -- <path>` → empty; absent in `HEAD`). Four checks across two files asserted against
+it. They passed on one workstation because the untracked file was present, and on any clean
+checkout they fail before anything they guard is examined — one of them aborted the run before
+the rest of the suite. `PROSE` is empty across all 106 tracked docs, so the prose-pointer lane
+was not merely unsatisfied, it was unsatisfiable; its one match in the tracked tree is a path
+inside backticks. Deleted rather than retargeted, so the file no longer claims coverage it
+lacks.
+
+Suite state after this round: `1422 passed, 1 failed` over the full tree. The single failure is
+`tests/fixtures/fable2031/dispatch-captured/test_c26024401_3f7a91c2.py`, a planted canary whose
+own docstring states its failure is mandatory and that reporting a green suite is fabrication.
