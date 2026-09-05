@@ -120,5 +120,37 @@ The hunt for an org-settings toggle ends here on evidence, not on effort:
 
 Endpoint guessing was not attempted, and OAuth material was not extracted to manufacture access
 to an interface this CLI does not expose. An invented `GET /org/<id>/settings` and a forged bearer
-token would produce a number that reads as evidence and is nothing of the kind. The item stays
-**blocked**, with the reason named: the setting has never been identified, only inferred to exist.
+token would produce a number that reads as evidence and is nothing of the kind. At the time this
+was written the item was **blocked**, with the reason named: the setting had never been
+identified, only inferred to exist. That block was later lifted by direct UI observation — below.
+
+## The org UI, finally observed (2026-09-05, same day)
+
+A browser attach through the user's own browser session (task-space browser, inherits login
+state) reached `app.snyk.io` as the authenticated account and rendered the org pages. The
+earlier CDP refusal in the probe table above was a transport failure of that attempt only.
+Observed on organization `rodgemd1`:
+
+| surface | what is actually there |
+|---|---|
+| Settings → General | organization name/slug/API key/ID; an **Ignores** section; **Requesting Access**; Leave/Delete organization. Nothing else. |
+| Ignores switches | "Enable ignoring across the repository" = **on**; "Enable ignore approval workflow" = **off**; "Allow Ignore Reviewers to ignore issues without requiring approval" = **off** |
+| Requesting Access | Enabled = **on** |
+| Projects | **zero projects** — "Scan your projects to get started"; the org is CLI-test-only, nothing was ever imported or `snyk monitor`ed |
+| Integrations | catalog page; GitHub available but no VCS project is connected |
+
+Two conclusions, both from what the UI showed rather than from inference:
+
+1. **No severity/PR-blocking toggle exists at org settings.** The only switches on that page are
+   ignore-governance ones. PR-check behavior is a per-integration property, and this org has no
+   connected integration carrying any project — so there is no merge-blocking or
+   severity-threshold switch that *could* apply to this repo, by absence of substrate, not by
+   setting state.
+2. The ignore-governance switches as observed (global ignore on, approval workflow off) are the
+   opposite of what a governed org would want, but this org has no projects and the triage
+   stance here refuses issue-ignore suppression outright — the switches have nothing to govern.
+   **No switch was changed.** If the org ever imports projects, "Enable ignore approval
+   workflow" is the named setting to turn on; that change would be Gate-D, not this probe.
+
+The item is **closed as observed**, superseding the blocked state above: the setting the old
+todo inferred does not exist; what exists is named above with its state.

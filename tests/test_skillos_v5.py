@@ -272,6 +272,71 @@ class SkillosV5(unittest.TestCase):
                 [(r["kind"], r["id"], r["sha"]) for r in rows],
             )
 
+    def test_restock_licence_skipped_counts_only_licence_denials(self):
+        """One canonical asset denied by the ledger, one failing for another
+        reason (payload unresolvable) — only the first is a licence skip."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "docs/skillos").mkdir(parents=True)
+            payload = root / "capabilities/skills/uncleared/SKILL.md"
+            payload.parent.mkdir(parents=True)
+            payload.write_bytes(b"vendored bytes nobody cleared")
+            rows = [
+                {"kind": "skill", "id": "uncleared", "sha": "a" * 12},
+                {"kind": "skill", "id": "ghost", "sha": "b" * 12},
+            ]
+            (root / "docs/skillos/universe.jsonl").write_text(
+                "".join(json.dumps(r, separators=(",", ":")) + "\n" for r in rows))
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [
+                    {"kind": "skill", "id": "uncleared", "sha": "a" * 12,
+                     "source": "canonical", "abs_path": str(payload)},
+                    {"kind": "skill", "id": "ghost", "sha": "b" * 12,
+                     "source": "canonical",
+                     "abs_path": str(root / "ghost/SKILL.md")},
+                ],
+            }))
+            (root / skillos.BLOB_LEDGER).write_text(json.dumps(
+                {"entries": []}))
+            result = skillos.restock_stores(Repo(root))
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["licence_skipped"], 1, result)
+            self.assertEqual(result["blobbed"], 0)
+
+    def test_restock_rewrite_stays_ascii_like_dump_output(self):
+        """dump_universe writes ASCII-escaped rows; a restocked row must not
+        smuggle raw UTF-8 back into a file read back via platform encoding."""
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            (root / "docs/skillos").mkdir(parents=True)
+            payload = root / "capabilities/skills/café/SKILL.md"
+            payload.parent.mkdir(parents=True)
+            payload.write_bytes(b"cleared content")
+            digest = hashlib.sha256(b"cleared content").hexdigest()
+            sha12 = Repo._sha_file(payload)
+            row = {"kind": "skill", "id": "café", "sha": sha12}
+            universe = root / "docs/skillos/universe.jsonl"
+            universe.write_bytes(
+                json.dumps(row, separators=(",", ":")).encode("utf-8") + b"\n")
+            (root / ".index.json").write_text(json.dumps({
+                "generated_epoch": 9999999999,
+                "assets": [{"kind": "skill", "id": "café", "sha": sha12,
+                            "source": "canonical",
+                            "abs_path": str(payload)}],
+            }))
+            (root / skillos.BLOB_LEDGER).write_text(json.dumps(
+                {"entries": [{"kind": "skill", "id": "café",
+                              "blob_sha256": digest, "catalog_sha": sha12,
+                              "archive_allowed": True}]}))
+            result = skillos.restock_stores(Repo(root))
+            self.assertTrue(result["ok"], result)
+            self.assertEqual(result["blobbed"], 1, result)
+            after = universe.read_bytes()
+            self.assertIn(b"caf\\u00e9", after)
+            self.assertNotIn("café".encode("utf-8"), after)
+            self.assertEqual(json.loads(after)["store"]["status"], "blob")
+
     def test_restock_network_error_leaves_universe_byte_identical(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)
@@ -879,6 +944,7 @@ class LicenceGate(unittest.TestCase):
             ("CC0 1.0 Universal\n\nStatement of Purpose\n", "CC0-1.0"),
             ("not CC0\n", None),
             ("Rights are reserved; this is not CC0 and not public domain.\n", None),
+            ("CC0 1.0 Universal is not applicable to this repository.\n", None),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:

@@ -595,8 +595,9 @@ def restock_stores(repo: Repo) -> dict:
         if asset is None or (asset.get("sha") or "") != row.get("sha"):
             continue                          # identity must match the frozen snapshot
         derived = _store_for(root, asset, licence=licence)
-        if asset.get("source") == "canonical" and derived.get("status") != "blob":
-            licence_skipped += 1               # ledger declined the archival
+        if (asset.get("source") == "canonical"
+                and "licence ledger" in (derived.get("reason") or "")):
+            licence_skipped += 1               # declined THIS content, on licence
         if derived.get("status") == "blob":
             if _universe_store_valid(root, {**row, "store": derived}, licence=licence):
                 row["store"] = derived
@@ -661,8 +662,7 @@ def restock_stores(repo: Repo) -> dict:
         else:
             ending = b""
         output_lines[row_lines[row_no]] = (
-            json.dumps(uni[row_no], ensure_ascii=False,
-                       separators=(",", ":")).encode("utf-8") + ending
+            json.dumps(uni[row_no], separators=(",", ":")).encode("ascii") + ending
         )
     output = b"".join(output_lines)
     if output != original:

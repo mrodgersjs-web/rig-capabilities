@@ -42,8 +42,9 @@ SPDX_RE = (
     ), "Apache-2.0"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?CC0\s+1\.0\s+Universal"
-        r"|^\s*CC0\s*$"
-        r"|^\s*CC0\s+Public\s+Domain\s+Dedication"
+        r"(?:\s*[-\u2013\u2014:]\s*Statement of Purpose)?\s*$"
+        r"|^\s*(?:The\s+)?CC0\s*$"
+        r"|^\s*CC0\s+Public\s+Domain\s+Dedication\s*$"
         r"|^\s*CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM"
     ), "CC0-1.0"),
     (re.compile(
@@ -163,7 +164,7 @@ def main(root: Path = ROOT) -> int:
         store = row.get("store") or {}
         if store.get("status") == "blob":
             stored += 1
-            key = f"{row['kind']}/{row['id']}"
+            key = f"{row.get('kind') or ''}/{row.get('id') or ''}"
             pinned[key] = store
             row_paths[key] = row.get("path") or ""
     entries, needs_review, drift = [], [], []
