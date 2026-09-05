@@ -141,20 +141,21 @@ Observed on organization `rodgemd1`:
 | Projects | **zero projects right now** — "Scan your projects to get started". No claim about history: a deleted project would leave no trace here. |
 | Integrations | catalog page (availability, not connection state). The catalog's **GitHub** entry resolves to a configured source record (`sources/9a3e5d90-…`), but opening it redirects to `auth/github-upgrade` — "Update to Snyk's Terms of Service". Its connection health was therefore **not observed**; accepting current ToS on the user's behalf was refused. |
 
-Two conclusions, both from what the UI showed rather than from inference:
+What follows is stated only as far as the UI evidence reaches:
 
-1. **No severity/PR-blocking control is present on the reachable org surfaces.** Settings →
-   General holds only ignore-governance switches; Projects holds zero projects. PR-check
-   behavior attaches to a source's imported projects, and with none present there is nothing
-   for such a control to act on. What this does *not* prove: that no such control exists
-   anywhere in Snyk — the GitHub source page itself sits behind ToS re-acceptance and was not
-   opened, so its deeper settings are **unobserved**, and this repo's own scans run through
-   the CLI, which no org toggle gates.
-2. The ignore-governance switches as observed (global ignore on, approval workflow off) are the
-   opposite of what a governed org would want, but this org has no projects and the triage
-   stance here refuses issue-ignore suppression outright — the switches have nothing to govern.
-   **No switch was changed.** If the org ever imports projects, "Enable ignore approval
-   workflow" is the named setting to turn on; that change would be Gate-D, not this probe.
+1. **No severity/PR-blocking control was seen on the reachable org surfaces.** Settings →
+   General holds only ignore-governance switches; Projects showed zero projects at the time of
+   the probe. What this does *not* establish: (a) that no such control exists anywhere in
+   Snyk; (b) anything about the GitHub source's configuration — its page sits behind ToS
+   re-acceptance and was not opened, and a configured source with zero imported projects is
+   equally consistent with an installed-but-unused integration, since an integration can be
+   installed before any repository is imported and the catalog snapshot did not establish
+   connection state; (c) whether any org setting governs CLI or `.snyk`-file ignores at all —
+   untested, and CLI scans may be subject to controls not visible on the surfaces probed.
+2. The observed switch states are recorded in the table above. **No switch was changed.**
+   Whether those states are good governance is a policy judgment this probe does not make.
+   If the org ever imports projects, "Enable ignore approval workflow" is the named setting
+   worth revisiting; that change would be Gate-D, not this probe.
 
 The item is **closed as far as observation goes**, superseding the blocked state above: the
 setting the old todo inferred is **not present on any surface reachable without a ToS
