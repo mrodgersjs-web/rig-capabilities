@@ -252,3 +252,31 @@ Two blockers caught in review of my own work before sealing, both real:
    health (its page sits behind a ToS re-acceptance the probe refused to click), and not that
    no such control exists anywhere. All three claims confined to what the UI showed; the
    conclusion is "not present on reachable surfaces."
+
+### Store-gate stability, measured at the final tree — not "302, stable"
+
+Three consecutive `skillos check --stores` runs at `091fced`/`2f95382` returned
+**302 / 140 / 233** valid. The arithmetic reconciles exactly once the blob lane is read
+from the universe, not from the ledger: the stable blob-lane count is **139** — the number
+of `store.status = blob` rows in `docs/skillos/universe.jsonl`, matching the offline count
+`skillos check` itself prints — and every online run is 139 + recipe successes:
+302 = 139 + 163, 140 = 139 + 1, 233 = 139 + 94. The recipe lane is a live network probe:
+6 url+commit groups fetched shallow over unauthenticated HTTPS with a 60-second per-fetch
+timeout, verified rows tracking how many groups survived. Named failure text: `git fetch
+--depth 1 origin <commit> … timed out after 60 seconds`.
+
+**Clearance ≠ storage.** The ledger's 140 archive-cleared *entries* are not 140 stored
+blobs: they cover **139 distinct `(kind,id)` assets** — `skill/evidence-retrieval-citations-gate`
+carries two cleared entries (shas `9eb5b1786d9e`, `afe28f7a5500`, both MIT, two content
+versions of one asset) — and clearance only *permits* filing; a row still needs its current
+snapshot content to be the cleared content. All 139 blob rows map to cleared assets and no
+blob row lacks clearance (checked both directions). So the honest statement of the v5
+blocking gate is:
+
+> `skillos check --stores` rc=1; valid = 139 blob receipts (stable, offline-verifiable)
+> + recipe receipts verified this run (1 to 163 of 163, network-dependent); invalid
+> 4,771–4,864; the gate is red on every run and its red does not depend on the flaky
+> lane — 4,700+ rows have no evidence of any kind.
+
+A future hardening (not this delta): cache verified fetch results per url+commit with a TTL
+so the gate's reported number is reproducible, and raise or parallelize-aware the 60 s cap.
