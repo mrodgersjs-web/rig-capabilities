@@ -938,13 +938,23 @@ class LicenceGate(unittest.TestCase):
             # Apache: heading, one-line title, and header notice; negation does not
             ("Apache License\nVersion 2.0, January 2004\n", "Apache-2.0"),
             ("The Apache License, Version 2.0 applies.\n\n", None),
-            ("   * Licensed under the Apache License, Version 2.0\n", "Apache-2.0"),
+            ('   Licensed under the Apache License, Version 2.0 (the "License");\n'
+             "you may not use this file except in compliance with the License.\n",
+             "Apache-2.0"),
+            ('   Licensed under the Apache License, Version 2.0 (the "License") '
+             "is not applicable\n", None),
+            ('   Licensed under the Apache License, Version 2.0 (the "License");\n',
+             "Apache-2.0"),
             ("The bundled tool is not Apache License compatible.\n", None),
             # CC0: `CC0` as a bare substring was the loosest needle of all
             ("CC0 1.0 Universal\n\nStatement of Purpose\n", "CC0-1.0"),
             ("not CC0\n", None),
             ("Rights are reserved; this is not CC0 and not public domain.\n", None),
             ("CC0 1.0 Universal is not applicable to this repository.\n", None),
+            ("CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE\n"
+             "LEGAL SERVICES.\n", "CC0-1.0"),
+            ("CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE\n"
+             "LEGAL SERVICES is a false claim.\n", None),
         ]
         for text, want in cases:
             with tempfile.TemporaryDirectory() as td:

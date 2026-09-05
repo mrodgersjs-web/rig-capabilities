@@ -136,21 +136,25 @@ Observed on organization `rodgemd1`:
 | Settings → General | organization name/slug/API key/ID; an **Ignores** section; **Requesting Access**; Leave/Delete organization. Nothing else. |
 | Ignores switches | "Enable ignoring across the repository" = **on**; "Enable ignore approval workflow" = **off**; "Allow Ignore Reviewers to ignore issues without requiring approval" = **off** |
 | Requesting Access | Enabled = **on** |
-| Projects | **zero projects** — "Scan your projects to get started"; the org is CLI-test-only, nothing was ever imported or `snyk monitor`ed |
-| Integrations | catalog page; GitHub available but no VCS project is connected |
+| Projects | **zero projects right now** — "Scan your projects to get started". No claim about history: a deleted project would leave no trace here. |
+| Integrations | catalog page (availability, not connection state). The catalog's **GitHub** entry resolves to a configured source record (`sources/9a3e5d90-…`), but opening it redirects to `auth/github-upgrade` — "Update to Snyk's Terms of Service". Its connection health was therefore **not observed**; accepting current ToS on the user's behalf was refused. |
 
 Two conclusions, both from what the UI showed rather than from inference:
 
-1. **No severity/PR-blocking toggle exists at org settings.** The only switches on that page are
-   ignore-governance ones. PR-check behavior is a per-integration property, and this org has no
-   connected integration carrying any project — so there is no merge-blocking or
-   severity-threshold switch that *could* apply to this repo, by absence of substrate, not by
-   setting state.
+1. **No severity/PR-blocking control is present on the reachable org surfaces.** Settings →
+   General holds only ignore-governance switches; Projects holds zero projects. PR-check
+   behavior attaches to a source's imported projects, and with none present there is nothing
+   for such a control to act on. What this does *not* prove: that no such control exists
+   anywhere in Snyk — the GitHub source page itself sits behind ToS re-acceptance and was not
+   opened, so its deeper settings are **unobserved**, and this repo's own scans run through
+   the CLI, which no org toggle gates.
 2. The ignore-governance switches as observed (global ignore on, approval workflow off) are the
    opposite of what a governed org would want, but this org has no projects and the triage
    stance here refuses issue-ignore suppression outright — the switches have nothing to govern.
    **No switch was changed.** If the org ever imports projects, "Enable ignore approval
    workflow" is the named setting to turn on; that change would be Gate-D, not this probe.
 
-The item is **closed as observed**, superseding the blocked state above: the setting the old
-todo inferred does not exist; what exists is named above with its state.
+The item is **closed as far as observation goes**, superseding the blocked state above: the
+setting the old todo inferred is **not present on any surface reachable without a ToS
+re-acceptance click** — and making that click is itself a user-authorized (Gate-D) act, not a
+probe. What is reachable is named above with its state.

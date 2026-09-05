@@ -38,18 +38,21 @@ SPDX_RE = (
     (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"), "MIT"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?Apache\s+(?:Software\s+)?License[,:]?\s*(?:Version\s+[23](?:\.0)?)?\s*$"
-        r"|^\W*Licensed\s+under\s+the\s+Apache\s+License"
+        r"|^\W*Licensed\s+under\s+the\s+Apache\s+License,\s*Version\s+[23](?:\.0)?"
+        r"\s*\(the\s+[\u201c\"']License[\u201d\"']\)\s*;?\s*$"
     ), "Apache-2.0"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?CC0\s+1\.0\s+Universal"
         r"(?:\s*[-\u2013\u2014:]\s*Statement of Purpose)?\s*$"
         r"|^\s*(?:The\s+)?CC0\s*$"
         r"|^\s*CC0\s+Public\s+Domain\s+Dedication\s*$"
-        r"|^\s*CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM"
+        r"|^\s*CREATIVE\s+COMMONS\s+CORPORATION\s+IS\s+NOT\s+A\s+LAW\s+FIRM"
+        r"\s+AND\s+DOES\s+NOT\s+PROVIDE\s+LEGAL\s+SERVICES\s*\.(?:\s|$)"
     ), "CC0-1.0"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?ISC\s+License\s*$"
-        r"|Permission\s+to\s+use,\s+copy,[^.\n]*distribute\s+this\s+software"
+        r"|Permission\s+to\s+use,\s+copy,[^.]*distribute\s+this\s+software"
+        r"[^.]*is\s+hereby\s+granted"
     ), "ISC"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?BSD\s*[-\s]?[1-3]\s*[-\s]?Clause\s+License\s*$"
