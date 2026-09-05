@@ -943,9 +943,10 @@ class LicenceGate(unittest.TestCase):
         """
         ledger = self._ledger_mod()
         cases = [
-            # canonical ISC, no title line — must still clear
+            # canonical ISC in full (no title line) — must still clear, across wraps
             ("Permission to use, copy, modify, and/or distribute this software for any\n"
-             "purpose with or without fee is hereby granted.\n", "ISC"),
+             "purpose with or without fee is hereby granted, provided that the above\n"
+             "copyright notice and this permission notice appear in all copies.\n", "ISC"),
             # titles only when they own the line
             ("ISC License\n\nPermission to use, copy, or distribute this software\n"
              "is hereby granted.\n", "ISC"),
@@ -991,9 +992,18 @@ class LicenceGate(unittest.TestCase):
              "is hereby granted is false.\n", None),
             ("CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE "
              "LEGAL SERVICES. according to this false notice\n", None),
-            # ...but the canonical continuation clears across any line wrap
-            ("Permission is hereby granted,\nfree of charge, to any person obtaining\n"
-             "a copy of this software\n", "MIT"),
+            # the canonical MIT grant at full depth, wrapped, no title
+            ("Permission is hereby granted, free of charge, to any person obtaining\n"
+             "a copy of this software and associated documentation files (the\n"
+             '"Software"), to deal in the Software without restriction, including\n'
+             "without limitation the rights to use, copy, modify, merge, publish,\n",
+             "MIT"),
+            # suffix denials the shallow prefixes accepted (advisory, round 12)
+            ("Permission is hereby granted, free of charge, to any person? No,\n"
+             "this is false\n", None),
+            ("Permission to use, copy, modify, and/or distribute this software for\n"
+             "any purpose with or without fee is hereby granted. This grant is\n"
+             "revoked.\n", None),
             # Apache 3.0 is not Apache-2.0: never mislabel a version we don't grant
             ("Apache License, Version 3.0\n", None),
             ('Licensed under the Apache License, Version 3.0 (the "License");\n', None),

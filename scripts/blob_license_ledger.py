@@ -32,11 +32,15 @@ OUT = ROOT / "docs/skillos/blob-license-ledger.json"
 # negates mid-phrase). Prose that merely names a licence grants nothing.
 SPDX: tuple = ()  # no raw substring needles survive — every branch is a regex now
 SPDX_RE = (
-    # MIT grant sentence, spelled with its canonical continuation so a negated prefix
-    # (`granted? No; all rights reserved.`) cannot match; \s+ spans line wraps.
+    # MIT grant sentence, spelled to its canonical DEPTH — through "deal in the
+    # Software without restriction". A prefix-only negation ("…to any person?
+    # No, this is false") cannot reach that far; \s spans line wraps.
     (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"
-                r"|Permission\s+is\s+hereby\s+granted\s*,\s*free\s+of\s+charge\s*"
-                r"\s*,\s*to\s+any\s+person"), "MIT"),
+                r"|Permission\s+is\s+hereby\s+granted\s*,\s*free\s+of\s+charge\s*,"
+                r"\s*to\s+any\s+person\s+obtaining\s+a\s+copy\s+of\s+this\s+software"
+                r"\s+and\s+associated\s+documentation\s+files\s+\(\s*the\s+"
+                r"[\u201c\"']?Software[\u201c\"']?\s*\)\s*,\s*to\s+deal\s+in\s+the\s+Software"
+                r"\s*,?\s*without\s+restriction"), "MIT"),
     # Apache: version 2.x ONLY — an Apache "3.0" text must not resolve to Apache-2.0.
     (re.compile(
         # horizontal whitespace only inside a title; the ONLY vertical form allowed is the
@@ -58,11 +62,15 @@ SPDX_RE = (
         r"|^\s*CREATIVE\s+COMMONS\s+CORPORATION\s+IS\s+NOT\s+A\s+LAW\s+FIRM"
         r"\s+AND\s+DOES\s+NOT\s+PROVIDE\s+LEGAL\s+SERVICES\s*\.\s*$"
     ), "CC0-1.0"),
-    # ISC: the grant must terminate with punctuation — `granted is false` does not.
+    # ISC: the FULL canonical grant sentence — purpose/fee clause, grant, AND the
+    # provided-clause through "all copies", terminated. "…is hereby granted. This
+    # grant is revoked" lacks the provided-clause and cannot match.
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?ISC\s+License\s*$"
-        r"|Permission\s+to\s+use,\s+copy,[^.]*distribute\s+this\s+software"
-        r"[^.]*is\s+hereby\s+granted\s*[.,;]"
+        r"|Permission\s+to\s+use,\s+copy,\s+modify,?\s+and(?:/or)?\s+distribute"
+        r"\s+this\s+software\s+for\s+any\s+purpose\s+with\s+or\s+without\s+fee"
+        r"\s+is\s+hereby\s+granted\s*,\s*provided\s+that\s+the\s+above\s+copyright"
+        r"\s+notice\s+and\s+this\s+permission\s+notice\s+appear\s+in\s+all\s+copies\s*[.,;]"
     ), "ISC"),
     (re.compile(
         r"(?mi)^\s*(?:The\s+)?BSD\s*[-\s]?[1-3]\s*[-\s]?Clause\s+License\s*$"
