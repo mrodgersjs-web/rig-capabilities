@@ -38,8 +38,9 @@ SPDX_RE = (
     (re.compile(r"(?mi)^\s*(?:The\s+)?MIT\s+Licen[cs]e\s*$"
                 r"|Permission\s+is\s+hereby\s+granted\s*,\s*free\s+of\s+charge\s*,"
                 r"\s*to\s+any\s+person\s+obtaining\s+a\s+copy\s+of\s+this\s+software"
-                r"\s+and\s+associated\s+documentation\s+files\s+\(\s*the\s+"
-                r"[\u201c\"']?Software[\u201c\"']?\s*\)\s*,\s*to\s+deal\s+in\s+the\s+Software"
+                r"\s+and\s+associated\s+documentation\s+files\s+\(\s*"
+                r"the\s+(?:\"Software\"|'Software'|“Software”|Software)\s*\)"
+                r"\s*,\s*to\s+deal\s+in\s+the\s+Software"
                 r"\s*,?\s*without\s+restriction"), "MIT"),
     # Apache: version 2.x ONLY — an Apache "3.0" text must not resolve to Apache-2.0.
     (re.compile(

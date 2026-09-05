@@ -998,6 +998,19 @@ class LicenceGate(unittest.TestCase):
              '"Software"), to deal in the Software without restriction, including\n'
              "without limitation the rights to use, copy, modify, merge, publish,\n",
              "MIT"),
+            # defined-term quoting variants: matched forms clear, mismatched pairs deny
+            ("Permission is hereby granted, free of charge, to any person obtaining\n"
+             "a copy of this software and associated documentation files (the\n"
+             "“Software”), to deal in the Software without restriction,\n", "MIT"),
+            ("Permission is hereby granted, free of charge, to any person obtaining\n"
+             "a copy of this software and associated documentation files (the\n"
+             "Software), to deal in the Software without restriction,\n", "MIT"),
+            ("Permission is hereby granted, free of charge, to any person obtaining\n"
+             "a copy of this software and associated documentation files (the\n"
+             "“Software\"), to deal in the Software without restriction,\n", None),
+            ("Permission is hereby granted, free of charge, to any person obtaining\n"
+             "a copy of this software and associated documentation files (the\n"
+             '"Software”), to deal in the Software without restriction,\n', None),
             # suffix denials the shallow prefixes accepted (advisory, round 12)
             ("Permission is hereby granted, free of charge, to any person? No,\n"
              "this is false\n", None),
