@@ -86,11 +86,16 @@ error  fetch failed: remote error: upload-pack: not our ref
 
 Evidence gathered, not assumed:
 
-- All 130 payloads still hash-match their snapshot SHA12 on disk in the `rig-gtm-studio-v2` working copy.
+- All 130 payloads match their snapshot SHA12 **from the pinned commit itself**:
+  2026-09-05 re-probe ran `git show 0a54375…:<store.path>` for all 130 rows in the local
+  clone — 130/130 SHA12 digest-match, 0 mismatch. Bytes are provable; only the server
+  refuses the object.
 - Origin was fetched read-only; **24 published refs** scanned with `git ls-tree -r`.
   Blob-level comparison (`git hash-object` vs tree OID): **0 of 130 paths exist at any
-  published ref**. The pinned commit exists locally only; the working branch
-  (`feat/studio-monorepo`, HEAD `cc37fdd8`) was never pushed.
+  published ref**. The pinned commit exists locally only; the lineage lives on the local
+  branch `feat/studio-monorepo` — re-probed 2026-09-05 at tip `865a1eb6` (earlier
+  observation `cc37fdd8`; branch has moved), with
+  `git merge-base --is-ancestor 0a54375 feat/studio-monorepo` true. Never pushed.
 - No `LICENSE` file at that repo root → no licence-cleared blob path either.
 
 So the pinned recipe stays pinned and red. Closing it needs either a push of that
