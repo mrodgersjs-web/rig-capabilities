@@ -280,3 +280,11 @@ blocking gate is:
 
 A future hardening (not this delta): cache verified fetch results per url+commit with a TTL
 so the gate's reported number is reproducible, and raise or parallelize-aware the 60 s cap.
+
+## Round 5 — delta reviewed at `a0de0ac` (3 minor)
+
+| # | finding | disposition |
+|---|---|---|
+| R5-1 | Stale internal reference "line 82" after the shlex rewrite shifted the quoted paragraph | **VALID — fixed.** The controlling statement is now named by its heading (`**Not done here:**` paragraph), not by a line number that any edit invalidates. |
+| R5-2 | Trust-boundary text said commands come from `loop.yaml` or CLI args, while the table itself listed `RIG_LOOP_VERIFIER_CMD` | **VALID — fixed.** The env var is named as a third input channel and the accepted risk is restated as "files, argv, **or environment** on this machine" — the same principal that can execute anything here. (The same edit briefly broke the table's blank-line and duplicated a row; both repaired, table re-read after.) |
+| R5-3 | "302 max" vs "140 + 163 = 303", and rows-vs-groups units | **VALID — already cured pre-review.** The addendum was amended (unpushed) to 139 stable blobs: totals 302 = 139 + 163 exactly; 6 URL+commit groups are named as groups, and 163/1/94 as verified *rows* per run. This round reviewed the pre-amend text. |

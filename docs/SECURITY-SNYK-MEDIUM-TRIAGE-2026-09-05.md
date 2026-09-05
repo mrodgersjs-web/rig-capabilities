@@ -61,7 +61,7 @@ commands *is* this module's product:
 
 | primitive | line | where the command string comes from |
 |---|---|---|
-| `_run_cmd()` → `subprocess.run(cmd, shell=True, …)` | 142 | `g["command"]` (gate, 605), `c["cmd"]` (check, 980), `red_cmd`/`green_cmd` (plant-failure, 990/991), `step["sh"]` (spec step, 1955) — every one is text in a committed `loop.yaml`, or an explicit CLI argument |
+| `_run_cmd()` → `subprocess.run(cmd, shell=True, …)` | 142 | `g["command"]` (gate, 605), `c["cmd"]` (check, 980), `red_cmd`/`green_cmd` (plant-failure, 990/991), `step["sh"]` (spec step, 1955) — every one is text in a committed `loop.yaml`, or an explicit CLI argument. The complete input surface is those two channels **plus** the `RIG_LOOP_VERIFIER_CMD` env var on the `verify()` row below — an env var is its own channel, so the accepted risk is explicitly "whoever controls this machine's files, argv, or environment", which is the same principal who can execute anything here anyway |
 | `verify()` override → `subprocess.run(cmd, shell=True, …)` | 1178 | `--cmd` / `RIG_LOOP_VERIFIER_CMD`, substituted with `{prompt_file}` and `{cwd}` |
 
 The built-in verifier families take the other branch, `subprocess.run(argv, …)` (1184) —
@@ -103,8 +103,7 @@ The REST org-settings call was not attempted, so its availability is **unknown**
 UI was not observed. The combined result is **inconclusive**: no toggle was changed, but these
 probes do not show that a relevant toggle is absent or unreachable.
 
-Issue-ignore suppression remains refused. The controlling statement is the actual
-`Not done here` line at line 82:
+Issue-ignore suppression remains refused. The controlling statement is the actual paragraph:
 
 > **Not done here:** no `.snyk` ignore rules added. Suppressing these 19 would bury the two
 > lines that actually matter (142, 1178) under 17 duplicate rows.
