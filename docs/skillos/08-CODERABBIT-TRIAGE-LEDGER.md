@@ -278,6 +278,18 @@ blocking gate is:
 > 4,702–4,864 (each run's invalid = 5004 − that run's valid); the gate is red on every run and its red does not depend on the flaky
 > lane — 4,700+ rows have no evidence of any kind.
 
+*Superseding note (clean-tree ledger regen at the review SHA):* after the M1 fix (restored
+snapshots no longer inherit the repo MIT grant), the ledger was regenerated in a detached
+worktree of the committed tree with the shared warehouse copied in. The new artifact carries
+**139** archive-cleared entries over 139 distinct assets; the duplicate cleared entry for
+`skill/evidence-retrieval-citations-gate` is gone because its stored-drift blob is now
+**denied** — the bytes in the warehouse carry no licence evidence of their own, and clearance
+of live content no longer blesses different stored bytes (`skill/codeql` likewise in
+`needs_review`). **The stable blob lane moved with the artifact:** `_licence_map` is
+digest-bound, so the two universe rows referencing denied hashes dropped too — bare
+`skillos check` now reports `valid_store_count` **137**, not the 139 measured above under the
+old artifact. Every "139 stable" figure in this section is explicitly a pre-regen measurement.
+
 A future hardening (not this delta): cache verified fetch results per url+commit with a TTL
 so the gate's reported number is reproducible, and raise or parallelize-aware the 60 s cap.
 

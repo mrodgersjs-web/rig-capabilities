@@ -15,6 +15,12 @@
 | `recipe_group_count` / `fetch` / `verified` | 6 / 6 / 163 |
 | `licence_problems` | none |
 
+> Table values are one `--stores` run measured under the PRE-REGEN ledger. After the
+> clean-tree regeneration (see `08-CODERABBIT-TRIAGE-LEDGER.md`, superseding note), the
+> digest-bound map denies two drifted blob rows: stable blob lane is **137**, and invalid
+> shifts to 5004 − 137 − recipe-verified rows for any given run. The group attributions
+> below are unaffected — they name universe rows, not blob receipts.
+
 Three `missing_evidence` groups carry 4,572 of the red; the remaining 130 rows are the one
 failing recipe group counted in §2 (293 recipe rows − 163 verified):
 

@@ -119,20 +119,29 @@ would rewrite a receipt to make a gate go green.
 
 `scripts/blob_license_ledger.py` → `docs/skillos/blob-license-ledger.json` → consumed by
 `_licence_map` in `rig_capabilities/skillos.py`. Every entry states its basis. Counts below are
-from the ledger as committed now: 141 rows over 140 distinct `(kind,id)` canonical assets. It was
-regenerated in an isolated clone of this repository at the committed tree — not in the shared
-worktree — because the shared `.index.json` had absorbed four canonical assets that are not
-tracked here (`prime-jake-pai`, `rig-memory-os`, `prime-jake-memory.ts`, `rig-prime.ts`). A ledger
-generated against that index would license content this repository does not contain.
+from the ledger as committed now: 142 rows over 140 distinct `(kind,id)` canonical assets,
+139 archive-cleared. It was regenerated in a detached worktree of the committed tree —
+tracked files only, the shared 139-blob warehouse copied in — not in the shared worktree,
+because the shared `.index.json` had absorbed four canonical assets that are not tracked here
+(`prime-jake-pai`, `rig-memory-os`, `prime-jake-memory.ts`, `rig-prime.ts`), and the shared
+directory additionally holds ambient untracked files inside otherwise-clean asset
+directories, which shifts dir-scope digests. A ledger generated against either would license
+content this repository does not contain.
 
 | basis | entries | archive allowed |
 |---|---|---|
-| repo `LICENSE` (MIT, RIG / mrodgersjs-web), no upstream marker in or beside the asset | 138 | yes |
+| repo `LICENSE` (MIT, RIG / mrodgersjs-web), no upstream marker in or beside the asset | 137 | yes |
 | asset's own `LICENSE.txt` (security-threat-model, Apache-2.0) | 1 | yes |
 | frontmatter `license: MIT` (rig-office-docs) | 1 | yes |
 | upstream marked, no licence found (`rig-lattice-system` → `github.com/rodgemd1-lgtm/rig-deviator`) | 1 | **no — needs_review** |
+| restored snapshot; no licence evidence travels with the bytes (`skill/codeql`, `skill/evidence-retrieval-citations-gate` drift blobs) | 2 | **no — needs_review** |
 
-Residual risk, named: 138 of those rows rest on the repo's own MIT grant with no
+The last row is the M1 fix biting its own artifact: under the old classifier these two drift
+blobs cleared via the repo MIT fallback, which a restored single file can always reach because
+a restored file has no sibling `LICENSE` by construction. The committed artifact — the thing
+`_licence_map` actually trusts — had to be regenerated for the fix to be real at runtime.
+
+Residual risk, named: 137 of those rows rest on the repo's own MIT grant with no
 upstream marker nearby. That is authorship by absence of counter-signal, not proof. If any
 of them is shown vendored, the flip is mechanical — ledger entry to `archive_allowed: false`,
 blob out of the warehouse, universe row back to `unresolved`, all in one commit — and the
