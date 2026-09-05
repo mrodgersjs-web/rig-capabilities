@@ -22,12 +22,20 @@ from rig_capabilities.skillos import (UNIVERSE, _content_digest, _payload_path,
                                       restore_blob)
 
 OUT = ROOT / "docs/skillos/blob-license-ledger.json"
+# Each needle must name a licence, not merely contain its letters: bare "ISC" matches inside
+# MISC, and bare "BSD" inside unrelated prose. A loose hit resolves to a PERMISSIVE id and
+# clears vendored bytes for archiving, so every pattern is title-anchored or word-bounded.
 SPDX = (("Apache License", "Apache-2.0"),
         ("Permission is hereby granted", "MIT"),
         ("MIT License", "MIT"),
-        ("BSD", "BSD (uncatalogued)"),
-        ("ISC", "ISC"),
+        ("BSD License", "BSD (uncatalogued)"),
+        ("ISC License", "ISC"),
         ("CC0", "CC0-1.0"))
+SPDX_RE = (
+    (re.compile(r"\bThe\s+ISC\s+License\b|\bISC\s+License\b|\bISC\b"), "ISC"),
+    (re.compile(r"\bBSD\s+[-\s]?[1-3]?\s*Clause\b|\bBSD\s+License\b|\bBSD\b"),
+     "BSD (uncatalogued)"),
+)
 PERMISSIVE = {"MIT", "Apache-2.0", "ISC", "CC0-1.0", "0BSD"}
 UPSTREAM = re.compile(r"https?://\S+")
 
@@ -66,6 +74,9 @@ def sibling_license(payload: Path) -> tuple[str | None, Path | None]:
                 for needle, spdx in SPDX:
                     if needle in text:
                         return spdx, cand
+                for rx, spdx in SPDX_RE:
+                    if rx.search(text):
+                        return spdx, cand
                 return "unrecognised licence text", cand
     return None, None
 
@@ -81,17 +92,24 @@ def upstream_marked(payload: Path) -> str | None:
 
 
 def classify(payload: Path) -> dict:
+    """Priority: the asset's own declaration, then a licence file beside it, then the
+    upstream marker, then the repo's own grant.
+
+    Order is the security property. A neighbour LICENSE is evidence about the directory, not
+    the file: scanning it first meant a vendored file declaring `license: GPL-3.0` inherited a
+    permissive neighbour's licence and got archived.
+    """
     desc = payload if payload.is_file() else next(
         (p for p in (payload / "SKILL.md", payload / "index.md") if p.is_file()), None)
-    licence, file_ = sibling_license(payload)
-    marked = upstream_marked(payload)
-    if licence:
-        return {"license": licence, "basis": f"asset licence file {file_.name}",
-                "archive_allowed": licence in PERMISSIVE}
     fm = frontmatter_license(desc)
     if fm:
         return {"license": fm, "basis": "frontmatter license:",
                 "archive_allowed": fm in PERMISSIVE}
+    licence, file_ = sibling_license(payload)
+    if licence:
+        return {"license": licence, "basis": f"asset licence file {file_.name}",
+                "archive_allowed": licence in PERMISSIVE}
+    marked = upstream_marked(payload)
     if marked:
         return {"license": None, "basis": f"upstream marked ({marked}), no licence found",
                 "archive_allowed": False}

@@ -806,5 +806,31 @@ class LicenceGate(unittest.TestCase):
             self.assertEqual(by_id["ghost"]["path"], "")   # the _rel(None) crash site
             self.assertIn("skill/ghost", doc["needs_review"])
 
+    def test_own_declaration_outranks_a_permissive_neighbour(self):
+        """A vendored file's `license:` is evidence about the file; the directory LICENSE is not."""
+        ledger = self._ledger_mod()
+        with tempfile.TemporaryDirectory() as td:
+            d = Path(td)
+            (d / "LICENSE.txt").write_text("MIT License\nPermission is hereby granted\n")
+            (d / "SKILL.md").write_text("---\nname: vendored\nlicense: GPL-3.0\n---\nbody\n")
+            got = ledger.classify(d)
+            self.assertEqual(got["license"], "GPL-3.0")
+            self.assertFalse(got["archive_allowed"],
+                             "copyleft declared by the asset must not inherit MIT from the dir")
+
+    def test_licence_needles_do_not_match_inside_other_words(self):
+        ledger = self._ledger_mod()
+        with tempfile.TemporaryDirectory() as td:
+            d = Path(td)
+            (d / "LICENSE").write_text("Additional permissions are described under MISC "
+                                       "NOTICES and our DISCLAIMER below.\n")
+            licence, cand = ledger.sibling_license(d)
+            # MISC / NOTICES / DISCLAIMER each contain a former bare needle.
+            self.assertEqual(licence, "unrecognised licence text")
+            self.assertEqual(cand.name, "LICENSE")
+            (d / "LICENSE").write_text("ISC License\n\nPermission to use, copy, or distribute "
+                                       "this software is hereby granted.\n")
+            self.assertEqual(ledger.sibling_license(d)[0], "ISC")
+
 if __name__ == "__main__":
     unittest.main()
