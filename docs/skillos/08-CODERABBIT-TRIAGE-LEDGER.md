@@ -275,7 +275,7 @@ blocking gate is:
 
 > `skillos check --stores` rc=1; valid = 139 blob receipts (stable, offline-verifiable)
 > + recipe receipts verified this run (1 to 163 of 163, network-dependent); invalid
-> 4,771–4,864; the gate is red on every run and its red does not depend on the flaky
+> 4,702–4,864 (each run's invalid = 5004 − that run's valid); the gate is red on every run and its red does not depend on the flaky
 > lane — 4,700+ rows have no evidence of any kind.
 
 A future hardening (not this delta): cache verified fetch results per url+commit with a TTL
