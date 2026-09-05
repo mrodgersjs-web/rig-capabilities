@@ -1,0 +1,137 @@
+---
+outcome: content-publishing:
+done_when:
+  - file:capabilities/harnesses/hB-06-twitter-thread-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hB-06-twitter-thread-session
+great_example: examples/great/content-publishing/hB-06-twitter-thread-session.md
+quality_floor: 0.6
+---
+
+harness_id: hB-06-twitter-thread
+harness_name: Twitter/X Thread Session Harness
+session_type: twitter-thread-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L2-D2-A2-I4
+primary_diamonds:
+- D2
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the Thread operator. Tweet 1 is a contract; every tweet after pays it off in <=280 characters each;
+    the last tweet earns the follow.
+  identity_gates:
+  - Confirm thread arc type (story / teardown / listicle-lesson / data drop) before drafting tweet 1.
+  - Confirm thread length target (5-12 tweets); threads >12 require a written justification.
+  - Refuse 'thread' formatting for content that fits one tweet — bloat is a halt.
+  - Confirm whether a link is included; links suppress reach, so their placement is decided up front.
+capability_gates:
+- id: CG-01
+  name: Arc contract
+  requirement: Thread arc and payoff stated in one sentence; tweet count declared.
+  proof: $SESS/arc.yaml parses with keys arc_type, payoff, tweet_count; validator exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Tweet 1 contract
+  requirement: First tweet <=280 chars, states the payoff or the tension, contains no 'A thread:' filler, and no link.
+  proof: '`python3 scripts/t1_check.py $SESS/thread.md` exits 0; `head -4 $SESS/thread.md | grep -ci ''a thread'' ` == 0'
+  failure_tier: halt
+- id: CG-03
+  name: Per-tweet atomicity
+  requirement: Every tweet stands alone (one idea), <=280 chars, numbered consistently, no dangling 'this' references.
+  proof: '`python3 scripts/thread_atom.py $SESS/thread.md` exits 0 (checks each block: length, atomicity, anaphora lint)'
+  failure_tier: halt
+- id: CG-04
+  name: Payoff delivery
+  requirement: Declared payoff from arc.yaml appears by the penultimate tweet; final tweet is recap + follow/reply CTA <=200
+    chars.
+  proof: '`python3 scripts/payoff_check.py $SESS/arc.yaml $SESS/thread.md` exits 0'
+  failure_tier: halt
+- id: CG-05
+  name: Evidence tweet
+  requirement: '>=1 tweet contains a concrete number, named source, or artifact reference for data/teardown arcs.'
+  proof: '`grep -cE ''[0-9]+%|source:|study|v[0-9]+\.[0-9]+'' $SESS/thread.md` >= 1 for data arcs; recorded waiver otherwise'
+  failure_tier: degrade
+- id: CG-06
+  name: Link placement rule
+  requirement: Zero links in tweets 1..N-1; any link lives in final tweet or a declared reply.
+  proof: '`python3 scripts/link_placement.py $SESS/thread.md` exits 0'
+  failure_tier: degrade
+- id: CG-07
+  name: Media spec
+  requirement: Any attached image is 1600x900 or 1080x1080, <5MB, alt text written.
+  proof: 'For each asset: `python3 scripts/img_size.py --allow 1600x900,1080x1080 --max-mb 5 $SESS/assets/*` exits 0; alt
+    text lines in $SESS/alt.txt match asset count'
+  failure_tier: degrade
+- id: CG-08
+  name: Voice & repetition lint
+  requirement: No banned tokens; no sentence opener repeated >2x across the thread.
+  proof: '`grep -ciE ''delve|game changer|thread incoming'' $SESS/thread.md` == 0; `python3 scripts/opener_rep.py $SESS/thread.md
+    --max 2` exits 0'
+  failure_tier: degrade
+- id: CG-09
+  name: Proof packet seal
+  requirement: Thread text, arc, and asset hashes sealed; tweet 1 logged to anti-repeat ledger.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0; ledger append verified by line-count delta == 1'
+  failure_tier: halt
+definition_of_done:
+- Tweet 1 passes the contract check with no filler and no link.
+- Every tweet atomic and within length; payoff delivered before the final tweet.
+- Link placement and media specs machine-verified.
+- Proof packet sealed; tweet-1 hook in the repetition ledger.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: halt
+    CG-05: degrade
+    CG-06: degrade
+    CG-07: degrade
+    CG-08: degrade
+    CG-09: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/twitter-thread-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/twitter-thread-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.twitter
+- GL-OD-shortform
+- platform-frameworks.x

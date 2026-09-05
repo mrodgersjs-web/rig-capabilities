@@ -1,0 +1,153 @@
+---
+outcome: content-publishing:
+done_when:
+  - file:capabilities/harnesses/hB-02-newsletter-issue-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hB-02-newsletter-issue-session
+great_example: examples/great/content-publishing/hB-02-newsletter-issue-session.md
+quality_floor: 0.6
+---
+
+harness_id: hB-02-newsletter-issue
+harness_name: Newsletter Issue Session Harness
+session_type: newsletter-issue-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D3-A2-I5
+primary_diamonds:
+- D3
+- D2
+bms_bias: A2
+identity_lock:
+  startup_phrase: 'I am the Newsletter operator. Every issue earns its open: one promise in the subject line, one payoff in
+    the body, zero wasted scrolls.'
+  identity_gates:
+  - Confirm issue format (curated links / single-essay / hybrid) against the publication’s editorial calendar before drafting.
+  - Load the subscriber segment definition; an issue written to 'everyone' is a session halt.
+  - Confirm send-time window and timezone are recorded; drafting without a send slot produces orphan content.
+  - Verify the previous issue’s performance numbers are available for the self-improvement loop; if unavailable, log degradation
+    and continue.
+capability_gates:
+- id: CG-01
+  name: Issue brief
+  requirement: Issue brief states the one promise, the segment, the send window, and the primary link goal.
+  proof: $SESS/brief.yaml parses with keys promise, segment, send_window, primary_link_goal; `python3 -c "import yaml;d=yaml.safe_load(open('$SESS/brief.yaml'));assert
+    all(k in d for k in ['promise','segment','send_window','primary_link_goal'])"` exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Subject line set
+  requirement: '>=5 subject line candidates, each <=50 chars, none using spam-trigger tokens; winner and runner-up marked.'
+  proof: $SESS/subjects.txt has >=5 non-empty lines; `awk 'length($0)>50{exit 1}' $SESS/subjects.txt` exits 0; `grep -ciE
+    'free!!!|act now|100%|risk-free' $SESS/subjects.txt` == 0
+  failure_tier: halt
+- id: CG-03
+  name: Preview text pair
+  requirement: Preview/preheader text complements (not repeats) the chosen subject line, 40-90 chars.
+  proof: $SESS/preview.txt exists; char count 40-90 via `python3 -c "s=open('$SESS/preview.txt').read().strip();assert 40<=len(s)<=90"`;
+    similarity check `python3 scripts/similar.py $SESS/subjects.txt $SESS/preview.txt --max 0.5` exits 0
+  failure_tier: degrade
+- id: CG-04
+  name: Link budget
+  requirement: Total outbound links <=7, every link tagged with UTM parameters, every link resolves.
+  proof: '`grep -oE ''https?://[^) ]+'' $SESS/issue.md | wc -l` <= 7; every URL matches `utm_source` (`grep -L utm_source`
+    empty); `xargs -n1 curl -s -o /dev/null -w ''%{http_code}\n''` all 2xx/3xx'
+  failure_tier: halt
+- id: CG-05
+  name: Skeleton scan
+  requirement: 'Issue is scannable: no paragraph >4 lines at 60ch measure, one idea per section, header rhythm every <=250
+    words.'
+  proof: '`python3 scripts/skeleton_scan.py $SESS/issue.md --max-para-lines 4 --max-words-between-headers 250` exits 0'
+  failure_tier: degrade
+- id: CG-06
+  name: One-payoff rule
+  requirement: Body delivers the brief promise in the first 20% and references it again in the final section.
+  proof: '`python3 scripts/promise_check.py $SESS/brief.yaml $SESS/issue.md` exits 0 (embedding-overlap threshold >=0.7 at
+    both anchor zones)'
+  failure_tier: halt
+- id: CG-07
+  name: List hygiene hooks
+  requirement: Unsubscribe link, physical mailing address, and permission reminder present in footer block (CAN-SPAM/CASL).
+  proof: '`grep -c ''unsubscribe'' $SESS/issue.md` >=1 AND `grep -ciE ''[0-9]+ .*(street|st\.|ave|road|rd\.)'' $SESS/issue.md`
+    >=1'
+  failure_tier: halt
+- id: CG-08
+  name: Plain-text twin
+  requirement: A plain-text version is generated and semantically equal to the HTML version (no link loss).
+  proof: $SESS/issue.txt exists; `python3 scripts/html_text_parity.py $SESS/issue.md $SESS/issue.txt` exits 0 with link_count_delta
+    == 0
+  failure_tier: degrade
+- id: CG-09
+  name: Rendering proof
+  requirement: Issue renders without broken images or clipped layout in 2 reference clients (screenshot or DOM assert).
+  proof: $SESS/proof/render/ contains gmail.png and applemail.png (or DOM assertion log) with `file` confirming PNG and size
+    >20KB each
+  failure_tier: degrade
+- id: CG-10
+  name: Proof packet seal
+  requirement: All artifacts hashed; winner subject line recorded for the learning loop.
+  proof: $SESS/proof/packet.yaml includes sha256 of issue.md, issue.txt, subjects.txt and field winner_subject; `sha256sum
+    -c $SESS/proof/packet.sha256` exits 0
+  failure_tier: halt
+definition_of_done:
+- All gates pass; subject winner + runner-up recorded with rationale.
+- Every link reachable and UTM-tagged at seal time.
+- Footer compliance block present; plain-text twin at link parity.
+- Issue file, subjects, and proof packet sealed with reproducible hashes.
+- Prior issue metrics (if available) appended to the self-improvement log with one stated lesson.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: degrade
+    CG-04: halt
+    CG-05: degrade
+    CG-06: halt
+    CG-07: halt
+    CG-08: degrade
+    CG-09: degrade
+    CG-10: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/newsletter-issue-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/newsletter-issue-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.newsletter
+- GL-OD-newsletter
+- lifecycle-cadence.broadcast

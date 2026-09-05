@@ -1,0 +1,119 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hA-09-api-design.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hA-09-api-design
+great_example: examples/great/design-ux/hA-09-api-design.md
+quality_floor: 0.6
+---
+
+harness_id: hA-09-api-design
+harness_name: API Design Session Goal Harness
+session_type: api-design-session
+coordinate_space:
+  levels: [L2, L3, L4, L5]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_apidesign(contract_first, spec_lint, compat_proof, consumer_test, improvement)
+primary_diamonds: [D2, D3]
+bms_bias: "A2 for spec authoring; A1 for lint/compat verification; A3 for doc narrative; A4 forbidden"
+identity_lock:
+  startup_phrase: "The contract is the product. I design it before anyone codes it."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the API surface pinned: protocol (REST/GraphQL/gRPC), owning service, and the consumer list (named clients or 'public')"
+      proof: "Session log contains protocol, service name, consumer list"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: contract-first, spec-linted, backward-compat proven, error model uniform"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first spec line"
+      proof: "Session log line 'COORD: L2-L5 x D1-D3 x A1-A3 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_apidesign(contract_first, spec_lint, compat_proof, consumer_test, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Contract Design"
+    gates:
+      - id: "1.1"
+        requirement: "Contract-first artifact exists: an OpenAPI 3.x YAML / .proto / GraphQL SDL file authored before any handler code, covering every endpoint agreed in scope"
+        proof: "Spec file path (e.g. openapi.yaml) exists; grep for each scoped route/method returns a hit in the spec"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Resource model coherent: nouns not verbs in paths, consistent pluralization, hierarchical relations expressed as path nesting or query filters per one chosen convention"
+        proof: ".rig/api/conventions.md states the convention; spec paths audited against it with any exceptions listed"
+        failure_tier: degrade
+      - id: "1.3"
+        requirement: "Uniform error model: a single error envelope schema (code, message, details, requestId) referenced by every error response in the spec; 4xx vs 5xx semantics stated"
+        proof: "Error schema component exists in spec; every 4xx/5xx response $refs it — verified by grep count equality"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Pagination/filtering/sorting contract: every list endpoint declares cursor-or-offset scheme, max page size, default ordering, and filter parameters explicitly"
+        proof: "grep over spec for list endpoints each carrying pagination params; .rig/api/pagination-audit.txt shows per-endpoint verdicts"
+        failure_tier: halt
+  - category: "Spec Verification"
+    gates:
+      - id: "2.1"
+        requirement: "Spec lints clean: spectral lint openapi.yaml (or buf lint / graphql-schema-linter) exit 0 with the repo ruleset; every suppressed rule individually justified"
+        proof: "Lint exit code + output in .rig/api/lint.txt; suppressions listed with reasons"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Backward compatibility proven for edits: oasdiff breaking old.yaml new.yaml (or buf breaking) run against the previous published spec; every breaking change has a version-bump or sunset decision attached"
+        proof: ".rig/api/breaking.txt with the oasdiff/buf output; per-breaking-change disposition listed"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Examples validate: every request/response example in the spec validates against its schema (openapi-examples-validator or spectral examples ruleset)"
+        proof: "Validator exit code in .rig/api/examples.txt"
+        failure_tier: degrade
+      - id: "2.4"
+        requirement: "Authn/authz declared per operation: security schemes defined once and every operation carries an explicit security requirement (including 'public' as an explicit empty/anonymous marker)"
+        proof: "grep audit: every operation block has a security key; count matches operation count in .rig/api/security-audit.txt"
+        failure_tier: halt
+  - category: "Consumer Reality"
+    gates:
+      - id: "3.1"
+        requirement: "Consumer test written: at least one generated-client or hand-written consumer test that calls the new/changed endpoints against a mock or stub server (prism mock / buf server / MSW from the spec)"
+        proof: "Consumer test file path + green run output in .rig/api/consumer-test.txt"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Idempotency & retry semantics stated: which mutations are idempotent, Idempotency-Key support for unsafe methods, and safe-retry list documented in the spec extensions or conventions doc"
+        proof: "conventions.md idempotency section + spec markers present for POST endpoints"
+        failure_tier: degrade
+      - id: "3.3"
+        requirement: "Rate-limit and quota contract: limits, headers (RateLimit-*), and 429 behavior documented for the surface"
+        proof: "Spec or conventions.md contains the rate-limit section with concrete header names"
+        failure_tier: degrade
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "Design decision log: 3+ alternatives considered for any contested shape (naming, versioning scheme, error envelope) with the reason the winner won"
+        proof: ".rig/api/decisions.md with per-decision alternatives + rationale"
+        failure_tier: degrade
+      - id: "4.2"
+        requirement: "Improvement entry written: one spec-pattern worth templating, or one consumer pain predicted"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-09-api-design"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "Spec file lints clean and passes breaking-change check (or dispositions recorded)"
+  - "Consumer test green against spec-derived mock"
+  - "Error model + security + pagination audits attached"
+  - "One improvement entry appended"
+  - "Identity closure: coordinate, contract verdict, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.3", "1.4", "2.1", "2.2", "2.4", "3.1", "4.2"]
+  degrade_gates: ["1.2", "2.3", "3.2", "3.3", "4.1"]
+  stop_gates: []
+  notes: "a breaking change without a version/sunset decision is a halt that only the API owner's explicit sign-off can release"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same design fault recurs 3+ times → fold the fix into the spectral ruleset or spec template"
+final_rule:
+  - "Spec before code; code never defines the contract retroactively."
+  - "Breaking changes carry a decision, not a surprise."
+  - "Every operation declares its security; no anonymous-by-omission."
+  - "No improvement entry, no session complete."
+  - "Every api-design session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-BD, GL-GG]

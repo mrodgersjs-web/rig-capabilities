@@ -344,7 +344,8 @@ def context_pack(repo, intent: str, budget_tokens: int = 1500,
     ref = None
     if top_lane:
         for a in assets:
-            if a.get("source") == "great" and f"/{top_lane}/" in (a.get("path") or ""):
+            p = a.get("path") or ""
+            if a.get("source") == "great" and (f"/{top_lane}/" in (a.get("abs_path") or "") or f"/{top_lane}/" in f"/{p}"):
                 ref = a
                 break
     if ref is not None:

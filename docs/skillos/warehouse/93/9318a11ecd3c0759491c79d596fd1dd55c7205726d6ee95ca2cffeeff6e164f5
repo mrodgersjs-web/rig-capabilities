@@ -1,0 +1,110 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/harnesses/hD-05-launch-prep.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hD-05-launch-prep
+great_example: examples/great/revenue-gtm/hD-05-launch-prep.md
+quality_floor: 0.6
+---
+
+harness_id: hD-05-launch-prep
+harness_name: Launch Prep Goal Harness
+session_type: gtm-launch-prep
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_launch(checklist, assets, channels, instrumentation, rollback, approvals, verdict)
+primary_diamonds: [D1, D3]
+bms_bias: "A1 for readiness checks and asset hashing; A2 for risk review; A3 permitted for messaging variants; A4 never — go-live is Gate-D"
+identity_lock:
+  startup_phrase: "Launch prep session. A launch is a promise kept in public. Readiness is proven per item, never declared in aggregate."
+  gates:
+    - id: "0.1"
+      requirement: "Launch named and tiered: launch-tiering rubric applied (Tier 1/2/3) with rationale"
+      proof: "artifacts/launch/<run>/tier.md contains tier enum and >= 2 rationale bullets citing reach and risk"
+    - id: "0.2"
+      requirement: "Launch owner and channel owners assigned by name; no unowned checklist section permitted"
+      proof: "artifacts/launch/<run>/owners.yaml — every checklist section key maps to a non-empty owner"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A3)"
+      proof: "coordinate block in ~/.hermes/jake/launch/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_launch declared with all 7 components"
+      proof: "session log contains 'H_launch(' line"
+capability_gates:
+  - category: "Readiness Inventory"
+    gates:
+      - id: "1.1"
+        requirement: "Launch checklist generated from the tier template with every item carrying status and evidence link"
+        proof: "artifacts/launch/<run>/checklist.yaml — jq '[.items[] | select(.status == \"unverified\")] | length' drives the readiness score; zero items missing evidence field"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Asset inventory complete: landing page, emails, social, sales enablement, docs — each with sha256 and final-approval flag"
+        proof: "artifacts/launch/<run>/assets.json — every asset has sha256 and approved: true; shasum -a 256 -c assets.sha256 exit 0"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Messaging consistency pass: same positioning statement and CTA across all public surfaces"
+        proof: "python3 scripts/consistency_check.py artifacts/launch/<run>/assets.json exit 0; report shows positioning_match: true"
+        failure_tier: degrade
+      - id: "1.4"
+        requirement: "Support readiness: FAQ draft + internal macro doc exist for launch-day questions"
+        proof: "artifacts/launch/<run>/support/faq.md and macros.md both non-empty (wc -l > 20 each)"
+        failure_tier: degrade
+  - category: "Systems Verification"
+    gates:
+      - id: "2.1"
+        requirement: "Analytics instrumentation verified live: events fire on staging for signup, conversion, and share actions"
+        proof: "artifacts/launch/<run>/analytics_proof.json — per-event {event, fired_on_staging: true, captured_at}; jq 'length >= 3' true"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Staging end-to-end run completed: full user path exercised (landing -> signup -> first value) with screenshots or trace ids"
+        proof: "artifacts/launch/<run>/e2e/ contains per-step evidence files; scripts/e2e_launch.sh exit 0"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Rollback / kill switch tested on staging: reverting the launch flag restores prior state"
+        proof: "artifacts/launch/<run>/rollback_test.log shows flag revert executed and state verification passed"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "CRM and email plumbing verified: launch segment query returns expected count; sequence enroll path tested with a test address"
+        proof: "segment_count in plumbing.json > 0; test enroll receipt logged with message_id"
+        failure_tier: halt
+  - category: "Risk & Approval"
+    gates:
+      - id: "3.1"
+        requirement: "Risk register reviewed: top 5 launch risks each with mitigation and owner (risk-playbooks format)"
+        proof: "artifacts/launch/<run>/risks.yaml — exactly >= 5 risks each with mitigation and owner fields"
+        failure_tier: degrade
+      - id: "3.2"
+        requirement: "Compliance/brand review pass for regulated claims: no unapproved superlatives or unverifiable stats in public copy"
+        proof: "artifacts/launch/<run>/compliance_review.md with per-asset verdict and reviewer identity"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Go/No-Go verdict computed: readiness score = verified items / total items, threshold per tier (T1: 1.0, T2: 0.95, T3: 0.9)"
+        proof: "artifacts/launch/<run>/verdict.json with score, threshold, verdict enum; score computed by scripts/launch_verdict.py"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Gate-D arming for go-live: typed APPROVE <run_id> recorded before any publish/deploy/send action"
+        proof: "artifacts/launch/<run>/gate_d.log APPROVE line present; absent it session ends as 'ready-unarmed' which is a complete outcome"
+        failure_tier: stop
+definition_of_done:
+  - "Checklist readiness score computed and meets the tier threshold (or shortfall items named with owners)"
+  - "Assets hashed and approved; staging e2e, analytics, rollback, and plumbing all evidenced"
+  - "Verdict artifact present: go | no-go | ready-unarmed, each with reasoning"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict, next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "2.1", "2.2", "2.3", "2.4", "3.2", "3.3"]
+  degrade_gates: ["1.3", "1.4", "3.1"]
+  stop_gates: ["3.4"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a launch-day incident maps back to a missing gate within 24h"
+final_rule:
+  - "Readiness is a computed score over evidenced items, never a feeling in a meeting."
+  - "No publish, deploy, or send without typed Gate-D approval for this exact launch run."
+  - "An unarmed ready launch is a success state; an armed unready one is a failure state."
+  - "Every launch prep session leaves the system stronger than it found it."
+governs_loops: [GL-OD-launch, launch-plays, launch-tiering, risk-playbooks]

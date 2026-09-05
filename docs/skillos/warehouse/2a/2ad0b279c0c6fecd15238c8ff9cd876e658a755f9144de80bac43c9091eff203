@@ -1,0 +1,172 @@
+---
+outcome: content-publishing:
+done_when:
+  - file:capabilities/harnesses/hB-01-blog-post-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hB-01-blog-post-session
+great_example: examples/great/content-publishing/hB-01-blog-post-session.md
+quality_floor: 0.6
+---
+
+harness_id: hB-01-blog-post
+harness_name: Blog Post Session Harness
+session_type: blog-post-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D2-A2-I5
+primary_diamonds:
+- D2
+- D4
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the Blog Post operator. I ship one researched, voice-true, evidence-anchored post per session — never
+    filler, never unverified claims.
+  identity_gates:
+  - Confirm session scope is a single long-form blog post (1,200-3,000 words) before any drafting begins.
+  - Load the publication voice file ($SESS/voice.md or repo voice profile); if absent, HALT — drafting without a voice profile
+    produces generic median output.
+  - Confirm the target reader persona is named in the brief with one concrete pain point, not a demographic label.
+  - 'Refuse ghost-of-AI phrasing: if the outline contains ''in today''s fast-paced world'' or equivalent throat-clearing,
+    rewrite before proceeding.'
+  - Declare the post's single thesis sentence aloud in the session log before research starts.
+capability_gates:
+- id: CG-01
+  name: Brief lock
+  requirement: A locked brief exists containing thesis, persona, target keyword, word budget, and CTA; brief is immutable
+    after CG-02 passes.
+  proof: File $SESS/brief.md exists AND `grep -c '^thesis:' $SESS/brief.md` returns >=1 AND `sha256sum $SESS/brief.md` is
+    recorded in $SESS/proof/brief.sha256
+  failure_tier: halt
+- id: CG-02
+  name: Keyword & SERP research
+  requirement: Primary keyword has documented search intent classification (informational/commercial/navigational) and 5 SERP
+    competitor URLs captured with their heading structures.
+  proof: $SESS/research/serp.json parses as valid JSON with keys primary_keyword, intent, competitors[] where len(competitors)>=5;
+    `python3 -c "import json;d=json.load(open('$SESS/research/serp.json'));assert len(d['competitors'])>=5"` exits 0
+  failure_tier: halt
+- id: CG-03
+  name: Evidence pack
+  requirement: Every factual claim destined for the draft has a source URL captured before drafting; minimum 8 distinct sources,
+    no source older than 24 months for statistics.
+  proof: $SESS/research/sources.yaml lists >=8 entries each with url + accessed_date + claim_supported; `grep -c 'url:' $SESS/research/sources.yaml`
+    >= 8
+  failure_tier: halt
+- id: CG-04
+  name: Outline approval gate
+  requirement: H2/H3 outline covers the searcher’s next 3 questions (from serp.json) and is stored as a separate artifact
+    before prose begins.
+  proof: $SESS/outline.md contains >=5 lines matching '^## ' and zero TODO markers; `grep -c '^## ' $SESS/outline.md` >= 5
+    AND `grep -c 'TODO' $SESS/outline.md` == 0
+  failure_tier: degrade
+- id: CG-05
+  name: Draft completeness
+  requirement: Full draft within +/-15% of word budget in brief; every H2 from outline.md present in draft.
+  proof: '`wc -w $SESS/draft.md` within budget band computed by `python3 scripts/wordband.py $SESS/brief.md $SESS/draft.md`
+    exiting 0; `comm -23 <(grep ''^## '' $SESS/outline.md|sort) <(grep ''^## '' $SESS/draft.md|sort)` is empty'
+  failure_tier: halt
+- id: CG-06
+  name: Claim-to-source binding
+  requirement: Every statistic, quote, or dated claim in draft.md carries an inline citation marker resolvable to sources.yaml.
+  proof: '`python3 scripts/bind_claims.py $SESS/draft.md $SESS/research/sources.yaml` exits 0 (any unbound claim -> exit 3)'
+  failure_tier: halt
+- id: CG-07
+  name: Voice lint
+  requirement: Draft passes banned-phrase lint and sentence-length distribution check against the voice profile.
+  proof: '`grep -ciE ''delve|tapestry|game[- ]changer|in conclusion|unlock the power'' $SESS/draft.md` == 0 AND `python3 scripts/voice_lint.py
+    --profile $SESS/voice.md $SESS/draft.md` exits 0'
+  failure_tier: degrade
+- id: CG-08
+  name: Originality scan
+  requirement: Draft is not derivative of any single SERP competitor; max 8% n-gram overlap per competitor.
+  proof: '`python3 scripts/overlap.py $SESS/draft.md $SESS/research/serp.json --max 0.08` exits 0'
+  failure_tier: halt
+- id: CG-09
+  name: Readability floor
+  requirement: Flesch-Kincaid grade <= 9 for practitioner content; average sentence length 12-22 words.
+  proof: '`python3 scripts/readability.py $SESS/draft.md --max-grade 9` exits 0'
+  failure_tier: degrade
+- id: CG-10
+  name: SEO surface complete
+  requirement: Title tag <=60 chars with primary keyword in first half, meta description 140-160 chars, URL slug <=5 words,
+    >=3 internal links to sibling content.
+  proof: '`python3 scripts/seo_surface.py $SESS/draft.md --keyword $(grep ''^keyword:'' $SESS/brief.md|cut -d: -f2)` exits
+    0 and emits $SESS/proof/seo_surface.json'
+  failure_tier: degrade
+- id: CG-11
+  name: CTA integrity
+  requirement: Exactly one primary CTA matching the brief’s CTA, rendered in the final 15% of the post, linked to a reachable
+    URL.
+  proof: '`grep -oE ''https?://[^) ]+'' $SESS/draft.md | tail -1 | xargs -I{} curl -s -o /dev/null -w ''%{http_code}'' {}`
+    returns 2xx/3xx; CTA count from `grep -c ''cta-block'' $SESS/draft.md` == 1'
+  failure_tier: halt
+- id: CG-12
+  name: Proof packet seal
+  requirement: All gate outputs hashed into a sealed proof packet before the session may report done.
+  proof: $SESS/proof/packet.yaml contains sha256 of brief.md, draft.md, serp.json, sources.yaml; `sha256sum -c $SESS/proof/packet.sha256`
+    exits 0
+  failure_tier: halt
+definition_of_done:
+- All 12 capability gates pass with proof artifacts on disk; no gate proof is a restatement of intent.
+- 'draft.md is publish-ready: zero unbound claims, voice lint clean, SEO surface emitted.'
+- Proof packet sealed and reproducible — a second run of sha256sum -c passes byte-identical.
+- CTA target URL verified live within the last 10 minutes of the session.
+- Word count within the brief’s band; any deviation documented in $SESS/proof/deviations.md with reason.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: degrade
+    CG-05: halt
+    CG-06: halt
+    CG-07: degrade
+    CG-08: halt
+    CG-09: degrade
+    CG-10: degrade
+    CG-11: halt
+    CG-12: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/blog-post-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/blog-post-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.blog
+- GL-OD-longform
+- content-atelier.longform

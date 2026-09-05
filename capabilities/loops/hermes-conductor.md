@@ -3,7 +3,7 @@ outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/hermes-conductor.md
   - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/hermes-conductor.md
-great_example: examples/great/agent-engineering/hermes-conductor.md.md
+great_example: examples/great/agent-engineering/hermes-conductor.md
 quality_floor: 0.6
 ---
 

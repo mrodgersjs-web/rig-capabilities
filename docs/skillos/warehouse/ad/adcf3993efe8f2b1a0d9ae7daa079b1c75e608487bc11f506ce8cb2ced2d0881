@@ -1,0 +1,110 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/harnesses/hD-04-pricing-test.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hD-04-pricing-test
+great_example: examples/great/revenue-gtm/hD-04-pricing-test.md
+quality_floor: 0.6
+---
+
+harness_id: hD-04-pricing-test
+harness_name: Pricing Test Goal Harness
+session_type: gtm-pricing-experiment
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_pricing(hypothesis, baseline, guardrails, variants, sizing, approval, measurement, decision)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for metrics capture and gating; A2 for analysis; A3 only for variant ideation; A4 never — price changes are Gate-D"
+identity_lock:
+  startup_phrase: "Pricing test session. Price is a promise; tests are contracts. Baseline before variant, guardrails before launch, decision log before memory fades."
+  gates:
+    - id: "0.1"
+      requirement: "Test objective declared: which pricing lever (amount, packaging, fence, billing period) and which decision it informs"
+      proof: "artifacts/pricing/<run>/objective.md with lever and decision fields non-empty"
+    - id: "0.2"
+      requirement: "pricing-governance and elasticity doctrine loaded"
+      proof: "grep -q 'guardrail' ~/.claude/skills/pricing-governance/SKILL.md && echo LOADED in session log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A2)"
+      proof: "coordinate block in ~/.hermes/jake/pricing/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_pricing declared with all 8 components"
+      proof: "session log contains 'H_pricing(' line"
+capability_gates:
+  - category: "Experiment Design"
+    gates:
+      - id: "1.1"
+        requirement: "Falsifiable hypothesis written: expected direction, minimum detectable effect, and what result kills the variant"
+        proof: "artifacts/pricing/<run>/hypothesis.md contains direction, mde (numeric), and kill_criteria (>= 2 measurable conditions)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Baseline metrics captured from source systems before any variant exists: conversion rate, ARPA, refund rate, sales cycle for the affected segment"
+        proof: "artifacts/pricing/<run>/baseline.json with metric values, source query ids, and captured_at; jq 'keys | length >= 3' true"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Guardrail metrics declared with tripwires: churn, support tickets, downgrade rate, brand-sentiment proxy"
+        proof: "artifacts/pricing/<run>/guardrails.yaml — each guardrail has metric, threshold, and alert_channel"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Sample size / duration math shown: exposure count and test length derived from baseline rate and MDE"
+        proof: "artifacts/pricing/<run>/sizing.md contains the formula inputs and computed n and days; numbers trace to baseline.json values"
+        failure_tier: halt
+  - category: "Variant & Rollout Control"
+    gates:
+      - id: "2.1"
+        requirement: "Variant configuration expressed as hashed config: price points, packaging contents, eligible segment query, traffic split"
+        proof: "artifacts/pricing/<run>/variants.yaml validates via scripts/validate_variants.py exit 0; sha256 recorded in proofpacket"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Rollback plan written: exact steps to restore control pricing, including cache/feature-flag reverts"
+        proof: "artifacts/pricing/<run>/rollback.md with executable steps referencing variant config hash"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Gate-D approval before any customer-visible price change: typed APPROVE <run_id> recorded"
+        proof: "artifacts/pricing/<run>/gate_d.log contains APPROVE line; absent it, variants.yaml stays arm: false and session ends design-only"
+        failure_tier: stop
+      - id: "2.4"
+        requirement: "Segment isolation verified: test eligibility query excludes existing-contract accounts unless explicitly intended"
+        proof: "artifacts/pricing/<run>/eligibility_report.json shows excluded_count and the exclusion rule strings"
+        failure_tier: halt
+  - category: "Measurement & Decision"
+    gates:
+      - id: "3.1"
+        requirement: "Measurement plan executed against the same metric definitions as baseline (no mid-test metric redefinition)"
+        proof: "artifacts/pricing/<run>/measurement.json uses identical source query ids as baseline.json; diff of definitions is empty"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Guardrail review: every tripwire checked at analysis time; any tripped guardrail forces variant stop recommendation regardless of primary result"
+        proof: "artifacts/pricing/<run>/guardrail_review.json with per-guardrail status; if any 'tripped', decision.md must contain stop recommendation"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Decision recorded: scale | kill | iterate, with reasoning tied to hypothesis and guardrails"
+        proof: "artifacts/pricing/<run>/decision.md with decision enum and >= 3 reasoning bullets citing measurement numbers"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Learning logged to pricing council: result feeds the pricing decision log for future tests"
+        proof: "append to ~/.hermes/jake/pricing/council_log.md with run_id, hypothesis hash, decision, and one lesson"
+        failure_tier: degrade
+definition_of_done:
+  - "Hypothesis, baseline, guardrails, sizing, variants, rollback all present and hashed in proofpacket.json"
+  - "Any customer-visible change shows Gate-D approval for this run_id"
+  - "Decision recorded with guardrail review attached; design-only is a valid complete outcome when approval is absent"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (designed | approved-live | analyzed), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "1.4", "2.1", "2.2", "2.4", "3.1", "3.2", "3.3"]
+  degrade_gates: ["3.4"]
+  stop_gates: ["2.3"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a tripped guardrail in production triggers immediate harness review of threshold defaults"
+final_rule:
+  - "No variant ships without baseline, guardrails, sizing math, and a rollback plan."
+  - "No customer-visible price change without typed Gate-D approval for this exact run."
+  - "A tripped guardrail overrides a winning primary metric. Always."
+  - "Every pricing test session leaves the system stronger than it found it."
+governs_loops: [GL-OD-pricing, pricing-governance, elasticity-lab, experiment-design-kit]

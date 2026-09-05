@@ -1,0 +1,146 @@
+---
+outcome: content-publishing:
+done_when:
+  - file:capabilities/harnesses/hB-07-video-script-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hB-07-video-script-session
+great_example: examples/great/content-publishing/hB-07-video-script-session.md
+quality_floor: 0.6
+---
+
+harness_id: hB-07-video-script
+harness_name: Video Script Session Harness
+session_type: video-script-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D3-A2-I5
+primary_diamonds:
+- D3
+- D5
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the Video Script operator. The first 30 seconds buy the next two minutes; every scene must answer 'why
+    keep watching'.
+  identity_gates:
+  - Confirm format (talking head / tutorial / essay / demo) and target runtime before writing.
+  - 'Confirm the retention beat map exists: hook, 3-5 beats, payoff — no scripting without structure.'
+  - Refuse scripts that open with channel meta ('welcome back') — cold open only.
+  - Confirm spoken-word rate assumption (typically 140-160 wpm) used for runtime math.
+capability_gates:
+- id: CG-01
+  name: Format & runtime lock
+  requirement: format.yaml declares format, target runtime (seconds), and wpm assumption.
+  proof: $SESS/format.yaml parses with keys format, runtime_s, wpm; `python3 -c "import yaml;f=yaml.safe_load(open('$SESS/format.yaml'));assert
+    100<=f['wpm']<=200"` exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Cold-open hook
+  requirement: First 60 spoken words state the payoff or open a loop; zero channel-meta tokens.
+  proof: '`python3 scripts/cold_open.py $SESS/script.md` exits 0; `grep -ciE ''welcome back|if you.re new|smash that'' $SESS/script.md`
+    == 0'
+  failure_tier: halt
+- id: CG-03
+  name: Beat map coverage
+  requirement: Script sections map 1:1 to the beat map; each beat has a stated viewer question it answers.
+  proof: '`python3 scripts/beat_map.py $SESS/beats.yaml $SESS/script.md` exits 0 (bijection check)'
+  failure_tier: halt
+- id: CG-04
+  name: Runtime math
+  requirement: Total spoken word count / wpm lands within +/-10% of target runtime.
+  proof: '`python3 scripts/runtime_math.py $SESS/script.md $SESS/format.yaml --tol 0.10` exits 0 and writes $SESS/proof/runtime.json'
+  failure_tier: halt
+- id: CG-05
+  name: Rehook cadence
+  requirement: A rehook (pattern interrupt, open loop, or visual change note) every 60-90 seconds of estimated runtime.
+  proof: '`python3 scripts/rehook_cadence.py $SESS/script.md --min-gap 60 --max-gap 90` exits 0'
+  failure_tier: degrade
+- id: CG-06
+  name: B-roll/visual annotation
+  requirement: Every spoken claim that references a thing has a [VISUAL:] annotation; demo steps have exact on-screen action
+    notes.
+  proof: '`grep -c ''\[VISUAL:'' $SESS/script.md` >= beats count; `python3 scripts/visual_cover.py $SESS/script.md $SESS/beats.yaml`
+    exits 0'
+  failure_tier: degrade
+- id: CG-07
+  name: Speakability pass
+  requirement: No sentence >25 words in spoken lines; tongue-twister and abbreviation lint clean.
+  proof: '`python3 scripts/speakability.py $SESS/script.md --max-words 25` exits 0'
+  failure_tier: degrade
+- id: CG-08
+  name: Claim sourcing
+  requirement: Every statistic or dated claim in the script has a source in research.yaml.
+  proof: '`python3 scripts/bind_claims.py $SESS/script.md $SESS/research.yaml` exits 0'
+  failure_tier: halt
+- id: CG-09
+  name: CTA placement
+  requirement: Single CTA spoken in the final 10% and echoed in description template; no mid-roll CTA before 50% runtime.
+  proof: '`python3 scripts/cta_place.py $SESS/script.md $SESS/format.yaml` exits 0'
+  failure_tier: degrade
+- id: CG-10
+  name: Proof packet seal
+  requirement: Script, beats, runtime proof, and research hashed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Cold open validated; zero channel-meta openers.
+- Beat map bijection and runtime math within tolerance, proven by scripts.
+- Rehook cadence and visual annotations verified.
+- All claims bound to sources; single CTA correctly placed.
+- Proof packet sealed with runtime.json included.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: halt
+    CG-05: degrade
+    CG-06: degrade
+    CG-07: degrade
+    CG-08: halt
+    CG-09: degrade
+    CG-10: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/video-script-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/video-script-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.video
+- GL-OD-video
+- scriptwriting.longform

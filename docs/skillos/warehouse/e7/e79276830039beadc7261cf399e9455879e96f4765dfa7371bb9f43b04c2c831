@@ -1,0 +1,134 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-04-design-critique.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-04-design-critique
+great_example: examples/great/design-ux/hC-04-design-critique.md
+quality_floor: 0.6
+---
+
+harness_id: hC-04-design-critique-session
+harness_name: Design Critique Goal Harness
+session_type: design-critique-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  diamonds:
+  - D2
+  - D3
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_design_critique_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+- D3
+bms_bias: A2-A3 preferred for divergent lenses; A1 for rubric scoring; A4 only with approval
+identity_lock:
+  startup_phrase: 'Design critique mode: attack the work, arm the maker, every verdict is actionable.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D2-A3'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_design_critique(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Setup & Framing
+  gates:
+  - id: '1.1'
+    requirement: 'Artifact under review frozen: immutable copy hashed before critique begins'
+    proof: '`sha256sum` of artifact recorded in artifacts/critique/<slug>/FREEZE.txt; critique references the frozen
+      hash'
+    failure_tier: halt
+  - id: '1.2'
+    requirement: Critique rubric selected and stated (heuristic, brand, conversion, or custom) with weighting
+    proof: artifacts/critique/<slug>/rubric.yaml with dimensions and weights summing to 100
+    failure_tier: halt
+  - id: '1.3'
+    requirement: Minimum two distinct reviewer lenses applied (e.g., first-time user + domain expert, or brand guardian
+      + accessibility)
+    proof: lens assignments recorded in rubric.yaml; each lens produces its own findings section
+    failure_tier: degrade
+- category: Evaluation
+  gates:
+  - id: '2.1'
+    requirement: Heuristic evaluation completed against Nielsen's 10 with pass/concern/fail per heuristic
+    proof: heuristics table in artifacts/critique/<slug>/findings.md; every concern/fail cites a screen or flow
+      step
+    failure_tier: halt
+  - id: '2.2'
+    requirement: Every issue carries a severity rating (blocker/major/minor/nit) with a stated impact rationale
+    proof: severity column populated for 100% of findings; rationale present for every blocker/major
+    failure_tier: halt
+  - id: '2.3'
+    requirement: Visual issues evidenced by annotated screenshots, not prose alone
+    proof: artifacts/critique/<slug>/shots/ contains one annotated capture per visual finding; filename referenced
+      in findings.md
+    failure_tier: degrade
+  - id: '2.4'
+    requirement: 'Feedback phrasing audit: zero vague directives (''make it pop'', ''feels off''); every item is
+      observable and actionable'
+    proof: '`grep -inE ''make it pop|feels off|more modern|cleaner'' artifacts/critique/<slug>/findings.md` returns
+      empty'
+    failure_tier: degrade
+- category: Decisions & Follow-through
+  gates:
+  - id: '3.1'
+    requirement: 'Decision log: every finding dispositioned accept / revise / defer with owner'
+    proof: decision table in findings.md; 100% of findings have a disposition and named owner
+    failure_tier: halt
+  - id: '3.2'
+    requirement: Revised artifact produced at a bumped version with changes mapped to findings
+    proof: v(N+1) artifact + artifacts/critique/<slug>/changelog.md mapping each change to finding IDs
+    failure_tier: halt
+  - id: '3.3'
+    requirement: Re-critique gate scheduled for blocker/major fixes with a verification date or trigger
+    proof: follow-up entry in changelog.md with re-check trigger per blocker/major finding
+    failure_tier: degrade
+definition_of_done:
+- All 10 capability gates passed with artifacts under artifacts/critique/<slug>/
+- 'Primary objective achieved: dispositioned decision log and revised artifact at bumped version'
+- Zero vague feedback survived the phrasing audit
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '3.1'
+  - '3.2'
+  degrade_gates:
+  - '1.3'
+  - '2.3'
+  - '2.4'
+  - '3.3'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every design-critique-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-VQ
+- GL-RI

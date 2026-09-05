@@ -1,0 +1,111 @@
+---
+outcome: code-engineering:
+done_when:
+  - file:capabilities/harnesses/hA-08-code-pr-prep.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hA-08-code-pr-prep
+great_example: examples/great/code-engineering/hA-08-code-pr-prep.md
+quality_floor: 0.6
+---
+
+harness_id: hA-08-code-pr-prep
+harness_name: PR Preparation Session Goal Harness
+session_type: code-pr-prep-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_prprep(branch_hygiene, self_review, description_pack, ci_green, improvement)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for self-review and CI; A2 for description writing; A3 for summary prose; A4 only for the push itself with explicit human instruction"
+identity_lock:
+  startup_phrase: "I review my own diff before anyone else has to."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the PR pinned to branch name + base branch + linked issue/ticket ID"
+      proof: "Session log contains branch, base, and issue reference; git branch --show-current matches"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: self-review before push, description from the diff not from memory, CI green or explained, reviewer-ready"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first self-review command"
+      proof: "Session log line 'COORD: L2-L4 x D1-D2 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_prprep(branch_hygiene, self_review, description_pack, ci_green, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Branch Hygiene"
+    gates:
+      - id: "1.1"
+        requirement: "Branch is current: rebased/merged onto latest base (git fetch && git log base..HEAD sanity) with conflicts resolved, and the branch contains only commits belonging to this change"
+        proof: "git merge-base HEAD origin/<base> equals origin/<base> tip, or divergence is explained; git log --oneline origin/<base>..HEAD attached to .rig/pr/commits.txt"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "No stray artifacts in the diff: no debug prints, commented-out code, .env files, editor droppings, or unintended files; git status clean except intended changes"
+        proof: "grep -rnE '(console\\.log|print\\(|TODO: temp|FIXME: temp)' over changed files empty or justified; git status --porcelain attached"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Commit hygiene: commit messages follow repo convention (conventional commits or existing style), each commit is self-contained, and WIP/fixup commits are squashed"
+        proof: "git log output in .rig/pr/commits.txt shows no WIP/fixup! subjects; convention exemplar from recent main history cited"
+        failure_tier: degrade
+  - category: "Self-Review"
+    gates:
+      - id: "2.1"
+        requirement: "Full-diff self-review executed: git diff origin/<base>...HEAD read end-to-end and a per-hunk verdict recorded (ok / fixed-this-session / flagged-for-reviewer)"
+        proof: ".rig/pr/self-review.md exists; every changed file from --stat appears with at least one verdict line"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Tests and verification evidence attached: suite, typecheck, lint run on the exact HEAD to be pushed (not an older tree)"
+        proof: "Three exit codes + HEAD SHA in .rig/pr/verify.txt; SHA matches git rev-parse HEAD at push time"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Risk surface named: the 1-3 riskiest hunks (schema change, auth path, concurrency, deletion) are explicitly flagged for reviewers with file:line and why"
+        proof: "self-review.md 'Risk Flags' section; empty requires a one-line 'low-risk diff because <reason>'"
+        failure_tier: degrade
+  - category: "Description Pack"
+    gates:
+      - id: "3.1"
+        requirement: "PR description written from the diff: summary (what+why), change list mapped to files, test plan with the actual commands run, and issue linkage (Closes #N)"
+        proof: ".rig/pr/DESCRIPTION.md contains all four sections; every command in test plan appears in verify.txt"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Visual proof for UI changes: before/after screenshots or a short capture attached for any diff touching rendered components/styles"
+        proof: "Screenshot paths in .rig/pr/visuals/ referenced from DESCRIPTION.md, or a 'no UI surface' line justified by the diff file list"
+        failure_tier: degrade
+      - id: "3.3"
+        requirement: "Migration/rollout notes when applicable: DB migrations, env var changes, and config changes each get a rollout + rollback line"
+        proof: "DESCRIPTION.md 'Rollout' section present when the diff touches migrations/, .env.example, or config; otherwise explicitly 'N/A — no ops surface'"
+        failure_tier: halt
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "CI green or explained: after push (or dry-run), CI status checked (gh pr checks / gh run list) and any red job has a root-cause note, not a shrug"
+        proof: "gh pr checks output in .rig/pr/ci.txt; red jobs each have a cause line in the session tail"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Improvement entry written: one thing that would have caught an issue earlier (hook, template, check) or one harness gap"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-08-code-pr-prep"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "DESCRIPTION.md complete with real test-plan commands and issue linkage"
+  - "verify.txt SHA matches pushed HEAD"
+  - "CI status captured; reds explained or none"
+  - "One improvement entry appended"
+  - "Identity closure: coordinate, PR-readiness verdict, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "2.1", "2.2", "3.1", "3.3", "4.1", "4.2"]
+  degrade_gates: ["1.3", "2.3", "3.2"]
+  stop_gates: []
+  notes: "the push itself is an outward action — execute only on explicit human instruction; everything up to push is in-scope"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times → promote to a pre-push hook or PR template field"
+final_rule:
+  - "The diff is re-read before it is shown."
+  - "The test plan contains commands that were actually run."
+  - "Red CI gets a cause, not a shrug."
+  - "No improvement entry, no session complete."
+  - "Every code-pr-prep session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-VQ, GL-PA]

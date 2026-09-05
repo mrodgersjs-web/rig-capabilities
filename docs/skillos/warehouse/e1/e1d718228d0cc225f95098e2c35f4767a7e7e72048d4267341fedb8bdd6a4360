@@ -1,0 +1,119 @@
+---
+outcome: security-review:
+done_when:
+  - file:capabilities/harnesses/hA-06-code-perf-audit.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hA-06-code-perf-audit
+great_example: examples/great/security-review/hA-06-code-perf-audit.md
+quality_floor: 0.6
+---
+
+harness_id: hA-06-code-perf-audit
+harness_name: Code Performance Audit Session Goal Harness
+session_type: code-perf-audit-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_perfaudit(baseline_numbers, profile_evidence, bottleneck_rank, fix_delta, improvement)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for measurement; A2 for optimization edits; A3 for report prose only; A4 forbidden"
+identity_lock:
+  startup_phrase: "I measure before I optimize, and I re-measure before I claim."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the audit target pinned to exact endpoints/functions/pages plus the metric(s) under audit (latency p95, throughput, bundle KB, query ms)"
+      proof: "Session log names target list + metric list with units"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: baseline first, profile-not-guess, one optimization per measured delta, no regression elsewhere"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first benchmark"
+      proof: "Session log line 'COORD: L2-L4 x D1-D2 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_perfaudit(baseline_numbers, profile_evidence, bottleneck_rank, fix_delta, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Baseline"
+    gates:
+      - id: "1.1"
+        requirement: "Reproducible benchmark harness exists or is built: k6/hey/autocannon for HTTP, hyperfine for CLI, BenchmarkDotNet/pytest-benchmark for functions — with fixed seed data and warmup runs"
+        proof: "Benchmark script path in .rig/perf/bench/ plus a 2-run consistency check (two baseline runs within 5% of each other)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Baseline numbers recorded with environment: p50/p95/p99 or mean+stddev, hardware (uname -m, nproc), load level, and dataset size all logged"
+        proof: ".rig/perf/baseline.json with numbers, env block, and tool command; JSON parses (jq . exit 0)"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Performance budget stated: the target number the audit is chasing (from SLA, Core Web Vitals threshold, or ticket) written before any optimization"
+        proof: "Session log contains 'BUDGET: <metric> <target> <unit>'"
+        failure_tier: halt
+  - category: "Profile Evidence"
+    gates:
+      - id: "2.1"
+        requirement: "Profile captured for the top target: CPU/flamegraph (py-spy, clinic flame, perf, pprof), or query plan (EXPLAIN ANALYZE), or bundle trace (source-map-explorer / next build analyzer) — attached as an artifact"
+        proof: "Profile artifact path in .rig/perf/profiles/ (svg/pb.gz/json/sql) and it is non-empty (>1KB)"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Bottleneck ranking derived from the profile, not intuition: top-N list cites self-time %, bytes, or rows-scanned from the captured artifact"
+        proof: ".rig/perf/bottlenecks.md ranks ≥3 candidates each with a number quoted from the profile artifact"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Allocation/query-count check: N+1 detection (Django-debug-toolbar, pg_stat_statements, or request-level query counter) and allocation hotspots (heap snapshot / tracemalloc) reviewed for the top target"
+        proof: "Query count before/after or heap summary in .rig/perf/allocations.txt"
+        failure_tier: degrade
+  - category: "Optimization & Delta"
+    gates:
+      - id: "3.1"
+        requirement: "One change per measured step: each optimization is applied and benchmarked individually; combined deltas are never claimed"
+        proof: ".rig/perf/deltas.md with one row per change: change | command | before | after | delta%"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "No correctness regression: full test suite green after each optimization; any semantic change (cache TTL, ordering, precision) flagged in deltas.md"
+        proof: "Exit codes appended per optimization row in deltas.md"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Improvement is real: final numbers beat baseline by a stated margin under the same harness, same env, same dataset — and the claim is the ratio, not an adjective"
+        proof: ".rig/perf/final.json + a one-line ratio claim ('p95 812ms -> 341ms = 2.38x') in the session tail"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "No new worst-regressions: the metrics NOT being optimized (memory, cold start, other endpoints) re-measured and within 10% of baseline or justified"
+        proof: ".rig/perf/guardrail-check.txt with the guardrail metric before/after"
+        failure_tier: degrade
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "Report written: baseline, budget, bottlenecks, deltas, final numbers, and remaining-headroom list filed at .rig/perf/REPORT.md"
+        proof: "File exists with all six sections and parses as markdown"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Benchmark harness left runnable: the bench script is committed or documented so the next session can re-run it in one command"
+        proof: "One-command invocation line in REPORT.md executes successfully (fresh shell, exit 0)"
+        failure_tier: degrade
+      - id: "4.3"
+        requirement: "Improvement entry written: one pattern (common bottleneck shape, measurement gotcha, or tool tip)"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-06-code-perf-audit"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "REPORT.md contains baseline vs final ratio claims with the harness + env recorded"
+  - "Profile artifacts on disk and cited by the bottleneck ranking"
+  - "Guardrail metrics re-measured, no silent regressions"
+  - "One improvement entry appended"
+  - "Identity closure: coordinate, headline delta, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "2.1", "2.2", "3.1", "3.2", "3.3", "4.1", "4.3"]
+  degrade_gates: ["2.3", "3.4", "4.2"]
+  stop_gates: []
+  notes: "no profile artifact = no optimization; an unmeasurable claim is a failed audit, not a smaller one"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same bottleneck class appears 3+ times → promote a lint rule, budget check, or architecture note"
+final_rule:
+  - "Measure first; profiles over opinions."
+  - "One change, one number, per step."
+  - "The claim is the ratio, not the adjective."
+  - "No improvement entry, no session complete."
+  - "Every code-perf-audit session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-VQ, GL-GR]

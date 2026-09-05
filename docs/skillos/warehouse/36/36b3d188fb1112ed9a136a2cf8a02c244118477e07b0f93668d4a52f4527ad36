@@ -1,0 +1,153 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-09-onboarding-flow.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-09-onboarding-flow
+great_example: examples/great/design-ux/hC-09-onboarding-flow.md
+quality_floor: 0.6
+---
+
+harness_id: hC-09-onboarding-flow-session
+harness_name: Onboarding Flow Design Goal Harness
+session_type: onboarding-flow-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  diamonds:
+  - D2
+  - D3
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_onboarding_flow_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+- D3
+bms_bias: A1-A2 preferred; A3 permitted for narrative/flow exploration; A4 only with approval
+identity_lock:
+  startup_phrase: 'Onboarding mode: time-to-first-value is the only metric that matters until it moves.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D2-A2'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_onboarding_flow(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Activation Definition
+  gates:
+  - id: '1.1'
+    requirement: 'Activation metric defined precisely: the observable event that means a new user got value'
+    proof: 'artifacts/onboarding/<slug>/activation.yaml: event name, firing condition, target rate, measurement
+      source'
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Time-to-first-value mapped: every step between signup and activation event with estimated seconds
+      per step'
+    proof: TTFV timeline table in activation.yaml; total time stated; longest step named as optimization target
+    failure_tier: halt
+  - id: '1.3'
+    requirement: 'Step budget enforced: step count <= declared budget; every step justified as value-delivering
+      or legally required'
+    proof: step list with per-step justification; steps failing justification removed or dispositioned in decision
+      log
+    failure_tier: degrade
+- category: Flow Design
+  gates:
+  - id: '2.1'
+    requirement: Every step has a designed completion signal and a designed abandonment recovery (skip, defer, or
+      save-state)
+    proof: 'flow spec artifacts/onboarding/<slug>/flow.md: per-step completion event + recovery path; zero dead-end
+      steps'
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'Progress indication present and honest: user can always answer ''where am I and how much is left'''
+    proof: progress pattern specified per step (bar, count, checklist) with screenshots or annotated comps
+    failure_tier: degrade
+  - id: '2.3'
+    requirement: 'Permission and data asks justified: each ask placed at the moment of demonstrated value with a
+      decline path'
+    proof: 'permission table in flow.md: `ask, timing justification, decline consequence` per entry'
+    failure_tier: degrade
+  - id: '2.4'
+    requirement: 'Empty-state design for the post-onboarding first screen: the user never lands on a blank dashboard'
+    proof: empty-state comp + copy in artifacts/onboarding/<slug>/; next-action CTA present in the empty state
+    failure_tier: halt
+- category: Instrumentation & Experimentation
+  gates:
+  - id: '3.1'
+    requirement: 'Analytics event spec complete: every step emits named events with declared payloads (step_entered,
+      step_completed, step_abandoned)'
+    proof: 'artifacts/onboarding/<slug>/events.yaml: event name + payload schema per step; naming follows project
+      convention'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Drop-off instrumentation verified: funnel query runnable against the event spec that would surface
+      per-step abandonment'
+    proof: funnel query (SQL or analytics-tool config) stored in events.yaml appendix and validated against event
+      names
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: 'Experiment variants defined: control + at least one variant with hypothesis and guardrail metric'
+    proof: 'experiment plan section: hypothesis, primary metric, guardrail (e.g., support tickets, refund rate),
+      sample-size note'
+    failure_tier: degrade
+- category: Compliance & Freeze
+  gates:
+  - id: '4.1'
+    requirement: 'Legal/consent checkpoints placed and copy-reviewed: ToS, privacy, marketing opt-in separated and
+      untangled'
+    proof: consent screen comps + copy in flow.md; opt-ins are untoggled by default and individually presented
+    failure_tier: stop
+  - id: '4.2'
+    requirement: 'Flow frozen: full screen-by-screen capture set with hash manifest'
+    proof: 'artifacts/onboarding/<slug>/manifest.yaml: per-screen file + sha256; count matches step list'
+    failure_tier: halt
+definition_of_done:
+- All 12 capability gates passed with artifacts under artifacts/onboarding/<slug>/
+- 'Primary objective achieved: activation-anchored flow with complete instrumentation spec'
+- Consent/compliance gates clean; zero dead-end steps
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.4'
+  - '3.1'
+  - '4.2'
+  degrade_gates:
+  - '1.3'
+  - '2.2'
+  - '2.3'
+  - '3.2'
+  - '3.3'
+  stop_gates:
+  - '4.1'
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every onboarding-flow-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-GR

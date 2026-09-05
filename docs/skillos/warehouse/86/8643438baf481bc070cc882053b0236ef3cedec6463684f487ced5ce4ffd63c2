@@ -1,0 +1,106 @@
+---
+outcome: misc:
+done_when:
+  - file:capabilities/harnesses/hD-12-growth-experiment.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hD-12-growth-experiment
+great_example: examples/great/misc/hD-12-growth-experiment.md
+quality_floor: 0.6
+---
+
+harness_id: hD-12-growth-experiment
+harness_name: Growth Experiment Goal Harness
+session_type: gtm-growth-experiment
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_experiment(hypothesis, score, guardrails, tracking_spec, sizing, discipline, results, decision, log)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for tracking verification and results math; A2 for analysis; A3 for hypothesis generation; A4 never — shipping a variant is gated"
+identity_lock:
+  startup_phrase: "Growth experiment session. An experiment is a bet with a pre-registered outcome. No peeking, no moving goalposts, no silent kills."
+  gates:
+    - id: "0.1"
+      requirement: "Experiment slot declared: which growth loop or funnel stage this experiment targets"
+      proof: "artifacts/experiments/<run>/slot.md with loop_id and funnel_stage fields non-empty"
+    - id: "0.2"
+      requirement: "Experiment doctrine loaded (experiment-design-kit, ab-testing, guardrail-scorecard read this session)"
+      proof: "grep -q 'guardrail' ~/.claude/skills/experiment-design-kit/SKILL.md && echo LOADED in session log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A3)"
+      proof: "coordinate block in ~/.hermes/jake/experiments/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_experiment declared with all 9 components"
+      proof: "session log contains 'H_experiment(' line"
+capability_gates:
+  - category: "Hypothesis & Prioritization"
+    gates:
+      - id: "1.1"
+        requirement: "Hypothesis is falsifiable: 'changing X for cohort Y moves metric Z by at least M because mechanism' — all 5 slots filled"
+        proof: "artifacts/experiments/<run>/hypothesis.md — scripts/hypothesis_lint.py exit 0 (checks all 5 slots present and M numeric)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Prioritization score computed (ICE or RICE) with component values shown, and ranked against the experiment backlog"
+        proof: "artifacts/experiments/<run>/score.json with framework, components, total; backlog position recorded in backlog_snapshot.md"
+        failure_tier: degrade
+      - id: "1.3"
+        requirement: "Pre-registration: hypothesis, primary metric, guardrails, and decision rules hashed before any variant ships"
+        proof: "artifacts/experiments/<run>/prereg.json sha256 recorded in session log and proofpacket; any later change creates prereg_amendment.md with justification"
+        failure_tier: halt
+  - category: "Instrumentation & Sizing"
+    gates:
+      - id: "2.1"
+        requirement: "Tracking spec verified live: primary metric and guardrail events fire on staging with correct properties"
+        proof: "artifacts/experiments/<run>/tracking_proof.json — per event: fired_on_staging: true, properties validated against spec; jq 'all(.[]; .fired_on_staging)' true"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Sizing math shown: baseline rate, MDE, power/alpha or sequential-method parameters, required n and duration"
+        proof: "artifacts/experiments/<run>/sizing.md with formula inputs and computed n/days; inputs trace to analytics export (source query id recorded)"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Guardrail scorecard defined: guardrail metrics with tripwire thresholds and the owner who watches them"
+        proof: "artifacts/experiments/<run>/guardrails.yaml — per guardrail: metric, threshold, owner; jq 'length >= 2' true"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Variant config hashed and eligibility rules stated: split, cohort query, exclusion rules"
+        proof: "artifacts/experiments/<run>/variant.yaml validates via scripts/validate_variant.py exit 0; sha256 in proofpacket"
+        failure_tier: halt
+  - category: "Discipline & Decision"
+    gates:
+      - id: "3.1"
+        requirement: "No-peeking discipline: analysis only at predeclared checkpoints, or a sequential method with stated alpha-spending"
+        proof: "artifacts/experiments/<run>/analysis_plan.md declares checkpoint dates or sequential method; results timestamps respect the plan"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Launch gating: variant ships only with typed approval APPROVE <run_id> (Gate-D for customer-facing surfaces)"
+        proof: "artifacts/experiments/<run>/gate_d.log APPROVE line; absent it variant.yaml stays arm: false"
+        failure_tier: stop
+      - id: "3.3"
+        requirement: "Results computed with uncertainty: effect estimate + confidence/credible interval, guardrail statuses, and data-quality notes"
+        proof: "artifacts/experiments/<run>/results.json — effect, interval_low, interval_high, guardrail_statuses; scripts/results_lint.py exit 0"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Decision logged against pre-registered rules: scale | iterate | kill, with reasoning that cites prereg decision rules — and a kill is recorded with the same dignity as a win"
+        proof: "artifacts/experiments/<run>/decision.md — decision enum + reasoning citing prereg.json rules; append to ~/.hermes/jake/experiments/log.jsonl with run_id, decision, one lesson"
+        failure_tier: halt
+definition_of_done:
+  - "Pre-registered hypothesis, sizing, guardrails, variant config, and tracking proof all hashed in proofpacket.json"
+  - "Results computed with uncertainty and guardrail review; decision logged against pre-registered rules"
+  - "Experiment log append present; kills and inconclusives recorded as first-class outcomes"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (designed | live | decided), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.3", "2.1", "2.2", "2.3", "2.4", "3.1", "3.3", "3.4"]
+  degrade_gates: ["1.2"]
+  stop_gates: ["3.2"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a post-hoc decision-rule change detected in any run triggers harness-wide discipline review"
+final_rule:
+  - "No variant ships before hypothesis, sizing, guardrails, and decision rules are hashed."
+  - "No peeking outside the analysis plan; no moving the goalposts after results exist."
+  - "A documented kill is a successful experiment; an undocumented win is a failed one."
+  - "Every growth experiment session leaves the system stronger than it found it."
+governs_loops: [GL-OD-experiment, ab-testing, experiment-design-kit, guardrail-scorecard, hypothesis-library]

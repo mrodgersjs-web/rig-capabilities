@@ -26,7 +26,7 @@ Resolved 143 queries from .../important-only.qls
 Analysis uses the suite path, never a pack name whose default filters can silently drop queries:
 
 ```console
-$ codeql database analyze "$OUTPUT_DIR/codeql.db" "$OUTPUT_DIR/raw/important-only.qls" --format=sarifv2.1.0 --output="$OUTPUT_DIR/raw/results.sarif"
+$ codeql database analyze "$OUTPUT_DIR/codeql.db" "$OUTPUT_DIR/raw/important-only.qls" --format=sarifv2.1.0 --output="$OUTPUT_DIR/results/results.sarif"
 ```
 
 ## Acceptance

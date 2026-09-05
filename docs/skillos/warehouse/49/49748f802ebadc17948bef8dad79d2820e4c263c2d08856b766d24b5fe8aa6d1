@@ -1,0 +1,40 @@
+---
+outcome: security-review:
+done_when:
+  - file:capabilities/harnesses/gap-healthcare-security-review.yaml
+  - grep:capabilities/harnesses/gap-healthcare-security-review.yaml:PHI
+quality_floor: 0.6
+great_example: examples/great/security-review/gap-healthcare-security-review.md
+---
+
+harness_id: gap-healthcare-security-review
+harness_name: healthcare × security-review gap draft
+status: draft
+source: requests.jsonl
+vertical: healthcare
+lane: security-review
+coverage: {have: 0, need: 3, gap: 3}
+session_type: gap-fill-session
+stake: |
+  No PHI in logs, prompts, pack markdown, or traces.
+identity_lock:
+  startup_phrase: "I am filling a measured gap, not inventing coverage."
+gates:
+  - id: G1
+    requirement: "Quote the requests.jsonl cell (vertical=healthcare lane=security-review have=0 need=3) before writing any other artifact"
+    proof: "Session log contains the cell verbatim"
+    failure_tier: halt
+  - id: G2
+    requirement: "No PHI in logs, prompts, pack markdown, or traces."
+    proof: "The token PHI appears in the produced artifact AND in this harness body"
+    failure_tier: halt
+  - id: G3
+    requirement: "Produce need-have = 3 concrete next assets (skill, hook, or command), each with a done_when that can go RED"
+    proof: "A list of 3 paths under capabilities/ whose done_when is file: or grep: against something outside their own frontmatter"
+    failure_tier: halt
+definition_of_done:
+  - "G1–G3 halt-green"
+  - "This file remains a draft until a round graduates it"
+final_rule:
+  - "A gap harness that cannot fail is not a fill."
+  - "PHI is load-bearing — deleting it must redden done_when."

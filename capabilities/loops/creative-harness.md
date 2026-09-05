@@ -3,7 +3,7 @@ outcome: agent-engineering:
 done_when:
   - file:capabilities/loops/creative-harness.md
   - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/creative-harness.md
-great_example: examples/great/agent-engineering/creative-harness.md.md
+great_example: examples/great/agent-engineering/creative-harness.md
 quality_floor: 0.6
 ---
 

@@ -28,6 +28,7 @@ $ bash capabilities/skills/semgrep/scripts/run-scans.sh \
 It writes `scans.json`, per-unit JSON/SARIF under `raw/`, then the asset's merge step produces the consumer artifact:
 
 ```console
+$ export OUTPUT_DIR="${OUTPUT_DIR:-/tmp/semgrep-scan}"
 $ uv run --no-project capabilities/skills/semgrep/scripts/merge_sarif.py "$OUTPUT_DIR/raw" "$OUTPUT_DIR/results/results.sarif" --scans "$OUTPUT_DIR/scans.json"
 ```
 

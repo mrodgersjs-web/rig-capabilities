@@ -1,0 +1,140 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-11-motion-design.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-11-motion-design
+great_example: examples/great/design-ux/hC-11-motion-design.md
+quality_floor: 0.6
+---
+
+harness_id: hC-11-motion-design-session
+harness_name: Motion Design Goal Harness
+session_type: motion-design-session
+coordinate_space:
+  levels:
+  - L4
+  - L5
+  diamonds:
+  - D2
+  bms_modes:
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_motion_design_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+bms_bias: A2-A3 preferred for choreography exploration; A1 for spec/perf verification; A4 only with approval
+identity_lock:
+  startup_phrase: 'Motion design mode: every animation is functional, timed by tokens, and safe under reduced-motion.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D2-A3'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_motion_design(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Purpose & Spec
+  gates:
+  - id: '1.1'
+    requirement: 'Motion purpose declared per animation: orientation, feedback, continuity, or personality — decorative-only
+      motion is cut'
+    proof: 'artifacts/motion/<slug>/motion-spec.yaml: `animation, trigger, purpose, duration_token, easing_token`
+      per entry; zero purpose: decorative'
+    failure_tier: halt
+  - id: '1.2'
+    requirement: Duration and easing drawn from motion tokens only (e.g., duration.fast/base/slow, easing.standard/emphasized)
+    proof: motion-spec.yaml references resolve against tokens/tokens.json motion tier; `node tokens/validate.mjs`
+      exit 0
+    failure_tier: halt
+  - id: '1.3'
+    requirement: 'Choreography spec for multi-element sequences: stagger intervals, orchestration order, and overlap
+      rules'
+    proof: choreography section in motion-spec.yaml with per-sequence timeline table
+    failure_tier: degrade
+- category: Performance & Safety
+  gates:
+  - id: '2.1'
+    requirement: 'Frame budget verified: animations hold 60fps (or declared target) on the reference device profile'
+    proof: performance capture artifact (Chrome DevTools trace or equivalent) in artifacts/motion/<slug>/perf/ with
+      dropped-frame count <= budget
+    failure_tier: halt
+  - id: '2.2'
+    requirement: Only compositor-friendly properties animated (transform/opacity) or exceptions justified with paint-cost
+      evidence
+    proof: '`grep -rEn ''animation|transition'' artifacts/motion/<slug>/ --include=''*.css''` sweep: property list
+      vs allowed set; exceptions documented'
+    failure_tier: degrade
+  - id: '2.3'
+    requirement: 'Reduced-motion variant implemented for every animation: @media (prefers-reduced-motion: reduce)
+      behavior specified and captured'
+    proof: reduced-motion capture pair per animation (full vs reduced) in artifacts/motion/<slug>/; spec section
+      names the fallback behavior
+    failure_tier: halt
+  - id: '2.4'
+    requirement: 'No vestibular triggers: no large parallax, auto-playing motion > 5s loop without pause control,
+      or flash > 3/s'
+    proof: vestibular checklist in motion-spec.yaml all-pass; any looping animation has a pause/stop control spec
+    failure_tier: halt
+- category: Handoff & Evidence
+  gates:
+  - id: '3.1'
+    requirement: 'Implementation mapping delivered: each animation mapped to concrete implementation (CSS keyframes,
+      GSAP timeline, or Lottie) with code-level parameters'
+    proof: 'handoff table: animation -> implementation target + parameter dump (durations, easings, delays) matching
+      token values'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Before/after evidence captured: video or WebM of each animation at 1x speed, plus a 0.25x slow-mo
+      for review'
+    proof: artifacts/motion/<slug>/captures/ contains 1x + 0.25x recordings per animation; filenames match motion-spec
+      keys
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: 'Export assets meet spec where applicable: Lottie JSON validated, dimensions and frame rate declared'
+    proof: Lottie files parse (`node -e "JSON.parse(...)"` exit 0) and carry declared w/h/fr; manifest lists them
+      with sha256
+    failure_tier: degrade
+definition_of_done:
+- All 10 capability gates passed with artifacts under artifacts/motion/<slug>/
+- 'Primary objective achieved: functional, token-timed, reduced-motion-safe motion system with implementation handoff'
+- Performance capture proves frame budget on reference profile
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.3'
+  - '2.4'
+  - '3.1'
+  degrade_gates:
+  - '1.3'
+  - '2.2'
+  - '3.2'
+  - '3.3'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every motion-design-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-SH

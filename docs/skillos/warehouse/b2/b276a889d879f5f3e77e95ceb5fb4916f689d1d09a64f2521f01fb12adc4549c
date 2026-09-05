@@ -1,0 +1,115 @@
+---
+outcome: code-engineering:
+done_when:
+  - file:capabilities/harnesses/hA-04-code-debug.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hA-04-code-debug
+great_example: examples/great/code-engineering/hA-04-code-debug.md
+quality_floor: 0.6
+---
+
+harness_id: hA-04-code-debug
+harness_name: Code Debug Session Goal Harness
+session_type: code-debug-session
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_debug(repro, hypothesis_ladder, root_cause, regression_lock, improvement)
+primary_diamonds: [D1, D2]
+bms_bias: "A1 for reproduction and verification; A2 for instrumentation edits; A3 for log reading only; A4 forbidden"
+identity_lock:
+  startup_phrase: "No fix without root cause. No root cause without reproduction."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the bug pinned to an exact symptom statement: observed behavior, expected behavior, environment"
+      proof: "Session log contains the three-part symptom statement verbatim"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: reproduce first, one hypothesis at a time, evidence kills hypotheses, fix lands with a regression test"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first investigation command"
+      proof: "Session log line 'COORD: L1-L4 x D1-D2 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_debug(repro, hypothesis_ladder, root_cause, regression_lock, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Reproduction"
+    gates:
+      - id: "1.1"
+        requirement: "Deterministic repro captured: a minimal command, script, or test that triggers the bug on the current tree, with its failure output recorded"
+        proof: ".rig/debug/repro.txt contains the exact repro command and its failing output tail; repro re-run confirmed within the session"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Environment facts captured: OS/arch, runtime versions (node --version / python -V / go version), dependency lockfile hash, and relevant env flags recorded before theorizing"
+        proof: ".rig/debug/env.txt with version outputs and shasum of lockfile (shasum -a 256 package-lock.json | poetry.lock | go.sum)"
+        failure_tier: degrade
+      - id: "1.3"
+        requirement: "Recency check: git log on the implicated files plus (if available) git bisect or a last-known-good claim verified by running the repro against that commit"
+        proof: "git log --oneline -20 -- <files> output in .rig/debug/history.txt; bisect log or 'no known good' statement recorded"
+        failure_tier: degrade
+  - category: "Hypothesis Discipline"
+    gates:
+      - id: "2.1"
+        requirement: "Hypothesis ladder written before the first code change: at least 2 competing hypotheses, each with the cheapest experiment that would kill it"
+        proof: ".rig/debug/hypotheses.md with numbered hypotheses and kill-experiments; single-hypothesis sessions explicitly justified"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "One variable at a time: each experiment changes exactly one thing (one instrumentation point, one config flip, one binary-search halving); the session log records per-experiment results"
+        proof: "hypotheses.md updated per experiment with 'result: confirmed/killed + evidence'"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Instrumentation is temporary: added logging/debug prints are confined to a named branch or clearly marked and are removed before closure"
+        proof: "Final git diff contains zero leftover debug statements — grep -nE '(console\\.log|print\\(|dbg!|println!)' over the fix diff returns only intentional logging with justification"
+        failure_tier: degrade
+  - category: "Root Cause & Fix"
+    gates:
+      - id: "3.1"
+        requirement: "Root cause stated in causal form: 'X happens because Y', where Y is a mechanism in the code/runtime — not 'the fix works' or 'the value was wrong'"
+        proof: ".rig/debug/root-cause.md contains the causal sentence plus the file:line of the mechanism"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Fix targets the cause, not the symptom: the diff modifies the causal mechanism, and the session log explicitly rules out symptom-suppression (no catch-and-swallow, no special-casing the repro input, no broadened timeout)"
+        proof: "root-cause.md 'symptom-check' section answers all three suppression patterns with evidence from the diff"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Repro now passes: the exact repro command from gate 1.1 re-run against the fixed tree exits 0 / produces expected behavior"
+        proof: ".rig/debug/repro-fixed.txt with the same command and its clean output, stamped with the fixed HEAD SHA"
+        failure_tier: halt
+  - category: "Regression Lock"
+    gates:
+      - id: "4.1"
+        requirement: "Regression test committed: a test that fails on the pre-fix tree and passes on the post-fix tree (red-then-green proven, not assumed)"
+        proof: ".rig/debug/regression-proof.txt with the test failure output at pre-fix SHA and pass output at post-fix SHA"
+        failure_tier: halt
+      - id: "4.2"
+        requirement: "Blast-radius check: full test suite plus typecheck/lint run on the fixed tree; neighboring behaviors sharing the fixed mechanism are exercised (or the risk is logged)"
+        proof: "Exit codes in .rig/debug/final-green.txt; risk note if shared-mechanism paths lack tests"
+        failure_tier: halt
+      - id: "4.3"
+        requirement: "Improvement entry written: the detection gap that let this bug through (missing test, missing alert, missing invariant) is named"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-04-code-debug with the named gap"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "root-cause.md contains a mechanism-level causal statement"
+  - "Repro passes on the fixed tree; regression test committed with red-then-green proof"
+  - "Full suite green on the fixed tree"
+  - "One improvement entry naming the detection gap"
+  - "Identity closure: coordinate, root cause in one line, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "2.1", "2.2", "3.1", "3.2", "3.3", "4.1", "4.2", "4.3"]
+  degrade_gates: ["1.2", "1.3", "2.3"]
+  stop_gates: []
+  notes: "if root cause remains unreachable after the hypothesis ladder is exhausted, halt and escalate with the full evidence trail — never ship a speculative fix as a fix"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same detection gap appears 3+ times → propose an invariant, assertion, or monitoring check to close the class"
+final_rule:
+  - "No repro, no theories."
+  - "No root cause, no fix."
+  - "No regression test, no closure."
+  - "No improvement entry, no session complete."
+  - "Every code-debug session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-VQ, GL-OD]

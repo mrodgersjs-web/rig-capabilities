@@ -1,0 +1,106 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/harnesses/hD-03-crm-hygiene.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hD-03-crm-hygiene
+great_example: examples/great/revenue-gtm/hD-03-crm-hygiene.md
+quality_floor: 0.6
+---
+
+harness_id: hD-03-crm-hygiene
+harness_name: CRM Hygiene Goal Harness
+session_type: ops-crm-hygiene
+coordinate_space:
+  levels: [L1, L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, S, Q2, P]
+harness_tuple: H_crm(snapshot, backup, audit, dryrun, mutation, verify, rollback)
+primary_diamonds: [D1]
+bms_bias: "A1 mandatory for all mutations (deterministic, dry-run first); A2 for duplicate heuristics; A3/A4 never — CRM writes are never autonomous"
+identity_lock:
+  startup_phrase: "CRM hygiene session. Backup before mutation, dry-run before write, verify after. The CRM is the system of record — treat it like one."
+  gates:
+    - id: "0.1"
+      requirement: "Twenty CRM reachable and its object inventory enumerated before any analysis"
+      proof: "curl -sf http://localhost:3000/healthz exit 0; artifacts/crm/<run>/objects.json lists people, companies, opportunities with counts"
+    - id: "0.2"
+      requirement: "Hygiene scope declared: which objects, which fields, which defect classes this run addresses"
+      proof: "artifacts/crm/<run>/scope.md lists objects, fields, defect_classes (duplicates | missing_fields | stale_stage | orphans)"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1, L3, L4; D1-D2; A1-A2)"
+      proof: "coordinate block in ~/.hermes/jake/crm/session-<ts>.log parseable by jq"
+    - id: "0.4"
+      requirement: "Harness tuple H_crm declared with all 7 components"
+      proof: "session log contains 'H_crm(' line"
+capability_gates:
+  - category: "Safety Baseline"
+    gates:
+      - id: "1.1"
+        requirement: "Pre-mutation backup of every in-scope object exported to disk"
+        proof: "artifacts/crm/<run>/backup/ contains <object>.json per in-scope object; row counts match objects.json counts; shasum -a 256 manifest written"
+        failure_tier: stop
+      - id: "1.2"
+        requirement: "Schema snapshot captured: current field definitions per object so mutations are checked against the real schema, not memory"
+        proof: "artifacts/crm/<run>/schema_snapshot.json diffed by scripts/schema_diff.py; session log records snapshot hash"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "Rollback procedure written BEFORE the first mutation: exact commands to restore from backup"
+        proof: "artifacts/crm/<run>/rollback.md contains executable restore commands referencing backup/ files"
+        failure_tier: halt
+  - category: "Defect Audit"
+    gates:
+      - id: "2.1"
+        requirement: "Duplicate detection run: exact email match + fuzzy name+domain match, results ranked by confidence"
+        proof: "python3 scripts/find_duplicates.py --crm http://localhost:3000 --out duplicates.json exit 0; report shows candidate_count and confidence tiers"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Missing-field report: required fields per stage definition (email, owner, next_step, amount where applicable) with null counts"
+        proof: "artifacts/crm/<run>/missing_fields.json with per-field null_count and affected record ids; jq 'keys | length >= 3' true"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Stale-stage detection: opportunities with no activity > 30 days flagged with last_activity timestamps"
+        proof: "artifacts/crm/<run>/stale.json entries each carry record_id and days_inactive; all days_inactive > 30"
+        failure_tier: degrade
+      - id: "2.4"
+        requirement: "Orphan detection: people without company, opportunities without owner or next_step"
+        proof: "artifacts/crm/<run>/orphans.json grouped by orphan_type with counts"
+        failure_tier: degrade
+  - category: "Mutation Discipline"
+    gates:
+      - id: "3.1"
+        requirement: "Every proposed mutation expressed as a dry-run plan file before execution: operation, record ids, before/after field values"
+        proof: "artifacts/crm/<run>/mutation_plan.jsonl — each line {op, record_id, before, after}; scripts/dryrun_mutations.py validates all lines exit 0"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Human approval for destructive classes: merges and deletions never execute from a plan file without an APPROVE line"
+        proof: "artifacts/crm/<run>/approve.log contains APPROVE <run_id> <class> for each destructive class executed; absent approval those lines are skipped and logged"
+        failure_tier: stop
+      - id: "3.3"
+        requirement: "Post-mutation verification queries re-run the original defect detectors and show improvement or explicit residual list"
+        proof: "artifacts/crm/<run>/post_verify.json compared to pre-run defects; defect_count_after <= defect_count_before; residual items each have reason codes"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Audit trail: every executed mutation logged with timestamp, operator, plan-line hash"
+        proof: "artifacts/crm/<run>/mutation_audit.jsonl line count equals executed ops; each line sha256-matches a mutation_plan.jsonl line"
+        failure_tier: halt
+definition_of_done:
+  - "Backup, schema snapshot, and rollback plan exist and are hashed in proofpacket.json"
+  - "Defect audit artifacts (duplicates, missing fields, stale, orphans) present with counts"
+  - "Executed mutations verified by post-run detectors; destructive classes show approval evidence"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (cleaned | partial | blocked), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.2", "1.3", "2.1", "2.2", "3.1", "3.3", "3.4"]
+  degrade_gates: ["2.3", "2.4"]
+  stop_gates: ["1.1", "3.2"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; recurring defect class becomes a standing prevention rule in scope.md defaults"
+final_rule:
+  - "No mutation without backup, dry-run plan, and rollback commands on disk."
+  - "No merge or delete without typed approval for that exact class and run."
+  - "Post-run verification is the definition of done, not the intention to verify."
+  - "Every CRM hygiene session leaves the system stronger than it found it."
+governs_loops: [GL-OD-crm, crm-hygiene, routing-logic]

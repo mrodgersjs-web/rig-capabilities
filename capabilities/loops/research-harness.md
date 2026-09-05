@@ -3,7 +3,7 @@ outcome: research-intel:
 done_when:
   - file:capabilities/loops/research-harness.md
   - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/research-harness.md
-great_example: examples/great/research-intel/research-harness.md.md
+great_example: examples/great/research-intel/research-harness.md
 quality_floor: 0.6
 ---
 

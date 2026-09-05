@@ -8,7 +8,8 @@ Tracked, sanitized companion to `.context/tessl-review-batch/` (run IDs only, no
 - Supported (skill): **29** → security 29/29 completed, quality 29/29 completed, **failed 0**
 - Unsupported (non-skill) records: **222**
 - Quality score (completed): min 66, max 99, mean 85.86
-- Verification checks: **11/11 pass**
+- Tessl verification checks: **11/11 pass**
+- Store gate: **red** — 143/4993 restorable (140 canonical blob + 3/5 verified recipe groups); SkillOS v6+ remains gated per `07-CANONICAL-VS-TESSL.md`
 
 ## Accepted security findings
 

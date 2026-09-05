@@ -1,0 +1,148 @@
+---
+outcome: content-publishing:
+done_when:
+  - file:capabilities/harnesses/hB-11-webinar-design-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hB-11-webinar-design-session
+great_example: examples/great/content-publishing/hB-11-webinar-design-session.md
+quality_floor: 0.6
+---
+
+harness_id: hB-11-webinar-design
+harness_name: Webinar Design Session Harness
+session_type: webinar-design-session
+doctrine_focus: content & marketing
+library: needle-haystack-v0
+batch: B
+coordinate_space:
+  levels:
+  - L1
+  - L2
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  - D3
+  - D4
+  - D5
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  - A4
+  iqrsqpi_steps:
+  - intake
+  - question
+  - research
+  - synthesize
+  - quantify
+  - produce
+  - iterate
+harness_tuple: L3-D3-A2-I5
+primary_diamonds:
+- D3
+- D4
+bms_bias: A2
+identity_lock:
+  startup_phrase: I am the Webinar Design operator. The session must teach something real in 45 minutes and earn its pitch
+    — value first, offer second, no bait-and-switch.
+  identity_gates:
+  - Confirm the webinar’s one teaching promise and the offer it bridges to before any slide work.
+  - Confirm live vs. evergreen; engagement mechanics differ and must be designed for the actual format.
+  - Refuse 'content-free pitchfest' outlines — teaching blocks must outnumber pitch blocks 3:1.
+  - Confirm the registration-to-attendance assumption (typically 35-45%) used in funnel math.
+capability_gates:
+- id: CG-01
+  name: Promise & offer lock
+  requirement: Teaching promise and bridged offer locked with funnel assumptions (reg rate, show rate, close assumption).
+  proof: $SESS/design.yaml parses with keys promise, offer, assumptions; `python3 -c "import yaml;d=yaml.safe_load(open('$SESS/design.yaml'));assert
+    0<d['assumptions']['show_rate']<=1"` exits 0
+  failure_tier: halt
+- id: CG-02
+  name: Arc structure
+  requirement: Session arc follows hook -> credibility -> 3 teaching blocks -> bridge -> offer -> Q&A, with minute budgets
+    summing to runtime.
+  proof: '`python3 scripts/arc_check.py $SESS/arc.yaml --runtime $(python3 -c "import yaml;print(yaml.safe_load(open(''$SESS/design.yaml''))[''runtime_min''])")`
+    exits 0'
+  failure_tier: halt
+- id: CG-03
+  name: Teaching density
+  requirement: Each teaching block contains >=1 framework, demonstration, or worked example; teaching:pitch block ratio >=3:1.
+  proof: '`python3 scripts/teach_density.py $SESS/arc.yaml --min-ratio 3` exits 0'
+  failure_tier: halt
+- id: CG-04
+  name: Engagement mechanics
+  requirement: '>=4 designed interactions (poll, chat prompt, Q&A call, worksheet moment) placed at >=7-minute intervals.'
+  proof: '`python3 scripts/engagement_map.py $SESS/arc.yaml --min 4 --max-gap 7` exits 0'
+  failure_tier: degrade
+- id: CG-05
+  name: Slide skeleton
+  requirement: Slide list <=60 slides with type per slide (title/teaching/demo/proof/offer); zero walls-of-text slides (<=40
+    words each).
+  proof: '`python3 scripts/slide_lint.py $SESS/slides.yaml --max-slides 60 --max-words 40` exits 0'
+  failure_tier: degrade
+- id: CG-06
+  name: Offer bridge integrity
+  requirement: Bridge segment explicitly connects the teaching promise’s unresolved gap to the offer; bridge script <=3 minutes.
+  proof: '`python3 scripts/bridge_check.py $SESS/arc.yaml $SESS/design.yaml` exits 0'
+  failure_tier: halt
+- id: CG-07
+  name: Registration page parity
+  requirement: Reg page headline repeats the teaching promise verbatim; reg form <=4 fields; confirmation + reminder sequence
+    (T-24h, T-1h) defined.
+  proof: '`python3 scripts/message_match.py --source $SESS/design.yaml --page $SESS/regpage.html` exits 0; `python3 -c "import
+    yaml;assert len(yaml.safe_load(open(''$SESS/reminders.yaml''))[''sequence''])>=2"` exits 0'
+  failure_tier: halt
+- id: CG-08
+  name: Tech rehearsal checklist
+  requirement: Platform, backup stream, slides-as-PDF fallback, and presenter one-sheet documented.
+  proof: $SESS/rehearsal.md contains all 4 checklist items; `grep -c '\[ \]' $SESS/rehearsal.md` >= 4
+  failure_tier: degrade
+- id: CG-09
+  name: Replay & follow-up plan
+  requirement: Replay window (hours), follow-up email count, and offer deadline defined.
+  proof: $SESS/followup.yaml parses with replay_hours, emails[], offer_deadline; validator exits 0
+  failure_tier: degrade
+- id: CG-10
+  name: Proof packet seal
+  requirement: Design, arc, slides, reg page, follow-up hashed.
+  proof: '`sha256sum -c $SESS/proof/packet.sha256` exits 0'
+  failure_tier: halt
+definition_of_done:
+- Arc time math balances; teaching:pitch ratio proven >=3:1.
+- Engagement mechanics placed and verified.
+- Bridge segment machine-checked against promise and offer.
+- Reg page parity and reminder sequence verified.
+- Proof packet sealed including rehearsal checklist.
+failure_protocol:
+  halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in
+    $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.
+  degrade: Continue the session with the deficit logged in $SESS/proof/waivers.md (gate id, reason, owner). A degrade-tier
+    failure blocks 'clean ship' status — the Definition of Done must record the waiver explicitly.
+  stop: Terminal condition. Seal whatever proof exists, write $SESS/proof/stop_reason.md, and exit. No outward action (publish,
+    send, deploy) may follow a stop-tier failure without human Gate-D approval.
+  gate_mapping:
+    CG-01: halt
+    CG-02: halt
+    CG-03: halt
+    CG-04: degrade
+    CG-05: degrade
+    CG-06: halt
+    CG-07: halt
+    CG-08: degrade
+    CG-09: degrade
+    CG-10: halt
+self_improvement:
+  log_path: ~/.rig/logs/harnesses/webinar-design-session.jsonl
+  pattern_cadence: After every 5 sessions, mine the JSONL log for recurring gate failures, degrade waivers, and proof-command
+    runtime outliers; write findings to ~/.rig/logs/harnesses/patterns/webinar-design-session-patterns.md.
+  update_trigger: 'If any single gate fails in >=30% of logged sessions over a rolling 20-session window, OR a new platform
+    constraint (algorithm change, policy update, format deprecation) invalidates a proof command, propose a harness revision:
+    bump the gate''s proof, adjust its threshold, or split the gate — then re-seal with a new version hash.'
+final_rule: Ship only what the gates can prove. No artifact leaves this session on adjectives — every claim is bound to a
+  command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's
+  proof stronger. The operator who follows this harness leaves the system stronger than it found it.
+governs_loops:
+- iqrsqpi.content.webinar
+- GL-OD-webinar
+- webinars.design

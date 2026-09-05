@@ -11,7 +11,7 @@ outcome: "agent-engineering: Expertise construction advances phase-by-phase agai
 done_when:
   - file:rig_capabilities/expert_os.py
   - grep:rig_capabilities/evidence_ledger.py:unverified_claim_on_resume
-  - cmd:./bin/rig-capabilities expert-os phases --json | python3 -c "import json,sys; d=json.load(sys.stdin); assert d['12']=='absent_at_source'"; test $? -eq 0
+  - cmd:python3 -c "import subprocess, json; r=subprocess.run(['./bin/rig-capabilities', 'expert-os', 'phases', '--json'], capture_output=True, text=True, check=True); assert json.loads(r.stdout)['12']=='absent_at_source'"
 great_example: examples/great/agent-engineering/rig-known-expert-os.md
 quality_floor: 0.6
 ---

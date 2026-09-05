@@ -1,7 +1,7 @@
 #!/bin/sh
 # outcome: security-review:
-# done_when: file:capabilities/hooks/guard-secret-write.sh || cmd:python3 scripts/hook_fires.py guard-secret-write.sh
-# great_example: examples/great/security-review/guard-secret-write.sh.md
+# done_when: cmd:python3 scripts/hook_fires.py guard-secret-write.sh
+# great_example: examples/great/security-review/guard-secret-write.md
 # quality_floor: 0.6
 # rig guard-secret-write — PreToolUse guard for file-write tool calls.
 # Canonical source: rig-capabilities repo.

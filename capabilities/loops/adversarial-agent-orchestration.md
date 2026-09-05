@@ -15,7 +15,7 @@ done_when:
   - grep:capabilities/loops/adversarial-agent-orchestration.md:does not silently reorder
   - grep:capabilities/loops/adversarial-agent-orchestration.md:Z90xlttVx3Y
   - grep:capabilities/loops/adversarial-agent-orchestration.md:arXiv:2608.21156
-great_example: examples/great/agent-engineering/adversarial-agent-orchestration.md.md
+great_example: examples/great/agent-engineering/adversarial-agent-orchestration.md
 quality_floor: 0.6
 ---
 

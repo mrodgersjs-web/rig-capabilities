@@ -1,0 +1,140 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-02-ui-design.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-02-ui-design
+great_example: examples/great/design-ux/hC-02-ui-design.md
+quality_floor: 0.6
+---
+
+harness_id: hC-02-ui-design-session
+harness_name: UI Design Goal Harness
+session_type: ui-design-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  diamonds:
+  - D1
+  - D2
+  bms_modes:
+  - A1
+  - A2
+  - A3
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_ui_design_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D2
+bms_bias: A1-A2 preferred; A3 permitted for creative exploration; A4 only with approval
+identity_lock:
+  startup_phrase: 'UI design mode: tokens first, states complete, every pixel accounted for.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L4-D2-A2'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_ui_design(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Brief & Inputs
+  gates:
+  - id: '1.1'
+    requirement: 'Design brief captured: user, job-to-be-done, success metric, and constraints before any artboard
+      opens'
+    proof: artifacts/ui/<slug>/brief.md exists with all four fields non-empty
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Reference scan completed: at least 3 comparable UIs studied and patterns extracted, not copied'
+    proof: artifacts/ui/<slug>/references.md with per-reference 'pattern extracted' notes and source URLs
+    failure_tier: degrade
+  - id: '1.3'
+    requirement: Design tokens loaded from the project token source; zero ad-hoc hex values introduced
+    proof: '`grep -rEo ''#[0-9a-fA-F]{6}'' artifacts/ui/<slug>/ --include=''*.css'' --include=''*.html'' | grep
+      -vFf tokens/allowed-hex.txt` returns empty'
+    failure_tier: halt
+- category: Layout & Type
+  gates:
+  - id: '2.1'
+    requirement: Spacing conforms to the 8pt grid system; off-grid values are documented exceptions
+    proof: '`grep -rEo ''(margin|padding|gap): ?[0-9]+px'' artifacts/ui/<slug>/` values all divisible by 8 or listed
+      in exceptions.md'
+    failure_tier: degrade
+  - id: '2.2'
+    requirement: Typography scale used from tokens only; no orphan font sizes
+    proof: computed font-size list extracted from rendered page diffed against tokens.json type scale; orphan list
+      empty or justified
+    failure_tier: degrade
+  - id: '2.3'
+    requirement: Responsive breakpoints rendered and captured at 375px, 768px, and 1440px
+    proof: three screenshots in artifacts/ui/<slug>/ named mobile-375.png, tablet-768.png, desktop-1440.png
+    failure_tier: halt
+- category: States & Accessibility
+  gates:
+  - id: '3.1'
+    requirement: 'State matrix complete: default, hover, active, focus, disabled, loading, empty, and error states
+      designed for every interactive element'
+    proof: artifacts/ui/<slug>/states.md checklist per component; missing states listed as explicit deferrals with
+      reason
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Contrast ratios verified: 4.5:1 body text, 3:1 large text and UI chrome'
+    proof: '`node scripts/contrast-check.mjs artifacts/ui/<slug>/` exit 0; ratio table attached to session log'
+    failure_tier: halt
+  - id: '3.3'
+    requirement: Focus order and visible focus indicators designed and annotated
+    proof: focus-order annotation layer or states.md section enumerating tab order per screen
+    failure_tier: degrade
+- category: Review & Handoff Readiness
+  gates:
+  - id: '4.1'
+    requirement: Aesthetic guardian review (Theo) dispatched and verdict received
+    proof: Theo dispatch output with pass/veto verdict and specific feedback stored in artifacts/ui/<slug>/theo-review.md
+    failure_tier: halt
+  - id: '4.2'
+    requirement: Final artifact frozen with content hash and version tag
+    proof: '`sha256sum` of final HTML/Figma export recorded in artifacts/ui/<slug>/FREEZE.txt with version stamp'
+    failure_tier: degrade
+definition_of_done:
+- All 11 capability gates passed with artifacts under artifacts/ui/<slug>/
+- 'Primary objective achieved: complete UI design with full state matrix and three-breakpoint captures'
+- Token-only palette and type scale verified by command output
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.3'
+  - '2.3'
+  - '3.1'
+  - '3.2'
+  - '4.1'
+  degrade_gates:
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '3.3'
+  - '4.2'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every ui-design-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-SH

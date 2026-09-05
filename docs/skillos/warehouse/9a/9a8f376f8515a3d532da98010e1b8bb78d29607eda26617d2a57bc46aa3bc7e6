@@ -1,0 +1,185 @@
+---
+outcome: "meta: a phase advances only on its gate as the source card actually wrote it — a truncated phase stays truncated rather than receiving invented criteria"
+done_when:
+  - file:capabilities/harnesses/rig-known-expert-os-v1.yaml
+  - grep:capabilities/harnesses/rig-known-expert-os-v1.yaml:absent_at_source
+  - cmd:test 10 -eq $(python3 -c 'from rig_capabilities.expert_os import GATES; print(len(GATES))')
+  - cmd:test 11 -eq $(python3 -c 'from rig_capabilities.expert_os import PHASES; print(len(PHASES))')
+  - cmd:./bin/rig-capabilities expert-os phases --json | grep -q objective_only_truncated
+  - cmd:./bin/rig-capabilities expert-os phases --json | grep -q absent_at_source
+great_example: capabilities/harnesses/rig-known-expert-os-v1.yaml
+quality_floor: 0.7
+---
+
+harness_id: rig-known-expert-os-v1
+harness_name: RIG Known Expert OS Phase Harness (Phases 1-10 gated; 11 truncated; 12 absent)
+session_type: known-expert-os-phase
+status: canonical
+source_card: "RIG Known Expert OS — 12-Phase Master Prompt for a Forward-Deployed AI Strategist & Engineer (truncated at source: Phase 11 carries only its one-line objective; Phase 12 and Gates 11-12 are absent; only Gates 1-10 exist)"
+coordinate_space:
+  levels: [L4, L5]
+  primary_diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [Intent, Question, Research, Solution, Quality, Proof, Integrate]
+harness_tuple: H_expertos(phase, deliverables, gate_verdict, ledger_state)
+bms_bias: "A1 gate evaluation — advance() is code over the verbatim gate, not opinion; A2 for drafting the phase's deliverables; A3 only for research passes that touch no published artifact; A4 forbidden inside a phase session — publication, résumé delivery, and outreach are separate human-approved actions"
+identity_lock:
+  startup_phrase: "I run the phase against its gate as written on the card. Where the card is silent, I am silent too."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the phase number pinned to one of 1..10 before any deliverable is opened; phases outside 1..10 are reported by status, never advanced"
+      proof: "expert_os.advance(phase, ...) invoked with an int in 1..10; out-of-range phases raise ValueError and that is quoted, not worked around"
+    - id: "0.2"
+      requirement: "Coordinate stated before any file is opened: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10 (Intent Question Research Solution Quality Proof Integrate)"
+      proof: "Session log line of form 'COORD: L4-L5 x D1-D2 x A1/A2 x IQRSQPI-10'"
+    - id: "0.3"
+      requirement: "Harness tuple H_expertos(phase, deliverables, gate_verdict, ledger_state) declared with all four components named"
+      proof: "Session log contains the tuple declaration verbatim"
+    - id: "0.4"
+      requirement: "The depth floor is stated before drafting: L1_surface, L2_synthesis, L3_scar, L4_judgment, L5_procedure, and nothing below L3_scar is publishable"
+      proof: "expert_os.DEPTH_LEVELS and MIN_PUBLISHABLE_DEPTH quoted; every drafted item tagged with its depth level"
+capability_gates:
+  - category: "Phase gates 1-10 (requirement text is the card's `### Gate N` line, verbatim)"
+    gates:
+      - id: "P1"
+        requirement: "Advance only with an identifiable economic buyer, costly status quo, observable transformed state, credible evidence alignment, and a path to demonstration."
+        proof: "advance(1, deliverables) returns ok true for the named Phase 1 deliverables (primary/secondary problem, rejected broad position, one-sentence problem statement, market narrative, for/not-for definition, five buyer-language versions, evidence table)"
+      - id: "P2"
+        requirement: "Every major career claim must map to direct evidence, an honest transferable capability, a concrete artifact, or a clearly labeled plan."
+        proof: "advance(2, ...) ok true with the Role Outcome Map present and every claim carrying one of the four dispositions — nothing between those four exists"
+      - id: "P3"
+        requirement: "No positioning claim advances without a firsthand story, working artifact, measured result, or explicit testable procedure."
+        proof: "advance(3, ...) ok true with scar stories at depth L3_scar or deeper, each naming its artifact or measurement"
+      - id: "P4"
+        requirement: "The point of view must be relevant, evidenced, operationally useful, meaningfully different, falsifiable, and bounded."
+        proof: "advance(4, ...) ok true with the thesis carrying a falsification criterion, not just adjectives"
+      - id: "P5"
+        requirement: "A competent third party must be able to use the framework to make a better decision without needing me to translate it."
+        proof: "advance(5, ...) ok true and the independence test is run by someone who did not author the framework"
+      - id: "P6"
+        requirement: "No successful-deployment claim until an independent verifier confirms predefined tests and proof obligations."
+        proof: "advance(6, ...) ok true with a named verifier outside the generator family and the tests defined before the run, not after"
+      - id: "P7"
+        requirement: "Every bullet must pass truth, relevance, specificity, outcome, differentiation, and ten-minute interview defensibility."
+        proof: "advance(7, ...) ok true with the bullet-level evidence ledger resolving every claim to a row in evidence_ledger.csv"
+      - id: "P8"
+        requirement: "The narrative must remain consistent with the résumé, survive technical scrutiny, connect to commercial outcomes, and admit unknowns without pretending to know confidential information."
+        proof: "advance(8, ...) ok true after the Q/R/critique cycles, with each admitted unknown recorded rather than papered over"
+      - id: "P9"
+        requirement: "Reject content that is generic, lacks judgment, is disconnected from buyer pain, cannot be supported honestly, or could be generated unchanged without my experience."
+        proof: "advance(9, ...) ok true and the rejected-topic list is non-empty — a phase that rejects nothing did not apply the gate"
+      - id: "P10"
+        requirement: "Do not increase volume below the quality threshold, and do not abandon the system because early audience numbers are small. Optimize for the right 30 people, not the wrong 30,000."
+        proof: "advance(10, ...) ok true with the MAP cadence tracked on the five awareness states; audience counts never substitute for gate pass"
+  - category: "Truncation integrity (the defect this harness exists to prevent)"
+    gates:
+      - id: "T11"
+        requirement: "Phase 11 is reported by status only: its one-line objective is the entire content on disk, so advance(11, anything) must never return ok true, and no Gate 11 criteria may be authored to make it pass"
+        proof: "expert_os.PHASE_STATUS[11] == objective_only_truncated and advance(11, {...}) returns ok false with that status; the empty gate cell below stays empty"
+      - id: "A12"
+        requirement: "Phase 12 has no heading, no objective, and no gate anywhere in the source, so it is reported absent_at_source and no phase-12 artifact, criteria, or title may be invented"
+        proof: "expert_os.GATES[12] raises KeyError and advance(12, {...}) returns ok false with status absent_at_source"
+      - id: "TRU"
+        requirement: "Every gate line in this harness is transcribed from a section that exists on disk; a gate with no source section is a fabrication and the phase is halted for the session"
+        proof: "the number of verbatim gate lines in this file equals len(expert_os.GATES) == 10; any mismatch stops the session"
+  - category: "Evidence ledger (the card's mandatory ledger, made executable)"
+    gates:
+      - id: "N3"
+        requirement: "Never place an unverified claim on a resume: any ledger row whose allowed_use includes resume must be type direct with confidence at least 0.8 and an evidence path that resolves to a file on disk"
+        proof: "evidence_ledger.validate_claim returns unverified_claim_on_resume for every violating row; `./bin/rig-capabilities evidence validate` exits non-zero on the fixture tests/fixtures/fable2031/evidence-ledger-unverified-resume.csv"
+      - id: "LED"
+        requirement: "Claims are typed before they are used: every row carries type direct, inferred, or planned and allowed_use from resume, interview, content, internal, with confidence inside 0 to 1"
+        proof: "evidence.validate_claim returns [] for every committed row; unknown enums or out-of-range confidence reject the row"
+      - id: "DEP"
+        requirement: "Publishable material sits at depth L3_scar or deeper — L1_surface and L2_synthesis may be internal working notes but never ship as expertise"
+        proof: "each drafted item carries a depth tag and the shipped set contains no tag below MIN_PUBLISHABLE_DEPTH"
+  - category: "Register linkage and GEV separation"
+    gates:
+      - id: "GEV"
+        requirement: "No component certifies its own output: the generator that drafts a phase's deliverables is never the evaluator that scores them or the verifier that clears the gate"
+        proof: "advance() called with a deliverable set whose evaluator differs from the generator; family names recorded in the session log"
+      - id: "REG"
+        requirement: "Phase 1-10 deliverables land as register rows in the criteria-card schema (studio Strategy or GTM; subsystem steering for intake and offer work, aero for the public surface); the Phase 11 offering row stays pinned at maturity_M0_5 0 while its source section is truncated"
+        proof: "register.validate_row returns [] for every row this phase adds; the Phase-11 offering row's maturity cell is 0 and its note names objective_only_truncated"
+      - id: "KPI"
+        requirement: "The card's lagging indicator is the register's existing booked_qualified_conversations row and nothing else: no second revenue KPI is created here, and today that row is zero by evidence, so no phase output may quote a booking, an offer, or a revenue figure as achieved"
+        proof: "grep of this phase's artifacts for booking or revenue claims returns nothing beyond the register's zero-evidence count; register.load_bookings(...) count quoted as it is"
+phase_gates:
+  - phase: 1
+    title: "Select the problem to own"
+    status: gated
+    gate_verbatim: "Advance only with an identifiable economic buyer, costly status quo, observable transformed state, credible evidence alignment, and a path to demonstration."
+  - phase: 2
+    title: "Reverse-engineer the market and target roles"
+    status: gated
+    gate_verbatim: "Every major career claim must map to direct evidence, an honest transferable capability, a concrete artifact, or a clearly labeled plan."
+  - phase: 3
+    title: "Mine scars, decisions, and proof"
+    status: gated
+    gate_verbatim: "No positioning claim advances without a firsthand story, working artifact, measured result, or explicit testable procedure."
+  - phase: 4
+    title: "Construct the category point of view"
+    status: gated
+    gate_verbatim: "The point of view must be relevant, evidenced, operationally useful, meaningfully different, falsifiable, and bounded."
+  - phase: 5
+    title: "Create signature intellectual property"
+    status: gated
+    gate_verbatim: "A competent third party must be able to use the framework to make a better decision without needing me to translate it."
+  - phase: 6
+    title: "Build the guinea-pig reference implementation"
+    status: gated
+    gate_verbatim: "No successful-deployment claim until an independent verifier confirms predefined tests and proof obligations."
+  - phase: 7
+    title: "Convert positioning into résumé evidence"
+    status: gated
+    gate_verbatim: "Every bullet must pass truth, relevance, specificity, outcome, differentiation, and ten-minute interview defensibility."
+  - phase: 8
+    title: "Engineer the interview system"
+    status: gated
+    gate_verbatim: "The narrative must remain consistent with the résumé, survive technical scrutiny, connect to commercial outcomes, and admit unknowns without pretending to know confidential information."
+  - phase: 9
+    title: "Build the searchable expertise architecture"
+    status: gated
+    gate_verbatim: "Reject content that is generic, lacks judgment, is disconnected from buyer pain, cannot be supported honestly, or could be generated unchanged without my experience."
+  - phase: 10
+    title: "Run the 90-day MAP deployment"
+    status: gated
+    gate_verbatim: "Do not increase volume below the quality threshold, and do not abandon the system because early audience numbers are small. Optimize for the right 30 people, not the wrong 30,000."
+phases_beyond_source:
+  - phase: 11
+    title: "Turn the system into the RIG offering"
+    status: objective_only_truncated
+    objective_on_disk: "Translate the validated expertise into a bounded offer."
+    gate_verbatim: ""
+    rule: "no Gate 11 text exists on the card and none may be authored; advance(11, ...) returns ok false with this status"
+  - phase: 12
+    title: ""
+    status: absent_at_source
+    objective_on_disk: ""
+    gate_verbatim: ""
+    rule: "the card ends at Phase 11's objective plus a Sources section; Phase 12 has no heading, no objective, and no gate, and nothing about it may be invented"
+depth_ladder:
+  levels: [L1_surface, L2_synthesis, L3_scar, L4_judgment, L5_procedure]
+  min_publishable: L3_scar
+  note: "the card prioritises L3-L5; L1 and L2 are working states, not products"
+failure_protocol:
+  halt_gates: ["P1", "P2", "P3", "P4", "P5", "P6", "P7", "P8", "P9", "P10", "T11", "A12", "TRU", "N3", "LED", "GEV", "REG", "KPI"]
+  degrade_gates: ["DEP"]
+  notes: "a phase whose gate text is absent from the source can never return ok true — the honest result for phases 11 and 12 is a named status, not a pass"
+anti_patterns:
+  - "Authoring Gate 11 or Gate 12 criteria because the ladder looks incomplete without them"
+  - "Renaming the card's truncated regions into plausible-sounding phases"
+  - "Placing an inferred or planned claim in the resume lane of the Evidence Ledger"
+  - "Shipping L1_surface or L2_synthesis material as expertise"
+  - "Inventing a second revenue KPI next to the register's booked_qualified_conversations row"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "if a longer copy of the card is ever recovered from Recall or RIGLake, Phases 11-12 gain real gates from that text only, with the recovery path recorded in docs/TRUNCATED-SOURCES.md"
+final_rule:
+  - "A gate with no source is a fabrication, not a completion."
+  - "objective_only_truncated and absent_at_source are honest states, not obstacles."
+  - "The Evidence Ledger decides what may carry the name; the generator does not."
+  - "Nothing below L3_scar ships."
+  - "Zero by evidence stays zero until a file says otherwise."
+governs_loops: [GL-RIG-KNOWN-EXPERT-OS-V1]

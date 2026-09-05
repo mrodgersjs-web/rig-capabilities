@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
 # done_when: cmd:T="${TMPDIR:-/tmp}/wm-gate-red-$$"; mkdir -p "$T"; : > "$T/ledger.jsonl"; printf '{"session_id":"wm-gate-fixture","tool_name":"Write","tool_input":{"file_path":"state.json","content":"goal: ship the gate\nstatus: DONE"}}' | RIG_WM_LEDGER="$T/ledger.jsonl" /bin/bash capabilities/hooks/working-memory-commit-gate.sh; rc=$?; rm -rf "$T"; test $rc -eq 2 || cmd:T="${TMPDIR:-/tmp}/wm-gate-syn-$$"; mkdir -p "$T"; printf '{"session_id":"wm-gate-fixture","receipt":"r-1","observation":"pytest green","evidence":"%s/absent-artifact.txt"}\n' "$T" > "$T/ledger.jsonl"; printf '{"session_id":"wm-gate-fixture","tool_input":{"content":"done: true"}}' | RIG_WM_LEDGER="$T/ledger.jsonl" /bin/bash capabilities/hooks/working-memory-commit-gate.sh; rc=$?; rm -rf "$T"; test $rc -eq 2 || cmd:T="${TMPDIR:-/tmp}/wm-gate-pass-$$"; mkdir -p "$T"; printf 'pytest exit=0\n' > "$T/obs.txt"; printf '{"session_id":"wm-gate-fixture","receipt":"r-1","observation":"pytest exit 0","evidence":"%s/obs.txt"}\n' "$T" > "$T/ledger.jsonl"; printf '{"session_id":"wm-gate-fixture","tool_input":{"content":"status: DONE"}}' | RIG_WM_LEDGER="$T/ledger.jsonl" /bin/bash capabilities/hooks/working-memory-commit-gate.sh; rc=$?; rm -rf "$T"; test $rc -eq 0
-# great_example: examples/great/agent-engineering/working-memory-commit-gate.sh.md
+# great_example: examples/great/agent-engineering/working-memory-commit-gate.md
 # quality_floor: 0.6
 # wm-commit-gate.sh — PreToolUse deny hook: no DONE without an observation-backed receipt row.
 #

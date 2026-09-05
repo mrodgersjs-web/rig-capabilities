@@ -1,0 +1,115 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hA-10-schema-design.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hA-10-schema-design
+great_example: examples/great/design-ux/hA-10-schema-design.md
+quality_floor: 0.6
+---
+
+harness_id: hA-10-schema-design
+harness_name: Database Schema Design Session Goal Harness
+session_type: schema-design-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_schema(access_patterns, ddl_proposal, migration_safety, query_plan_proof, improvement)
+primary_diamonds: [D1, D3]
+bms_bias: "A2 for DDL authoring; A1 for migration-safety and plan verification; A3 for ERD narrative; A4 forbidden"
+identity_lock:
+  startup_phrase: "Schema follows the queries. Every migration is reversible or named irreversible."
+  gates:
+    - id: "0.1"
+      requirement: "Startup phrase spoken and the schema target pinned: database engine+version, owning service, and whether this is greenfield or an alteration of live tables"
+      proof: "Session log contains engine string (e.g. 'PostgreSQL 16'), service name, and greenfield/alteration flag"
+    - id: "0.2"
+      requirement: "Procedures declared mandatory: access-patterns-first, every column typed+constrained deliberately, migrations reversible-by-default, query plans proven on realistic volume"
+      proof: "All four procedure names in session preamble"
+    - id: "0.3"
+      requirement: "RIG coordinate stated before the first DDL line"
+      proof: "Session log line 'COORD: L2-L4 x D1-D3 x A1/A2 x IQRSQPI'"
+    - id: "0.4"
+      requirement: "Harness tuple H_schema(access_patterns, ddl_proposal, migration_safety, query_plan_proof, improvement) declared"
+      proof: "Tuple declaration present in session log"
+capability_gates:
+  - category: "Design Inputs"
+    gates:
+      - id: "1.1"
+        requirement: "Access patterns enumerated before tables: the top reads and writes (with rough rates: reads/s, writes/s, growth rows/month) drive the design; the list exists before any CREATE TABLE"
+        proof: ".rig/schema/access-patterns.md with per-query rate estimates; timestamps show it predates the DDL file"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Cardinality & growth estimated: per-table row estimates at 3 and 12 months recorded; any table projected >10M rows gets a partitioning or archival note"
+        proof: ".rig/schema/growth.md with the estimates; large-table notes present where triggered"
+        failure_tier: degrade
+  - category: "DDL Quality"
+    gates:
+      - id: "2.1"
+        requirement: "Every column deliberate: non-null by default with explicit NULL justification; types sized (varchar(n) not text-by-default, timestamptz not timestamp, numeric for money); no EAV or jsonb without a written escape-hatch reason"
+        proof: ".rig/schema/ddl-review.md with per-column type/nullability verdicts; jsonb/EAV uses each carry a justification"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Integrity enforced in the schema: primary keys on every table, foreign keys with explicit ON DELETE behavior, CHECK constraints for enum-like fields and invariants, UNIQUE where the domain demands it"
+        proof: "DDL grep: every CREATE TABLE has PRIMARY KEY; every FK has ON DELETE; invariant list in ddl-review.md maps to CHECK/UNIQUE clauses"
+        failure_tier: halt
+      - id: "2.3"
+        requirement: "Indexes derived from access patterns: each top query in access-patterns.md maps to an index (or a written seq-scan justification); no duplicate/redundant indexes; no index on a column never queried"
+        proof: ".rig/schema/index-map.md: query | index | rationale; redundancy checked (pg_stat or manual prefix analysis)"
+        failure_tier: halt
+      - id: "2.4"
+        requirement: "Naming & convention audit: singular vs plural chosen once, snake_case, no reserved words, created_at/updated_at convention consistent with the repo's existing schema"
+        proof: ".rig/schema/conventions.md + DDL conforms; exceptions listed"
+        failure_tier: degrade
+  - category: "Migration Safety"
+    gates:
+      - id: "3.1"
+        requirement: "Migration files generated and hand-reviewed: alembic/prisma migrate/atlas output inspected — no auto-generated surprise (dropped columns, re-created tables) survives review"
+        proof: "Diff between ORM model and generated migration annotated in .rig/schema/migration-review.md"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Reversibility: every migration has a working downgrade/rollback executed in the session (migrate up && migrate down && migrate up cycle green on a scratch database)"
+        proof: "Cycle output in .rig/schema/reversibility.txt with scratch DB name and exit codes; irreversible steps explicitly named and justified"
+        failure_tier: halt
+      - id: "3.3"
+        requirement: "Lock & zero-downtime check for live alterations: no ACCESS EXCLUSIVE rewrites without a plan — big-table ALTERs use CONCURRENTLY indexes, batched backfills, or expand-migrate-contract; lock_timeout and statement_timeout set in the migration"
+        proof: "Migration file contains timeout settings; .rig/schema/lock-analysis.md covers each live-table statement"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Query plans proven: EXPLAIN (ANALYZE, BUFFERS) run for the top access patterns against a scratch DB loaded with representative row counts (generated via generate_series or seed script)"
+        proof: ".rig/schema/plans/ contains one plan output per top query; each shows index usage (no unexpected Seq Scan on large tables)"
+        failure_tier: halt
+  - category: "Closure"
+    gates:
+      - id: "4.1"
+        requirement: "ERD + summary filed: entity diagram (mermaid or dbml) and a one-paragraph-per-table purpose note committed under docs/ or db/"
+        proof: "File paths recorded; mermaid block parses (mermaid-cli or viewer check)"
+        failure_tier: degrade
+      - id: "4.2"
+        requirement: "Improvement entry written: one schema smell avoided, one migration gotcha, or one harness gap"
+        proof: "Appended line to ~/.hermes/jake/improvements.log tagged hA-10-schema-design"
+        failure_tier: halt
+definition_of_done:
+  - "All gates passed or degraded-with-log; zero unresolved halt gates"
+  - "Migration up/down/up cycle green on a scratch database"
+  - "Query plans on realistic volume attached and read"
+  - "index-map.md ties every top query to an index or a justification"
+  - "One improvement entry appended"
+  - "Identity closure: coordinate, migration-safety verdict, next safe action stated"
+failure_protocol:
+  halt_gates: ["1.1", "2.1", "2.2", "2.3", "3.1", "3.2", "3.3", "3.4", "4.2"]
+  degrade_gates: ["1.2", "2.4", "4.1"]
+  stop_gates: []
+  notes: "applying a migration to a live database is an outward action requiring Gate-D approval; this harness governs design + scratch verification only"
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same migration hazard recurs 3+ times → add a migration linter rule or template guard"
+final_rule:
+  - "Queries design the schema, not the other way around."
+  - "Up, down, up again — or it's not a migration, it's a hope."
+  - "No lock analysis, no live-table DDL."
+  - "No improvement entry, no session complete."
+  - "Every schema-design session leaves the system stronger than it found it."
+governs_loops: [GL-SW, GL-BD, GL-VQ]

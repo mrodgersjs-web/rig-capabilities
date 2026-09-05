@@ -1,0 +1,110 @@
+---
+outcome: revenue-gtm:
+done_when:
+  - file:capabilities/harnesses/hD-07-churn-prevention.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hD-07-churn-prevention
+great_example: examples/great/revenue-gtm/hD-07-churn-prevention.md
+quality_floor: 0.6
+---
+
+harness_id: hD-07-churn-prevention
+harness_name: Churn Prevention Goal Harness
+session_type: ops-churn-prevention
+coordinate_space:
+  levels: [L1, L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2, A3]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_churn(cohort, health_score, root_cause, play_match, drafts, tasks, tracking, learning)
+primary_diamonds: [D2, D1]
+bms_bias: "A1 for cohort/score determinism; A2 for play matching; A3 for outreach drafting; A4 never — customer contact is Gate-D"
+identity_lock:
+  startup_phrase: "Churn prevention session. Save plays are earned by evidence. No discount reflexes, no vibes-based risk lists."
+  gates:
+    - id: "0.1"
+      requirement: "Save-play doctrine loaded (renewal-playbooks, save-play-library, escalation-framework read this session)"
+      proof: "grep -lq 'play' ~/.claude/skills/renewal-playbooks/SKILL.md && echo LOADED in session log"
+    - id: "0.2"
+      requirement: "Operating mode declared: analysis + drafts only; zero customer contact without approval"
+      proof: "session log line 'MODE=draft-only' in ~/.hermes/jake/churn/session-<ts>.log"
+    - id: "0.3"
+      requirement: "RIG coordinate stated (L1-L4; D1-D3; A1-A3)"
+      proof: "coordinate block parseable by jq '.coordinate'"
+    - id: "0.4"
+      requirement: "Harness tuple H_churn declared with all 8 components"
+      proof: "session log contains 'H_churn(' line"
+capability_gates:
+  - category: "Cohort & Scoring"
+    gates:
+      - id: "1.1"
+        requirement: "At-risk cohort produced by a reproducible query, not hand-picked: usage decline, support signal, billing flag, renewal window"
+        proof: "artifacts/churn/<run>/cohort_query.sql + cohort.json with per-account trigger signals; re-running the query reproduces the same account set (hash match)"
+        failure_tier: halt
+      - id: "1.2"
+        requirement: "Health score computed by the versioned scoring script with inputs logged per account"
+        proof: "python3 scripts/health_score.py --cohort cohort.json --out scores.json exit 0; scores.json contains script_version and per-account input values"
+        failure_tier: halt
+      - id: "1.3"
+        requirement: "False-positive guard: accounts with an active expansion motion or resolved ticket are excluded with reason codes"
+        proof: "artifacts/churn/<run>/exclusions.json — every excluded account has reason_code from the declared enum"
+        failure_tier: halt
+      - id: "1.4"
+        requirement: "Root-cause evidence per account: usage trend lines, ticket themes, or stakeholder change signals — no account enters the save queue 'on feel'"
+        proof: "artifacts/churn/<run>/root_cause.jsonl — one line per account with >= 2 evidence pointers (metric series id, ticket ids, or dated signal)"
+        failure_tier: halt
+  - category: "Play Design"
+    gates:
+      - id: "2.1"
+        requirement: "Save play matched from the save-play library by segment + root cause, with the match rule recorded"
+        proof: "artifacts/churn/<run>/play_matches.json — each account maps to play_id and match_rule; every play_id exists in save-play-library index"
+        failure_tier: halt
+      - id: "2.2"
+        requirement: "Commercial guardrail: no discount, concession, or contract change drafted without an approval placeholder and limit"
+        proof: "drafts containing commercial terms carry 'REQUIRES APPROVAL: <limit>' header; scripts/concession_scan.py exit 0"
+        failure_tier: stop
+      - id: "2.3"
+        requirement: "Outreach drafts personalized to the account's actual usage and root cause, reviewed against voice rules"
+        proof: "artifacts/churn/<run>/drafts/<account>.md each reference >= 1 account-specific evidence pointer; voice_check.py exit 0"
+        failure_tier: degrade
+      - id: "2.4"
+        requirement: "Escalation path declared per account: when the play fails, who owns the next move and by when"
+        proof: "play_matches.json entries carry escalation_owner and escalation_by date"
+        failure_tier: degrade
+  - category: "Execution & Tracking"
+    gates:
+      - id: "3.1"
+        requirement: "CRM tasks created for every account in the save queue with play_id, owner, and due date"
+        proof: "artifacts/churn/<run>/crm_tasks.json — task ids returned by Twenty API; count equals save-queue account count"
+        failure_tier: halt
+      - id: "3.2"
+        requirement: "Gate-D approval before any customer-facing send: typed APPROVE <run_id> per account batch"
+        proof: "artifacts/churn/<run>/gate_d.log APPROVE lines; absent them all drafts remain arm: false"
+        failure_tier: stop
+      - id: "3.3"
+        requirement: "Outcome tracking configured: each account has a measurable save/kill criterion and a review date"
+        proof: "artifacts/churn/<run>/tracking.yaml — per account: save_criterion (metric + threshold), kill_criterion, review_date"
+        failure_tier: halt
+      - id: "3.4"
+        requirement: "Learning capture: play effectiveness logged back to the save-play library (hit/miss + why)"
+        proof: "append to ~/.hermes/jake/churn/play_outcomes.jsonl with account_hash, play_id, outcome, reason"
+        failure_tier: degrade
+definition_of_done:
+  - "Cohort reproducible, scores versioned, exclusions reason-coded, root causes evidenced"
+  - "Every save-queue account has a matched play, CRM task, tracking criterion, and draft (armed only with approval)"
+  - "No commercial concession leaves draft state without an approval record"
+  - "One improvement entry appended to ~/.hermes/jake/improvements.log"
+  - "Identity closure: coordinate, verdict (plays-staged | partial | blocked), next safe action in session log"
+failure_protocol:
+  halt_gates: ["1.1", "1.2", "1.3", "1.4", "2.1", "3.1", "3.3"]
+  degrade_gates: ["2.3", "2.4", "3.4"]
+  stop_gates: ["2.2", "3.2"]
+self_improvement:
+  log_path: "~/.hermes/jake/improvements.log"
+  pattern_cadence: 5
+  update_trigger: "same gate fails 3+ times; a play with 3 consecutive misses is retired or revised in the save-play library"
+final_rule:
+  - "No account enters a save queue without a reproducible cohort query and evidenced root cause."
+  - "No discount is a play. Concessions are stop-tier events with explicit limits."
+  - "No customer contact without typed Gate-D approval for this exact batch."
+  - "Every churn prevention session leaves the system stronger than it found it."
+governs_loops: [GL-OD-churn, renewal-playbooks, save-play-library, escalation-framework, risk-scoring-framework]

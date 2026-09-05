@@ -1,7 +1,7 @@
 #!/bin/sh
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/guard-dangerous-commands.sh || cmd:python3 scripts/hook_fires.py guard-dangerous-commands.sh
-# great_example: examples/great/agent-engineering/guard-dangerous-commands.sh.md
+# done_when: cmd:python3 scripts/hook_fires.py guard-dangerous-commands.sh
+# great_example: examples/great/agent-engineering/guard-dangerous-commands.md
 # quality_floor: 0.6
 # rig guard-dangerous-commands — PreToolUse guard for shell tool calls.
 # Canonical source: rig-capabilities repo. Installed copies are wired via hook config.

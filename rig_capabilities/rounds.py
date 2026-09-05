@@ -119,7 +119,7 @@ def _upgrade_plan(asset) -> dict:
         plan["quality_floor"] = 0.6
     if not q.get("great_example"):
         lane = (q.get("outcome") or "").split(":")[0].strip() or "misc"
-        plan["great_example"] = f"examples/great/{lane}/{asset['id']}.md"
+        plan["great_example"] = f"examples/great/{lane}/{Path(asset['id']).stem}.md"
     return plan
 
 

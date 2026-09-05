@@ -186,7 +186,7 @@ def migrate_canonical(repo) -> dict:
             lane_name = "misc"
         rel = a.get("path", a["id"])
         done = [d.replace("{path}", rel) for d in _KIND_DONE.get(a["kind"], ["file:" + rel])]
-        great = f"examples/great/{lane_name}/{a['id']}.md"
+        great = f"examples/great/{lane_name}/{Path(a['id']).stem}.md"
         fields = {"outcome": f"{lane_name}: {a.get('description','')[:120]}".strip(),
                   "done_when": done,
                   "great_example": great,

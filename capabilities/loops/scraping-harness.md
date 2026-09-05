@@ -3,7 +3,7 @@ outcome: code-engineering:
 done_when:
   - file:capabilities/loops/scraping-harness.md
   - cmd:python3 scripts/assert_loop_termination.py capabilities/loops/scraping-harness.md
-great_example: examples/great/code-engineering/scraping-harness.md.md
+great_example: examples/great/code-engineering/scraping-harness.md
 quality_floor: 0.6
 ---
 

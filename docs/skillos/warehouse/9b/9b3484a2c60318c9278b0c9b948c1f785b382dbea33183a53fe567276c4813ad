@@ -1,0 +1,134 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-03-ux-research.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-03-ux-research
+great_example: examples/great/design-ux/hC-03-ux-research.md
+quality_floor: 0.6
+---
+
+harness_id: hC-03-ux-research-session
+harness_name: UX Research Goal Harness
+session_type: ux-research-session
+coordinate_space:
+  levels:
+  - L2
+  - L3
+  - L6
+  diamonds:
+  - D1
+  - D3
+  bms_modes:
+  - A1
+  - A2
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_ux_research_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D1
+- D3
+bms_bias: A1-A2 preferred; A3 permitted for thematic synthesis; A4 only with approval
+identity_lock:
+  startup_phrase: 'UX research mode: participants are people, insights are traceable, saturation is proven.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L2-D1-A1'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_ux_research(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Plan & Ethics
+  gates:
+  - id: '1.1'
+    requirement: Research question and falsifiable hypotheses written before any participant contact
+    proof: artifacts/uxr/<slug>/plan.md with question, >=3 hypotheses, method, and analysis plan
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Participant screener documented: inclusion/exclusion criteria and recruitment source'
+    proof: artifacts/uxr/<slug>/screener.md with criteria and per-participant fit scores
+    failure_tier: halt
+  - id: '1.3'
+    requirement: Consent captured for every session; recordings/notes stored with provenance and PII handling declared
+    proof: artifacts/uxr/<slug>/consent/ contains one record per participant; PII redaction statement in plan.md
+    failure_tier: stop
+- category: Collection & Coding
+  gates:
+  - id: '2.1'
+    requirement: Session notes or transcripts stored per participant with timestamped raw capture
+    proof: one file per participant under artifacts/uxr/<slug>/sessions/ with header metadata (date, duration, modality)
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'Coding pass completed: observations tagged with a stated codebook'
+    proof: artifacts/uxr/<slug>/codebook.yaml + coded observations CSV with `observation_id, participant_id, code,
+      quote` columns
+    failure_tier: halt
+  - id: '2.3'
+    requirement: Theme clustering produced from coded observations (affinity mapping), not from memory
+    proof: artifacts/uxr/<slug>/themes.csv mapping each theme to >=2 observation_ids from >=2 participants
+    failure_tier: halt
+  - id: '2.4'
+    requirement: 'Saturation check: last N sessions produced no new themes, N stated'
+    proof: 'saturation table in report: new-themes-per-session counts converging to zero; N >= 2'
+    failure_tier: degrade
+- category: Synthesis & Traceability
+  gates:
+  - id: '3.1'
+    requirement: Insight statements written in 'we observed X, which means Y, therefore Z' form with evidence links
+    proof: report insights section; every insight cites theme IDs from themes.csv
+    failure_tier: halt
+  - id: '3.2'
+    requirement: Every recommendation traces to at least one insight ID; orphan recommendations removed
+    proof: traceability table `recommendation_id -> insight_id -> theme_id` in report; orphan count = 0
+    failure_tier: halt
+  - id: '3.3'
+    requirement: Persona or journey-map artifacts updated as a diff, not overwritten blindly
+    proof: '`git diff` (or dated before/after files) for persona/journey artifacts committed with the report'
+    failure_tier: degrade
+  - id: '3.4'
+    requirement: Findings readout produced for stakeholders with confidence levels per finding
+    proof: artifacts/uxr/<slug>/readout.md with per-finding confidence (high/med/low) and evidence density
+    failure_tier: degrade
+definition_of_done:
+- All 11 capability gates passed with artifacts under artifacts/uxr/<slug>/
+- 'Primary objective achieved: traceable insight-to-recommendation chain delivered'
+- Consent and provenance records complete for every participant
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '2.3'
+  - '3.1'
+  - '3.2'
+  degrade_gates:
+  - '2.4'
+  - '3.3'
+  - '3.4'
+  stop_gates:
+  - '1.3'
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every ux-research-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-FS
+- GL-BD

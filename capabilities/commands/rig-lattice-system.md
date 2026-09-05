@@ -13,7 +13,7 @@ done_when:
   - cmd:capabilities/skills/rig-lattice-system/bin/rig-lattice doctor --json | python3 -c "import json,sys; assert json.load(sys.stdin)['ok'] is True"
   - cmd:python3 scripts/gen_engine_aliases.py --check 2>/dev/null || python3 capabilities/skills/rig-lattice-system/scripts/gen_engine_aliases.py --check
   - cmd:python3 -c "import re,sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.engine_aliases import CODENAME_TO_ENGINE_ID as C; doc=open('capabilities/commands/rig-lattice-system.md').read(); rows=dict(re.findall(r'^\| \`([A-Z-]+)\` \| \`(e\d\d)\`', doc, re.M)); assert rows, 'alias table not found in the command doc'; missing=[k for k,v in rows.items() if C.get(k)!=v]; assert not missing, f'doc disagrees with engine_aliases.py: {missing}'; assert len(rows)==len(C), f'doc has {len(rows)} rows, table has {len(C)}'"
-great_example: examples/great/agent-engineering/rig-lattice-system.md.md
+great_example: examples/great/agent-engineering/rig-lattice-system-command.md
 acl: public
 quality_floor: 0.7
 ---

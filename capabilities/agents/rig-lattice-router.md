@@ -16,7 +16,7 @@ done_when:
   - grep:capabilities/agents/rig-lattice-router.md:evidence_required
   - cmd:capabilities/skills/rig-lattice-system/bin/rig-lattice route "migrate the billing table to a new schema" --json | python3 -c "import json,sys; d=json.load(sys.stdin); [d[k] for k in ('cell_id','mode','archetype','budget_usd','approval_required','deterministic')]"
   - cmd:capabilities/skills/rig-lattice-system/bin/rig-lattice route "rename a local variable" --json | python3 -c "import re,json,sys; d=json.load(sys.stdin); assert re.match(r'^L[1-7]-D[1-3]-A[1-4]-(I1|Q1|R|S|Q2|P|I2)$', d['cell_id']), d['cell_id']"
-great_example: examples/great/agent-engineering/rig-lattice-router.md.md
+great_example: examples/great/agent-engineering/rig-lattice-router.md
 quality_floor: 0.7
 ---
 

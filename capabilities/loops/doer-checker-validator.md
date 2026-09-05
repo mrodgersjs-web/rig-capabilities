@@ -17,7 +17,7 @@ done_when:
   - cmd:python3 capabilities/loops/verifier_contract_check.py report tests/fixtures/fable2031/verifier-report-looks-good.json; rc=$?; test $rc -eq 2
   - cmd:python3 capabilities/loops/verifier_contract_check.py report tests/fixtures/fable2031/verifier-report-same-family.json; rc=$?; test $rc -eq 2
   - cmd:python3 capabilities/loops/verifier_contract_check.py report tests/fixtures/fable2031/verifier-report-single-run.json; rc=$?; test $rc -eq 2
-great_example: examples/great/agent-engineering/doer-checker-validator.md.md
+great_example: examples/great/agent-engineering/doer-checker-validator.md
 quality_floor: 0.6
 ---
 

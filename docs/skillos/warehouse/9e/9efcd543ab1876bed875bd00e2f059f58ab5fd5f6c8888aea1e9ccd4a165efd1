@@ -1,0 +1,40 @@
+---
+outcome: infra-ops:
+done_when:
+  - file:capabilities/harnesses/gap-manufacturing-infra-ops.yaml
+  - grep:capabilities/harnesses/gap-manufacturing-infra-ops.yaml:lot-genealogy
+quality_floor: 0.6
+great_example: examples/great/infra-ops/gap-manufacturing-infra-ops.md
+---
+
+harness_id: gap-manufacturing-infra-ops
+harness_name: manufacturing × infra-ops gap draft
+status: draft
+source: requests.jsonl
+vertical: manufacturing
+lane: infra-ops
+coverage: {have: 0, need: 3, gap: 3}
+session_type: gap-fill-session
+stake: |
+  Lot genealogy is traced before a quality claim is scored.
+identity_lock:
+  startup_phrase: "I am filling a measured gap, not inventing coverage."
+gates:
+  - id: G1
+    requirement: "Quote the requests.jsonl cell (vertical=manufacturing lane=infra-ops have=0 need=3) before writing any other artifact"
+    proof: "Session log contains the cell verbatim"
+    failure_tier: halt
+  - id: G2
+    requirement: "Lot genealogy is traced before a quality claim is scored."
+    proof: "The token lot-genealogy appears in the produced artifact AND in this harness body"
+    failure_tier: halt
+  - id: G3
+    requirement: "Produce need-have = 3 concrete next assets (skill, hook, or command), each with a done_when that can go RED"
+    proof: "A list of 3 paths under capabilities/ whose done_when is file: or grep: against something outside their own frontmatter"
+    failure_tier: halt
+definition_of_done:
+  - "G1–G3 halt-green"
+  - "This file remains a draft until a round graduates it"
+final_rule:
+  - "A gap harness that cannot fail is not a fill."
+  - "lot-genealogy is load-bearing — deleting it must redden done_when."

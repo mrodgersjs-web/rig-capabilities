@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
 # done_when: cmd:python3 scripts/hook_fires.py tac-plan-gate.sh
-# great_example: examples/great/agent-engineering/tac-plan-gate.sh.md
+# great_example: examples/great/agent-engineering/tac-plan-gate.md
 # quality_floor: 0.6
 # PreToolUse: block Write/Edit if TAC mode requires plan and plan-gate is RED.
 # Opt-in via RIG_TAC_ENFORCE=1 (recommended during /tac-build sessions).

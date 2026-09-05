@@ -1,0 +1,151 @@
+---
+outcome: design-ux:
+done_when:
+  - file:capabilities/harnesses/hC-08-dashboard-design.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem hC-08-dashboard-design
+great_example: examples/great/design-ux/hC-08-dashboard-design.md
+quality_floor: 0.6
+---
+
+harness_id: hC-08-dashboard-design-session
+harness_name: Dashboard Design Goal Harness
+session_type: dashboard-design-session
+coordinate_space:
+  levels:
+  - L3
+  - L4
+  - L5
+  diamonds:
+  - D1
+  - D2
+  bms_modes:
+  - A1
+  - A2
+  iqrsqpi_steps:
+  - I
+  - Q
+  - R
+  - S
+  - Q2
+  - P
+  - I2
+harness_tuple: H_dashboard_design_session(identity, gates, dod, failure_protocol, self_improvement)
+primary_diamonds:
+- D1
+- D2
+bms_bias: A1-A2 preferred; A3 permitted for novel visualization patterns; A4 only with approval
+identity_lock:
+  startup_phrase: 'Dashboard design mode: every metric earns its pixels by driving a decision.'
+  gates:
+  - id: '0.1'
+    requirement: Startup phrase spoken and session type declared before any work begins
+  - id: '0.2'
+    requirement: RIG operating procedures loaded and declared mandatory for this session
+  - id: '0.3'
+    requirement: 'RIG coordinate stated verbatim: L3-D1-A2'
+  - id: '0.4'
+    requirement: 'Harness tuple declared verbatim: H_dashboard_design(identity, gates, dod, failure_protocol, self_improvement)'
+  - id: '0.5'
+    requirement: Goal-card for the session written to artifacts/<session>/goal-card.yaml with an executable done_test
+capability_gates:
+- category: Decision-First Scoping
+  gates:
+  - id: '1.1'
+    requirement: 'Metric-to-decision map: every displayed metric names the decision it drives and the viewer who
+      drives it'
+    proof: 'artifacts/dashboard/<slug>/metric-map.yaml: `metric, decision, viewer_role, action_threshold` per widget;
+      zero ''nice to know'' metrics'
+    failure_tier: halt
+  - id: '1.2'
+    requirement: 'Data-source verification: every widget bound to a real query/endpoint that returns data, or explicitly
+      mocked with a flag'
+    proof: per-widget binding table with sample response or query text; mock flags listed in metric-map.yaml
+    failure_tier: halt
+  - id: '1.3'
+    requirement: 'Chart-type rationale: each visualization choice justified against data shape (trend->line, composition->stacked,
+      distribution->histogram, comparison->bar)'
+    proof: rationale column in metric-map.yaml citing data shape per chart
+    failure_tier: degrade
+- category: Hierarchy & States
+  gates:
+  - id: '2.1'
+    requirement: 'Five-second test: the single most important number is identifiable within 5 seconds of first view'
+    proof: five-second-test note with reviewer name + timestamp; identified element matches the declared primary
+      metric
+    failure_tier: halt
+  - id: '2.2'
+    requirement: 'Widget states complete: loading, empty, error, and stale-data states designed per widget'
+    proof: states matrix in artifacts/dashboard/<slug>/states.md; stale-data treatment (timestamp or banner) specified
+    failure_tier: halt
+  - id: '2.3'
+    requirement: 'Color semantics disciplined: red/amber/green reserved for status meaning; no decorative red'
+    proof: '`grep -rEo ''#(e|f)[0-9a-fA-F]{5}''` sweep of styles + screenshot review; violations dispositioned in
+      decision log'
+    failure_tier: degrade
+  - id: '2.4'
+    requirement: 'Density budget: widget count and grid declared; overflow behavior (scroll vs paginate vs tab)
+      specified'
+    proof: layout spec in states.md with widget count, breakpoints, and overflow rule
+    failure_tier: degrade
+- category: Interaction & Performance
+  gates:
+  - id: '3.1'
+    requirement: 'Drill-down path defined for every summary metric: what happens on click, down to the row level
+      where applicable'
+    proof: interaction map per widget in artifacts/dashboard/<slug>/interactions.md
+    failure_tier: degrade
+  - id: '3.2'
+    requirement: 'Filter state model specified: filter persistence, URL-shareability, and reset behavior'
+    proof: filter spec section in interactions.md; shareable-URL behavior demonstrated or specified with example
+      URL
+    failure_tier: degrade
+  - id: '3.3'
+    requirement: 'Performance budget: per-dashboard query count and payload size budgeted; heavy widgets lazy or
+      deferred'
+    proof: budget table (queries, KB, render ms) in artifacts/dashboard/<slug>/perf-budget.yaml with per-widget
+      deferral strategy
+    failure_tier: degrade
+- category: Review & Freeze
+  gates:
+  - id: '4.1'
+    requirement: KPI-dashboard rubric review passed (metric selection, visual hierarchy, calc-method consistency)
+    proof: rubric scorecard artifact with per-dimension scores and pass threshold met
+    failure_tier: halt
+  - id: '4.2'
+    requirement: Final dashboard artifact frozen with hash and capture set at declared breakpoints
+    proof: FREEZE.txt with sha256 + screenshots at 1440px and 1024px in artifacts/dashboard/<slug>/
+    failure_tier: degrade
+definition_of_done:
+- All 12 capability gates passed with artifacts under artifacts/dashboard/<slug>/
+- 'Primary objective achieved: decision-first dashboard with verified data bindings and complete states'
+- Metric map shows zero orphan metrics and zero unbound widgets
+- One improvement entry appended to ~/.hermes/jake/improvements.log
+- 'Identity closure: coordinate, verdict, and next safe action stated'
+failure_protocol:
+  halt_gates:
+  - '1.1'
+  - '1.2'
+  - '2.1'
+  - '2.2'
+  - '4.1'
+  degrade_gates:
+  - '1.3'
+  - '2.3'
+  - '2.4'
+  - '3.1'
+  - '3.2'
+  - '3.3'
+  - '4.2'
+  stop_gates: []
+self_improvement:
+  log_path: ~/.hermes/jake/improvements.log
+  pattern_cadence: 5
+  update_trigger: same gate fails 3+ times across sessions
+final_rule:
+- No gate evidence, no progress.
+- No improvement entry, no session complete.
+- Outward action (publish, send, deploy) requires Gate-D approval — v0 is local-only.
+- Every dashboard-design-session session leaves the system stronger than it found it.
+governs_loops:
+- GL-BD
+- GL-PA

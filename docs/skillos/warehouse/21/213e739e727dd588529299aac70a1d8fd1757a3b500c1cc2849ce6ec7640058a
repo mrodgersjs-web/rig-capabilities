@@ -1,0 +1,40 @@
+---
+outcome: docs-knowledge:
+done_when:
+  - file:capabilities/harnesses/gap-construction-docs-knowledge.yaml
+  - grep:capabilities/harnesses/gap-construction-docs-knowledge.yaml:OSHA
+quality_floor: 0.6
+great_example: examples/great/docs-knowledge/gap-construction-docs-knowledge.md
+---
+
+harness_id: gap-construction-docs-knowledge
+harness_name: construction × docs-knowledge gap draft
+status: draft
+source: requests.jsonl
+vertical: construction
+lane: docs-knowledge
+coverage: {have: 2, need: 3, gap: 1}
+session_type: gap-fill-session
+stake: |
+  OSHA-relevant constraints are listed; silence is a finding.
+identity_lock:
+  startup_phrase: "I am filling a measured gap, not inventing coverage."
+gates:
+  - id: G1
+    requirement: "Quote the requests.jsonl cell (vertical=construction lane=docs-knowledge have=2 need=3) before writing any other artifact"
+    proof: "Session log contains the cell verbatim"
+    failure_tier: halt
+  - id: G2
+    requirement: "OSHA-relevant constraints are listed; silence is a finding."
+    proof: "The token OSHA appears in the produced artifact AND in this harness body"
+    failure_tier: halt
+  - id: G3
+    requirement: "Produce need-have = 1 concrete next assets (skill, hook, or command), each with a done_when that can go RED"
+    proof: "A list of 1 paths under capabilities/ whose done_when is file: or grep: against something outside their own frontmatter"
+    failure_tier: halt
+definition_of_done:
+  - "G1–G3 halt-green"
+  - "This file remains a draft until a round graduates it"
+final_rule:
+  - "A gap harness that cannot fail is not a fill."
+  - "OSHA is load-bearing — deleting it must redden done_when."

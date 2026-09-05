@@ -317,7 +317,7 @@ class Repo:
                 "id": m.parent.name if (kind == "skill" and m.name == "SKILL.md") else m.name,
                 "kind": kind,
                 "source": label,
-                "path": str(m),
+                "path": str(m.relative_to(base)),
                 "abs_path": str(m),
                 "name": name,
                 "description": (fm.get("description") or fm.get("summary") or "")[:400],

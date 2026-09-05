@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # outcome: agent-engineering:
-# done_when: file:capabilities/hooks/session-size-guard.sh || cmd:python3 scripts/hook_fires.py session-size-guard.sh
-# great_example: examples/great/agent-engineering/session-size-guard.sh.md
+# done_when: cmd:python3 scripts/hook_fires.py session-size-guard.sh
+# great_example: examples/great/agent-engineering/session-size-guard.md
 # quality_floor: 0.6
 # session-size-guard.sh — PostToolUse guardrail (non-blocking).
 #
