@@ -90,7 +90,7 @@ establish whether such a toggle exists:
 | check | observed | not established |
 |---|---|---|
 | `snyk --version` | 1.1307.0 | org configuration |
-| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF | the successful scan proves OAuth credentials exist outside the legacy API-token key, but not where they are stored or which REST calls they authorize |
+| `snyk code test --org=rodgemd1 scripts/blob_license_ledger.py` | exit 0, valid SARIF | **the authentication source.** A successful scan proves only that the CLI had *some* usable credential. It does not show the credential was an OAuth token rather than a legacy API token held somewhere `snyk config get API` does not read, nor where it is stored, nor which REST calls it authorizes. An earlier wording of this row read "the successful scan proves OAuth credentials exist" — that inference is withdrawn; the source is **unknown** |
 | `snyk config get API` | length 0 | it returned no legacy API token; it does **not** prove REST access is unavailable |
 | `snyk projects`, `snyk orgs` | `Unknown command` | this CLI version did not enumerate org/project configuration |
 | browser inspection of org settings | attach refused at CDP `Network.enable`: "Debugger is not attached to the tab" | the UI was not observed; the refusal proves nothing about available org toggles |

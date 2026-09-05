@@ -151,10 +151,17 @@ The run header prints `Compare : fable-2031 → cr-base-984d60f`, and the review
 expected file set (21 then 22 files), which is what proves the range rather than the header.
 `--base-commit 984d60f` was also tried and still compared against `main`.
 
-### Round 1 — `984d60f` → `8917635` (`.context/coderabbit/delta-984d60f-to-66fb687.md`)
+### Round 1 — `984d60f` → `8917635`
 
-Seven findings: the five left unresolved from the earlier batch, plus two new ones in
-`scripts/blob_license_ledger.py`. All seven fixed, each with a check that fails without it.
+> **Artifact caveat, recorded after the fact.** This section originally cited
+> `.context/coderabbit/delta-984d60f-to-66fb687.md`. That attribution was wrong, and the reason matters:
+> `.context/coderabbit/` is gitignored scratch that **each review run overwrites**, so the file named
+> `…to-66fb687.md` no longer holds the head it was named for. What is on disk now is a 2-finding tail
+> (5 finding blocks across the two misnamed files), not the 7 findings this round reported. The tables
+> below are the record — written from the live transcript as each finding was dispositioned, with the
+> check that proves each fix. The artifacts are not. Treat any `.context/coderabbit/*.md` filename as
+> "the head this run pointed at", never as durable evidence, and copy it out before the next run if a
+> specific review must survive.
 
 | # | File & Location | Severity | Description | Disposition | Evidence & Resolution |
 |---|---|---|---|---|---|
@@ -163,7 +170,7 @@ Seven findings: the five left unresolved from the earlier batch, plus two new on
 | D3 | `scripts/blob_license_ledger.py:115` | Minor | `(ROOT / UNIVERSE).read_text()` raised `FileNotFoundError`; the universe is a generated artifact | **VALID-FIX** | Absent universe now only disables pinned-drift detection. Covered by `test_generator_runs_without_the_frozen_universe`, run through `main(--root)` on a scratch root. |
 | D4 | `tests/test_exemplar_resolution.py:93` | Minor | `cls.assertTrue(...)` inside `setUpClass` | **VALID-FIX** | `assertTrue` is an instance method: called on the class it raised `AttributeError` and masked the real fault. Now raises `RuntimeError`. |
 | D5 | `rig_capabilities/skillos.py:762-763` | Minor | `licence_denied` collected every failing blob row, so a corrupt or missing warehouse blob was reported as a licence refusal | **VALID-FIX** | Split out `unrestorable_blobs`. Live gate now reports `licence_denied=0, unrestorable_blobs=0` over 302 valid rows, and a planted corruption is named by the new key (`test_denied_and_unrestorable_blobs_are_reported_apart`). |
-| D6 | `scripts/blob_license_ledger.py:25-30` | Minor | Bare `"ISC"` / `"BSD"` needles matched inside `MISC` and `DISCLAIMER`; `ISC` is in `PERMISSIVE`, so a false hit clears bytes for archiving | **VALID-FIX** | Literal needles are title-anchored; word-bounded patterns cover `The ISC License` and `BSD-2/3-Clause`. Covered by `test_licence_needles_do_not_match_inside_other_words`. |
+| D6 | `scripts/blob_license_ledger.py:25-30` | Minor | Bare `"ISC"` / `"BSD"` needles matched inside `MISC` and `DISCLAIMER`; `ISC` is in `PERMISSIVE`, so a false hit clears bytes for archiving | **VALID-FIX, then RE-OPENED** | First remediation word-bounded the needles. That claim was **overstated** and is corrected in Round 3: a word-bounded `\bISC\b` still reads `"not ISC licensed"` as a grant. |
 | D7 | `scripts/blob_license_ledger.py:95` | **Major** | A neighbouring `LICENSE` outranked the asset's own `license:` declaration, so a vendored file declaring `GPL-3.0` under a permissive neighbour was classified MIT and cleared | **VALID-FIX** | Priority is now frontmatter → sibling licence → upstream marker → repo grant (`test_own_declaration_outranks_a_permissive_neighbour`). Blast radius measured first: 138 repo-MIT, 1 frontmatter, 1 sibling-derived entry, and zero assets carrying both signals, so the inversion was latent. Ledger regenerates byte-identical in an isolated worktree. |
 
 ### Round 2 — `984d60f` → `24142b7` (`.context/coderabbit/delta-984d60f-to-24142b7.md`)
@@ -172,7 +179,37 @@ Seven findings: the five left unresolved from the earlier batch, plus two new on
 
 | # | File & Location | Severity | Description | Disposition | Evidence & Resolution |
 |---|---|---|---|---|---|
-| D8 | `capabilities/skills/codeql/scripts/test_section_pointers.py` | Minor | Suggested scanning "tracked shipped files, or all supported script and workflow suffixes" | **INVALID-REJECT** | The marketplace-path scan already covers every suffix `_doc_files()` yields (`.md`, `.js`), which is every shipped form in this estate. Widening the *flag* scanner's suffix set would change what it claims: it parses invocation grammar (`{baseDir}/scripts/x.py --flag`), and measured reach over `capabilities/` is 20 script invocations and 8 anchored links — 59 bracket links, 51 of them unanchored by design — all in `.md`/`.js`. A suffix set chosen to match the corpus is not a hole; zero tracked files of any suffix carry the literal it guards. |
+| D8 | `capabilities/skills/codeql/scripts/test_section_pointers.py` | Minor | Suggested scanning "tracked shipped files, or all supported script and workflow suffixes" | **INVALID-REJECT → overturned in Round 3** | Rejected as "the scan already covers every shipped form". The rejection reasoning was unsound: *zero offenders today* says nothing about a regression test's future coverage, and `.py`/`.sh` are shipped forms in this estate. Fixed in Round 3 by widening the scan, not by narrowing the claim further. |
+
+### Round 3 — `984d60f` → `aeaf337` (`.context/coderabbit/delta-984d60f-to-aeaf337.md`, copied out before the next run)
+
+All 8 unpushed commits, 22 paths plus this round's edits. **Zero critical, zero major.** Two minor,
+both correct, both against documentation I had written in the previous two rounds — which is the point
+of running the review at the revision you intend to ship rather than at the one you reviewed last.
+
+| # | File & Location | Severity | Description | Disposition | Evidence & Resolution |
+|---|---|---|---|---|---|
+| D9 | `docs/SECURITY-SNYK-MEDIUM-TRIAGE-2026-09-05.md:93` | Minor | A successful `snyk code test` was recorded as proving OAuth credentials exist. It proves only that *some* credential was usable | **VALID-FIX** | Row rewritten to name the authentication source as **unknown** and to state the withdrawal in place. A scan result cannot distinguish an OAuth token from a legacy token in a store `snyk config get API` does not read — and this doc's whole argument was that the org setting is unidentified, so the inference contradicted its own conclusion |
+| D10 | `docs/skillos/08-CODERABBIT-TRIAGE-LEDGER.md:154` | Minor | Round-1 heading said `→ 8917635` while citing an artifact named `…to-66fb687.md` | **VALID-FIX** | The reviewer found a real labelling error, and the cause was worse than the mismatch: `.context/coderabbit/` is overwritten by each run, so the cited file no longer held round 1's output. Heading de-referenced, caveat added above Round 1, and this round's artifact copied out deliberately. See the artifact caveat |
+
+### Two defects found by reading the diff back, not by the reviewer
+
+Recorded here because a ledger that only lists what the tool caught understates how the remaining
+defects were missed:
+
+1. **`_rel` ignored its `root` argument.** `main(root)` resolved output and universe against `root`
+   while payloads were still relativized against module-level `ROOT`, so `--root` against an alternate
+   checkout wrote absolute temp paths into a committed file. Found while verifying the flag at all.
+   The first repair attempt still emitted 144 escaped paths — `_rel` resolved the payload but not the
+   root, and macOS `/var` is a symlink to `/private/var`, so `relative_to()` rejected paths genuinely
+   inside the root. Both sides resolve now; `test_generator_runs_without_the_frozen_universe` asserts
+   `present.path == capabilities/skills/present/SKILL.md` through a symlinked temp root, which fails
+   without either half.
+2. **D6's remediation was thinner than its claim.** Detection now requires a licence *form* — the
+   heading, the opening sentence of the canonical ISC text (which usually has no heading), or a BSD
+   clause/license form. Measured against the committed ledger: **0 of 147 entries change verdict**, so
+   nothing licensed is lost to the stricter needle. `test_a_licence_claim_must_look_like_a_licence`
+   pins the canonical-text positive and the `not ISC licensed` negative.
 
 ### Root cause worth keeping
 
