@@ -133,13 +133,20 @@ published today — that would rewrite a receipt to make a gate go green.
   used as an authorship claim — see "Canonical assets: the warehouse archive gate" in
   `docs/SOURCE-LICENSE.md`, including what that claim does and does not prove.
 - No self-referential `file:`/`grep: SKILL.md` witnesses to make `witness --strict` green.
-  `witness --strict` is red with `missing_fixtures: [prime-jake-pai, rig-memory-os]` —
-  both directories are **untracked work from other sessions** (untracked as of this
-  writing), and their stated capability is a live authenticated call
-  (`memory.get_context_package`), not a text pattern. `run_asset` reports
-  `pass=false, ran=0` — honestly unrunnable. A real bounded smoke test against the
-  registered Memory OS connection is the only acceptable witness; it belongs to whoever
-  owns those skills.
+  This bullet recorded `witness --strict` red with
+  `missing_fixtures: [prime-jake-pai, rig-memory-os]` — both **untracked work from other
+  sessions**, whose stated capability is a live authenticated call
+  (`memory.get_context_package`), not a text pattern. **Status changed by their owner, not
+  by us:** both directories are now absent from disk (`ls capabilities/skills/prime-jake-pai`
+  → No such file), so the witness set is the 29 tracked canonical skills and
+  `witness --strict` reports `ok: true, ran: 29, missing_fixtures: []`, exit 0. The same
+  removal is why the shared root and a fresh worktree now both index 5005: the four untracked
+  canonical assets that pushed it to 5006 are gone. Nothing was made green by writing a
+  witness; if those skills return, the honest witness is still a bounded smoke test against
+  the registered Memory OS connection, owned by whoever owns them.
+- Store-gate consequence: with doors 50, `witness --strict`, `orphan-replay` and
+  `provenance --deny tesslio/cli` all exit 0, **`check --stores` is the only red DONE-TEST
+  left** in the Goal Card's five-command block.
 
 ## Archive gate: clearance is bound to bytes
 
