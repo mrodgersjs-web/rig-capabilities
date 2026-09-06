@@ -27,3 +27,19 @@ tree.old/
 # docs/proof/ holds another session's Gate-D packets (e.g. gate-p-<date>/ for a sibling
 # branch); committing them from a different branch would attribute their evidence here.
 docs/proof/
+
+# Session scratch: review transcripts, gate JSON captures, screenshots, tool caches.
+# `.local/` additionally holds whole-repo working copies (`.local/*/repo`) that carry
+# `.signing.key` and `.serve.token` — the two secrets ignored above — so committing it
+# would put them in history through a copy. 384 MB, none of it branch content.
+.local/
+.lavish/
+.serena/
+
+# Deviator runtime output inside the lattice skill. `runs/*.jsonl` and `runs/deviator.db`
+# are tracked ledger state (0beeb46); these four directories are per-run artifacts written
+# by whatever session last executed the engine, in the same class as docs/proof/ above.
+capabilities/skills/rig-lattice-system/runs/approvals/
+capabilities/skills/rig-lattice-system/runs/packets/
+capabilities/skills/rig-lattice-system/runs/proof_packets/
+capabilities/skills/rig-lattice-system/runs/log/
