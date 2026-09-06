@@ -232,3 +232,29 @@ Measured on the same clean tree afterwards (committed state, `b621897`):
   because the denied `stored_snapshot` entries for the superseded digests and the lattice
   upstream-marked live bytes remain honest warnings; no store row hangs on them.
 
+## Lane verdicts 2026-09-06 (owner turned)
+
+The open lanes behind the RED 4,701 carry owner verdicts, logged with evidence:
+
+1. **Federation — leave down, red.** No `serve` process listening at `127.0.0.1:8776`
+   (the catalog server peers pull `/public-catalog.json` from); recorded refusal
+   `2026-09-06T20:32:45Z` (188 ms). Verdict: the conscript-down red link stays red until
+   `serve` is (re)started; no supervisor added this round.
+2. **Route A — rotate the live Stripe key now.** The `sk_live_`-shaped string flagged in
+   the 2026-09-05 gate-p scan resolves to `sk_live_51To…` (the live key), held in
+   `~/.rig/secrets/stripe-live.env` as `STRIPE_PUBLISHABLE_KEY`/`STRIPE_API_KEY` with
+   `STRIPE_LIVE_MODE=1` + live pay-link rows for the named account. Published refs of
+   `rig-gtm-studio-v2` carry only the sk_live_*prefix* surface (the
+   `pipeline/stretch_link_config.py` `_LIVE_KEY_PREFIX` constant, `sk_live_dummy_key_for_test`,
+   `sk_live_123…idx` test fixtures, `sk_live_…` placeholder doc lines); the live key bytes
+   stayed in `~/.rig/secrets/`. Rotate the key; once the rotated tree is published on the
+   upstream, restock the 130 pinned rows against the published chain.
+3. **Secret-scan lane (this repo) — one-off, done.** `gitleaks detect` over the push
+   range `origin/fable-2031..8c719b0` (3 commits / 5083 B): **0 leaks**, exit 0. Full
+   history one-off (`--source .`, 146 commits / 18.83 MB): 22 hits, all red-team fixtures
+   from this gate's own suite — `tests/fixtures/fable2031/redteam/decoy-{1,2,3}.json` and
+   `tests/fixtures/fable2031/handoff-*.json` (adversarial handoff samples) and
+   `examples/great/security-review/guard-secret-write.sh.md` (the doc's AKIA-shape sample
+   constant). Zero live secrets. Lane valued 2026-09-06; go reopened on next publish.
+4. **Route B — held for the v5.1 cycle.** The 4,571 rows stay unresolved-origin for now;
+   per-corpus licence citations or a v5.1 scope-down decision is owed there, not this round.
