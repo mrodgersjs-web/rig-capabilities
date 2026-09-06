@@ -204,3 +204,31 @@ recipe-verified — and stays red until every remaining row is either cleared wi
 or given a tested immutable recipe. `github.com/mrodgersjs-web/rig-gtm-studio-v2@0a54375…`
 (130 rows) is still red: that commit is unpublished, so no recipe can fetch it and none was
 invented.
+
+## Route C executed 2026-09-06 (commit `b621897` on `fable-2031`)
+
+Owner ruled Route C open. Executed in a detached worktree of the committed tree
+(`git worktree` at published `17705e0`; the shared `.index.json` absorbed two more
+external roots at 5007, which the clean tree avoids by construction), then the changed
+paths landed on `fable-2031` as `b621897`. Ledger regenerated; no `dump` against the
+locked snapshot.
+
+| change | effect |
+|---|---|
+| ledger regenerated in the clean tree | `archive_allowed` 139; the two drift rows' live bytes clear via the repo MIT grant (frontmatter/sibling/upstream all negative, no vendoring counter-signal) |
+| `skill/codeql` + `skill/evidence-retrieval-citations-gate` rows refilled at the live cleared digests | rows now restorable: `c06b63e3…→6c394b1077a7`, `bf586258…→9eb5b1786d9e`; two new warehouse blobs shipped (`warehouse/c0/`, `warehouse/bf/`); blob-valid lane 137→139 as forecast |
+| `skill/rig-lattice-system` row re-snapshotted `6d2279fdc8b2`→`1d03f9c66d2c` | the frozen generation `6d2279fdc8b2` was digested under runtime-ledger churn before `17705e0` committed it; it exists on no published ref, so no tested recipe could ever point at it. Lane closes instead on live content: tested retrieval recipe `https://github.com/mrodgersjs-web/rig-capabilities.git @17705e0` + `capabilities/skills/rig-lattice-system`, verified through the same `_verify_recipe_rows` gate (`check --stores` uses), tree manifest + digest match |
+
+Measured on the same clean tree afterwards (committed state, `b621897`):
+
+- `skillos check --stores`: **303** of 5004 valid, **4701** invalid — `licence_denied: []`,
+  `unrestorable_blobs: []`, recipe-verified 163→164 (the `17705e0` group added), recipe rows 293→294.
+  Gate still RED by construction (4,571 unresolved-origin rows — Route B — + 130 pinned-
+  unfetchable `rig-gtm-studio-v2@0a54375` rows — Route A — = 4,701).
+- Goal-Card lock digest v2 (same formula, refilled identities): `e8af9f6d4297722831e98fb7f3598b8bbc5670fdaa84d193fc4e5d8f288efb4f`.
+- Battery on the restored state: `doors --count` 50/rc 0, `witness --strict` ok ran 29/rc 0,
+  `orphan-replay` ran 1/rc 0, `provenance --deny tesslio/cli` hits []/rc 0, `check` (keys) ok.
+- Residual ledger note: `needs_review` still names the two drift ids + `rig-lattice-system`
+  because the denied `stored_snapshot` entries for the superseded digests and the lattice
+  upstream-marked live bytes remain honest warnings; no store row hangs on them.
+
