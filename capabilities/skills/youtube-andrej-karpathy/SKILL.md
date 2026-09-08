@@ -26,28 +26,30 @@ hooks: []
 Channel-scope context for the **@AndrejKarpathy** YouTube corpus — L2 depth tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @AndrejKarpathy - digest
-- **what it is**: "Let's build X from scratch" AI code-walkthrough channel; reimplementation of major models (GPT, makemore, micrograd) with live narration.
-- **episode shape**: 1–4 hr live-coding sessions and talks; recent longer deep-dives on LLM architecture; older short Stable Diffusion art experiments.
+## @AndrejKarpathy — digest
+
+- **what it is**: Deep-dive screencast lectures and coding walkthroughs that demystify neural nets, LLMs, and generative models by building them from scratch in code.
+- **episode shape**: 1–4 hr single-speaker coding-along sessions with incremental builds (micrograd → makemore → GPT → GPT-2 124M), plus short Stable Diffusion art experiments.
 - **recurring themes**:
-  - Reimplementation-as-pedagogy: GPT-2, tokenizer, makemore, micrograd — each a standalone minimal-code project
-  - LLM internal mechanics: attention, context windows, instructor tokens, multi-token prediction
-  - Backprop from first principles (autograd, gradient flow, batchnorm)
-  - Tokenizer as the critical abstraction between raw text and model input
-  - Practical LLM usage: prompting patterns, fine-tuning vs RAG, model selection
+  - Backpropagation mechanics made explicit (micrograd, makemore Parts 3–4)
+  - GPT architecture end-to-end: tokenizer → transformer → 124M reproduction
+  - Language modeling as next-token prediction (makemore series)
+  - "Spelled-out" pedagogy as the anti-mystery contract for LLM capability
+  - Training dynamics: activations, BatchNorm, gradient flow, learning-rate schedules
+  - Stable Diffusion as creative texture generator (short experiments, not core)
 - **signature frames**:
-  - "Let's build X" — from-scratch reimplementation as the teaching unit
-  - makemore → nanoGPT → GPT-2 progression (char-level → word-level → full transformer)
-  - "Spelled out" — every line narrated, zero magic
-  - "Backprop ninja" — the micrograd gradient-fill-er walkthrough
-  - "Instructor tokens" frame from the LLM deep dive (system prompts as learned ensembles)
+  - "Spelled out" — no hidden steps; every line justified, the channel's pedagogical contract
+  - ~100-line from-scratch build as the litmus test for real understanding
+  - Adder/softmax-as-weighted-average framing for attention (from the LLM deep dive)
+  - LLM as "amnesiac engineer who read everything" — reframing hallucination as a constraint, not a bug
+  - "You can reproduce GPT-2 124M on one GPU" as a barrier-busting claim
 - **must-watch**:
-  - "Let's reproduce GPT-2 (124M)" — the definitive end-to-end GPT-2 reimplementation
-  - "Deep Dive into LLMs like ChatGPT" — best single source on what vendors hide (context mgmt, training pipeline)
-  - "The spelled-out intro to neural networks and backpropagation: building micrograd" — canonical backprop explanation
-  - "Let's build GPT: from scratch, in code, spelled out." — the nanoGPT foundation everyone forks
-  - "How I use LLMs" — compact usage-patterns reference, high signal-to-noise
-- **mine-for**: The makemore→nanoGPT→GPT-2 progression maps directly onto agent-engineering primitives (tokenization, context-management, training loops). For GTM: the LLM deep dive is the single best source on instructor tokens, multi-turn context, and what's actually under the hood. "How I use LLMs" is a compact vendor-agnostic usage-patterns reference.
+  - *Deep Dive into LLMs like ChatGPT* — the single best conceptual map of pretrain → SFT → RLHF pipeline
+  - *Let's reproduce GPT-2 (124M)* — proves the smallest real GPT-2 is reproducible; critical for agent-cost reasoning
+  - *Let's build GPT: from scratch, in code, spelled out* — canonical ~200-line GPT reference; shapes how engineers reason about transformers
+  - *The spelled-out intro to neural networks and backpropagation: building micrograd* — the 24-line autograd engine underpinning everything downstream
+  - *How I use LLMs* — practitioner workflow patterns that predate the agent-framework era
+- **mine-for**: Tokenizer internals (where inference cost actually lives), the 124M baseline as cheapest honest grounding for agent systems, and the SFT/RLHF breakdown that maps directly to fine-tune-vs-prompt GTM decisions. "How I use LLMs" surfaces prompt-chaining patterns that still inform agent architectures.
 
 ## Top videos (signal-sorted)
 `l8pRSuU81PU`  241m  Let's reproduce GPT-2 (124M)  https://www.youtube.com/watch?v=l8pRSuU81PU — 

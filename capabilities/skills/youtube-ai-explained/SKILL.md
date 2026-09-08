@@ -26,31 +26,29 @@ hooks: []
 Channel-scope context for the **@aiexplained-official** YouTube corpus — L5 bridge tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## MEDIAN (@aiexplained-official) - digest
-
-- **what it is**: Long-form animated explainers (15–34 min) by Med Ramanuj dissecting frontier model launches with critical, data-dense breakdowns.
-- **episode shape**: Single-model or thematic deep dive combining benchmark analysis, hype-filtered take, and forward-looking context; recurring "page-count" format signals depth.
+## MEDIAN - digest
+- **what it is**: Long-form animated AI explainer channel (ExComplex/Grace) doing deep release-note breakdowns and cross-model analysis at RIG Level 5
+- **episode shape**: 15–34 min animated deep dives, structured as page-count release breakdowns, model comparatives, or narrative documentaries on key figures
 - **recurring themes**:
-  - Model-by-model deep dives: DeepSeek R1, Claude Fable 5, GPT 6 Astra, o1, Claude 3.7/4, GPT-5.x
-  - AGI timeline skepticism: Altman "AGI 2026" claims, self/mis-training signals, capability ceilings
-  - Hype-filtering stance: "Sans Hype", "OpenAI is Not God", "Is it Really an Upgrade?"
-  - Competitive positioning: Fable 5 vs GPT 5.6 Sol vs Grok 4.5 vs Meta Muse — always relative
-  - Architecture paradigm shifts: o1 as "3rd paradigm", SmartGPT, reasoning vs generation split
+  - Model-generation naming as capability markers (Fable, Mythos, Sol)
+  - Cross-vendor comparison matrices (Claude vs GPT vs Gemini vs DeepSeek)
+  - Page-count breakdowns as structural release-notes (92, 120, 244, 319 pages)
+  - AGI-claims stress-testing (Altman's "AGI in 2026", self-training loops)
+  - Hype-stripping lens ("Sans Hype", "just as Models Start to [Mis]Train Themselves")
+  - Paradigm-shift framing (o1 as "3rd paradigm", 6 key LLM upgrade vectors)
 - **signature frames**:
-  - Page-count depth marker ("Full 319 page Breakdown", "244-page Release") as proxy for rigor
-  - "N things you might not know" enumeration
-  - Paradigm classification (labeling o1 a "3rd paradigm of model")
-  - Hype-strip test: separating what's novel from what's marketing
-  - Capability-critical test ("until it can at least do *this*")
+  - **Page-count authority**: citing exact PDF page counts to signal depth of first-hand reading
+  - **Sans Hype**: explicit deflation of marketing language while retaining technical substance
+  - **Paradigm numbering**: mapping releases to discrete computational-paradigm jumps (1st = scaling, 2nd = in-context, 3rd = test-time compute)
+  - **Documentary lens**: narrative treatment of single researchers (Liang Wenfeng, Sam Altman) as case studies
+  - **Generational naming map**: tracking Fable → Mythos → Sol as a cross-vendor taxonomy
 - **must-watch**:
-  - "OpenAI is Not God" – The DeepSeek Documentary on Liang Wenfeng, R1 and What's Next — anchors the channel's critical, geopolitical lens
-  - "o1 - What is Going On? Why o1 is a 3rd Paradigm of Model + 10 Things You Might Not Know" — best example of the paradigm-relabeling frame
-  - "Claude Fable 5 - Full 319 page Breakdown" — quintessential deep-dive format
-  - "AI Won't Be AGI, Until It Can At Least Do This (plus 6 key ways LLMs are being upgraded)" — cleanest AGI-test + upgrade-pattern summary
-- **mine-for**:
-  - GTM: each episode encodes a launch narrative (breakthrough vs incremental); page-count and "even OpenAI are worried" phrasing signal competitive positioning.
-  - Agent reliability: logic-failure episodes, "auto-hack" claims, and self-training stories map directly to trust boundaries in multi-step agent pipelines.
-  - Paradigm taxonomy (generation → reasoning → ?) gives a reusable vocabulary for classifying new model releases.
+  - "OpenAI is Not God" – unique single-actor documentary + critical framing of DeepSeek R1 lineage
+  - "Claude Fable 5 - Full 319 page Breakdown" – maximum depth, best example of the page-count method
+  - "o1 - What is Going On? Why o1 is a 3rd Paradigm of Model + 10 Things You Might Not Know" – cleanest paradigm-shift articulation
+  - "What the Freakiness of 2025 in AI Tells Us About 2026" – forward-signal synthesis, rare in a reactive channel
+  - "Claude 3.7 is More Significant than its Name Implies (ft DeepSeek R2 + GPT 4.5 coming soon)" – best cross-vendor positioning read
+- **mine-for**: GTM positioning language decoded from model-gen naming (Fable/Mythos/Sol reveal vendor tiering strategy); page-count breakdowns function as structured release notes usable for agent-spec extraction; cross-comparative episodes expose which capability claims are load-bearing for agent engineering (tool-use, self-training, test-time compute) vs. marketing inflation
 
 ## Top videos (signal-sorted)
 `Lo0FDmSbTp4`  34m  "OpenAI is Not God” - The DeepSeek Documentary on Liang Wenfeng, R1 and What's N  https://www.youtube.com/watch?v=Lo0FDmSbTp4 — 

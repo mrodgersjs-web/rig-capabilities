@@ -26,30 +26,30 @@ hooks: []
 Channel-scope context for the **@mreflow** YouTube corpus — L1 rarity tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @mreflow – digest
+## mreflow - digest
 
-- **what it is**: AI tooling news and practical how-to channel for non-technical practitioners ("normal people" who want to use AI today)
-- **episode shape**: 40–48 min weekly AI-news roundups interleaved with single-tool deep dives; cadence is "what shipped this week + what it means for you"
+- **what it is**: Weekly AI news + tooling channel for knowledge workers and creators; the "practical AI adopter" segment
+- **episode shape**: 40–48 min weekly AI News roundups (5–8 stories, opinionated framing) + 20–40 min standalone tutorials/model reviews/Q&A episodes
 - **recurring themes**:
-  - Free-vs-paid tooling axis (Claude, Gemini vs. ChatGPT Plus)
-  - Agent race tracking (OpenAI's O-series, Anthropic's Claude agents, Google agents)
-  - Workflow-stacking: how 3–5 tools compose into a daily system
-  - Chrome/browser replacement experiments (Comet, Perplexity)
-  - "Kids/college/career" AI-impact framing for a mainstream audience
-  - Hype calibration: overhyped vs. underhyped model drops (GPT-6 Astra, Claude 3.5 Sonnet)
+  - Weekly AI News roundups with opinionated takes on model releases (GPT-6, Claude 3, Gemini Ultra, GPT-4)
+  - ChatGPT prompting playbooks and "insane ways" lists (50+ tips, 35 tips)
+  - Model-vs-model "war" framing (ChatGPT vs Claude vs Bard/Gemini comparisons)
+  - AI agents and automation (agent race, agents doing "everything for you")
+  - Free/low-cost tooling as the primary wedge (free agents, free apps, 19 free tools)
+  - Culture-adjacent AI questions (college, side hustles, YouTube economics)
 - **signature frames**:
-  - "Should YOU be using X?" (personal-fit over best-in-class)
-  - "Week in AI" signal/s noise sort (29 stories → top 5)
-  - "Blowing my mind" as a hype thermometer (calibrate against actual product maturity)
-  - "For normal people" filter: what's usable in a spreadsheet vs. what's a research demo
-  - Free-tier audit: can you replicate the paid workflow without a subscription?
+  - "AI News" curated roundup (signal-over-noise curation of the week's biggest stories)
+  - "It's War!" competitive model-release framing
+  - "Free" as positioning (free agent, free app, free tools — anti-enterprise-pricing stance)
+  - "Answering All Your Questions" Q&A episode format
+  - "X Killer" / "X Beetle" shorthand for model comparisons
 - **must-watch**:
-  - "AI News: The AI Agent Race Just Exploded" — maps the competitive agent-landscape shift in one sitting
-  - "The Most Overhyped and Underhyped New AI Models" — his calibration lens is a ready-made positioning map for GTM
-  - "I Built a FREE App That Runs Your Entire Business" — reveals his builder mode; shows what practitioners actually wire together
-  - "50+ Insane Ways To Use The NEW ChatGPT" — dense pattern library of prompt/workflow compositions
-  - "AI News: OpenAI Made a Massive Move Against NVIDIA" — inflection-point framing useful for tracking platform risk narratives
-- **mine-for**: The gap between his "insane" reactions and genuine product maturity is a leading indicator of GTM readiness — if he's excited but the tool is still free-tier-only, the enterprise wedge hasn't opened yet. His tool-stacking episodes are informal field notes on how practitioners compose agentic workflows (the actual user picture behind buyer personas).
+  - "50+ Insane Ways To Use The NEW ChatGPT" — highest-density practical prompting pattern list
+  - "The New ChatGPT Playbook & Prompting Guide" — systematic framework, not just tips
+  - "AI News: The AI Agent Race Just Exploded" — best single-episode marker of consumer-agent sentiment turning point
+  - "I Built a FREE App That Runs Your Entire Business" — agent architecture exposed at consumer level
+  - "29 Biggest AI Stories You Missed This Week" — signal-sorted news curation benchmark
+- **mine-for**: Tracks the gap between frontier model capability and consumer tooling accessibility — useful for timing GTM moves. His "free" positioning and agent-optimism cycles are leading indicators of when paid tools become "table stakes." The Q&A episodes ("900k channel," "college") reveal audience composition and willingness-to-pay signals for creator-economy AI products.
 
 ## Top videos (signal-sorted)
 `UsnyU-9mbKE`  48m  What AI Image Generator Should YOU Be Using??  https://www.youtube.com/watch?v=UsnyU-9mbKE — 

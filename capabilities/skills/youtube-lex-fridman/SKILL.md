@@ -28,28 +28,28 @@ Channel-scope context for the **@lexfridman** YouTube corpus — L5 bridge tier 
 ## What this surface is
 ## Lex Fridman - digest
 
-- **what it is**: Long-form deep-conversation podcast (2–6 hr) spanning AI, physics, math, engineering, gaming, and politics with domain experts.
-- **episode shape**: Unscripted one-on-one; guest monologues punctuated by Lex's cross-domain probing ("how does this relate to…?"), no slides, no audience.
+- **what it is**: Long-form (2-10h) one-on-one deep dives with scientists, engineers, CEOs, and historians; 856 episodes cataloged here.
+- **episode shape**: Single guest, unstructured-ish flow from bio → their field → AI/tech implications → existential framing; often 300-700 min.
 - **recurring themes**:
-  - AGI timelines & scaling-law debates (Dario Amodei, Sam Altman, Jensen Huang, State of AI 2026)
-  - Agentic engineering & coding workflows (ThePrimeagen, DHH "vibe coding", OpenClaw / Peter Steinberger)
-  - Physics-to-CS bridges: Many-Worlds, Gödel, computation vs. reality (Sean Carroll, Stephen Wolfram, Terence Tao)
-  - Hardware & infra as GTM constraint: GPU clusters, TSMC, Stargate, DeepSeek (Jensen Huang, #459)
-  - Solo-founder / indie-engineer identity and burnout (DHH, ThePrimeagen, John Carmack)
-  - "Hard problem" framing across domains (Tao's hardest math, Carroll's ToE, Amodei's alignment)
+  - AGI timelines and the "scaling laws" debate (Hinton, Sutskever, Amodei, Altman)
+  - LLM primitives → agents → AGI pipeline (cited repeatedly by Dario Amodei, ThePrimeagen, Dario)
+  - China vs. US AI race: TSMC, Stargate, GPU supply chains (Jensen Huang, #459)
+  - Hardware as bottleneck: NVIDIA CUDA moat, custom ASICs, photonics (Huang, #494)
+  - Practitioner AI-coding workflows: agentic engineering, vibe coding, tool-use (DHH ×2, ThePrimeagen)
+  - History/complexity framing: why civilizations rise/fall (Roman, Byzantine, WWII episodes)
 - **signature frames**:
-  - The "hardest open problem in your field" prompt
-  - Cross-domain analogy chains (Gödel → consciousness → AGI)
-  - Adversarial "but what if…" pushback on guest's AGI timeline
-  - "Walk me through the math" — forcing formal rigor on hand-wavy claims
-  - Architecture-as-narrative: guests describe systems by drawing on paper or whiteboard in real time
+  - "The future of humanity" as the through-line for every tech question
+  - First-principles decomposition (ask "why" until you hit physics/math bedrock)
+  - Analogies from analog domains (Biomimicry for AI, economics for decision-making)
+  - "Surreal" as the register—Fridman treats 2025 AI as cognitively disorienting
+  - The Fermi-paradox / cosmic-cope lens applied to AI risk
 - **must-watch**:
-  - *Dario Amodei: Anthropic CEO on Claude, AGI & the Future of AI & Humanity* — most candid CTO-level AGI risk framing to date.
-  - *State of AI in 2026: LLMs, Coding, Scaling Laws, China, Agents, GPUs, AGI* — single-episode condensation of the entire 2025 AI landscape.
-  - *ThePrimeagen: Programming, AI, ADHD, Productivity, Addiction, and God* — agent-engineer workflow & tooling in raw form.
-  - *Dario Amodei: Anthropic CEO on Claude, AGI & the Future of AI & Humanity* — (merge with above if dedup; keep one)
-  - *Jensen Huang: NVIDIA - The $4 Trillion Company & the AI Revolution* — silicon-to-GTM constraint analysis.
-- **mine-for**: Treat as a primary-source corpus for AGI-timeline claims (Amodei, Altman #367 & #419), agent-toolchain narratives (ThePrimeagen, OpenClaw, DHH #501), and hardware-GTM themes (Jensen Huang, #459 DeepSeek/NVIDIA). Cross-reference every AGI prediction against episode date to build a "prediction-accuracy log." The DHH two-episode arc (#474 → #501) is the cleanest zettakai-of-vibe-coding timeline in the corpus.
+  - *Dario Amodei: Anthropic CEO on Claude, AGI & the Future of AI & Humanity* — clearest CEO-level GTM + safety positioning from a non-OpenAI lab
+  - *Jensen Huang: NVIDIA - The $4 Trillion Company & the AI Revolution* — hardware GTM at scale, CUDA moat, TSMC dependency
+  - *DHH: Future of Programming, AI, Agentic Engineering, Vibe Coding & Linux* — practitioner lens on how shipping software actually changes with agents
+  - *State of AI in 2026: LLMs, Coding, Scaling Laws, China, Agents, GPUs, AGI* — 265-min synthesis spanning all subfields
+  - *Sam Altman: OpenAI CEO on GPT-4, ChatGPT, and the Future of AI* — product-led GTM, consumer vs. enterprise tension
+- **mine-for**: Extract GTM positioning language (Amodei's "safety as premium," Altman's "toys," Huang's "we're the toll booth of AI"), agent-engineering patterns (DHH on iterative tool-use loops, ThePrimeagen on context-window management), and supply-chain chokepoints (Huang + #459 on TSMC/Fab capacity as the real bottleneck, not models).
 
 ## Top videos (signal-sorted)
 `jdCKiEJpwf4`  627m  Scott Horton: The Case Against War and the Military Industrial Complex | Lex Fri  https://www.youtube.com/watch?v=jdCKiEJpwf4 — 

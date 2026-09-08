@@ -26,29 +26,30 @@ hooks: []
 Channel-scope context for the **@Deeplearningai** YouTube corpus — L4 lab tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @Deeplearningai — digest
-- **what it is**: Andrew Ng's content arm covering LLM courses, AI Dev conference talks, and agent-building patterns; the "practitioner layer" of his 5-level AI stack.
-- **episode shape**: Long anchor courses (149m), AI Dev 25/26 conference tracks (10–55m speaker slots + panels), and 2–6m promo/teaser clips driving course signups.
+## DeepLearning.AI - digest
+
+- **what it is**: Andrew Ng's org; applied-AI courses, AI Dev conference talks (NYC/SF), and short-form clips — the practitioner-mid layer of the AI stack.
+- **episode shape**: Long-form course lectures (12–149 min), AI Dev conference sessions (19–92 min), and 2–6 min promo/clips; conference talks dominate the signal.
 - **recurring themes**:
-  - Agent memory & context engineering (LangGraph, MemGPT, Oracle AI DB)
-  - Coding agents as a product category (Claude Agent SDK, Bedrock, Genspark)
-  - Real-time / low-latency inference (OpenAI Realtime API, AMD + Lamini, serverless Bedrock)
-  - Transformer & attention internals (Chris Manning, C5W3 attention modules)
-  - Open-source model fine-tuning (DeepSeek reasoning on AMD)
-  - Prompting as a formal discipline (149m course, Jay Alammar / Maarten Grootendorst)
+  - Agent memory & context engineering (LangGraph, MemGPT, Oracle AI Database)
+  - Coding agents and LLM code quality at enterprise scale
+  - Serverless inference & cost optimization (Bedrock, AMD GPUs via Lamini, DeepSeek reasoning)
+  - Accuracy/cost/latency tradeoffs in production agents; red-team LLM apps
+  - Knowledge graphs for agent grounding; agent discovery
+  - AI velocity costs — the hidden tax on teams adopting agents fast
 - **signature frames**:
-  - "LLMs as Operating Systems" (agent memory as the resource-management layer)
-  - 5-level AI stack (positioning: L4 = agents/tooling)
-  - "Agent multiverse" (composable agent topologies, Ankit Mathur)
-  - Velocity vs. quality tension ("Hidden Cost of AI Velocity")
-  - "AI writes your code. Who reviews it?" — the accountability gap frame
+  - Ng's Five Levels of AI (this channel = Level 4, "Narrow AI / Generative")
+  - LLMs as Operating Systems (MemGPT framing)
+  - "Context Engineering" as the successor to prompt engineering
+  - Agent-as-daemon: coding agent calls the developer (from short-form clips)
+  - "AI Dev" as a counterweight to research-only conferences — practitioner signal
 - **must-watch**:
-  - *Full AI Prompting Course with Andrew Ng* — the foundational long-form anchor; all downstream courses assume this baseline.
-  - *AI Dev 25 | Harrison Chase: Long Term Memory with LangGraph* — concrete agent-memory architecture, directly transferable GTM pattern.
-  - *AI Dev 26 x SF | Eli Schilling: Hands On Agent Context & Memory Engineering* — production-grade context layering with Oracle; maps to enterprise buyer pain.
-  - *AI Dev 26 x SF | Ankit Mathur: The Coding Agent Multiverse of Madness* — agent orchestration taxonomy; useful for framing multi-agent product bets.
-  - *AI Dev 25 | Justin Uberti: Introduction to the OpenAI Realtime API* — modality-shift signal; where consumer-facing agents land first.
-- **mine-for**: Agent-memory architectures as the current engineering bottleneck (MemGPT, LangGraph state, context windows). Coding-agent workflow mechanics (review loops, human-in-the-loop gates). The real-time/low-latency axis as a differentiation lever vs. batch LLM services. GTM implication: buyers are shifting from "which model" to "how do agents coordinate and remember."
+  - "AI Dev 25 | Harrison Chase: Long Term Memory with LangGraph" — the reference architecture for agent memory in production
+  - "AI Dev 26 x SF | Or Dagan: Optimizing Accuracy, Cost, and Latency in Real-World Agents" — the ops cost model every team needs
+  - "AI Dev 26 x SF | Tom Howlett: Can LLMs Generate Enterprise Quality Code?" — GTM-signal: when to trust vs. gate LLM output
+  - "AI Dev 26 x SF | Barun Singh & Kennith Jackson; The Hidden Cost of AI Velocity and AI Agents" — the counter-argument that resists adoptions
+  - "Full AI Prompting Course with Andrew Ng" — the baseline mental model everything else builds on
+- **mine-for**: Agent-engineering patterns that have survived conference iterations (2025→2026); the shift from "prompt" to "context engineering" + memory systems; cost/latency as first-class constraints, not afterthoughts. The short clips reveal a new GTM narrative: the agent as a teammate that pings you, not a black box — that's the sales story.
 
 ## Top videos (signal-sorted)
 `8ib4Qnh2HFE`  149m  Full AI Prompting Course with Andrew Ng  https://www.youtube.com/watch?v=8ib4Qnh2HFE — 

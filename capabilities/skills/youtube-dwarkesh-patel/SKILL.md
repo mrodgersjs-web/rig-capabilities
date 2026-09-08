@@ -26,30 +26,29 @@ hooks: []
 Channel-scope context for the **@DwarkeshPatel** YouTube corpus — L5 bridge tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## DwarkeshPatel - digest
+## Dwarkesh Patel — Digest
 
-- **what it is**: The deepest structured AI-research discourse in podcast form; expert-to-expert long-form with unusually high signal density.
-- **episode shape**: 1.5–4.5 hr single-guest sits; guests are named researchers or lab leads; recurring guests (Shulman, Sholto/Trenton, Christiano) get multi-part deep dives.
+- **what it is**: Long-form (90–270 min) expert podcasts centered on AI alignment, AGI timelines, and the physics/economics of scaling, with occasional history/physics detours.
+- **episode shape**: Single expert (or pair) in deep, unstructured dialogue; Dwarkesh pushes on具体时间 assumptions, counterfactuals, and hidden variables.
 - **recurring themes**:
-  - AGI timeline modelling (2027 forecast, intelligence-explosion vs 30-year counter)
-  - Alignment / AI-takeover prevention (Christiano, Carlsmith, Yudkowsky, Shulman)
-  - RL vs LLM sufficiency (Sutton's "dead end," Chollet's puzzle failures, Sholto/Trenton mechanism)
-  - Scaling & data limits (data black hole, compute-price curves, 1 GW datacenters)
-  - China/US superintelligence race (Aschenbrenner, Dylan Patel)
-  - Cross-domain first-principles rebuilds (AlphaGo, bubble universes, AdS/CFT as analogy engine)
+  - Intelligence-explosion models: FLOPS doubling curves, model-collapse thresholds, month-by-month 2027 AGI scenarios (Kokotajlo, Aschenbrenner, Shulman).
+  - Alignment as prevention problem: "AI takeover" not just capability but governance; Christiano/Shulman/Carlsmith recurring.
+  - Training-paradigm shifts: self-play, continual learning, RL+LLM sufficiency debate (Eric Jang, Sutton, Sholto/Trenton).
+  - Compute & data economics: $10B models, 1 GW datacenters, 10× compute price spikes, data black hole.
+  - Adjacent-domain pattern matching: AlphaGo self-play → LLMs, primate evolution → intelligence explosion, atomic-bomb history → existential risk.
 - **signature frames**:
-  - "How does X actually work?" reconstructions (LLM thinking, AlphaGo rebuild, training pipeline)
-  - Month-by-month AI2027 scenario walk
-  - The "dead end" stress test (Sutton, Chollet as counter-thesis generators)
-  - Recursion / acceleration node analysis (AI-automates-AI-research)
-  - Pre-mortem takeover narrative (Christiano/Carlsmith "what does the last step look like?")
+  - "AGI is 30 years away" vs "AGI in 2027" — the channel's core axis of disagreement.
+  - Compute-doubling / FLOPS-ramp arithmetic as the predictive tool of record.
+  - "AI takeover" framing: capability ≠ alignment; governance gap as the kill path.
+  - Model-collapse / self-play saturation as the ceiling test.
+  - Sutton's "LLMs are a dead end" as the contrarian anchor point for every alignment episode.
 - **must-watch**:
-  - Sholto Douglas & Trenton Bricken — How LLMs actually think — best mechanism-level explanation in the corpus
-  - Ryan Greenblatt – What happens once AI can automate AI research? — the recursive-automation node that reframes all GTM timing
-  - Richard Sutton – Father of RL thinks LLMs are a dead end — strongest single counter-thesis; forces you to name your assumption
-  - Elon Musk – "In 36 months, the cheapest place to put AI will be space" — harshest external pressure test on compute/timeline orthodoxy
-  - John Schulman (OpenAI Cofounder) — Reasoning, RLHF, & plan for 2027 AGI — practitioner roadmap closest to shipped product
-- **mine-for**: Extract scaling-law & data-limit arguments (Reiner Pope, data black hole, compute 10x) to set realistic capacity ceilings. Map the RL+LLM sufficiency debate (Sutton, Chollet, Sholto/Trenton) to decide where your agent stack is structurally locked vs. evolvable. Use AI2027 + Greenblatt for acceleration-timing that resets your GTM horizon lines.
+  - "Leopold Aschenbrenner — 2027 AGI, China/US super-intelligence race, & the return of history" — most complete single-episode AGI-timeline argument.
+  - "AI 2027: month-by-month model of intelligence explosion — Scott Alexander & Daniel Kokotajlo" — the granular FLOPS-as-timeline method.
+  - "How GPT, Claude, and Gemini are actually trained and served – Reiner Pope" — rare infrastructure-level view of what's under the API.
+  - "What rebuilding AlphaGo teaches us about self-play, RL, and future of LLMs - Eric Jang" — concrete next-paradigm blueprint.
+  - "Richard Sutton – Father of RL thinks LLMs are a dead end" — the dissenting pole that stress-tests every pro-LLM episode.
+- **mine-for**: Cost-of-intelligence curves (who pays, when prices invert), compute-doubling → inference-cost predictions for GTM planning, data-black-hole constraints on fine-tuning vs. RL bootstrap. The channel is the best single source for "what does the training paradigm look like in 18 months and what does that do to your unit economics."
 
 ## Top videos (signal-sorted)
 `zdbVtZIn9IM`  272m  Leopold Aschenbrenner — 2027 AGI, China/US super-intelligence race, & the return  https://www.youtube.com/watch?v=zdbVtZIn9IM — 

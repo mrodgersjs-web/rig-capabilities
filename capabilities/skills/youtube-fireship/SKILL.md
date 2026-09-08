@@ -28,23 +28,32 @@ Channel-scope context for the **@Fireship** YouTube corpus — L3 credible tier 
 ## What this surface is
 ## Fireship - digest
 
-- **what it is**: 100-second-to-25-minute dev videos mixing rapid-fire explainers with build-along tutorials, shifting hard toward AI beats since 2024
-- **episode shape**: Two modes — 3-7min viral hook-driven AI news roundups and 17-25min hands-on "build X from scratch" tutorials; no series, each video standalone
+- **what it is**: 100-second explainer franchise that expanded into 4–25 min deep-dives and AI model-war commentary
+- **episode shape**: Hooky competitive framing ("X destroyed Y") → rapid comparison → one actionable takeaway; longer videos add build-along or cost breakdown
+
 - **recurring themes**:
-  - AI model hype cycles (GPT-4, Claude 3, Gemini Ultra, DeepSeek, GPT-6 Astra) benchmarked against each other with "destroyed/terrified" framing
-  - Same-app-multi-framework constraint comparisons ("built 10 times")
-  - Cost/opex framing ("$320/mo AI stack", "40x cheaper than Claude")
-  - Beginner-first build tutorials (PWA, PWA, SQL, Firebase) as evergreen back-catalog
-  - Bug postmortems and "screw-ups" as a recurring device
-  - Web3/NFTs as a 2022-era throughline now fading from titles
-- **signature frames**: "in 100 seconds" compression, "I built the same app N times" constraint test, "AGI is near?" escalation, "grift" as a skeptical lens for AI GTM, "God-Tier" roadmap hierarchies, viral-title as Gate 1 (viewers judge before content)
+  - Model rivalry as narrative engine: Claude vs GPT-4 vs Gemini vs DeepSeek (named, cycle every 2–3 videos)
+  - Cost-performance reframe: "40x cheaper than Claude," open-source replacing paid stacks
+  - AI grift patterns: wrapper tools, ChatGPT store, "5 ideas for your own AI grift"
+  - Math/reasoning as the frontier: "the summer Math fell to the machines"
+  - Serverless/Firebase as recurring infra baseline
+  - MCP (Model Context Protocol) as the emerging agent-protocol layer
+
+- **signature frames**:
+  - "In 100 seconds" constraint as epistemic filter
+  - "Destroyed / crushed / leveled up" competitive-benchmark frame
+  - "The mystery is solved... and the answer is 40x cheaper" (cost-reframe twist)
+  - "I built the same app 10 times" (controlled comparison)
+  - "Your own AI grift" (GTM-as-hustle lens)
+
 - **must-watch**:
-  - "I built the same app 10 times // Which JS Framework is best?" — constraint-based benchmarking methodology reusable for any model/tool comparison
-  - "5 open source tools that replaced my $320/mo AI stack..." — concrete cost-stack decomposition for agent engineering
-  - "Claude's Model Context Protocol is here... Let's test it" — direct agent-engineering lens, MCP in practice
-  - "DeepSeek is back... and Silicon Valley is terrified" — competitive dynamics read, useful for GTM timing calls
-  - "The most expensive software bug in history..." — single-incident anatomy, good for engineering postmortem templates
-- **mine-for**: RL is the fastest "framework shift" signal in the title stream (faster than any framework change). Cost-per-token framing ("40x cheaper", "$320/mo") is the GTM wedge Fireship uses to make AI accessible — mirrors how startups sell. Watch for when "in 100 seconds" format breaks (25min Firebase = the format is dead for that topic), which tells you where the audience actually lives.
+  - *5 open source tools that replaced my $320/mo AI stack...* — concrete cost-stack teardown, directly usable for GTM pricing
+  - *Claude's Model Context Protocol is here... Let's test it* — first hands-on agent-protocol evaluation
+  - *The mystery is solved... and the answer is 40x cheaper than Claude* — archetypal cost-disruptor GTM frame
+  - *I built the same app 10 times // Which JS Framework is best?* — methodology template for benchmarking
+  - *5 ideas for your own AI grift with ChatGPT* — distilled GTM pattern catalog
+
+- **mine-for**: Model-comparison videos double as positioning briefs (which capability claim is "the win" this cycle). The "40x cheaper" and "grift" frames reveal how Fireship encodes GTM signals into narrative. MCP episode is the single best free artifact for understanding the agent-protocol layer before it consolidates. Use the "same app 10 times" structure as a template for internal stack evaluations.
 
 ## Top videos (signal-sorted)
 `q5J5ho7YUhA`  25m  Firebase - Back to the Basics  https://www.youtube.com/watch?v=q5J5ho7YUhA — 

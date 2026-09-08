@@ -26,28 +26,29 @@ hooks: []
 Channel-scope context for the **@3blue1brown** YouTube corpus — L2 depth tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## 3blue1brown - digest
-- **what it is**: Grant Sanderson's video channel turning hard math/ML concepts into geometric intuition via Manim animation.
-- **episode shape**: 10–20 min self-contained "but what is X?" explainers; longer (35–60 min) guest features and series finales.
+## 3Blue1Brown - digest
+- **what it is**: Grant Sanderson's channel that reduces advanced math and CS concepts to geometric intuition via custom Manim animations, the de-facto reference for "why this works" before "how to compute it."
+- **episode shape**: Single-object deep dives (10–60 min) structured as a narrative arc: naive picture → formal definition → surprising consequence, one canonical idea per video.
 - **recurring themes**:
-  - Deep Learning chapter series (gradient descent → backprop → transformers → LLM fact storage)
-  - "Compression is Intelligence" two-parter (entropy, cross-entropy)
-  - Laplace transform pipeline (physics prelude → transform → utility)
-  - Quantum computing and quantum mechanics (Grover's, with minutephysics)
-  - Guest-madefeature videos as a distribution strategy (Welch Labs, Paul Dancstep, Vilas Winstein)
-  - Summer of Math Exposition as a community-building + curation play
+  - Fourier/signal decomposition as a universal lens (Laplace transforms, logarithms of images, phase changes)
+  - Neural network geometry (gradient descent as surface walking, backprop as chain-rule unfolding, attention as weighted projection)
+  - Information → intelligence (entropy, cross-entropy, compression as Bayesian inference)
+  - Linear algebra as pure geometry (vectors, rotation matrices, eigenvalues as invariant structure)
+  - Quantum superposition and Grover's search as amplitude interference
+  - Manim itself as a reusable explainability substrate
 - **signature frames**:
-  - "Geometric intuition first" — every concept reduced to a picture before formalism
-  - "Combin a hairy ball" style reductive-impossibility framing
-  - "How to lie using visual proofs" — meta-critique of the channel's own method
-  - "Tattoos on Math" — distillation test (if you can't make it a 2D surface design, you don't understand it)
-  - "What does it feel like to invent math?" — invention-as-narrative lens
+  - Geometric-first: every abstract object gets a spatial picture before notation
+  - "Surface" metaphor: loss landscapes as 3-D terrain the optimizer walks
+  - Signal/frequency decomposition as the master lens across physics, ML, and math
+  - Atomic decomposition: one idea, one video, no cross-referencing required
+  - "Why before what" narrative gating (motivation precedes formalism)
 - **must-watch**:
-  - "Attention in transformers, step-by-step | Deep Learning Chapter 6" — the clearest public visualization of QKV stillness; still the canonical ref for engineers.
-  - "Reinventing Entropy | Compression is Intelligence Part 1" — shortest correct path from dice to information theory.
-  - "The most beautiful formula not enough people understand" — tests your tolerance for a single identity carrying a full narrative.
-  - "But what is quantum computing? (Grover's Algorithm)" — best 37 min from zero to oracle+diffusion in one sitting.
-- **mine-for**: As a GTM/agent-engineering lens, extract (1) how serial long-form builds a "intuition moat" that short-form can't replicate, (2) the guest-video flywheel as a low-cost content partnership engine, and (3) the "Tattoos on Math" distillation heuristic as a labeling rubric for agent explainability quality.
+  - "But what is quantum computing? (Grover's Algorithm)" — the cleanest single-video explainer of amplitude interference and speedup logic; transfers directly to analog-computing arguments.
+  - "But what is cross-entropy? | Compression is Intelligence Part 2" — the bridge from Shannon to Bayesian model selection in one sitting; the frame for agent-evaluation metric design.
+  - "Attention in transformers, step-by-step | Deep Learning Chapter 6" — the canonical geometric decomposition of Q/K/V; the reference for any "what does attention actually compute" discussion.
+  - "Reinventing Entropy | Compression is Intelligence Part 1" — the foundational framing that entropy = expected code length; prerequisite for the entire compression-is-intelligence arc.
+  - "How (and why) to take a logarithm of an image" — rare non-ML entry: applies Fourier-domain thinking to pixel data; good transfer-analogy for signal-to-agent mappings.
+- **mine-for**: Extract (1) the compression-as-universal-lens frame (entropy → cross-entropy → variational inference → agent grounding), (2) attention-as-geometric-projection as a transferable mental model for retrieval-augmented systems, (3) the Manim source code itself as a template for agent-generated explanatory artifacts. Grounding: the "Compression is Intelligence" pair positions the entire stack as a compression problem, which maps cleanly onto GTM for "the model is a lossy compressor of its context."
 
 ## Top videos (signal-sorted)
 `fsLh-NYhOoU`  60m  The most beautiful formula not enough people understand  https://www.youtube.com/watch?v=fsLh-NYhOoU — 

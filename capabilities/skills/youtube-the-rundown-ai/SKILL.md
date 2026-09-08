@@ -26,30 +26,29 @@ hooks: []
 Channel-scope context for the **@TheRundownAI** YouTube corpus — L1 rarity tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @TheRundownAI - digest
-- **what it is**: Daily AI news channel running long-form strategic interviews with lab/building leaders as its Layer-1 signal feed.
-- **episode shape**: 14–57 min single-guest interviews; fast-paced, one theme per segment, heavy on "what's coming next quarter" talk.
+## MEDIAN – digest
+- **what it is**: Long-form executive interviews with AI lab and platform leaders, positioned as Level 1 of a 5-level AI stack (daily AI news cycle feed).
+- **episode shape**: Single-guest sit-down, 14–57 min, structured around a strategic thesis + technical build + future-of-work cut.
 - **recurring themes**:
-  - AI Agents as the dominant product primitive (appears in 7/10 titles)
-  - AGI / superintelligence timelines and what life looks like after (Hassabis, Altman, Zuck)
-  - Open-source model strategy as a moat play (Llama 3.1, Gemini open weights)
-  - AI-native interfaces replacing the web (*AEO*, "rebuilding the web", AI App Store)
-  - Hardware convergence: glasses, neural control, infinite-memory companions
-  - "Zero-person company" and agent-driven org design (Altman, Suleyman)
+  - AI agents as the platform-of-record (Dharmesh "AI App Store," Nadella "Rebuilding the Web," Pichai "Agents Replacing Engineers")
+  - Open-source positioning as distribution moat (Zuckerberg on Llama 3.1, Shah on AEO)
+  - AGI timelines and post-AGI civilization (Hassabis 2030, Altman "Zero-Person Companies")
+  - Neural interfaces and superintelligence as the 10-year horizon (Zuckerberg neural control)
+  - Companion/memory architectures (Suleyman Copilot Vision, Infinite Memory)
+  - "Flip phone moment" framing for AI's inflection (Pichai)
 - **signature frames**:
-  - "AI App Store" — distribution layer above the model (Shah)
-  - "Flip phone moment" — the inflection from terminal to iPhone (Pichai)
-  - "Zero-person company" — agent-employee ratio = 1:0 (Altman)
-  - "Infinite memory" — personal AI companion with unbounded recall (Suleyman)
-  - "Curing every disease" — AGI as universal疗法, not just chat (Hassabis)
-  - RIG Level-1 framing: this layer is *what leaders say*, not *what ships*
+  - The Agent Economy lens – agents as new app store / distribution layer
+  - Zero-person company test – can a firm run with no employees?
+  - Flip-phone analogy – when does an AI capability leap from incremental to category-defining?
+  - Stacked capability levels (RIG 5-level stack) – where does each player sit?
+  - "Life after AGI" horizon – what problem does AGI actually solve?
 - **must-watch**:
-  - Dharmesh Shah on AEO, AI Agents, and the 'AI App Store' — clearest GTM thesis for agent distribution
-  - Logan Kilpatrick on Google's new Gemini Models, AI Agents, AGI, and more — agent-framework roadmap + open-weight strategy
-  - Sam Altman on Zero-Person AI Companies, Sora, AGI Breakthroughs, and more — org-design economics, media-gen moat
-  - Sundar Pichai on Agents Replacing Engineers, Google's Future, AI's Flip Phone Moment, and More — candid on agent→engineer substitution
-  - Demis Hassabis on AGI by 2030, Curing Every Disease, Life After AGI, and More — longest-horizon framing in the corpus
-- **mine-for**: Extract every claim about agent distribution channels (AEO, app stores, native apps vs. web). Cross-reference "infinite memory" and AI-native UI claims against what's actually shipped (no transcripts → treat as *intent*, not *implementation*). Use Pichai + Suleyman agent-replaces-engineer takes as baseline for workforce-replacement TAM models.
+  - *Sam Altman on Zero-Person AI Companies, Sora, AGI Breakthroughs, and more* – cleanest articulation of agent-economy GTM and distribution logic.
+  - *Satya Nadella on AI Agents, Rebuilding the Web, the Future of Work, and more* – best map of how a legacy platform re-architects for agent-first.
+  - *Dharmesh Shah on AEO, AI Agents, and the 'AI App Store'* – longest (57 min); AEO as the new SEO, agent-commerce thesis.
+  - *Mark Zuckerberg on Llama 3.1, Open Source, AI Agents, Safety, and more* – open-source as competitive strategy, not ideology.
+  - *Sundar Pichai on Agents Replacing Engineers, Google's Future, AI's Flip Phone Moment, and More* – "flip phone" frame is the sharpest single metaphor in the corpus.
+- **mine-for**: Extract the agent-distribution argv: how each exec defines who the agent's user is (dev? end consumer? other agent), what the billing surface looks like (app store, API, embedded interface), and where open-source lowers CAC. The Rhino cut: Nadella's "rebuild the Web" + Pichai's "agents replace engineers" + Altman's "zero-person" form a single thesis – the web's human-UI layer is being replaced by an agent-UI layer, and whoever owns that layer owns the next platform tax.
 
 ## Top videos (signal-sorted)
 `fKjgKr-kgAY`  57m  Dharmesh Shah on AEO, AI Agents, and the ‘AI App Store’  https://www.youtube.com/watch?v=fKjgKr-kgAY — 

@@ -1,6 +1,6 @@
 ---
 name: youtube-statquest
-description: StatQuest (@statquest): L2 depth AI-stack channel (263-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
+description: StatQuest (@statquest): L2 depth AI-stack channel (264-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
 when_to_use: mining @statquest videos; quoting StatQuest as evidence for GTM/agent-engineering work; choosing what to absorb from lab/bridge/rarity tier (L2 depth)
 version: 0.1.0
 owner: rig
@@ -27,33 +27,28 @@ Channel-scope context for the **@statquest** YouTube corpus — L2 depth tier of
 
 ## What this surface is
 ## STATQUEST - digest
-
-- **what it is**: Josh Starmer's visual-statistics channel that compresses graduate-level ML into colored-dot 20-min videos; now pivoting hard into "from start to finish" Python coding series.
-- **episode shape**: 15–45 min single-topic explainer with a "Clearly Explanged!!!" or "From Start to Finish" suffix; occasional long-form webinar (74 min) and podcast ("The AI Buzz").
+- **what it is**: Josh Starmer's channel turning stats/ML into "Clearly Explained" visual-oral lessons for builders, students, and prac
+- **episode shape**: Two-tier structure — "Main Ideas" explainer → "Mathematical Details" deep-dive; interspersed with interview series (Human Stories in AI, AI Buzz) and hands-on Python code-alongs
 - **recurring themes**:
-  - Colored-orb probability visualizations (binary, categorical, continuous) as the base rendering layer
-  - "From Start to Finish" coding pipeline: problem → features → model → evaluate → full Python script (trees, XGBoost, SVM, transformers)
-  - "Human Stories in AI" practitioner interviews (Abbas Merchant, Simon Stochholm, Tommy Tang) mapping who actually deploys these tools
-  - "The AI Buzz" news/podcast cadence tracking ChatGPT→transformers→RLHF→alignment
-  - Linear-algebra bridge: design matrices, simplex, matrix math behind attention
-  - Level-2 "I can use it" framing over Level-3 "I can prove it" rigor
+  - Linear models as the unifying backbone (t-tests, ANOVA, regression, design matrices)
+  - Transformer architecture decomposed step-by-step (encoder-only, decoder-only, attention, matrix math)
+  - Gradient boosting family (XGBoost, random forests, missing data handling)
+  - Optimization fundamentals (simplex, SGD, linear programming)
+  - Dimensionality reduction (UMAP) and evaluation metrics (FDR, QQ plots, quantiles)
+  - Industry-context curation via AI Buzz and Human Stories interviews (ChatGPT, Matics, alignment)
 - **signature frames**:
-  - "It's just a biased coin" disambiguation (reset prior before each topic)
-  - Colored balls in an urn as the universal probability renderer
-  - "Don't panic, it's just a breath" scaffold for anxiety spikes
-  - The duck test / rubber-duck as validation lens
-  - "From Start to Finish" as a GTM artifact shape (problem→code, reusable)
-  - "Clearly Explained!!!" as an explicit quality bar marker in titles
+  - "Main Ideas → Mathematical Details" split (separate pitch from proof)
+  - Design matrix as the single frame for every linear model
+  - "Super Simple Terms" entry ramp before technical ascent
+  - Pop! quick-hit analogies (4-6 min mental models)
+  - "Start to Finish" code-along as a runnable task chain
 - **must-watch**:
-  - *The Essence of Linear Regression!!!* — the single frame that unlocks t-tests, ANOVA, XOR, and every downstream model; 12-min density
-  - *The matrix math behind transformer neural networks, one step at a time!!!* — shortest path from stats-literate crowd to attention-mechanism literacy
-  - *XGBoost in Python from Start to Finish* — exemplar of the new coding-pipeline format you can re-shape into a learning path or product onboarding
-  - *Decoder-Only Transformers, ChatGPTs specific Transformer, Clearly Explained!!!* — the ChatGPT-specific architecture (vs. encoder-only, vs. encoder-decoder) in one sitting
-  - *The Simplex Algorithm, Mathematical Details!!!* — signals channel depth: goes past intuition into numeric geometry, useful for LP-based agent planning
-- **mine-for**:
-  - The "from start to finish" series is a GTM template: each video is a self-contained feature-→-model-→-eval pipeline you can scrape into onboarding docs or agent-tool-card times
-  - Human Stories + AI Buzz together form a practitioner-market map; useful for RIG segmentation (who's at Level 2 vs. Level 4)
-  - Josh's compression ratio (6-month curriculum → 20 min) is itself a product: agent systems that ingest these as "mid-level priors" can skip to Level 3 without re-deriving Level 1
+  - *The Essence of Linear Regression!!!* — the design-matrix frame that reorganizes every downstream test
+  - *The matrix math behind transformer neural networks, one step at a time!!!* — best public decomposition for agent-engineering readers
+  - *The Simplex Algorithm, Mathematical Details!!!* — constraint-satisfaction thinking reusable beyond LP
+  - *XGBoost in Python from Start to Finish* — compact reference for the boosting task pattern
+  - *Decoder-Only Transformers, ChatGPT's specific Transformer, Clearly Explained!!!* — isolates the architecture actually in production
+- **mine-for**: The "Main Ideas / Math Details" split is a ready-made GTM artifact pattern (concept pitch vs. technical proof). Design-matrix unification is useful for agents that must dispatch across t-test, ANOVA, and regression without branching. AI Buzz episodes provide citable industry-voice context (alignment, RAG, startup framing) without relying on transcript depth.
 
 ## Top videos (signal-sorted)
 `Y5tyrAxhmUc`  74m  The Elements of StatQuest (Webinar)  https://www.youtube.com/watch?v=Y5tyrAxhmUc — 

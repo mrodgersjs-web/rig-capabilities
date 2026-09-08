@@ -1,6 +1,6 @@
 ---
 name: youtube-two-minute-papers
-description: Two Minute Papers (@TwoMinutePapers): L2 depth AI-stack channel (1085-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
+description: Two Minute Papers (@TwoMinutePapers): L2 depth AI-stack channel (1086-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
 when_to_use: mining @TwoMinutePapers videos; quoting Two Minute Papers as evidence for GTM/agent-engineering work; choosing what to absorb from lab/bridge/rarity tier (L2 depth)
 version: 0.1.0
 owner: rig
@@ -26,31 +26,35 @@ hooks: []
 Channel-scope context for the **@TwoMinutePapers** YouTube corpus — L2 depth tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @TwoMinutePapers — digest
-- **what it is**: Short-form AI/ML explainer channel (Kunal Kushreja) with embedded TU Wien computer-graphics lecture series; 0 transcripts at index, ~1085 videos.
-- **episode shape**: 3–10 min single-paper/model explainers; 18–25 min TU Wien rendering lectures (Path Tracing, Metropolis LT, tone mapping) as a parallel track.
-- **recurring themes**:
-  - OpenAI model releases (o3, 5.5 Instant) and ChatGPT capability claims
-  - DeepSeek / open-weight models as cost-disruption proof points
-  - DeepMind AlphaFold and Gemini positioning
-  - Claude (Anthropic) benchmarking against ChatGPT
-  - NVIDIA GPU/compute as the bottleneck layer
-  - TU Wien: path tracing, importance sampling, BRDF/rendering equation
-- **signature frames**:
-  - "Shouldn't Be Possible" — impossible→possible inversion to signal a regime break
-  - "Failed N Times, Then Beat the Human Record" — persistence-as-proof narrative
-  - "The Billion Dollar Gap Is Collapsing" — dem
+## TwoMinutePapers — digest
 
-ocratization / cost-curve frame
-  - "Just Crossed A Line" — threshold-crossing for agent autonomy
-  - "The Future Is Here" — deflationary hype counter-positioning reality against the name
+- **what it is**: Original 2-min paper explainer channel that has expanded into long-form technical deep-dives, lecture series, and conference-talk curation
+- **episode shape**: Hybrid — 2–5 min paper summaries (classic format) + 18–29 min lecture/cut-in blocks (TU Wien series, speaker talks, original breakdowns)
+
+- **recurring themes**:
+  - TU Wien Rendering series (path tracing, importance sampling, Reinhard tone mapping, space partitioning) as a standing curriculum
+  - OpenAI/ChatGPT product-cycle commentary (o3, o4, agents, "supercharged" cycles)
+  - DeepSeek efficiency claims and open-weight economics
+  - AlphaFold / structural biology as "the most important AI breakthrough" framing
+  - Jeff Dean / Demis Hassabis as forward-signal speakers
+  - NVIDIA rendering + generative world models
+
+- **signature frames**:
+  - "One key idea in 120 seconds" compression (original brand)
+  - TU Wien lecture as a structured, numbered curriculum (episode numbers imply a graph)
+  - Importance sampling / next-event estimation as a metaphor for agent search
+  - "Compute leap" scaling as binary step-function thinking
+  - Product-cycle pattern: hype →不及 → quiet reframe
+
 - **must-watch**:
-  - *What Happens After A 1,000,000x AI Compute Leap? | Jeff Dean* — longest clip; direct Google-bet framing on compute architecture
-  - *DeepSeek's New AI System Shouldn't Be Possible* — best single-video GTM signal on open-weight cost disruption
-  - *OpenAI's AI Agents Just Crossed A Line* — tightest agent-conditioning / autonomy-boundary language in the corpus
-  - *AlphaFold – The Most Important AI Breakthrough Ever Made* — densest scientific proof-point for "AI that ships to users"
-  - *The Billion Dollar AI Gap Is Collapsing* — one-line cost-curve thesis, reusable in enterprise decks
-- **mine-for**: Which models are being positioned as the "free / almost-free" tier (DeepSeek, GLM 5.3) and how that reframes enterprise-TAM math; how "agent crossed a line" language maps to concrete autonomy triggers (tool-call depth, error-rate thresholds); benchmark-comparison frames (Claude vs ChatGPT, Bard vs GPT) as the channel's default GTM arbiter.
+  - "What Happens After A 1,000,000x AI Compute Leap? | Jeff Dean" — macro infrastructure bet that reframes cost curves for agent-system designers
+  - "TU Wien Rendering #32 - Bidirectional Path Tracing, Multiple Importance Sampling" — closest published analogy to multi-signal agent routing
+  - "AlphaFold - The Most Important AI Breakthrough Ever Made" — best single-video case for "AI product that outshined the lab" GTM pattern
+  - "The Billion Dollar AI Gap Is Collapsing" — sharpest one-liner on open-vs-closed margin compression
+  - "TU Wien Rendering #3 - BRDF models, The Rendering Equation" — foundational frame for anyone modeling agent behavior as a surface integral
+
+- **mine-for**:
+  The rendering series is a rare public corpus where importance-sampling and variance-reduction concepts are taught slowly — directly transferable to any agent framework that must allocate evaluation budget across combinatorial action spaces. Jeff Dean's compute-leap talk is the cleanest public statement on what "1M×" means for batch-size and data-efficiency regimes, useful for GTM narratives about when agent systems stop being margin-negative.
 
 ## Top videos (signal-sorted)
 `yz6I23VRbdg`  29m  What Happens After A 1,000,000x AI Compute Leap? | Jeff Dean  https://www.youtube.com/watch?v=yz6I23VRbdg — 

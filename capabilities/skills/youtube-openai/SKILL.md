@@ -26,30 +26,30 @@ hooks: []
 Channel-scope context for the **@OpenAI** YouTube corpus — L4 lab tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## OpenAI - digest
+## @OpenAI - digest
 
-- **what it is**: OpenAI's official channel — product drops, podcast interviews, and "Build Hour" developer deep-dives.
-- **episode shape**: Three tiers — 30–75 min podcast/chat, 60 min Build Hour dev sessions, 2–4 min product clips.
+- **what it is**: OpenAI's official channel spanning product demos, Build Hours (dev deep-dives), and a podcast — the primary signal source for where the stack is actually heading, not just what the blog says.
+- **episode shape**: Long-form 40–86m (podcast, Build Hours, lectures) + short 2–4m product clips; two distinct formats serving different audiences.
 - **recurring themes**:
-  - o1/g1 reasoning models tackling unsolved math (Tao, 80-yr problem)
-  - Agent RFT (Reinforcement Fine-Tuning) as the core training loop for agents
-  - GPT-5 → GPT-6 Astra alignment as a first-class product axis
-  - Workspace agents embedded in Excel, metrics, ad ops (not standalone chat)
-  - Codex / built-in tools / Apps-in-ChatGPT as agent action surfaces
-  - Alignment + shaping behavior framed as testable constraints, not vibes
+  - Reasoning as a product tier (o1 → GPT-5 → GPT-6 Astra), benchmarked against open math problems with Terence Tao
+  - Agent architectures as the unit of work: RFT loops, memory patterns, workspace agents, Atlas browser
+  - "ChatGPT Work" as the agent-compute surface distinct from chat
+  - Builder-facing API surface (Codex, Built-In Tools, Apps in ChatGPT) tested in Build Hours
+  - Real-domain case studies (cancer, education, jobs) as GTM proof over ablation papers
+  - Alignment named as a first-class product property alongside intelligence
 - **signature frames**:
-  - "Math as linter" — using proof problems as objective verifiers for reasoning
-  - Alignment as product moat, not just safety checkbox
-  - Agent = model + tools + memory + RFT loop (the "agent stack")
-  - "Model co-pilot → autonomous agent" as the GTM arc
-  - RLHF → RFT pipeline as the "how we actually train" lens
+  - "Cracked an 80-year-old problem" — reasoning proof-of-work frame
+  - Agent as the atomic unit (not prompt, not app) — recurring in all Build Hours
+  - GPT-6 Astra positioned as "most intelligent AND aligned" — two-axis model card
+  - Build Hour as a shipping test: "can you build with this API today?"
+  - ChatGPT Work vs. ChatGPT chat — surface-level GTM segmentation
 - **must-watch**:
-  - *The Future of Math with o1 Reasoning with Terence Tao, Mark Chen, and James Donovan* — canonical o1-reasoning origin story
-  - *How a reasoning model cracked an 80-year-old math problem — the OpenAI Podcast Ep. 20* — proof that reasoning models solve open problems
-  - *Build Hour: Agent RFT* — the exact training recipe behind their agent claims
-  - *Sam Altman on AGI, GPT-5, and what's next — the OpenAI Podcast Ep. 1* — founding framing of the alignment bet
-  - *Build Hour: Agent Memory Patterns* — concrete architecture for persistent agent state
-- **mine-for**: The GPT-6 Astra + workspace-agent GTM is a "sell the agent, not the token" motion — agents live inside Excel, ad dashboards, and weekly reports, not a chat bubble. Agent RFT is the differentiator to extract: if you can't RFT your agent, you're shipping a prompt. Watch how they package alignment as a buyer-facing trust signal rather than a research footnote.
+  - "The Future of Math with o1 Reasoning with Terence Tao, Mark Chen, and James Donovan" — 86m, reveals how reasoning depth is actually benchmarked
+  - "Build Hour: Agent RFT" — core reinforcement-fine-tuning loop for agents, 62m
+  - "Build Hour: Agent Memory Patterns" — the missing piece in most agent stacks, 58m
+  - "Sam, Jakub, and Wojciech on the future of OpenAI with audience Q&A" — unfiltered org-direction signal, 62m
+  - "How a reasoning model cracked an 80-year-old math problem — the OpenAI Podcast Ep. 20" — concrete proof-of-work for the next reasoning tier
+- **mine-for**: Agent-engineering specifics from Build Hours (RFT loops, memory patterns, workspace agent routing); GTM segmentation between "ChatGPT Work" and "GPT-6 Astra for developers" — the split between consumer-agent surface and dev-compute surface; watch the gap between GPT-5.1 (current) and GPT-6 Astra (flagship) to read their next model-card pitch.
 
 ## Top videos (signal-sorted)
 `Zu2oET6Xjow`  86m  The Future of Math with o1 Reasoning with Terence Tao, Mark Chen, and James Dono  https://www.youtube.com/watch?v=Zu2oET6Xjow — 

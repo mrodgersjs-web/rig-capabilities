@@ -26,30 +26,29 @@ hooks: []
 Channel-scope context for the **@NVIDIADeveloper** YouTube corpus — L4 lab tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## NVIDIA Developer - digest
+## @NVIDIADeveloper - digest
 
-- **what it is**: NVIDIA's developer-facing keynotes, architecture deep-dives, and embodied-AI research group meetings (Jetson AI Lab).
-- **episode shape**: heterogeneous — GTC stage talks (25–110 min), Jetson Lab group meetings (86–93 min), Grandmaster tutorials (55–66 min), 2–6 min explainers.
+- **what it is**: NVIDIA's developer-facing channel — a heterogeneous mix of research-group recordings, GTC keynotes, short how-to clips, and architect interviews spanning the full stack from CUDA tile kernels to world models.
+- **episode shape**: No fixed format; ranges from 2-minute product how-tos to 90-minute Jetson AI Lab research meetings and 55–100-minute GTC sessions.
 - **recurring themes**:
-  - Embodied AI & world models: Cosmos, Isaac Sim, LeRobot, H1 humanoid, Stanley
-  - Inference scaling: Dynamo (low-latency distributed inference), NeMo Switchyard (agent routing)
-  - CUDA architecture: Tile kernels, Nsight Compute, parallel algorithms
-  - Agent engineering: continuous distillation, data flywheels, LLM reasoning for data analysis
-  - Quantum-ML crossover: quantum-based drug discovery, GTC 2025 fireside chat
-  - Jetson edge: DGX Spark, Jetson Nano, NASA JPL ROSA
+  - Jetson AI Lab series (dated research-group meetings; embodied AI, humanoid robots, Isaac Sim)
+  - Named model families: Cosmos (world FMs), Dynamo (distributed inference), NeMo Switchyard (agent routing), Nemotron 3.5, Alpamayo 2 Super
+  - CUDA architecture deep-dives (tile kernels, Nsight profiling, Stephen Jones interviews)
+  - Grandmaster Series (competitive ML / LLM frontiers with Kaggle/GTC grandmasters)
+  - Hardware-targeted how-tos (DGX Spark, Jetson Nano, Jetson Orin)
 - **signature frames**:
-  - "GPU as the AI operating system" (CUDA-per-everything framing)
-  - World models as synthetic data flywheels (Cosmos)
-  - Inference economics as the new compute bottleneck (Dynamo)
-  - Embodied intelligence as the LLM successor frontier (Jim Fan)
-  - "Democratize via kits" — Jetson Nano → Jetson Orin → DGX Spark product ladder
+  - Jetson AI Lab as a public "research group meeting" format — episodic, dated, unscripted
+  - Grandmaster Series competition framing (treat ML like a esport)
+  - GTC keynote → Fireside Chat → 5-minute "In 5 Minutes" teaser as a three-tier narrative bundle
+  - "World Foundational Model" as the next-tier product above LLM
+  - RIG stack positioning (Level 4 = Dev/Tools above model, below application)
 - **must-watch**:
-  - "An Introduction to NVIDIA Cosmos World Foundational Models | NVIDIA GTC 2025" — defines the world-model thesis in 36 min
-  - "Generally Capable Agents in Open-Ended Worlds, Jim Fan, NVIDIA Lead of Embodied AI | NVIDIA GTC 2024" — clearest articulation of NVIDIA's agent-embodiment bet
-  - "Introducing NVIDIA Dynamo: Low-Latency Distributed Inference for Scaling Reasoning LLMs" — the inference-scaling architecture NVIDIA is selling "now"
-  - "Optimize AI Agents with Continuous Model Distillation and Evaluation Using a Data Flywheel" — compact GTM framing for agent product teams
-  - "Interview with NVIDIA CUDA Architect Stephen Jones" — ground-truth on where CUDA is heading (Warp, Tile, async)
-- **mine-for**: Extract NVIDIA's agent-awareness layering (Cosmos = sim/data, Dynamo = runtime, NeMo Switchyard = routing, Nemotron = weights). For GTM, the Jetson→DGX Spark product ladder doubles as an inference-TAM expansion story. For agent engineering, the distillation/flywheel loop and Switchyard routing are the two patterns worth stealing for building agent systems on NVIDIA silicon.
+  - "Generally Capable Agents in Open-Ended Worlds, Jim Fan, NVIDIA Lead of Embodied AI | NVIDIA GTC 2024" — Jim Fan's thesis on general embodied agents
+  - "Introducing NVIDIA Dynamo: Low-Latency Distributed Inference for Scaling Reasoning LLMs" — the inference-architecture blueprint
+  - "An Introduction to NVIDIA Cosmos World Foundational Models | NVIDIA GTC 2025" — world-moel product framing for simulation-to-reality
+  - "Deploying AI in Real-World Robots | Aaron Saunders, Boston Dynamics CTO | NVIDIA GTC 2024" — outside validation of the Jetson/Isaac stack
+  - "Run NVIDIA Nemotron 3.5 Lightning on DGX Spark" — 5-min product GTM in a single breath
+- **mine-for**: The Jetson AI Lab meetings are week-to-week research-group transcripts that expose what embodied-AI labs actually iterate on (ROS2, Isaac Sim, OASIS, Iron Man) before it becomes a slides deck. The 2–6-minute how-tos are the pure GTM layer: each names a model, a hardware target, and a use case in one sentence — ideal for reverse-engineering NVIDIA's product-messaging cadence. The GTC keynotes plus 5-minute re-cuts (e.g., "NVIDIA Dynamo in 5 Minutes") show a deliberate long-form → short-form distillation pipeline you can mirror for agent-engineering content.
 
 ## Top videos (signal-sorted)
 `fgibRb_8T5I`  146m  NVIDIA RecSys Summit 2022 - China Day  https://www.youtube.com/watch?v=fgibRb_8T5I — 

@@ -26,30 +26,28 @@ hooks: []
 Channel-scope context for the **@YannLeCunPhD** YouTube corpus — L4 lab tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @YannLeCunPhD - digest
-
-- **what it is**: Archive of Yann LeCun's talks, demos, and historical research clips (conv-nets, LAGR, JEPA-era vision)
-- **episode shape**: Heterogeneous — flagship hour-long talks, 1–3 min raw demo clips, 14-min lecture fragments; no consistent cadence
+## MEDIAN — digest
+- **what it is**: Unofficial lecture/demo archive of Yann LeCun's talks and short clips, ranging from a 2022 keynote to 2006 home-video dailies.
+- **episode shape**: Heterogeneous — 1-hour talks, 1–8 min focused demos, and unlabeled raw dailies (`hoh`/`mvi` = phone-camera timestamps).
 - **recurring themes**:
-  - Convolutional networks from LeNet-5 (1989) through modern pedestrian detection and semantic segmentation demos
-  - LAGR (Learning a General Representation) — off-road robot navigation via conv-net feature extraction + metric learning
-  - Siamese network embeddings (DrLIM, 2006) as the bridge to contrastive representation learning
-  - JEPA / energy-based worldview: predict in latent representation space, avoid pixel-space generation
-  - The 6-layer autonomous-machine-intelligence stack (perceiver → world model → cost → predictor → planner → actor)
-  - Recurring critique of generative models and attention-only scaling as insufficient for autonomous understanding
+  - ConvNet lineage: 1989 HMax demo → NEC face detection (2003) → pedestrian detection (CVPR 2013) → video semantic segmentation (2014)
+  - Siamese / metric-learning embeddings (DrLIM, 2006)
+  - Lagrangian relaxation for combinatorial vision tasks (`lagrtest11` NYU runs)
+  - Energy-Based Models as the "next paradigm" beyond GANs/VAEs (core thesis of the Baidu talk)
+  - LAGR off-road robot navigation as the applied-robotics anchor
 - **signature frames**:
-  - JEPA test: "can you predict the embedding of a future view, not the pixels?"
-  - Energy-based vs. distributional: a good model should lower energy on compatible (x, y) pairs, not just assign high joint probability
-  - World-model gap: most learned representations invertible in principle; LeCun wants deliberately *lossy* abstractions
-  - Hamiltonian/lagrangian lens: neural energy as a physical potential, gradients as force fields
-  - "Perception is easy, understanding is hard" — the core claim that drives the whole autonomous-AI pitch
+  - HMax hierarchical max-pooling (1989) as the original ConvNet template
+  - Twin Siamese network for learned distance metrics
+  - Energy function as a unifying object for perception + planning (vs. loss functions in DNN)
+  - Lagrangian duality as the "free lunch" for structured prediction in vision
+  - Perception–action loop as the definition of autonomous AI (not language)
 - **must-watch**:
-  - "Yann LeCun: A Path Towards Autonomous AI", Baidu 2022-02-22 — the canonical statement of his post-$1B-Transformer thesis
-  - "Q&A sessions for A Path Towards Autonomous AI" — stress-tests and clarifications with Q&A pressure
-  - "Convolutional Network Demo from 1989 [restored version]" — origin artifact; shows what "deep learning" looked like pre-backprop-training
-  - "DrLIM: learning an embedding with Siamese nets (2006)" — the method that seeded all of Meta AI's contrastive-learning line
-  - "Off-Road robot navigation with convolutional networks (LAGR Project 2008)" — applied world-model thinking before the term was mainstream
-- **mine-for**: The 6-layer autonomous-AI stack is a ready-made agent-architecture checklist (what's your perceiver, what's your world model, what's your cost function). JEPA's "predict the embedding, not the sample" is a direct architectural decision for any system where you want compressed state and don't care about reconstruction. The LAGR pipeline (conv features → metric learning → metric planning) is an early template for perception-to-action pipelines that skip end-to-end "pure end-to-end" SCALING.
+  - Yann LeCun: "A Path Towards Autonomous AI", Baidu 2022-02-22 — the single clearest statement of his EBM thesis and why he thinks deep learning alone won't reach autonomy
+  - Q&A sessions for "A Path Towards Autonomous AI", by Yann LeCun, Baidu 2022-02-22 — where the energy-function argument gets stress-tested by audience objections
+  - DrLIM: learning an embedding with Siamese nets (2006) — 14-min explainer on why metric learning predates and outlives deep metric learning
+  - Convolutional Network Demo from 1989 [restored version] — the origin artifact; shows how little the architecture has changed in 35 years
+  - Off-Road robot navigation with convolutional networks (LAGR Project 2008) — the perception–action loop made tangible, pre-GPT
+- **mine-for**: For an agent-engineering lens, extract his repeated claim that *world models + energy minimization* (not autoregressive next-token) is the right architecture for agents operating in continuous spaces. The Baidu talk's opening frames autonomous AI as a closed perception–planning–acting loop where the energy function is the single optimizable object — directly contrast with reward-model + RL pipelines. The `lagrtest` dailies reveal his internal validation loop: run → plot → iterate on relaxation tightness, a primitive "agent eval" long before the term existed.
 
 ## Top videos (signal-sorted)
 `DokLw1tILlw`  62m  Yann LeCun: "A Path Towards Autonomous AI", Baidu 2022-02-22  https://www.youtube.com/watch?v=DokLw1tILlw — 

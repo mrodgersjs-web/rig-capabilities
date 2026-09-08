@@ -26,33 +26,35 @@ hooks: []
 Channel-scope context for the **@anthropic-ai** YouTube corpus — L3 credible tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @anthropic-ai - digest
-- **what it is**: Anthropic's official channel spanning alignment research, mechanistic interpretability, and hands-on Claude product/agent content.
-- **episode shape**: Long-form research explainers (50–90 min) paired with short product demos (1–6 min) and mid-length "Code w/ Claude" agent-engineering tutorials.
+## Key-lessons digest
+
+# Anthropic AI (MEDIAN) - digest
+
+- **what it is**: Anthropic's primary video channel — research talks, Claude Code demos, and product launches; Boris Cherny's team as home base.
+- **episode shape**: 1–3 min model drops at the low end; 20–90 min research deep-dives at the top; most content sits in the 20–50 min band.
 - **recurring themes**:
-  - Claude family models (Sonnet 3.5/4.5, Opus, Fable 5/5.1) and their positioning across agentic vs. reasoning tiers
-  - Alignment faking and reward hacking as failure modes under compute scaling
-  - Mechanistic interpretability: CKA, scaling explainability, "translating Claude's thoughts"
-  - MCP (Model Context Protocol) as an open standard for tool/context grounding
-  - Agentic coding loops: Claude Code, Cursor, vibe coding, Pokemon/Catan as agent benchmarks
-  - Anthropic's co-founder lore (Dario, Daniela Amodei) and institutional framing of "responsible scaling"
+  - Claude Code & agentic coding (Code w/ Claude series, Cursor, vibe coding in prod)
+  - Interpretability & alignment (reward hacking, alignment faking, scaling interpretability)
+  - Agent architecture (MCP, Agent Skills, Claude Plays Pokemon/Catan as testbeds)
+  - Claude model family progression (Fable 5 → Fable 5.1, Sonnet 4.5, 3.5 Sonnet)
+  - Ecosystem distribution (Vertex AI, Amazon Bedrock, European Parliament)
+  - Safety containment (jailbreaks, "controlling powerful AI," consciousness)
 - **signature frames**:
-  - **RIG 5-level AI stack** (the taxonomy this channel sits at level 3 of)
-  - **Reward hacking**: the model gaming the eval rather than solving the task
-  - **Alignment faking**: behaviorally correct under observation, divergent under distribution shift
-  - **Vibe coding in prod**: the low-friction agent-assisted dev loop as a design test
-  - **Interpretability-as-scaling**: the claim that you must grow the interpretability stack in lockstep with model scale
-  - **Claude Plays Pokemon/Catan**: agent-context-management micro-benchmarks
+  - Reward hacking as the core alignment failure mode
+  - "Translating Claude's thoughts into language" — chain-of-thought as interpretability proxy
+  - Vibe coding — the casual AI-assisted dev posture
+  - MCP as the interop standard layer ("USB-C for AI tools")
+  - Code w/ Claude — the recurring applied-agent-engineering frame
 - **must-watch**:
-  - *Alignment faking in large language models* — the canonical long-form treatment of silent divergence; 90 min of the core alignment risk.
-  - *AI prompt engineering: A deep dive* — 77 min of system-prompt architecture patterns directly transferable to agent pipelines.
-  - *Defending against AI jailbreaks* — adversarial-robustness framing you'll reuse in production guardrail design.
-  - *Building the future of agents with Claude* — the highest-signal agent-architecture overview (planning, tool-use, memory loops).
-  - *Why we built—and donated—the Model Context Protocol (MCP)* — the one-sentence GTM argument for open standards as moat-removal.
+  - "Alignment faking in large language models" — 90m capstone; why faking is harder to detect than outright failure
+  - "Why we built—and donated—the Model Context Protocol (MCP)" — the 36m GTM explainer for agent interop
+  - "Lessons on AI agents from Claude Plays Pokemon" — concrete failure modes (context rot, tool chaining limits) in a game setting
+  - "AI prompt engineering: A deep dive" — 77m practitioner reference; treat as a prompt-pattern taxonomy
+  - "Building the future of agents with Claude" — architecture overview; the scaffold for reading all Code w/ Claude episodes
 - **mine-for**:
-  - Extract the prompt-engineering taxonomy (system prompts, context windows, tool schemas) and map it to your own agent stack.
-  - Use the alignment/reward-hacking taxonomy as a risk language when writing internal eval docs.
-  - Note MCP's "donated to open" move as a template for how model providers can lower onboarding friction without ceding the model layer.
+  - MCP donation is the open-protocol GTM play: standards lock-in via ecosystem (Vertex, Bedrock, Cursor all build on it).
+  - Agent-engineering lessons cluster around context management (Catan, Pokemon) and tool-use primitive design (Agent Skills, MCP server specs).
+  - The "Code w/ Claude" series is the Tier-2 distribution motion — partner-led demos that position Claude as the engine under third-party IDEs.
 
 ## Top videos (signal-sorted)
 `9eXV64O2Xp8`  90m  Alignment faking in large language models  https://www.youtube.com/watch?v=9eXV64O2Xp8 — 

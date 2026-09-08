@@ -26,30 +26,29 @@ hooks: []
 Channel-scope context for the **@swillison** YouTube corpus — L3 credible tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## @swillison - digest
-
-- **what it is**: Simon Willison's practical channel bridging small-data tooling (Datasette/SQLite) and emerging LLM agent tooling, with guest-built public-interest projects.
-- **episode shape**: Short (1–18 min) solo tool demos and plugin builds; longer (28–48 min) guest-presented "under the hood" project walkthroughs with live demos.
+## MEDIAN — digest
+- **what it is**: Simon Willison's catalog of practical AI/SQLite tooling: Datasette publishing, LLM pipelines, and agent-engineering patterns at the "small data" scale.
+- **episode shape**: Short product walkthroughs (2–10 min) and longer office-hours/deep-dives (20–48 min); no series structure, signal-sorted by topic.
 - **recurring themes**:
-  - Datasette + SQLite as a sufficient "small data" platform for public-interest work
-  - LLM CLI agents (Codex CLI, Claude Code) as composable, pipe-able primitives
-  - Prompt injection / security as a first-class design concern for LLM-powered tools
-  - Python tooling modernism (uv, sqlite-utils, subprocess-based orchestration)
-  - Public-sector data projects (Canada Spends, Congressional Travel, Civic Band)
-  - Embeddings and vector search as under-explained primitives for devs
+  - Datasette plugins as the unit of data-exploration and LLM-augmented publishing
+  - Composable LLM tooling: OpenAI Codex CLI, Claude Code, GPT-4 Turbo, Gemini 1.5/2.0 Flash
+  - Agent swarms (thousands of coding agents) as the next scaling axis beyond single-agent
+  - Prompt injection as a first-class threat model for any LLM-in-the-loop system
+  - "Small data" thesis: SQLite + embeddings + LLM extraction beats Spark for most workloads
+  - GitHub Actions + git scraping as lightweight ETL glue for LLM pipelines
 - **signature frames**:
-  - "Small data is real data" – SQLite as default, not last resort
-  - LLM-as-CLI-harness – treat model calls as subprocesses you can script and chain
-  - "Bag of tricks" pragmatism – no silver-bullet architecture, just composable tools
-  - Reverse-engineer-by-observation – infer LLM behavior from output traces, not docs
-  - Data → SQLite → Web UI → LLM triad as a repeatable project template
+  - Small-data-first: SQLite as the atomic unit, not Hadoop
+  - "A big bag of tricks": opportunistic SQL/LLM composition over clean architecture
+  - Prompt-injection lens: every LLM-read path is an attack surface
+  - Reverse-engineering behavior: poke a model with a tiny task to reveal its latent capabilities
+  - Agent-swarm scaling: treat agents as disposable workers, not precious stateful processes
 - **must-watch**:
-  - *FastRender with Wilson Lin - building a web browser with swarms of thousands of coding agents* – clearest look at multi-agent swarm orchestration for UI construction
-  - *Embeddings: What they are and why they matter* – best 39-min grounding on when/why to use vector search
-  - *Prompt Injection, explained* – the canonical short explanation for why LLM tools need input isolation
-  - *Under the hood of Canada Spends with Brendan Samek* – end-to-end public-data pipeline from scrape to interactive web app
-  - *My process for upgrading Datasette plugins with uv and OpenAI Codex CLI* – concrete agent-assisted dev workflow pattern
-- **mine-for**: Agent-engineering patterns (swarm coordination, CLI agent harnesses, prompt-injection defenses as architectural decisions); practical GTM for indie dev tools (Datasette plugin ecosystem, public-data as marketing); a repeatable "scrape → SQLite → Datasette → LLM → public web" project template for fast, defensible data products.
+  - "FastRender with Wilson Lin - building a web browser with swarms of thousands of coding agents" — most concrete agent-engineering GTM signal in the corpus
+  - "Prompt Injection, explained" — the one 12-min video any LLM-product engineer should internalize
+  - "Datasette - an ecosystem of tools for working with small data" — canonical statement of the small-data thesis and plugin architecture
+  - "Reverse engineering Codex CLI to get GPT-5-Codex-Mini to draw me a pelican" — compact method for probing model boundaries without benchmarks
+  - "llm-consortium with Thomas Hughes" — the composable-pipeline pattern (model-as-service orchestration) in 20 minutes
+- **mine-for**: The GTM/agent-engineering reader should extract: (1) the small-data framing that justifies shipping LLM features on SQLite rather than waiting for vector-DB infrastructure, (2) the agent-swarm pattern from FastRender as a template for horizontal agent scale-out, and (3) the prompt-injection threat model as the minimum security checklist for any LLM-in-the-UI product.
 
 ## Top videos (signal-sorted)
 `bKrAcTf2pL4`  48m  FastRender with Wilson Lin - building a web browser with swarms of thousands of   https://www.youtube.com/watch?v=bKrAcTf2pL4 — 

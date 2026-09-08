@@ -26,30 +26,29 @@ hooks: []
 Channel-scope context for the **@LoganKilpatrickYT** YouTube corpus — L3 credible tier of the RIG 5-level AI stack.
 
 ## What this surface is
-## channel - digest
-- **what it is**: Product-led AI channel run by the Gemini PM, covering agent engineering, open source, and AI GTM through long-form operator interviews
-- **episode shape**: Two formats — 45–60 min "unfiltered conversations" with CEOs/founders, and 40–55 min "Around the Prompt" episodes with focused AI builders; short 4–7 min Gemini promo clips fill the gaps
+## @LoganKilpatrickYT - digest
+
+- **what it is**: Logan Kilpatrick's channel (Google AI Product Lead, Gemini) running long-form "unfiltered conversation" interviews with AI execs alongside a structured "Around the Prompt" series on agent architecture and product; occasional short Google AI Studio promos.
+- **episode shape**: Two tracks — "unfiltered conversation with [name]" (~50–70 min, single guest, conversational) and "Around the Prompt #N" (~45–55 min, numbered installments, more structured deep-dive); plus 4–7 min AI Studio promo clips.
 - **recurring themes**:
-- AI agents as the build layer (BabyAGI, Bolt.new, Figure, Factory)
-- Open-source model strategy and fine-tuning tradeoffs (Willison, Howard)
-- AI coding at production scale (Sourcegraph/Cody, GitHub)
-- Guardrails, reliability, and production failure modes (Rajpal)
-- Prompt engineering as leverage and moat (Mayne, series framing)
-- AI product management and GTM patterns (Nika, Grinberg, Dohmke)
+  - AI agent loops (babyAGI, GPT agents, BabyAGI variants) as the 2024–25 frontier
+  - AI coding tooling: Cody/Sourcegraph, Bolt.new, Factory AI, GitHub Copilot
+  - Open vs closed model strategy (Willison on open source, Atallah on OpenRouter, Howard on FastAI)
+  - Production reliability & guardrails (Rajpal, Matic Robots)
+  - GTM for AI products in the absence of a clear moat
+  - Prompt engineering as a transient skill vs. structural agent design
 - **signature frames**:
-- "Unfiltered conversation" — radical-operator-intel format
-- "Around the Prompt" framing — prompt as the strategic variable
-- The AI stack as layers (Level 3 = integration/practice)
-- Gemini-as-prototype / "build your next app in 90 seconds" GTM
-- Open-source vs. closed frontier model tradeoff lens
-- Agent engineering as the new systems-design discipline
+  - "Unfiltered" — positions each conversation as candid executive candor, not PR
+  - "Around the Prompt" — frames agent work as iterative prompt-level debugging
+  - Google AI Studio as the recurring CTA anchor (free tier, 90-second app build)
+  - RIG 5-level stack positioning (Level 3 = app/orchestration layer, not base model)
 - **must-watch**:
-- "Simon Willison: The Future of Open Source and AI | Around the Prompt #10" — clearest read on when to pick open vs. closed, with a DeepMind-adjacent sympathizer's bias
-- "An unfiltered conversation with Dwarkesh Patel" — highest signal density on reasoning compute, data limits, and what smarts actually is
-- "Shreya Rajpal: Guardrails AI, AI Production Challenges, & AI Reliability | Around the Prompt #9" — the operational reliability lens most agent teams underestimate
-- "An unfiltered conversation with Thomas Dohmke, CEO of GitHub" — how a platform embeds AI coding into a 30M-Dev base
-- "Jeremy Howard: AnswerAI, FastAI, Fine-tuning & AI recruiting | Around the Prompt #1" — practical fine-tuning ROI and the talent-market signal
-- **mine-for**: Extract concrete agent-architecture decisions (when to use retrieval vs. fine-tune vs. prompt-only), production failure taxonomies (guardrail gaps, eval drift), and GTM patterns for developer-tools AI (free tier → lock-in → enterprise). The Dwarkesh and Willison episodes are the highest-leverage reads on model-selection strategy for a system you're integrating into.
+  - "An unfiltered conversation with Dwarkesh Patel" — highest-signal agent-architecture teardown in the set
+  - "Simon Willison: The Future of Open Source and AI | Around the Prompt #10" — strongest open-vs-closed framing
+  - "Shreya Rajpal: Guardrails AI, AI Production Challenges, & AI Reliability | Around the Prompt #9" — production GRC patterns
+  - "Yohei Nakajima: BabyAGI, AI Agents & AI Investing | Around the Prompt #2" — agent-loop taxonomy + investment logic
+  - "An unfiltered conversation with Samuel Dohmke, CEO of GitHub" — dev-tool GTM playbook on Copilot scale
+- **mine-for**: Extract the Level-3 (orchestration) vocabulary Kilpatrick uses to situate agents above model calls but below base-model research; map which execs explicitly build with Gemini vs. GPT vs. open weights to infer Google's competitive positioning. The guardrails episodes (Rajpal, Matic) are the densest source for production reliability patterns (eval harnesses, regression gates) that a technical GTM reader can lift directly.
 
 ## Top videos (signal-sorted)
 `xzQJWLWiYYE`  69m  An unfiltered conversation with Sahil Lavingia, CEO of Gumroad  https://www.youtube.com/watch?v=xzQJWLWiYYE — 

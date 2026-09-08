@@ -27,28 +27,29 @@ Channel-scope context for the **@googledeepmind** YouTube corpus — L4 lab tier
 
 ## What this surface is
 ## @googledeepmind – digest
-- **what it is**: Google DeepMind's public channel spanning UCL co-branded lecture series, internal courses, and short product demos; anchored by Demis Hassabis's org
-- **episode shape**: Bimodal — 90–110 min structured lecture series (13-part UCL RL & DL) interleaved with 2–6 min product clips (Gemini Robotics 2, WeatherNext)
+
+- **what it is**: Google DeepMind's public research-and-teaching pipeline — RL/deep-learning lecture series, world-model demos, and Gemini product engineering talks.
+- **episode shape**: Bimodal — 90–150 min academic lecture blocks (UCL RL course, DL course) vs. 2–5 min product demo clips (Gemini Robotics 2) and 45–60 min keynotes.
 - **recurring themes**:
-- David Silver's RL curriculum (MDPs → value iteration → policy gradient → deep agents)
-- UCL 13-lecture structure duplicated across RL and Deep Learning tracks
-- Gemini Robotics 2 embodied stack (whole-body control, dexterity, multi-robot)
-- Genie 3 as "infinite world model" for agent training substrate
-- Oriol Vinyals framing agentic AI as next paradigm beyond transformer scaling
-- WeatherNext as applied generative/forecasting productization
+  - David Silver's RL course as the canonical anchor (MDPs, policy gradient, actor-critic, exploration)
+  - World models as unifying abstraction: Genie 3 (infinite environments), WeatherNext (forecasting)
+  - Gemini as the agentic backbone — from Gemini 2.0 reasoning to Gemini Robotics 2 whole-body control
+  - Unsupervised representation learning and embeddings as the bridge between vision and language
+  - Uncertainty quantification elevated to a first-class design axis ("mathematics of AI uncertainty")
+  - Multi-robot collaboration and dexterity as the near-physical frontier
 - **signature frames**:
-- Agent–environment loop as universal problem abstraction
-- Value function as the organizing primitive of all decision-making
-- "Infinite world model" (Genie 3) as scalable training substrate hypothesis
-- MDP decomposition applied to any sequential decision problem
-- Experience-data scaling as the counterweight to raw data scaling
+  - MDP/state-action-reward as the universal planning lens
+  - "World model" as the single architecture question (Genie 3, WeatherNext)
+  - Agentic AI = RL at scale with a language model as policy (Vinyals framing)
+  - Exploration-exploitation tradeoff applied to product roadmap (capable now vs. capability ceiling)
+  - Prediction before control (model-free → model-based → hybrid)
 - **must-watch**:
-- *DeepMind x UCL RL Lecture Series - Introduction to Reinforcement Learning [1/13]* — canonical MDP + agent-environment framing in one sitting
-- *Gemini 2.0 and the evolution of agentic AI | Oriol Vinyals* — strategic thesis distinguishing agents from models
-- *Genie 3: An infinite world model | Shlomi Fruchter and Jack Parker-Holder* — world-model scaling bet in execution detail
-- *RL Course by David Silver - Lecture 7: Policy Gradient Methods* — the workhorse method most practitioners under-explain
-- *The mathematics of AI uncertainty* — epistemic calibration story for agent reliability claims
-- **mine-for**: GTM positioning of "agentic AI" as a distinct selling category vs. model scaling; Gemini Robotics 2 clips reveal the embodied-stack decomposition hierarchy (perception → planning → whole-body control → dexterity) that maps directly to product layering; Genie 3 implies DeepMind is building its own simulation substrate to out-train competitors on agent generalization — watch for "world model as service" packaging signals.
+  - "Genie 3: An infinite world model | Shlomi Fruchter and Jack Parker-Holder" — the world-model thesis in one 61-min talk
+  - "Gemini 2.0 and the evolution of agentic AI | Oriol Vinyals" — connects classic RL to the current product stack
+  - "DeepMind x UCL RL Lecture Series - Introduction to Reinforcement Learning [1/13]" — foundational MDP framing
+  - "Reinforcement Learning 10: Classic Games Case Study" — grounds theory in AlphaGo/AlphaZero lineage
+  - "The mathematics of AI uncertainty" — 45-min signal on where epistemic calibration is heading
+- **mine-for**: The latency between UCL RL lectures (research) and Gemini Robotics 2 demo clips (product) is your "research-to-shipping" window — map which demo titles (whole-body control, multi-robot, dexterity) correspond to which lecture topics. Vinyals' agentic framing is the GTM narrative bridge: sell agents, not models. The robotics clips are the "agent-engineering surface" a technical reader should extract for go-to-market.
 
 ## Top videos (signal-sorted)
 `ook46h2Jfb4`  150m  DeepMind x UCL RL Lecture Series - Function Approximation [7/13]  https://www.youtube.com/watch?v=ook46h2Jfb4 — 
