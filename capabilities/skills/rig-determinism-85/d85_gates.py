@@ -7,7 +7,8 @@ with reachable CODE validator, fallback, and failure-state nodes. Scoring
 requires all four ratios at or above the threshold. Gate-D is a separate
 exact-action authorization gate with signed append-only approvals and atomic
 one-time consumption. Surface wiring requires every coding-agent surface to
-carry the same doctrine marker. Every gate fails closed.
+carry the exact doctrine marker plus the canonical doctrine body bytes pinned
+by authority/doctrine.md. Every gate fails closed.
 """
 from __future__ import annotations
 
@@ -600,6 +601,20 @@ def check_wiring(registry_path: Path) -> dict[str, Any]:
         _block("BLOCK_WIRING_SURFACE_DIVERGENT", f"{surfaces_path}: schema mismatch")
     doctrine_sha256 = _nonempty(surfaces.get("doctrine_sha256"), "doctrine_sha256")
     marker = _surface_marker(doctrine_sha256)
+    doctrine_path = authority_root / "doctrine.md"
+    try:
+        canonical = doctrine_path.read_bytes()
+    except OSError as exc:
+        _block("BLOCK_WIRING_DOCTRINE_MISSING", f"{doctrine_path}: {exc}")
+    canonical_hash = hashlib.sha256(canonical).hexdigest()
+    if canonical_hash != doctrine_sha256:
+        _block(
+            "BLOCK_WIRING_DOCTRINE_DIVERGENT",
+            f"{doctrine_path}: sha256 {canonical_hash} != surfaces.json doctrine_sha256 "
+            f"{doctrine_sha256} — the pinned hash must anchor the canonical doctrine bytes",
+        )
+    # The surface must carry the exact marker line followed by the canonical body.
+    required_block = f"<!-- {marker} -->\n".encode("utf-8") + canonical
     records = surfaces.get("surfaces")
     if not isinstance(records, dict) or set(records) != set(REQUIRED_SURFACES):
         _block(
@@ -611,12 +626,14 @@ def check_wiring(registry_path: Path) -> dict[str, Any]:
         surface_path = Path(_nonempty(records[name], f"surfaces.{name}")).expanduser()
         try:
             content = surface_path.read_text(encoding="utf-8")
-        except OSError as exc:
+        except (OSError, UnicodeDecodeError) as exc:
             _block("BLOCK_WIRING_SURFACE_MISSING", f"{name}: {surface_path}: {exc}")
-        if marker not in content:
+        if required_block not in content.encode("utf-8"):
             _block(
                 "BLOCK_WIRING_SURFACE_DIVERGENT",
-                f"{name}: {surface_path} lacks doctrine marker {marker}",
+                f"{name}: {surface_path} lacks the exact doctrine marker+body block "
+                f"for {marker} (marker alone is not wiring; the body must match "
+                "authority/doctrine.md byte-for-byte)",
             )
         checked[name] = str(surface_path)
     return {

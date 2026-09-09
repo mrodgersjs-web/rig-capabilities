@@ -1,5 +1,6 @@
 """Tests for D85 classification, scoring, Gate-D, and surface-wiring gates."""
 
+import hashlib
 import json
 import os
 import sys
@@ -645,12 +646,17 @@ class WiringTests(unittest.TestCase):
         self.root = Path(self.temp.name)
         self.authority_root = self.root / "authority"
         self.authority_root.mkdir(parents=True)
-        self.doctrine = "a" * 64
+        self.doctrine_body = "canonical doctrine body\nline two\n"
+        self.doctrine = hashlib.sha256(self.doctrine_body.encode("utf-8")).hexdigest()
         self.marker = f"rig-determinism-85@{self.doctrine}"
+        (self.authority_root / "doctrine.md").write_text(self.doctrine_body, encoding="utf-8")
         self.surface_paths: dict[str, Path] = {}
         for name in ("claude", "hermes", "omp", "prime"):
             path = self.root / f"{name}.md"
-            path.write_text(f"# surface {name}\n{self.marker}\n", encoding="utf-8")
+            path.write_text(
+                f"# surface {name}\n<!-- {self.marker} -->\n{self.doctrine_body}",
+                encoding="utf-8",
+            )
             self.surface_paths[name] = path
         self.write_surfaces()
 
@@ -693,10 +699,48 @@ class WiringTests(unittest.TestCase):
 
     def test_wiring_blocks_on_divergent_marker(self) -> None:
         self.surface_paths["omp"].write_text(
-            "# surface omp\nrig-determinism-85@" + "b" * 64 + "\n", encoding="utf-8"
+            "# surface omp\n<!-- rig-determinism-85@" + "b" * 64 + " -->\n" + self.doctrine_body,
+            encoding="utf-8",
         )
         self.assert_block(
             "BLOCK_WIRING_SURFACE_DIVERGENT",
+            lambda: check_wiring(self.registry_path()),
+        )
+
+    def test_wiring_blocks_on_non_utf8_surface(self) -> None:
+        # A surface that is not decodable UTF-8 must fail closed with a typed
+        # BLOCK, not escape as a UnicodeDecodeError crash.
+        self.surface_paths["omp"].write_bytes(b"# surface omp\n<!-- \xff\xfe garbage \x80 -->\n")
+        self.assert_block(
+            "BLOCK_WIRING_SURFACE_MISSING",
+            lambda: check_wiring(self.registry_path()),
+        )
+
+    def test_wiring_blocks_on_surface_body_drift(self) -> None:
+        # Marker intact, canonical intact — one word of the surface body edited.
+        self.surface_paths["omp"].write_text(
+            "# surface omp\n<!-- " + self.marker + " -->\ncanonical doctrine BODY\nline two\n",
+            encoding="utf-8",
+        )
+        self.assert_block(
+            "BLOCK_WIRING_SURFACE_DIVERGENT",
+            lambda: check_wiring(self.registry_path()),
+        )
+
+    def test_wiring_blocks_on_canonical_doctrine_drift(self) -> None:
+        # doctrine.md edited without re-pinning surfaces.json: hash anchors nothing anymore.
+        (self.authority_root / "doctrine.md").write_text(
+            self.doctrine_body + "sneaky edit\n", encoding="utf-8"
+        )
+        self.assert_block(
+            "BLOCK_WIRING_DOCTRINE_DIVERGENT",
+            lambda: check_wiring(self.registry_path()),
+        )
+
+    def test_wiring_blocks_on_missing_canonical_doctrine(self) -> None:
+        (self.authority_root / "doctrine.md").unlink()
+        self.assert_block(
+            "BLOCK_WIRING_DOCTRINE_MISSING",
             lambda: check_wiring(self.registry_path()),
         )
 

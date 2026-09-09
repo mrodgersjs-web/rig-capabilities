@@ -16,6 +16,12 @@ from d85_gates import (  # noqa: E402
     score_process,
     verify_surfaces,
 )
+from tool_selection import (  # noqa: E402
+    ToolSelectionBlock,
+    certify_build,
+    check_build_checklist,
+    select_framework,
+)
 
 
 def _parser() -> argparse.ArgumentParser:
@@ -34,6 +40,18 @@ def _parser() -> argparse.ArgumentParser:
     gate.add_argument("process_id")
     gate.add_argument("--action", type=Path, required=True)
     commands.add_parser("wiring")
+    select_cmd = commands.add_parser("select")
+    select_cmd.add_argument("evidence_file", type=Path)
+    checklist = commands.add_parser("checklist")
+    checklist.add_argument("build_file", type=Path)
+    checklist.add_argument("--root", type=Path, default=None)
+    checklist.add_argument("--process-id", default=None,
+                           help="bind the verdict to the current inventory hash of this process")
+    commands.add_parser("estate-validate")
+    verify_cmd = commands.add_parser("verify-cert")
+    verify_cmd.add_argument("build_file", type=Path)
+    verify_cmd.add_argument("certificate_file", type=Path)
+    verify_cmd.add_argument("--root", type=Path, default=None)
     return parser
 
 
@@ -64,7 +82,38 @@ def _submitted(path: Path):
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
     try:
-        if args.command == "inventory":
+        if args.command == "select":
+            result = select_framework(_submitted(args.evidence_file))
+        elif args.command == "checklist":
+            build = _submitted(args.build_file)
+            result = check_build_checklist(build, root=args.root)
+            if args.process_id:
+                result = certify_build(build, args.process_id, root=args.root)
+            elif result.get("verdict") == "CHECKLIST_PASS":
+                result = dict(
+                    result,
+                    verdict="CHECKLIST_BLOCK",
+                    binding_reason=(
+                        "unbound verdict: --process-id is required — only a bound "
+                        "CHECKLIST_PASS is an enforcement verdict"
+                    ),
+                )
+            if result.get("verdict") != "CHECKLIST_PASS":
+                print(json.dumps(result, sort_keys=True))
+                return 2
+        elif args.command == "verify-cert":
+            from tool_selection import verify_certification
+
+            result = verify_certification(
+                _submitted(args.build_file), _submitted(args.certificate_file), root=args.root
+            )
+            if result.get("verdict") != "CERTIFICATION_VERIFIED":
+                print(json.dumps(result, sort_keys=True))
+                return 2
+        elif args.command == "estate-validate":
+            import estate_validator
+            return estate_validator.main()
+        elif args.command == "inventory":
             result = build_inventory(args.process_id)
         elif args.command == "compare":
             result = compare_inventory(args.process_id, _submitted(args.inventory_file))
@@ -76,6 +125,9 @@ def main(argv: list[str] | None = None) -> int:
             result = arm_gate_d(args.process_id, _submitted(args.action))
         else:
             result = verify_surfaces()
+    except ToolSelectionBlock as exc:
+        print(json.dumps(exc.as_dict(), sort_keys=True))
+        return 2
     except AdmissionBlock as exc:
         print(json.dumps(exc.as_dict(), sort_keys=True))
         return 2

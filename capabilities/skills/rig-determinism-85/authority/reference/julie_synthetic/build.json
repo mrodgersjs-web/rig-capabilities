@@ -1,0 +1,19 @@
+{
+  "process_id": "julie_synthetic",
+  "inventory_sha256": "98bbe954c929d1748e7da5836345a7ee1ed64ded78302d47497d442ecfe5839e",
+  "framework": "temporal",
+  "properties": {
+    "clock_critical": {
+      "named_consumer": "hiring inbox batch",
+      "failure_mode": "missed morning cutoff loses the day's application window",
+      "recovery_policy": "catch_up",
+      "sla_start_latency_seconds": 30
+    }
+  },
+  "durable_system": true,
+  "pydantic_models": ["ApplicationPacket"],
+  "model_necessity_claims": ["classify: deterministic sort failed on replay set"],
+  "archify_diagram_path": "diagram.json",
+  "d85_realized_pass": true,
+  "orchestration_is_code": true
+}

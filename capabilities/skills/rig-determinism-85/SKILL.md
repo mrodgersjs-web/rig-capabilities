@@ -1,6 +1,6 @@
 ---
 name: rig-determinism-85
-description: Enforces the deterministic-admission chain — source-derived operation inventory, authority classification, four-ratio D85 scoring, exact-action Gate-D, and agent-surface wiring. Use when registering, classifying, scoring, or arming a process, or verifying surface wiring.
+description: Enforces the deterministic-admission chain — source-derived operation inventory, authority classification, four-ratio D85 scoring, tool-selection and durable-build certification with consumer-side verification, exact-action Gate-D, and agent-surface wiring. Use when registering, classifying, scoring, certifying, or arming a process, selecting a framework, verifying a certificate, or verifying surface wiring.
 ---
 
 <objective>
@@ -20,6 +20,7 @@ This capability owns the realized admission chain: inventory, classification, sc
 6. Run `bin/rig-determinism-85 score PROCESS_ID` — requires `REALIZED_PASS` on all four ratios.
 7. For an outward or irreversible action: mint a signed approval with `d85_gates.mint_approval` (authority operator), then run `bin/rig-determinism-85 gate-d PROCESS_ID --action ACTION_FILE`. The action file is the exact pre-tool envelope; one arm consumes one approval.
 8. Run `bin/rig-determinism-85 wiring` to verify all four surfaces carry the doctrine marker recorded in `authority/surfaces.json`.
+8b. Tool selection and durable-build certification (standard v1.4.0): `bin/rig-determinism-85 select EVIDENCE_FILE` derives one framework from closed-schema evidence records (absent claim = FALSE, contradicted claim BLOCKs). `checklist BUILD_FILE --process-id ID` certifies the build: it declares `process_id` and the `inventory_sha256` snapshot it was generated against; certification recomputes the live inventory and binds only on exact equality — unbound, mismatched, or stale BLOCKs. `verify-cert BUILD_FILE CERT_FILE` is the consumer boundary: it recomputes the canonical build digest, rejects non-exact certificate schemas and tampered payloads, and blocks post-cert mutation replays. The worked example is `authority/reference/julie_synthetic/` — copy that shape, never hand-edit outputs, and rerun `verify-cert` before trusting an archived certificate.
 9. Stop on exit 2. Create a new immutable process authority version before retrying.
 </process>
 
@@ -31,7 +32,7 @@ This capability owns the realized admission chain: inventory, classification, sc
 - Scoring requires aggregate unweighted, aggregate weighted, minimum-path unweighted, and minimum-path weighted CODE ratios ≥ 0.85. HUMAN operations are excluded from both numerator and denominator. Only CODE earns credit.
 - `INVENTORY_PASS` and classification admission never authorize effects. Gate-D is a separate exact-action gate: HMAC-SHA256-signed append-only approvals bound to process, inventory, classification, realized, and action hashes; issue+expiry ≤ 24h; atomic O_EXCL one-time consumption; distinct BLOCK reasons for missing, corrupt, unapproved, expired, mismatched, consumed, and root-override.
 - D85 eligibility never authorizes an effect. A passing internal process terminates without Gate-D.
-- Surface wiring requires exactly `claude_code`, `hermes`, `omp`, and `prime_agent` in `authority/surfaces.json`, each file carrying the marker `rig-determinism-85@<doctrine_sha256>`. Missing or divergent surfaces return `BLOCK`.
+- Surface wiring requires exactly `claude_code`, `hermes`, `omp`, and `prime_agent` in `authority/surfaces.json`; each file must carry the exact marker line `rig-determinism-85@<doctrine_sha256>` followed by the canonical `authority/doctrine.md` body bytes (marker substring alone is not wiring). Missing, unreadable, or divergent surfaces return `BLOCK`.
 - A local imported module under the source root requires a file hash. An omitted local module returns `UNHASHED_REACHABLE_FILE`.
 - The adapter operation is the execution root. Its source-derived call graph must reach the bound process entrypoint.
 </rules>
@@ -44,6 +45,7 @@ python3 -m unittest tests.test_determinism_85 tests.test_d85_gates -v
 ```
 
 The inventory suite proves the matching path, exact snapshot parsing, exact nested and sequential order, adapter reachability, locked external-module resolution, and the planted padding, split-node, hidden-symbol, omitted-module, source-drift, root-escape, alias, loader-state, sentinel-iter, breakpoint, external-value-escape, and unsupported-grammar failures. The gates suite proves classification pass/stale/missing/unknown/duplicate, critical-control CODE enforcement, necessity field and reachability validation, graph asymmetry/cycle/self-edge, all four ratio blocks including minimum-path-only and HUMAN exclusion, Gate-D arm/replay/unapproved/expired/mismatch/corrupt/root-override, and wiring pass/divergent/missing.
+The tool-selection suites (`tests.test_tool_selection`, `tests.test_tool_selection_cli`, `tests.test_evasion_battery`) prove the closed evidence grammar, typed blocks, claim-and-verify inventory binding, root containment, seven planted evasion attacks, and the verifier's honest-replay/mutated-build/tampered-certificate/stale-inventory exits.
 </verification>
 
 <success_criteria>
@@ -51,6 +53,6 @@ The inventory suite proves the matching path, exact snapshot parsing, exact nest
 - Classification covers exactly the extracted IDs, mints stable final operation identities, and proves every MODEL operation's necessity with reachable CODE support.
 - `REALIZED_PASS` requires all four ratios at or above 0.85 with HUMAN operations excluded.
 - Gate-D arms at most once per signed approval bound to the exact action envelope; every failure mode is a distinct terminal BLOCK.
-- All four agent surfaces carry the same doctrine marker; any divergence blocks wiring.
+- All four agent surfaces carry the exact doctrine marker plus the canonical doctrine body; any divergence blocks wiring.
 - No gate in this skill executes an outward effect.
 </success_criteria>

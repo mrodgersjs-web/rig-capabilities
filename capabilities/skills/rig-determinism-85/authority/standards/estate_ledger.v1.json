@@ -1,0 +1,3411 @@
+{
+  "schema": "rig.d85.estate-ledger.v1",
+  "generated_at": "2026-09-09T17:55:00Z",
+  "surfaces": {
+    "launchd": {
+      "status": "scanned",
+      "plists": 304,
+      "vendor_skipped": 3,
+      "resident": 51,
+      "periodic": 149,
+      "needs_review": 100,
+      "unreadable": 1
+    },
+    "hermes_cron": {
+      "status": "scanned",
+      "total": 158,
+      "enabled": 0,
+      "states": {
+        "completed": 1,
+        "paused": 38,
+        "retired": 119
+      }
+    },
+    "kestra": {
+      "status": "declared_unreachable",
+      "declared_flows": 27,
+      "source": "user_table_2026-09-09"
+    },
+    "temporal": {
+      "status": "declared_unreachable",
+      "declared_schedules": 4,
+      "source": "user_table_2026-09-09"
+    },
+    "orca": {
+      "status": "declared_unreachable",
+      "declared_automations": 11,
+      "source": "user_table_2026-09-09"
+    }
+  },
+  "jobs": [
+    {
+      "job_id": "ai.claude-code-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.claude-code-router.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.free-claude-code.server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.free-claude-code.server.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.gbrain.mcp",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.gbrain.mcp.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:3131"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "ai.hermes.gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.hermes.gateway.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.openclaw.gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.openclaw.gateway.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.apps.keepalive",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.apps.keepalive.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bus-reconciler",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bus-reconciler.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.bus-to-gbrain",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bus-to-gbrain.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bus-to-sqlite",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bus-to-sqlite.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bx-corpus-index",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bx-corpus-index.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bx-digest-audit",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bx-digest-audit.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bx-formula-taxonomy-check",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bx-formula-taxonomy-check.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bx-gate-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bx-gate-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.bx-icp-selfcheck",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.bx-icp-selfcheck.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.catalog.server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.catalog.server.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:3333"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "ai.rig.hermes-bus-heartbeat",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.hermes-bus-heartbeat.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.instantly-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.instantly-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.intel-api",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.intel-api.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.keepawake",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.keepawake.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.knowledge-pipeline",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.knowledge-pipeline.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.memory-probe",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.memory-probe.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.reply.watcher",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.reply.watcher.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.sales.caffeinate",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.sales.caffeinate.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.sales.monitor",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.sales.monitor.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.session-bus-fleet-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.session-bus-fleet-router.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "ai.rig.session-bus-nats",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.session-bus-nats.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "ai.rig.stack-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/ai.rig.stack-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.bigbirch.homeassistant",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.bigbirch.homeassistant.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.citrolabs.EgoUpdater.wake",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.citrolabs.EgoUpdater.wake.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.citrolabs.keystone.agent",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.citrolabs.keystone.agent.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.citrolabs.keystone.xpcservice",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.citrolabs.keystone.xpcservice.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.gbrain.autopilot",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.gbrain.autopilot.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.hermes.webui",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.hermes.webui.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8787"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.jake.strategic-operator.daily-brief",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.jake.strategic-operator.daily-brief.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.jake.strategic-operator.s1-refresh",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.jake.strategic-operator.s1-refresh.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.jake.workflows.poller",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.jake.workflows.poller.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.james-avis.nps-daily",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.james-avis.nps-daily.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.james-avis.nps-scrape",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.james-avis.nps-scrape.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.mission.4day.heartbeat",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.4day.heartbeat.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.mission.4day.watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.4day.watchdog.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.mission.architect",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.architect.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.mission.booking",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.booking.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:7791"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.mission.builder",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.builder.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.mission.cockpit",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.cockpit.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:7792"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.mission.index",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.index.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:7794"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.mission.james.monthly",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.james.monthly.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.mission.revenue",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.revenue.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:7790"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.mission.verifier",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.verifier.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.mission.webhook",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.webhook.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:7793"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.mission.weekly-cadence",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.mission.weekly-cadence.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.pheremona.scrape-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.pheremona.scrape-sync.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.pheremona.server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.pheremona.server.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8792"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.1000x.audit",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.1000x.audit.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.1000x.tripwire",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.1000x.tripwire.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.1000x.watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.1000x.watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.ads-ready",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.ads-ready.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.adv-copilot",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.adv-copilot.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.agency-watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agency-watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.agent-fabric.presence",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agent-fabric.presence.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.agent-os-server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agent-os-server.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.agent-os",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agent-os.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.agentforge.deep-research.friday",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agentforge.deep-research.friday.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.agentforge.deep-research.tuesday",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.agentforge.deep-research.tuesday.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.aops",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.aops.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.blackwell-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen36-tunnels",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen36-tunnels.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen38-long-responses",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen38-long-responses.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen38-tp1-responses",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen38-tp1-responses.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4029"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen38-tp2-responses",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen38-tp2-responses.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4028"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen38-uncensored-responses",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen38-uncensored-responses.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4051"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.blackwell-qwen38-uncensored-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-qwen38-uncensored-tunnel.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8656"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.blackwell-worker-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.blackwell-worker-router.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.buzz-acp",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.buzz-acp.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.buzz-minio",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.buzz-minio.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.buzz-relay",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.buzz-relay.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.campaign-daily",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.campaign-daily.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.capability-index-rebuild",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.capability-index-rebuild.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.checkout-poster",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.checkout-poster.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.claude-litellm-gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.claude-litellm-gateway.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.co-unemployment-weekly",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.co-unemployment-weekly.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cockpit-refresh",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cockpit-refresh.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cockpit-v5",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cockpit-v5.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cold-loop",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cold-loop.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.colima",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.colima.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.conference-approval-daemon",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.conference-approval-daemon.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.cu2-objective-finalizer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-objective-finalizer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cu2-signer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-signer.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.cu2-soak",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-soak.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cu2-v2-evaluator",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-v2-evaluator.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cu2-v2-maintenance",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-v2-maintenance.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.cu2-v2-perception",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2-v2-perception.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.cu2d",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.cu2d.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.department-agent-orchestrator",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-agent-orchestrator.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.01.doctrine-standards",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.01.doctrine-standards.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.02.department-intelligence",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.02.department-intelligence.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.03.great-output-examples",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.03.great-output-examples.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.04.rig-os-verticals",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.04.rig-os-verticals.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.05.gbrain-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.05.gbrain-sync.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.06.paperclip-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.06.paperclip-sync.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.07.agentforge-benchmarks",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.07.agentforge-benchmarks.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.08.gtm-revenue-examples",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.08.gtm-revenue-examples.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.09.quality-failure-scan",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.09.quality-failure-scan.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department-intel.10.daily-digest-memory-proof",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department-intel.10.daily-digest-memory-proof.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.department.gtm",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.department.gtm.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.desktop-commander-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.desktop-commander-router.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:18001"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.docker-fleet.accounting",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.docker-fleet.accounting.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.docker-start",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.docker-start.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.dykema-approval-bot",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.dykema-approval-bot.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.engagement-daemon",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.engagement-daemon.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.factory.droid-remote",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.factory.droid-remote.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.founder-worker.rig-128gb-mbp",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.founder-worker.rig-128gb-mbp.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.foundry-api",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.foundry-api.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.foundry-fleet-health-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.foundry-fleet-health-worker.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.foundry-ui-candidate-5a34abcd43b7-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.foundry-ui-candidate-5a34abcd43b7-tunnel.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.foundry-ui-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.foundry-ui-tunnel.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.freetoken-blackwell-qwen38-gate",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.freetoken-blackwell-qwen38-gate.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8663"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.freetoken-blackwell-qwen38-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.freetoken-blackwell-qwen38-tunnel.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8662"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.freetoken-blackwell-qwen38-uncensored-gate",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.freetoken-blackwell-qwen38-uncensored-gate.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8665"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.freetoken-blackwell-qwen38-uncensored-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.freetoken-blackwell-qwen38-uncensored-tunnel.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8664"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.gads-stealth-evening",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gads-stealth-evening.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.gads-stealth-morning",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gads-stealth-morning.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.gbrain-obsidian-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gbrain-obsidian-sync.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.gbrain-sync-darius-google-ads",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gbrain-sync-darius-google-ads.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.gbrain-sync-jakestudio",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gbrain-sync-jakestudio.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.gbrain-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gbrain-sync.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.gbrain-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.gbrain-worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.github-steward.improve.weekly",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.github-steward.improve.weekly.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.github-steward.organize.daily",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.github-steward.organize.daily.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.github-steward.weekly",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.github-steward.weekly.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.googleads-guard",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.googleads-guard.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.grok45-subscription-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.grok45-subscription-proxy.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.grokbot-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.grokbot-router.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:18768"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.handy-keepalive",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.handy-keepalive.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.icp-pipeline",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.icp-pipeline.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.improvement-engine",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.improvement-engine.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.intel-scale.01.acquirer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.intel-scale.01.acquirer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.intel-scale.02.enricher-36-48-96",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.intel-scale.02.enricher-36-48-96.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.intel-scale.03.obsidian-writer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.intel-scale.03.obsidian-writer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.intel-scale.04.gbrain-mirror",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.intel-scale.04.gbrain-mirror.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-daily-cycle",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-daily-cycle.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-guardian-webhook",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-guardian-webhook.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.jacob-x-lane-comments",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-lane-comments.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-lane-posts",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-lane-posts.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-monitor",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-monitor.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-repost",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-repost.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob-x-token-refresh",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob-x-token-refresh.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.jacob.operations-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jacob.operations-worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.jake-24-7",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jake-24-7.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.jarvis",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.jarvis.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.julie.daily-sweep",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.julie.daily-sweep.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.julie",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.julie.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.julie.scrapers",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.julie.scrapers.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.keepawake",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.keepawake.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.kimi-sub-watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.kimi-sub-watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.knowledge-ingestion",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.knowledge-ingestion.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.li-healer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.li-healer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.librespot-multiroom",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.librespot-multiroom.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.linkedin-doctor",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-doctor.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-collector",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-collector.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-content-loop",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-content-loop.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-eden-bridge",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-eden-bridge.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-eden-posts",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-eden-posts.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-learnings",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-learnings.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-media-loop",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-media-loop.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-paced-tick",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-paced-tick.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-runner",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-runner.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-scorecard",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-scorecard.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-vault-push",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-vault-push.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin-os-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-os-worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.linkedin-public-v3",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-public-v3.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.linkedin-review-v2",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin-review-v2.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin.cli-engine",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin.cli-engine.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger; resource not provable from plist \u2014 standard verdict is Kestra + Pydantic AI (failure-restart KeepAlive conditions are absorbed by Kestra retry policy)"
+    },
+    {
+      "job_id": "com.rig.linkedin.cookie-refresh",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin.cookie-refresh.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin.dm-afternoon",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin.dm-afternoon.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin.dm-evening",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin.dm-evening.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.linkedin.dm-morning",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.linkedin.dm-morning.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.lobe-gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.lobe-gateway.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.lobehub-rig.company-dispatch",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.lobehub-rig.company-dispatch.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.lobehub-rig.paperclip-bridge",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.lobehub-rig.paperclip-bridge.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:18766"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.local-ollama-desktop-guard",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.local-ollama-desktop-guard.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8773"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.marimo-dashboards",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.marimo-dashboards.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8766"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.memory-consolidation",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-consolidation.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.memory-healer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-healer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.memory-os.all-lanes-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-os.all-lanes-worker.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:65023"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.memory-os",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-os.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8765"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.memory-os.worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-os.worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.memory-service",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-service.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.memory-settlement",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.memory-settlement.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "plist unreadable"
+    },
+    {
+      "job_id": "com.rig.meta-harness.harvest-hourly",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.harvest-hourly.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.meta-harness.jake-founder-heartbeat",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.jake-founder-heartbeat.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.meta-harness.jake-value-loop",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.jake-value-loop.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.meta-harness.upgrade-daily",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.upgrade-daily.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.meta-harness.weekly-meta",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.weekly-meta.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.meta-harness.worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.meta-harness.worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.mimo-responses-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.mimo-responses-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8659"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.mimo-token-plan-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.mimo-token-plan-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8655"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.modal1-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.modal1-proxy.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.multiroom-volume-sync",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.multiroom-volume-sync.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.node-agent.128gb-control",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.node-agent.128gb-control.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.node-ops.48gb-department-context",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.node-ops.48gb-department-context.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.node-ops.blackwell-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.node-ops.blackwell-tunnel.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.node-ops.fleet-controller",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.node-ops.fleet-controller.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.node-ops.fleet-reconciler",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.node-ops.fleet-reconciler.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.notion-airpods-fix",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.notion-airpods-fix.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.omp-auth-broker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.omp-auth-broker.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8767"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.omp-auth-gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.omp-auth-gateway.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8768"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.openbot-app-soak",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-app-soak.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-app",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-app.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.openbot-backup-verify",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-backup-verify.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-daily-brief",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-daily-brief.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-db-backup",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-db-backup.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-fleet-probe",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-fleet-probe.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-fleet-watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-fleet-watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-forwarders",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-forwarders.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.openbot-goal-check",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-goal-check.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-grokbot-push",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-grokbot-push.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-kpi-snapshot",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-kpi-snapshot.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-landing-watch",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-landing-watch.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-model-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-model-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-model-warmer",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-model-warmer.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-pg-backup",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-pg-backup.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.openbot-server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-server.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.openbot-ui",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-ui.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.openbot-watchdog",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-watchdog.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.openbot-window-refresh",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openbot-window-refresh.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.opencode-free-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.opencode-free-proxy.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.opendesign-model-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.opendesign-model-router.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:49171"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.openjarvis-memory-bridge",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openjarvis-memory-bridge.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8101"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.openmausbot.harness",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openmausbot.harness.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8799"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.openrouter-claude-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.openrouter-claude-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8770"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.orca-claude-account-rotator",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.orca-claude-account-rotator.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.owntone",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.owntone.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.paipkg-sales-intel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.paipkg-sales-intel.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.paipkg-sitewatch",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.paipkg-sitewatch.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.paipkg-stripe-alerts",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.paipkg-stripe-alerts.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.paperclip",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.paperclip.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.phronema.operator-shell",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.phronema.operator-shell.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8090"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.phronema.venture-worker",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.phronema.venture-worker.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.pm2",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.pm2.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.prime-omp-orca-supervisor",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.prime-omp-orca-supervisor.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.prime1000x.monday-weekly-eval",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.prime1000x.monday-weekly-eval.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.pulseaudio-usbc",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.pulseaudio-usbc.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.qnap-agent-fabric.minute-probe",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qnap-agent-fabric.minute-probe.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.qwen-fleet-256gb",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qwen-fleet-256gb.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8772"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.qwen-fleet-96gb",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qwen-fleet-96gb.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8771"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.qwen38-27b",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qwen38-27b.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.qwen38-flash-uncensored-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qwen38-flash-uncensored-tunnel.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8658"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.qwen38-tool-filter-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.qwen38-tool-filter-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8657"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.ralph-daemon",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.ralph-daemon.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.rc-server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rc-server.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.recall-ingest-247",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.recall-ingest-247.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.reply-poller",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.reply-poller.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.revenue-oracle",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.revenue-oracle.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.rig-instagram-engine",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rig-instagram-engine.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.rig256gb-qwen38-omlx-responses",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rig256gb-qwen38-omlx-responses.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4064"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.rig256gb-qwen38-omlx-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rig256gb-qwen38-omlx-tunnel.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:18657"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.robot-ai-outlook",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.robot-ai-outlook.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8618"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.rowboat-ollama-96gb-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rowboat-ollama-96gb-tunnel.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.rowboat.email-triage",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rowboat.email-triage.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.rowboat.fleet-health",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rowboat.fleet-health.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.rowboat.keep-on-track",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rowboat.keep-on-track.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.rowboat.morning-brief",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.rowboat.morning-brief.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.seo-daily",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.seo-daily.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.seo-office",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.seo-office.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.stayawake",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.stayawake.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.systems-verify",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.systems-verify.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.temporal-server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.temporal-server.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:57872"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.unified-gateway",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.unified-gateway.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.v10.floor",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.v10.floor.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.v100.studios",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.v100.studios.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rig.voice-command-router",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.voice-command-router.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.voicebox-ptt",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.voicebox-ptt.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.voicebox-server",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.voicebox-server.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.warm-lead-24-7",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.warm-lead-24-7.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.warm-lead-engine",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.warm-lead-engine.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "com.rig.warm-lead-morning-prep",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.warm-lead-morning-prep.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rig.xai-tool-cap-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.xai-tool-cap-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8769"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.youtube-intel-webhook",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.youtube-intel-webhook.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener *:8793"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.zai-coding-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.zai-coding-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8652"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig.zai-responses-proxy",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig.zai-responses-proxy.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4018"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "com.rig96gb.omlx-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rig96gb.omlx-tunnel.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "com.rigintelligence.rigdesk.heartbeat",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rigintelligence.rigdesk.heartbeat.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.rodgersintelligence.v11-batch-publisher",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.rodgersintelligence.v11-batch-publisher.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "com.valvesoftware.steamclean",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/com.valvesoftware.steamclean.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "watched_directory",
+          "resource_detail": "WatchPaths: ['/Users/rig128gb/Library/Application Support/Steam/Steam.AppBundle/Steam']"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "homebrew.mxcl.node_exporter",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/homebrew.mxcl.node_exporter.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "homebrew.mxcl.postgresql@17",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/homebrew.mxcl.postgresql@17.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener [::1]:5432"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "homebrew.mxcl.prometheus",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/homebrew.mxcl.prometheus.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "homebrew.mxcl.redis",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/homebrew.mxcl.redis.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:6379"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "homebrew.mxcl.syncthing",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/homebrew.mxcl.syncthing.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "io.exo.local-runtime",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/io.exo.local-runtime.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "local.qnap-docker-tunnel",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/local.qnap-docker-tunnel.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "screenpipe",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/screenpipe.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "sh.executor.daemon",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/sh.executor.daemon.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:4789"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "tech.mikerodgers.rlm-harness",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.mikerodgers.rlm-harness.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "tech.mikerodgers.rlm-improve",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.mikerodgers.rlm-improve.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    },
+    {
+      "job_id": "tech.mikerodgers.wallpaperd",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.mikerodgers.wallpaperd.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "KeepAlive=true proves restart policy, not a held resource; no plist resource, no running listener \u2014 binary test unresolved, inspect the executable"
+    },
+    {
+      "job_id": "tech.rig.frontier-web",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.rig.frontier-web.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:8791"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "tech.rig.livecoach-ollama",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.rig.livecoach-ollama.plist",
+      "class": "resident",
+      "evidence": {
+        "resident_service": {
+          "resource_kind": "listening_socket",
+          "resource_detail": "OS corroboration: running process holds listener 127.0.0.1:11436"
+        }
+      },
+      "expected_framework": "launchd",
+      "action": "keep",
+      "note": "source-proven resident service; stays on launchd"
+    },
+    {
+      "job_id": "tech.rig.livecoach",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.rig.livecoach.plist",
+      "class": "needs_review",
+      "evidence": null,
+      "expected_framework": null,
+      "action": "review",
+      "note": "no schedule, no held resource, no KeepAlive lifetime \u2014 manual/oneshot semantics, human must decide"
+    },
+    {
+      "job_id": "tech.rig.rowboat-state-guard",
+      "source": "launchd",
+      "origin": "/Users/rig128gb/Library/LaunchAgents/tech.rig.rowboat-state-guard.plist",
+      "class": "periodic",
+      "evidence": {},
+      "expected_framework": "kestra_pydantic",
+      "action": "move",
+      "note": "schedule trigger without resident markers \u2014 standard verdict is Kestra + Pydantic AI"
+    }
+  ],
+  "unresolved": [
+    "ai.claude-code-router",
+    "ai.free-claude-code.server",
+    "ai.hermes.gateway",
+    "ai.openclaw.gateway",
+    "ai.rig.bus-reconciler",
+    "ai.rig.intel-api",
+    "ai.rig.keepawake",
+    "ai.rig.reply.watcher",
+    "ai.rig.sales.caffeinate",
+    "ai.rig.sales.monitor",
+    "ai.rig.session-bus-nats",
+    "com.bigbirch.homeassistant",
+    "com.citrolabs.keystone.agent",
+    "com.citrolabs.keystone.xpcservice",
+    "com.gbrain.autopilot",
+    "com.mission.4day.heartbeat",
+    "com.mission.4day.watchdog",
+    "com.mission.architect",
+    "com.mission.builder",
+    "com.mission.verifier",
+    "com.rig.adv-copilot",
+    "com.rig.agent-os",
+    "com.rig.agent-os-server",
+    "com.rig.blackwell-qwen36-tunnels",
+    "com.rig.blackwell-qwen38-long-responses",
+    "com.rig.blackwell-worker-router",
+    "com.rig.buzz-acp",
+    "com.rig.buzz-minio",
+    "com.rig.buzz-relay",
+    "com.rig.claude-litellm-gateway",
+    "com.rig.colima",
+    "com.rig.conference-approval-daemon",
+    "com.rig.cu2-signer",
+    "com.rig.cu2-v2-perception",
+    "com.rig.cu2d",
+    "com.rig.department.gtm",
+    "com.rig.dykema-approval-bot",
+    "com.rig.engagement-daemon",
+    "com.rig.factory.droid-remote",
+    "com.rig.founder-worker.rig-128gb-mbp",
+    "com.rig.foundry-api",
+    "com.rig.gbrain-obsidian-sync",
+    "com.rig.gbrain-worker",
+    "com.rig.grok45-subscription-proxy",
+    "com.rig.jacob-x-guardian-webhook",
+    "com.rig.jacob.operations-worker",
+    "com.rig.jake-24-7",
+    "com.rig.jarvis",
+    "com.rig.keepawake",
+    "com.rig.librespot-multiroom",
+    "com.rig.linkedin-os-worker",
+    "com.rig.linkedin-public-v3",
+    "com.rig.lobe-gateway",
+    "com.rig.lobehub-rig.company-dispatch",
+    "com.rig.memory-os.worker",
+    "com.rig.memory-service",
+    "com.rig.memory-settlement",
+    "com.rig.meta-harness.worker",
+    "com.rig.modal1-proxy",
+    "com.rig.multiroom-volume-sync",
+    "com.rig.node-agent.128gb-control",
+    "com.rig.node-ops.blackwell-tunnel",
+    "com.rig.node-ops.fleet-controller",
+    "com.rig.node-ops.fleet-reconciler",
+    "com.rig.notion-airpods-fix",
+    "com.rig.openbot-app",
+    "com.rig.openbot-forwarders",
+    "com.rig.openbot-pg-backup",
+    "com.rig.openbot-server",
+    "com.rig.openbot-ui",
+    "com.rig.opencode-free-proxy",
+    "com.rig.owntone",
+    "com.rig.paperclip",
+    "com.rig.phronema.venture-worker",
+    "com.rig.pm2",
+    "com.rig.pulseaudio-usbc",
+    "com.rig.qwen38-27b",
+    "com.rig.ralph-daemon",
+    "com.rig.rc-server",
+    "com.rig.recall-ingest-247",
+    "com.rig.rig-instagram-engine",
+    "com.rig.rowboat-ollama-96gb-tunnel",
+    "com.rig.seo-office",
+    "com.rig.stayawake",
+    "com.rig.unified-gateway",
+    "com.rig.v10.floor",
+    "com.rig.v100.studios",
+    "com.rig.voice-command-router",
+    "com.rig.voicebox-ptt",
+    "com.rig.voicebox-server",
+    "com.rig.warm-lead-24-7",
+    "com.rig.warm-lead-engine",
+    "com.rig96gb.omlx-tunnel",
+    "homebrew.mxcl.node_exporter",
+    "homebrew.mxcl.prometheus",
+    "homebrew.mxcl.syncthing",
+    "io.exo.local-runtime",
+    "local.qnap-docker-tunnel",
+    "screenpipe",
+    "tech.mikerodgers.wallpaperd",
+    "tech.rig.livecoach"
+  ],
+  "unresolved_count": 101
+}

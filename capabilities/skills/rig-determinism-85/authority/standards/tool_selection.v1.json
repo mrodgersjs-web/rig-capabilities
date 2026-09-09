@@ -1,0 +1,270 @@
+{
+  "schema": "rig.d85.tool-selection.standard.v1",
+  "version": "1.4.0",
+  "one_liner": "Pydantic AI thinks, Kestra schedules, Temporal clocks, Orca reasons, launchd serves. LangChain for graphs, Flowise for visuals. Default to Pydantic AI. Always.",
+  "rules": [
+    {
+      "id": "pydantic-ai-default",
+      "rule": "Every new agent, automation, or process starts with Pydantic AI: typed inputs, validated outputs, dependency injection, testable.",
+      "d85_note": "Typed schemas make MODEL ops validatable; typing does not make them CODE. The four ratios still apply."
+    },
+    {
+      "id": "langchain-only-when-pa-insufficient",
+      "rule": "LangChain/LangGraph only for complex multi-agent graphs with backtracking, LangSmith enterprise tracing, or Deep Agents context compression.",
+      "d85_note": "Provider switching alone is NOT a trigger — Pydantic AI is multi-provider. A simple chain in LangChain is overengineering."
+    },
+    {
+      "id": "flowise-non-engineer-only",
+      "rule": "Flowise only when a non-engineer must build/modify the agent, or for rapid visual prototyping or client demos.",
+      "d85_note": "Flowise output is not closed-grammar Python source under an authority root: it cannot pass D85 inventory and is NEVER admissible as a durable system."
+    },
+    {
+      "id": "kestra-orchestrates",
+      "rule": "Kestra runs the schedule; Pydantic AI runs the logic. Trigger -> Shell task -> Python -> Pydantic AI agent -> structured result -> store/alert.",
+      "d85_note": "Orchestration is control plane and must be CODE in the flow definition."
+    },
+    {
+      "id": "temporal-clock-critical",
+      "rule": "Temporal only for durable workflows with a tight start-latency SLA and mandatory catch-up recovery after downtime. If 'around 8am' is fine, use Kestra. Temporal buys durable-execution semantics, not a wall-clock promise.",
+      "d85_note": "The discriminator is a measured SLA plus recovery policy, nothing else. Schedules can still be delayed by worker availability; admission requires deployment evidence meeting the declared SLA."
+    },
+    {
+      "id": "orca-agent-driven-only",
+      "rule": "Orca only for jobs that need an agent to reason, interpret, or decide. Scripts go to Kestra; agents go to Orca with Pydantic AI I/O.",
+      "d85_note": "Choosing Orca declares MODEL ops: each requires a D85 necessity record at admission."
+    }
+  ],
+  "property_definitions": {
+    "claim_semantics": "A property is claimed by supplying an evidence record over exactly its schema fields; CODE derives the boolean from the record. A well-formed record whose evidence fails its acceptance predicate is a CONTRADICTED claim and BLOCKS — it is never silently read as FALSE. An absent property is not claimed and is FALSE. No bare booleans are accepted anywhere.",
+    "clock_critical": {
+      "definition": "The job carries a written start-latency SLA of at most 60 seconds AND a mandatory catch-up recovery policy: after a crash or missed window the execution must be recovered and delivered late, never skipped. Temporal is selected for durable-execution semantics, not as a wall-clock guarantee — schedules can still be delayed by worker availability, so admission requires deployment evidence meeting the declared SLA.",
+      "binary_test": "Is there a named consumer that fails if start latency exceeds the SLA, and is skipping after downtime unacceptable?",
+      "measurement": "Write the SLA number and the recovery policy; name the consumer and the failure mode. If no consumer or failure mode can be named, the property is FALSE.",
+      "true_example": "Market-open data pull with p95 start latency <= 15s of 09:30:00 ET and mandatory catch-up after downtime.",
+      "false_example": "Daily 8am digest email — 'by 8:15' is fine, and a missed run can rerun whenever.",
+      "evidence_schema": {
+        "named_consumer": "string, non-empty — who breaks when the SLA is missed",
+        "failure_mode": "string, non-empty — how they break",
+        "sla_start_latency_seconds": "integer 1..60 — the accepted predicate; outside this range the claim is CONTRADICTED (a looser SLA is an ordinary Kestra schedule)",
+        "recovery_policy": "'catch_up' — 'skip' is CONTRADICTED (skip-on-miss is an ordinary schedule)"
+      },
+      "precedence": 1
+    },
+    "resident_service": {
+      "definition": "The job must hold a long-lived local resource: a listening socket, a watched directory, a hardware connection, or sub-second response to OS events (file/watchdog/USB). KeepAlive in a plist proves restart policy, not a held resource; it is never sufficient evidence on its own.",
+      "binary_test": "Does the job wait for events rather than being invoked on a schedule?",
+      "measurement": "If the job can be expressed as cron/interval + run-to-completion, the property is FALSE regardless of how it is currently deployed. Corroborating a resident requires source evidence of the resource itself: plist Sockets/WatchPaths/WatchDevices, or an OS-observed listening socket (lsof) — not KeepAlive.",
+      "true_example": "Watchdog daemon monitoring a folder and reacting within 500ms.",
+      "false_example": "Health check that runs every minute — that is a schedule.",
+      "evidence_schema": {
+        "resource_kind": "one of listening_socket | watched_directory | hardware_connection | os_event_sub_second",
+        "resource_detail": "string, non-empty — the concrete resource held"
+      },
+      "precedence": 2
+    },
+    "non_engineer_surface": {
+      "definition": "The primary builder or maintainer of the artifact is not a software engineer, or the artifact's purpose is a throwaway demo/prototype for stakeholder communication.",
+      "binary_test": "Will a non-engineer edit this artifact after the engineer leaves?",
+      "measurement": "Named maintainer is a non-engineer, or artifact is explicitly labeled demo with an expiry date. Otherwise FALSE.",
+      "true_example": "Operations lead tweaks a visual assistant flow weekly.",
+      "false_example": "Engineer-built internal tool that happens to have a UI.",
+      "evidence_schema": {
+        "maintainer": "string, non-empty — the named maintainer",
+        "maintainer_is_engineer": "boolean",
+        "expiry_date": "'YYYY-MM-DD' or null — engineer maintainer WITHOUT an expiry date is CONTRADICTED (that is an internal tool; rerun selection without the claim)"
+      },
+      "precedence": 3,
+      "hard_boundary": "Verdict is Flowise and durable_admissible=false. It can never be promoted to durable; a durable rewrite is a new build under a new selection."
+    },
+    "multi_agent_graph": {
+      "definition": "The workflow is a graph of >=3 cooperating agents where control flow backtracks (retries a node, revisits a stage, or dynamically chooses the next node based on intermediate output), or requires LangSmith-grade distributed tracing, or needs Deep Agents-style context compression across agent handoffs.",
+      "binary_test": "Is there a cycle in the agent graph, a dynamic router node, or a cross-agent tracing/compression requirement?",
+      "measurement": "Draw the agent graph. No cycle AND no dynamic router AND no distributed-tracing requirement = FALSE.",
+      "true_example": "Research loop: planner -> three parallel workers -> critic -> replan (cycle on critic verdict).",
+      "false_example": "Linear summarize-then-post pipeline — that is a chain, use Pydantic AI.",
+      "evidence_schema": {
+        "graph_shape": "one of cycle | dynamic_router | distributed_tracing | context_compression",
+        "description": "string, non-empty — the actual topology",
+        "agent_count": "integer >= 3 — fewer is CONTRADICTED (a linear chain is not a graph)"
+      },
+      "precedence": 4
+    },
+    "agent_reasoning": {
+      "definition": "Producing the output requires interpreting unstructured input or exercising judgment that cannot be expressed as a fixed transformation of the inputs; a human would have to read and decide.",
+      "binary_test": "Could a deterministic function with full access to the same inputs produce acceptable output?",
+      "measurement": "Write the deterministic alternative in one sentence. If it exists and meets the quality bar, the property is FALSE and the MODEL op fails necessity.",
+      "true_example": "Read an inbound email and decide if it is a buying signal.",
+      "false_example": "Extract fields from a fixed-format webhook payload — that is parsing.",
+      "evidence_schema": {
+        "unstructured_input": "string, non-empty — what must be interpreted",
+        "deterministic_alternative": "string, non-empty — the alternative that was considered",
+        "alternative_rejected_because": "string, non-empty — the falsifiable reason it cannot meet the bar"
+      },
+      "precedence": 5
+    },
+    "default": {
+      "definition": "None of the above properties holds: a scheduled or triggered job whose logic is deterministic code plus at most typed model calls in validated slots.",
+      "binary_test": "All five properties above answered FALSE.",
+      "measurement": "Kestra flow wrapping Pydantic AI agents is the correct verdict.",
+      "true_example": "Nightly scraper -> typed agent summary -> CRM write.",
+      "evidence_schema": "none — default is the absence of claims",
+      "precedence": 6
+    }
+  },
+  "framework_contracts": {
+    "kestra_pydantic": {
+      "when": "Default for every scheduled or event-triggered job.",
+      "where": "Kestra flows in the rig namespace; agent code as Python scripts under an authority root.",
+      "how": "Trigger -> Shell/Python task -> Pydantic AI agent (typed I/O) -> structured result -> store/alert. Flow YAML is the single orchestration source of truth.",
+      "prohibited": "Business logic in flow YAML templates; model calls outside typed pydantic boundaries; secrets in flow variables.",
+      "d85_obligations": "Flow YAML + agent source under authority root; MODEL ops carry typed schemas + necessity; four ratios >= 0.85.",
+      "migration": "Landing target for all launchd periodic scripts and Flowise flows that outgrow prototype status."
+    },
+    "temporal": {
+      "when": "clock_critical only: a start-latency SLA <= 60s with mandatory catch-up.",
+      "where": "Temporal namespace rig; workflows as code in the temporal worker repo.",
+      "how": "Workflow as Python/Go code; activities call Pydantic AI agents; retries/timeouts/schedules declared in workflow code, never in agent prompts.",
+      "prohibited": "Using Temporal for convenience scheduling; cron-with-jitter requirements (that is Kestra); describing Temporal as a wall-clock guarantee.",
+      "d85_obligations": "Workflow code under authority root; every activity typed; four ratios >= 0.85; deployment evidence (measured start latency + recovery time) meeting the declared SLA.",
+      "migration": "Existing 4 schedules audited against the evidence schema: any without a <=60s SLA and catch-up policy move to Kestra."
+    },
+    "orca_pydantic": {
+      "when": "agent_reasoning: the job IS an agent making decisions in a workspace.",
+      "where": "Orca worktree automations with Pydantic AI I/O contracts.",
+      "how": "Orca automation declares typed input/output models; agent reasons inside; deterministic guardrails bound every outward action (Gate-D).",
+      "prohibited": "Scripts that do not reason (move to Kestra); untyped free-text agent outputs; agent-decided scheduling/retries.",
+      "d85_obligations": "Choosing Orca declares MODEL ops: necessity records required at admission; control plane stays CODE.",
+      "migration": "3 of 11 existing automations identified as non-reasoning scripts: move to Kestra."
+    },
+    "langchain": {
+      "when": "multi_agent_graph: cycles, dynamic routing, LangSmith tracing, or Deep Agents context compression.",
+      "where": "langgraph projects under an authority root with pinned dependencies.",
+      "how": "Graph as code; nodes are typed callables; state is a pydantic model; conditional edges are deterministic functions of state.",
+      "prohibited": "Linear chains (use Pydantic AI); provider switching as the justification; prompt strings as the routing mechanism.",
+      "d85_obligations": "Graph definition under authority root; every node typed; necessity records for MODEL nodes; four ratios >= 0.85.",
+      "migration": "None existing; new builds only when the graph test passes."
+    },
+    "flowise": {
+      "when": "non_engineer_surface: non-engineer builder or explicit demo/prototype.",
+      "where": "Flowise canvas; export JSON kept in the prototype archive with an expiry date.",
+      "how": "Visual build; documented owner; expiry review date; no production credentials.",
+      "prohibited": "Durable operation; production secrets; promotion by editing — a durable rewrite is a NEW selection under kestra_pydantic/orca_pydantic.",
+      "d85_obligations": "durable_admissible=false, permanently. Cannot pass closed-grammar inventory; cannot be scheduled as a durable system.",
+      "migration": "Any Flowise flow needed in production is rebuilt, not exported."
+    },
+    "launchd": {
+      "when": "resident_service only.",
+      "where": "~/Library/LaunchAgents plists, one plist per service, KeepAlive semantics declared.",
+      "how": "plist declares sockets/watch paths; service binary is Python under an authority root; internal scheduling is still code.",
+      "prohibited": "StartCalendarInterval/StartInterval jobs (that is Kestra territory); resident daemons that merely poll a schedule.",
+      "d85_obligations": "plist + source under authority root; plist is control plane and therefore CODE; four ratios >= 0.85.",
+      "migration": "64 launchd periodic jobs move to Kestra; ~50 true residents stay."
+    }
+  },
+  "decision_table": {
+    "precedence": [
+      "clock_critical",
+      "resident_service",
+      "non_engineer_surface",
+      "multi_agent_graph",
+      "agent_reasoning",
+      "default"
+    ],
+    "rows": [
+      {
+        "when": {
+          "clock_critical": true
+        },
+        "framework": "temporal"
+      },
+      {
+        "when": {
+          "resident_service": true
+        },
+        "framework": "launchd"
+      },
+      {
+        "when": {
+          "non_engineer_surface": true
+        },
+        "framework": "flowise",
+        "durable_admissible": false
+      },
+      {
+        "when": {
+          "multi_agent_graph": true
+        },
+        "framework": "langchain"
+      },
+      {
+        "when": {
+          "agent_reasoning": true
+        },
+        "framework": "orca_pydantic"
+      },
+      {
+        "when": {},
+        "framework": "kestra_pydantic"
+      }
+    ]
+  },
+  "estate_decisions": {
+    "27_kestra_flows": {
+      "action": "keep",
+      "add": "pydantic type safety"
+    },
+    "4_temporal_schedules": {
+      "action": "keep",
+      "why": "clock-critical",
+      "audit": "any that tolerate >60s drift move to Kestra"
+    },
+    "11_orca_automations": {
+      "action": "keep 8 agent-driven, move 3 scripts to Kestra"
+    },
+    "50_launchd_services": {
+      "action": "keep",
+      "why": "resident services",
+      "superseded_by": "authority/standards/estate_ledger.v1.json mechanical scan: 52 source-proven residents (plist resources + OS-corroborated listeners); counts here were user-table estimates"
+    },
+    "64_launchd_periodic": {
+      "action": "move to Kestra + Pydantic AI",
+      "why": "scripts on schedules",
+      "superseded_by": "authority/standards/estate_ledger.v1.json mechanical scan: 149 periodic move candidates; counts here were user-table estimates"
+    }
+  },
+  "build_checklist": [
+    "build declares process_id and the inventory_sha256 snapshot it was generated against; certification recomputes the live inventory and only binds when the declared process matches the target AND the declared hash equals the live hash (stale or mismatched checklists are CHECKLIST_BLOCK, never rebound)",
+    "framework matches select_framework() output for the declared properties",
+    "flowise verdicts are prototypes; no durable system declares flowise",
+    "every MODEL op has typed pydantic input/output schemas",
+    "every MODEL op has a D85 necessity record",
+    "an archify diagram showing how the process works is present and parses",
+    "four-ratio D85 score is REALIZED_PASS",
+    "orchestration (schedule, retry, timeout, cancellation, dispatch) is code, never model-decided"
+  ],
+  "what_good_looks_like": {
+    "selection": "the framework is the output of the decision table for declared properties, decided before the first line of logic is written",
+    "typing": "every model boundary crosses a pydantic model in both directions; nothing accepts or returns free text across a boundary",
+    "necessity": "every MODEL op carries a falsifiable claim, a deterministic alternative, and reachable CODE fallbacks",
+    "orchestration": "a human reading only the Kestra/Temporal/plist config can predict when the job runs, what it retries, and when it gives up",
+    "diagram": "an archify artifact exists that a non-author can follow from trigger to terminal state without reading the source",
+    "admission": "the process has passed inventory -> classification -> REALIZED_PASS scoring, and outward effects have a dormant Gate-D arm"
+  },
+  "changelog": [
+    {
+      "version": "1.2.1",
+      "date": "2026-09-09",
+      "change": "Rolled back the keepalive_daemon resource kind: KeepAlive proves restart policy, not a held resource, and admitting it would certify the current estate by definition. Residents require plist resource evidence or OS-corroborated listeners; KeepAlive-only jobs land in needs_review. Estate counts superseded by the mechanical scan in estate_ledger.v1.json."
+    },
+    {
+      "version": "1.3.0",
+      "date": "2026-09-09",
+      "change": "Checklist schema now requires process_id and inventory_sha256. Enforcement certification (certify_build / checklist subcommand) is claim-and-verify: the build declares the snapshot digest it was generated against, certification recomputes the live inventory, and binding happens only on exact equality. Declared/target process mismatch, stale hash replay, and unbound runs are each typed CHECKLIST_BLOCK paths. A direct check_build_checklist() PASS is self-described inventory_binding=unbound and is not an enforcement verdict."
+    },
+    {
+      "version": "1.4.0",
+      "date": "2026-09-09",
+      "change": "Verdict binding is enforceable end to end: certification attaches checklist_sha256 (canonical digest over the full closed-schema build), and a consumer-side verifier (verify_certification / verify-cert subcommand) recomputes the digest, rejects non-exact certificate schemas, rejects unbound or non-PASS certificates, and blocks post-cert mutation replays, tampered snapshot hashes, and live-inventory drift. A saved PASS paired with a mutated build now BLOCKs at the boundary that consumes it."
+    }
+  ]
+}
