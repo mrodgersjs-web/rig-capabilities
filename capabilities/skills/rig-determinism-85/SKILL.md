@@ -56,3 +56,122 @@ The tool-selection suites (`tests.test_tool_selection`, `tests.test_tool_selecti
 - All four agent surfaces carry the exact doctrine marker plus the canonical doctrine body; any divergence blocks wiring.
 - No gate in this skill executes an outward effect.
 </success_criteria>
+
+## Universal Enforcement (v1.5)
+
+The central gate is `rig-loop dispatch_hook`, above loop-specific logic and
+active even when no loop run exists. Claude, Codex, Hermes, OMP, and Prime Agent
+must route mutation-class pre-tool calls through it. Protected roots come only
+from `~/.rig/d85/enforcement.json`; a `write`, `edit`, `bash`/`shell`,
+`apply_patch`, or equivalent mutation touching an exact path beneath one of
+those roots requires a current signed admission for that path and session.
+
+### Admission ceremony
+
+```bash
+rig-determinism-85 admit-request <build.json> \
+  --path <exact-absolute-target> \
+  --session-key <sid-or-cwd-key>
+# Mike types in chat: APPROVE d85adm_<hex12>
+rig-determinism-85 admit-approve
+```
+
+`process_id` defaults from `build.json`. `admit-request` first requires a bound
+`CHECKLIST_PASS`; an unbound pass is not an enforcement verdict.
+`admit-approve` reads the exact phrase from an interactive TTY; `--phrase` is
+test-only. Approval appends an HMAC-signed record to
+`~/.rig/d85/admissions/approvals.jsonl`, binding exact absolute paths, build
+SHA-256, process, session, and a finite positive TTL of at most 24 hours. Each mutation
+revalidates signature, TTL, exact-path coverage, session, and unchanged build
+bytes.
+
+The Python approval boundary itself opens `/dev/tty` and requires a TTY before
+minting a production record; the CLI delegates to it. Supplied phrases or
+clocks require `RIG_D85_TEST_PHRASE=1` plus an explicit temporary D85 home,
+non-escaping ledger/key paths, and temporary builds/outputs/launchers.
+The test path refuses the production home and records `how=test-phrase`, not
+`typed-approve`. Same-account signing-key compromise remains outside this
+application boundary. Tests never mint production admissions.
+
+An admission needs at least one `--path` OR `--launcher`. A launcher-only
+request has no writable outputs. `--launcher <script>` binds execution
+identity and content digest; `--path <output>` grants only that exact writable
+literal. Neither the launcher nor its parent becomes writable implicitly.
+
+### Scheduled automation launcher
+
+Scripts that live under, or can touch, protected roots must be scheduled through:
+
+```bash
+rig-determinism-85 d85-run <script> [args...]
+```
+
+With active protected roots, `d85-run` requires an admission for EVERY script,
+regardless of where it lives. It checks the signed launcher digest, unchanged
+approved build digest, and live `verify-cert` before executing under
+`sandbox-exec`. The profile allows default operations, denies writes under
+canonical protected roots, then permits only explicitly admitted output
+literals. Resolve roots before emitting SBPL so aliases such as `/var` and
+`/private/var` cannot escape the boundary. A directory literal does not grant
+its descendants. The sandbox is the execution-time boundary, not shell parsing.
+
+### Estate migration
+
+`estate-validate` requires a declared existing launcher at or after
+`launcher_epoch`, including numeric Unix epochs interpreted in UTC. The
+builder derives `modified_at` from the source file's mtime and emits
+`modified_at_source` with path, field, and raw value. For a shared Hermes store,
+this conservatively marks every enabled job as modified when that store changes.
+Known pre-epoch jobs remain the visible `grandfathered_launcher_missing`
+retrofit backlog. Missing/invalid dates do not grandfather newly discovered jobs.
+A launcher path check alone is not proof of scheduler wiring or signed admission.
+
+Verify Hermes locations from the installed scheduler, not an old runbook.
+On this host, `.hermes/hermes-agent/cron/jobs.py` defines
+`get_hermes_home()/cron/jobs.json`: the root store and
+`~/.hermes/profiles/*/cron/jobs.json`. The previously documented no-`cron/`
+paths are absent. The builder records each scanned path and scopes IDs by profile.
+
+### Fail-closed matrix
+
+| Condition | Verdict |
+| --- | --- |
+| Protected target with no exact current-session admission | DENY |
+| Missing, unreadable, or malformed config, payload, key, ledger, or signature | DENY |
+| Expired approval, changed build bytes, missing build, or non-bound checklist result | DENY |
+| Unknown shell verb referencing a protected path, or unproven verb with cwd under a protected root | DENY |
+| Missing or failing live certificate, unavailable sandbox, or unsafe sandbox path literal | DENY |
+| Arbitrary-code tool (`eval`, Python/REPL aliases) while protected roots are active | DENY, even with a path admission |
+| Hook engine absent, failed, empty, malformed, or missing a boolean verdict | DENY mutations; retain read-only recovery |
+| Proven read-only call or mutation with no target under configured roots | PASS without admission |
+
+### Partial shell ceiling
+
+Shell classification recognizes mutation verbs, redirections, and a closed set
+of read-only verbs. It cannot prove that interpreter or build tools such as
+Python, `make`, or `npm` will not write paths they never name. The cwd-under-root
+rule narrows that gap, but does not close it. `d85-run` plus `sandbox-exec` is
+the execution boundary for scheduled automation; universal harness-shell
+sandboxing remains open work. Any unclassifiable or internally failed check
+against a protected surface denies.
+
+### Emergency recovery
+
+Only Mike's explicitly authorized break-glass process may repair a broken live
+gate. Verify `RIG_D85_DISABLE=1` in the process that will perform the write.
+Do not set it from a tool or use an alternate alias after a denial. A persistent
+execution worker can differ from the shell; a fresh standalone child may be
+used only when explicitly authorized, with normal inheritance and no override.
+Require one complete-line match, compile the candidate in memory, retain a
+backup and original permissions, then atomically replace and recompile.
+Remove the override from every isolated enforcement-test subprocess and inspect
+the actual pi JSON `block` values: read false, protected write true, eval true.
+Ordinary eval denial is intentional, not an outage.
+
+### Wiring proof
+
+`rig-loop wire` is a dry-run proposal unless `--apply` is supplied.
+`rig-loop doctor --json` compares installed managed JSON registrations and
+adapter bytes with canonical sources. Markers alone do not establish parity.
+Matching files do not prove invocation in an already-running harness, and Hermes
+gateway hooks cannot block. Obtain approval before changing live security wiring.

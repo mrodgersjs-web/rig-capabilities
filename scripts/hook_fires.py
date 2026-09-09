@@ -37,6 +37,8 @@ def isolated_loop_env(root: Path) -> dict[str, str]:
         "RIG_LOOP_STATE": str(root / "state"),
         "RIG_LOOP_PROOF_DIR": str(root / "proof"),
         "RIG_LOOP_CLI": str(ROOT / "bin" / "rig-loop"),
+        "PYTHONPATH": os.pathsep.join(sys.path),
+        "PATH": os.pathsep.join((str(Path.home() / ".bun" / "bin"), env.get("PATH", ""))),
     })
     return env
 

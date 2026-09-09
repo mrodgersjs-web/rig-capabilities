@@ -3,11 +3,14 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(SKILL_ROOT))
+REPO_ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(REPO_ROOT))
 
 from d85 import AdmissionBlock, build_inventory, compare_inventory  # noqa: E402
 from d85_gates import (  # noqa: E402
@@ -52,6 +55,20 @@ def _parser() -> argparse.ArgumentParser:
     verify_cmd.add_argument("build_file", type=Path)
     verify_cmd.add_argument("certificate_file", type=Path)
     verify_cmd.add_argument("--root", type=Path, default=None)
+    admit_request = commands.add_parser("admit-request")
+    admit_request.add_argument("build_file", metavar="BUILD")
+    admit_request.add_argument("--process-id", default=None)
+    admit_request.add_argument("--path", action="append", default=[], dest="paths",
+                               help="exact writable output (repeatable); never implied by --launcher")
+    admit_request.add_argument("--session-key", required=True)
+    admit_request.add_argument("--launcher", action="append", default=None, dest="launchers",
+                               help="script whose CONTENT is signed as this job's identity (repeatable)")
+    admit_approve = commands.add_parser("admit-approve")
+    admit_approve.add_argument("--phrase", default=None)
+    commands.add_parser("admit-status")
+    d85_run = commands.add_parser("d85-run")
+    d85_run.add_argument("script", metavar="SCRIPT")
+    d85_run.add_argument("script_args", nargs=argparse.REMAINDER)
     return parser
 
 
@@ -81,6 +98,27 @@ def _submitted(path: Path):
 
 def main(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    if args.command in {"admit-request", "admit-approve", "admit-status", "d85-run"}:
+        from rig_capabilities import d85_admission
+
+        try:
+            if args.command == "admit-request":
+                result = d85_admission.admit_request(
+                    args.build_file, args.process_id, args.paths, args.session_key,
+                    launchers=args.launchers,
+                )
+            elif args.command == "admit-approve":
+                result = d85_admission.admit_approve(args.phrase)
+            elif args.command == "admit-status":
+                result = d85_admission.admit_status()
+            else:
+                return d85_admission.run_launcher([args.script, *args.script_args])
+        except d85_admission.AdmissionDenied as exc:
+            print(str(exc), file=sys.stderr)
+            return 2
+        print(json.dumps(result, sort_keys=True))
+        return 0
+
     try:
         if args.command == "select":
             result = select_framework(_submitted(args.evidence_file))

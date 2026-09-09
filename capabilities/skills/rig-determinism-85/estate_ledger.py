@@ -186,10 +186,18 @@ def _resident(label: str, plist_path: Path, kind: str, detail: str, stats: dict)
 
 
 def _record(job_id, source, origin, job_class, evidence, action, note, expected=None):
+    try:
+        modified = Path(origin).stat().st_mtime
+        modified_at = datetime.fromtimestamp(modified, timezone.utc).isoformat()
+        provenance = {"path": origin, "field": "stat.st_mtime", "value": modified}
+    except OSError:
+        modified_at, provenance = None, None
     return {
         "job_id": job_id,
         "source": source,
         "origin": origin,
+        "modified_at": modified_at,
+        "modified_at_source": provenance,
         "class": job_class,
         "evidence": evidence,
         "expected_framework": expected,
@@ -199,34 +207,38 @@ def _record(job_id, source, origin, job_class, evidence, action, note, expected=
 
 
 def _hermes_summary() -> tuple[list[dict], dict]:
-    path = Path.home() / ".hermes" / "cron" / "jobs.json"
-    if not path.exists():
-        return [], {"status": "missing"}
-    jobs = json.loads(path.read_text(encoding="utf-8")).get("jobs", [])
-    enabled = [
-        j for j in jobs
-        if j.get("enabled") and j.get("state") not in ("retired", "dead", "disposed")
-    ]
+    home = Path.home() / ".hermes"
+    # Installed cron/jobs.py resolves get_hermes_home()/cron/jobs.json per profile.
+    paths = [home / "cron" / "jobs.json", *sorted((home / "profiles").glob("*/cron/jobs.json"))]
+    records, sources = [], []
     states: dict[str, int] = {}
-    for job in jobs:
-        state = job.get("state") or "unknown"
-        states[state] = states.get(state, 0) + 1
-    records = []
-    for job in enabled:
-        records.append(
-            _record(
-                f"hermes:{job['id']}", "hermes_cron", job.get("name", ""),
+    total = 0
+    for path in paths:
+        if not path.exists():
+            sources.append({"path": str(path), "status": "missing"})
+            continue
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        jobs = raw.get("jobs", []) if isinstance(raw, dict) else raw
+        if not isinstance(jobs, list) or any(not isinstance(j, dict) for j in jobs):
+            raise ValueError(f"Invalid Hermes job registry: {path}")
+        total += len(jobs)
+        sources.append({"path": str(path), "status": "scanned", "total": len(jobs)})
+        profile = "root" if path.parent.parent == home else path.parent.parent.name
+        for job in jobs:
+            state = job.get("state") or "unknown"
+            states[state] = states.get(state, 0) + 1
+            if not job.get("enabled") or state in ("retired", "dead", "disposed"):
+                continue
+            records.append(_record(
+                f"hermes:{profile}:{job['id']}", "hermes_cron", str(path),
                 "needs_review", None, "review",
-                "enabled hermes cron job — agent-vs-script determination requires reading the job's prompt/script (human or agent review)",
-            )
-        )
-    summary = {
-        "status": "scanned",
-        "total": len(jobs),
-        "enabled": len(enabled),
+                "enabled Hermes job; prompt/script classification and launcher wiring require review",
+            ))
+    return records, {
+        "status": "scanned" if any(s["status"] == "scanned" for s in sources) else "missing",
+        "sources": sources, "total": total, "enabled": len(records),
         "states": dict(sorted(states.items())),
     }
-    return records, summary
 
 
 def build_ledger() -> dict:

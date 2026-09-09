@@ -2,6 +2,7 @@
 the typed exit-2 block paths for both exception families."""
 
 import json
+import os
 import subprocess
 import sys
 import tempfile
@@ -20,8 +21,12 @@ CLOCK = {"clock_critical": {"named_consumer": "x", "failure_mode": "y",
 
 
 def run_cli(*argv: str) -> tuple[int, dict | str]:
-    proc = subprocess.run([sys.executable, str(CLI), *argv],
-                          capture_output=True, text=True, timeout=30)
+    with tempfile.TemporaryDirectory(prefix="d85-cli-") as home:
+        Path(home, "enforcement.json").write_text(json.dumps({"roots": [home], "ttl_hours": 24}))
+        env = {k: v for k, v in os.environ.items() if k != "RIG_D85_DISABLE"}
+        env["RIG_D85_HOME"] = home
+        proc = subprocess.run([sys.executable, str(CLI), *argv],
+                              capture_output=True, text=True, timeout=30, env=env)
     try:
         payload = json.loads(proc.stdout)
     except json.JSONDecodeError:

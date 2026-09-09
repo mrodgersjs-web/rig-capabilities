@@ -9,7 +9,7 @@
 //   before_agent_start  -> rig-loop hook prompt          (stage banner injected as a message)
 //   tool_call           -> rig-loop hook pre-tool        ({block:true} when the stage forbids the write / outward action)
 //   agent_end           -> rig-loop hook stop            (cannot block in pi; surfaces NOT-DONE as a warning)
-// With no active loop run every call is a silent no-op. Installed by `rig-loop wire --apply`.
+// D85 runs even without an active loop. Installed by `rig-loop wire --apply`.
 import { spawnSync } from "node:child_process";
 import { homedir } from "node:os";
 
@@ -17,18 +17,63 @@ const RIG_LOOP = process.env.RIG_LOOP_CLI || `${homedir()}/Developer/rig-capabil
 
 type HookResult = { block?: boolean; reason?: string; inject?: string; error?: string };
 
+// Fail-closed, matching rig_capabilities/loops.py dispatch_hook: when the D85
+// engine cannot answer (missing CLI, spawn error, timeout, unparseable output),
+// MUTATION-class tool calls are denied and read-only tools pass with a stderr
+// warning. Tool-NAME classification only — command-level scanning stays in the
+// Python engine (documented ceiling, same as the shell layer).
+const MUTATION_TOOLS = new Set([
+  "write", "edit", "multiedit", "multi_edit", "notebookedit", "notebook_edit",
+  "apply_patch", "applypatch", "str_replace_editor", "create_file",
+  "bash", "shell", "run_command", "exec", "terminal", "execute_command",
+  "eval", "python", "python_repl", "execute_code", "run_code", "code_interpreter",
+]);
+
 function callHook(event: string, payload: Record<string, unknown>): HookResult {
+  let r: ReturnType<typeof spawnSync> | null = null;
+  let failure = "";
   try {
-    const r = spawnSync("python3", [RIG_LOOP, "hook", event, "--format", "pi"], {
+    r = spawnSync("python3", [RIG_LOOP, "hook", event, "--format", "pi"], {
       input: JSON.stringify(payload),
       encoding: "utf8",
       timeout: 15000,
     });
-    if (!r.stdout) return {};
-    return JSON.parse(r.stdout.trim().split("\n").pop() || "{}") as HookResult;
-  } catch {
-    return {};
+    if (r.error) failure = `engine unreachable: ${r.error.message}`;
+    else if (r.status !== 0) failure = `engine exited ${r.status} signal=${r.signal}`;
+    else {
+      try {
+        const result: unknown = JSON.parse(r.stdout.trim());
+        if (
+          !result || typeof result !== "object" || Array.isArray(result) ||
+          !("block" in result) || typeof result.block !== "boolean" ||
+          ["reason", "inject", "error"].some(
+            key => key in result && typeof (result as Record<string, unknown>)[key] !== "string",
+          ) ||
+          ("error" in result && result.error)
+        ) {
+          failure = "engine response missing or invalid verdict";
+        } else {
+          return result as HookResult;
+        }
+      } catch {
+        failure = "engine output unparseable";
+      }
+    }
+  } catch (e: any) {
+    failure = `engine unavailable: ${e?.message ?? String(e)}`;
   }
+  const tool = String(payload.tool_name || "").trim().toLowerCase().replaceAll("-", "_");
+  const mutation = event === "pre-tool" && (!tool || MUTATION_TOOLS.has(tool));
+  if (mutation) {
+    return {
+      block: true,
+      reason:
+        `[d85] gate engine unavailable (${failure}) — mutation-class tool denied, fail closed. ` +
+        `Repair ${RIG_LOOP} / rig_capabilities/d85_admission.py in an explicitly authorized break-glass session.`,
+    };
+  }
+  process.stderr.write(`[d85] gate engine unavailable (${failure}) — read-only tool allowed\n`);
+  return {};
 }
 
 function cwdOf(ctx: any): string {

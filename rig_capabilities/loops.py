@@ -60,8 +60,8 @@ HOOK_CONFIG = {
 OMP_CONFIG = HOME / ".omp" / "agent" / "config.yml"
 PROOF_DIR = HOME / ".rig" / "proof"
 
-WRITE_TOOLS = {"write", "edit", "multiedit", "notebookedit", "apply_patch", "multi_edit",
-               "str_replace_editor", "create_file"}
+WRITE_TOOLS = {"write", "edit", "multiedit", "notebookedit", "notebook_edit",
+               "apply_patch", "applypatch", "multi_edit", "str_replace_editor", "create_file"}
 SHELL_TOOLS = {"bash", "shell", "run_command", "exec", "terminal", "execute_command"}
 
 # Plan/spec/scratch locations always writable while a loop is active, regardless of stage.
@@ -1305,7 +1305,7 @@ def _norm_tool(name: str) -> str:
         return "Write"
     if low in SHELL_TOOLS:
         return "Bash"
-    return n
+    return low if low in {"eval", "python", "python_repl", "execute_code", "run_code", "code_interpreter"} else n
 
 
 _PATCH_FILE_RX = re.compile(r"^\*\*\*\s+(?:Add|Update|Delete|Move to)\s+File:\s*(.+?)\s*$", re.M)
@@ -1384,6 +1384,26 @@ def _declared_globs(run: dict, spec: dict) -> list[str]:
     return globs
 
 
+def _d85_session_banner() -> str:
+    if os.environ.get("RIG_D85_DISABLE"):
+        return ""
+    try:
+        root = Path(os.environ.get("RIG_D85_HOME") or HOME / ".rig" / "d85")
+        config = root / "enforcement.json"
+        if not config.exists():
+            return ""
+        roots = json.loads(config.read_text(encoding="utf-8")).get("roots")
+        if isinstance(roots, list) and any(isinstance(item, str) and item for item in roots):
+            return (
+                "[d85] production-surface mutations require signed admission: "
+                "rig-determinism-85 admit-request → APPROVE <id> → admit-approve "
+                "(deny is fail-closed)"
+            )
+    except Exception:  # noqa: BLE001 — banner discovery must not break session start
+        pass
+    return ""
+
+
 def banner(run: dict, spec: dict) -> str:
     st = current_stage(run, spec)
     done, total = progress(run, spec)
@@ -1446,9 +1466,15 @@ def human_brief(run: dict, spec: dict) -> str:
 
 
 def hook_session_start(run: dict | None, spec: dict | None, p: dict) -> dict:
-    if not run:
+    lines = []
+    if run:
+        lines.extend(("[rig-loop] RESUMED active loop run", banner(run, spec)))
+    d85_banner = _d85_session_banner()
+    if d85_banner:
+        lines.append(d85_banner)
+    if not lines:
         return {"action": "allow"}
-    return {"action": "inject", "text": "[rig-loop] RESUMED active loop run\n" + banner(run, spec)}
+    return {"action": "inject", "text": "\n".join(lines)}
 
 
 def hook_prompt(run: dict | None, spec: dict | None, p: dict) -> dict:
@@ -1586,6 +1612,42 @@ def dispatch_hook(event: str, payload: dict, skill: str | None = None, run_id: s
     if event not in HOOKS:
         raise SpecError(f"unknown hook event {event}; valid: {sorted(HOOKS)}")
     p = normalize_payload(payload)
+    if event == "pre-tool" and not os.environ.get("RIG_D85_DISABLE"):
+        # Classify BEFORE importing the gate: a broken gate module must deny
+        # mutation-class calls (fail closed, no universal bypass) but never
+        # brick read-only traffic — the repair path must stay reachable.
+        _tool_pre = _norm_tool(p["raw_tool"]).lower()
+        try:
+            from . import d85_admission
+        except Exception as exc:  # noqa: BLE001 — broken gate, fail closed on mutations only
+            if not _tool_pre or _tool_pre in (
+                "write", "edit", "multiedit", "notebookedit", "notebook_edit",
+                "bash", "shell", "apply_patch", "applypatch", "str_replace_editor",
+                "eval", "python", "python_repl", "execute_code", "run_code", "code_interpreter"):
+                return {
+                    "action": "deny",
+                    "reason": f"[d85] admission gate module is broken (fail closed for mutations): {exc!r} "
+                    "Repair rig_capabilities/d85_admission.py in an explicitly authorized break-glass session.",
+                }
+            print(f"[d85] gate module unavailable; read-only tool allowed: {exc!r}", file=sys.stderr)
+        else:
+            try:
+                tool = _norm_tool(p["raw_tool"]).lower()
+                command = p["command"] if tool in ("bash", "shell") else ""
+                d85_result = d85_admission.hook_check({
+                    "tool": tool,
+                    "paths": _write_paths(p["input"], payload),
+                    "command": command if isinstance(command, str) else "",
+                    "cwd": p["cwd"],
+                    "session_id": p["session_id"],
+                })
+                if isinstance(d85_result, dict) and d85_result.get("action") == "deny":
+                    return d85_result
+            except Exception as exc:  # noqa: BLE001 — admission is fail-closed
+                return {
+                    "action": "deny",
+                    "reason": f"[d85] admission gate internal failure (fail closed): {exc!r}",
+                }
     run = find_active(p["cwd"], run_id)
     spec = load_spec(run["loop_id"]) if run else None
     if event == "pre-tool":
@@ -1620,7 +1682,7 @@ def _hook_cmd(event: str, fmt: str) -> str:
 
 
 def _claude_style_entries(fmt: str) -> dict:
-    tools = "Write|Edit|MultiEdit|NotebookEdit|Bash|apply_patch|shell"
+    tools = "*"  # Let the engine classify aliases; reads remain available during recovery.
     e = lambda ev, t=None: {"type": "command", "command": _hook_cmd(ev, fmt), "timeout": t or 20}  # noqa: E731
     return {
         "SessionStart": [{"matcher": "startup|resume", "hooks": [e("session-start", 10)]}],
@@ -1674,9 +1736,9 @@ def _wire_json_hooks(path: Path, fmt: str, apply: bool, remove: bool = False) ->
     return {"harness": fmt, "path": str(path), "ok": True, "changed": changed, "applied": bool(apply and changed)}
 
 
-def _pi_extension_source() -> str:
+def _pi_extension_source() -> bytes:
     src = REPO / "capabilities" / "hooks" / "rig-loop-hooks.ts"
-    return src.read_text()
+    return src.read_bytes()
 
 
 def _wire_pi(dest: Path, apply: bool, remove: bool = False) -> dict:
@@ -1686,11 +1748,11 @@ def _wire_pi(dest: Path, apply: bool, remove: bool = False) -> dict:
             dest.unlink()
         return {"path": str(dest), "ok": True, "changed": existed}
     text = _pi_extension_source()
-    changed = (not dest.exists()) or dest.read_text() != text
+    changed = (not dest.exists()) or dest.read_bytes() != text
     if apply and changed:
         dest.parent.mkdir(parents=True, exist_ok=True)
         _backup(dest)
-        _atomic_write(dest, text)
+        _atomic_write(dest, text.decode("utf-8"))
     return {"path": str(dest), "ok": True, "changed": changed, "applied": bool(apply and changed)}
 
 
@@ -1765,20 +1827,30 @@ def verify_wiring() -> dict:
     out = {}
     for h in HARNESSES:
         p = HOOK_CONFIG[h]
-        if h in ("claude", "codex"):
-            try:
+        try:
+            if h in ("claude", "codex"):
                 data = json.loads(p.read_text()) if p.exists() else {}
-                blob = json.dumps(data.get("hooks") or {})
-                events = [ev for ev, arr in (data.get("hooks") or {}).items()
-                          if any(MARKER in str(hk.get("command", "")) for m in arr for hk in (m.get("hooks") or []))]
-                out[h] = {"wired": MARKER in blob, "events": sorted(events), "path": str(p)}
-            except Exception as exc:  # noqa: BLE001
-                out[h] = {"wired": False, "error": str(exc), "path": str(p)}
-        elif h in ("omp", "prime-agent"):
-            out[h] = {"wired": p.exists() and MARKER in p.read_text(), "path": str(p)}
-        else:
-            out[h] = {"wired": (p / "HOOK.yaml").exists() and (p / "handler.py").exists(), "path": str(p),
-                      "note": "Hermes gateway hooks cannot block or inject; enforcement is CLI-level"}
+                installed = {}
+                for event, entries in (data.get("hooks") or {}).items():
+                    for entry in entries:
+                        managed = [hook for hook in entry.get("hooks", [])
+                                   if MARKER in str(hook.get("command", ""))]
+                        if managed:
+                            installed.setdefault(event, []).append({**entry, "hooks": managed})
+                out[h] = {"wired": installed == _claude_style_entries(h),
+                          "events": sorted(installed), "path": str(p),
+                          "verification": "canonical managed entries"}
+            elif h in ("omp", "prime-agent"):
+                out[h] = {"wired": p.is_file() and p.read_bytes() == _pi_extension_source(),
+                          "path": str(p), "verification": "canonical source equality"}
+            else:
+                src = REPO / "capabilities" / "hooks" / "rig-loop-gate"
+                out[h] = {"wired": all((p / name).is_file() and (p / name).read_bytes() == (src / name).read_bytes()
+                                       for name in ("HOOK.yaml", "handler.py")),
+                          "path": str(p), "verification": "canonical source equality",
+                          "note": "Hermes gateway hooks cannot block or inject; enforcement is CLI-level"}
+        except (OSError, ValueError, TypeError, AttributeError) as exc:
+            out[h] = {"wired": False, "error": str(exc), "path": str(p)}
     return out
 
 

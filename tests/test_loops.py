@@ -13,6 +13,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
@@ -403,6 +404,9 @@ class WiringTests(TempState):
         L.OMP_CONFIG = self.root / "omp-config.yml"
         L.OMP_CONFIG.write_text("skills:\n  includeSkills:\n    - alfred*\n    - iqrsqpi-v11\n")
         L.HOOK_CONFIG["claude"].write_text(json.dumps({"hooks": {"Stop": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo keep"}]}]}}))
+        home = patch.object(L, "HOME", self.root)
+        home.start()
+        self.addCleanup(home.stop)
 
     def tearDown(self):
         L.HOOK_CONFIG.clear()
@@ -428,6 +432,23 @@ class WiringTests(TempState):
         self.assertEqual(omp.count("    - iqrsqpi-v11\n"), 1)
         ver = L.verify_wiring()
         self.assertTrue(all(v["wired"] for v in ver.values()), ver)
+
+    def test_wiring_rejects_drift_even_when_markers_survive(self):
+        L.wire(apply=True)
+        for harness in ("omp", "prime-agent"):
+            path = L.HOOK_CONFIG[harness]
+            path.write_bytes(path.read_bytes().replace(b"\n", b"\r\n"))
+        handler = L.HOOK_CONFIG["hermes"] / "handler.py"
+        handler.write_text(handler.read_text() + "\n# drift\n")
+        for harness in ("claude", "codex"):
+            path = L.HOOK_CONFIG[harness]
+            data = json.loads(path.read_text())
+            data["hooks"]["PreToolUse"][0]["matcher"] = "Write"
+            path.write_text(json.dumps(data))
+        verdicts = L.verify_wiring()
+        self.assertTrue(all(v["wired"] is False for v in verdicts.values()), verdicts)
+        L.wire(apply=True)
+        self.assertTrue(all(v["wired"] for v in L.verify_wiring().values()))
 
     def test_wire_remove_strips_only_managed_entries(self):
         L.wire(apply=True)

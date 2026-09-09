@@ -210,9 +210,9 @@ An experiment may exist but cannot be scheduled, installed globally, productized
 Required surfaces:
 
 - Claude Code: `~/.claude/CLAUDE.md`; registered hooks in `~/.claude/settings.json`
-- Hermes: `~/.hermes/SOUL.md`; invocation registration remains unknown
-- OMP: `~/.omp/agent/AGENTS.md`; live `config.yml` currently references missing `capabilities/hooks/rig-prime.ts`
-- Prime-Agent: `~/.prime/agent/AGENTS.md`; invocation registration remains unknown
+- Hermes: `~/.hermes/SOUL.md`; adapter at `~/.hermes/hooks/rig-loop-gate` is observational and cannot block.
+- OMP: `~/.omp/agent/AGENTS.md`; adapter at `~/.omp/agent/extensions/rig-loop-hooks.ts`.
+- Prime-Agent: `~/.prime/agent/AGENTS.md`; adapter at `~/.prime/agent/extensions/rig-loop-hooks.ts`.
 
 Every surface must load the same doctrine hash and call the same authority-owned pre-tool compiler. Missing, divergent, or unregistered bindings return BLOCK. Filesystem directories are not registration proof.
 
@@ -237,7 +237,7 @@ A green gate that cannot be made red is theater.
 
 Implemented and non-vacuously tested: the source-derived realized-operation inventory (`d85.py`, 51-test suite), authority classification, four-ratio D85 scoring, signed exact-action Gate-D with atomic consumption, and surface-wiring verification (`d85_gates.py`, 28-test suite). The synthetic Julie workflow exercises the full chain — inventory, classification, `REALIZED_PASS`, dormant Gate-D arm, replay BLOCK — without a real submission.
 
-Still open: live four-surface registration (the wiring gate verifies markers; live hook invocation on each surface is not yet proven), the clean isolated-loader proof for external modules (`runtime_loader_proven: false`), planned-manifest admission, and sealed release/effect receipts. The verdict for those stages remains `BLOCK`.
+Still open: live harness invocation on every surface, clean isolated-loader proof for external modules (`runtime_loader_proven: false`), planned-manifest admission, and sealed release/effect receipts. `rig-loop doctor --json` verifies canonical adapter bytes and managed JSON entries, not just markers; parity is not proof that a running harness loaded the new adapter. `rig-loop wire` prepares changes without applying them. Live security wiring requires approval.
 
 ### Trust model and admitted limits
 
@@ -245,4 +245,30 @@ Still open: live four-surface registration (the wiring gate verifies markers; li
 - Approval lifetime is measured against the local system clock; clock rollback is outside the threat model. Consumption is atomic `O_EXCL` on local APFS; crash between verify and consume can at worst double-report, never double-authorize a different action.
 - Scoring weights are code in `d85_gates.py`; they are covered transitively because every approval binds the realized-score hash, and weight changes alter ratios and therefore the realized hash, invalidating outstanding approvals as `BLOCK_GATE_D_MISMATCH`.
 - "Exact" extraction means exact within the closed grammar: admitted programs are extracted fully and in execution order, and any construct outside the grammar fails closed (`SOURCE_UNSUPPORTED_GRAMMAR` or `SOURCE_DYNAMIC_CALL`). There is no best-effort path.
-- Admission is pre-execution. Runtime re-verification of file hashes between arm and dispatch, and live hook invocation on each surface, remain open items — the enforced boundary today is admission, not execution-time enforcement.
+- `d85-run` checks signed launcher content, unchanged build bytes, and a live certificate before entering an OS sandbox. Launchers anywhere are gated while protected roots are active. `--launcher` is identity only; writable outputs require separate exact `--path` literals. At least one path or launcher is required, and TTL must be finite, positive, and no more than 24 hours. Canonicalize protected-root aliases before emitting sandbox rules; a writable directory literal does not admit its descendants.
+
+### Recovery and remaining boundaries
+
+The source gate and extension fail closed for mutation calls when the engine
+is unavailable or its result lacks a valid verdict. Read-only recovery remains
+available. Arbitrary-code tools remain denied while protected roots are active,
+even with path admissions. Do not restore the regex scanner.
+
+Break-glass repairs require Mike's scoped authorization and verification that
+the actual writing process inherited `RIG_D85_DISABLE=1`. Do not inject the
+variable, change enforcement settings, or switch tool aliases after a denial.
+Compile a uniquely matched candidate in memory before atomic replacement,
+preserve the original and permissions, then verify the installed source and
+the actual hook. Enforcement-test children must remove the override and use
+isolated state. Assert JSON `block`, not merely exit zero.
+
+Estate timestamps carry source path, mtime field, and raw value. Numeric
+`launcher_epoch` values are UTC Unix seconds. Only dated pre-epoch jobs remain
+the legacy retrofit backlog; unknown dates cannot exempt new jobs indefinitely.
+The installed Hermes scheduler defines `<profile-home>/cron/jobs.json`; verify
+that definition and the actual stores rather than trusting prior path advice.
+
+Shell parsing remains a heuristic. Interpreter, expansion, quoting, and indirect
+write behavior are not contained by a command scanner. The OS boundary applies
+to scheduled `d85-run` execution, not every interactive harness shell call.
+No source repair alone completes the remaining D85 rollout.

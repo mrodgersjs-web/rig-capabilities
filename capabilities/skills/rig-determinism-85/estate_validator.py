@@ -8,6 +8,8 @@ Exit 0: ledger consistent. Exit 2: typed BLOCK_LEDGER_INCONSISTENT JSON.
 from __future__ import annotations
 
 import json
+import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 from tool_selection import RESOURCE_KINDS, ToolSelectionBlock, select_framework  # noqa: E402
@@ -44,13 +46,59 @@ def _authority_matches_code() -> list[str]:
     return []
 
 
+def _launcher_epoch():
+    """Missing epoch disables the retrofit cutoff; unreadable config does not."""
+    home = Path(os.environ.get("RIG_D85_HOME") or Path.home() / ".rig" / "d85")
+    raw = json.loads((home / "enforcement.json").read_text(encoding="utf-8"))
+    return raw.get("launcher_epoch")
+
+
+def _parse_ts(v) -> datetime | None:
+    try:
+        if isinstance(v, bool) or v is None:
+            return None
+        if isinstance(v, (int, float)):
+            return datetime.fromtimestamp(v, timezone.utc)
+        parsed = datetime.fromisoformat(str(v).replace("Z", "+00:00"))
+        return parsed.replace(tzinfo=timezone.utc) if parsed.tzinfo is None else parsed.astimezone(timezone.utc)
+    except (ValueError, TypeError, OverflowError, OSError):
+        return None
+
+
 def validate(ledger: dict) -> list[str]:
     problems: list[str] = list(_authority_matches_code())
-    seen_ids: set[str] = set()
     jobs = ledger.get("jobs")
     if not isinstance(jobs, list):
         return problems + ["ledger.jobs is not a list"]
+    try:
+        epoch = _launcher_epoch()
+    except (OSError, ValueError, TypeError, AttributeError) as exc:
+        return problems + [f"launcher enforcement config unreadable: {exc}"]
+    ledger["_grandfathered_launcher_missing"] = 0
+    if epoch is not None:
+        epoch_ts = _parse_ts(epoch)
+        if epoch_ts is None:
+            problems.append(f"launcher_epoch invalid: {epoch!r}")
+        else:
+            for job in jobs:
+                if not isinstance(job, dict):
+                    continue
+                modified = _parse_ts(job.get("modified_at"))
+                if modified is not None and modified < epoch_ts:
+                    if not job.get("launcher"):
+                        ledger["_grandfathered_launcher_missing"] += 1
+                    continue
+                launcher = job.get("launcher")
+                if not launcher or not Path(str(launcher)).is_file():
+                    problems.append(
+                        f"{job.get('job_id', '<missing>')}: modified_at is unknown or at/after launcher_epoch {epoch}; "
+                        f"launcher missing or not a file: {launcher!r} — register via admit-request --launcher, fail closed."
+                    )
+    seen_ids: set[str] = set()
     for job in jobs:
+        if not isinstance(job, dict):
+            problems.append("ledger job is not an object")
+            continue
         jid = job.get("job_id", "<missing>")
         if jid in seen_ids:
             problems.append(f"{jid}: duplicate job_id")
@@ -97,6 +145,7 @@ def main() -> int:
         "schema": "rig.d85.estate-ledger-validate.v1",
         "jobs": len(jobs),
         "unresolved": ledger.get("unresolved_count"),
+        "grandfathered_launcher_missing": ledger.get("_grandfathered_launcher_missing"),
         "consistent": not problems,
         "problems": problems,
     }

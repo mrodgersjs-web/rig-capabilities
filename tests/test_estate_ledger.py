@@ -5,13 +5,21 @@ launchctl and lsof parsers against captured real output, and the launchd
 classification decisions derived from them.
 """
 
+import json
+import os
+import plistlib
 import sys
+import tempfile
 import unittest
 from pathlib import Path
+from datetime import datetime, timezone
+from unittest.mock import patch
 
 SKILL = Path(__file__).resolve().parents[1] / "capabilities/skills/rig-determinism-85"
 sys.path.insert(0, str(SKILL))
 
+import estate_validator  # noqa: E402
+import estate_ledger
 from estate_ledger import (  # noqa: E402
     _classify_launchd,
     _label_pids,
@@ -108,6 +116,14 @@ class ClassifyTests(unittest.TestCase):
         self.assertEqual((rec["class"], rec["action"]), ("needs_review", "review"))
 
 class ValidatorTests(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory(prefix="d85-validator-")
+        self.addCleanup(temp.cleanup)
+        Path(temp.name, "enforcement.json").write_text(json.dumps({"roots": [temp.name], "ttl_hours": 24}))
+        env = patch.dict(os.environ, {"RIG_D85_HOME": temp.name})
+        env.start()
+        self.addCleanup(env.stop)
+
     def _clean(self) -> dict:
         return {
             "schema": "rig.d85.estate-ledger.v1",
@@ -151,6 +167,84 @@ class ValidatorTests(unittest.TestCase):
         ledger = self._clean()
         ledger["jobs"][0]["evidence"] = None
         self.assertTrue(any("without dict evidence" in p for p in validate(ledger)))
+
+
+class TestLauncherRule(unittest.TestCase):
+    def setUp(self):
+        temp = tempfile.TemporaryDirectory(prefix="d85-estate-")
+        self.addCleanup(temp.cleanup)
+        self.home = Path(temp.name)
+        self.epoch = 1788980438
+        self.config = self.home / "enforcement.json"
+        self.config.write_text(json.dumps({
+            "roots": [str(self.home)], "ttl_hours": 24, "launcher_epoch": self.epoch,
+        }))
+        env = patch.dict(os.environ, {"RIG_D85_HOME": str(self.home)})
+        env.start()
+        self.addCleanup(env.stop)
+
+    def test_builder_to_validator_uses_source_mtime_and_preserves_legacy_backlog(self):
+        agents = self.home / "Library/LaunchAgents"
+        agents.mkdir(parents=True)
+        for name, stamp in (("legacy", self.epoch - 1), ("boundary", self.epoch), ("new", self.epoch + 1)):
+            path = agents / f"{name}.plist"
+            path.write_bytes(plistlib.dumps({"StartInterval": 60}))
+            os.utime(path, (stamp, stamp))
+        with patch.object(Path, "home", return_value=self.home), \
+             patch.object(estate_ledger, "_label_pids", return_value={}), \
+             patch.object(estate_ledger, "_listener_pids", return_value={}):
+            ledger = estate_ledger.build_ledger()
+        records = {job["job_id"]: job for job in ledger["jobs"]}
+        self.assertEqual(records["new"]["modified_at_source"], {
+            "path": str(agents / "new.plist"), "field": "stat.st_mtime", "value": self.epoch + 1,
+        })
+        self.assertEqual(estate_validator._parse_ts(records["new"]["modified_at"]),
+                         datetime.fromtimestamp(self.epoch + 1, timezone.utc))
+        problems = estate_validator.validate(ledger)
+        self.assertEqual({p.split(":")[0] for p in problems}, {"boundary", "new"})
+        self.assertEqual(ledger["_grandfathered_launcher_missing"], 1)
+        self.assertEqual(estate_validator.validate(ledger), problems)
+        self.assertEqual(ledger["_grandfathered_launcher_missing"], 1)
+        launcher = self.home / "job.py"
+        launcher.write_text("print('fixture')\n")
+        for name in ("boundary", "new"):
+            records[name]["launcher"] = str(launcher)
+        self.assertEqual(estate_validator.validate(ledger), [])
+
+    def test_undated_or_invalid_job_is_not_automatically_legacy(self):
+        for modified in (None, "invalid", float("nan"), True):
+            with self.subTest(modified=modified):
+                ledger = {"jobs": [{"job_id": "new-undated", "class": "needs_review", "action": "review", "modified_at": modified}]}
+                problems = estate_validator.validate(ledger)
+                self.assertTrue(any("new-undated" in p and "launcher" in p for p in problems), problems)
+                self.assertEqual(ledger["_grandfathered_launcher_missing"], 0)
+
+    def test_invalid_epoch_and_missing_config_fail_closed(self):
+        self.config.write_text(json.dumps({"launcher_epoch": "not a timestamp"}))
+        self.assertTrue(any("launcher_epoch invalid" in p for p in estate_validator.validate({"jobs": []})))
+        self.config.unlink()
+        self.assertTrue(any("config unreadable" in p for p in estate_validator.validate({"jobs": []})))
+
+    def test_numeric_epoch_and_offset_timestamp_compare_in_utc(self):
+        numeric = estate_validator._parse_ts(self.epoch)
+        self.assertEqual(numeric, datetime.fromtimestamp(self.epoch, timezone.utc))
+        self.assertEqual(estate_validator._parse_ts("2026-09-09T12:00:00-06:00"),
+                         estate_validator._parse_ts("2026-09-09T18:00:00Z"))
+
+    def test_hermes_root_and_profile_stores_have_distinct_job_ids(self):
+        paths = [self.home / ".hermes/cron/jobs.json",
+                 self.home / ".hermes/profiles/team/cron/jobs.json"]
+        for path in paths:
+            path.parent.mkdir(parents=True)
+            path.write_text(json.dumps({"jobs": [{"id": "shared", "enabled": True, "state": "scheduled"}]}))
+            os.utime(path, (self.epoch + 1, self.epoch + 1))
+        (self.home / ".hermes/jobs.json").write_text('{"jobs":[{"id":"stale","enabled":true}]}')
+        with patch.object(Path, "home", return_value=self.home):
+            records, summary = estate_ledger._hermes_summary()
+        self.assertEqual({r["job_id"] for r in records}, {"hermes:root:shared", "hermes:team:shared"})
+        self.assertEqual({r["origin"] for r in records}, {str(p) for p in paths})
+        self.assertEqual(summary["enabled"], 2)
+        self.assertEqual(len(estate_validator.validate({"jobs": records})), 2)
 
 
 if __name__ == "__main__":
