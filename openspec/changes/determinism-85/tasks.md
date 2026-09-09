@@ -13,4 +13,4 @@
 - [x] 3.3 Wire one shared rule into Claude Code, Hermes, OMP, and Prime-Agent.
 - [x] 4.1 Plant and restore failures on all four surfaces.
 - [x] 4.2 Exercise the synthetic Julie workflow without a real submission.
-- [ ] 4.3 Seal design, build, runtime, release, proof, and effect receipts.
+- [x] 4.3 Seal design, build, runtime, release, proof, and effect receipts.
