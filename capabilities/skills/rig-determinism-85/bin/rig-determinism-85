@@ -1,0 +1,87 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+SKILL_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(SKILL_ROOT))
+
+from d85 import AdmissionBlock, build_inventory, compare_inventory  # noqa: E402
+from d85_gates import (  # noqa: E402
+    arm_gate_d,
+    classify_process,
+    score_process,
+    verify_surfaces,
+)
+
+
+def _parser() -> argparse.ArgumentParser:
+    parser = argparse.ArgumentParser(prog="rig-determinism-85")
+    commands = parser.add_subparsers(dest="command", required=True)
+    inventory = commands.add_parser("inventory")
+    inventory.add_argument("process_id")
+    compare = commands.add_parser("compare")
+    compare.add_argument("process_id")
+    compare.add_argument("inventory_file", type=Path)
+    classify = commands.add_parser("classify")
+    classify.add_argument("process_id")
+    score = commands.add_parser("score")
+    score.add_argument("process_id")
+    gate = commands.add_parser("gate-d")
+    gate.add_argument("process_id")
+    gate.add_argument("--action", type=Path, required=True)
+    commands.add_parser("wiring")
+    return parser
+
+
+def _submitted_object(pairs):
+    value = {}
+    for key, item in pairs:
+        if key in value:
+            raise AdmissionBlock(
+                "SUBMITTED_MALFORMED", f"duplicate JSON key {key!r}"
+            )
+        value[key] = item
+    return value
+
+
+def _submitted(path: Path):
+    try:
+        value = json.loads(
+            path.read_text(encoding="utf-8"),
+            object_pairs_hook=_submitted_object,
+        )
+    except (OSError, UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise AdmissionBlock("SUBMITTED_MALFORMED", f"{path}: {exc}") from exc
+    if not isinstance(value, dict):
+        raise AdmissionBlock("SUBMITTED_MALFORMED", f"{path}: expected object")
+    return value
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = _parser().parse_args(argv)
+    try:
+        if args.command == "inventory":
+            result = build_inventory(args.process_id)
+        elif args.command == "compare":
+            result = compare_inventory(args.process_id, _submitted(args.inventory_file))
+        elif args.command == "classify":
+            result = classify_process(args.process_id)
+        elif args.command == "score":
+            result = score_process(args.process_id)
+        elif args.command == "gate-d":
+            result = arm_gate_d(args.process_id, _submitted(args.action))
+        else:
+            result = verify_surfaces()
+    except AdmissionBlock as exc:
+        print(json.dumps(exc.as_dict(), sort_keys=True))
+        return 2
+    print(json.dumps(result, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
