@@ -13,8 +13,8 @@ on Neon were created automatically by AI agents") · Salesforce expansion story
 (2026-06-16) · Accenture Databricks Business Group PR (2026-03-17) · Deloitte
 awards article (2026-06-15) · Microsoft expansion PR (2026-07-23) · Brickbuilder
 Partner Network launch blog (2026-02-11). Newsroom-page context (A): Databricks
->80% YoY growth / $7B+ run-rate (2026-08-13); $188B-valuation strategic round
-(2026-07-16).
+over 80% YoY growth / $7B+ run-rate (2026-08-13); $188B-valuation strategic
+round (2026-07-16).
 Official PR URLs that 404 on direct read — claims kept at B: Wipro partnership
 PR; Informatica IWM-2026 PR (date slug 2026-05-20 unverified). Live
 partner-directory crawl still pending (browser path D85-gated).
