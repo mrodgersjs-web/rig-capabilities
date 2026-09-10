@@ -95,3 +95,22 @@ Sources: `rig-determinism-85/{d85.py,d85_gates.py,tool_selection.py}` +
   ~/Developer/rig-capabilities — exact-path admission (d85adm) and Gate-D
   authority approval are different events; registry mutation needs the latter
   regardless of the former.
+
+## Companion documents (same directory)
+- `PARTNER_ANALYSIS.md` — dated, source-URL-per-row target matrix with
+  A-verified / B-lead / C-hypothesis tiers. Partner claims in any downstream
+  artifact MUST cite its rows; no relationship may be presented without a
+  Tier-A row or an explicit hypothesis label. Pending validation: live partner-
+  directory crawl (browser path currently D85-gated).
+- `VIDEO_BRIEF.md` — marketing-cut and demo-cut acceptance sets (distinct),
+  Higgsfield scoped to B-roll/transitions only after real product capture exists.
+
+## Publication dependency (corrected 2026-09-10)
+- Publishing THIS spec is bound to a **registered deterministic git-publication
+  process** (score ≥0.85 + `gate-d <pub-process> --action <push-action-file>` +
+  typed approval). No such process is registered → that is the authority gap;
+  `databricks_lattice` runtime work is NOT its precondition.
+- Jake gate-d ledger request `gd_1789072285353` alone is insufficient; commit
+  `f6535c3` stays local until the publication process passes. Repo is PRIVATE
+  (origin `mrodgersjs-web/rig-capabilities`, fable-2031 ahead 1) — visibility does
+  not waive the gate.
