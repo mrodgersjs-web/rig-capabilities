@@ -24,23 +24,25 @@ partner-directory crawl still pending (browser path D85-gated).
 level defined. Sort = score desc; **ties: higher overlap, then signal, then
 alphabetical**.
 
-signal: 10 named in 2026 official partnership PR or 2026 award + co-marketing
-≤6 mo · 9 2026 award + co-marketing ≤12 mo · 8 2026 award winner (awards blog) ·
-7 award-nominated/shortlisted official mention 2026 · 6 official partnership PR
-older than 12 mo · 5 dated partnership PR 24–30 mo · 4 official mention 18+ mo ·
-3 program page presence, no dated item · 2 program-level only · 1 incidental
-official mention · 0 nothing official.
+signal (take the highest level whose condition holds):
+10 named in 2026 official partnership PR, or 2026 award with co-marketing
+≤6 mo · 9 2026 award with co-marketing 6–12 mo · 8 2026 award winner
+(awards blog) · 7 award-finalist/runner-up official mention 2026 ·
+6 official partnership PR dated 13–23 mo ago · 5 official partnership PR
+dated 24–36 mo ago · 4 official mention or PR older than 36 mo ·
+3 program page presence, no dated item · 2 program-level only ·
+1 incidental official mention · 0 nothing official.
 
 overlap (RIG ICPs: healthcare/dental/medspa, law, fractional-CPA/PE,
-manufacturing, construction, service-business): 10 award in a matching vertical ·
-9 award in a matching vertical plus named client/use-case in another adjacent
-vertical · 8 named clients/use-cases in a matching vertical · 7 official
-partnership names an adjacent vertical (finance≈PE/CPA;
-retail/consumer≈service-business) · 6 official materials reference an adjacent
-vertical · 5 named customers in an adjacent vertical · 4 adjacent vertical
-claimed without named evidence · 3 horizontal offer, adjacency implied only ·
-2 enterprise-generic only · 1 no vertical language · 0 positioning conflicts
-with RIG ICPs.
+manufacturing, construction, service-business): 10 winner of an award in a
+matching vertical · 9 official finalist/runner-up in a matching-vertical
+award (no win) · 8 named clients/use-cases in a matching vertical ·
+7 official partnership names an adjacent vertical (finance≈PE/CPA;
+retail/consumer≈service-business) · 6 official materials reference an
+adjacent vertical · 5 named customers in an adjacent vertical · 4 adjacent
+vertical claimed without named evidence · 3 horizontal offer, adjacency
+implied only · 2 enterprise-generic only · 1 no vertical language ·
+0 positioning conflicts with RIG ICPs.
 
 cost⁻¹ (inverse entry cost): 10 self-service (Built-On registration/Marketplace) ·
 9 self-service with light editorial review · 8 small-SI teaming (hundreds of
@@ -57,15 +59,18 @@ path) · 5 large-SI teaming · 4 ISV co-marketing · 3 Tier-1 alliance gate ·
 | 3 | Salesforce | A | Platform gravity: expanded partnership (Zero Copy, Federated Auth/Search, MuleSoft Agent Scanners, Slack Genie); owns Informatica; ISV Business App PoY | salesforce.com 2026-06-16 + awards 2026-06-15 | 10 | 7 | 4 | (5.0+2.1+0.8)/2 | **3.95** | CRM-triangulation pitch |
 | 4 | SAP | A | The money: "earmark $250M to help make customers and system integrator partners successful … across deployment and migrations"; Manufacturing ISV PoY | SAP PR 2025-02-13 + awards 2026-06-15 | 10 | 6 | 3 | (5.0+1.8+0.6)/2 | **3.7** | PE-portfolio CFO plays on migration wave |
 | 5 | Health Catalyst | A | **Healthcare PoY (ISV) 2026** — nearest-ISV adjacency to RIG's dental/medspa lane | awards 2026-06-15 | 8 | 8 | 4 | (4.0+2.4+0.8)/2 | **3.6** | Marketplace co-listing / referral path |
-| 6 | Celebal Technologies | A | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — small SI operating the SAP wave | awards 2026-06-15 | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | SAP-wave subcontract (realistic terms) |
+| 6 | Celebal Technologies | A (c⁻¹ = C hypothesis) | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — an SI operating the SAP wave | awards 2026-06-15 | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | SAP-wave subcontract (size/terms inferred) |
 | 7 | Tredence | A | Business Transformation PoY; named customers include healthcare systems | awards 2026-06-15 | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | healthcare-client subcontract |
-| 8 | Indicium AI | A | Latin America PoY, Brazil-based — smallest named winner; fastest teaming test | awards 2026-06-15 | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | cheapest subcontract experiment |
-| 9 | Koantek | A (B for staff-size detail) | Lakebase PoY; Databricks-exclusive SI selling an "AppBase" starter-kit pattern — template for RIG's packaged play | awards 2026-06-15 | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | competitive template for D85-branded app kit |
-| 10 | Anthropic | A | AI Transformations PoY 2026 + "strategic, five-year partnership" PR bringing Claude natively to 10,000+ companies ($100M figure is Forbes-only, excluded from scoring) | awards 2026-06-15 + PR 2025-03-26 | 8 | 3 | 6 | (4.0+0.9+1.2)/2 | **3.05** | Claude-on-Databricks co-build content |
+| 8 | Indicium AI | A (c⁻¹ = C hypothesis) | Latin America PoY, Brazil-based (awards text); "smallest/fastest teaming" is RIG inference | awards 2026-06-15 | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | cheapest subcontract experiment |
+| 9 | Koantek | A (B size detail; c⁻¹ = C hypothesis) | Lakebase PoY; Databricks-exclusive SI selling an "AppBase" starter-kit pattern — template for RIG's packaged play | awards 2026-06-15 | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | competitive template for D85-branded app kit |
+| 10 | Anthropic | A (c⁻¹ = C hypothesis) | AI Transformations PoY 2026 + "strategic, five-year partnership" PR bringing Claude natively to 10,000+ companies ($100M figure is Forbes-only, excluded from scoring) | awards 2026-06-15 + PR 2025-03-26 | 8 | 3 | 6 | (4.0+0.9+1.2)/2 | **3.05** | Claude-on-Databricks co-build content |
 
-Note: Anthropic overlap re-scored to 3 under the explicit rubric (horizontal
-offer, adjacency implied only), which drops it below Koantek and Indicium; its
-PR is now direct-read A, so no B claim feeds its score.
+Component provenance: all sig/ovl values derive from A evidence; the c⁻¹
+values for rows 6, 8, 9, 10 are C hypotheses (firm size / teaming ease /
+co-build path not sourced in the awards blog). Row `tier` = evidence tier of
+the underlying facts, not of every component. Anthropic overlap = 3 under the
+explicit rubric (horizontal offer, adjacency implied only); its PR is
+direct-read A, so no B claim feeds its score.
 
 Not scored (won't change RIG's plan near-term), appendix facts only:
 Deloitte [A] (NA+Banking+SLED PoY, 2026-06-15), Microsoft [A] (partnership
