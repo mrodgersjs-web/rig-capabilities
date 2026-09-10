@@ -44,6 +44,14 @@ vertical claimed without named evidence · 3 horizontal offer, adjacency
 implied only · 2 enterprise-generic only · 1 no vertical language ·
 0 positioning conflicts with RIG ICPs.
 
+Interpretive rules (needed for reproducibility): (a) co-marketing = a dated
+joint marketing artifact from BOTH parties, distinct from the awards-blog
+announcement itself — so a plain 2026 winner scores signal 8, not 10, unless a
+separate 2026 partnership PR or joint item exists; (b) overlap 10 requires the
+award's named category to be itself a matching vertical, segment subtypes
+included (Healthcare PoY (ISV) qualifies; Global/APJ/Business-Transformation
+PoYs do not); (c) take the highest level whose condition holds.
+
 cost⁻¹ (inverse entry cost): 10 self-service (Built-On registration/Marketplace) ·
 9 self-service with light editorial review · 8 small-SI teaming (hundreds of
 staff) · 7 mid-SI teaming · 6 ISV co-build program application (no self-service
@@ -54,19 +62,19 @@ path) · 5 large-SI teaming · 4 ISV co-marketing · 3 Tier-1 alliance gate ·
 
 | # | target | tier | why it can change RIG's plan | evidence (date) | sig | ovl | c⁻¹ | calc | score | RIG wedge (C) |
 |---|---|---|---|---|---|---|---|---|---|---|
-| 1 | Cognizant | A | **Manufacturing PoY 2026 — the only award in a core RIG ICP** ("18 manufacturing use cases") | awards blog 2026-06-15 | 8 | 10 | 5 | (4.0+3.0+1.0)/2 | **4.0** | manufacturing vertical co-sell |
-| 2 | Accenture/Avanade | A | Global Partner of the Year 2026 (8th consecutive yr) **and Healthcare PoY**; BG >25,000 trained | awards 2026-06-15 + accenture.com PR 2026-03-17 | 10 | 8 | 3 | (5.0+2.4+0.6)/2 | **4.0** | subcontract into healthcare workstreams |
-| 3 | Salesforce | A | Platform gravity: expanded partnership (Zero Copy, Federated Auth/Search, MuleSoft Agent Scanners, Slack Genie); owns Informatica; ISV Business App PoY | salesforce.com 2026-06-16 + awards 2026-06-15 | 10 | 7 | 4 | (5.0+2.1+0.8)/2 | **3.95** | CRM-triangulation pitch |
-| 4 | SAP | A | The money: "earmark $250M to help make customers and system integrator partners successful … across deployment and migrations"; Manufacturing ISV PoY | SAP PR 2025-02-13 + awards 2026-06-15 | 10 | 6 | 3 | (5.0+1.8+0.6)/2 | **3.7** | PE-portfolio CFO plays on migration wave |
-| 5 | Health Catalyst | A | **Healthcare PoY (ISV) 2026** — nearest-ISV adjacency to RIG's dental/medspa lane | awards 2026-06-15 | 8 | 8 | 4 | (4.0+2.4+0.8)/2 | **3.6** | Marketplace co-listing / referral path |
-| 6 | Celebal Technologies | A (c⁻¹ = C hypothesis) | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — an SI operating the SAP wave | awards 2026-06-15 | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | SAP-wave subcontract (size/terms inferred) |
-| 7 | Tredence | A | Business Transformation PoY; named customers include healthcare systems | awards 2026-06-15 | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | healthcare-client subcontract |
+| 1 | Accenture/Avanade | A | Global Partner of the Year 2026 (8th consecutive yr) **and Healthcare PoY** — award in a core RIG ICP; BG >25,000 trained | awards 2026-06-15 + accenture.com PR 2026-03-17 | 10 | 10 | 3 | (5.0+3.0+0.6)/2 | **4.3** | subcontract into healthcare workstreams |
+| 2 | Cognizant | A | **Manufacturing PoY 2026 — core RIG ICP award** ("18 manufacturing use cases") | awards blog 2026-06-15 | 8 | 10 | 5 | (4.0+3.0+1.0)/2 | **4.0** | manufacturing vertical co-sell |
+| 3 | Salesforce | A | Platform gravity: expanded partnership (Zero Copy, Federated Auth/Search, MuleSoft Agent Scanners, Slack Genie); owns Informatica; ISV Business App PoY (not a vertical award) | salesforce.com 2026-06-16 + awards 2026-06-15 | 10 | 7 | 4 | (5.0+2.1+0.8)/2 | **3.95** | CRM-triangulation pitch |
+| 4 | Health Catalyst | A | **Healthcare PoY (ISV) 2026 — award in a core RIG ICP**; nearest-ISV adjacency to RIG's dental/medspa lane | awards 2026-06-15 | 8 | 10 | 4 | (4.0+3.0+0.8)/2 | **3.9** | Marketplace co-listing / referral path |
+| 5 | Tredence | A | Business Transformation PoY; **named customers include healthcare systems** (matching vertical, named clients) | awards 2026-06-15 | 8 | 8 | 7 | (4.0+2.4+1.4)/2 | **3.9** | healthcare-client subcontract |
+| 6 | SAP | A | The money: "earmark $250M to help make customers and system integrator partners successful … across deployment and migrations" (PR 2025-02-13); **Manufacturing ISV PoY 2026** — award in a core RIG ICP | SAP PR 2025-02-13 + awards 2026-06-15 | 8 | 10 | 3 | (4.0+3.0+0.6)/2 | **3.8** | PE-portfolio CFO plays on migration wave |
+| 7 | Celebal Technologies | A (c⁻¹ = C hypothesis) | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — capability adjacency, no named vertical customers | awards 2026-06-15 | 8 | 4 | 7 | (4.0+1.2+1.4)/2 | **3.3** | SAP-wave subcontract (size/terms inferred) |
 | 8 | Indicium AI | A (c⁻¹ = C hypothesis) | Latin America PoY, Brazil-based (awards text); "smallest/fastest teaming" is RIG inference | awards 2026-06-15 | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | cheapest subcontract experiment |
 | 9 | Koantek | A (B size detail; c⁻¹ = C hypothesis) | Lakebase PoY; Databricks-exclusive SI selling an "AppBase" starter-kit pattern — template for RIG's packaged play | awards 2026-06-15 | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | competitive template for D85-branded app kit |
 | 10 | Anthropic | A (c⁻¹ = C hypothesis) | AI Transformations PoY 2026 + "strategic, five-year partnership" PR bringing Claude natively to 10,000+ companies ($100M figure is Forbes-only, excluded from scoring) | awards 2026-06-15 + PR 2025-03-26 | 8 | 3 | 6 | (4.0+0.9+1.2)/2 | **3.05** | Claude-on-Databricks co-build content |
 
 Component provenance: all sig/ovl values derive from A evidence; the c⁻¹
-values for rows 6, 8, 9, 10 are C hypotheses (firm size / teaming ease /
+values for rows 7, 8, 9, 10 are C hypotheses (firm size / teaming ease /
 co-build path not sourced in the awards blog). Row `tier` = evidence tier of
 the underlying facts, not of every component. Anthropic overlap = 3 under the
 explicit rubric (horizontal offer, adjacency implied only); its PR is
