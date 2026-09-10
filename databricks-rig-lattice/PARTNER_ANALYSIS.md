@@ -60,7 +60,7 @@ path) · 5 large-SI teaming · 4 ISV co-marketing · 3 Tier-1 alliance gate ·
 
 ## Plan-relevant counterparties — sorted by score; each row = one relationship
 
-| # | target | tier | why it can change RIG's plan | evidence (date) | sig | ovl | c⁻¹ | calc | score | RIG wedge (C) |
+| # | target | tier | why it can change RIG's plan | evidence (date) | sig | ovl | c⁻¹ (C) | calc | score | RIG wedge (C) |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | Accenture/Avanade | A | Global Partner of the Year 2026 (8th consecutive yr) **and Healthcare PoY** — award in a core RIG ICP; BG >25,000 trained | awards 2026-06-15 + accenture.com PR 2026-03-17 | 10 | 10 | 3 | (5.0+3.0+0.6)/2 | **4.3** | subcontract into healthcare workstreams |
 | 2 | Cognizant | A | **Manufacturing PoY 2026 — core RIG ICP award** ("18 manufacturing use cases") | awards blog 2026-06-15 | 8 | 10 | 5 | (4.0+3.0+1.0)/2 | **4.0** | manufacturing vertical co-sell |
@@ -68,15 +68,15 @@ path) · 5 large-SI teaming · 4 ISV co-marketing · 3 Tier-1 alliance gate ·
 | 4 | Health Catalyst | A | **Healthcare PoY (ISV) 2026 — award in a core RIG ICP**; nearest-ISV adjacency to RIG's dental/medspa lane | awards 2026-06-15 | 8 | 10 | 4 | (4.0+3.0+0.8)/2 | **3.9** | Marketplace co-listing / referral path |
 | 5 | Tredence | A | Business Transformation PoY; **named customers include healthcare systems** (matching vertical, named clients) | awards 2026-06-15 | 8 | 8 | 7 | (4.0+2.4+1.4)/2 | **3.9** | healthcare-client subcontract |
 | 6 | SAP | A | The money: "earmark $250M to help make customers and system integrator partners successful … across deployment and migrations" (PR 2025-02-13); **Manufacturing ISV PoY 2026** — award in a core RIG ICP | SAP PR 2025-02-13 + awards 2026-06-15 | 8 | 10 | 3 | (4.0+3.0+0.6)/2 | **3.8** | PE-portfolio CFO plays on migration wave |
-| 7 | Celebal Technologies | A (c⁻¹ = C hypothesis) | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — capability adjacency, no named vertical customers | awards 2026-06-15 | 8 | 4 | 7 | (4.0+1.2+1.4)/2 | **3.3** | SAP-wave subcontract (size/terms inferred) |
-| 8 | Indicium AI | A (c⁻¹ = C hypothesis) | Latin America PoY, Brazil-based (awards text); "smallest/fastest teaming" is RIG inference | awards 2026-06-15 | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | cheapest subcontract experiment |
-| 9 | Koantek | A (B size detail; c⁻¹ = C hypothesis) | Lakebase PoY; Databricks-exclusive SI selling an "AppBase" starter-kit pattern — template for RIG's packaged play | awards 2026-06-15 | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | competitive template for D85-branded app kit |
-| 10 | Anthropic | A (c⁻¹ = C hypothesis) | AI Transformations PoY 2026 + "strategic, five-year partnership" PR bringing Claude natively to 10,000+ companies ($100M figure is Forbes-only, excluded from scoring) | awards 2026-06-15 + PR 2025-03-26 | 8 | 3 | 6 | (4.0+0.9+1.2)/2 | **3.05** | Claude-on-Databricks co-build content |
+| 7 | Celebal Technologies | A | APJ PoY + Migration & Modernization PoY with "SAP data integration solutions" — capability adjacency, no named vertical customers | awards 2026-06-15 | 8 | 4 | 7 | (4.0+1.2+1.4)/2 | **3.3** | SAP-wave subcontract |
+| 8 | Indicium AI | A | Latin America PoY, Brazil-based (awards text); "smallest/fastest teaming" is RIG inference | awards 2026-06-15 | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | cheapest subcontract experiment |
+| 9 | Koantek | A (B size detail) | Lakebase PoY; Databricks-exclusive SI selling an "AppBase" starter-kit pattern — template for RIG's packaged play | awards 2026-06-15 | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | competitive template for D85-branded app kit |
+| 10 | Anthropic | A | AI Transformations PoY 2026 + "strategic, five-year partnership" PR bringing Claude natively to 10,000+ companies ($100M figure is Forbes-only, excluded from scoring) | awards 2026-06-15 + PR 2025-03-26 | 8 | 3 | 6 | (4.0+0.9+1.2)/2 | **3.05** | Claude-on-Databricks co-build content |
 
-Component provenance: all sig/ovl values derive from A evidence; the c⁻¹
-values for rows 7, 8, 9, 10 are C hypotheses (firm size / teaming ease /
-co-build path not sourced in the awards blog). Row `tier` = evidence tier of
-the underlying facts, not of every component. Anthropic overlap = 3 under the
+Component provenance: all sig/ovl values derive from A evidence; **every c⁻¹
+value in the table is a C hypothesis** — entry-cost estimates with no cited
+terms evidence, for all ten rows. Row `tier` = evidence tier of the underlying
+facts, not of every component. Anthropic overlap = 3 under the
 explicit rubric (horizontal offer, adjacency implied only); its PR is
 direct-read A, so no B claim feeds its score.
 
