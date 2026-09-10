@@ -27,14 +27,15 @@ alphabetical**.
 signal: 10 named in 2026 official partnership PR or 2026 award + co-marketing
 ≤6 mo · 9 2026 award + co-marketing ≤12 mo · 8 2026 award winner (awards blog) ·
 7 award-nominated/shortlisted official mention 2026 · 6 official partnership PR
->12 mo old · 5 dated partnership PR 24–30 mo · 4 official mention >18 mo ·
+older than 12 mo · 5 dated partnership PR 24–30 mo · 4 official mention 18+ mo ·
 3 program page presence, no dated item · 2 program-level only · 1 incidental
 official mention · 0 nothing official.
 
 overlap (RIG ICPs: healthcare/dental/medspa, law, fractional-CPA/PE,
 manufacturing, construction, service-business): 10 award in a matching vertical ·
-9 awards in ≥2 matching verticals · 8 named clients/use-cases in a matching
-vertical · 7 official partnership names an adjacent vertical (finance≈PE/CPA;
+9 award in a matching vertical plus named client/use-case in another adjacent
+vertical · 8 named clients/use-cases in a matching vertical · 7 official
+partnership names an adjacent vertical (finance≈PE/CPA;
 retail/consumer≈service-business) · 6 official materials reference an adjacent
 vertical · 5 named customers in an adjacent vertical · 4 adjacent vertical
 claimed without named evidence · 3 horizontal offer, adjacency implied only ·
