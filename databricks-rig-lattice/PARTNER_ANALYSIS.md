@@ -6,13 +6,19 @@ publication dates); **B** = search-summary lead, page not yet read directly;
 **C** = RIG hypothesis/recommendation, not evidence.
 
 A-validated by direct read (exact publication dates): 2026 Global Partner Awards
-blog (2026-06-15) · SAP Databricks PR (2025-02-13) · Salesforce expansion story
-(2026-06-16) · Accenture Databricks Business Group PR (2026-03-17) · Deloitte
-awards article (2026-06-15) · Microsoft expansion PR (2026-07-23) · Brickbuilder
-Partner Network launch blog (2026-02-11).
-Still pending direct read: Anthropic 2025 PR, Neon PR, Informatica IWM-2026 PR
-(date from URL slug `20260520` only), Wipro partnership PR (URL 404 — claim
-demoted to B), live partner-directory crawl (browser path D85-gated).
+blog (2026-06-15) · SAP Databricks PR (2025-02-13) · Databricks–Anthropic PR
+(2025-03-26, "strategic, five-year partnership", 10,000+ customers) ·
+Databricks–Neon PR (2025-05-14, "80 percent of databases … created
+automatically by AI agents") · Salesforce expansion story (2026-06-16) ·
+Accenture Databricks Business Group PR (2026-03-17) · Deloitte awards article
+(2026-06-15) · Microsoft expansion PR (2026-07-23) · Brickbuilder Partner
+Network launch blog (2026-02-11). Newsroom-page context (A): Databricks >80%
+YoY growth / $7B+ run-rate (2026-08-13); $188B-valuation strategic round
+(2026-07-16).
+Official PR URLs that 404 on direct read — claims kept at B from search
+summaries: Wipro partnership PR; Informatica IWM-2026 PR (date slug
+2026-05-20 unverified). Live partner-directory crawl still pending (browser
+path D85-gated).
 
 ## Scoring (reproducible)
 Components 0–10; **score = (0.5·signal + 0.3·overlap + 0.2·cost⁻¹) / 2**.
@@ -43,14 +49,14 @@ Components 0–10; **score = (0.5·signal + 0.3·overlap + 0.2·cost⁻¹) / 2**
 | 9 | Tredence | SI | Business Transformation PoY — "healthcare systems" named customer set | 2026-06-15 (awards) | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | healthcare client base subcontract | outreach experiment |
 | 10 | Microsoft | platform | Partnership extended "through the 2030s"; Genie/Unity AI Gateway across M365; Cobalt | 2026-07-23 (PR) | 10 | 3 | 4 | (5.0+0.9+0.8)/2 | **3.35** | Azure Databricks co-sell | own Azure partner status |
 | 11 | Indicium AI | SI | Latin America PoY (Brazil-based) | 2026-06-15 (awards) | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | fastest-terms subcontract test | directory + contact |
-| 12 | Anthropic | ISV | AI Transformations PoY 2026; 5-yr Claude deal (2025-03 PR, pending direct read; $100M figure is Forbes) | 2026-06-15 (awards) + 2025-03 (pending) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | Claude-first co-build story | PR direct read + Marketplace scan |
+| 12 | Anthropic | ISV | AI Transformations PoY 2026; "strategic, five-year partnership" bringing Claude natively to 10,000+ companies (PR); $100M figure is Forbes only, not in PR | 2026-06-15 (awards) + 2025-03-26 (PR, direct read) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | Claude-first co-build story | Marketplace scan |
 | 13 | Wipro | SI | Innovation PoY 2026 (banking: Bill Pay, KYC, FDIC 370). NOTE: "new global partnership" PR URL 404s — that claim demoted to B | 2026-06-15 (awards) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | capacity practice white-label | find live PR via wipro.com |
 | 14 | Tiger Analytics | SI | Retail/Consumer/Travel PoY — IDX accelerator | 2026-06-15 (awards) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | service-business vertical subcontract | directory |
 | 15 | OpenAI | ISV | AI Agents Partner of the Year 2026 | 2026-06-15 (awards) | 8 | 4 | 5 | (4.0+1.2+1.0)/2 | **3.15** | model-adjacency content plays | — |
 | 16 | Koantek | SI | Lakebase PoY — Ascend AI AppBase, FDE delivery model | 2026-06-15 (awards) | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | Lakebase migration niche partner | koantek.com direct read |
 | 17 | Slalom | SI | Data+AI Platform PoY + Insurance PoY (Insurance 360 Brickbuilder) | 2026-06-15 (awards) | 8 | 4 | 5 | (4.0+1.2+1.0)/2 | **3.1** | insurance/service adjacency | directory |
 | 18 | NTT Data | SI | APJ Growth PoY (Japanese banks) | 2026-06-15 (awards) | 8 | 3 | 5 | (4.0+0.9+1.0)/2 | **2.95** | APJ subcontract | directory |
-| 19 | Informatica (Salesforce-owned) | ISV/data | IWM 2026: IDMC headless + Agent Bricks via MCP, Lakebase connector, MDM golden records, UC tag extraction | 2026-05-20 per URL slug (page read pending) | 8 | 4 | 4 | (4.0+1.2+0.8)/2 | **3.0** | MCP-ecosystem legitimization | page direct read |
+| 19 | Informatica (Salesforce-owned) [B] | ISV/data | IWM 2026: IDMC headless + Agent Bricks via MCP, Lakebase connector, MDM golden records, UC tag extraction — official PR URL 404s; claim from search summary | ~2026-05-20 (unverified slug) | 6 | 4 | 4 | (3.0+1.2+0.8)/2 | **2.5** | MCP-ecosystem legitimization | find live PR via informatica.com/about-us/news |
 | 20 | Capgemini | SI | EMEA PoY (25k-table UC migration) + CME PoY | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | EMEA subcontract | directory |
 | 21 | Infosys | SI | Visionary PoY + Governance PoY (UC migrations) | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | governance-workstream subcontract | directory |
 | 22 | TCS | SI | Data Warehouse PoY + Talent Development PoY | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | capacity subcontract | directory |
@@ -62,8 +68,9 @@ LTM (COE), Aimpoint Digital (Digital Native), v4c.ai (Emerging), NIIT MTS
 (observability), MinIO (storage), NVIDIA (AI tools), Replit (app generation),
 Epsilon/Celonis/Kythera (Built-On), S&P Global + Cotality (data), D&B, FactSet,
 Trade Desk, IQVIA, Kraken, Acxiom, Palantir, Moody's, Fivetran, Glean, Omni.
-Neon acquisition (serverless Postgres → Lakebase) confirmed by Reuters URL
-2025-05-14; databricks.com PR direct read pending.
+Neon acquisition: databricks.com PR direct-read A — 2025-05-14, "over 80
+percent of the databases provisioned on Neon were created automatically by AI
+agents."
 
 Program facts (A, BPN blog 2026-02-11): unified Bronze→Silver→Gold→Platinum
 across Consulting&SI / Connected Tech / Data providers / Built-On; Velocity
