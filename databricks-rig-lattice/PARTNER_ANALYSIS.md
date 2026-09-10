@@ -1,85 +1,98 @@
 # Databricks Partner Analysis — 2026-09-10
+## Status: SOURCED DRAFT — pending remaining validation before remote publication
 
-Method: web search sweep 2026-09-10; rows kept only where the evidence is an
-official press release / official partner page / major wire. Partner directory
-was NOT crawled live (JS-rendered; browser path currently D85-gated) — that
-crawl is the top validation step below. Confidence = source authority × recency.
+Evidence tiers: **A** = official page read directly this session (dates are page
+publication dates); **B** = search-summary lead, page not yet read directly;
+**C** = RIG hypothesis/recommendation, not evidence.
 
-Status legend:
-- **A-verified** — official source, relationship exists, dated URL below.
-- **B-lead** — third-party/summary source or inference from A facts; not a claim
-  of relationship.
-- **C-hypothesis** — RIG targeting statement / recommendation; explicitly not
-  evidence.
+A-validated by direct read (exact publication dates): 2026 Global Partner Awards
+blog (2026-06-15) · SAP Databricks PR (2025-02-13) · Salesforce expansion story
+(2026-06-16) · Accenture Databricks Business Group PR (2026-03-17) · Deloitte
+awards article (2026-06-15) · Microsoft expansion PR (2026-07-23) · Brickbuilder
+Partner Network launch blog (2026-02-11).
+Still pending direct read: Anthropic 2025 PR, Neon PR, Informatica IWM-2026 PR
+(date from URL slug `20260520` only), Wipro partnership PR (URL 404 — claim
+demoted to B), live partner-directory crawl (browser path D85-gated).
 
-Likelihood-to-work-with-RIG score (0–5): 0.5×co-sell/Marketplace/PWAF signal +
-0.3×RIG vertical-buyer overlap + 0.2×inverse entry cost. Verified co-program
-signals (awards, Business Group, new partnership PRs) outrank brand adjacency.
+## Scoring (reproducible)
+Components 0–10; **score = (0.5·signal + 0.3·overlap + 0.2·cost⁻¹) / 2**.
+- signal: 10 = named in 2026 official partnership PR **or** 2026 award +
+  co-marketing ≤6 mo · 8 = 2026 award winner (awards blog, A) · 6 = official
+  partnership PR >12 mo old · 4 = official mention >18 mo · 2 = program-level only.
+- overlap: with RIG ICP verticals (healthcare/medical/medspa, law,
+  fractional-CPA/PE, manufacturing, construction, service-business):
+  10 = award in matching vertical · 8 = named client/use-case matches ·
+  5 = adjacent (finance ≈ PE/CPA; retail/consumer ≈ service-business) ·
+  2 = enterprise-generic.
+- cost⁻¹: 10 = self-service (Built-On registration/Marketplace) ·
+  7 = small/mid SI teaming · 5 = large-SI teaming · 4 = ISV co-marketing ·
+  3 = Tier-1 alliance gate.
 
-## Tier A — verified relationships (official, dated)
+## Ranked target matrix (each row = one relationship; A unless noted)
 
-| target | cat | joint motion (evidence) | buyer/use case | evidence (date, URL) | conf | RIG wedge (C) | next validation | score |
-|---|---|---|---|---|---|---|---|---|
-| SAP | platform | SAP Databricks in Business Data Cloud; $250M pledged for customer+SI migrations | ERP customers, PE-portfolio finance/CFO | 2025-02 databricks.com: https://www.databricks.com/company/newsroom/press-releases/databricks-announces-launch-sap-databricks | high | migration-wave subcontract; fractional-CPA/PE vertical depth | confirm $250M fund status + partner eligibility terms | 4.6 |
-| Salesforce | platform | expanded 2026 partnership: Data 360 Zero Copy, Federated Auth/Search, MuleSoft Agent Scanners, Slack; ISV Business App Partner of Year DAIS '26 | Agentforce buyers, CRM-centric ops | 2026-07 salesforce.com: https://www.salesforce.com/news/stories/salesforce-databricks-shared-foundation-of-human-agent-work-announcement/ | high | one-pitch triangulation with RIG CRM plays | check Databricks-side PR mirror + integration cert list | 4.2 |
-| Accenture/Avanade | SI | Global Partner of the Year 2026 (8th yr); Accenture Databricks Business Group launched | global enterprise agentic AI | 2026-07 databricks.com awards: https://www.databricks.com/blog/databricks-announces-2026-global-partner-awards · 2026 accenture.com newsroom: https://newsroom.accenture.com/news/2026/accenture-and-databricks-accelerate-enterprise-adoption-of-ai-applications-and-agents-at-scale | high | delivery-depth subcontract on vertical workstreams | probe BG partner/teaming terms (tier gates likely) | 4.0 |
-| Deloitte | SI | NA Partner of Year 2026 (2nd yr) + Banking + Public Sector SLED (3 awards) | regulated finance, government | 2026-07 deloitte.com: https://www.deloitte.com/us/en/alliances/articles/databricks-partner-award.html | high | regulated-vertical depth (healthcare/legal) | same teaming-terms probe | 3.8 |
-| Microsoft | platform | expanded strategic partnership "through the 2030s"; Databricks runs own ops on Azure | Azure-centric enterprises | 2026-08 databricks.com: https://www.databricks.com/company/newsroom/press-releases/databricks-and-microsoft-expand-partnership-help-enterprises-bring | high | Azure Databricks co-sell path | map to existing Azure partner status (none yet) | 3.5 |
-| Wipro | SI | new/enhanced global partnership; "self-contained Databricks practice" | modernization at scale | 2026-08 wipro.com: https://www.wipro.com/newsroom/press-releases/2026/wipro-partners-with-databricks-to-enable-enterprises-modernize-data-and-deploy-ai-at-scale/ | high | capacity-hungry practice → white-label vertical accelerators | contact alliance via Built-On/MDF route | 3.9 |
-| Anthropic | model ISV | 5-year partnership; Claude native on platform (Forbes reports ~$100M) | enterprise agent builders | 2025-03 databricks.com: https://www.databricks.com/company/newsroom/press-releases/databricks-and-anthropic-sign-landmark-deal-bring-claude-models · 2025-03 Forbes: https://www.forbes.com/sites/richardnieva/2025/03/26/anthropic-databricks/ | high (relationship) / med ($ figure is Forbes) | RIG is already Claude-first; co-build story | Marketplace listing co-brand possibility | 3.4 |
-| Capgemini | SI | EMEA Partner of the Year 2026 | EMEA enterprise | 2026-07 databricks.com awards (URL above) | high | EMEA subcontract | directory skills tags | 3.2 |
-| Celebal Technologies | SI | APJ Growth Partner of the Year 2026 | APJ mid-market | 2026-07 databricks.com awards (URL above) | high | faster subcontract than Tier-1 (hypothesis) | outreach experiment | 3.6 |
-| NTT Data | SI | APJ Growth Partner of the Year 2026 | APJ | 2026-07 databricks.com awards (URL above) | high | subcontract | directory | 3.0 |
-| Indicium AI | SI | Latin America Partner of the Year 2026 | LatAm | 2026-07 databricks.com awards (URL above) | med | niche subcontract | directory | 2.6 |
-| Koantek | SI | Lakebase category recognition 2026 | Lakebase early adopters | 2026-07 databricks.com awards (URL above) | med | Neon/Lakebase migration niche | skills page | 2.9 |
-| Informatica (Salesforce-owned) | ISV/data | expanded Databricks capabilities at IWM 2026: IDMC headless + Agent Bricks via MCP, Lakebase connector, MDM golden records, UC tag extraction | governed-data buyers | 2026-05-20 informatica.com: https://www.informatica.com/about-us/news/news-releases/2026/05/20260520-informatica-brings-headless-data-management-lakebase-connectivity-golden-record-publishing-and-unity-catalog-tag-extraction-to-the-databricks-platform.html · close: 2025-11-18 salesforce.com: https://www.salesforce.com/uk/news/press-releases/2025-11-18/salesforce-completes-acquisition-of-informatica/ | high | MCP-ecosystem adjacency (their MCP presence legitimizes RIG MCP route) | none needed for adjacency claim | 3.1 |
-| EY / Infosys / TCS / Slalom / EMEA regional winners | SI | category/POY wins 2026 (banking, governance, DW, platform) | per-category | 2026-07 databricks.com awards (URL above) | high (per award row) | subcontract candidates | directory per firm | 2.8–3.4 |
-| Neon | internal product | $1B acquisition; serverless Postgres for agents → Lakebase | agent-dev teams | 2025-05 databricks.com: https://www.databricks.com/company/newsroom/press-releases/databricks-agrees-acquire-neon-help-developers-deliver-ai-systems · Reuters: https://www.reuters.com/technology/databricks-buy-startup-neon-1-billion-wsj-reports-2025-05-14/ | high | build on Lakebase = riding their integration wave | architecture decision, not partnership | — |
+| # | target | category | joint motion (verbatim-grade evidence) | date (source) | sig | ovl | c⁻¹ | calc | score | RIG wedge (C) | next validation |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 1 | Accenture/Avanade | SI | Global Partner of the Year 2026, 8th consecutive year (2019–2026); Healthcare PoY; Public Sector Federal PoY; Business Group w/ >25,000 trained (BG PR) | 2026-06-15 (awards) + 2026-03-17 (accenture.com) | 10 | 8 | 3 | (5.0+2.4+0.6)/2 | **4.0** | delivery-depth subcontract on healthcare workstreams | BG teaming terms/tier gates |
+| 2 | Cognizant | SI | Manufacturing Partner of the Year 2026 — "18 manufacturing use cases" | 2026-06-15 (awards) | 8 | 10 | 5 | (4.0+3.0+1.0)/2 | **4.0** | RIG manufacturing vertical co-sell; only award in a core RIG ICP | alliance contact; directory tier |
+| 3 | Salesforce | platform ISV | Expanded partnership: Zero Copy + Federated Auth/Search, MuleSoft Agent Scanners, Slack Genie; ISV Business App PoY | 2026-06-16 (salesforce.com) | 10 | 7 | 4 | (5.0+2.1+0.8)/2 | **3.95** | CRM-triangulation pitch | Databricks-side mirror + H2-2026 GA list |
+| 4 | Deloitte | SI | NA PoY (2nd yr) + Banking PoY + SLED PoY | 2026-06-15 (both) | 10 | 5 | 3 | (5.0+1.5+0.6)/2 | **3.55** | regulated-vertical depth | teaming terms |
+| 5 | SAP | platform | SAP Databricks in Business Data Cloud; "earmark $250M to help make customers and system integrator partners successful … across deployment and migrations"; also Manufacturing ISV PoY | 2025-02-13 (PR) + 2026-06-15 (awards) | 10 | 6 | 3 | (5.0+1.8+0.6)/2 | **3.7** | PE-portfolio finance/CFO plays on migration wave | fund eligibility terms |
+| 6 | Health Catalyst | ISV | Healthcare Partner of the Year (ISV) 2026 | 2026-06-15 (awards) | 8 | 8 | 4 | (4.0+2.4+0.8)/2 | **3.6** | healthcare/medspa vertical adjacency | Marketplace co-listing scan |
+| 7 | EY | SI | Customer Impact PoY + Financial Services PoY 2026 (6,900+ trained) | 2026-06-15 (awards) | 8 | 7 | 4 | (4.0+2.1+0.8)/2 | **3.45** | fractional-CPA/PE finance adjacency | directory + practice scan |
+| 8 | Celebal Technologies | SI | APJ PoY + Migration & Modernization PoY — "pre-built migration accelerators, SAP data integration solutions" (awards text) | 2026-06-15 (awards) | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | SAP-wave subcontract; small-SI speed | outreach experiment |
+| 9 | Tredence | SI | Business Transformation PoY — "healthcare systems" named customer set | 2026-06-15 (awards) | 8 | 5 | 7 | (4.0+1.5+1.4)/2 | **3.45** | healthcare client base subcontract | outreach experiment |
+| 10 | Microsoft | platform | Partnership extended "through the 2030s"; Genie/Unity AI Gateway across M365; Cobalt | 2026-07-23 (PR) | 10 | 3 | 4 | (5.0+0.9+0.8)/2 | **3.35** | Azure Databricks co-sell | own Azure partner status |
+| 11 | Indicium AI | SI | Latin America PoY (Brazil-based) | 2026-06-15 (awards) | 8 | 3 | 8 | (4.0+0.9+1.6)/2 | **3.25** | fastest-terms subcontract test | directory + contact |
+| 12 | Anthropic | ISV | AI Transformations PoY 2026; 5-yr Claude deal (2025-03 PR, pending direct read; $100M figure is Forbes) | 2026-06-15 (awards) + 2025-03 (pending) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | Claude-first co-build story | PR direct read + Marketplace scan |
+| 13 | Wipro | SI | Innovation PoY 2026 (banking: Bill Pay, KYC, FDIC 370). NOTE: "new global partnership" PR URL 404s — that claim demoted to B | 2026-06-15 (awards) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | capacity practice white-label | find live PR via wipro.com |
+| 14 | Tiger Analytics | SI | Retail/Consumer/Travel PoY — IDX accelerator | 2026-06-15 (awards) | 8 | 4 | 6 | (4.0+1.2+1.2)/2 | **3.2** | service-business vertical subcontract | directory |
+| 15 | OpenAI | ISV | AI Agents Partner of the Year 2026 | 2026-06-15 (awards) | 8 | 4 | 5 | (4.0+1.2+1.0)/2 | **3.15** | model-adjacency content plays | — |
+| 16 | Koantek | SI | Lakebase PoY — Ascend AI AppBase, FDE delivery model | 2026-06-15 (awards) | 8 | 3 | 7 | (4.0+0.9+1.4)/2 | **3.15** | Lakebase migration niche partner | koantek.com direct read |
+| 17 | Slalom | SI | Data+AI Platform PoY + Insurance PoY (Insurance 360 Brickbuilder) | 2026-06-15 (awards) | 8 | 4 | 5 | (4.0+1.2+1.0)/2 | **3.1** | insurance/service adjacency | directory |
+| 18 | NTT Data | SI | APJ Growth PoY (Japanese banks) | 2026-06-15 (awards) | 8 | 3 | 5 | (4.0+0.9+1.0)/2 | **2.95** | APJ subcontract | directory |
+| 19 | Informatica (Salesforce-owned) | ISV/data | IWM 2026: IDMC headless + Agent Bricks via MCP, Lakebase connector, MDM golden records, UC tag extraction | 2026-05-20 per URL slug (page read pending) | 8 | 4 | 4 | (4.0+1.2+0.8)/2 | **3.0** | MCP-ecosystem legitimization | page direct read |
+| 20 | Capgemini | SI | EMEA PoY (25k-table UC migration) + CME PoY | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | EMEA subcontract | directory |
+| 21 | Infosys | SI | Visionary PoY + Governance PoY (UC migrations) | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | governance-workstream subcontract | directory |
+| 22 | TCS | SI | Data Warehouse PoY + Talent Development PoY | 2026-06-15 (awards) | 8 | 3 | 3 | (4.0+0.9+0.6)/2 | **2.75** | capacity subcontract | directory |
 
-Program facts (A, official): Brickbuilder Partner Network Bronze→Platinum, PWAF
-promotion paths (Connected/Data/Built-on), Source/Activate/Grow incentives, MDF,
-6 Core Industries + 4 Core Products specializations (GenAI, Lakeflow) —
-2026-02 blog https://www.databricks.com/blog/building-whats-next-together-introducing-brickbuilder-partner-network-agentic-ai-era +
-2026-05 guide https://www.databricks.com/sites/default/files/2026-05/partner-program-guides-2026.pdf.
-Agent-product integration surface (PWAF guidance): Managed MCP, Genie APIs via
-MCP, Marketplace MCP publishing — official partner-architecture docs
-https://databrickslabs.github.io/partner-architecture/isv-partners/product-categories/ai-ml (undated doc; treat requirements as current-but-uncertain).
+Unscored A-context (from awards blog, single-source, no action yet): ZS (Life
+Sciences), EPAM (AI), Entrada (Genie), Lovelytics (Energy + Brickbuilder PoY),
+LTM (COE), Aimpoint Digital (Digital Native), v4c.ai (Emerging), NIIT MTS
+(training); ISV: Sigma (BI), Qlik (integration), Collibra (governance), Datadog
+(observability), MinIO (storage), NVIDIA (AI tools), Replit (app generation),
+Epsilon/Celonis/Kythera (Built-On), S&P Global + Cotality (data), D&B, FactSet,
+Trade Desk, IQVIA, Kraken, Acxiom, Palantir, Moody's, Fivetran, Glean, Omni.
+Neon acquisition (serverless Postgres → Lakebase) confirmed by Reuters URL
+2025-05-14; databricks.com PR direct read pending.
 
-## Tier B — leads (not evidence-backed relationships)
+Program facts (A, BPN blog 2026-02-11): unified Bronze→Silver→Gold→Platinum
+across Consulting&SI / Connected Tech / Data providers / Built-On; Velocity
+incentives = Source/Activate/Grow (consumption rebates); MDF proposal-based at
+Silver → strategic co-investment at Platinum; Specializations = 6 Core
+Industries + 4 Core Products (GenAI, Lakeflow); Delivery Expert badges;
+ecosystem "7,000+ partners", GSI practice growth "101% YoY" (blog figures).
 
-- Quantiphi, Thoughtworks, "Slalom elite status" per dataconsultingfirms.com
-  ranking (2026-05, third-party): https://dataconsultingfirms.com/insights/databricks-consulting-partners-2026 —
-  low authority; Slalom's award IS in Tier A, Quantiphi/Thoughtworks are B until
-  directory-verified.
-- "Cross-Industry Partner Accelerators (Agentic AI/GenAI/LLMOps)" — databricks.com
-  blog 2025-11: https://www.databricks.com/blog/introducing-databricks-cross-industry-partner-accelerators-agentic-ai-genai-and-llmops —
-  program exists (A) but RIG eligibility/benefit = B.
-- Search result "Claude Fable 5 available on Databricks" — UNVERIFIED model-name
-  claim on a databricks.com URL; excluded pending direct check.
+Disambiguations (do not conflate):
+- **Two $250M figures**: SAP-success earmark for customers+SI deployments/
+  migrations (SAP PR 2025-02-13) vs Databricks India investment (linked from
+  Accenture PR 2026-03-17).
+- **Seven vs eight years**: Accenture PR (2026-03-17) says "Global SI Partner of
+  the Year seven consecutive years"; awards blog (2026-06-15) says Global
+  Partner of the Year "eighth consecutive year (2019–2026)". Both quoted as
+  published; later-dated awards blog governs the ranking.
 
-## Tier C — RIG targeting statements (hypotheses, all)
+## Tier C — RIG targeting hypotheses (not evidence)
+- H1 Tier-1 SIs under-staff RIG vertical depth (dental/legal/construction) →
+  validate via RFP language + directory skill tags.
+- H2 SAP $250M wave is the 12-month money event; Celebal/Infosys/Capgemini
+  (SAP-integration award language) are the wave's operators → subcontract them,
+  don't wait for the fund.
+- H3 Built-On track = RIG's lowest-cost entry; D85 gates presented as PWAF
+  evidence. (Program steps A; cost estimate C.)
+- H4 small/mid awardees convert to subcontract faster than Tier-1. Run as
+  scored outreach experiments (Indicium, Celebal, Tredence first).
 
-- H1: Tier-1 SIs under-staff dental/legal/construction vertical depth →
-  subcontract demand. UNVERIFIED; validate via RFP language + directory skills
-  tags.
-- H2: SAP $250M migration wave + PE-portfolio CFO use cases = 12-month revenue
-  event. Money-event claim is inference; fund existence is A.
-- H3: Built-On track (Marketplace MCP server + PWAF Built-on validation) is
-  RIG's lowest-cost legitimate entry; D85 gates presented as PWAF evidence.
-  Entry-cost estimate = hypothesis; program steps are A.
-- H4: mid-tier awardees (Celebal, Tredence, Indicium) convert to subcontract
-  faster than Accenture/Deloitte. Inference from size, untested; run as
-  scored outreach experiments.
-
-## Top-ranked RIG entry list (by score, C-adjusted)
-
-1. SAP-migration wave plays (4.6) — via whoever wins migration pods; validate fund terms.
-2. Salesforce/Databricks triangulation (4.2) — existing RIG CRM assets.
-3. Wipro practice (3.9) — newest, capacity-hungry, A-dated PR.
-4. Deloitte regulated verticals (3.8) / Accenture BG (4.0, gated teaming).
-5. Celebal APJ experiment (3.6) — cheap subcontract test.
-
-Next validation (one batch, when browser path unlocks): crawl
-databricks.com/partners/partner-directory for each target's tier +
-specializations; confirm DAIS '26 award pages; check Marketplace for existing
-vertical-agent MCP listings (competition scan).
+## Remaining validation before remote publication
+1. Direct-read pending PRs: Anthropic, Neon, Informatica, Koantek, Wipro-live URL.
+2. Partner-directory crawl (tier + specialization per target) — browser-gated.
+3. Marketplace scan for existing vertical-agent MCP listings (competition).
