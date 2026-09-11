@@ -1,0 +1,31 @@
+"""Parameterized activation worker for the jarvis_blackwell process (v7).
+
+v1 BLOCK: method calls on local objects are unrepresentable (open/write/close).
+v2/v3 superseded: multi-op linear activate() cannot fail-fast between effects
+(this grammar has no conditionals). v4 superseded: first gate-d attempt bound
+an action with a mutable sidecar checksum (TOCTOU). v5 superseded: gate-d was
+probed before an approval record existed (exit-2 = terminal for the attempt).
+v6 superseded: transaction scope bundled Handy retirement; scope reduced per
+advisory so the approved effect is config install + service restart ONLY.
+v7: config/restart-only transaction, Gate-D protocol as corrected in v6 —
+action hash computed locally, approval minted AFTER typed human approval,
+first gate-d invocation is the approved one. The script (staged + hash-bound
+in the Gate-D action file, NOT here) enforces ordering executably with set -e:
+literal-hash verification of staged bytes, temp-file + atomic rename install,
+launchctl restart, PID turnover gate (process must actually restart), health
+gate, model-advertised gate. Handy retirement is OUT OF SCOPE for v7 — it
+requires a separate later Gate-D action after the voice replacement is proven.
+The action file additionally binds sha256 hashes of the OpenJarvis source
+files whose changed behavior the restart loads (source-tree binding).
+"""
+
+import subprocess
+
+
+def run_activation_transaction(arguments):
+    return subprocess.call(arguments)
+
+
+def activate(transaction_arguments):
+    status = run_activation_transaction(transaction_arguments)
+    return (status,)

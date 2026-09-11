@@ -1,0 +1,26 @@
+{
+  "schema": "rig.d85.process-authority.v1",
+  "process_id": "jarvis_blackwell_activation_v4",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/jarvis_blackwell_activation_v4",
+  "file_hashes": {
+    "jarvis_activation_worker.py": "d0e5d6f70463ae68ba4269c8920a57f25f96107871b46b2b0181d4835e703f55",
+    "jarvis_activation_adapter.py": "6827de0e41c933fcd6b8dbe5e9b03db40edf735adca8c74d5b8f5c2a754bae1f"
+  },
+  "external_modules": [
+    {
+      "module": "subprocess",
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "allowed_calls": ["subprocess.call"]
+    }
+  ],
+  "entrypoints": [
+    {
+      "source_path": "jarvis_activation_worker.py",
+      "symbol": "activate",
+      "adapter_path": "jarvis_activation_adapter.py",
+      "adapter_operation": "execute"
+    }
+  ],
+  "classification_path": "processes/jarvis_blackwell_activation_v4.classification.json"
+}

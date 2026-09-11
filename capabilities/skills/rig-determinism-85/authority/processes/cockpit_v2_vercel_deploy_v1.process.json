@@ -1,0 +1,28 @@
+{
+  "schema": "rig.d85.process-authority.v1",
+  "process_id": "cockpit_v2_vercel_deploy_v1",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/cockpit_v2_vercel_deploy_v1",
+  "file_hashes": {
+    "cockpit_deploy_worker.py": "f616699a325d3ac29be5effc02a8ea7c0ed49bb55803e61fe7085b1eaddf0c11",
+    "cockpit_deploy_adapter.py": "68cd21f4e51eaed3ac565daad1dacc368520ef5a2e23278aaef9c94dffe60e30"
+  },
+  "external_modules": [
+    {
+      "module": "subprocess",
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "allowed_calls": [
+        "subprocess.call"
+      ]
+    }
+  ],
+  "entrypoints": [
+    {
+      "source_path": "cockpit_deploy_worker.py",
+      "symbol": "deploy",
+      "adapter_path": "cockpit_deploy_adapter.py",
+      "adapter_operation": "execute"
+    }
+  ],
+  "classification_path": "processes/cockpit_v2_vercel_deploy_v1.classification.json"
+}
