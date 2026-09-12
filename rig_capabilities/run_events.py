@@ -304,6 +304,12 @@ def _anchor_file(anchor_dir) -> Path:
     return Path(anchor_dir if anchor_dir is not None else DEFAULT_ANCHOR_DIR)
 
 
+def _anchor_name(run_id: str) -> str:
+    """run_id is caller data: '../x' must not traverse out of the anchor
+    root. The filename is a hash of the id; the raw id lives inside."""
+    return hashlib.sha256(run_id.encode()).hexdigest() + ".anchors"
+
+
 def _write_anchor(pkt: dict, anchor_dir) -> None:
     """Append the packet's digest to an OUT-OF-TREE ledger of seals. An
     attacker who can rewrite the SQLite file AND recompute the packet hash
@@ -317,19 +323,20 @@ def _write_anchor(pkt: dict, anchor_dir) -> None:
     line = json.dumps({"run_id": pkt["run_id"], "seq": pkt["seq"],
                        "packet_hash": pkt["packet_hash"], "ts": time.time()},
                       sort_keys=True)
-    with open(d / f"{pkt['run_id']}.anchors", "a") as f:
+    with open(d / _anchor_name(pkt["run_id"]), "a") as f:
         f.write(line + "\n")
 
 
 def _anchored(pkt_hash: str, run_id: str, anchor_dir) -> bool:
-    f = _anchor_file(anchor_dir) / f"{run_id}.anchors"
+    f = _anchor_file(anchor_dir) / _anchor_name(run_id)
     try:
         lines = f.read_text().splitlines()
     except OSError:
         return False
     for line in lines:
         try:
-            if json.loads(line).get("packet_hash") == pkt_hash:
+            rec = json.loads(line)
+            if rec.get("run_id") == run_id and rec.get("packet_hash") == pkt_hash:
                 return True
         except json.JSONDecodeError:
             continue
@@ -622,6 +629,25 @@ def selftest(argv=None) -> int:
         except RuntimeError:
             pass
         ok("seal empty run", lambda: seal(con, "r-never-exists"))
+
+        # advisor freeze: run_id traversal must not escape the anchor root
+        esc = os.path.join(td, "escroot")
+        econ = connect(os.path.join(td, "esc.db"))
+        erid = "../escaped-run"
+        append(econ, erid, "declare", payload=["B"])
+        epkt = seal(econ, erid, anchor_dir=esc)
+        if verify(econ, epkt, anchor_dir=esc) is not None:
+            errs.append("traversal-id honest verify failed")
+        roots = (Path(esc), Path(anchors))
+        stray = [str(p) for p in Path(td).rglob("*.anchors")
+                 if not any(r in p.parents for r in roots)]
+        if stray:
+            errs.append(f"anchor escaped its root: {stray}")
+        names = list(Path(esc).glob("*.anchors"))
+        if not names or not all(len(p.stem) == 64 for p in names):
+            errs.append("anchor filename not hash-derived")
+        if _anchored(epkt["packet_hash"], "different-run", esc):
+            errs.append("anchor matched a different run_id")
 
         # seq monotone + unique per run
         seqs = [r[0] for r in con.execute(
