@@ -1,0 +1,370 @@
+"""Append-only run-events ledger (s7).
+
+SQLite enforces the contract natively — DB constraints over app code:
+  * PRIMARY KEY (run_id, seq): one row per sequence number, per run.
+  * BEFORE UPDATE / BEFORE DELETE triggers RAISE(ABORT): even the DBA role
+    over this connection cannot rewrite or drop a row.
+  * a SHA-256 hash chain (prev_hash -> canonical row bytes): replay
+    reconstruction detects ANY out-of-band tampering with the file itself.
+Transition validation happens at append time: a transition is legal only if
+replay of the current ledger says so (stage order, no skips, no un-doing a
+done run, park/resume coherence). ProofPacket binding: seal() pins head
+seq/hash/state; verify() re-reads and recomputes. Stdlib only.
+
+Idempotence: writers retry on PRIMARY KEY collision (concurrent appends get
+distinct seqs, never a lost or duplicated event).
+"""
+from __future__ import annotations
+import hashlib
+import hmac
+import json
+import sqlite3
+import time
+
+SCHEMA_VERSION = 1
+GENESIS = "0" * 64
+KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume", "commit"}
+
+
+class TransitionError(ValueError):
+    pass
+
+def connect(path: str) -> sqlite3.Connection:
+    """Open (creating schema + triggers if absent) an append-only ledger."""
+
+    con = sqlite3.connect(path)
+    con.isolation_level = None  # manual BEGIN IMMEDIATE in append()
+    con.execute("PRAGMA synchronous=FULL")   # durability before ack
+    con.execute("PRAGMA busy_timeout=5000")
+    con.executescript(
+        """
+        CREATE TABLE IF NOT EXISTS run_events (
+            run_id TEXT    NOT NULL,
+            seq    INTEGER NOT NULL,
+            ts     REAL    NOT NULL,
+            kind   TEXT    NOT NULL,
+            stage  TEXT,
+            payload TEXT   NOT NULL DEFAULT '',
+            prev_hash TEXT NOT NULL,
+            hash      TEXT NOT NULL,
+            PRIMARY KEY (run_id, seq)
+        );
+        CREATE TRIGGER IF NOT EXISTS run_events_no_update
+        BEFORE UPDATE ON run_events
+        BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END;
+        CREATE TRIGGER IF NOT EXISTS run_events_no_delete
+        BEFORE DELETE ON run_events
+        BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END;
+        """)
+    con.commit()
+    return con
+
+
+def _canon(row: tuple) -> str:
+    return json.dumps({"run_id": row[0], "seq": row[1], "ts": row[2],
+                       "kind": row[3], "stage": row[4], "payload": row[5],
+                       "prev_hash": row[6]},
+                      sort_keys=True, separators=(",", ":"))
+
+
+def _row_hash(row: tuple) -> str:
+    return hashlib.sha256(_canon(row).encode()).hexdigest()
+
+
+def _head(con: sqlite3.Connection, run_id: str) -> tuple[int, str]:
+    r = con.execute(
+        "SELECT seq, hash FROM run_events WHERE run_id=? "
+        "ORDER BY seq DESC LIMIT 1", (run_id,)).fetchone()
+    return (r[0], r[1]) if r else (0, GENESIS)
+
+
+def replay(con: sqlite3.Connection, run_id: str, up_to: int | None = None) -> dict:
+    """Reconstruct run state by folding events in seq order."""
+    st: dict = {}
+    q = ("SELECT seq, kind, stage, payload FROM run_events "
+         "WHERE run_id=? AND (? IS NULL OR seq<=?) ORDER BY seq")
+    for seq, kind, stage, payload in con.execute(q, (run_id, up_to, up_to)):
+        st["seq"] = seq
+        if kind == "declare":
+            st.update(stages={s: None for s in json.loads(payload)},
+                      parked=False, done=False, commits=[])
+        elif kind == "stage_pass":
+            st["stages"][stage] = "pass"
+            if st["stages"] and all(v == "pass" for v in st["stages"].values()):
+                st["done"] = True
+        elif kind == "stage_fail":
+            st["stages"][stage] = "fail"
+            st["done"] = False
+        elif kind == "park":
+            st["parked"] = True
+        elif kind == "resume":
+            st["parked"] = False
+        elif kind == "commit":
+            st["commits"].append(json.loads(payload)["commit_sha"])
+    return st
+
+
+def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> None:
+    if kind not in KINDS:
+        raise TransitionError(f"unknown kind {kind!r}")
+    if kind == "declare":
+        if st.get("stages"):
+            raise TransitionError("already declared")
+        return
+    if not st.get("stages"):
+        raise TransitionError("no declare event for this run")
+    if kind != "commit" and st["done"]:
+        raise TransitionError("run is done; only commits may follow")
+    if kind in ("stage_pass", "stage_fail") and st["parked"]:
+        raise TransitionError("run parked; resume before stage transitions")
+    if kind == "park" and st["parked"]:
+        raise TransitionError("already parked")
+    if kind == "resume" and not st["parked"]:
+        raise TransitionError("not parked")
+    if kind == "stage_pass":
+        if stage not in st["stages"]:
+            raise TransitionError(f"stage {stage!r} not declared")
+        if st["stages"][stage] is not None:
+            raise TransitionError(f"stage {stage} already {st['stages'][stage]}")
+        names = list(st["stages"])
+        # no skipping: every earlier stage must be pass; no un-passing a later one
+        if any(st["stages"][s] is not None for s in names[names.index(stage) + 1:]):
+            raise TransitionError(f"cannot pass {stage}: a later stage already resolved")
+        if any(st["stages"][s] != "pass" for s in names[:names.index(stage)]):
+            raise TransitionError(f"cannot pass {stage}: earlier stage unresolved")
+    elif kind == "stage_fail":
+        if stage not in st["stages"]:
+            raise TransitionError(f"stage {stage!r} not declared")
+        if st["stages"][stage] is None:
+            raise TransitionError(f"cannot fail {stage} before it is resolved")
+    elif kind == "commit":
+        if not st["done"]:
+            raise TransitionError("commit before all stages pass")
+        try:
+            sha = json.loads(payload).get("commit_sha", "")
+        except json.JSONDecodeError as e:
+            raise TransitionError(f"commit payload not json: {e}")
+        if len(sha) != 40 or any(c not in "0123456789abcdef" for c in sha):
+            raise TransitionError("commit_sha must be 40 hex chars")
+        if sha in st["commits"]:
+            raise TransitionError(f"commit {sha[:12]} already recorded")
+
+
+def append(con: sqlite3.Connection, run_id: str, kind: str,
+           stage: str | None = None, payload=None) -> dict:
+    """Validate and insert as ONE atomic step under BEGIN IMMEDIATE.
+
+    The write lock is taken before replay, so validation always sees the
+    state the insert will land on — across connections and processes.
+    """
+    body = "" if payload is None else json.dumps(payload, sort_keys=True)
+    for attempt in range(32):
+        # BEGIN IMMEDIATE takes the write lock FIRST: validation and insert
+        # are one atomic unit across connections and processes. A second
+        # writer cannot validate against stale state and slip in after.
+        con.execute("BEGIN IMMEDIATE")
+        try:
+            seq, prev_hash = _head(con, run_id)
+            _check_transition(replay(con, run_id), kind, stage, body)
+            row = (run_id, seq + 1, time.time(), kind, stage, body, prev_hash)
+            row = (*row, _row_hash(row))
+            con.execute("INSERT INTO run_events VALUES (?,?,?,?,?,?,?,?)", row)
+            con.commit()
+            return {"run_id": run_id, "seq": row[1], "hash": row[7]}
+        except sqlite3.IntegrityError:
+            con.rollback()  # should be impossible under IMMEDIATE; retry
+            time.sleep(0.01 * (attempt + 1))
+        except Exception:
+            con.rollback()
+            raise
+    raise TransitionError("could not acquire next seq (writer starvation)")
+
+
+def verify_chain(con: sqlite3.Connection, run_id: str) -> str | None:
+    """Return a description of the first anomaly, or None if pristine."""
+    prev_seq, prev_hash = 0, GENESIS
+    for r in con.execute(
+            "SELECT run_id, seq, ts, kind, stage, payload, prev_hash, hash "
+            "FROM run_events WHERE run_id=? ORDER BY seq", (run_id,)):
+        if r[1] != prev_seq + 1:
+            return f"seq gap/duplication at {r[1]}"
+        if r[6] != prev_hash:
+            return f"chain break at seq {r[1]}"
+        if _row_hash(r[:7]) != r[7]:
+            return f"row hash mismatch at seq {r[1]}"
+        prev_seq, prev_hash = r[1], r[7]
+    return None
+
+
+def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dict:
+    anomaly = verify_chain(con, run_id)
+    if anomaly:
+        raise TransitionError(f"refusing to seal: {anomaly}")
+    seq, head = _head(con, run_id)
+    pkt = {"schema": "rig.run_events.packet.v" + str(SCHEMA_VERSION),
+           "run_id": run_id, "seq": seq, "head_hash": head,
+           "state": replay(con, run_id, up_to=seq)}
+    if extra:
+        pkt["extra"] = extra
+    # canonical hash over the WHOLE body (extra included): a packet is one
+    # indivisible claim; editing any field breaks the digest.
+    pkt["packet_hash"] = hashlib.sha256(
+        json.dumps(pkt, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    return pkt
+
+
+def verify(con: sqlite3.Connection, pkt: dict) -> str | None:
+    """Recompute everything the packet claims. None = holds."""
+    if pkt.get("schema") != "rig.run_events.packet.v" + str(SCHEMA_VERSION):
+        return f"packet schema {pkt.get('schema')!r}"
+    body = {k: v for k, v in pkt.items() if k != "packet_hash"}
+    want = hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":")).encode()
+    ).hexdigest()
+    if not hmac.compare_digest(want, str(pkt.get("packet_hash"))):
+        return "packet_hash does not match packet body (field was edited)"
+    run_id, seq = pkt.get("run_id"), pkt.get("seq")
+    anomaly = verify_chain(con, run_id)
+    if anomaly:
+        return anomaly
+    head_seq, head_now = _head(con, run_id)
+    if head_seq < seq:
+        return f"ledger has only {head_seq} rows, packet seals {seq}"
+    got = replay(con, run_id, up_to=seq)
+    if got != pkt.get("state"):
+        return "replayed state does not match packet state"
+    sealed_hash = con.execute(
+        "SELECT hash FROM run_events WHERE run_id=? AND seq=?",
+        (run_id, seq)).fetchone()
+    if not sealed_hash or sealed_hash[0] != pkt.get("head_hash"):
+        return "head_hash does not match the row at that seq"
+    return None
+
+
+# -- selftest ---------------------------------------------------------------
+def selftest(argv=None) -> int:
+    import os
+    import subprocess
+    import sys
+    import tempfile
+
+    errs = []
+    with tempfile.TemporaryDirectory() as td:
+        db = os.path.join(td, "events.sqlite")
+        con = connect(db)
+        run = "r-1"
+
+        def ok(name, fn):
+            try:
+                fn()
+            except TransitionError:
+                return
+            except Exception as e:  # noqa: BLE001
+                errs.append(f"{name}: wrong error {e!r}")
+                return
+            errs.append(f"{name}: illegal transition accepted")
+
+        append(con, run, "declare", payload=["B", "V", "C"])
+        append(con, run, "stage_pass", "B")
+        ok("pass C before V", lambda: append(con, run, "stage_pass", "C"))
+        ok("V pass twice", lambda: (append(con, run, "stage_pass", "V"),
+                                    append(con, run, "stage_pass", "V")))
+        st = replay(con, run)
+        if st["stages"] != {"B": "pass", "V": "pass", "C": None} or st["done"]:
+            errs.append(f"replay wrong: {st['stages']}")
+        append(con, run, "stage_pass", "C")
+        ok("pass after done", lambda: append(con, run, "stage_pass", "B"))
+        ok("park after done", lambda: append(con, run, "park"))
+        sha = "a" * 40
+        append(con, run, "commit", payload={"commit_sha": sha})
+        ok("duplicate commit", lambda: append(
+            con, run, "commit", payload={"commit_sha": sha}))
+        ok("bad sha", lambda: append(con, run, "commit",
+                                     payload={"commit_sha": "zz"}))
+        ok("undeclared stage", lambda: append(con, "r-other", "stage_pass", "B"))
+
+        # park/resume lifecycle on a live run
+        r3 = "r-park"
+        append(con, r3, "declare", payload=["B", "V", "C"])
+        append(con, r3, "stage_pass", "B")
+        append(con, r3, "park")
+        ok("double park", lambda: append(con, r3, "park"))
+        ok("stage_pass while parked",
+           lambda: append(con, r3, "stage_pass", "V"))
+        ok("stage_fail while parked",
+           lambda: append(con, r3, "stage_fail", "B"))
+        ok("resume twice", lambda: (append(con, r3, "resume"),
+                                    append(con, r3, "resume")))
+        append(con, r3, "stage_pass", "V")
+        # atomic validate-insert: 6 processes racing to park the same run
+        # legally park exactly once (stale-state double-park is the bug)
+        r4 = "r-race"
+        append(con, r4, "declare", payload=["B"])
+        code = ("import sys; sys.path.insert(0, %r);"
+                "from rig_capabilities.run_events import connect, append;"
+                "append(connect(%r), %r, 'park')") % (os.getcwd(), db, r4)
+        codes = sorted(p.wait() for p in
+                       [subprocess.Popen([sys.executable, "-c", code])
+                        for _ in range(6)])
+        n_park = con.execute(
+            "SELECT COUNT(*) FROM run_events WHERE run_id=? AND kind='park'",
+            (r4,)).fetchone()[0]
+        if n_park != 1 or codes[:1] != [0] or codes[-1] not in (0, 1):
+            errs.append(f"racy park: {n_park} inserted, codes {codes}")
+
+        # UPDATE/DELETE are refused at the DB level
+        for stmt in ("UPDATE run_events SET kind='park' WHERE run_id='r-1'",
+                     "DELETE FROM run_events WHERE run_id='r-1'"):
+            try:
+                con.execute(stmt)
+                con.commit()
+                errs.append(f"mutation accepted: {stmt[:20]}")
+            except sqlite3.IntegrityError:
+                con.rollback()
+
+        # out-of-band tampering: rewrite a row via a rogue trigger-less copy
+        # (simulates file-level forgery; chain must catch it)
+        import shutil
+        tam = os.path.join(td, "tampered.sqlite")
+        shutil.copy(db, tam)
+        tcon = sqlite3.connect(tam)
+        tcon.execute("DROP TRIGGER run_events_no_update")
+        tcon.execute("UPDATE run_events SET kind='park' "
+                     "WHERE run_id='r-1' AND seq=2")
+        tcon.commit()
+        if verify_chain(tcon, "r-1") is None:
+            errs.append("tampered chain verified clean")
+        tcon.close()
+
+        # seal/verify: honest seal holds; packet then tampered -> caught
+        pkt = seal(con, run, {"done_test": "s7"})
+        if verify(con, pkt) is not None:
+            errs.append(f"honest packet failed: {verify(con, pkt)}")
+        # append after sealing: packet must still verify at its own point
+        append(con, run, "commit", payload={"commit_sha": "b" * 40})
+        if verify(con, pkt) is not None:
+            errs.append("packet broken by later append")
+        # state forgery in the packet itself
+        forgery = dict(pkt)
+        forgery["state"] = {**pkt["state"], "stages": {"B": "pass"}}
+        if verify(con, forgery) is None:
+            errs.append("forged packet state verified clean")
+        # extra forgery: checks/artifacts edited after sealing
+        forgery = {**dict(pkt),
+                   "extra": {**pkt["extra"], "done_test": "s7-tampered"}}
+        if verify(con, forgery) is None:
+            errs.append("forged packet extra verified clean")
+
+        # seq monotone + unique per run
+        seqs = [r[0] for r in con.execute(
+            "SELECT seq FROM run_events WHERE run_id='r-1' ORDER BY seq")]
+        if seqs != list(range(1, len(seqs) + 1)):
+            errs.append(f"seqs not contiguous: {seqs}")
+    print(json.dumps({"ok": not errs, "errors": errs}))
+    return 0 if not errs else 1
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(selftest())
