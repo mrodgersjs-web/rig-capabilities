@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import fnmatch
 import hashlib
+import hmac
 import json
 import os
 import re
@@ -1159,6 +1160,43 @@ def build_verifier_prompt(run: dict, spec: dict) -> str:
     )
 
 
+def _candidate_binding(run: dict) -> tuple[str, str]:
+    """(parent_head, candidate_tree) that a verdict must cryptographically
+    bind: HEAD now, plus a git tree built in a THROWAWAY index seeded from
+    HEAD and overlaid with exactly run.files_written. Other dirty files
+    (incidental ledgers/db) stay out of the tree; commit_gate requires
+    sha^ == parent_head and sha^{tree} == candidate_tree, so a sibling
+    commit with an extra change anywhere fails the equality."""
+    cwd = str(run.get("cwd") or "")
+    rels = []
+    for fp in run.get("files_written") or []:
+        try:
+            rels.append(str(Path(fp).resolve().relative_to(
+                Path(cwd).resolve())))
+        except (OSError, ValueError):
+            continue
+    ph = tree = ""
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            env = {**os.environ, "GIT_INDEX_FILE": os.path.join(td, "idx"),
+                   "GIT_OPTIONAL_LOCKS": "0"}
+
+            def g(*a):
+                return subprocess.run(["git", "-C", cwd, *a],
+                                      capture_output=True, text=True,
+                                      timeout=20, env=env)
+            h = g("rev-parse", "HEAD")
+            ph = h.stdout.strip() if h.returncode == 0 else ""
+            if rels and g("read-tree", "HEAD").returncode == 0 and \
+                    g("add", "-A", "--", *rels).returncode == 0:
+                w = g("write-tree")
+                tree = (w.stdout.splitlines() or [""])[0].strip() \
+                    if w.returncode == 0 else ""
+    except (OSError, subprocess.TimeoutExpired):
+        return "", ""
+    return ph, tree
+
+
 def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, timeout: int = 900) -> dict:
     """Dispatch a headless verifier of another family, parse its VERDICT, record it on the run."""
     family = family.lower()
@@ -1170,6 +1208,10 @@ def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, 
     prompt_path = d / f"verify-{family}-{ts}.prompt.md"
     out_path = d / f"verify-{family}-{ts}.md"
     _atomic_write(prompt_path, prompt)
+    # TOCTOU: capture what the verifier is ABOUT to see; the stamp may
+    # only ever bind this exact candidate, never whatever the tree became
+    # during a multi-minute run (verifier writes or builder drift).
+    _binding0 = _candidate_binding(run)
     t0 = time.time()
     override = cmd_override or os.environ.get("RIG_LOOP_VERIFIER_CMD")
     try:
@@ -1198,6 +1240,52 @@ def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, 
         gaps = [ln.strip().lstrip("-* ").strip() for ln in gm.group(1).splitlines() if ln.strip()][:12]
     rec = {"family": family, "verdict": verdict, "exit": exit_code, "at": utc_now(), "secs": round(time.time() - t0, 1),
            "output": str(out_path), "prompt": str(prompt_path), "gaps": gaps, "iteration": run["iteration"]}
+    # Family provenance, not family self-assertion: the DISPATCH stamps
+    # what it actually ran (argv0/override), the real builder harness, the
+    # digests of prompt+transcript, AND the candidate the verifier stood
+    # on — PRE-dispatch binding, re-checked post-dispatch: if the tree
+    # moved at all, the record is stamped NOTHING (binding_drift) and
+    # commit_gate refuses it. commit_gate additionally requires
+    # sha^ == parent_head and sha^{tree} == candidate_tree, so a verdict
+    # replays to no other commit: same files + extra change anywhere is
+    # a tree mismatch.
+    # G5 DEFERRAL, named: the HMAC proves the record was not edited after
+    # dispatch and pins the requested family LABEL; it cannot cryptogra-
+    # phically prove which model answered (a key holder could sign a lie —
+    # same residual as gate-d approvals).
+    # No key / no binding / drift => no stamp => downstream refusal
+    # (fail closed, never a fake sig).
+    key = (os.environ.get("RIG_CAPABILITIES_SIGNING_KEY") or "").encode() \
+        or None
+    if key is None:
+        try:
+            kp = Path(run["cwd"]) / ".signing.key"
+            key = kp.read_bytes().strip() or None if kp.exists() else None
+        except OSError:
+            key = None
+    if key and _binding0[1] and _candidate_binding(run) == _binding0:
+        payload = {
+            "family": family, "run_id": run["run_id"], "verdict": verdict,
+            "exit": exit_code,
+            "builder_family": (run.get("harness") or "").lower(),
+            "argv0": "override" if cmd_override else VERIFIER_FAMILIES.get(
+                family, ["unknown"])[0],
+            "sha256_prompt": hashlib.sha256(prompt_path.read_bytes()).hexdigest(),
+            "sha256_output": hashlib.sha256(out_path.read_bytes()).hexdigest(),
+            "at": rec["at"],
+            "parent_head": _binding0[0], "candidate_tree": _binding0[1],
+        }
+        rec["attest"] = {
+            "payload": payload,
+            "sig": hmac.new(key, json.dumps(payload, sort_keys=True)
+                            .encode(), hashlib.sha256).hexdigest(),
+        }
+    elif key:
+        rec["binding_drift"] = {
+            "pre": list(_binding0), "post": list(_candidate_binding(run)),
+            "why": "candidate moved during dispatch (or was uncomputable) "
+                   "— the verdict speaks for a tree this record cannot "
+                   "bind; left unstamped, commit_gate will refuse"}
     run.setdefault("verifications", []).append(rec)
     log_event(run, "verify", family=family, verdict=verdict, exit=exit_code)
     save_run(run)

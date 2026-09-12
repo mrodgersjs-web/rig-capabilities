@@ -23,6 +23,9 @@ import sys
 import tempfile
 from pathlib import Path
 
+if __package__ in (None, ""):  # direct `python3 rig_capabilities/build_index.py`
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 
 class IndexError_(ValueError):
     pass
@@ -39,13 +42,23 @@ def current_pack_sha(repo: Path) -> str:
 
 
 def open_live(repo: Path, path: str) -> "BuildIndex":
-    """Bind an index to the LIVE authority: cells from the pack generator,
-    pack sha from the golden manifest. There is no unbound construction path
-    for production use — the constructor stays raw for tests only."""
-    from rig_capabilities.criteria_pack import build_rows
-    sha = current_pack_sha(repo)
-    cells = {r["cell_id"] for r in build_rows()}
-    return BuildIndex(path, cells, sha, repo)
+    """Bind an index to a SINGLE authority: the verified golden bytes.
+    `criteria_pack.verify` checks the golden against its manifest (hash,
+    filename, rows), the manifest's prov digest, every recorded input
+    hash, AND byte-equality with freshly regenerated content — so a
+    generator that drifted from the golden FAILS CLOSED here instead of
+    rebinding the handle to new cells under the old sha (the s10
+    dual-authority defect). Cells and pack sha come from the same
+    verified bytes. No unbound construction path exists for production
+    use — the constructor stays raw for tests only."""
+    from rig_capabilities import criteria_pack
+    golden = repo / "runs/agentic-stack-buildout/packs/criteria-v1.jsonl"
+    errs, info = criteria_pack.verify(golden)
+    if errs:
+        raise IndexError_(f"golden pack verification failed: {errs[0]}")
+    cells = {json.loads(ln)["cell_id"]
+             for ln in golden.read_bytes().decode().splitlines() if ln.strip()}
+    return BuildIndex(path, cells, info["sha256"], repo)
 
 class BuildIndex:
     def __init__(self, path: str, valid_cells: set[str], pack_sha: str,
@@ -337,6 +350,25 @@ def selftest(argv=None) -> int:
                 errs.append(f"cross-gen rejection misnamed: {e}")
         if idx2.migrate(sha_a) != 1:
             errs.append("migrate after promotion rewrote wrong count")
+    # open_live single authority: cells come from the VERIFIED GOLDEN
+    # BYTES, never the live generator. Healthy open serves 588 golden
+    # cells; a generator drifted against the golden must fail closed.
+    from rig_capabilities import criteria_pack as _cp
+    real_repo = Path(__file__).resolve().parent.parent
+    with tempfile.TemporaryDirectory() as td:
+        ix = open_live(real_repo, os.path.join(td, "live.jsonl"))
+        if len(ix.valid_cells) != 588 or ix.pack_sha != current_pack_sha(real_repo):
+            errs.append("open_live not bound to golden 588/manifest sha")
+        orig = _cp.pack_bytes
+        _cp.pack_bytes = lambda: b"drift\n"
+        try:
+            open_live(real_repo, os.path.join(td, "live2.jsonl"))
+            errs.append("open_live accepted drifted source authority")
+        except IndexError_ as e:
+            if "regenerated" not in str(e):
+                errs.append(f"drift refusal misnamed: {e}")
+        finally:
+            _cp.pack_bytes = orig
     print(json.dumps({"ok": not errs, "errors": errs,
                       "cells_valid": len(valid)}))
     return 0 if not errs else 1
