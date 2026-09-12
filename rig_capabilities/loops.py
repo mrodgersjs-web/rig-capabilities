@@ -28,6 +28,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 from datetime import datetime, timezone
@@ -260,6 +261,13 @@ def _new_run_id(loop_id: str) -> str:
     return f"{loop_id}-{ts}-{salt}"
 
 
+def _bump_status(run: dict) -> None:
+    """Every stage_status mutation stamps a revision; the save merge lets the
+    higher revision own the field wholesale — deletions (closing loop,
+    proof_stale reopen) are intent, not gaps for stale disk to refill."""
+    run["status_rev"] = int(run.get("status_rev") or 0) + 1
+
+
 def _merge_ledgers(disk: dict, run: dict) -> None:
     """Append-only ledgers merge under the save lock: entries written by other
     processes between this run's load and its save are never lost (s11 lost
@@ -278,13 +286,28 @@ def _merge_ledgers(disk: dict, run: dict) -> None:
                 else f"\0{x!r}")
     for k in ("planted", "children", "verifications"):
         if k in disk or k in run:
-            disk_v, run_v = list(disk.get(k) or []), list(run.get(k) or [])
+            # A reset (closing-loop iteration bump stamps planted_epoch) is an
+            # intent to DROP: stale DISK entries recorded before the epoch must
+            # not resurrect through the merge. The filter applies to disk only —
+            # a reset clears this process's own ledger (run["planted"]=[]) before
+            # re-appending, so every live run_v entry is already post-reset; the
+            # second-precision clock makes `at > ep` false for a re-plant in the
+            # same second, and filtering run_v would drop it (breaks proof-loop).
+            ep = str(run.get(f"{k}_epoch") or "")
+            def keep(x, ep=ep):
+                at = str(x.get("at") or "") if isinstance(x, dict) else ""
+                return not ep or at > ep
+            disk_v = [x for x in (disk.get(k) or []) if keep(x)]
+            run_v = list(run.get(k) or [])
             seen = {dkey(x) for x in run_v}
             run[k] = [x for x in disk_v if dkey(x) not in seen] + run_v
     if "stage_status" in disk or "stage_status" in run:
-        m = dict(disk.get("stage_status") or {})
-        m.update(run.get("stage_status") or {})
-        run["stage_status"] = m
+        if int(run.get("status_rev") or 0) >= int(disk.get("status_rev") or 0):
+            run["stage_status"] = dict(run.get("stage_status") or {})
+        else:
+            m = dict(run.get("stage_status") or {})
+            m.update(disk.get("stage_status") or {})
+            run["stage_status"] = m
     run["events"] = max(int(run.get("events") or 0), int(disk.get("events") or 0))
 
 
@@ -640,6 +663,46 @@ def _gate_sealed(run, spec, st, g):
     return proof_binding_ok(run)
 
 
+def _gate_d85_certified(run, spec, st, g):
+    root = (Path(run["cwd"]) / g["root"]).resolve()
+    build = (root / g["build"]).resolve()
+    certificate = (root / g["certificate"]).resolve()
+    if not build.is_relative_to(root) or not certificate.is_relative_to(root):
+        return False, "build and certificate must remain inside the declared root"
+    build_hash, certificate_hash = sha256_file(build), sha256_file(certificate)
+    cli = REPO / "capabilities/skills/rig-determinism-85/bin/rig-determinism-85"
+    result = subprocess.run(
+        [sys.executable, str(cli), "verify-cert", str(build), str(certificate), "--root", str(root)],
+        capture_output=True, text=True, timeout=120,
+    )
+    if result.returncode != 0:
+        return False, result.stdout + result.stderr
+    verdict = json.loads(result.stdout)
+    if verdict.get("verdict") != "CERTIFICATION_VERIFIED":
+        return False, "certificate verifier did not return CERTIFICATION_VERIFIED"
+    if build_hash != sha256_file(build) or certificate_hash != sha256_file(certificate):
+        return False, "build or certificate changed during verification"
+    return True, json.dumps({"verification": verdict, "build": str(build),
+                             "build_sha256": build_hash, "certificate": str(certificate),
+                             "certificate_sha256": certificate_hash}, sort_keys=True)
+
+
+def _require_build_certifications(run, spec):
+    evidence = []
+    for stage in spec["stages"]:
+        for gate in stage.get("gate") or []:
+            if gate["type"] != "d85_certified":
+                continue
+            try:
+                ok, detail = _gate_d85_certified(run, spec, stage, gate)
+            except Exception as exc:
+                ok, detail = False, str(exc)
+            if not ok:
+                raise SpecError(f"D85 build certification blocks completion: {detail}")
+            evidence.append(detail)
+    return evidence
+
+
 def _gate_gate_d(run, spec, st, g):
     gd = run["gate_d"]
     return bool(gd.get("approved")), ("Gate-D approved by " + str(gd.get("by")) if gd.get("approved") else "Gate-D not approved — outward action needs Mike's typed APPROVE <run_id>")
@@ -892,6 +955,7 @@ GATE_TYPES = {
     "confidence_declared": _gate_confidence_declared,
     "questions_quality": _gate_questions_quality, "gate_d_threshold": _gate_gate_d_threshold,
     "questions_min": _gate_questions_min, "corpus_scraped": _gate_corpus_scraped,
+    "d85_certified": _gate_d85_certified,
 }
 
 
@@ -904,8 +968,9 @@ def evaluate_gate(run: dict, spec: dict, st: dict) -> tuple[bool, list[dict]]:
             ok, detail = fn(run, spec, st, g)
         except Exception as exc:  # noqa: BLE001 — fail closed
             ok, detail = False, f"gate error: {exc}"
-        results.append({"type": g["type"], "ok": bool(ok), "detail": detail, "tier": g.get("failure_tier", "halt")})
-        if not ok and g.get("failure_tier", "halt") != "degrade":
+        tier = "halt" if g["type"] == "d85_certified" else g.get("failure_tier", "halt")
+        results.append({"type": g["type"], "ok": bool(ok), "detail": detail, "tier": tier})
+        if not ok and tier != "degrade":
             ok_all = False
     return ok_all, results
 
@@ -944,11 +1009,13 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
             bound, why = proof_binding_ok(run)
             if not bound and not force:
                 run["stage_status"].pop("P", None)
+                _bump_status(run)
                 log_event(run, "proof_stale", stage=sid, detail=why)
                 save_run(run)
                 raise SpecError(f"cannot mark {sid}: {why} — P reopened; re-seal then `rig-loop stage P pass`")
         gate_ok, gate_results = evaluate_gate(run, spec, st)
-        if not gate_ok and not force:
+        d85_red = any(r["type"] == "d85_certified" and not r["ok"] for r in gate_results)
+        if not gate_ok and (not force or d85_red):
             red = [r for r in gate_results if not r["ok"] and r["tier"] != "degrade"]
             log_event(run, "gate_red", stage=sid, results=gate_results)
             save_run(run)
@@ -964,7 +1031,10 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
             added = register_done_tests(run, spec, st)
             if added:
                 note = (note + " " if note else "") + f"[done-tests registered: {len(added)}]"
+        if sid == spec["stages"][-1]["id"]:
+            _require_build_certifications(run, spec)
     run["stage_status"][sid] = status
+    _bump_status(run)
     if score is not None:
         run["stage_score"][sid] = int(score)
     if note:
@@ -1004,9 +1074,11 @@ def _apply_closing_loop(run: dict, spec: dict, failed: str) -> None:
         ids = [s["id"] for s in spec["stages"]]
         for sid in ids[ids.index(to):]:
             run["stage_status"].pop(sid, None)
+        _bump_status(run)
         # evidence is per iteration: a new iteration must re-prove its planted failures and
         # re-seal; registered checks stay but their last results are discarded
         run["planted"] = []
+        run["planted_epoch"] = utc_now()
         run["proof"] = None
         for c in run["checks"]:
             c["last"] = None
@@ -1014,6 +1086,7 @@ def _apply_closing_loop(run: dict, spec: dict, failed: str) -> None:
         log_event(run, "closing_loop", from_stage=failed, to=to, iteration=run["iteration"])
     else:
         run["stage_status"].pop(failed, None)
+        _bump_status(run)
 
 
 # --------------------------------------------------------------------------- checks / plant / gate-d / seal
@@ -1069,6 +1142,7 @@ def gate_d_approve(run: dict, phrase: str, by: str = "mike") -> dict:
 def seal(run: dict, spec: dict, signer: str = "rig-loop") -> dict:
     """ProofPacket: hash-bound record of the run. Requires every stage before P (or all
     stages if no P) to be pass; refuses on red checks."""
+    build_certifications = _require_build_certifications(run, spec)
     ids = [s["id"] for s in spec["stages"]]
     p_idx = ids.index("P") if "P" in ids else len(ids)
     unmet = [sid for sid in ids[:p_idx] if run["stage_status"].get(sid) != "pass"]
@@ -1097,6 +1171,7 @@ def seal(run: dict, spec: dict, signer: str = "rig-loop") -> dict:
         "planted_failures": run["planted"], "files_written": run["files_written"],
         "scope_drift": run["drift"], "gate_d": run["gate_d"], "events": run["events"],
         "history": run["history"], "verdict": "GO",
+        "build_certifications": build_certifications,
         "verifications": run.get("verifications") or [], "children": slice_list(run),
         "qr_passes": run.get("qr_passes") or [], "predicted": run.get("predicted"),
         "calibration": record_calibration(run), "tool_calls": run.get("tool_calls", 0),

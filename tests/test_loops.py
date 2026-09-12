@@ -44,6 +44,78 @@ class TempState(unittest.TestCase):
         self.tmp.cleanup()
 
 
+class BuildCertificationGateTests(TempState):
+    def build_run(self):
+        run = L.activate('iqrsqpi-v11', cwd=str(self.cwd), harness='ut')
+        spec = dict(L.load_spec('iqrsqpi-v11'))
+        spec['stages'] = [{'id': 'F', 'gate': [{'type': 'd85_certified', 'root': '.',
+                                              'build': 'build.json', 'certificate': 'certificate.json',
+                                              'failure_tier': 'degrade'}]}]
+        return run, spec
+
+    def test_build_failure_cannot_force_or_degrade_to_pass(self):
+        run, spec = self.build_run()
+        with patch.dict(L.GATE_TYPES, {'d85_certified': lambda *args: (False, 'D85 ratio failure')}):
+            with self.assertRaisesRegex(L.SpecError, 'refusing pass'):
+                L.mark_stage(run, spec, 'F', 'pass', force=True)
+        self.assertNotEqual(run['stage_status'].get('F'), 'pass')
+
+    def test_final_stage_rechecks_stale_build_even_with_force(self):
+        run, spec = self.build_run()
+        with patch.dict(L.GATE_TYPES, {'d85_certified': lambda *args: (True, 'initial pass')}), \
+             patch.object(L, '_gate_d85_certified', return_value=(False, 'source changed')):
+            with self.assertRaisesRegex(L.SpecError, 'blocks completion'):
+                L.mark_stage(run, spec, 'F', 'pass', force=True)
+
+    def test_seal_rechecks_build_and_records_passing_evidence(self):
+        run, spec = self.build_run()
+        run['stage_status']['F'] = 'pass'
+        with patch.object(L, '_gate_d85_certified', return_value=(False, 'stale certificate')):
+            with self.assertRaisesRegex(L.SpecError, 'blocks completion'):
+                L.seal(run, spec)
+        with patch.object(L, '_gate_d85_certified', return_value=(True, 'verified build certificate')):
+            packet = L.seal(run, spec)
+        self.assertEqual(packet['verdict'], 'GO')
+        self.assertEqual(packet['build_certifications'], ['verified build certificate'])
+
+    def test_missing_declared_build_certificate_blocks(self):
+        run, spec = self.build_run()
+        with self.assertRaises(L.SpecError):
+            L.mark_stage(run, spec, 'F', 'pass')
+
+    def test_certificate_change_during_verification_blocks(self):
+        run, spec = self.build_run()
+        (self.cwd / 'build.json').write_text('{}')
+        certificate = self.cwd / 'certificate.json'
+        certificate.write_text('{}')
+        def change_during_verify(*args, **kwargs):
+            certificate.write_text('{"changed": true}')
+            return subprocess.CompletedProcess(args, 0, '{"verdict": "CERTIFICATION_VERIFIED"}', '')
+        with patch.object(L.subprocess, 'run', side_effect=change_during_verify):
+            ok, detail = L._gate_d85_certified(run, spec, spec['stages'][0], spec['stages'][0]['gate'][0])
+        self.assertFalse(ok)
+        self.assertEqual(detail, 'build or certificate changed during verification')
+
+    def test_real_declared_certificate_passes_and_tampering_blocks(self):
+        run, spec = self.build_run()
+        source = REPO_ROOT / 'capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic'
+        (self.cwd / 'build.json').write_bytes((source / 'build.json').read_bytes())
+        (self.cwd / 'diagram.json').write_bytes((source / 'root/diagram.json').read_bytes())
+        cli = REPO_ROOT / 'capabilities/skills/rig-determinism-85/bin/rig-determinism-85'
+        result = subprocess.run([sys.executable, str(cli), 'checklist', str(self.cwd / 'build.json'),
+                                 '--root', str(self.cwd), '--process-id', 'julie_synthetic'],
+                                capture_output=True, text=True, timeout=30)
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        certificate = self.cwd / 'certificate.json'
+        certificate.write_text(result.stdout)
+        gate = spec['stages'][0]['gate'][0]
+        self.assertTrue(L._gate_d85_certified(run, spec, spec['stages'][0], gate)[0])
+        packet = json.loads(certificate.read_text())
+        packet['checks'] = []
+        certificate.write_text(json.dumps(packet))
+        self.assertFalse(L._gate_d85_certified(run, spec, spec['stages'][0], gate)[0])
+
+
 class SpecTests(TempState):
     def test_all_canonical_specs_load_and_validate(self):
         for sid in CANONICAL:
