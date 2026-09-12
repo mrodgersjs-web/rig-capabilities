@@ -116,6 +116,144 @@ class BuildCertificationGateTests(TempState):
         self.assertFalse(L._gate_d85_certified(run, spec, spec['stages'][0], gate)[0])
 
 
+class BuildDiagnosisGateTests(TempState):
+    """A13/A53/A54: the build_diagnosis gate is halt-tier and non-forceable,
+    re-checked at the final stage and at seal, while fail/park and reads stay
+    usable when it is red."""
+
+    GOOD_DIAG = {
+        'goal': 'ship the criteria pack',
+        'cell_id': 'L1-D1-A1-I1',
+        'done_test': ['python3 rig_capabilities/criteria_pack.py generate --verify '
+                      'runs/agentic-stack-buildout/packs/criteria-v1.jsonl'],
+        'out_of_scope': ['push'],
+        'effort_budget': {'cpu_minutes': 30, 'usd': 0.01, 'wallclock_seconds': 900},
+        'evidence_refs': ['receipt:s4-manifest-gate-fires'],
+    }
+
+    def diag_run(self, seed_index=True):
+        run = L.activate('iqrsqpi-v11', cwd=str(self.cwd), harness='ut')
+        spec = dict(L.load_spec('iqrsqpi-v11'))
+        spec['stages'] = [{'id': 'F', 'gate': [{'type': 'build_diagnosis',
+                                                'diagnosis': 'diagnosis.json',
+                                                'index': 'build-index.jsonl'}]}]
+        (self.cwd / 'diagnosis.json').write_text(json.dumps(self.GOOD_DIAG))
+        if seed_index:
+            from rig_capabilities import build_index
+            idx = build_index.open_live(REPO_ROOT, str(self.cwd / 'build-index.jsonl'))
+            idx.insert('L1-D1-A1-I1', 'builds/l1-d1-a1-i1.json')
+        return run, spec
+
+    def gate(self, run, spec):
+        return L._gate_build_diagnosis(run, spec, spec['stages'][0],
+                                       spec['stages'][0]['gate'][0])
+
+    def test_real_diagnosis_and_index_row_pass(self):
+        run, spec = self.diag_run()
+        ok, detail = self.gate(run, spec)
+        self.assertTrue(ok, detail)
+        self.assertIn('L1-D1-A1-I1', detail)
+
+    def test_missing_diagnosis_packet_blocks(self):
+        run, spec = self.diag_run()
+        (self.cwd / 'diagnosis.json').unlink()
+        ok, detail = self.gate(run, spec)
+        self.assertFalse(ok)
+        self.assertIn('unreadable', detail)
+
+    def test_diagnosis_without_executable_acceptance_blocks(self):
+        run, spec = self.diag_run()
+        bad = dict(self.GOOD_DIAG)
+        del bad['done_test']
+        (self.cwd / 'diagnosis.json').write_text(json.dumps(bad))
+        ok, detail = self.gate(run, spec)
+        self.assertFalse(ok)
+        self.assertIn('diagnosis refused', detail)
+
+    def test_diagnosis_without_provenance_refs_blocks(self):
+        run, spec = self.diag_run()
+        bad = dict(self.GOOD_DIAG)
+        bad['evidence_refs'] = []
+        (self.cwd / 'diagnosis.json').write_text(json.dumps(bad))
+        ok, detail = self.gate(run, spec)
+        self.assertFalse(ok)
+        self.assertIn('diagnosis refused', detail)
+
+    def test_missing_index_row_blocks(self):
+        run, spec = self.diag_run(seed_index=False)
+        ok, detail = self.gate(run, spec)
+        self.assertFalse(ok)
+        self.assertIn('no row', detail)
+
+    def test_row_bound_to_other_pack_blocks(self):
+        run, spec = self.diag_run()
+        index = self.cwd / 'build-index.jsonl'
+        lines = []
+        for ln in index.read_text().splitlines():
+            rec = json.loads(ln)
+            if 'cell_id' in rec:
+                rec['pack_sha'] = '0' * 64
+            lines.append(json.dumps(rec, sort_keys=True))
+        index.write_text('\n'.join(lines) + '\n')
+        ok, detail = self.gate(run, spec)
+        self.assertFalse(ok)  # rejected either as stale row or corrupt index
+
+    def test_red_diagnosis_cannot_be_forced_past_stage_pass(self):
+        run, spec = self.diag_run()
+        with patch.dict(L.GATE_TYPES, {'build_diagnosis': lambda *a: (False, 'stale pack')}):
+            with self.assertRaisesRegex(L.SpecError, 'refusing pass'):
+                L.mark_stage(run, spec, 'F', 'pass', force=True)
+        self.assertNotEqual(run['stage_status'].get('F'), 'pass')
+
+    def test_final_stage_rechecks_diagnosis_even_with_force(self):
+        run, spec = self.diag_run()
+        with patch.dict(L.GATE_TYPES, {'build_diagnosis': lambda *a: (True, 'initial pass')}), \
+             patch.object(L, '_gate_build_diagnosis', return_value=(False, 'diagnosis stale')):
+            with self.assertRaisesRegex(L.SpecError, 'blocks completion'):
+                L.mark_stage(run, spec, 'F', 'pass', force=True)
+
+    def test_seal_refuses_red_diagnosis_and_binds_green_evidence(self):
+        run, spec = self.diag_run()
+        run['stage_status']['F'] = 'pass'
+        with patch.object(L, '_gate_build_diagnosis', return_value=(False, 'diagnosis stale')):
+            with self.assertRaisesRegex(L.SpecError, 'blocks completion'):
+                L.seal(run, spec)
+        with patch.object(L, '_gate_build_diagnosis', return_value=(True, 'diagnosis bound')):
+            packet = L.seal(run, spec)
+        self.assertIn('diagnosis bound', packet['build_certifications'])
+
+    def test_park_and_reads_stay_usable_while_diagnosis_is_red(self):
+        run, spec = self.diag_run()
+        with patch.dict(L.GATE_TYPES, {'build_diagnosis': lambda *a: (False, 'stale pack')}):
+            L.mark_stage(run, spec, 'F', 'park', note='diagnosis red — parked for repair')
+        reloaded = L.load_run(run['run_id'])
+        self.assertEqual(reloaded['stage_status']['F'], 'park')
+
+
+class GateDActionBindingTests(TempState):
+    """A50 (loops side): an APPROVE authorizes exactly the action it was
+    issued against; a later action cannot replay the earlier approval."""
+
+    def _run(self):
+        return L.activate('iqrsqpi-v11', cwd=str(self.cwd), harness='ut')
+
+    def test_approval_does_not_replay_onto_a_new_action(self):
+        run = self._run()
+        L.gate_d_request(run, 'publish post #1 to LinkedIn')
+        L.gate_d_approve(run, f"APPROVE {run['run_id']}")
+        self.assertTrue(run['gate_d']['approved'])
+        L.gate_d_request(run, 'deploy the landing page')
+        self.assertFalse(run['gate_d']['approved'])
+        L.gate_d_approve(run, f"APPROVE {run['run_id']}")
+        self.assertTrue(run['gate_d']['approved'])
+
+    def test_identical_re_request_keeps_its_approval(self):
+        run = self._run()
+        L.gate_d_request(run, 'publish post #1')
+        L.gate_d_approve(run, f"APPROVE {run['run_id']}")
+        L.gate_d_request(run, 'publish post #1')
+        self.assertTrue(run['gate_d']['approved'])
+
 class SpecTests(TempState):
     def test_all_canonical_specs_load_and_validate(self):
         for sid in CANONICAL:
@@ -406,6 +544,39 @@ class V20Tests(TempState):
         finally:
             L.SKILL_ROOTS.clear()
             L.SKILL_ROOTS.update(old_roots)
+    def test_doctor_diagnoses_loop_without_selftest_cases(self):
+        # A13: a declared loop missing tests/cases.json must be named, and must
+        # make the diagnosis NOT OK — a loop whose gates can never be proven RED
+        # is a diagnosis hole, not a green.
+        import shutil
+        import tempfile
+        fake = Path(tempfile.mkdtemp(prefix="rig-loop-nocases-"))
+        (fake / "bare-loop").mkdir()
+        (fake / "bare-loop" / "loop.yaml").write_text(
+            "id: bare-loop\nname: bare\nversion: 1.0.0\nstages:\n  - id: I\n    name: Intent\n"
+            "    done_when: [x]\n    gate:\n      type: always\n")
+        old = dict(L.SKILL_ROOTS)
+        try:
+            L.SKILL_ROOTS["canonical"] = fake
+            rep = L.doctor()
+            self.assertIn("bare-loop", rep["loops_missing_selftest"])
+            self.assertFalse(rep["ok"])
+            # plant-restore: cases present -> loop drops out of the red list
+            cases = fake / "bare-loop" / "tests"
+            cases.mkdir()
+            shutil.copy(old["canonical"] / "gate-d-loop" / "tests" / "cases.json",
+                        cases / "cases.json")
+            rep2 = L.doctor()
+            self.assertNotIn("bare-loop", rep2["loops_missing_selftest"])
+        finally:
+            L.SKILL_ROOTS.clear()
+            L.SKILL_ROOTS.update(old)
+            shutil.rmtree(fake, ignore_errors=True)
+
+    def test_doctor_all_canonical_loops_carry_case_packs(self):
+        rep = L.doctor()
+        self.assertEqual(rep["loops_missing_selftest"], [],
+                         f"loops without plant-case packs: {rep['loops_missing_selftest']}")
 
     def test_detect_harness_from_env(self):
         old = dict(os.environ)

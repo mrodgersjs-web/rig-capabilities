@@ -700,7 +700,54 @@ def _require_build_certifications(run, spec):
             if not ok:
                 raise SpecError(f"D85 build certification blocks completion: {detail}")
             evidence.append(detail)
+    for stage in spec["stages"]:
+        for gate in stage.get("gate") or []:
+            if gate["type"] != "build_diagnosis":
+                continue
+            try:
+                ok, detail = _gate_build_diagnosis(run, spec, stage, gate)
+            except Exception as exc:  # noqa: BLE001 — fail closed
+                ok, detail = False, str(exc)
+            if not ok:
+                raise SpecError(f"build diagnosis blocks completion: {detail}")
+            evidence.append(detail)
     return evidence
+
+
+def _gate_build_diagnosis(run, spec, st, g):
+    """A13: a cell-bound diagnosis packet validated through build_diagnose,
+    cross-checked against a live outcome-index row for the same cell written
+    against the current golden pack. Reuses build_diagnose/build_index math;
+    implements none of it."""
+    from rig_capabilities import build_diagnose, build_index
+    root = Path(run["cwd"]).resolve()
+    diagnosis = (root / g["diagnosis"]).resolve()
+    index = (root / g["index"]).resolve()
+    if not diagnosis.is_relative_to(root) or not index.is_relative_to(root):
+        return False, "diagnosis and index paths must remain inside the run cwd"
+    try:
+        payload = json.loads(diagnosis.read_text())
+    except (OSError, json.JSONDecodeError) as exc:
+        return False, f"diagnosis packet unreadable: {exc}"
+    try:
+        diag = build_diagnose.diagnose(payload)
+    except build_diagnose.DiagnoseError as exc:
+        return False, f"diagnosis refused: {exc}"
+    try:
+        idx = build_index.open_live(REPO, str(index))
+        _, recs = idx._load()
+    except build_index.IndexError_ as exc:
+        return False, f"outcome index unusable: {exc}"
+    cid = diag["cell_id"]
+    rec = recs.get(cid)
+    if rec is None:
+        return False, f"outcome index has no row for {cid}"
+    if rec.get("pack_sha") != idx.pack_sha:
+        return False, (f"index row for {cid} is bound to stale pack "
+                       f"{str(rec.get('pack_sha'))[:12]}; live pack is {idx.pack_sha[:12]}")
+    return True, json.dumps({"cell_id": cid, "pack_sha": rec["pack_sha"],
+                             "diagnosis_sha256": sha256_file(diagnosis)}, sort_keys=True)
+
 
 
 def _gate_gate_d(run, spec, st, g):
@@ -955,7 +1002,7 @@ GATE_TYPES = {
     "confidence_declared": _gate_confidence_declared,
     "questions_quality": _gate_questions_quality, "gate_d_threshold": _gate_gate_d_threshold,
     "questions_min": _gate_questions_min, "corpus_scraped": _gate_corpus_scraped,
-    "d85_certified": _gate_d85_certified,
+    "d85_certified": _gate_d85_certified, "build_diagnosis": _gate_build_diagnosis,
 }
 
 
@@ -968,7 +1015,7 @@ def evaluate_gate(run: dict, spec: dict, st: dict) -> tuple[bool, list[dict]]:
             ok, detail = fn(run, spec, st, g)
         except Exception as exc:  # noqa: BLE001 — fail closed
             ok, detail = False, f"gate error: {exc}"
-        tier = "halt" if g["type"] == "d85_certified" else g.get("failure_tier", "halt")
+        tier = "halt" if g["type"] in ("d85_certified", "build_diagnosis") else g.get("failure_tier", "halt")
         results.append({"type": g["type"], "ok": bool(ok), "detail": detail, "tier": tier})
         if not ok and tier != "degrade":
             ok_all = False
@@ -1014,8 +1061,9 @@ def mark_stage(run: dict, spec: dict, sid: str, status: str, artifact: str | Non
                 save_run(run)
                 raise SpecError(f"cannot mark {sid}: {why} — P reopened; re-seal then `rig-loop stage P pass`")
         gate_ok, gate_results = evaluate_gate(run, spec, st)
-        d85_red = any(r["type"] == "d85_certified" and not r["ok"] for r in gate_results)
-        if not gate_ok and (not force or d85_red):
+        completion_red = any(r["type"] in ("d85_certified", "build_diagnosis") and not r["ok"]
+                             for r in gate_results)
+        if not gate_ok and (not force or completion_red):
             red = [r for r in gate_results if not r["ok"] and r["tier"] != "degrade"]
             log_event(run, "gate_red", stage=sid, results=gate_results)
             save_run(run)
@@ -1121,6 +1169,12 @@ def plant(run: dict, name: str, red_cmd: str, green_cmd: str, cwd: str | None = 
 
 
 def gate_d_request(run: dict, action: str) -> dict:
+    # An approval approves exactly the action it was issued against. Requesting
+    # a new action revokes any earlier approval — a stale APPROVE phrase must
+    # never authorize a different outward effect (replay).
+    if run["gate_d"].get("requested") != action and run["gate_d"].get("approved"):
+        run["gate_d"].update({"approved": False, "by": None, "at": None, "phrase": None})
+        log_event(run, "gate_d_revoked", reason="new action requested after approval")
     run["gate_d"].update({"requested": action, "requested_at": utc_now()})
     log_event(run, "gate_d_request", action=action)
     save_run(run)
@@ -2088,6 +2142,11 @@ def doctor() -> dict:
             root = SKILL_ROOTS[h] / s["id"]
             inst[h] = (root / "SKILL.md").exists() and ((root / "loop.yaml").exists() or (root / "loop.json").exists())
         rep["loop_skills"][s["id"]] = {"installed": inst, "stages": s["stages"], "version": s.get("version")}
+    # A13 diagnosis-index: every declared loop must carry a plant-case pack, or
+    # `rig-loop test` on it silently no-ops and the loop's gates can go green
+    # without ever having gone red. A loop with no self-test is a diagnosis hole.
+    rep["loops_selftest"] = {s["id"]: str(Path(s["path"]).parent / "tests" / "cases.json") for s in specs}
+    rep["loops_missing_selftest"] = [sid for sid, p in rep["loops_selftest"].items() if not Path(p).exists()]
     bad = [s for s in list_specs() if "error" in s]
     rep["spec_errors"] = bad
     a = _read_active()
@@ -2095,7 +2154,8 @@ def doctor() -> dict:
     rep["missing_installs"] = [f"{sid}@{h}" for sid, v in rep["loop_skills"].items()
                                for h, ok in v["installed"].items() if not ok]
     # ok means: every spec parses, every harness is wired, every loop-skill is installed everywhere
-    rep["ok"] = (not bad) and all(v["wired"] for v in rep["wiring"].values()) and not rep["missing_installs"]
+    rep["ok"] = ((not bad) and all(v["wired"] for v in rep["wiring"].values())
+                 and not rep["missing_installs"] and not rep["loops_missing_selftest"])
     return rep
 
 def _selftest_engine() -> dict:
@@ -2241,7 +2301,8 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
         cur = load_run(run["run_id"]) if run else None
         proof_path = ((cur or {}).get("proof") or {}).get("path", "") if cur else ""
         return (s.replace("<cwd>", str(cwd)).replace("<artifacts>", str(artifacts_dir(run)) if run else "")
-                 .replace("<run_id>", run["run_id"] if run else "").replace("<proof>", proof_path))
+                 .replace("<run_id>", run["run_id"] if run else "").replace("<proof>", proof_path)
+                 .replace("<repo>", str(REPO)))
 
     for i, step in enumerate(case.get("steps", [])):
         expect = step.get("expect") or {}
