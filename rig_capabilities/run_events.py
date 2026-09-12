@@ -230,9 +230,10 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
         if not st["done"]:
             raise TransitionError("commit before all stages pass")
         try:
-            sha = json.loads(payload).get("commit_sha", "")
+            rec = json.loads(payload)
         except json.JSONDecodeError as e:
             raise TransitionError(f"commit payload not json: {e}")
+        sha = rec.get("commit_sha", "") if isinstance(rec, dict) else ""
         if len(sha) != 40 or any(c not in "0123456789abcdef" for c in sha):
             raise TransitionError("commit_sha must be 40 hex chars")
         if sha in st["commits"]:
@@ -345,10 +346,11 @@ def _anchored(pkt_hash: str, run_id: str, anchor_dir) -> bool:
     for line in lines:
         try:
             rec = json.loads(line)
-            if rec.get("run_id") == run_id and rec.get("packet_hash") == pkt_hash:
-                return True
         except json.JSONDecodeError:
             continue
+        if (isinstance(rec, dict) and rec.get("run_id") == run_id
+                and rec.get("packet_hash") == pkt_hash):
+            return True
     return False
 
 
@@ -640,6 +642,23 @@ def selftest(argv=None) -> int:
         except RuntimeError:
             pass
         ok("seal empty run", lambda: seal(con, "r-never-exists"))
+        ok("commit payload non-object", lambda: append(
+            con, run, "commit", payload='"not-an-object"'))
+
+        # FAIL at aa06bb6 freeze: a syntactically valid non-object line
+        # (e.g. null) in the anchor file must be SKIPPED, not crash verify
+        nanc = os.path.join(td, "nullanchor")
+        anchor_packet(pkt, anchor_dir=nanc)
+        nfile = next(Path(nanc).glob("*.anchors"))
+        with open(nfile, "a") as fh:
+            fh.write("null\n")
+        if verify(con, pkt, anchor_dir=nanc) is not None:
+            errs.append("null anchor line broke an otherwise honest verify")
+        only = os.path.join(td, "nullonly")
+        Path(only).mkdir()
+        (Path(only) / nfile.name).write_text("null\n")
+        if not isinstance(verify(con, pkt, anchor_dir=only), str):
+            errs.append("non-object anchor lines raised instead of refusing")
         before = sorted(map(str, Path(td).rglob("*")))
         _ = seal(con, run)
         if sorted(map(str, Path(td).rglob("*"))) != before:
@@ -654,7 +673,7 @@ def selftest(argv=None) -> int:
         anchor_packet(epkt, anchor_dir=esc)
         if verify(econ, epkt, anchor_dir=esc) is not None:
             errs.append("traversal-id honest verify failed")
-        roots = (Path(esc), Path(anchors))
+        roots = (Path(esc), Path(anchors), Path(nanc), Path(only))
         stray = [str(p) for p in Path(td).rglob("*.anchors")
                  if not any(r in p.parents for r in roots)]
         if stray:
