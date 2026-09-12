@@ -2,10 +2,13 @@
 
 SQLite enforces the contract natively — DB constraints over app code:
   * PRIMARY KEY (run_id, seq): one row per sequence number, per run.
-  * BEFORE UPDATE / BEFORE DELETE triggers RAISE(ABORT): even the DBA role
-    over this connection cannot rewrite or drop a row.
-  * a SHA-256 hash chain (prev_hash -> canonical row bytes): replay
-    reconstruction detects ANY out-of-band tampering with the file itself.
+  * BEFORE UPDATE / BEFORE DELETE triggers RAISE(ABORT): no DML on this
+    connection can rewrite or drop a row. A holder WITH DDL RIGHTS can
+    drop the triggers and edit — that variant is then caught by the chain
+    only if they fail to recompute it consistently (see RESIDUAL TRUST).
+  * a SHA-256 hash chain (prev_hash -> canonical row bytes): detects any
+    out-of-band edit that does not consistently recompute every following
+    row's hash.
 Transition validation happens at append AND verify time: a transition is
 legal only if replay of the current ledger says so (stage order, no skips,
 no un-doing a done run, park/resume coherence), and verify_chain revalidates
