@@ -13,7 +13,6 @@ from rig_lattice.lattice.bms import (
     BMS_BUDGET_USD,
     BMSResult,
     compute_bms,
-    evaluate,
     raw_score,
     score_to_mode,
 )
@@ -103,7 +102,6 @@ __all__ = [
     "all_cells",
     "archetypes",
     "compute_bms",
-    "evaluate",
     "is_old_format",
     "is_valid_cell_id",
     "load_cell",

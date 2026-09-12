@@ -13,19 +13,27 @@ The thresholds are sharp and reproducible — the same input always yields the
 same mode. No floating ambiguity at boundaries: 0.75 is A1, 0.45 is A2,
 0.25 is A3, anything below 0.25 is A4.
 
-Two entry points:
+Two entry points (this module is the EVIDENCE-GATED eligibility scorer;
+heuristic routing lives in ``wire`` and never produces a BMSResult):
 
-``evaluate(confidence)``
-    You already have a confidence number.
+``_evaluate(confidence)`` (private): confidence -> mode + doctrine.
+    Reached only from ``compute_bms``; there is no public receipt-free path.
 
-``compute_bms(failure_cost=, reversibility=, mechanism_clarity=, ...)``
-    You have the criteria and want the number computed:
+``compute_bms(failure_cost=, reversibility=, mechanism_clarity=,
+              past_failure_rate=, data_volume=, level=)``
+    You have ALL criteria receipts and want the number computed. Every
+    scalar is REQUIRED: absent evidence raises ``BMSEvidenceMissing``
+    (UNKNOWN, C24-BLOCKED per scoring-contract). Scoring for
+    eligibility from fabricated defaults is the defect this API exists
+    to refuse (scoring-contract fail-closed rule, verifier gap G9):
 
         raw   = (1 - failure_cost)*0.4 + reversibility*0.3 + mechanism_clarity*0.3
         final = clamp(raw - past_failure_rate*0.2
                           + (data_volume - 0.5)*0.1
                           + ALTITUDE_BONUS[level], 0.0, 1.0)
         mode  = BMSMode.from_score(final)
+
+
 """
 
 from __future__ import annotations
@@ -111,8 +119,9 @@ def score_to_mode(confidence: float) -> BMSMode:
     return BMSMode.from_score(float(confidence))
 
 
-def evaluate(confidence: float, **detail: object) -> BMSResult:
-    """Full BMS evaluation: confidence -> mode + execution doctrine."""
+def _evaluate(confidence: float, **detail: object) -> BMSResult:
+    """Private: confidence -> mode + execution doctrine. Only compute_bms
+    may call this; a bare confidence alone never yields an eligibility result."""
     mode = score_to_mode(confidence)
     v = mode.value
     return BMSResult(
@@ -131,11 +140,12 @@ def evaluate(confidence: float, **detail: object) -> BMSResult:
 
 
 def raw_score(
-    failure_cost: float = 0.5,
-    reversibility: float = 0.5,
-    mechanism_clarity: float = 0.5,
+    failure_cost: float,
+    reversibility: float,
+    mechanism_clarity: float,
 ) -> float:
-    """The unadjusted weighted criteria score.
+    """The unadjusted weighted criteria score. All three criteria are
+    REQUIRED — there are no defaults (fail-closed scoring contract).
 
     failure_cost enters as its complement: higher consequence of failure
     means LOWER confidence in autonomous mode. A defect regression (2026-09
@@ -148,22 +158,42 @@ def raw_score(
     return (1.0 - fc) * 0.4 + rv * 0.3 + mc * 0.3
 
 
+class BMSEvidenceMissing(ValueError):
+    """Absent evidence is UNKNOWN (C24-BLOCKED), never a fabricated default."""
+
+
 def compute_bms(
-    failure_cost: float = 0.5,
-    reversibility: float = 0.5,
-    mechanism_clarity: float = 0.5,
-    past_failure_rate: float = 0.0,
-    data_volume: float = 0.5,
-    level: str | Level = Level.L2,
+    failure_cost: float | None = None,
+    reversibility: float | None = None,
+    mechanism_clarity: float | None = None,
+    past_failure_rate: float | None = None,
+    data_volume: float | None = None,
+    level: str | Level | None = None,
 ) -> BMSResult:
-    """Criteria -> adjusted confidence -> mode, with every term reported."""
+    """Criteria -> adjusted confidence -> mode, with every term reported.
+
+    Every scalar is REQUIRED (fail-closed scoring contract): an absent
+    receipt is UNKNOWN evidence and raises BMSEvidenceMissing naming the
+    field — never silently scored at 0.5/0.0/L2. The old defaults turned
+    zero evidence into confidence 0.78 / mode A1 (verifier gap G9); the
+    exact repro is frozen in tests/test_lattice_math.py."""
+    missing = [name for name, val in (
+        ("failure_cost", failure_cost), ("reversibility", reversibility),
+        ("mechanism_clarity", mechanism_clarity),
+        ("past_failure_rate", past_failure_rate),
+        ("data_volume", data_volume), ("level", level),
+    ) if val is None]
+    if missing:
+        raise BMSEvidenceMissing(
+            f"no receipt for BMS scalars {missing}; absent evidence is "
+            "UNKNOWN, never a default")
     lv = Level(level) if not isinstance(level, Level) else level
     raw = raw_score(failure_cost, reversibility, mechanism_clarity)
     adj_failure = -_check_unit("past_failure_rate", past_failure_rate) * 0.2
     adj_volume = (_check_unit("data_volume", data_volume) - 0.5) * 0.1
     adj_altitude = ALTITUDE_BONUS[lv.value]
     final = _clamp01(raw + adj_failure + adj_volume + adj_altitude)
-    return evaluate(
+    return _evaluate(
         final,
         raw=raw,
         adj_failure=adj_failure,
@@ -173,9 +203,11 @@ def compute_bms(
     )
 
 
+
+
 if __name__ == "__main__":  # pragma: no cover
     for c in (0.92, 0.75, 0.60, 0.45, 0.30, 0.25, 0.10):
-        r = evaluate(c)
+        r = _evaluate(c)
         print(
             f"conf={c:>4}  -> {r.mode.value} {r.mode_name:<14} "
             f"{r.threshold:<10} {r.cost_band:<8} approval={r.approval} "

@@ -29,6 +29,7 @@ from rig_lattice.lattice import (
     parse_cell_id,
     primary_coordinates,
 )
+from rig_lattice.lattice.bms import BMSEvidenceMissing
 from rig_lattice.lattice.schema import LatticeCoordinate
 from rig_lattice.lattice.validator import (
     generate_all_cell_ids,
@@ -164,28 +165,32 @@ class TestBMSSelection(unittest.TestCase):
         """raw = (1-failure_cost)*0.4 + reversibility*0.3 + mechanism_clarity*0.3."""
         result = compute_bms(
             failure_cost=0.0, reversibility=0.0, mechanism_clarity=0.0,
+            past_failure_rate=0.0, data_volume=0.5,
             level=Level.L4,  # altitude bonus 0.0
         )
         self.assertAlmostEqual(result.raw, 0.4, places=9)
         result = compute_bms(
             failure_cost=1.0, reversibility=0.0, mechanism_clarity=0.0,
+            past_failure_rate=0.0, data_volume=0.5,
             level=Level.L4,
         )
         self.assertAlmostEqual(result.raw, 0.0, places=9)
         result = compute_bms(
             failure_cost=1.0, reversibility=1.0, mechanism_clarity=0.0,
+            past_failure_rate=0.0, data_volume=0.5,
             level=Level.L4,
         )
         self.assertAlmostEqual(result.raw, 0.3, places=9)
         result = compute_bms(
             failure_cost=1.0, reversibility=0.0, mechanism_clarity=1.0,
+            past_failure_rate=0.0, data_volume=0.5,
             level=Level.L4,
         )
         self.assertAlmostEqual(result.raw, 0.3, places=9)
 
     def test_altitude_penalty_lowers_the_band(self):
-        low = compute_bms(0.2, 0.8, 0.8, level=Level.L1)
-        high = compute_bms(0.2, 0.8, 0.8, level=Level.L7)
+        low = compute_bms(0.2, 0.8, 0.8, 0.0, 0.5, level=Level.L1)
+        high = compute_bms(0.2, 0.8, 0.8, 0.0, 0.5, level=Level.L7)
         self.assertGreater(low.confidence, high.confidence)
         self.assertAlmostEqual(
             low.adj_altitude - high.adj_altitude, 0.70, places=9
@@ -197,28 +202,32 @@ class TestBMSSelection(unittest.TestCase):
         self.assertEqual(ALTITUDE_BONUS["L7"], -0.35)
 
     def test_past_failure_and_volume_adjustments(self):
-        base = compute_bms(0.5, 0.5, 0.5, level=Level.L4)
+        base = compute_bms(0.5, 0.5, 0.5, 0.0, 0.5, level=Level.L4)
         penalised = compute_bms(
-            0.5, 0.5, 0.5, past_failure_rate=1.0, level=Level.L4
+            0.5, 0.5, 0.5, past_failure_rate=1.0, data_volume=0.5,
+            level=Level.L4,
         )
         self.assertAlmostEqual(penalised.adj_failure, -0.2, places=9)
         self.assertLess(penalised.confidence, base.confidence)
 
-        volume = compute_bms(0.5, 0.5, 0.5, data_volume=1.0, level=Level.L4)
+        volume = compute_bms(0.5, 0.5, 0.5, 0.0, 1.0, level=Level.L4)
         self.assertAlmostEqual(volume.adj_volume, 0.05, places=9)
 
     def test_score_clamped_to_unit_interval(self):
-        top = compute_bms(1.0, 1.0, 1.0, data_volume=1.0, level=Level.L1)
+        top = compute_bms(1.0, 1.0, 1.0, 0.0, 1.0, level=Level.L1)
         self.assertLessEqual(top.confidence, 1.0)
         self.assertIs(top.mode, BMSMode.A1)
-        bottom = compute_bms(
-            0.0, 0.0, 0.0, past_failure_rate=1.0, data_volume=0.0, level=Level.L7
-        )
+        bottom = compute_bms(0.0, 0.0, 0.0, 1.0, 0.0, level=Level.L7)
         self.assertGreaterEqual(bottom.confidence, 0.0)
         self.assertIs(bottom.mode, BMSMode.A4)
 
     def test_inputs_out_of_range_rejected(self):
-        for kwargs in (
+        complete = {
+            "failure_cost": 0.5, "reversibility": 0.5,
+            "mechanism_clarity": 0.5, "past_failure_rate": 0.0,
+            "data_volume": 0.5, "level": Level.L4,
+        }
+        for bad in (
             {"failure_cost": 1.5},
             {"reversibility": -0.1},
             {"mechanism_clarity": 2.0},
@@ -226,13 +235,70 @@ class TestBMSSelection(unittest.TestCase):
             {"data_volume": -1.0},
         ):
             with self.assertRaises(ValueError):
-                compute_bms(**kwargs)
+                compute_bms(**{**complete, **bad})
 
     def test_same_input_same_mode(self):
-        a = compute_bms(0.7, 0.6, 0.65, level=Level.L3)
-        b = compute_bms(0.7, 0.6, 0.65, level=Level.L3)
+        a = compute_bms(0.7, 0.6, 0.65, 0.0, 0.5, level=Level.L3)
+        b = compute_bms(0.7, 0.6, 0.65, 0.0, 0.5, level=Level.L3)
         self.assertEqual(a.to_dict(), b.to_dict())
 
+
+class TestFailClosedEvidence(unittest.TestCase):
+    """G9 frozen: absent receipts are UNKNOWN — never a scored verdict.
+
+    Pre-fix bytes scored zero evidence as confidence 0.78 / mode A1
+    (silent defaults). These tests FAIL on those bytes and pin the
+    fail-closed contract permanently."""
+
+    def test_bare_call_raises_naming_every_missing_field(self):
+        with self.assertRaises(BMSEvidenceMissing) as ctx:
+            compute_bms()
+        msg = str(ctx.exception)
+        for name in ("failure_cost", "reversibility", "mechanism_clarity",
+                     "past_failure_rate", "data_volume", "level"):
+            self.assertIn(name, msg)
+
+    def test_level_alone_is_not_a_verdict(self):
+        # exact repro of the reported G9 absence case
+        with self.assertRaises(BMSEvidenceMissing):
+            compute_bms(level="L2")
+
+    def test_partial_evidence_refused_naming_the_gap(self):
+        with self.assertRaises(BMSEvidenceMissing) as ctx:
+            compute_bms(failure_cost=0.9, reversibility=0.9,
+                        mechanism_clarity=0.9, level="L4")
+        msg = str(ctx.exception)
+        self.assertIn("past_failure_rate", msg)
+        self.assertIn("data_volume", msg)
+
+    def test_heuristic_routing_output_is_machine_unqualified(self):
+        """Router output cannot masquerade as an eligibility verdict:
+        a bare mode (no BMSResult), scored=False, bms_score=None —
+        in the object AND in the serialized dict a gate would read."""
+        from rig_lattice.lattice.constants import BMSMode as _Mode
+        from rig_lattice.lattice.wire import (
+            _routing_mode, generate_all_build_cards, route_intent,
+        )
+        self.assertIsInstance(_routing_mode("L2"), _Mode)
+        card = generate_all_build_cards()[0]
+        self.assertFalse(card.scored)
+        self.assertIsNone(card.bms_score)
+        self.assertFalse(card.to_dict()["scored"])
+        r = route_intent("fix typo", step="I1")
+        self.assertFalse(r.scored)
+        self.assertIsNone(r.bms_score)
+        self.assertFalse(r.to_dict()["scored"])
+
+
+    def test_no_public_receipt_free_scorer(self):
+        """evaluate(0.78) must NOT be able to yield an eligibility
+        result: the confidence->BMSResult constructor is private, and
+        neither package surface re-exports it."""
+        from rig_lattice.lattice import bms
+        import rig_lattice
+        self.assertFalse(hasattr(bms, "evaluate"))
+        self.assertTrue(callable(bms._evaluate))  # internal use only
+        self.assertFalse(hasattr(rig_lattice, "evaluate_bms"))
 
 if __name__ == "__main__":
     unittest.main()

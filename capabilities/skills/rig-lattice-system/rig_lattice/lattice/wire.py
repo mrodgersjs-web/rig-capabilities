@@ -35,8 +35,11 @@ from dataclasses import dataclass, field
 from enum import Enum
 from typing import Any
 
-from rig_lattice.lattice.bms import BMS_BUDGET_USD, BMSResult, compute_bms
+from rig_lattice.lattice.bms import (
+    BMS_BUDGET_USD, raw_score, score_to_mode,
+)
 from rig_lattice.lattice.constants import (
+    ALTITUDE_BONUS,
     ARCHETYPE_MAP,
     BMS_COST_BAND,
     BMS_DOCTRINE,
@@ -174,8 +177,9 @@ class BuildCard:
     tools: tuple[str, ...] = ()
     validation_criteria: tuple[str, ...] = ()
     escalation_target: str = ""
-    bms_score: float = 0.5
+    bms_score: float | None = None
     approval_required: bool = False
+    scored: bool = False
 
     def to_dict(self) -> dict:
         return {
@@ -195,12 +199,27 @@ class BuildCard:
             "escalation_target": self.escalation_target,
             "bms_score": self.bms_score,
             "approval_required": self.approval_required,
+            "scored": self.scored,
         }
 
 
-def generate_build_card(cell: LatticeCell, bms: BMSResult) -> BuildCard:
-    """Build the card for a cell, with the BMS result choosing the mode."""
-    mode = bms.mode
+def _routing_mode(level: Level | str) -> BMSMode:
+    """Heuristic default mode at an altitude: the neutral criteria point
+    plus the altitude bonus, through the shared mode thresholds.
+
+    ROUTING ONLY. It returns a bare BMSMode — never a BMSResult, never a
+    score — and every artifact built from it is marked ``scored=False``,
+    so heuristic output cannot be mistaken for, or substituted into, an
+    eligibility verdict. Eligibility is ``compute_bms`` alone, and it
+    refuses absent receipts (``BMSEvidenceMissing``)."""
+    lv = Level(level) if not isinstance(level, Level) else level
+    conf = min(1.0, max(0.0, 0.5 + ALTITUDE_BONUS[lv.value]))
+    return score_to_mode(conf)
+
+
+def generate_build_card(cell: LatticeCell, mode: BMSMode) -> BuildCard:
+    """Build the routing card for a cell at the given mode (scored=False
+    by construction: a card describes the plane, it does not certify)."""
     resolved = LatticeCell(
         level=cell.level, diamond=cell.diamond, step=cell.step, mode=mode
     )
@@ -219,22 +238,22 @@ def generate_build_card(cell: LatticeCell, bms: BMSResult) -> BuildCard:
         tools=tuple(TOOLS_BY_MODE[mode.value]),
         validation_criteria=tuple(VALIDATION_BY_MODE[mode.value]),
         escalation_target=ESCALATION_BY_MODE[mode.value],
-        bms_score=round(bms.confidence, 4),
         approval_required=mode.approval_required,
     )
 
 
 def generate_all_build_cards() -> list[BuildCard]:
-    """One card per legacy-shape cell (147), mode derived from altitude."""
+    """One routing card per legacy-shape cell (147), mode from altitude.
+    Descriptive only — see ``_routing_mode``."""
     return [
-        generate_build_card(cell, compute_bms(level=cell.level))
+        generate_build_card(cell, _routing_mode(cell.level))
         for cell in get_all_cells()
     ]
 
 
 def get_build_card(cell_id: str) -> BuildCard:
     cell = LatticeCell.parse(cell_id)
-    return generate_build_card(cell, compute_bms(level=cell.level))
+    return generate_build_card(cell, _routing_mode(cell.level))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -425,11 +444,12 @@ class RouteResult:
     archetype: str
     primary_coordinate: str
     step: str
-    bms_score: float
     budget_usd: float
     approval_required: bool
     deterministic: bool
     rationale: str
+    bms_score: float | None = None
+    scored: bool = False
     evidence_keywords: tuple[str, ...] = ()
     cell_ids: tuple[str, ...] = field(default=())
 
@@ -444,6 +464,7 @@ class RouteResult:
             "step": self.step,
             "archetype": self.archetype,
             "bms_score": self.bms_score,
+            "scored": self.scored,
             "budget_usd": self.budget_usd,
             "approval_required": self.approval_required,
             "deterministic": self.deterministic,
@@ -463,16 +484,20 @@ def route_intent(
     *,
     step: IQRSQPIStep | str = IQRSQPIStep.I1,
     domain: str = "",
-    failure_cost: float = 0.5,
-    reversibility: float = 0.5,
-    mechanism_clarity: float = 0.5,
+    failure_cost: float | None = None,
+    reversibility: float | None = None,
+    mechanism_clarity: float | None = None,
 ) -> RouteResult:
     """Route free text to a lattice cell. Pure keyword rules, no model.
 
     Diamond comes from ``DIAMOND_KEYWORDS`` hit counts (ties resolve to D2,
     the reasoning plane, because an unclassified request is a thinking problem
     before it is an execution problem). Level comes from complexity keywords.
-    Mode comes from ``compute_bms`` at that level.
+    Mode is the heuristic ``_routing_mode`` default at that level, nudged by
+    any criteria the caller actually supplies (unspecified criteria stay
+    neutral and are labelled as such). The result is machine-unqualified:
+    ``scored=False`` and ``bms_score=None`` — eligibility requires receipts
+    through ``compute_bms``, which never sees this path.
     """
     step_enum = step if isinstance(step, IQRSQPIStep) else IQRSQPIStep(step)
     text = f"{intent} {domain}"
@@ -492,40 +517,41 @@ def route_intent(
     level_ordinal = max(1, min(7, score))
     level = Level(f"L{level_ordinal}")
 
-    bms = compute_bms(
-        failure_cost=failure_cost,
-        reversibility=reversibility,
-        mechanism_clarity=mechanism_clarity,
-        level=level,
+    raw = raw_score(
+        0.5 if failure_cost is None else failure_cost,
+        0.5 if reversibility is None else reversibility,
+        0.5 if mechanism_clarity is None else mechanism_clarity,
+    )
+    mode = score_to_mode(
+        min(1.0, max(0.0, raw + ALTITUDE_BONUS[level.value]))
     )
     cell = LatticeCell(
-        level=level, diamond=Diamond(diamond), step=step_enum, mode=bms.mode
+        level=level, diamond=Diamond(diamond), step=step_enum, mode=mode
     )
     return RouteResult(
         intent=intent,
         diamond=diamond,
         level=level.value,
-        mode=bms.mode.value,
+        mode=mode.value,
         cell_id=cell.full_cell_id,
         archetype=cell.archetype_id,
         primary_coordinate=(
-            f"{level.value}-{diamond}-{bms.mode.value}"
+            f"{level.value}-{diamond}-{mode.value}"
         ),
         step=step_enum.value,
-        bms_score=round(bms.confidence, 4),
-        budget_usd=BMS_BUDGET_USD[bms.mode.value],
-        approval_required=bms.mode.approval_required,
-        deterministic=bms.mode.deterministic,
+        budget_usd=BMS_BUDGET_USD[mode.value],
+        approval_required=mode.approval_required,
+        deterministic=mode.deterministic,
         rationale=(
             f"diamond {diamond} ({counts[diamond]} keyword hits, owns: "
             f"{DIAMOND_OWNS[diamond].split(',')[0].strip()}); "
             f"complexity score {score} -> {level.value}; "
-            f"BMS {bms.confidence:.3f} -> {bms.mode.value}"
+            f"routing default {mode.value} (heuristic, unscored)"
         ),
         evidence_keywords=tuple(hits[diamond]),
         cell_ids=tuple(
             LatticeCell(
-                level=level, diamond=Diamond(diamond), step=s, mode=bms.mode
+                level=level, diamond=Diamond(diamond), step=s, mode=mode
             ).full_cell_id
             for s in STEPS
         ),

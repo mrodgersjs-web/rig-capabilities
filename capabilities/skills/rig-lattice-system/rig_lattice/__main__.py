@@ -444,12 +444,14 @@ def build_parser() -> argparse.ArgumentParser:
     bms_sub = bms.add_subparsers(dest="bms_cmd", required=True)
     score = bms_sub.add_parser("score", parents=[common],
                                 help="criteria -> confidence -> mode")
-    score.add_argument("--failure-cost", type=float, default=0.5)
-    score.add_argument("--reversibility", type=float, default=0.5)
-    score.add_argument("--mechanism-clarity", type=float, default=0.5)
-    score.add_argument("--past-failure-rate", type=float, default=0.0)
-    score.add_argument("--data-volume", type=float, default=0.5)
-    score.add_argument("--level", default="L2", help="L1..L7 (altitude bonus)")
+    # Fail-closed: an eligibility verdict has no defaults; every receipt
+    # must be stated on the command line.
+    score.add_argument("--failure-cost", type=float, required=True)
+    score.add_argument("--reversibility", type=float, required=True)
+    score.add_argument("--mechanism-clarity", type=float, required=True)
+    score.add_argument("--past-failure-rate", type=float, required=True)
+    score.add_argument("--data-volume", type=float, required=True)
+    score.add_argument("--level", required=True, help="L1..L7 (altitude bonus)")
     bms.set_defaults(func=cmd_bms)
 
     # route
@@ -457,9 +459,9 @@ def build_parser() -> argparse.ArgumentParser:
     route.add_argument("intent")
     route.add_argument("--step", default="I1", help="IQRSQPI step (default I1)")
     route.add_argument("--domain", default="")
-    route.add_argument("--failure-cost", type=float, default=0.5)
-    route.add_argument("--reversibility", type=float, default=0.5)
-    route.add_argument("--mechanism-clarity", type=float, default=0.5)
+    route.add_argument("--failure-cost", type=float, default=None)
+    route.add_argument("--reversibility", type=float, default=None)
+    route.add_argument("--mechanism-clarity", type=float, default=None)
     route.set_defaults(func=cmd_route)
 
     # audit
