@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""rig-build-standard — the standard build verbs (iqrsqpi-intent Section IV).
+
+Usage: rig-build-standard <verb> [args...]
+Verbs:
+  check        per-build admission: --repo PATH --sha SHA --manifest FILE;
+               loads the receipt manifest and runs the public
+               commit_gate.check over the CURRENT build. Prints the
+               verdict; exit 0 only when admitted, else 2.
+  test         code selftests recomputed on live authorities (golden pack
+               verify + provenance, index liveness, commit-gate synthetic
+               selftest). Blocked => exit 2. Not per-build admission.
+  diagnose     build diagnosis harness        (rig_capabilities/build_diagnose.py)
+  index        build-index checks             (rig_capabilities/build_index.py)
+  commit-gate  four-receipt commit gate selftest (rig_capabilities/commit_gate.py)
+  wave-check   estate inventory SHAPE checker (file size/headings only —
+               a known false-green for build readiness, Q2 gap #1; kept
+               only for inventory hygiene)
+
+With no args (or --help) prints this usage. `<verb> --help` prints verb
+usage. Any other args are passed through to the verb's script; with no
+args the verb runs its default self-check.
+"""
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+REPO = Path(__file__).resolve().parent.parent
+VERBS = {
+    "diagnose": ("rig_capabilities/build_diagnose.py", ["selftest"],
+                 "build_diagnose.py [selftest|--help]"),
+    "index": ("rig_capabilities/build_index.py", ["selftest"],
+              "build_index.py [selftest|--help]"),
+    "wave-check": ("runs/agentic-stack-buildout/scripts_wave_check.py", [],
+                   "scripts_wave_check.py [TARGET_DIR ...]  (default: all waves;"
+                   " shape-only, NOT readiness)"),
+    "commit-gate": ("rig_capabilities/commit_gate.py", ["selftest"],
+                    "commit_gate.py [selftest|--help]"),
+}
+
+_LIVENESS = (
+    "import sys, json, tempfile; sys.path.insert(0, '.');"
+    "from pathlib import Path;"
+    "from rig_capabilities.build_index import open_live, current_pack_sha;"
+    "repo = Path('.');"
+    "tmp = tempfile.mkdtemp();"
+    "ix = open_live(repo, str(Path(tmp)/'ix.jsonl'));"
+    "assert ix.pack_sha == current_pack_sha(repo), 'handle != live manifest';"
+    "assert len(ix.valid_cells) == 588, 'cells != 588 authority';"
+    "print(json.dumps({'index_live': True, 'pack_sha': ix.pack_sha[:12]}))"
+)
+
+
+def run_test() -> int:
+    """Code-level checks: every authority RECOMPUTED, fail-closed."""
+    steps = [
+        ("pack golden verify + provenance",
+         [sys.executable, "rig_capabilities/criteria_pack.py", "generate",
+          "--verify", "runs/agentic-stack-buildout/packs/criteria-v1.jsonl"]),
+        ("index liveness vs live manifest",
+         [sys.executable, "-c", _LIVENESS]),
+        ("commit-gate authorities (synthetic fixtures)",
+         [sys.executable, "rig_capabilities/commit_gate.py", "selftest"]),
+    ]
+    for name, cmd in steps:
+        r = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True)
+        if r.returncode != 0:
+            print(f"test BLOCKED at {name}: exit {r.returncode}",
+                  file=sys.stderr)
+            print((r.stdout + r.stderr)[-400:], file=sys.stderr)
+            return 2
+        last = r.stdout.strip().splitlines()[-1] if r.stdout.strip() else "ok"
+        print(f"{name}: {last}")
+    print("test: code selftests green (per-build admission is `check`)")
+    return 0
+
+
+def run_check(argv: list[str]) -> int:
+    """Per-build admission through the PUBLIC commit_gate.check. No
+    receipts manifest, no verdict — the manifest is required."""
+    ap = argparse.ArgumentParser(prog="rig-build-standard check")
+    ap.add_argument("--repo", required=True)
+    ap.add_argument("--sha", required=True)
+    ap.add_argument("--manifest", required=True)
+    a = ap.parse_args(argv)  # missing args => argparse exits 2
+    sys.path.insert(0, str(REPO))
+    from rig_capabilities import commit_gate
+    manifest = json.loads(Path(a.manifest).read_text())
+    verdict = commit_gate.check(Path(a.repo), a.sha, manifest)
+    print(json.dumps(verdict, indent=1, sort_keys=True))
+    return 0 if verdict.get("admitted") else 2
+
+
+def main(argv: list[str]) -> int:
+    if not argv or argv[0] in ("-h", "--help"):
+        print(__doc__.strip())
+        return 0
+    verb, rest = argv[0], argv[1:]
+    if verb == "check":
+        return run_check(rest)
+    if verb == "test":
+        if rest and rest[0] == "--help":
+            print("test: recomputes golden verify, index liveness, "
+                  "commit-gate selftest; exit 2 on any failure")
+            return 0
+        return run_test()
+    if verb not in VERBS:
+        print(f"rig-build-standard: unknown verb {verb!r}", file=sys.stderr)
+        print(__doc__.strip(), file=sys.stderr)
+        return 2
+    script, default, usage = VERBS[verb]
+    if rest and rest[0] == "--help":
+        print(f"{verb}: python3 {REPO / script}\nusage: {usage}")
+        return 0
+    call = rest if rest else default
+    return subprocess.run(
+        [sys.executable, str(REPO / script), *call]).returncode
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv[1:]))

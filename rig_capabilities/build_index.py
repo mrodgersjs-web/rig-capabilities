@@ -21,6 +21,7 @@ import json
 import os
 import sys
 import tempfile
+from pathlib import Path
 
 
 class IndexError_(ValueError):
@@ -32,8 +33,8 @@ def current_pack_sha(repo: Path) -> str:
     man = repo / "runs/agentic-stack-buildout/packs/criteria-v1.sha256"
     if not man.exists():
         raise IndexError_("golden manifest missing; index cannot be trusted")
-    line = man.read_text().strip()
-    return line.split("  ", 1)[0]
+    first = man.read_text().splitlines()[0]
+    return first.split("  ", 1)[0]
 
 
 
@@ -44,13 +45,26 @@ def open_live(repo: Path, path: str) -> "BuildIndex":
     from rig_capabilities.criteria_pack import build_rows
     sha = current_pack_sha(repo)
     cells = {r["cell_id"] for r in build_rows()}
-    return BuildIndex(path, cells, sha)
+    return BuildIndex(path, cells, sha, repo)
 
 class BuildIndex:
-    def __init__(self, path: str, valid_cells: set[str], pack_sha: str):
+    def __init__(self, path: str, valid_cells: set[str], pack_sha: str,
+                 repo: Path | None = None):
         self.path = path
         self.valid_cells = valid_cells
         self.pack_sha = pack_sha
+        self.repo = repo
+
+    def _assert_live(self) -> None:
+        """A handle opened before a golden promotion must refuse, not
+        write into the new generation under the old sha. Re-reads the
+        manifest on every mutation; raw test handles (repo=None) skip."""
+        if self.repo is not None:
+            live = current_pack_sha(self.repo)
+            if live != self.pack_sha:
+                raise IndexError_(
+                    f"handle bound to stale pack {self.pack_sha[:12]}; "
+                    f"manifest now says {live[:12]}; reopen and migrate")
 
     @contextlib.contextmanager
     def _locked(self):
@@ -135,6 +149,7 @@ class BuildIndex:
         if cell_id not in self.valid_cells:
             raise IndexError_(f"cell not in authority: {cell_id!r}")
         with self._locked():
+            self._assert_live()
             gen, recs = self._load()
             self._require_writer_gen(gen)
             if cell_id in recs:
@@ -148,6 +163,7 @@ class BuildIndex:
         """CAS *within* the current generation: writer must match the index
         generation, and expected_sha must match the stored record."""
         with self._locked():
+            self._assert_live()
             gen, recs = self._load()
             self._require_writer_gen(gen)
             if cell_id not in recs:
@@ -167,6 +183,7 @@ class BuildIndex:
         """The ONLY way to advance generation: one atomic rewrite of every
         record under a new index-level pack_sha."""
         with self._locked():
+            self._assert_live()
             gen, recs = self._load()
             if gen != expected_from:
                 raise IndexError_(
@@ -294,10 +311,40 @@ def selftest(argv=None) -> int:
         except IndexError_ as e:
             if "duplicate _meta" not in str(e):
                 errs.append(f"dup-meta wrong reason: {e}")
+    # freshness: a handle opened under an old manifest must refuse every
+    # mutation after a promotion; reopen + migrate is the only advance.
+    with tempfile.TemporaryDirectory() as td:
+        repo = Path(td)
+        man = repo / "runs/agentic-stack-buildout/packs/criteria-v1.sha256"
+        man.parent.mkdir(parents=True)
+        man.write_text(sha_a + "  criteria-v1.jsonl  rows=588\n")
+        idx = BuildIndex(str(repo / "idx.jsonl"), valid, sha_a, repo)
+        idx.insert("C001", "b1")
+        man.write_text(sha_b + "  criteria-v1.jsonl  rows=588\n"
+                       + "prov  " + "0" * 64 + "\n")
+        try:
+            idx.insert("C002", "b2")
+            errs.append("stale handle wrote after promotion")
+        except IndexError_ as e:
+            if "stale pack" not in str(e):
+                errs.append(f"stale-handle refusal misnamed: {e}")
+        idx2 = BuildIndex(str(repo / "idx.jsonl"), valid, sha_b, repo)
+        try:
+            idx2.update("C001", "b1b", sha_a)
+            errs.append("cross-generation update accepted")
+        except IndexError_ as e:
+            if "stale-writer" not in str(e):
+                errs.append(f"cross-gen rejection misnamed: {e}")
+        if idx2.migrate(sha_a) != 1:
+            errs.append("migrate after promotion rewrote wrong count")
     print(json.dumps({"ok": not errs, "errors": errs,
                       "cells_valid": len(valid)}))
     return 0 if not errs else 1
 
 
 if __name__ == "__main__":
+    _a = sys.argv[1:]
+    if _a and _a[0] not in ("selftest", "--help"):
+        print("usage: build_index.py [selftest|--help]", file=sys.stderr)
+        sys.exit(2)
     sys.exit(selftest())

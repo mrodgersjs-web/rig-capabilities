@@ -117,4 +117,8 @@ def selftest(argv=None) -> int:
 
 
 if __name__ == "__main__":
+    _a = sys.argv[1:]
+    if _a and _a[0] not in ("selftest", "--help"):
+        print("usage: build_diagnose.py [selftest|--help]", file=sys.stderr)
+        sys.exit(2)
     sys.exit(selftest())

@@ -37,6 +37,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+if __package__ in (None, ""):  # direct script invocation: the repo root
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
 from rig_capabilities.measure import wilson_lb
 
 # Pinned authorities — resolved relative to the repo argument, never supplied
@@ -543,4 +546,8 @@ def selftest(argv=None) -> int:
 
 
 if __name__ == "__main__":
+    _a = sys.argv[1:]
+    if _a and _a[0] not in ("selftest", "--help"):
+        print("usage: commit_gate.py [selftest|--help]", file=sys.stderr)
+        sys.exit(2)
     sys.exit(selftest())

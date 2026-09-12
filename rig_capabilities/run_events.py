@@ -111,17 +111,22 @@ def connect(path: str) -> sqlite3.Connection:
     gets created.
     """
     con = sqlite3.connect(path)
-    con.isolation_level = None  # manual BEGIN IMMEDIATE in append()
-    con.execute("PRAGMA synchronous=FULL")   # durability before ack
-    con.execute("PRAGMA busy_timeout=5000")
-    existing = [r[0] for r in con.execute(
-        "SELECT name FROM sqlite_master "
-        "WHERE name IN ('run_events','run_events_no_update','run_events_no_delete')")]
-    if existing:
-        _verify_schema(con)  # verify the COMPLETE set; no DDL executed
-    else:
-        con.executescript(";\n".join(_DDL_STATEMENTS) + ";")
-        _verify_schema(con)
+    try:
+        con.isolation_level = None  # manual BEGIN IMMEDIATE in append()
+        con.execute("PRAGMA synchronous=FULL")   # durability before ack
+        con.execute("PRAGMA busy_timeout=5000")
+        existing = [r[0] for r in con.execute(
+            "SELECT name FROM sqlite_master "
+            "WHERE name IN ('run_events','run_events_no_update',"
+            "'run_events_no_delete')")]
+        if existing:
+            _verify_schema(con)  # verify the COMPLETE set; no DDL executed
+        else:
+            con.executescript(";\n".join(_DDL_STATEMENTS) + ";")
+            _verify_schema(con)
+    except BaseException:
+        con.close()  # a failed connect never leaves an open handle
+        raise
     return con
 
 def _canon(row: tuple) -> str:
@@ -484,6 +489,22 @@ def selftest(argv=None) -> int:
         except TransitionError:
             pass
 
+
+        def _closed_on_fail(exc: BaseException) -> bool:
+            """True iff connect() closed its handle before raising."""
+            f, esc = exc.__traceback__, None
+            while f is not None:
+                frame = f.tb_frame
+                if frame.f_code.co_name == "connect":
+                    esc = frame.f_locals.get("con")
+                f = f.tb_next
+            if esc is None:
+                return False
+            try:
+                esc.execute("SELECT 1")
+            except sqlite3.ProgrammingError:
+                return True
+            return False
         # pre-existing same-named NO-OP triggers must not fool connect():
         # IF NOT EXISTS accepts them silently, so the schema check fails closed
         poisoned = os.path.join(td, "poisoned.sqlite")
@@ -501,8 +522,9 @@ def selftest(argv=None) -> int:
         try:
             connect(poisoned)
             errs.append("connect accepted no-op trigger impostor")
-        except RuntimeError:
-            pass
+        except RuntimeError as e:
+            if not _closed_on_fail(e):
+                errs.append("connect leaks an OPEN handle (poisoned)")
 
         # a silently DROPPED trigger must fail closed too — no auto-repair
         dropped = os.path.join(td, "dropped.sqlite")
@@ -516,8 +538,9 @@ def selftest(argv=None) -> int:
         try:
             connect(dropped)
             errs.append("connect silently repaired dropped trigger")
-        except RuntimeError:
-            pass
+        except RuntimeError as e:
+            if not _closed_on_fail(e):
+                errs.append("connect leaks an OPEN handle (dropped)")
 
         # park/resume lifecycle on a live run
         r3 = "r-park"
@@ -695,4 +718,8 @@ def selftest(argv=None) -> int:
 
 if __name__ == "__main__":
     import sys
+    _a = sys.argv[1:]
+    if _a and _a[0] not in ("selftest", "--help"):
+        print("usage: run_events.py [selftest|--help]", file=sys.stderr)
+        sys.exit(2)
     sys.exit(selftest())
