@@ -18,6 +18,8 @@ State root: ~/.rig/state/loops (override: RIG_LOOP_STATE, used by tests).
 """
 from __future__ import annotations
 
+import copy
+import fcntl
 import fnmatch
 import hashlib
 import hmac
@@ -258,9 +260,56 @@ def _new_run_id(loop_id: str) -> str:
     return f"{loop_id}-{ts}-{salt}"
 
 
+def _merge_ledgers(disk: dict, run: dict) -> None:
+    """Append-only ledgers merge under the save lock: entries written by other
+    processes between this run's load and its save are never lost (s11 lost
+    update: a concurrent `check run` saved a stale snapshot over three plant
+    records). Engine ledgers (planted/children/verifications) are LISTED
+    append-only; exact-content dedup keeps order and makes the caller's own
+    records replay-idempotent. Deliberately not name-keyed: s11-style
+    re-registration of the same plant name with new evidence must coexist.
+    Everything else — including `checks`, where `check rm` is a real
+    deletion — stays caller-owned.
+    ponytail: check-list edits remain last-writer-wins (CLI single-writer
+    assumption); give them key-merge too if cross-process check add appears."""
+
+    def dkey(x):
+        return (json.dumps(x, sort_keys=True) if isinstance(x, (dict, list))
+                else f"\0{x!r}")
+    for k in ("planted", "children", "verifications"):
+        if k in disk or k in run:
+            disk_v, run_v = list(disk.get(k) or []), list(run.get(k) or [])
+            seen = {dkey(x) for x in run_v}
+            run[k] = [x for x in disk_v if dkey(x) not in seen] + run_v
+    if "stage_status" in disk or "stage_status" in run:
+        m = dict(disk.get("stage_status") or {})
+        m.update(run.get("stage_status") or {})
+        run["stage_status"] = m
+    run["events"] = max(int(run.get("events") or 0), int(disk.get("events") or 0))
+
+
 def save_run(run: dict) -> None:
+    """The single mutation site for run.json: hold the flock, reload the live
+    disk copy, merge append-only ledgers into `run`, then write atomically. A
+    stale load -> save can no longer erase a sibling process's ledger entries."""
     run["updated_at"] = utc_now()
-    _atomic_write(_run_dir(run["run_id"]) / "run.json", json.dumps(run, indent=2, sort_keys=True))
+    d = _run_dir(run["run_id"])
+    d.mkdir(parents=True, exist_ok=True)
+    path = d / "run.json"
+    with open(d / ".run.lock", "w") as lk:
+        fcntl.flock(lk.fileno(), fcntl.LOCK_EX)
+        try:
+            disk = None
+            if path.exists():
+                try:
+                    disk = json.loads(path.read_text())
+                except (OSError, ValueError):
+                    disk = None  # corrupt run.json: rebuild wholesale
+            if isinstance(disk, dict):
+                _merge_ledgers(disk, run)
+            _atomic_write(path, json.dumps(run, indent=2, sort_keys=True))
+        finally:
+            fcntl.flock(lk.fileno(), fcntl.LOCK_UN)
 
 
 def load_run(run_id: str) -> dict | None:
@@ -1969,6 +2018,111 @@ def doctor() -> dict:
     rep["ok"] = (not bad) and all(v["wired"] for v in rep["wiring"].values()) and not rep["missing_installs"]
     return rep
 
+def _selftest_engine() -> dict:
+    """Engine invariants the declarative case language cannot express
+    (no concurrency, git, or dispatch stubs in tests/cases.json steps).
+    Covers: run.json lost updates, candidate-binding correctness, and the
+    TOCTOU stamp rule. Wired into run_loop_tests so `rig-loop test` cannot
+    go green while any of them is broken."""
+    fails: list[str] = []
+    old_key = os.environ.pop("RIG_CAPABILITIES_SIGNING_KEY", None)
+    try:
+        # 1. stale load -> save must not erase a sibling's ledger entries
+        rid = "selftest-race-" + hashlib.sha1(str(time.time()).encode()).hexdigest()[:8]
+        base = {"run_id": rid, "cwd": os.getcwd(), "iteration": 1, "events": 3,
+                "planted": [{"name": "early", "red_ok": True}], "children": ["c0"],
+                "checks": [{"kind": "cmd", "cmd": "true"}], "verifications": [],
+                "stage_status": {"B": "pass"}}
+        save_run(base)
+        a, b = copy.deepcopy(base), copy.deepcopy(base)
+        a["planted"].append({"name": "x", "red_ok": True})
+        a["children"].append("cx")
+        a["verifications"].append({"family": "codex", "at": "t-x"})
+        b["planted"].append({"name": "y", "red_ok": True})
+        b["children"].append("cy")
+        b["verifications"].append({"family": "gpt", "at": "t-y"})
+        save_run(a)
+        save_run(b)
+        disk = load_run(rid) or {}
+        if {p.get("name") for p in disk.get("planted", [])} != {"early", "x", "y"}:
+            fails.append("planted ledger lost an update")
+        if sorted(disk.get("children", [])) != ["c0", "cx", "cy"]:
+            fails.append("children ledger lost an update")
+        if {v.get("family") for v in disk.get("verifications", [])} != {"codex", "gpt"}:
+            fails.append("verifications ledger lost an update")
+        disk["checks"] = []  # caller-owned deletions must survive the merge
+        save_run(disk)
+        if (load_run(rid) or {}).get("checks"):
+            fails.append("check rm was resurrected by merge")
+        if int((load_run(rid) or {}).get("events", 0)) < 3:
+            fails.append("events counter regressed")
+
+        # 2. producer side: candidate tree = HEAD + files_written, nothing else
+        repo = Path(tempfile.mkdtemp(prefix="rigloop-bind-"))
+        apath = str(repo / "a.py")
+
+        def g(*args, timeout=20):
+            return subprocess.run(["git", *args], cwd=str(repo),
+                                  capture_output=True, text=True, timeout=timeout)
+        g("init", "-q")
+        g("config", "user.email", "t@example.invalid")
+        g("config", "user.name", "selftest")
+        # Local config for a synthetic fixture repo, not a bypass of a guard
+        # under test: the machine-wide github-steward pre-commit guard
+        # (global core.hooksPath) correctly refuses commits in unregistered
+        # directories — it would otherwise block every temp-repo fixture.
+        g("config", "core.hooksPath", str(repo / ".no-hooks"))
+        (repo / "a.py").write_text("A1\n")
+        (repo / "b.py").write_text("B1\n")
+        g("add", "-A")
+        g("commit", "-qm", "seed")
+        vrun = {"run_id": "selftest-bind", "cwd": str(repo), "harness": "claude",
+                "iteration": 1, "loop_id": "selftest", "intent": "selftest",
+                "checks": [], "stage_artifacts": {}, "files_written": [apath]}
+        ph, tree = _candidate_binding(vrun)
+        head = g("rev-parse", "HEAD").stdout.strip()
+        if not (ph and tree) or ph != head:
+            fails.append("binding parent_head != HEAD (or uncomputable)")
+        (repo / "dirt.py").write_text("untracked dirt\n")
+        if _candidate_binding(vrun)[1] != tree:
+            fails.append("unrelated untracked dirt changed the tree")
+        (repo / "a.py").write_text("A2\n")
+        if _candidate_binding(vrun)[1] == tree:
+            fails.append("binding insensitive to files_written change")
+        g("commit", "-qam", "a2")
+        tree2 = _candidate_binding(vrun)[1]
+        if tree2 != g("rev-parse", "HEAD^{tree}").stdout.strip():
+            fails.append("binding tree != committed tree once worktree == HEAD")
+
+        # 3. TOCTOU: drift during dispatch => binding_drift + NO stamp;
+        #    stable candidate => stamped; no key => silent refusal.
+        os.environ["RIG_CAPABILITIES_SIGNING_KEY"] = "selftest-key"
+        spec_stub = {"stages": [{"id": "B", "name": "Build"}]}
+        rec = verify(vrun, spec_stub, "codex", cmd_override="true", timeout=30)
+        if "attest" not in rec:
+            fails.append("positive control: stable candidate not stamped")
+        vrun = dict(vrun, run_id="selftest-drift")
+        rec = verify(vrun, spec_stub, "codex",
+                     cmd_override=f"echo x >> '{apath}'", timeout=30)
+        if "binding_drift" not in rec or "attest" in rec:
+            fails.append("drift during dispatch was stamped anyway")
+        os.environ.pop("RIG_CAPABILITIES_SIGNING_KEY", None)
+        vrun = dict(vrun, run_id="selftest-nokey")
+        rec = verify(vrun, spec_stub, "codex", cmd_override="true", timeout=30)
+        if "attest" in rec or "binding_drift" in rec:
+            fails.append("keyless run produced a stamp/drift instead of silence")
+    except Exception as exc:  # noqa: BLE001 — an invariant that cannot run is not one
+        fails.append(f"selftest crashed: {exc!r}")
+    finally:
+        if old_key is not None:
+            os.environ["RIG_CAPABILITIES_SIGNING_KEY"] = old_key
+    return {"name": "engine: run-state durability + candidate binding + TOCTOU",
+            "ok": not fails,
+            "steps": [{"i": 0, "step": "engine invariants", "ok": not fails,
+                       "got": "; ".join(fails) or "all invariants hold",
+                       "expect": "no lost updates; exact tree binding; drift unstamped"}]}
+
+
 
 # --------------------------------------------------------------------------- loop tests (non-vacuity)
 def run_loop_tests(loop_id: str) -> dict:
@@ -1986,6 +2140,7 @@ def run_loop_tests(loop_id: str) -> dict:
         try:
             for case in cases:
                 results.append(_run_case(spec, case, Path(tmp)))
+            results.append(_selftest_engine())
         finally:
             for k, v in (("RIG_LOOP_STATE", old_state), ("RIG_LOOP_PROOF_DIR", old_proof)):
                 if v is None:
@@ -1995,8 +2150,6 @@ def run_loop_tests(loop_id: str) -> dict:
     ok = all(r["ok"] for r in results)
     return {"loop": loop_id, "ok": ok, "cases": results,
             "summary": f"{sum(1 for r in results if r['ok'])}/{len(results)} cases pass"}
-
-
 def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
     cwd = tmp / re.sub(r"[^a-z0-9]+", "-", case["name"].lower())[:40]
     cwd.mkdir(parents=True, exist_ok=True)
