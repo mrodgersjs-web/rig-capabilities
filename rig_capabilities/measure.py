@@ -125,17 +125,6 @@ class Recorder:
             f.flush()
             os.fsync(f.fileno())
 
-    def append(self, trial_id: str, cell: str, outcome: str,
-               attempt_seq: int = 1, **extra) -> dict:
-        if outcome not in ("success", "failure"):
-            raise ValueError("outcome must be success|failure")
-        if not isinstance(attempt_seq, int) or attempt_seq < 1:
-            raise ValueError("attempt_seq must be an int >= 1")
-        row = {"trial_id": trial_id, "cell": cell, "outcome": outcome,
-               "attempt_seq": attempt_seq, "ts": time.time(), **extra}
-        with self._locked():
-            self._append_locked(row)
-        return row
 
     def record_once(self, trial_id: str, cell: str, outcome: str,
                     attempt_seq: int = 1) -> str:
@@ -330,6 +319,32 @@ def selfcheck(rules_path: str) -> int:
         got_keys = {(r["cell"], r["trial_id"], r["attempt_seq"]) for r in rows}
         if len(rows) != 4 or got_keys != want_keys:
             errors.append(f"attempt-key rows wrong: {len(rows)} {got_keys}")
+
+    # 9. no public write path bypasses attempt-key dedupe (s2c): record_once is
+    # the only Recorder method that can add a row; anything else public that
+    # writes must fail the fixture until reviewed into the allowlist.
+    with tempfile.TemporaryDirectory() as td:
+        rec = Recorder(os.path.join(td, "trials.jsonl"))
+        public = {n for n in dir(rec) if not n.startswith("_")}
+        allowed = {"record_once", "heal_tail", "existing_ids",
+                   "existing_keys", "path"}
+        stray = public - allowed
+        if stray:
+            errors.append(f"public surface outside allowlist: {stray}")
+
+        # planted: the old bypass must be gone
+        if hasattr(rec, "append"):
+            errors.append("Recorder.append bypass still present")
+        # record_once under contention still yields 1 row for shared key
+        procs = [subprocess.Popen(
+            [sys.executable, os.path.abspath(__file__), "record",
+             "--ledger", os.path.join(td, "x.jsonl"), "--trial-id", "s",
+             "--cell", "C01", "--outcome", "success", "--attempt-seq", "1"],
+            stdout=subprocess.DEVNULL) for _ in range(4)]
+        [p.wait(timeout=60) for p in procs]
+        rows = [json.loads(l) for l in open(os.path.join(td, "x.jsonl"))]
+        if len(rows) != 1:
+            errors.append(f"dedupe invariant broken: {len(rows)} rows")
 
     print(json.dumps({"ok": not errors, "errors": errors,
                       "wilson_lb_72_72": wilson_lb(72, 72, 0.05),
