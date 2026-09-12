@@ -127,30 +127,38 @@ class Recorder:
 
 
     def record_once(self, trial_id: str, cell: str, outcome: str,
-                    attempt_seq: int = 1) -> str:
+                    attempt_seq: int = 1, bind: dict | None = None) -> str:
         """One critical section: heal, attempt-key scan, append+fsync under the
         same lock. Replays of (cell, trial_id, attempt_seq) are rejected;
         the same trial_id under a NEW attempt_seq is a genuine retry and
-        lands. Safe to call again after a crash."""
+        lands. Safe to call again after a crash. `bind` (e.g.
+        {"commit_sha": ...}) is stored AT RECORD TIME so downstream gates can
+        bind evidence to a commit without trusting later edits."""
         if outcome not in ("success", "failure"):
             raise ValueError("outcome must be success|failure")
         if not isinstance(attempt_seq, int) or attempt_seq < 1:
             raise ValueError("attempt_seq must be an int >= 1")
+        if bind is not None and (not isinstance(bind, dict)
+                                 or not bind.get("commit_sha")):
+            raise ValueError("bind must be a dict with commit_sha")
         key = (cell, trial_id, attempt_seq)
         with self._locked():
             self.heal_tail()
             if key in self._scan_locked():
                 return "duplicate"
-            self._append_locked({"trial_id": trial_id, "cell": cell,
-                                 "outcome": outcome,
-                                 "attempt_seq": attempt_seq,
-                                 "ts": time.time()})
+            row = {"trial_id": trial_id, "cell": cell,
+                   "outcome": outcome,
+                   "attempt_seq": attempt_seq,
+                   "ts": time.time()}
+            if bind:
+                row["bind"] = dict(bind)
+            self._append_locked(row)
             return "recorded"
 
 
 def record_idempotent(rec: Recorder, trial_id: str, cell: str, outcome: str,
-                      attempt_seq: int = 1) -> str:
-    return rec.record_once(trial_id, cell, outcome, attempt_seq)
+                      attempt_seq: int = 1, bind: dict | None = None) -> str:
+    return rec.record_once(trial_id, cell, outcome, attempt_seq, bind=bind)
 
 
 
