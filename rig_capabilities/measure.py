@@ -46,24 +46,37 @@ def alpha_j(m: int, j: int) -> float:
 
 class Recorder:
     """Append-only trial ledger. Retry-safe AND concurrency-safe: one
-    process-wide exclusive flock spans heal -> ID scan -> append+fsync, so a
-    duplicate trial_id can never land even under competing writers."""
+    process-wide exclusive flock spans heal -> key scan -> append+fsync.
+
+    Dedupe key is the ATTEMPT KEY (cell, trial_id, attempt_seq): a retry that
+    replays the same attempt key is rejected; a genuinely new attempt uses the
+    next attempt_seq and lands. attempt_seq is caller-supplied (runner
+    persists it per operation), never inferred from row counts."""
 
     def __init__(self, path: str):
         self.path = path
 
-    def existing_ids(self) -> set[str]:
-        ids = set()
+    def _scan_locked(self) -> set[tuple]:
+        """Committed attempt keys (complete newline-terminated rows only)."""
+        keys: set[tuple] = set()
         if os.path.exists(self.path):
             with open(self.path) as f:
                 for line in f:
                     line = line.strip()
-                    if line:
-                        try:
-                            ids.add(json.loads(line)["trial_id"])
-                        except (json.JSONDecodeError, KeyError):
-                            continue  # torn tail line: ignored, never trusted
-        return ids
+                    if not line:
+                        continue
+                    try:
+                        r = json.loads(line)
+                        keys.add((r["cell"], r["trial_id"], r["attempt_seq"]))
+                    except (json.JSONDecodeError, KeyError):
+                        continue  # torn or pre-s2b line: never trusted
+        return keys
+
+    def existing_keys(self) -> set[tuple]:
+        return self._scan_locked()
+
+    def existing_ids(self) -> set[str]:
+        return {k[1] for k in self._scan_locked()}
 
     def heal_tail(self) -> str | None:
         """Crash-safe append needs a newline-terminated file. A torn final line
@@ -112,28 +125,43 @@ class Recorder:
             f.flush()
             os.fsync(f.fileno())
 
-    def append(self, trial_id: str, cell: str, outcome: str, **extra) -> dict:
+    def append(self, trial_id: str, cell: str, outcome: str,
+               attempt_seq: int = 1, **extra) -> dict:
         if outcome not in ("success", "failure"):
             raise ValueError("outcome must be success|failure")
+        if not isinstance(attempt_seq, int) or attempt_seq < 1:
+            raise ValueError("attempt_seq must be an int >= 1")
         row = {"trial_id": trial_id, "cell": cell, "outcome": outcome,
-               "ts": time.time(), **extra}
+               "attempt_seq": attempt_seq, "ts": time.time(), **extra}
         with self._locked():
             self._append_locked(row)
         return row
 
-    def record_once(self, trial_id: str, cell: str, outcome: str) -> str:
-        """One critical section: scan-then-append under the same lock.
-        Returns 'recorded' or 'duplicate'. Safe to retry after a crash."""
+    def record_once(self, trial_id: str, cell: str, outcome: str,
+                    attempt_seq: int = 1) -> str:
+        """One critical section: heal, attempt-key scan, append+fsync under the
+        same lock. Replays of (cell, trial_id, attempt_seq) are rejected;
+        the same trial_id under a NEW attempt_seq is a genuine retry and
+        lands. Safe to call again after a crash."""
+        if outcome not in ("success", "failure"):
+            raise ValueError("outcome must be success|failure")
+        if not isinstance(attempt_seq, int) or attempt_seq < 1:
+            raise ValueError("attempt_seq must be an int >= 1")
+        key = (cell, trial_id, attempt_seq)
         with self._locked():
-            if trial_id in self.existing_ids():
+            self.heal_tail()
+            if key in self._scan_locked():
                 return "duplicate"
             self._append_locked({"trial_id": trial_id, "cell": cell,
-                                 "outcome": outcome, "ts": time.time()})
+                                 "outcome": outcome,
+                                 "attempt_seq": attempt_seq,
+                                 "ts": time.time()})
             return "recorded"
 
 
-def record_idempotent(rec: Recorder, trial_id: str, cell: str, outcome: str) -> str:
-    return rec.record_once(trial_id, cell, outcome)
+def record_idempotent(rec: Recorder, trial_id: str, cell: str, outcome: str,
+                      attempt_seq: int = 1) -> str:
+    return rec.record_once(trial_id, cell, outcome, attempt_seq)
 
 
 
@@ -194,7 +222,8 @@ def selfcheck(rules_path: str) -> int:
             errors.append(f"{name}: script missing: {argv[1]}")
         for flag, placeholder in (("--trial-id", "{trial_id}"),
                                   ("--cell", "{cell}"),
-                                  ("--outcome", "{outcome}")):
+                                  ("--outcome", "{outcome}"),
+                                  ("--attempt-seq", "{attempt_seq}")):
             if flag not in argv:
                 errors.append(f"{name}: command missing {flag}")
             if placeholder not in spec.get("command", ""):
@@ -264,10 +293,11 @@ def selfcheck(rules_path: str) -> int:
     with tempfile.TemporaryDirectory() as td:
         p = os.path.join(td, "trials.jsonl")
         me = os.path.abspath(__file__)
-        def spawn(tid):
+        def spawn(tid, seq=1):
             return subprocess.Popen(
                 [sys.executable, me, "record", "--ledger", p,
-                 "--trial-id", tid, "--cell", "C01", "--outcome", "success"],
+                 "--trial-id", tid, "--cell", "C01", "--outcome", "success",
+                 "--attempt-seq", str(seq)],
                 stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         procs = [spawn("shared") for _ in range(8)]
         codes = [c.wait(timeout=60) for c in procs]
@@ -281,6 +311,25 @@ def selfcheck(rules_path: str) -> int:
         if codes.count(0) != 8 or len(rows) != 9:
             errors.append(f"distinct-ID race: {codes.count(0)} exit-0,"
                           f" {len(rows)} rows (expected 8 / 9)")
+
+    # 8. attempt-key dedupe (s2b): replay of (cell, trial_id, attempt_seq) is
+    # rejected; the same trial_id at a NEW attempt_seq is a genuine retry and
+    # lands; scope is honored across cells.
+    with tempfile.TemporaryDirectory() as td:
+        rec = Recorder(os.path.join(td, "trials.jsonl"))
+        s = [rec.record_once("x", "C01", "success", 1),
+             rec.record_once("x", "C01", "success", 1),
+             rec.record_once("x", "C01", "success", 2),
+             rec.record_once("y", "C01", "success", 1),
+             rec.record_once("x", "C02", "success", 1)]
+        if s != ["recorded", "duplicate", "recorded", "recorded", "recorded"]:
+            errors.append(f"attempt-key dedupe wrong: {s}")
+        rows = [json.loads(l) for l in open(os.path.join(td, "trials.jsonl"))]
+        want_keys = {("C01", "x", 1), ("C01", "x", 2),
+                     ("C01", "y", 1), ("C02", "x", 1)}
+        got_keys = {(r["cell"], r["trial_id"], r["attempt_seq"]) for r in rows}
+        if len(rows) != 4 or got_keys != want_keys:
+            errors.append(f"attempt-key rows wrong: {len(rows)} {got_keys}")
 
     print(json.dumps({"ok": not errors, "errors": errors,
                       "wilson_lb_72_72": wilson_lb(72, 72, 0.05),
@@ -302,6 +351,9 @@ def main(argv=None) -> int:
     rc.add_argument("--trial-id", required=True)
     rc.add_argument("--cell", required=True)
     rc.add_argument("--outcome", required=True, choices=("success", "failure"))
+    # REQUIRED, never defaulted: a retry resubmits the same attempt_seq,
+    # a genuinely new attempt submits the next one.
+    rc.add_argument("--attempt-seq", type=int, required=True)
     args = ap.parse_args(argv)
     if args.cmd == "selfcheck":
         return selfcheck(args.rules)
@@ -309,7 +361,7 @@ def main(argv=None) -> int:
         print(f"{wilson_lb(args.successes, args.n, args.alpha):.6f}")
         return 0
     status = record_idempotent(Recorder(args.ledger), args.trial_id,
-                               args.cell, args.outcome)
+                               args.cell, args.outcome, args.attempt_seq)
     print(status)
     return 0 if status == "recorded" else 2
 
