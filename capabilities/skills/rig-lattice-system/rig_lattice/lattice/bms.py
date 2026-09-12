@@ -21,7 +21,7 @@ Two entry points:
 ``compute_bms(failure_cost=, reversibility=, mechanism_clarity=, ...)``
     You have the criteria and want the number computed:
 
-        raw   = failure_cost*0.4 + reversibility*0.3 + mechanism_clarity*0.3
+        raw   = (1 - failure_cost)*0.4 + reversibility*0.3 + mechanism_clarity*0.3
         final = clamp(raw - past_failure_rate*0.2
                           + (data_volume - 0.5)*0.1
                           + ALTITUDE_BONUS[level], 0.0, 1.0)
@@ -135,11 +135,17 @@ def raw_score(
     reversibility: float = 0.5,
     mechanism_clarity: float = 0.5,
 ) -> float:
-    """The unadjusted weighted criteria score."""
+    """The unadjusted weighted criteria score.
+
+    failure_cost enters as its complement: higher consequence of failure
+    means LOWER confidence in autonomous mode. A defect regression (2026-09
+    S08) previously used +failure_cost and routed max-consequence work to A1;
+    tests/test_bms_monotonicity.py guards the sign permanently.
+    """
     fc = _check_unit("failure_cost", failure_cost)
     rv = _check_unit("reversibility", reversibility)
     mc = _check_unit("mechanism_clarity", mechanism_clarity)
-    return fc * 0.4 + rv * 0.3 + mc * 0.3
+    return (1.0 - fc) * 0.4 + rv * 0.3 + mc * 0.3
 
 
 def compute_bms(

@@ -161,19 +161,24 @@ class TestBMSSelection(unittest.TestCase):
         self.assertTrue(BMSMode.A4.approval_required)
 
     def test_raw_score_weights(self):
-        """raw = failure_cost*0.4 + reversibility*0.3 + mechanism_clarity*0.3."""
+        """raw = (1-failure_cost)*0.4 + reversibility*0.3 + mechanism_clarity*0.3."""
         result = compute_bms(
-            failure_cost=1.0, reversibility=0.0, mechanism_clarity=0.0,
+            failure_cost=0.0, reversibility=0.0, mechanism_clarity=0.0,
             level=Level.L4,  # altitude bonus 0.0
         )
         self.assertAlmostEqual(result.raw, 0.4, places=9)
         result = compute_bms(
-            failure_cost=0.0, reversibility=1.0, mechanism_clarity=0.0,
+            failure_cost=1.0, reversibility=0.0, mechanism_clarity=0.0,
+            level=Level.L4,
+        )
+        self.assertAlmostEqual(result.raw, 0.0, places=9)
+        result = compute_bms(
+            failure_cost=1.0, reversibility=1.0, mechanism_clarity=0.0,
             level=Level.L4,
         )
         self.assertAlmostEqual(result.raw, 0.3, places=9)
         result = compute_bms(
-            failure_cost=0.0, reversibility=0.0, mechanism_clarity=1.0,
+            failure_cost=1.0, reversibility=0.0, mechanism_clarity=1.0,
             level=Level.L4,
         )
         self.assertAlmostEqual(result.raw, 0.3, places=9)
