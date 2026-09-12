@@ -1,0 +1,36 @@
+# Measurement rules v1 — FROZEN for run iqrsqpi-v20-20260912T091037Z-e5142d
+# Frozen BEFORE any trial runs (sequential-testing discipline, research wave 1).
+# Commands are executable templates: {trial_id} {cell} {outcome} are substituted
+# by the runner; selfcheck dry-parses each one. Any scalar without completed
+# receipts stays UNKNOWN — never 0.5.
+scalars:
+  failure_cost:
+    command: python3 rig_capabilities/measure.py record --ledger runs/agentic-stack-buildout/trials/failure_cost.jsonl --trial-id {trial_id} --cell {cell} --outcome {outcome}
+    estimator: wilson-lb-one-sided-0.05-on-binary-severity-loss-ge-0.35-per-trial
+    min_trials: 72
+  reversibility:
+    command: python3 rig_capabilities/measure.py record --ledger runs/agentic-stack-buildout/trials/reversibility.jsonl --trial-id {trial_id} --cell {cell} --outcome {outcome}
+    estimator: wilson-lb-one-sided-0.05-on-planted-failure-recovered-binary
+    min_trials: 20
+  mechanism_clarity:
+    command: python3 rig_capabilities/measure.py record --ledger runs/agentic-stack-buildout/trials/mechanism_clarity.jsonl --trial-id {trial_id} --cell {cell} --outcome {outcome}
+    estimator: wilson-lb-one-sided-0.05-on-trace-to-source-agreement-binary
+    min_trials: 20
+  past_failure_rate:
+    command: python3 rig_capabilities/measure.py record --ledger runs/agentic-stack-buildout/trials/past_failure_rate.jsonl --trial-id {trial_id} --cell {cell} --outcome {outcome}
+    estimator: wilson-lb-one-sided-0.05-on-failure-event-binary-reported-as-rate
+    min_trials: 20
+  data_volume:
+    command: python3 rig_capabilities/measure.py record --ledger runs/agentic-stack-buildout/trials/data_volume.jsonl --trial-id {trial_id} --cell {cell} --outcome {outcome}
+    estimator: count-deduped-effective-sample-size-recorded-per-trial
+    min_trials: 20
+constraints:
+  durable_min_runs: 10
+  durable_min_spacing_hours: 24
+  repeatable_min_trials: 72
+  joint_lb_floor: 0.95
+  joint_rule: min
+  alpha_spend: geometric-0.05_over_m_times_2_pow_j
+  default_substitution: FORBIDDEN-0.5-is-not-an-answer
+  unknown_rule: no-receipt-means-UNKNOWN-and-C24-BLOCKED
+  severity_threshold: 0.35
