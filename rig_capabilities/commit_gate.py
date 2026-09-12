@@ -97,8 +97,8 @@ def _anchor_errors(repo: Path, anchor: str | None) -> list[str]:
                 "version; refusing to execute it"]
     return []
 
-def verify_d85(repo: Path, r: dict, sha: str, *,
-               anchor: str | None = None) -> list[str]:
+def _verify_d85(repo: Path, r: dict, sha: str, *,
+                anchor: str | None = None) -> list[str]:
     errs = _anchor_errors(repo, anchor)
     if errs:
         return errs
@@ -187,8 +187,9 @@ def _load_authority(repo: Path):
     return d85, d85_gates
 
 
-def verify_gate_d(repo: Path, r: dict, sha: str, *, gate_root: Path | None = None,
-                  proof_fn=None, anchor: str | None = None) -> list[str]:
+def _verify_gate_d(repo: Path, r: dict, sha: str, *,
+                   gate_root: Path | None = None, proof_fn=None,
+                   anchor: str | None = None) -> list[str]:
     """NON-CONSUMING readiness read of the canonical Gate-D ledger
     (HMAC-signed, proof-bound, action-hash-bound, expiry-bounded,
     consume-once). Calling gate_d() here would CONSUME the approval, so we
@@ -266,8 +267,8 @@ def verify_gate_d(repo: Path, r: dict, sha: str, *, gate_root: Path | None = Non
     return [f"gate-d: no approval binds action {action_sha256[:12]}"]
 
 
-def arm_gate_d(repo: Path, r: dict, sha: str, *,
-               anchor: str | None = None) -> dict:
+def _arm_gate_d(repo: Path, r: dict, sha: str, *,
+                anchor: str | None = None) -> dict:
     """THE effect-time call, once; returns the authority's ARMED verdict
     (consume marker inside). Callers must retain it as the execution
     receipt. NOT used by check(); never call it for readiness."""
@@ -318,13 +319,11 @@ def verify_verdict(repo: Path, r: dict, sha: str) -> list[str]:
         errs.append("verdict: verifier family missing")
     return errs
 
-
 # -- gate -------------------------------------------------------------------
-def check(repo: Path, sha: str, manifest: dict, *, anchor: str | None = None,
-          gate_root: Path | None = None, proof_fn=None) -> dict:
-    """NON-CONSUMING readiness. anchor/gate_root/proof_fn are TEST SEAMS
-    (never manifest fields): production reads the out-of-tree anchor and
-    the live registry. Arming stays a separate effect-time call."""
+def _check(repo: Path, sha: str, manifest: dict, *, anchor: str | None = None,
+           gate_root: Path | None = None, proof_fn=None) -> dict:
+    """TEST-ONLY core with injection seams. Production callers MUST use
+    check(), which carries no seam parameters at all."""
     # ANCHOR PREFLIGHT: if the pinned certifier authority in this candidate
     # tree does not match the out-of-tree digest, NOTHING from that tree may
     # be executed or imported — including the gate-d authority modules.
@@ -337,20 +336,32 @@ def check(repo: Path, sha: str, manifest: dict, *, anchor: str | None = None,
         if kind not in manifest:
             errs.append(f"{kind}: missing receipt (UNKNOWN blocks)")
     if "d85" in manifest:
-        errs += verify_d85(repo, manifest["d85"], sha, anchor=anchor)
+        errs += _verify_d85(repo, manifest["d85"], sha, anchor=anchor)
     if "joint" in manifest:
         errs += verify_joint(repo, manifest["joint"], sha)
     if "gate-d" in manifest:
-        errs += verify_gate_d(repo, manifest["gate-d"], sha,
-                              gate_root=gate_root, proof_fn=proof_fn,
-                              anchor=anchor)
+        errs += _verify_gate_d(repo, manifest["gate-d"], sha,
+                               gate_root=gate_root, proof_fn=proof_fn,
+                               anchor=anchor)
     if "verdict" in manifest:
         errs += verify_verdict(repo, manifest["verdict"], sha)
     return {"commit": sha[:12], "admitted": not errs, "refusals": errs}
 
 
-def check_or_raise(repo: Path, sha: str, manifest: dict, **seams) -> dict:
-    v = check(repo, sha, manifest, **seams)
+def check(repo: Path, sha: str, manifest: dict) -> dict:
+    """NON-CONSUMING readiness. NO seam parameters: the anchor is read from
+    the out-of-tree file, the gate root from the pinned registry, the proof
+    from the live scorer. Arming is a separate effect-time call."""
+    return _check(repo, sha, manifest)
+
+
+def arm_gate_d(repo: Path, r: dict, sha: str) -> dict:
+    """Production arming: no seams (anchor read from the out-of-tree file)."""
+    return _arm_gate_d(repo, r, sha)
+
+
+def check_or_raise(repo: Path, sha: str, manifest: dict) -> dict:
+    v = check(repo, sha, manifest)
     if not v["admitted"]:
         raise GateRefused("; ".join(v["refusals"]))
     return v
@@ -442,11 +453,11 @@ def selftest(argv=None) -> int:
             "gate-d": {"process_id": "P1", "action_file": "actions/ship.json"},
             "verdict": {"artifact": "proof/verdicts/v.json"},
         }
-        v0 = check(repo, SHA, manifest, **seam)
+        v0 = _check(repo, SHA, manifest, **seam)
         if not v0["admitted"]:
             errs.append(f"valid manifest refused: {v0['refusals']}")
         # non-consuming: readiness twice must stay admitted
-        v1 = check(repo, SHA, manifest, **seam)
+        v1 = _check(repo, SHA, manifest, **seam)
         if not v1["admitted"]:
             errs.append("readiness consumed the approval")
 
@@ -456,7 +467,7 @@ def selftest(argv=None) -> int:
                 mutate(m)
             if pre:
                 pre()
-            v = check(repo, SHA, m, **seam)
+            v = _check(repo, SHA, m, **seam)
             if post:
                 post()
             if v["admitted"]:
@@ -471,10 +482,10 @@ def selftest(argv=None) -> int:
                post=lambda: write_ledger(0))
         expect("missing receipts", lambda m: m.clear(), "missing receipt")
         # anchor mismatch exercised directly (anchor is a kwarg seam)
-        if not verify_d85(repo, manifest["d85"], SHA, anchor="0" * 64):
+        if not _verify_d85(repo, manifest["d85"], SHA, anchor="0" * 64):
             errs.append("anchor mismatch admitted")
         # preflight must SHORT-CIRCUIT: one refusal, nothing else ran
-        v = check(repo, SHA, manifest, **dict(seam, anchor="0" * 64))
+        v = _check(repo, SHA, manifest, **dict(seam, anchor="0" * 64))
         if len(v["refusals"]) != 1 or "match" not in v["refusals"][0]:
             errs.append(f"anchor mismatch not short-circuited: {v['refusals']}")
         marker = gate_root / "consumed" / (
@@ -482,21 +493,21 @@ def selftest(argv=None) -> int:
             sd85._canonical_hash(action)[7:23])
         marker.parent.mkdir(exist_ok=True)
         marker.write_text("{}")
-        v = check(repo, SHA, manifest, **seam)
+        v = _check(repo, SHA, manifest, **seam)
         if v["admitted"] or not any("consumed" in r for r in v["refusals"]):
             errs.append(f"consumed approval admitted: {v['refusals']}")
         marker.unlink()
         # a certified build for ANOTHER commit must not pass
         (repo / "other-build.json").write_text(json.dumps(
             {"commit_sha": "d" * 40}))
-        v = check(repo, SHA, {**manifest, "d85": {
+        v = _check(repo, SHA, {**manifest, "d85": {
             "build": "other-build.json", "cert": "cert.json"}}, **seam)
         if v["admitted"] or not any("not" in r for r in v["refusals"]):
             errs.append("cross-commit certified build admitted")
         expect("build path escape",
                lambda m: m["d85"].update(build="../../etc/passwd"), "escapes")
         # a receipt-supplied binary key is inert: pinned path still used
-        v = check(repo, SHA, {**manifest, "d85": {
+        v = _check(repo, SHA, {**manifest, "d85": {
             "build": "build.json", "cert": "cert.json",
             "d85_bin": "/bin/echo"}}, **seam)
         if not v["admitted"]:
@@ -505,7 +516,7 @@ def selftest(argv=None) -> int:
         (repo / "proof/verdicts/f.json").write_text(json.dumps(
             {"commit_sha": SHA, "decision": "pass", "builder_family": "claude",
              "verifier_family": "claude"}))
-        v = check(repo, SHA, {**manifest, "verdict": {
+        v = _check(repo, SHA, {**manifest, "verdict": {
             "artifact": "proof/verdicts/f.json"}}, **seam)
         if v["admitted"] or not any("same-family" in r for r in v["refusals"]):
             errs.append("same-family verdict admitted")
@@ -521,6 +532,12 @@ def selftest(argv=None) -> int:
             errs.append("check_or_raise admitted empty")
         except GateRefused:
             pass
+    # the exact advisory lesson, frozen: public entrypoints carry NO seams
+    import inspect as _insp
+    for fn in (check, arm_gate_d, check_or_raise):
+        s = str(_insp.signature(fn))
+        if any(w in s for w in ("anchor", "gate_root", "proof_fn")):
+            errs.append(f"public seam leak in {fn.__name__}: {s}")
     print(json.dumps({"ok": not errs, "errors": errs}))
     return 0 if not errs else 1
 
