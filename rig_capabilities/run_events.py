@@ -79,15 +79,27 @@ def _verify_schema(con: sqlite3.Connection) -> None:
 
 
 def connect(path: str) -> sqlite3.Connection:
-    """Open (creating schema + triggers if absent) an append-only ledger."""
+    """Open an append-only ledger; fail closed on any schema divergence.
+
+    Inspect BEFORE touching DDL: a pre-existing schema must already be
+    fully canonical (a dropped trigger is tampering, not something to
+    silently repair; a poisoned one must not be half-fixed on the way to
+    the raise). Only a pristine database with no ledger objects at all
+    gets created.
+    """
     con = sqlite3.connect(path)
     con.isolation_level = None  # manual BEGIN IMMEDIATE in append()
     con.execute("PRAGMA synchronous=FULL")   # durability before ack
     con.execute("PRAGMA busy_timeout=5000")
-    con.executescript(";\n".join(_DDL_STATEMENTS) + ";")
-    _verify_schema(con)
+    existing = [r[0] for r in con.execute(
+        "SELECT name FROM sqlite_master "
+        "WHERE name IN ('run_events','run_events_no_update','run_events_no_delete')")]
+    if existing:
+        _verify_schema(con)  # verify the COMPLETE set; no DDL executed
+    else:
+        con.executescript(";\n".join(_DDL_STATEMENTS) + ";")
+        _verify_schema(con)
     return con
-
 
 def _canon(row: tuple) -> str:
     return json.dumps({"run_id": row[0], "seq": row[1], "ts": row[2],
@@ -362,6 +374,21 @@ def selftest(argv=None) -> int:
         try:
             connect(poisoned)
             errs.append("connect accepted no-op trigger impostor")
+        except RuntimeError:
+            pass
+
+        # a silently DROPPED trigger must fail closed too — no auto-repair
+        dropped = os.path.join(td, "dropped.sqlite")
+        dcon = connect(dropped)
+        append(dcon, "r", "declare", payload=["B"])
+        dcon.close()
+        dcon = sqlite3.connect(dropped)
+        dcon.execute("DROP TRIGGER run_events_no_update")
+        dcon.commit()
+        dcon.close()
+        try:
+            connect(dropped)
+            errs.append("connect silently repaired dropped trigger")
         except RuntimeError:
             pass
 
