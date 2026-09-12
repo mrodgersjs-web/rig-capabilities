@@ -186,6 +186,10 @@ def selftest() -> int:
             import io
             from contextlib import redirect_stdout
             prov = _prov_path(tmp)
+            if "rig_lattice/lattice/constants.py" not in json.loads(
+                    prov.read_text())["inputs"]:
+                errs.append("input closure missing"
+                            " rig_lattice/lattice/constants.py")
             # laundering: sidecar rewritten over drifted inputs while the
             # checked manifest keeps the old prov digest -> must go RED.
             pv = json.loads(prov.read_text())
