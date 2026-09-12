@@ -78,6 +78,27 @@ def _head(con: sqlite3.Connection, run_id: str) -> tuple[int, str]:
     return (r[0], r[1]) if r else (0, GENESIS)
 
 
+def _apply(st: dict, kind: str, stage: str | None, payload: str) -> None:
+    """Fold one event into state (validation is separate)."""
+    if kind == "declare":
+        st.update(stages={s: None for s in json.loads(payload)},
+                  parked=False, done=False, commits=[])
+    elif kind == "stage_pass":
+        st.setdefault("stages", {})[stage] = "pass"
+        if st["stages"] and all(v == "pass" for v in st["stages"].values()):
+            st["done"] = True
+    elif kind == "stage_fail":
+        st.setdefault("stages", {})[stage] = "fail"
+        st["done"] = False
+    elif kind == "park":
+        st["parked"] = True
+    elif kind == "resume":
+        st["parked"] = False
+    elif kind == "commit":
+        st.setdefault("commits", []).append(
+            json.loads(payload)["commit_sha"])
+
+
 def replay(con: sqlite3.Connection, run_id: str, up_to: int | None = None) -> dict:
     """Reconstruct run state by folding events in seq order."""
     st: dict = {}
@@ -85,22 +106,7 @@ def replay(con: sqlite3.Connection, run_id: str, up_to: int | None = None) -> di
          "WHERE run_id=? AND (? IS NULL OR seq<=?) ORDER BY seq")
     for seq, kind, stage, payload in con.execute(q, (run_id, up_to, up_to)):
         st["seq"] = seq
-        if kind == "declare":
-            st.update(stages={s: None for s in json.loads(payload)},
-                      parked=False, done=False, commits=[])
-        elif kind == "stage_pass":
-            st["stages"][stage] = "pass"
-            if st["stages"] and all(v == "pass" for v in st["stages"].values()):
-                st["done"] = True
-        elif kind == "stage_fail":
-            st["stages"][stage] = "fail"
-            st["done"] = False
-        elif kind == "park":
-            st["parked"] = True
-        elif kind == "resume":
-            st["parked"] = False
-        elif kind == "commit":
-            st["commits"].append(json.loads(payload)["commit_sha"])
+        _apply(st, kind, stage, payload)
     return st
 
 
@@ -181,8 +187,15 @@ def append(con: sqlite3.Connection, run_id: str, kind: str,
 
 
 def verify_chain(con: sqlite3.Connection, run_id: str) -> str | None:
-    """Return a description of the first anomaly, or None if pristine."""
+    """Return a description of the first anomaly, or None if pristine.
+
+    Hash linkage alone is NOT validity: a client may INSERT a correctly
+    hashed ILLEGAL event directly (bypassing append), so every row is
+    revalidated through _check_transition against the replayed prefix
+    before it is applied. seal()/verify() inherit this refusal.
+    """
     prev_seq, prev_hash = 0, GENESIS
+    st: dict = {}
     for r in con.execute(
             "SELECT run_id, seq, ts, kind, stage, payload, prev_hash, hash "
             "FROM run_events WHERE run_id=? ORDER BY seq", (run_id,)):
@@ -192,6 +205,11 @@ def verify_chain(con: sqlite3.Connection, run_id: str) -> str | None:
             return f"chain break at seq {r[1]}"
         if _row_hash(r[:7]) != r[7]:
             return f"row hash mismatch at seq {r[1]}"
+        try:
+            _check_transition(st, r[3], r[4], r[5])
+        except TransitionError as e:
+            return f"illegal transition at seq {r[1]}: {e}"
+        _apply(st, r[3], r[4], r[5])
         prev_seq, prev_hash = r[1], r[7]
     return None
 
@@ -337,6 +355,23 @@ def selftest(argv=None) -> int:
             errs.append("tampered chain verified clean")
         tcon.close()
 
+
+        # direct INSERT bypassing append: valid chain hash, ILLEGAL
+        # transition (pass C with nothing resolved) — must be refused by
+        # verify_chain, hence by seal
+        bad = "r-bad"
+        d = append(con, bad, "declare", payload=["B", "V", "C"])
+        row = (bad, 2, time.time(), "stage_pass", "C", "", d["hash"])
+        row = (*row, _row_hash(row))
+        con.execute("INSERT INTO run_events VALUES (?,?,?,?,?,?,?,?)", row)
+        con.commit()
+        if verify_chain(con, bad) is None:
+            errs.append("hashed illegal insert verified clean")
+        try:
+            seal(con, bad)
+            errs.append("seal accepted ledger with illegal insert")
+        except TransitionError:
+            pass
         # seal/verify: honest seal holds; packet then tampered -> caught
         pkt = seal(con, run, {"done_test": "s7"})
         if verify(con, pkt) is not None:
