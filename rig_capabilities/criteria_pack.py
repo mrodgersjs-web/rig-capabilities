@@ -40,30 +40,39 @@ def build_rows() -> list[dict]:
     if len(ids) != 588:
         raise AssertionError(f"authority returned {len(ids)} cells, expected 588")
     rows = []
-    for cid in ids:
+    for cid in ids:  # cid is the CANONICAL dialect from all_cells()
         c = gen.load_cell(cid)
         step = c["process"]["step_code"]
         if step not in steps:
             raise AssertionError(f"{cid}: step {step!r} not in {steps}")
         i = steps.index(step)
-        # Lossless: every field of the source cell contract is carried at the
-        # top level (no selective copying), plus two pack-only derivations.
-        row = dict(c)
-        row["bms_inputs"] = {k: "UNKNOWN-no-receipt" for k in BMS_SCALARS}
-        row["deps"] = {
-            "archetype": c["routing"]["archetype"],
-            "fallback_archetype": c["routing"]["fallback_archetype"],
-            "escalation_policy": c["routing"]["escalation_policy"],
-            "prev_step": steps[i - 1] if i > 0 else None,
-            "next_step": steps[i + 1] if i < len(steps) - 1 else None,
+        # Lossless AND identity-safe: the full source contract is embedded
+        # unchanged under "contract" (its own vendored bare-digit cell_id is
+        # kept as source_cell_id provenance); top-level cell_id stays the
+        # canonical all_cells() dialect — load_cell's contract uses a
+        # different dialect and must never overwrite the pack identity.
+        row = {
+            "cell_id": cid,
+            "source_cell_id": c["cell_id"],
+            "contract": c,
+            "bms_inputs": {k: "UNKNOWN-no-receipt" for k in BMS_SCALARS},
+            "deps": {
+                "archetype": c["routing"]["archetype"],
+                "fallback_archetype": c["routing"]["fallback_archetype"],
+                "escalation_policy": c["routing"]["escalation_policy"],
+                "prev_step": steps[i - 1] if i > 0 else None,
+                "next_step": steps[i + 1] if i < len(steps) - 1 else None,
+            },
         }
         rows.append(row)
+    if [r["cell_id"] for r in rows] != ids:
+        raise AssertionError("top-level cell ids drifted from all_cells()")
     return rows
 
 
 def row_covers(row: dict, contract: dict) -> bool:
-    """True iff row carries every source contract field, unchanged."""
-    return all(k in row and row[k] == v for k, v in contract.items())
+    """True iff the row embeds the source contract exactly, unchanged."""
+    return row.get("contract") == contract
 
 
 def selftest() -> int:
@@ -71,26 +80,27 @@ def selftest() -> int:
     rows = {r["cell_id"]: r for r in build_rows()}
     if len(rows) != 588:
         errs.append(f"expected 588 unique cells, got {len(rows)}")
+    if sorted(rows) != sorted(gen.all_cells()):
+        errs.append("top-level ids != gen.all_cells() dialect")
     for cid, row in sorted(rows.items()):
         c = gen.load_cell(cid)
         if not row_covers(row, c):
-            missing = [k for k in c if k not in row]
-            diffs = [k for k in c if k in row and row[k] != c[k]]
-            errs.append(f"{cid}: missing={missing} differs={diffs}")
-        if "sequence" not in row.get("process", {}):
+            errs.append(f"{cid}: embedded contract differs from load_cell")
+        if row.get("source_cell_id") != c["cell_id"]:
+            errs.append(f"{cid}: source_cell_id provenance wrong")
+        if "sequence" not in row.get("contract", {}).get("process", {}):
             errs.append(f"{cid}: process contract stripped")
         if "escalation_policy" not in row.get("deps", {}):
             errs.append(f"{cid}: escalation_policy missing")
-    # self-proof the validator is not blind: the OLD lossy projection — and
-    # any field dropped from a correct row — must fail coverage.
+    # self-proof the validator is not blind: a row whose contract is replaced
+    # by the s4b top-level flattening (identity-clobbering shape) must fail.
     probe = sorted(rows)[0]
-    lossy = {k: v for k, v in rows[probe].items() if k != "process"}
+    s4b_shape = {**rows[probe]["contract"], "cell_id": rows[probe]["cell_id"]}
+    if row_covers(s4b_shape, gen.load_cell(probe)):
+        errs.append("row_covers accepts identity-clobbering shape")
+    lossy = {k: v for k, v in rows[probe].items() if k != "contract"}
     if row_covers(lossy, gen.load_cell(probe)):
-        errs.append("row_covers accepts lossy row (validator blind)")
-    old_shape = {k: rows[probe][k] for k in
-                 ("cell_id", "coordinate", "bms_inputs")}
-    if row_covers(old_shape, gen.load_cell(probe)):
-        errs.append("row_covers accepts s4-era lossy shape")
+        errs.append("row_covers accepts contract-stripped row (validator blind)")
     print(json.dumps({"ok": not errs, "errors": errs[:10],
                       "cells_checked": len(rows)}))
     return 0 if not errs else 1
