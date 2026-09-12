@@ -1,0 +1,25 @@
+captured_utc: 2026-09-12T09:01:11Z
+R1 cmd: git status --porcelain -- capabilities/data/durable-repeatable-index runs/agentic-stack-buildout
+R1 result: [?? runs/agentic-stack-buildout/] exit=0
+R2 cmd: git rev-parse HEAD
+R2 result: eb0bd0605c0142cf89324f449036661601e21c21
+R3 cmd: rig-lattice lattice cells --json | count
+R3 result: 588
+R4 cmd: grep -rn durable-repeatable-index repo excl runs
+R4 result: 0
+R5 cmd: grep -rn durable-repeatable-index-criteria repo
+R5 result: 3
+R6 cmd: registry.json durable* lookup
+R6 result: []
+--- appended to receipts at 2026-09-12T09:03:03Z
+R1b cmd: git status --porcelain -- capabilities/data runs/agentic-stack-buildout (after removing empty premature dirs)
+R1b result: [?? capabilities/data/gtm-marketing-hook-5b3a1e3c6e9a-a84372cf/
+?? runs/agentic-stack-buildout/]
+X1 cmd: test -d capabilities/data/durable-repeatable-index
+X1 result: EXISTS
+X2 files-in-scope: 0
+X3 cmd: rmdir index + parent (both empty, created by this session's premature mkdir)
+X3 result: ABSENT
+X4 cmd: git status --porcelain -- capabilities/data runs/agentic-stack-buildout
+X4 result: [?? capabilities/data/gtm-marketing-hook-5b3a1e3c6e9a-a84372cf/|?? runs/agentic-stack-buildout/|]
+note: capabilities/data/gtm-marketing-hook-* is pre-existing user content, untouched

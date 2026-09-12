@@ -1,0 +1,68 @@
+{
+  "record": "C24-blocked-diagnosis",
+  "kind": "blocked_diagnosis",
+  "created_utc": "2026-09-12T09:05:00Z",
+  "plan_source": {
+    "path": "/Users/rig128gb/.omp/agent/sessions/-Desktop-Projects/2026-09-12T07-09-29-711Z_01a09473-26ef-7102-81f2-1b96e46f37c1/local/agentic-stack-buildout-plan.md",
+    "sha256": "a3bda1240125525389ebbbebf707841b49fc89a4fe79de3c162c148b4d078d58",
+    "lines": 675
+  },
+  "startup_packet": {
+    "artifact": "runs/agentic-stack-buildout/receipts/startup-packet-omp.json",
+    "packet_sha256": "921b871dc0bd80ad063bc83c70b9e0bbd685d4a3c7f7345bcad6a1e68765a0d0",
+    "command": "/Users/rig128gb/.rig/bin/rig-meta-harness startup --agent omp --cwd /Users/rig128gb/Developer/rig-capabilities --format json",
+    "hard_stop": false,
+    "blocking_gates": "boot_contract/manifest/surface:omp_agents/live:launchd_services/live:temporal_owner/live:temporal/live:worker all PASS (16 gates in saved packet; cognee DEGRADED non-blocking)",
+    "degraded_nonblocking": ["live:cognee (DEGRADED, backlog outside this mission)"]
+  },
+  "c01_geometry_freeze": {
+    "constants_source": "capabilities/skills/rig-lattice-system/rig_lattice/lattice/constants.py",
+    "constants_sha256": "d6373f87e59e97b7e3c43da905957da04d0169c8cfcaec4a71a14eac87d7b7c1",
+    "invariants": {"N_LEVELS": 7, "N_DIAMONDS": 3, "N_MODES": 4, "N_STEPS": 7, "N_PRIMARY_COORDS": 84, "N_CELLS": 588, "N_ARCHETYPES": 28},
+    "expansion_receipt": "rig-lattice lattice cells --json -> cells: 588 (exit 0)",
+    "coordinate_vs_lifecycle_separation": "Coordinate altitude = lattice.constants.Level (L1..L7, LEVEL_DESCRIPTION + ALTITUDE_BONUS). rig_lattice/system/levels.py defines a DIFFERENT, ordered CAPTURE->AUTONOMIZE deviator pipeline enum (L1_CAPTURE..L7_AUTONOMIZE); it must never be consumed as a coordinate level.",
+    "status": "FROZEN (read-only fact extraction; no source mutation)"
+  },
+  "attempted_unit": {
+    "process_id": "durable-repeatable-index-criteria",
+    "attempted_version": "1.0.0",
+    "intended_source_scope": [
+      "capabilities/data/durable-repeatable-index/criteria/v1/*",
+      "capabilities/data/durable-repeatable-index/index/*"
+    ],
+    "level_candidate": "L2 (structured parameterized criteria content; not umbrella L7 despite mission umbrella; not L1 because parameter domains/versions matter) - qualitative, per C21 process",
+    "mode_claim": "NOT CLAIMED"
+  },
+  "bms": {
+    "status": "BLOCKED",
+    "refuted_scorer": {
+      "path": "capabilities/skills/rig-lattice-system/rig_lattice/lattice/bms.py",
+      "sha256": "ba5749f87cda731adbf18acacf7751f98b641fcce6f70d8761749c14158ecf47",
+      "defect": "raw_score() computes fc*0.4 (line 142): rising failure_cost RAISES confidence; violates the plan's monotonicity requirement. Required correction: (1-failure_cost)*0.4 with retained adjustment terms/thresholds. Repair = S08 (versioned prerequisite)."
+    },
+    "inputs": {
+      "failure_cost": "UNKNOWN - receipts exist (0 consumer bindings R4; HEAD pinned R2) but no predeclared receipt->scalar measurement rule exists yet",
+      "reversibility": "UNKNOWN - receipts exist (HEAD eb0bd06 pinned; target scope has no tracked files, only this record's own untracked runs dir per R1/X4) but no predeclared numeric mapping rule; do not equate 'git scope clean' with .95",
+      "mechanism_clarity": "UNKNOWN - deterministic 588-cell expansion mechanism exists and shipped (rig-lattice cells=588) but no predeclared mapping rule",
+      "past_failure_rate": "UNKNOWN - zero prior runs of this process id (denominator empty; absence is not a positive finding)",
+      "data_volume": "UNKNOWN - no frozen volume-normalization rule"
+    },
+    "rule_applied": "Unavailable evidence yields UNKNOWN, not a silently favorable value; unknown inputs halt this unit (plan BMS section); no rubric invented; no numeric admission manufactured.",
+    "release_condition": "Finalize after S08 scorer repair AND a predeclared measurement rule per scalar (e.g., restore-trials/eligible-trials for reversibility, incident-ledger denominator for past_failure_rate, exact source-complexity metric for mechanism_clarity)."
+  },
+  "receipts": {
+    "verbatim_artifact": "runs/agentic-stack-buildout/receipts/R1-R6.txt",
+    "verbatim_sha256": "a90eeb0e1efd0c00316fafe37dd51637f808b69beff156f90b6b5760841cf47d",
+    "captured_utc": "2026-09-12T09:01:11Z synchronous re-run + later X-series cleanup entries (initial background run agreed on R2-R4, R6; deltas noted honestly)",
+    "R1": "[?? runs/agentic-stack-buildout/] at capture time — this record's own untracked dir; an earlier premature `mkdir -p` had created an EMPTY criteria/v1+index skeleton under capabilities/data/durable-repeatable-index (0 files, confirmed X2); removed via rmdir (X3), final state ABSENT (X1/X3), scoped porcelain X4 lists only this runs dir plus pre-existing unrelated user content (gtm-marketing-hook-*, untouched)",
+    "R2": "eb0bd0605c0142cf89324f449036661601e21c21",
+    "R3": "588",
+    "R4": "0 consumer bindings outside runs/",
+    "R5": "3 — SELF-REFERENCE: all matches are this diagnosis record itself (created before re-run); pre-record background run observed 0. No external reference exists.",
+    "R6": "[] (process unregistered in D85 authority/registry.json)"
+  },
+  "decision": {
+    "criteria_pack_build": "DEFERRED (blocked behind BMS finalization; criteria files not written)",
+    "continuing": "Independent read-only C17-C23 inventory/diagnosis work proceeds per plan C24 ('record BLOCKED and finalize after S08, not with fabricated inputs')."
+  }
+}

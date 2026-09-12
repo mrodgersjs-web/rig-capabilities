@@ -1,0 +1,21 @@
+# Questions — Q1 (run iqrsqpi-v20-20260912T091037Z-e5142d, UNCERTAINTY-LEVEL 3)
+
+Each line is the live question state as of 2026-09-12. ANSWER lines cite receipts under runs/agentic-stack-buildout/ or command output.
+
+- [BLOCKING] Who or what computes the five BMS scalars, and with which predeclared measurement rules? -> ANSWER: rules drafted and frozen-for-review in runs/agentic-stack-buildout/scoring/scoring-contract-v0.md; values remain UNKNOWN until trials.jsonl rows exist; no substitution permitted (diagnosis/C24-blocked-diagnosis.json).
+- [BLOCKING] Does the bms scorer currently implement the frozen formula? -> ANSWER: NO — receipts/R1-R6.txt era source read shows raw line uses failure_cost*0.4 instead of (1-failure_cost)*0.4 (bms.py sha256 ba5749f87cda731adbf18acacf7751f98b641fcce6f70d8761749c14158ecf47). S08 sign repair is the unblock path.
+- [BLOCKING] Which scheduler owns the repeatable commit-gate runs (launchd vs Hermes cron vs Temporal vs Kestra vs pg_cron)? -> UNANSWERED — depends on EstateSchedulers + ProcessSurfaces inventories (wave in flight).
+- [BLOCKING] Is the criteria pack for the 588 cells buildable now? -> ANSWER: NO, deferred; release condition = S08 repair + measurement rules; recorded in diagnosis/C24-blocked-diagnosis.json with criteria_pack_build: DEFERRED.
+- [BLOCKING] Can an A2/A3/A4 mode claim be certified at all today? -> ANSWER: NO — certifier supports A1 only; A2-A4 need trusted execution receipts of deterministic-path failure; self-authored failure JSON rejected as proof (startup contract + AGENTS.md D85 scope).
+- [ASSUMED] Does `rig-lattice cells --json` return 588 in this checkout? -> ANSWER: YES — receipts R3=588, constants.py sha d6373f87e59e97b7e3c43da905957da04d0169c8cfcaec4a71a14eac87d7b7c1.
+- [BLOCKING] Which OMP skills root actually loads (~/ .omp/skills vs ~/.omp/agent/skills)? -> UNANSWERED — needs an omp runtime skill-source receipt; listed UNRESOLVED in intent.
+- [ASSUMED] Is L7-A1 reachable? -> ANSWER: NO, provably — max composite 0.70 < 0.75 by frozen bonus table; any certificate claiming L7-A1 is invalid by construction (scoring-contract-v0.md).
+- [BLOCKING] Does bin/rig-build-standard exist yet? -> ANSWER: NO — contract planned at B-series/Section IV (rig_capabilities/build_standard.py + bin/rig-build-standard, 8 capabilities_build_* tools). Creating it prematurely violates the no-canonical-dirs-early rule.
+- [ASSUMED] Is the startup boot contract satisfied for omp? -> ANSWER: YES — receipts/startup-packet-omp.json sha256 921b871d... hard_stop=false; live:cognee DEGRADED non-blocking.
+- [BLOCKING] Does Prime runtime need its own build-standard surface, or is it a Jake alias only? -> ANSWER: alias per substrate — Prime Agent is an execution runtime for Jake; surfaces under ~/.prime/; never treat as Codex (JAKE_PAI_SUBSTRATE.md lines 1-120 + 613-634).
+- [ASSUMED] Are the three Section I scouts read-only outside their OWNS file? -> ANSWER: enforced by brief (single write target, allowlisted commands); verify on delivery via leaf gates R2/E2/S2.
+- [BLOCKING] Are paused services off-limits for probe-induced state change? -> ANSWER: yes — plan approval does not authorize enablement; read-only list/describe/get only (plan constraints, recorded in intent OUT-OF-SCOPE).
+- [ASSUMED] Is graft trustworthy for structural claims right now? -> ANSWER: PARTIAL — graph rebuilt this session (bg_1) but STALE again after new run artifacts; rule: rebuild before each structural claim batch, name the graft command in receipts.
+- [ASSUMED] Does the loop's gate_d_threshold block this diagnosis run's stages? -> ANSWER: NO for diagnosis stages; it fires on effects stages (S/Q boundary) — observed: I1 passed with gate-d not approved; will re-check at S1/Solution.
+- [BLOCKING] Whose approval covers writing canonical capability files later? -> ANSWER: per-build Gate-D (typed approval + git ls-remote proof), never the plan-level approval (intent OUT-OF-SCOPE; jake substrate 613-634).
+- [ASSUMED] Is a joint durable+repeatable 0.95 claim supported by any data today? -> ANSWER: NO — zero trials.jsonl rows; honest value UNKNOWN; no 0.95 may appear in any seal until Wilson LBs are computed from >=72 committed runs (scoring-contract-v0.md).
