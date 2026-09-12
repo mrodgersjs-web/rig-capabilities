@@ -38,10 +38,10 @@ def assemble(*, sha_build: str, cert: str, trials: str, cells: list[str],
 
 
 def readiness(repo: Path, sha: str, manifest: dict) -> dict:
-    """The authoritative gate verdict, verbatim. Non-consuming by construction:
-    commit_gate.check() is the documented non-consuming entrypoint."""
-    v = commit_gate.check(repo, sha, manifest)
-    return {"sha": sha, "ready": bool(v["admitted"]), "gate_verdict": v}
+    """Literally commit_gate.check(...): the same object, zero wrapping, zero
+    derived keys. Non-consuming by construction (check() is the documented
+    non-consuming entrypoint). Report shaping happens in main() only."""
+    return commit_gate.check(repo, sha, manifest)
 
 
 def main(argv=None) -> int:
@@ -67,8 +67,9 @@ def main(argv=None) -> int:
     if a.cmd == "assemble":
         print(json.dumps(manifest, indent=2, sort_keys=True))
         return 0
-    print(json.dumps(readiness(Path(a.repo).resolve(), a.sha, manifest),
-                     indent=2, sort_keys=True))
+    v = readiness(Path(a.repo).resolve(), a.sha, manifest)
+    print(json.dumps({"sha": a.sha, "ready": bool(v["admitted"]),
+                      "gate_verdict": v}, indent=2, sort_keys=True))
     return 0
 
 
@@ -91,9 +92,9 @@ def selftest() -> int:
         # readiness IS the gate's verdict: same object, not a paraphrase
         gate = commit_gate.check(repo, "0" * 40, m)
         r = readiness(repo, "0" * 40, m)
-        if r["gate_verdict"] != gate or r["ready"] != gate["admitted"]:
-            errs.append("readiness diverged from commit_gate.check")
-        if r["ready"] or not gate["refusals"]:
+        if r != gate:  # SAME object contents — no wrapper, no derived keys
+            errs.append(f"readiness is not check(): {r}")
+        if r["admitted"] or not r["refusals"]:
             errs.append(f"empty repo not refused: {r}")
         # report CLI runs the same path and exits 0 with JSON
         proc = subprocess.run(
