@@ -29,34 +29,63 @@ KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume", "commit"}
 class TransitionError(ValueError):
     pass
 
+def _norm(sql: str) -> str:
+    return " ".join(sql.split()).rstrip(";").strip()
+
+
+# IF NOT EXISTS TRUSTS whatever already occupies these names — a hostile
+# or merely older database can carry same-named no-op triggers and every
+# mutation sails through. connect() therefore validates the actual
+# sqlite_master definitions and fails closed on any divergence.
+# Single source of truth: the SAME statements connect() executes define
+# the canonical shapes. IF NOT EXISTS trusts whatever already occupies
+# these names — a hostile or older database can carry same-named no-op
+# triggers and every mutation sails through — so connect() validates the
+# actual sqlite_master definitions and fails closed on divergence.
+_DDL_STATEMENTS = [
+    """CREATE TABLE IF NOT EXISTS run_events (
+    run_id TEXT    NOT NULL,
+    seq    INTEGER NOT NULL,
+    ts     REAL    NOT NULL,
+    kind   TEXT    NOT NULL,
+    stage  TEXT,
+    payload TEXT   NOT NULL DEFAULT '',
+    prev_hash TEXT NOT NULL,
+    hash      TEXT NOT NULL,
+    PRIMARY KEY (run_id, seq)
+)""",
+    """CREATE TRIGGER IF NOT EXISTS run_events_no_update
+BEFORE UPDATE ON run_events
+BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END""",
+    """CREATE TRIGGER IF NOT EXISTS run_events_no_delete
+BEFORE DELETE ON run_events
+BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END""",
+]
+# sqlite strips "IF NOT EXISTS" from the stored schema text; strip it from
+# the source before comparison so identical schemas compare identical.
+_CANON = {s.split()[5]: _norm(s.replace(" IF NOT EXISTS", ""))
+          for s in _DDL_STATEMENTS}
+
+
+def _verify_schema(con: sqlite3.Connection) -> None:
+    have = {name: _norm(sql) for name, sql in con.execute(
+        "SELECT name, sql FROM sqlite_master "
+        "WHERE name IN ('run_events','run_events_no_update','run_events_no_delete')")}
+    for name, canon in _CANON.items():
+        if have.get(name) is None:
+            raise RuntimeError(f"ledger schema object {name!r} is missing")
+        if have[name] != canon:
+            raise RuntimeError(f"ledger schema object {name!r} is not canonical")
+
+
 def connect(path: str) -> sqlite3.Connection:
     """Open (creating schema + triggers if absent) an append-only ledger."""
-
     con = sqlite3.connect(path)
     con.isolation_level = None  # manual BEGIN IMMEDIATE in append()
     con.execute("PRAGMA synchronous=FULL")   # durability before ack
     con.execute("PRAGMA busy_timeout=5000")
-    con.executescript(
-        """
-        CREATE TABLE IF NOT EXISTS run_events (
-            run_id TEXT    NOT NULL,
-            seq    INTEGER NOT NULL,
-            ts     REAL    NOT NULL,
-            kind   TEXT    NOT NULL,
-            stage  TEXT,
-            payload TEXT   NOT NULL DEFAULT '',
-            prev_hash TEXT NOT NULL,
-            hash      TEXT NOT NULL,
-            PRIMARY KEY (run_id, seq)
-        );
-        CREATE TRIGGER IF NOT EXISTS run_events_no_update
-        BEFORE UPDATE ON run_events
-        BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END;
-        CREATE TRIGGER IF NOT EXISTS run_events_no_delete
-        BEFORE DELETE ON run_events
-        BEGIN SELECT RAISE(ABORT, 'run_events is append-only'); END;
-        """)
-    con.commit()
+    con.executescript(";\n".join(_DDL_STATEMENTS) + ";")
+    _verify_schema(con)
     return con
 
 
@@ -143,6 +172,11 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
             raise TransitionError(f"stage {stage!r} not declared")
         if st["stages"][stage] is None:
             raise TransitionError(f"cannot fail {stage} before it is resolved")
+        names = list(st["stages"])
+        # an ordered pipeline cannot retroactively fail a stage whose
+        # successors already resolved — that state is fabrication, not fact
+        if any(st["stages"][s] is not None for s in names[names.index(stage) + 1:]):
+            raise TransitionError(f"cannot fail {stage}: a later stage already resolved")
     elif kind == "commit":
         if not st["done"]:
             raise TransitionError("commit before all stages pass")
@@ -301,6 +335,35 @@ def selftest(argv=None) -> int:
         ok("bad sha", lambda: append(con, run, "commit",
                                      payload={"commit_sha": "zz"}))
         ok("undeclared stage", lambda: append(con, "r-other", "stage_pass", "B"))
+
+        # advisor freeze: retroactively failing B after V passed (C still
+        # unresolved, so this is the ordering rule, not the done guard)
+        r5 = "r-failorder"
+        append(con, r5, "declare", payload=["B", "V", "C"])
+        append(con, r5, "stage_pass", "B")
+        append(con, r5, "stage_pass", "V")
+        ok("fail B after V passed",
+           lambda: append(con, r5, "stage_fail", "B"))
+
+        # pre-existing same-named NO-OP triggers must not fool connect():
+        # IF NOT EXISTS accepts them silently, so the schema check fails closed
+        poisoned = os.path.join(td, "poisoned.sqlite")
+        pcon = sqlite3.connect(poisoned)
+        pcon.executescript(
+            "CREATE TABLE run_events (run_id TEXT, seq INTEGER, ts REAL,"
+            " kind TEXT, stage TEXT, payload TEXT DEFAULT '',"
+            " prev_hash TEXT, hash TEXT, PRIMARY KEY (run_id, seq));"
+            "CREATE TRIGGER run_events_no_update BEFORE UPDATE ON run_events"
+            " BEGIN SELECT 1; END;"
+            "CREATE TRIGGER run_events_no_delete BEFORE DELETE ON run_events"
+            " BEGIN SELECT 1; END;")
+        pcon.commit()
+        pcon.close()
+        try:
+            connect(poisoned)
+            errs.append("connect accepted no-op trigger impostor")
+        except RuntimeError:
+            pass
 
         # park/resume lifecycle on a live run
         r3 = "r-park"
