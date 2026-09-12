@@ -6,10 +6,20 @@ SQLite enforces the contract natively — DB constraints over app code:
     over this connection cannot rewrite or drop a row.
   * a SHA-256 hash chain (prev_hash -> canonical row bytes): replay
     reconstruction detects ANY out-of-band tampering with the file itself.
-Transition validation happens at append time: a transition is legal only if
-replay of the current ledger says so (stage order, no skips, no un-doing a
-done run, park/resume coherence). ProofPacket binding: seal() pins head
-seq/hash/state; verify() re-reads and recomputes. Stdlib only.
+Transition validation happens at append AND verify time: a transition is
+legal only if replay of the current ledger says so (stage order, no skips,
+no un-doing a done run, park/resume coherence), and verify_chain revalidates
+every stored row — a directly-INSERTed illegal event blocks seal/verify.
+ProofPacket binding: seal() pins head seq/hash/state, canonical-hashes the
+whole packet body, and anchors that hash as a chained seal event; verify()
+re-reads and recomputes all of it.
+
+RESIDUAL TRUST (honest): every hash is unkeyed and lives in the same
+writable file. This defeats accidental corruption, partial edits, packet
+re-hashing (the ledger has no matching seal event), and stale-schema
+impostors; it does NOT defeat an attacker with full write access to the
+database who recomputes the entire chain — that needs a key or head digest
+anchored OUTSIDE the file (same residual as commit_gate).
 
 Idempotence: writers retry on PRIMARY KEY collision (concurrent appends get
 distinct seqs, never a lost or duplicated event).
@@ -23,7 +33,8 @@ import time
 
 SCHEMA_VERSION = 1
 GENESIS = "0" * 64
-KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume", "commit"}
+KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume",
+         "commit", "seal"}
 
 
 class TransitionError(ValueError):
@@ -72,6 +83,14 @@ def _verify_schema(con: sqlite3.Connection) -> None:
             raise RuntimeError(f"ledger schema object {name!r} is missing")
         if have[name] != canon:
             raise RuntimeError(f"ledger schema object {name!r} is not canonical")
+    # an EXTRA trigger (e.g. BEFORE INSERT RAISE(IGNORE)) silently voids
+    # appends while returning a valid-looking receipt: no surprises allowed
+    extra = [r[0] for r in con.execute(
+        "SELECT name FROM sqlite_master WHERE type='trigger' "
+        "AND tbl_name='run_events' AND name NOT IN "
+        "('run_events_no_update','run_events_no_delete')")]
+    if extra:
+        raise RuntimeError(f"unexpected trigger(s) on run_events: {extra}")
 
 
 def connect(path: str) -> sqlite3.Connection:
@@ -170,8 +189,8 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
         return
     if not st.get("stages"):
         raise TransitionError("no declare event for this run")
-    if kind != "commit" and st["done"]:
-        raise TransitionError("run is done; only commits may follow")
+    if kind not in ("commit", "seal") and st["done"]:
+        raise TransitionError("run is done; only commits and seals may follow")
     if kind in ("stage_pass", "stage_fail") and st["parked"]:
         raise TransitionError("run parked; resume before stage transitions")
     if kind == "park" and st["parked"]:
@@ -210,6 +229,13 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
             raise TransitionError("commit_sha must be 40 hex chars")
         if sha in st["commits"]:
             raise TransitionError(f"commit {sha[:12]} already recorded")
+    elif kind == "seal":
+        try:
+            ph = json.loads(payload).get("packet_hash", "")
+        except (json.JSONDecodeError, AttributeError) as e:
+            raise TransitionError(f"seal payload not {{packet_hash}}: {e}")
+        if len(ph) != 64 or any(c not in "0123456789abcdef" for c in ph):
+            raise TransitionError("seal packet_hash must be 64 hex chars")
 
 
 def append(con: sqlite3.Connection, run_id: str, kind: str,
@@ -226,11 +252,15 @@ def append(con: sqlite3.Connection, run_id: str, kind: str,
         # writer cannot validate against stale state and slip in after.
         con.execute("BEGIN IMMEDIATE")
         try:
+            _verify_schema(con)  # connect->append drift: triggers can be
+            # added by another connection in between
             seq, prev_hash = _head(con, run_id)
             _check_transition(replay(con, run_id), kind, stage, body)
             row = (run_id, seq + 1, time.time(), kind, stage, body, prev_hash)
             row = (*row, _row_hash(row))
             con.execute("INSERT INTO run_events VALUES (?,?,?,?,?,?,?,?)", row)
+            if con.execute("SELECT changes()").fetchone()[0] != 1:
+                raise TransitionError("INSERT voided by schema (0 rows landed)")
             con.commit()
             return {"run_id": run_id, "seq": row[1], "hash": row[7]}
         except sqlite3.IntegrityError:
@@ -275,6 +305,8 @@ def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dic
     if anomaly:
         raise TransitionError(f"refusing to seal: {anomaly}")
     seq, head = _head(con, run_id)
+    if seq == 0:
+        raise TransitionError("refusing to seal: run has no events")
     pkt = {"schema": "rig.run_events.packet.v" + str(SCHEMA_VERSION),
            "run_id": run_id, "seq": seq, "head_hash": head,
            "state": replay(con, run_id, up_to=seq)}
@@ -285,6 +317,9 @@ def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dic
     pkt["packet_hash"] = hashlib.sha256(
         json.dumps(pkt, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
+    # anchor the packet INSIDE the hash chain: an editor who re-hashes the
+    # packet alone still has to explain a ledger with no such seal event
+    append(con, run_id, "seal", payload={"packet_hash": pkt["packet_hash"]})
     return pkt
 
 
@@ -313,6 +348,18 @@ def verify(con: sqlite3.Connection, pkt: dict) -> str | None:
         (run_id, seq)).fetchone()
     if not sealed_hash or sealed_hash[0] != pkt.get("head_hash"):
         return "head_hash does not match the row at that seq"
+    anchored = False
+    for (pl,) in con.execute(
+            "SELECT payload FROM run_events WHERE run_id=? AND kind='seal'",
+            (run_id,)):
+        try:
+            if json.loads(pl).get("packet_hash") == pkt.get("packet_hash"):
+                anchored = True
+        except json.JSONDecodeError:
+            pass
+    if not anchored:
+        return ("packet hash is not anchored in the ledger "
+                "(no seal event, or the packet was re-hashed after sealing)")
     return None
 
 
@@ -514,6 +561,37 @@ def selftest(argv=None) -> int:
                    "extra": {**pkt["extra"], "done_test": "s7-tampered"}}
         if verify(con, forgery) is None:
             errs.append("forged packet extra verified clean")
+
+        # FinalVerifier freeze: forged extra + RE-HASHED packet_hash must
+        # still fail verify — the ledger holds no matching seal event
+        rehash = {**dict(pkt), "extra": {**pkt["extra"], "done_test": "x"}}
+        rehash["packet_hash"] = hashlib.sha256(
+            json.dumps({k: v for k, v in rehash.items()
+                        if k != "packet_hash"},
+                       sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        if verify(con, rehash) is None:
+            errs.append("re-hashed forged packet verified clean")
+
+        # FinalVerifier freeze: an EXTRA BEFORE INSERT RAISE(IGNORE)
+        # trigger voids appends while the receipt looks valid
+        ig = os.path.join(td, "ignore.sqlite")
+        icon = connect(ig)
+        icon.execute("CREATE TRIGGER void BEFORE INSERT ON run_events "
+                     "BEGIN SELECT RAISE(IGNORE); END")
+        icon.commit()
+        try:
+            append(icon, "r", "declare", payload=["B"])
+            errs.append("append acknowledged a voided insert")
+        except (RuntimeError, TransitionError):
+            pass
+        icon.close()
+        try:
+            connect(ig)
+            errs.append("connect accepted void-trigger schema")
+        except RuntimeError:
+            pass
+        ok("seal empty run", lambda: seal(con, "r-never-exists"))
 
         # seq monotone + unique per run
         seqs = [r[0] for r in con.execute(
