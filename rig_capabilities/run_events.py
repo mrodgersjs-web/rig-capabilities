@@ -33,10 +33,6 @@ def _norm(sql: str) -> str:
     return " ".join(sql.split()).rstrip(";").strip()
 
 
-# IF NOT EXISTS TRUSTS whatever already occupies these names — a hostile
-# or merely older database can carry same-named no-op triggers and every
-# mutation sails through. connect() therefore validates the actual
-# sqlite_master definitions and fails closed on any divergence.
 # Single source of truth: the SAME statements connect() executes define
 # the canonical shapes. IF NOT EXISTS trusts whatever already occupies
 # these names — a hostile or older database can carry same-named no-op
