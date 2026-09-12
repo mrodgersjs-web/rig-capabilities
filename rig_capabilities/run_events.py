@@ -153,6 +153,20 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
     if kind == "declare":
         if st.get("stages"):
             raise TransitionError("already declared")
+        if stage is not None:
+            raise TransitionError("declare carries no stage")
+        try:
+            names = json.loads(payload)
+        except json.JSONDecodeError as e:
+            raise TransitionError(f"declare payload not json: {e}")
+        # an empty list folds to stages={} — falsy — so a SECOND declare
+        # would sail past the guard above; duplicates collapse invisibly
+        # in the fold dict. Both are shape violations, refused at the door.
+        if (not isinstance(names, list) or not names
+                or not all(isinstance(n, str) and n for n in names)
+                or len(set(names)) != len(names)):
+            raise TransitionError(
+                "declare needs a non-empty list of unique stage names")
         return
     if not st.get("stages"):
         raise TransitionError("no declare event for this run")
@@ -352,6 +366,30 @@ def selftest(argv=None) -> int:
         append(con, r5, "stage_pass", "V")
         ok("fail B after V passed",
            lambda: append(con, r5, "stage_fail", "B"))
+
+        # advisor freeze: declare payload shape
+        ok("empty declare",
+           lambda: append(con, "r-d0", "declare", payload=[]))
+        ok("duplicate stages",
+           lambda: append(con, "r-d1", "declare", payload=["B", "B"]))
+        ok("declare with stage",
+           lambda: append(con, "r-d2", "declare", stage="X", payload=["B"]))
+        dbad = "r-declareforgery"
+        row = (dbad, 1, time.time(), "declare", None, "[]", GENESIS)
+        row = (*row, _row_hash(row))
+        con.execute("INSERT INTO run_events VALUES (?,?,?,?,?,?,?,?)", row)
+        row2 = (dbad, 2, time.time(), "declare", None,
+                json.dumps(["B"]), row[7])
+        row2 = (*row2, _row_hash(row2))
+        con.execute("INSERT INTO run_events VALUES (?,?,?,?,?,?,?,?)", row2)
+        con.commit()
+        if verify_chain(con, dbad) is None:
+            errs.append("empty-declare redeclare forgery verified clean")
+        try:
+            seal(con, dbad)
+            errs.append("seal accepted declare forgery")
+        except TransitionError:
+            pass
 
         # pre-existing same-named NO-OP triggers must not fool connect():
         # IF NOT EXISTS accepts them silently, so the schema check fails closed
