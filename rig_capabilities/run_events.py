@@ -11,15 +11,19 @@ legal only if replay of the current ledger says so (stage order, no skips,
 no un-doing a done run, park/resume coherence), and verify_chain revalidates
 every stored row — a directly-INSERTed illegal event blocks seal/verify.
 ProofPacket binding: seal() pins head seq/hash/state, canonical-hashes the
-whole packet body, and anchors that hash as a chained seal event; verify()
-re-reads and recomputes all of it.
+whole packet body, and appends that digest to an OUT-OF-TREE anchor ledger
+(default ~/.rig/run_events/, outside the DB's write boundary); verify()
+re-reads and recomputes everything and requires the anchor.
 
-RESIDUAL TRUST (honest): every hash is unkeyed and lives in the same
-writable file. This defeats accidental corruption, partial edits, packet
-re-hashing (the ledger has no matching seal event), and stale-schema
-impostors; it does NOT defeat an attacker with full write access to the
-database who recomputes the entire chain — that needs a key or head digest
-anchored OUTSIDE the file (same residual as commit_gate).
+GUARANTEE (precise): the ledger is append-only against anything that
+cannot DDL (DB-level triggers), tamper-evident against partial/out-of-band
+edits (hash chain revalidated row-by-row by verify_chain), and re-hash
+forgery of a sealed packet is caught by the out-of-tree anchor.
+RESIDUAL TRUST (honest): hashes are unkeyed; an attacker with full write
+access to BOTH the database file and the out-of-tree anchor (i.e. the
+whole filesystem/user) can recompute everything. Defeating that needs a
+keyed signature or a second machine — the same named residual as
+commit_gate's certifier anchor.
 
 Idempotence: writers retry on PRIMARY KEY collision (concurrent appends get
 distinct seqs, never a lost or duplicated event).
@@ -30,11 +34,11 @@ import hmac
 import json
 import sqlite3
 import time
+from pathlib import Path
 
 SCHEMA_VERSION = 1
 GENESIS = "0" * 64
-KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume",
-         "commit", "seal"}
+KINDS = {"declare", "stage_pass", "stage_fail", "park", "resume", "commit"}
 
 
 class TransitionError(ValueError):
@@ -189,8 +193,8 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
         return
     if not st.get("stages"):
         raise TransitionError("no declare event for this run")
-    if kind not in ("commit", "seal") and st["done"]:
-        raise TransitionError("run is done; only commits and seals may follow")
+    if kind != "commit" and st["done"]:
+        raise TransitionError("run is done; only commits may follow")
     if kind in ("stage_pass", "stage_fail") and st["parked"]:
         raise TransitionError("run parked; resume before stage transitions")
     if kind == "park" and st["parked"]:
@@ -229,13 +233,6 @@ def _check_transition(st: dict, kind: str, stage: str | None, payload: str) -> N
             raise TransitionError("commit_sha must be 40 hex chars")
         if sha in st["commits"]:
             raise TransitionError(f"commit {sha[:12]} already recorded")
-    elif kind == "seal":
-        try:
-            ph = json.loads(payload).get("packet_hash", "")
-        except (json.JSONDecodeError, AttributeError) as e:
-            raise TransitionError(f"seal payload not {{packet_hash}}: {e}")
-        if len(ph) != 64 or any(c not in "0123456789abcdef" for c in ph):
-            raise TransitionError("seal packet_hash must be 64 hex chars")
 
 
 def append(con: sqlite3.Connection, run_id: str, kind: str,
@@ -300,7 +297,47 @@ def verify_chain(con: sqlite3.Connection, run_id: str) -> str | None:
     return None
 
 
-def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dict:
+DEFAULT_ANCHOR_DIR = Path.home() / ".rig" / "run_events"
+
+
+def _anchor_file(anchor_dir) -> Path:
+    return Path(anchor_dir if anchor_dir is not None else DEFAULT_ANCHOR_DIR)
+
+
+def _write_anchor(pkt: dict, anchor_dir) -> None:
+    """Append the packet's digest to an OUT-OF-TREE ledger of seals. An
+    attacker who can rewrite the SQLite file AND recompute the packet hash
+    still cannot make verify() pass without writing this file — which sits
+    outside the ledger's write boundary, exactly like commit_gate's
+    certifier anchor. A full filesystem-privileged attacker is the named
+    residual trust (keyed signatures = upgrade path), same as commit_gate.
+    """
+    d = _anchor_file(anchor_dir)
+    d.mkdir(parents=True, exist_ok=True)
+    line = json.dumps({"run_id": pkt["run_id"], "seq": pkt["seq"],
+                       "packet_hash": pkt["packet_hash"], "ts": time.time()},
+                      sort_keys=True)
+    with open(d / f"{pkt['run_id']}.anchors", "a") as f:
+        f.write(line + "\n")
+
+
+def _anchored(pkt_hash: str, run_id: str, anchor_dir) -> bool:
+    f = _anchor_file(anchor_dir) / f"{run_id}.anchors"
+    try:
+        lines = f.read_text().splitlines()
+    except OSError:
+        return False
+    for line in lines:
+        try:
+            if json.loads(line).get("packet_hash") == pkt_hash:
+                return True
+        except json.JSONDecodeError:
+            continue
+    return False
+
+
+def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None,
+         *, anchor_dir: str | Path | None = None) -> dict:
     anomaly = verify_chain(con, run_id)
     if anomaly:
         raise TransitionError(f"refusing to seal: {anomaly}")
@@ -317,13 +354,12 @@ def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dic
     pkt["packet_hash"] = hashlib.sha256(
         json.dumps(pkt, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-    # anchor the packet INSIDE the hash chain: an editor who re-hashes the
-    # packet alone still has to explain a ledger with no such seal event
-    append(con, run_id, "seal", payload={"packet_hash": pkt["packet_hash"]})
+    _write_anchor(pkt, anchor_dir)
     return pkt
 
 
-def verify(con: sqlite3.Connection, pkt: dict) -> str | None:
+def verify(con: sqlite3.Connection, pkt: dict, *,
+           anchor_dir: str | Path | None = None) -> str | None:
     """Recompute everything the packet claims. None = holds."""
     if pkt.get("schema") != "rig.run_events.packet.v" + str(SCHEMA_VERSION):
         return f"packet schema {pkt.get('schema')!r}"
@@ -348,18 +384,9 @@ def verify(con: sqlite3.Connection, pkt: dict) -> str | None:
         (run_id, seq)).fetchone()
     if not sealed_hash or sealed_hash[0] != pkt.get("head_hash"):
         return "head_hash does not match the row at that seq"
-    anchored = False
-    for (pl,) in con.execute(
-            "SELECT payload FROM run_events WHERE run_id=? AND kind='seal'",
-            (run_id,)):
-        try:
-            if json.loads(pl).get("packet_hash") == pkt.get("packet_hash"):
-                anchored = True
-        except json.JSONDecodeError:
-            pass
-    if not anchored:
-        return ("packet hash is not anchored in the ledger "
-                "(no seal event, or the packet was re-hashed after sealing)")
+    if not _anchored(str(pkt.get("packet_hash")), str(run_id), anchor_dir):
+        return ("packet hash is not anchored out-of-tree "
+                "(missing anchor file, or the packet was re-hashed after sealing)")
     return None
 
 
@@ -544,22 +571,25 @@ def selftest(argv=None) -> int:
         except TransitionError:
             pass
         # seal/verify: honest seal holds; packet then tampered -> caught
-        pkt = seal(con, run, {"done_test": "s7"})
-        if verify(con, pkt) is not None:
-            errs.append(f"honest packet failed: {verify(con, pkt)}")
+        anchors = os.path.join(td, "anchors")
+        pkt = seal(con, run, {"done_test": "s7"}, anchor_dir=anchors)
+        if verify(con, pkt, anchor_dir=anchors) is not None:
+            errs.append(f"honest packet failed: {verify(con, pkt, anchor_dir=anchors)}")
+        if verify(con, pkt) is None:
+            errs.append("packet verified against an anchor root that never saw it")
         # append after sealing: packet must still verify at its own point
         append(con, run, "commit", payload={"commit_sha": "b" * 40})
-        if verify(con, pkt) is not None:
+        if verify(con, pkt, anchor_dir=anchors) is not None:
             errs.append("packet broken by later append")
         # state forgery in the packet itself
         forgery = dict(pkt)
         forgery["state"] = {**pkt["state"], "stages": {"B": "pass"}}
-        if verify(con, forgery) is None:
+        if verify(con, forgery, anchor_dir=anchors) is None:
             errs.append("forged packet state verified clean")
         # extra forgery: checks/artifacts edited after sealing
         forgery = {**dict(pkt),
                    "extra": {**pkt["extra"], "done_test": "s7-tampered"}}
-        if verify(con, forgery) is None:
+        if verify(con, forgery, anchor_dir=anchors) is None:
             errs.append("forged packet extra verified clean")
 
         # FinalVerifier freeze: forged extra + RE-HASHED packet_hash must
@@ -570,7 +600,7 @@ def selftest(argv=None) -> int:
                         if k != "packet_hash"},
                        sort_keys=True, separators=(",", ":")).encode()
         ).hexdigest()
-        if verify(con, rehash) is None:
+        if verify(con, rehash, anchor_dir=anchors) is None:
             errs.append("re-hashed forged packet verified clean")
 
         # FinalVerifier freeze: an EXTRA BEFORE INSERT RAISE(IGNORE)
