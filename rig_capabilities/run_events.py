@@ -10,10 +10,11 @@ Transition validation happens at append AND verify time: a transition is
 legal only if replay of the current ledger says so (stage order, no skips,
 no un-doing a done run, park/resume coherence), and verify_chain revalidates
 every stored row — a directly-INSERTed illegal event blocks seal/verify.
-ProofPacket binding: seal() pins head seq/hash/state, canonical-hashes the
-whole packet body, and appends that digest to an OUT-OF-TREE anchor ledger
-(default ~/.rig/run_events/, outside the DB's write boundary); verify()
-re-reads and recomputes everything and requires the anchor.
+ProofPacket binding: seal() is PURE (pins head seq/hash/state and
+canonical-hashes the whole body). The digest becomes evidence only when a
+SEPARATE receiver-side effect (anchor_packet, Gate-D-class) records it
+out-of-tree; verify() recomputes everything and requires the anchor.
+Self-anchoring by the producer proves nothing — hence the split.
 
 GUARANTEE (precise): the ledger is append-only against anything that
 cannot DDL (DB-level triggers), tamper-evident against partial/out-of-band
@@ -310,21 +311,26 @@ def _anchor_name(run_id: str) -> str:
     return hashlib.sha256(run_id.encode()).hexdigest() + ".anchors"
 
 
-def _write_anchor(pkt: dict, anchor_dir) -> None:
-    """Append the packet's digest to an OUT-OF-TREE ledger of seals. An
-    attacker who can rewrite the SQLite file AND recompute the packet hash
-    still cannot make verify() pass without writing this file — which sits
-    outside the ledger's write boundary, exactly like commit_gate's
-    certifier anchor. A full filesystem-privileged attacker is the named
-    residual trust (keyed signatures = upgrade path), same as commit_gate.
+def anchor_packet(pkt: dict, *, anchor_dir: str | Path | None = None) -> Path:
+    """Record the packet digest in an out-of-tree anchor ledger.
+
+    A GATE-D-CLASS EFFECT, deliberately separate from seal(): it must run
+    under the RECEIVING side's authority (verifier/integrator). Candidate
+    code that produced a packet must not self-anchor it — an anchor issued
+    by the same authority that forged the packet proves nothing. Keep
+    anchor_dir on receiver-owned storage; a full filesystem-privileged
+    attacker remains the named residual (keyed signatures = upgrade path),
+    same class as commit_gate's certifier anchor trust.
     """
     d = _anchor_file(anchor_dir)
     d.mkdir(parents=True, exist_ok=True)
     line = json.dumps({"run_id": pkt["run_id"], "seq": pkt["seq"],
                        "packet_hash": pkt["packet_hash"], "ts": time.time()},
                       sort_keys=True)
-    with open(d / _anchor_name(pkt["run_id"]), "a") as f:
-        f.write(line + "\n")
+    f = d / _anchor_name(pkt["run_id"])
+    with open(f, "a") as fh:
+        fh.write(line + "\n")
+    return f
 
 
 def _anchored(pkt_hash: str, run_id: str, anchor_dir) -> bool:
@@ -343,8 +349,10 @@ def _anchored(pkt_hash: str, run_id: str, anchor_dir) -> bool:
     return False
 
 
-def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None,
-         *, anchor_dir: str | Path | None = None) -> dict:
+def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None) -> dict:
+    """PURE: reads the ledger, returns the bound packet. Writes nothing,
+    ever — anchoring is a separate effect (anchor_packet) which by policy
+    runs under the receiver's/verifier's authority, not the candidate's."""
     anomaly = verify_chain(con, run_id)
     if anomaly:
         raise TransitionError(f"refusing to seal: {anomaly}")
@@ -361,7 +369,6 @@ def seal(con: sqlite3.Connection, run_id: str, extra: dict | None = None,
     pkt["packet_hash"] = hashlib.sha256(
         json.dumps(pkt, sort_keys=True, separators=(",", ":")).encode()
     ).hexdigest()
-    _write_anchor(pkt, anchor_dir)
     return pkt
 
 
@@ -579,7 +586,8 @@ def selftest(argv=None) -> int:
             pass
         # seal/verify: honest seal holds; packet then tampered -> caught
         anchors = os.path.join(td, "anchors")
-        pkt = seal(con, run, {"done_test": "s7"}, anchor_dir=anchors)
+        pkt = seal(con, run, {"done_test": "s7"})
+        anchor_packet(pkt, anchor_dir=anchors)
         if verify(con, pkt, anchor_dir=anchors) is not None:
             errs.append(f"honest packet failed: {verify(con, pkt, anchor_dir=anchors)}")
         if verify(con, pkt) is None:
@@ -629,13 +637,18 @@ def selftest(argv=None) -> int:
         except RuntimeError:
             pass
         ok("seal empty run", lambda: seal(con, "r-never-exists"))
+        before = sorted(map(str, Path(td).rglob("*")))
+        _ = seal(con, run)
+        if sorted(map(str, Path(td).rglob("*"))) != before:
+            errs.append("seal() is not pure: it touched the filesystem")
 
         # advisor freeze: run_id traversal must not escape the anchor root
         esc = os.path.join(td, "escroot")
         econ = connect(os.path.join(td, "esc.db"))
         erid = "../escaped-run"
         append(econ, erid, "declare", payload=["B"])
-        epkt = seal(econ, erid, anchor_dir=esc)
+        epkt = seal(econ, erid)
+        anchor_packet(epkt, anchor_dir=esc)
         if verify(econ, epkt, anchor_dir=esc) is not None:
             errs.append("traversal-id honest verify failed")
         roots = (Path(esc), Path(anchors))
