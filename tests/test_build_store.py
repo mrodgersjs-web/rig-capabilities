@@ -1,271 +1,399 @@
-"""Adversarial tests for the rig_build durable backend.
+"""rig_build store tests — NO live database, no mocks pretending to be one.
 
-Real Postgres (no mocks): a scratch database is created on the local server,
-both migrations applied, and every invariant attacked through role switches,
-direct SQL, and the store API. Skips only when psycopg2 or the server is
-genuinely absent.
+Harness: the APPLY-PORTABLE section of scripts/ddl_rig_build.sql, run through
+the documented mechanical adaptation (CREATE SCHEMA dropped, rig_build. prefix
+stripped) into an in-memory sqlite3 database. That proves the PORTABLE laws:
+primary keys, unique constraints (idempotency key, append sequence), foreign
+keys, CHECK constraints, and every store-layer guard (fencing, hash
+verification, mint refusal, lease expiry, evidence-gated reconciliation).
+
+What sqlite CANNOT prove is listed in BLOCKED_NEEDS_LIVE_PROOF and printed —
+the Postgres-only database law (plpgsql append/immutability/fencing triggers,
+role grants, RLS) is NOT claimed green here. Running the suite prints the
+list; a clean run means the portable surface plus the store guards hold, not
+that the schema is applied anywhere.
 """
-import datetime as dt
-import os
-import re
-import shutil
-import subprocess
+import json
+import sqlite3
 import unittest
-import uuid
-
-import psycopg2
-from psycopg2 import errors as pg_errors
-from psycopg2 import errorcodes
 
 from rig_capabilities import build_store
 
+CELL = "L1-D1-A1-I1"
+PACK_SHA = "f4" * 32
 SHA_A = "a" * 64
-TREE_A = "b" * 40
-COMMIT_A = "c" * 40
+SHA_B = "b" * 64
+T0 = "2026-09-12T00:00:00+00:00"
+
+BLOCKED_NEEDS_LIVE_PROOF = [
+    "run_events UPDATE/DELETE refusal by plpgsql trigger for EVERY role "
+    "(sqlite harness has no triggers; only the store guard + PK are proven)",
+    "run_events sequence-continuity trigger under concurrent cross-connection "
+    "inserts (store guard proven single-connection only)",
+    "cell_contracts / process_versions / approval_refs immutability triggers",
+    "runs fencing_token monotonicity trigger",
+    "least-privilege grants: rig_build_data_plane has no UPDATE/DELETE on "
+    "append-only/frozen tables and no DELETE anywhere (B20/B43)",
+    "RLS policies and the no-anonymous-exposure guarantee (needs live PG)",
+    "build_migrate apply/verify against a real target incl. the identity "
+    "probe (blocked on B11/B12: scoped credential + approval)",
+    "psycopg2 code path of build_store.connect (driver present; no target "
+    "reachable without the approved credential)",
+]
 
 
-def _server_available():
-    if shutil.which("psql") is None:
-        return False
-    try:
-        import psycopg2  # noqa: F401
-    except ImportError:
-        return False
-    try:
-        conn = psycopg2.connect("host=/tmp port=5432 dbname=postgres user=" + os.environ["USER"],
-                                connect_timeout=3)
-        conn.close()
-        return True
-    except Exception:
-        return False
+def _harness():
+    conn = sqlite3.connect(":memory:")
+    conn.execute("PRAGMA foreign_keys=ON")
+    conn.executescript(build_store.portable_ddl_sqlite())
+    return conn
 
 
-@unittest.skipUnless(_server_available(), "local postgres or psycopg2 unavailable")
+def _seed(conn):
+    build_store.put_cell_contract(
+        conn, cell_id=CELL, criteria_version="v1",
+        contract={"done_test": ["pytest"], "buyer_metric": "activation"},
+        criteria_pack_sha256=PACK_SHA, sealed_by="TestSeal")
+    build_store.register_process_version(
+        conn, process_key="intake", version="1", definition={"cadence": "on_demand"},
+        declared_owner="python-intake", registered_by="TestSeal")
+
+
 class RigBuildStoreTests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.dbname = "rig_build_test_" + uuid.uuid4().hex[:10]
-        cls.maint = psycopg2.connect(
-            f"host=/tmp port=5432 dbname=postgres user={os.environ['USER']}")
-        cls.maint.autocommit = True
-        with cls.maint.cursor() as cur:
-            cur.execute(f'CREATE DATABASE "{cls.dbname}"')
-        cls.conn = build_store.connect(
-            f"host=/tmp port=5432 dbname={cls.dbname} user={os.environ['USER']}")
-        build_store.apply_migrations(cls.conn)
-        cls.conn.close()
-
-    @classmethod
-    def tearDownClass(cls):
-        with cls.maint.cursor() as cur:
-            cur.execute(f'DROP DATABASE IF EXISTS "{cls.dbname}" WITH (FORCE)')
-        cls.maint.close()
-
     def setUp(self):
-        self.conn = build_store.connect(
-            f"host=/tmp port=5432 dbname={self.dbname} user={os.environ['USER']}")
-        with self.conn, self.conn.cursor() as cur:
-            cur.execute("TRUNCATE rig_build.qualification, rig_build.seal_link,"
-                        " rig_build.quality_score, rig_build.verdict, rig_build.trace,"
-                        " rig_build.trial, rig_build.outbox CASCADE")
-        self.t0 = dt.datetime.now(dt.timezone.utc) - dt.timedelta(hours=48)
+        self.conn = _harness()
+        _seed(self.conn)
 
     def tearDown(self):
         self.conn.close()
 
-    # helpers -------------------------------------------------------------
-    def seed_quorum(self, cell="C42", n=72, durable=12, verdict="VERIFIED"):
-        for i in range(n):
-            build_store.record_trial(
-                self.conn, cell=cell, trial_id=f"t{i:03d}", attempt_seq=1,
-                family="claude", model="opus", node="main", task_sha=SHA_A,
-                outcome="pass", artifact_tree=TREE_A, durable=i < durable,
-                started_at=self.t0 + dt.timedelta(minutes=21 * i),
-                finished_at=self.t0 + dt.timedelta(minutes=21 * i + 5))
-        v = build_store.record_verdict(
-            self.conn, cell=cell, family="hermes", verdict=verdict,
-            candidate_commit=COMMIT_A, candidate_tree=TREE_A, verdict_at=self.t0)
-        return v["verdict_id"]
+    # -- DDL shape (B06 freeze) ------------------------------------------------
 
-    def denial(self, sql, params=None, role="rig_build_worker", exc=None):
-        """SET ROLE must survive the aborted-tx rollbacks: commit it, and
-        re-assert after every denial (rollback restores last committed role)."""
-        exc = exc or pg_errors.InsufficientPrivilege
-        self.conn.rollback()
-        with self.conn.cursor() as cur:
-            cur.execute(f"SET ROLE {role}")
-            cur.execute("SELECT current_user")
-            self.assertEqual(cur.fetchone()[0], role)
+    def test_ddl_covers_nine_entities_with_keys(self):
+        sec = build_store.ddl_sections()["APPLY-PORTABLE"]
+        for entity in ("cell_contracts", "process_versions", "cell_bindings",
+                       "runs", "run_events", "artifacts", "approval_refs",
+                       "source_documents", "outbox"):
+            self.assertIn(f"CREATE TABLE IF NOT EXISTS rig_build.{entity}",
+                          sec, entity)
+            self.assertIn(f"PRIMARY KEY", sec.split(
+                f"rig_build.{entity} (")[1].split(");")[0], entity)
+        self.assertIn("idempotency_key     text        NOT NULL UNIQUE", sec)
+        self.assertIn("PRIMARY KEY (run_id, sequence)", sec)
+        self.assertIn("FOREIGN KEY", sec)
+        rollback = build_store.ddl_sections()["ROLLBACK"]
+        self.assertIn("DROP TABLE IF EXISTS rig_build.outbox", rollback)
+        self.assertIn("rig_build", rollback)
+        header = build_store.DDL_PATH.read_text()
+        self.assertIn("NEVER", header)  # catalog-sync truncation law is stated
+
+    def test_sqlite_harness_never_carries_pg_only_law(self):
+        adapted = build_store.portable_ddl_sqlite()
+        statements = "\n".join(ln for ln in adapted.splitlines()
+                               if not ln.strip().startswith("--"))
+        self.assertIn("PRIMARY KEY", statements.upper())
+        for marker in ("TRIGGER", "GRANT", "ROLE", "ROW LEVEL SECURITY"):
+            self.assertNotIn(marker, statements.upper(), marker)
+
+    # -- frozen records (B14) ---------------------------------------------------
+
+    def test_contract_replay_is_a_noop_and_rewrite_is_refused(self):
+        again = build_store.put_cell_contract(
+            self.conn, cell_id=CELL, criteria_version="v1",
+            contract={"done_test": ["pytest"], "buyer_metric": "activation"},
+            criteria_pack_sha256=PACK_SHA, sealed_by="TestSeal")
+        self.assertEqual(again["status"], "replay_confirmed")
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.put_cell_contract(
+                self.conn, cell_id=CELL, criteria_version="v1",
+                contract={"done_test": ["rm -rf"]},
+                criteria_pack_sha256=PACK_SHA, sealed_by="Attacker")
+        self.assertIn("frozen contract differs", str(ctx.exception))
+        n = self.conn.execute(
+            "SELECT count(*) FROM cell_contracts").fetchone()[0]
+        self.assertEqual(n, 1)
+
+    def test_contract_outside_authority_refused(self):
+        with self.assertRaises(build_store.StoreError):
+            build_store.put_cell_contract(
+                self.conn, cell_id="L9-9-Z9-X9", criteria_version="v1",
+                contract={}, criteria_pack_sha256=PACK_SHA, sealed_by="x")
+
+    def test_process_version_rewrite_refused(self):
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.register_process_version(
+                self.conn, process_key="intake", version="1",
+                definition={"cadence": "every_minute"},
+                declared_owner="python-intake", registered_by="Attacker")
+        self.assertIn("frozen", str(ctx.exception))
+
+    def test_binding_requires_sealed_records_and_T_types(self):
+        with self.assertRaises(build_store.StoreError):
+            build_store.bind_cell(
+                self.conn, cell_id=CELL, criteria_version="v9",
+                process_key="intake", process_version="1", work_type="T1",
+                owner="python-intake", bound_by="x")
+        with self.assertRaises(build_store.StoreError):
+            build_store.bind_cell(
+                self.conn, cell_id=CELL, criteria_version="v1",
+                process_key="intake", process_version="1", work_type="T9",
+                owner="python-intake", bound_by="x")
+        out = build_store.bind_cell(
+            self.conn, cell_id=CELL, criteria_version="v1",
+            process_key="intake", process_version="1", work_type="T1",
+            owner="python-intake", bound_by="TestSeal")
+        self.assertEqual(out["status"], "bound")
+
+    # -- runs (B15) --------------------------------------------------------------
+
+    def _run(self, key="op-1"):
+        return build_store.start_run(
+            self.conn, cell_id=CELL, criteria_version="v1",
+            process_key="intake", process_version="1",
+            idempotency_key=key, started_by="TestSeal")
+
+    def test_idempotency_key_replays_never_forks(self):
+        first = self._run()
+        self.assertEqual(first["status"], "started")
+        for _ in range(3):
+            replay = self._run()
+            self.assertEqual(replay["status"], "replayed")
+            self.assertEqual(replay["row"]["run_id"], first["row"]["run_id"])
+        n = self.conn.execute("SELECT count(*) FROM runs").fetchone()[0]
+        self.assertEqual(n, 1)
+
+    # -- events: sequence + fencing -----------------------------------------------
+
+    def _started(self):
+        return self._run()["row"]["run_id"]
+
+    def test_event_sequence_duplicate_and_gap_refused(self):
+        run = self._started()
+        for seq in (1, 2):
+            out = build_store.append_event(
+                self.conn, run_id=run, sequence=seq, kind="transition",
+                fencing_token=1, payload={"i": seq})
+            self.assertEqual(out["status"], "appended")
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.append_event(self.conn, run_id=run, sequence=2,
+                                     kind="transition", fencing_token=1)
+        self.assertIn("duplicate/out-of-order", str(ctx.exception))
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.append_event(self.conn, run_id=run, sequence=5,
+                                     kind="checkpoint", fencing_token=1)
+        self.assertIn("gap", str(ctx.exception))
+        n = self.conn.execute(
+            "SELECT count(*) FROM run_events").fetchone()[0]
+        self.assertEqual(n, 2)
+
+    def test_stale_fencing_token_cannot_commit(self):
+        run = self._started()
+        build_store.append_event(self.conn, run_id=run, sequence=1,
+                                 kind="transition", fencing_token=1)
+        # lease taken over elsewhere: run fence advances (PG guards this with
+        # the monotonicity trigger; here the harness advances it directly)
+        self.conn.execute("UPDATE runs SET fencing_token=2 WHERE run_id=?",
+                          (run,))
         self.conn.commit()
-        try:
-            with self.assertRaises(exc) as cm:
-                with self.conn.cursor() as cur:
-                    cur.execute(sql, params)
-            return cm.exception
-        finally:
-            self.conn.rollback()
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.append_event(self.conn, run_id=run, sequence=2,
+                                     kind="checkpoint", fencing_token=1)
+        self.assertIn("stale fencing token", str(ctx.exception))
+        # the current holder lands the same event
+        out = build_store.append_event(self.conn, run_id=run, sequence=2,
+                                       kind="checkpoint", fencing_token=2)
+        self.assertEqual(out["status"], "appended")
 
-    # store happy paths ----------------------------------------------------
-    def test_trial_roundtrip_and_attempt_key_uniqueness(self):
-        row = build_store.record_trial(
-            self.conn, cell="C01", trial_id="t1", attempt_seq=1, family="claude",
-            model="sonnet", node="main", task_sha=SHA_A, outcome="pass",
-            started_at=self.t0, finished_at=self.t0 + dt.timedelta(seconds=5))
-        self.assertEqual(row["outcome"], "pass")
-        self.assertEqual(row["recorded_by"], os.environ["USER"])
-        with self.assertRaises(psycopg2.IntegrityError):
-            build_store.record_trial(
-                self.conn, cell="C01", trial_id="t1", attempt_seq=1, family="claude",
-                model="sonnet", node="main", task_sha=SHA_A, outcome="fail",
-                started_at=self.t0, finished_at=self.t0)
-        self.conn.rollback()
-        # second attempt on the same trial is legal
-        r2 = build_store.record_trial(
-            self.conn, cell="C01", trial_id="t1", attempt_seq=2, family="claude",
-            model="sonnet", node="main", task_sha=SHA_A, outcome="fail",
-            started_at=self.t0, finished_at=self.t0 + dt.timedelta(seconds=9))
-        self.assertEqual(r2["attempt_seq"], 2)
+    # -- artifacts (B16) -----------------------------------------------------------
 
-    def test_event_sequence_no_gap_no_dup(self):
-        e1 = build_store.append_event(self.conn, cell="C02", trial_id="t1", event="start")
-        e2 = build_store.append_event(self.conn, cell="C02", trial_id="t1", event="end")
-        self.assertEqual((e1["seq"], e2["seq"]), (1, 2))
-        other = build_store.append_event(self.conn, cell="C02", trial_id="t2", event="start")
-        self.assertEqual(other["seq"], 1)
+    def test_artifact_hash_mismatch_refused_nothing_stored(self):
+        run = self._started()
+        content = b"the bytes that exist"
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.add_artifact(
+                self.conn, run_id=run, uri="local://evidence/out.txt",
+                kind="receipt", recorded_by="TestSeal", content=content,
+                content_sha256=SHA_A)
+        self.assertIn("hash mismatch", str(ctx.exception))
+        n = self.conn.execute("SELECT count(*) FROM artifacts").fetchone()[0]
+        self.assertEqual(n, 0)
+        out = build_store.add_artifact(
+            self.conn, run_id=run, uri="local://evidence/out.txt",
+            kind="receipt", recorded_by="TestSeal", content=content)
+        self.assertEqual(out["content_sha256"],
+                         build_store._sha256(content))
+        again = build_store.add_artifact(
+            self.conn, run_id=run, uri="local://evidence/out.txt",
+            kind="receipt", recorded_by="TestSeal", content=content)
+        self.assertEqual(again["status"], "replay_confirmed")
 
-    def test_python_boundary_validation_rejects_before_sql(self):
+    def test_artifact_requires_a_real_run(self):
         with self.assertRaises(build_store.StoreError):
-            build_store.record_trial(self.conn, cell="C03", trial_id="t", attempt_seq=0,
-                                     family="f", model="m", node="n", task_sha="nope",
-                                     outcome="pass", started_at=self.t0, finished_at=self.t0)
+            build_store.add_artifact(
+                self.conn, run_id="nope", uri="local://x", kind="receipt",
+                recorded_by="TestSeal", content=b"x")
+
+    # -- approval references (B17) ----------------------------------------------------
+
+    def test_no_minting_verb_exists_at_all(self):
+        for name in ("set_qualified", "approve_omission", "mark_pass",
+                     "approve", "qualify", "set_approved"):
+            self.assertFalse(hasattr(build_store, name), name)
+
+    def test_approval_ref_is_reference_only(self):
+        approvals = [r for r in self.conn.execute(
+            "PRAGMA table_info(approval_refs)").fetchall()]
+        cols = {r[1] for r in approvals}
+        self.assertTrue(cols.isdisjoint(
+            {"status", "verdict", "approved", "qualified", "state"}), cols)
+        out = build_store.add_approval_ref(
+            self.conn, authority_ledger="gate-d", external_ref="req-7712",
+            subject_kind="cell_omission", subject_id=CELL,
+            requested_by="TestSeal", recorded_by="TestSeal")
+        self.assertEqual(out["status"], "referenced")
+        self.assertIn("reference only", out["note"])
+
+    def test_caller_submitted_pass_flag_refused(self):
+        base = dict(authority_ledger="gate-d", external_ref="req-7713",
+                    subject_kind="cell_omission", subject_id=CELL,
+                    requested_by="TestSeal", recorded_by="TestSeal")
+        for detail in ({"pass": True}, {"verdict": "PASS"},
+                       {"note": {"qualified": "yes"}}, {"flag": "approved"},
+                       {"chain": [{"ok": "passed"}]}):
+            with self.assertRaises(build_store.StoreError, msg=str(detail)):
+                build_store.add_approval_ref(self.conn, detail=detail, **base)
+        n = self.conn.execute("SELECT count(*) FROM approval_refs") \
+                     .fetchone()[0]
+        self.assertEqual(n, 0)
+
+    def test_self_authority_and_caller_refused(self):
         with self.assertRaises(build_store.StoreError):
-            build_store.record_trial(self.conn, cell="C03", trial_id="t", attempt_seq=1,
-                                     family="f", model="m", node="n", task_sha=SHA_A,
-                                     outcome="launched", started_at=self.t0, finished_at=self.t0)
+            build_store.add_approval_ref(
+                self.conn, authority_ledger="self", external_ref="trust-me",
+                subject_kind="run", subject_id="r1",
+                requested_by="x", recorded_by="x")
         with self.assertRaises(build_store.StoreError):
-            build_store.record_verdict(self.conn, cell="C03", family="f", verdict="LGTM",
-                                       candidate_commit=COMMIT_A, candidate_tree=TREE_A,
-                                       verdict_at=self.t0)
+            build_store.add_approval_ref(
+                self.conn, authority_ledger="gate-d", external_ref="caller:1",
+                subject_kind="run", subject_id="r1",
+                requested_by="x", recorded_by="x")
 
-    # role isolation -------------------------------------------------------
-    def test_worker_cannot_touch_verdict_quality_or_qualification(self):
-        self.seed_quorum(cell="C10")
-        self.denial(
-            "INSERT INTO rig_build.verdict (cell, family, verdict, candidate_commit,"
-            " candidate_tree, verdict_at) VALUES ('C10','x','VERIFIED',%s,%s,now())",
-            (COMMIT_A, TREE_A))
-        self.denial("SELECT rig_build.record_qualification('C10', 1)")
-        self.denial("UPDATE rig_build.trial SET outcome = 'pass' WHERE cell='C10'")
+    # -- source documents (B18) ---------------------------------------------------------
 
-    def test_read_role_is_select_only(self):
-        self.denial(
-            "INSERT INTO rig_build.trace (cell, trial_id, seq, event) VALUES ('x','y',1,'z')",
-            role="rig_build_read")
-        self.conn.rollback()
-        with self.conn.cursor() as cur:
-            cur.execute("SET ROLE rig_build_read")
-        self.conn.commit()
-        with self.conn.cursor() as cur:
-            cur.execute("SELECT count(*) FROM rig_build.verdict")
-            cur.fetchone()
-        self.conn.rollback()
+    def test_source_document_dedupe_and_resume(self):
+        url = "https://example.test/tutorial"
+        key = build_store._sha256(url.encode())
+        first = build_store.put_source_document(
+            self.conn, dedupe_key=key, url=url, provider="prov",
+            kind="official_howto", expected_artifact="snapshot+sha256")
+        self.assertEqual(first["status"], "accepted")
+        again = build_store.put_source_document(
+            self.conn, dedupe_key=key, url=url, provider="prov",
+            kind="official_howto", retrieval_status="FETCHING")
+        self.assertEqual(again["status"], "advanced")
+        self.assertEqual(again["row"]["attempt_count"], 1)
+        n = self.conn.execute(
+            "SELECT count(*) FROM source_documents").fetchone()[0]
+        self.assertEqual(n, 1)  # dedupe key: same row, never a second accept
 
-    # append-only triggers fire even for the superuser owner ---------------
-    def test_append_only_tables_refuse_owner_mutation(self):
-        ev = build_store.append_event(self.conn, cell="C04", trial_id="t", event="x")
-        for stmt in ("DELETE FROM rig_build.trace WHERE id = %s".replace("%s", str(ev["id"])),
-                     "UPDATE rig_build.trace SET event = 'rewritten' WHERE id = %s".replace("%s", str(ev["id"]))):
-            with self.assertRaises(pg_errors.RaiseException) as cm:
-                self.conn.cursor().execute(stmt)
-            self.assertIn("append-only", str(cm.exception))
-            self.conn.rollback()
-
-    def test_quality_score_requires_existing_attempt(self):
-        with self.assertRaises(psycopg2.IntegrityError):
-            build_store.record_quality(self.conn, cell="C05", trial_id="ghost",
-                                       attempt_seq=1, rubric="r", score=88)
-        self.conn.rollback()
-
-    # qualification is derived, never hand-written --------------------------
-    def test_qualification_requires_pass_family_verdict(self):
-        vid = self.seed_quorum(cell="C20", verdict="PARTIAL")
-        with self.assertRaises(pg_errors.RaiseException) as cm:
-            build_store.record_qualification(self.conn, cell="C20", verdict_id=vid)
-        self.assertIn("PERFECT|VERIFIED", str(cm.exception))
-        self.conn.rollback()
-
-    def test_qualification_requires_full_quorum(self):
-        vid = self.seed_quorum(cell="C21", n=71)
-        with self.assertRaises(pg_errors.RaiseException) as cm:
-            build_store.record_qualification(self.conn, cell="C21", verdict_id=vid)
-        self.assertRegex(str(cm.exception), r"n=\d+ < 72")
-        self.conn.rollback()
-        # 72 attempts but only 9 durable
-        vid = self.seed_quorum(cell="C22", n=72, durable=9)
-        with self.assertRaises(pg_errors.RaiseException) as cm:
-            build_store.record_qualification(self.conn, cell="C22", verdict_id=vid)
-        self.assertIn("durable-arm", str(cm.exception))
-        self.conn.rollback()
-
-    def test_qualification_happy_path_then_immutable(self):
-        vid = self.seed_quorum(cell="C23")
-        q = build_store.record_qualification(self.conn, cell="C23", verdict_id=vid)
-        self.assertGreaterEqual(q["n_attempts"], 72)
-        self.assertGreaterEqual(q["span_hours"], 24)
-        self.assertIsNotNone(build_store.qualification(self.conn, "C23"))
-        self.assertIsNone(build_store.qualification(self.conn, "NOPE"))
-        with self.assertRaises(psycopg2.IntegrityError):
-            build_store.record_qualification(self.conn, cell="C23", verdict_id=vid)
-        self.conn.rollback()
-        with self.assertRaises(pg_errors.RaiseException):
-            self.conn.cursor().execute("DELETE FROM rig_build.qualification WHERE cell='C23'")
-        self.conn.rollback()
-
-    # outbox: ambiguous ack is a state, never an auto-resend ----------------
-    def test_outbox_direct_state_edit_refused(self):
-        ob = build_store.outbox_new(self.conn, topic="notify", payload={"n": 1})
-        with self.assertRaises(pg_errors.RaiseException) as cm:
-            self.conn.cursor().execute(
-                "UPDATE rig_build.outbox SET state='reconciled' WHERE outbox_id=%s",
-                (ob["outbox_id"],))
-        self.assertIn("named functions", str(cm.exception))
-        self.conn.rollback()
-
-    def test_outbox_state_machine_transitions(self):
-        ob = build_store.outbox_new(self.conn, topic="notify", payload={"n": 1})
-        oid = ob["outbox_id"]
-        with self.assertRaises(pg_errors.RaiseException):
-            build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="reconciled")
-        self.conn.rollback()
-        # ambiguous ack requires the reconciliation note
-        with self.assertRaises(pg_errors.RaiseException) as cm:
-            build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="unknown")
-        self.assertIn("note", str(cm.exception))
-        self.conn.rollback()
-        st = build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="unknown",
-                                          note="provider 504, ack unknown")
-        self.assertEqual(st["state"], "unknown")
-        self.assertEqual(st["attempts"], 0)  # unknown never counts as an attempt
-        st = build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="pending",
-                                          note="reconciled: provider confirms not received")
-        self.assertEqual((st["state"], st["attempts"]), ("pending", 1))
-        build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="sent")
-        st = build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="reconciled",
-                                          note="receipt 0192 seen")
-        self.assertEqual(st["state"], "reconciled")
-        with self.assertRaises(pg_errors.RaiseException):
-            build_store.outbox_set_state(self.conn, outbox_id=oid, next_state="pending")
-        self.conn.rollback()
-
-    def test_seal_link_binds_trials(self):
-        build_store.record_trial(self.conn, cell="C30", trial_id="t", attempt_seq=1,
-                                 family="f", model="m", node="n", task_sha=SHA_A,
-                                 outcome="pass", started_at=self.t0, finished_at=self.t0)
-        n = build_store.link_seal(self.conn, packet_hash=SHA_A,
-                                  links=[("trial", "C30|t|1"), ("verdict", "7")])
-        self.assertEqual(n, 2)  # both links inserted
+    def test_fetched_without_hash_is_not_evidence(self):
+        key = build_store._sha256(b"https://example.test/x")
         with self.assertRaises(build_store.StoreError):
-            build_store.link_seal(self.conn, packet_hash="not-a-hash", links=[("trial", "x")])
+            build_store.put_source_document(
+                self.conn, dedupe_key=key, url="https://example.test/x",
+                provider="prov", kind="official_howto",
+                retrieval_status="FETCHED")
+
+    # -- outbox (B19) ----------------------------------------------------------------------
+
+    def _queued(self):
+        return build_store.outbox_add(
+            self.conn, topic="notify", payload={"n": 1})["row"]["outbox_id"]
+
+    def test_claim_lease_expiry_and_stale_worker_fencing(self):
+        oid = self._queued()
+        a = build_store.claim_outbox(self.conn, outbox_id=oid,
+                                     claim_owner="workerA", lease_seconds=60,
+                                     now=T0)
+        self.assertEqual(a["status"], "claimed")
+        live = build_store.claim_outbox(self.conn, outbox_id=oid,
+                                        claim_owner="workerB",
+                                        lease_seconds=60,
+                                        now="2026-09-12T00:00:30+00:00")
+        self.assertEqual(live["status"], "not_claimable")  # lease honoured
+        taken = build_store.claim_outbox(self.conn, outbox_id=oid,
+                                         claim_owner="workerB",
+                                         lease_seconds=60,
+                                         now="2026-09-12T00:02:00+00:00")
+        self.assertEqual(taken["status"], "claimed")       # lease expired
+        self.assertEqual(taken["row"]["claim_fence"], 2)
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.settle_outbox(self.conn, outbox_id=oid,
+                                      claim_owner="workerA", claim_fence=1,
+                                      state="sent", receipt="ack-1",
+                                      now="2026-09-12T00:02:01+00:00")
+        self.assertIn("stale", str(ctx.exception))         # B47: crash-resume
+        out = build_store.settle_outbox(self.conn, outbox_id=oid,
+                                        claim_owner="workerB", claim_fence=2,
+                                        state="sent", receipt="ack-1",
+                                        now="2026-09-12T00:02:02+00:00")
+        self.assertEqual(out["row"]["state"], "sent")
+
+    def test_sent_requires_receipt_unknown_requires_reconciliation(self):
+        oid = self._queued()
+        c = build_store.claim_outbox(self.conn, outbox_id=oid,
+                                     claim_owner="w", lease_seconds=60, now=T0)
+        fence = c["row"]["claim_fence"]
+        with self.assertRaises(build_store.StoreError):
+            build_store.settle_outbox(self.conn, outbox_id=oid,
+                                      claim_owner="w", claim_fence=fence,
+                                      state="sent", now=T0)
+        with self.assertRaises(build_store.StoreError) as ctx:
+            build_store.settle_outbox(self.conn, outbox_id=oid,
+                                      claim_owner="w", claim_fence=fence,
+                                      state="pending", now=T0)
+        self.assertIn("blind resend", str(ctx.exception))
+        out = build_store.settle_outbox(
+            self.conn, outbox_id=oid, claim_owner="w", claim_fence=fence,
+            state="unknown", error="timeout before ack", now=T0)
+        self.assertEqual(out["row"]["state"], "unknown")
+        # an unknown row cannot be re-claimed (no blind resend path)
+        self.assertEqual(build_store.claim_outbox(
+            self.conn, outbox_id=oid, claim_owner="w2", lease_seconds=60,
+            now="2026-09-12T10:00:00+00:00")["status"], "not_claimable")
+        # ... and reconcile demands named evidence
+        with self.assertRaises(build_store.StoreError):
+            build_store.reconcile_unknown(self.conn, outbox_id=oid,
+                                          resolution="pending",
+                                          expected_fence=fence, evidence=" ")
+        row = self.conn.execute(
+            "SELECT state FROM outbox WHERE outbox_id=?", (oid,)).fetchone()
+        self.assertEqual(row[0], "unknown")  # refusal left it honest
+        rec = build_store.reconcile_unknown(
+            self.conn, outbox_id=oid, resolution="pending",
+            expected_fence=fence,
+            evidence="provider GET /jobs/ack-1 => 404 not-found, resend safe",
+            now="2026-09-12T10:05:00+00:00")
+        self.assertEqual(rec["row"]["state"], "pending")
+        # re-queue goes through a FRESH fence, the old holder is dead
+        # (settle requires a live claimed row; the pending row is not
+        # settle-able by the dead holder — see the refusal below)
+        with self.assertRaises(build_store.StoreError):
+            build_store.settle_outbox(self.conn, outbox_id=oid,
+                                      claim_owner="w", claim_fence=fence,
+                                      state="sent", receipt="x", now=T0)
+        new = build_store.claim_outbox(self.conn, outbox_id=oid,
+                                       claim_owner="w3", lease_seconds=60,
+                                       now="2026-09-12T10:06:00+00:00")
+        self.assertEqual(new["status"], "claimed")
+        self.assertGreater(new["row"]["claim_fence"], fence)
+
+    def test_blocked_list_is_reported_not_faked(self):
+        # The suite's honesty contract: PG-only law is named, never faked.
+        self.assertGreaterEqual(len(BLOCKED_NEEDS_LIVE_PROOF), 5)
+        print("\nBLOCKED — needs live-target proof (not claimed by sqlite):")
+        for item in BLOCKED_NEEDS_LIVE_PROOF:
+            print("  *", item)
 
 
 if __name__ == "__main__":
