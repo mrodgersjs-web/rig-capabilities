@@ -71,6 +71,8 @@ class BuildIndex:
         mixed record/generation pair are corruption and raise."""
         gen: str | None = None
         recs: dict[str, dict] = {}
+        meta_seen = 0
+        body_started = False
         if os.path.exists(self.path):
             with open(self.path) as f:
                 for line in f:
@@ -79,13 +81,26 @@ class BuildIndex:
                         continue
                     r = json.loads(line)
                     if "_meta" in r:
+                        meta_seen += 1
+                        if meta_seen > 1:
+                            raise IndexError_(
+                                "duplicate _meta header; corrupt")
+                        if body_started:
+                            raise IndexError_(
+                                "late _meta header after records; corrupt "
+                                "(never last-wins)")
                         gen = r["_meta"]["pack_sha"]
                         continue
+                    body_started = True
                     if r["cell_id"] in recs:
                         raise IndexError_(
                             f"duplicate row for {r['cell_id']}; "
                             "index corrupt (never last-wins)")
                     recs[r["cell_id"]] = r
+            if recs and meta_seen == 0:
+                raise IndexError_(
+                    "records without _meta header; corrupt (deleting the "
+                    "header is not an adoption path)")
             if gen is not None:
                 bad = {cid for cid, r in recs.items()
                        if r["pack_sha"] != gen}
@@ -255,6 +270,30 @@ def selftest(argv=None) -> int:
         except IndexError_ as e:
             if "disagree" not in str(e):
                 errs.append(f"mixed wrong reason: {e}")
+        # header deletion is corruption, not a generation-adoption path
+        # (built from p3's single clean row — p is already corrupted here)
+        p4 = os.path.join(td, "index4.jsonl")
+        with open(p4, "w") as f:
+            f.write('{"build_ref": "x", "cell_id": "C001", "pack_sha": '
+                    '"' + sha_a + '", "version": 1}\n')
+        try:
+            BuildIndex(p4, valid, sha_b).insert("C100", "adopt")
+            errs.append("header-deletion adoption accepted")
+        except IndexError_ as e:
+            if "without _meta" not in str(e):
+                errs.append(f"header-del wrong reason: {e}")
+        # duplicate metadata rows refused (no last-wins)
+        p5 = os.path.join(td, "index5.jsonl")
+        with open(p5, "w") as f:
+            for sha in (sha_a, sha_b):
+                f.write(json.dumps({"_meta": {"pack_sha": sha}},
+                                   sort_keys=True) + "\n")
+        try:
+            BuildIndex(p5, valid, sha_b)._load()
+            errs.append("duplicate _meta accepted")
+        except IndexError_ as e:
+            if "duplicate _meta" not in str(e):
+                errs.append(f"dup-meta wrong reason: {e}")
     print(json.dumps({"ok": not errs, "errors": errs,
                       "cells_valid": len(valid)}))
     return 0 if not errs else 1
