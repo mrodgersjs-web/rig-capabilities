@@ -1263,17 +1263,22 @@ def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, 
     _binding0 = _candidate_binding(run)
     t0 = time.time()
     override = cmd_override or os.environ.get("RIG_LOOP_VERIFIER_CMD")
+    # RIG_TASK: the rig-knowledge task-context shim demands a declared task;
+    # its env route satisfies every agent grammar (hermes' -q/--oneshot form
+    # has no value slot after --oneshot and is otherwise shim-BLOCKED).
+    verifier_env = {**os.environ,
+                    "RIG_TASK": str(run.get("intent") or "loop verify")[:400]}
     try:
         if override:
             cmd = override.replace("{prompt_file}", str(prompt_path)).replace("{cwd}", run["cwd"])
             r = subprocess.run(cmd, shell=True, cwd=run["cwd"], capture_output=True, text=True, timeout=timeout,
-                               stdin=subprocess.DEVNULL)
+                               stdin=subprocess.DEVNULL, env=verifier_env)
         else:
             if family not in VERIFIER_FAMILIES:
                 raise SpecError(f"unknown verifier family {family}; options: {sorted(VERIFIER_FAMILIES)}")
             argv = [a.replace("{prompt}", prompt).replace("{cwd}", run["cwd"]) for a in VERIFIER_FAMILIES[family]]
             r = subprocess.run(argv, cwd=run["cwd"], capture_output=True, text=True, timeout=timeout,
-                               stdin=subprocess.DEVNULL)
+                               stdin=subprocess.DEVNULL, env=verifier_env)
         output, exit_code = (r.stdout or "") + ("\n[stderr]\n" + r.stderr if r.stderr else ""), r.returncode
     except subprocess.TimeoutExpired:
         output, exit_code = f"[timeout after {timeout}s]", 124
