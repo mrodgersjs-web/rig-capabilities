@@ -32,7 +32,16 @@ from rig_capabilities import loops as L  # noqa: E402
 
 
 def _need_run(args) -> dict:
-    run = L.find_active(getattr(args, "cwd", None) or os.getcwd(), getattr(args, "run", None))
+    cwd = getattr(args, "cwd", None) or os.getcwd()
+    run = L.find_active(cwd, getattr(args, "run", None))
+    if not run and getattr(args, "run", None):
+        # An explicit run id may name a done/parked run: inspecting and
+        # cleanup verbs are legal after close; every mutation still refuses
+        # inside the engine (stage: "run is done; resume first", resume:
+        # "run is done"). Ownership of the cwd is still enforced.
+        cand = L.load_run(args.run)
+        if cand and L._owns_cwd(cand, cwd):
+            run = cand
     if not run:
         sys.exit("rig-loop: no active loop run for this directory. Start one: rig-loop activate <loop-id>")
     return run
@@ -61,7 +70,7 @@ def cmd_brief(a):
 def cmd_status(a):
     run = _need_run(a)
     spec = L.load_spec(run["loop_id"])
-    if a.json:
+    if a.json or getattr(a, "format", None) == "json":
         _print(run)
     else:
         print(L.banner(run, spec))
@@ -362,7 +371,7 @@ def main(argv=None) -> int:
     p = sub.add_parser("activate"); p.add_argument("loop_id"); p.add_argument("--intent"); p.add_argument("--mode", default="auto")
     p.add_argument("--cwd"); p.add_argument("--harness"); p.add_argument("--session-id"); p.add_argument("--if-inactive", action="store_true"); p.set_defaults(fn=cmd_activate)
     p = sub.add_parser("brief"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_brief)
-    p = sub.add_parser("status"); p.add_argument("--json", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_status)
+    p = sub.add_parser("status"); p.add_argument("--json", action="store_true"); p.add_argument("--format", choices=["json", "text"], default=None, help="output format; --format json is the registered done-test form"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_status)
     p = sub.add_parser("stage"); p.add_argument("stage"); p.add_argument("status", choices=["pass", "fail", "park"]); p.add_argument("--artifact")
     p.add_argument("--score", type=int); p.add_argument("--note"); p.add_argument("--force", action="store_true"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_stage)
     p = sub.add_parser("artifact"); p.add_argument("stage"); p.add_argument("path"); p.add_argument("--run"); p.add_argument("--cwd"); p.set_defaults(fn=cmd_artifact)
