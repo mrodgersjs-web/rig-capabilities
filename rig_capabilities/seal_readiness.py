@@ -1,12 +1,12 @@
 """s8 — seal-readiness assembly: build the commit-gate manifest from live
-state and report each receipt's status WITHOUT consuming anything.
+state and report the gate's OWN verdict WITHOUT consuming anything.
 
-The manifest shape is commit_gate's (d85 / joint / gate-d / verdict). This
-module never approves, never arms, never consumes: it answers "what is
-still open before the SHA can be sealed?" and points at the exact owner of
-each open item (certifier re-cert, trial rows, Gate-D human approval,
-cross-family verdict). A missing artifact or unavailable authority is
-reported as OPEN/REFUSED, never as a pass.
+The manifest shape is commit_gate's (d85 / joint / gate-d / verdict) and
+readiness() delegates to the PUBLIC commit_gate.check(): same code path,
+same anchor short-circuit, no seams, no second opinion that could diverge
+from the authoritative gate. This module never approves, never arms,
+never consumes — it answers "what is still open before the SHA can be
+sealed?" and refuses to paraphrase the gate.
 
 Usage:
   python3 -m rig_capabilities.seal_readiness assemble --sha SHA ...
@@ -18,6 +18,7 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+
 try:
     from rig_capabilities import commit_gate
 except ImportError:  # direct `python3 rig_capabilities/seal_readiness.py`
@@ -37,37 +38,10 @@ def assemble(*, sha_build: str, cert: str, trials: str, cells: list[str],
 
 
 def readiness(repo: Path, sha: str, manifest: dict) -> dict:
-    """Per-receipt status. Non-consuming: verify paths only, never arm."""
-    out: dict = {"sha": sha, "receipts": {}, "blockers": []}
-
-    def run(kind, fn):
-        try:
-            errs = fn()
-        except Exception as e:  # unavailable authority counts as REFUSED
-            errs = [f"{type(e).__name__}: {e}"]
-        out["receipts"][kind] = "PASS" if not errs else "REFUSED"
-        if errs:
-            out["blockers"].append({kind: errs})
-
-    anchor = commit_gate._anchor_errors(repo, None)
-    out["anchor"] = ("SEALED" if not anchor
-                     else "; ".join(anchor) or "UNSEALED")
-    if anchor:
-        # nothing under d85 can pass while the anchor is unsealed; report it
-        # once as the named blocker instead of four identical refusals
-        out["receipts"]["d85"] = "BLOCKED_BY_ANCHOR"
-        out["blockers"].append({"d85": anchor})
-    else:
-        run("d85", lambda: commit_gate._verify_d85(
-            repo, manifest["d85"], sha))
-    run("joint", lambda: commit_gate.verify_joint(
-        repo, manifest["joint"], sha))
-    run("gate-d", lambda: commit_gate._verify_gate_d(
-        repo, manifest["gate-d"], sha))
-    run("verdict", lambda: commit_gate.verify_verdict(
-        repo, manifest["verdict"], sha))
-    out["ready"] = all(v == "PASS" for v in out["receipts"].values())
-    return out
+    """The authoritative gate verdict, verbatim. Non-consuming by construction:
+    commit_gate.check() is the documented non-consuming entrypoint."""
+    v = commit_gate.check(repo, sha, manifest)
+    return {"sha": sha, "ready": bool(v["admitted"]), "gate_verdict": v}
 
 
 def main(argv=None) -> int:
@@ -105,7 +79,6 @@ def selftest() -> int:
     with tempfile.TemporaryDirectory() as td:
         repo = Path(td)
         (repo / "rig_capabilities").mkdir()
-        (repo / ".git").mkdir()
         m = assemble(sha_build="b.json", cert="c.json", trials="t.jsonl",
                      cells=["C01"], process_id="P", action_file="a.json",
                      verdict_artifact="v.json")
@@ -115,16 +88,13 @@ def selftest() -> int:
                 "verdict": {"artifact": "v.json"}}
         if m != want:
             errs.append(f"assemble shape drift: {m}")
-        # readiness on an empty repo: NOTHING passes, NOTHING is consumed,
-        # and the unsealed anchor is the named d85 blocker
+        # readiness IS the gate's verdict: same object, not a paraphrase
+        gate = commit_gate.check(repo, "0" * 40, m)
         r = readiness(repo, "0" * 40, m)
-        if r["ready"]:
-            errs.append("empty repo reported ready")
-        if r["receipts"]["d85"] != "BLOCKED_BY_ANCHOR":
-            errs.append(f"anchor not named for d85: {r['receipts']['d85']}")
-        for k in ("joint", "gate-d", "verdict"):
-            if r["receipts"][k] != "REFUSED":
-                errs.append(f"{k} not refused on empty repo")
+        if r["gate_verdict"] != gate or r["ready"] != gate["admitted"]:
+            errs.append("readiness diverged from commit_gate.check")
+        if r["ready"] or not gate["refusals"]:
+            errs.append(f"empty repo not refused: {r}")
         # report CLI runs the same path and exits 0 with JSON
         proc = subprocess.run(
             [sys.executable, "-m", "rig_capabilities.seal_readiness",
@@ -140,12 +110,11 @@ def selftest() -> int:
             got = {}
         if proc.returncode != 0 or got.get("ready") is not False:
             errs.append(f"CLI wrong: rc={proc.returncode} ready={got.get('ready')}")
-        # no consumption: no approval markers or consumed files anywhere
-        if any(p.is_file() for p in repo.rglob("*") if p.parent != repo / ".git"):
-            leftovers = [str(p.relative_to(repo)) for p in repo.rglob("*")
-                         if p.is_file() and ".git" not in p.parts]
-            if leftovers:
-                errs.append(f"readiness wrote state: {leftovers}")
+        # no consumption: readiness must not write anything into the repo
+        leftovers = [str(p.relative_to(repo)) for p in repo.rglob("*")
+                     if p.is_file()]
+        if leftovers:
+            errs.append(f"readiness wrote state: {leftovers}")
     print(json.dumps({"ok": not errs, "errors": errs}))
     return 0 if not errs else 1
 
