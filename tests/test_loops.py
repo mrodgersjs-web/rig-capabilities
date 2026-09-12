@@ -550,12 +550,14 @@ class V20Tests(TempState):
         # is a diagnosis hole, not a green.
         import shutil
         import tempfile
+        old = dict(L.SKILL_ROOTS)
+        # a hand-written mini-spec would fail load_spec validation and land in
+        # spec_errors instead of the diagnosis under test — clone a real spec
+        src = Path(old["canonical"]) / "gate-d-loop" / "loop.yaml"
         fake = Path(tempfile.mkdtemp(prefix="rig-loop-nocases-"))
         (fake / "bare-loop").mkdir()
         (fake / "bare-loop" / "loop.yaml").write_text(
-            "id: bare-loop\nname: bare\nversion: 1.0.0\nstages:\n  - id: I\n    name: Intent\n"
-            "    done_when: [x]\n    gate:\n      type: always\n")
-        old = dict(L.SKILL_ROOTS)
+            src.read_text().replace("gate-d-loop", "bare-loop"))
         try:
             L.SKILL_ROOTS["canonical"] = fake
             rep = L.doctor()
@@ -564,7 +566,7 @@ class V20Tests(TempState):
             # plant-restore: cases present -> loop drops out of the red list
             cases = fake / "bare-loop" / "tests"
             cases.mkdir()
-            shutil.copy(old["canonical"] / "gate-d-loop" / "tests" / "cases.json",
+            shutil.copy(Path(old["canonical"]) / "gate-d-loop" / "tests" / "cases.json",
                         cases / "cases.json")
             rep2 = L.doctor()
             self.assertNotIn("bare-loop", rep2["loops_missing_selftest"])
