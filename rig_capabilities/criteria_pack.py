@@ -46,24 +46,54 @@ def build_rows() -> list[dict]:
         if step not in steps:
             raise AssertionError(f"{cid}: step {step!r} not in {steps}")
         i = steps.index(step)
-        rows.append({
-            "cell_id": cid,
-            "coordinate": c["coordinate"],
-            "criteria": {
-                "bms": c["bms"],
-                "cost_band": c["cost_band"],
-                "execution": c["execution"],
-            },
-            "bms_inputs": {k: "UNKNOWN-no-receipt" for k in BMS_SCALARS},
-            "deps": {
-                "archetype": c["routing"]["archetype"],
-                "fallback_archetype": c["routing"]["fallback_archetype"],
-                "prev_step": steps[i - 1] if i > 0 else None,
-                "next_step": steps[i + 1] if i < len(steps) - 1 else None,
-            },
-        })
+        # Lossless: every field of the source cell contract is carried at the
+        # top level (no selective copying), plus two pack-only derivations.
+        row = dict(c)
+        row["bms_inputs"] = {k: "UNKNOWN-no-receipt" for k in BMS_SCALARS}
+        row["deps"] = {
+            "archetype": c["routing"]["archetype"],
+            "fallback_archetype": c["routing"]["fallback_archetype"],
+            "escalation_policy": c["routing"]["escalation_policy"],
+            "prev_step": steps[i - 1] if i > 0 else None,
+            "next_step": steps[i + 1] if i < len(steps) - 1 else None,
+        }
+        rows.append(row)
     return rows
 
+
+def row_covers(row: dict, contract: dict) -> bool:
+    """True iff row carries every source contract field, unchanged."""
+    return all(k in row and row[k] == v for k, v in contract.items())
+
+
+def selftest() -> int:
+    errs: list[str] = []
+    rows = {r["cell_id"]: r for r in build_rows()}
+    if len(rows) != 588:
+        errs.append(f"expected 588 unique cells, got {len(rows)}")
+    for cid, row in sorted(rows.items()):
+        c = gen.load_cell(cid)
+        if not row_covers(row, c):
+            missing = [k for k in c if k not in row]
+            diffs = [k for k in c if k in row and row[k] != c[k]]
+            errs.append(f"{cid}: missing={missing} differs={diffs}")
+        if "sequence" not in row.get("process", {}):
+            errs.append(f"{cid}: process contract stripped")
+        if "escalation_policy" not in row.get("deps", {}):
+            errs.append(f"{cid}: escalation_policy missing")
+    # self-proof the validator is not blind: the OLD lossy projection — and
+    # any field dropped from a correct row — must fail coverage.
+    probe = sorted(rows)[0]
+    lossy = {k: v for k, v in rows[probe].items() if k != "process"}
+    if row_covers(lossy, gen.load_cell(probe)):
+        errs.append("row_covers accepts lossy row (validator blind)")
+    old_shape = {k: rows[probe][k] for k in
+                 ("cell_id", "coordinate", "bms_inputs")}
+    if row_covers(old_shape, gen.load_cell(probe)):
+        errs.append("row_covers accepts s4-era lossy shape")
+    print(json.dumps({"ok": not errs, "errors": errs[:10],
+                      "cells_checked": len(rows)}))
+    return 0 if not errs else 1
 
 def pack_bytes() -> bytes:
     return "".join(json.dumps(r, sort_keys=True) + "\n"
@@ -78,10 +108,12 @@ def _fail(target: Path, reason: str) -> int:
 def main(argv=None) -> int:
     import argparse
     ap = argparse.ArgumentParser(prog="criteria_pack")
-    ap.add_argument("cmd", choices=("generate",))
+    ap.add_argument("cmd", choices=("generate", "selftest"))
     ap.add_argument("--verify", metavar="PATH", nargs="?", const="", default=None)
     ap.add_argument("--out", default=str(DEFAULT_OUT))
     a = ap.parse_args(argv)
+    if a.cmd == "selftest":
+        return selftest()
     out = Path(a.out)
     data = pack_bytes()
     sha = hashlib.sha256(data).hexdigest()
