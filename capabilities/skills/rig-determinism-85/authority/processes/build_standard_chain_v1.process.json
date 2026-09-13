@@ -1,0 +1,195 @@
+{
+  "classification_path": "processes/build_standard_chain_v1.classification.json",
+  "entrypoints": [
+    {
+      "adapter_operation": "main",
+      "adapter_path": "rig_capabilities/criteria_pack.py",
+      "source_path": "rig_capabilities/criteria_pack.py",
+      "symbol": "main"
+    },
+    {
+      "adapter_operation": "check",
+      "adapter_path": "rig_capabilities/commit_gate.py",
+      "source_path": "rig_capabilities/commit_gate.py",
+      "symbol": "check"
+    },
+    {
+      "adapter_operation": "current_pack_sha",
+      "adapter_path": "rig_capabilities/build_index.py",
+      "source_path": "rig_capabilities/build_index.py",
+      "symbol": "current_pack_sha"
+    }
+  ],
+  "external_modules": [
+    {
+      "allowed_calls": [
+        "ast.Import",
+        "ast.ImportFrom",
+        "ast.parse",
+        "ast.walk"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/ast.py",
+      "artifact_sha256": "c513073798bdbf3cdef09327d0d2d381a53213a13a4ba3f02729695327539406",
+      "module": "ast"
+    },
+    {
+      "allowed_calls": [
+        "contextlib.contextmanager",
+        "contextlib.redirect_stdout"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/contextlib.py",
+      "artifact_sha256": "d732c045bc7450997f97b2f79cfdb1546b68d2655e89ab3170f3b19b3930d83c",
+      "module": "contextlib"
+    },
+    {
+      "allowed_calls": [
+        "fcntl.LOCK_EX",
+        "fcntl.LOCK_UN",
+        "fcntl.flock"
+      ],
+      "artifact_path": "/Users/rig128gb/.hermes/hermes-agent/venv/bin/python3",
+      "artifact_sha256": "51b0f8201b2c4cc94d04dd614c20f7dce0cc22ef23e9ca134f39c978d78c38f2",
+      "module": "fcntl"
+    },
+    {
+      "allowed_calls": [
+        "hashlib.sha256"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/hashlib.py",
+      "artifact_sha256": "e2bffb462e4d43e6637b9450e259e8ba2a56626ba3037d68aa1cee68b3f61d4a",
+      "module": "hashlib"
+    },
+    {
+      "allowed_calls": [
+        "hmac.compare_digest",
+        "hmac.new"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/hmac.py",
+      "artifact_sha256": "7facd1330e5487ed995eda5c8619df0d3e32f69cb619f97662372fb76325746e",
+      "module": "hmac"
+    },
+    {
+      "allowed_calls": [
+        "json.JSONDecodeError",
+        "json.dumps",
+        "json.loads"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/__init__.py",
+      "artifact_sha256": "d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5",
+      "module": "json",
+      "package_modules": [
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/decoder.py",
+          "sha256": "9f02654649816145bc76f8c210a5fe3ba1de142d4d97a1c93105732e747c285b"
+        },
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/encoder.py",
+          "sha256": "af7bd40a0d0d0a3e726a9b4b3a2a543019f6ab97a340d0162a9c29ca9da97869"
+        }
+      ]
+    },
+    {
+      "allowed_calls": [
+        "os.environ",
+        "os.environ.get",
+        "os.environ.pop",
+        "os.fsync",
+        "os.makedirs",
+        "os.replace"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/os.py",
+      "artifact_sha256": "8a5d4ac7b87c6c5b31fcb5081f7f7c06f8403a2fdb3eb23692c48933baeb899e",
+      "module": "os"
+    },
+    {
+      "allowed_calls": [
+        "os.path.abspath",
+        "os.path.dirname",
+        "os.path.exists",
+        "os.path.join"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/genericpath.py",
+      "artifact_sha256": "34497be8d2eb70df61e94cb2ee1938433145c977a56b36be37cc41a3a71d32c2",
+      "module": "os.path"
+    },
+    {
+      "allowed_calls": [
+        "pathlib.Path",
+        "pathlib.Path.home"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/pathlib.py",
+      "artifact_sha256": "3b21ac188fd9ac20bacc8ccd976fabd5d8ccf5000f8e157d3dfff005b228fb3d",
+      "module": "pathlib"
+    },
+    {
+      "allowed_calls": [
+        "re.compile",
+        "re.findall",
+        "re.fullmatch",
+        "re.match"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/re/__init__.py",
+      "artifact_sha256": "029ead61f362489e9bb034f4c2503abee95462056541e9ad07715de3c353b0da",
+      "module": "re",
+      "package_modules": [
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/re/_casefix.py",
+          "sha256": "41572ac50cf96b04496e676d8a6708898bb8e752e06dad34ed4c50c5d8f1fe40"
+        },
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/re/_compiler.py",
+          "sha256": "c05067f8bfa4c13cbbf1eedc4d5cafc9b621bcb6ebc5771ba0518a18095af15a"
+        },
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/re/_constants.py",
+          "sha256": "3e4463dc8ba87c4a3563be46d2d593e82ca9a0fb91768cfe5a07554ed3de82c5"
+        },
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/re/_parser.py",
+          "sha256": "4748e39c77d6dc14f81af80e68a62ad99031a8182d5e0b219a6666d0cfb1626f"
+        }
+      ]
+    },
+    {
+      "allowed_calls": [
+        "subprocess.TimeoutExpired",
+        "subprocess.run"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "module": "subprocess"
+    },
+    {
+      "allowed_calls": [
+        "sys.argv",
+        "sys.executable",
+        "sys.exit",
+        "sys.modules",
+        "sys.modules.get",
+        "sys.modules.pop",
+        "sys.path",
+        "sys.path.insert",
+        "sys.stderr"
+      ],
+      "artifact_path": "/Users/rig128gb/.hermes/hermes-agent/venv/bin/python3",
+      "artifact_sha256": "51b0f8201b2c4cc94d04dd614c20f7dce0cc22ef23e9ca134f39c978d78c38f2",
+      "module": "sys"
+    },
+    {
+      "allowed_calls": [
+        "tempfile.TemporaryDirectory"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/tempfile.py",
+      "artifact_sha256": "ea4b01b1dfd4ab1f3974a98c216879770a4f7db060bf233a48e3a4223487c836",
+      "module": "tempfile"
+    }
+  ],
+  "file_hashes": {
+    "rig_capabilities/build_index.py": "1682432800f2a839fbc4cfe7c5ccdbb30df0c1ab4ddf4ec5564f799396466715",
+    "rig_capabilities/commit_gate.py": "0ed9700057acd8557de252b9e7a0875e0d58ecffab9a9c4b285d1f8971ae3a7c",
+    "rig_capabilities/criteria_pack.py": "b070410d4cd5e01841175726b5859586e574fc94b7879ff1d893ae1c218af3bb"
+  },
+  "process_id": "build_standard_chain_v1",
+  "schema": "rig.d85.process-authority.v1",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/build_standard_chain_v1"
+}
