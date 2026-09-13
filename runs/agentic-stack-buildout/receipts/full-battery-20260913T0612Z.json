@@ -1,0 +1,28 @@
+{
+ "schema": "rig.receipt.full-battery.v1",
+ "ts": "2026-09-13T06:12:00+00:00",
+ "command": "python3 -m unittest discover -s tests -p test_*.py",
+ "ran": 1070,
+ "skipped": 2,
+ "failures": 2,
+ "errors": 0,
+ "wall_seconds": 197.5,
+ "head": "e693072",
+ "branch": "fable-2031",
+ "failures_attributed": [
+  {
+   "test": "test_unsupported_execution_grammar_fails_closed (name='monkey_patch')",
+   "classes": ["DeterminismInventoryTests", "ModuleInitV2Tests"],
+   "assertion": "expected SOURCE_UNSUPPORTED_GRAMMAR, live scanner labels SOURCE_DYNAMIC_CALL",
+   "lane": "external d85 inventory grammar-label (author actively editing: 4 reds -> 2 reds across this cycle)",
+   "materiality": "both labels BLOCK admission — fail-closed either way; label taxonomy disagreement only",
+   "owner": "external d85 lane; report-only, not adopted"
+  }
+ ],
+ "green_owned_suites": [
+  "test_durable_fixtures (V07/V17)", "test_build_intake (B31)",
+  "test_build_store", "test_measure_store", "test_loops (51)",
+  "test_d85_gates (32)", "test_estate_ledger", "fable2031_tools (spec<->handler bijection, OK after data-contract fix e693072)"
+ ],
+ "note": "1068/1070 non-skipped pass. Prior-cycle reds retired by their authors mid-cycle: test_d85_admission 17F -> 0, test_build_standard 2F6E -> 0, determinism escape-class 4F -> 2. This receipt is the battery record for the durable/repeatable plan; battery item closes with attribution."
+}
