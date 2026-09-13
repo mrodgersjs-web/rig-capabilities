@@ -1,9 +1,11 @@
-"""Minimal MCP stdio server: newline-delimited JSON-RPC 2.0, stdlib only.
+"""MCP stdio server: newline-delimited JSON-RPC 2.0, stdlib only.
 
-Vendored from ~/Developer/jake-pai-mcp/jake_pai/mcp_stdio.py (same owner, MIT).
-Implements the subset every harness (Claude Code, Codex, OMP, Hermes, Prime
-Agent) exercises: initialize, notifications/initialized, ping, tools/list,
-tools/call. Logs go to stderr — stdout is protocol-only, always.
+Vendored from ~/Developer/jake-pai-mcp/jake_pai/mcp_stdio.py (same owner, MIT),
+extended with the full negotiating surface every real client exercises:
+initialize (with `instructions` + capability advertisement),
+notifications/initialized, ping, tools/list, tools/call, resources/list,
+resources/read, prompts/list, prompts/get. Logs go to stderr — stdout is
+protocol-only, always.
 """
 from __future__ import annotations
 
@@ -20,6 +22,10 @@ METHOD_NOT_FOUND = -32601
 INVALID_PARAMS = -32602
 INTERNAL_ERROR = -32603
 
+# A resource read is capped, never streamed: a 512 KiB doctrine doc is fine
+# over stdio; a runaway tree is not.
+RESOURCE_MAX_BYTES = 512 * 1024
+
 
 class ToolError(Exception):
     """Raised by a tool handler; surfaces as an isError tool result."""
@@ -32,11 +38,21 @@ def log(msg: str) -> None:
 
 class McpStdioServer:
     def __init__(self, name: str, version: str, tools: List[Dict[str, Any]],
-                 handlers: Dict[str, Callable[[Dict[str, Any]], Any]]):
+                 handlers: Dict[str, Callable[[Dict[str, Any]], Any]],
+                 resources: List[Dict[str, Any]] = (),
+                 read_resource: Callable[[str], str] | None = None,
+                 prompts: List[Dict[str, Any]] = (),
+                 get_prompt: Callable[[str, Dict[str, Any]], Dict[str, Any]] | None = None,
+                 instructions: str = ""):
         self.name = name
         self.version = version
         self.tools = tools
         self.handlers = handlers
+        self.resources = list(resources)
+        self.read_resource = read_resource
+        self.prompts = list(prompts)
+        self.get_prompt = get_prompt
+        self.instructions = instructions
         self.initialized = False
 
     # -- protocol plumbing ------------------------------------------------
@@ -65,11 +81,19 @@ class McpStdioServer:
             negotiated = (requested if requested in SUPPORTED_PROTOCOL_VERSIONS
                           else LATEST_PROTOCOL_VERSION)
             self.initialized = True
-            self._result(rid, {
+            caps: Dict[str, Any] = {"tools": {"listChanged": False}}
+            if self.read_resource is not None:
+                caps["resources"] = {"listChanged": False}
+            if self.get_prompt is not None:
+                caps["prompts"] = {"listChanged": False}
+            result: Dict[str, Any] = {
                 "protocolVersion": negotiated,
-                "capabilities": {"tools": {"listChanged": False}},
+                "capabilities": caps,
                 "serverInfo": {"name": self.name, "version": self.version},
-            })
+            }
+            if self.instructions:
+                result["instructions"] = self.instructions
+            self._result(rid, result)
             return
         if method == "notifications/initialized" or (is_notification and method and
                                                      method.startswith("notifications/")):
@@ -83,6 +107,43 @@ class McpStdioServer:
             return
         if method == "tools/call":
             self._handle_tool_call(rid, params)
+            return
+        if method == "resources/list":
+            if self.read_resource is None:
+                self._error(rid, METHOD_NOT_FOUND, "resources not offered")
+                return
+            self._result(rid, {"resources": self.resources})
+            return
+        if method == "resources/read":
+            if self.read_resource is None:
+                self._error(rid, METHOD_NOT_FOUND, "resources not offered")
+                return
+            uri = params.get("uri") or ""
+            try:
+                text = self.read_resource(uri)
+            except ToolError as exc:
+                self._error(rid, INVALID_PARAMS, str(exc))
+                return
+            self._result(rid, {"contents": [{"uri": uri, "mimeType": "text/plain",
+                                             "text": text[:RESOURCE_MAX_BYTES]}]})
+            return
+        if method == "prompts/list":
+            if self.get_prompt is None:
+                self._error(rid, METHOD_NOT_FOUND, "prompts not offered")
+                return
+            self._result(rid, {"prompts": self.prompts})
+            return
+        if method == "prompts/get":
+            if self.get_prompt is None:
+                self._error(rid, METHOD_NOT_FOUND, "prompts not offered")
+                return
+            try:
+                body = self.get_prompt(params.get("name") or "",
+                                        params.get("arguments") or {})
+            except ToolError as exc:
+                self._error(rid, INVALID_PARAMS, str(exc))
+                return
+            self._result(rid, body)
             return
         if is_notification:
             return  # unknown notifications are ignored per spec
