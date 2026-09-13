@@ -1,0 +1,33 @@
+{
+  "receipt": "orphaned-uncommitted-evidence-20260913T0505Z",
+  "finding": "Done-claims S19–S23 and A43–A54 (and A33–A36 corpus) have evidence on disk that is NOT in git. A reset --hard would wipe it. Recorded so the durability failure is visible, not silent.",
+  "wipe_precedent": "3388d73 message: 'commit this slice's registrar artifacts before the next reset --hard wipes them'",
+  "not_adopted": "These files were not authored in this session. They are untracked, not gitignored. This receipt does not claim they pass, are current, or should be committed — only that they exist and that prior done-claims pointing at them are BUILT_UNVERIFIED until the files are committed or the claims are retracted.",
+  "orphans": {
+    "S19-S23_plants": {
+      "path": "tests/test_d85_authority_plants.py",
+      "sha256": "42853498f2b5200f0bb82b365a1d075f455e4e24f8fba49a35ce269fd7191ccd",
+      "lines": 245
+    },
+    "A43-A54_owner_routing": {
+      "path": "tests/test_owner_routing.py",
+      "sha256": "491e0d57ab849da9e4be87c58eb0ed7047c720448d118abed441c3085d9676be",
+      "lines": 363
+    },
+    "conftest": {
+      "path": "tests/conftest.py",
+      "sha256": "76019bf39bef5b4cbee15d72ebaeaa091dba65387d0fe7b1343414229f01f527",
+      "lines": 11
+    },
+    "A33-A36_howto_corpus": {
+      "path": "runs/agentic-stack-buildout/corpus/raw/*.html",
+      "count": 30,
+      "aggregate_sha256_of_sha256sum_lines": "b1d94ef1d1262bb186e8f1ea5f129be6ca8abaa2cebffee65b3429bea04a0d1a"
+    },
+    "corpus_scripts": {
+      "scripts/verify_howto_corpus.py": "123c4df94fd1cc109a2cd4c1a2738a30e3cc3152c1bfe925260801a29ff63782",
+      "scripts/howto_scrape_recovery.sh": "34a41eb9124ecceea474a82cfddb6602a3ac2dc226f7a2b499973bbefd24d309"
+    }
+  },
+  "status_correction": "S19–S23 / A43–A54 / A33–A36: BUILT_UNVERIFIED (orphaned working-tree evidence). Not QUALIFIED. Not silently done."
+}
