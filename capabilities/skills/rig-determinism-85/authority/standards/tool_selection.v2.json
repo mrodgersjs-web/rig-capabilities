@@ -1,0 +1,160 @@
+{
+  "schema": "rig.d85.tool-selection.standard.v2",
+  "version": "2.1.0",
+  "selection_contract": "rig.d85.tool-selection.v4",
+  "one_liner": "Facts choose the owner: Temporal clocks, launchd serves, LangGraph cycles, Orca reasons, Kestra schedules, plain Python computes. Controls are code, effects wait at Gate-D. There is no default owner.",
+  "supersedes": {
+    "file": "tool_selection.v1.json",
+    "schema": "rig.d85.tool-selection.standard.v1",
+    "note": "The v1 bytes are retained unchanged for legacy records; v1 verdicts derived with the default-to-Kestra rule are explicitly requalified, not grandfathered."
+  },
+  "removed_distortions": [
+    "No default-to-Kestra: missing, absent, contradictory, or ambiguous carrier facts raise TOOL_SELECTION_UNRESOLVED naming the missing facts; no silent default row exists.",
+    "graph-property is not LangChain: LangChain is an optional integration library that may attach only to a T6 LangGraph carrier with an explicit langchain_integration fact; genuine cycles require genuine_cycles=true and multiple agents alone never qualify LangGraph."
+  ],
+  "owner_table": [
+    {"rule": "T1", "work_type": "pure collection, counting, hashing, validation, routing", "carrier": "plain_python", "evidence_fact": "deterministic_step"},
+    {"rule": "T2", "work_type": "ordinary scheduled run-to-completion work", "carrier": "kestra", "evidence_fact": "ordinary_schedule", "required_facts": ["cadence", "overlap_policy", "missed_run_policy"], "note": "missed_run_policy catch_up is durable recovery — file clock_critical (T3) instead"},
+    {"rule": "T3", "work_type": "durable, clock-critical work with catch-up/recovery", "carrier": "temporal", "evidence_fact": "clock_critical"},
+    {"rule": "T4", "work_type": "resident service, socket, watcher, hardware connection", "carrier": "launchd", "evidence_fact": "resident_service"},
+    {"rule": "T5", "work_type": "human-oriented judgment coordination", "carrier": "orca_pydantic", "evidence_fact": "non_engineer_surface", "note": "no approved/auto-approve fact is accepted anywhere; consent is a Gate-D event, never a selection input"},
+    {"rule": "T6", "work_type": "dynamic multi-agent graph with real cycles/backtracking", "carrier": "langgraph", "evidence_fact": "multi_agent_graph", "required_facts": ["genuine_cycles=true"], "note": "multiple agents alone do not qualify; cycles require the genuine_cycles fact"},
+    {"rule": "T7", "work_type": "approval, permissions, budgets, retries, idempotency", "carrier": null, "note": "deterministic code, never selected here and never model-decided"},
+    {"rule": "T8", "work_type": "public posting, email, payments, destructive effects", "carrier": null, "executor": "gate-d-deterministic-executor", "evidence_fact": "outward_effect", "note": "an outward_effect fact names the deterministic executor behind Gate-D; it selects no framework"}
+  ],
+  "precedence": ["clock_critical (T3)", "resident_service (T4)", "multi_agent_graph with genuine_cycles (T6)", "non_engineer_surface (T5)", "ordinary_schedule (T2)", "deterministic_step (T1)"],
+  "contradictory_fact_pairs": [
+    {"facts": ["clock_critical", "resident_service"], "code": "resident_clock_conflict", "detail": "clock-critical workflow evidence conflicts with a resident held-resource claim"}
+  ],
+  "unresolved_semantics": "If no carrier fact converts, the selection raises TOOL_SELECTION_UNRESOLVED naming every missing carrier fact. Ambiguous or contradictory facts raise a typed block. There is no default row, no environment override, and no caller override.",
+  "model_necessity": "MODEL operation allowance is granted only by an evidenced agent_reasoning record plus the source-inventoried model_necessity_claims list. A framework token or name containing 'pydantic' never grants MODEL allowance.",
+  "property_definitions": {
+    "claim_semantics": "A property is claimed by supplying an evidence record over exactly its schema fields; CODE derives the boolean from the record. A well-formed record whose evidence fails its acceptance predicate is a CONTRADICTED claim and BLOCKS — it is never silently read as FALSE. An absent property is not claimed and is FALSE. No bare booleans are accepted anywhere.",
+    "clock_critical": {
+      "rule": "T3",
+      "carrier": "temporal",
+      "meaning": "Durable, clock-critical work: a named consumer waits on start latency and missed runs must catch up.",
+      "evidence_schema": {
+        "consumer": "non-empty string — the named consumer waiting on start time",
+        "start_latency_ms": "integer 1..60000 — the SLA; looser is an ordinary schedule (Kestra)",
+        "catch_up_policy": "'catch_up' — skip-on-miss is an ordinary schedule (Kestra)",
+        "mechanism": "non-empty string — the durable-clock mechanism",
+        "deployment_evidence": "non-empty path — evidence the mechanism is deployed"
+      }
+    },
+    "resident_service": {
+      "rule": "T4",
+      "carrier": "launchd",
+      "meaning": "A held resource: socket, watched directory, hardware connection, or sub-second OS event stream.",
+      "evidence_schema": {
+        "resource_kind": "one of listening_socket | watched_directory | hardware_connection | os_event_sub_second",
+        "resource_detail": "non-empty string — which resource and the reaction requirement"
+      }
+    },
+    "non_engineer_surface": {
+      "rule": "T5",
+      "carrier": "orca_pydantic",
+      "meaning": "Human-oriented judgment coordination maintained by a non-engineer; the human decision is necessary.",
+      "evidence_schema": {
+        "maintainer": "non-empty string",
+        "maintainer_is_engineer": "boolean",
+        "expiry_date": "'YYYY-MM-DD' or null; an engineer maintainer requires an expiry date (bounded demo)"
+      },
+      "note": "No approval, auto-approve, or consent field is accepted; T5 can never self-approve."
+    },
+    "multi_agent_graph": {
+      "rule": "T6",
+      "carrier": "langgraph",
+      "meaning": "Genuine cycles/backtracking with dynamic branching — not merely multiple agents or a graph library import.",
+      "evidence_schema": {
+        "graph_shape": "one of cycle | dynamic_router | distributed_tracing | context_compression",
+        "description": "non-empty string",
+        "agent_count": "integer >= 3",
+        "genuine_cycles": "boolean — true is required to convert the claim; a claimed cycle with genuine_cycles=false is contradicted"
+      }
+    },
+    "agent_reasoning": {
+      "rule": "operation-owner",
+      "meaning": "A bounded model proposal demonstrably helps; the deterministic alternative was tried and rejected.",
+      "evidence_schema": {
+        "unstructured_input": "non-empty string",
+        "deterministic_alternative": "non-empty string",
+        "alternative_rejected_because": "non-empty string"
+      },
+      "note": "Converts the operation owner to MODEL only together with model_necessity_claims; never selects a carrier."
+    },
+    "deterministic_step": {
+      "rule": "T1",
+      "carrier": "plain_python",
+      "meaning": "Pure computation: fixed inputs, deterministic transforms, exact repeatable outputs; no scheduler, no model.",
+      "evidence_schema": {
+        "steps": "list of {step, mechanism} objects",
+        "model_countermeasures": "list of non-empty strings"
+      }
+    },
+    "ordinary_schedule": {
+      "rule": "T2",
+      "carrier": "kestra",
+      "meaning": "Ordinary scheduled run-to-completion work with explicit overlap and missed-run policy.",
+      "evidence_schema": {
+        "cadence": "non-empty string — the schedule (cron expression, interval, or named cadence)",
+        "overlap_policy": "one of forbid | allow | queue",
+        "missed_run_policy": "non-empty string; 'catch_up' is contradicted — durable catch-up is clock-critical recovery (T3 Temporal)"
+      }
+    },
+    "outward_effect": {
+      "rule": "T8",
+      "carrier": null,
+      "executor": "gate-d-deterministic-executor",
+      "meaning": "The unit has outward or irreversible effects; delivery runs through the deterministic executor behind Gate-D.",
+      "evidence_schema": {
+        "channel": "non-empty string — the outbound channel",
+        "effect_detail": "non-empty string — the exact effect",
+        "gate_d_class": "non-empty string — the Gate-D class governing the effect"
+      },
+      "note": "Selects no framework; the carrier is chosen by the other facts. Never accepts an approval field — consent is the Gate-D event itself."
+    },
+    "langchain_integration": {
+      "rule": "T6-supporting",
+      "carrier": null,
+      "meaning": "An optional LangChain integration library attached to the T6 LangGraph carrier.",
+      "evidence_schema": {
+        "reason": "non-empty string",
+        "integration_point": "non-empty string — where the library attaches in the graph"
+      },
+      "note": "Valid only when the selected carrier is langgraph; with any other carrier the claim is contradicted. LangChain is never itself a carrier."
+    }
+  },
+  "framework_contracts": {
+    "plain_python": {"role": "T1 carrier — deterministic code", "model": "none in the decision path"},
+    "kestra": {"role": "T2 carrier — code-owned cadence, overlap/retry policy, execution records", "model": "typed boundary only in justified model-dependent steps"},
+    "temporal": {"role": "T3 carrier — durable history, replay, deadline/missed-run semantics, idempotent activities", "model": "activities only; never in workflow replay"},
+    "launchd": {"role": "T4 carrier — resident lifecycle ownership, single-instance, reconnect/state recovery", "model": "none in the service loop"},
+    "orca_pydantic": {"role": "T5 carrier — real human decision handoff, durable pause/resume, typed proposals", "model": "proposes; the human decides; no fabricated consent"},
+    "langgraph": {"role": "T6 carrier — persisted checkpoints, bounded genuine cycles/backtracking, restart", "model": "agents where useful, bounded in code"},
+    "langchain": {"role": "OPTIONAL integration library on the T6 LangGraph carrier only", "model": "n/a — never a carrier, never selected alone"}
+  },
+  "legacy_token_map": {
+    "kestra_pydantic": "kestra",
+    "flowise": "kestra",
+    "langchain": "langgraph"
+  },
+  "legacy_token_semantics": "Legacy tokens are compatibility metadata only. A token with no carrier facts raises TOOL_SELECTION_UNRESOLVED — the v1 default-to-Kestra row no longer exists.",
+  "certification_boundary": "validate_lattice remains A1-only. Higher-mode certification requires a separately approved trusted-receipt implementation; a self-authored failure record cannot authorize escalation.",
+  "d85_gates_preserved": ["source-derived inventory", "classification binding", "four-ratio scoring (aggregate/minimum-path, unweighted/weighted >= 0.85)", "inventory-hash certification (certify/verify-cert)"],
+  "build_checklist": [
+    "build declares process_id and the inventory_sha256 snapshot it was generated against; certification recomputes the live inventory and only binds when the declared process matches the target AND the declared hash equals the live hash (stale or mismatched checklists are CHECKLIST_BLOCK, never rebound)",
+    "framework matches select_framework() output for the declared properties; properties with no converting carrier fact block the checklist with TOOL_SELECTION_UNRESOLVED",
+    "flowise verdicts are prototypes; no durable system declares flowise",
+    "every MODEL op has typed pydantic input/output schemas",
+    "every MODEL op has a D85 necessity record",
+    "orchestration (schedule, retry, timeout, cancellation, dispatch) is deterministic code",
+    "lattice cell is canonical, A1, and its recomputed BMS mode matches the cell",
+    "archify diagram is present, inside the declared root, and hash-named in the check detail"
+  ],
+  "changelog": [
+    {"version": "2.1.0", "contract": "rig.d85.tool-selection.v4", "date": "2026-09-12", "changes": ["selection contract is now machine-readable at runtime: select_framework loads precedence and contradictory_fact_pairs from this file and carries no inline owner table; a missing or mismatched standard raises TOOL_STANDARD_UNAVAILABLE (fail-closed, no code fallback)", "precedence carries the plan carrier order — graph (T6) outranks human-coordination (T5); a genuine graph with a non-engineer surface routes LangGraph, not Orca"]},
+    {"version": "2.0.0", "contract": "rig.d85.tool-selection.v3", "date": "2026-09-12", "changes": ["removed the default-to-Kestra row: no carrier fact -> TOOL_SELECTION_UNRESOLVED naming the missing facts", "removed graph-property -> LangChain: langchain is an optional integration library on the T6 carrier only, cycles require genuine_cycles=true, multi-agent count alone never qualifies LangGraph", "MODEL allowance tied to the source-inventoried model_necessity_claims list, never to framework names containing 'pydantic'", "added T1 carrier fact (deterministic_step -> plain_python), T2 facts (ordinary_schedule: cadence/overlap/missed-run), T8 effect fact (outward_effect -> gate-d-deterministic-executor)", "default_used retired from the selection result together with the default row", "v1 standard bytes retained unchanged for legacy records"]},
+    {"version": "1.4.0", "note": "v1 line — retained in tool_selection.v1.json, unchanged"}
+  ]
+}
