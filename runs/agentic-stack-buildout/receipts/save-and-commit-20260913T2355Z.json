@@ -1,0 +1,68 @@
+{
+  "run_id": "agentic-stack-buildout",
+  "receipt": "save-and-commit-20260913T2355Z",
+  "ask": "save, commit",
+  "pushed": false,
+  "commits": [
+    {"sha": "ffa7dfc", "subject": "standard: save the build-standard slice + Section IV backend proofs", "files": 161},
+    {"sha": "3388d73", "subject": "d85: commit this slice's registrar artifacts before the next reset --hard wipes them", "files": 20},
+    {"sha": "0ea9039", "subject": "standard: the coupled half of the admission change I left behind, plus cleaned corpus text", "files": 31},
+    {"sha": "16698ba", "subject": "standard: make the committed tree actually importable, and un-sweep a foreign test", "files": 2},
+    {"sha": "c982b08", "subject": "standard: mcp_stdio that server.py needs, and two more foreign tests back out", "files": 1}
+  ],
+  "verification": {
+    "method": "not the working tree -- git clone -s of each state, module set run in the clone",
+    "before_my_commits": {
+      "rev": "68c60ca",
+      "ran": 363,
+      "failures": 8,
+      "errors": 8,
+      "note": "4 of these were unittest loader errors: test_surface_tools, test_round_cli, test_goal_spec, test_version_coherence could not import at all, which masked the failures behind them"
+    },
+    "after_my_commits": {
+      "rev": "c982b08",
+      "ran": 372,
+      "failures": 5,
+      "errors": 0
+    },
+    "my_own_modules_in_a_clone": {"ran": 227, "failures": 1, "failure": "test_catalog.WholeRepoCertifyTests.test_non_suite_gates_green (red at 68c60ca too)", "skipped": 2},
+    "remaining_red_at_head": [
+      {"test": "test_catalog.WholeRepoCertifyTests.test_non_suite_gates_green", "state": "pre-existing at 68c60ca"},
+      {"test": "test_exemplar_resolution.ExemplarResolutionTests.test_detector_fires_on_a_planted_dangling_entry", "state": "pre-existing at 68c60ca"},
+      {"test": "test_mcp_wire.RealConfigTests.test_launch_spec_matches_a_server_that_already_works", "state": "pre-existing at 68c60ca"},
+      {"test": "test_selection.History.test_real_repo_history_is_nonempty", "state": "pre-existing at 68c60ca", "note": "needs a .git directory; this A/B used git clone -s so .git exists in the clone"},
+      {"test": "test_surface_tools.AssetHygieneTests.test_resolved_exemplar_estate_stays_complete", "state": "pre-existing but masked: the module could not import at 68c60ca, so the assertion never ran; my mcp_stdio/comms_bridge commit made it importable and it now fails", "measurement": "declared_great_example=158 resolved=140 dangling=18 in BOTH /tmp/pre@68c60ca and /tmp/post3@c982b08 -- identical, so my commits changed nothing here", "owner": "whoever owns the youtube-* skill assets; their great_example targets (e.g. youtube-3blue1brown) are files that were never committed"}
+    ]
+  },
+  "defects_i_introduced_and_fixed": [
+    {
+      "defect": "ffa7dfc was not self-consistent: d85_admission.py + its test committed, loops.py left behind",
+      "how_found": "git archive of HEAD into a clean dir: tests.test_d85_admission FAILED (failures=17) while the working tree was green",
+      "proof_its_mine": "copying only loops.py back into the extracted tree -> OK (40/40)",
+      "fixed_in": "0ea9039"
+    },
+    {
+      "defect": "server.py committed with another agent's 'from . import comms_bridge' while comms_bridge.py was untracked: no clone could import the MCP server (23 of my own protocol tests + loader/catalog errors)",
+      "how_found": "python3 -c 'import rig_capabilities.server' inside the clone -> ImportError",
+      "fixed_in": "16698ba (comms_bridge.py) then c982b08 (mcp_stdio.py, needed for McpStdioServer(resources=))"
+    },
+    {
+      "defect": "swept another agent's tests/test_determinism_85.py into ffa7dfc on a grep fingerprint; it asserts behaviour in their still-uncommitted d85.py v3 grammar (1271 insertions, mtime 21:27) -> 34 clone-only errors",
+      "how_found": "A/B of red test names between 68c60ca and my HEAD in isolated clones",
+      "fixed_in": "16698ba, reverted to the 68c60ca blob through git update-index --cacheinfo so their worktree copy (sha ea199e648596929b) stayed on disk untouched"
+    }
+  ],
+  "lessons": [
+    "A diff fingerprint is not authorship evidence. tests/test_determinism_85.py matched SOURCE_UNSUPPORTED_GRAMMAR because the other agent added that string at 20:58. Check the mtime window and whether the implementation the assertions need is inside the same commit.",
+    "green-in-working-tree proves nothing about the commit. Commit claims get verified by cloning HEAD and running there.",
+    "committing a shared file (server.py) makes its untracked imports load-bearing. Before committing it, import it from a clean checkout.",
+    "never rebase/rewrite while other agents are committing into the same repo; repair forward instead. 68c60ca -> 2bfe774 -> 378dc79 landed from another agent mid-task."
+  ],
+  "left_untouched": {
+    "tracked_modified_foreign": 61,
+    "untracked_foreign": 137,
+    "corpus_raw_excluded": "runs/agentic-stack-buildout/corpus/raw/*.raw.html (30 files, 14M) and corpus/practitioner/raw (9 HTML) stay untracked: re-fetchable from manifest URLs; redistributed documentation was not the deliverable. cleaned text (corpus/raw/*.clean.txt, 508K, hash-bound by cleaned_sha256) IS committed.",
+    "gitignore": "not touched -- it carries another agent's /graft/ hunk"
+  },
+  "supersedes": "2bfe774's claim that S19-S23 / A43-A54 / A33-A36 evidence is uncommitted: those artifacts are in ffa7dfc/3388d73 now, so BUILT_UNVERIFIED is stale for the ones named there."
+}
