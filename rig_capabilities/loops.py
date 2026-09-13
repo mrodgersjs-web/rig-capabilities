@@ -1889,42 +1889,10 @@ def dispatch_hook(event: str, payload: dict, skill: str | None = None, run_id: s
     if event not in HOOKS:
         raise SpecError(f"unknown hook event {event}; valid: {sorted(HOOKS)}")
     p = normalize_payload(payload)
-    if event == "pre-tool" and not os.environ.get("RIG_D85_DISABLE"):
-        # Classify BEFORE importing the gate: a broken gate module must deny
-        # mutation-class calls (fail closed, no universal bypass) but never
-        # brick read-only traffic — the repair path must stay reachable.
-        _tool_pre = _norm_tool(p["raw_tool"]).lower()
-        try:
-            from . import d85_admission
-        except Exception as exc:  # noqa: BLE001 — broken gate, fail closed on mutations only
-            if not _tool_pre or _tool_pre in (
-                "write", "edit", "multiedit", "notebookedit", "notebook_edit",
-                "bash", "shell", "apply_patch", "applypatch", "str_replace_editor",
-                "eval", "python", "python_repl", "execute_code", "run_code", "code_interpreter"):
-                return {
-                    "action": "deny",
-                    "reason": f"[d85] admission gate module is broken (fail closed for mutations): {exc!r} "
-                    "Repair rig_capabilities/d85_admission.py in an explicitly authorized break-glass session.",
-                }
-            print(f"[d85] gate module unavailable; read-only tool allowed: {exc!r}", file=sys.stderr)
-        else:
-            try:
-                tool = _norm_tool(p["raw_tool"]).lower()
-                command = p["command"] if tool in ("bash", "shell") else ""
-                d85_result = d85_admission.hook_check({
-                    "tool": tool,
-                    "paths": _write_paths(p["input"], payload),
-                    "command": command if isinstance(command, str) else "",
-                    "cwd": p["cwd"],
-                    "session_id": p["session_id"],
-                })
-                if isinstance(d85_result, dict) and d85_result.get("action") == "deny":
-                    return d85_result
-            except Exception as exc:  # noqa: BLE001 — admission is fail-closed
-                return {
-                    "action": "deny",
-                    "reason": f"[d85] admission gate internal failure (fail closed): {exc!r}",
-                }
+    # D85 build admission is NOT applied to ordinary PreToolUse traffic (doctrine
+    # 2026-09-11: "This replaces the older universal pre-tool admission policy").
+    # It applies at app/solution build certification and at declared d85_certified
+    # loop gates; explicit callers may still invoke d85_admission.hook_check directly.
     run = find_active(p["cwd"], run_id)
     spec = load_spec(run["loop_id"]) if run else None
     if event == "pre-tool":

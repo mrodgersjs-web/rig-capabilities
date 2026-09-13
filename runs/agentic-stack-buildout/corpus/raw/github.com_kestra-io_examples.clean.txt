@@ -1,0 +1,184 @@
+GitHub - kestra-io/examples: Best practices for data workflows, integrations with the Modern Data Stack (MDS), Infrastructure as Code (IaC), Cloud Provider Services · GitHub 
+
+Skip to content 
+
+```
+
+```
+
+You signed in with another tab or window. Reload to refresh your session. You signed out in another tab or window. Reload to refresh your session. You switched accounts on another tab or window. Reload to refresh your session. Dismiss alert 
+
+{{ message }} 
+
+Uh oh! 
+
+There was an error while loading. Please reload this page . 
+
+kestra-io / examples Public template 
+
+Notifications You must be signed in to change notification settings 
+Fork 9 
+
+Star 40 
+
+Branches Tags 
+
+Open more actions menu 
+
+Latest commit 
+
+History 257 Commits 
+
+257 Commits 
+Folders and files 
+Name Name 
+Last commit message 
+Last commit date 
+
+.github/ workflows 
+
+.github/ workflows 
+
+ForEachItem 
+
+ForEachItem 
+
+dockerfiles-manual 
+
+dockerfiles-manual 
+
+dockerfiles 
+
+dockerfiles 
+
+images 
+
+images 
+
+.env_example 
+
+.env_example 
+
+.gitignore 
+
+.gitignore 
+
+.terraform.lock.hcl 
+
+.terraform.lock.hcl 
+
+LICENSE 
+
+LICENSE 
+
+README.md 
+
+README.md 
+
+data_infrastructure_as_code.md 
+
+data_infrastructure_as_code.md 
+
+docker-compose.yml 
+
+docker-compose.yml 
+
+encode_env_vars.bash 
+
+encode_env_vars.bash 
+
+main.tf 
+
+main.tf 
+
+pluginDefaults.yml 
+
+pluginDefaults.yml 
+
+requirements.txt 
+
+requirements.txt 
+
+terraform_cloud.md 
+
+terraform_cloud.md 
+
+terraform_oss.md 
+
+terraform_oss.md 
+
+variables.tf 
+
+variables.tf 
+
+Repository files navigation 
+
+Kestra Examples 
+This repository will help you get started with Kestra 
+For example use-cases, check out Blueprints 
+
+How to install Kestra 
+Download the Docker Compose file: 
+
+```
+curl -o docker-compose.yml https://raw.githubusercontent.com/kestra-io/kestra/develop/docker-compose.yml
+```
+
+Start Kestra: 
+
+```
+docker compose up
+```
+
+Hello World example 
+Here is a simple example logging hello world message to the terminal: 
+
+```
+id: myflow
+namespace: company.team
+
+tasks:
+  - id: hello_world
+    type: io.kestra.plugin.core.log.Log
+    message: Hello, World!
+```
+
+Cloud & Eneterprise Edition 
+Cloud & Enterprise Editions have a dedicated credentials managers with extra encryption, namespace-bound credential inheritance hierarchy and an RBAC-setting behind it. 
+You can add a Secret in the relevant namespace from the Namespace tab in the UI. You should not add the 
+```
+SECRET_
+```
+prefix while setting up the secrets via the Namespace tab. 
+To reference that secret in your flow, use 
+```
+{{ secret('AWS_ACCESS_KEY_ID') }}
+```
+. 
+
+About 
+Best practices for data workflows, integrations with the Modern Data Stack (MDS), Infrastructure as Code (IaC), Cloud Provider Services 
+Topics 
+analytics-engineering automation data-engineering data-orchestration data-pipelines data-workflows orchestration 
+Resources 
+Readme 
+MIT license 
+Activity 
+Custom properties 
+Stars 
+40 stars 
+Watchers 
+6 watching 
+Forks 
+9 forks 
+Report repository 
+
+Packages 
+
+Used by 
+
+Contributors 
+
+Languages 
+
+You can’t perform that action at this time.

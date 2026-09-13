@@ -1,0 +1,216 @@
+Flows in Kestra – Define Orchestration Units | Kestra 
+
+Search 
+
+ESC 
+
+Ask Kestra AI 
+ESC 
+
+Hi! I ' m your Kestra AI assistant. 
+Ask me anything about workflows. 
+
+EXAMPLE QUESTIONS 
+
+How to schedule flow? 
+What is a task runner? 
+How to add secrets? 
+
+Understand Flows: The Core Units of Kestra Orchestration 
+
+Table of Contents 
+
+Get Involved 
+
+For the complete documentation index, see llms.txt . For a full content snapshot, see llms-full.txt . Append 
+```
+.md
+```
+to any 
+```
+kestra.io/docs/*
+```
+URL for plain Markdown. 
+
+A flow is a container for tasks and their orchestration logic. 
+
+Components of a flow 
+A flow organizes tasks, their inputs and outputs, error handling, and orchestration logic. It specifies what tasks run, when they run, and how they interact (sequentially, in parallel, or conditionally). 
+You can define a flow declaratively in YAML or build it using the No Code editor . 
+A flow must have: 
+identifier ( 
+```
+id
+```
+) 
+
+```
+namespace
+```
+
+list of 
+```
+tasks
+```
+
+Optionally, a flow can also have: 
+inputs — typed parameters passed at execution time 
+outputs — values or files a flow produces for downstream use 
+variables — reusable key/value pairs scoped to the flow 
+triggers — schedule or event conditions that start executions automatically 
+labels — key/value metadata for filtering and grouping executions 
+errors — tasks that run when a flow or task fails 
+finally — tasks that always run at the end, regardless of execution outcome 
+retries — automatic retry policy on task failure 
+sla — time-based constraints that fail or alert when exceeded 
+concurrency — limits on how many executions of this flow can run simultaneously 
+descriptions — Markdown documentation attached to flows and tasks 
+disabled — prevent a flow from executing without deleting it 
+checks — assertions that must pass before an execution is created 
+Flow sample 
+The example below uses several of the optional components listed above — refer to each component’s documentation for full configuration details. 
+
+```
+
+```
+
+id: hello-world
+
+namespace: company.team
+
+description: flow **documentation** in *Markdown*
+
+labels:
+
+  env: prod
+
+  team: engineering
+
+inputs:
+
+  - id: my-value
+
+    type: STRING
+
+    defaults: "default value"
+
+    description: This input has a default value.
+
+variables:
+
+  first: "1"
+
+  second: "{{ vars.first }} > 2"
+
+tasks:
+
+  - id: hello
+
+    type: io.kestra.plugin.core.log.Log
+
+    description: "Log the input value passed at execution time."
+
+    message: "Hello, {{ inputs.['my-value'] }}!"
+
+  - id: date
+
+    type: io.kestra.plugin.core.debug.Return
+
+    description: "Return the current date as a task output."
+
+    format: "{{ taskrun.startDate }}"
+
+outputs:
+
+  - id: execution_date
+
+    type: STRING
+
+    value: "{{ outputs.date.value }}"
+
+triggers:
+
+  - id: daily
+
+    type: io.kestra.plugin.core.trigger.Schedule
+
+    cron: "0 9 * * *"
+```
+
+```
+
+Revision 
+Every change to a flow creates a new revision. Kestra automatically manages revisions, similar to version control, and you can view them in the Revisions tab. 
+Use Save as draft to stage changes without affecting running executions. Draft revisions are not executed — any trigger or manual run falls back to the last published revision until you publish the draft. See Draft revisions for details. 
+Flow variable expressions 
+Parameter Description 
+
+```
+{{ flow.id }}
+```
+The identifier of the flow. 
+
+```
+{{ flow.namespace }}
+```
+The name of the flow namespace. 
+
+```
+{{ flow.tenantId }}
+```
+The identifier of the tenant (EE and Cloud only). 
+
+```
+{{ flow.revision }}
+```
+The revision of the flow. 
+FAQ 
+Where does Kestra store flows? 
+Flows are stored in a serialized format directly in the Kestra backend database. 
+The easiest way to add new flows is from the Kestra UI. You can also use 
+```
+kestractl flows deploy
+```
+to push flows from the command line, or use the Git Sync pattern or CI/CD integration to deploy flows automatically after a pull request is merged. On Kestra Enterprise, Promote lets you move a flow between environments (dev, staging, production) directly from the UI without a pipeline. 
+To see how flows are represented in a file structure, use the 
+```
+_flows
+```
+directory in the Namespace Files editor. 
+How to load flows at server startup? 
+To pre-load flows from a directory when Kestra starts, use the 
+```
+-f
+```
+or 
+```
+--flow-path
+```
+flag: 
+
+```
+
+```
+
+./kestra server standalone --flow-path /path/to/flows
+```
+
+```
+
+Can I sync a local flows directory into Kestra? 
+Yes. See Synchronize Local Flows for syncing a local directory, or Sync Flows from a Git Repository for Git-based workflows. 
+Previous 
+Tasks Tasks in Kestra – Define Steps in a Flow 
+Next 
+
+Was this page helpful? 
+
+Send Feedback 
+
+😔 
+
+Share your thoughts (Optional) 
+
+```
+
+```

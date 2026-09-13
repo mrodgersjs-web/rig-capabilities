@@ -1,0 +1,58 @@
+Timers - Python SDK | Temporal Documentation 
+
+Skip to main content 
+
+For the complete documentation index, see /llms.txt . This page is also available as raw Markdown at /develop/python/workflows/timers.md . Append 
+```
+.md
+```
+to any page URL to fetch its Markdown. 
+
+A Workflow can set a durable Timer for a fixed time period. In some SDKs, the function is called 
+```
+sleep()
+```
+, and in others, it's called 
+```
+timer()
+```
+. 
+A Workflow can sleep for months. Timers are persisted, so even if your Worker or Temporal Service is down when the time period completes, as soon as your Worker and Temporal Service are back up, the 
+```
+sleep()
+```
+call will resolve and your code will continue executing. 
+Sleeping is a resource-light operation: it does not tie up the process, and you can run millions of Timers off a single Worker. 
+To set a Timer in Python, call the 
+```
+asyncio.sleep()
+```
+function and pass the duration in seconds you want to wait before continuing. 
+
+```
+
+```
+
+import asyncio
+
+from temporalio import workflow
+
+@workflow.defn
+
+class LoopingWorkflow:
+
+    @workflow.run
+
+    async def run(self, iteration: int) -> None:
+
+        if iteration == 5:
+
+            return
+
+        await asyncio.sleep(10)
+
+        workflow.continue_as_new(iteration + 1)
+
+```
+
+```
