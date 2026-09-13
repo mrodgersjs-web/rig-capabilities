@@ -1,0 +1,90 @@
+# durable-build — the loop for solution / application / durable-system builds.
+# Other loops stay open to research, ideation, review and repair; this one is the
+# build lane: it cannot be marked done, sealed, or advanced past Proof without a
+# freshly verified D85 certificate bound to the exact build bytes. Non-forceable.
+schema: rig.loop-skill.v11
+id: durable-build
+name: Durable build loop (D85-certified)
+version: 1.0.0
+doctrine_source:
+  - capabilities/data/rig-build-standard/policy.md
+  - capabilities/data/durable-repeatable-index/SCHEMA.md
+coordinate: {level: 4, diamond: D2, bms_mode: A1, step: B}
+family: engineering
+packet: BuildPacket
+modes:
+  auto: {}
+  walk: {stop_after_stage: true}
+  fast: {skip_stages: []}
+kill_switch: {max_iterations: 3, max_wall_minutes: 240, max_stop_blocks: 2}
+outward_policy: {require_gate_d: true}
+stages:
+  - id: I
+    name: Intent
+    artifact: intent.md
+    gate:
+      - type: file_contains
+        path: intent.md
+        patterns: ["^## Goal", "^## Done-test", "^## Out of scope", "^## Budget"]
+      - type: regex
+        path: intent.md
+        pattern: '^## Done-test[^\n]*\n[^\n]*\b(cmd|test|grep):'
+        hint: "done-test must be executable (`- cmd:...`), not an adjective"
+  - id: D
+    name: Diagnosis and owner
+    artifact: diagnosis.md
+    gate:
+      - type: file_contains
+        path: diagnosis.md
+        patterns: ["^## Cell", "^## Level fits", "^## Mode necessity", "^## Owner", "^## Rejected fits"]
+      - type: regex
+        path: diagnosis.md
+        pattern: '(?i)^## Owner[^\n]*\n[^\n]*\bT[1-8]\b'
+        hint: "name the T-rule and the carrier from tool_selection.select_framework; a keyword guess is not an owner"
+      - type: regex
+        path: diagnosis.md
+        pattern: '(?i)^## Rejected fits[^\n]*\n[^\n]*\b(L[1-7]-D[1-3]|A[2-4])\b'
+        hint: "state which coordinate/mode fits were rejected and why (all seven level fits, four mode assessments)"
+  - id: B
+    name: Build
+    artifact: build.md
+    gate:
+      - type: files_written_min
+        min: 1
+      - type: file_contains
+        path: build.md
+        patterns: ["^## Change", "^## Determinism", "^## Artifacts"]
+      - type: regex
+        path: build.md
+        pattern: '(?i)inventory|classify|score'
+        hint: "paste the D85 inventory/classify/score invocation for this build"
+  - id: V
+    name: Verify
+    artifact: verify.md
+    gate:
+      - type: checks_green
+        min: 1
+      - type: planted_failure
+        min: 1
+      - type: independent_verdict
+        min: 1
+      - type: file_contains
+        path: verify.md
+        patterns: ["^## Checks", "^## Planted failure", "^## Independent verdict"]
+  - id: P
+    name: Proof
+    artifact: proof.md
+    gate:
+      - type: d85_certified
+        root: .
+        build: build.json
+        certificate: certificate.json
+      - type: build_diagnosis
+        diagnosis: diagnosis.json
+        index: diagnosis_index.jsonl
+      - type: sealed
+closing_loop:
+  from: [V, P]
+  to: B
+  max_iterations: 3
+  on_exhaust: escalate
