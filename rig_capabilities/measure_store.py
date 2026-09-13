@@ -184,3 +184,36 @@ def qualification(conn, cell: str) -> dict | None:
 def _row(cur) -> dict:
     cols = [d[0] for d in cur.description]
     return dict(zip(cols, cur.fetchone()))
+
+
+def status(dsn: str | None = None) -> dict:
+    """Read-only plane probe. configured=false is honest UNCONFIGURED (no DSN),
+    never a fabricated pass. A role that cannot SELECT is reported ok=false with
+    the error — one aborted transaction means all counts are unreadable, so they
+    are all None, never a partial fake."""
+    out = {"plane": "measure", "configured": False}
+    try:
+        conn = connect(dsn)
+    except Exception as exc:  # noqa: BLE001 — unconfigured/unreachable, honest
+        out["detail"] = str(exc)[:160]
+        return out
+    out["configured"] = True
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT current_user")
+            out["role"] = cur.fetchone()[0]
+            counts = {}
+            # a denied table aborts the whole transaction: all counts become
+            # None with the detail attached, never a partial fake.
+            for table in ("trial", "verdict", "quality_score", "outbox", "qualification"):
+                cur.execute(f"SELECT count(*) FROM rig_build.{table}")
+                counts[table] = cur.fetchone()[0]
+            out["counts"] = counts
+            out["ok"] = True
+    except Exception as exc:  # noqa: BLE001 — unreadable, report not swallow
+        out["ok"] = False
+        out["counts"] = {t: None for t in ("trial", "verdict", "quality_score", "outbox", "qualification")}
+        out["detail"] = str(exc)[:160]
+    finally:
+        conn.close()
+    return out

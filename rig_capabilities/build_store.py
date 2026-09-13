@@ -677,3 +677,36 @@ def reconcile_unknown(conn, *, outbox_id: str, resolution: str,
 # Deliberately absent: set_qualified, approve_omission, mark_pass, or any
 # other verb that could turn a caller's wish into stored consent. tests/
 # test_build_store.py asserts their non-existence as a standing guard.
+
+
+def status(dsn: str | None = None) -> dict:
+    """Read-only plane probe for MCP status. configured=false is honest
+    UNCONFIGURED (no DSN discovered), never a fabricated pass. A denied read
+    aborts the transaction: every count comes back None with the detail, never
+    a partial fake."""
+    out = {"plane": "record", "configured": False}
+    try:
+        conn = connect(dsn)
+    except Exception as exc:  # noqa: BLE001 — unconfigured/unreachable, honest
+        out["detail"] = str(exc)[:160]
+        return out
+    out["configured"] = True
+    tables = ("cell_contracts", "process_versions", "cell_bindings", "runs",
+              "run_events", "artifacts", "approval_refs", "source_documents", "outbox")
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT current_user")
+            out["role"] = cur.fetchone()[0]
+            counts = {}
+            for table in tables:
+                cur.execute(f"SELECT count(*) FROM rig_build.{table}")
+                counts[table] = cur.fetchone()[0]
+            out["counts"] = counts
+            out["ok"] = True
+    except Exception as exc:  # noqa: BLE001 — unreadable, report not swallow
+        out["ok"] = False
+        out["counts"] = dict.fromkeys(tables)
+        out["detail"] = str(exc)[:160]
+    finally:
+        conn.close()
+    return out

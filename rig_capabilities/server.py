@@ -1,13 +1,15 @@
 """rig-capabilities MCP surface: tool definitions + handlers."""
 from __future__ import annotations
+import getpass
+import hashlib
 import json
 import os
 from pathlib import Path
-
 from . import __version__
 from . import surface_tools
 from .catalog import KINDS, Repo
 from .live import live_status
+from . import comms_bridge
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
@@ -266,6 +268,21 @@ TOOLS = [
         "name": "capabilities_connectors",
         "description": "SQL/API connector status (configured labels/types + last error).",
         "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_build_store",
+        "description": "Read-only rig_build status: both planes (record, measure) probed for "
+                       "configuration/reachability, outbox total+pending, effective role. "
+                       "configured=false is honest UNCONFIGURED, never a fabricated pass.",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_measure_quorum",
+        "description": "Qualification evidence for one lattice cell: attempt count, durable "
+                       "count, span hours, and the stored qualification record if any.",
+        "inputSchema": {"type": "object",
+                        "properties": {"cell": {"type": "string"}},
+                        "required": ["cell"]},
     },
     {
         "name": "capabilities_observe",
@@ -534,6 +551,255 @@ TOOLS = [
             "required": ["check"],
         },
     },
+    # --- Communications OS (rig_comms runtime, deterministic, no LLM) ---
+    {
+        "name": "capabilities_comms_surfaces",
+        "description": "surface registry: lanes, engines, deviation budgets, AGF floors",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_comms_route",
+        "description": "route a natural-language writing intent to a ranked surface list",
+        "inputSchema": {"type": "object", "properties": {
+            "intent": {"type": "string"}}, "required": ["intent"]},
+    },
+    {
+        "name": "capabilities_comms_packet",
+        "description": "assemble the deterministic drafting context packet for a surface; "
+                       "private lane refuses without human:true (PRIVACY_LOCK)",
+        "inputSchema": {"type": "object", "properties": {
+            "surface": {"type": "string"}, "brief": {"type": "string"},
+            "persona": {"type": "string"},
+            "human": {"type": "boolean",
+                      "description": "assert human-directed write (private lane only)"}},
+            "required": ["surface", "brief"]},
+    },
+    {
+        "name": "capabilities_comms_score",
+        "description": "run the deterministic gate stack (voice, fingerprint, gates) over an "
+                       "artifact; can_ship=false lists the blocking reasons",
+        "inputSchema": {"type": "object", "properties": {
+            "surface": {"type": "string"}, "artifact": {"type": "string"}},
+            "required": ["surface", "artifact"]},
+    },
+    {
+        "name": "capabilities_comms_voice_check",
+        "description": "voice fingerprint score + corpus drift report for an artifact",
+        "inputSchema": {"type": "object", "properties": {
+            "artifact": {"type": "string"}}, "required": ["artifact"]},
+    },
+    {
+        "name": "capabilities_comms_ledger_report",
+        "description": "loop events, drafted-vs-shipped funnel, and calibration (Brier) report",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    {
+        "name": "capabilities_comms_doctor",
+        "description": "harness drift check: every installed comms skill hash-matched against "
+                       "canonical (exit 2 = drift)",
+        "inputSchema": {"type": "object", "properties": {}},
+    },
+    # -- build backend (Section IV B23–B28). Eight additions ONLY: every
+    # schema is closed (additionalProperties=false), NONE carries a caller-
+    # authored identity or a PASS/admitted/qualified field — by construction
+    # there is no argument slot such a flag could arrive in, and the handlers
+    # additionally re-refuse any stray key. Identity is bound at this server
+    # process (RIG_CAP_CALLER from the wrapper, else the OS user).
+    {
+        "name": "capabilities_build_diagnose",
+        "description": (
+            "Validate a build diagnosis packet against the 588-cell authority "
+            "and bind it to the CURRENT criteria pack sha. Same validator as "
+            "bin/rig-build-standard diagnose — the tool cannot disagree with "
+            "the CLI. Read-only: returns the normalized packet or the named "
+            "refusal; a missing field is a rejection, never a default."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "goal": {"type": "string", "minLength": 1},
+                "cell_id": {"type": "string"},
+                "done_test": {"type": "array", "items": {"type": "string"},
+                              "minItems": 1},
+                "out_of_scope": {"type": "array", "items": {"type": "string"}},
+                "effort_budget": {"type": "object", "properties": {
+                    "cpu_minutes": {"type": "number", "exclusiveMinimum": 0},
+                    "usd": {"type": "number", "exclusiveMinimum": 0},
+                    "wallclock_seconds": {"type": "number",
+                                          "exclusiveMinimum": 0}},
+                    "required": ["cpu_minutes", "usd", "wallclock_seconds"],
+                    "additionalProperties": False},
+                "evidence_refs": {"type": "array", "minItems": 1,
+                                  "items": {"type": "string"}},
+            },
+            "required": ["goal", "cell_id", "done_test", "out_of_scope",
+                         "effort_budget", "evidence_refs"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_index",
+        "description": (
+            "Read the cell->build index bound to the verified golden pack "
+            "(588-cell authority). Bounded rows + cursor; explicit state: "
+            "live | empty | unknown(stale/corrupt). Never writes; a handle "
+            "older than the current golden manifest answers stale, never "
+            "answers for the new generation."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string", "description":
+                         "index file inside the repo (default "
+                         "runs/agentic-stack-buildout/index/build-index.jsonl)"},
+                "cursor": {"type": "integer", "minimum": 0},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 200},
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_gaps",
+        "description": (
+            "Cells of the 588 authority with NO build-index record under the "
+            "current pack generation. Read-only, bounded + cursor; when the "
+            "index is unreadable the state is 'unknown' and no gap list is "
+            "fabricated from assumptions."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "path": {"type": "string"},
+                "cursor": {"type": "integer", "minimum": 0},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 200},
+            },
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_run_start",
+        "description": (
+            "Register a durable run from a VALID diagnosis packet (same "
+            "validator as the CLI). Idempotent on the packet hash; the "
+            "caller cannot choose state, identity, or any PASS field — "
+            "started_by is this server process's identity. Without an "
+            "approved rig_build target the answer is an explicit blocked "
+            "state naming the reason, never a fake run."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "goal": {"type": "string", "minLength": 1},
+                "cell_id": {"type": "string"},
+                "done_test": {"type": "array", "items": {"type": "string"},
+                              "minItems": 1},
+                "out_of_scope": {"type": "array", "items": {"type": "string"}},
+                "effort_budget": {"type": "object", "properties": {
+                    "cpu_minutes": {"type": "number", "exclusiveMinimum": 0},
+                    "usd": {"type": "number", "exclusiveMinimum": 0},
+                    "wallclock_seconds": {"type": "number",
+                                          "exclusiveMinimum": 0}},
+                    "required": ["cpu_minutes", "usd", "wallclock_seconds"],
+                    "additionalProperties": False},
+                "evidence_refs": {"type": "array", "minItems": 1,
+                                  "items": {"type": "string"}},
+                "process_key": {"type": "string"},
+                "process_version": {"type": "string"},
+            },
+            "required": ["goal", "cell_id", "done_test", "out_of_scope",
+                         "effort_budget", "evidence_refs"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_run_get",
+        "description": (
+            "Read one run plus its most recent events from the durable "
+            "store. Read-only; unknown run answers state=unknown; events "
+            "bounded by limit/cursor. Unreachable storage is state=unknown "
+            "with the named reason, never an empty success."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "run_id": {"type": "string"},
+                "cursor": {"type": "integer", "minimum": 0},
+                "limit": {"type": "integer", "minimum": 1, "maximum": 100},
+            },
+            "required": ["run_id"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_evidence_add",
+        "description": (
+            "Worker-scoped evidence ingestion: register a repo-contained "
+            "artifact (sha256 RECOMPUTED from bytes; declared-hash mismatch "
+            "refused) and append a receipt event under the caller's fencing "
+            "token (stale token -> refused, B47). There is no verdict/"
+            "outcome/qualified argument that can be submitted here; "
+            "qualification is recomputed, never accepted."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "run_id": {"type": "string"},
+                "path": {"type": "string", "description":
+                         "artifact file inside the repo"},
+                "uri": {"type": "string"},
+                "kind": {"type": "string", "enum":
+                         ["receipt", "checkpoint", "report", "log"]},
+                "sequence": {"type": "integer", "minimum": 1},
+                "fencing_token": {"type": "integer", "minimum": 1},
+            },
+            "required": ["run_id", "path", "kind", "sequence",
+                         "fencing_token"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_omission_request",
+        "description": (
+            "Stage an exact-cell omission PROPOSAL (cell + reason + evidence "
+            "refs) as a DORMANT request file carrying the server-bound "
+            "caller identity. This tool can stage and never approve: no "
+            "argument approves, waives, or qualifies — that is Gate-D/human "
+            "authority and the pending request stays open until then."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "cell_id": {"type": "string"},
+                "reason": {"type": "string", "minLength": 1},
+                "evidence_refs": {"type": "array", "minItems": 1,
+                                  "items": {"type": "string"}},
+            },
+            "required": ["cell_id", "reason", "evidence_refs"],
+            "additionalProperties": False,
+        },
+    },
+    {
+        "name": "capabilities_build_qualify",
+        "description": (
+            "Recompute build qualification for a commit from the four-"
+            "receipt manifest through the SAME commit_gate.check the CLI "
+            "runs, plus the live index generation for the cell. The input is "
+            "only (cell_id, sha, manifest path): there is no admitted/pass/"
+            "verdict field, and the answer is recomputed fresh, never "
+            "accepted from the caller. Read-only and non-consuming."
+        ),
+        "inputSchema": {
+            "type": "object",
+            "properties": {
+                "cell_id": {"type": "string"},
+                "sha": {"type": "string"},
+                "manifest_path": {"type": "string", "description":
+                                  "receipt manifest JSON inside the repo"},
+            },
+            "required": ["cell_id", "sha", "manifest_path"],
+            "additionalProperties": False,
+        },
+    },
 ]
 
 
@@ -650,6 +916,29 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     def connectors(_args: dict):
         from .connectors import connector_status
         return connector_status(repo)
+
+    def build_store_status(_args: dict):
+        from . import build_store as _bs, measure_store as _ms
+        return {"record": _bs.status(), "measure": _ms.status()}
+
+    def measure_quorum(args: dict):
+        from . import measure_store as _ms
+        cell = str(args.get("cell", ""))
+        out = {"cell": cell, "configured": False}
+        try:
+            conn = _ms.connect()
+        except Exception as exc:  # noqa: BLE001 — honest UNCONFIGURED, not a crash
+            out["detail"] = str(exc)[:160]
+            return out
+        out["configured"] = True
+        try:
+            out["quorum"] = _ms.assess_quorum(conn, cell)
+            out["qualification"] = _ms.qualification(conn, cell)
+        except Exception as exc:  # noqa: BLE001
+            out["detail"] = str(exc)[:160]
+        finally:
+            conn.close()
+        return out
 
     def observe(_args: dict):
         from .observe import status as obs_status
@@ -964,6 +1253,288 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return out
 
 
+    # -- build backend (B23–B28): bound to the SAME modules that
+    # bin/rig-build-standard runs (build_diagnose / build_index / commit_gate)
+    # so a tool answer can never disagree with the CLI. Identity is taken
+    # from this server process (wrapper env, else OS user) — never from a
+    # caller-authored field; every schema is closed and every handler below
+    # also re-refuses keys outside its allow-list. There is deliberately no
+    # argument slot named pass/admitted/qualified/verdict.
+
+    def _build_caller() -> str:
+        return os.environ.get("RIG_CAP_CALLER") or getpass.getuser()
+
+    def _build_inside(rel: str) -> Path:
+        root = Path(repo.root).resolve()
+        p = (root / str(rel)).resolve()
+        if not str(p).startswith(str(root) + "/"):
+            raise ToolError(f"path escapes the repo: {rel!r}")
+        return p
+
+    def _build_closed(args: dict, allowed: tuple, tool: str) -> None:
+        extra = set(args) - set(allowed)
+        if extra:
+            raise ToolError(f"{tool}: unknown keys {sorted(extra)} refused "
+                            "(closed schema; identity/verdict fields are "
+                            "never accepted from callers)")
+
+    def _build_store():
+        """Connect or return the named blocker — a missing target is an
+        explicit blocked/unknown state, never a fabricated success."""
+        from . import build_store
+        try:
+            return build_store, build_store.connect()
+        except build_store.StoreError as exc:
+            return build_store, None, str(exc)
+
+    _DIAG_KEYS = ("goal", "cell_id", "done_test", "out_of_scope",
+                  "effort_budget", "evidence_refs")
+
+    def build_diagnose_tool(args: dict):
+        from . import build_diagnose as bd
+        from .build_index import current_pack_sha
+        _build_closed(args, _DIAG_KEYS, "capabilities_build_diagnose")
+        try:
+            packet = bd.diagnose({k: args[k] for k in _DIAG_KEYS})
+        except bd.DiagnoseError as exc:
+            raise ToolError(f"diagnosis refused: {exc}")
+        return {"read_only": True, "state": "validated", "packet": packet,
+                "criteria_pack_sha256": current_pack_sha(Path(repo.root))}
+
+    def _build_index_read(args: dict):
+        from .build_index import open_live, IndexError_
+        rel = args.get("path") or \
+            "runs/agentic-stack-buildout/index/build-index.jsonl"
+        path = _build_inside(rel)
+        try:
+            ix = open_live(Path(repo.root), str(path))
+            gen, recs = ix._load()
+        except IndexError_ as exc:
+            return None, None, "unknown", str(exc)
+        if gen is None:
+            # No _meta header: the file is absent or never written. The
+            # handle still carries the verified pack sha, but there is no
+            # generation to answer for.
+            return None, None, "empty", f"no index generation at {rel}"
+        return ix, recs, "live", None
+
+    def build_index_tool(args: dict):
+        _build_closed(args, ("path", "cursor", "limit"),
+                      "capabilities_build_index")
+        ix, recs, state, reason = _build_index_read(args)
+        cur = int(args.get("cursor") or 0)
+        lim = min(int(args.get("limit") or 50), 200)
+        out = {"read_only": True, "state": state}
+        if state != "live":
+            out["reason"] = reason
+            return out
+        cells = sorted(recs)
+        out.update({"pack_sha": ix.pack_sha, "index_generation": ix.pack_sha,
+                    "total": len(cells), "shown": len(cells[cur:cur + lim]),
+                    "records": [recs[c] for c in cells[cur:cur + lim]],
+                    "next_cursor": cur + lim if cur + lim < len(cells)
+                    else None})
+        return out
+
+    def build_gaps_tool(args: dict):
+        from .build_diagnose import _cell_ids
+        _build_closed(args, ("path", "cursor", "limit"),
+                      "capabilities_build_gaps")
+        ix, recs, state, reason = _build_index_read(args)
+        cur = int(args.get("cursor") or 0)
+        lim = min(int(args.get("limit") or 50), 200)
+        if state == "unknown":
+            return {"read_only": True, "state": "unknown", "reason": reason,
+                    "gaps": None}
+        authority = set(_cell_ids())
+        gaps = sorted(authority - set(recs or {}))
+        out = {"read_only": True,
+               "state": "empty" if state == "empty" else "live",
+               "authority_cells": len(authority), "recorded": len(recs or {}),
+               "gap_total": len(gaps), "gaps": gaps[cur:cur + lim],
+               "next_cursor": cur + lim if cur + lim < len(gaps) else None}
+        if state == "empty":
+            out["reason"] = reason
+        return out
+
+    def build_run_start_tool(args: dict):
+        from . import build_diagnose as bd, build_store
+        _build_closed(args, _DIAG_KEYS + ("process_key", "process_version"),
+                      "capabilities_build_run_start")
+        try:
+            packet = bd.diagnose({k: args[k] for k in _DIAG_KEYS})
+        except bd.DiagnoseError as exc:
+            raise ToolError(f"run refused — diagnosis invalid: {exc}")
+        caller = _build_caller()
+        key = "mcp:" + hashlib.sha256(
+            json.dumps(packet, sort_keys=True).encode()).hexdigest()[:24]
+        res = _build_store()
+        store, conn = res[0], res[1]
+        if conn is None:
+            return {"state": "blocked",
+                    "reason": f"no rig_build target: {res[2]}",
+                    "idempotency_key": key,
+                    "next_action": "apply scripts/ddl_rig_build.sql via "
+                                   "build_migrate after B11/B12 approval"}
+        try:
+            if not (args.get("process_key") and args.get("process_version")):
+                return {"state": "blocked",
+                        "reason": "no owner binding supplied for this cell — "
+                                  "run bind_cell first; the store never "
+                                  "invents a default owner",
+                        "idempotency_key": key}
+            from .build_index import current_pack_sha
+            out = store.start_run(
+                conn, cell_id=packet["cell_id"],
+                criteria_version=current_pack_sha(Path(repo.root)),
+                process_key=args["process_key"],
+                process_version=args["process_version"],
+                idempotency_key=key, started_by=caller)
+            return {"state": out["status"], "run": out["row"],
+                    "started_by": caller, "idempotency_key": key}
+        except store.StoreError as exc:
+            return {"state": "blocked", "reason": str(exc)}
+        finally:
+            conn.close()
+
+    def build_run_get_tool(args: dict):
+        from . import build_store
+        _build_closed(args, ("run_id", "cursor", "limit"),
+                      "capabilities_build_run_get")
+        cur = int(args.get("cursor") or 0)
+        lim = min(int(args.get("limit") or 25), 100)
+        res = _build_store()
+        store, conn = res[0], res[1]
+        if conn is None:
+            return {"read_only": True, "state": "unknown",
+                    "reason": f"storage unreachable: {res[2]}"}
+        try:
+            c = conn.cursor()
+            c.execute("SELECT * FROM rig_build.runs WHERE run_id=%s",
+                      (args["run_id"],))
+            cols = [d[0] for d in c.description]
+            row = c.fetchone()
+            if row is None:
+                return {"read_only": True, "state": "unknown",
+                        "run_id": args["run_id"]}
+            run = dict(zip(cols, row))
+            c.execute("""SELECT sequence, kind, payload, fencing_token,
+                                occurred_at FROM rig_build.run_events
+                         WHERE run_id=%s ORDER BY sequence DESC
+                         LIMIT %s""", (args["run_id"], lim))
+            ecols = [d[0] for d in c.description]
+            events = [dict(zip(ecols, r)) for r in c.fetchall()]
+            return {"read_only": True, "state": "live", "run": run,
+                    "events_newest_first": events, "cursor": cur,
+                    "next_cursor": cur + lim}
+        except Exception as exc:  # fail closed, named
+            return {"read_only": True, "state": "unknown",
+                    "reason": f"{type(exc).__name__}: {exc}"}
+        finally:
+            conn.close()
+
+    def build_evidence_add_tool(args: dict):
+        from . import build_store
+        _build_closed(args, ("run_id", "path", "uri", "kind", "sequence",
+                             "fencing_token"),
+                      "capabilities_build_evidence_add")
+        p = _build_inside(args["path"])
+        if not p.is_file():
+            raise ToolError(f"evidence file not found: {args['path']}")
+        res = _build_store()
+        store, conn = res[0], res[1]
+        if conn is None:
+            return {"state": "blocked",
+                    "reason": f"no rig_build target: {res[2]}"}
+        caller = _build_caller()
+        try:
+            art = store.add_artifact(
+                conn, run_id=args["run_id"], uri=args.get("uri")
+                or f"local://{args['path']}", kind=args["kind"],
+                recorded_by=caller, path=str(p))
+            ev = store.append_event(
+                conn, run_id=args["run_id"], sequence=args["sequence"],
+                kind="receipt", fencing_token=args["fencing_token"],
+                payload={"content_sha256": art["content_sha256"],
+                         "path": args["path"], "artifact": art["status"]})
+            return {"state": "recorded", "artifact": art["status"],
+                    "event": ev["status"], "recorded_by": caller}
+        except store.StoreError as exc:
+            return {"state": "refused", "reason": str(exc),
+                    "note": "hash mismatch, stale fencing token, or "
+                            "sequence violation — nothing was stored"}
+        finally:
+            conn.close()
+
+    def build_omission_request_tool(args: dict):
+        from .build_diagnose import _cell_ids
+        _build_closed(args, ("cell_id", "reason", "evidence_refs"),
+                      "capabilities_build_omission_request")
+        if args["cell_id"] not in _cell_ids():
+            raise ToolError("cell_id not in the 588-cell authority")
+        caller = _build_caller()
+        doc = {"state": "PENDING_HUMAN_REVIEW", "cell_id": args["cell_id"],
+               "reason": args["reason"].strip(),
+               "evidence_refs": list(args["evidence_refs"]),
+               "requested_by": caller,
+               "approval": "NOT POSSIBLE HERE — this tool stages only; "
+                           "consent is Gate-D/human and this file records "
+                           "that the request is OPEN, never that it is "
+                           "granted"}
+        body = json.dumps(doc, indent=1, sort_keys=True) + "\n"
+        digest = hashlib.sha256(
+            json.dumps({k: doc[k] for k in
+                        ("state", "cell_id", "reason", "evidence_refs",
+                         "requested_by")},
+                       sort_keys=True).encode()).hexdigest()[:16]
+        out_path = Path(repo.root) / "runs" / "agentic-stack-buildout" \
+            / "omissions" / f"omission-{digest}.json"
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        if out_path.exists():
+            return {"state": "already_staged", "path": str(out_path),
+                    "requested_by": caller}
+        out_path.write_text(body, encoding="utf-8")
+        return {"state": "staged_dormant", "path": str(out_path),
+                "requested_by": caller,
+                "next_action": "human/Gate-D review; pending stays open"}
+
+    def build_qualify_tool(args: dict):
+        from . import commit_gate
+        from .build_index import open_live, current_pack_sha, IndexError_
+        from .build_diagnose import _cell_ids
+        _build_closed(args, ("cell_id", "sha", "manifest_path"),
+                      "capabilities_build_qualify")
+        if args["cell_id"] not in _cell_ids():
+            raise ToolError("cell_id not in the 588-cell authority")
+        manifest_file = _build_inside(args["manifest_path"])
+        try:
+            manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as exc:
+            raise ToolError(f"manifest unreadable: {exc}")
+        # RECOMPUTED — the verdict is produced here from live authorities;
+        # no submitted flag is consulted (the schema has no such slot).
+        live_sha = current_pack_sha(Path(repo.root))
+        try:
+            ix = open_live(Path(repo.root), str(_build_inside(
+                "runs/agentic-stack-buildout/index/build-index.jsonl")))
+            _, recs = ix._load()
+            cell_record = recs.get(args["cell_id"])
+        except FileNotFoundError:
+            cell_record = None
+        except IndexError_ as exc:
+            return {"read_only": True, "state": "stale",
+                    "admitted": False, "reason": str(exc)}
+        gate = commit_gate.check(Path(repo.root), args["sha"], manifest)
+        blockers = list(gate["refusals"])
+        if cell_record is None:
+            blockers.append("index: no build record for this cell under the "
+                            f"current pack {live_sha[:12]} (UNKNOWN blocks)")
+        return {"read_only": True, "state": "recomputed",
+                "admitted": gate["admitted"] and not blockers,
+                "refusals": blockers, "criteria_pack_sha256": live_sha,
+                "index_generation": live_sha,
+                "checked_by": _build_caller()}
+
     handlers = {
         "capabilities_asset_hygiene": asset_hygiene,
         "capabilities_verdict": verdict,
@@ -986,6 +1557,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_analytics": analytics,
         "capabilities_public_catalog": public_catalog,
         "capabilities_connectors": connectors,
+        "capabilities_build_store": build_store_status,
+        "capabilities_measure_quorum": measure_quorum,
         "capabilities_observe": observe,
         "capabilities_test": test_asset,
         "capabilities_round": round_lane,
@@ -1003,5 +1576,138 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_dispatch_verify": dispatch_verify,
         "capabilities_goal_spec": goal_spec_tool,
         "capabilities_wire_mcp": wire_mcp,
+        # Communications OS — thin passthrough to the rig_comms runtime.
+        "capabilities_comms_surfaces": comms_bridge.surfaces_catalog,
+        "capabilities_comms_route": comms_bridge.route,
+        "capabilities_comms_packet": comms_bridge.packet,
+        "capabilities_comms_score": comms_bridge.score,
+        "capabilities_comms_voice_check": comms_bridge.voice_check,
+        "capabilities_comms_ledger_report": comms_bridge.ledger_report,
+        "capabilities_comms_doctor": comms_bridge.doctor,
+        # Build backend (B23–B28) — eight additions, nothing renamed or
+        # removed. Read tools return {"read_only": True, ...} per house
+        # convention; every handler re-checks its closed schema.
+        "capabilities_build_diagnose": build_diagnose_tool,
+        "capabilities_build_index": build_index_tool,
+        "capabilities_build_gaps": build_gaps_tool,
+        "capabilities_build_run_start": build_run_start_tool,
+        "capabilities_build_run_get": build_run_get_tool,
+        "capabilities_build_evidence_add": build_evidence_add_tool,
+        "capabilities_build_omission_request": build_omission_request_tool,
+        "capabilities_build_qualify": build_qualify_tool,
     }
-    return McpStdioServer(NAME, VERSION, TOOLS, handlers)
+
+    # -- resources: an exact-match URI map, never a path join (no traversal) --
+    skills_dir = comms_bridge.COMMS_HOME.parent
+    RESOURCES = [
+        {"uri": "comms://surfaces", "name": "Surface registry",
+         "description": "lanes, engines, deviation budgets, AGF floors (live)",
+         "mimeType": "application/json"},
+        {"uri": "comms://fingerprint", "name": "Voice fingerprint v2",
+         "description": "banned phrases, signature vocab, sentence bands (live)",
+         "mimeType": "application/json"},
+        {"uri": "comms://doctrine", "name": "Communications doctrine",
+         "description": "the routing doctrine every comms tool obeys",
+         "mimeType": "text/markdown"},
+        {"uri": "comms://rejected-patterns", "name": "Rejected patterns",
+         "description": "phrases and shapes the machine refuses to emit",
+         "mimeType": "text/markdown"},
+        {"uri": "capabilities://stats", "name": "Catalog stats",
+         "description": "asset counts by kind and source (live)",
+         "mimeType": "application/json"},
+    ]
+
+    def read_resource(uri: str) -> str:
+        if uri == "comms://surfaces":
+            return json.dumps(comms_bridge.surfaces_catalog({}), indent=1, default=str)
+        if uri == "comms://fingerprint":
+            return json.dumps(comms_bridge._load()["voice"].FINGERPRINT, indent=1)
+        if uri == "comms://doctrine":
+            p = skills_dir / "rig-communications-doctrine" / "SKILL.md"
+            if not p.is_file():
+                raise ToolError(f"doctrine skill missing at {p}")
+            return p.read_text(encoding="utf-8")
+        if uri == "comms://rejected-patterns":
+            p = (comms_bridge._load()["ledger"].data_root()
+                 / "rejected-patterns" / "banned-phrases.md")
+            if not p.is_file():
+                raise ToolError(f"no rejected-patterns corpus at {p}")
+            return p.read_text(encoding="utf-8")
+        if uri == "capabilities://stats":
+            return json.dumps(repo.stats(), indent=1, default=str)
+        raise ToolError(f"unknown resource uri: {uri}")
+
+    # -- prompts: the /write loop as a first-class MCP primitive --
+    PROMPTS = [
+        {"name": "write", "description":
+            "Communications OS write packet: doctrine, voice, gates and surface "
+            "card assembled for one brief; draft must then pass "
+            "capabilities_comms_score before shipping.",
+         "arguments": [{"name": "surface", "required": True},
+                       {"name": "brief", "required": True},
+                       {"name": "persona", "required": False},
+                       {"name": "human", "required": False}]},
+        {"name": "review", "description":
+            "Verifier prompt: score an artifact through the deterministic gate "
+            "stack and report blocks — never rewrite silently.",
+         "arguments": [{"name": "surface", "required": True},
+                       {"name": "artifact", "required": True}]},
+    ]
+
+    def get_prompt(name: str, args: dict) -> dict:
+        if name == "write":
+            m = comms_bridge._load()
+            surf = m["surfaces"].resolve(args.get("surface") or "")
+            if surf is None:
+                raise ToolError(f"unknown surface '{args.get('surface')}'")
+            comms_bridge._private_guard(surf, bool(args.get("human")),
+                                        "the write prompt")
+            brief = (args.get("brief") or "").strip()
+            if not brief:
+                raise ToolError("brief required")
+            packet = m["packets"].build_packet(
+                surf.id, brief, args.get("persona", ""))
+            return {
+                "description": f"Communications OS write packet for {surf.id}",
+                "messages": [
+                    {"role": "system", "content": packet + (
+                        "\n\n---\nHARD RULES: draft only from this packet; before "
+                        "shipping run capabilities_comms_score with surface='"
+                        + surf.id + "' and the draft as artifact; can_ship=false means "
+                        "revise (max 3 corrections, then escalate), never ship; never "
+                        "claim metrics the packet did not supply.")},
+                    {"role": "user", "content": brief},
+                ],
+            }
+        if name == "review":
+            surf = args.get("surface") or ""
+            artifact = args.get("artifact") or ""
+            if not artifact.strip():
+                raise ToolError("artifact required")
+            return {
+                "description": "Gate-stack review of a comms artifact",
+                "messages": [
+                    {"role": "system", "content":
+                        "You are the independent Verifier (Builder/Verifier split). "
+                        "Run capabilities_comms_score with surface='" + surf + "' "
+                        "and capabilities_comms_voice_check on this artifact. Report "
+                        "can_ship, every blocking reason, and voice drift deltas. "
+                        "Do NOT rewrite the artifact yourself; return the verdict."},
+                    {"role": "user", "content": artifact},
+                ],
+            }
+        raise ToolError(f"unknown prompt: {name}")
+
+    return McpStdioServer(
+        NAME, VERSION, TOOLS, handlers,
+        resources=RESOURCES, read_resource=read_resource,
+        prompts=PROMPTS, get_prompt=get_prompt,
+        instructions=(
+            "rig-capabilities: search before you author; canonicalize with "
+            "capability_add; distribute with capability_install. Communications OS "
+            "loop: capabilities_comms_route -> capabilities_comms_packet (or the "
+            "`write` prompt) -> draft -> capabilities_comms_score (can_ship=true or "
+            "revise, max 3) -> capabilities_comms_doctor before any harness ships. "
+            "The private lane (love-notes) refuses machine drafting without "
+            "human:true and machine scoring always — a PRIVACY_LOCK error is a "
+            "lock, not a bug."))
