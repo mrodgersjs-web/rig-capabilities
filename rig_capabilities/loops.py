@@ -45,13 +45,17 @@ CLI = REPO / "bin" / "rig-loop"
 STAGE_OK = ("pass",)
 
 HARNESSES = ("claude", "codex", "hermes", "omp", "prime-agent")
+# Per-harness skill roots a loop-skill may be found under. These MUST be the
+# harness's real load roots — a root the harness never loads can only produce
+# false greens. OMP loads ~/.omp/config.json:skillDirectories (verified live):
+# ~/.omp/agent/skills is NOT a load root and must never appear here.
 SKILL_ROOTS = {
-    "canonical": REPO / "capabilities" / "skills",
-    "claude": HOME / ".claude" / "skills",
-    "codex": HOME / ".codex" / "skills",
-    "hermes": HOME / ".hermes" / "skills",
-    "omp": HOME / ".omp" / "agent" / "skills",
-    "prime-agent": HOME / ".prime" / "agent" / "skills",
+    "canonical": [REPO / "capabilities" / "skills"],
+    "claude": [HOME / ".claude" / "skills"],
+    "codex": [HOME / ".codex" / "skills"],
+    "hermes": [HOME / ".hermes" / "skills"],
+    "omp": [HOME / ".hermes" / "skills", HOME / ".rig" / "universal-skills-registry" / "skills"],
+    "prime-agent": [HOME / ".prime" / "agent" / "skills"],
 }
 # Per-harness hook registration surface (json manifests, pi extensions, hermes hook dir).
 HOOK_CONFIG = {
@@ -160,12 +164,13 @@ class SpecError(ValueError):
 
 def find_spec_path(loop_id: str, roots: dict | None = None) -> Path | None:
     roots = roots or SKILL_ROOTS
-    for root in roots.values():
-        d = Path(root) / loop_id
-        for name in ("loop.yaml", "loop.json"):
-            p = d / name
-            if p.exists():
-                return p
+    for root_list in roots.values():
+        for root in root_list:
+            d = Path(root) / loop_id
+            for name in ("loop.yaml", "loop.json"):
+                p = d / name
+                if p.exists():
+                    return p
     return None
 
 
@@ -233,20 +238,21 @@ def list_specs(roots: dict | None = None) -> list[dict]:
     roots = roots or {"canonical": SKILL_ROOTS["canonical"]}
     out = []
     for label, root in roots.items():
-        root = Path(root)
-        if not root.is_dir():
-            continue
-        for d in sorted(root.iterdir()):
-            for name in ("loop.yaml", "loop.json"):
-                p = d / name
-                if p.exists():
-                    try:
-                        s = load_spec(str(p))
-                        out.append({"id": s["id"], "name": s.get("name"), "version": s.get("version"),
-                                    "root": label, "path": str(p), "stages": [x["id"] for x in s["stages"]]})
-                    except Exception as exc:  # noqa: BLE001
-                        out.append({"id": d.name, "root": label, "path": str(p), "error": str(exc)})
-                    break
+        for root in ([root] if isinstance(root, (str, Path)) else root):
+            root = Path(root)
+            if not root.is_dir():
+                continue
+            for d in sorted(root.iterdir()):
+                for name in ("loop.yaml", "loop.json"):
+                    p = d / name
+                    if p.exists():
+                        try:
+                            s = load_spec(str(p))
+                            out.append({"id": s["id"], "name": s.get("name"), "version": s.get("version"),
+                                        "root": label, "path": str(p), "stages": [x["id"] for x in s["stages"]]})
+                        except Exception as exc:  # noqa: BLE001
+                            out.append({"id": d.name, "root": label, "path": str(p), "error": str(exc)})
+                        break
     return out
 
 
@@ -2139,8 +2145,9 @@ def doctor() -> dict:
     for s in specs:
         inst = {}
         for h in HARNESSES:
-            root = SKILL_ROOTS[h] / s["id"]
-            inst[h] = (root / "SKILL.md").exists() and ((root / "loop.yaml").exists() or (root / "loop.json").exists())
+            inst[h] = any((r / s["id"] / "SKILL.md").exists()
+                          and ((r / s["id"] / "loop.yaml").exists() or (r / s["id"] / "loop.json").exists())
+                          for r in SKILL_ROOTS[h])
         rep["loop_skills"][s["id"]] = {"installed": inst, "stages": s["stages"], "version": s.get("version")}
     # A13 diagnosis-index: every declared loop must carry a plant-case pack, or
     # `rig-loop test` on it silently no-ops and the loop's gates can go green
@@ -2519,7 +2526,7 @@ SCAFFOLD_LOOP = {
 
 
 def scaffold(loop_id: str, name: str, source: str = "", summary: str = "") -> Path:
-    d = SKILL_ROOTS["canonical"] / loop_id
+    d = SKILL_ROOTS["canonical"][0] / loop_id
     if d.exists():
         raise SpecError(f"{d} exists")
     (d / "tests").mkdir(parents=True)

@@ -272,7 +272,7 @@ class SpecTests(TempState):
 
     def test_skill_frontmatter_declares_hooks_for_claude(self):
         for sid in CANONICAL:
-            text = (L.SKILL_ROOTS["canonical"] / sid / "SKILL.md").read_text()
+            text = (L.SKILL_ROOTS["canonical"][0] / sid / "SKILL.md").read_text()
             self.assertIn("\nhooks:\n", text, sid)
             self.assertIn("PreToolUse", text, sid)
             self.assertIn("rig-loop hook stop", text, sid)
@@ -537,7 +537,7 @@ class V20Tests(TempState):
         old_roots = dict(L.SKILL_ROOTS)
         try:
             for h in L.HARNESSES:
-                L.SKILL_ROOTS[h] = self.root / "empty" / h
+                L.SKILL_ROOTS[h] = [self.root / "empty" / h]
             rep = L.doctor()
             self.assertFalse(rep["ok"])
             self.assertIn("iqrsqpi-v20@claude", rep["missing_installs"])
@@ -553,20 +553,20 @@ class V20Tests(TempState):
         old = dict(L.SKILL_ROOTS)
         # a hand-written mini-spec would fail load_spec validation and land in
         # spec_errors instead of the diagnosis under test — clone a real spec
-        src = Path(old["canonical"]) / "gate-d-loop" / "loop.yaml"
+        src = Path(old["canonical"][0]) / "gate-d-loop" / "loop.yaml"
         fake = Path(tempfile.mkdtemp(prefix="rig-loop-nocases-"))
         (fake / "bare-loop").mkdir()
         (fake / "bare-loop" / "loop.yaml").write_text(
             src.read_text().replace("gate-d-loop", "bare-loop"))
         try:
-            L.SKILL_ROOTS["canonical"] = fake
+            L.SKILL_ROOTS["canonical"] = [fake]
             rep = L.doctor()
             self.assertIn("bare-loop", rep["loops_missing_selftest"])
             self.assertFalse(rep["ok"])
             # plant-restore: cases present -> loop drops out of the red list
             cases = fake / "bare-loop" / "tests"
             cases.mkdir()
-            shutil.copy(Path(old["canonical"]) / "gate-d-loop" / "tests" / "cases.json",
+            shutil.copy(Path(old["canonical"][0]) / "gate-d-loop" / "tests" / "cases.json",
                         cases / "cases.json")
             rep2 = L.doctor()
             self.assertNotIn("bare-loop", rep2["loops_missing_selftest"])
