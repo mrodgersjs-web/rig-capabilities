@@ -83,6 +83,26 @@ class IntakeTests(unittest.TestCase):
         with self.assertRaises(build_intake.Refused):
             build_intake.validate(p)
 
+    def test_crash_between_run_commit_and_route_self_heals_on_replay(self):
+        # Simulate an ingest that died right after start_run committed:
+        # the run exists, its work command does not. Pre-fix, every later
+        # replay skipped the add and reported exit 0 with no outbox row —
+        # silent permanent effect loss. The derived outbox id must repair.
+        d = build_intake.validate(_packet())
+        build_store.start_run(
+            self.conn, cell_id=CELL, criteria_version="v1",
+            process_key="intake", process_version="1",
+            idempotency_key=f"intake:{d['dedupe_key']}",
+            started_by="crash-sim")
+        self.assertEqual(len(build_intake.pending(self.conn)), 0)
+        out = build_intake.ingest(self.conn, _packet())
+        self.assertEqual(out["status"], "replayed")
+        self.assertEqual(out["effect"], "routed")  # the repair, not a lie
+        self.assertEqual(len(build_intake.pending(self.conn)), 1)
+        again = build_intake.ingest(self.conn, _packet())
+        self.assertEqual(again["effect"], "already_routed")
+        self.assertEqual(len(build_intake.pending(self.conn)), 1)
+
     def test_malformed_cell_refused(self):
         with self.assertRaises(build_intake.Refused):
             build_intake.ingest(self.conn, _packet(cell_id="L9-D1-A1-R"))

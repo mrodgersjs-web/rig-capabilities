@@ -95,7 +95,13 @@ def validate(packet) -> dict:
 
 
 def ingest(conn, packet: dict) -> dict:
-    """One packet, end to end: validate -> hash -> persist -> route."""
+    """One packet, end to end: validate -> hash -> persist -> route.
+
+    Routing is self-healing: the outbox id is derived from the dedupe
+    key, so a replay that finds the run committed but its command
+    missing (crash between start_run's commit and the add) re-adds it;
+    when the row exists, nothing is ever added twice.
+    """
     d = validate(packet)
     src = packet["source"]
     doc = build_store.put_source_document(
@@ -110,17 +116,32 @@ def ingest(conn, packet: dict) -> dict:
         process_key=str(packet["process_key"]),
         process_version=str(packet["process_version"]),
         idempotency_key=f"intake:{d['dedupe_key']}", started_by="b31-intake")
-    effect = "routed"
-    if started["status"] == "started":
-        build_store.outbox_add(
-            conn, topic=d["topic"],
-            payload={"cell_id": packet["cell_id"],
-                     "dedupe_key": d["dedupe_key"],
-                     "content_sha256": d["content_sha256"],
-                     "run_id": started["row"]["run_id"]},
-            outbox_id="cmd-" + d["dedupe_key"][:16])
-    else:
+    outbox_id = "cmd-" + d["dedupe_key"][:16]
+    cur = build_store._exec(
+        conn, "SELECT outbox_id FROM rig_build.outbox WHERE outbox_id=%s",
+        (outbox_id,))
+    if build_store._fetch_rows(cur):
         effect = "already_routed"
+    else:
+        try:
+            build_store.outbox_add(
+                conn, topic=d["topic"],
+                payload={"cell_id": packet["cell_id"],
+                         "dedupe_key": d["dedupe_key"],
+                         "content_sha256": d["content_sha256"],
+                         "run_id": started["row"]["run_id"]},
+                outbox_id=outbox_id)
+            effect = "routed"
+        except Exception:
+            # A concurrent replay won the race on the derived id, or a
+            # rare integrity surprise. The after-check discriminates: the
+            # row exists now -> already_routed; it doesn't -> real failure.
+            cur = build_store._exec(
+                conn, "SELECT outbox_id FROM rig_build.outbox "
+                      "WHERE outbox_id=%s", (outbox_id,))
+            if not build_store._fetch_rows(cur):
+                raise
+            effect = "already_routed"
     return {"status": started["status"], "document": doc["status"],
             "effect": effect, "run_id": started["row"]["run_id"],
             "topic": d["topic"], "dedupe_key": d["dedupe_key"]}
