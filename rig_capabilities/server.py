@@ -285,6 +285,23 @@ TOOLS = [
                         "required": ["cell"]},
     },
     {
+        "name": "capabilities_build_run",
+        "description": "Read-only run record from the rig_build plane, by run_id or "
+                       "idempotency_key. configured=false is honest UNCONFIGURED.",
+        "inputSchema": {"type": "object",
+                        "properties": {"run_id": {"type": "string"},
+                                       "idempotency_key": {"type": "string"}}},
+    },
+    {
+        "name": "capabilities_build_contract",
+        "description": "Read-only sealed cell criteria contracts (all criteria versions, "
+                       "newest first) from the rig_build plane.",
+        "inputSchema": {"type": "object",
+                        "properties": {"cell_id": {"type": "string"},
+                                       "criteria_version": {"type": "string"}},
+                        "required": ["cell_id"]},
+    },
+    {
         "name": "capabilities_observe",
         "description": "Local traces + Langfuse reachability. langfuse=false when unconfigured.",
         "inputSchema": {"type": "object", "properties": {}},
@@ -940,6 +957,41 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
             conn.close()
         return out
 
+    def _build_read(fn, args: dict, required: tuple):
+        from . import build_store as _bs
+        out = {"configured": False}
+        missing = [k for k in required if not str(args.get(k, "")).strip()]
+        if missing:
+            out["error"] = f"missing required arg(s): {', '.join(missing)}"
+            return out
+        try:
+            conn = _bs.connect()
+        except Exception as exc:  # noqa: BLE001 — honest UNCONFIGURED, not a crash
+            out["detail"] = str(exc)[:160]
+            return out
+        out["configured"] = True
+        try:
+            out["result"] = fn(_bs, conn, args)
+        except Exception as exc:  # noqa: BLE001
+            out["error"] = str(exc)[:160]
+        finally:
+            conn.close()
+        return out
+
+    def build_run(args: dict):
+        return _build_read(
+            lambda bs, conn, a: bs.get_run(
+                conn, run_id=str(a.get("run_id", "")).strip() or None,
+                idempotency_key=str(a.get("idempotency_key", "")).strip() or None),
+            args, ())
+
+    def build_contract(args: dict):
+        return _build_read(
+            lambda bs, conn, a: bs.cell_contract(
+                cell_id=str(a.get("cell_id", "")).strip(),
+                criteria_version=str(a.get("criteria_version", "")).strip() or None),
+            args, ("cell_id",))
+
     def observe(_args: dict):
         from .observe import status as obs_status
         return obs_status(repo)
@@ -1559,6 +1611,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_connectors": connectors,
         "capabilities_build_store": build_store_status,
         "capabilities_measure_quorum": measure_quorum,
+        "capabilities_build_run": build_run,
+        "capabilities_build_contract": build_contract,
         "capabilities_observe": observe,
         "capabilities_test": test_asset,
         "capabilities_round": round_lane,

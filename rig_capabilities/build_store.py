@@ -710,3 +710,35 @@ def status(dsn: str | None = None) -> dict:
     finally:
         conn.close()
     return out
+
+
+def _dicts(cur) -> list[dict]:
+    cols = [d[0] for d in cur.description]
+    return [dict(zip(cols, row)) for row in cur.fetchall()]
+
+
+def get_run(conn, *, run_id: str | None = None,
+            idempotency_key: str | None = None) -> dict | None:
+    """One run record by run_id or idempotency_key (B24, read-only)."""
+    if run_id:
+        cur = _exec(conn, "SELECT * FROM rig_build.runs WHERE run_id = %s", (run_id,))
+    elif idempotency_key:
+        cur = _exec(conn, "SELECT * FROM rig_build.runs WHERE idempotency_key = %s",
+                    (idempotency_key,))
+    else:
+        raise StoreError("run_id or idempotency_key required")
+    rows = _dicts(cur)
+    return rows[0] if rows else None
+
+
+def cell_contract(conn, *, cell_id: str,
+                  criteria_version: str | None = None) -> list[dict]:
+    """Sealed criteria contracts for one cell (B24, read-only), newest version first."""
+    if criteria_version:
+        cur = _exec(conn, "SELECT * FROM rig_build.cell_contracts "
+                          "WHERE cell_id = %s AND criteria_version = %s",
+                    (cell_id, criteria_version))
+        return _dicts(cur)
+    cur = _exec(conn, "SELECT * FROM rig_build.cell_contracts WHERE cell_id = %s "
+                      "ORDER BY criteria_version DESC", (cell_id,))
+    return _dicts(cur)
