@@ -1,0 +1,23 @@
+{
+ "diagram_type": "flowchart",
+ "title": "rig_capabilities_engine_v1 — loop-engine build pipeline (D85 view)",
+ "nodes": [
+  {"id": "init", "label": "module init: subprocess (EXTERNAL_IMPORT_INIT, CODE/control plane)"},
+  {"id": "prov", "label": "provision_run — rig-loop activate (CODE/side effect)"},
+  {"id": "gates", "label": "check_stage_gates — deterministic gate table (CODE/control plane)"},
+  {"id": "slice", "label": "run_slice — slice start child run (CODE/side effect)"},
+  {"id": "model", "label": "dispatch_verifier — cross-family LLM CLI (MODEL/decision, no deterministic credit)", "kind": "MODEL"},
+  {"id": "parse", "label": "parse_verdict — verdict grammar + GEV acceptance (CODE/control plane)", "role": "validator"},
+  {"id": "fb", "label": "record_fallback — stage Q2 fail fail-closed (CODE/side effect)", "role": "fallback"},
+  {"id": "fail", "label": "record_failure — park kill-switch (CODE/side effect)", "role": "failure_state"},
+  {"id": "bind", "label": "bind_evidence — sha256 proof binding (CODE/transformation)"},
+  {"id": "seal", "label": "seal_packet — ProofPacket last (CODE/side effect)"},
+  {"id": "emit", "label": "emit_receipt — status --format json (CODE/presentation)"}
+ ],
+ "edges": [
+  ["init", "prov"], ["prov", "gates"], ["gates", "slice"], ["slice", "model"],
+  ["model", "parse"], ["parse", "fb"], ["fb", "fail"], ["fail", "bind"],
+  ["bind", "seal"], ["seal", "emit"]
+ ],
+ "notes": "Each argv str(status) conversion is an inventoried CODE/transformation op (9 total) omitted here for legibility; the 20-op inventory is the authority, this diagram is its presentation. Nonzero status short-circuits every downstream script; 17 = run never provisioned."
+}

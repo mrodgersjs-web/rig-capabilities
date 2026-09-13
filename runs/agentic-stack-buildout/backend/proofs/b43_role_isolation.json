@@ -1,0 +1,39 @@
+{
+  "cluster": {
+    "databases": [
+      "rb_store",
+      "rb_measure"
+    ],
+    "port": 62061,
+    "tmp_root": "/var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/rig_build_proof_pg_x75we7_h"
+  },
+  "ddl_sha256": "1b21ac7c0a57107ea8a044426f1ef8d01cc330a226942fb7f706f633c60371eb",
+  "ddl_sha256_0001": "dec712b37d75780b0bbc3533b3c99e9cced55248a0b3669992c84b215f177c48",
+  "ddl_sha256_0002": "31eda163e1efe5fa6d495f5eff392dc06b7eb95f6dc31344ec942b1cd1ec3f61",
+  "details": {
+    "all_three_logins_non_superuser": true,
+    "bypass_detector_flags_superuser": true,
+    "matrix": {
+      "read_exec_record_trial": "permission denied for function record_trial",
+      "read_insert_trace": "permission denied for table trace",
+      "read_select_trial": "ok",
+      "verifier_exec_record_trial": "permission denied for function record_trial",
+      "verifier_insert_trace": "permission denied for table trace",
+      "verifier_insert_verdict": "ok",
+      "verifier_qualification_reaches_guard": "quorum n=1 < 72 attempts\nCONTEXT:  PL/pgSQL function record_qualification(text,bigint) line 19 at RAISE\n \u2014 EXECUTE granted, mint still refused by the 1-attempt < 72 quorum the function enforces",
+      "worker_delete_trace": "permission denied for table trace",
+      "worker_direct_insert_trial": "rig_build.trial: writes only through named functions\nCONTEXT:  PL/pgSQL function _no_direct_write() line 4 at RAISE\n",
+      "worker_direct_update_outbox": "permission denied for table outbox",
+      "worker_exec_record_qualification": "permission denied for function record_qualification",
+      "worker_illegal_transition": "illegal outbox transition unknown -> sent\nCONTEXT:  PL/pgSQL function outbox_set_state(bigint,text,text) line 18 at RAISE\n",
+      "worker_insert_trace": "ok",
+      "worker_insert_verdict": "permission denied for table verdict",
+      "worker_record_trial": "ok (recorded_by honest)"
+    }
+  },
+  "executed_at": "2026-09-13T03:09:43+00:00",
+  "pg_version": "16.14 (Homebrew)",
+  "proof": "b43_role_isolation",
+  "spec_item": "B43",
+  "verdict": "PROVEN"
+}

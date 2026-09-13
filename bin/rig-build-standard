@@ -12,10 +12,17 @@ Verbs:
                selftest). Blocked => exit 2. Not per-build admission.
   diagnose     build diagnosis harness        (rig_capabilities/build_diagnose.py)
   index        build-index checks             (rig_capabilities/build_index.py)
+  packet       shared build context packet (rig_capabilities/context_packet.py) —
+               freezes a validated diagnosis into a packet and re-hashes its bound
+               sources; a stale or incomplete packet exits 2.
+  surface      instruction-surface renderer (rig_capabilities/surfaces_render.py):
+               `check` (default; exit 2 unless all four surfaces carry the current
+               managed block), `render --surface X [--out F]`, `stage` (candidates
+               + diff + pending Gate-D request; never writes a target),
+               `install --surface X --approval ID` (refuses without the exact typed
+               approval), `receipts` (installed/configured/loaded/exercised/enforced
+               reported separately, unknown = UNVERIFIED).
   commit-gate  four-receipt commit gate selftest (rig_capabilities/commit_gate.py)
-  wave-check   estate inventory SHAPE checker (file size/headings only —
-               a known false-green for build readiness, Q2 gap #1; kept
-               only for inventory hygiene)
 
 With no args (or --help) prints this usage. `<verb> --help` prints verb
 usage. Any other args are passed through to the verb's script; with no
@@ -36,6 +43,12 @@ VERBS = {
     "wave-check": ("runs/agentic-stack-buildout/scripts_wave_check.py", [],
                    "scripts_wave_check.py [TARGET_DIR ...]  (default: all waves;"
                    " shape-only, NOT readiness)"),
+    "packet": ("rig_capabilities/context_packet.py", ["selftest"],
+               "context_packet.py [selftest|compile --diagnosis F --skills S… "
+               "--sources F… --next-action A [--out F]|verify --packet F]"),
+    "surface": ("rig_capabilities/surfaces_render.py", ["check"],
+                "surfaces_render.py [selftest|check|render --surface X [--out F]|"
+                "stage [--surface X]|install --surface X --approval ID|receipts]"),
     "commit-gate": ("rig_capabilities/commit_gate.py", ["selftest"],
                     "commit_gate.py [selftest|--help]"),
 }
@@ -63,6 +76,10 @@ def run_test() -> int:
          [sys.executable, "-c", _LIVENESS]),
         ("commit-gate authorities (synthetic fixtures)",
          [sys.executable, "rig_capabilities/commit_gate.py", "selftest"]),
+        ("context-packet completeness + staleness",
+         [sys.executable, "rig_capabilities/context_packet.py", "selftest"]),
+        ("surface render splice/idempotency (tempdir; targets untouched)",
+         [sys.executable, "rig_capabilities/surfaces_render.py", "selftest"]),
     ]
     for name, cmd in steps:
         r = subprocess.run(cmd, cwd=REPO, capture_output=True, text=True)

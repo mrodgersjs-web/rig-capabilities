@@ -1,0 +1,14 @@
+{
+  "diagram_type": "process-flow",
+  "nodes": [
+    {"id": "adapter", "label": "register_selftest_adapter.execute", "kind": "entrypoint"},
+    {"id": "run", "label": "register_selftest_worker.run_stage", "kind": "code"},
+    {"id": "echo", "label": "subprocess.call(/bin/echo)", "kind": "external_effect"},
+    {"id": "finish", "label": "register_selftest_worker.finish", "kind": "code"}
+  ],
+  "edges": [
+    {"from": "adapter", "to": "run"},
+    {"from": "run", "to": "echo"},
+    {"from": "adapter", "to": "finish"}
+  ]
+}

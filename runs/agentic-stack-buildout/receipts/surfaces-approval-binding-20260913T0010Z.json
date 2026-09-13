@@ -1,0 +1,78 @@
+{
+  "schema": "rig.build-standard.receipt.v1",
+  "item": "A14-A22 correction: instruction-surface install authorization bound to the signed Gate-D store",
+  "recorded_at": "2026-09-13T00:10Z",
+  "supersedes_note": "corrections to install-and-surfaces-20260912T2310Z.json and runtime-wiring-A19-A20-20260912T2311Z.json; those files are left as written (append-only history)",
+  "forgery_gap": {
+    "was": "rig_capabilities/surfaces_render.py read an UNSIGNED runs/agentic-stack-buildout/gate-d/approvals.jsonl; any process with write access (including this one) could append {\"status\":\"APPROVED\"} and wire all four real surfaces",
+    "now": "install() calls d85_gates.gate_d(<authority>/registry.json, GATE_D_PROCESS, action, test_gate_root=GATE_ROOT): HMAC-signed row verified against <authority>/gate_d/key, bound to the recomputed D85 proof (inventory/classification/realized hashes), lifetime <= 24h, then consumed by an O_EXCL marker",
+    "self_authority": "surfaces_render never calls mint_approval; mint is Mike's keystroke. The request file now carries action_file + process_id + a ready mint_command so the typed approval is one command.",
+    "ledger_disposition": "runs/agentic-stack-buildout/gate-d/approvals.jsonl deleted (no reader remains)"
+  },
+  "staged_actions": {
+    "dir": "runs/agentic-stack-buildout/gate-d/surfaces/actions/",
+    "files": [
+      "claude_code.action.json",
+      "hermes.action.json",
+      "omp.action.json",
+      "prime_agent.action.json"
+    ],
+    "action_shape": {
+      "kind": "wiring:instruction-surface",
+      "surface": "<runtime>",
+      "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d"
+    },
+    "target_bytes_untouched": "all four surface mtimes 09:56:59Z before and after re-staging (measured, not asserted)"
+  },
+  "plant_failure_evidence": [
+    {
+      "test": "tests.test_build_standard.SurfaceInstallTests.test_a_self_written_approval_row_is_refused",
+      "planted": "an unsigned approvals.jsonl row naming the correct action, written by the module that would spend it",
+      "observed": "AdmissionBlock BLOCK_GATE_D_CORRUPT: approvals.jsonl line 2: bad signature; surface bytes unchanged"
+    },
+    {
+      "test": "tests.test_build_standard.SurfaceInstallTests.test_install_splices_once_and_consumes_its_approval",
+      "observed": "install WIRED once with consumed_marker on disk; second install BLOCK_GATE_D_CONSUMED; drift repaired only after a fresh signed approval in a fresh store"
+    },
+    {
+      "test": "tests.test_build_standard.SurfaceInstallTests.test_install_without_a_signed_approval_leaves_bytes_untouched",
+      "observed": "no approval / unknown id / approval bound to another surface all refused; consumed/ stayed empty"
+    }
+  ],
+  "suite_state_at_record_time": {
+    "command": "python3 -m unittest tests.test_build_standard",
+    "result": "Ran 13 tests OK",
+    "full_suite": "runs/agentic-stack-buildout/receipts/suite-solo-20260913T0007Z.txt (solo run in flight; this receipt does not depend on it)"
+  },
+  "corrections_to_prior_receipts": {
+    "prime_agent_agent_root": "INFERRED, not proven: ~/.prime/agent/skills pre-existed (179 entries) but ~/.prime/agent/agents had 0 entries before install and was created by Catalog.install; whether Prime scans it is UNVERIFIED",
+    "omp_commands": "served_by: ~/.claude/commands (named by ~/.omp/config.json). Not recorded as a second install key: install(...,\"claude\") and (...,\"omp\") would write the same directory and the ledger could not tell the two apart",
+    "omp_skill_roots": "VERIFIED load roots are ~/.hermes/skills and ~/.rig/universal-skills-registry/skills; ~/.omp/agent/skills is NOT a load root (skill probe returned Unknown skill) even though AGENTS.md D85_CHECKLIST_MANDATE points at it"
+  },
+  "blocking_chain_for_wiring": {
+    "status": "RED - surfaces cannot be wired until a registered process scores D85-eligible",
+    "measured": [
+      {
+        "process_id": "d85_register_selftest_v1",
+        "block": "CLASSIFICATION_STALE: classification is not bound to the current extracted inventory"
+      },
+      {
+        "process_id": "estate_automation_ledger_v1",
+        "block": "EXTERNAL_CALL_UNRESOLVED: os.environ.get: opaque at 'environ'"
+      },
+      {
+        "process_id": "build_standard_chain_v1",
+        "block": "EXTERNAL_CALL_UNRESOLVED: hashlib.sha256: missing 'sha256'"
+      }
+    ],
+    "reading": "registration data is incomplete (external_modules do not declare hashlib.sha256 / os.environ.get) or stale vs the extracted inventory; gate_d couples eligibility with authorization, so an honest mint is impossible while score_realized blocks",
+    "owner": "D85Authority (registrar / process records), not surfaces_render"
+  },
+  "honesty": {
+    "installed": "SHA-identical copies at 17 targets as of 20260912T2310Z; durable-build SKILL.md + loop.yaml + cases.json changed since, so those installed copies are now STALE until re-installed",
+    "configured": "instruction surfaces UNWIRED (4 surfaces, exit 2 on check)",
+    "loaded": "UNVERIFIED",
+    "exercised": "UNVERIFIED",
+    "enforced": "UNVERIFIED"
+  }
+}

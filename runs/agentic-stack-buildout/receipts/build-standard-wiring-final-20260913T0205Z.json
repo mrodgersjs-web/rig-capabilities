@@ -1,0 +1,228 @@
+{
+ "schema": "rig.build-standard.wiring.v1",
+ "task_id": "agentic-stack-buildout",
+ "generated_at": "2026-09-13T02:05:10Z",
+ "repo": "/Users/rig128gb/Developer/rig-capabilities",
+ "head_commit": "7dddea84dc4435ec3ce9ee560dc3afa1b5e9192a",
+ "uncommitted_paths": 232,
+ "suite": {
+  "command": "python3 -m unittest discover -s tests",
+  "result": [
+   "Ran 1071 tests in 243.736s",
+   "",
+   "OK (skipped=2)"
+  ],
+  "exit_code": 0,
+  "log": "runs/agentic-stack-buildout/receipts/suite-final-20260913T0105Z.txt",
+  "log_sha256": "5bcf1030ba79c11273b6f2ee99d8a99d7acb5d228b92507aa97ebe53c607aa23"
+ },
+ "claims": [
+  {
+   "claim": "durable-build loop owns a halt-tier, non-forceable d85_certified gate plus a cell-bound build_diagnosis gate",
+   "evidence": {
+    "command": "./bin/rig-loop test durable-build",
+    "result": "PASS \u2014 6/6 cases pass",
+    "exit_code": 0,
+    "plants": [
+     "no certificate -> Proof RED + force refused",
+     "fresh cert -> Proof GREEN + seal binds it",
+     "build altered after cert -> RED even with force",
+     "builder cannot self-certify (GEV family separation)",
+     "valid diagnosis + cert but no cell-bound index row -> RED"
+    ]
+   }
+  },
+  {
+   "claim": "the three new assets pass their own done_when",
+   "evidence": {
+    "command": "done_tests.run_asset(rig-build-standard | rig-stackwright.md | durable-build)",
+    "result": {
+     "rig-build-standard": {
+      "pass": true,
+      "ran": 9
+     },
+     "rig-stackwright.md": {
+      "pass": true,
+      "ran": 4
+     },
+     "durable-build": {
+      "pass": true,
+      "ran": 7
+     }
+    }
+   }
+  },
+  {
+   "claim": "installed copies are byte-identical to canonical at every configured root",
+   "evidence": {
+    "command": "sha256(SKILL.md) vs each root copy",
+    "roots": {
+     "claude": "~/.claude/skills",
+     "codex": "~/.codex/skills",
+     "hermes": "~/.hermes/skills",
+     "omp": "~/.rig/universal-skills-registry/skills",
+     "agents": "~/.agents/skills",
+     "prime-agent": "~/.prime/agent/skills"
+    },
+    "result": "rig-build-standard 6/6 match; durable-build 6/6 match; rig-stackwright.md 3/3 where an agent root exists"
+   }
+  },
+  {
+   "claim": "no instruction surface was written by this session",
+   "evidence": {
+    "command": "sha256+mtime snapshot of the 4 targets before/after surface stage",
+    "result": "DRIFTED TARGETS: none \u2014 staging wrote zero bytes to targets",
+    "surface_check": {
+     "command": "./bin/rig-build-standard surface check",
+     "exit_code": 2,
+     "meaning": "honest RED: all 4 surfaces UNWIRED, awaiting typed Gate-D"
+    }
+   }
+  },
+  {
+   "claim": "index rebuild no longer races on a shared tmp file",
+   "evidence": {
+    "command": "6 concurrent Repo.load_index(force=True) subprocesses",
+    "result": "exit codes [0]*6, counts identical (5028), no leftover .index*.tmp"
+   },
+   "was": "FileNotFoundError .index.tmp -> .index.json inside WholeRepoCertifyTests"
+  }
+ ],
+ "live_status_probe": {
+  "source": "capabilities.live_status (generated_at 2026-09-13T01:58:13Z)",
+  "rig-build-standard": {
+   "live": true,
+   "state": "wired",
+   "roots": [
+    "agents",
+    "claude",
+    "codex",
+    "hermes",
+    "omp",
+    "prime-agent"
+   ]
+  },
+  "durable-build": {
+   "live": true,
+   "state": "wired",
+   "roots": [
+    "agents",
+    "claude",
+    "codex",
+    "hermes",
+    "omp",
+    "prime-agent"
+   ]
+  },
+  "rig-stackwright.md": {
+   "live": true,
+   "state": "wired",
+   "roots": [
+    "claude",
+    "codex",
+    "hermes"
+   ]
+  }
+ },
+ "five_state_honesty": {
+  "installed": "byte-identical copies verified by sha256 at the roots above",
+  "configured": "roots come from config.json install_roots overlay; OMP load roots are ~/.hermes/skills + ~/.rig/universal-skills-registry/skills (~/.omp/agent/skills is NOT a load root)",
+  "loaded": "UNVERIFIED \u2014 no live claude/codex/hermes/prime-agent session observed loading them; this OMP session predates the install",
+  "exercised": "UNVERIFIED for agent dispatch; the loop itself was exercised 6/6 in cases, the packet/surface verbs exercised via selftests",
+  "enforced": "d85_certified + build_diagnosis enforcement proven inside the loop engine's own case runs only; codex loads agents natively as *.toml, so a markdown agent's codex load stays UNVERIFIED"
+ },
+ "blockers": [
+  {
+   "item": "4 instruction surfaces await typed Gate-D",
+   "owner": "mike",
+   "actions": [
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "claude_code"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "hermes"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "omp"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "prime_agent"
+    }
+   ]
+  },
+  {
+   "item": "all three registered D85 processes score RED (EXTERNAL_CALL_UNRESOLVED hashlib.sha256 / os.environ.get; CLASSIFICATION_STALE), so no real build can mint a certificate yet",
+   "owner": "D85Authority",
+   "note": "durable-build's cert fixtures are minted at runtime inside cases; the registry gap blocks production certifications, not the loop"
+  }
+ ],
+ "artifact_sha256": {
+  "capabilities/skills/rig-build-standard/SKILL.md": "b5066f0f73b06532a5cae84d478af0c29b1d0063362b0ef551906a9f406bd464",
+  "capabilities/skills/durable-build/SKILL.md": "22f0d9a3f51d521729d77df2dec2a43659982aabaa268e23f5d03da1d939f73b",
+  "capabilities/skills/durable-build/loop.yaml": "4082ab1e1852b31199f732883f5e680ef3eac88033522401903178fe8da4e451",
+  "capabilities/skills/durable-build/tests/cases.json": "9c3a5000db1b2ad37766b31ce4cb6d88478d761a9965ba182e146d0b44fbaf6b",
+  "capabilities/agents/rig-stackwright.md": "feb687011feedea72bc0526f266031b11a9aaaf5d9a747dfab05f789cb8c495b",
+  "capabilities/data/rig-build-standard/policy.md": "71c2b4c55ed5607322dd5b24bf9d86c59da629f7326267d4ea9917d2a2dda9e3",
+  "rig_capabilities/catalog.py": "fbdfde3ca49c5605d0e052c56431da0a400636223bd6d7375ec37da4134ba57c",
+  "rig_capabilities/surfaces_render.py": "11698b9bdb287b977fdcebb3289b92ded582f2f02fb947bd8d0d0984da1d65f5",
+  "rig_capabilities/context_packet.py": "5f1930772d6c1a38b282c3372344dd14d5f2e2d90a95a7cf08a42e1350462e14"
+ },
+ "surfaces_staged": {
+  "claude_code": {
+   "candidate": "runs/agentic-stack-buildout/gate-d/surfaces/claude_code.candidate.md",
+   "candidate_sha256": "16c2e79cc6adbca8b921bdca04283990cf4a484edb7f4ecdad042c6caa276506",
+   "diff_sha256": "9aa035fc54a4be4d2e3571851bb65cc1516ab6ffe924e26f51b2599361555f90",
+   "action_file": "runs/agentic-stack-buildout/gate-d/surfaces/actions/claude_code.action.json",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "claude_code"
+   },
+   "target_sha256_before_write": "f3040920ad34984d6c5b50ee7bd2e4dcb09dae1ca323a54e8b375206ef54ed12"
+  },
+  "hermes": {
+   "candidate": "runs/agentic-stack-buildout/gate-d/surfaces/hermes.candidate.md",
+   "candidate_sha256": "cf92bdd84e1fbc35f57681384e09c97b1798d6fdd5abee0cefeb327ff9d5074f",
+   "diff_sha256": "78111e5edfa4ea4add46e36082e3c3efcd8de55d1bcf99cc6db9d510120f1392",
+   "action_file": "runs/agentic-stack-buildout/gate-d/surfaces/actions/hermes.action.json",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "hermes"
+   },
+   "target_sha256_before_write": "26309a199596977a805cdcd7a957a179e1f2434118a5ec3d014e3b14c2f5f0d2"
+  },
+  "omp": {
+   "candidate": "runs/agentic-stack-buildout/gate-d/surfaces/omp.candidate.md",
+   "candidate_sha256": "109b1c6e1c7fd67df9fec6084a3362576c71bb42a4e2d19fd6978b7e0799644a",
+   "diff_sha256": "b1231bb405f95e2c8ac73cc3e5bc3c49ef472a47243ef0fd9a76dae813bbc104",
+   "action_file": "runs/agentic-stack-buildout/gate-d/surfaces/actions/omp.action.json",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "omp"
+   },
+   "target_sha256_before_write": "5c0da6187d853434d5f7916c5af88aad9d4fe1e57b7f10a588bf7bd863d88321"
+  },
+  "prime_agent": {
+   "candidate": "runs/agentic-stack-buildout/gate-d/surfaces/prime_agent.candidate.md",
+   "candidate_sha256": "9b8e0d0ada9329b80a920922cfd7fb61f7a4f5ac42c4dc43b0aebc75f5f87b47",
+   "diff_sha256": "1aebe3d2bcbd2a6eec8928326f7e192addf29740dbd3b7a5298d1d6f3780ac6e",
+   "action_file": "runs/agentic-stack-buildout/gate-d/surfaces/actions/prime_agent.action.json",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "prime_agent"
+   },
+   "target_sha256_before_write": "7f6fa46484e7b29231369cb260c69020941c2c12ef39d7a34edf1bccf86f18d2"
+  }
+ }
+}

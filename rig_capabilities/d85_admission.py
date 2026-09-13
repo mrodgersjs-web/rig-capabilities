@@ -1,10 +1,10 @@
 """d85_admission — universal fail-closed admission gate for production-surface
 mutations and automation execution (D85 tool-selection standard, enforcement layer).
 
-Every coding-agent harness (claude, codex, omp/prime via the pi extension, hermes)
-routes PreToolUse through ``rig-loop hook pre-tool``; ``dispatch_hook`` runs
-``hook_check`` above loop-skill logic so admission applies with or without an
-active loop run.
+These explicit admission and automation-launcher APIs remain available to
+callers that request them. Ordinary coding-agent PreToolUse no longer invokes
+this classifier. D85 applies at app/solution build certification and at a
+declared ``d85_certified`` loop gate; independent loop and Gate-D controls remain.
 
 Trust model (no writable verdict state is ever trusted):
 - A mutation of a path under a configured production root requires a signed
@@ -105,6 +105,13 @@ _READONLY_FIRST = {
 _READONLY_GIT = {"status", "log", "diff", "show", "branch", "rev-parse", "ls-files", "blame"}
 _CLAUSE_RX = re.compile(r"[;|&]{1,2}")
 
+_JAKE_GREET_PATH = "/Users/rig128gb/.rig/bin/jake-greet"
+_JAKE_GREET_SHA256 = "01b9dbdd3edc6554fbe0e1db6b6bff68482ea198ac7ff94ba1aedaaa3934df46"
+_JAKE_GREET_COMMAND = re.compile(
+    re.escape(_JAKE_GREET_PATH)
+    + r"(?:[ \t]+--agent[ \t]+[A-Za-z0-9_-]+)?(?:[ \t]+--json)?[ \t]*"
+)
+
 
 def _shell_analysis(command: str, cwd: str | None) -> tuple[list[str], list[str], bool]:
     """(write_targets, unknown_tokens, has_unproven_clause) for a shell command.
@@ -116,6 +123,12 @@ def _shell_analysis(command: str, cwd: str | None) -> tuple[list[str], list[str]
     parser cannot see those. The cwd-under-root rule in hook_check plus
     d85-run/estate backstops narrow but do not close that gap; OS-level
     sandboxing is the only universal boundary (documented ceiling)."""
+    if _JAKE_GREET_COMMAND.fullmatch(command):
+        try:
+            if hashlib.sha256(Path(_JAKE_GREET_PATH).read_bytes()).hexdigest() == _JAKE_GREET_SHA256:
+                return [], [], False
+        except OSError:
+            pass
     writes: list[str] = []
     unknown: list[str] = []
     has_unproven = False

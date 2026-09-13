@@ -359,10 +359,17 @@ class TestCliTruth(unittest.TestCase):
             self.assertIn(shape, proc.stderr)
 
     def test_bms_altitude_changes_the_band(self):
+        # Fail-closed (s9, 62c50fb): bms score takes no defaults; every receipt
+        # must be stated. Values match the repo convention elsewhere; only
+        # --level varies so the confidence delta is attributable to altitude.
         low = _cli("bms", "score", "--failure-cost", "0.9", "--reversibility",
-                    "0.8", "--mechanism-clarity", "0.9", "--level", "L1")
+                    "0.8", "--mechanism-clarity", "0.9",
+                    "--past-failure-rate", "0.0", "--data-volume", "0.5",
+                    "--level", "L1")
         high = _cli("bms", "score", "--failure-cost", "0.9", "--reversibility",
-                     "0.8", "--mechanism-clarity", "0.9", "--level", "L7")
+                     "0.8", "--mechanism-clarity", "0.9",
+                     "--past-failure-rate", "0.0", "--data-volume", "0.5",
+                     "--level", "L7")
         self.assertEqual(low["mode"], "A1")
         self.assertTrue(low["deterministic"])
         self.assertFalse(low["approval_required"])

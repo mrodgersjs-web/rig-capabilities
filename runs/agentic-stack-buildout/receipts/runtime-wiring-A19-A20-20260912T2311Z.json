@@ -1,0 +1,180 @@
+{
+ "a19_omp_skill_load_roots": {
+  "command_directories": [
+   "/Users/rig128gb/.claude/commands",
+   "/Users/rig128gb/rig-app-studio/.claude/commands",
+   "/Users/rig128gb/Developer/super-simple-software-factory/.claude/commands"
+  ],
+  "configured_in_omp_config": [
+   "/Users/rig128gb/.hermes/skills",
+   "/Users/rig128gb/.rig/universal-skills-registry/skills"
+  ],
+  "consequence": "installs targeting ~/.omp/agent/skills are configured-not-loaded; catalog DEFAULT_INSTALL_ROOTS.skill.omp now points at the universal-skills-registry root that OMP does read",
+  "probe_evidence": [
+   {
+    "meaning": "directory is present and populated (392 entries) but is NOT a skill-discovery root for the OMP runtime",
+    "probe": "read skill://ApertureOscillation",
+    "result": "Unknown skill: ApertureOscillation",
+    "root": "~/.omp/agent/skills"
+   },
+   {
+    "meaning": "the AGENTS.md mandate points at a path the runtime does not load",
+    "probe": "d85-compliance-checklist (mandated by ~/.omp/agent/AGENTS.md D85_CHECKLIST_MANDATE)",
+    "result": "absent from the runtime skill list"
+   }
+  ]
+ },
+ "a20_install_state_by_runtime": [
+  {
+   "asset": "rig-build-standard",
+   "harness": "agents",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.agents/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-build-standard",
+   "harness": "claude",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.claude/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-build-standard",
+   "harness": "codex",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.codex/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-build-standard",
+   "harness": "hermes",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.hermes/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-build-standard",
+   "harness": "omp",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.rig/universal-skills-registry/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-build-standard",
+   "harness": "prime-agent",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.prime/agent/skills/rig-build-standard/SKILL.md"
+  },
+  {
+   "asset": "rig-stackwright.md",
+   "harness": "claude",
+   "kind": "agent",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.claude/agents/rig-stackwright.md"
+  },
+  {
+   "asset": "rig-stackwright.md",
+   "harness": "codex",
+   "kind": "agent",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.codex/agents/rig-stackwright.md"
+  },
+  {
+   "asset": "rig-stackwright.md",
+   "harness": "hermes",
+   "kind": "agent",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.hermes/agents/rig-stackwright.md"
+  },
+  {
+   "asset": "rig-stackwright.md",
+   "harness": "omp",
+   "kind": "agent",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.omp/agent/agents/rig-stackwright.md"
+  },
+  {
+   "asset": "rig-stackwright.md",
+   "harness": "prime-agent",
+   "kind": "agent",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.prime/agent/agents/rig-stackwright.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "agents",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.agents/skills/durable-build/SKILL.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "claude",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.claude/skills/durable-build/SKILL.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "codex",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.codex/skills/durable-build/SKILL.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "hermes",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.hermes/skills/durable-build/SKILL.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "omp",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.rig/universal-skills-registry/skills/durable-build/SKILL.md"
+  },
+  {
+   "asset": "durable-build",
+   "harness": "prime-agent",
+   "kind": "skill",
+   "present": true,
+   "sha_match": true,
+   "target": "/Users/rig128gb/.prime/agent/skills/durable-build/SKILL.md"
+  }
+ ],
+ "five_states": {
+  "configured": "PARTIAL \u2014 omp roots proven from ~/.omp/config.json; claude/codex/hermes/agents/prime roots come from catalog config.json + DEFAULT_INSTALL_ROOTS",
+  "enforced": "UNVERIFIED",
+  "exercised": "UNVERIFIED",
+  "installed": "VERIFIED \u2014 17/17 targets byte-identical to canonical (sha256 of each landed file vs canonical source file)",
+  "loaded": "UNVERIFIED \u2014 no runtime here can be made to enumerate its own skill table from this session"
+ },
+ "generated_utc": "2026-09-12T22:57:16Z",
+ "known_gaps": [
+  "codex agent kind is natively *.toml (549 toml vs 106 md); installed markdown agent's codex load is UNVERIFIED",
+  "~/.omp/agent/commands holds 21 stale command files in a location OMP does not read as commandDirectories",
+  "~/.omp/skills holds 6 entries in a location not listed in skillDirectories",
+  "rig-loop SKILL_ROOTS['omp'] still = ~/.omp/agent/skills, so `rig-loop doctor` will report missing_installs for omp until SKILL_ROOTS is aligned to the load root (loops.py, OwnerRouting-owned)"
+ ],
+ "schema": "rig.build-standard.runtime-wiring-receipt.v1"
+}

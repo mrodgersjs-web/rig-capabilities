@@ -1,0 +1,47 @@
+# RIG build standard — managed policy (the only always-loaded build text)
+
+This file is rendered verbatim into the four instruction surfaces registered in
+`capabilities/skills/rig-determinism-85/authority/surfaces.json`
+(`claude_code`, `hermes`, `omp`, `prime_agent`) between the managed-block markers.
+It is the whole always-loaded surface: detail loads just-in-time from
+`capabilities/skills/rig-build-standard/SKILL.md`. Edit this file, then
+`bin/rig-build-standard surface render`; never hand-edit a target's block.
+
+<!-- BODY -->
+
+## RIG build standard (managed block — do not hand-edit)
+
+Standard repo: `/Users/rig128gb/Developer/rig-capabilities` (`R`). Verbs:
+`R/bin/rig-build-standard {diagnose|packet|index|check|commit-gate|surface|test}`.
+
+Any code, config, schema, skill or owner-authority change — in any runtime,
+including this one's own machinery — follows, in order:
+
+1. **Diagnose before building.** A packet with a cell id + evidence refs must
+   resolve (`packet --diagnosis FILE`). No packet, or a packet whose source hash
+   drifted: build nothing, report `BLOCKED`. Reads, diagnosis and authorized
+   repair stay available while a build gate is red.
+2. **Owner by contract, not keyword.** `tool_selection.select_framework` over
+   `authority/standards/tool_selection.v2.json` chooses T1–T6
+   (clock/recovery → resident → genuine graph → human coordination → ordinary
+   schedule → pure computation); T7 controls are always deterministic code; T8
+   effects require an exact typed Gate-D action. Missing or contradictory facts
+   BLOCK the choice — never default to a scheduler, and never treat a graph
+   library or "multiple agents" as a cycle requirement.
+3. **Determinism, recomputed.** `R/capabilities/skills/rig-determinism-85/bin/rig-determinism-85
+   inventory <id> → classify <id> → score <id>`; all four ratios ≥ 0.85;
+   certification is A1-only. `UNKNOWN_PROCESS` ⇒ register an immutable version;
+   exit 2 is terminal for those bytes, so ship a genuinely revised version rather
+   than retrying them.
+4. **Done = four receipts on one record at the claimed SHA**
+   (`check --repo . --sha SHA --manifest FILE`): fresh D85 `verify-cert`; joint
+   (durable-setup AND repeatable-results) one-sided lower bound ≥ .95 inside the
+   frozen envelope with fault coverage; a cross-family independent verdict bound
+   to the same files; the exact Gate-D approval plus `git ls-remote` proof. Any
+   missing ⇒ `BUILT_UNVERIFIED`, not done, and no push.
+5. **No self-approval anywhere in the chain.** Gate-D authorizes outward actions;
+   an independent family certifies verdicts; humans ratify non-build decisions and
+   instruction-surface changes. An honest `UNAVAILABLE` / `INSUFFICIENT_EVIDENCE`
+   is reported, never written as PASS.
+
+<!-- /BODY -->

@@ -1,0 +1,238 @@
+ M .gitignore
+ M .install.json
+ M README.md
+ M bin/rig-build-standard
+ M capabilities/harnesses/mh-02-harness-forge-session.yaml
+ M capabilities/skills/rig-determinism-85/SKILL.md
+ M capabilities/skills/rig-determinism-85/authority/doctrine.md
+ M capabilities/skills/rig-determinism-85/authority/processes/julie_synthetic.classification.json
+ M capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/README.md
+ M capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json
+ M capabilities/skills/rig-determinism-85/authority/registry.json
+ M capabilities/skills/rig-determinism-85/authority/surfaces.json
+ M capabilities/skills/rig-determinism-85/bin/rig-determinism-85
+ M capabilities/skills/rig-determinism-85/d85.py
+ M capabilities/skills/rig-determinism-85/d85_gates.py
+ M capabilities/skills/rig-determinism-85/estate_ledger.py
+ M capabilities/skills/rig-determinism-85/estate_validator.py
+ M capabilities/skills/rig-determinism-85/tool_selection.py
+ M capabilities/skills/rig-lattice-system/rig_lattice/deviator/baselines/_last_recal.txt
+ M capabilities/skills/rig-lattice-system/runs/audit_hash_chain.jsonl
+ M capabilities/skills/rig-lattice-system/runs/brier_history.jsonl
+ M capabilities/skills/rig-lattice-system/runs/cost_ledger.jsonl
+ M capabilities/skills/rig-lattice-system/runs/deployments.jsonl
+ M capabilities/skills/rig-lattice-system/runs/deviator.db
+ M capabilities/skills/rig-lattice-system/runs/langfuse.jsonl
+ M capabilities/skills/rig-lattice-system/runs/langsmith.jsonl
+ M capabilities/skills/rig-lattice-system/runs/notifications.jsonl
+ M capabilities/skills/rig-lattice-system/runs/observability.jsonl
+ M capabilities/skills/rig-lattice-system/runs/otel.jsonl
+ M capabilities/skills/rig-lattice-system/runs/swarm.jsonl
+ M capabilities/skills/rig-lattice-system/tests/test_gap_fill.py
+ M capabilities/skills/youtube-3blue1brown/SKILL.md
+ M capabilities/skills/youtube-ai-explained/SKILL.md
+ M capabilities/skills/youtube-ai-ladder/SKILL.md
+ M capabilities/skills/youtube-andrej-karpathy/SKILL.md
+ M capabilities/skills/youtube-anthropic/SKILL.md
+ M capabilities/skills/youtube-deeplearning-ai/SKILL.md
+ M capabilities/skills/youtube-dwarkesh-patel/SKILL.md
+ M capabilities/skills/youtube-fireship/SKILL.md
+ M capabilities/skills/youtube-google-deepmind/SKILL.md
+ M capabilities/skills/youtube-lex-fridman/SKILL.md
+ M capabilities/skills/youtube-logan-kilpatrick/SKILL.md
+ M capabilities/skills/youtube-matt-wolfe/SKILL.md
+ M capabilities/skills/youtube-nvidia-developer/SKILL.md
+ M capabilities/skills/youtube-openai/SKILL.md
+ M capabilities/skills/youtube-simon-willison/SKILL.md
+ M capabilities/skills/youtube-statquest/SKILL.md
+ M capabilities/skills/youtube-the-rundown-ai/SKILL.md
+ M capabilities/skills/youtube-two-minute-papers/SKILL.md
+ M capabilities/skills/youtube-yann-lecun/SKILL.md
+ M capability_register.csv
+ M config.json
+ M docs/DETERMINISM_85_DOCTRINE.md
+ M docs/ROADMAP.md
+ M out/harness-goalspecs/mh-02-harness-forge-session.json
+ M out/harness-goalspecs/mh-02-harness-forge-session.yaml
+ M rig_capabilities/__init__.py
+ M rig_capabilities/catalog.py
+ M rig_capabilities/d85_admission.py
+ M rig_capabilities/loops.py
+ M rig_capabilities/mcp_stdio.py
+ M scripts/hook_fires.py
+ M tests/test_catalog.py
+ M tests/test_d85_admission.py
+ M tests/test_determinism_85.py
+ M tests/test_estate_ledger.py
+ M tests/test_evasion_battery.py
+ M tests/test_lattice_bundle.py
+ M tests/test_surface_tools.py
+ M tests/test_tool_selection.py
+ M tests/test_tool_selection_cli.py
+?? .ignore
+?? .local-runs/
+?? .quarantine/
+?? .staging/
+?? .unlazy/
+?? bin/rig-comm
+?? capabilities/agents/gtm-agent-311d4ab5c8ed-05e476af/
+?? capabilities/agents/rig-comms-gev.md
+?? capabilities/agents/rig-linkedin-desktop.md
+?? capabilities/commands/write.md
+?? capabilities/data/durable-repeatable-index/
+?? capabilities/data/gtm-marketing-hook-5b3a1e3c6e9a-a84372cf/
+?? capabilities/data/rig-build-standard/
+?? capabilities/data/shaduxe-ui-reference/
+?? capabilities/harnesses/comms-transformation-harness.yaml
+?? capabilities/harnesses/gtm-harness-2c585c27a292-d2b527d4/
+?? capabilities/harnesses/gtm-harness-2c585c27a292-de5826bc/
+?? capabilities/hooks/comms-guard-throat-clear.sh
+?? capabilities/hooks/gtm-runtime-hook-41976d53c7f5-4e3941b9/
+?? capabilities/hooks/gtm-runtime-hook-41976d53c7f5-5704fe72/
+?? capabilities/hooks/hermes-memory-frontdoor/
+?? capabilities/hooks/memory-fleet.py
+?? capabilities/hooks/prime-jake-memory.ts
+?? capabilities/loops/gtm-loop-7e0e0ee777d5-136f6874/
+?? capabilities/loops/gtm-loop-7e0e0ee777d5-a1d37b9b/
+?? capabilities/loops/rig-comms-drafting-loop.md
+?? capabilities/skills/animate-expo/
+?? capabilities/skills/animate/
+?? capabilities/skills/animation-vocabulary/
+?? capabilities/skills/anti-ai-writing/
+?? capabilities/skills/anti-slop/
+?? capabilities/skills/apple-design/
+?? capabilities/skills/ask-sonner/
+?? capabilities/skills/avoid-ai-writing/
+?? capabilities/skills/baseline-ui/
+?? capabilities/skills/better-accessibility/
+?? capabilities/skills/better-colors/
+?? capabilities/skills/better-interface/
+?? capabilities/skills/better-layout/
+?? capabilities/skills/better-typography/
+?? capabilities/skills/better-ui/
+?? capabilities/skills/better-writing/
+?? capabilities/skills/break/
+?? capabilities/skills/caveman/
+?? capabilities/skills/codex-fusion/
+?? capabilities/skills/create-design-md/
+?? capabilities/skills/emil-design-eng/
+?? capabilities/skills/explain-interface/
+?? capabilities/skills/find-animation-opportunities/
+?? capabilities/skills/fixing-accessibility/
+?? capabilities/skills/fixing-metadata/
+?? capabilities/skills/fixing-motion-performance/
+?? capabilities/skills/gtm-skill-6eab988ba917-03766ede/
+?? capabilities/skills/hermes-job-apply/
+?? capabilities/skills/hermes-resume-only-applications/
+?? capabilities/skills/impeccable/
+?? capabilities/skills/improve-animations/
+?? capabilities/skills/improve-ui/
+?? capabilities/skills/interface-review/
+?? capabilities/skills/iqrsqpi-v11/loop.json
+?? capabilities/skills/julie-w2-applypilot/
+?? capabilities/skills/pick-ui-library/
+?? capabilities/skills/prototype/
+?? capabilities/skills/resume-grounded-job-apply/
+?? capabilities/skills/review-animations/
+?? capabilities/skills/rig-build-standard/
+?? capabilities/skills/rig-comms-agent-craft/
+?? capabilities/skills/rig-comms-conversation-craft/
+?? capabilities/skills/rig-comms-narrative-craft/
+?? capabilities/skills/rig-communications-behavior/
+?? capabilities/skills/rig-communications-core/
+?? capabilities/skills/rig-communications-doctrine/
+?? capabilities/skills/rig-communications-voice/
+?? capabilities/skills/rig-communications-wounds/
+?? capabilities/skills/rig-determinism-85/CERTIFICATE-MIGRATION.md
+?? capabilities/skills/rig-determinism-85/authority/classifications/
+?? capabilities/skills/rig-determinism-85/authority/evidence/
+?? capabilities/skills/rig-determinism-85/authority/processes/build_standard_chain_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cosell_adapter.json
+?? capabilities/skills/rig-determinism-85/authority/processes/d85_register_selftest_v1.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/d85_register_selftest_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/estate-automation-review.json
+?? capabilities/skills/rig-determinism-85/authority/processes/estate_automation_ledger_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_capabilities_engine_v1.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_capabilities_engine_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/reference/rig_capabilities_engine_v1/
+?? capabilities/skills/rig-determinism-85/authority/register-selftest/
+?? capabilities/skills/rig-determinism-85/authority/sources/build_standard_chain_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/cosell_adapter/
+?? capabilities/skills/rig-determinism-85/authority/sources/d85_register_selftest_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/estate-automation-review/
+?? capabilities/skills/rig-determinism-85/authority/sources/estate_automation_ledger_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig_capabilities_engine_v1/
+?? capabilities/skills/rig-determinism-85/register_process.py
+?? capabilities/skills/rig-lattice-system/runs/d85-build-scope-audit.json
+?? capabilities/skills/rig-write-code/
+?? capabilities/skills/rig-write-emails/
+?? capabilities/skills/rig-write-film-scripts/
+?? capabilities/skills/rig-write-linkedin/
+?? capabilities/skills/rig-write-love-notes/
+?? capabilities/skills/rig-write-novels/
+?? capabilities/skills/rig-write-prompts/
+?? capabilities/skills/rig-write-resumes/
+?? capabilities/skills/rig-write-songs/
+?? capabilities/skills/rig-write-specs/
+?? capabilities/skills/rig-write-substack/
+?? capabilities/skills/ui-skills-root/
+?? capabilities/skills/unlazy/
+?? capabilities/skills/variant/
+?? capabilities/skills/write-swift/
+?? data/comms/
+?? data/corpora/
+?? docs/COMMUNICATIONS-MCP-V20.md
+?? docs/COMMUNICATIONS-OS-V20-PLAN.md
+?? docs/COMMUNICATIONS-OS.md
+?? docs/D85-BUILD-SCOPE.md
+?? examples/great/agent-engineering/mh-07-lattice-application-session.yaml.md
+?? examples/great/agent-engineering/rig-lattice-router.md.md
+?? examples/great/agent-engineering/rig-lattice-system.md.md
+?? examples/great/business-ops/rig-resume-only-job-application.md
+?? examples/great/docs-knowledge/julie-w2-applypilot.md
+?? examples/great/meta/write.md
+?? openspec/changes/d85-build-scope/
+?? openspec/changes/resume-grounded-job-apply/
+?? out/harness-goalspecs/comms-transformation-harness.json
+?? out/harness-goalspecs/comms-transformation-harness.yaml
+?? proof/2026-09-07-hermes-resume-only-applications/
+?? proof/2026-09-11-d85-build-scope.json
+?? proof/2026-09-11-jake-greeting-hook.json
+?? proof/communications-os-endstate.md
+?? proof/resume-grounded-job-apply/
+?? proof/wave1-phase-notes.md
+?? rig_capabilities/build_corpus.py
+?? rig_capabilities/build_migrate.py
+?? rig_capabilities/comms_bridge.py
+?? rig_capabilities/surfaces_render.py
+?? runs/agentic-stack-buildout/backend/
+?? runs/agentic-stack-buildout/corpus/
+?? runs/agentic-stack-buildout/d85/
+?? runs/agentic-stack-buildout/gate-d/
+?? runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0205Z.json
+?? runs/agentic-stack-buildout/receipts/install-and-surfaces-20260912T2310Z.json
+?? runs/agentic-stack-buildout/receipts/runtime-wiring-A19-A20-20260912T2311Z.json
+?? runs/agentic-stack-buildout/receipts/startup-omp-20260912T2240Z.json
+?? runs/agentic-stack-buildout/receipts/suite-final-20260913T0105Z.txt
+?? runs/agentic-stack-buildout/receipts/suite-solo-20260913T0007Z.txt
+?? runs/agentic-stack-buildout/receipts/surfaces-approval-binding-20260913T0010Z.json
+?? runs/agentic-stack-buildout/receipts/tracked-diff-20260913T0220Z.patch
+?? runs/agentic-stack-buildout/receipts/tracked-status-20260913T0220Z.txt
+?? scripts/clean_auto_subs.py
+?? scripts/comms_baselines.py
+?? scripts/comms_scoreboards.py
+?? scripts/howto_scrape_recovery.sh
+?? scripts/recall_delta_sync.py
+?? scripts/refresh_writing_craft.py
+?? scripts/scrape_writing_craft.py
+?? scripts/smoke_comms_mcp_v20.py
+?? scripts/verify_howto_corpus.py
+?? staging/
+?? tests/conftest.py
+?? tests/test_build_corpus.py
+?? tests/test_build_proofs.py
+?? tests/test_build_standard.py
+?? tests/test_d85_authority_plants.py
+?? tests/test_mcp_comms.py
+?? tests/test_owner_routing.py
+?? workflows/

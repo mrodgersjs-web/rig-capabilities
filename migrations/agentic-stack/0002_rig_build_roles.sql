@@ -34,6 +34,12 @@ GRANT rig_build_read TO rig_build_worker, rig_build_verifier;
 GRANT INSERT ON rig_build.trace TO rig_build_worker;
 GRANT USAGE, SELECT ON SEQUENCE rig_build.trace_id_seq TO rig_build_worker;
 GRANT INSERT ON rig_build.outbox TO rig_build_worker;
+-- record_trial is SECURITY INVOKER (0001), so the INSERT runs with the
+-- caller's privileges: without this row grant the EXECUTE grant below was a
+-- dead verb (live-Postgres proof test_b43 caught permission-denied). Named-
+-- function discipline still holds — the trial_named_fn trigger refuses every
+-- direct INSERT; UPDATE/DELETE stay ungranted.
+GRANT INSERT ON rig_build.trial TO rig_build_worker;
 GRANT EXECUTE ON FUNCTION rig_build.record_trial(text, text, integer, text, text,
     text, text, text, text, jsonb, boolean, timestamptz, timestamptz) TO rig_build_worker;
 GRANT EXECUTE ON FUNCTION rig_build.outbox_set_state(bigint, text, text) TO rig_build_worker;

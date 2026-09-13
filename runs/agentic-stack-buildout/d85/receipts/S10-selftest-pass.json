@@ -1,0 +1,17 @@
+{
+  "receipt": "S10",
+  "claim": "register_process.py emits records the existing D85 loader accepts unchanged (installed + configured + loaded + exercised through the CLI; NOT an estate-work claim)",
+  "process_id": "d85_register_selftest_v1",
+  "nature": "synthetic loader-compat selftest asset (authority/register-selftest/); earns no work credit for any estate process",
+  "generator": "capabilities/skills/rig-determinism-85/register_process.py",
+  "process_record_sha256": "b662ce5c22a19c13e96d88870cd5791daaa450c76a8946503f18dba9f0eeb23e",
+  "commands": [
+    {"cmd": "python3 register_process.py --process-id d85_register_selftest_v1 --source-root authority/register-selftest --entrypoints finish@register_selftest_adapter.py:execute --files register_selftest_worker.py,register_selftest_adapter.py --external-module subprocess=<uv-stdlib>/subprocess.py:subprocess.call --out-dir authority", "exit": 0},
+    {"cmd": "bin/rig-determinism-85 inventory d85_register_selftest_v1", "exit": 0, "operations": 2, "roots": 1, "inventory_sha256": "026bd955847f33867e77a508478f2154c8a48bd96d9e5a56b7ab2ae13ce11c76"},
+    {"cmd": "bin/rig-determinism-85 classify d85_register_selftest_v1", "exit": 0},
+    {"cmd": "bin/rig-determinism-85 score d85_register_selftest_v1", "exit": 0, "verdict": "REALIZED_PASS", "ratios": {"aggregate_unweighted": 1.0, "aggregate_weighted": 1.0, "min_path_unweighted": 1.0, "min_path_weighted": 1.0}, "d85_admission": true, "classification_sha256": "cc498963ce7b423427f766695b4f64f0e543735398c6f0e3c369c472a5ab3d7e"}
+  ],
+  "classification": "EXTERNAL_IMPORT_INIT(subprocess)=retrieval/CODE; EXTERNAL_MODULE_CALL(subprocess.call)=side effect/CODE; model_necessity=[]",
+  "loader_unmodified": true,
+  "note": "classification inventory_sha256 must be bound from the CLI's own inventory output: loader_fingerprint embeds sys.path, so any other interpreter context computes a different hash (CLASSIFICATION_STALE)."
+}

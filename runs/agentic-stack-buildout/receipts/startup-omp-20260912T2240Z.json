@@ -1,0 +1,861 @@
+{
+  "agent": "omp",
+  "boot_contract_hash": "sha256:d6c10d8386bf6c83d181a794afde5984b20966638332e2c29f81fe56f8bd3905",
+  "cwd": "/Users/rig128gb/Developer/rig-capabilities",
+  "degraded": [
+    {
+      "blocking": false,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "drain_batch_size": 3,
+        "drain_interval_seconds": 30,
+        "fresh_ingest_seconds": 600,
+        "importable": true,
+        "ingest_path": "/Users/rig128gb/.rig/meta-harness/state/live/cognee-ingest.jsonl",
+        "ingest_records": 171063,
+        "last_ingest_status": "DEGRADED",
+        "latest_ingest_age_seconds": 50329.482937,
+        "latest_queue_age_seconds": 345.482937,
+        "newest_queue_processed": false,
+        "note": "Full Cognee graph cognify may require LLM_API_KEY; add/import bridge is local and bounded.",
+        "oldest_pending_age_seconds": 670087.482937,
+        "pending_drain_budget_seconds": 26250,
+        "pending_drain_cycles": 869,
+        "pending_grace_seconds": 180,
+        "pending_hash_count": 2607,
+        "pending_hash_sample": [
+          "sha256:eeffbf890e3b424cc8ffbd6771579782dfc63308579a0ad3aa7abcd89c53672f",
+          "sha256:44d7d0152ff3fec89694f48b10487d176153b279688109a348aff247451d2bef",
+          "sha256:a1c5a86ae1b5672a1dbe3c488291e8c286b8f15a3202afa5a2d5864b2ad98205",
+          "sha256:279f8152b4ba46c82dcec659067a99030cf2c779dc34d5a37d98d7a682681f34",
+          "sha256:e5c7a393492df2d3fdaded7c98749a22cfc079576bd41d47fb9e7a7ef6371edc"
+        ],
+        "pending_within_drain_budget": false,
+        "pending_within_grace": false,
+        "probe": {
+          "importable": true,
+          "probe_type": "metadata",
+          "status": "PASS",
+          "version": "1.5.4"
+        },
+        "queue_path": "/Users/rig128gb/.rig/meta-harness/state/cognee_queue.jsonl",
+        "queue_ready": false,
+        "queue_records": 20244,
+        "status": "DEGRADED"
+      },
+      "message": "Cognee bridge health",
+      "name": "live:cognee",
+      "status": "DEGRADED"
+    }
+  ],
+  "gates": [
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:40Z",
+      "evidence": {
+        "hash": "sha256:d6c10d8386bf6c83d181a794afde5984b20966638332e2c29f81fe56f8bd3905",
+        "path": "/Users/rig128gb/.rig/meta-harness/BOOT_CONTRACT.md"
+      },
+      "message": "boot contract present",
+      "name": "boot_contract",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:40Z",
+      "evidence": {
+        "hash": "sha256:d5d80e376ff04fbf9e6ee7fcd4b2ee259e5396cc59522e800ccaaeeabcdead56",
+        "path": "/Users/rig128gb/.rig/meta-harness/MANIFEST.yaml"
+      },
+      "message": "manifest present",
+      "name": "manifest",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:40Z",
+      "evidence": "/Users/rig128gb/.omp/agent/AGENTS.md",
+      "message": "loader stanza present",
+      "name": "surface:omp_agents",
+      "status": "PASS"
+    },
+    {
+      "blocking": false,
+      "checked_at": "2026-09-12T22:36:40Z",
+      "evidence": {
+        "cognee": {
+          "cache_root": "/Users/rig128gb/.rig/meta-harness/state/live/cognee/cache",
+          "data_root": "/Users/rig128gb/.rig/meta-harness/state/live/cognee/data",
+          "dataset": "rig_meta_harness_learning",
+          "enabled": true,
+          "ingest_path": "/Users/rig128gb/.rig/meta-harness/state/live/cognee-ingest.jsonl",
+          "logs_root": "/Users/rig128gb/.rig/meta-harness/logs/cognee",
+          "queue_path": "/Users/rig128gb/.rig/meta-harness/state/cognee_queue.jsonl",
+          "system_root": "/Users/rig128gb/.rig/meta-harness/state/live/cognee/system"
+        },
+        "enabled": true,
+        "jake_learning": {
+          "enabled": true,
+          "heartbeat_path": "/Users/rig128gb/.rig/meta-harness/state/live/worker-heartbeat.json",
+          "ledger_path": "/Users/rig128gb/.rig/meta-harness/state/live/jake-learning.jsonl",
+          "mode": "live_local"
+        },
+        "schema_version": "rig.meta_harness.live_config.v1",
+        "temporal": {
+          "address": "127.0.0.1:7233",
+          "db_filename": "/Users/rig128gb/.temporal-linkedin/linkedin.db",
+          "managed_by_meta_harness": false,
+          "namespace": "default",
+          "owner_label": "com.rig.temporal-server",
+          "owner_mode": "external_launchd",
+          "task_queue": "rig-meta-harness",
+          "ui": "127.0.0.1:8233"
+        },
+        "updated_at": "2026-09-09T04:22:00Z"
+      },
+      "message": "live config state",
+      "name": "live:config",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:40Z",
+      "evidence": {
+        "failures": {},
+        "services": {
+          "daily": {
+            "label": "com.rig.meta-harness.upgrade-daily",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/upgrade-daily.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/upgrade-daily.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.upgrade-daily\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"Program\" = \"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\t\"upgrade-daily\";\n\t\t\"--mode\";\n\t\t\"propose\";\n\t\t\"--proof\";\n\t\t\"--format\";\n\t\t\"json\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "hourly": {
+            "label": "com.rig.meta-harness.harvest-hourly",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/harvest-hourly.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/harvest-hourly.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.harvest-hourly\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"PID\" = 39532;\n\t\"Program\" = \"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\t\"harvest-hourly\";\n\t\t\"--proof\";\n\t\t\"--format\";\n\t\t\"json\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "temporal_external": {
+            "label": "com.rig.temporal-server",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/Library/Logs/rig-temporal/server.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/Library/Logs/rig-temporal/server.err\";\n\t\"Label\" = \"com.rig.temporal-server\";\n\t\"OnDemand\" = false;\n\t\"LastExitStatus\" = 0;\n\t\"PID\" = 6439;\n\t\"Program\" = \"/Users/rig128gb/.homebrew/bin/temporal\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.homebrew/bin/temporal\";\n\t\t\"server\";\n\t\t\"start-dev\";\n\t\t\"--db-filename\";\n\t\t\"/Users/rig128gb/.temporal-linkedin/linkedin.db\";\n\t\t\"--ui-port\";\n\t\t\"8233\";\n\t\t\"--port\";\n\t\t\"7233\";\n\t\t\"--log-level\";\n\t\t\"warn\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "value": {
+            "label": "com.rig.meta-harness.jake-value-loop",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-value-loop.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-value-loop.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.jake-value-loop\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"Program\" = \"/Users/rig128gb/.rig/meta-harness/bin/jake-value-loop-launchd\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/meta-harness/bin/jake-value-loop-launchd\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "value_heartbeat": {
+            "label": "com.rig.meta-harness.jake-founder-heartbeat",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-founder-heartbeat.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-founder-heartbeat.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.jake-founder-heartbeat\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"Program\" = \"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\t\"jake\";\n\t\t\"value\";\n\t\t\"heartbeat\";\n\t\t\"--proof\";\n\t\t\"--format\";\n\t\t\"json\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "weekly": {
+            "label": "com.rig.meta-harness.weekly-meta",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/weekly-meta.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/weekly-meta.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.weekly-meta\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"Program\" = \"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\t\"weekly-meta\";\n\t\t\"--recovery-drill\";\n\t\t\"--proof\";\n\t\t\"--format\";\n\t\t\"json\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          },
+          "worker": {
+            "label": "com.rig.meta-harness.worker",
+            "result": {
+              "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/live-worker.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/live-worker.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.worker\";\n\t\"OnDemand\" = false;\n\t\"LastExitStatus\" = 0;\n\t\"PID\" = 6347;\n\t\"Program\" = \"/Users/rig128gb/.rig/meta-harness/bin/live-worker-launchd\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/meta-harness/bin/live-worker-launchd\";\n\t);\n};",
+              "returncode": 0
+            },
+            "status": "PASS"
+          }
+        }
+      },
+      "message": "launchd services are loaded for always-on operation",
+      "name": "live:launchd_services",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "assurance_scope": "gui/501 and installed user LaunchAgents; user/system domains, opaque and dynamic behavior excluded",
+        "blockers": [],
+        "db_filename": "/Users/rig128gb/.temporal-linkedin/linkedin.db",
+        "exclusive_external_proof": true,
+        "inventory_issues": [],
+        "managed_by_meta_harness": false,
+        "owner_label": "com.rig.temporal-server",
+        "owner_mode": "external_launchd",
+        "pid": 6439,
+        "status": "PASS"
+      },
+      "message": "Temporal owner identity",
+      "name": "live:temporal_owner",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "address": "127.0.0.1:7233",
+        "binary": "/Users/rig128gb/.homebrew/bin/temporal",
+        "cli": {
+          "output": "SERVING",
+          "returncode": 0
+        },
+        "port_open": true,
+        "status": "PASS",
+        "ui": "127.0.0.1:8233",
+        "ui_open": true
+      },
+      "message": "Temporal dev server health",
+      "name": "live:temporal",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "age_seconds": 10.043816,
+        "heartbeat": {
+          "heartbeat_at": "2026-09-12T22:36:34Z",
+          "jake_router": {
+            "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+            "counts": {
+              "claude_agent_wrappers": 232,
+              "codex_agent_tomls": 232,
+              "inventory_counts": {
+                "agent_like_total": 233,
+                "claude_agent_wrappers": 232,
+                "codex_agency_toml_total": 232,
+                "departments_seen": 22,
+                "frontmatter_total": 233,
+                "hermes_dispatcher_capsules": 1,
+                "markdown_total": 275
+              },
+              "real_agency_departments": 17,
+              "rig_os": {
+                "domain_agent_files": 147,
+                "domain_dirs": 7,
+                "domain_names": [
+                  "construction",
+                  "fractional-cpa",
+                  "law",
+                  "manufacturing",
+                  "medical",
+                  "medspa",
+                  "service-business"
+                ],
+                "installed_rig_department_role_slugs": [
+                  "rig-app-dept",
+                  "rig-companyos-dept",
+                  "rig-design-dept",
+                  "rig-forecast-dept",
+                  "rig-linkedin-dept",
+                  "rig-market-dept",
+                  "rig-strategy-dept"
+                ],
+                "installed_rig_department_roles": 7,
+                "meta_agents": 7,
+                "meta_names": [
+                  "L1-scraper",
+                  "L2-generator",
+                  "L3-evaluator",
+                  "L4-self-healer",
+                  "L5-updater",
+                  "L6-telemetry",
+                  "L7-witness"
+                ],
+                "registry_hash": "sha256:350079cf973ac760164fd51fa6aeff31262b4a9904b38142c54654f430d38a27",
+                "source_head": "4f6772d0daeddabe08b9705d3ec6ebfca004c71c",
+                "source_path": "/Users/rig128gb/.rig/meta-harness/sources/RIG-OS-Intelligence",
+                "source_status_short": "",
+                "workflow_agents": 20,
+                "workflow_names": [
+                  "book-writer",
+                  "brand-discovery-runner",
+                  "campaign-runner",
+                  "case-study-writer",
+                  "course-builder",
+                  "deck-builder",
+                  "email-sequence-builder",
+                  "landing-page-writer",
+                  "lead-magnet-builder",
+                  "newsletter-writer",
+                  "outreach-composer",
+                  "pitch-deck-builder",
+                  "podcast-prep",
+                  "proposal-writer",
+                  "rfp-responder",
+                  "sales-page-writer",
+                  "thought-leadership-writer",
+                  "video-script-writer",
+                  "website-builder",
+                  "whitepaper-writer"
+                ]
+              }
+            },
+            "route_eval": {
+              "age_seconds": 2607162,
+              "case_count": 47,
+              "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+              "generated_at": "2026-08-13T18:23:52Z",
+              "path": "/Users/rig128gb/.rig/meta-harness/state/route_eval_latest.json",
+              "status": "DEGRADED"
+            },
+            "status": "PASS"
+          },
+          "pid": 6347,
+          "schema_version": "rig.meta_harness.live_worker_heartbeat.v1",
+          "task_queue": "rig-meta-harness",
+          "temporal_address": "127.0.0.1:7233",
+          "temporal_connected": true
+        },
+        "path": "/Users/rig128gb/.rig/meta-harness/state/live/worker-heartbeat.json",
+        "status": "PASS"
+      },
+      "message": "live worker heartbeat",
+      "name": "live:worker",
+      "status": "PASS"
+    },
+    {
+      "blocking": false,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "drain_batch_size": 3,
+        "drain_interval_seconds": 30,
+        "fresh_ingest_seconds": 600,
+        "importable": true,
+        "ingest_path": "/Users/rig128gb/.rig/meta-harness/state/live/cognee-ingest.jsonl",
+        "ingest_records": 171063,
+        "last_ingest_status": "DEGRADED",
+        "latest_ingest_age_seconds": 50329.482937,
+        "latest_queue_age_seconds": 345.482937,
+        "newest_queue_processed": false,
+        "note": "Full Cognee graph cognify may require LLM_API_KEY; add/import bridge is local and bounded.",
+        "oldest_pending_age_seconds": 670087.482937,
+        "pending_drain_budget_seconds": 26250,
+        "pending_drain_cycles": 869,
+        "pending_grace_seconds": 180,
+        "pending_hash_count": 2607,
+        "pending_hash_sample": [
+          "sha256:eeffbf890e3b424cc8ffbd6771579782dfc63308579a0ad3aa7abcd89c53672f",
+          "sha256:44d7d0152ff3fec89694f48b10487d176153b279688109a348aff247451d2bef",
+          "sha256:a1c5a86ae1b5672a1dbe3c488291e8c286b8f15a3202afa5a2d5864b2ad98205",
+          "sha256:279f8152b4ba46c82dcec659067a99030cf2c779dc34d5a37d98d7a682681f34",
+          "sha256:e5c7a393492df2d3fdaded7c98749a22cfc079576bd41d47fb9e7a7ef6371edc"
+        ],
+        "pending_within_drain_budget": false,
+        "pending_within_grace": false,
+        "probe": {
+          "importable": true,
+          "probe_type": "metadata",
+          "status": "PASS",
+          "version": "1.5.4"
+        },
+        "queue_path": "/Users/rig128gb/.rig/meta-harness/state/cognee_queue.jsonl",
+        "queue_ready": false,
+        "queue_records": 20244,
+        "status": "DEGRADED"
+      },
+      "message": "Cognee bridge health",
+      "name": "live:cognee",
+      "status": "DEGRADED"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "mode": {
+          "enabled": true,
+          "heartbeat_at": "2026-09-12T22:36:34Z",
+          "mode": "live_local",
+          "router": {
+            "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+            "counts": {
+              "claude_agent_wrappers": 232,
+              "codex_agent_tomls": 232,
+              "inventory_counts": {
+                "agent_like_total": 233,
+                "claude_agent_wrappers": 232,
+                "codex_agency_toml_total": 232,
+                "departments_seen": 22,
+                "frontmatter_total": 233,
+                "hermes_dispatcher_capsules": 1,
+                "markdown_total": 275
+              },
+              "real_agency_departments": 17,
+              "rig_os": {
+                "domain_agent_files": 147,
+                "domain_dirs": 7,
+                "domain_names": [
+                  "construction",
+                  "fractional-cpa",
+                  "law",
+                  "manufacturing",
+                  "medical",
+                  "medspa",
+                  "service-business"
+                ],
+                "installed_rig_department_role_slugs": [
+                  "rig-app-dept",
+                  "rig-companyos-dept",
+                  "rig-design-dept",
+                  "rig-forecast-dept",
+                  "rig-linkedin-dept",
+                  "rig-market-dept",
+                  "rig-strategy-dept"
+                ],
+                "installed_rig_department_roles": 7,
+                "meta_agents": 7,
+                "meta_names": [
+                  "L1-scraper",
+                  "L2-generator",
+                  "L3-evaluator",
+                  "L4-self-healer",
+                  "L5-updater",
+                  "L6-telemetry",
+                  "L7-witness"
+                ],
+                "registry_hash": "sha256:350079cf973ac760164fd51fa6aeff31262b4a9904b38142c54654f430d38a27",
+                "source_head": "4f6772d0daeddabe08b9705d3ec6ebfca004c71c",
+                "source_path": "/Users/rig128gb/.rig/meta-harness/sources/RIG-OS-Intelligence",
+                "source_status_short": "",
+                "workflow_agents": 20,
+                "workflow_names": [
+                  "book-writer",
+                  "brand-discovery-runner",
+                  "campaign-runner",
+                  "case-study-writer",
+                  "course-builder",
+                  "deck-builder",
+                  "email-sequence-builder",
+                  "landing-page-writer",
+                  "lead-magnet-builder",
+                  "newsletter-writer",
+                  "outreach-composer",
+                  "pitch-deck-builder",
+                  "podcast-prep",
+                  "proposal-writer",
+                  "rfp-responder",
+                  "sales-page-writer",
+                  "thought-leadership-writer",
+                  "video-script-writer",
+                  "website-builder",
+                  "whitepaper-writer"
+                ]
+              }
+            },
+            "route_eval": {
+              "age_seconds": 2607162,
+              "case_count": 47,
+              "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+              "generated_at": "2026-08-13T18:23:52Z",
+              "path": "/Users/rig128gb/.rig/meta-harness/state/route_eval_latest.json",
+              "status": "DEGRADED"
+            },
+            "status": "PASS"
+          },
+          "source": "rig-meta-harness-live-worker"
+        },
+        "path": "/Users/rig128gb/.rig/meta-harness/state/live/jake-learning-mode.json",
+        "router": {
+          "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+          "counts": {
+            "claude_agent_wrappers": 232,
+            "codex_agent_tomls": 232,
+            "inventory_counts": {
+              "agent_like_total": 233,
+              "claude_agent_wrappers": 232,
+              "codex_agency_toml_total": 232,
+              "departments_seen": 22,
+              "frontmatter_total": 233,
+              "hermes_dispatcher_capsules": 1,
+              "markdown_total": 275
+            },
+            "real_agency_departments": 17,
+            "rig_os": {
+              "domain_agent_files": 147,
+              "domain_dirs": 7,
+              "domain_names": [
+                "construction",
+                "fractional-cpa",
+                "law",
+                "manufacturing",
+                "medical",
+                "medspa",
+                "service-business"
+              ],
+              "installed_rig_department_role_slugs": [
+                "rig-app-dept",
+                "rig-companyos-dept",
+                "rig-design-dept",
+                "rig-forecast-dept",
+                "rig-linkedin-dept",
+                "rig-market-dept",
+                "rig-strategy-dept"
+              ],
+              "installed_rig_department_roles": 7,
+              "meta_agents": 7,
+              "meta_names": [
+                "L1-scraper",
+                "L2-generator",
+                "L3-evaluator",
+                "L4-self-healer",
+                "L5-updater",
+                "L6-telemetry",
+                "L7-witness"
+              ],
+              "registry_hash": "sha256:350079cf973ac760164fd51fa6aeff31262b4a9904b38142c54654f430d38a27",
+              "source_head": "4f6772d0daeddabe08b9705d3ec6ebfca004c71c",
+              "source_path": "/Users/rig128gb/.rig/meta-harness/sources/RIG-OS-Intelligence",
+              "source_status_short": "",
+              "workflow_agents": 20,
+              "workflow_names": [
+                "book-writer",
+                "brand-discovery-runner",
+                "campaign-runner",
+                "case-study-writer",
+                "course-builder",
+                "deck-builder",
+                "email-sequence-builder",
+                "landing-page-writer",
+                "lead-magnet-builder",
+                "newsletter-writer",
+                "outreach-composer",
+                "pitch-deck-builder",
+                "podcast-prep",
+                "proposal-writer",
+                "rfp-responder",
+                "sales-page-writer",
+                "thought-leadership-writer",
+                "video-script-writer",
+                "website-builder",
+                "whitepaper-writer"
+              ]
+            }
+          },
+          "route_eval": {
+            "age_seconds": 2607162,
+            "case_count": 47,
+            "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+            "generated_at": "2026-08-13T18:23:52Z",
+            "path": "/Users/rig128gb/.rig/meta-harness/state/route_eval_latest.json",
+            "status": "DEGRADED"
+          },
+          "status": "PASS"
+        },
+        "status": "PASS",
+        "worker": {
+          "age_seconds": 10.578173,
+          "heartbeat": {
+            "heartbeat_at": "2026-09-12T22:36:34Z",
+            "jake_router": {
+              "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+              "counts": {
+                "claude_agent_wrappers": 232,
+                "codex_agent_tomls": 232,
+                "inventory_counts": {
+                  "agent_like_total": 233,
+                  "claude_agent_wrappers": 232,
+                  "codex_agency_toml_total": 232,
+                  "departments_seen": 22,
+                  "frontmatter_total": 233,
+                  "hermes_dispatcher_capsules": 1,
+                  "markdown_total": 275
+                },
+                "real_agency_departments": 17,
+                "rig_os": {
+                  "domain_agent_files": 147,
+                  "domain_dirs": 7,
+                  "domain_names": [
+                    "construction",
+                    "fractional-cpa",
+                    "law",
+                    "manufacturing",
+                    "medical",
+                    "medspa",
+                    "service-business"
+                  ],
+                  "installed_rig_department_role_slugs": [
+                    "rig-app-dept",
+                    "rig-companyos-dept",
+                    "rig-design-dept",
+                    "rig-forecast-dept",
+                    "rig-linkedin-dept",
+                    "rig-market-dept",
+                    "rig-strategy-dept"
+                  ],
+                  "installed_rig_department_roles": 7,
+                  "meta_agents": 7,
+                  "meta_names": [
+                    "L1-scraper",
+                    "L2-generator",
+                    "L3-evaluator",
+                    "L4-self-healer",
+                    "L5-updater",
+                    "L6-telemetry",
+                    "L7-witness"
+                  ],
+                  "registry_hash": "sha256:350079cf973ac760164fd51fa6aeff31262b4a9904b38142c54654f430d38a27",
+                  "source_head": "4f6772d0daeddabe08b9705d3ec6ebfca004c71c",
+                  "source_path": "/Users/rig128gb/.rig/meta-harness/sources/RIG-OS-Intelligence",
+                  "source_status_short": "",
+                  "workflow_agents": 20,
+                  "workflow_names": [
+                    "book-writer",
+                    "brand-discovery-runner",
+                    "campaign-runner",
+                    "case-study-writer",
+                    "course-builder",
+                    "deck-builder",
+                    "email-sequence-builder",
+                    "landing-page-writer",
+                    "lead-magnet-builder",
+                    "newsletter-writer",
+                    "outreach-composer",
+                    "pitch-deck-builder",
+                    "podcast-prep",
+                    "proposal-writer",
+                    "rfp-responder",
+                    "sales-page-writer",
+                    "thought-leadership-writer",
+                    "video-script-writer",
+                    "website-builder",
+                    "whitepaper-writer"
+                  ]
+                }
+              },
+              "route_eval": {
+                "age_seconds": 2607162,
+                "case_count": 47,
+                "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+                "generated_at": "2026-08-13T18:23:52Z",
+                "path": "/Users/rig128gb/.rig/meta-harness/state/route_eval_latest.json",
+                "status": "DEGRADED"
+              },
+              "status": "PASS"
+            },
+            "pid": 6347,
+            "schema_version": "rig.meta_harness.live_worker_heartbeat.v1",
+            "task_queue": "rig-meta-harness",
+            "temporal_address": "127.0.0.1:7233",
+            "temporal_connected": true
+          },
+          "path": "/Users/rig128gb/.rig/meta-harness/state/live/worker-heartbeat.json",
+          "status": "PASS"
+        }
+      },
+      "message": "Jake learning mode heartbeat",
+      "name": "live:jake_learning",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "age_seconds": 590.586118,
+        "gates": {
+          "fresh": true,
+          "launchd_loaded": true,
+          "markdown_hash_ok": true,
+          "payload_status_pass": true,
+          "proof_status_pass_or_pending": true,
+          "report_hash_ok": true
+        },
+        "generated_at": "2026-09-12T22:26:54Z",
+        "heartbeat_id": "founder-heartbeat-9d6aba02648f4be183e7e3ae6641d3d0",
+        "label": "com.rig.meta-harness.jake-founder-heartbeat",
+        "launchd": {
+          "label": "com.rig.meta-harness.jake-founder-heartbeat",
+          "result": {
+            "output": "{\n\t\"StandardOutPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-founder-heartbeat.out.log\";\n\t\"LimitLoadToSessionType\" = \"Aqua\";\n\t\"StandardErrorPath\" = \"/Users/rig128gb/.rig/meta-harness/logs/jake-founder-heartbeat.err.log\";\n\t\"Label\" = \"com.rig.meta-harness.jake-founder-heartbeat\";\n\t\"OnDemand\" = true;\n\t\"LastExitStatus\" = 0;\n\t\"Program\" = \"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\"ProgramArguments\" = (\n\t\t\"/Users/rig128gb/.rig/bin/rig-meta-harness\";\n\t\t\"jake\";\n\t\t\"value\";\n\t\t\"heartbeat\";\n\t\t\"--proof\";\n\t\t\"--format\";\n\t\t\"json\";\n\t);\n};",
+            "returncode": 0
+          },
+          "status": "PASS"
+        },
+        "max_age_seconds": 1800,
+        "path": "/Users/rig128gb/.rig/meta-harness/state/jake_founder_revenue_heartbeat_latest.json",
+        "proof": {
+          "path": "/Users/rig128gb/.rig/meta-harness/proof/jake-founder-heartbeat-20260912T222711.040530Z-a85038e1-proof.json",
+          "self_hash": "sha256:f383e92b9d3568123d93bd96248413c6522c7335fdebb3b4ca163bf0feb41818",
+          "status": "PASS"
+        },
+        "status": "PASS"
+      },
+      "message": "Jake founder revenue heartbeat freshness and proof state",
+      "name": "live:jake_founder_heartbeat",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "catalog_fingerprint": "sha256:d9d01370c1e72dd9b23b5f16069c4d9ca04a93b9c285a45614724e499cd53bb8",
+        "counts": {
+          "claude_agent_wrappers": 232,
+          "codex_agent_tomls": 232,
+          "inventory_counts": {
+            "agent_like_total": 233,
+            "claude_agent_wrappers": 232,
+            "codex_agency_toml_total": 232,
+            "departments_seen": 22,
+            "frontmatter_total": 233,
+            "hermes_dispatcher_capsules": 1,
+            "markdown_total": 275
+          },
+          "real_agency_departments": 17,
+          "rig_os": {
+            "domain_agent_files": 147,
+            "domain_dirs": 7,
+            "domain_names": [
+              "construction",
+              "fractional-cpa",
+              "law",
+              "manufacturing",
+              "medical",
+              "medspa",
+              "service-business"
+            ],
+            "installed_rig_department_role_slugs": [
+              "rig-app-dept",
+              "rig-companyos-dept",
+              "rig-design-dept",
+              "rig-forecast-dept",
+              "rig-linkedin-dept",
+              "rig-market-dept",
+              "rig-strategy-dept"
+            ],
+            "installed_rig_department_roles": 7,
+            "meta_agents": 7,
+            "meta_names": [
+              "L1-scraper",
+              "L2-generator",
+              "L3-evaluator",
+              "L4-self-healer",
+              "L5-updater",
+              "L6-telemetry",
+              "L7-witness"
+            ],
+            "registry_hash": "sha256:350079cf973ac760164fd51fa6aeff31262b4a9904b38142c54654f430d38a27",
+            "source_head": "4f6772d0daeddabe08b9705d3ec6ebfca004c71c",
+            "source_path": "/Users/rig128gb/.rig/meta-harness/sources/RIG-OS-Intelligence",
+            "source_status_short": "",
+            "workflow_agents": 20,
+            "workflow_names": [
+              "book-writer",
+              "brand-discovery-runner",
+              "campaign-runner",
+              "case-study-writer",
+              "course-builder",
+              "deck-builder",
+              "email-sequence-builder",
+              "landing-page-writer",
+              "lead-magnet-builder",
+              "newsletter-writer",
+              "outreach-composer",
+              "pitch-deck-builder",
+              "podcast-prep",
+              "proposal-writer",
+              "rfp-responder",
+              "sales-page-writer",
+              "thought-leadership-writer",
+              "video-script-writer",
+              "website-builder",
+              "whitepaper-writer"
+            ]
+          }
+        },
+        "status": "PASS"
+      },
+      "message": "Jake Agency/RIG router catalog loaded",
+      "name": "startup:jake_agency_router",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "catalog_fingerprint": "sha256:7299b5993b017fdcc3f25e4dce0d5f163819b74384a8c472f9604f08686349f9",
+        "profile_count": 17
+      },
+      "message": "RIG quality standards catalog loaded",
+      "name": "startup:quality_catalog",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "loop_count": 50,
+        "registry_fingerprint": "sha256:ecf6d22b3f7c1f9b8a4bb39beb60ec1fbe9a1dab3f013a4e32289a076647d572"
+      },
+      "message": "Jake value-creation loop registry loaded",
+      "name": "startup:jake_value_engine",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "category_counts": {
+          "agent_orchestration": 7,
+          "browser_research": 2,
+          "coding_executor": 3,
+          "memory_graph": 4,
+          "observability_eval": 5,
+          "scraping_intel": 2,
+          "vector_store": 3,
+          "workflow_data": 4
+        },
+        "registry_fingerprint": "sha256:8e16ef571497a1e5a5798256cc463d2f0bf74abd992408db203855352e39c44b",
+        "solution_count": 30
+      },
+      "message": "Jake open-source integration registry loaded",
+      "name": "startup:jake_open_source_integrations",
+      "status": "PASS"
+    },
+    {
+      "blocking": true,
+      "checked_at": "2026-09-12T22:36:44Z",
+      "evidence": {
+        "lane_counts": {
+          "build": 2,
+          "code": 2,
+          "operate": 2
+        },
+        "registry_fingerprint": "sha256:1918a1bd2c53a74007d1e38f642c5f8df3d7b15b056697595fa4ec0d744266e5",
+        "subsystem_count": 6
+      },
+      "message": "6 rig subsystems loaded",
+      "name": "startup:rig_subsystems",
+      "status": "PASS"
+    }
+  ],
+  "hard_stop": false,
+  "harness_tuple": {
+    "C": "local-only v0; Gate-D for public/destructive/provider/credential/push/deploy/send/paid actions",
+    "E": "coding-session-startup",
+    "L": "always-on Temporal dev server + worker heartbeat + local mirror + bounded Cognee bridge",
+    "S": "source registry, startup surfaces, memory adapters, workflows",
+    "T": "rig-meta-harness CLI + local filesystem + startup registries",
+    "V": "startup live gates, doctor, proof verify, red-path plant failures; builder does not self-certify final release"
+  },
+  "loaded_at": "2026-09-12T22:36:44Z",
+  "manifest_hash": "sha256:d5d80e376ff04fbf9e6ee7fcd4b2ee259e5396cc59522e800ccaaeeabcdead56",
+  "packet_id": "startup-43cfee3de3504cc985597e0d3d27da6e",
+  "quality_catalog_fingerprint": "sha256:7299b5993b017fdcc3f25e4dce0d5f163819b74384a8c472f9604f08686349f9",
+  "schema_version": "rig.meta_harness.startup_packet.v1",
+  "status": "PASS"
+}

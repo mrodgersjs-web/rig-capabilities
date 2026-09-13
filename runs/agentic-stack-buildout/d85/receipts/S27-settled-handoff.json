@@ -1,0 +1,42 @@
+{
+  "schema": "rig.d85.settled-handoff.v1",
+  "sealed_at": "2026-09-12T21:30:00+00:00",
+  "owner": "D85Authority",
+  "purpose": "Gate-D unblock data for the four instruction-surface requests; classification records deliberately absent where no inventory hash exists.",
+  "scoreable_now": {
+    "d85_register_selftest_v2": {
+      "verdict": "REALIZED_PASS",
+      "inventory_sha256": "974f410925e936b6709ad13c4541993d189008c0679364156db771f61b1c9e48",
+      "classification_sha256": "6e38918c281fc014dd8186ff8ee625621ccea56a68ada69a095aefe27e405aea",
+      "contexts_verified": ["bare -c with skill root only", "CLI startup context", "certifier context (lattice-inserted)", "pinned runner runs/agentic-stack-buildout/d85/scripts/d85_certified_score.py"],
+      "why_context_independent": "zero declared external modules, so the loader-fingerprint (which embeds sys.path, d85.py _external_module_locks) never enters the inventory hash",
+      "checklist": "runs/agentic-stack-buildout/d85/receipts/S13b-checklist-v2.json CHECKLIST_PASS bound via plain CLI; build record S13b-build-v2.json (closed CHECKLIST_KEYS schema)"
+    },
+    "d85_register_selftest_v1": {
+      "verdict": "REALIZED_PASS only in the certifier context (pinned runner); plain contexts report CLASSIFICATION_STALE by design",
+      "inventory_sha256": "f63f37b6b0b9c4e7a01596ab909229fd6b42ed6b5dd6ad46f7fd5c0f0fcfd899",
+      "classification_sha256": "64f29a32611c714ffc61f6f55c221f7dcf78869cc3ebba61a17939c8c5b61096",
+      "note": "superseded by v2 for mint purposes; record and S13 certificate chain remain immutable"
+    }
+  },
+  "unmintable_by_design": {
+    "build_standard_chain_v1": {
+      "live_verdict": "AdmissionBlock EXTERNAL_CALL_UNRESOLVED: hashlib.sha256: missing 'sha256'",
+      "redeclare_proof": "register_process.py re-run emits BYTE-IDENTICAL record (exit 0) — hashlib.sha256 was already declared; no declaration change is possible",
+      "root_cause": "hashlib.py:307 materializes sha256 via globals()[__func_name] = __get_hash(__func_name); d85._surface_of_py indexes only defs/classes/submodules/imports, and hashlib is not in sys.builtin_module_names so the native-manifest path (d85.py _verify_external_call) never runs",
+      "classification_file": "deliberately absent — inventory refuses before any hash exists; writing a classification would require fabricating inventory_sha256"
+    },
+    "estate_automation_ledger_v1": {
+      "live_verdict": "AdmissionBlock EXTERNAL_CALL_UNRESOLVED: os.environ.get: opaque at 'environ'",
+      "root_cause": "os.py:769 environ = _createenviron() is an assignment value; _verify_external_call traverses defs/classes/submodules/imports only",
+      "classification_file": "deliberately absent for the same reason"
+    }
+  },
+  "what_would_unblock_them": [
+    "d85.py analyzer extension: resolve module-namespace assignments whose value is a call to a same-module factory (os.environ), and globals()[name] = ... materialization (hashlib), OR",
+    "rig_capabilities / estate source changes removing hashlib.sha256 / os.environ.get from reachable paths (files owned outside this agent)",
+    "none of these is a registry/classification data change; none may be faked by hand-writing records"
+  ],
+  "registrar_note": "register_process.py now publishes registry mappings via --registry (closed-schema, duplicate-key-rejecting, conflict-refusing); no hand-edit of authority/registry.json was used for d85_register_selftest_v2",
+  "approver_constraint": "no approval minted here; approver remains mike"
+}

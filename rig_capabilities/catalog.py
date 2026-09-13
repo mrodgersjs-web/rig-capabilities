@@ -68,11 +68,20 @@ DEFAULT_EXTERNAL_ROOTS = [
 ]
 
 DEFAULT_INSTALL_ROOTS = {
+    # Roots are the directories each runtime ACTUALLY loads, verified against live
+    # config on 2026-09-12: OMP `skillDirectories` = [~/.hermes/skills,
+    # ~/.rig/universal-skills-registry/skills] and `commandDirectories` = claude
+    # dirs — ~/.omp/skills and ~/.omp/agent/commands are never loaded, so installing
+    # there was a false green. Hermes loads ~/.hermes/skills; Prime loads
+    # ~/.prime/agent/skills. Codex agents are natively *.toml (549 toml vs 106 md in
+    # ~/.codex/agents): the md asset installs, but codex `loaded` stays UNVERIFIED.
     "skill": {"claude": "~/.claude/skills", "codex": "~/.codex/skills",
               "hermes": "~/.hermes/skills", "agents": "~/.agents/skills",
-              "omp": "~/.omp/skills"},
+              "omp": "~/.rig/universal-skills-registry/skills",
+              "prime-agent": "~/.prime/agent/skills"},
     "agent": {"claude": "~/.claude/agents", "codex": "~/.codex/agents",
-              "hermes": "~/.hermes/agents"},
+              "hermes": "~/.hermes/agents", "omp": "~/.omp/agent/agents",
+              "prime-agent": "~/.prime/agent/agents"},
     "hook": {"claude": "~/.claude/hooks", "codex": "~/.codex/hooks",
              "hermes": "~/.hermes/hooks", "omp": "~/.omp/hooks",
              "prime-agent": "~/.prime/agent/hooks"},
@@ -374,6 +383,18 @@ class Repo:
 
     # -- index -------------------------------------------------------------
 
+    def _publish_index(self, doc: dict) -> dict:
+        """Unique tmp name on purpose: one shared `.index.tmp` let two concurrent
+        rebuilds steal each other's file — FileNotFoundError on replace, or a torn
+        index handed to the next reader."""
+        tmp = self.index_path.with_name(f".index.{os.getpid()}.tmp")
+        try:
+            tmp.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
+            tmp.replace(self.index_path)
+        finally:
+            tmp.unlink(missing_ok=True)  # a crashed publish must not leave litter
+        return doc
+
     def build_index(self) -> dict:
         assets = self.scan()
         overlay = {}
@@ -389,10 +410,7 @@ class Repo:
                 if lane:
                     a["lane"] = lane
         doc = {"generated_at": _now(), "count": len(assets), "assets": assets}
-        tmp = self.index_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
-        tmp.replace(self.index_path)
-        return doc
+        return self._publish_index(doc)
 
     def load_index(self, force: bool = False) -> dict:
         if not force and self.index_path.exists():
@@ -405,10 +423,7 @@ class Repo:
                 pass
         doc = self.build_index()
         doc["generated_epoch"] = int(time.time())
-        tmp = self.index_path.with_suffix(".tmp")
-        tmp.write_text(json.dumps(doc, ensure_ascii=False), encoding="utf-8")
-        tmp.replace(self.index_path)
-        return doc
+        return self._publish_index(doc)
 
     # -- search ------------------------------------------------------------
 

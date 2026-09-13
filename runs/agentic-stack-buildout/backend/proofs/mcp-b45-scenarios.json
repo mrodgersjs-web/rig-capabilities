@@ -1,0 +1,266 @@
+{
+ "generated_at": "20260913T031022Z",
+ "receipt": "rig.build.mcp.b45",
+ "scenario_total": 10,
+ "scenarios": [
+  {
+   "calls": [
+    {
+     "result": {
+      "isError": false,
+      "state": "configured=false",
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+     },
+     "tool": "capabilities_build_store"
+    }
+   ],
+   "expectation": "both planes configured=false: [{'tool': 'capabilities_build_store', 'result': {'isError': False, 'text': '{\\n \"record\": {\\n  \"plane\": \"record\",\\n  \"configured\": false,\\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\\n },\\n \"measure\": {\\n  \"plane\": \"measure\",\\n  \"configured\": false,\\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\\n }\\n}', 'state': 'configured=false'}}]",
+   "lane": "diagnosis",
+   "scenario": 1,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S1 store triage on an unconfigured backend"
+  },
+  {
+   "calls": [
+    {
+     "result": {
+      "isError": false,
+      "state": "configured=false",
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+     },
+     "tool": "capabilities_build_store"
+    },
+    {
+     "result": {
+      "isError": false,
+      "state": "validated",
+      "text": "{\n \"read_only\": true,\n \"state\": \"validated\",\n \"packet\": {\n  \"goal\": \"ship the pack\",\n  \"cell_id\": \"L1-D1-A1-I1\",\n  \"done_test\": [\n   \"python3 rig_capabilities/criteria_pack.py generate --verify runs/agentic-stack-buildout/packs/criteria-v1.jsonl\"\n  ],\n  \"out_of_scope\": [\n   \"push\"\n  ],\n  \"effort_budget\": {\n   \"cpu_minutes\": 30,\n   \"usd\": 0.01,\n   \"wallclock_seconds\": 900\n  },\n  \"evidence_refs\": [\n"
+     },
+     "tool": "capabilities_build_diagnose"
+    }
+   ],
+   "expectation": "diagnose -> validated, bound to live pack sha",
+   "lane": "diagnosis",
+   "scenario": 2,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S2 diagnosis accepted and bound to the live pack"
+  },
+  {
+   "calls": [
+    {
+     "args": {
+      "cell_id": "L9-DX-A9-I9"
+     },
+     "result": {
+      "isError": true,
+      "text": "diagnosis refused: cell_id not in the 588-cell authority: 'L9-DX-A9-I9'"
+     },
+     "tool": "capabilities_build_diagnose"
+    },
+    {
+     "result": {
+      "isError": false,
+      "state": "validated",
+      "text": "{\n \"read_only\": true,\n \"state\": \"validated\",\n \"packet\": {\n  \"goal\": \"ship the pack\",\n  \"cell_id\": \"L1-D1-A1-I1\",\n  \"done_test\": [\n   \"python3 rig_capabilities/criteria_pack.py generate --verify runs/agentic-stack-buildout/packs/criteria-v1.jsonl\"\n  ],\n  \"out_of_scope\": [\n   \"push\"\n  ],\n  \"effort_budget\": {\n   \"cpu_minutes\": 30,\n   \"usd\": 0.01,\n   \"wallclock_seconds\": 900\n  },\n  \"evidence_refs\": [\n"
+     },
+     "tool": "capabilities_build_diagnose"
+    }
+   ],
+   "expectation": "bad cell refused naming the authority; session still serves the valid packet",
+   "lane": "diagnosis",
+   "scenario": 3,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S3 diagnosis refused for an out-of-authority cell"
+  },
+  {
+   "calls": [
+    {
+     "result": {
+      "isError": false,
+      "state": "configured=false",
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+     },
+     "tool": "capabilities_build_store"
+    },
+    {
+     "result": {
+      "isError": false,
+      "state": "blocked",
+      "text": "{\n \"state\": \"blocked\",\n \"reason\": \"no rig_build target: StoreError: no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\",\n \"idempotency_key\": \"mcp:bb7248a81633a5bca405b967\",\n \"next_action\": \"apply scripts/ddl_rig_build.sql via build_migrate after B11/B12 approval\"\n}"
+     },
+     "tool": "capabilities_build_run_start"
+    },
+    {
+     "result": {
+      "isError": false,
+      "state": "configured=false",
+      "text": "{\n \"configured\": false,\n \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n}"
+     },
+     "tool": "capabilities_build_run"
+    }
+   ],
+   "expectation": "run_start -> blocked + next_action names approval; follow-up read honestly UNCONFIGURED",
+   "lane": "missing-dependency",
+   "scenario": 4,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S4 run start blocked honestly with no store target"
+  },
+  {
+   "calls": [
+    {
+     "args_note": "valid packet, no process_key/process_version",
+     "result": {
+      "isError": false,
+      "state": "blocked",
+      "text": "{\n \"state\": \"blocked\",\n \"reason\": \"no owner binding supplied for this cell \u2014 run bind_cell first; the store never invents a default owner\",\n \"idempotency_key\": \"mcp:bb7248a81633a5bca405b967\"\n}"
+     },
+     "tool": "capabilities_build_run_start"
+    }
+   ],
+   "expectation": "store live but no owner binding -> blocked naming bind_cell, no default owner invented",
+   "lane": "missing-dependency",
+   "scenario": 5,
+   "server": "live",
+   "status": "PASS",
+   "title": "S5 run start blocked on missing owner binding (store live)"
+  },
+  {
+   "calls": [
+    {
+     "result": {
+      "isError": false,
+      "state": "staged_dormant",
+      "text": "{\n \"state\": \"staged_dormant\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-b4e9426fe525be90.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\",\n \"next_action\": \"human/Gate-D review; pending stays open\"\n}"
+     },
+     "tool": "capabilities_build_omission_request"
+    },
+    {
+     "result": {
+      "isError": false,
+      "state": "already_staged",
+      "text": "{\n \"state\": \"already_staged\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-b4e9426fe525be90.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\"\n}"
+     },
+     "tool": "capabilities_build_omission_request"
+    },
+    {
+     "requested_by": "mcp-protocol-probe-nostore",
+     "staged_file_state": "PENDING_HUMAN_REVIEW"
+    }
+   ],
+   "expectation": "staged dormant -> replay already_staged; file says PENDING_HUMAN_REVIEW, approval impossible",
+   "lane": "approval-staging",
+   "scenario": 6,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S6 omission staged dormant; replay idempotent; never approved"
+  },
+  {
+   "calls": [
+    {
+     "result": {
+      "note": "seeded",
+      "run_id": "a9241b4fb35c4652bf473859d78ca951"
+     },
+     "tool": "capabilities_build_run_start"
+    },
+    {
+     "args": {
+      "fencing_token": 999
+     },
+     "result": {
+      "isError": false,
+      "state": "refused",
+      "text": "{\n \"state\": \"refused\",\n \"reason\": \"stale fencing token rejected for run a9241b4fb35c4652bf473859d78ca951: caller 999 != current 1\",\n \"note\": \"hash mismatch, stale fencing token, or sequence violation \u2014 nothing was stored\"\n}"
+     },
+     "tool": "capabilities_build_evidence_add"
+    },
+    {
+     "args": {
+      "fencing_token": 1
+     },
+     "result": {
+      "isError": false,
+      "state": "recorded",
+      "text": "{\n \"state\": \"recorded\",\n \"artifact\": \"replay_confirmed\",\n \"event\": \"appended\",\n \"recorded_by\": \"mcp-protocol-probe-live\"\n}"
+     },
+     "tool": "capabilities_build_evidence_add"
+    }
+   ],
+   "expectation": "stale token refused (B47); current token records through the same protocol path",
+   "lane": "failure-recovery",
+   "scenario": 7,
+   "server": "live",
+   "status": "PASS",
+   "title": "S7 stale fencing token refused; current token records"
+  },
+  {
+   "calls": [
+    {
+     "result": {
+      "isError": false,
+      "state": "unknown",
+      "text": "{\n \"read_only\": true,\n \"state\": \"unknown\",\n \"run_id\": \"run-does-not-exist-000\"\n}"
+     },
+     "tool": "capabilities_build_run_get"
+    }
+   ],
+   "expectation": "unknown run -> state=unknown, no fabricated empty success",
+   "lane": "failure-recovery",
+   "scenario": 8,
+   "server": "live",
+   "status": "PASS",
+   "title": "S8 unknown run answers state=unknown, never empty success"
+  },
+  {
+   "calls": [
+    {
+     "args": {
+      "limit": 1
+     },
+     "returned": 1,
+     "tool": "capabilities_build_run_get"
+    },
+    {
+     "args": {
+      "limit": 5
+     },
+     "returned": 3,
+     "tool": "capabilities_build_run_get"
+    }
+   ],
+   "expectation": "pages respect limit, newest-first ordering",
+   "lane": "failure-recovery",
+   "scenario": 9,
+   "server": "live",
+   "status": "PASS",
+   "title": "S9 run_get pages bounded, newest-first, clamp proven"
+  },
+  {
+   "calls": [
+    {
+     "args": {
+      "manifest": "empty {} manifest, real HEAD sha"
+     },
+     "result": {
+      "admitted": false,
+      "isError": false,
+      "state": "recomputed",
+      "text": "{\n \"read_only\": true,\n \"state\": \"recomputed\",\n \"admitted\": false,\n \"refusals\": [\n  \"authority: certifier anchor /Users/rig128gb/.rig/d85/certifier.digest missing \u2014 fail closed; a human must seal it (see pin-certifier) before any certified claim\",\n  \"index: no build record for this cell under the current pack f463e9601377 (UNKNOWN blocks)\"\n ],\n \"criteria_pack_sha256\": \"f463e960137723d13021fd169b001"
+     },
+     "tool": "capabilities_build_qualify"
+    }
+   ],
+   "expectation": "qualification RECOMPUTED: empty manifest -> admitted=false with named receipt refusals",
+   "lane": "qualification",
+   "note": "refusals on this host: authority: certifier anchor /Users/rig128gb/.rig/d85/certifier.digest missing \u2014 fail closed; a human must seal it (see pin-certifier) before any certified claim | index: no build record for this cell under the current pack f463e9601377 (UNKNOWN blocks)",
+   "scenario": 10,
+   "server": "no_store",
+   "status": "PASS",
+   "title": "S10 qualification recomputed from an empty manifest denies"
+  }
+ ]
+}

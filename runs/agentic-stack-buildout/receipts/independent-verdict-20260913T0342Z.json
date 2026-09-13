@@ -1,0 +1,33 @@
+{
+  "generated_at": "2026-09-13T03:42:00Z",
+  "verifier": "SliceVerifier (independent reviewer subagent; separate context; read-only)",
+  "builder": "Main omp session (blackwell-qwen38-flash)",
+  "family_difference": "UNVERIFIED - the harness does not attest the reviewer's model family; recorded honestly rather than claimed",
+  "instructions_given": "read-only, no edits, no full-suite run, six named questions, VERDICT line required, attack valued over approval",
+  "reviewer_output_verbatim": {
+    "overall_correctness": "correct",
+    "explanation": "All six questions of the sealed slice check out under independent read-only verification, so I issue VERDICT: VERIFIED. (1) d85_certified is halt-tier and genuinely non-forceable: loops.py:1024 pins tier=\"halt\" for d85_certified/build_diagnosis regardless of spec failure_tier, and the force-refusal path is mark_stage's completion_red check (loops.py:1070-1072): `if not gate_ok and (not force or completion_red)` raises SpecError even when force=True; ./bin/rig-loop test durable-build => rc=0, 6/6 cases pass (5 declarative + engine selftest; case 1 exercises a real mark_stage(force=True) against a red d85 gate and expects refusal). (2) IndexPublishRaceTests is a real guard, not implementation-pinning: _publish_index (catalog.py:386-393) uses a per-PID scratch .index.{pid}.tmp + atomic replace; test 1 loads the index while a directory squats on the old shared name .index.tmp (revert => IsADirectoryError on replace, matching the author's plant), test 2 forces 4 concurrent subprocess rebuilds to rc=0 with zero leftover .index.*.tmp; command re-run => rc=0, 2/2 OK. (3) Receipt 0230: all five claims carry command+result and I re-ran four of them (unittest class, rig-loop test, done_tests.run_asset 9/4/7 ran-pass exactly as claimed, surface check rc=2) plus verified every one of the 14 artifact_sha256 entries and the suite log sha256 (5bcf1030...) against the live tree; the 5-state honesty is honest (loaded/exercised/enforced marked UNVERIFIED; installed delta for durable-build honestly flipped to all-false); blockers carry UNAVAILABLE/UNVERIFIED states; nothing is presented as PASS that is UNAVAILABLE/UNVERIFIED. (4) afproof chain: all three fable2031 packets recompute (True,'ok') via verify_seal and link genesis -> cae3c573 -> 8351cc93 -> 1263d378, filenames follow the <slug>__hash[:16] formula, and the final payload equals the 0230 receipt content. (5) rig-build-standard test => rc=0, pack match=true, 588 rows; surface check => rc=2, all four surfaces UNWIRED; grepping the four target files for the candidate's distinctive managed-block marker RIG_BUILD_STANDARD (open tag RIG_BUILD_STANDARD:v1:sha256:8501a8c9..., which I recomputed live) gives 0 matches in all four => DORMANT confirmed, i.e. no instruction surface was written without typed approval. (6) Real defects: none blocking - only two P3 items (launch crash leaves .index.<pid>.tmp litter in the repo root since the publish tmp has no unlink-on-failure; and the per-PID scratch only de-races cross-process, not two threads in one PID, which no claim asserts). No fail-open, forgeable-approval, or gate-theater found: gate exceptions fail closed, surfaces install is signature-locked to HMAC-signed Gate-D rows consumed once via O_EXCL, and the d85 gate re-hashes build+certificate after the CLI verify to kill TOCTOU. VERDICT: VERIFIED",
+    "confidence": 0.9,
+    "findings": [
+      {
+        "title": "Crashed index publish leaves per-PID scratch litter behind",
+        "priority": 3,
+        "confidence": 0.85,
+        "file_path": "rig_capabilities/catalog.py",
+        "line_start": 390,
+        "line_end": 393,
+        "disposition": "FIXED in this slice: _publish_index now wraps write+replace in try/finally with tmp.unlink(missing_ok=True). Solo full suite after the change: 1073 tests OK (skipped=2), and 0 leftover .index.*.tmp in the repo root."
+      },
+      {
+        "title": "Five-state honesty block lives in the superseded 0205 receipt, not 0230",
+        "priority": 3,
+        "confidence": 0.9,
+        "file_path": "runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0230Z.json",
+        "line_start": 2,
+        "line_end": 9,
+        "disposition": "CARRIED FORWARD: the five-state block is restated in full in receipts/build-standard-wiring-final-20260913T0345Z.json (v4). The receipt-name/generated_at skew is also corrected in v4 (filename matches generation time)."
+      }
+    ]
+  },
+  "builder_note": "The reviewer's one substantive correction to my own evidence: receipt 0230's `installed_sha_match_recomputed_at_seal` reported durable-build all-false because my seal-time probe expanded `~` literally (config.json uses `~/...`, not `${HOME}`). The installs existed; the probe was wrong. v4 recomputes with expanduser and both skills match at all six roots. Also revealed by the correct probe: durable-build installs were genuinely STALE (canonical SKILL.md/loop.yaml/cases.json had been edited after the last install); they were force-reinstalled and re-verified before the suite ran."
+}

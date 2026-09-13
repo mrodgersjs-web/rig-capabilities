@@ -26,7 +26,7 @@
       "codex": "~/.codex/skills",
       "hermes": "~/.hermes/skills",
       "agents": "~/.agents/skills",
-      "omp": "~/.omp/agent/skills",
+      "omp": "~/.rig/universal-skills-registry/skills",
       "prime-agent": "~/.prime/agent/skills"
     },
     "command": {
@@ -34,8 +34,12 @@
       "codex": "~/.codex/commands",
       "hermes": "~/.hermes/commands",
       "agents": "~/.agents/commands",
-      "omp": "~/.omp/agent/commands",
+      "omp": "~/.claude/commands",
       "prime-agent": "~/.prime/agent/commands"
+    },
+    "_runtime_proof": {
+      "note": "omp roots are the directories OMP actually loads, read from ~/.omp/config.json on 2026-09-12: skillDirectories=[~/.hermes/skills, ~/.rig/universal-skills-registry/skills], commandDirectories=[~/.claude/commands, ~/rig-app-studio/.claude/commands, ~/Developer/super-simple-software-factory/.claude/commands]. Proof that ~/.omp/agent/skills is NOT OMP-loadable: d85-compliance-checklist and ApertureOscillation exist only there and `skill://ApertureOscillation` returns Unknown skill. Receipt: runs/agentic-stack-buildout/receipts/runtime-load-roots-20260912.json",
+      "stale_installs": "~/.omp/agent/commands (21 files) and ~/.omp/skills (6) are not in any load path; left in place, reported as drift"
     }
   },
   "external_roots": [

@@ -1,0 +1,132 @@
+{
+  "schema": "rig.build-standard.wiring.receipt/4",
+  "task_id": "agentic-stack-buildout",
+  "generated_at": "2026-09-13T03:45:00Z",
+  "supersedes": "runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0230Z.json (proof_hash 1263d3780795a042e49eb3683295f23281e27f9c507c04b84609e718d6b28b9c)",
+  "why_superseded": [
+    "v3 bound install parity with a broken probe (literal `~`, no expanduser): durable-build read all-false when the installs existed but were STALE. v4 recomputes correctly and re-installs.",
+    "v3 predates the independent verdict and the solo full-suite re-run.",
+    "v3 carried no five-state honesty block (reviewer P3); v3 receipt filename/generated_at were skewed ~15-20 min."
+  ],
+  "repository": "/Users/rig128gb/Developer/rig-capabilities",
+  "head_observed": "7dddea84dc4435ec3ce9ee560dc3afa1b5e9192a (unstable; another agent commits during the session) - every claim below is bound to artifact sha256, not HEAD",
+
+  "five_state_honesty": {
+    "installed": "TRUE for rig-build-standard and durable-build at all six harness roots (claude, codex, hermes, agents, omp, prime-agent), recomputed with expanduser after force-reinstall; 6/6 byte-match canonical in both cases. rig-stackwright.md installed at the three roots that have an agent directory (claude, codex, hermes).",
+    "configured": "TRUE - assets present in the canonical catalog; index rebuilt; pack golden verified (588 rows, sha f463e960137723d1..., match=true).",
+    "loaded": "UNVERIFIED - no foreign-harness session was restarted after install; this OMP session predates it.",
+    "exercised": "UNVERIFIED in a foreign harness. VERIFIED inside this harness: `./bin/rig-loop test durable-build` rc=0 (6/6), `./bin/rig-build-standard test` rc=0, `done_tests.run_asset` ran 9/4/7 pass for the three assets.",
+    "enforced": "PARTIAL - the halt-tier gates are enforced by code (verified independently, see verdict), but no proof yet that a foreign harness session reaches them. `surface check` rc=2: all four instruction surfaces UNWIRED.",
+    "rule": "unknown is reported UNVERIFIED; an unavailable check is never written as PASS"
+  },
+
+  "install_parity_corrected": {
+    "method": "sha256 of every canonical file vs every installed file, roots resolved from config.json with Path.expanduser()",
+    "rig-build-standard": {"claude": true, "codex": true, "hermes": true, "agents": true, "omp": true, "prime-agent": true},
+    "durable-build": {"claude": true, "codex": true, "hermes": true, "agents": true, "omp": true, "prime-agent": true},
+    "correction": "v3's durable-build row (all-false) was a probe artifact. The same correct probe then showed the installs were genuinely stale (canonical SKILL.md/loop.yaml/cases.json edited after the last install); force-reinstalled 6/6 and re-verified true before the suite ran.",
+    "command": "./bin/rig-capabilities install durable-build --harness <claude|codex|hermes|agents|omp|prime-agent> --force"
+  },
+
+  "index_publish_race": {
+    "root_cause": "rig_capabilities/catalog.py used one shared scratch path (`.index.tmp`) for both index writers; a concurrent rebuild could rename it away (FileNotFoundError on replace) or hand a torn file to the next reader.",
+    "observed_failure": "FileNotFoundError: [Errno 2] No such file or directory: '/Users/rig128gb/Developer/rig-capabilities/.index.tmp' -> '.index.json' inside test_catalog.WholeRepoCertifyTests (parallel worker run).",
+    "fix": "Repo._publish_index (catalog.py:386) writes to `.index.{pid}.tmp` and atomically replaces; both build_index() and load_index(force=True) publish through it; try/finally unlinks so a crashed publish leaves no litter (reviewer P3-1).",
+    "regression_tests": ["tests/test_catalog.py::IndexPublishRaceTests::test_publication_survives_a_competitor_holding_the_shared_name", "tests/test_catalog.py::IndexPublishRaceTests::test_concurrent_forced_rebuilds_all_succeed"],
+    "plant_failure": "restoring the shared scratch name -> IsADirectoryError: [Errno 21] Is a directory: '<repo>/repo/.index.tmp' at catalog.py:391 (RED); per-pid name restored -> 2/2 OK (GREEN). Independent reviewer accepted the tests as real guards, not implementation-pinning.",
+    "evidence": "python3 -m unittest tests.test_catalog -> Ran 119 tests, OK (skipped=2); solo full suite below"
+  },
+
+  "verification": {
+    "suite_command": "python3 -m unittest discover -s tests",
+    "suite_log": "runs/agentic-stack-buildout/receipts/suite-final-20260913T0340Z.txt",
+    "suite_result": "Ran 1073 tests in 176.898s / OK (skipped=2) / rc=0",
+    "concurrency_note": "run solo - both worker agents settled first, because a concurrent `unittest discover` poisons attribution and trips the mutation hook",
+    "leftover_index_tmp_after_suite": 0,
+    "build_standard_test": "./bin/rig-build-standard test -> rc=0 (pack match=true 588 rows sha f463e960137723d13021fd169b00167d781dcfaee4a5fd7b15de4380c9bbc7c5; index_live true; commit-gate authorities ok; context-packet selftest OK; surfaces-render selftest OK)",
+    "surface_check": "./bin/rig-build-standard surface check -> rc=2, all four surfaces UNWIRED (intentional RED: no typed approval yet)",
+    "dormancy_proved": "independent grep of ~/.claude/CLAUDE.md, ~/.hermes/SOUL.md, ~/.omp/agent/AGENTS.md, ~/.prime/agent/AGENTS.md for the managed-block marker RIG_BUILD_STANDARD -> 0 matches in all four",
+    "loop_cases": "./bin/rig-loop test durable-build -> rc=0, 6/6 (5 declarative cases + engine selftest), re-run after the force-reinstall",
+    "done_tests": "rig-build-standard ran=9 pass; rig-stackwright.md ran=4 pass; durable-build ran=7 pass"
+  },
+
+  "independent_verdict": {
+    "receipt": "runs/agentic-stack-buildout/receipts/independent-verdict-20260913T0342Z.json",
+    "verdict": "VERIFIED",
+    "confidence": 0.9,
+    "verifier": "independent read-only reviewer subagent (separate context)",
+    "family_difference": "UNVERIFIED - the harness does not attest the reviewer's model family, so builder/verifier family separation is recorded as unproven rather than claimed",
+    "p3_findings_disposition": "both closed in this slice (unlink-on-failure; five-state block + timestamp carried into v4)"
+  },
+
+  "d85_process_state": {
+    "authorities_checked_at_seal": "python3 -c \"from rig_capabilities import d85_gates as g; print(g.score_realized(g.AUTHORITY_REGISTRY, pid))\"",
+    "d85_register_selftest_v2": "REALIZED_PASS from any interpreter context; inventory_sha256 974f410925e936b6709ad13c4541993d189008c0679364156db771f61b1c9e48; classification_sha256 6e38918c281fc014dd8186ff8ee625621ccea56a68ada69a095aefe27e405aea; checklist CHECKLIST_PASS bound to that inventory (runs/agentic-stack-buildout/d85/receipts/S13b-checklist-v2.json, by D85Authority)",
+    "build_standard_chain_v1": "NOT SCOREABLE - `AdmissionBlock: EXTERNAL_CALL_UNRESOLVED: hashlib.sha256: missing 'sha256'`. No `.classification.json` exists BY DESIGN: the inventory itself refuses before any hash exists, and a classification must bind a real inventory_sha256, so writing one now would be fabricated evidence.",
+    "estate_automation_ledger_v1": "NOT SCOREABLE - `EXTERNAL_CALL_UNRESOLVED: os.environ.get: opaque at 'environ'`; same no-classification-by-design state.",
+    "root_cause": "static analysis, not declarations (re-declaring emits a byte-identical record): hashlib.py:307 materialises sha256 via `globals()[__func_name] = __get_hash(...)` and os.py:769 assigns `environ = _createenviron()`; d85._surface_of_py indexes only defs/classes/submodules/imports, and neither module is in sys.builtin_module_names, so the native-manifest path (d85.py:1372-1399) never runs.",
+    "unblock_options": ["(a) extend the analyzer in the rig-determinism-85 payload to resolve those two assignment forms", "(b) remove those calls from reachable paths in the registered estate sources"],
+    "rejected_option": "repointing the four surfaces' mint_command at d85_register_selftest_v2 would mint an approval bound to a registrar selftest rather than the build that realises the work - gate theater, refused",
+    "mis_probe_recorded": "./<skill>/bin/rig-determinism-85 checklist pointed at durable-build/loop.yaml returns {\"reason\":\"SUBMITTED_MALFORMED\",\"verdict\":\"BLOCK\"}: checklist takes a JSON build file, not YAML. The exit code was masked in my own probe by piping to tail (`$?` measured tail). Both mistakes recorded so the next reader does not repeat them."
+  },
+
+  "cell_bound_outcome_index": {
+    "declared_source_of_truth": "data/durable-repeatable-index/index.jsonl (one JSON row per Lattice cell, qualified iff durable_lb>=0.95 AND repeatable_lb>=0.95 AND freshness valid)",
+    "file_on_disk": false,
+    "rows_in_repo_tree": 0,
+    "cells_qualified": "0/588",
+    "north_star": "0/588 qualified - the honest value; the criteria pack exists (588 rows) but no cell has a sealed durable+repeatable row yet",
+    "insert_path_exercised": "only inside `rig-loop test durable-build` cases, which run in temp roots; case 5 (`a certificate with no cell-bound outcome row still blocks Proof`) is the plant proving the gate reads this index",
+    "build_diagnosis": "the P-stage `build_diagnosis` gate requires a diagnosis plus a cell-bound row for L4-D1-A1-P / L4-D2-A1-P / L4-D3-A1-P; with 0 rows the gate is correctly RED outside a real certified run"
+  },
+
+  "gate_d_surfaces": {
+    "status": "STAGED DORMANT - zero bytes written to any registered instruction surface",
+    "request_status": "PENDING_MIKE_TYPED_APPROVAL",
+    "process_id": "build_standard_chain_v1",
+    "kind": "wiring:instruction-surface",
+    "bytes_added": 2364,
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surfaces": ["claude_code -> /Users/rig128gb/.claude/CLAUDE.md", "hermes -> /Users/rig128gb/.hermes/SOUL.md", "omp -> /Users/rig128gb/.omp/agent/AGENTS.md", "prime_agent -> /Users/rig128gb/.prime/agent/AGENTS.md"],
+    "correction": "blast radius is ALL FOUR surfaces, not only certificate minting: every mint_command computes score_realized(g.AUTHORITY_REGISTRY,'build_standard_chain_v1') before mint_approval, so all four fail with EXTERNAL_CALL_UNRESOLVED before an approval is recorded. Mike should not attempt them until the analyzer option (a) or (b) above lands. Mint and consume must run in the same interpreter context (gate_d recomputes score_realized and compares all three hashes).",
+    "approver": "mike - no approval was self-minted in this session"
+  },
+
+  "open_gaps_honest": [
+    "0/588 Lattice cells qualified; the cell-bound outcome index has no rows in the repo tree.",
+    "loaded/exercised/enforced UNVERIFIED in foreign harness sessions (no session restarted after install).",
+    "codex native agent format is *.toml; a markdown agent's codex load stays UNVERIFIED.",
+    "all four instruction-surface approvals unmintable until the d85 analyzer resolves hashlib.sha256 / os.environ.get (or those calls leave registered reachability).",
+    "rig-stackwright.md installed at 3 of 6 roots (omp/agents/prime-agent have no agent skill root).",
+    "builder/verifier model-family separation UNVERIFIED.",
+    "RIG Memory OS durable write unavailable this session: memory.write_knowledge -> PolicyError knowledge_path_not_allowed / knowledge_write_requires_intake_namespace; memory.search_knowledge -> ValidationError knowledge_backend_failed. Durable record is therefore receipts + sealed packet only.",
+    "Section V 72/197-trial sampling remains structurally impossible until Section IV backend work lands; Section VI depends on V + Gate-D."
+  ],
+
+  "untracked_snapshot_for_reset_hazard": {
+    "reason": "a `git reset --hard HEAD` during this session silently reverted another agent's uncommitted tracked edit",
+    "tracked_diff": "runs/agentic-stack-buildout/receipts/tracked-diff-20260913T0220Z.patch (1229288 bytes; contains _publish_index and IndexPublishRaceTests)",
+    "tracked_status": "runs/agentic-stack-buildout/receipts/tracked-status-20260913T0220Z.txt (238 entries)",
+    "head_at_snapshot": "runs/agentic-stack-buildout/receipts/head-at-20260913T0220Z.txt",
+    "git_state_at_seal": "edits left unstaged; no git add / checkout / stash used for restoration"
+  },
+
+  "artifact_sha256": {
+    "rig_capabilities/catalog.py": "db8d3c480f1b02f3",
+    "rig_capabilities/surfaces_render.py": "11698b9bdb287b97",
+    "rig_capabilities/context_packet.py": "5f1930772d6c1a38",
+    "tests/test_catalog.py": "d92655ea1696c70d",
+    "tests/test_build_standard.py": "722d1a552bd5ea02",
+    "tests/test_build_proofs.py": "dc2df34768139571",
+    "capabilities/skills/rig-build-standard/SKILL.md": "b5066f0f73b06532",
+    "capabilities/skills/durable-build/SKILL.md": "22f0d9a3f51d5217",
+    "capabilities/skills/durable-build/loop.yaml": "4082ab1e1852b311",
+    "capabilities/skills/durable-build/tests/cases.json": "9c3a5000db1b2ad3",
+    "capabilities/agents/rig-stackwright.md": "feb687011feedea7",
+    "capabilities/data/rig-build-standard/policy.md": "71c2b4c55ed56073",
+    "runs/agentic-stack-buildout/receipts/suite-final-20260913T0340Z.txt": "2d443414e3feebb4"
+  },
+  "artifact_sha256_note": "prefixes are for reading; full digests are in the sealed payload (runs/agentic-stack-buildout/receipts/hashes-v4.json copied from the hashing run). Seal binds full digests.",
+
+  "disposition": "SUBMITTED_FOR_VERIFICATION - this slice does not certify itself. Independent verdict on the evidence as it stood: VERIFIED (0.9). Certified-completion claims stay with the verifier."
+}

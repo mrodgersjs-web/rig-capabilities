@@ -1,0 +1,23 @@
+{
+  "schema": "rig.gaps.erratum/1",
+  "generated_at": "2026-09-13T04:06:00Z",
+  "task_id": "agentic-stack-buildout",
+  "corrects": "runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0345Z.json (proof_hash d48c03066bb3e0500bc1381e9a196da2881fee0b684674b987ab66a507a41050), field open_gaps_honest[4] and five_state_honesty.installed",
+  "sealed_file_left_untouched": true,
+  "wrong_claim": "`rig-stackwright.md` installed at 3 of 6 roots (omp/agents/prime-agent have no agent skill root)",
+  "cause": "the claim was copied from an earlier `capabilities_live_status` probe instead of recomputed at seal time; the agent install root set is not the skill root set",
+  "true_claim": {
+    "method": "sha256(computed file) vs canonical capabilities/agents/rig-stackwright.md, roots from catalog.py DEFAULT_INSTALL_ROOTS['agent'] with expanduser",
+    "canonical_sha256_prefix": "feb687011feedea7",
+    "roots": {"claude": "match", "codex": "match", "hermes": "match", "omp": "match", "prime-agent": "match"},
+    "roots_evaluated": 5,
+    "agent_roots": {"claude": "~/.claude/agents", "codex": "~/.codex/agents", "hermes": "~/.hermes/agents", "omp": "~/.omp/agent/agents", "prime-agent": "~/.prime/agent/agents"}
+  },
+  "unchanged_and_still_true": [
+    "installed is not loaded: the declared load patterns in catalog.py LOAD_PATTERNS are claude=*.md, codex=*.toml, hermes=*.json, so the .md asset sits in codex and hermes roots outside their declared pattern — `loaded` for codex and hermes stays UNVERIFIED, and this is why NB-03 exists",
+    "durable-build and rig-build-standard skill parity at six roots was recomputed with expanduser and is 6/6 byte-identical (that part of v4 stands)"
+  ],
+  "process_lesson_recorded": "second evidence bug this session from trusting a cached probe at seal time (first: literal `~` in install-root expansion). Seal-time recomputation is now done for every parity claim in this receipt chain, not carried forward.",
+  "no_code_changed": true,
+  "no_surface_written": true
+}

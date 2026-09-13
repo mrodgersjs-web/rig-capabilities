@@ -1,0 +1,24 @@
+{
+  "receipt": "S11-a",
+  "claim": "estate-ledger classification path registered from real bytes; loader BLOCKS honestly — no stored PASS reused, no default favorability",
+  "process_id": "estate_automation_ledger_v1",
+  "registered_files": {
+    "estate_ledger.py": "80a46574c18406b6161401270f30eb605252ee39c430405a1f0e664e04f3f98d",
+    "estate_validator.py": "4a39f60c074ea576506712d8d347e6e28ae989666a9da65019f38f3d92ae16c8",
+    "tool_selection.py": "9c297d443c2430bc127500a5dbd6f8e9cc33d1da76a5a91ffce4ed720d97e333"
+  },
+  "process_record_sha256": "8ab1113ef0ae55f69bc40b8272c2f02d3e6b0dceac7dc6c8ee13f366ddca5f11",
+  "snapshot_note": "bytes snapshotted AFTER OwnerRouting's `if scheduled:` hunk landed in estate_ledger.py (confirmed by OwnerRouting via IRC; estate_validator.py zero edits)",
+  "entrypoints": ["select_framework (tool_selection.py, self-bound)", "validate_lattice (tool_selection.py, self-bound)"],
+  "command": "bin/rig-determinism-85 inventory estate_automation_ledger_v1",
+  "exit": 2,
+  "block": {"reason": "EXTERNAL_CALL_UNRESOLVED", "detail": "os.environ.get: opaque at 'environ'"},
+  "blockers_behind_first_block": [
+    {"pattern": "walrus in dict comprehension", "site": "estate_ledger.py:62", "expected": "SOURCE_UNSUPPORTED_GRAMMAR once externals resolve"},
+    {"pattern": "function-local imports", "sites": ["tool_selection.py:548", "tool_selection.py:765", "tool_selection.py:778", "tool_selection.py:806"], "expected": "SOURCE_UNSUPPORTED_GRAMMAR"},
+    {"pattern": "except clauses (count across the three snapshot files)", "count": 17, "expected": "blocked by _validate_callable_references probe"},
+    {"pattern": "sys.argv read", "sites": ["estate_ledger.py (1 ref)"], "expected": "needs sys.argv in allowed_calls; passes _verify_external_call"}
+  ],
+  "honest_status": "installed + configured (record + registry entry + source snapshot); NOT loaded (loader refuses at first declared external call)",
+  "analyzer_gap": "EXTERNAL_CALL_UNRESOLVED on os.environ.get is itself an AST-analyzer limitation, not a source defect: _verify_external_call (d85.py:1251-1296) resolves declared calls only through defs/classes/submodules/static imports in the locked artifact; `environ = _createenviron()` in os.py is a runtime-computed value the static surface cannot classify. See S12-analyzer-gap.json."
+}

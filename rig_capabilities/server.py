@@ -274,7 +274,8 @@ TOOLS = [
         "description": "Read-only rig_build status: both planes (record, measure) probed for "
                        "configuration/reachability, outbox total+pending, effective role. "
                        "configured=false is honest UNCONFIGURED, never a fabricated pass.",
-        "inputSchema": {"type": "object", "properties": {}},
+        "inputSchema": {"type": "object", "properties": {},
+                        "additionalProperties": False},
     },
     {
         "name": "capabilities_measure_quorum",
@@ -282,7 +283,8 @@ TOOLS = [
                        "count, span hours, and the stored qualification record if any.",
         "inputSchema": {"type": "object",
                         "properties": {"cell": {"type": "string"}},
-                        "required": ["cell"]},
+                        "required": ["cell"],
+                        "additionalProperties": False},
     },
     {
         "name": "capabilities_build_run",
@@ -290,7 +292,8 @@ TOOLS = [
                        "idempotency_key. configured=false is honest UNCONFIGURED.",
         "inputSchema": {"type": "object",
                         "properties": {"run_id": {"type": "string"},
-                                       "idempotency_key": {"type": "string"}}},
+                                       "idempotency_key": {"type": "string"}},
+                        "additionalProperties": False},
     },
     {
         "name": "capabilities_build_contract",
@@ -299,7 +302,8 @@ TOOLS = [
         "inputSchema": {"type": "object",
                         "properties": {"cell_id": {"type": "string"},
                                        "criteria_version": {"type": "string"}},
-                        "required": ["cell_id"]},
+                        "required": ["cell_id"],
+                        "additionalProperties": False},
     },
     {
         "name": "capabilities_observe",
@@ -934,13 +938,16 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from .connectors import connector_status
         return connector_status(repo)
 
-    def build_store_status(_args: dict):
+    def build_store_status(args: dict):
         from . import build_store as _bs, measure_store as _ms
+        _build_closed(args, (), "capabilities_build_store")
         return {"record": _bs.status(), "measure": _ms.status()}
 
     def measure_quorum(args: dict):
         from . import measure_store as _ms
-        cell = str(args.get("cell", ""))
+        _build_closed(args, ("cell",), "capabilities_measure_quorum")
+        _build_required(args, ("cell",), "capabilities_measure_quorum")
+        cell = str(args["cell"]).strip()
         out = {"cell": cell, "configured": False}
         try:
             conn = _ms.connect()
@@ -979,6 +986,12 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return out
 
     def build_run(args: dict):
+        _build_closed(args, ("run_id", "idempotency_key"),
+                      "capabilities_build_run")
+        if not (str(args.get("run_id", "")).strip()
+                or str(args.get("idempotency_key", "")).strip()):
+            return {"configured": False,
+                    "error": "missing required arg(s): run_id or idempotency_key"}
         return _build_read(
             lambda bs, conn, a: bs.get_run(
                 conn, run_id=str(a.get("run_id", "")).strip() or None,
@@ -986,6 +999,8 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
             args, ())
 
     def build_contract(args: dict):
+        _build_closed(args, ("cell_id", "criteria_version"),
+                      "capabilities_build_contract")
         return _build_read(
             lambda bs, conn, a: bs.cell_contract(
                 cell_id=str(a.get("cell_id", "")).strip(),
@@ -1330,14 +1345,25 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
                             "(closed schema; identity/verdict fields are "
                             "never accepted from callers)")
 
+    def _build_required(args: dict, required: tuple, tool: str) -> None:
+        """A declared-required key must be refused by name, not surfaced as a
+        raw KeyError from the dict comprehension below it."""
+        missing = [k for k in required if not str(args.get(k, "")).strip()]
+        if missing:
+            raise ToolError(f"{tool}: missing required field: "
+                            + ", ".join(missing))
+
     def _build_store():
         """Connect or return the named blocker — a missing target is an
-        explicit blocked/unknown state, never a fabricated success."""
+        explicit blocked/unknown state, never a fabricated success. Catches
+        every connect failure: psycopg2 raises OperationalError (a sibling of
+        StoreError, not a subclass), and a configured-but-down DSN must answer
+        `blocked`/`unknown`, not crash into the generic translator."""
         from . import build_store
         try:
             return build_store, build_store.connect()
-        except build_store.StoreError as exc:
-            return build_store, None, str(exc)
+        except Exception as exc:  # noqa: BLE001 — named blocker, never a crash
+            return build_store, None, f"{type(exc).__name__}: {exc}"
 
     _DIAG_KEYS = ("goal", "cell_id", "done_test", "out_of_scope",
                   "effort_budget", "evidence_refs")
@@ -1346,6 +1372,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from . import build_diagnose as bd
         from .build_index import current_pack_sha
         _build_closed(args, _DIAG_KEYS, "capabilities_build_diagnose")
+        _build_required(args, _DIAG_KEYS, "capabilities_build_diagnose")
         try:
             packet = bd.diagnose({k: args[k] for k in _DIAG_KEYS})
         except bd.DiagnoseError as exc:
@@ -1413,6 +1440,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from . import build_diagnose as bd, build_store
         _build_closed(args, _DIAG_KEYS + ("process_key", "process_version"),
                       "capabilities_build_run_start")
+        _build_required(args, _DIAG_KEYS, "capabilities_build_run_start")
         try:
             packet = bd.diagnose({k: args[k] for k in _DIAG_KEYS})
         except bd.DiagnoseError as exc:
@@ -1453,6 +1481,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         from . import build_store
         _build_closed(args, ("run_id", "cursor", "limit"),
                       "capabilities_build_run_get")
+        _build_required(args, ("run_id",), "capabilities_build_run_get")
         cur = int(args.get("cursor") or 0)
         lim = min(int(args.get("limit") or 25), 100)
         res = _build_store()
@@ -1473,7 +1502,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
             c.execute("""SELECT sequence, kind, payload, fencing_token,
                                 occurred_at FROM rig_build.run_events
                          WHERE run_id=%s ORDER BY sequence DESC
-                         LIMIT %s""", (args["run_id"], lim))
+                         LIMIT %s OFFSET %s""", (args["run_id"], lim, cur))
             ecols = [d[0] for d in c.description]
             events = [dict(zip(ecols, r)) for r in c.fetchall()]
             return {"read_only": True, "state": "live", "run": run,

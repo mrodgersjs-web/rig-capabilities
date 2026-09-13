@@ -1,0 +1,64 @@
+{
+  "schema": "rig.backend.proof.wave/1",
+  "task_id": "agentic-stack-buildout",
+  "generated_at": "2026-09-13T05:02:00Z",
+  "wave": "Section IV behavior proofs (B30, B42-B45, B47, B48) + server contract repairs + follow-on install",
+  "repository": "/Users/rig128gb/Developer/rig-capabilities",
+  "head_note": "HEAD kept moving during this session (another agent commits continuously); every claim is bound to artifact sha256 in receipts/hashes-v5.json",
+
+  "solo_full_suite": {
+    "command": "python3 -m unittest discover -s tests",
+    "result": "Ran 1101 tests in 245.544s / OK (skipped=2) / rc=0",
+    "log": "runs/agentic-stack-buildout/receipts/suite-final-20260913T0500Z.txt",
+    "delta": "1073 -> 1101 tests (+23 MCP protocol, +5 live-Postgres proofs, +2 net elsewhere)",
+    "concurrency": "run solo with zero workers active; leftover .index.*.tmp after the run: 0",
+    "independent_recheck": "python3 -m unittest tests.test_build_store_postgres -v re-run by the conductor after the worker yielded -> Ran 5 tests, OK; 0 residual postgres processes"
+  },
+
+  "backend_proofs_now_green": {
+    "B42_migration_repeatability": "PROVEN against throwaway PostgreSQL 16.14 — apply twice through build_migrate.apply, rows inserted between applies survive byte-identical, wrong confirm token refused, verify() reports schema + 9 tables + 6 triggers + policies + roles read from the live catalog. ddl_sha256 1b21ac7c0a57... (proofs/b42_repeatability.json)",
+    "B43_role_isolation": "PROVEN — three login roles, each member of exactly one of rig_build_read/worker/verifier; 15-probe matrix of real database-level refusals; superuser/RLS-bypass DETECTED by a rolsuper|rolbypassrls probe and asserted non-bypassing before any denial is trusted. Verifier's record_qualification reaches the function's own guard and is refused by 'quorum n=1 < 72 attempts' — the quorum rule is real, not decorative (proofs/b43_role_isolation.json)",
+    "B44_mcp_protocol": "PROVEN — 23 tests over real stdio JSON-RPC (initialize, tools/list, tools/call): closed-schema refusals, verdict/identity injection refused across 80 sub-calls with zero accepted, unknown tool/method as JSON-RPC errors, unavailable-backend states honest, server survives every malformed call (proofs/mcp-b44-protocol.json)",
+    "B45_ten_multi_tool_scenarios": "PROVEN — all 10 PASS across diagnosis, missing dependency, approval staging, failure recovery, qualification (proofs/mcp-b45-scenarios.json)",
+    "B47_claim_fencing": "PROVEN — pg_terminate_backend mid-lease, fresh claim after expiry wins (fence 2), zombie settle refused and cannot move the row, runs_fencing_monotonic trigger refuses any token decrease for every role (proofs/b47_claim_fencing.json)",
+    "B48_outbox_reconciliation": "PROVEN — duplicate packet -> already_routed with exactly one outbox/run/source_document row; ambiguous ack lands unknown, unknown is never re-claimable even past expiry, blind pending settlement refused before touching the row, evidence-gated reconcile lands sent with attempt_count still 1 (proofs/b48_outbox_reconciliation.json)",
+    "B30_jit_tool_teaching": "PROVEN — capabilities/skills/rig-build-mcp/SKILL.md installed at 6/6 harness roots byte-identical; done_when `./bin/rig-capabilities test rig-build-mcp` -> rc=0, pass=true, ran=4"
+  },
+
+  "real_defects_found_and_fixed": [
+    {
+      "defect": "worker's trial-recording verb was dead: 0002 granted EXECUTE on rig_build.record_trial, but record_trial is SECURITY INVOKER (0001:147-160) and nobody held INSERT ON rig_build.trial — invisible to the sqlite/fake suites, 'permission denied for table trial' on a live database",
+      "fix": "GRANT INSERT ON rig_build.trial TO rig_build_worker (migrations/agentic-stack/0002_rig_build_roles.sql:42); a probe still proves the trial_named_fn trigger refuses a direct INSERT from the granted role, and UPDATE/DELETE remain ungranted",
+      "class": "grant-vs-function-execution-context mismatch — only a real Postgres can see it"
+    },
+    {
+      "defect": "six MCP contract violations in server.py (open schemas swallowing verdict keys; declared-required cell answered as ''; configured-but-down DSN crashing to a transport error; next_cursor echoed without the SQL ever applying it so a paging client looped on page 1; missing required key surfacing as raw KeyError; capabilities_build_run calling get_run with both ids None)",
+      "fix": "all six repaired at the shared helpers (_build_closed + new _build_required + _build_store named-blocker + LIMIT/OFFSET), six server.py-referencing lines above; details and file:line in proofs/mcp-server-contract-fixes-20260913T0432Z.json",
+      "plant_evidence": "restoring the open schema -> test_build_readers_advertise_closed_schemas_and_refuse_injection RED; restoring the narrow except -> test_configured_but_down_dsn_answers_unknown_state RED; server.py restored byte-for-byte (sha256 prefix fbb5ad8937cd286d) and GREEN",
+      "tests_followed_the_contract": "five tests that had pinned the defective behavior were rewritten to assert the correct contract rather than re-pinned to the new text"
+    },
+    {
+      "defect": "test-side lock starvation: an idle-in-transaction read in the count helper held ACCESS SHARE on rig_build.outbox and starved the re-apply's ALTER TABLE ... ENABLE ROW LEVEL SECURITY",
+      "fix": "helper commits after each read (tests/test_build_store_postgres.py::_count)"
+    }
+  ],
+
+  "five_state_honesty": {
+    "installed": "rig-build-standard 6/6, durable-build 6/6, rig-build-mcp 6/6, rig-stackwright.md 5/5 agent roots (all byte-identical, recomputed with expanduser at seal time)",
+    "configured": "TRUE — pack 588 rows sha f463e960137723d1..., rig_build DDL frozen with confirm token, roles 0001/0002 applied in throwaway targets",
+    "loaded": "UNVERIFIED — no foreign harness session restarted after install",
+    "exercised": "TRUE for this harness (protocol suite, loop cases, done_tests, live-Postgres proofs); UNVERIFIED in foreign harnesses",
+    "enforced": "PARTIAL — role isolation and fencing are enforced by the database itself (proven), instruction-surface enforcement still UNWIRED pending NB-01 + NB-04"
+  },
+
+  "what_this_wave_did_not_move": [
+    "0/588 Lattice cells qualified — no durable cell row exists in the repo tree; the throwaway clusters prove the mechanism, not any real cell outcome",
+    "NB-02 unchanged: nothing was applied to Supabase, rig-dev-db, or any RIG_CAP_DSN target; both workers used clusters they created and deleted, and residual postgres processes were re-verified at zero",
+    "NB-01 unchanged: build_standard_chain_v1 / estate_automation_ledger_v1 still unscoreable (hashlib.sha256 / os.environ.get static-analysis limits), so the four instruction-surface approvals remain unmintable",
+    "qualify admitted=TRUE branch stays UNVERIFIED: the out-of-tree certifier anchor ~/.rig/d85/certifier.digest does not exist on this host, so commit_gate anchor preflight fail-closes before the four receipts are evaluated — by design",
+    "page-distinctness for the OFFSET fix is not asserted by any protocol test (needs a cluster seeded beyond `limit` events); clamp and next_cursor are asserted"
+  ],
+
+  "artifact_sha256": "see runs/agentic-stack-buildout/receipts/hashes-v5.json (18 artifacts, full digests bound in the sealed payload)",
+  "disposition": "SUBMITTED_FOR_VERIFICATION"
+}

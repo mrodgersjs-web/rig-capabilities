@@ -1,0 +1,90 @@
+{
+  "archify_diagram_path": "runs/agentic-stack-buildout/d85/diagram.json",
+  "d85_realized_pass": true,
+  "durable_system": true,
+  "framework": "plain_python",
+  "inventory_sha256": "82d4cb9f34ed01cc6c44edb9a36541ab6679bb1a878a456bf4fcf6409e2135ad",
+  "lattice": {
+    "a1_failure": null,
+    "bms": {
+      "data_volume": 0.5,
+      "failure_cost": 0.5,
+      "level": "L3",
+      "mechanism_clarity": 0.95,
+      "past_failure_rate": 0.1,
+      "reversibility": 0.95
+    },
+    "cell_id": "L3-D2-A1-I1"
+  },
+  "model_necessity_claims": [
+    "advisory verdict from an isolated cross-family reviewer subprocess whose report is schema-checked, run_id-matched and verdict-vetted by deterministic parser code; the engine itself never lets the reviewer output bypass the parse gate"
+  ],
+  "orchestration_is_code": true,
+  "process_id": "rig_capabilities_engine_v1",
+  "properties": {
+    "agent_reasoning": {
+      "alternative_rejected_because": "a deterministic self-check cannot refute its own reasoning family; the acceptance contract requires an independent model-family verdict, so reviewer prose is necessary and only its schema-checked VerdictReport projection is trusted",
+      "deterministic_alternative": "bind the process's own deterministic checks as the verdict and skip external review",
+      "unstructured_input": "free-form cross-family reviewer prose verdict about the run artifact set"
+    },
+    "deterministic_step": {
+      "model_countermeasures": [
+        "the reviewer subprocess is classified MODEL with no deterministic credit",
+        "reviewer output is only consumed via parse_verdict, which rejects malformed payloads and mismatched run_id values",
+        "a missing or invalid reviewer verdict yields a deterministic NO_VERDICT failure record and no seal is emitted"
+      ],
+      "steps": [
+        {
+          "mechanism": "subprocess launch of the canonical rig-loop CLI provisioning the run state under the loop-state root",
+          "step": "provision_run"
+        },
+        {
+          "mechanism": "deterministic gate-table lookup over IQRSQPI stage artifacts",
+          "step": "check_stage_gates"
+        },
+        {
+          "mechanism": "subprocess launch of the canonical rig-loop slice executor",
+          "step": "run_slice"
+        },
+        {
+          "mechanism": "subprocess launch of an isolated cross-family reviewer; output consumed only through the deterministic parser",
+          "step": "dispatch_verifier"
+        },
+        {
+          "mechanism": "schema check, run_id match, and verdict-vocabulary vetting of the reviewer report (D85_VERDICT_MALFORMED on violation)",
+          "step": "parse_verdict"
+        },
+        {
+          "mechanism": "deterministic fallback to the local verdict file when the reviewer report is malformed",
+          "step": "record_fallback"
+        },
+        {
+          "mechanism": "deterministic NO_VERDICT failure record when no valid verdict exists",
+          "step": "record_failure"
+        },
+        {
+          "mechanism": "content-hash binding of run artifacts and verdict into the evidence packet",
+          "step": "bind_evidence"
+        },
+        {
+          "mechanism": "ProofPacket seal executed by the canonical loop CLI with proof hash",
+          "step": "seal_packet"
+        },
+        {
+          "mechanism": "receipt serialization to stdout for the calling harness",
+          "step": "emit_receipt"
+        }
+      ]
+    },
+    "outward_effect": {
+      "channel": "local filesystem via subprocess launch of the canonical rig-loop binary",
+      "effect_detail": "run state writes under the loop-state root and ProofPacket seals, executed only by the canonical loop CLI under Gate-D discipline",
+      "gate_d_class": "loop-state-write-and-seal"
+    }
+  },
+  "pydantic_models": [
+    "rig_capabilities_engine_v1:RunRecord",
+    "rig_capabilities_engine_v1:VerdictReport",
+    "rig_capabilities_engine_v1:SealReceipt"
+  ]
+}

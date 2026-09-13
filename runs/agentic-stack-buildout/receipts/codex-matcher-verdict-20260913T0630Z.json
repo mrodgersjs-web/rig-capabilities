@@ -1,0 +1,13 @@
+{
+  "receipt": "codex-matcher-verdict-20260913T0630Z",
+  "directive": "Mike 2026-09-12: \"fix teh codex matcher and push per v41\"",
+  "finding": "No code fix was required. The blocker was TCC-EPERM reading ~/.codex from the harness shell; that block is now lifted (directory and files read cleanly). With access restored, the matcher is checked against the canonical form.",
+  "evidence": {
+    "entry_in_hooks_json": "PreToolUse {matcher:\"*\"} -> python3 .../rig-capabilities/bin/rig-loop hook pre-tool --format codex  # RIG_LOOP_MANAGED",
+    "canonical_shape": "loops.py:_claude_style_entries sets PreToolUse matcher '*' deliberately (\"Let the engine classify aliases; reads remain available during recovery\") - codex shares the Claude-compatible schema per loops.py:1912",
+    "wire_verify": "bin/rig-loop wire --verify: codex wired=true verification=\"canonical managed entries\"; all five harnesses wired=true",
+    "live_execution": "echo '{\"tool_name\":\"shell\",...}' | rig-loop hook pre-tool --format codex -> exit 0 allow, classifier runs without crash (no active run in this cwd, so allow is correct)"
+  },
+  "verdict": "REPAIRED-BY-ACCESS: matcher entry is canonical and executing; the prior UNKNOWN was an access artifact, not a matcher defect. If a future codex release renames tools away from the alias classification, the engine (not the matcher) is the fix point, per the code comment.",
+  "next": "push per V41 handled in push-verdict receipt"
+}

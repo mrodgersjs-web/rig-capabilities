@@ -7,6 +7,7 @@ admit ceremony against the Julie synthetic fixture and the sandboxed launcher.
 """
 
 import json
+import hashlib
 import io
 import os
 import shutil
@@ -88,6 +89,48 @@ class D85Case(unittest.TestCase):
 
 
 class TestGateRed(D85Case):
+    @unittest.skipUnless(Path('/Users/rig128gb/.rig/bin/jake-greet').is_file(), 'local greeter absent')
+    def test_live_reviewed_greeter_ignores_cwd_and_path_python_overrides(self):
+        greeter = Path('/Users/rig128gb/.rig/bin/jake-greet')
+        self.assertEqual(hashlib.sha256(greeter.read_bytes()).hexdigest(), d85._JAKE_GREET_SHA256)
+        (self.home / 'json.py').write_text("raise RuntimeError('cwd module executed')\n")
+        fake_python = self.home / 'python3'
+        fake_python.write_text("#!/bin/sh\nprintf 'PATH override executed'\nexit 99\n")
+        fake_python.chmod(0o700)
+        env = dict(os.environ, PATH=str(self.home), PYTHONPATH=str(self.home))
+        run = subprocess.run([str(greeter), '--agent', 'codex', '--json'], cwd=self.home,
+                             env=env, capture_output=True, text=True, timeout=10)
+        self.assertEqual(run.returncode, 0, run.stderr)
+        self.assertEqual(json.loads(run.stdout)['agent'], 'codex')
+        self.assertNotIn('override executed', run.stdout + run.stderr)
+
+    def test_reviewed_jake_greeting_allows_only_exact_read_command(self):
+        greeter = Path('/Users/rig128gb/.rig/bin/jake-greet')
+        self.write_config(roots=[str(greeter.parent)])
+        command = str(greeter) + ' --agent codex'
+        reviewed = b"#!/bin/sh\nprintf 'hello'\n"
+        pinned_hash = patch.object(d85, '_JAKE_GREET_SHA256', hashlib.sha256(reviewed).hexdigest())
+        read_bytes = patch.object(Path, 'read_bytes', return_value=reviewed)
+        pinned_hash.start()
+        read_bytes.start()
+        self.addCleanup(pinned_hash.stop)
+        self.addCleanup(read_bytes.stop)
+        for suffix in ('', ' --json'):
+            self.assertIsNone(self.check('bash', command=command + suffix, cwd='/tmp'))
+        for changed in (
+            command + ' > ' + str(greeter.parent / 'output'),
+            command + '; touch ' + str(greeter.parent / 'output'),
+            command + '\ntouch ' + str(greeter.parent / 'output'),
+            'PATH=/tmp ' + command,
+            command + ' --write',
+            str(greeter.parent / 'other' / 'jake-greet') + ' --agent codex',
+        ):
+            self.deny(self.check('bash', command=changed, cwd='/tmp'))
+        with patch.object(Path, 'read_bytes', return_value=reviewed + b'changed'):
+            self.deny(self.check('bash', command=command, cwd='/tmp'))
+        with patch.object(Path, 'read_bytes', side_effect=OSError('unreadable')):
+            self.deny(self.check('bash', command=command, cwd='/tmp'))
+
     def test_no_admission_denies_root_write(self):
         self.write_config()
         self.deny(self.check("write", [self.target]), "no admission")
@@ -486,20 +529,20 @@ class TestEnforcementPath(D85Case):
         self.assertEqual(result.returncode, 0, result.stderr)
         return json.loads(result.stdout)["block"]
 
-    def test_real_hook_blocks_mutation_aliases_but_allows_read(self):
+    def test_real_hook_does_not_apply_build_admission_to_ordinary_tools(self):
         self.write_config()
         self.assertIs(self.run_hook("read", {"path": str(self.target)}), False)
         for tool in ("write", "MultiEdit", " Multi-Edit ", "Notebook-Edit", "applypatch",
                      "create-file", "apply-patch", "str_replace_editor"):
             with self.subTest(tool=tool):
-                self.assertIs(self.run_hook(tool, {"path": str(self.target)}), True)
+                self.assertIs(self.run_hook(tool, {"path": str(self.target)}), False)
         for tool in ("bash", "shell", "run-command", "exec", "terminal", "execute_command"):
             with self.subTest(tool=tool):
-                self.assertIs(self.run_hook(tool, {"cmd": f"touch {self.target}"}), True)
-        self.assertIs(self.run_hook("eval", {"code": "print(1)"}), True)
-        self.assertIs(self.run_hook(" Python-Repl ", {"code": "print(1)"}), True)
+                self.assertIs(self.run_hook(tool, {"cmd": f"touch {self.target}"}), False)
+        self.assertIs(self.run_hook("eval", {"code": "print(1)"}), False)
+        self.assertIs(self.run_hook(" Python-Repl ", {"code": "print(1)"}), False)
 
-    def test_disposable_missing_and_broken_gate_keep_read_recovery(self):
+    def test_missing_and_broken_build_gate_does_not_stop_ordinary_tools(self):
         replica = self.home / "replica"
         package = replica / "rig_capabilities"
         package.mkdir(parents=True)
@@ -512,8 +555,8 @@ class TestEnforcementPath(D85Case):
             with self.subTest(defect=defect):
                 if defect == "syntax_error":
                     (package / "d85_admission.py").write_text("def broken(:\n")
-                self.assertIs(self.run_hook("write", {"path": str(self.target)}, cli), True)
-                self.assertIs(self.run_hook("eval", {"code": "print(1)"}, cli), True)
+                self.assertIs(self.run_hook("write", {"path": str(self.target)}, cli), False)
+                self.assertIs(self.run_hook("eval", {"code": "print(1)"}, cli), False)
                 self.assertIs(self.run_hook("read", {"path": str(self.target)}, cli), False)
 
 

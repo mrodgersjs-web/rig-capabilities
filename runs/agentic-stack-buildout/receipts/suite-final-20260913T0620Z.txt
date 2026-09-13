@@ -1,0 +1,217 @@
+....................................................................................
+BLOCKED — needs live-target proof (not claimed by sqlite):
+  * run_events UPDATE/DELETE refusal by plpgsql trigger for EVERY role (sqlite harness has no triggers; only the store guard + PK are proven)
+  * run_events sequence-continuity trigger under concurrent cross-connection inserts (store guard proven single-connection only)
+  * cell_contracts / process_versions / approval_refs immutability triggers
+  * runs fencing_token monotonicity trigger
+  * least-privilege grants: rig_build_data_plane has no UPDATE/DELETE on append-only/frozen tables and no DELETE anywhere (B20/B43)
+  * RLS policies and the no-anonymous-exposure guarantee (needs live PG)
+  * build_migrate apply/verify against a real target incl. the identity probe (blocked on B11/B12: scoped credential + approval)
+  * psycopg2 code path of build_store.connect (driver present; no target reachable without the approved credential)
+................................................  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-certify.md — deliver capabilities-certify.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-certify.md — deliver capabilities-certify.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-concepts-build.md — deliver capabilities-concepts-build.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-concepts-build.md — deliver capabilities-concepts-build.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-db-sync.md — deliver capabilities-db-sync.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-db-sync.md — deliver capabilities-db-sync.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-dispatch-verify.md — deliver capabilities-dispatch-verify.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-dispatch-verify.md — deliver capabilities-dispatch-verify.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-done-test.md — deliver capabilities-done-test.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-done-test.md — deliver capabilities-done-test.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-realign.md — deliver capabilities-realign.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-realign.md — deliver capabilities-realign.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-round.md — deliver capabilities-round.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-round.md — deliver capabilities-round.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/harness-assembly-contract.md — deliver harness-assembly-contract.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/harness-assembly-contract.md — deliver harness-assembly-contract.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/iqrsqpi.md — deliver iqrsqpi.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/iqrsqpi.md — deliver iqrsqpi.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-corpus.md — deliver rig-capabilities-corpus.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-corpus.md — deliver rig-capabilities-corpus.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-register.md — deliver rig-capabilities-register.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-register.md — deliver rig-capabilities-register.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-lattice-system.md — deliver rig-lattice-system.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-lattice-system.md — deliver rig-lattice-system.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/skill-upgrades.md — deliver skill-upgrades.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/skill-upgrades.md — deliver skill-upgrades.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/write.md — deliver write.md
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/write.md — deliver write.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-certify.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-certify.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-concepts-build.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-concepts-build.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-db-sync.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-db-sync.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-dispatch-verify.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-dispatch-verify.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-done-test.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-done-test.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-realign.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-realign.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-round.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-round.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/harness-assembly-contract.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/harness-assembly-contract.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/iqrsqpi.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/iqrsqpi.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-corpus.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-corpus.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-register.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-register.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-lattice-system.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-lattice-system.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/skill-upgrades.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/skill-upgrades.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/write.md
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/write.md
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-certify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-certify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-concepts-build.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-concepts-build.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-db-sync.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-db-sync.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-dispatch-verify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-dispatch-verify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-done-test.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-done-test.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-realign.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-realign.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-round.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-round.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/harness-assembly-contract.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/harness-assembly-contract.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/iqrsqpi.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/iqrsqpi.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-corpus.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-corpus.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-register.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-register.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-lattice-system.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-lattice-system.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/skill-upgrades.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/skill-upgrades.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/write.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/write.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-certify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-certify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-concepts-build.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-concepts-build.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-db-sync.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-db-sync.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-dispatch-verify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-dispatch-verify.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-done-test.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-done-test.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-realign.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-realign.md — current
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/capabilities-round.md
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/capabilities-round.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/harness-assembly-contract.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/harness-assembly-contract.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/iqrsqpi.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/iqrsqpi.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-corpus.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-corpus.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-capabilities-register.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-capabilities-register.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/rig-lattice-system.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/rig-lattice-system.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/skill-upgrades.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/skill-upgrades.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/claude/write.md — current
+  [ok] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-cmd-jwp9595x/codex/write.md — current
+.s............................  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/comms-guard-throat-clear.sh — deliver comms-guard-throat-clear.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/comms-guard-throat-clear.sh — deliver comms-guard-throat-clear.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/goal-loop-startup.sh — deliver goal-loop-startup.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/goal-loop-startup.sh — deliver goal-loop-startup.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/guard-dangerous-commands.sh — deliver guard-dangerous-commands.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/guard-dangerous-commands.sh — deliver guard-dangerous-commands.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/guard-secret-write.sh — deliver guard-secret-write.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/guard-secret-write.sh — deliver guard-secret-write.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/immutable-surface-guard.sh — deliver immutable-surface-guard.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/immutable-surface-guard.sh — deliver immutable-surface-guard.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/jake-pushback.sh — deliver jake-pushback.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/jake-pushback.sh — deliver jake-pushback.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/rail-registry-four-way-gate.sh — deliver rail-registry-four-way-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/rail-registry-four-way-gate.sh — deliver rail-registry-four-way-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/rig-loop-hook.sh — deliver rig-loop-hook.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/rig-loop-hook.sh — deliver rig-loop-hook.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/session-size-guard.sh — deliver session-size-guard.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/session-size-guard.sh — deliver session-size-guard.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/skill-preload-precondition-gate.sh — deliver skill-preload-precondition-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/skill-preload-precondition-gate.sh — deliver skill-preload-precondition-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/tac-plan-gate.sh — deliver tac-plan-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/tac-plan-gate.sh — deliver tac-plan-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/task-authority-over-skill-authority.sh — deliver task-authority-over-skill-authority.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/task-authority-over-skill-authority.sh — deliver task-authority-over-skill-authority.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/working-memory-commit-gate.sh — deliver working-memory-commit-gate.sh
+  [plan] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/working-memory-commit-gate.sh — deliver working-memory-commit-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/comms-guard-throat-clear.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/comms-guard-throat-clear.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/goal-loop-startup.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/goal-loop-startup.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/guard-dangerous-commands.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/guard-dangerous-commands.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/guard-secret-write.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/guard-secret-write.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/immutable-surface-guard.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/immutable-surface-guard.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/jake-pushback.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/jake-pushback.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/rail-registry-four-way-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/rail-registry-four-way-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/rig-loop-hook.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/rig-loop-hook.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/session-size-guard.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/session-size-guard.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/skill-preload-precondition-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/skill-preload-precondition-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/tac-plan-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/tac-plan-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/task-authority-over-skill-authority.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/task-authority-over-skill-authority.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/omp/working-memory-commit-gate.sh
+  [wired] /var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/cap-hooksync-vvgjgf6o/prime/working-memory-commit-gate.sh
+..................................................s...........................type: APPROVE <admission_id>
+................................[d85-run] /usr/bin/sandbox-exec unavailable — cannot enforce the OS write boundary for a production automation. Fail closed.
+.....................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................PAIRED-RUNS RED: baseline:baseline:1: retained_negative_missing: 'PR-11B' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/valid_pair.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIRED-RUNS RED: baseline:baseline:2: retained_negative_missing: 'PR-11V' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/valid_pair.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIRED-RUNS RED: baseline:baseline:3: retained_negative_missing: 'N-77' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/valid_pair.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIR P-77 (T-42): correctness false->true delta=improved | tokens 48200->51800 x1.07 | wall_ms 185000->172000 x0.93 | differs_in=skill
+PAIRED-RUNS RED: ledger:2: two_variables_differ: pair 'P-21' varies model, skill — a pair with >1 free variable proves nothing about any single change and is rejected outright
+PAIRED-RUNS RED: baseline:baseline:1: retained_negative_missing: 'PR-11B' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/two_variables.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIRED-RUNS RED: baseline:baseline:2: retained_negative_missing: 'PR-11V' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/two_variables.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIRED-RUNS RED: baseline:baseline:3: retained_negative_missing: 'N-77' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/two_variables.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIRED-RUNS RED: baseline:baseline:3: retained_negative_missing: 'N-77' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/ledger_dropped_negative.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIR P-11 (T-11): correctness false->true delta=improved | tokens 50000->52500 x1.05 | wall_ms 190000->182000 x0.96 | differs_in=skill
+.PAIRED-RUNS RED: ledger:2: cost_regression: pair 'P-55' costs x2.50 tokens / x1.06 wall time at unchanged correctness — >=2x on either axis is a regression even when the run passes
+PAIR P-55 (T-55): correctness true->true delta=unchanged | tokens 40000->100000 x2.50 | wall_ms 90000->95000 x1.06 | differs_in=skill
+.PAIRED-RUNS RED: ledger:2: identical_config: pair 'P-33' ran the same configuration twice and calls the second run an improvement
+.PAIRED-RUNS RED: ledger:2: missing_cost_delta: claimed side has no numeric 'tokens'; acceptance is correctness AND cost, both axes
+.PAIRED-RUNS RED: ledger:1: no_pair: pair 'P-99' has no counterpart run recorded — an improvement claim needs the frozen baseline beside it
+.PAIRED-RUNS RED: baseline:baseline:3: retained_negative_missing: 'N-77' was recorded in /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/baseline_ledger.jsonl and is gone from /Users/rig128gb/Developer/rig-capabilities/examples/fixtures/paired-runs/ledger_dropped_negative.jsonl — a red run deleted for inconvenience destroys the negative half of the evidence
+PAIR P-11 (T-11): correctness false->true delta=improved | tokens 50000->52500 x1.05 | wall_ms 190000->182000 x0.96 | differs_in=skill
+.PAIR P-11 (T-11): correctness false->true delta=improved | tokens 50000->52500 x1.05 | wall_ms 190000->182000 x0.96 | differs_in=skill
+.PAIRED-RUNS RED: ledger:2: config_hash_mismatch: declared 'c345e68af744b273e1c8bf2ce086ad387c153082439fa4983cbff9fd2a05ac60' does not match recomputed 'c6a5d64a9421d7185f3bb96893987a9bf9a46df9785ccad0e810f088e4b6e24d' — the config was edited after (or not at) recording
+.PAIRED-RUNS RED: ledger:2: two_variables_differ: pair 'P-21' varies model, skill — a pair with >1 free variable proves nothing about any single change and is rejected outright
+.PAIR P-77 (T-42): correctness false->true delta=improved | tokens 48200->51800 x1.07 | wall_ms 185000->172000 x0.93 | differs_in=skill
+.......................................................................................{
+ "canonical_assets": 2,
+ "stored_blobs": 0,
+ "archive_allowed": 1,
+ "needs_review_count": 1,
+ "needs_review": [
+  "skill/ghost"
+ ],
+ "stored_content_drift": [],
+ "out": "/var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/tmpii3iozyy/docs/skillos/blob-license-ledger.json"
+}
+............................................................................................................................................................................................................self_test fails: ['report_plants_expected_10_got_0']
+doc_plants=8 report_plants=0 clean_reports=2
+.self_test fails: []
+doc_plants=8 report_plants=10 clean_reports=2
+...........................................
+----------------------------------------------------------------------
+Ran 1101 tests in 240.495s
+
+OK (skipped=2)

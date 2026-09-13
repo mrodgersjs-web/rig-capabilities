@@ -1,0 +1,25 @@
+{
+  "schema": "rig.backend.proof.wave.addendum/1",
+  "task_id": "agentic-stack-buildout",
+  "generated_at": "2026-09-13T05:14:00Z",
+  "supersedes_nothing": "appends to backend-proof-wave-20260913T0502Z.json; that receipt's `remains_unverified` first bullet is now obsolete and is closed here",
+  "sealed_packet": "d48c03066bb3e050... (v4) then ddaeeca9ad59d763... (v5); this addendum is sealed as v6",
+
+  "closed_gap": {
+    "was": "no protocol test asserted that two pages of capabilities_build_run_get have DIFFERENT event content, so the LIMIT/OFFSET fix was proven only by code path and by plants of the neighbouring contract",
+    "now": "tests/test_build_mcp_protocol.py::LivePagination::test_limit_clamped_and_pages_bounded asserts (a) the window at cursor=next_cursor differs from the cursor=0 window, (b) a limit=1 walk across the whole log yields no overlapping sequence, and (c) the walked set equals the single clamped page's set exactly — no more, no less",
+    "evidence": {
+      "green": "python3 -m unittest tests.test_build_mcp_protocol.LivePagination -v -> Ran 1 test, OK",
+      "plant": "dropping OFFSET from the events SQL again -> LivePagination FAILED (rc=1); server.py restored byte-for-byte (sha256 prefix fbb5ad8937cd286d) and the full protocol module returns Ran 23 tests, OK (rc=0)",
+      "test_file_sha256": "147df179f461ac76 was pre-edit; post-edit digest in the sealed payload"
+    },
+    "note": "the assertion replaced a `_record_finding(...)` block that deliberately asserted nothing about the outcome — a test that records whichever way a defect goes is not a guard"
+  },
+
+  "suite_state_after_addendum": {
+    "protocol_module": "Ran 23 tests, OK",
+    "last_solo_full_suite": "Ran 1101 tests in 245.544s / OK (skipped=2) / rc=0 (log: receipts/suite-final-20260913T0500Z.txt) — taken BEFORE this test-file edit; the edited module is green on its own and no other module reads this test file"
+  },
+
+  "disposition": "SUBMITTED_FOR_VERIFICATION"
+}

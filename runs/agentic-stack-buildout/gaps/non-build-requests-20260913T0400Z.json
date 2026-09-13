@@ -1,0 +1,117 @@
+{
+  "schema": "rig.gaps.non-build-requests/1",
+  "generated_at": "2026-09-13T04:00:00Z",
+  "task_id": "agentic-stack-buildout",
+  "plan_item": "A58 — submit unresolved cell/tool gaps as explicit non-build requests with consequences; pending requests remain open",
+  "authoritative_state": {
+    "criteria_pack_rows": 588,
+    "criteria_pack_sha256": "f463e960137723d13021fd169b00167d781dcfaee4a5fd7b15de4380c9bbc7c5",
+    "cell_bound_index_file": "data/durable-repeatable-index/index.jsonl",
+    "cell_bound_index_rows": 0,
+    "cells_qualified": "0/588",
+    "note": "Requests below are the named reasons the count cannot move without a decision or an approval. None of them is a build task; writing more code does not close any of them."
+  },
+
+  "requests": [
+    {
+      "id": "NB-01",
+      "title": "Extend the D85 static analyzer to resolve two stdlib assignment forms",
+      "ask": "Teach `_surface_of_py` to resolve `hashlib.sha256` (hashlib.py:307 assigns via `globals()[__func_name] = __get_hash(...)`) and `os.environ.get` (os.py:769 `environ = _createenviron()`), or approve removing those calls from reachable paths in the registered estate sources.",
+      "why_non_build": "This is a decision about the admission analyzer's semantics in a payload owned by another lane (rig-determinism-85 / d85.py), being edited concurrently. Declaring the externals again is provably a no-op — the registrar re-emits a byte-identical record.",
+      "blocked": [
+        "build_standard_chain_v1 and estate_automation_ledger_v1 cannot be scored (EXTERNAL_CALL_UNRESOLVED before any inventory hash exists)",
+        "therefore no `.classification.json` can be written for them without fabricating an inventory binding",
+        "therefore every Gate-D mint_command that recomputes score_realized fails before recording an approval",
+        "therefore the four instruction surfaces (A14-A22) stay UNWIRED and no certified durable-build run can mint a certificate"
+      ],
+      "affected_cells": ["L4-D1-A1-P", "L4-D2-A1-P", "L4-D3-A1-P", "every P-step cell whose certificate depends on a scoreable process"],
+      "affected_plan_items": ["S10-S14", "A14-A22", "B59", "all of Section V statistical qualification"],
+      "consequence_if_not_granted": "0/588 cells stay qualified; the standard is enforceable in code but cannot be exercised end to end on this estate.",
+      "owner": "rig-determinism-85 payload owner (analyzer lane)",
+      "status": "OPEN",
+      "evidence": ["runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0345Z.json#d85_process_state", "runs/agentic-stack-buildout/d85/receipts/S27-settled-handoff.json"]
+    },
+    {
+      "id": "NB-02",
+      "title": "Authorize the live `rig_build` storage target (B11/B12)",
+      "ask": "Name the Supabase project/database that owns `rig_build`, grant a scoped server-side credential, and approve applying the frozen DDL (ddl_sha256 recorded in the migrate plan) plus the role grants.",
+      "why_non_build": "Schema application, credential issuance, and role grants on shared infrastructure are exactly the class of change that requires typed approval — no amount of local code substitutes for the target.",
+      "blocked": ["B12-B22 live", "B42/B43 against the real target", "B44/B45/B53 with a live backend", "B50 restore receipts", "Section V 72/197-trial sampling"],
+      "affected_cells": ["every cell whose run record lives in rig_build (I1/Q1/R/S/Q2/P/I2 for all 588)"],
+      "affected_plan_items": ["B11", "B12", "B13", "B42", "B43", "B44", "B45", "B50", "B53", "B59"],
+      "consequence_if_not_granted": "The backend stays provable only against a throwaway cluster; durable run state, approval references, and qualification rows cannot exist, so no cell can ever be marked qualified.",
+      "owner": "Mike (infrastructure approval) + backend lane",
+      "status": "OPEN",
+      "evidence": ["runs/agentic-stack-buildout/backend/plan-20260912T225435496626Z.json"]
+    },
+    {
+      "id": "NB-03",
+      "title": "Decide the codex agent-asset format so `rig-stackwright` load can be verified",
+      "ask": "Confirm whether codex loads `~/.codex/agents/*.md` (659 entries there are mixed `.md` and `agency-*.toml`) or whether the canonical agent must ship as `.toml`. If `.toml`, approve a generated twin in `capabilities/agents/`.",
+      "why_non_build": "There is no `.toml` precedent in the canonical `capabilities/agents/` directory (all four assets are `.md`); inventing a second format without the runtime's answer is guesswork, and the harness does not attest which files it actually loads.",
+      "blocked": ["rig-stackwright.md loaded-state for codex (installed=TRUE, loaded=UNVERIFIED)"],
+      "affected_cells": ["L1-D1-A1-I1 (onboarding/agent-shape cell) for the codex runtime"],
+      "affected_plan_items": ["A40", "A55", "B29"],
+      "consequence_if_not_granted": "One of four runtimes keeps an unverifiable agent load; the standard's onboarding claim stays partial.",
+      "owner": "Mike / codex runtime owner",
+      "status": "OPEN",
+      "evidence": ["runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0345Z.json#five_state_honesty"]
+    },
+    {
+      "id": "NB-04",
+      "title": "Typed Gate-D approval for the four instruction surfaces",
+      "ask": "Approve the four staged rows (claude_code, hermes, omp, prime_agent) once NB-01 lands — mint and consume in the same interpreter context.",
+      "why_non_build": "Instruction surfaces are registered authority files. Nothing was written to them this session; dormancy was independently re-proved by marker grep (0 matches in all four targets).",
+      "blocked": ["configured-but-unwired standard (surface check rc=2)"],
+      "affected_cells": ["every cell whose mandatory doctrine must load in a foreign session"],
+      "affected_plan_items": ["A14-A18", "A55"],
+      "consequence_if_not_granted": "Agents keep relying on copied skill files rather than an enforced load — the exact failure A55 names.",
+      "owner": "Mike",
+      "status": "PENDING_MIKE_TYPED_APPROVAL",
+      "evidence": ["runs/agentic-stack-buildout/gate-d/surfaces/"]
+    },
+    {
+      "id": "NB-05",
+      "title": "Fix Memory OS write policy and search backend",
+      "ask": "Name the intake namespace that machine callers may write to, and repair the search backend (`ValidationError: knowledge_backend_failed`).",
+      "why_non_build": "Policy and backend health are outside any repo edit I can make; guessing namespace strings to probe the policy returned `knowledge_path_not_allowed` and `knowledge_write_requires_intake_namespace`, and probing further is noise, not progress.",
+      "blocked": ["durable cross-harness knowledge write for this buildout (durable record is currently receipts + sealed packet only)"],
+      "affected_cells": ["L7 memory/continuity cells for the buildout record"],
+      "affected_plan_items": ["A41"],
+      "consequence_if_not_granted": "The next session cannot retrieve this buildout's decisions through the memory front door; it depends on receipts on disk.",
+      "owner": "Memory OS warden",
+      "status": "OPEN",
+      "evidence": ["runs/agentic-stack-buildout/receipts/build-standard-wiring-final-20260913T0345Z.json#open_gaps_honest"]
+    },
+    {
+      "id": "NB-06",
+      "title": "Provider credentials for LangSmith evaluation (and any paid provider)",
+      "ask": "Either issue credentials or record the pack as blocked-live with a named non-build consequence.",
+      "why_non_build": "A30 is explicit: missing credentials means blocked live verification, not silent substitution.",
+      "blocked": ["A29/A30 live verification receipts"],
+      "affected_cells": ["L5-D2 observability cells for the provider-evaluation pack"],
+      "affected_plan_items": ["A29", "A30", "B39"],
+      "consequence_if_not_granted": "Evaluation claims for that pack stay UNVERIFIED; only redacted local tracing can be proven.",
+      "owner": "Mike",
+      "status": "OPEN"
+    },
+    {
+      "id": "NB-07",
+      "title": "A session-restart window to observe loaded/exercised/enforced per runtime",
+      "ask": "Restart one Claude, one Hermes, one codex, and one Prime session, then ask each to name the standard's gate vocabulary; record the four receipts.",
+      "why_non_build": "Load state is only observable in a session that starts after the install. No repo change can manufacture it, and this session predates the install.",
+      "blocked": ["upgrading installed/configured/wired to loaded/exercised/enforced"],
+      "affected_cells": ["L1-D1 onboarding cells across the four runtimes"],
+      "affected_plan_items": ["A55", "B29", "B30"],
+      "consequence_if_not_granted": "The five-state receipt stays honest but stuck at `configured`, which is precisely the gap between a copied file and enforcement.",
+      "owner": "Mike (four session restarts)",
+      "status": "OPEN"
+    }
+  ],
+
+  "not_requests": [
+    "catalog index publish race — fixed, regression-tested, plant-verified (IsADirectoryError on the shared name), solo suite green",
+    "stale durable-build installs — force-reinstalled and re-verified 6/6 byte-identical",
+    "unlink-on-failure on the index scratch file — reviewer P3 closed"
+  ]
+}

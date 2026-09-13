@@ -1,0 +1,44 @@
+{
+ "action": "plan",
+ "catalog_sync_law": "capabilities sync must NEVER truncate rig_build",
+ "confirm_token": "rig_build__ddl_v1__1b21ac7c0a57",
+ "connection": "NONE \u2014 plan proves shape only; a stored plan is never evidence the schema is live (that is verify)",
+ "ddl": "scripts/ddl_rig_build.sql",
+ "ddl_sha256": "1b21ac7c0a57107ea8a044426f1ef8d01cc330a226942fb7f706f633c60371eb",
+ "entities": [
+  "cell_contracts",
+  "process_versions",
+  "cell_bindings",
+  "runs",
+  "run_events",
+  "artifacts",
+  "approval_refs",
+  "source_documents",
+  "outbox"
+ ],
+ "entities_missing_from_portable": [],
+ "pg_only_law": {
+  "rls_enabled_on": [
+   "runs",
+   "run_events",
+   "artifacts",
+   "outbox",
+   "approval_refs"
+  ],
+  "roles": [
+   "rig_build_data_plane",
+   "rig_build_operator"
+  ],
+  "triggers": [
+   "run_events_append_only",
+   "run_events_next_sequence",
+   "cell_contracts_immutable",
+   "process_versions_immutable",
+   "approval_refs_immutable",
+   "runs_fencing_monotonic"
+  ]
+ },
+ "rollback_available": true,
+ "rollback_statement_count": 26,
+ "schema": "rig_build"
+}

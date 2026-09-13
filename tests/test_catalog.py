@@ -1190,6 +1190,8 @@ class CorpusRootTests(unittest.TestCase):
     def test_live_corpus_root_indexed(self):
         rows = [a for a in Repo(REPO_ROOT).load_index()["assets"]
                 if a["source"] == "intel-corpus"]
+        if not rows:
+            self.skipTest("intel-corpus external root not provisioned")
         self.assertGreater(len(rows), 50)
         self.assertTrue(all((a.get("quality") or {}).get("verified_on")
                             for a in rows))
@@ -1347,7 +1349,8 @@ class CertifyTests(unittest.TestCase):
         self.addCleanup(shutil.rmtree, tmp, True)
         shutil.copytree(REPO_ROOT, tmp / "repo",
                         ignore=shutil.ignore_patterns(".git", ".venvs",
-                                                      ".apodex", "__pycache__"))
+                                                      ".apodex", ".local", "tree",
+                                                      "__pycache__"))
         return tmp / "repo"
 
     def test_acl_gate_green_then_planted_red(self):
@@ -1786,6 +1789,49 @@ class ProofchainTests(unittest.TestCase):
         self.assertIn("deadbeef", rep["missing"])
         self.assertIn("cafebabe", rep["found"])
         self.assertFalse(rep["ok"])
+
+
+class IndexPublishRaceTests(unittest.TestCase):
+    """Index publication goes through a scratch file. One shared name let two
+    rebuilds steal each other's file — FileNotFoundError on replace, or a torn
+    index handed to the next reader."""
+
+    def test_publication_survives_a_competitor_holding_the_shared_name(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        # Another publisher owning that exact path is the old failure condition.
+        (repo.root / ".index.tmp").mkdir()
+        doc = repo.load_index(force=True)
+        self.assertTrue(doc["assets"])
+        self.assertTrue(repo.index_path.exists())
+
+    def test_concurrent_forced_rebuilds_all_succeed(self):
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        code = ("import sys; sys.path.insert(0, %r);"
+                "from pathlib import Path;"
+                "from rig_capabilities.catalog import Repo;"
+                "sys.exit(0 if Repo(Path(sys.argv[1])).load_index(force=True)['assets'] else 1)"
+                % str(REPO_ROOT))
+        procs = [subprocess.Popen([sys.executable, "-c", code, str(repo.root)])
+                 for _ in range(4)]
+        self.assertEqual([0, 0, 0, 0], [p.wait() for p in procs])
+        self.assertEqual([], sorted(p.name for p in repo.root.glob(".index.*.tmp")))
+
+    def test_a_failed_replace_leaves_no_scratch_behind(self):
+        """The rename can fail for reasons unrelated to concurrency (a directory
+        squatting the index path). The scratch file is gone either way — litter
+        here would be re-picked by the next publisher."""
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = make_fixture(Path(tmp.name))
+        repo.index_path.unlink()          # make_fixture built a real index first
+        repo.index_path.mkdir()
+        with self.assertRaises(OSError):
+            repo.load_index(force=True)
+        self.assertEqual([], sorted(p.name for p in repo.root.glob(".index.*.tmp")))
 
 
 if __name__ == "__main__":

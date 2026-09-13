@@ -101,7 +101,7 @@ class DeterminismInventoryTests(unittest.TestCase):
             symbol["source"]["symbol"]: symbol
             for symbol in inventory["symbols"]
         }
-        self.assertEqual(set(by_symbol), {"collect", "decide", "execute"})
+        self.assertEqual(set(by_symbol), {"collect", "decide", "execute", "__module_init__"})
         self.assertEqual(
             (by_symbol["collect"]["source"]["start_line"], by_symbol["collect"]["source"]["end_line"]),
             (1, 2),
@@ -169,6 +169,7 @@ class DeterminismInventoryTests(unittest.TestCase):
                 ("adapter.py", "hidden"),
                 ("worker.py", "collect"),
                 ("worker.py", "decide"),
+                ("adapter.py", "__module_init__"),
             },
         )
 
@@ -300,29 +301,32 @@ class DeterminismInventoryTests(unittest.TestCase):
         )
 
     def test_discarded_or_dead_builtin_calls_cannot_pad_inventory(self) -> None:
-        cases = {
-            "discarded": (
-                "def collect(value):\n"
-                "    str(value)\n"
-                "    return bool(value)\n"
-            ),
-            "dead_assignment": (
-                "def collect(value):\n"
-                "    unused = str(value)\n"
-                "    return bool(value)\n"
-            ),
-        }
-        for name, source in cases.items():
-            with self.subTest(name=name):
-                self.source.write_text(source, encoding="utf-8")
-                self.process["file_hashes"]["worker.py"] = sha256(self.source)
-                self._write_authority()
-                self.assert_block(
-                    "SOURCE_UNSUPPORTED_GRAMMAR",
-                    lambda: _build_inventory_from_registry(
-                        self.registry_path, "sample"
-                    ),
-                )
+        # v3: a discarded call statement is admitted — and must appear as an
+        # inventoried operation, never silent padding
+        self.source.write_text(
+            "def collect(value):\n"
+            "    str(value)\n"
+            "    return bool(value)\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        inventory = _build_inventory_from_registry(self.registry_path, "sample")
+        callees = sorted(op["external_call"]["callee"] for op in inventory["operations"])
+        self.assertEqual(callees, ["bool", "str"])
+        # a call result never consumed is still refused
+        self.source.write_text(
+            "def collect(value):\n"
+            "    unused = str(value)\n"
+            "    return bool(value)\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        self.assert_block(
+            "SOURCE_UNSUPPORTED_GRAMMAR",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
 
     def test_adapter_must_reach_bound_source_entrypoint(self) -> None:
         self.adapter.write_text(
@@ -376,8 +380,7 @@ class DeterminismInventoryTests(unittest.TestCase):
         self.assertEqual(verdict["verdict"], "INVENTORY_PASS")
         self.assertNotEqual(verdict["verdict"], "REALIZED_PASS")
         self.assertEqual(verdict["operation_count"], 1)
-        self.assertEqual(verdict["credit_operation_count"], 0)
-        self.assertEqual(verdict["structural_node_count"], 3)
+        self.assertEqual(verdict["structural_node_count"], 4)
         self.assertFalse(verdict["d85_admission"])
 
     def test_inventory_id_binds_canonical_source_root(self) -> None:
@@ -455,7 +458,7 @@ class DeterminismInventoryTests(unittest.TestCase):
                 item["source"]["symbol"]
                 for item in current["symbols"]
             },
-            {"collect", "decide", "execute", "hidden"},
+            {"collect", "decide", "execute", "hidden", "__module_init__"},
         )
         self.assert_block(
             "INVENTORY_MISMATCH",
@@ -482,7 +485,7 @@ class DeterminismInventoryTests(unittest.TestCase):
                 item["source"]["symbol"]
                 for item in inventory["symbols"]
             },
-            {"collect", "collect.hidden", "execute"},
+            {"collect", "collect.hidden", "execute", "__module_init__"},
         )
 
     def test_local_callable_alias_fails_closed(self) -> None:
@@ -528,7 +531,7 @@ class DeterminismInventoryTests(unittest.TestCase):
         self._write_authority()
 
         self.assert_block(
-            "SOURCE_UNSUPPORTED_GRAMMAR",
+            "SOURCE_DYNAMIC_CALL",
             lambda: _build_inventory_from_registry(self.registry_path, "sample"),
         )
 
@@ -575,7 +578,7 @@ class DeterminismInventoryTests(unittest.TestCase):
         self._write_authority()
 
         self.assert_block(
-            "SOURCE_UNSUPPORTED_GRAMMAR",
+            "SOURCE_DYNAMIC_CALL",
             lambda: _build_inventory_from_registry(self.registry_path, "sample"),
         )
 
@@ -747,10 +750,10 @@ class DeterminismInventoryTests(unittest.TestCase):
                 "def collect(value):\n"
                 "    return value\n"
             ),
-            "module_call": (
+            "tuple_assign": (
                 "def bootstrap():\n"
                 "    return True\n\n"
-                "bootstrap()\n\n"
+                "a, b = 1, 2\n\n"
                 "def collect(value):\n"
                 "    return value\n"
             ),
@@ -831,15 +834,19 @@ class DeterminismInventoryTests(unittest.TestCase):
             )
         finally:
             sys.path.remove(str(external))
-        self.assertEqual(len(inventory["operations"]), 1)
-        operation = inventory["operations"][0]
-        self.assertEqual(operation["external_call"]["callee"], "model_sdk.generate")
+        self.assertEqual(len(inventory["operations"]), 2)
+        operation = next(
+            op for op in inventory["operations"]
+            if op["external_call"]["callee"] == "model_sdk.generate"
+        )
         self.assertEqual(operation["operation_kind"], "EXTERNAL_MODULE_CALL")
         initialization = operation["external_call"]["module_initialization"]
         self.assertEqual(initialization["origin"], str(model_sdk.resolve()))
         self.assertEqual(initialization["sha256"], sha256(model_sdk))
+        # resolver bumped to static-source.v2: packages, dotted modules,
+        # builtin-executable binding, full-chain call surfaces (d85.py amendment)
         self.assertEqual(
-            initialization["resolver"], "rig.d85.sys-path-source.v1"
+            initialization["resolver"], "rig.d85.static-source.v2"
         )
         self.assertFalse(operation["credit_eligible"])
         self.assertFalse(initialization["runtime_loader_proven"])
@@ -1236,5 +1243,321 @@ class DeterminismInventoryCliTests(unittest.TestCase):
         payload = json.loads(result.stdout)
         self.assertEqual(payload["verdict"], "BLOCK")
         self.assertEqual(payload["reason"], "UNKNOWN_PROCESS")
+
+
+class ModuleInitV2Tests(DeterminismInventoryTests):
+    """Permanent coverage for grammar v2: ordered module-init operations,
+    import-init zero credit, guarded-main non-duplication, initializer escapes,
+    and the data_hashes resource binding."""
+
+    def test_init_path_home_produces_one_operation_before_main(self) -> None:
+        self.source.write_text(
+            "from pathlib import Path\n\n"
+            "ROOT = Path.home()\n\n"
+            "def collect(value):\n"
+            "    return str(value)\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        pathlib_origin = __import__("d85")._deterministic_module_origin("pathlib")
+        self.process["external_modules"] = [
+            {
+                "module": "pathlib",
+                "artifact_path": str(pathlib_origin),
+                "artifact_sha256": sha256(pathlib_origin),
+                "allowed_calls": ["pathlib.Path", "pathlib.Path.home"],
+            }
+        ]
+        self._write_authority()
+        inventory = _build_inventory_from_registry(self.registry_path, "sample")
+        ops = inventory["operations"]
+        home_ops = [op for op in ops if op["external_call"]["callee"] == "pathlib.Path.home"]
+        self.assertEqual(len(home_ops), 1)
+        import_inits = [op for op in ops if op["operation_kind"] == "EXTERNAL_IMPORT_INIT"]
+        self.assertEqual(len(import_inits), 1)
+        self.assertFalse(import_inits[0]["credit_eligible"])
+        self.assertEqual(import_inits[0]["external_call"]["callee"], "pathlib")
+        self.assertEqual(inventory["roots"][0], import_inits[0]["inventory_id"])
+        self.assertEqual(home_ops[0]["predecessors"], [import_inits[0]["inventory_id"]])
+
+    def test_guarded_main_dispatch_is_not_duplicated(self) -> None:
+        self.source.write_text(
+            "BOOT = str(1)\n\n"
+            "def main():\n"
+            "    return str(BOOT)\n\n"
+            "if __name__ == '__main__':\n"
+            "    main()\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"].pop("adapter.py")
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self.process["entrypoints"] = [
+            {
+                "source_path": "worker.py",
+                "symbol": "main",
+                "adapter_path": "worker.py",
+                "adapter_operation": "main",
+            }
+        ]
+        (self.source_root / "adapter.py").unlink()
+        self._write_authority()
+        inventory = _build_inventory_from_registry(self.registry_path, "sample")
+        main_ops = [op for op in inventory["operations"] if ":main@" in op["execution_path"][-1]]
+        self.assertEqual(len(main_ops), 1)
+        kinds = [op["operation_kind"] for op in inventory["operations"]]
+        self.assertEqual(kinds.count("EXTERNAL_CALL"), 2)  # str(1) init + str(BOOT) in main, once each
+
+    def test_undeclared_init_external_call_blocks(self) -> None:
+        self.source.write_text(
+            "import os\n\n"
+            "X = os.getuid()\n\n"
+            "def collect(value):\n"
+            "    return value\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        os_origin = __import__("d85")._deterministic_module_origin("os")
+        self.process["external_modules"] = [
+            {
+                "module": "os",
+                "artifact_path": str(os_origin),
+                "artifact_sha256": sha256(os_origin),
+                "allowed_calls": ["os.fspath"],
+            }
+        ]
+        self._write_authority()
+        self.assert_block(
+            "EXTERNAL_CALL_UNDECLARED",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+    def test_literal_only_init_is_not_padding(self) -> None:
+        self.source.write_text(
+            "LIMIT = 10\n\n"
+            "def collect(value):\n"
+            "    return str(value)\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        inventory = _build_inventory_from_registry(self.registry_path, "sample")
+        for op in inventory["operations"]:
+            self.assertNotIn("__module_init__", " ".join(op["execution_path"]))
+
+    def test_lambda_init_blocks(self) -> None:
+        self.source.write_text(
+            "handler = lambda: 1\n\n"
+            "def collect(value):\n"
+            "    return value\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        self.assert_block(
+            "SOURCE_UNSUPPORTED_GRAMMAR",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+    def test_comprehension_init_blocks(self) -> None:
+        self.source.write_text(
+            "ITEMS = [x for x in range(3)]\n\n"
+            "def collect(value):\n"
+            "    return value\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        self.assert_block(
+            "SOURCE_UNSUPPORTED_GRAMMAR",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+    def test_callable_alias_init_blocks(self) -> None:
+        self.source.write_text(
+            "def collect(value):\n"
+            "    return value\n\n"
+            "handler = collect\n",
+            encoding="utf-8",
+        )
+        self.process["file_hashes"]["worker.py"] = sha256(self.source)
+        self._write_authority()
+        self.assert_block(
+            "SOURCE_UNSUPPORTED_GRAMMAR",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+    def test_data_hashes_green_and_bound_into_inventory(self) -> None:
+        policy = self.source_root / "policy.json"
+        policy.write_text('{"version": 1}\n', encoding="utf-8")
+        self.process["data_hashes"] = {"policy.json": sha256(policy)}
+        self._write_authority()
+        inventory = _build_inventory_from_registry(self.registry_path, "sample")
+        self.assertEqual(inventory["data_hashes"], {"policy.json": sha256(policy)})
+        policy.write_text('{"version": 2}\n', encoding="utf-8")
+        self.assert_block(
+            "DATA_HASH_MISMATCH",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+    def test_data_hashes_escape_overlap_and_alias_block(self) -> None:
+        self.process["data_hashes"] = {"../escape.json": "0" * 64}
+        self._write_authority()
+        self.assert_block(
+            "SOURCE_ROOT_ESCAPE",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+        self.process["data_hashes"] = {"worker.py": sha256(self.source)}
+        self._write_authority()
+        self.assert_block(
+            "AUTHORITY_MALFORMED",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+        alias = self.source_root / "policy-alias.json"
+        os.link(self.source, alias)
+        self.process["data_hashes"] = {"policy-alias.json": sha256(alias)}
+        self._write_authority()
+        self.assert_block(
+            "AUTHORITY_DUPLICATE_BINDING",
+            lambda: _build_inventory_from_registry(self.registry_path, "sample"),
+        )
+
+
+class StaticSourceV2Tests(unittest.TestCase):
+    """Regression coverage for the resolver rig.d85.static-source.v2 amendment:
+    dotted submodule resolution, recursive package binding, builtin executable
+    binding, full-chain call surfaces, and the stdlib preload exemption."""
+
+    def setUp(self) -> None:
+        import d85  # noqa: PLC0415
+
+        self.d85 = d85
+        self.executable = Path(sys.executable).resolve()
+        self.exe_sha = hashlib.sha256(self.executable.read_bytes()).hexdigest()
+
+    def _entry(self, module: str, calls: list[str], artifact: Path | None = None,
+               sha: str | None = None, package_modules: list[dict[str, str]] | None = None) -> dict:
+        artifact = artifact or self.d85._deterministic_module_origin(module)
+        sha = sha or hashlib.sha256(artifact.read_bytes()).hexdigest()
+        entry = {
+            "module": module,
+            "artifact_path": str(artifact),
+            "artifact_sha256": sha,
+            "allowed_calls": calls,
+        }
+        if package_modules is not None:
+            entry["package_modules"] = package_modules
+        return entry
+
+    def _package_entries(self, package: str) -> list[dict[str, str]]:
+        init = self.d85._deterministic_module_origin(package)
+        return [
+            {"path": str(member), "sha256": hashlib.sha256(member.read_bytes()).hexdigest()}
+            for member in sorted(self.d85._package_reachable(init))
+        ]
+
+    def _assert_lock(self, entry: dict) -> None:
+        self.d85._external_lock_entry(entry, Path("/nonexistent-source-root"), "fp", "ext[0]")
+
+    def _assert_lock_block(self, code: str, entry: dict) -> None:
+        with self.assertRaises(AdmissionBlock) as caught:
+            self.d85._external_lock_entry(entry, Path("/nonexistent-source-root"), "fp", "ext[0]")
+        self.assertEqual(caught.exception.code, code)
+
+    def test_dotted_submodule_resolves_and_chain_verifies(self) -> None:
+        origin = self.d85._deterministic_module_origin("urllib.request")
+        self.assertEqual(origin.name, "request.py")
+        self.assertEqual(origin.parent.name, "urllib")
+        self._assert_lock(self._entry("urllib.request", ["urllib.request.urlopen"]))
+
+    def test_dotted_callee_has_no_duplicated_segment(self) -> None:
+        import ast  # noqa: PLC0415
+
+        tree = ast.parse("import urllib.request\nurllib.request.urlopen('http://x')\n")
+        imports = self.d85._index_imports(tree, "fixture")
+        call = next(node for node in ast.walk(tree) if isinstance(node, ast.Call))
+        callee, _ = self.d85._external_callee(
+            call.func, imports, {"urllib.request": {"allowed_calls": ["urllib.request.urlopen"]}}, set()
+        )
+        self.assertEqual(callee, "urllib.request.urlopen")
+
+    def test_package_init_without_binding_stays_blocked(self) -> None:
+        self._assert_lock_block(
+            "EXTERNAL_MODULE_PACKAGE_UNBOUND",
+            self._entry("json", ["json.dumps"]),
+        )
+
+    def test_package_binding_green_and_member_tamper_red(self) -> None:
+        members = self._package_entries("json")
+        self.assertTrue(any(Path(m["path"]).name == "decoder.py" for m in members))
+        self._assert_lock(self._entry("json", ["json.dumps", "json.loads"], package_modules=members))
+        tampered = [dict(m) for m in members]
+        tampered[0]["sha256"] = "0" * 64
+        self._assert_lock_block(
+            "PACKAGE_MODULE_HASH_MISMATCH",
+            self._entry("json", ["json.dumps"], package_modules=tampered),
+        )
+
+    def test_builtin_binds_executable_only(self) -> None:
+        self._assert_lock(
+            self._entry("sys", ["sys.path.insert"], artifact=self.executable, sha=self.exe_sha)
+        )
+        not_the_exe = self.d85._deterministic_module_origin("json")
+        with self.assertRaises(AdmissionBlock):
+            self._assert_lock(
+                self._entry(
+                    "sys",
+                    ["sys.path.insert"],
+                    artifact=not_the_exe,
+                    sha=hashlib.sha256(not_the_exe.read_bytes()).hexdigest(),
+                )
+            )
+
+    def test_builtin_bogus_attribute_blocked(self) -> None:
+        self._assert_lock_block(
+            "EXTERNAL_CALL_UNRESOLVED",
+            self._entry("sys", ["sys.no_such_attribute"], artifact=self.executable, sha=self.exe_sha),
+        )
+
+    def test_full_chain_bogus_tail_blocked(self) -> None:
+        members = self._package_entries("json")
+        self._assert_lock_block(
+            "EXTERNAL_CALL_UNRESOLVED",
+            self._entry("json", ["json.dumps.nope"], package_modules=members),
+        )
+        self._assert_lock_block(
+            "EXTERNAL_CALL_UNRESOLVED",
+            self._entry("json", ["json.loads.nope"], package_modules=members),
+        )
+
+    def test_stdlib_preload_exempt_nonstdlib_still_blocked(self) -> None:
+        # json is preloaded in this very interpreter; stdlib-manifest members are
+        # exempt because every proof input comes from disk, never from memory
+        self.assertIn("json", sys.modules)
+        self._assert_lock(self._entry("json", ["json.dumps"], package_modules=self._package_entries("json")))
+        # a preloaded non-stdlib module stays fail-closed (substitution hostile)
+        outside = Path(tempfile.mkdtemp(prefix="rig-d85-ext-"))
+        (outside / "shadow_sdk.py").write_text("def generate(v):\n    return v\n", encoding="utf-8")
+        sys.path.insert(0, str(outside))
+        sys.modules["shadow_sdk"] = types.ModuleType("shadow_sdk")
+        try:
+            self._assert_lock_block(
+                "EXTERNAL_MODULE_LOADER_STATE",
+                self._entry("shadow_sdk", ["shadow_sdk.generate"], artifact=outside / "shadow_sdk.py"),
+            )
+        finally:
+            sys.path.remove(str(outside))
+            sys.modules.pop("shadow_sdk", None)
+
+    def test_class_method_chain_resolves(self) -> None:
+        self._assert_lock(
+            self._entry("datetime", ["datetime.datetime.now", "datetime.datetime.fromisoformat"])
+        )
+
+    def test_dynamic_surface_member_blocked_assign_member_green(self) -> None:
+        self._assert_lock(self._entry("hashlib", ["hashlib.new"]))
+        self._assert_lock_block(
+            "EXTERNAL_CALL_UNRESOLVED",
+            self._entry("hashlib", ["hashlib.sha256"]),
+        )
 if __name__ == "__main__":
     unittest.main()

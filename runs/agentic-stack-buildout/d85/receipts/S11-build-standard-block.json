@@ -1,0 +1,24 @@
+{
+  "receipt": "S11-b",
+  "claim": "build-standard chain registered from real bytes; loader BLOCKS honestly",
+  "process_id": "build_standard_chain_v1",
+  "registered_files": {
+    "rig_capabilities/criteria_pack.py": "b070410d4cd5e01841175726b5859586e574fc94b7879ff1d893ae1c218af3bb",
+    "rig_capabilities/build_index.py": "1682432800f2a839fbc4cfe7c5ccdbb30df0c1ab4ddf4ec5564f799396466715",
+    "rig_capabilities/commit_gate.py": "0ed9700057acd8557de252b9e7a0875e0d58ecffab9a9c4b285d1f8971ae3a7c"
+  },
+  "process_record_sha256": "08746cddcefedf8ba78067f921d0b689051ed258f0cf78cbe9e92f20afa8ea9c",
+  "entrypoints": ["main (criteria_pack.py, self-bound)", "check (commit_gate.py, self-bound)", "current_pack_sha (build_index.py, self-bound)"],
+  "command": "bin/rig-determinism-85 inventory build_standard_chain_v1",
+  "exit": 2,
+  "block": {"reason": "EXTERNAL_CALL_UNRESOLVED", "detail": "hashlib.sha256: missing 'sha256'"},
+  "blockers_behind_first_block": [
+    {"pattern": "hashlib re-export: hashlib.py imports sha256 inside try/except fallback chain; _surface_of_py does not index it as a resolvable symbol", "expected": "same analyzer gap class as os.environ"},
+    {"pattern": "os.environ.get / os.environ.pop value-typed externals", "expected": "EXTERNAL_CALL_UNRESOLVED"},
+    {"pattern": "unregistered intra-package import", "site": "commit_gate.py:51 `from rig_capabilities.measure import wilson_lb`", "expected": "SOURCE_EXTERNAL_IMPORT unless measure.py (+ its closure) is registered"},
+    {"pattern": "runtime sys.path manipulation before rig_lattice import", "site": "criteria_pack.py:39 `from rig_lattice.lattice import generator` after sys.path setup", "expected": "EXTERNAL_MODULE_LOADER_MISMATCH or SOURCE_EXTERNAL_IMPORT: rig_lattice is not on the CLI sys.path (REPO_ROOT + SKILL_ROOT only)"},
+    {"pattern": "except clauses", "expected": "blocked by _validate_callable_references probe"}
+  ],
+  "closure_note": "full registration of this chain needs the rig_capabilities intra-package import closure (measure.py et al.) plus either rig-lattice-system on the loader path or rig_lattice registered as a locked external package; none of that is faked here.",
+  "honest_status": "installed + configured; NOT loaded"
+}

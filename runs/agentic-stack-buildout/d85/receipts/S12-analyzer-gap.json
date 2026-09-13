@@ -1,0 +1,21 @@
+{
+  "receipt": "S12",
+  "claim": "AST analyzer blind spot recorded with a live reproduction (fixture under /tmp only — nothing committed, production registry untouched)",
+  "fixture": {
+    "root": "/tmp/d85-s12",
+    "src": "/tmp/d85-s12/src/dyn_worker.py",
+    "pattern": "fn = getattr(subprocess, TARGET); fn([...]) — target chosen at runtime via a module constant",
+    "registration": "throwaway temp authority dir via register_process.py --out-dir /tmp/d85-s12/authority; production authority/registry.json never referenced"
+  },
+  "command": "python3 -c \"import d85; d85._build_inventory_from_registry(Path('/tmp/d85-s12/authority/registry.json'), 's12_dynamic_gap_v1')\"",
+  "result": {"code": "SOURCE_DYNAMIC_CALL", "detail": "dyn_worker.py:15: getattr", "verdict": "BLOCK"},
+  "interpretation": [
+    "Correct fail-closed behavior for dynamic dispatch: the analyzer refuses rather than inventing an operation the bytes do not statically determine. This is the intended half of the gap record.",
+    "The second, real-world half is the value-surface gap: _verify_external_call (d85.py:1251-1296, per current live file) resolves declared external calls only through defs/classes/submodules/static imports in the locked artifact. Values COMPUTED at import time (os.environ = _createenviron()) or conditionally re-exported (hashlib.sha256 via try/except fallback) are unresolvable: they block estate_automation_ledger_v1 (os.environ.get: opaque at 'environ') and build_standard_chain_v1 (hashlib.sha256: missing 'sha256') — see S11 receipts. Real estate code legitimately uses these; the analyzer cannot yet admit them. Named gap, not a fabricated pass."
+  ],
+  "fixtures_observed": [
+    {"class": "dynamic dispatch", "evidence": "SOURCE_DYNAMIC_CALL dyn_worker.py:15: getattr (this fixture)"},
+    {"class": "runtime-computed module attribute", "evidence": "EXTERNAL_CALL_UNRESOLVED os.environ.get: opaque at 'environ' (estate_automation_ledger_v1, real bytes)"},
+    {"class": "conditional re-export", "evidence": "EXTERNAL_CALL_UNRESOLVED hashlib.sha256: missing 'sha256' (build_standard_chain_v1, real bytes)"}
+  ]
+}

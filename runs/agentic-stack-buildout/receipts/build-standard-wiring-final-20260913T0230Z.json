@@ -1,0 +1,201 @@
+{
+ "schema": "rig.build-standard.wiring.v3",
+ "supersedes": "8351cc939fbb2a46b1ed909363ffd79bda8a7ed155e550cbc46867c42b710721",
+ "task_id": "agentic-stack-buildout",
+ "generated_at": "2026-09-13T02:10:18Z",
+ "repo": "/Users/rig128gb/Developer/rig-capabilities",
+ "head_at_assembly": "7dddea84dc4435ec3ce9ee560dc3afa1b5e9192a",
+ "claims_bind_to_content_not_head": true,
+ "publisher_fix_recomputed_at_seal": {
+  "method": "AST: function body rendered with the docstring excluded, so the flag reads executed code only",
+  "executed_code": "tmp = self.index_path.with_name(f'.index.{os.getpid()}.tmp')\ntmp.write_text(json.dumps(doc, ensure_ascii=False), encoding='utf-8')\ntmp.replace(self.index_path)\nreturn doc",
+  "shared_scratch_name_in_executed_code": false,
+  "per_pid_tmp_in_executed_code": true
+ },
+ "claims": [
+  {
+   "claim": "index publication uses a per-process scratch name; a competitor holding the old shared path can no longer break it",
+   "evidence": {
+    "command": "python3 -m unittest tests.test_catalog.IndexPublishRaceTests",
+    "result": "OK (2 tests)",
+    "plant": "restoring with_suffix('.tmp') -> ERROR IsADirectoryError: .../.index.tmp; content-write restore -> OK",
+    "module": "python3 -m unittest tests.test_catalog -> Ran 119 tests, OK (skipped=2)"
+   }
+  },
+  {
+   "claim": "full suite green on the tree this seal binds, minus the two tests added after that log",
+   "evidence": {
+    "command": "python3 -m unittest discover -s tests",
+    "result": "Ran 1071 tests in 243.736s OK (skipped=2), rc=0",
+    "log": "runs/agentic-stack-buildout/receipts/suite-final-20260913T0105Z.txt",
+    "log_sha256": "5bcf1030ba79c11273b6f2ee99d8a99d7acb5d228b92507aa97ebe53c607aa23",
+    "gap": "1071-run predates tests.test_catalog.IndexPublishRaceTests; module run (119 OK) covers those; full re-run pending the concurrent worker"
+   }
+  },
+  {
+   "claim": "durable-build enforces a halt-tier non-forceable d85_certified gate and a cell-bound build_diagnosis gate",
+   "evidence": {
+    "command": "./bin/rig-loop test durable-build",
+    "result": "PASS \u2014 6/6 cases pass",
+    "exit_code": 0
+   }
+  },
+  {
+   "claim": "the three assets pass their own done_when",
+   "evidence": {
+    "command": "done_tests.run_asset",
+    "result": {
+     "rig-build-standard": "9 ran pass",
+     "rig-stackwright.md": "4 ran pass",
+     "durable-build": "7 ran pass"
+    }
+   }
+  },
+  {
+   "claim": "no instruction surface was written",
+   "evidence": {
+    "command": "./bin/rig-build-standard surface check",
+    "exit_code": 2,
+    "result": "all four UNWIRED; staging wrote zero bytes to targets (sha+mtime identical before/after)"
+   }
+  }
+ ],
+ "installed_sha_match_recomputed_at_seal": {
+  "rig-build-standard": {
+   "claude": true,
+   "codex": true,
+   "hermes": true,
+   "agents": true,
+   "omp": true,
+   "prime-agent": true
+  },
+  "durable-build": {
+   "claude": false,
+   "codex": false,
+   "hermes": false,
+   "agents": false,
+   "omp": false,
+   "prime-agent": false
+  },
+  "rig-stackwright.md": {
+   "claude": true,
+   "codex": true,
+   "hermes": true,
+   "prime-agent": true
+  }
+ },
+ "blockers": [
+  {
+   "item": "Gate-D approval for the four instruction surfaces cannot be minted at all right now",
+   "blast_radius": "all four mint_command entries, not just real-build certificate minting",
+   "observed_at_seal": "AdmissionBlock: EXTERNAL_CALL_UNRESOLVED: hashlib.sha256: missing 'sha256'",
+   "owner": "D85Authority (declaration data: hashlib.sha256, os.environ.get; stale classification)",
+   "instruction_for_mike": "do NOT run the mint commands yet \u2014 score_realized() raises before an approval is recorded",
+   "actions": [
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "claude_code"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "hermes"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "omp"
+    },
+    {
+     "kind": "wiring:instruction-surface",
+     "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+     "surface": "prime_agent"
+    }
+   ]
+  },
+  {
+   "item": "RIG Memory OS knowledge write unavailable",
+   "observed": "memory.write_knowledge rejected in 3 reference forms (knowledge_path_not_allowed / knowledge_write_requires_intake_namespace); memory.search_knowledge -> knowledge_backend_failed",
+   "state": "unavailable / pending refresh; durable facts live in this packet + repo receipts only"
+  },
+  {
+   "item": "loaded / exercised / enforced beyond the loop's own case runs",
+   "state": "UNVERIFIED \u2014 no foreign harness session observed consuming these assets; codex loads agents as *.toml natively"
+  }
+ ],
+ "provenance_verified": {
+  "cb66f06": {
+   "show_first_line": "commit cb66f064e483fb72a64d02ce439cd8f31784e91f",
+   "is_ancestor_of_head": true,
+   "touches": [
+    "rig_capabilities/loops.py | 65 ++++++++++++++++++++++++++---------------------",
+    "tests/test_loops.py       | 10 ++++----"
+   ]
+  }
+ },
+ "artifact_sha256": {
+  "rig_capabilities/catalog.py": "fbdfde3ca49c5605d0e052c56431da0a400636223bd6d7375ec37da4134ba57c",
+  "rig_capabilities/surfaces_render.py": "11698b9bdb287b977fdcebb3289b92ded582f2f02fb947bd8d0d0984da1d65f5",
+  "rig_capabilities/context_packet.py": "5f1930772d6c1a38b282c3372344dd14d5f2e2d90a95a7cf08a42e1350462e14",
+  "tests/test_catalog.py": "d92655ea1696c70d2c0b3e3b7dd4ae5cd2634126b39180b65aef9bf964307679",
+  "tests/test_build_standard.py": "722d1a552bd5ea0287b7210f417a935998b65fc5f5eb786b4ee5dfcb36bc60e6",
+  "tests/test_build_proofs.py": "dc2df347681395716bcbd552adc73d2a0615c0d40de94bdd13de54f50f18dcfb",
+  "capabilities/skills/rig-build-standard/SKILL.md": "b5066f0f73b06532a5cae84d478af0c29b1d0063362b0ef551906a9f406bd464",
+  "capabilities/skills/durable-build/SKILL.md": "22f0d9a3f51d521729d77df2dec2a43659982aabaa268e23f5d03da1d939f73b",
+  "capabilities/skills/durable-build/loop.yaml": "4082ab1e1852b31199f732883f5e680ef3eac88033522401903178fe8da4e451",
+  "capabilities/skills/durable-build/tests/cases.json": "9c3a5000db1b2ad37766b31ce4cb6d88478d761a9965ba182e146d0b44fbaf6b",
+  "capabilities/agents/rig-stackwright.md": "feb687011feedea72bc0526f266031b11a9aaaf5d9a747dfab05f789cb8c495b",
+  "capabilities/data/rig-build-standard/policy.md": "71c2b4c55ed5607322dd5b24bf9d86c59da629f7326267d4ea9917d2a2dda9e3",
+  "receipts/tracked-diff-20260913T0220Z.patch": "4f20733a6b0e5839cdd7cda75ba3df8730edc1cfc78fb0ffe7b3ed5c37b8689f",
+  "receipts/tracked-status-20260913T0220Z.txt": "b43f889be3100f55be62b0ae6ef855aed1204cab550115a598aee5a723765c5b"
+ },
+ "surfaces_staged": {
+  "claude_code": {
+   "candidate_sha256": "16c2e79cc6adbca8b921bdca04283990cf4a484edb7f4ecdad042c6caa276506",
+   "diff_sha256": "9aa035fc54a4be4d2e3571851bb65cc1516ab6ffe924e26f51b2599361555f90",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "claude_code"
+   }
+  },
+  "hermes": {
+   "candidate_sha256": "cf92bdd84e1fbc35f57681384e09c97b1798d6fdd5abee0cefeb327ff9d5074f",
+   "diff_sha256": "78111e5edfa4ea4add46e36082e3c3efcd8de55d1bcf99cc6db9d510120f1392",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "hermes"
+   }
+  },
+  "omp": {
+   "candidate_sha256": "109b1c6e1c7fd67df9fec6084a3362576c71bb42a4e2d19fd6978b7e0799644a",
+   "diff_sha256": "b1231bb405f95e2c8ac73cc3e5bc3c49ef472a47243ef0fd9a76dae813bbc104",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "omp"
+   }
+  },
+  "prime_agent": {
+   "candidate_sha256": "9b8e0d0ada9329b80a920922cfd7fb61f7a4f5ac42c4dc43b0aebc75f5f87b47",
+   "diff_sha256": "1aebe3d2bcbd2a6eec8928326f7e192addf29740dbd3b7a5298d1d6f3780ac6e",
+   "action": {
+    "kind": "wiring:instruction-surface",
+    "policy_sha256": "8501a8c945a22cbc0a6c65425fa6038d939829d0946770d7144cbfd55eaa730d",
+    "surface": "prime_agent"
+   }
+  }
+ },
+ "reset_hazard_note": "an agent ran 'git reset --hard HEAD' mid-session and destroyed a tracked uncommitted edit; the full tracked diff is snapshotted in receipts/ (untracked) and hashed above",
+ "corrections": [
+  {
+   "field": "publisher_fix_recomputed_at_seal.shared_scratch_name_in_publisher",
+   "was": true,
+   "why_wrong": "the regex capture included _publish_index's docstring, which quotes the old name `.index.tmp`; a substring test on that text reported the defect as present",
+   "now": "derived from ast.unparse of the executed statements",
+   "sealed_superseded": "8351cc939fbb2a46b1ed909363ffd79bda8a7ed155e550cbc46867c42b710721"
+  }
+ ]
+}

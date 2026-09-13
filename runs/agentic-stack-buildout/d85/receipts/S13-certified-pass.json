@@ -1,0 +1,14 @@
+{
+  "receipt": "S13",
+  "claim": "one registered process (d85_register_selftest_v1) passes the 11-field checklist, gets a bound certificate, and verify-cert replays it; the estate processes CANNOT produce a valid build and the reason is named, not papered over",
+  "build_record": "runs/agentic-stack-buildout/d85/receipts/S13-build.json",
+  "certificate": "runs/agentic-stack-buildout/d85/receipts/S13-certificate.json",
+  "commands": [
+    {"cmd": "bin/rig-determinism-85 checklist --root . --process-id d85_register_selftest_v1 runs/agentic-stack-buildout/d85/receipts/S13-build.json", "exit": 0, "verdict": "CHECKLIST_PASS", "inventory_binding": "bound", "all_checks_green": ["rig_lattice", "framework_matches_standard", "flowise_not_durable", "pydantic_models_present", "model_necessity_claims_present", "archify_diagram_present", "d85_realized_pass", "orchestration_is_code", "source_derived_d85"]},
+    {"cmd": "bin/rig-determinism-85 verify-cert --root . S13-build.json S13-certificate.json", "exit": 0, "verdict": "CERTIFICATION_VERIFIED", "checklist_sha256": "b34653b0bee6c3e4d97b4e00e7e9252d03a4d02fa9a1fb2f3b5f389f14d30e6d", "inventory_sha256": "f63f37b6b0b9c4e7a01596ab909229fd6b42ed6b5dd6ad46f7fd5c0f0fcfd899"},
+    {"cmd": "plant-failure: flip orchestration_is_code to false AFTER certification, re-present same certificate", "exit": 2, "verdict": "CERTIFICATION_BLOCK", "binding_reason": "post-cert mutation replay refused"}
+  ],
+  "selection": "properties={deterministic_step(steps=hash+AST-inventory, model_countermeasures=...)} -> T1 plain_python; lattice L3-D2-A1-I1 with BMS criteria (0.5/0.95/0.95/0.0/0.5, L3); a1_failure null (A1 cell, no escalation claimed)",
+  "environment_dependency_discovered": "loader_fingerprint embeds sys.path; validate_lattice inserts rig-lattice-system BEFORE certify_build recomputes the inventory, so the certifier context hash (f63f37b6…) differs from the plain CLI context hash (026bd955…). The classification and build record must bind the CERTIFIER-context hash. Confirmed the same phenomenon changes the exemplar rig_capabilities_engine_v1 too: its stored classification binds 82d4cb9f… which matches NEITHER current context — the engine correctly refuses to reuse it as fresh evidence (CLASSIFICATION_STALE), exactly as doctrine requires. This is a named design consequence (inventory identity is interpreter-path-relative), not a bug patched here.",
+  "honest_answer_on_impossibility": "estate_automation_ledger_v1 and build_standard_chain_v1 cannot get a bound certificate today: they never reach an inventory hash at all (loader blocks at EXTERNAL_CALL_UNRESOLVED, see S11 receipts), so no 11-field build record can bind — the checklist's inventory_sha256 field has no value that certifies. Stating the gap: the 11-field schema is fine; the analyzer's external-call surface is what gates estate registration, and that gap is recorded in S12."
+}

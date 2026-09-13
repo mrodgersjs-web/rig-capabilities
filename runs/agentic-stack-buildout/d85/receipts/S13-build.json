@@ -1,0 +1,40 @@
+{
+  "archify_diagram_path": "runs/agentic-stack-buildout/d85/receipts/S13-diagram.json",
+  "d85_realized_pass": true,
+  "durable_system": false,
+  "framework": "plain_python",
+  "inventory_sha256": "f63f37b6b0b9c4e7a01596ab909229fd6b42ed6b5dd6ad46f7fd5c0f0fcfd899",
+  "lattice": {
+    "a1_failure": null,
+    "bms": {
+      "data_volume": 0.5,
+      "failure_cost": 0.5,
+      "level": "L3",
+      "mechanism_clarity": 0.95,
+      "past_failure_rate": 0.0,
+      "reversibility": 0.95
+    },
+    "cell_id": "L3-D2-A1-I1"
+  },
+  "model_necessity_claims": [],
+  "orchestration_is_code": true,
+  "process_id": "d85_register_selftest_v1",
+  "properties": {
+    "deterministic_step": {
+      "model_countermeasures": [
+        "no model decides any step: inventory is recomputed from bytes on every run"
+      ],
+      "steps": [
+        {
+          "mechanism": "deterministic stdlib sha256 + json (register_process.py)",
+          "step": "hash locked source bytes and emit the process record"
+        },
+        {
+          "mechanism": "static AST walk (d85.py), no execution",
+          "step": "loader re-derives the operation inventory from the snapshot"
+        }
+      ]
+    }
+  },
+  "pydantic_models": []
+}

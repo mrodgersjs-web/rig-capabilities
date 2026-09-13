@@ -1,0 +1,15 @@
+{
+  "receipt": "push-decision-v41-20260913T0634Z",
+  "directive": "Mike 2026-09-12: \"fix teh codex matcher and push per v41\"",
+  "action_taken": "NO PUSH",
+  "reason": "The V41 commit gate was run on the real path (public commit_gate.check via its own CLI layer) against HEAD 68c60ca7 and refused: admitted=false. The refusal is at receipt-1 itself: the certifier anchor file ~/.rig/d85/certifier.digest does not exist, and the gate fails closed stating a human must seal it (pin-certifier). Receipts 2 (72 trials / 10 durable runs / 24h), 3 (cross-family verifier verdict), and 4 (arm-time Gate-D HMAC) are not even reached: 0 trials recorded. V41 is not a rubric to weigh when it refuses; it is the machine, and it said no.",
+  "interpretation_note": "Read 'push per v41' as 'push IF V41 admits'. It does not. A directed override would need an explicit 'push anyway' from Mike, which would then be recorded here as the named authority for the shortcut, not smuggled through.",
+  "unlock_checklist_for_mike": [
+    "seal the certifier anchor: ~/.rig/d85/certifier.digest (human seal; commit_gate pin-certifier procedure)",
+    "record >=72 trials incl. >=10 durable runs spanning >=24h in the trials.jsonl manifest points to",
+    "obtain a PASS/PERFECT verdict file under .rig/d85/verdicts for the build sha (cross-family, non-builder)",
+    "arm Gate-D at effect time (arm_gate_d with the parent break-glass HMAC env)"
+  ],
+  "branch_state": "fable-2031 ahead of origin/fable-2031 by 62+ commits (fast-forward available); contains origin/main (e18305f); no master branch exists",
+  "gate_output_verbatim": "CHECK {\"commit\": \"68c60ca77a3c\", \"admitted\": false, \"refusals\": [\"authority: certifier anchor /Users/rig128gb/.rig/d85/certifier.digest missing — fail closed; a human must seal it (see pin-certifier) before any certified claim\"]}"
+}

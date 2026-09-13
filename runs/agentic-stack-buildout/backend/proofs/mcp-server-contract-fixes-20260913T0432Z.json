@@ -1,0 +1,72 @@
+{
+  "schema": "rig.backend.server-contract-fixes/1",
+  "generated_at": "2026-09-13T04:32:00Z",
+  "task_id": "agentic-stack-buildout",
+  "source_findings": "runs/agentic-stack-buildout/backend/proofs/mcp-b44-protocol.json (reported by McpProofs, which was instructed not to patch server.py)",
+  "artifact_sha256_after_fixes": "fbb5ad8937cd286d (rig_capabilities/server.py, verified after plant/restore cycle)",
+
+  "defects_fixed": [
+    {
+      "finding": "four build readers advertised OPEN schemas; an injected {verdict:pass, approved:true} was accepted and silently ignored",
+      "tools": ["capabilities_build_store", "capabilities_measure_quorum", "capabilities_build_run", "capabilities_build_contract"],
+      "fix": "each schema now advertises additionalProperties:false AND each handler re-refuses unknown keys through _build_closed — the same two-layer convention the eight B23-B28 tools already used, so the advertised contract and the handler can no longer disagree",
+      "file_line": "server.py:277-278, 284-287, 293-296, 302-306 (schemas); 941-944, 946-951, 988-994, 1001-1003 (handlers)"
+    },
+    {
+      "finding": "capabilities_measure_quorum declared required ['cell'] but answered a no-argument call with cell=''",
+      "fix": "_build_required refuses by name: 'capabilities_measure_quorum: missing required field: cell'",
+      "file_line": "server.py:948-950 (new helper at 1348-1354)"
+    },
+    {
+      "finding": "with a CONFIGURED but unreachable DSN, run_start/run_get/evidence_add crashed into the generic translator ('tool ... failed: connection ...') instead of the advertised blocked/unknown state; _build_store excepted only StoreError while psycopg2.connect raises OperationalError",
+      "fix": "_build_store now returns the named blocker for ANY connect failure, matching _build_read's existing behavior — the wrapper's documented job. Kept in server.py rather than build_store.py because another worker owns that file right now",
+      "file_line": "server.py:1356-1366"
+    },
+    {
+      "finding": "capabilities_build_run_get echoed next_cursor = cursor + limit but the SQL never applied the cursor, so every page re-served the newest `limit` events and a paging client looped on page 1",
+      "fix": "events query now applies LIMIT %s OFFSET %s; ordering stays newest-first and next_cursor = cursor + limit is now the true next offset",
+      "file_line": "server.py:1502-1505"
+    },
+    {
+      "finding": "a missing required key on capabilities_build_diagnose / capabilities_build_run_start surfaced as a raw KeyError repr because the dict comprehension dereferenced args[k] before validation",
+      "fix": "_build_required runs first; the caller now sees the same 'missing required field: X' text the CLI gives",
+      "file_line": "server.py:1375, 1443, 1484"
+    },
+    {
+      "finding": "capabilities_build_run accepted neither argument and called get_run(run_id=None, idempotency_key=None)",
+      "fix": "refuses with 'missing required arg(s): run_id or idempotency_key' in the same {configured:false, error} shape the other readers use",
+      "file_line": "server.py:991-994"
+    }
+  ],
+
+  "tests_updated_because_they_pinned_the_defects": [
+    "test_pre_wave_build_tools_advertise_open_schemas_as_findings -> test_build_readers_advertise_closed_schemas_and_refuse_injection (now asserts closed advertisement + wire refusal per tool)",
+    "test_measure_quorum_missing_cell_is_silently_emptied -> test_measure_quorum_missing_cell_refused_by_name",
+    "test_configured_but_down_dsn_currently_crashes_to_iserror -> test_configured_but_down_dsn_answers_unknown_state",
+    "test_run_start_missing_required_same_keyerror_path -> test_run_start_missing_required_names_the_field",
+    "test_diagnose_missing_field_named_and_server_survives: assertion moved from generic translator text to the named field error"
+  ],
+
+  "verification": {
+    "protocol_suite": "python3 -m unittest tests.test_build_mcp_protocol -> Ran 23 tests, OK, rc=0",
+    "server_dependent_modules": "python3 -m unittest tests.fable2031_tools tests.test_goal_spec tests.test_mcp_comms tests.test_round_cli tests.test_surface_tools -> Ran 84 tests, OK",
+    "store_and_corpus": "python3 -m unittest tests.test_build_store tests.test_build_corpus -> Ran 29 tests, OK",
+    "skill_done_when": "./bin/rig-capabilities test rig-build-mcp -> rc=0, pass=true, ran=4",
+    "plant_failure_A": "restoring the open schema on capabilities_build_store -> test_build_readers_advertise_closed_schemas_and_refuse_injection FAILED (rc=1)",
+    "plant_failure_B": "restoring the narrow `except build_store.StoreError` -> test_configured_but_down_dsn_answers_unknown_state FAILED (rc=1)",
+    "restore": "server.py rewritten byte-for-byte (sha256 prefix fbb5ad8937cd286d matches pre-plant), full module GREEN again after the cycle"
+  },
+
+  "skill_updated": "capabilities/skills/rig-build-mcp/SKILL.md paging caveat replaced with the real contract (cursor is an OFFSET into newest-first order, limit clamps to 100)",
+
+  "remains_unverified": [
+    "no protocol test asserts that two pages have DIFFERENT event content (needs a live cluster seeded with more than `limit` events); the existing live test asserts clamp + next_cursor only, so the OFFSET fix is proven by code path + plant of the surrounding contract, not by a page-distinctness assertion",
+    "qualify admitted=TRUE branch: out-of-tree certifier anchor ~/.rig/d85/certifier.digest absent on this host (NB-01 dependency)",
+    "capabilities_build_index / capabilities_build_gaps `live` state with populated rows: no index file exists in the tree (0 rows, 0/588 qualified)"
+  ],
+
+  "ownership_notes": [
+    "McpProofs patched nothing; it reported. These fixes are the follow-up on the reported findings, made while it was idle so server.py had one writer.",
+    "PostgresProofs was running throughout and owns build_store.py/build_migrate.py; the down-DSN fix was deliberately placed in the server wrapper, not in build_store.connect(), to avoid a same-file collision."
+  ]
+}
