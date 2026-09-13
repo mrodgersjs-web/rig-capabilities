@@ -1,0 +1,11 @@
+{
+  "receipt": "codex-launcher-compare-20260913T0650Z",
+  "purpose": "Closes the named gap left open in landing-actions: the A19/A20 launcher compare was not re-run while ~/.codex was EPERM-blocked. Advisory steering: reproduce directly, exit codes over archaeology.",
+  "candidates_and_results": {
+    "rig_agent_codex": "launched via echo|timeout 10 ~/.rig/bin/rig-agent-codex -> codex v0.144.1 started, router TOML read without EPERM, exit 0. The original block was ROUTER.read_text() on ~/.codex/agents/rig-agent.toml under TCC; access is the whole fix.",
+    "codex_config_toml_managed_block": "grep -c RIG_LOOP_MANAGED ~/.codex/config.toml = 0. NOT a defect: loops.py HOOK_CONFIG maps codex to ~/.codex/hooks.json (Claude-compatible schema), and wire --verify reports canonical managed entries there. The config.toml candidate is refuted against the code.",
+    "launcher_compare": "~/.rig/bin/rig-loop is a symlink to this repo's bin/rig-loop (single inode). sha256 canonical == installed is tautology by construction, strictly stronger than byte equality."
+  },
+  "verdict": "REPAIRED-BY-ACCESS across all codex surfaces; no code change was needed anywhere. Residual ceiling: verification proves the routes exist and execute, not that a live Codex session's pre-tool deny fires - that needs one gated codex session (recorded ceiling, not a claim).",
+  "state_note": "Taken with clean git index (0 staged) after the bae738a sweep incident; launcher sha unique-count check = 1. Supersedes nothing; complements codex-matcher-verdict-20260913T0630Z.json."
+}
