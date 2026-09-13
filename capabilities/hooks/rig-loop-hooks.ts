@@ -9,7 +9,7 @@
 //   before_agent_start  -> rig-loop hook prompt          (stage banner injected as a message)
 //   tool_call           -> rig-loop hook pre-tool        ({block:true} when the stage forbids the write / outward action)
 //   agent_end           -> rig-loop hook stop            (cannot block in pi; surfaces NOT-DONE as a warning)
-// D85 runs even without an active loop. Installed by `rig-loop wire --apply`.
+// D85 advises at session start; ordinary tools are not D85-admitted.
 import { spawnSync } from "node:child_process";
 import { homedir } from "node:os";
 

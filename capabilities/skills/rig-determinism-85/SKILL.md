@@ -4,11 +4,11 @@ description: Enforces the deterministic-admission chain — source-derived opera
 ---
 
 <objective>
-Build the reachable Python operation graph from a fixed authority registry, classify every extracted operation from a separate authority file, require all four determinism ratios at or above 0.85, authorize one exact outward action through signed one-time Gate-D approval, and verify that all four coding-agent surfaces carry the same doctrine marker. Every gate fails closed with exit 2 and a BLOCK JSON verdict.
+Build the reachable Python operation graph from a fixed authority registry, classify every extracted operation from a separate authority file, require all four determinism ratios at or above 0.85 for certified builds, authorize one exact outward action through signed one-time Gate-D approval, and verify that all four coding-agent surfaces carry the same doctrine marker. Session checks advise during ordinary work; explicit certification, launcher, and Gate-D boundaries fail closed without denying remediation tools.
 </objective>
 
 <current_boundary>
-This capability owns the realized admission chain: inventory, classification, scoring, Gate-D arming, and surface-wiring verification. It does not execute effects, dispatch outward actions, register live agent hooks, or seal proofs. An `ARMED` Gate-D verdict authorizes exactly one action envelope; the effect itself stays with the calling tool.
+Inventory, classification, scoring, checklist, Gate-D, and wiring gates do not execute effects. Ordinary tool dispatch does not require D85 admission. Session checks keep D85 findings visible so the agent can repair them and report what changed. `d85-run` is the separate confined executor for deliberate durable consumers; an `ARMED` Gate-D verdict authorizes exactly one action envelope, and the approved calling tool still owns that outward effect.
 </current_boundary>
 
 <process>
@@ -21,7 +21,7 @@ This capability owns the realized admission chain: inventory, classification, sc
 7. For an outward or irreversible action: mint a signed approval with `d85_gates.mint_approval` (authority operator), then run `bin/rig-determinism-85 gate-d PROCESS_ID --action ACTION_FILE`. The action file is the exact pre-tool envelope; one arm consumes one approval.
 8. Run `bin/rig-determinism-85 wiring` to verify all four surfaces carry the doctrine marker recorded in `authority/surfaces.json`.
 8b. Tool selection and durable-build certification (standard v1.4.0): `bin/rig-determinism-85 select EVIDENCE_FILE` derives one framework from closed-schema evidence records (absent claim = FALSE, contradicted claim BLOCKs). `checklist BUILD_FILE --process-id ID` certifies the build: it declares `process_id` and the `inventory_sha256` snapshot it was generated against; certification recomputes the live inventory and binds only on exact equality — unbound, mismatched, or stale BLOCKs. `verify-cert BUILD_FILE CERT_FILE` is the consumer boundary: it recomputes the canonical build digest, rejects non-exact certificate schemas and tampered payloads, and blocks post-cert mutation replays. The worked example is `authority/reference/julie_synthetic/` — copy that shape, never hand-edit outputs, and rerun `verify-cert` before trusting an archived certificate.
-9. Stop on exit 2. Create a new immutable process authority version before retrying.
+9. On exit 2, withhold certification or the requested exact effect. Keep repair tools available, fix the evidence or implementation, report the changes and remaining gaps, then create a new immutable process authority version when process bytes or classification changed.
 </process>
 
 <rules>
@@ -57,16 +57,21 @@ The tool-selection suites (`tests.test_tool_selection`, `tests.test_tool_selecti
 - No gate in this skill executes an outward effect.
 </success_criteria>
 
-## Universal Enforcement (v1.5)
+## Advisory work loop and explicit build boundary (v1.6)
 
-The central gate is `rig-loop dispatch_hook`, above loop-specific logic and
-active even when no loop run exists. Claude, Codex, Hermes, OMP, and Prime Agent
-must route mutation-class pre-tool calls through it. Protected roots come only
-from `~/.rig/d85/enforcement.json`; a `write`, `edit`, `bash`/`shell`,
-`apply_patch`, or equivalent mutation touching an exact path beneath one of
-those roots requires a current signed admission for that path and session.
+`rig-loop dispatch_hook` applies active-loop stage and Gate-D policy but does not
+send ordinary pre-tool calls through D85 admission. D85 remains active through
+session advice plus explicit inventory, classification, scoring, checklist,
+certificate verification, launcher, Gate-D, and wiring commands. A RED result
+withholds certification only. The agent continues working, repairs reachable
+findings, and reports the applied changes and remaining gaps.
 
-### Admission ceremony
+The authority config at `~/.rig/d85/enforcement.json` is consumed only by
+explicit admission and launcher users. It is not a universal tool allowlist.
+Custom MCP, browser, computer, shell, Python, read, and edit calls do not need
+entries there.
+
+### Explicit admission ceremony for deliberate durable consumers
 
 ```bash
 rig-determinism-85 admit-request <build.json> \
@@ -132,41 +137,30 @@ On this host, `.hermes/hermes-agent/cron/jobs.py` defines
 `~/.hermes/profiles/*/cron/jobs.json`. The previously documented no-`cron/`
 paths are absent. The builder records each scanned path and scopes IDs by profile.
 
-### Fail-closed matrix
+### Explicit-boundary fail-closed matrix
 
 | Condition | Verdict |
 | --- | --- |
-| Protected target with no exact current-session admission | DENY |
-| Missing, unreadable, or malformed config, payload, key, ledger, or signature | DENY |
-| Expired approval, changed build bytes, missing build, or non-bound checklist result | DENY |
-| Unknown shell verb referencing a protected path, or unproven verb with cwd under a protected root | DENY |
-| Missing or failing live certificate, unavailable sandbox, or unsafe sandbox path literal | DENY |
-| Arbitrary-code tool (`eval`, Python/REPL aliases) while protected roots are active | DENY, even with a path admission |
-| Hook engine absent, failed, empty, malformed, or missing a boolean verdict | DENY mutations; retain read-only recovery |
-| Proven read-only call or mutation with no target under configured roots | PASS without admission |
+| Ordinary startup, research, diagnosis, browser/computer use, shell, Python, read, edit, or repair | ALLOW; surface D85 advice when available |
+| D85 advice is RED or unavailable | ALLOW work and remediation; certification remains unverified |
+| Build inventory, classification, score, checklist, or certificate is missing, stale, malformed, or below threshold | CHECKLIST_BLOCK for certification; fix and rerun |
+| Outward action lacks an exact current Gate-D approval | DENY that effect only |
+| Explicit `d85-run` invocation has an expired approval, changed bytes, unsafe output, unavailable sandbox, or invalid signature | DENY that launcher invocation only |
 
-### Partial shell ceiling
+### Interactive host ceiling
 
-Shell classification recognizes mutation verbs, redirections, and a closed set
-of read-only verbs. It cannot prove that interpreter or build tools such as
-Python, `make`, or `npm` will not write paths they never name. The cwd-under-root
-rule narrows that gap, but does not close it. `d85-run` plus `sandbox-exec` is
-the execution boundary for scheduled automation; universal harness-shell
-sandboxing remains open work. Any unclassifiable or internally failed check
-against a protected surface denies.
+The shell classifier and protected-root admission logic apply only when a
+deliberate consumer invokes the explicit admission API or `d85-run`. They are
+not part of ordinary `rig-loop dispatch_hook` traffic. `d85-run` remains the
+deny-by-default filesystem boundary for scheduled Python automation. Universal
+interactive-host containment remains platform work.
 
 ### Emergency recovery
 
-Only Mike's explicitly authorized break-glass process may repair a broken live
-gate. Verify `RIG_D85_DISABLE=1` in the process that will perform the write.
-Do not set it from a tool or use an alternate alias after a denial. A persistent
-execution worker can differ from the shell; a fresh standalone child may be
-used only when explicitly authorized, with normal inheritance and no override.
-Require one complete-line match, compile the candidate in memory, retain a
-backup and original permissions, then atomically replace and recompile.
-Remove the override from every isolated enforcement-test subprocess and inspect
-the actual pi JSON `block` values: read false, protected write true, eval true.
-Ordinary eval denial is intentional, not an outage.
+A broken explicit certification, launcher, or Gate-D boundary stays fail-closed
+for that boundary. Ordinary repair tools remain available and need no
+break-glass flag. Fix the implementation, rerun the failed check, and report
+what changed plus any remaining certification gap.
 
 ### Wiring proof
 

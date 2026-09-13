@@ -308,6 +308,56 @@ class RunTests(TempState):
         res = L.dispatch_hook("pre-tool", {"cwd": str(other), "tool_name": "Write", "tool_input": {"file_path": str(other / "x.py")}})
         self.assertEqual(res["action"], "allow")
 
+    def test_no_active_loop_keeps_non_build_tools_outside_d85(self):
+        other = self.root / "ordinary-work"
+        other.mkdir()
+        cases = (
+            ("mcp__cua_repl__js", {"code": "return 1"}),
+            ("mcp__motionsites_search_prompts", {"query": "editorial"}),
+            ("mcp__cua_driver_get_window_state", {"pid": 1}),
+            ("mcp__graft_find_code", {"query": "entry point"}),
+            ("eval", {"code": "print(1)"}),
+            ("bash", {"command": "python3 -c 'print(1)'"}),
+        )
+        for tool_name, tool_input in cases:
+            with self.subTest(tool_name=tool_name):
+                result = L.dispatch_hook(
+                    "pre-tool",
+                    {
+                        "cwd": str(other),
+                        "tool_name": tool_name,
+                        "tool_input": tool_input,
+                    },
+                )
+                self.assertEqual(result["action"], "allow", result)
+
+    def test_d85_session_check_is_advisory_even_during_repair(self):
+        d85_home = self.root / "d85"
+        d85_home.mkdir()
+        (d85_home / "enforcement.json").write_text(json.dumps({
+            "roots": [str(self.root / "protected")],
+            "ttl_hours": 24,
+            "launcher_epoch": 0,
+        }))
+        with patch.dict(os.environ, {"RIG_D85_HOME": str(d85_home), "RIG_D85_DISABLE": "1"}):
+            banner = L._d85_session_banner()
+        self.assertIn("advisory checks active", banner)
+        self.assertIn("not block tools", banner)
+        self.assertIn("what changed and what remains", banner)
+
+    def test_active_loop_still_blocks_outward_action_without_gate_d(self):
+        L.activate("iqrsqpi-v11", cwd=str(self.cwd), harness="ut")
+        result = L.dispatch_hook(
+            "pre-tool",
+            {
+                "cwd": str(self.cwd),
+                "tool_name": "bash",
+                "tool_input": {"command": "git push origin main"},
+            },
+        )
+        self.assertEqual(result["action"], "deny", result)
+        self.assertIn("OUTWARD ACTION BLOCKED", result["reason"])
+
     def test_gate_refuses_pass_and_records_gate_red_event(self):
         run = L.activate("proof-loop", cwd=str(self.cwd), harness="ut")
         spec = L.load_spec("proof-loop")

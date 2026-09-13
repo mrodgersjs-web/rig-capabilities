@@ -1662,8 +1662,6 @@ def _declared_globs(run: dict, spec: dict) -> list[str]:
 
 
 def _d85_session_banner() -> str:
-    if os.environ.get("RIG_D85_DISABLE"):
-        return ""
     try:
         root = Path(os.environ.get("RIG_D85_HOME") or HOME / ".rig" / "d85")
         config = root / "enforcement.json"
@@ -1672,9 +1670,10 @@ def _d85_session_banner() -> str:
         roots = json.loads(config.read_text(encoding="utf-8")).get("roots")
         if isinstance(roots, list) and any(isinstance(item, str) and item for item in roots):
             return (
-                "[d85] production-surface mutations require signed admission: "
-                "rig-determinism-85 admit-request → APPROVE <id> → admit-approve "
-                "(deny is fail-closed)"
+                "[d85] advisory checks active: inventory → classify → four-ratio score. "
+                "Ordinary work and remediation remain available; D85 may withhold "
+                "certification, not block tools. Fix reported items, then tell Mike "
+                "what changed and what remains."
             )
     except Exception:  # noqa: BLE001 — banner discovery must not break session start
         pass
