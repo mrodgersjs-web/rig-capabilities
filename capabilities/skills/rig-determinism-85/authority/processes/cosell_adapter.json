@@ -1,0 +1,65 @@
+{
+  "classification_path": "processes/cosell_adapter.classification.json",
+  "entrypoints": [
+    {
+      "adapter_operation": "execute",
+      "adapter_path": "cosell_adapter.py",
+      "source_path": "cosell_worker.py",
+      "symbol": "execute_impl"
+    }
+  ],
+  "external_modules": [
+    {
+      "allowed_calls": [
+        "json.JSONDecodeError",
+        "json.dumps",
+        "json.loads"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/__init__.py",
+      "artifact_sha256": "d5d41e2c29049515d295d81a6d40b4890fbec8d8482cfb401630f8ef2f77e4d5",
+      "module": "json",
+      "package_modules": [
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/decoder.py",
+          "sha256": "9f02654649816145bc76f8c210a5fe3ba1de142d4d97a1c93105732e747c285b"
+        },
+        {
+          "path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/json/encoder.py",
+          "sha256": "af7bd40a0d0d0a3e726a9b4b3a2a543019f6ab97a340d0162a9c29ca9da97869"
+        }
+      ]
+    },
+    {
+      "allowed_calls": [
+        "subprocess.run"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "module": "subprocess"
+    },
+    {
+      "allowed_calls": [
+        "pathlib.Path"
+      ],
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/pathlib.py",
+      "artifact_sha256": "3b21ac188fd9ac20bacc8ccd976fabd5d8ccf5000f8e157d3dfff005b228fb3d",
+      "module": "pathlib"
+    },
+    {
+      "allowed_calls": [
+        "sys.path",
+        "sys.path.insert"
+      ],
+      "artifact_path": "/Users/rig128gb/.hermes/hermes-agent/venv/bin/python3",
+      "artifact_sha256": "51b0f8201b2c4cc94d04dd614c20f7dce0cc22ef23e9ca134f39c978d78c38f2",
+      "module": "sys"
+    }
+  ],
+  "file_hashes": {
+    "cosell_adapter.py": "cf2dc463636c2d3ee073b49f8b76712a6258b805bc6267f8c44f7e55e4fb550b",
+    "cosell_worker.py": "6391fbdcbb84d067e20e7ade567e87db6221f00359b94929f911326d4617b804"
+  },
+  "process_id": "cosell_adapter",
+  "schema": "rig.d85.process-authority.v1",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/cosell_adapter"
+}
