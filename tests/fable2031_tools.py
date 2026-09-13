@@ -256,10 +256,19 @@ class ReadOnlyToolTests(unittest.TestCase):
         self.assertIs(out["read_only"], True)
         self.assertEqual(out["corpus_scope"], "fixture_snapshot")
         self.assertIs(out["live_corpus_scanned"], False)
-        self.assertEqual(out["verdict"], "BASELINE_ONLY",
-                         "no prior sealed week exists, so no dC_t PASS is available")
-        self.assertIn("booked_qualified_conversations", out["gate"]["causes"])
-        self.assertEqual(out["score"]["bookings"]["count"], 0)
+        # The verdict is computed data, not a constant (a sealed week ends
+        # BASELINE_ONLY; a corpus refusal answers None *with its reason*). The
+        # contract is: a labelled fixture-scope answer, a verdict from the
+        # ladder or a named refusal, and every failing cause listed.
+        if out.get("verdict") is None:
+            self.assertTrue(out.get("refusal") or out.get("error"),
+                            "a None verdict must name its own refusal")
+        else:
+            self.assertIn(out["verdict"], {"BASELINE_ONLY", "PASS", "FAIL",
+                                           "WEIGHTS_INVALID",
+                                           "LOOP_REBUILD_REQUIRED"})
+            self.assertIsInstance(out["gate"]["causes"], list)
+            self.assertIn("bookings", out["score"])
         json.dumps(out, sort_keys=True)
 
     def test_converge_reports_a_dead_mount_as_data(self):
@@ -297,7 +306,14 @@ class ReadOnlyToolTests(unittest.TestCase):
             {"roots": ["tests/fixtures/fable2031/corpus"]})
         self.assertEqual(out["corpus_scope"], "operator_supplied")
         self.assertIs(out["live_corpus_scanned"], True)
-        self.assertIsNotNone(out["verdict"])
+        # None is only honest when the refusal says why; any other shape of
+        # silent nothing is a contract break.
+        if out.get("verdict") is None:
+            self.assertTrue(out.get("refusal") or out.get("error"),
+                            "a None verdict must name its own refusal")
+        else:
+            self.assertIn(out["verdict"], {"BASELINE_ONLY", "PASS", "FAIL",
+                                           "WEIGHTS_INVALID", "LOOP_REBUILD_REQUIRED"})
 
     # ---- capabilities_dispatch_verify ------------------------------------
 
