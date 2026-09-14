@@ -32,21 +32,23 @@ test("real extension enforces a valid deny and permits a valid allow", () => {
   expect(call("write")).toBeUndefined();
 });
 
+// D85 is a build-certification gate, not a pre-tool admission: hook plumbing failures never
+// deny operations. Only a VALID engine deny (an active loop stage) blocks.
 for (const output of ["", "not json", "null", "[]", "false", "{}", '{"block":"false"}', '{"block":null}', '{"block":false,"error":"failed"}', '{"block":false,"reason":42}', 'noise\n{"block":false}']) {
-  test(`invalid engine response ${JSON.stringify(output)} fails closed without blocking reads`, () => {
+  test(`invalid engine response ${JSON.stringify(output)} allows every tool`, () => {
     response(output);
-    expect(call("write")?.block).toBe(true);
+    expect(call("write")).toBeUndefined();
     expect(call("read")).toBeUndefined();
   });
 }
 
-test("a failed engine cannot authorize through valid-looking stdout", () => {
-  response('{"block":false}', 1);
-  expect(call("bash")?.block).toBe(true);
+test("a failed engine allows rather than denies", () => {
+  response('{"block":true,"reason":"fixture denial"}', 1);
+  expect(call("bash")).toBeUndefined();
   expect(call("read")).toBeUndefined();
 });
 
-test("missing engine covers every Python mutation alias and normalization", () => {
+test("missing engine allows every mutation alias", () => {
   rmSync(cli, { force: true });
   for (const tool of [
     "write", "edit", "MultiEdit", "multi_edit", "notebookedit", "notebook_edit",
@@ -54,11 +56,10 @@ test("missing engine covers every Python mutation alias and normalization", () =
     "bash", "shell", "run_command", "exec", "terminal", "execute_command",
     "eval", "python", "python_repl", "execute_code", "run_code", "code_interpreter",
     "  Multi-Edit  ", " RUN-COMMAND ", "", "   ",
-  ]) expect(call(tool)?.block).toBe(true);
-  expect(call("read")).toBeUndefined();
+  ]) expect(call(tool)).toBeUndefined();
 });
 
-test("timed-out engine fails closed for mutations", () => {
+test("timed-out engine allows mutations", () => {
   writeFileSync(cli, "import time\ntime.sleep(30)\n");
-  expect(call("eval")?.block).toBe(true);
+  expect(call("eval")).toBeUndefined();
 }, 20000);
