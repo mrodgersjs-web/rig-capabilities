@@ -63,9 +63,22 @@ resolves work class -> model -> observed owning nodes, and grades each choice:
   `--allow-local-only`.
 - `unproven` — never observed; allowed, but `verify` decides after the run.
 
-Current inventory: 7 offload-proven models, 0 local-only. Note `rig-128gb` also owns
-`qwen3.8:27b` and `qwen3-coder:30b`, so naive dispatch of those can land back on this box —
-which is exactly what `verify` catches.
+Live inventory correction: the 128GB box owns only `nomic-embed-text`; the older registry
+claimed it owned Qwen models, but PAIR's live per-node inventory disproved that. Every measured
+generation request has therefore run remotely. Placement is still checked per run because
+configuration can drift.
+
+### Model quality policy
+
+- **Quality leader:** Qwen3.8-Flash-Next Q4 on the 256GB node. Official HF results:
+  DeepSWE 58.7, SWE-bench Pro 62.5, Toolathlon 73.5. The selected GGUF has four shards
+  totaling 111.3GB; sharded registry pulls fail, so the shards are SHA-256 verified and
+  imported locally with `ollama create`.
+- **Practical workhorse:** Qwen3.8-27B on 36/96/256GB. Official results include Terminal
+  Bench 73.0, SWE-bench Pro 61.7, QwenSWEBench 79.0, native 262K context.
+- **Small-node floor:** `qwen3.5:9b`. There is no official Qwen3.8-9B repository.
+- **Triage only:** `qwen3:4b`. It is excluded from code, reasoning, summary, extraction, and
+  long-context routes; it remains useful for routing labels, probes, and smoke tests.
 
 ## Decision: the criticality gate is fail-closed toward Mike
 

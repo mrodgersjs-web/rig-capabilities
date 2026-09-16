@@ -95,7 +95,7 @@ CRITICAL_PATTERNS: tuple[tuple[str, str, str], ...] = (
 #   .64 28GB    qwen3.5:9b + 30/32B fallbacks already resident + triage:4b
 #   .74 96GB    Qwen3.8-27B + qwen3:32b + coder/longctx fallbacks
 #   local 128GB embeddings only, deliberately bare so work does not land here
-FLASH_NEXT = "hf.co/unsloth/Qwen3.8-Flash-Next-GGUF:UD-Q4_K_XL"
+FLASH_NEXT = "qwen3.8-flash-next:q4_k_xl"
 
 WORK_CLASS_MODELS: dict[str, tuple[str, ...]] = {
     "code": (FLASH_NEXT, "qwen3.8:27b", "qwen3-coder:30b", "deepseek-r1:32b"),
