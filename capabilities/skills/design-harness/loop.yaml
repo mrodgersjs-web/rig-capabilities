@@ -1,0 +1,46 @@
+schema: rig.loop-skill.v11
+id: design-harness
+name: Design Harness
+version: 11.0.0
+doctrine_source:
+- /Users/rig128gb/Developer/rig-intelligence/packages/rig-design-harness/harness/
+coordinate:
+  level: 3
+  diamond: D2
+  bms_mode: A1
+  step: I1
+family: governance
+packet: LoopRunPacket
+modes:
+  auto: {}
+  walk:
+    stop_after_stage: true
+kill_switch:
+  max_iterations: 3
+  max_wall_minutes: 240
+  max_stop_blocks: 2
+outward_policy:
+  require_gate_d: true
+stages:
+- id: I1
+  name: Intent
+  artifact: intent.md
+  gate:
+  - type: file_contains
+    path: intent.md
+    patterns:
+    - ^## GOAL
+    - ^## DONE-TEST
+  write_policy:
+    mode: artifacts_only
+- id: P
+  name: Proof
+  artifact: proof.json
+  gate:
+  - type: sealed
+closing_loop:
+  from:
+  - P
+  to: I1
+  max_iterations: 3
+  on_exhaust: park

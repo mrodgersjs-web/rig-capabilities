@@ -1,0 +1,42 @@
+[
+  {
+    "name": "refuses pass without artifact",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "passes with artifact",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\nx\n## DONE-TEST\n- cmd:true\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      }
+    ]
+  }
+]
