@@ -29,8 +29,8 @@ import json
 import re
 import subprocess
 import time
-import urllib.error
-import urllib.request
+import urllib.error as urllib_error
+import urllib.request as urllib_request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -205,7 +205,7 @@ def owner_for(text: str, *, router: Path = OWNER_ROUTER) -> str:
 
 
 def _get_json(url: str, timeout: int = 15) -> Any:
-    with urllib.request.urlopen(url, timeout=timeout) as resp:
+    with urllib_request.urlopen(url, timeout=timeout) as resp:
         return json.loads(resp.read())
 
 
@@ -324,15 +324,15 @@ def _post_chat(base: str, model: str, prompt: str, *, max_tokens: int, timeout: 
         "max_tokens": max_tokens,
         "stream": False,
     }).encode()
-    req = urllib.request.Request(f"{base}/v1/chat/completions", data=body, headers={"Content-Type": "application/json"})
+    req = urllib_request.Request(f"{base}/v1/chat/completions", data=body, headers={"Content-Type": "application/json"})
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as resp:
+        with urllib_request.urlopen(req, timeout=timeout) as resp:
             payload = json.loads(resp.read())
         choices = payload.get("choices") or [{}]
         return 200, str(choices[0].get("message", {}).get("content", ""))
-    except urllib.error.HTTPError as exc:
+    except urllib_error.HTTPError as exc:
         return exc.code, exc.read()[:400].decode("utf-8", "replace")
-    except (urllib.error.URLError, TimeoutError, OSError) as exc:
+    except (urllib_error.URLError, TimeoutError, OSError) as exc:
         return 0, f"{type(exc).__name__}: {exc}"
 
 
@@ -491,7 +491,7 @@ def doctor(*, base: str = PAIR_BASE) -> dict[str, Any]:
     try:
         report["models"] = sorted(pair_models(base=base))
         report["pair"] = "reachable"
-    except (urllib.error.URLError, OSError, TimeoutError, json.JSONDecodeError) as exc:
+    except (urllib_error.URLError, OSError, TimeoutError, json.JSONDecodeError) as exc:
         report["pair"] = f"unreachable: {type(exc).__name__}: {exc}"
         report["models"] = []
     try:
