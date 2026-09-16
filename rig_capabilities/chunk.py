@@ -34,18 +34,18 @@ import urllib.request as urllib_request
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Iterable, Literal
+from typing import Any, Iterable, Literal, TypeAlias
 
-SCHEMA = "rig.chunk.plan.v1"
+SCHEMA: str = "rig.chunk.plan.v1"
 
-PAIR_BASE = "http://127.0.0.1:11435"
-PAIR_SUPPORT = Path.home() / "Library/Application Support/Nvidia Corporation/Personal AI Router"
-PAIR_MEMBERS = PAIR_SUPPORT / "cluster/members.json"
-PAIR_HISTORY = PAIR_SUPPORT / "workloads-history.json"
-OWNER_ROUTER = Path("/Users/rig128gb/.rig/bin/rig-owner-router")
-RUN_ROOT = Path.home() / ".rig/state/chunk-runs"
+PAIR_BASE: str = "http://127.0.0.1:11435"
+PAIR_SUPPORT: Path = Path.home() / "Library/Application Support/Nvidia Corporation/Personal AI Router"
+PAIR_MEMBERS: Path = PAIR_SUPPORT / "cluster/members.json"
+PAIR_HISTORY: Path = PAIR_SUPPORT / "workloads-history.json"
+OWNER_ROUTER: Path = Path("/Users/rig128gb/.rig/bin/rig-owner-router")
+RUN_ROOT: Path = Path.home() / ".rig/state/chunk-runs"
 
-Lane = Literal["local", "fanout", "refused"]
+Lane: TypeAlias = Literal["local", "fanout", "refused"]
 
 # A chunk touching any of these stays with Mike: design authority, control plane, outward
 # effect, security boundary, instruction surface.
@@ -95,7 +95,7 @@ CRITICAL_PATTERNS: tuple[tuple[str, str, str], ...] = (
 #   .64 28GB    qwen3.5:9b + 30/32B fallbacks already resident + triage:4b
 #   .74 96GB    Qwen3.8-27B + qwen3:32b + coder/longctx fallbacks
 #   local 128GB embeddings only, deliberately bare so work does not land here
-FLASH_NEXT = "qwen3.8-flash-next:q4_k_xl"
+FLASH_NEXT: str = "qwen3.8-flash-next:q4_k_xl"
 
 WORK_CLASS_MODELS: dict[str, tuple[str, ...]] = {
     "code": (FLASH_NEXT, "qwen3.8:27b", "qwen3-coder:30b", "deepseek-r1:32b"),
@@ -106,7 +106,7 @@ WORK_CLASS_MODELS: dict[str, tuple[str, ...]] = {
     "triage": ("qwen3:4b", "qwen3.5:9b"),
     "embed": ("nomic-embed-text:latest",),
 }
-DEFAULT_WORK_CLASS = "summarize"
+DEFAULT_WORK_CLASS: str = "summarize"
 
 
 class ChunkError(Exception):
