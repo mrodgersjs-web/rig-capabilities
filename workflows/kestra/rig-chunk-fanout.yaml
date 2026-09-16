@@ -1,0 +1,86 @@
+# rig-chunk-fanout — ordinary scheduled run-to-completion fan-out (doctrine row 2:
+# "ordinary scheduled run-to-completion -> Kestra w/ Pydantic AI in model steps").
+#
+# STATUS: DORMANT AND DELIBERATELY UNREGISTERED. Do not create or enable this flow until the
+# two blockers below are fixed; registering it would add another always-green schedule that
+# produces nothing.
+#
+# Blocker 1 — this Kestra plane executes nothing. Verified 2026-09-15 via the Kestra MCP:
+#   instance 1.3.31 OSS, Docker (kestra/kestra:latest + postgres, 127.0.0.1:8093->8080),
+#   namespace main.rig holds 27 flows with enabled Schedule triggers, yet executions in the
+#   last 7 days = 0 and in the last 90 days = 0. Twenty-seven schedules claiming 1-5 minute
+#   cadences and zero executions is decorative green, not a working carrier.
+# Blocker 2 — host paths are not reachable from inside the container. The RIG flows are
+#   Shell tasks with `runner: PROCESS`, so they run INSIDE the Kestra container, while their
+#   commands point at absolute macOS paths (/Users/rig128gb/...) that the compose file does
+#   not mount. That is the same class of defect as a health probe pointing at a 404 path:
+#   it can never succeed, so it can never be trusted.
+#
+# Consequence for THIS flow: `rig-chunk` lives on the host, and PAIR is loopback-only on the
+# host. A PROCESS task inside the container can reach neither. Before enabling, either
+#   (a) mount /Users/rig128gb/Developer/rig-capabilities and the lane venv into the container
+#       AND give the container a route to the host's 11435 (host.docker.internal), or
+#   (b) run this flow on a Kestra REMOTE WORKER installed on a fleet node, where both the
+#       repo and that node's own PAIR are local — which is also what actually frees the 128GB.
+#
+# Activation (registration + enabling the schedule) is an outward action: fresh Gate-D each time.
+
+id: rig-chunk-fanout
+namespace: main.rig
+description: |
+  Split a mission with rig-chunk, fan the delegable chunks through PAIR, and fail the run
+  unless placement is PROVEN off the 128GB box. Critical and design chunks are never
+  dispatched here - rig-chunk keeps them in the local lane for Mike.
+
+inputs:
+  - id: mission_path
+    type: STRING
+    description: Absolute path to a rig.chunk mission JSON (as produced by `rig-chunk example`).
+  - id: max_inflight
+    type: INT
+    defaults: 4
+    description: Our own backpressure. PAIR has no queue and no max-concurrency, so this cap
+      is the only thing preventing a thundering herd against the cluster.
+
+variables:
+  repo: /Users/rig128gb/Developer/rig-capabilities
+  python: /Users/rig128gb/.rig/state/venvs/chunk-lane/bin/python
+
+tasks:
+  - id: plan
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    commands:
+      - "{{ vars.repo }}/bin/rig-chunk plan {{ inputs.mission_path }} > {{ outputDir }}/plan.json"
+      - "cat {{ outputDir }}/plan.json"
+    outputFiles:
+      - plan.json
+
+  - id: dispatch
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    commands:
+      # Non-zero exit here fails the execution: a partially dispatched fan-out is not a success.
+      - "{{ vars.repo }}/bin/rig-chunk dispatch {{ outputs.plan['plan.json'] }} --max-inflight {{ inputs.max_inflight }} > {{ outputDir }}/dispatch.json"
+      - "cat {{ outputDir }}/dispatch.json"
+    outputFiles:
+      - dispatch.json
+
+  - id: prove_offload
+    type: io.kestra.plugin.scripts.shell.Commands
+    taskRunner:
+      type: io.kestra.plugin.core.runner.Process
+    commands:
+      # Exits 2 on OFFLOAD_VIOLATION or UNPROVEN. This is the gate: "it ran somewhere else"
+      # is a claim until PAIR's workloads-history.json says which node it ran on.
+      - "{{ vars.repo }}/bin/rig-chunk verify {{ outputs.dispatch['dispatch.json'] }}"
+
+errors:
+  - id: report_failure
+    type: io.kestra.plugin.core.log.Log
+    message: |
+      rig-chunk-fanout FAILED for {{ inputs.mission_path }}.
+      Check which stage: plan (refusals), dispatch (PAIR errors), or prove_offload
+      (placement unproven or work ran on the 128GB box). No outward effect was performed.

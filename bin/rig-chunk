@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""rig-chunk — split a mission, keep the critical work with Mike, fan the rest through PAIR,
+and prove where it ran.
+
+Verbs:
+  doctor                       what is reachable now: PAIR, models, local node UUID,
+                               which models are PROVEN offloadable vs local-only.
+  example                      print a runnable sample mission to stdout.
+  plan      <mission.json|->   classify into local / fanout / refused. Dispatches nothing.
+                               --allow-local-only  permit models only ever seen on this box.
+  dispatch  <plan.json|->      fan out the fanout lane through PAIR with our own backpressure.
+                               --max-inflight N (default 4)  --max-tokens N  --attempts N
+  verify    <dispatch.json|->  prove placement from PAIR's workloads-history.json.
+                               Exits 2 on OFFLOAD_VIOLATION or UNPROVEN.
+  run       <mission.json|->   plan -> dispatch -> verify in one pass, same exit rules.
+
+Exit codes: 0 pass · 2 gate failure (refusals, dispatch failures, unproven/violated offload).
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+
+from rig_capabilities import chunk as C  # noqa: E402
+
+EXAMPLE = {
+    "mission_id": "demo-triage",
+    "goal": "Summarize three log files and name the API surface change (design stays local).",
+    "chunks": [
+        {
+            "id": "sum-a",
+            "title": "Summarize scraper log A",
+            "prompt": "In one sentence, what is 2+2? Answer with the number only.",
+            "work_class": "extract",
+            "acceptance": "one sentence, names the arithmetic result",
+            "reversible": True,
+            "failure_cost": 0.1,
+        },
+        {
+            "id": "sum-b",
+            "title": "Summarize scraper log B",
+            "prompt": "Name one color. One word only.",
+            "work_class": "summarize",
+            "acceptance": "single word naming a color",
+            "reversible": True,
+            "failure_cost": 0.1,
+        },
+        {
+            "id": "api-surface",
+            "title": "Decide the public API surface for the new chunk endpoint",
+            "prompt": "Design the API surface and naming for the chunk dispatcher.",
+            "work_class": "reason",
+            "acceptance": "a named interface Mike signed off on",
+            "reversible": False,
+            "failure_cost": 0.8,
+        },
+    ],
+}
+
+
+def _load(arg: str) -> dict:
+    text = sys.stdin.read() if arg == "-" else Path(arg).expanduser().read_text()
+    return json.loads(text)
+
+
+def _emit(obj: dict) -> None:
+    print(json.dumps(obj, indent=2))
+
+
+def main() -> int:
+    ap = argparse.ArgumentParser(prog="rig-chunk", add_help=True)
+    sub = ap.add_subparsers(dest="verb", required=True)
+    sub.add_parser("doctor")
+    sub.add_parser("example")
+    p_plan = sub.add_parser("plan")
+    p_plan.add_argument("mission")
+    p_plan.add_argument("--allow-local-only", action="store_true")
+    p_disp = sub.add_parser("dispatch")
+    p_disp.add_argument("plan")
+    p_disp.add_argument("--max-inflight", type=int, default=4)
+    p_disp.add_argument("--max-tokens", type=int, default=1024)
+    p_disp.add_argument("--attempts", type=int, default=3)
+    p_ver = sub.add_parser("verify")
+    p_ver.add_argument("dispatch")
+    p_run = sub.add_parser("run")
+    p_run.add_argument("mission")
+    p_run.add_argument("--max-inflight", type=int, default=4)
+    p_run.add_argument("--max-tokens", type=int, default=1024)
+    p_run.add_argument("--allow-local-only", action="store_true")
+    args = ap.parse_args()
+
+    try:
+        if args.verb == "doctor":
+            report = C.doctor()
+            _emit(report)
+            return 0 if report.get("pair") == "reachable" else 2
+
+        if args.verb == "example":
+            _emit(EXAMPLE)
+            return 0
+
+        if args.verb == "plan":
+            plan_obj = C.plan(_load(args.mission), allow_local_only=args.allow_local_only)
+            _emit(plan_obj)
+            return 2 if plan_obj["counts"]["refused"] else 0
+
+        if args.verb == "dispatch":
+            result = C.dispatch(
+                _load(args.plan),
+                max_inflight=args.max_inflight,
+                max_tokens=args.max_tokens,
+                attempts=args.attempts,
+            )
+            _emit(result)
+            return 2 if result["failed"] else 0
+
+        if args.verb == "verify":
+            report = C.verify(_load(args.dispatch))
+            _emit(report)
+            return 0 if report["overall"] == "OFFLOAD_PROVEN" else 2
+
+        if args.verb == "run":
+            plan_obj = C.plan(_load(args.mission), allow_local_only=args.allow_local_only)
+            dispatched = C.dispatch(plan_obj, max_inflight=args.max_inflight, max_tokens=args.max_tokens)
+            proof = C.verify(dispatched)
+            _emit({"plan": plan_obj["counts"], "dispatch": {k: v for k, v in dispatched.items() if k != "results"},
+                   "verify": proof})
+            return 0 if (proof["overall"] == "OFFLOAD_PROVEN" and not dispatched["failed"]) else 2
+    except C.ChunkError as exc:
+        print(json.dumps({"status": "REFUSED", "reason": str(exc)}, indent=2), file=sys.stderr)
+        return 2
+    return 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

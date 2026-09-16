@@ -47,6 +47,18 @@ IGNORE = shutil.ignore_patterns(".git", ".venvs", ".apodex", "__pycache__",
                                 ".venv", "node_modules")
 
 
+def _copytree(src: Path, dst: Path) -> None:
+    """Clone the repository for a plant without dereferencing its catalog links.
+
+    The estate intentionally contains path-index symlinks, including dangling links for
+    assets not installed on this workstation. Dereferencing them makes certification crash
+    before a single gate runs. Preserve the link itself: gates must judge the same tree shape
+    as the live repo, and a missing target remains missing without breaking the copy phase.
+    """
+    shutil.copytree(src, dst, ignore=IGNORE, symlinks=True)
+
+
+
 def _g_suite(repo) -> tuple[bool, str]:
     r = subprocess.run([sys.executable, "-m", "unittest", "tests.test_catalog"],
                        cwd=str(repo.root), capture_output=True, timeout=300,
@@ -332,7 +344,7 @@ def _plant(name: str, tmp_root: Path) -> str:
 
 def _restore(name: str, tmp_root: Path, backup: Path) -> None:
     shutil.rmtree(tmp_root, ignore_errors=True)
-    shutil.copytree(backup, tmp_root, ignore=IGNORE)
+    _copytree(backup, tmp_root)
 
 
 def _gate_probe(work: Path, name: str, pkg: Path) -> bool | None:
@@ -388,10 +400,10 @@ def self_test(repo, only: list[str] | None = None) -> dict:
     backup = tmp / "backup"
     work = tmp / "repo"
     try:
-        shutil.copytree(repo.root, backup, ignore=IGNORE)
+        _copytree(repo.root, backup)
         for name in sweep:
             shutil.rmtree(work, ignore_errors=True)
-            shutil.copytree(backup, work, ignore=IGNORE)
+            _copytree(backup, work)
             from .catalog import Repo
             r1 = Repo(work)
             before = run_gates(r1, only=[name])[name]["ok"]
