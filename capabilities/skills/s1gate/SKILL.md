@@ -133,6 +133,19 @@ An advisory rubric never returns 1.
 
 ## Where this integrates
 
+- **Aside (the browser agent) and every other MCP harness**:
+  `capabilities_s1gate` on the `rig-capabilities` server — one tool, actions
+  `list / show / check / rank / improve / stats / recent / review / label /
+  calibrate / selftest`. It calls the same library functions as the CLI, so a
+  tool answer cannot disagree with `bin/rig-s1gate`. Guards baked in: closed
+  schema, `calibrate` is dry-run only (no caller key can turn a gate enforcing),
+  25-candidate and 5-iteration spend caps, provider failure comes back as
+  `fail_closed` data rather than a pass, and nothing prints on stdout (that is
+  the JSON-RPC channel). Ask "is it wired?" with `{"action":"selftest"}` — free,
+  no API call. Tests: `tests/test_mcp_s1gate.py`.
+- **Raw Jev questions outside the rubrics**: the `typesafe-jev` skill (same repo,
+  symlinked into the Aside skills dir) has the request shapes that validate —
+  including the one that costs everyone a 422: a `noul` takes **no** `criteria`.
 - **Coding agents**: `capabilities/hooks/s1gate-stage-gate.sh` — a Claude Code / OMP
   Stop hook. Exit 2 blocks the agent and feeds the reasons back as stderr.
 - **Decision log**: `~/.rig/s1gate/decisions.db`. Every call recorded with the state

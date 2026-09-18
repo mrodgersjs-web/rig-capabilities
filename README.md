@@ -72,6 +72,7 @@ tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 | `capabilities_public_catalog` | v5 assets whose `acl` contains `public` |
 | `capabilities_connectors` | SQL/API connector status + last error |
 | `capabilities_observe` | local traces + Langfuse reachability (honest false if unkeyed) |
+| `capabilities_s1gate` | **System-1 gate (Jev)**: check/rank/improve an artifact against a rubric, read the decision log, dry-run calibrate, selftest -- same library as `bin/rig-s1gate` |
 
 CLI twins: `pack --requester`, `refresh`, `serve`, `connectors`, `observe`,
 `publish`, `sign`, `verify`. See [docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md).

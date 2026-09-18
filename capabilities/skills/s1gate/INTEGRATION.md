@@ -33,6 +33,12 @@ Wherever a routine currently says *"draft X and hand it to Mike"*, it now says:
 Where a routine produces **several** candidates (post variants, comment targets, leads,
 prospects), it runs `rank` first and only `improve`s the top one or two.
 
+**In Aside specifically**, the same two verbs are a tool call, not a shell command:
+`capabilities_s1gate` with `{"action":"improve","rubric":"post.linkedin","text":"…",
+"context":"…","max_iterations":3}` (or `"action":"rank"` with `candidates[]`). Same
+library, same decision log, same verdicts — a routine with browser access but no
+bash permission can still run the gate. The CLI above stays the path for hooks and CI.
+
 The rubric never sees Gate-D. `improve` on Lane C (`nil.jacob`) is `never_auto`: it
 returns a cleaner draft and still ESCALATEs, because a human decides on a minor's lane.
 

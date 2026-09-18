@@ -10,6 +10,7 @@ from . import surface_tools
 from .catalog import KINDS, Repo
 from .live import live_status
 from . import comms_bridge
+from . import s1gate_bridge
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
@@ -570,6 +571,65 @@ TOOLS = [
                      "description": "tokens the named module expects, minus the "
                                     "program name; repo-relative paths only"}},
             "required": ["check"],
+        },
+    },
+    # --- System-1 gate (Jev via s1gate): the only route into the classifier ---
+    {
+        "name": "capabilities_s1gate",
+        "description": (
+            "The RIG System-1 Gate: score an artifact against a rubric using "
+            "TypeSafe's Jev classifier, through the same s1gate runtime as "
+            "`bin/rig-s1gate` (so this tool can never disagree with the CLI). "
+            "Jev is a classifier, NOT a chat model: it returns calibrated "
+            "probabilities and generates zero text, so it decides what deserves "
+            "a System 2 model rather than replacing one. action=list (every rubric "
+            "packs + which are enforcing), show (questions/rules/floor for one "
+            "pack), check (rubric + text -> PASS/ESCALATE/BLOCK with per-question "
+            "answers, cheapest single judgement), rank (candidates[] -> best-first, "
+            "needs no calibration), improve (score -> rewrite -> rescore loop, "
+            "local rewriter first), stats/recent/review (the decision log at "
+            "~/.rig/s1gate/decisions.db), label (grow the calibration corpus), "
+            "calibrate (DRY RUN ONLY -- no tool here can flip a gate to enforcing, "
+            "that is law 3 and stays human), selftest (proves the gate is wired "
+            "with zero API spend -- call this before believing 'the gate is "
+            "down'). Every check is logged. Free verbs: list/show/stats/recent/"
+            "review/label/calibrate/selftest; billable (live Jev call): check/rank/"
+            "improve. Rubrics ship advisory until measured -- check `enforcing` "
+            "in the list output, because a PASS from an advisory pack annotates, it never "
+            "authorises (law 6), and Lane C (nil.jacob) is never_auto."
+        ),
+        "inputSchema": {"type": "object", "properties": {
+            "action": {"type": "string", "enum": list(s1gate_bridge.ACTIONS)},
+            "rubric": {"type": "string",
+                       "description": "rubric id from action=list, e.g. "
+                                      "code.diff, post.linkedin, comment.linkedin"},
+            "text": {"type": "string",
+                     "description": "the artifact being judged (draft, diff, plan). "
+                                    f"Max {s1gate_bridge.MAX_ARTIFACT_CHARS} chars."},
+            "subject": {"type": "string", "description": "label for the decision log"},
+            "model": {"type": "string", "description": "override the configured Jev model id"},
+            "candidates": {"type": "array", "items": {"type": "string"},
+                           "description": f"for rank: 2..{s1gate_bridge.MAX_RANK_CANDIDATES} artifacts"},
+            "context": {"type": "string",
+                        "description": "for improve: facts the rewriter may use "
+                                       "(author's own measurements count)"},
+            "max_iterations": {"type": "integer",
+                               "description": f"improve loop budget, 1..{s1gate_bridge.MAX_IMPROVE_ITERATIONS}"},
+            "accept": {"type": "string", "enum": ["PASS", "ESCALATE"],
+                       "description": "improve: the verdict that counts as done"},
+            "decision_id": {"type": "integer"},
+            "label": {"type": "string", "enum": ["good", "bad"],
+                      "description": "human judgement on a logged decision"},
+            "signal": {"type": "string",
+                       "description": "calibrate: question.attr, e.g. weakened_test.noul"},
+            "direction": {"type": "string", "enum": ["above", "below"]},
+            "max_false_block_rate": {"type": "number"},
+            "min_recall": {"type": "number"},
+            "limit": {"type": "integer", "description": "recent: rows, max 100"},
+            "unlabelled": {"type": "boolean",
+                           "description": "recent: only rows awaiting a label"}},
+            "required": ["action"],
+            "additionalProperties": False,
         },
     },
     # --- Communications OS (rig_comms runtime, deterministic, no LLM) ---
@@ -1619,6 +1679,9 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
     handlers = {
         "capabilities_asset_hygiene": asset_hygiene,
         "capabilities_verdict": verdict,
+        # System-1 gate: thin passthrough to the s1gate runtime (same library
+        # functions bin/rig-s1gate calls), never a second implementation.
+        "capabilities_s1gate": s1gate_bridge.s1gate,
         "capabilities_search": search,
         "capabilities_get": get,
         "capabilities_list": lst,
