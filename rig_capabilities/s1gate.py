@@ -304,6 +304,7 @@ class GateResult:
     latency_ms: int
     advisory: bool = False
     state_sha256: str = ""
+    state_preview: str = ""
     error: Optional[str] = None
     decision_id: Optional[int] = None
 
@@ -343,7 +344,8 @@ CREATE TABLE IF NOT EXISTS decisions (
     error        TEXT,
     label        TEXT,
     labelled_at  REAL,
-    labelled_by  TEXT
+    labelled_by  TEXT,
+    state_preview TEXT
 );
 CREATE INDEX IF NOT EXISTS idx_decisions_rubric ON decisions(rubric);
 CREATE INDEX IF NOT EXISTS idx_decisions_label ON decisions(rubric, label);
@@ -364,29 +366,76 @@ class DecisionLog:
         self._conn = sqlite3.connect(str(self.db_path))
         self._conn.row_factory = sqlite3.Row
         self._conn.executescript(_SCHEMA)
+        # Migration for databases created before state previews existed. A busy
+        # error means another writer just did the same ALTER; verify either way.
+        try:
+            self._conn.execute("ALTER TABLE decisions ADD COLUMN state_preview TEXT")
+        except sqlite3.OperationalError:
+            pass
+        cols = {r[1] for r in self._conn.execute("PRAGMA table_info(decisions)")}
+        self.has_preview = "state_preview" in cols
         self._conn.commit()
 
     def record(self, result: GateResult, subject: Optional[str] = None) -> int:
-        cur = self._conn.execute(
-            "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
-            " answers_json, reasons_json, model, latency_ms, error)"
-            " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-            (
-                time.time(),
-                result.rubric,
-                subject,
-                result.state_sha256,
-                result.verdict,
-                1 if result.advisory else 0,
-                json.dumps(result.answers),
-                json.dumps(result.reasons),
-                result.model,
-                result.latency_ms,
-                result.error,
-            ),
-        )
+        preview = getattr(result, "state_preview", "") or None
+        if self.has_preview:
+            cur = self._conn.execute(
+                "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
+                " answers_json, reasons_json, model, latency_ms, error, state_preview)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    time.time(),
+                    result.rubric,
+                    subject,
+                    result.state_sha256,
+                    result.verdict,
+                    1 if result.advisory else 0,
+                    json.dumps(result.answers),
+                    json.dumps(result.reasons),
+                    result.model,
+                    result.latency_ms,
+                    result.error,
+                    preview,
+                ),
+            )
+        else:
+            cur = self._conn.execute(
+                "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
+                " answers_json, reasons_json, model, latency_ms, error)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    time.time(),
+                    result.rubric,
+                    subject,
+                    result.state_sha256,
+                    result.verdict,
+                    1 if result.advisory else 0,
+                    json.dumps(result.answers),
+                    json.dumps(result.reasons),
+                    result.model,
+                    result.latency_ms,
+                    result.error,
+                ),
+            )
         self._conn.commit()
         return int(cur.lastrowid)
+
+    def recent(self, rubric: Optional[str] = None, n: int = 20, unlabelled: bool = False) -> List[sqlite3.Row]:
+        q = "SELECT * FROM decisions"
+        cond, args = [], []
+        if rubric:
+            cond.append("rubric=?")
+            args.append(rubric)
+        if unlabelled:
+            cond.append("label IS NULL")
+        if cond:
+            q += " WHERE " + " AND ".join(cond)
+        q += " ORDER BY id DESC LIMIT ?"
+        args.append(max(1, min(int(n), 500)))
+        return list(self._conn.execute(q, args))
+
+    def get(self, decision_id: int) -> Optional[sqlite3.Row]:
+        return self._conn.execute("SELECT * FROM decisions WHERE id=?", (decision_id,)).fetchone()
 
     def label(self, decision_id: int, label: str, by: str = "human") -> None:
         self._conn.execute(
@@ -462,6 +511,9 @@ def evaluate(
     """
     rb = load_rubric(rubric) if isinstance(rubric, str) else rubric
     sha = hashlib.sha256(state.encode("utf-8")).hexdigest()
+    # A short local preview is what makes a logged decision labelable later.
+    # Disable entirely with S1GATE_STATE_PREVIEW=0.
+    preview = "" if os.environ.get("S1GATE_STATE_PREVIEW") == "0" else state[:500]
     t0 = time.time()
 
     try:
@@ -478,6 +530,7 @@ def evaluate(
             model="",
             latency_ms=int((time.time() - t0) * 1000),
             state_sha256=sha,
+            state_preview=preview,
             error=str(exc),
         )
         if log:
@@ -538,6 +591,7 @@ def evaluate(
         model=str(body.get("model", "")),
         latency_ms=latency,
         state_sha256=sha,
+        state_preview=preview,
     )
     if log:
         res.decision_id = log.record(res, subject)

@@ -16,6 +16,8 @@ Usage
     rig-s1gate calibrate <rubric> --signal Q.ATTR [--direction above|below]
                                   [--max-false-block 0.05] [--min-recall 0.50] [--write]
     rig-s1gate stats [rubric]
+    rig-s1gate recent [rubric] [-n N] [--unlabelled]   list logged decisions for labelling
+    rig-s1gate review <decision-id>                    show one decision: state preview, answers, reasons
     rig-s1gate selftest
     rig-s1gate improve <rubric> [--file PATH | --stdin] [--context STR] [--max 3]
                                 [--accept PASS|ESCALATE] [--json]
@@ -102,7 +104,7 @@ def cmd_check(args) -> int:
         print(res.summary())
         if res.decision_id:
             print("  decision id %d  (%dms, %s)" % (res.decision_id, res.latency_ms, res.model))
-            print("  label it later:  rig-s1gate label %d good|bad" % res.decision_id)
+            print("  label it later:  rig-s1gate label %d good|bad   (review it first: rig-s1gate review %d)" % (res.decision_id, res.decision_id))
     # An advisory verdict never hard-fails a build; it reports 2 at worst.
     code = EXIT[res.verdict]
     if res.advisory and code == 1:
@@ -193,6 +195,65 @@ def cmd_rank(args) -> int:
     return 0
 
 
+def cmd_recent(args) -> int:
+    log = DecisionLog()
+    try:
+        rows = log.recent(rubric=args.rubric, n=args.n, unlabelled=args.unlabelled)
+    finally:
+        log.close()
+    if not rows:
+        print("no decisions match")
+        return 0
+    import datetime as _dt
+    print("%-5s %-15s %-16s %-9s %-6s %s" % ("ID", "TIME", "RUBRIC", "VERDICT", "LABEL", "SUBJECT / STATE"))
+    for r in rows:
+        ts = _dt.datetime.fromtimestamp(r["ts"]).strftime("%m-%d %H:%M:%S")
+        label = r["label"] or "-"
+        keys = r.keys()
+        hint = r["subject"] or ((r["state_preview"] if "state_preview" in keys and r["state_preview"] else None) or "")[:44].replace("\n", " ") or (r["state_sha256"][:12] + "..")
+        print("%-5d %-15s %-16s %-9s %-6s %s" % (r["id"], ts, r["rubric"], r["verdict"], label, hint))
+    return 0
+
+
+def cmd_review(args) -> int:
+    log = DecisionLog()
+    try:
+        r = log.get(args.decision_id)
+    finally:
+        log.close()
+    if not r:
+        print("no decision with id %d" % args.decision_id, file=sys.stderr)
+        return 3
+    print("decision %d  %s  [%s]%s%s" % (
+        r["id"], r["rubric"], r["verdict"],
+        "  advisory" if r["advisory"] else "",
+        "  labelled=" + r["label"] if r["label"] else "  UNLABELLED"))
+    print("  subject : %s" % (r["subject"] or "(none)"))
+    print("  model   : %s   latency: %sms" % (r["model"] or "-", r["latency_ms"]))
+    if r["error"]:
+        print("  error   : %s" % r["error"])
+    keys = r.keys()
+    preview = r["state_preview"] if "state_preview" in keys else None
+    if preview:
+        print("  state   :\n    " + preview.replace("\n", "\n    "))
+    else:
+        print("  state   : (preview not stored for pre-migration rows; sha256 %s..)" % r["state_sha256"][:16])
+    try:
+        answers = json.loads(r["answers_json"] or "{}")
+    except ValueError:
+        answers = {}
+    if answers:
+        print("  answers : %s" % json.dumps(answers, sort_keys=True)[:800])
+    try:
+        reasons = json.loads(r["reasons_json"] or "[]")
+    except ValueError:
+        reasons = []
+    for reason in reasons:
+        print("  reason  : %s" % reason)
+    print("  label it:  rig-s1gate label %d good|bad" % r["id"])
+    return 0
+
+
 def cmd_selftest(args) -> int:
     """Prove the rule engine and the fail-closed path without calling the API."""
     from rig_capabilities.s1gate import eval_condition
@@ -251,6 +312,12 @@ def main(argv=None) -> int:
     cal.set_defaults(fn=cmd_calibrate)
 
     st = sub.add_parser("stats"); st.add_argument("rubric", nargs="?"); st.set_defaults(fn=cmd_stats)
+    rc = sub.add_parser("recent")
+    rc.add_argument("rubric", nargs="?")
+    rc.add_argument("-n", type=int, default=20)
+    rc.add_argument("--unlabelled", action="store_true")
+    rc.set_defaults(fn=cmd_recent)
+    rv = sub.add_parser("review"); rv.add_argument("decision_id", type=int); rv.set_defaults(fn=cmd_review)
 
     im = sub.add_parser("improve")
     im.add_argument("rubric")
