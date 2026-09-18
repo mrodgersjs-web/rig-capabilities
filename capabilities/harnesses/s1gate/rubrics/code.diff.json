@@ -84,6 +84,25 @@
   ],
   "confidence_floor": 0.3,
   "calibrated": false,
-  "calibration": {},
+  "calibration": {
+    "status": "REFUSED",
+    "attempted": "2026-09-18",
+    "corpus": "capabilities/golden/s1gate/code-diff-corpus.jsonl",
+    "n_labelled": 204,
+    "n_good": 153,
+    "n_bad": 51,
+    "signals_swept": {
+      "weakened_test.noul": 0.0023,
+      "silent_scope_creep.noul": 0.0104,
+      "risk.score": 0.094,
+      "secret_exposure.noul": 0.021,
+      "addresses_task.noul": 0.0099,
+      "claims_match_diff.noul": 0.0546,
+      "verification_strength.score": 0.066
+    },
+    "verdict": "No signal separated good from bad at false_block_rate <= 0.05. Gate stays advisory.",
+    "diagnosis": "Label/question mismatch, NOT model failure. The corpus labels answer 'was this commit later reverted or fixed up', which is an outcome proxy. The rubric asks 'does this diff weaken a test / address its task'. Those are different questions. Evidence the signal itself works: weakened_test.noul scored 0.92 on a hand-built diff that deletes an assertion, but never exceeds 0.48 across all 204 real commits and sits below 0.10 on 169 of them - the corpus simply contains almost no test-weakening to detect. A commit can also be reverted for product reasons with nothing wrong in the diff, and 'untouched for 30 days' often means dead code rather than good code.",
+    "to_certify": "Build labels on the question the rubric actually asks: have a human or a strong System 2 model read each diff and answer 'does this weaken a test, yes/no'. Target >= 20 genuine positives. Until then this gate annotates and cannot block."
+  },
   "never_auto": false
 }
