@@ -1,0 +1,56 @@
+{
+  "name": "screen.pitch",
+  "stage": "build",
+  "lane": "job",
+  "description": "Gate the 90-second opener or one-sentence pitch for a recruiter screen. The recruiter must be able to paste one sentence into an ATS note that says W2 hire, seat, proof, next-move filter.",
+  "questions": {
+    "pasteable_sentence": {
+      "type": "noul",
+      "instructions": "A recruiter could lift one sentence from this that states who the candidate is, what seat they fit, and one proof point"
+    },
+    "names_next_move": {
+      "type": "noul",
+      "instructions": "It states what the candidate wants next in plain terms a recruiter can match to a requisition"
+    },
+    "sells_services": {
+      "type": "noul",
+      "instructions": "It pitches consulting, a company, or a services offer rather than a hire"
+    },
+    "proof_specific": {
+      "type": "score",
+      "instructions": "Specificity of proof",
+      "criteria": [
+        "Adjectives only",
+        "One vague achievement",
+        "One named, numbered outcome",
+        "Two or three named, numbered outcomes tied to the seat"
+      ]
+    },
+    "under_90_seconds": {
+      "type": "noul",
+      "instructions": "Spoken at a normal pace this runs 90 seconds or less"
+    }
+  },
+  "rules": [
+    {
+      "when": "sells_services.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "consulting pitch in a screen opener"
+    },
+    {
+      "when": "pasteable_sentence.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "no forwardable sentence"
+    },
+    {
+      "when": "under_90_seconds.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "too long"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

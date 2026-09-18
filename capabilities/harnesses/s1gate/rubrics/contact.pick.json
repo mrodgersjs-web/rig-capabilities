@@ -1,0 +1,42 @@
+{
+  "name": "contact.pick",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Given one person at a target company (title, tenure, shared history with the candidate, recent activity), judge whether they are the right first door for this role. Rank across candidates.",
+  "questions": {
+    "hm_likelihood": {
+      "type": "noul",
+      "instructions": "This person is likely the hiring manager or the hiring manager's direct leader for the role described"
+    },
+    "recruiter_for_req": {
+      "type": "noul",
+      "instructions": "This person is the recruiter or talent partner who would own this requisition"
+    },
+    "warm_strength": {
+      "type": "score",
+      "instructions": "Strength of the warm path between the candidate and this person",
+      "criteria": [
+        "No connection",
+        "2nd degree through a weak mutual",
+        "2nd degree through a strong mutual or shared past employer",
+        "1st degree, has interacted in the last year"
+      ]
+    },
+    "responsive": {
+      "type": "noul",
+      "instructions": "This person posts, comments or replies publicly often enough that a message is likely to be read"
+    }
+  },
+  "rules": [
+    {
+      "when": "warm_strength.score >= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "strong warm path -- ask for the intro here first"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

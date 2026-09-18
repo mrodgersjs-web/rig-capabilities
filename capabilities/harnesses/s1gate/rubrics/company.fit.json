@@ -1,0 +1,52 @@
+{
+  "name": "company.fit",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Company-level fit for a $250K+ Head-of-AI / AI transformation seat: does this company pay at band, is AI a real mandate, and is this a place a builder-strategist would thrive. Input: company name, size, sector, any public signals.",
+  "questions": {
+    "pays_at_band": {
+      "type": "noul",
+      "instructions": "A company of this size, sector and funding stage typically pays $250K or more all-in for a VP/Head-of AI or senior director AI role"
+    },
+    "ai_mandate": {
+      "type": "score",
+      "instructions": "How real the AI mandate is at this company",
+      "criteria": [
+        "AI is a buzzword in the JD only",
+        "AI initiatives exist but no executive owner or budget named",
+        "Named executive sponsor and funded programs",
+        "AI is core to strategy with public commitments and a team already in place"
+      ]
+    },
+    "risk_signals": {
+      "type": "noul",
+      "instructions": "Public signals of layoffs, hiring freeze, leadership turnover or financial distress in the last 12 months"
+    },
+    "operator_fit": {
+      "type": "noul",
+      "instructions": "The environment rewards an operator who drives adoption across clinicians, plants or field teams, rather than a pure research or platform culture"
+    }
+  },
+  "rules": [
+    {
+      "when": "pays_at_band.noul < 0.35",
+      "verdict": "BLOCK",
+      "reason": "company unlikely to pay at band"
+    },
+    {
+      "when": "risk_signals.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "distress signals; check before investing"
+    },
+    {
+      "when": "ai_mandate.score < 1.00",
+      "verdict": "ESCALATE",
+      "reason": "AI mandate looks nominal"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

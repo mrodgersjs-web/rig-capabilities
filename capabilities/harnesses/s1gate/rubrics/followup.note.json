@@ -1,0 +1,65 @@
+{
+  "name": "followup.note",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Gate a post-interview thank-you or follow-up before sending: specific to the conversation, one next step, no pitch, no new claims, right length.",
+  "questions": {
+    "specific_reference": {
+      "type": "noul",
+      "instructions": "It references something specific that was said in the conversation"
+    },
+    "one_next_step": {
+      "type": "noul",
+      "instructions": "It proposes or asks for exactly one next step"
+    },
+    "new_pitch": {
+      "type": "noul",
+      "instructions": "It introduces new selling points, services, or claims not discussed in the interview"
+    },
+    "length": {
+      "type": "choice",
+      "instructions": "Length band",
+      "criteria": {
+        "under_120": "Under 120 words",
+        "120_to_200": "120 to 200 words",
+        "over_200": "Over 200 words"
+      }
+    },
+    "tone": {
+      "type": "choice",
+      "instructions": "Tone",
+      "criteria": {
+        "warm_direct": "Warm and direct",
+        "stiff": "Formal and stiff",
+        "needy": "Over-eager or apologetic"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "new_pitch.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "no new pitch in a thank-you"
+    },
+    {
+      "when": "length.choice == over_200",
+      "verdict": "ESCALATE",
+      "reason": "trim"
+    },
+    {
+      "when": "tone.choice == needy",
+      "verdict": "ESCALATE",
+      "reason": "tone"
+    },
+    {
+      "when": "specific_reference.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "reference the conversation"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

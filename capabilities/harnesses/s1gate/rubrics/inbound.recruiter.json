@@ -1,0 +1,54 @@
+{
+  "name": "inbound.recruiter",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Triage an inbound recruiter or hiring-manager message for the 1-hour reply SLA: real search or mass blast, in-house or agency, band, and what the reply should do.",
+  "questions": {
+    "real_search": {
+      "type": "noul",
+      "instructions": "This message is about one specific open role the sender is actively filling, not a mass template or a database-building blast"
+    },
+    "sender_type": {
+      "type": "choice",
+      "instructions": "Who sent it",
+      "criteria": {
+        "in_house_recruiter": "Recruiter employed by the hiring company",
+        "hiring_manager": "The person the role reports to",
+        "exec_search": "Retained or contingent executive search firm",
+        "staffing_agency": "Contract or staffing agency",
+        "unclear": "Cannot tell"
+      }
+    },
+    "band_plausible": {
+      "type": "noul",
+      "instructions": "The role described plausibly pays $250K or more all-in"
+    },
+    "reply_action": {
+      "type": "choice",
+      "instructions": "Best next action for the candidate",
+      "criteria": {
+        "book_call": "Reply and book a call this week",
+        "ask_two_questions": "Reply asking for band and seat shape before booking",
+        "polite_decline": "Decline briefly and keep the relationship",
+        "ignore": "No reply warranted"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "real_search.noul < 0.40",
+      "verdict": "BLOCK",
+      "reason": "mass blast; no same-hour reply needed"
+    },
+    {
+      "when": "band_plausible.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "in-band real search -- reply within the hour"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

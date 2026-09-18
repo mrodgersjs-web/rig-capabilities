@@ -1,0 +1,47 @@
+{
+  "name": "posting.legit",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Is this posting a real, current, fillable seat? Filters ghost jobs, evergreen pipeline posts, staffing-agency mass reposts and stale listings before any effort is spent.",
+  "questions": {
+    "ghost_signals": {
+      "type": "score",
+      "instructions": "Signs this posting is not a real, currently open seat (evergreen wording, no team or manager context, identical text across many cities, posted 60+ days, generic 'always hiring')",
+      "criteria": [
+        "No ghost signals; specific team, manager context and recent date",
+        "One mild signal",
+        "Several signals; likely pipeline or evergreen",
+        "Almost certainly not a fillable seat right now"
+      ]
+    },
+    "agency_repost": {
+      "type": "noul",
+      "instructions": "The poster is a staffing agency or recruiter reposting a client's role rather than the employer itself"
+    },
+    "direct_employer": {
+      "type": "noul",
+      "instructions": "The posting names the employer and the team the role sits in"
+    },
+    "urgency": {
+      "type": "noul",
+      "instructions": "The text implies an active search with a named timeline, backfill, or new funding for the seat"
+    }
+  },
+  "rules": [
+    {
+      "when": "ghost_signals.score >= 2.50",
+      "verdict": "BLOCK",
+      "reason": "likely ghost or evergreen posting"
+    },
+    {
+      "when": "agency_repost.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "agency repost -- find the direct employer posting first"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

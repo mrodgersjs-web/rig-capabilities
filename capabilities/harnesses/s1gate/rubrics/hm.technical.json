@@ -1,0 +1,51 @@
+{
+  "name": "hm.technical",
+  "stage": "measure",
+  "lane": "job",
+  "description": "Score a technical answer for a hiring-manager or technical-builder round: would it survive a follow-up probe, and does it distinguish what the candidate built from what they directed.",
+  "questions": {
+    "built_vs_directed": {
+      "type": "choice",
+      "instructions": "What the answer claims about the candidate's own role",
+      "criteria": {
+        "built_it": "Personally wrote or configured the working system",
+        "directed_it": "Led others who built it",
+        "unclear": "Cannot tell from the answer"
+      }
+    },
+    "survives_probe": {
+      "type": "noul",
+      "instructions": "A skeptical engineer asking 'how exactly' twice would get concrete answers, not generalities"
+    },
+    "tradeoff_named": {
+      "type": "noul",
+      "instructions": "The answer names a design trade-off and why it was chosen"
+    },
+    "overclaim": {
+      "type": "noul",
+      "instructions": "The answer implies deeper personal technical work than the evidence in it supports"
+    }
+  },
+  "rules": [
+    {
+      "when": "overclaim.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "overclaim -- will be caught on the probe; say what you directed"
+    },
+    {
+      "when": "survives_probe.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "drill: add the how"
+    },
+    {
+      "when": "built_vs_directed.choice == unclear",
+      "verdict": "ESCALATE",
+      "reason": "say built or directed explicitly"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

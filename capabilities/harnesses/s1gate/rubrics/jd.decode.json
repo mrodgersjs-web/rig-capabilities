@@ -1,0 +1,66 @@
+{
+  "name": "jd.decode",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Decode what the hiring manager actually wants from a JD: the real seat shape, the hidden must-have, and where a strategy-led candidate would be filtered. Feeds tailoring and the prep room.",
+  "questions": {
+    "real_seat": {
+      "type": "choice",
+      "instructions": "What the team will actually have this person do most days, reading past the title",
+      "criteria": {
+        "hands_on_builder": "Writes production code or models most days",
+        "player_coach": "Builds some, leads a small team",
+        "strategist_operator": "Sets direction, runs adoption, owns outcomes, does not code daily",
+        "governance_owner": "Policy, risk, responsible AI, compliance",
+        "customer_embedded": "Sits with customers deploying and adopting the product",
+        "unclear": "The JD does not make it clear"
+      }
+    },
+    "hands_on_required": {
+      "type": "noul",
+      "instructions": "The JD requires daily hands-on coding or model building as a must-have rather than a nice-to-have"
+    },
+    "hidden_filter": {
+      "type": "choice",
+      "instructions": "The most likely reason a strong strategy-and-adoption leader would be filtered out",
+      "criteria": {
+        "none": "No obvious filter",
+        "years_of_eng_management": "Requires many years managing software engineers",
+        "phd_or_research": "Requires research credentials",
+        "specific_platform": "Requires deep experience in one named platform or vendor",
+        "industry_only": "Requires years in one industry the candidate lacks",
+        "ic_depth": "Requires IC-level depth in ML or infrastructure"
+      }
+    },
+    "outcome_owner": {
+      "type": "noul",
+      "instructions": "The role owns a business outcome (adoption, revenue, cost, customer result) rather than only technical delivery"
+    },
+    "reports_to_exec": {
+      "type": "noul",
+      "instructions": "The role reports to a C-level or SVP, or is described as leading AI for a business unit or the company"
+    }
+  },
+  "rules": [
+    {
+      "when": "hands_on_required.noul >= 0.75",
+      "verdict": "ESCALATE",
+      "reason": "daily hands-on required; use the FDE master and lead with proof-studio"
+    },
+    {
+      "when": "hidden_filter.choice == years_of_eng_management",
+      "verdict": "ESCALATE",
+      "reason": "eng-management years filter; likely not worth a cold apply"
+    },
+    {
+      "when": "hidden_filter.choice == phd_or_research",
+      "verdict": "BLOCK",
+      "reason": "research credential filter"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

@@ -1,0 +1,56 @@
+{
+  "name": "offer.eval",
+  "stage": "measure",
+  "lane": "job",
+  "description": "Evaluate an offer or late-stage role against Mike's stated goals: $250K+ all-in (reach $325K), and the priority order fitness, James, learning. Input: comp components, role, location, expectations.",
+  "questions": {
+    "all_in_band": {
+      "type": "score",
+      "instructions": "All-in first-year compensation from base, target bonus and expected annual equity value",
+      "criteria": [
+        "Below $250K",
+        "$250K to $300K",
+        "$300K to $325K",
+        "Above $325K"
+      ]
+    },
+    "equity_real": {
+      "type": "noul",
+      "instructions": "The equity component has a plausible, explained value (public stock, recent priced round, or stated FMV) rather than an unquantified promise"
+    },
+    "protects_priorities": {
+      "type": "noul",
+      "instructions": "The role's travel, hours and location expectations leave room for daily training and family time"
+    },
+    "learning_curve": {
+      "type": "noul",
+      "instructions": "The role would materially grow the candidate's enterprise AI leadership scope"
+    },
+    "negotiable": {
+      "type": "noul",
+      "instructions": "The offer language leaves room to negotiate base, bonus or equity"
+    }
+  },
+  "rules": [
+    {
+      "when": "all_in_band.score < 1.00",
+      "verdict": "BLOCK",
+      "reason": "below the $250K floor as offered"
+    },
+    {
+      "when": "protects_priorities.noul < 0.40",
+      "verdict": "ESCALATE",
+      "reason": "conflicts with priorities 1-2"
+    },
+    {
+      "when": "all_in_band.score < 2.00",
+      "verdict": "ESCALATE",
+      "reason": "in floor band, below reach -- negotiate"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}

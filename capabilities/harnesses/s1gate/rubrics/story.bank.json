@@ -1,0 +1,59 @@
+{
+  "name": "story.bank",
+  "stage": "build",
+  "lane": "job",
+  "description": "Score one answer-bank story for reuse: completeness, ownership, number, and which competency it proves. Rank stories to pick the lead story for a given JD (pass the JD as context).",
+  "questions": {
+    "star_complete": {
+      "type": "score",
+      "instructions": "Situation, own action, result all present",
+      "criteria": [
+        "Missing two parts",
+        "Missing one part",
+        "All present but thin",
+        "All present with a mechanism explained"
+      ]
+    },
+    "personal_action": {
+      "type": "noul",
+      "instructions": "The action is clearly the candidate's own decision, not the team's"
+    },
+    "number_present": {
+      "type": "noul",
+      "instructions": "The result carries a specific number with scope"
+    },
+    "competency": {
+      "type": "choice",
+      "instructions": "Primary competency this story proves",
+      "criteria": {
+        "adoption_change": "Driving adoption across resistant operators",
+        "technical_build": "Building a working system hands-on",
+        "exec_influence": "Influencing C-level or board decisions",
+        "commercial": "Revenue, deals, funding",
+        "governance": "Risk, safety, responsible AI",
+        "ops_efficiency": "Cost, time, throughput"
+      }
+    },
+    "fits_jd": {
+      "type": "noul",
+      "instructions": "Given the JD provided in context, this story is one of the two best to lead with"
+    }
+  },
+  "rules": [
+    {
+      "when": "personal_action.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "rewrite in first person with the decision named"
+    },
+    {
+      "when": "number_present.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "find the number"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+}
