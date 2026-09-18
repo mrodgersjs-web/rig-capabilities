@@ -1,0 +1,202 @@
+#!/usr/bin/env python3
+"""rig-ultra -- the shell entry point for the ULTRA gate router.
+
+A skill can only use a gate it can call. ultra_gates.route() was importable but
+unreachable from a shell, which left every studio gate decorative. This closes
+that gap without changing the routing semantics.
+
+Exit codes are the contract. Callers and CI read these, not stdout:
+    0  cleared              -- advance or annotate_advance
+    1  defect               -- rework, halt_failclosed, blocked_unknown_gate
+    2  needs a human/System2 -- escalate_review, human_card, offline_code_only
+    3  usage / config error
+
+`offline_code_only` exits 2 on purpose: Jev was never consulted, so the gate did
+not clear, whatever the code checks said.
+
+Usage
+-----
+    rig-ultra gates
+    rig-ultra contract [--json]
+    rig-ultra route <gate-id> --state TEXT|--state-file PATH
+                            [--facts FILE.json] [--set key=value ...]
+                            [--live] [--subject S] [--model M] [--timeout N] [--json]
+    rig-ultra metrics coverage --facts counts.json [--min N]
+    rig-ultra metrics information --facts class_resolved.json
+    rig-ultra metrics trimmed --values 0.4,0.5,0.6 [--trim 1]
+
+A skill's call normally looks like:
+    rig-ultra route research.citation_before_cite --state-file finding.md \
+        --facts facts.json --json
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from rig_capabilities.ultra_gates import (  # noqa: E402
+    GATES,
+    NOT_CLEARED,
+    Route,
+    contract,
+    coverage,
+    information,
+    route,
+    trimmed_mean,
+)
+
+CLEARED = (Route.ADVANCE, Route.ANNOTATE_ADVANCE)
+HUMAN_OR_WORSE = (Route.ESCALATE_REVIEW, Route.HUMAN_CARD, Route.OFFLINE_CODE_ONLY)
+DEFECT = (Route.REWORK, Route.HALT_FAILCLOSED, Route.BLOCKED_UNKNOWN)
+
+
+def exit_code(r: str) -> int:
+    """0 cleared | 1 defect | 2 a human or System 2 is required | 3 unknown route."""
+    if r in CLEARED:
+        return 0
+    if r in DEFECT:
+        return 1
+    if r in HUMAN_OR_WORSE:
+        return 2
+    return 3
+
+
+def _coerce(text: str):
+    try:
+        return json.loads(text)
+    except Exception:                                        # noqa: BLE001
+        return text
+
+
+def gather_facts(args) -> dict:
+    facts = {}
+    if getattr(args, "facts", None):
+        raw = Path(args.facts).read_text(encoding="utf-8")
+        loaded = json.loads(raw)
+        if not isinstance(loaded, dict):
+            raise SystemExit("rig-ultra: --facts must be a JSON object")
+        facts.update(loaded)
+    for pair in getattr(args, "set", None) or []:
+        if "=" not in pair:
+            raise SystemExit(f"rig-ultra: --set needs key=value, got {pair!r}")
+        k, v = pair.split("=", 1)
+        facts[k.strip()] = _coerce(v)
+    return facts
+
+
+def read_state(args) -> str:
+    if getattr(args, "state_file", None):
+        return Path(args.state_file).read_text(encoding="utf-8")
+    if getattr(args, "state", None):
+        return args.state
+    if not sys.stdin.isatty():
+        return sys.stdin.read()
+    raise SystemExit("rig-ultra: no state. Use --state, --state-file, or pipe it in.")
+
+
+def cmd_gates(_args) -> int:
+    print(f"{'GATE':<38} {'STUDIO':<12} {'PACK':<20} FLAGS            WHEN")
+    for g in GATES.values():
+        flags = "".join(["H" if g.requires_human else "-", "K" if g.escalate_is_blocking else "-",
+                         "C" if g.pack is None else "-"])
+        print(f"{g.id:<38} {g.studio:<12} {(g.pack or 'code+human only'):<20} {flags:<16} {g.when}")
+    print(f"\n{len(GATES)} gates · {len(NOT_CLEARED)} not-cleared routes are: {', '.join(sorted(NOT_CLEARED))}")
+    return 0
+
+
+def cmd_contract(args) -> int:
+    rows = contract()
+    if args.json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    for r in rows:
+        cal = r.get("pack_calibrated")
+        print(f"{r['id']:<38} pack={str(r.get('pack')):<20} calibrated={str(cal):<6} "
+              f"checks={','.join(r.get('checks') or []) or '-'} requires={','.join(r.get('requires') or []) or '-'}")
+    return 0
+
+
+def cmd_route(args) -> int:
+    facts = gather_facts(args)
+    state = read_state(args) if (args.live or args.state or args.state_file) else ""
+    res = route(args.gate, state, facts, live=args.live, subject=args.subject,
+                model=args.model, timeout=args.timeout)
+    code = exit_code(str(res.get("route")))
+    if args.json:
+        print(json.dumps(res, indent=2, default=str))
+    else:
+        print(f"gate   {res.get('gate')}   route {res.get('route')}   cleared {res.get('cleared')}"
+              f"   advance {res.get('advance')}   human {res.get('human_required')}")
+        for c in res.get("code_checks") or []:
+            print(f"  check {c.get('check')}: {c.get('ok')} -- {c.get('note')}")
+        for line in res.get("reasons") or []:
+            print(f"  why   {line}")
+        if res.get("verdict"):
+            print(f"  jev   {res.get('verdict')} advisory={res.get('advisory')} "
+                  f"enforced={res.get('enforced')} decision={res.get('decision_id')}")
+    return code
+
+
+def cmd_metrics(args) -> int:
+    what = args.what
+    if what == "coverage":
+        counts = json.loads(Path(args.facts).read_text(encoding="utf-8")) if args.facts else {}
+        out = coverage({k: int(v) for k, v in counts.items()}, minimum=args.min)
+    elif what == "information":
+        if not args.facts:
+            raise SystemExit("rig-ultra: metrics information needs --facts with {class: resolved}")
+        raw = json.loads(Path(args.facts).read_text(encoding="utf-8"))
+        out = information({k: float(v) for k, v in raw.items()})
+    else:
+        vals = [float(v) for v in (args.values or "").split(",") if v.strip()]
+        out = trimmed_mean(vals, trim=args.trim)
+    print(json.dumps(out, indent=2, default=str))
+    return 0
+
+
+def build_parser() -> argparse.ArgumentParser:
+    p = argparse.ArgumentParser(prog="rig-ultra", description=__doc__.splitlines()[0],
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    sub.add_parser("gates", help="list the declared gates").set_defaults(fn=cmd_gates)
+
+    pc = sub.add_parser("contract", help="the route table as data")
+    pc.add_argument("--json", action="store_true")
+    pc.set_defaults(fn=cmd_contract)
+
+    pr = sub.add_parser("route", help="route one gate on one artifact")
+    pr.add_argument("gate")
+    pr.add_argument("--state", default=None, help="artifact text sent to Jev when --live")
+    pr.add_argument("--state-file", default=None)
+    pr.add_argument("--facts", default=None, help="JSON object of gate facts")
+    pr.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                    help="add one fact (value parsed as JSON when it can)")
+    pr.add_argument("--live", action="store_true", help="consult Jev (a paid call)")
+    pr.add_argument("--subject", default=None)
+    pr.add_argument("--model", default=None)
+    pr.add_argument("--timeout", type=float, default=20.0)
+    pr.add_argument("--json", action="store_true")
+    pr.set_defaults(fn=cmd_route)
+
+    pm = sub.add_parser("metrics", help="the deterministic computed metrics")
+    pm.add_argument("what", choices=["coverage", "information", "trimmed"])
+    pm.add_argument("--facts", default=None)
+    pm.add_argument("--values", default=None)
+    pm.add_argument("--min", type=int, default=1)
+    pm.add_argument("--trim", type=int, default=1)
+    pm.set_defaults(fn=cmd_metrics)
+    return p
+
+
+def main(argv=None) -> int:
+    args = build_parser().parse_args(argv)
+    return int(args.fn(args))
+
+
+if __name__ == "__main__":
+    sys.exit(main())
