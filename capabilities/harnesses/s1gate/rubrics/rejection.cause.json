@@ -1,0 +1,36 @@
+{
+  "name": "rejection.cause",
+  "stage": "measure",
+  "lane": "job",
+  "description": "Project Get a Job: classify why an application or interview did not advance, from the rejection email plus Mike's post-interview notes. Turns 'I need to interview better' into a counted claim per cause.",
+  "questions": {
+    "cause": {
+      "type": "choice",
+      "instructions": "Most likely primary reason this did not advance",
+      "criteria": {
+        "comp_mismatch": "Compensation expectations above the role's band",
+        "sold_consulting": "Candidate came across as a consultant/founder pitching services rather than a hire",
+        "seniority_mismatch": "Seen as over- or under-levelled for the seat",
+        "technical_depth": "Interviewer wanted deeper hands-on technical proof than was given",
+        "domain_gap": "Missing industry or functional domain the team needed",
+        "internal_or_other_candidate": "Role filled internally or by a candidate already ahead in process",
+        "no_signal": "Generic rejection with nothing to infer"
+      }
+    },
+    "explicit_reason_given": { "type": "noul", "instructions": "The employer's message states an actual reason rather than boilerplate" },
+    "stage_reached": {
+      "type": "choice",
+      "instructions": "Furthest stage evidenced in the text",
+      "criteria": { "application": "Rejected before any conversation", "recruiter_screen": "Spoke to a recruiter only", "hiring_manager": "Spoke to the hiring manager or team", "final": "Reached a final round or offer stage" }
+    }
+  },
+  "rules": [
+    { "when": "cause.choice == sold_consulting", "verdict": "ESCALATE", "reason": "the trainable pattern -- add to drill queue" },
+    { "when": "cause.choice == comp_mismatch", "verdict": "ESCALATE", "reason": "check whether the role was ever in band; adjust job.fit if it was not" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Weekly rollup: count by cause. That count is the ProofPacket behind any 'this is why' claim."
+}

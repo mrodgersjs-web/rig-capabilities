@@ -1,0 +1,50 @@
+{
+  "name": "outreach.intro",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Project Get a Job: gate a warm-intro message to a recruiter, hiring manager, or a 1st-degree connection being asked for an introduction. Outbound is irreversible.",
+  "questions": {
+    "sells_rig": {
+      "type": "noul",
+      "instructions": "The message pitches Rodgers Intelligence Group, consulting services, or a fractional engagement instead of expressing interest in the job as an employee"
+    },
+    "single_clear_ask": {
+      "type": "noul",
+      "instructions": "The message contains exactly one specific ask the reader can act on in under a minute"
+    },
+    "forwardable": {
+      "type": "noul",
+      "instructions": "A recruiter or connection could forward this message unchanged and the recipient would understand who the candidate is and why they fit in one read"
+    },
+    "length": {
+      "type": "choice",
+      "instructions": "Word count band",
+      "criteria": {
+        "under_80": "Fewer than 80 words",
+        "80_to_150": "Between 80 and 150 words",
+        "over_150": "More than 150 words"
+      }
+    },
+    "comp_or_private_leak": {
+      "type": "noul",
+      "instructions": "The message states salary numbers, names other companies the candidate is interviewing with, or includes private details that belong in a later conversation"
+    },
+    "generic_template": {
+      "type": "noul",
+      "instructions": "The message could have been sent to any company; nothing in it is specific to this role, team or person"
+    }
+  },
+  "rules": [
+    { "when": "sells_rig.noul >= 0.60", "verdict": "BLOCK", "reason": "consulting pitch in a job-search message" },
+    { "when": "comp_or_private_leak.noul >= 0.60", "verdict": "BLOCK", "reason": "leaks comp or pipeline" },
+    { "when": "length.choice == over_150", "verdict": "ESCALATE", "reason": "too long for a cold read" },
+    { "when": "single_clear_ask.noul < 0.50", "verdict": "ESCALATE", "reason": "no single ask" },
+    { "when": "forwardable.noul < 0.50", "verdict": "ESCALATE", "reason": "not forwardable as-is" },
+    { "when": "generic_template.noul >= 0.60", "verdict": "ESCALATE", "reason": "reads as a template" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Sending stays gated by Mike's daily approval regardless of verdict. Rank verb picks among 3 drafted variants; check annotates the winner."
+}

@@ -1,0 +1,27 @@
+{
+  "name": "interview.answer",
+  "stage": "measure",
+  "lane": "job",
+  "description": "Project Get a Job: score one interview answer (practice transcript or live caption segment) on the five 0-4 criteria already used in Traject rehearsal, plus the two failure modes the prep rooms name. Input: the question, then '=== ANSWER ===', then the answer text.",
+  "questions": {
+    "relevance": { "type": "score", "instructions": "The answer addresses the question that was actually asked", "criteria": ["Off topic", "Partly on topic", "On topic with drift", "On topic", "Directly on topic and scoped to the asker's agenda"] },
+    "ownership": { "type": "score", "instructions": "The candidate states what they personally decided and did, not what the team or company did", "criteria": ["Only 'we'", "Mostly 'we'", "Mixed", "Mostly 'I' with named decisions", "Clear personal decisions and actions throughout"] },
+    "evidence": { "type": "score", "instructions": "Claims carry specifics: names, numbers, dates, mechanisms", "criteria": ["No specifics", "One vague specific", "Some specifics", "Specific and bounded", "Specific, bounded, and the mechanism is explained"] },
+    "outcome": { "type": "score", "instructions": "The answer lands on a measurable business result", "criteria": ["No outcome", "Activity described as outcome", "Outcome implied", "Outcome stated", "Outcome stated with a number and what it changed"] },
+    "clarity": { "type": "score", "instructions": "Structure and length: outcome first, own action, then stop", "criteria": ["Rambling", "Long with buried point", "Structured but long", "Structured and concise", "Outcome-first, concise, stops cleanly"] },
+    "consulting_pitch": { "type": "noul", "instructions": "The answer drifts into selling Rodgers Intelligence Group, a polymath self-description, or a services offer instead of answering as a prospective employee" },
+    "stops_cleanly": { "type": "noul", "instructions": "The answer ends after the outcome and hands the turn back to the interviewer rather than continuing with unrelated material" }
+  },
+  "rules": [
+    { "when": "consulting_pitch.noul >= 0.60", "verdict": "BLOCK", "reason": "consulting pitch -- the pattern that lost the last screens; redo as a W2 answer" },
+    { "when": "ownership.score < 2.00", "verdict": "ESCALATE", "reason": "drill: say what YOU decided" },
+    { "when": "outcome.score < 2.00", "verdict": "ESCALATE", "reason": "drill: land the number" },
+    { "when": "clarity.score < 2.00", "verdict": "ESCALATE", "reason": "drill: outcome first, then stop" },
+    { "when": "stops_cleanly.noul < 0.40", "verdict": "ESCALATE", "reason": "kept talking past the outcome" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "BLOCK here means 'redo this answer', never an authorisation. In live mode only the ESCALATE reasons are surfaced as one-line cues. Calibrate against the 2026-09-17 Salesforce drill transcripts once scores/ has labelled rows."
+}

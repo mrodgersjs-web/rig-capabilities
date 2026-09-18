@@ -1,0 +1,51 @@
+{
+  "name": "resume.ats",
+  "stage": "build",
+  "lane": "job",
+  "description": "Project Get a Job: gate a tailored resume against its job description before upload. Input is the tailored resume text followed by '=== JD ===' and the posting.",
+  "questions": {
+    "keyword_coverage": {
+      "type": "score",
+      "instructions": "How well the resume's language covers the must-have skills, tools and responsibilities named in the JD, using the JD's own terms",
+      "criteria": [
+        "Most must-haves absent or paraphrased so an ATS keyword match would miss them",
+        "About half the must-haves present in the JD's terms",
+        "Most must-haves present in the JD's terms with evidence beside them",
+        "Every must-have present in the JD's terms, each backed by a dated, quantified outcome"
+      ]
+    },
+    "fabricated_claim": {
+      "type": "noul",
+      "instructions": "The resume asserts an employer, title, date, credential, number or technology that a careful reader would suspect was added to match the JD rather than drawn from the candidate's real history"
+    },
+    "w2_signal": {
+      "type": "noul",
+      "instructions": "The resume reads as a candidate seeking a full-time employed leadership role, not as a consultant or founder pitching services"
+    },
+    "quantified_outcomes": {
+      "type": "score",
+      "instructions": "Share of experience bullets that end in a measurable business outcome",
+      "criteria": [
+        "Almost none",
+        "Some, mostly activity statements",
+        "Most bullets carry a number or named outcome",
+        "Nearly every bullet is outcome-first with a number and scope"
+      ]
+    },
+    "over_length": {
+      "type": "noul",
+      "instructions": "The resume would exceed two pages for a senior leadership candidate"
+    }
+  },
+  "rules": [
+    { "when": "fabricated_claim.noul >= 0.50", "verdict": "BLOCK", "reason": "possible fabricated claim -- the tailor must only rearrange and emphasise, never add" },
+    { "when": "keyword_coverage.score < 1.50", "verdict": "ESCALATE", "reason": "re-tailor: must-haves missing in the JD's own words" },
+    { "when": "w2_signal.noul < 0.50", "verdict": "ESCALATE", "reason": "reads as a consulting pitch; screener needs a W2 hire" },
+    { "when": "over_length.noul >= 0.60", "verdict": "ESCALATE", "reason": "trim to two pages" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Layout parseability (single column, standard headings, no tables) is checked deterministically in code, not here. Jev sees text only."
+}

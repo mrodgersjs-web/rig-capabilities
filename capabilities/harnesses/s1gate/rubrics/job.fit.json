@@ -1,0 +1,55 @@
+{
+  "name": "job.fit",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Project Get a Job: qualify one posting for Mike Rodgers (Head of AI / AI strategy & enablement / senior customer-facing AI deployment). Comp floor $250K all-in, reach $325K. Routes to skip / apply / warm-intro-first.",
+  "questions": {
+    "comp_band": {
+      "type": "score",
+      "instructions": "Total compensation this posting most plausibly pays, using the posted range and any bonus/equity language. If no number is posted, infer from title, company size and seniority.",
+      "criteria": [
+        "All-in clearly below $200K",
+        "All-in $200K-$250K, or unposted with a director-level title",
+        "All-in $250K-$325K, or unposted with a VP/Head-of title at a company that pays at that level",
+        "All-in $325K or more, stated or strongly implied"
+      ]
+    },
+    "role_shape": {
+      "type": "choice",
+      "instructions": "Which shape best describes the job as written",
+      "criteria": {
+        "head_of_ai": "Owns AI strategy, governance and adoption for a business unit or company",
+        "customer_facing_ai_deployment": "Deployment strategist, forward deployed, solutions or advisory role embedded with customers",
+        "ai_product_or_transformation_leader": "Director/VP of AI product, transformation or enablement inside an enterprise",
+        "deep_engineering_ic": "Individual contributor requiring years of hands-on ML research or large-scale systems engineering",
+        "sales_quota": "Primarily a quota-carrying sales seat",
+        "not_a_fit": "Unrelated function (finance, legal, HR, creative, medical, etc.)"
+      }
+    },
+    "hard_disqualifier": {
+      "type": "noul",
+      "instructions": "The posting requires something the candidate does not have: a PhD, an active security clearance, a specific professional license, 10+ years managing software engineering teams, or a named vendor certification as a must-have"
+    },
+    "seniority_match": {
+      "type": "noul",
+      "instructions": "The seniority is Director, Senior Director, VP, Head-of or C-level. Manager-and-below or pure IC is not a match"
+    },
+    "adoption_story_fits": {
+      "type": "noul",
+      "instructions": "A candidate whose proof is enterprise AI adoption, telehealth rollout across hospital systems, Oracle/Cerner strategy, and hands-on governed AI builds would be a credible finalist for this role"
+    }
+  },
+  "rules": [
+    { "when": "role_shape.choice == not_a_fit", "verdict": "BLOCK", "reason": "wrong function" },
+    { "when": "role_shape.choice == sales_quota", "verdict": "BLOCK", "reason": "quota seat, not the target lane" },
+    { "when": "hard_disqualifier.noul >= 0.70", "verdict": "BLOCK", "reason": "must-have the candidate lacks" },
+    { "when": "comp_band.score < 1.00", "verdict": "BLOCK", "reason": "below $200K, no path to $250K all-in" },
+    { "when": "seniority_match.noul < 0.40", "verdict": "ESCALATE", "reason": "seniority unclear; human reads the JD" },
+    { "when": "comp_band.score >= 2.00", "verdict": "ESCALATE", "reason": "in band -- warm-intro lane, do not cold-apply first" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-18 from the audit: 98 of 639 salaried discoveries clear a $200K floor, 25 clear $250K. Rank verb is the first use; check stays advisory until labelled against Mike's own skip/apply decisions."
+}
