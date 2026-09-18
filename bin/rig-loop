@@ -15,6 +15,7 @@
   rig-loop wire [--apply] [--verify] [--remove] [--harness H ...]
   rig-loop doctor [--json]
   rig-loop list | specs
+  rig-loop route <intent text> [--all] [--json]   intent -> loop id via System One (Jev), fail-open
   rig-loop test <loop-id> [--json]
   rig-loop compile <loop-id>                 write loop.json beside loop.yaml
   rig-loop scaffold <loop-id> --name N [--source PATH] [--summary T]
@@ -364,6 +365,24 @@ def cmd_scaffold(a):
     return 0
 
 
+def cmd_route(a):
+    try:
+        from rig_capabilities import loop_route as R
+    except ImportError as exc:
+        print(f"rig-loop: route unavailable: {exc}", file=sys.stderr)
+        return 3
+    intent = " ".join(a.intent).strip()
+    if not intent:
+        print("rig-loop: route: empty intent", file=sys.stderr)
+        return 3
+    meta = R.route_intent(intent, all_roots=a.all)
+    if a.json:
+        _print(meta)
+    else:
+        print(R.format_brief(meta))
+    return 0 if meta["route"] != "NONE" else 2
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="rig-loop", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -394,6 +413,7 @@ def main(argv=None) -> int:
     p = sub.add_parser("doctor"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_doctor)
     p = sub.add_parser("list"); p.set_defaults(fn=cmd_list)
     p = sub.add_parser("specs"); p.add_argument("--all", action="store_true"); p.set_defaults(fn=cmd_specs)
+    p = sub.add_parser("route"); p.add_argument("intent", nargs="+"); p.add_argument("--all", action="store_true"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_route)
     p = sub.add_parser("test"); p.add_argument("loop_id"); p.add_argument("--json", action="store_true"); p.set_defaults(fn=cmd_test)
     p = sub.add_parser("compile"); p.add_argument("loop_id"); p.set_defaults(fn=cmd_compile)
     p = sub.add_parser("scaffold"); p.add_argument("loop_id"); p.add_argument("--name", required=True); p.add_argument("--source"); p.add_argument("--summary"); p.set_defaults(fn=cmd_scaffold)
