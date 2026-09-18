@@ -1,0 +1,72 @@
+{
+  "name": "ultra.forecasting",
+  "stage": "forecast",
+  "lane": "build",
+  "description": "ULTRA Forecasting studio: is this forecast worth averaging into the swarm? Probabilities themselves come from the swarm and are combined in code (trimmed mean, Brier, weights); nothing here asks Jev to predict.",
+  "questions": {
+    "reason_quality": {
+      "instructions": "How well is this forecast reasoned, judged only on its text",
+      "type": "score",
+      "criteria": [
+        "no reasoning at all, or reasoning that restates the number",
+        "assertion plus a generic reason that would fit any outcome",
+        "cites a mechanism but not a reference class",
+        "names a reference class with its own base rate",
+        "reference class, base rate, and the specific considerations for and against this case",
+        "as above, plus what would update the number and which is load-bearing"
+      ]
+    },
+    "reference_class_named": {
+      "instructions": "This forecast names an explicit reference class (a set of comparable past cases), not just this project.",
+      "type": "noul"
+    },
+    "anchored_on_author": {
+      "instructions": "This number was anchored on the plan author's own prior estimate rather than derived independently.",
+      "type": "noul"
+    },
+    "disagreement_is_factual": {
+      "instructions": "Where this forecast disagrees with the evidence pack, the disagreement rests on a factual claim, not on mood or optimism.",
+      "type": "noul"
+    },
+    "cause_is_testable": {
+      "instructions": "This premortem cause could be confirmed or killed by a cheap probe before we commit.",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "reason_quality.score <= 2.00",
+      "verdict": "BLOCK",
+      "reason": "an unreasoned number must not enter the swarm average"
+    },
+    {
+      "when": "reference_class_named.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "no outside view: this is an inside-view guess (Halawi et al. ablate exactly this)"
+    },
+    {
+      "when": "anchored_on_author.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "author-anchored forecast: averaging it in manufactures false agreement"
+    },
+    {
+      "when": "disagreement_is_factual.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "disagreement is vibes-shaped: send it back to Research"
+    },
+    {
+      "when": "cause_is_testable.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "untestable premortem cause: it will not produce a tripwire"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "reason_quality": "doc signal f.reason_quality; 6 levels so the mean stays interpretable (max 11 allowed).",
+    "anchored_on_author": "doc signal f.anchored_on_author; motivates dropping the author's own number from the median.",
+    "cause_is_testable": "doc signal pm.cause_is_testable; single-token name required by the rule grammar."
+  },
+  "never_auto": false
+}

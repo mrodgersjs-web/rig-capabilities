@@ -1,0 +1,97 @@
+{
+  "name": "ultra.research",
+  "stage": "research",
+  "lane": "build",
+  "description": "ULTRA Research/Scraping studio: does the source say it, is it primary, does it contradict something settled? Counters, liveness and staleness arithmetic stay in code; only judgment is asked here.",
+  "questions": {
+    "claim_supported": {
+      "instructions": "The cited source itself states this specific claim; it is not the agent's inference or a different figure.",
+      "type": "noul"
+    },
+    "source_grade": {
+      "instructions": "How strong is this source as evidence",
+      "type": "choice",
+      "criteria": {
+        "HIGH": "primary source, named method or first-hand measurement",
+        "MED": "secondary but credible: reputable outlet restating a primary claim",
+        "LOW": "blog, forum, undated, anonymous or self-interested with no method"
+      }
+    },
+    "is_primary": {
+      "instructions": "This is a primary source: the party that did or measured the thing is speaking.",
+      "type": "noul"
+    },
+    "contradicts_settled": {
+      "instructions": "This finding contradicts something the mission already settled, so the settled node needs reopening.",
+      "type": "noul"
+    },
+    "novelty": {
+      "instructions": "How does this competitor or analogue relate to what we are planning",
+      "type": "choice",
+      "criteria": {
+        "same": "does the same thing, for the same person, the same way",
+        "better": "same mechanism, measurably better on one axis",
+        "different": "different mechanism for the same job",
+        "new": "no one here is attempting this"
+      }
+    },
+    "stale_risk": {
+      "instructions": "How likely is this source to have drifted out of date since it was fetched",
+      "type": "score",
+      "criteria": [
+        "content is date-immobile or already re-verified this week",
+        "slow-moving; last fetch is recent enough to trust",
+        "moves on a monthly scale; last fetch is borderline",
+        "moves weekly or faster; a stale read would mislead the decision",
+        "moves daily or is known to have changed since the fetch",
+        "already contradicted by a fresher source on hand"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "claim_supported.noul <= 0.70",
+      "verdict": "BLOCK",
+      "reason": "citation does not carry the claim attached to it (source laundering)"
+    },
+    {
+      "when": "source_grade.choice == LOW",
+      "verdict": "ESCALATE",
+      "reason": "weak source behind a load-bearing finding"
+    },
+    {
+      "when": "source_grade.p.MED >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "source most likely secondary: back it with a primary before it settles a node"
+    },
+    {
+      "when": "is_primary.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "no primary source in this evidence chain"
+    },
+    {
+      "when": "contradicts_settled.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "contradiction with a settled node must reopen it with evidence attached"
+    },
+    {
+      "when": "novelty.choice == same",
+      "verdict": "ESCALATE",
+      "reason": "this competitor already does exactly this: the novelty claim needs rework"
+    },
+    {
+      "when": "stale_risk.score >= 3.50",
+      "verdict": "ESCALATE",
+      "reason": "staleness risk too high to cite as current"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "claim_supported": "doc signal r.claim_supported. Motivation: 3-13% of deep-research citations are fabricated URLs and the dominant failure in strong-model systems is orchestrator citation error (arxiv.org/abs/2604.03173, arxiv.org/html/2608.24306v1).",
+    "stale_risk": "doc signal r.stale_risk; levels are ordered by how fast the content moves, combined in code with fetched_at.",
+    "novelty": "doc signal r.novelty; feeds the tree's per-component novelty tag."
+  },
+  "never_auto": false
+}

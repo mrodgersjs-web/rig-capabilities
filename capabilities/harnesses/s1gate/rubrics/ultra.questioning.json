@@ -1,0 +1,96 @@
+{
+  "name": "ultra.questioning",
+  "stage": "plan",
+  "lane": "build",
+  "description": "ULTRA Questioning studio: is this question worth asking Mike at all, and is the angle taxonomy actually resolved? Polarity is mixed and stated per question. Signals are named in studios/questioning/STUDIO.md; `q.duplicate_of` is DEFERRED (needs a per-call dynamic option list the static registry cannot carry; dedup stays code normalization).",
+  "questions": {
+    "shape": {
+      "instructions": "What kind of thing is this question",
+      "type": "choice",
+      "criteria": {
+        "decision": "only the human owner can answer this",
+        "fact": "looking it up would answer it",
+        "assumption": "nobody has answered it and the plan is proceeding as if it were true",
+        "noise": "answering it would not change the build"
+      }
+    },
+    "decision_critical": {
+      "instructions": "Answering this question could change what we build or whether we build it.",
+      "type": "noul"
+    },
+    "leading": {
+      "instructions": "This question presupposes its own answer or steers the respondent to one option.",
+      "type": "noul"
+    },
+    "cls": {
+      "instructions": "Which angle class does this question belong to",
+      "type": "choice",
+      "criteria": {
+        "customer_job": "who is this for and what job does it do",
+        "buyer_money": "who pays, from what budget, against what alternative spend",
+        "competitor_landscape": "who else is doing this or something like it",
+        "technical_feasibility": "can it actually be built with the models, data and hands available",
+        "distribution_channel": "how does it reach the person who needs it",
+        "timing_why_now": "why this month rather than next year",
+        "legal_compliance": "what law, contract or policy constrains it",
+        "people_capacity": "who does the work and what do they stop doing",
+        "second_order_effects": "what happens after it succeeds",
+        "failure_modes": "how this dies in a way we can foresee",
+        "exit_kill": "what would make us stop, and who decides",
+        "measurement": "how we would know it worked",
+        "dependencies_assumptions": "what has to be true elsewhere for this to hold",
+        "ethics_reputation": "what we would not want on a screen in a court"
+      }
+    },
+    "class_resolved": {
+      "instructions": "Every decision-critical unknown in this angle class has an answer or a named probe on record.",
+      "type": "noul"
+    },
+    "is_decision": {
+      "instructions": "This question can only be answered by the human owner; looking harder would not answer it.",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "shape.choice == noise",
+      "verdict": "BLOCK",
+      "reason": "noise question: would not change the build if answered"
+    },
+    {
+      "when": "shape.choice == fact",
+      "verdict": "BLOCK",
+      "reason": "a fact to look up, not a question for the human: route to Research"
+    },
+    {
+      "when": "decision_critical.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "low value of information: park rather than spend a human decision"
+    },
+    {
+      "when": "leading.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "leading question: the card would manufacture agreement"
+    },
+    {
+      "when": "is_decision.noul <= 0.55",
+      "verdict": "ESCALATE",
+      "reason": "looks answerable by research; send it to Research before asking"
+    },
+    {
+      "when": "class_resolved.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "angle class not resolved: coverage cannot be claimed for it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "shape": "doc signal q.shape. 'fact' and 'noise' block the card, not the mission.",
+    "cls": "doc signal q.class; the 14 options are the angle taxonomy and must stay in step with coverage meter code.",
+    "class_resolved": "doc signal q.class_resolved; coverage is COMPUTED from this answer over 14 calls, never asked directly.",
+    "is_decision": "doc signal card.is_decision; a card reaches Mike only above the threshold."
+  },
+  "never_auto": false
+}

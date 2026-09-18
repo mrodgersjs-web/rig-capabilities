@@ -1,0 +1,70 @@
+{
+  "name": "ultra.learning",
+  "stage": "learn",
+  "lane": "build",
+  "description": "ULTRA Learning studio: which cell caused the miss, and is this fix safe to adopt? Improvement deltas, held-out scores and Brier changes are computed in code; Jev judges attribution and generality.",
+  "questions": {
+    "attribution": {
+      "instructions": "Which part of the system caused this miss",
+      "type": "choice",
+      "criteria": {
+        "prompt": "the instruction the cell was given was wrong or incomplete",
+        "rubric_wording": "the rubric question is worded so a good artifact reads bad",
+        "threshold": "the question is fine, the cut-off is wrong",
+        "routing": "the work reached the wrong cell, level or studio",
+        "context": "the right information never arrived in context",
+        "capability": "the model or tool could not do it at all",
+        "impossible": "no process would have caught it; the task was underdetermined"
+      }
+    },
+    "regression_risk": {
+      "instructions": "How much of the rest of the estate could this change disturb",
+      "type": "score",
+      "criteria": [
+        "no plausible way this breaks anything that works today",
+        "touches one prompt in one cell",
+        "touches a shared prompt several cells read",
+        "touches a gate threshold or routing that other missions depend on",
+        "touches enforcement, credentials, or an outward-facing surface"
+      ]
+    },
+    "lesson_is_general": {
+      "instructions": "This lesson would help on a different mission, not just the one that produced it.",
+      "type": "noul"
+    },
+    "rubric_wording_defect": {
+      "instructions": "The false block came from how this rubric question is worded, not from the artifact or the threshold.",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "attribution.choice == impossible",
+      "verdict": "ESCALATE",
+      "reason": "no write-back target: record it and move on, do not tune a cell"
+    },
+    {
+      "when": "regression_risk.score >= 3.00",
+      "verdict": "BLOCK",
+      "reason": "this change reaches shared or outward behaviour: it is Mike's call, not the loop's"
+    },
+    {
+      "when": "lesson_is_general.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "one-off lesson: keep it in the cell's memory, do not promote it to a skill"
+    },
+    {
+      "when": "rubric_wording_defect.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "reword the question and record the decision id that exposed it; do not soften the threshold"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "attribution": "doc signal l.attribution; routes the write-back to the producing cell. Seven slugs fixed at registration; add one only with a decision id that shows a real miss.",
+    "rubric_wording_defect": "doc signal l.rubric_wording_defect; provenance is s1gate's own first live run, 3 of 4 good artifacts false-blocked, two of them wording defects. Optimise against the false block."
+  },
+  "never_auto": false
+}

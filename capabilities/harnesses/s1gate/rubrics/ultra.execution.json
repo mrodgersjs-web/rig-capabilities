@@ -1,0 +1,70 @@
+{
+  "name": "ultra.execution",
+  "stage": "build",
+  "lane": "build",
+  "description": "ULTRA Execution studio: did the diff do what the claim says, with evidence, inside its fence? The verifier reads state, never the builder's report, because a builder under goal conflict has been observed faking a health signal.",
+  "questions": {
+    "diff_matches_claims": {
+      "instructions": "How well does the diff deliver exactly what the claims say",
+      "type": "score",
+      "criteria": [
+        "the diff does something else entirely",
+        "part of the claimed work is absent",
+        "claimed work present, unclaimed changes included",
+        "claimed work present, changes confined to the stated slice",
+        "claimed work present, confined, and each claim maps to a named hunk"
+      ]
+    },
+    "claim_has_evidence": {
+      "instructions": "This atomic claim is backed by something a reader can re-run: a command, an output, or a digest.",
+      "type": "noul"
+    },
+    "scope_creep": {
+      "instructions": "This diff touches concerns outside the slice it was dispatched for.",
+      "type": "noul"
+    },
+    "verdict_consistent": {
+      "instructions": "This verdict agrees with its own listed items: a PASS with blocking items listed is not consistent.",
+      "type": "noul"
+    },
+    "tripwire_fired": {
+      "instructions": "Current evidence shows this tripwire condition has been met.",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "diff_matches_claims.score <= 2.00",
+      "verdict": "BLOCK",
+      "reason": "diff does not deliver the claimed slice"
+    },
+    {
+      "when": "claim_has_evidence.noul <= 0.60",
+      "verdict": "BLOCK",
+      "reason": "claim without re-runnable evidence: record it as unsure, never accepted"
+    },
+    {
+      "when": "scope_creep.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "scope creep: send to the arbiter before integrating"
+    },
+    {
+      "when": "verdict_consistent.noul <= 0.50",
+      "verdict": "BLOCK",
+      "reason": "verdict contradicts its own findings"
+    },
+    {
+      "when": "tripwire_fired.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "tripwire met: park the mission and raise a card"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "diff_matches_claims": "doc signal b.diff_matches_claims; threshold 2.0 is provisional, the docs said >=8 on a 0-10 scale, which on this 0-4 ladder maps to 3.2 - recorded so calibration does not inherit a typo.",
+    "tripwire_fired": "doc signal x.tripwire_fired; BLOCK here is deliberately fail-closed on a kill switch, not a quality judgment."
+  },
+  "never_auto": false
+}

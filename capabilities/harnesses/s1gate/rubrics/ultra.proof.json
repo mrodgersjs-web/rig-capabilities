@@ -1,0 +1,45 @@
+{
+  "name": "ultra.proof",
+  "stage": "verify",
+  "lane": "build",
+  "description": "ULTRA Proof studio: is this evidence evidence? Chain integrity, digests and planted-failure presence are checked by code; Jev only judges whether a check could pass while the thing it names is false.",
+  "questions": {
+    "done_test_is_vacuous": {
+      "instructions": "This done-test can go green while the outcome it names is false (it checks existence, a string, or its own narration).",
+      "type": "noul"
+    },
+    "claim_atomic": {
+      "instructions": "This claim states one verifiable thing rather than several bundled together.",
+      "type": "noul"
+    },
+    "evidence_is_command_output": {
+      "instructions": "This evidence is a command result, file digest, or artifact bytes rather than a narrative about them.",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "done_test_is_vacuous.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "vacuous done-test: a gate that cannot go red is theater"
+    },
+    {
+      "when": "claim_atomic.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "compound claim cannot be verified or falsified as written: split it"
+    },
+    {
+      "when": "evidence_is_command_output.noul <= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "narrative evidence: the verdict is unsure, not passed"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "done_test_is_vacuous": "doc signal p.done_test_is_vacuous. Motivation: a 300-checkpoint report whose runner contained zero assertions and hardcoded full_scenario_executed:false (projects/transformfit-qa.md).",
+    "evidence_is_command_output": "doc signal p.evidence_is_command_output; SLSA/in-toto bind claims to digests, not to prose."
+  },
+  "never_auto": false
+}

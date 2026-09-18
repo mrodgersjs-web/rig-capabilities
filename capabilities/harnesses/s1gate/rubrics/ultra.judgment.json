@@ -1,0 +1,133 @@
+{
+  "name": "ultra.judgment",
+  "stage": "plan",
+  "lane": "build",
+  "description": "ULTRA Judgment studio: the decision-quality chain itself, plus rubric hygiene. dq.information is COMPUTED in code as the minimum of ultra.questioning class_resolved over the 14 angle classes; it is deliberately not a question here. Existing plan.readiness stays the coarse pre-build gate; this pack is the fine-grained chain.",
+  "questions": {
+    "frame": {
+      "instructions": "How well is the decision and the decision-maker framed",
+      "type": "score",
+      "criteria": [
+        "the artifact solves a problem nobody stated",
+        "problem is stated but not the decision it serves",
+        "decision named; the human whose decision it is stays vague",
+        "decision, decision-maker and constraints are all explicit",
+        "as above, plus the frame was tested against a plausible alternative frame"
+      ]
+    },
+    "alternatives": {
+      "instructions": "How real is the set of alternatives considered",
+      "type": "score",
+      "criteria": [
+        "one option presented as the only option",
+        "alternatives named only to be dismissed",
+        "two real options with stated trade-offs",
+        "three or more real options with different mechanisms",
+        "as above, plus the rejected options say what evidence would reopen them"
+      ]
+    },
+    "values": {
+      "instructions": "How explicit are the objective, the measure and the trade-offs",
+      "type": "score",
+      "criteria": [
+        "what the decision is for is unstated",
+        "stated objective with no measure",
+        "objective plus a measure",
+        "objective, measure, target and the trade-off it is willing to make",
+        "as above, plus the cost of being wrong is priced on both sides"
+      ]
+    },
+    "reasoning": {
+      "instructions": "How auditable is the step from evidence to conclusion",
+      "type": "score",
+      "criteria": [
+        "assertion chain with gaps",
+        "reasoning present but key step is an appeal",
+        "each step stated, sources named",
+        "steps, sources, and the assumptions each step depends on",
+        "as above, plus counter-evidence considered and answered"
+      ]
+    },
+    "commitment": {
+      "instructions": "How accountable is the plan after it ships",
+      "type": "score",
+      "criteria": [
+        "no owner, no date, nothing to check",
+        "owner named, nothing scheduled",
+        "owner, date, and a check that can fail",
+        "owner, date, failing check, and what happens if it fails",
+        "as above, plus the kill criterion is stated before the work starts"
+      ]
+    },
+    "question_is_atomic": {
+      "instructions": "This rubric question is answerable as written, about one thing, without a human disambiguating it first.",
+      "type": "noul"
+    },
+    "genuinely_different": {
+      "instructions": "These two alternatives differ in mechanism, not merely in wording, price or vendor.",
+      "type": "noul"
+    },
+    "spec_complete": {
+      "instructions": "How buildable is this spec without further guessing",
+      "type": "score",
+      "criteria": [
+        "a reader would have to guess to start",
+        "intent clear, acceptance missing",
+        "acceptance present, boundaries missing",
+        "inputs, outputs, acceptance and out-of-scope all stated",
+        "as above, plus done-tests that can already be run"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "frame.score <= 1.50",
+      "verdict": "BLOCK",
+      "reason": "the plan is optimizing an unstated problem"
+    },
+    {
+      "when": "alternatives.score <= 1.50",
+      "verdict": "BLOCK",
+      "reason": "single-option plan: no comparison means no information about fit"
+    },
+    {
+      "when": "values.score <= 1.50",
+      "verdict": "ESCALATE",
+      "reason": "objective or measure missing: nothing downstream can be scored"
+    },
+    {
+      "when": "reasoning.score <= 1.50",
+      "verdict": "ESCALATE",
+      "reason": "reasoning gap on the load-bearing step"
+    },
+    {
+      "when": "commitment.score <= 1.50",
+      "verdict": "ESCALATE",
+      "reason": "no owner, check or kill criterion: the plan cannot be held to anything"
+    },
+    {
+      "when": "question_is_atomic.noul <= 0.50",
+      "verdict": "BLOCK",
+      "reason": "unatomic rubric question: it would produce an uninterpretable probability"
+    },
+    {
+      "when": "genuinely_different.noul >= 0.85",
+      "verdict": "ESCALATE",
+      "reason": "alternatives may be cosmetic variants of one idea"
+    },
+    {
+      "when": "spec_complete.score <= 2.00",
+      "verdict": "BLOCK",
+      "reason": "spec not buildable unattended"
+    }
+  ],
+  "confidence_floor": 0.45,
+  "calibrated": false,
+  "calibration": {},
+  "notes": {
+    "frame": "doc signal dq.frame. Decision-quality chain: the mission's P(good plan) is the WEAKEST link, not the mean; code takes min().",
+    "question_is_atomic": "doc signal j.question_is_atomic; law from TypeSafe docs -- a noul on an underspecified question returns an uninterpretable probability.",
+    "genuinely_different": "doc signal alt.genuinely_different; pairwise, so run it order-swapped and average in code (judge position bias)."
+  },
+  "never_auto": false
+}
