@@ -159,3 +159,35 @@ An advisory rubric never returns 1.
 Not a replacement for tests, types, or linters — it catches what those structurally
 cannot see. Not a security boundary. Not an approval: a PASS from a calibrated rubric
 means "the measured bar was met", never "you may publish, spend, or deploy."
+
+## ULTRA studio packs and two schema traps (measured 2026-09-18)
+
+`capabilities/harnesses/s1gate/rubrics/ultra.{questioning,research,forecasting,judgment,
+execution,proof,learning}.json` — 37 questions, 38 rules, all `calibrated: false`. The
+routing layer is `rig_capabilities/ultra_gates.py`: 10 declared gates, 11 deterministic
+code checks, 8 routes, ordered **code → Jev → human**. `rig-ultra`-style consumers call
+`ultra_gates.route(gate_id, state, facts, live=True)`; `live=False` returns
+`offline_code_only` and `cleared: false` on purpose, so a code-only check can never be
+read as a cleared gate.
+
+Two traps that cost real debugging time, both now asserted by `tests/test_ultra_gates.py`:
+
+1. **A `choice` question's options are a `criteria` dict of `slug -> description`**, not
+   a list and not prose. Rules compare against the slug (`shape.choice == fact`). A slug
+   with a space is unreachable: `attribution.choice == 'task was impossible'` parses, but
+   no provider answer can ever equal it. Test: `test_rule_literals_address_declared_options`.
+2. **A rule's left side is `<question>.<attr>`, exactly one dot.** An option probability
+   is `source_grade.p.MED`. Written as `p.source_grade.MED` it is an unparseable string
+   that `eval_condition` returns as *undecidable* — which silently escalates forever
+   instead of ever firing. Test: `test_rules_parse_and_are_answerable`, which evaluates
+   every rule against a synthetic answer set and asserts the result is not `None`.
+
+Trap 2 is the general lesson: **an invalid rule is a valid string.** Syntax checks pass;
+the defect only appears at first real use. Any new pack must be loaded and every rule
+evaluated, not merely parsed.
+
+Question names may not contain a dot, so the ULTRA doc names collapse to their last
+token (`pm.cause_is_testable` → `cause_is_testable`) or were renamed (`q.class` → `cls`).
+`dq.information` is **computed in code** (`ultra_gates.information()`: the weakest of the
+14 angle classes, `None` when a class is unanswered) and is deliberately not a question —
+a mean would hide the one class that is unresolved.
