@@ -243,3 +243,73 @@ class TestDecisionLog(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TestImproveAndRank(unittest.TestCase):
+    """The loop is exercised with a stub provider and a stub rewriter, so the
+    assertions are about the loop's contract, not about any model."""
+
+    def _provider(self, script):
+        # script: list of answer dicts returned in order of evaluate() calls
+        calls = iter(script)
+        return mock.patch.object(s1gate, "ask", side_effect=lambda *a, **k: {"model": "t", "answers": next(calls)})
+
+    def test_improve_stops_when_cleared_and_returns_best(self):
+        from rig_capabilities.s1gate_improve import improve
+        rb = _rubric(calibrated=False)
+        script = [{"bad": {"type": "noul", "noul": 0.9}}, {"bad": {"type": "noul", "noul": 0.1}}]
+        seen = []
+        def rw(draft, ctx, findings, rubric):
+            seen.append(findings); return draft + " [fixed]"
+        with self._provider(script):
+            res = improve(rb, "draft", rewriter=rw, max_iterations=3)
+        self.assertTrue(res.cleared)
+        self.assertEqual(res.iterations, 1)
+        self.assertEqual(res.best, "draft [fixed]")
+        self.assertEqual([t["verdict"] for t in res.trajectory], [s1gate.ESCALATE, s1gate.PASS])
+        self.assertTrue(seen and seen[0][0].startswith("BLOCK:"), "rewriter must receive the findings")
+
+    def test_improve_never_returns_a_worse_version(self):
+        from rig_capabilities.s1gate_improve import improve
+        rb = _rubric(calibrated=False, rules=[
+            {"when": "bad.noul >= 0.60", "verdict": "ESCALATE", "reason": "b"},
+            {"when": "bad.noul >= 0.90", "verdict": "ESCALATE", "reason": "worse"},
+        ])
+        script = [{"bad": {"type": "noul", "noul": 0.7}},   # 1 finding
+                  {"bad": {"type": "noul", "noul": 0.95}},  # 2 findings: worse
+                  {"bad": {"type": "noul", "noul": 0.95}}]
+        with self._provider(script):
+            res = improve(rb, "v0", rewriter=lambda d, c, f, r: d + "+", max_iterations=2)
+        self.assertFalse(res.cleared)
+        self.assertEqual(res.best, "v0")
+        self.assertIn("budget", res.stopped_because)
+
+    def test_improve_stops_on_unchanged_rewrite(self):
+        from rig_capabilities.s1gate_improve import improve
+        rb = _rubric(calibrated=False)
+        with self._provider([{"bad": {"type": "noul", "noul": 0.9}}] * 3):
+            res = improve(rb, "same", rewriter=lambda d, c, f, r: d, max_iterations=3)
+        self.assertEqual(res.iterations, 1)
+        self.assertIn("unchanged", res.stopped_because)
+
+    def test_improve_on_never_auto_still_escalates(self):
+        from rig_capabilities.s1gate_improve import improve
+        rb = _rubric(calibrated=False, never_auto=True)
+        with self._provider([{"bad": {"type": "noul", "noul": 0.0}}]):
+            res = improve(rb, "clean", rewriter=lambda d, c, f, r: d, max_iterations=1)
+        self.assertEqual(res.best_verdict, s1gate.ESCALATE)
+        self.assertIn("never_auto", res.stopped_because)
+
+    def test_rank_orders_best_first(self):
+        from rig_capabilities.s1gate_improve import rank
+        rb = _rubric(calibrated=False, rules=[
+            {"when": "bad.noul >= 0.30", "verdict": "ESCALATE", "reason": "a"},
+            {"when": "bad.noul >= 0.60", "verdict": "ESCALATE", "reason": "b"},
+        ])
+        script = [{"bad": {"type": "noul", "noul": 0.9}},
+                  {"bad": {"type": "noul", "noul": 0.1}},
+                  {"bad": {"type": "noul", "noul": 0.4}}]
+        with self._provider(script):
+            rows = rank(rb, ["worst", "best", "middle"])
+        self.assertEqual([r["text"] for r in rows], ["best", "middle", "worst"])
+        self.assertEqual([r["tripped"] for r in rows], [0, 1, 2])

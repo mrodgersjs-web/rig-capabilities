@@ -17,6 +17,9 @@ Usage
                                   [--max-false-block 0.05] [--min-recall 0.50] [--write]
     rig-s1gate stats [rubric]
     rig-s1gate selftest
+    rig-s1gate improve <rubric> [--file PATH | --stdin] [--context STR] [--max 3]
+                                [--accept PASS|ESCALATE] [--json]
+    rig-s1gate rank <rubric> --file CANDIDATES   (candidates separated by a line '---')
 """
 from __future__ import annotations
 
@@ -38,6 +41,7 @@ from rig_capabilities.s1gate import (  # noqa: E402
     load_rubric,
 )
 from rig_capabilities.s1gate_calibrate import calibrate_rubric, report  # noqa: E402
+from rig_capabilities.s1gate_improve import improve, rank  # noqa: E402
 
 EXIT = {PASS: 0, BLOCK: 1, ESCALATE: 2}
 
@@ -151,6 +155,44 @@ def cmd_stats(args) -> int:
     return 0
 
 
+def cmd_improve(args) -> int:
+    draft = _read_state(args)
+    log = DecisionLog()
+    try:
+        res = improve(args.rubric, draft, context=args.context or "",
+                      max_iterations=args.max, accept=args.accept,
+                      subject=args.subject, log=log)
+    finally:
+        log.close()
+    if args.json:
+        print(json.dumps(res.to_dict(), indent=2))
+    else:
+        print(res.summary(), file=sys.stderr)
+        print(res.best)
+    return 0 if res.cleared else 2
+
+
+def cmd_rank(args) -> int:
+    raw = Path(args.file).read_text(encoding="utf-8") if args.file != "-" else sys.stdin.read()
+    cands = [c.strip() for c in raw.split("\n---\n") if c.strip()]
+    if len(cands) < 2:
+        raise SystemExit("rank needs at least 2 candidates separated by a line containing only ---")
+    log = DecisionLog()
+    try:
+        rows = rank(args.rubric, cands, subject=args.subject, log=log)
+    finally:
+        log.close()
+    if args.json:
+        print(json.dumps(rows, indent=2))
+        return 0
+    for pos, r in enumerate(rows, 1):
+        print("#%d  candidate %d  %s  (%d finding%s)" % (pos, r["index"], r["verdict"], r["tripped"], "" if r["tripped"] == 1 else "s"))
+        for reason in r["reasons"][:3]:
+            print("      " + reason[:110])
+    print("\n=== best ===\n" + rows[0]["text"])
+    return 0
+
+
 def cmd_selftest(args) -> int:
     """Prove the rule engine and the fail-closed path without calling the API."""
     from rig_capabilities.s1gate import eval_condition
@@ -209,6 +251,21 @@ def main(argv=None) -> int:
     cal.set_defaults(fn=cmd_calibrate)
 
     st = sub.add_parser("stats"); st.add_argument("rubric", nargs="?"); st.set_defaults(fn=cmd_stats)
+
+    im = sub.add_parser("improve")
+    im.add_argument("rubric")
+    im.add_argument("--file", default=None); im.add_argument("--text", default=None)
+    im.add_argument("--stdin", action="store_true")
+    im.add_argument("--context", default=""); im.add_argument("--subject", default=None)
+    im.add_argument("--max", type=int, default=3)
+    im.add_argument("--accept", default="PASS", choices=["PASS", "ESCALATE"])
+    im.add_argument("--json", action="store_true")
+    im.set_defaults(fn=cmd_improve)
+
+    rk = sub.add_parser("rank")
+    rk.add_argument("rubric"); rk.add_argument("--file", required=True)
+    rk.add_argument("--subject", default=None); rk.add_argument("--json", action="store_true")
+    rk.set_defaults(fn=cmd_rank)
     sub.add_parser("selftest").set_defaults(fn=cmd_selftest)
 
     args = p.parse_args(argv)

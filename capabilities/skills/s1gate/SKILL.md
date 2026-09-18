@@ -77,7 +77,16 @@ blocked good work on day one.** That is what law 3 exists to prevent.
 
 ## Usage
 
+Three verbs. Reach for them in this order: **rank** (no calibration needed), **improve**
+(no calibration needed), **check** (blocks only once calibrated). See INTEGRATION.md
+for the routine-by-routine map.
+
 ```bash
+# make the number DO something
+cat draft.md | rig-s1gate improve post.linkedin --stdin --context "Lane B, author audited 9 automations" --max 3
+rig-s1gate rank comment.linkedin --file candidates.txt        # candidates separated by a '---' line
+
+# inspect and measure
 rig-s1gate list                                  # all rubrics + enforcing/advisory mode
 rig-s1gate show code.diff                        # questions, rules, calibration record
 cat diff.txt | rig-s1gate check code.diff --stdin --subject PR-482
