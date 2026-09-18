@@ -1,0 +1,51 @@
+{
+  "name": "signal.performance",
+  "stage": "measure",
+  "lane": "gtm",
+  "description": "Classify a published item's result so 'what is working' becomes a counted claim instead of a vibe.",
+  "questions": {
+    "outcome": {
+      "type": "choice",
+      "instructions": "What did this item actually produce",
+      "criteria": {
+        "business_outcome": "A reply, booked call, lead, or revenue event",
+        "audience_signal": "Meaningful saves, shares, or substantive comments but no business event",
+        "vanity_only": "Impressions or likes with no substantive engagement",
+        "no_signal": "Effectively no engagement"
+      }
+    },
+    "attributable": {
+      "type": "noul",
+      "instructions": "The result can be attributed to this item specifically rather than to coincident activity"
+    },
+    "repeatable_format": {
+      "type": "noul",
+      "instructions": "The format, not the topic, is what appears to have driven the result"
+    },
+    "sample_too_small": {
+      "type": "noul",
+      "instructions": "The sample is too small to support a conclusion about what works"
+    }
+  },
+  "rules": [
+    {
+      "when": "sample_too_small.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "sample too small -- do not turn this into a rule"
+    },
+    {
+      "when": "attributable.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "not cleanly attributable; label as correlation"
+    },
+    {
+      "when": "outcome.choice == business_outcome",
+      "verdict": "ESCALATE",
+      "reason": "real business outcome -- study this format deliberately"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

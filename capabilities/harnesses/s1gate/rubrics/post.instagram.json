@@ -1,0 +1,76 @@
+{
+  "name": "post.instagram",
+  "stage": "distribute",
+  "lane": "instagram",
+  "description": "Fitness/mindset personal lane (@rodgemd1). Not RIG B2B, not Lane C.",
+  "questions": {
+    "unverified_claim": {
+      "type": "noul",
+      "instructions": "States a metric, result, or outcome that is NEITHER reported first-hand from the author's own work or measurement, NOR attributed to a named source. A first-person report of what the author personally measured or observed is sourced and is NOT a violation; an unattributed claim about the industry, a third party, or 'studies' is."
+    },
+    "banned_words": {
+      "type": "noul",
+      "instructions": "Uses any of: unlock, empower, synergy, leverage, disrupt, hustle, utilize, iterate, optimize"
+    },
+    "hook_strength": {
+      "type": "score",
+      "instructions": "How strongly does the opening line earn the next line",
+      "criteria": [
+        "Generic, scrolled past",
+        "Mildly interesting",
+        "Strong, creates a question",
+        "Stops the scroll and names a real tension"
+      ]
+    },
+    "first_three_seconds": {
+      "type": "noul",
+      "instructions": "The first three seconds give a reason to keep watching or reading"
+    },
+    "saveable": {
+      "type": "noul",
+      "instructions": "This is worth saving or sending to someone, rather than merely scrolled past"
+    },
+    "medical_claim": {
+      "type": "noul",
+      "instructions": "Makes a health, medical, supplement, or body-composition claim that is stated as fact without a source"
+    },
+    "off_lane": {
+      "type": "noul",
+      "instructions": "This is B2B/AI-consulting content that belongs on LinkedIn rather than on a fitness and mindset account"
+    }
+  },
+  "rules": [
+    {
+      "when": "medical_claim.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "unsourced health claim"
+    },
+    {
+      "when": "banned_words.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "banned vocabulary"
+    },
+    {
+      "when": "off_lane.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "wrong lane for this account"
+    },
+    {
+      "when": "first_three_seconds.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "weak open"
+    },
+    {
+      "when": "saveable.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "low save/share value"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)"
+  }
+}

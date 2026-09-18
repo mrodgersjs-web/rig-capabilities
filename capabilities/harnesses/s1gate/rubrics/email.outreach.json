@@ -1,0 +1,77 @@
+{
+  "name": "email.outreach",
+  "stage": "distribute",
+  "lane": "gtm",
+  "description": "Gate every outbound email before it is queued. Outbound is irreversible.",
+  "questions": {
+    "specific_to_recipient": {
+      "type": "noul",
+      "instructions": "The email demonstrates specific knowledge of this recipient's situation rather than a mail-merge token"
+    },
+    "one_ask": {
+      "type": "noul",
+      "instructions": "There is exactly one clear ask"
+    },
+    "unverified_claim": {
+      "type": "noul",
+      "instructions": "States a metric, result, or outcome that is NEITHER reported first-hand from the author's own work or measurement, NOR attributed to a named source. A first-person report of what the author personally measured or observed is sourced and is NOT a violation; an unattributed claim about the industry, a third party, or 'studies' is."
+    },
+    "generic_ai_slop": {
+      "type": "noul",
+      "instructions": "The email reads like generic AI-generated sales copy"
+    },
+    "banned_words": {
+      "type": "noul",
+      "instructions": "The copy uses any of: unlock, empower, synergy, leverage, disrupt, hustle, utilize, iterate, optimize"
+    },
+    "strength": {
+      "type": "score",
+      "instructions": "How likely is this to earn a reply from a busy operator",
+      "criteria": [
+        "Deleted on sight",
+        "Skimmed and ignored",
+        "Read, might reply",
+        "Specific and useful enough that a reply is likely"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "unverified_claim.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "unsourced claim in outbound -- ProofPacket law"
+    },
+    {
+      "when": "banned_words.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "banned vocabulary"
+    },
+    {
+      "when": "generic_ai_slop.noul >= 0.65",
+      "verdict": "BLOCK",
+      "reason": "reads as AI slop"
+    },
+    {
+      "when": "specific_to_recipient.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "not specific to recipient"
+    },
+    {
+      "when": "one_ask.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "more than one ask"
+    },
+    {
+      "when": "strength.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "weak, unlikely to earn a reply"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)"
+  }
+}

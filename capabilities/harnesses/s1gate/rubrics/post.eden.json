@@ -1,0 +1,76 @@
+{
+  "name": "post.eden",
+  "stage": "distribute",
+  "lane": "A",
+  "description": "Lane A: personal brand, drafted in Eden. Pop-culture hook plus operational authority. Birch is Tuesday-only; Wed-Sat imagery belongs to The Coach.",
+  "questions": {
+    "unverified_claim": {
+      "type": "noul",
+      "instructions": "States a metric, result, or outcome that is NEITHER reported first-hand from the author's own work or measurement, NOR attributed to a named source. A first-person report of what the author personally measured or observed is sourced and is NOT a violation; an unattributed claim about the industry, a third party, or 'studies' is."
+    },
+    "banned_words": {
+      "type": "noul",
+      "instructions": "Uses any of: unlock, empower, synergy, leverage, disrupt, hustle, utilize, iterate, optimize"
+    },
+    "hook_strength": {
+      "type": "score",
+      "instructions": "How strongly does the opening line earn the next line",
+      "criteria": [
+        "Generic, scrolled past",
+        "Mildly interesting",
+        "Strong, creates a question",
+        "Stops the scroll and names a real tension"
+      ]
+    },
+    "birch_present": {
+      "type": "noul",
+      "instructions": "The post uses the Birch mascot or its sign-off"
+    },
+    "is_tuesday_slot": {
+      "type": "noul",
+      "instructions": "The post is explicitly written for the Tuesday slot"
+    },
+    "operational_authority": {
+      "type": "noul",
+      "instructions": "Behind the hook there is a real operational point drawn from doing the work, not just a motivational sentiment"
+    },
+    "register_fit": {
+      "type": "noul",
+      "instructions": "The tone matches a warm, wry, Ted Lasso-adjacent register rather than a hard-sell or guru voice"
+    }
+  },
+  "rules": [
+    {
+      "when": "unverified_claim.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "unsourced claim"
+    },
+    {
+      "when": "banned_words.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "banned vocabulary"
+    },
+    {
+      "when": "operational_authority.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "hook with no operational substance underneath"
+    },
+    {
+      "when": "register_fit.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "off-register for Lane A"
+    },
+    {
+      "when": "hook_strength.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "weak hook"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)"
+  }
+}

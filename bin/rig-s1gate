@@ -1,0 +1,223 @@
+#!/usr/bin/env python3
+"""rig-s1gate -- RIG System-1 Gate CLI.
+
+Exit codes are the contract. Hooks and CI read these, not stdout:
+    0  PASS      -- gate cleared, proceed
+    1  BLOCK     -- enforced stop (calibrated rubric, or provider failed closed)
+    2  ESCALATE  -- hand to a System 2 model or a human
+    3  usage/config error
+
+Usage
+-----
+    rig-s1gate list
+    rig-s1gate show <rubric>
+    rig-s1gate check <rubric> [--file PATH | --text STR | -]   [--subject S] [--json]
+    rig-s1gate label <decision-id> <good|bad>
+    rig-s1gate calibrate <rubric> --signal Q.ATTR [--direction above|below]
+                                  [--max-false-block 0.05] [--min-recall 0.50] [--write]
+    rig-s1gate stats [rubric]
+    rig-s1gate selftest
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+
+from rig_capabilities.s1gate import (  # noqa: E402
+    BLOCK,
+    ESCALATE,
+    PASS,
+    DecisionLog,
+    S1GateError,
+    evaluate,
+    list_rubrics,
+    load_rubric,
+)
+from rig_capabilities.s1gate_calibrate import calibrate_rubric, report  # noqa: E402
+
+EXIT = {PASS: 0, BLOCK: 1, ESCALATE: 2}
+
+
+def _read_state(args) -> str:
+    if args.text:
+        return args.text
+    if args.file == "-" or args.stdin:
+        return sys.stdin.read()
+    if args.file:
+        return Path(args.file).read_text(encoding="utf-8")
+    if not sys.stdin.isatty():
+        return sys.stdin.read()
+    raise SystemExit("s1gate: no input. Use --file, --text, or pipe to stdin.")
+
+
+def cmd_list(args) -> int:
+    names = list_rubrics()
+    if not names:
+        print("no rubrics found")
+        return 3
+    print("%-22s %-10s %-10s %-11s %s" % ("RUBRIC", "STAGE", "LANE", "MODE", "DESCRIPTION"))
+    for n in names:
+        try:
+            rb = load_rubric(n)
+        except S1GateError as exc:
+            print("%-22s %s" % (n, exc))
+            continue
+        mode = "ENFORCING" if rb.calibrated else "advisory"
+        if rb.never_auto:
+            mode += "+never_auto"
+        print("%-22s %-10s %-10s %-11s %s" % (n, rb.stage, rb.lane, mode, rb.description[:58]))
+    return 0
+
+
+def cmd_show(args) -> int:
+    rb = load_rubric(args.rubric)
+    print(json.dumps({
+        "name": rb.name, "stage": rb.stage, "lane": rb.lane,
+        "calibrated": rb.calibrated, "never_auto": rb.never_auto,
+        "confidence_floor": rb.confidence_floor,
+        "questions": list(rb.questions), "rules": rb.rules,
+        "calibration": rb.calibration,
+    }, indent=2))
+    return 0
+
+
+def cmd_check(args) -> int:
+    state = _read_state(args)
+    log = DecisionLog()
+    try:
+        res = evaluate(args.rubric, state, subject=args.subject, log=log)
+    finally:
+        log.close()
+    if args.json:
+        print(json.dumps(res.to_dict(), indent=2))
+    else:
+        print(res.summary())
+        if res.decision_id:
+            print("  decision id %d  (%dms, %s)" % (res.decision_id, res.latency_ms, res.model))
+            print("  label it later:  rig-s1gate label %d good|bad" % res.decision_id)
+    # An advisory verdict never hard-fails a build; it reports 2 at worst.
+    code = EXIT[res.verdict]
+    if res.advisory and code == 1:
+        code = 2
+    return code
+
+
+def cmd_label(args) -> int:
+    if args.label not in ("good", "bad"):
+        raise SystemExit("label must be 'good' or 'bad'")
+    log = DecisionLog()
+    try:
+        log.label(args.decision_id, args.label)
+    finally:
+        log.close()
+    print("decision %d labelled %s" % (args.decision_id, args.label))
+    return 0
+
+
+def cmd_calibrate(args) -> int:
+    if "." not in args.signal:
+        raise SystemExit("--signal must look like question.attr, e.g. weakened_test.noul")
+    q, attr = args.signal.split(".", 1)
+    result = calibrate_rubric(
+        args.rubric, (q, attr),
+        direction=args.direction,
+        max_false_block_rate=args.max_false_block,
+        min_recall=args.min_recall,
+        write=args.write,
+    )
+    print(report(result))
+    return 0 if result["certified"] else 2
+
+
+def cmd_stats(args) -> int:
+    log = DecisionLog()
+    try:
+        counts = log.counts(args.rubric)
+    finally:
+        log.close()
+    if not counts:
+        print("no decisions recorded yet")
+        return 0
+    total = sum(counts.values())
+    scope = args.rubric or "ALL"
+    print("s1gate decisions (%s): %d" % (scope, total))
+    for v in (BLOCK, ESCALATE, PASS):
+        if v in counts:
+            print("  %-9s %5d  (%4.1f%%)" % (v, counts[v], 100.0 * counts[v] / total))
+    return 0
+
+
+def cmd_selftest(args) -> int:
+    """Prove the rule engine and the fail-closed path without calling the API."""
+    from rig_capabilities.s1gate import eval_condition
+
+    checks = [
+        (({"a": {"type": "noul", "noul": 0.92}}, "a.noul >= 0.60"), True),
+        (({"a": {"type": "noul", "noul": 0.10}}, "a.noul >= 0.60"), False),
+        (({"a": {"type": "score", "score": 1.39, "confidence": 0.0}}, "a.score >= 2.50"), False),
+        (({"a": {"type": "choice", "choice": "x"}}, "a.choice == x"), True),
+        (({}, "missing.noul >= 0.5"), None),
+        (({"a": {"type": "noul", "noul": 0.5}}, "garbage"), None),
+    ]
+    bad = 0
+    for (answers, expr), want in checks:
+        got, note = eval_condition(answers, expr)
+        ok = got is want if want is None or got is None else got == want
+        if not ok:
+            bad += 1
+            print("FAIL %-28s want=%s got=%s (%s)" % (expr, want, got, note))
+    n = len(list_rubrics())
+    print("rule engine: %d/%d checks passed" % (len(checks) - bad, len(checks)))
+    print("rubrics loadable: %d" % n)
+    for name in list_rubrics():
+        load_rubric(name)
+    return 1 if bad else 0
+
+
+def main(argv=None) -> int:
+    p = argparse.ArgumentParser(prog="rig-s1gate", description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    sub = p.add_subparsers(dest="cmd", required=True)
+
+    sub.add_parser("list").set_defaults(fn=cmd_list)
+    s = sub.add_parser("show"); s.add_argument("rubric"); s.set_defaults(fn=cmd_show)
+
+    c = sub.add_parser("check")
+    c.add_argument("rubric")
+    c.add_argument("--file", nargs="?", default=None)
+    c.add_argument("--text", default=None)
+    c.add_argument("--stdin", action="store_true")
+    c.add_argument("--subject", default=None)
+    c.add_argument("--json", action="store_true")
+    c.set_defaults(fn=cmd_check)
+
+    l = sub.add_parser("label")
+    l.add_argument("decision_id", type=int); l.add_argument("label")
+    l.set_defaults(fn=cmd_label)
+
+    cal = sub.add_parser("calibrate")
+    cal.add_argument("rubric")
+    cal.add_argument("--signal", required=True)
+    cal.add_argument("--direction", default="above", choices=["above", "below"])
+    cal.add_argument("--max-false-block", type=float, default=0.05)
+    cal.add_argument("--min-recall", type=float, default=0.50)
+    cal.add_argument("--write", action="store_true")
+    cal.set_defaults(fn=cmd_calibrate)
+
+    st = sub.add_parser("stats"); st.add_argument("rubric", nargs="?"); st.set_defaults(fn=cmd_stats)
+    sub.add_parser("selftest").set_defaults(fn=cmd_selftest)
+
+    args = p.parse_args(argv)
+    try:
+        return args.fn(args)
+    except S1GateError as exc:
+        print("s1gate: %s" % exc, file=sys.stderr)
+        return 3
+
+
+if __name__ == "__main__":
+    sys.exit(main())

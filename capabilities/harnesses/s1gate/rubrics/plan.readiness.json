@@ -1,0 +1,74 @@
+{
+  "name": "plan.readiness",
+  "stage": "plan",
+  "lane": "build",
+  "description": "Gate a spec/plan BEFORE any code is written. Stops the most expensive failure: building the wrong thing well.",
+  "questions": {
+    "has_acceptance_criteria": {
+      "type": "noul",
+      "instructions": "The plan states concrete, checkable acceptance criteria -- not aspirations like 'works well' or 'is fast'"
+    },
+    "names_the_user_decision": {
+      "type": "noul",
+      "instructions": "The plan names the actual decision or job the user is trying to complete, not just a feature to add"
+    },
+    "unverifiable_claims": {
+      "type": "noul",
+      "instructions": "The plan asserts outcomes, numbers, or benefits with no stated source or measurement method"
+    },
+    "scope_is_bounded": {
+      "type": "noul",
+      "instructions": "The scope is bounded: a reader could tell what is explicitly NOT included"
+    },
+    "deterministic_first": {
+      "type": "noul",
+      "instructions": "The plan reaches for an LLM or agent where ordinary deterministic code would do the job"
+    },
+    "readiness": {
+      "type": "score",
+      "instructions": "How ready is this plan to hand to a coding agent unattended",
+      "criteria": [
+        "Vague idea, no contract, would produce guesswork",
+        "Direction is clear but acceptance is undefined",
+        "Contract and acceptance defined, some ambiguity at the edges",
+        "Fully specified: inputs, outputs, acceptance tests, and out-of-scope all stated"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "has_acceptance_criteria.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "no checkable acceptance criteria -- the agent has nothing to be graded against"
+    },
+    {
+      "when": "unverifiable_claims.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "ProofPacket violation: asserts outcomes with no source"
+    },
+    {
+      "when": "deterministic_first.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "reaching for agentic where deterministic would do"
+    },
+    {
+      "when": "readiness.score <= 1.20",
+      "verdict": "BLOCK",
+      "reason": "plan not ready for unattended build"
+    },
+    {
+      "when": "scope_is_bounded.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "unbounded scope"
+    },
+    {
+      "when": "names_the_user_decision.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "feature described without the user decision it serves"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

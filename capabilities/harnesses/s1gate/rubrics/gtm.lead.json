@@ -1,0 +1,57 @@
+{
+  "name": "gtm.lead",
+  "stage": "distribute",
+  "lane": "gtm",
+  "description": "Inbound/outbound lead triage for RIG. Routes by fit band, not by gut.",
+  "questions": {
+    "band": {
+      "type": "score",
+      "instructions": "Buying readiness of this lead for a scoped AI delivery engagement",
+      "criteria": [
+        "Student, hobbyist, or curiosity -- no budget and no named problem",
+        "Small team, interested, no named owner or timeline",
+        "Company with a named problem, an accountable owner, and a rough timeline",
+        "Named problem, owner, timeline, and an explicit budget or procurement path"
+      ]
+    },
+    "fit": {
+      "type": "choice",
+      "instructions": "Which RIG motion fits this lead best",
+      "criteria": {
+        "workflow_review": "One accountable owner, one workflow, wants a scoped diagnostic",
+        "build": "Wants something built or automated end to end",
+        "advisory": "Wants judgment, governance, or fractional CAIO help",
+        "not_a_fit": "Outside RIG's scope, a vendor pitch, or a job solicitation"
+      }
+    },
+    "is_vendor_pitch": {
+      "type": "noul",
+      "instructions": "This is someone selling to RIG rather than a prospective client"
+    },
+    "named_problem": {
+      "type": "noul",
+      "instructions": "The lead names a specific operational problem rather than a general interest in AI"
+    }
+  },
+  "rules": [
+    {
+      "when": "is_vendor_pitch.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "inbound vendor pitch, not a lead"
+    },
+    {
+      "when": "fit.choice == not_a_fit",
+      "verdict": "BLOCK",
+      "reason": "out of scope"
+    },
+    {
+      "when": "band.score >= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "high-fit lead -- founder replies same day"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

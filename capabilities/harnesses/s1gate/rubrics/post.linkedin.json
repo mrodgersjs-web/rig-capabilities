@@ -1,0 +1,81 @@
+{
+  "name": "post.linkedin",
+  "stage": "distribute",
+  "lane": "B",
+  "description": "Lane B: Rodgers Intelligence B2B. Evidence-led, named receipts. Pop-culture hooks ARE allowed; the proprietary cast is not.",
+  "questions": {
+    "unverified_claim": {
+      "type": "noul",
+      "instructions": "States a metric, result, or outcome that is NEITHER reported first-hand from the author's own work or measurement, NOR attributed to a named source. A first-person report of what the author personally measured or observed is sourced and is NOT a violation; an unattributed claim about the industry, a third party, or 'studies' is."
+    },
+    "banned_words": {
+      "type": "noul",
+      "instructions": "Uses any of: unlock, empower, synergy, leverage, disrupt, hustle, utilize, iterate, optimize"
+    },
+    "hook_strength": {
+      "type": "score",
+      "instructions": "How strongly does the opening line earn the next line",
+      "criteria": [
+        "Generic, scrolled past",
+        "Mildly interesting",
+        "Strong, creates a question",
+        "Stops the scroll and names a real tension"
+      ]
+    },
+    "proprietary_cast": {
+      "type": "noul",
+      "instructions": "References Birch, Unit 7, The Coach, or the phrase 'Be more Birch' -- the personal-brand cast, which must never appear in RIG B2B content"
+    },
+    "named_receipt": {
+      "type": "noul",
+      "instructions": "Contains a concrete, named, checkable receipt: a number with a source, a named system, or a specific outcome"
+    },
+    "buyer_relevant": {
+      "type": "noul",
+      "instructions": "Speaks to an operator who owns a workflow and a budget, rather than to other AI enthusiasts"
+    },
+    "one_idea": {
+      "type": "noul",
+      "instructions": "The post carries one idea rather than a list of loosely related thoughts"
+    }
+  },
+  "rules": [
+    {
+      "when": "proprietary_cast.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "Lane A cast leaking into Lane B"
+    },
+    {
+      "when": "unverified_claim.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "unsourced claim"
+    },
+    {
+      "when": "banned_words.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "banned vocabulary"
+    },
+    {
+      "when": "named_receipt.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "no named receipt -- Lane B runs on evidence"
+    },
+    {
+      "when": "hook_strength.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "weak hook"
+    },
+    {
+      "when": "buyer_relevant.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "written for peers, not buyers"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)"
+  }
+}

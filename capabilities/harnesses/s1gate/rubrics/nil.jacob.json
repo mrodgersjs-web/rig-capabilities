@@ -1,0 +1,86 @@
+{
+  "name": "nil.jacob",
+  "stage": "distribute",
+  "lane": "C",
+  "description": "Lane C: athletic development / recruiting / NIL content about a MINOR. Detection precedence over Lanes A and B. never_auto is hard-set: a machine PASS is a recommendation to a human, never a licence to publish.",
+  "questions": {
+    "reveals_location": {
+      "type": "noul",
+      "instructions": "Reveals a precise real-time location, routine, schedule, or address that could be used to find the minor in person"
+    },
+    "adult_contact": {
+      "type": "noul",
+      "instructions": "Solicits, invites, or facilitates contact from adults, recruiters, coaches, or scouts"
+    },
+    "commercial_cta": {
+      "type": "noul",
+      "instructions": "Contains a commercial call to action, sponsorship solicitation, brand deal ask, or monetary offer"
+    },
+    "mascot_or_lane_bleed": {
+      "type": "noul",
+      "instructions": "Uses the Birch mascot, The Coach, a Ted Lasso close, or any personal-brand or RIG commercial voice"
+    },
+    "provenance_altered": {
+      "type": "noul",
+      "instructions": "Alters, upgrades, or omits a provenance label on a measurement, time, lift, or mark as it was given"
+    },
+    "unverified_measurable": {
+      "type": "noul",
+      "instructions": "States a height, weight, lift, time, or throw mark without the provenance label it was supplied with"
+    },
+    "third_party_minor": {
+      "type": "noul",
+      "instructions": "Identifies another minor in a way that would need that family's consent"
+    },
+    "tone_fit": {
+      "type": "noul",
+      "instructions": "The tone is a 15-year-old athlete's own plain voice rather than an adult marketer writing as him"
+    }
+  },
+  "rules": [
+    {
+      "when": "reveals_location.noul >= 0.25",
+      "verdict": "BLOCK",
+      "reason": "minor safety: location or routine exposure"
+    },
+    {
+      "when": "adult_contact.noul >= 0.25",
+      "verdict": "BLOCK",
+      "reason": "no coach/recruiter contact before spring 2028"
+    },
+    {
+      "when": "third_party_minor.noul >= 0.40",
+      "verdict": "BLOCK",
+      "reason": "identifies another minor without consent"
+    },
+    {
+      "when": "commercial_cta.noul >= 0.35",
+      "verdict": "BLOCK",
+      "reason": "no commercial CTA on a minor's lane"
+    },
+    {
+      "when": "mascot_or_lane_bleed.noul >= 0.35",
+      "verdict": "BLOCK",
+      "reason": "Lane A/B voice bleeding into Lane C"
+    },
+    {
+      "when": "provenance_altered.noul >= 0.35",
+      "verdict": "BLOCK",
+      "reason": "provenance labels are preserved exactly as given"
+    },
+    {
+      "when": "unverified_measurable.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "measurable without its provenance label"
+    },
+    {
+      "when": "tone_fit.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "reads as an adult marketer, not the athlete"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true
+}

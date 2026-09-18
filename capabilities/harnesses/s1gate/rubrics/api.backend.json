@@ -1,0 +1,54 @@
+{
+  "name": "api.backend",
+  "stage": "build",
+  "lane": "backend",
+  "description": "Backend/API surface gate: contracts, failure modes, idempotency, data safety.",
+  "questions": {
+    "typed_contract": {
+      "type": "noul",
+      "instructions": "Inputs and outputs are explicitly typed or schema-validated at the boundary"
+    },
+    "failure_path_defined": {
+      "type": "noul",
+      "instructions": "The failure path is defined: what happens on timeout, partial write, or downstream error"
+    },
+    "idempotent_or_justified": {
+      "type": "noul",
+      "instructions": "The operation is idempotent, or its non-idempotency is explicitly acknowledged and handled"
+    },
+    "unbounded_resource": {
+      "type": "noul",
+      "instructions": "The code can fan out, retry, or allocate without an explicit ceiling"
+    },
+    "destructive_unguarded": {
+      "type": "noul",
+      "instructions": "A destructive or irreversible operation runs without an explicitly passed target and a guard"
+    }
+  },
+  "rules": [
+    {
+      "when": "destructive_unguarded.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "destructive op without an explicit target -- an unset variable can land on real work"
+    },
+    {
+      "when": "typed_contract.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "untyped boundary"
+    },
+    {
+      "when": "failure_path_defined.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "no defined failure path"
+    },
+    {
+      "when": "unbounded_resource.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "unbounded fan-out or retry"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

@@ -1,0 +1,64 @@
+{
+  "name": "ui.design",
+  "stage": "build",
+  "lane": "frontend",
+  "description": "Frontend/UX/UI gate. Scores a screen description, component, or design spec.",
+  "questions": {
+    "primary_action_obvious": {
+      "type": "noul",
+      "instructions": "The single primary action on this screen is visually obvious within a second"
+    },
+    "states_handled": {
+      "type": "noul",
+      "instructions": "Loading, empty, error, and success states are all accounted for"
+    },
+    "accessible": {
+      "type": "noul",
+      "instructions": "Contrast, focus order, labels, and keyboard reachability are addressed"
+    },
+    "mobile_considered": {
+      "type": "noul",
+      "instructions": "Behaviour at small viewport widths is specified rather than assumed"
+    },
+    "jargon": {
+      "type": "noul",
+      "instructions": "The copy uses internal jargon the intended user would not recognise"
+    },
+    "clarity": {
+      "type": "score",
+      "instructions": "How clearly does this communicate what to do next",
+      "criteria": [
+        "Confusing, user would stall",
+        "Workable but cluttered",
+        "Clear",
+        "Immediately obvious, nothing competes with the primary action"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "states_handled.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "empty/error/loading states unspecified"
+    },
+    {
+      "when": "accessible.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "accessibility unaddressed"
+    },
+    {
+      "when": "clarity.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "primary action not clear"
+    },
+    {
+      "when": "primary_action_obvious.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "no obvious primary action"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

@@ -1,0 +1,81 @@
+{
+  "name": "comment.linkedin",
+  "stage": "distribute",
+  "lane": "engagement",
+  "description": "Auto-comment safety gate. House rule: comments are positive-only -- validate the point, add one insight, optionally link his own post as a complement.",
+  "questions": {
+    "is_positive": {
+      "type": "noul",
+      "instructions": "The comment is positive or validating toward the original poster"
+    },
+    "contains_pushback": {
+      "type": "noul",
+      "instructions": "The comment disagrees with, corrects, contradicts, or undercuts the original poster's central claim. Adding a supporting example, a confirming data point, or a related nuance while AGREEING with the poster is NOT pushback."
+    },
+    "adds_insight": {
+      "type": "noul",
+      "instructions": "The comment adds a specific insight rather than generic praise like 'great post' or 'well said'"
+    },
+    "unverified_claim": {
+      "type": "noul",
+      "instructions": "States a metric, result, or outcome that is NEITHER reported first-hand from the author's own work or measurement, NOR attributed to a named source. A first-person report of what the author personally measured or observed is sourced and is NOT a violation; an unattributed claim about the industry, a third party, or 'studies' is."
+    },
+    "self_promo_heavy": {
+      "type": "noul",
+      "instructions": "The comment is primarily self-promotion rather than a contribution to the thread"
+    },
+    "generic_filler": {
+      "type": "noul",
+      "instructions": "This is generic engagement filler that any bot could have written"
+    },
+    "sensitive_topic": {
+      "type": "noul",
+      "instructions": "The original post concerns a layoff, death, illness, politics, or another sensitive personal matter where an automated comment would be inappropriate"
+    }
+  },
+  "rules": [
+    {
+      "when": "contains_pushback.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "house rule: comments are positive-only, no pushback (threshold provisional, pending calibration)"
+    },
+    {
+      "when": "sensitive_topic.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "sensitive thread -- never auto-comment"
+    },
+    {
+      "when": "generic_filler.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "bot-grade filler"
+    },
+    {
+      "when": "unverified_claim.noul >= 0.55",
+      "verdict": "BLOCK",
+      "reason": "unsourced claim"
+    },
+    {
+      "when": "self_promo_heavy.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "too promotional for a comment"
+    },
+    {
+      "when": "adds_insight.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "no specific insight added"
+    },
+    {
+      "when": "is_positive.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "not clearly positive"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)",
+    "contains_pushback": "reworded + threshold 0.35->0.55 on 2026-09-18 after a false block on an agreeing comment (decision id 7)"
+  }
+}

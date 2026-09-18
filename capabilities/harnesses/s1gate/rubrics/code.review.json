@@ -1,0 +1,63 @@
+{
+  "name": "code.review",
+  "stage": "verify",
+  "lane": "build",
+  "description": "Cheap broad screen over a whole codebase or a large diff. Produces the shortlist a System 2 model then reads.",
+  "questions": {
+    "dead_code": {
+      "type": "noul",
+      "instructions": "This code is unreachable, unused, or superseded"
+    },
+    "duplicate_logic": {
+      "type": "noul",
+      "instructions": "This duplicates logic that plainly belongs in one place"
+    },
+    "magic_values": {
+      "type": "noul",
+      "instructions": "This relies on unexplained magic numbers or string literals"
+    },
+    "name_lies": {
+      "type": "noul",
+      "instructions": "The function or variable name does not describe what it actually does, including its side effects"
+    },
+    "comment_useless": {
+      "type": "noul",
+      "instructions": "The comment restates the code rather than explaining intent, constraint, or a non-obvious why"
+    },
+    "error_swallowed": {
+      "type": "noul",
+      "instructions": "An error or failure path is swallowed, so a failure would read as success"
+    },
+    "severity": {
+      "type": "score",
+      "instructions": "How much does this actually matter",
+      "criteria": [
+        "Cosmetic nit",
+        "Worth fixing eventually",
+        "Should fix before merge",
+        "Will cause a real defect or incident"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "error_swallowed.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "a swallowed failure reads as success -- the worst class of bug in this codebase"
+    },
+    {
+      "when": "severity.score >= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "high-severity finding, route to a System 2 agent"
+    },
+    {
+      "when": "name_lies.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "name does not describe side effects"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}
