@@ -57,9 +57,16 @@ class TestRouteExitCodes(unittest.TestCase):
     def test_offline_code_pass_never_exits_zero(self):
         """The load-bearing one: five documented alternatives, clean code checks,
         Jev not consulted. A caller must not be able to read that as cleared."""
-        facts = json.dumps([{"title": f"t{i}", "why": "x" * 30} for i in range(5)])
+        # The S gate demands five *mechanically* different plans plus a sourced
+        # outside view, so the fixture has to supply both or this test is
+        # proving the wrong thing (it would exit 1 on a defect, not 2 on Jev).
+        facts = json.dumps([{"title": "t%d" % i, "mechanism": "different mechanism %d" % i} for i in range(5)])
         r = run("route", "plan.dq_before_build", "--state", "spec text",
-                "--set", f"alternatives={facts}", "--json")
+                "--set", f"alternatives={facts}",
+                "--set", "reference_class=governed AI studios, first 12 months to repeat revenue",
+                "--set", "base_rate=0.28",
+                "--set", "base_rate_source=measured 2026-09 class ai-services-first-year",
+                "--set", "n_in_class=41", "--json")
         self.assertEqual(r.returncode, 2, r.stdout)
         d = json.loads(r.stdout)
         self.assertEqual(d["route"], "offline_code_only")

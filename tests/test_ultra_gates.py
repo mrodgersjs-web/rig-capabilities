@@ -10,7 +10,7 @@ from __future__ import annotations
 import unittest
 from unittest import mock
 
-from rig_capabilities import s1gate, ultra_gates as ug
+from rig_capabilities import s1gate, ultra_gates as ug, ultra_plan as up
 
 
 def noul(p):
@@ -42,7 +42,11 @@ def fake_evaluator(verdict, answers=None, advisory=True, enforced=False, reasons
 
 
 GOOD_FACTS = {
-    "plan.dq_before_build": {"alternatives": ["a", "b", "c"], "intent": "x"},
+    "plan.dq_before_build": {
+        "alternatives": [{"name": n, "mechanism": "m" + str(i)} for i, n in
+                         enumerate(["boring", "inverted", "cross-domain", "buy-not-build", "wait"])],
+        "reference_class": "governed AI studios, first 12 months to first revenue",
+        "base_rate": 0.28, "base_rate_source": "measured 2026-09", "n_in_class": 41, "intent": "x"},
     "questioning.card_before_ask": {"card_options": ["a", "b"], "card_recommendation": "a",
                                     "question_text": "which buyer?"},
     "research.citation_before_cite": {"citation_url": "https://x.dev/a", "citation_fetched_at": "2026-09-18",
@@ -142,6 +146,46 @@ class TestRouterOffline(unittest.TestCase):
         got = ug.route("research.citation_before_cite", "state", {}, live=False)
         self.assertEqual(got["route"], ug.Route.REWORK)
         self.assertTrue(got["jev_skipped"])
+        self.assertIn("missing required facts", " ".join(got["reasons"]))
+
+    def test_five_headings_over_one_mechanism_is_not_divergence(self):
+        got = ug.route("plan.dq_before_build", "state", {
+            "alternatives": [{"name": "price " + str(i), "mechanism": "retainer"} for i in range(5)],
+            "reference_class": "governed AI studios, first 12 months", "base_rate": 0.3,
+            "base_rate_source": "measured", "n_in_class": 41}, live=True,
+            evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
+        self.assertIn("need 5", " ".join(got["reasons"]))
+
+    def test_an_estimate_without_a_reference_class_is_refused(self):
+        got = ug.route("plan.dq_before_build", "state", {
+            "alternatives": [{"name": n, "mechanism": "m" + str(i)} for i, n in enumerate("abcde")],
+            "reference_class": "we think it will go fine", "base_rate": 0.7,
+            "base_rate_source": "vibes"}, live=True, evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
+
+    def test_a_thin_reference_class_is_refused(self):
+        base = {"alternatives": [{"name": n, "mechanism": "m" + str(i)} for i, n in enumerate("abcde")],
+                "reference_class": "the two studios I know personally", "base_rate": 0.5,
+                "base_rate_source": "conversation with 2 founders"}
+        for n, expect_refused in ((2, True), (4, True), (5, False), (41, False)):
+            got = ug.route("plan.dq_before_build", "state", dict(base, n_in_class=n),
+                           live=True, evaluator=fake_evaluator(s1gate.PASS))
+            self.assertEqual(got["route"] == ug.Route.REWORK, expect_refused, "n_in_class=%d" % n)
+
+    def test_a_real_source_containing_a_filler_word_still_counts(self):
+        base = {"alternatives": [{"name": n, "mechanism": "m" + str(i)} for i, n in enumerate("abcde")],
+                "reference_class": "governed AI studios, first 12 months", "base_rate": 0.3,
+                "base_rate_source": "https://example.com/me-study-2026 (their own vibes-adjacent survey)",
+                "n_in_class": 30}
+        self.assertTrue(up.outside_view(base)["ok"])
+
+    def test_a_base_rate_with_no_source_is_refused(self):
+        got = ug.route("plan.dq_before_build", "state", {
+            "alternatives": [{"name": n, "mechanism": "m" + str(i)} for i, n in enumerate("abcde")],
+            "reference_class": "governed AI studios, first 12 months", "base_rate": 0.3},
+            live=True, evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
         self.assertIn("missing required facts", " ".join(got["reasons"]))
 
     def test_code_check_failure_short_circuits_before_jev(self):
@@ -263,15 +307,37 @@ class TestDerivedMetrics(unittest.TestCase):
     def test_coverage_counts_a_missing_class_as_missing(self):
         counts = {c: 3 for c in ug.ANGLE_CLASSES if c != "exit/kill"}
         got = ug.coverage(counts)
-        self.assertEqual(got["missing"], ["exit/kill"])
+        self.assertEqual(got["missing"], ["exit_kill"])
+        self.assertEqual(got["missing_readable"], ["exit/kill"])
         self.assertAlmostEqual(got["coverage"], 13 / 14.0, places=4)
+
+    def test_labels_and_slugs_are_the_same_class(self):
+        """A stage tagging with the pack's slug and a human writing the readable
+        label must not produce two different coverage numbers."""
+        by_label = ug.coverage({c: 2 for c in ug.ANGLE_CLASSES})
+        by_slug = ug.coverage({c: 2 for c in ug.angle_slugs()})
+        self.assertEqual(by_label["coverage"], by_slug["coverage"])
+        self.assertEqual(by_label["missing"], by_slug["missing"])
+        self.assertEqual(by_label["answered"], by_slug["answered"])
+        self.assertEqual(by_label["coverage"], 1.0)
+
+    def test_an_unknown_class_is_reported_not_credited(self):
+        got = ug.coverage({"customer/job": 3, "vibes": 99})
+        self.assertIn("vibes", got["unknown_classes"])
+        self.assertLess(got["coverage"], 0.2)
+
+    def test_a_non_numeric_count_is_refused_not_zeroed(self):
+        got = ug.coverage({"customer/job": "three"})
+        self.assertIsNone(got["coverage"])
+        self.assertIn("not a number", got["insufficient_input"])
 
     def test_information_is_the_weakest_link_not_the_mean(self):
         vals = {c: 0.95 for c in ug.ANGLE_CLASSES}
         vals["legal/compliance"] = 0.20
         got = ug.information(vals)
         self.assertEqual(got["dq_information"], 0.2)
-        self.assertEqual(got["worst_class"], "legal/compliance")
+        self.assertEqual(got["worst_class"], "legal_compliance")
+        self.assertEqual(got["worst_class_readable"], "legal/compliance")
         self.assertAlmostEqual(got["mean"], 0.8964, places=4)
         self.assertGreater(got["mean"] - got["dq_information"], 0.6, "the mean hides the gap")
 

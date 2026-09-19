@@ -22,10 +22,12 @@ decides what to do with it.
 """
 from __future__ import annotations
 
+import re
 import statistics
 from dataclasses import asdict, dataclass, field
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from . import ultra_plan
 from .s1gate import BLOCK, ESCALATE, PASS, S1GateError, evaluate, load_rubric
 
 __all__ = ["Route", "NOT_CLEARED", "Gate", "GATES", "CODE_CHECKS", "ANGLE_CLASSES",
@@ -108,13 +110,21 @@ def check_swarm_diversity(facts):
 
 
 def check_alternatives_documented(facts):
+    """Diverge before converge, and count mechanisms rather than headings."""
     alts = facts.get("alternatives")
     if alts is None:
         return None, "alternatives list absent"
-    n = len(alts)
-    if n < 2:
-        return False, "fewer than two alternatives: nothing to reason over"
-    return True, "%d alternatives documented" % n
+    got = ultra_plan.diverge(alts, minimum=int(facts.get("diverge_minimum", ultra_plan.DIVERGE_MINIMUM)))
+    if not got["ok"]:
+        return False, got["why"]
+    return True, got["why"]
+
+
+def check_outside_view_declared(facts):
+    got = ultra_plan.outside_view(facts)
+    if not got["ok"]:
+        return False, got["why"]
+    return True, got["why"]
 
 
 def check_lease_held(facts):
@@ -187,6 +197,7 @@ CODE_CHECKS: Dict[str, Check] = {
     "citation_liveness": check_citation_liveness,
     "swarm_diversity": check_swarm_diversity,
     "alternatives_documented": check_alternatives_documented,
+    "outside_view_declared": check_outside_view_declared,
     "lease_held": check_lease_held,
     "done_test_executable": check_done_test_executable,
     "planted_failure_receipt": check_planted_failure_receipt,
@@ -218,8 +229,8 @@ class Gate:
 GATES: Dict[str, Gate] = {g.id: g for g in [
     Gate("plan.dq_before_build", "judgment", "ultra.judgment",
          "S gate: plan -> build",
-         checks=["alternatives_documented"],
-         requires=["alternatives"],
+         checks=["alternatives_documented", "outside_view_declared"],
+         requires=["alternatives", "reference_class", "base_rate", "base_rate_source", "n_in_class"],
          note="dq.information is computed from ultra.questioning over the 14 classes, not asked here."),
     Gate("questioning.card_before_ask", "questioning", "ultra.questioning",
          "before a card reaches Mike",
@@ -271,7 +282,11 @@ GATES: Dict[str, Gate] = {g.id: g for g in [
 # Derived metrics: computed in code, never asked of a model.
 # ---------------------------------------------------------------------------
 
-#: The 14 angle classes, mirrored from studios/questioning/STUDIO.md.
+#: The 14 angle classes. `ANGLE_CLASSES` stays the readable label list for docs and
+#: humans; the canonical key is the `cls` slug in the live `ultra.questioning` pack,
+#: because that is what a tagging run actually writes back. Both spellings normalise
+#: to the same key -- without this, a stage that records `customer/job` against a pack
+#: whose option is `customer_job` would report every class missing and a coverage of 0.
 ANGLE_CLASSES = [
     "customer/job", "buyer/money", "competitor/landscape", "technical feasibility",
     "distribution/channel", "timing/why-now", "legal/compliance", "people/capacity",
@@ -279,15 +294,75 @@ ANGLE_CLASSES = [
     "dependencies/assumptions", "ethics/reputation",
 ]
 
+_FALLBACK_SLUGS = [
+    "customer_job", "buyer_money", "competitor_landscape", "technical_feasibility",
+    "distribution_channel", "timing_why_now", "legal_compliance", "people_capacity",
+    "second_order_effects", "failure_modes", "exit_kill", "measurement",
+    "dependencies_assumptions", "ethics_reputation",
+]
 
-def coverage(counts: Dict[str, int], minimum: int = 1) -> Dict[str, Any]:
+
+def _norm(name: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "_", str(name).lower()).strip("_")
+
+
+def angle_slugs() -> List[str]:
+    """The canonical class list, read from the live pack so the two cannot drift."""
+    try:
+        crit = load_rubric("ultra.questioning").questions["cls"]["criteria"]
+        keys = list(crit)
+        if len(keys) == len(_FALLBACK_SLUGS):
+            return keys
+    except Exception:  # noqa: BLE001 -- an unreadable pack must not break a meter
+        pass
+    return list(_FALLBACK_SLUGS)
+
+
+def _canon_map() -> Dict[str, str]:
+    slugs = angle_slugs()
+    m = {_norm(s): s for s in slugs}
+    for slug, label in zip(slugs, ANGLE_CLASSES):
+        m.setdefault(_norm(label), slug)
+    return m
+
+
+def canonical_class(name: str) -> Optional[str]:
+    return _canon_map().get(_norm(name))
+
+
+def angle_label(slug: str) -> str:
+    """Readable form of a canonical slug, for anything a human reads."""
+    slugs = angle_slugs()
+    if slug in slugs:
+        return ANGLE_CLASSES[slugs.index(slug)]
+    return slug
+
+
+def coverage(counts: Dict[str, Any], minimum: int = 1) -> Dict[str, Any]:
     """Fraction of angle classes with at least `minimum` answered questions.
 
-    An unreported class counts as missing, never as free credit.
+    An unreported class counts as missing, never as free credit. Keys may be pack
+    slugs or readable labels; anything that is neither is reported as `unknown`
+    rather than silently credited to the class it vaguely resembles.
     """
-    missing = [c for c in ANGLE_CLASSES if int(counts.get(c, 0) or 0) < minimum]
-    return {"coverage": round((len(ANGLE_CLASSES) - len(missing)) / float(len(ANGLE_CLASSES)), 4),
-            "missing": missing, "classes": len(ANGLE_CLASSES)}
+    slugs = angle_slugs()
+    canon: Dict[str, int] = {}
+    unknown: Dict[str, int] = {}
+    for k, v in (counts or {}).items():
+        c = canonical_class(k)
+        try:
+            n = int(v or 0)
+        except (TypeError, ValueError):
+            return {"coverage": None, "insufficient_input": "count for %r is not a number: %r" % (k, v),
+                    "missing": slugs, "classes": len(slugs)}
+        if c is None:
+            unknown[k] = n
+        else:
+            canon[c] = canon.get(c, 0) + n
+    missing = [c for c in slugs if canon.get(c, 0) < minimum]
+    return {"coverage": round((len(slugs) - len(missing)) / float(len(slugs)), 4),
+            "missing": missing, "missing_readable": [angle_label(c) for c in missing],
+            "answered": canon, "classes": len(slugs), "unknown_classes": unknown}
 
 
 def information(class_resolved: Dict[str, float]) -> Dict[str, Any]:
@@ -297,13 +372,25 @@ def information(class_resolved: Dict[str, float]) -> Dict[str, Any]:
     it. All 14 must be reported, or the answer is `insufficient_input` -- never
     a default 1.0.
     """
+    slugs = angle_slugs()
+    canon: Dict[str, float] = {}
+    for k, v in (class_resolved or {}).items():
+        c = canonical_class(k)
+        if c is None or v is None:
+            continue
+        canon[c] = float(v)
+    unknown = [k for k in (class_resolved or {}) if canonical_class(k) is None]
+    if unknown:
+        return {"dq_information": None, "insufficient_input": "unrecognised angle class(es): %s" % unknown,
+                "worst_class": None}
     vals: Dict[str, float] = {}
-    for c in ANGLE_CLASSES:
-        if c not in class_resolved or class_resolved[c] is None:
+    for c in slugs:
+        if c not in canon:
             return {"dq_information": None, "insufficient_input": "no answer for %r" % c, "worst_class": None}
-        vals[c] = float(class_resolved[c])
+        vals[c] = canon[c]
     worst = min(vals, key=lambda k: vals[k])
     return {"dq_information": round(vals[worst], 4), "worst_class": worst,
+            "worst_class_readable": angle_label(worst),
             "mean": round(statistics.fmean(vals.values()), 4)}
 
 
@@ -486,3 +573,25 @@ def contract() -> List[Dict[str, Any]]:
                 d["pack_error"] = str(exc)
         rows.append(d)
     return rows
+
+
+def coverage_from_answers(answers: Dict[str, Any]) -> Dict[str, Any]:
+    """Turn one `ultra.questioning` answer set into the counts the meter wants.
+
+    Convenience for a stage that has the Jev answers in hand and should not have to
+    know the keying rules. A `cls` answer with no choice is not a zero: it is reported
+    as unresolved, because crediting an unanswered class would inflate coverage.
+    """
+    counts: Dict[str, int] = {}
+    for cls in angle_slugs():
+        counts[cls] = 0
+    for qname, ans in (answers or {}).items():
+        if not isinstance(ans, dict):
+            continue
+        if ans.get("type") == "choice" and qname == "cls":
+            c = canonical_class(ans.get("choice") or "")
+            if c:
+                counts[c] += 1
+        elif ans.get("type") == "noul":
+            continue
+    return coverage(counts)
