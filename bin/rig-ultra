@@ -24,6 +24,9 @@ Usage
     rig-ultra metrics coverage --facts counts.json [--min N]
     rig-ultra metrics information --facts class_resolved.json
     rig-ultra metrics trimmed --values 0.4,0.5,0.6 [--trim 1]
+    rig-ultra cell validate [ROOT] [--json]     # exit 0 all cells valid, 1 any red
+    rig-ultra cell tree [ROOT]                  # cells by level with their routes
+    rig-ultra cell plant CELL [--slot routes.yaml]  # the M1 red path, restored byte-identical
 
 A skill's call normally looks like:
     rig-ultra route research.citation_before_cite --state-file finding.md \
@@ -47,6 +50,12 @@ from rig_capabilities.ultra_gates import (  # noqa: E402
     information,
     route,
     trimmed_mean,
+)
+
+from rig_capabilities.ultra_cell import (  # noqa: E402
+    plant_failure,
+    tree_lines,
+    validate_tree,
 )
 
 CLEARED = (Route.ADVANCE, Route.ANNOTATE_ADVANCE)
@@ -158,6 +167,33 @@ def cmd_metrics(args) -> int:
     return 0
 
 
+def cmd_cell(args) -> int:
+    if args.what == "plant":
+        res = plant_failure(args.root, slot=args.slot)
+        print(json.dumps(res, indent=2) if args.json else
+              f"plant {args.slot} in {res.get('cell', args.root)}: "
+              f"{'RED as required' if res.get('ok') else 'FAILED -- ' + str(res.get('reason') or res)}"
+              + (f"  restored={res.get('restored_byte_identical')}" if 'restored_byte_identical' in res else ""))
+        return 0 if res.get("ok") else 1
+    rep = validate_tree(args.root)
+    if args.what == "tree":
+        print("\n".join(tree_lines(rep)))
+        return 0 if rep["ok"] else 1
+    if args.json:
+        print(json.dumps(rep, indent=2))
+    else:
+        print(f"cells {rep['valid']}/{rep['total']} valid  orphans {len(rep['orphans'])}  "
+              f"gates-known {rep['declared_gates_seen']}  ok {rep['ok']}")
+        for c in rep["cells"]:
+            if not c["ok"]:
+                print(f"  RED {c['cell']}")
+                for f in c["findings"]:
+                    print(f"      {f['code']}: {f['msg']}")
+        for o in rep["orphans"]:
+            print(f"  ORPHAN {o} (cell-shaped, no parent routes to it)")
+    return 0 if rep["ok"] else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     p = argparse.ArgumentParser(prog="rig-ultra", description=__doc__.splitlines()[0],
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -190,6 +226,13 @@ def build_parser() -> argparse.ArgumentParser:
     pm.add_argument("--min", type=int, default=1)
     pm.add_argument("--trim", type=int, default=1)
     pm.set_defaults(fn=cmd_metrics)
+
+    pcell = sub.add_parser("cell", help="the ULTRA cell contract: validate / tree / plant")
+    pcell.add_argument("what", choices=["validate", "tree", "plant"])
+    pcell.add_argument("root", nargs="?", default=".")
+    pcell.add_argument("--slot", default="routes.yaml")
+    pcell.add_argument("--json", action="store_true")
+    pcell.set_defaults(fn=cmd_cell)
     return p
 
 
