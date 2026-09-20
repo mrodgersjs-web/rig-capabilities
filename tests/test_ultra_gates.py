@@ -236,6 +236,32 @@ class TestRouterOffline(unittest.TestCase):
         self.assertEqual(got["route"], ug.Route.REWORK)
         self.assertTrue(any("TIMEOUT" in c["note"] for c in got["code_checks"]))
 
+    def test_judge_sees_the_claim_not_just_the_artifact(self):
+        """Planted-failure regression: route used to hand JEV only the artifact, so
+        done_test_is_vacuous/claim_atomic were answered blind and every claim against
+        one file scored identically."""
+        seen = {}
+
+        def spy(rb, state, **kw):
+            seen["state"] = state
+            return FakeResult(s1gate.PASS, {"claim_atomic": noul(0.9)})
+
+        ug.route("proof.gate_before_register", "ARTIFACT-BYTES",
+                 {"done_test_text": "unique-claim-text-42", "done_test_cmds": ["cmd: true"],
+                  "planted_failure_receipt": "r"}, live=True, evaluator=spy)
+        self.assertIn("ARTIFACT-BYTES", seen["state"])
+        self.assertIn("unique-claim-text-42", seen["state"], "claim never reached the judge")
+        self.assertIn("cmd: true", seen["state"])
+
+    def test_judged_state_helper_contract(self):
+        """No text-bearing facts -> the artifact is judged raw. Text facts -> appended.
+        Booleans/numbers are NOT text: they are code-check inputs, not claims."""
+        self.assertEqual(ug._judged_state("raw", {}), "raw")
+        self.assertEqual(ug._judged_state("raw", {"score": 0.9, "flag": True}), "raw")
+        with_claim = ug._judged_state("raw", {"claim_text": "3-13%"})
+        self.assertTrue(with_claim.startswith("raw\n\n-- declared facts --\n"))
+        self.assertIn("claim_text: 3-13%", with_claim)
+
 
 class TestRouterWithVerdicts(unittest.TestCase):
     def test_pass_advances(self):

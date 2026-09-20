@@ -440,6 +440,27 @@ def trimmed_mean(values: List[float], trim: int = 1) -> Dict[str, Any]:
 # ---------------------------------------------------------------------------
 
 
+def _judged_state(state: str, facts: Dict[str, Any]) -> str:
+    """The artifact plus every text-bearing fact, in a form the judge can read.
+
+    A rubric that asks about a claim or a done-test cannot answer it from artifact
+    bytes alone; without this the model scores the file and the questions about the
+    claim are answered blind -- and every claim scored against one file returns the
+    identical noul, which is the signature of a judge that never saw the claim.
+    """
+    parts: List[str] = []
+    for key in sorted(facts):
+        val = facts[key]
+        if isinstance(val, str) and val.strip():
+            parts.append("%s: %s" % (key, val.strip()[:600]))
+        elif isinstance(val, (list, tuple)) and val:
+            flat = "; ".join(str(x)[:200] for x in val)[:800]
+            parts.append("%s: %s" % (key, flat))
+    if not parts:
+        return state
+    return state + "\n\n-- declared facts --\n" + "\n".join(parts)
+
+
 def _reason_lines(answers: Dict[str, Any]) -> List[str]:
     """Code-owned reason strings. Jev returns numbers, never prose."""
     out = []
@@ -555,8 +576,13 @@ def route(
         return decide(Route.HALT_FAILCLOSED, jev_skipped=True,
                       reasons=reasons + ["pack %r unreadable: %s" % (gate.pack, exc)])
 
+    # The judge must SEE what the rubric asks about. Packs like ultra.proof ask
+    # "is this done-test vacuous?" and "is this claim atomic?" -- questions that are
+    # unanswerable from the artifact alone. Fold the claim-bearing facts into the
+    # judged state so JEV scores the assertion, not just the bytes it changed.
+    judged = _judged_state(state, facts)
     try:
-        res = evaluator(rb, state, subject=subject or gate.id, log=log, model=model, timeout=timeout)
+        res = evaluator(rb, judged, subject=subject or gate.id, log=log, model=model, timeout=timeout)
     except Exception as exc:  # evaluator may raise before s1gate's own fail-closed path
         return decide(Route.HALT_FAILCLOSED, jev_skipped=True,
                       reasons=reasons + ["Jev call raised %s: %s" % (type(exc).__name__, exc)])
