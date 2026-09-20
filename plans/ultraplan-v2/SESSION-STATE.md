@@ -1,6 +1,6 @@
 # UltraPlan V2 — Session State (checkpoint 2026-09-20b)
 
-HEADS: ultraplan `0c87a89` · rig-capabilities `fb7ce33` (branch ultraplan-v2) · ultra-mcp `02a6338`
+HEADS: ultraplan `7f0203d` · rig-capabilities (W07 evidence commit, post-fb7ce33)  (branch ultraplan-v2) · ultra-mcp `02a6338`
 Manifest: 1207 items — 164 built, 53 connected, 2 specified, 988 inventoried. Board ~444 open.
 Live: console hub process `ultraconsole` :8902; ledger ultraplan/data/ledger.db mission 0f516f4a-…-0601 seq 17 chain-intact; JEV decision ledger ~/.rig/s1gate/decisions.db; tmux firstmate (pane 2 jake stale — codex pool limited).
 
@@ -29,7 +29,7 @@ Fix the 4 RED cells: rewrite their done_whens to be red-capable (altitude-walk) 
 4. **ROTATE PAT github_pat_11ABZYK6Y0… NOW** (in transcript history; remotes scrubbed, token not).
 
 ## Next 5
-1. Build 14 thin W07 cells per pattern above (2-3 batches), tree green before each commit
+1. DONE 2026-09-20c: 14 thin cells live (7f0203d), all 14 JEX PASS per-cell (w07c-* receipts; envval needed claim re-split — judge enforced atomicity); only freshness-scheduler left in W07 (no engine — honest-negative JEX exists). Tree 52/52. Next: W09 cells (worker/verifier/arbiter envelopes over cell_runner+fence), W13 soak, W10 attribution
 2. W09 worker/verifier/arbiter cells: envelope = cell_runner output schema; family fields enforced
 3. W13 soak harness (100 missions x command mixes w/ 20% dupes, reconnect churn vs live console)
 4. W10 harvest->attribute->write-back on the decision-ledger + receipt corpus (attribution evidence exists now)
