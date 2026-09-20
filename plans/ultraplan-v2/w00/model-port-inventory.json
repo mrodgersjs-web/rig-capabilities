@@ -1,0 +1,87 @@
+{
+  "schema": "ultraplan-v2.w00.model-port-inventory.v1",
+  "captured_at_utc": "2026-09-20T18:14:47Z",
+  "command_evidence": {
+    "path": "model-observations.txt",
+    "sha256": "39936c6569a89ddc9293c58a591fc2bc49ad224df5f91790318cca9b8cd70bc5"
+  },
+  "jev_route": {
+    "ultraplan_entry": "tools/build_status.py invokes ../../rig-capabilities/bin/rig-ultra and bin/rig-s1gate; the /ultraplan command delegates to the skill and rig-loop gates rather than inlining JEV logic",
+    "command_template": "/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra route <gate-id> --state-file <artifact> --facts <facts.json> --live [--model <model>] [--timeout <seconds>] --json",
+    "live_flag_required": true,
+    "default_model": "jev-latest",
+    "endpoint": "https://api.typesafe.ai/v1/systemone",
+    "endpoint_env_override": "S1GATE_JEV_ENDPOINT",
+    "model_env_override": "S1GATE_JEV_MODEL",
+    "environment_overrides_present": false,
+    "offline_behavior": "without --live, route returns offline_code_only and exit 2; JEV is not consulted",
+    "calibration_state": "advisory; UltraPlan STATUS.json reports zero labelled decisions"
+  },
+  "configured_harness_models": {
+    "codex": {
+      "source": "/Users/rig128gb/.codex/config.toml",
+      "source_sha256": "8bcc3cdd326443abf854cb19a60cbd10ebfa7b0b66004da9a8ead68a744191f4",
+      "model": "gpt-6-astra",
+      "provider": "openai-rig",
+      "catalog": "/Users/rig128gb/.codex/model-catalogs/openai-rig.json",
+      "reasoning_effort": "xhigh"
+    },
+    "claude": {
+      "source": "/Users/rig128gb/.claude/settings.json",
+      "source_sha256": "f321a8047de87e3288fbf48adfb0ee2d92505d95adf74598542d28d37d460edd",
+      "base_url": "http://127.0.0.1:8768",
+      "default_haiku_model": "claude-fable-5",
+      "default_sonnet_model": "claude-fable-5",
+      "default_opus_model": "claude-opus-5",
+      "effort_level": "xhigh"
+    }
+  },
+  "ollama": {
+    "available": true,
+    "command": "ollama list",
+    "timeout_seconds": 10,
+    "exit_code": 0,
+    "models": [
+      {
+        "name": "nomic-embed-text:latest",
+        "id": "0a109f422b47",
+        "size": "274 MB",
+        "modified": "8 days ago"
+      }
+    ],
+    "warning": "ignoring cloud base URL override because a non-loopback cloud override is not allowed in release mode"
+  },
+  "installed_surfaces": {
+    "fusion": {
+      "installed": true,
+      "skill": "/Users/rig128gb/.codex/skills/fusion-harness",
+      "commands": [
+        "/Users/rig128gb/.codex/commands/fusion-harness.md",
+        "/Users/rig128gb/.codex/commands/moa-fusion.md",
+        "/Users/rig128gb/.codex/commands/moa-bal-fusion.md"
+      ],
+      "mcp_configured": true,
+      "mcp_enabled": false,
+      "mcp_command": "/Users/rig128gb/.homebrew/opt/python@3.14/bin/python3.14 -m prime_jake_coding_fleet.fusion mcp",
+      "governed_launcher": "/Users/rig128gb/.rig/bin/fusion-harness"
+    },
+    "earendil": {
+      "installed_in_codex_surfaces": false,
+      "searched": [
+        "/Users/rig128gb/.codex/config.toml",
+        "/Users/rig128gb/.codex/commands",
+        "/Users/rig128gb/.codex/skills"
+      ],
+      "matches": []
+    }
+  },
+  "ports": {
+    "source": "console-state.json",
+    "listeners": [
+      {"port": 8902, "pid": 7249, "process": "python", "cwd": "/Users/rig128gb/Developer/ultraplan"},
+      {"port": 61398, "pid": 9871, "process": "node", "cwd": "/Users/rig128gb/Developer/ultraplan/ui"},
+      {"port": 61399, "pid": 67242, "process": "node", "cwd": "/Users/rig128gb/Developer/ultraplan"},
+      {"port": 61400, "pid": 12766, "process": "node", "cwd": "/Users/rig128gb/Developer/ultraplan"}
+    ]
+  }
+}

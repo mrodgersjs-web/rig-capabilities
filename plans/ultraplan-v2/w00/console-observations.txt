@@ -1,0 +1,50 @@
+$ lsof -nP -iTCP:8902 -sTCP:LISTEN
+COMMAND  PID     USER   FD   TYPE            DEVICE SIZE/OFF NODE NAME
+python  7249 rig128gb    3u  IPv4 0x5b13e2fcce31b71      0t0  TCP 127.0.0.1:8902 (LISTEN)
+$ ps -p 7249 -o pid=,ppid=,user=,command=
+7249 1 rig128gb /Users/rig128gb/.aside/runtime/python/venv/bin/python -m http.server 8902 --bind 127.0.0.1
+$ lsof -a -p 7249 -d cwd -Fn | awk '/^n/{sub(/^n/,""); print}'
+/Users/rig128gb/Developer/ultraplan
+
+$ lsof -nP -iTCP:61398 -sTCP:LISTEN
+COMMAND  PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    9871 rig128gb   14u  IPv4 0x79d97fa9d7b5b0f8      0t0  TCP 127.0.0.1:61398 (LISTEN)
+$ ps -p 9871 -o pid=,ppid=,user=,command=
+9871 1 rig128gb /Users/rig128gb/.aside/runtime/node/bin/node server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/private-tmp/20260918-114757/ --port 61398
+$ lsof -a -p 9871 -d cwd -Fn | awk '/^n/{sub(/^n/,""); print}'
+/Users/rig128gb/Developer/ultraplan/ui
+
+$ lsof -nP -iTCP:61399 -sTCP:LISTEN
+COMMAND   PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    67242 rig128gb   14u  IPv4 0x9974deb4288dd443      0t0  TCP 127.0.0.1:61399 (LISTEN)
+$ ps -p 67242 -o pid=,ppid=,user=,command=
+67242 1 rig128gb /Users/rig128gb/.aside/runtime/node/bin/node ui/server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/Users-rig128gb-Developer-ultraplan/20260919-114235 --port 61399
+$ lsof -a -p 67242 -d cwd -Fn | awk '/^n/{sub(/^n/,""); print}'
+/Users/rig128gb/Developer/ultraplan
+
+$ lsof -nP -iTCP:61400 -sTCP:LISTEN
+COMMAND   PID     USER   FD   TYPE             DEVICE SIZE/OFF NODE NAME
+node    12766 rig128gb   14u  IPv4 0xa763d2208362f23f      0t0  TCP 127.0.0.1:61400 (LISTEN)
+$ ps -p 12766 -o pid=,ppid=,user=,command=
+12766 12762 rig128gb /Users/rig128gb/.aside/runtime/node/bin/node ui/server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/Users-rig128gb-Developer-ultraplan/20260919-124914 --port 61400
+$ lsof -a -p 12766 -d cwd -Fn | awk '/^n/{sub(/^n/,""); print}'
+/Users/rig128gb/Developer/ultraplan
+
+$ NODE_NO_WARNINGS=1 node --input-type=module -e '<import buildSeed/buildArch/buildGates/buildCells; emit every id>'
+Canvas 149; Architecture 56; JevBuild 31; Cells 56; TOTAL 292
+$ wc -l shape-ids.txt
+292 shape-ids.txt
+$ sha256sum shape-ids.txt
+5ce2bf01c466e0bd9a69f61ec5b2db249813f9708d8717a866c17c7d45f5b62f  shape-ids.txt
+
+$ sha256sum canvas-seed.js cells-seed.js gates-seed.js TLRAW.html STATUS.json
+77a16107a0ed6f387000e303291c95310c3b83ba6d00cf34ebbeffee31a6d926  canvas-seed.js
+80a76dd3c3a821f2967eb750fa9a0410190b524f28d89c486f7444dcc39b8879  cells-seed.js
+5a64168c5bb5e6925f05354784d4be0f566ea7c62f07a5b709b00f573569ec2b  gates-seed.js
+596c152125ae5a4b86bef0f627ba3ad587a834de7f6c0d3b786e2224b92a676b  TLRAW.html
+99845f476c1a20105527beb7e02e397ff42d5a2795067ab59f2631d4db826422  STATUS.json
+
+$ sort shape-ids.txt | uniq -d | wc -l
+0
+$ sort -u shape-ids.txt | wc -l
+292

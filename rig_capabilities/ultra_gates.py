@@ -141,16 +141,44 @@ def check_lease_held(facts):
 _ASSERTION_PREFIXES = ("cmd:", "pytest", "python3 -m unittest", "npm test", "make", "bash -c", "cargo test")
 
 
+def _run(cmd: str, timeout: int):
+    """Execute one assertion. Facts are caller-supplied and the gate caller already
+    holds a shell -- this runs inside the local trust domain, not a sandbox."""
+    import subprocess, time
+    t0 = time.monotonic()
+    try:
+        p = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=timeout)
+        tail = (p.stdout or p.stderr or "")[-160:].strip()
+        return p.returncode, tail, int((time.monotonic() - t0) * 1000)
+    except subprocess.TimeoutExpired:
+        return 124, "TIMEOUT after %ds" % timeout, timeout * 1000
+
+
 def check_done_test_executable(facts):
-    """A done-test that only greps for a file, or asserts nothing, is theater."""
+    """A done-test that only greps for a file, or asserts nothing, is theater --
+    and an assertion named but never RUN is the same theater with a longer name.
+    Every recognised assertion is executed here; all must exit 0."""
     cmds = facts.get("done_test_cmds")
     if cmds is None:
         return None, "done_test_cmds absent"
-    if not cmds:
-        return False, "no executable assertion in the done-test"
-    if not any(str(c).strip().startswith(_ASSERTION_PREFIXES) for c in cmds):
+    asserts = []
+    for c in cmds:
+        c = str(c).strip()
+        if c.startswith("cmd:"):
+            asserts.append(c[4:].strip())
+        elif c.startswith(_ASSERTION_PREFIXES):
+            asserts.append(c)
+    if not asserts:
         return False, "done-test has no runnable assertion (existence checks only)"
-    return True, "%d executable assertion(s)" % len(cmds)
+    try:
+        timeout = min(int(facts.get("done_test_timeout", 300)), 900)
+    except (TypeError, ValueError):
+        return False, "done_test_timeout is not a number"
+    for c in asserts:
+        code, tail, ms = _run(c, timeout)
+        if code != 0:
+            return False, "assertion exited %d after %dms: %s | %s" % (code, ms, c[:80], tail)
+    return True, "%d assertion(s) EXECUTED, all exit 0" % len(asserts)
 
 
 def check_planted_failure_receipt(facts):

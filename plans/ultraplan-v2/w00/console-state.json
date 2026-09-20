@@ -1,0 +1,83 @@
+{
+  "schema": "ultraplan-v2.w00.console-state.v1",
+  "captured_at_utc": "2026-09-20T18:14:47Z",
+  "command_evidence": {
+    "path": "console-observations.txt",
+    "sha256": "22499d5a21ef097749bbe239556b274d2d989151d27adc09a83e4350caca5fef"
+  },
+  "listeners": [
+    {
+      "host": "127.0.0.1",
+      "port": 8902,
+      "pid": 7249,
+      "ppid": 1,
+      "process": "python",
+      "command": "/Users/rig128gb/.aside/runtime/python/venv/bin/python -m http.server 8902 --bind 127.0.0.1",
+      "cwd": "/Users/rig128gb/Developer/ultraplan",
+      "classification": "plain static Python HTTP server; not a durable console runtime"
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 61398,
+      "pid": 9871,
+      "ppid": 1,
+      "process": "node",
+      "command": "/Users/rig128gb/.aside/runtime/node/bin/node server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/private-tmp/20260918-114757/ --port 61398",
+      "cwd": "/Users/rig128gb/Developer/ultraplan/ui"
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 61399,
+      "pid": 67242,
+      "ppid": 1,
+      "process": "node",
+      "command": "/Users/rig128gb/.aside/runtime/node/bin/node ui/server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/Users-rig128gb-Developer-ultraplan/20260919-114235 --port 61399",
+      "cwd": "/Users/rig128gb/Developer/ultraplan"
+    },
+    {
+      "host": "127.0.0.1",
+      "port": 61400,
+      "pid": 12766,
+      "ppid": 12762,
+      "process": "node",
+      "command": "/Users/rig128gb/.aside/runtime/node/bin/node ui/server.mjs serve --session /Users/rig128gb/.grill-with-ui/sessions/Users-rig128gb-Developer-ultraplan/20260919-124914 --port 61400",
+      "cwd": "/Users/rig128gb/Developer/ultraplan"
+    }
+  ],
+  "persisted_console_state": {
+    "shape_id_file": "shape-ids.txt",
+    "shape_id_count": 292,
+    "shape_id_sha256": "5ce2bf01c466e0bd9a69f61ec5b2db249813f9708d8717a866c17c7d45f5b62f",
+    "all_shape_ids_unique": true,
+    "groups": {
+      "Canvas": 149,
+      "Architecture": 56,
+      "JevBuild": 31,
+      "Cells": 56
+    },
+    "sources": [
+      {
+        "path": "/Users/rig128gb/Developer/ultraplan/canvas-seed.js",
+        "sha256": "77a16107a0ed6f387000e303291c95310c3b83ba6d00cf34ebbeffee31a6d926"
+      },
+      {
+        "path": "/Users/rig128gb/Developer/ultraplan/cells-seed.js",
+        "sha256": "80a76dd3c3a821f2967eb750fa9a0410190b524f28d89c486f7444dcc39b8879"
+      },
+      {
+        "path": "/Users/rig128gb/Developer/ultraplan/gates-seed.js",
+        "sha256": "5a64168c5bb5e6925f05354784d4be0f566ea7c62f07a5b709b00f573569ec2b"
+      },
+      {
+        "path": "/Users/rig128gb/Developer/ultraplan/TLRAW.html",
+        "sha256": "596c152125ae5a4b86bef0f627ba3ad587a834de7f6c0d3b786e2224b92a676b"
+      },
+      {
+        "path": "/Users/rig128gb/Developer/ultraplan/STATUS.json",
+        "sha256": "99845f476c1a20105527beb7e02e397ff42d5a2795067ab59f2631d4db826422"
+      }
+    ],
+    "enumeration_command": "NODE_NO_WARNINGS=1 node --input-type=module -e <import buildSeed/buildArch/buildGates/buildCells; emit every id>",
+    "note": "The measured 292 IDs are the four pages seeded by canvas-seed.js; TLRAW.html is an older standalone seed and is hashed as source evidence but is not double-counted."
+  }
+}

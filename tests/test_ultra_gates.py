@@ -56,7 +56,7 @@ GOOD_FACTS = {
     "execution.slice_before_integrate": {"diff_text": "diff", "claims_text": "claims", "lease_holder": "w1",
                                          "writer_family": "a", "verifier_family": "b"},
     "execution.tripwire_before_next_wave": {"tripwire_text": "CAC > 3x", "fresh_evidence_text": "CAC 1.2x"},
-    "proof.gate_before_register": {"done_test_text": "runs", "done_test_cmds": ["cmd: pytest -q"],
+    "proof.gate_before_register": {"done_test_text": "runs", "done_test_cmds": ["cmd: true"],
                                    "planted_failure_receipt": "receipt-1"},
     "proof.seal_before_forecast_resolve": {"chain_verified": True, "planted_failure_receipt": "r",
                                            "artifact_text": "bytes"},
@@ -209,6 +209,32 @@ class TestRouterOffline(unittest.TestCase):
                        evaluator=fake_evaluator(s1gate.PASS))
         self.assertEqual(got["route"], ug.Route.ESCALATE_REVIEW)
         self.assertTrue(got["jev_skipped"])
+
+    def test_named_but_never_run_assertion_no_longer_passes(self):
+        """A cmd: string whose command FAILS at execution time is not a done-test.
+        Before this check executed, any string starting with 'cmd:' cleared it."""
+        got = ug.route("proof.gate_before_register", "state",
+                       {"done_test_text": "x", "done_test_cmds": ["cmd: exit 3"],
+                        "planted_failure_receipt": "r"}, live=True,
+                       evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
+        self.assertTrue(any("exited 3" in c["note"] for c in got["code_checks"]))
+
+    def test_executing_assertion_advances(self):
+        got = ug.route("proof.gate_before_register", "state",
+                       {"done_test_text": "x", "done_test_cmds": ["cmd: true"],
+                        "planted_failure_receipt": "r"}, live=True,
+                       evaluator=fake_evaluator(s1gate.PASS, {"done_test_is_vacuous": noul(0.05)}))
+        self.assertTrue(got["cleared"])
+        self.assertTrue(any("EXECUTED" in c["note"] for c in got["code_checks"]))
+
+    def test_timeout_is_a_failure_not_an_absolution(self):
+        got = ug.route("proof.gate_before_register", "state",
+                       {"done_test_text": "x", "done_test_cmds": ["cmd: sleep 5"],
+                        "done_test_timeout": 1, "planted_failure_receipt": "r"}, live=True,
+                       evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
+        self.assertTrue(any("TIMEOUT" in c["note"] for c in got["code_checks"]))
 
 
 class TestRouterWithVerdicts(unittest.TestCase):

@@ -1,0 +1,286 @@
+ M .gitignore
+ M .install.json
+ M README.md
+ M capabilities/harnesses/mh-02-harness-forge-session.yaml
+ M capabilities/skills/d85-compliance-checklist/SKILL.md
+ M capabilities/skills/rig-determinism-85/authority/doctrine.md
+ M capabilities/skills/rig-determinism-85/authority/registry.json
+ M capabilities/skills/rig-determinism-85/authority/surfaces.json
+ M capabilities/skills/rig-determinism-85/tool_selection.py
+ M capabilities/skills/rig-lattice-system/rig_lattice/deviator/baselines/_last_recal.txt
+ M capabilities/skills/rig-lattice-system/runs/audit_hash_chain.jsonl
+ M capabilities/skills/rig-lattice-system/runs/brier_history.jsonl
+ M capabilities/skills/rig-lattice-system/runs/cost_ledger.jsonl
+ M capabilities/skills/rig-lattice-system/runs/deployments.jsonl
+ M capabilities/skills/rig-lattice-system/runs/deviator.db
+ M capabilities/skills/rig-lattice-system/runs/langfuse.jsonl
+ M capabilities/skills/rig-lattice-system/runs/langsmith.jsonl
+ M capabilities/skills/rig-lattice-system/runs/notifications.jsonl
+ M capabilities/skills/rig-lattice-system/runs/observability.jsonl
+ M capabilities/skills/rig-lattice-system/runs/otel.jsonl
+ M capabilities/skills/rig-lattice-system/runs/swarm.jsonl
+ M capabilities/skills/rig-lattice-system/tests/test_gap_fill.py
+ M capabilities/skills/youtube-3blue1brown/SKILL.md
+ M capabilities/skills/youtube-ai-explained/SKILL.md
+ M capabilities/skills/youtube-ai-ladder/SKILL.md
+ M capabilities/skills/youtube-andrej-karpathy/SKILL.md
+ M capabilities/skills/youtube-anthropic/SKILL.md
+ M capabilities/skills/youtube-deeplearning-ai/SKILL.md
+ M capabilities/skills/youtube-dwarkesh-patel/SKILL.md
+ M capabilities/skills/youtube-fireship/SKILL.md
+ M capabilities/skills/youtube-google-deepmind/SKILL.md
+ M capabilities/skills/youtube-lex-fridman/SKILL.md
+ M capabilities/skills/youtube-logan-kilpatrick/SKILL.md
+ M capabilities/skills/youtube-matt-wolfe/SKILL.md
+ M capabilities/skills/youtube-nvidia-developer/SKILL.md
+ M capabilities/skills/youtube-openai/SKILL.md
+ M capabilities/skills/youtube-simon-willison/SKILL.md
+ M capabilities/skills/youtube-statquest/SKILL.md
+ M capabilities/skills/youtube-the-rundown-ai/SKILL.md
+ M capabilities/skills/youtube-two-minute-papers/SKILL.md
+ M capabilities/skills/youtube-yann-lecun/SKILL.md
+ M capability_register.csv
+ M docs/ROADMAP.md
+ M out/harness-goalspecs/mh-02-harness-forge-session.json
+ M out/harness-goalspecs/mh-02-harness-forge-session.yaml
+ M rig_capabilities/__init__.py
+ M rig_capabilities/catalog.py
+ M runs/agentic-stack-buildout/backend/proofs/b42_repeatability.json
+ M runs/agentic-stack-buildout/backend/proofs/b43_role_isolation.json
+ M runs/agentic-stack-buildout/backend/proofs/b47_claim_fencing.json
+ M runs/agentic-stack-buildout/backend/proofs/b48_outbox_reconciliation.json
+ M runs/agentic-stack-buildout/backend/proofs/cluster_lifecycle.json
+ M runs/agentic-stack-buildout/backend/proofs/mcp-b44-protocol.json
+ M runs/agentic-stack-buildout/backend/proofs/mcp-b45-scenarios.json
+ M scripts/hook_fires.py
+ M tests/test_evasion_battery.py
+ M tests/test_surface_tools.py
+ M tests/test_tool_selection.py
+?? .ignore
+?? .local-runs/
+?? .quarantine/
+?? .staging/
+?? .unlazy/
+?? bin/rig-comm
+?? capabilities/agents/gtm-agent-311d4ab5c8ed-05e476af/
+?? capabilities/agents/rig-comms-gev.md
+?? capabilities/agents/rig-linkedin-desktop.md
+?? capabilities/commands/write.md
+?? capabilities/data/gtm-marketing-hook-5b3a1e3c6e9a-a84372cf/
+?? capabilities/data/shaduxe-ui-reference/
+?? capabilities/harnesses/comms-transformation-harness.yaml
+?? capabilities/harnesses/gtm-harness-2c585c27a292-d2b527d4/
+?? capabilities/harnesses/gtm-harness-2c585c27a292-de5826bc/
+?? capabilities/harnesses/s1gate/rubrics/ULTRA-INVENTORY.md
+?? capabilities/harnesses/s1gate/rubrics/mail.status.json
+?? capabilities/hooks/comms-guard-throat-clear.sh
+?? capabilities/hooks/gtm-runtime-hook-41976d53c7f5-4e3941b9/
+?? capabilities/hooks/gtm-runtime-hook-41976d53c7f5-5704fe72/
+?? capabilities/hooks/hermes-memory-frontdoor/
+?? capabilities/hooks/memory-fleet.py
+?? capabilities/hooks/prime-jake-memory.ts
+?? capabilities/loops/gtm-loop-7e0e0ee777d5-136f6874/
+?? capabilities/loops/gtm-loop-7e0e0ee777d5-a1d37b9b/
+?? capabilities/loops/rig-comms-drafting-loop.md
+?? capabilities/skills/adversarial-verification-loop/loop.json
+?? capabilities/skills/animate-expo/
+?? capabilities/skills/animate/
+?? capabilities/skills/animation-vocabulary/
+?? capabilities/skills/anti-ai-writing/
+?? capabilities/skills/anti-slop/
+?? capabilities/skills/apple-design/
+?? capabilities/skills/ask-sonner/
+?? capabilities/skills/avoid-ai-writing/
+?? capabilities/skills/baseline-ui/
+?? capabilities/skills/better-accessibility/
+?? capabilities/skills/better-colors/
+?? capabilities/skills/better-interface/
+?? capabilities/skills/better-layout/
+?? capabilities/skills/better-typography/
+?? capabilities/skills/better-ui/
+?? capabilities/skills/better-writing/
+?? capabilities/skills/break/
+?? capabilities/skills/caveman/
+?? capabilities/skills/codex-fusion/
+?? capabilities/skills/create-design-md/
+?? capabilities/skills/email-campaign-operator/
+?? capabilities/skills/emil-design-eng/
+?? capabilities/skills/explain-interface/
+?? capabilities/skills/find-animation-opportunities/
+?? capabilities/skills/fixing-accessibility/
+?? capabilities/skills/fixing-metadata/
+?? capabilities/skills/fixing-motion-performance/
+?? capabilities/skills/gate-d-loop/loop.json
+?? capabilities/skills/git-push-safety-loop/loop.json
+?? capabilities/skills/gtm-skill-6eab988ba917-03766ede/
+?? capabilities/skills/hermes-job-apply/
+?? capabilities/skills/hermes-resume-only-applications/
+?? capabilities/skills/huntington-executive-interview/
+?? capabilities/skills/hyperresearch/
+?? capabilities/skills/impeccable/
+?? capabilities/skills/improve-animations/
+?? capabilities/skills/improve-ui/
+?? capabilities/skills/interface-review/
+?? capabilities/skills/iqrsqpi-v11/loop.json
+?? capabilities/skills/iqrsqpi-v20-slice/loop.json
+?? capabilities/skills/iqrsqpi-v20/loop.json
+?? capabilities/skills/julie-w2-applypilot/
+?? capabilities/skills/north-star-lock-loop/loop.json
+?? capabilities/skills/phase-discipline-loop/loop.json
+?? capabilities/skills/pick-ui-library/
+?? capabilities/skills/proof-loop/loop.json
+?? capabilities/skills/prototype/
+?? capabilities/skills/resume-grounded-job-apply/
+?? capabilities/skills/review-animations/
+?? capabilities/skills/rig-comms-agent-craft/
+?? capabilities/skills/rig-comms-conversation-craft/
+?? capabilities/skills/rig-comms-narrative-craft/
+?? capabilities/skills/rig-communications-behavior/
+?? capabilities/skills/rig-communications-core/
+?? capabilities/skills/rig-communications-doctrine/
+?? capabilities/skills/rig-communications-voice/
+?? capabilities/skills/rig-communications-wounds/
+?? capabilities/skills/rig-determinism-85/CERTIFICATE-MIGRATION.md
+?? capabilities/skills/rig-determinism-85/authority/classifications/
+?? capabilities/skills/rig-determinism-85/authority/evidence/
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_nightly_refresh_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_nightly_refresh_v2.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_nightly_refresh_v3.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_nightly_refresh_v3.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_v2_vercel_deploy_v2.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/cockpit_v2_vercel_deploy_v2.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/d85_rollout.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/d85_rollout.json
+?? capabilities/skills/rig-determinism-85/authority/processes/estate-automation-review.json
+?? capabilities/skills/rig-determinism-85/authority/processes/fleet_routing_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/fleet_routing_v2.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/fleet_routing_v3.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/fleet_routing_v4.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/fleet_routing_v4.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig-gtm-studio-v2-foundry.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_capabilities_engine_v1.classification.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_capabilities_engine_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_comm_writing_tools.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_design_harness_core_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/processes/rig_linkedin_foundry_tac_v1.process.json
+?? capabilities/skills/rig-determinism-85/authority/reference/rig_capabilities_engine_v1/
+?? capabilities/skills/rig-determinism-85/authority/reference/rig_comm_writing_tools/
+?? capabilities/skills/rig-determinism-85/authority/sources/cockpit_nightly_refresh_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/cockpit_nightly_refresh_v2/
+?? capabilities/skills/rig-determinism-85/authority/sources/cockpit_nightly_refresh_v3/
+?? capabilities/skills/rig-determinism-85/authority/sources/cockpit_v2_vercel_deploy_v2/
+?? capabilities/skills/rig-determinism-85/authority/sources/d85_rollout/
+?? capabilities/skills/rig-determinism-85/authority/sources/estate-automation-review/
+?? capabilities/skills/rig-determinism-85/authority/sources/fleet_routing_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/fleet_routing_v2/
+?? capabilities/skills/rig-determinism-85/authority/sources/fleet_routing_v3/
+?? capabilities/skills/rig-determinism-85/authority/sources/fleet_routing_v4/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig-gtm-studio-v2-foundry/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig_capabilities_engine_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig_comm_writing_tools/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig_design_harness_core_v1/
+?? capabilities/skills/rig-determinism-85/authority/sources/rig_linkedin_foundry_tac_v1/
+?? capabilities/skills/rig-determinism-85/build.cockpit_v2_vercel_deploy_v2.json
+?? capabilities/skills/rig-determinism-85/certificate.cockpit_v2_vercel_deploy_v2.json
+?? capabilities/skills/rig-determinism-85/cockpit_v2_vercel_deploy_v2.diagram.json
+?? capabilities/skills/rig-determinism-85/d85_admission.py
+?? capabilities/skills/rig-determinism-85/register_process.py
+?? capabilities/skills/rig-lattice-system/runs/d85-build-scope-audit.json
+?? capabilities/skills/rig-tac-doctrine/
+?? capabilities/skills/rig-write-code/
+?? capabilities/skills/rig-write-emails/
+?? capabilities/skills/rig-write-film-scripts/
+?? capabilities/skills/rig-write-linkedin/
+?? capabilities/skills/rig-write-love-notes/
+?? capabilities/skills/rig-write-novels/
+?? capabilities/skills/rig-write-prompts/
+?? capabilities/skills/rig-write-resumes/
+?? capabilities/skills/rig-write-songs/
+?? capabilities/skills/rig-write-specs/
+?? capabilities/skills/rig-write-substack/
+?? capabilities/skills/ui-skills-root/
+?? capabilities/skills/unlazy/
+?? capabilities/skills/variant/
+?? capabilities/skills/write-swift/
+?? data/comms/
+?? data/corpora/
+?? docs/COMMUNICATIONS-MCP-V20.md
+?? docs/COMMUNICATIONS-OS-V20-PLAN.md
+?? docs/COMMUNICATIONS-OS.md
+?? docs/D85-BUILD-SCOPE.md
+?? examples/great/agent-engineering/mh-07-lattice-application-session.yaml.md
+?? examples/great/agent-engineering/rig-lattice-router.md.md
+?? examples/great/agent-engineering/rig-lattice-system.md.md
+?? examples/great/business-ops/rig-resume-only-job-application.md
+?? examples/great/docs-knowledge/julie-w2-applypilot.md
+?? examples/great/meta/write.md
+?? openspec/changes/d85-build-scope/
+?? openspec/changes/resume-grounded-job-apply/
+?? out/harness-goalspecs/comms-transformation-harness.json
+?? out/harness-goalspecs/comms-transformation-harness.yaml
+?? proof/2026-09-07-hermes-resume-only-applications/
+?? proof/2026-09-11-d85-build-scope.json
+?? proof/2026-09-11-jake-greeting-hook.json
+?? proof/communications-os-endstate.md
+?? proof/resume-grounded-job-apply/
+?? proof/wave1-phase-notes.md
+?? runs/agentic-stack-buildout/backend/apply-20260913T052139425383Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260913T052149450846Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260913T052149486437Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260913T052224637959Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260915T232752345975Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260915T232755993164Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260915T232756002637Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260915T232823002859Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260916T000949840726Z.json
+?? runs/agentic-stack-buildout/backend/apply-20260916T001019932371Z.json
+?? runs/agentic-stack-buildout/corpus/practitioner/raw/
+?? runs/agentic-stack-buildout/corpus/raw/ai.pydantic.dev.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/ai.pydantic.dev_agents.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/ai.pydantic.dev_output.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/ai.pydantic.dev_testing-evals.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/ai.pydantic.dev_tools.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.langchain.com_oss_python_langgraph_interrupts.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.langchain.com_oss_python_langgraph_quickstart.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.smith.langchain.com.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.smith.langchain.com_evaluation.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.smith.langchain.com_observability.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.temporal.io_develop_python.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.temporal.io_develop_python_best-practices_testing-suite.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.temporal.io_develop_python_core-application.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.temporal.io_develop_python_workers.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/docs.temporal.io_develop_python_workflows_timers.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/github.com_kestra-io_examples.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/github.com_langchain-ai_langgraph_tree_main_examples.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/github.com_temporalio_sdk-python.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/kestra.io_docs.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/kestra.io_docs_how-to-guides.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/kestra.io_docs_workflow-components_flow.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/langchain-ai.github.io_langgraph.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/langchain-ai.github.io_langgraph_concepts_persistence.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/langfuse.com_docs.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/langfuse.com_docs_prompt-management.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/langfuse.com_docs_tracing.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/pydantic.dev_docs_ai_evals_examples_simple-validation.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/python.langchain.com_docs_how_to.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/python.langchain.com_docs_introduction.raw.html
+?? runs/agentic-stack-buildout/corpus/raw/python.langchain.com_docs_tutorials.raw.html
+?? runs/agentic-stack-buildout/gaps/d85-dispatch-lockout-20260914T0040Z.json
+?? runs/agentic-stack-buildout/receipts/suite-level-clone-verification-20260914T0030Z.json
+?? scripts/clean_auto_subs.py
+?? scripts/comms_baselines.py
+?? scripts/comms_scoreboards.py
+?? scripts/howto_scrape_recovery.sh
+?? scripts/recall_delta_sync.py
+?? scripts/refresh_writing_craft.py
+?? scripts/scrape_writing_craft.py
+?? scripts/smoke_comms_mcp_v20.py
+?? scripts/verify_howto_corpus.py
+?? staging/
+?? tests/conftest.py
+?? tests/test_d85_authority_plants.py
+?? tests/test_d85_hardening.py
+?? tests/test_hermes_pre_tool.py
+?? tests/test_mcp_comms.py
+?? tests/test_owner_routing.py
+?? workflows/resume-grounded-job-apply/

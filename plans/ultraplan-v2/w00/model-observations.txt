@@ -1,0 +1,59 @@
+$ grep ultraplan/tools + commands for JEV invocation (built-in grep)
+/Users/rig128gb/Developer/ultraplan/tools/build_status.py:34:GATE_CALL = r"rig-ultra route|ultra_gates.route|s1gate check ultra."
+/Users/rig128gb/Developer/ultraplan/tools/build_status.py:105:    rc, out, _err = sh(["./bin/rig-s1gate", "list"], cwd=CAPS)
+/Users/rig128gb/Developer/ultraplan/tools/build_status.py:121:    rc, out, _e = sh(["./bin/rig-s1gate", "stats", "ultra.judgment"], cwd=CAPS)
+/Users/rig128gb/Developer/ultraplan/tools/build_status.py:315:                      mech_cmd("a skill can call it from a shell", ["./bin/rig-ultra", "gates"], cwd=CAPS,
+/Users/rig128gb/Developer/ultraplan/tools/build_status.py:318:                               ["./bin/rig-ultra", "route", "plan.dq_before_build", "--state", "spec",
+/Users/rig128gb/Developer/ultraplan/commands/ultraplan-v2.command.md:7:Pass the command arguments as the mission intent. Follow the skill's UI mode, stage routing, `rig-loop` gates, tree frontier, Send-to-Agent loop, resume rules, and Gate-D boundaries. Do not inline or reinterpret stage logic in this command.
+
+$ inspect rig-ultra and s1gate provider constants
+/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra:21:    rig-ultra route <gate-id> --state TEXT|--state-file PATH
+/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra:23:                            [--live] [--subject S] [--model M] [--timeout N] [--json]
+/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra:135:    res = route(args.gate, state, facts, live=args.live, subject=args.subject,
+/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra:136:                model=args.model, timeout=args.timeout)
+/Users/rig128gb/Developer/rig-capabilities/rig_capabilities/s1gate.py:69:JEV_ENDPOINT = os.environ.get("S1GATE_JEV_ENDPOINT", "https://api.typesafe.ai/v1/systemone")
+/Users/rig128gb/Developer/rig-capabilities/rig_capabilities/s1gate.py:70:JEV_MODEL = os.environ.get("S1GATE_JEV_MODEL", "jev-latest")
+/Users/rig128gb/Developer/rig-capabilities/rig_capabilities/s1gate.py:137:        {"state": state, "model": model or JEV_MODEL, "questions": questions}
+/Users/rig128gb/Developer/rig-capabilities/rig_capabilities/s1gate.py:144:            JEV_ENDPOINT,
+$ printenv S1GATE_JEV_ENDPOINT S1GATE_JEV_MODEL
+(no output; exit 1 — neither override is set, so code defaults apply)
+
+$ selected non-secret model settings from ~/.codex/config.toml
+model = "gpt-6-astra"
+model_provider = "openai-rig"
+model_catalog_json = "/Users/rig128gb/.codex/model-catalogs/openai-rig.json"
+model_reasoning_effort = "xhigh"
+$ selected non-secret model settings from ~/.claude/settings.json
+ANTHROPIC_BASE_URL = "http://127.0.0.1:8768"
+ANTHROPIC_DEFAULT_HAIKU_MODEL = "claude-fable-5"
+ANTHROPIC_DEFAULT_OPUS_MODEL = "claude-opus-5"
+ANTHROPIC_DEFAULT_SONNET_MODEL = "claude-fable-5"
+effortLevel = "xhigh"
+
+$ ollama list
+2026/09/20 12:11:32 WARN ignoring cloud base URL override env=OLLAMA_CLOUD_BASE_URL error="non-loopback cloud override is not allowed in release mode"
+NAME                       ID              SIZE      MODIFIED
+nomic-embed-text:latest    0a109f422b47    274 MB    8 days ago
+(exit 0 within 10 seconds)
+
+$ Fusion/Earendil surface checks under ~/.codex
+FOUND /Users/rig128gb/.codex/skills/fusion-harness
+FOUND /Users/rig128gb/.codex/commands/fusion-harness.md
+FOUND /Users/rig128gb/.codex/commands/moa-fusion.md
+FOUND /Users/rig128gb/.codex/commands/moa-bal-fusion.md
+/Users/rig128gb/.codex/config.toml:3225:# BEGIN CODEX FUSION (managed)
+/Users/rig128gb/.codex/config.toml:3226:[mcp_servers.codex-fusion]
+/Users/rig128gb/.codex/config.toml:3227:enabled = false
+/Users/rig128gb/.codex/config.toml:3228:command = "/Users/rig128gb/.homebrew/opt/python@3.14/bin/python3.14"
+/Users/rig128gb/.codex/config.toml:3229:args = ["-m", "prime_jake_coding_fleet.fusion", "mcp"]
+EARENDIL search in ~/.codex/config.toml, ~/.codex/commands, ~/.codex/skills: no matches found
+
+$ sha256sum source files
+1e24a013a27f156729ff199849a5650fe63d5009b477dd51edcc182f96fd58f2  /Users/rig128gb/Developer/ultraplan/tools/build_status.py
+ebeaa129652ef343bb83a4369643f79f51983bd01c0623959b9881fc6a912d7b  /Users/rig128gb/Developer/ultraplan/commands/ultraplan-v2.command.md
+641cbfd3f8076910e83db1117da1c2f2973fb9b45793cea6689d01389527fa6b  /Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra
+72c7a0546a6cc5a302efe7b020db89628e8be9f3f74271374ef4b2a0186f1b62  /Users/rig128gb/Developer/rig-capabilities/rig_capabilities/s1gate.py
+8bcc3cdd326443abf854cb19a60cbd10ebfa7b0b66004da9a8ead68a744191f4  /Users/rig128gb/.codex/config.toml
+f321a8047de87e3288fbf48adfb0ee2d92505d95adf74598542d28d37d460edd  /Users/rig128gb/.claude/settings.json
+c4dd59a9d043f5e8045f6c06a0ee5fc49486bc2910b2503b6f38d9c37e820d3e  /Users/rig128gb/.claude/settings.local.json
+56696cba3b9dc04d30451a5053ccb1232322548cbc09b0eda9b4d40f643cde73  /Users/rig128gb/.codex/skills/fusion-harness/SKILL.md

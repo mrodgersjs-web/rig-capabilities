@@ -1,0 +1,37 @@
+$ jq 'group_by(.classSlug) | map({slug: .[0].classSlug, title: .[0].classTitle, count: length})' lesson-index.json
+11 classes; counts sum to 673 rows. None is the 14-lesson Tactical Agentic Coding course.
+$ sha256sum lesson-index.json MANIFEST.md EXTRACT-BRIEF.md BUILD-OUT-TODO.md
+530c1b6f7bf64e072f11d766941661a86e17b24d4c9b8e3b23d639c1dabf4cc4  lesson-index.json
+b16aa5efc09b8caf42405ee910d66fbd502135ad667e145600ccc47f5038f39e  MANIFEST.md
+9732e9432baee792c1892af74cd67b9d01337ce37cc4f8d142bdbe6436e820b7  EXTRACT-BRIEF.md
+c078c4492a1e73f95fdde7106da981056b00e12b7f5b6137e39ff5c7fa85bfac  BUILD-OUT-TODO.md
+
+$ sha256sum CLONE-INVENTORY.md repository-inventory.json
+f7c1ff082d07667a5c48a5c8c0fddd54fed5f52d6d257e85f30981aa1bf93e6f  CLONE-INVENTORY.md
+03fcd1a346c1e4d9ba7531aba7abd76ffa4ebb390dcf27298770c92a5383ca90  repository-inventory.json
+
+$ verify each repository-inventory.json row with git rev-parse HEAD and git remote get-url origin
+repos=14
+head_matches=14
+remote_matches_after_userinfo_redaction=14
+missing_paths=[]
+SECURITY: credential-bearing URL userinfo was detected and redacted before writing tac-repo-verification.json.
+
+$ search both canonical registry roots for all 14 repository names
+/Users/rig128gb/Developer/rig-intelligence/registry: no matches
+/Users/rig128gb/Developer/rig-intelligence-worktrees/rig-design-harness-ultraplan-20260919/registry: no matches
+matched_repo_names=0
+
+$ ruby -e '<YAML parse and 14-lesson assertions>' tac-source-manifest.yaml
+lessons=14 loot=259 missing=0
+$ sha256sum tac-source-manifest.yaml tac-repo-verification.json
+3878b1ef039cfd3afb132b3ee732353e4e22ba4a76cea18c94d9f4589348592f  tac-source-manifest.yaml
+3431a1055b41d3e5bdf87055cc7a494c81b397ff9342e0a90073967b2b6c6c9b  tac-repo-verification.json
+
+Verbatim source lines:
+MANIFEST.md line 3: Captured 2026-09-20 (America/Denver) from agenticcoding.school via the logged-in member account's own `classes.getVideoTranscript` endpoint — the same call the site's "Copy transcript" button makes. Video files were NOT downloaded (site policy + unnecessary); this is transcript and written-article text only, for the account owner's personal use.
+MANIFEST.md line 11: | Full verbatim transcripts captured | **403 / 503 unique videos** (~632K words, timestamped segments) |
+ULTRAPLAN-V2-CONTRACT.md line 472: Full caption coverage is complete; full frame-by-frame course review remains a tracked source-audit item.
+SOURCE-COVERAGE.md line 18: Every text token present in the course player’s official English subtitle track was captured in order with timestamps. The canonical transcript removes only cues whose timestamp and text are both exact duplicates caused by overlapping HLS segments. It does not infer, paraphrase, or silently correct speech.
+
+Finding: MANIFEST.md and EXTRACT-BRIEF.md do not contain the contract's complete-caption/incomplete-frame-by-frame sentence. The ACS manifest reports 403/503 transcript captures; the separate TAC package reports 14/14 official caption tracks. The requested sentence is recorded verbatim from the UltraPlan contract rather than fabricated as an ACS source line.
