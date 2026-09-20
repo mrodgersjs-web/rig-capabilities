@@ -29,7 +29,7 @@ Fix the 4 RED cells: rewrite their done_whens to be red-capable (altitude-walk) 
 4. **ROTATE PAT github_pat_11ABZYK6Y0… NOW** (in transcript history; remotes scrubbed, token not).
 
 ## Next 5
-1. DONE 2026-09-20c: 14 thin cells live (7f0203d), all 14 JEX PASS per-cell (w07c-* receipts; envval needed claim re-split — judge enforced atomicity); only freshness-scheduler left in W07 (no engine — honest-negative JEX exists). Tree 52/52. Next: W09 cells (worker/verifier/arbiter envelopes over cell_runner+fence), W13 soak, W10 attribution
+1. DONE 2026-09-20c: 14 thin cells live (7f0203d), all 14 JEX PASS per-cell (w07c-* receipts; envval needed claim re-split — judge enforced atomicity); only freshness-scheduler left in W07 (no engine — honest-negative JEX exists). Tree 61/61 (W09 batch: lease/dispatch/worker/verifier/arbiter/integrate/seal/proofpacket/sssf-gates all JEX PASS, ultraplan 4981130, seq 40). W07 down to freshness-scheduler+blocker-research; W09 down to wave-planner, firstmate-envelopes, slice-kind taxonomy. Next: W09 cells (worker/verifier/arbiter envelopes over cell_runner+fence), W13 soak, W10 attribution
 2. W09 worker/verifier/arbiter cells: envelope = cell_runner output schema; family fields enforced
 3. W13 soak harness (100 missions x command mixes w/ 20% dupes, reconnect churn vs live console)
 4. W10 harvest->attribute->write-back on the decision-ledger + receipt corpus (attribution evidence exists now)
