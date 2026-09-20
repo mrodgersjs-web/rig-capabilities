@@ -3,9 +3,9 @@
 Updated: 2026-09-20 ~17:40 MT. Authoritative board: `BUILD-MANIFEST.yaml` (this dir). Todos mirror it.
 
 ## Repo HEADs
-- ultraplan `c280733` — schemas/v1 (7), runtime/{ledger,commands,cli,console_server,effects,approvals}.py, features/ (80 BDD), data/shape-map.json (292/292), tests/ (61 green via discover)
+- ultraplan `386ad34` — + runtime/cell_runner.py (done_when executor, theater-refusal, ledger receipts), runtime/subs.py (16 W11 prims), runtime/w13/{migrate,rehearsal}.py (WAL-safe snapshot/rollback), features/, data/shape-map.json, data/ledger.db (mission 0601 with persona-panel receipt) — schemas/v1 (7), runtime/{ledger,commands,cli,console_server,effects,approvals}.py, features/ (80 BDD), data/shape-map.json (292/292), tests/ (61 green via discover)
 - ultra-mcp `02a6338` — ultraplan_execute/query thin MCP tools over the shared handler; smoke asserts idempotency (plant-proven)
-- rig-capabilities `f02c62e` — W04 slices (polarity fix 886e8d4, executor 0b6cc1d, per-rule calibration 0665b93, JEX v7 111dd88), ultra_cell studio/cycle fixes, MIN_FAMILIES=3 cc44a21
+- rig-capabilities `cc44a21`+ (W04 forecast floors MIN_FAMILIES=3, asymmetric fixture) — W04 slices (polarity fix 886e8d4, executor 0b6cc1d, per-rule calibration 0665b93, JEX v7 111dd88), ultra_cell studio/cycle fixes, MIN_FAMILIES=3 cc44a21
 - Manifest: 125/1207 past inventoried (88 built, 35 connected, 2 specified)
 - Live: console `hub` process `ultraconsole` on :8902 (/api/{session,command,events,missions,health}); grill sessions 61398-61400 preserved (node pids 9871/67242/12766)
 
@@ -24,10 +24,10 @@ Updated: 2026-09-20 ~17:40 MT. Authoritative board: `BUILD-MANIFEST.yaml` (this 
 - `gc.sh <repo> <test...> --staged <paths...> -- <git-args>` — test-first commit, EXPLICIT paths only (no -A; land-grab lesson)
 - Calibration corpus: every live decision auto-logs to `~/.rig/s1gate/decisions.db`; label via seed scripts in this dir. done_test_is_vacuous REFUSES calibration (separation 0.19) — stays annotate-only.
 
-## Next 5 runnable items (in order)
-1. W05 board rows: intent/question/research/alternatives/spec artifacts — drive via `runtime/cli.py` on the REAL ledger (`data/ledger.db`), JEX each
-2. W12: reconnect-no-duplicate-missions test (two SSE reconnects → /api/missions count unchanged); Architecture/Cells view readability (tldraw pages need panel rendering)
-3. W11: reconcile 24 named sub-primitives — most exist (schema validator=schemas/v1, hasher=ledger._h, budget checker=_policy_check, approval validator=runtime/approvals, writer-fence=ledger.check_fence, SSE cursor=console sse(), route resolver=ultra_cell, plant runner=ultra_cell.plant_failure). Map + build the missing (lens instances, angle generation, scraper instances, liveness, model-family ladder, lens pack, JEV noul/choice/score subs, order-swap, memory append, variant proposal, envelope builder, Firstmate registration)
+## Next 5 runnable items (in order — updated 17:50)
+1. W07 replication: cell runner + live model output for bank-harvest, tag-and-route, corpus-first, forecast-brief (pattern established: 386ad34, one JEX per op)
+2. W12 Architecture/Cells readable panels; local frontend deps bundle (tldraw vendoring check)
+3. W09: worker envelope = cell_runner + fence + verifier family separation (verifier via atomic.claim/proof gate, worker != verifier) — most exist (schema validator=schemas/v1, hasher=ledger._h, budget checker=_policy_check, approval validator=runtime/approvals, writer-fence=ledger.check_fence, SSE cursor=console sse(), route resolver=ultra_cell, plant runner=ultra_cell.plant_failure). Map + build the missing (lens instances, angle generation, scraper instances, liveness, model-family ladder, lens pack, JEV noul/choice/score subs, order-swap, memory append, variant proposal, envelope builder, Firstmate registration)
 4. TAC P0 remaining (263-279): run the planning packet's own checkers (TRANSCRIPT-COVERAGE recompute, SECRET-SCAN rescan) — artifacts exist in 07-evidence
 5. W13: migration rehearsal (legacy JSON → events import with provenance), then the soak harness (background, 24h)
 
