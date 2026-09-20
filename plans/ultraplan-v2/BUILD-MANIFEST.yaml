@@ -7902,14 +7902,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r01-contract.001`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: rubric notes field + commit 6c886b7 message states the polarity law
+  status: specified
 - id: UP.W04.r02-contract.002
   title: Specify Add high, low, and boundary fixtures
   kind: documentation
@@ -7930,14 +7924,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r02-contract.002`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: fixture set declared in test_ultra_polarity docstrings
+  status: specified
 - id: UP.W04.r03-contract.003
   title: Specify Calibrate per rule and per signal instead of one rubric-wide flag
   kind: documentation
@@ -8305,14 +8293,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r01-implementation.015`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: ultra.judgment.json rule <=0.50 + reason; regression tests/test_ultra_polarity.py; plant-failure 4/4 RED on reverted polarity
+  status: built
 - id: UP.W04.r02-implementation.016
   title: Implement Add high, low, and boundary fixtures
   kind: test
@@ -8334,14 +8316,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r02-implementation.016`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: 'tests/test_ultra_polarity.py 4 cases: 0.95 high, 0.05 low, 0.50 boundary, structural direction guard; all green'
+  status: built
 - id: UP.W04.r03-implementation.017
   title: Implement Calibrate per rule and per signal instead of one rubric-wide flag
   kind: runtime
@@ -8512,14 +8488,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r08-implementation.022`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: 'ultra_gates.check_done_test_executable EXECUTES assertions (0b6cc1d); cmd: exit 3 routes rework live; 3 regression tests; blind-judge fix _judged_state + 2 tests'
+  status: built
 - id: UP.W04.r09-implementation.023
   title: Implement Require five surviving forecasts across three independent weight families
   kind: loop
