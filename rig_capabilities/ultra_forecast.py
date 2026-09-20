@@ -32,7 +32,9 @@ __all__ = ["Ledger", "MIN_FORECASTERS", "MIN_FAMILIES", "MIN_RESOLVED_PER_FAMILY
            "register_payload", "brier", "weights", "UltraForecastError"]
 
 MIN_FORECASTERS = 5
-MIN_FAMILIES = 2                 # docs propose 3; 2 is what code can refuse on
+MIN_FAMILIES = 3                 # contract W04: three independent weight families.
+                                 # Was 2 ("what code can refuse on"); three is what the
+                                 # plan demands and what the boundary test pins (2026-09-20).
 MIN_RESOLVED_PER_FAMILY = 4      # below this a family's Brier is noise
 
 #: horizon strings the Memory OS resolver accepts (schema-observed shapes)

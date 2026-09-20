@@ -143,6 +143,26 @@ class TestSwarmLedger(unittest.TestCase):
         self.assertFalse(got["diverse"])
         self.assertEqual(len(got["refusals"]), 2)
 
+    def test_two_families_are_refused_the_contract_demands_three(self):
+        for i, (fam, p) in enumerate([("qwen", 0.40), ("qwen", 0.50), ("gpt", 0.55),
+                                      ("gpt", 0.60), ("gpt", 0.65)]):
+            self._add("F%d" % i, fam, p)
+        got = uf.aggregate(self.led.all())
+        self.assertFalse(got["diverse"], got)
+        self.assertTrue(any("3" in r for r in got["refusals"]),
+                        "the refusal must name the demanded family count: %s" % got["refusals"])
+
+    def test_asymmetric_swarm_aggregates_by_symmetric_trim(self):
+        """All-high swarm with one extreme low: trim=1 drops ONE from each end
+        symmetrically -- the loud low goes, one high goes, and the fixture pins
+        the number so an 'asymmetric clamp' cannot sneak in unnoticed."""
+        for i, (fam, p) in enumerate([("qwen", 0.90), ("gpt", 0.91), ("gemini", 0.92),
+                                      ("llama", 0.93), ("mistral", 0.05)]):
+            self._add("F%d" % i, fam, p)
+        got = uf.aggregate(self.led.all())
+        self.assertAlmostEqual(got["value"], 0.910, places=3, msg=got)
+        self.assertEqual(got["trimmed"], 1)
+
     def test_author_number_can_be_excluded_from_its_own_swarm(self):
         """Trimming usually already absorbs a lone outlier, so the numbers here
         are chosen to prove the exclusion actually runs, not that trimming works."""

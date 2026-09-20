@@ -1,0 +1,24 @@
+{
+ "gate": "proof.gate_before_register",
+ "route": "rework",
+ "cleared": false,
+ "verdict": null,
+ "pack": "ultra.proof",
+ "samples": 3,
+ "jev": {},
+ "code_checks": [
+  {
+   "check": "done_test_executable",
+   "ok": false,
+   "note": "assertion exited 2 after 10ms: bash -c \"python3 - <<'E2'\\nimport json,urllib.request\\nr=urllib.request.Request( | urllib.request.urlopen(r2,timeout=5).read())\\nassert any(x['mission_id'].endswith('00aa') for x in m['missions']), m\\nprint('live ok', len(m['missions']))\\nE2'"
+  },
+  {
+   "check": "planted_failure_receipt",
+   "ok": true,
+   "note": "planted-failure receipt present"
+  }
+ ],
+ "reasons": [
+  "code check done_test_executable failed: assertion exited 2 after 10ms: bash -c \"python3 - <<'E2'\\nimport json,urllib.request\\nr=urllib.request.Request( | urllib.request.urlopen(r2,timeout=5).read())\\nassert any(x['mission_id'].endswith('00aa') for x in m['missions']), m\\nprint('live ok', len(m['missions']))\\nE2'"
+ ]
+}
