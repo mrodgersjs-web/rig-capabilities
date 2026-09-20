@@ -132,8 +132,14 @@ def cmd_contract(args) -> int:
 def cmd_route(args) -> int:
     facts = gather_facts(args)
     state = read_state(args) if (args.live or args.state or args.state_file) else ""
+    log = None
+    if args.live and not args.no_log:
+        # every live decision is calibration corpus (s1gate law 5): an unlabelled
+        # row still earns its decision_id; labels arrive later via s1gate_calibrate.
+        from rig_capabilities.s1gate import DecisionLog
+        log = DecisionLog()
     res = route(args.gate, state, facts, live=args.live, subject=args.subject,
-                model=args.model, timeout=args.timeout)
+                model=args.model, timeout=args.timeout, log=log)
     code = exit_code(str(res.get("route")))
     if args.json:
         print(json.dumps(res, indent=2, default=str))
@@ -216,6 +222,8 @@ def build_parser() -> argparse.ArgumentParser:
     pr.add_argument("--subject", default=None)
     pr.add_argument("--model", default=None)
     pr.add_argument("--timeout", type=float, default=20.0)
+    pr.add_argument("--no-log", action="store_true",
+                    help="skip appending this live decision to the calibration ledger")
     pr.add_argument("--json", action="store_true")
     pr.set_defaults(fn=cmd_route)
 

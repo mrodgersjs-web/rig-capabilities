@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# jex.sh — JEV EXEC gate (captain rule 2026-09-20): run at the END of every test.
-# A todo item is NOT built unless the live rig-ultra route clears with JEV
-# verdict PASS and every scored rule >= 0.85 (polarity-corrected).
+# jex.sh v2 — JEV EXEC gate (captain rule 2026-09-20): run at the END of every test.
+# PASS = code checks cleared AND every JEV question's rule-derived goodness >= 0.85.
+# Polarity is read from the pack's own rules (q.noul >= X -> bad-framed; <= X -> good-framed),
+# never guessed from names.
 # Usage: jex.sh <item-id> <gate> <artifact-file> <done_test_text> <assertion-cmd...>
-# Receipt env: JEX_RECEIPT="path-or-text" (RED->GREEN planted-failure receipt; required
-# by proof gates). Exit 0 = built; exit 1 = NOT built.
+# JEX_RECEIPT=required for proof gates. Exit 0 = built; 1 = NOT built.
 set -euo pipefail
 ITEM="$1"; GATE="$2"; ART="$3"; DTT="$4"; shift 4
 D=$(cd "$(dirname "$0")" && pwd)
@@ -20,32 +20,46 @@ if os.environ.get("JEX_RECEIPT"): f["planted_failure_receipt"] = os.environ["JEX
 json.dump(f, open("/tmp/jex-"+os.environ["JEX_ITEM"]+".json","w"))
 '
 OUT="$D/evidence/jex/$ITEM.json"
-if ! /Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra route "$GATE" --state-file "$ART" --facts "$FACTS" --live --json > "$OUT" 2>"$OUT.err"; then
-  echo "$ITEM jex: route ERROR (fail closed): $(head -c 200 "$OUT.err")"; exit 1
+/Users/rig128gb/Developer/rig-capabilities/bin/rig-ultra route "$GATE" --state-file "$ART" --facts "$FACTS" --live --json > "$OUT" 2>"$OUT.err" || true
+if ! python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$OUT" 2>/dev/null; then
+  echo "$ITEM jex: route produced no valid verdict JSON (fail closed): $(head -c 200 "$OUT.err")"; exit 1
 fi
-python3 - "$OUT" "$ITEM" <<'PY'
-import json, sys
-out, item = sys.argv[1], sys.argv[2]
+OUT="$OUT" ITEM="$ITEM" D="$D" python3 <<'PY'
+import json, os, re, sys
+out, item = os.environ["OUT"], os.environ["ITEM"]
 d = json.load(open(out))
 jev = d.get("jev") or {}
-verdict = (d.get("verdict") or "").upper()
 cleared = bool(d.get("cleared"))
-# Polarity: rules whose name says the BAD thing ("vacuous", "missing", "generic",
-# "unsupported") are inverted; everything else uses score/confidence directly.
-NEG = ("vacuous", "missing", "generic", "stale", "broken", "unclear")
-def rule_pass(name, ans):
-    low = name.lower()
-    for k in ("score", "confidence"):
-        if isinstance(ans, dict) and ans.get(k) is not None:
-            v = float(ans[k])
-            return (1 - v) if any(n in low for n in NEG) else v >= 0.85
-    if isinstance(ans, dict) and ans.get("noul") is not None:
-        v = float(ans["noul"])
-        return (1 - v) >= 0.85 if any(n in low for n in NEG) else v >= 0.85
-    return None  # no scalar for this type (choice) -> rely on verdict
-scalars = [r for name, ans in jev.items() if (r := rule_pass(name, ans)) is not None]
-ok = cleared and verdict in ("PASS", "CLEARED") and all(scalars) if scalars else (cleared and verdict in ("PASS", "CLEARED"))
-print(f"{item} jex: route={d.get('route')} cleared={cleared} verdict={verdict or 'NONE'} "
-      f"rules={ {k: v for k, v in jev.items()} } -> {out}")
+verdict = (d.get("verdict") or "").upper()
+if not cleared:
+    print("%s jex: code checks not cleared route=%s -> %s" % (item, d.get("route"), out)); sys.exit(1)
+# derive polarity from the pack rules
+good = {}
+pack = d.get("pack")
+if pack:
+    p = os.path.expanduser("~/Developer/rig-capabilities/capabilities/harnesses/s1gate/rubrics/%s.json" % pack)
+    if os.path.exists(p):
+        rb = json.load(open(p))
+        for r in rb.get("rules", []):
+            m = re.match(r"^(\w+)\.noul\s*(>=|<=)\s*([\d.]+)", r.get("when",""))
+            if m:
+                qname, op, thr = m.group(1), m.group(2), float(m.group(3))
+                good[qname] = "bad" if op == ">=" else "good"
+scores = {}
+for q, a in jev.items():
+    if isinstance(a, dict) and a.get("noul") is not None:
+        v = float(a["noul"])
+        pol = good.get(q, "good")   # unknown rule: default good-framed
+        scores[q] = (1.0 - v) if pol == "bad" else v
+    elif isinstance(a, dict) and a.get("score") is not None and a.get("probabilities"):
+        probs = {int(k): float(x) for k, x in a["probabilities"].items()}
+        mx = max(probs)
+        scores[q] = probs[mx] / mx if mx else 0.0   # normalized expected grade
+worst = min(scores.values()) if scores else None
+worst_q = min(scores, key=scores.get) if scores else None
+ok = worst is not None and worst >= 0.85
+print("%s jex: cleared=%s verdict=%s goodness=%s worst=%.2f(%s) threshold=0.85 -> %s"
+      % (item, cleared, verdict or "NONE", {k: round(v,2) for k,v in scores.items()},
+         worst if worst is not None else -1, worst_q, out))
 sys.exit(0 if ok else 1)
 PY

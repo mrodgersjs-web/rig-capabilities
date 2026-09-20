@@ -111,9 +111,9 @@
       "reason": "unatomic rubric question: it would produce an uninterpretable probability"
     },
     {
-      "when": "genuinely_different.noul >= 0.85",
+      "when": "genuinely_different.noul <= 0.50",
       "verdict": "ESCALATE",
-      "reason": "alternatives may be cosmetic variants of one idea"
+      "reason": "the alternatives differ in wording, price or vendor only -- no mechanism difference is visible: a cosmetic set is one option wearing masks"
     },
     {
       "when": "spec_complete.score <= 2.00",
@@ -127,7 +127,7 @@
   "notes": {
     "frame": "doc signal dq.frame. Decision-quality chain: the mission's P(good plan) is the WEAKEST link, not the mean; code takes min().",
     "question_is_atomic": "doc signal j.question_is_atomic; law from TypeSafe docs -- a noul on an underspecified question returns an uninterpretable probability.",
-    "genuinely_different": "doc signal alt.genuinely_different; pairwise, so run it order-swapped and average in code (judge position bias)."
+    "genuinely_different": "polarity fixed 2026-09-20 (UltraPlan V2 W04): prompt is positively framed ('differ in mechanism'), so escalation must fire on LOW noul; the old >=0.85 rule punished genuine diversity and its reason text contradicted its own trigger."
   },
   "never_auto": false
 }
