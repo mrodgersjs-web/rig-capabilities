@@ -8340,14 +8340,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r03-implementation.017`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: s1gate.rule_enforces per-rule + calibrate writes calibration.rules (0665b93); test_certifies_one_rule_only
+  status: built
 - id: UP.W04.r04-implementation.018
   title: Implement Reject unmatched calibration rules without writing configuration
   kind: runtime
@@ -8370,14 +8364,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r04-implementation.018`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: ValueError refusal without write; test_unmatched_signal_refused_without_write
+  status: built
 - id: UP.W04.r05-implementation.019
   title: Implement Bind calibration to rubric, rule, model, and labeled-set hashes
   kind: runtime
@@ -8400,14 +8388,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r05-implementation.019`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: rubric/rule/model/labeled-set sha256 binding; staleness tests x2; hash-guarded shipped calibration
+  status: built
 - id: UP.W04.r06-implementation.020
   title: Implement Require held-out and combined-policy evaluation
   kind: ui
@@ -8429,14 +8411,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r06-implementation.020`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: deterministic stratified holdout; in-sample-only threshold refused; test_in_sample_fit_fails_holdout
+  status: built
 - id: UP.W04.r07-implementation.021
   title: Implement Keep insufficiently measured rules advisory
   kind: runtime
@@ -8458,14 +8434,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r07-implementation.021`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: combined-policy metrics recorded; ceiling required on holdout AND combined
+  status: built
 - id: UP.W04.r08-implementation.022
   title: Implement Use real chain verification and reject caller-supplied boolean assertions
   kind: runtime
@@ -8512,14 +8482,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r09-implementation.023`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
-  status: inventoried
+  evidence: uncertified BLOCK downgrades per rule; uncertified never launders via neighbours (test_certified_alpha_does_not_launder_beta)
+  status: built
 - id: UP.W04.r10-implementation.024
   title: Implement Exclude the author family from independent forecasts
   kind: loop
