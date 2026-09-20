@@ -152,11 +152,25 @@ class TestRefusals(unittest.TestCase):
             rep = validate_cell(root / "a", known_gates=GATES)
             self.assertIn("routes_sibling_call", codes(rep))
 
-    def test_studio_and_self_calls_are_allowed(self):
+    def test_studio_calls_must_resolve(self):
+        """W01: `studio:` used to `continue` unchecked -- the 26/26 blind spot.
+        Now the target must be a cell-shaped studio under the tree root."""
         with tempfile.TemporaryDirectory() as td:
             d = write_cell(Path(td) / "c", routes=[dict(when="x", call="studio:forecasting"),
                                                    dict(when="y", call="self"), dict(when="z", call="close")])
+            self.assertIn("studio_target_unresolved", codes(validate_cell(d, known_gates=GATES)))
+            (d / "studios" / "forecasting").mkdir(parents=True)
+            (d / "studios" / "forecasting" / "agent.md").write_text("# f\n", encoding="utf-8")
             self.assertTrue(validate_cell(d, known_gates=GATES)["ok"])
+
+    def test_studio_not_in_allowed_list_is_refused(self):
+        with tempfile.TemporaryDirectory() as td:
+            d = write_cell(Path(td) / "c", routes=[dict(when="x", call="studio:forecasting")])
+            (d / "studios" / "forecasting").mkdir(parents=True)
+            (d / "studios" / "forecasting" / "agent.md").write_text("# f\n", encoding="utf-8")
+            rtxt = d / "routes.yaml"
+            rtxt.write_text(rtxt.read_text() + "studios_allowed:\n  - studio:questioning\n", encoding="utf-8")
+            self.assertIn("studio_not_allowed", codes(validate_cell(d, known_gates=GATES)))
 
     def test_declared_child_must_exist(self):
         with tempfile.TemporaryDirectory() as td:

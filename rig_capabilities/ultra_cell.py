@@ -235,6 +235,23 @@ def validate_cell(path, root=None, known_gates=None):
                     continue
                 call = str(rt["call"])
                 if call.startswith(STUDIO_PREFIX):
+                    # studio: targets must resolve to an existing implementation --
+                    # the 2026 blind spot was `continue` here plus `studios` in
+                    # SKIP_DIRS: every studio: call was trusted unchecked and the
+                    # whole subtree was invisible to discovery.
+                    name = call[len(STUDIO_PREFIX):].strip("/")
+                    base = Path(root) if root is not None else path
+                    target = (base / "studios" / name)
+                    if not target.is_dir():
+                        alt = (path / "studios" / name)
+                        target = alt if alt.is_dir() else target
+                    if not is_cell_dir(target):
+                        findings.append(_finding("studio_target_unresolved",
+                                                 f"routes[{i}] calls `{call}` but {os.path.relpath(target, base)} is not a cell-shaped studio"))
+                    allowed = r.get("studios_allowed")
+                    if isinstance(allowed, list) and call not in [str(a) for a in allowed]:
+                        findings.append(_finding("studio_not_allowed",
+                                                 f"routes[{i}] calls `{call}` which this cell's studios_allowed does not grant"))
                     continue
                 if call in ("self", "parent", "close", "park"):
                     continue
@@ -284,7 +301,10 @@ def is_cell_dir(p: Path) -> bool:
     return p.is_dir() and any((p / s).exists() for s in ("routes.yaml", "agent.md", "harness.yaml"))
 
 
-SKIP_DIRS = set(DIR_SLOTS) | {"ui", "node_modules", "studios", "tools", "agents", "commands", "__pycache__"}
+# `studios` was removed from this set 2026-09-20 (W01): skipping it made nine
+# operational studios invisible -- unrouted studio trees could not be reported
+# as orphans, and `26/26 valid` covered a tree that omitted them entirely.
+SKIP_DIRS = set(DIR_SLOTS) | {"ui", "node_modules", "tools", "agents", "commands", "__pycache__"}
 
 
 def discover_cells(root):
@@ -306,7 +326,16 @@ def discover_cells(root):
             return []
         try:
             data = yaml.safe_load(r.read_text(encoding="utf-8")) or {}
-            return [str(c) for c in (data.get("children") or [])]
+            kids = [str(c) for c in (data.get("children") or [])]
+            for rt in (data.get("routes") or []):
+                if isinstance(rt, dict):
+                    call = str(rt.get("call", ""))
+                    if call.startswith(STUDIO_PREFIX):
+                        kids.append("studios/" + call[len(STUDIO_PREFIX):].strip("/"))
+            for a in (data.get("studios_allowed") or []):
+                if str(a).startswith(STUDIO_PREFIX):
+                    kids.append("studios/" + str(a)[len(STUDIO_PREFIX):].strip("/"))
+            return kids
         except Exception:
             return []
 
