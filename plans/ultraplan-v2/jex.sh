@@ -122,5 +122,5 @@ if not cleared: fails.append("not-cleared")
 print("%s jex: cleared=%s verdict=%s %s failing=%s -> %s"
       % (item, cleared, verdict or "NONE", "; ".join("%s: %s" % kv for kv in detail.items()) or "no jev answers",
          fails or "none", out))
-sys.exit(0 if ok else 1)
+sys.exit(0 if (cleared and not fails) else 1)
 PY
