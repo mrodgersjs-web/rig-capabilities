@@ -245,6 +245,31 @@ def eval_condition(answers: Dict[str, Any], expr: str) -> Tuple[Optional[bool], 
 # --------------------------------------------------------------------------
 
 
+def _rule_signal(rule: Dict[str, Any]) -> Optional[str]:
+    """'claim_atomic.noul <= 0.50' -> 'claim_atomic.noul'."""
+    m = re.match(r"^\s*(\w+\.\w+)", str(rule.get("when", "")))
+    return m.group(1) if m else None
+
+
+def rule_canonical_sha(rule: Dict[str, Any]) -> str:
+    return hashlib.sha256(json.dumps(rule, sort_keys=True, ensure_ascii=False)
+                          .encode("utf-8")).hexdigest()
+
+
+def rubric_canonical_sha(rb: "Rubric") -> str:
+    """Hash over everything that shapes judgement -- calibration data and the file
+    path are excluded, or writing a certification would invalidate itself."""
+    body = asdict(rb)
+    # calibration, the derived whole-rubric flag, and the rules list are EXCLUDED:
+    # rules bind through their own rule_sha256, so certifying rule B must not void
+    # rule A's binding. What remains -- questions, stage, lane, wording, floor --
+    # is exactly what shapes every answer from the judge.
+    for k in ("calibration", "calibrated", "path", "rules"):
+        body.pop(k, None)
+    return hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False, default=str)
+                          .encode("utf-8")).hexdigest()
+
+
 @dataclass
 class Rubric:
     name: str
@@ -266,6 +291,24 @@ class Rubric:
     def enforcing(self) -> bool:
         """Only a calibrated rubric may BLOCK. Others annotate."""
         return bool(self.calibrated)
+
+    def rule_enforces(self, rule: Dict[str, Any], model: Optional[str] = None) -> bool:
+        """A rule enforces only on its OWN certification whose hashes still match.
+
+        Editing the rule, any part of the rubric, or switching the judging model
+        voids the certification -- the rule drops back to advisory rather than
+        enforcing on stale evidence. No entry: fall back to the whole-rubric flag,
+        so pre-per-rule packs keep their prior behaviour.
+        """
+        sig = _rule_signal(rule)
+        entries = (self.calibration or {}).get("rules") or {}
+        entry = entries.get(sig) if sig else None
+        if not entry:
+            return self.enforcing
+        if entry.get("model") not in (None, "*", model or JEV_MODEL):
+            return False
+        return (entry.get("rule_sha256") == rule_canonical_sha(rule)
+                and entry.get("rubric_sha256") == rubric_canonical_sha(self))
 
 
 def load_rubric(name: str, rubric_dir: Optional[Path] = None) -> Rubric:
@@ -542,6 +585,7 @@ def evaluate(
     verdict = PASS
     reasons: List[str] = []
 
+    fired_enforce: List[bool] = []
     for rule in rb.rules:
         cond = rule.get("when", "")
         want = str(rule.get("verdict", ESCALATE)).upper()
@@ -554,6 +598,15 @@ def evaluate(
             reasons.append("rule %r undecidable (%s)" % (cond, note))
             continue
         if outcome:
+            enforce = rb.rule_enforces(rule, model or JEV_MODEL)
+            fired_enforce.append(enforce)
+            if want == BLOCK and not enforce:
+                # Rule 3, per rule: a signal nobody measured may annotate, not block.
+                want = ESCALATE
+                reasons.append(
+                    "downgraded BLOCK->ESCALATE: rule %r is not calibrated (or its "
+                    "certification is stale: rubric, rule, or model changed); "
+                    "run s1gate_calibrate before enforcing" % (_rule_signal(rule) or cond))
             if _SEVERITY.get(want, 2) > _SEVERITY[verdict]:
                 verdict = want
             reasons.append("%s: %s [%s]" % (want, rule.get("reason", cond), note))
@@ -563,14 +616,13 @@ def evaluate(
             verdict = ESCALATE
         reasons.append("ESCALATE: " + note)
 
-    # Rule 3: an unmeasured rubric may not block.
-    advisory = not rb.enforcing
-    if advisory and verdict == BLOCK:
-        verdict = ESCALATE
-        reasons.append(
-            "downgraded BLOCK->ESCALATE: rubric %r is not calibrated; "
-            "run s1gate_calibrate before enforcing" % rb.name
-        )
+    # Rule 3: an unmeasured signal may not block. Enforcement is per rule: one
+    # certified rule no longer launders its uncertified neighbours into hard power,
+    # and a whole-rubric `calibrated: true` still means what it meant for legacy packs.
+    # The pack enforces when at least one FIRED rule carries its own certification.
+    # An enforceable BLOCK is not diluted by uncalibrated neighbours; a BLOCK from an
+    # uncalibrated rule was already downgraded in the loop above.
+    advisory = (not any(fired_enforce)) if fired_enforce else (not rb.enforcing)
     if rb.never_auto and verdict == PASS:
         verdict = ESCALATE
         reasons.append(

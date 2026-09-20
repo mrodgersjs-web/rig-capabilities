@@ -155,9 +155,24 @@ class TestRubricPacks(unittest.TestCase):
             probe[name] = rb
         # Lane C must be hard-gated regardless of anything else.
         self.assertTrue(probe["nil.jacob"].never_auto)
-        # Nothing ships pre-certified.
-        self.assertFalse(any(rb.calibrated for rb in probe.values()),
-                         "a rubric shipped as calibrated without a measured operating point")
+        # A shipped `calibrated: true` is only honest when the rule signals it
+        # claims carry measured operating points whose hashes verify.
+        # (Was: nothing ships calibrated -- pre per-rule era; 2026-09-20.)
+        for name, rb in probe.items():
+            if not rb.calibrated:
+                continue
+            entries = (rb.calibration or {}).get("rules") or {}
+            self.assertTrue(entries, "%s: calibrated flag with no per-rule entries" % name)
+            for r in rb.rules:
+                sig = s1gate._rule_signal(r)
+                if sig not in entries:
+                    continue  # unmeasured rule: advisory, allowed to coexist
+                e = entries[sig]
+                for field in ("threshold", "train", "holdout", "combined",
+                              "labeled_set_sha256", "rule_sha256", "rubric_sha256"):
+                    self.assertIn(field, e, "%s: %s certified without %s" % (name, sig, field))
+                self.assertTrue(rb.rule_enforces(r, model=e.get("model") or None),
+                                "%s: %s hash binding does not verify" % (name, sig))
 
     def test_score_rules_reference_valid_levels(self):
         for name in s1gate.list_rubrics():
@@ -267,7 +282,10 @@ class TestImproveAndRank(unittest.TestCase):
         self.assertEqual(res.iterations, 1)
         self.assertEqual(res.best, "draft [fixed]")
         self.assertEqual([t["verdict"] for t in res.trajectory], [s1gate.ESCALATE, s1gate.PASS])
-        self.assertTrue(seen and seen[0][0].startswith("BLOCK:"), "rewriter must receive the findings")
+        # 2026-09-20: per-rule enforcement records the VERDICT ACTUALLY ENFORCED.
+        # An uncalibrated BLOCK is annotated as ESCALATE everywhere, not just in
+        # the verdict field -- a rewriter must never be shown a BLOCK that cannot fire.
+        self.assertTrue(seen and seen[0][0].startswith("ESCALATE:"), "rewriter must receive the findings")
 
     def test_improve_never_returns_a_worse_version(self):
         from rig_capabilities.s1gate_improve import improve

@@ -34,7 +34,13 @@ from dataclasses import dataclass, asdict
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from .s1gate import DecisionLog, Rubric, load_rubric, resolve
+from .s1gate import DecisionLog, Rubric, load_rubric, resolve, rubric_canonical_sha, rule_canonical_sha
+
+
+def _rubric_body_sha(body: Dict[str, Any]) -> str:
+    import hashlib
+    return hashlib.sha256(json.dumps(body, sort_keys=True, ensure_ascii=False, default=str)
+                          .encode("utf-8")).hexdigest()
 
 __all__ = ["Point", "sweep", "choose_operating_point", "calibrate_rubric", "report"]
 
@@ -159,6 +165,41 @@ def choose_operating_point(
     return sorted(eligible, key=lambda p: (-p.recall, -p.precision, p.threshold))[0]
 
 
+def _labeled_hash(rows) -> str:
+    import hashlib
+    return hashlib.sha256("\n".join("%d:%s" % (r["id"], r["label"]) for r in rows).encode()).hexdigest()
+
+
+def _split(pairs: Sequence[Tuple[float, str]]) -> Tuple[List, List]:
+    """Deterministic stratified split: every 5th labelled point, taken per class,
+    is held out. Same data always yields the same split -- calibration is rerunnable."""
+    train: List = []
+    hold: List = []
+    counters: Dict[str, int] = {}
+    for v, lab in pairs:
+        i = counters.get(lab, 0)
+        counters[lab] = i + 1
+        (hold if i % 5 < 2 else train).append((v, lab))
+    return train, hold
+
+
+def _metrics(pairs: Sequence[Tuple[float, str]], t: float, direction: str) -> Dict[str, float]:
+    tp = fp = tn = fn = 0
+    for val, lab in pairs:
+        flagged = val >= t if direction == "above" else val <= t
+        if flagged and lab == "bad":
+            tp += 1
+        elif flagged:
+            fp += 1
+        elif lab == "good":
+            tn += 1
+        else:
+            fn += 1
+    p = Point(t, tp, fp, tn, fn)
+    return {"threshold": t, "precision": p.precision, "recall": p.recall,
+            "false_block_rate": p.false_block_rate}
+
+
 def calibrate_rubric(
     rubric_name: str,
     signal: Tuple[str, str],
@@ -170,96 +211,117 @@ def calibrate_rubric(
     rubric_dir: Optional[Path] = None,
     write: bool = False,
 ) -> Dict[str, Any]:
-    """Measure one rubric's primary signal and, optionally, certify it.
+    """Measure ONE signal and, optionally, certify THAT RULE only.
 
-    ``signal`` is ``(question_name, attribute)`` e.g. ``("weakened_test", "noul")``.
-    Certification (``write=True``) rewrites the rubric JSON with the measured
-    threshold, the metrics, and ``calibrated: true``.
+    Certification is per rule: a rubric becomes whole-rubric `calibrated` only when
+    every rule signal has its own certified entry. The chosen threshold must hold
+    on train, holdout, AND combined -- a rule that only works in-sample does not
+    ship. A signal with no matching rule in the rubric is refused WITHOUT writing
+    anything: calibration that cannot bind to a rule is decoration.
     """
     rb: Rubric = load_rubric(rubric_name, rubric_dir)
+    qname, attr = signal
+    sig = "%s.%s" % (qname, attr)
+
+    # Bind first or refuse: exactly one rule must carry this signal.
+    matching = [r for r in rb.rules if str(r.get("when", "")).startswith(sig)]
+    if len(matching) != 1:
+        raise ValueError(
+            "refusing to calibrate %s.%s: %d rules match signal %r "
+            "(need exactly 1); nothing written" % (rubric_name, attr, len(matching), sig))
+    rule = matching[0]
+
     log = DecisionLog(db_path)
     try:
         rows = log.labelled(rubric_name)
+        models = sorted({r["model"] or "" for r in rows})
     finally:
         log.close()
 
-    qname, attr = signal
     pairs = _extract(rows, qname, attr)
     n_bad = sum(1 for _, l in pairs if l == "bad")
     n_good = len(pairs) - n_bad
-
     result: Dict[str, Any] = {
-        "rubric": rubric_name,
-        "signal": "%s.%s" % (qname, attr),
-        "direction": direction,
-        "n_labelled": len(pairs),
-        "n_good": n_good,
-        "n_bad": n_bad,
-        "certified": False,
-        "reason": "",
+        "rubric": rubric_name, "signal": sig, "direction": direction,
+        "n_labelled": len(pairs), "n_good": n_good, "n_bad": n_bad, "certified": False, "reason": "",
     }
-
     if len(pairs) < MIN_LABELLED:
         result["reason"] = (
             "only %d labelled decisions; need >= %d before any threshold is "
-            "trustworthy. Gate stays advisory." % (len(pairs), MIN_LABELLED)
-        )
+            "trustworthy. Gate stays advisory." % (len(pairs), MIN_LABELLED))
         return result
     if n_bad < 5 or n_good < 5:
-        result["reason"] = (
-            "class imbalance: %d good / %d bad. Need >= 5 of each." % (n_good, n_bad)
-        )
+        result["reason"] = "class imbalance: %d good / %d bad. Need >= 5 of each." % (n_good, n_bad)
         return result
 
-    points = sweep(pairs, direction=direction)
-    chosen = choose_operating_point(
-        points, max_false_block_rate=max_false_block_rate, min_recall=min_recall
-    )
-    result["curve"] = [p.to_dict() for p in points[:: max(1, len(points) // 20)]]
+    train, holdout = _split(pairs)
+    points = sweep(train, direction=direction)
+    chosen = choose_operating_point(points, max_false_block_rate=max_false_block_rate,
+                                    min_recall=min_recall)
     result["separation"] = round(
-        abs(
-            statistics.fmean([v for v, l in pairs if l == "bad"])
-            - statistics.fmean([v for v, l in pairs if l == "good"])
-        ),
-        4,
-    )
-
+        abs(statistics.fmean([v for v, l in pairs if l == "bad"])
+            - statistics.fmean([v for v, l in pairs if l == "good"])), 4)
     if chosen is None:
         result["reason"] = (
-            "no threshold satisfies false_block_rate <= %.2f and recall >= %.2f. "
+            "no threshold satisfies false_block_rate <= %.2f and recall >= %.2f on TRAIN. "
             "The signal does not separate good from bad on this data. Fix the "
-            "rubric wording or drop the gate -- do not ship it."
-            % (max_false_block_rate, min_recall)
-        )
+            "rubric wording or drop the gate -- do not ship it." % (max_false_block_rate, min_recall))
+        return result
+    t = chosen.threshold
+    m_train = _metrics(train, t, direction)
+    m_hold = _metrics(holdout, t, direction)
+    m_all = _metrics(list(pairs), t, direction)
+    result["operating_point"] = chosen.to_dict()
+    result["train"], result["holdout"], result["combined"] = m_train, m_hold, m_all
+
+    def meets(m: Dict[str, float]) -> bool:
+        return m["false_block_rate"] <= max_false_block_rate and m["recall"] >= min_recall
+
+    if not (meets(m_hold) and meets(m_all)):
+        result["reason"] = (
+            "threshold %.4f holds on train but fails holdout (fbr=%.2f recall=%.2f) or "
+            "combined (fbr=%.2f recall=%.2f): in-sample fit is not calibration. "
+            "Gate stays advisory." % (t, m_hold["false_block_rate"], m_hold["recall"],
+                                      m_all["false_block_rate"], m_all["recall"]))
         return result
 
-    result["operating_point"] = chosen.to_dict()
-    result["reason"] = "threshold %.4f meets the ceiling" % chosen.threshold
+    result["reason"] = "threshold %.4f meets the ceiling on train, holdout, and combined" % t
 
     if write:
         path = Path(rb.path)  # type: ignore[arg-type]
         raw = json.loads(path.read_text(encoding="utf-8"))
-        updated = False
-        for rule in raw.get("rules", []):
-            if rule.get("when", "").startswith("%s.%s" % (qname, attr)):
-                op = ">=" if direction == "above" else "<="
-                rule["when"] = "%s.%s %s %.4f" % (qname, attr, op, chosen.threshold)
-                updated = True
-        if not updated:
-            result["reason"] += " (WARNING: no matching rule to update)"
-        raw["calibrated"] = True
-        raw["calibration"] = {
-            "signal": result["signal"],
-            "direction": direction,
-            "n_labelled": len(pairs),
-            "n_good": n_good,
-            "n_bad": n_bad,
-            "operating_point": chosen.to_dict(),
-            "max_false_block_rate": max_false_block_rate,
-            "min_recall": min_recall,
+        import re as _re
+        # Edit the SHIPPED text first, then hash what a later reader will load:
+        # the binding must survive the write, not describe the pre-write state.
+        for r in raw.get("rules", []):
+            if str(r.get("when", "")).startswith(sig):
+                r["when"] = "%s %s %.4f" % (sig, ">=" if direction == "above" else "<=", round(t, 4))
+                edited = r
+        fields = {f for f in Rubric.__dataclass_fields__ if f != "path"}
+        rb_after = Rubric(**{k: v for k, v in raw.items() if k in fields})
+        edited = next(r for r in raw["rules"] if str(r.get("when", "")).startswith(sig))
+        entry = {
+            "direction": direction, "threshold": round(t, 4),
+            "train": m_train, "holdout": m_hold, "combined": m_all,
+            "n_labelled": len(pairs), "n_good": n_good, "n_bad": n_bad,
+            "labeled_set_sha256": _labeled_hash(rows),
+            "model": (models[0] if len(models) == 1 else "*"),
+            "models_seen": models,
+            "rule_sha256": rule_canonical_sha(edited),
+            "rubric_sha256": rubric_canonical_sha(rb_after),
+            "max_false_block_rate": max_false_block_rate, "min_recall": min_recall,
         }
+        cal = raw.setdefault("calibration", {})
+        cal.setdefault("rules", {})[sig] = entry
+        all_sigs = []
+        for r in raw.get("rules", []):
+            m = _re.match(r"^\s*(\w+\.\w+)", str(r.get("when", "")))
+            if m and m.group(1) not in all_sigs:
+                all_sigs.append(m.group(1))
+        raw["calibrated"] = bool(all_sigs) and all(s in cal["rules"] for s in all_sigs)
         path.write_text(json.dumps(raw, indent=2) + "\n", encoding="utf-8")
         result["certified"] = True
+        result["rubric_calibrated"] = raw["calibrated"]
         result["written_to"] = str(path)
 
     return result
