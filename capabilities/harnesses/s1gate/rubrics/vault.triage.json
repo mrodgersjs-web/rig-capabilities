@@ -1,0 +1,77 @@
+{
+  "name": "vault.triage",
+  "stage": "learn",
+  "lane": "memory",
+  "description": "Triage a raw note dumped into the Obsidian inbox: classify its kind, route it to a vault area, and decide whether cheap logic can file it or a frontier LLM must distill it first.",
+  "questions": {
+    "kind": {
+      "type": "choice",
+      "instructions": "What kind of artifact this file is",
+      "criteria": {
+        "transcript": "Spoken-word capture: meeting, podcast, video, or interview transcript",
+        "scrape": "Captured web or app content: articles, forum threads, social posts, docs pages",
+        "code": "Source code, scripts, configs, or dumps with substantial code blocks",
+        "log": "Machine or agent output: run logs, diffs, command traces, error dumps",
+        "journal": "First-person notes: daily notes, ideas, decisions, meeting notes written by a human or agent on purpose",
+        "reference": "Structured reference material: research findings, data tables, specifications, curated docs",
+        "junk": "Empty stub, fragment, duplicate, or content-free chrome"
+      }
+    },
+    "destination": {
+      "type": "choice",
+      "instructions": "Which vault area this file belongs in once filed",
+      "criteria": {
+        "transcripts": "It is a spoken-word capture and belongs with the transcripts",
+        "knowledge": "Durable reference or curated content the owner will want to link and cite later",
+        "research": "Source material feeding an active investigation or content pipeline",
+        "memory": "Session, decision, or state record worth remembering but not curated",
+        "archive": "Low value but not obviously noise: keep for provenance, out of the working set",
+        "needs_review": "Nothing fits confidently; a human should decide where it goes"
+      }
+    },
+    "needs_reasoning": {
+      "type": "noul",
+      "instructions": "Turning this file into usable knowledge requires generative reasoning -- summarizing, extracting decisions, rewriting, or reconciling against other notes -- rather than simply filing it where it belongs"
+    },
+    "is_noise": {
+      "type": "noul",
+      "instructions": "This file has no durable value: empty, a UI or export artifact stub, a near-duplicate fragment, or throwaway scratch"
+    },
+    "sensitivity": {
+      "type": "choice",
+      "instructions": "The highest sensitivity level present in the visible text",
+      "criteria": {
+        "public": "Already publishable or generic technical content",
+        "internal": "Business, project, or agent operations content not meant for public release",
+        "private": "Personal health, family, finance, or privately identifiable information about an individual",
+        "secret": "Credentials, tokens, keys, or raw passwords appear in the text"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "sensitivity.choice == secret",
+      "verdict": "BLOCK",
+      "reason": "credential material visible -- quarantine the file, never index its contents"
+    },
+    {
+      "when": "is_noise.noul >= 0.75",
+      "verdict": "BLOCK",
+      "reason": "noise -- archive without a memory write"
+    },
+    {
+      "when": "needs_reasoning.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "distillation needed -- hand to a frontier LLM agent, not the filing script"
+    },
+    {
+      "when": "destination.choice == needs_review",
+      "verdict": "ESCALATE",
+      "reason": "routing unclear -- human files it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}
