@@ -1,0 +1,50 @@
+{
+  "gate": "proof.gate_before_register",
+  "studio": "proof",
+  "pack": "ultra.proof",
+  "code_checks": [
+    {
+      "check": "done_test_executable",
+      "ok": true,
+      "note": "1 assertion(s) EXECUTED, all exit 0"
+    },
+    {
+      "check": "planted_failure_receipt",
+      "ok": true,
+      "note": "planted-failure receipt present"
+    }
+  ],
+  "reasons": [
+    "downgraded BLOCK->ESCALATE: rule 'done_test_is_vacuous.noul' is not calibrated (or its certification is stale: rubric, rule, or model changed); run s1gate_calibrate before enforcing",
+    "ESCALATE: vacuous done-test: a gate that cannot go red is theater [done_test_is_vacuous.noul=0.7 >= 0.6]",
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.34 <= 0.49]",
+    "done_test_is_vacuous.noul=0.70",
+    "claim_atomic.noul=0.34",
+    "evidence_is_command_output.noul=0.66",
+    "advisory only: pack not calibrated"
+  ],
+  "jev": {
+    "done_test_is_vacuous": {
+      "type": "noul",
+      "noul": 0.7
+    },
+    "claim_atomic": {
+      "type": "noul",
+      "noul": 0.34
+    },
+    "evidence_is_command_output": {
+      "type": "noul",
+      "noul": 0.66
+    }
+  },
+  "verdict": "ESCALATE",
+  "advisory": true,
+  "enforced": false,
+  "decision_id": 6774,
+  "note": "",
+  "jev_skipped": false,
+  "route": "annotate_advance",
+  "cleared": true,
+  "advance": true,
+  "human_required": false
+}
