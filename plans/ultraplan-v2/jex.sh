@@ -116,8 +116,11 @@ atomic_ok = aok >= 2
 bad = [q for q in bad if q != "claim_atomic"]  # superseded by the single-field call
 if not atomic_ok:
     detail["claim_atomic(single-field)"] = "%d/3 PASS calls (need 2)" % aok
+fails = list(bad)
+if not atomic_ok: fails.append("atomic-calls %d/3" % aok)
+if not cleared: fails.append("not-cleared")
 print("%s jex: cleared=%s verdict=%s %s failing=%s -> %s"
       % (item, cleared, verdict or "NONE", "; ".join("%s: %s" % kv for kv in detail.items()) or "no jev answers",
-         bad or "none", out))
+         fails or "none", out))
 sys.exit(0 if ok else 1)
 PY
