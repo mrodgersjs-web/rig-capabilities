@@ -24,19 +24,90 @@
       "reason": "vacuous done-test: a gate that cannot go red is theater"
     },
     {
-      "when": "claim_atomic.noul <= 0.50",
+      "when": "claim_atomic.noul <= 0.4916",
       "verdict": "ESCALATE",
       "reason": "compound claim cannot be verified or falsified as written: split it"
     },
     {
-      "when": "evidence_is_command_output.noul <= 0.60",
+      "when": "evidence_is_command_output.noul <= 0.4425",
       "verdict": "ESCALATE",
       "reason": "narrative evidence: the verdict is unsure, not passed"
     }
   ],
   "confidence_floor": 0.4,
   "calibrated": false,
-  "calibration": {},
+  "calibration": {
+    "rules": {
+      "claim_atomic.noul": {
+        "direction": "below",
+        "threshold": 0.4916,
+        "train": {
+          "threshold": 0.4916,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.4916,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.4916,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 34,
+        "n_good": 24,
+        "n_bad": 10,
+        "labeled_set_sha256": "08f6d816e55eb471f0b7363f5ae27dc582e74700e5678bfd087a1eb7da3c3aba",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "481f74d37f7ec37d0d43bd8f29fd163927a5772190742948e9d541e01f7f692c",
+        "rubric_sha256": "bfba1763a7ae2c07365aa3bfbaf8e74c38ffb2f49f6d9efd2ee5231206a03f1c",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5
+      },
+      "evidence_is_command_output.noul": {
+        "direction": "below",
+        "threshold": 0.4425,
+        "train": {
+          "threshold": 0.4425,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.4425,
+          "precision": 1.0,
+          "recall": 0.5,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.4425,
+          "precision": 1.0,
+          "recall": 0.8,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 34,
+        "n_good": 24,
+        "n_bad": 10,
+        "labeled_set_sha256": "08f6d816e55eb471f0b7363f5ae27dc582e74700e5678bfd087a1eb7da3c3aba",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "55f466216dec8cf81a88b6a628fa5e9d55726a9dc9ad816cce386026bb076739",
+        "rubric_sha256": "bfba1763a7ae2c07365aa3bfbaf8e74c38ffb2f49f6d9efd2ee5231206a03f1c",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5
+      }
+    }
+  },
   "notes": {
     "done_test_is_vacuous": "doc signal p.done_test_is_vacuous. Motivation: a 300-checkpoint report whose runner contained zero assertions and hardcoded full_scenario_executed:false (projects/transformfit-qa.md).",
     "evidence_is_command_output": "doc signal p.evidence_is_command_output; SLSA/in-toto bind claims to digests, not to prose."
