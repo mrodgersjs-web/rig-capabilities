@@ -1,0 +1,40 @@
+{
+ "gate": "proof.gate_before_register",
+ "route": "advance",
+ "cleared": true,
+ "verdict": "PASS",
+ "pack": "ultra.proof",
+ "samples": 3,
+ "jev": {
+  "done_test_is_vacuous": {
+   "type": "noul",
+   "noul": 0.53
+  },
+  "evidence_is_command_output": {
+   "type": "noul",
+   "noul": 0.84
+  },
+  "claim_atomic": {
+   "type": "noul",
+   "noul": 0.53
+  }
+ },
+ "code_checks": [
+  {
+   "check": "done_test_executable",
+   "ok": true,
+   "note": "1 assertion(s) EXECUTED, all exit 0"
+  },
+  {
+   "check": "planted_failure_receipt",
+   "ok": true,
+   "note": "planted-failure receipt present"
+  }
+ ],
+ "reasons": [
+  "no rule tripped; all confidences at or above floor",
+  "done_test_is_vacuous.noul=0.53",
+  "claim_atomic.noul=0.50",
+  "evidence_is_command_output.noul=0.86"
+ ]
+}
