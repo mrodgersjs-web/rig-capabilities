@@ -1,0 +1,62 @@
+{
+  "name": "atomic.claim",
+  "stage": "proof",
+  "lane": "build",
+  "description": "single-field judgment: is the ITEM CLAIM one verifiable fact? State = the claim text ONLY. Sibling of ultra.proof (same prompt), whose multi-part state the judge cannot separate (UltraPlan V2 W04 finding 2026-09-20: the same claim scored 0.48 inside a claim+test+evidence blob and 0.88 alone). One question, one field: no separation problem is even possible.",
+  "questions": {
+    "claim_atomic": {
+      "instructions": "This claim states one verifiable thing rather than several bundled together",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "claim_atomic.noul <= 0.4968",
+      "verdict": "ESCALATE",
+      "reason": "compound claim cannot be verified or falsified as written: split it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": true,
+  "notes": {
+    "claim_atomic": "prompt copied verbatim from ultra.proof so corpus transfers"
+  },
+  "calibration": {
+    "rules": {
+      "claim_atomic.noul": {
+        "direction": "below",
+        "threshold": 0.4968,
+        "train": {
+          "threshold": 0.4968,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.4968,
+          "precision": 1.0,
+          "recall": 0.75,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.4968,
+          "precision": 1.0,
+          "recall": 0.8888888888888888,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 62,
+        "n_good": 44,
+        "n_bad": 18,
+        "labeled_set_sha256": "fdc0791e8e9bb5498831089aa2ced28b6d87e15be7682c4a9ba710b35464a58e",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "2f22fdf4a2c61e35ed8233050faaa5e2cd43529a6ec48635e34d40abcab4c141",
+        "rubric_sha256": "dc3ba828d53fbea832f5baf36240c4c28b023e2400e1c662b957c3e15013e4fd",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5
+      }
+    }
+  }
+}
