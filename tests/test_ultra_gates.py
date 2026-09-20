@@ -212,6 +212,19 @@ class TestRouterOffline(unittest.TestCase):
         self.assertEqual(got["route"], ug.Route.REWORK)
         self.assertTrue(any("model family" in c["note"] for c in got["code_checks"]))
 
+    def test_distinct_families_pass_the_lease_check(self):
+        got = ug.route("execution.slice_before_integrate", "state",
+                       GOOD_FACTS["execution.slice_before_integrate"], live=True,
+                       evaluator=fake_evaluator(s1gate.PASS, {"claim_has_evidence": noul(0.9)}))
+        self.assertNotEqual(got["route"], ug.Route.REWORK)
+
+    def test_missing_lease_holder_is_undecidable_not_passed(self):
+        facts = dict(GOOD_FACTS["execution.slice_before_integrate"], lease_holder=None)
+        got = ug.route("execution.slice_before_integrate", "state", facts, live=True,
+                       evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.ESCALATE_REVIEW,
+                         "unknown lease state is never consent")
+
     def test_undecidable_code_check_escalates_not_passes(self):
         got = ug.route("research.citation_before_cite", "state",
                        {"citation_url": "https://x.dev/a", "citation_fetched_at": "2026-09-18",

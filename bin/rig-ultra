@@ -165,6 +165,9 @@ def cmd_metrics(args) -> int:
         if not args.facts:
             raise SystemExit("rig-ultra: metrics information needs --facts with {class: resolved}")
         raw = json.loads(Path(args.facts).read_text(encoding="utf-8"))
+        if not isinstance(raw, dict) or any(not isinstance(v, (int, float)) for v in raw.values()):
+            raise SystemExit("rig-ultra: metrics information wants a FLAT {class: probability} map "
+                             "(nested values are not coerced; run metrics coverage for counts)")
         out = information({k: float(v) for k, v in raw.items()})
     else:
         vals = [float(v) for v in (args.values or "").split(",") if v.strip()]
