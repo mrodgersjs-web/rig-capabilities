@@ -202,6 +202,16 @@ class TestRouterOffline(unittest.TestCase):
         self.assertEqual(called, [], "Jev was called after a deterministic failure")
         self.assertTrue(any("no runnable assertion" in c["note"] for c in got["code_checks"]))
 
+    def test_builder_verifier_family_separation_is_enforced(self):
+        """'a' verifying 'a' is self-certification: the slice gate must refuse
+        even when a lease is held, and name the families."""
+        facts = dict(GOOD_FACTS["execution.slice_before_integrate"],
+                     writer_family="blackwell", verifier_family="blackwell")
+        got = ug.route("execution.slice_before_integrate", "state", facts, live=True,
+                       evaluator=fake_evaluator(s1gate.PASS))
+        self.assertEqual(got["route"], ug.Route.REWORK)
+        self.assertTrue(any("model family" in c["note"] for c in got["code_checks"]))
+
     def test_undecidable_code_check_escalates_not_passes(self):
         got = ug.route("research.citation_before_cite", "state",
                        {"citation_url": "https://x.dev/a", "citation_fetched_at": "2026-09-18",
