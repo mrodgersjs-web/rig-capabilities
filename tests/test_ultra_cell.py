@@ -21,6 +21,7 @@ sys.path.insert(0, str(ROOT))
 from rig_capabilities.ultra_cell import (  # noqa: E402
     SLOTS,
     discover_cells,
+    find_cycles,
     plant_failure,
     validate_cell,
     validate_tree,
@@ -184,6 +185,16 @@ class TestRefusals(unittest.TestCase):
 
 
 class TestTree(unittest.TestCase):
+    def test_route_cycle_is_a_reported_defect(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            write_cell(root, level="L0", children=("p",))
+            write_cell(root / "p", level="L1", children=("../",))  # edge back to ancestor
+            cyc = find_cycles(root)
+            self.assertTrue(cyc, "a cycle must be reported, not quietly survived")
+            rep = validate_tree(root)
+            self.assertFalse(rep["ok"], "a cyclic tree cannot pass")
+
     def test_tree_walks_declared_children_reports_leaves_and_orphans(self):
         with tempfile.TemporaryDirectory() as td:
             root = Path(td)

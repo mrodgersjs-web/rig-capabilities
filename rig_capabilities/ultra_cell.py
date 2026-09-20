@@ -364,10 +364,40 @@ def discover_cells(root):
     return order, orphans, sorted(set(leaves))
 
 
+def find_cycles(root):
+    """A route edge back to an ancestor is a cycle: the walk terminates (seen-set)
+    but the graph is a lie -- report it as a defect instead of quietly surviving."""
+    root = Path(root).resolve()
+    cycles = []
+
+    def declared_children(p):
+        r = p / "routes.yaml"
+        if not (r.exists() and yaml is not None):
+            return []
+        try:
+            data = yaml.safe_load(r.read_text(encoding="utf-8")) or {}
+            return [str(c) for c in (data.get("children") or [])]
+        except Exception:
+            return []
+
+    def walk(p, stack):
+        sp = str(p)
+        if sp in stack:
+            cycles.append(" -> ".join(stack[stack.index(sp):] + [sp]))
+            return
+        for c in declared_children(p):
+            cp = (p / c).resolve()
+            if cp.is_dir():
+                walk(cp, stack + [sp])
+    walk(root, [])
+    return cycles
+
+
 def validate_tree(root):
     root = Path(root).resolve()
     gates = declared_gate_ids()
     order, orphans, leaves = discover_cells(root)
+    cycles = find_cycles(root)
     cells = [validate_cell(p, root=root, known_gates=gates) for p in order]
     by_level = {}
     for c in cells:
@@ -380,7 +410,8 @@ def validate_tree(root):
         "orphans": orphans,
         "leaves": leaves,
         "by_level": by_level,
-        "ok": bool(cells) and all(c["ok"] for c in cells) and not orphans,
+        "ok": bool(cells) and all(c["ok"] for c in cells) and not orphans and not cycles,
+        "cycles": cycles,
         "declared_gates_seen": bool(gates),
     }
 
