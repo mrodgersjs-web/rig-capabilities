@@ -1561,8 +1561,8 @@
  },
  {
   "id": "UP.W08.architecture-frontend-architecture-negative-invocation.054",
-  "claim": "The stored evidence command for manifest item UP.W08.architecture-frontend-architecture-negative-invocation.054 reproduces green on disk today",
-  "repro_cmd": "python3 -c \"import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-frontend-architecture.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:600], d['cell'], d.get('mission_id')) and d['cell'].endswith('frontend-architecture')\"",
+  "claim": "a declared route with no backing contract is a NAMED violation (frontend arch negative path)",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_arch_contract.TestArchContract.test_undeclared_route_is_a_violation\"",
   "title": "Negative invocation evidence for architecture frontend-architecture"
  },
  {
@@ -1615,8 +1615,8 @@
  },
  {
   "id": "UP.W08.architecture-architecture-verification-negative-invocati.063",
-  "claim": "The stored evidence command for manifest item UP.W08.architecture-architecture-verification-negative-invocati.063 reproduces green on disk today",
-  "repro_cmd": "python3 -c \"import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-architecture-verification.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:600], d['cell'], d.get('mission_id')) and d['cell'].endswith('architecture-verification')\"",
+  "claim": "an accepted ADR lacking a review stamp FAILS verification (arch-verification negative path)",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_arch_contract.TestArchContract.test_accepted_adr_without_review_stamp_fails\"",
   "title": "Negative invocation evidence for architecture architecture-verification"
  },
  {
@@ -1633,8 +1633,8 @@
  },
  {
   "id": "UP.W08.development-build-data-migrations-negative-invocation.066",
-  "claim": "The stored evidence command for manifest item UP.W08.development-build-data-migrations-negative-invocation.066 reproduces green on disk today",
-  "repro_cmd": "python3 -c \"import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-data-migrations.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:600], d['cell'], d.get('mission_id')) and d['cell'].endswith('data-migrations')\"",
+  "claim": "a dangling foreign key is a NAMED violation (data-migrations negative path)",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_arch_contract.TestArchContract.test_dangling_fk_is_a_violation\"",
   "title": "Negative invocation evidence for development-build data-migrations"
  },
  {
@@ -1657,8 +1657,8 @@
  },
  {
   "id": "UP.W08.development-build-system-e2e-tests-negative-invocation.070",
-  "claim": "The stored evidence command for manifest item UP.W08.development-build-system-e2e-tests-negative-invocation.070 reproduces green on disk today",
-  "repro_cmd": "python3 -c \"import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-system-e2e-tests.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:600], d['cell'], d.get('mission_id')) and d['cell'].endswith('system-e2e-tests')\"",
+  "claim": "a contract change REOPENS a previously-stamped review (e2e negative path)",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_arch_contract.TestArchContract.test_contract_change_reopens_review\"",
   "title": "Negative invocation evidence for development-build system-e2e-tests"
  },
  {
@@ -4033,7 +4033,7 @@
  },
  {
   "id": "UP.W06.TAC.TAC-274",
-  "claim": "The stored evidence command for manifest item UP.W06.TAC.TAC-274 reproduces green on disk today",
+  "claim": "the TAC-274 admission doc names all ten required ProofPacket fields (task_id, claim, done_test, command_output, exit_code, verifier, planted_failure, source_revisions, corpus_hash, ts) with zero missing",
   "repro_cmd": "python3 -c \"t=open('/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/admission/TAC-274-proofpacket-fields-for-tac.md').read();req=['task_id','claim','done_test','command_output','exit_code','verifier','planted_failure','source_revisions','corpus_hash','ts'];missing=[f for f in req if f not in t];assert not missing,missing;print('TAC-274 names ALL required packet fields:');print(', '.join(req));print('missing:',missing)\"",
   "title": "Define ProofPacket fields for TAC runs: task, prompt version, context manifest, model route, tool allowlist, phase exits, review verdict, artifact hashes, approval state, and residual risk."
  },
