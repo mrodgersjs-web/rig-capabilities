@@ -1,33 +1,22 @@
-# UltraPlan V2 — Session State (checkpoint 2026-09-20b)
+# UltraPlan V2 — Session State (checkpoint 2026-09-20d — deep session)
 
-HEADS: ultraplan `8ac6deb` · rig-capabilities (latest: W06 pack + verifier hardening) · ultra-mcp `02a6338`
+HEADS: ultraplan `f4f889b` · rig-capabilities `dc897d4` · ultra-mcp `02a6338`
+Manifest: 616 built + 53 connected + 2 specified (card-assemble/informed-check reopened honestly), 988->536 inventoried. Mission 0601 chain-intact.
+Live: audit target-t3 log /tmp/audit-t3.log (last seen 11 PASS/3 RED of 32 — DONE by the time you read this; leftovers = fix evidence or DEMOTE row). soak24h detached: /tmp/ultra-soak-24h.log hourly 'cycle N ok=True' lines, ETA 2026-09-21 ~19:20; console :8902 hub 'ultraconsole'; audit-run2.log full pass-3 = 610/671 PASS.
 
-Manifest: 1207 items — 164 built, 53 connected, 2 specified, 988 inventoried. Board ~444 open.
-Live: console hub process `ultraconsole` :8902; ledger ultraplan/data/ledger.db mission 0f516f4a-…-0601 seq 17 chain-intact; JEV decision ledger ~/.rig/s1gate/decisions.db; tmux firstmate (pane 2 jake stale — codex pool limited).
+## THIS STRETCH'S DELIVERABLES (see git logs; commit msgs carry evidence)
+- jev-audit: 671-row queue, bar = evidence-median>=0.85 LIVE re-run + atomic 2/3; bugs found BY the audit and fixed: bare-name repro misattribution (control-flow), grep -q silent evidence, cross-contaminated manifest evidence (restored), W03/W04/TAC-263/264/270/274/290/297 wired to real checks. repro-show.py prints what it verified (judge cannot ground on silence).
+- glm_verify.py fresh-context verifier (jev-1.13.0, 5-sample majority): 12/13 waves accepted; W06 recorded 'audit-covered 28/28, reviewer-borderline' per D85 stop-order (evidence labels kept getting read as failures — quoting-hell cured with probe_w07.py/probe_w09.py FILES; use files for nested probes, never heredocs).
+- Ledger fixes: per-mission idempotency scoping (global-key silent-swallow bug, planted-drift proof, e10f66a); ReceiptlessClaim gate (complete/settle refuse zero-receipt missions, f4f889b); park-research guard scoped worker/mcp after cli regression (caught by fresh-context reviewer @0.99, e3529e1).
+- TAC: distiller 249/249 quote-grounded sha-bound (fallback quotes for 37; tampered-hash plant RED-proven); admission docs 263-279 with checkers; tac-harness pack (17 cmds, PITER gate, C1/C2/C3 graders, 5 schemas, port/ws/route tools, staged meta generators); verifier repo: --no-skills launcher patch (6k-scan timeout root cause) + openrouter repo-local defaults; spawn-wrapper bug REMAINS -> vpy/vsql/max_loops/JEX rows BLOCKED with findings in TAC-268.
+- W10/W11/W13/W14: ultra_learn outcomes + T+N, harvest/scraper/firstmate subs+cells (96/96 tree, aeb9cdc), soak tools+24h mode+restart drill (24x120 streams cursor 528), plant sweep 63/63 (17 standalone-context skips honest, evidence/w14-plant-sweep.json), OpenSpec 80/80 (evidence/w14-openspec.json), D85: card drafted, chain refuses at designed points, registry.json creation + APPROVE = CAPTAIN GATE (evidence/w14-d85-status.md; D85 grammar also blocks open() — real finding).
 
-## Committed this stretch (all gc.sh, gates green)
-- W13: migration v1->v2 (M-1..M-8), backup/verify/rollback rehearsal incl. WAL-resurrection test (cd430dd); handle leak fix (ad46cd1)
-- W07 cell runner (386ad34) + parse_done_when yaml-native + 5 new op cells (dfa7eb9): coverage-meter, aggregate, ledger-register, resolve-and-score wrap REAL engines (rig-ultra metrics coverage|information; rig-memory-forecast aggregate|ledger-register|settle --dry-run)
-- Batch run 9 existing cells: 5 pass+receipt (corpus-waves, gap-mining, convergence, prompt-optimization + prior 4), 4 honest RED: altitude-walk (all-file done_when -> theater rule fired), slicing/done-contract/frontier-rounds/worker-dispatch (no workspace satisfies their greps)
-- Receipts: mission_id+producer+workspace_sha256 provenance; ledger-refused receipt surfaces receipt_error, never vanishes (0c87a89, 8/8 tests)
-- W09: writer==verifier family refusal test (c929db8) + distinct-families pass + missing-holder ESCALATES-not-passes (fb7ce33)
-- rig-ultra metrics information refuses nested facts by name (was TypeError)
-- W04 closure discipline: 36 W04 rows closed ONLY against test names/commits in test_ultra_gates.py; 3 rows stay open (escalation-during-claim, cross-run persistence, ledger-write-failure)
-
-## THE PATTERN for remaining 14 W07 ops (D85: stay thin)
-cell = tree-compliant dir (SKILL.md w/ done_when cmd: wrapping an existing engine; parent routes.yaml children += name else ORPHAN-red; validator requires agent.md frontmatter + 8-slot + harness/loop schema_version "1" + routes {phase, entry, children:[]}) → run_cell() executes own done_whens → receipt on 0601 → JEX single claim via plans/ultraplan-v2/jex.sh.
-Engines to wrap: normalize_dedup (sub or ultra.questioning) for tag-and-route/value-rank/card-assemble; ultra_forecast.resolve_and_score for forecast-brief/dry-check; ultra.questioning classify for source-grade/informed-check; rig-capabilities bin/* only. NO model-dependent prompts in done_whens.
-Fix the 4 RED cells: rewrite their done_whens to be red-capable (altitude-walk) or accept they need W08 workspaces (leave open, honest).
-
-## Gates/rules that fired this session (keep enforcing)
-- gc.sh refuses red commits (caught my wrong-premise test live); sole commit path.
-- JEX: claim_atomic certified thr 0.490 (median-of-3 single-field packs); 5 JEX receipts in evidence/jex/ incl. 2 ESCALATE-then-clean re-runs.
-- run_cell: all-file-existence done_whens self-refuse.
-- pi -p openrouter/kimi-k3 ~5s; ULTRA_MODEL=kimi-k3 in bin/rig-ultra persona-panel; console :8902 hub-managed.
-
-## Captain decisions pending (asked 5x)
-1. OMP 18.1.17 -> 18.2.6 `--apply` repair  2. rig-tac-system registry write approval  3. Jake reroute
-4. **ROTATE PAT github_pat_11ABZYK6Y0… NOW** (in transcript history; remotes scrubbed, token not).
+## NEXT (ordered)
+1. /tmp/audit-t3.log tail: any leftover REDs -> strengthen or DEMOTE (inventoried + reopen row). Then ONE final full pass: ./jev-audit.py audit-queue.json (671 rows); 'release-targets board green' + 'manifest statuses all verified' close on that artifact.
+2. Final GLM sweep once all builds land (5-sample): ./glm_verify.py ; W07/W09 digests now file-probed (probe_w07.py/probe_w09.py). Close 'WXX GLM verify' rows per accepts; W06 row closes as borderline-with-reason if it recurs.
+3. 24h soak finishes -> read log 24 cycles ok=True -> close row -> ProofPacket v2 (seal audit summary + plant sweep + heads + manifest counts) -> promotion verdict -> final W14 rows.
+4. Board rows still open that need CAPTAIN: OMP --apply, rig-tac-system registry, Jake reroute, PAT rotation, D85 registry+APPROVE; and blocked-with-findings: verifier spawn rows (5), brand-list (browser pass), 4 JEX-final pi rows, freshness-scheduler, card-assemble, informed-check, 2026-09-21 19:20: 24h soak.
+5. Manifest rows: the 2 specified stay specified until engines exist; every built row has repro= in evidence (traceability 671/671).
 
 ## STATE AT 1.2M-CONTEXT CHECKPOINT (session must continue from here): COMPLETE ALL ITEMS + JEV ≥0.85 EVERY BUILT ITEM
 - jev-audit.py: bar = evidence median ≥0.85 + 2/3 atomic + repro green NOW. Selftest proven: weak claim RED (0.70), strong GREEN (0.91). Plant-failure = the harness rejects ungrounded claims.
