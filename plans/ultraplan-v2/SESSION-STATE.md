@@ -11,6 +11,15 @@ Live: audit target-t3 log /tmp/audit-t3.log (last seen 11 PASS/3 RED of 32 — D
 - TAC: distiller 249/249 quote-grounded sha-bound (fallback quotes for 37; tampered-hash plant RED-proven); admission docs 263-279 with checkers; tac-harness pack (17 cmds, PITER gate, C1/C2/C3 graders, 5 schemas, port/ws/route tools, staged meta generators); verifier repo: --no-skills launcher patch (6k-scan timeout root cause) + openrouter repo-local defaults; spawn-wrapper bug REMAINS -> vpy/vsql/max_loops/JEX rows BLOCKED with findings in TAC-268.
 - W10/W11/W13/W14: ultra_learn outcomes + T+N, harvest/scraper/firstmate subs+cells (96/96 tree, aeb9cdc), soak tools+24h mode+restart drill (24x120 streams cursor 528), plant sweep 63/63 (17 standalone-context skips honest, evidence/w14-plant-sweep.json), OpenSpec 80/80 (evidence/w14-openspec.json), D85: card drafted, chain refuses at designed points, registry.json creation + APPROVE = CAPTAIN GATE (evidence/w14-d85-status.md; D85 grammar also blocks open() — real finding).
 
+## CHECKPOINT f (session close — READ THIS FIRST ON RESUME)
+Final chain RUNNING (nohup, survives session death): logs plans/ultraplan-v2/audit-final.log then glm-final-sweep.log, sentinel 'FINAL-DONE' in /tmp/final-verify2.log.
+Expected ONE known RED: UP.W02.r03-negative-invocation.030 (my wiring error, FIXED in queue after the pass loaded — just re-run it: ./jev-audit.py audit-queue.json UP.W02.r03-negative-invocation.030).
+On completion, in order:
+1. evidence/audit-final-summary.json -> any REDs beyond the known one: strengthen evidence or DEMOTE row+reopen board row. Then close 'jev-audit every built item at 0.85' honestly.
+2. glm-final-sweep.log: close the 13 'WXX GLM verify' board rows on accepts (W06 = borderline-recorded, cite its 28/28 row-audit + repair@0.85 calibration note). If a wave regressed vs its probe-file version (W07/W09 use probe_w07.py/probe_w09.py), re-run that wave alone before recording.
+3. ProofPacket v2 via afproof.seal_packet(task_id='ultraplan-v2-w05' chains): bind audit-final-summary.json sha + plant-sweep sha + tree 100/100 + HEAD hashes -> 'final ProofPacket' + 'promotion gate verdict' + 'manifest statuses all verified' rows close on it.
+4. Board residue that CANNOT close (do not fudge): 24h soak (ETA 09-21 ~19:20, log /tmp/ultra-soak-24h.log), browser/a11y/visual suites (browser dead: 'No page targets'), 5 verifier-spawn Pi rows (TAC-268 finding), ui model-run rows (brief-to-memo, prime, team-gen, brand-list), install-into-codebase dry (needs Claude CLI), Codex Fusion repair + Earendil preserved (undefined by captain), registry/D85/PAT/OMP/Jake rows = captain gates.
+---
 ## CHECKPOINT e (post-report, captain said finish everything)
 - Tree now 100/100 (wave-planner, slice-kinds, informed-check, freshness-scheduler, card-assemble rebuilt on REAL engines e022084+82ab25d; card.v1.json + slice-kind gate + freshness_plan + informed_check all built THIS stretch).
 - 8 t3-reds repaired (1339132): atomic claim_overrides for W06.r09 swarm rows, named-test repros for W03 stragglers, TAC-274 field print; 8/8 PASS on targeted t4.
