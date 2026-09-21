@@ -3386,7 +3386,7 @@ items:
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
   evidence: evidence/jex/w02-ledger-crash.json + w02-idempotent.json; ultraplan commit pending; runtime/ledger.py + tests/test_ledger.py 13 green repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan
-    && python3 -m unittest -v tests.test_ledger.TestLedger.test_stale_sequence_guard tests.test_commands.TestHandler.test_schema_rejects_before_state_touch 2>&1"
+    && python3 -m unittest -v tests.test_ledger.TestLedger.test_stale_expected_seq_refused tests.test_commands.TestHandler.test_schema_rejects_before_state_touch 2>&1"
   status: built
 - id: UP.W02.r04-negative-invocation.031
   title: Exercise rejected path for Commit outbox entries transactionally and store effect receipts separately
@@ -14311,8 +14311,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.execution-wave-planner-cell.001`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_subs.TestWavePlan']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0 if r.wasSuccessful()
+    and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.execution-lease-cell.002
   title: Assemble the execution lease normal operation cell
   kind: harness
@@ -14695,8 +14696,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.studio-requirement-01.016`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d+aeb9cdc; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_subs.TestLearnAndFleetSubs.test_firstmate_registration_is_append_only_and_owner_unique']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0
+    if r.wasSuccessful() and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.studio-requirement-02.017
   title: Enforce one writer lease and serialize shared-file writes
   kind: hook
@@ -14773,8 +14775,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.studio-requirement-03.018`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_commands.TestSliceKinds']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0 if r.wasSuccessful()
+    and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.studio-requirement-04.019
   title: Require receipt-shaped done-tests for every slice
   kind: ui
@@ -15110,8 +15113,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.execution-wave-planner-positive-invocation.027`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_subs.TestWavePlan']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0 if r.wasSuccessful()
+    and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.execution-lease-positive-invocation.028
   title: Positive invocation evidence for execution lease
   kind: test
@@ -15472,8 +15476,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.execution-wave-planner-negative-invocation.042`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_subs.TestWavePlan']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0 if r.wasSuccessful()
+    and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.execution-lease-negative-invocation.043
   title: Negative invocation evidence for execution lease
   kind: test
@@ -15833,8 +15838,9 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W09.execution-wave-planner-independent-verification.057`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: '{"required": ["command", "exit_code", "stdout", "artifact_sha256"], "receipts": []}'
-  status: inventoried
+  evidence: ultraplan 82ab25d; repro=cd /Users/rig128gb/Developer/ultraplan && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_subs.TestWavePlan']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0 if r.wasSuccessful()
+    and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
 - id: UP.W09.execution-lease-independent-verification.058
   title: Independent GLM evidence for execution lease
   kind: test
