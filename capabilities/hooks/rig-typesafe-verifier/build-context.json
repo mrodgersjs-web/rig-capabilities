@@ -1,0 +1,81 @@
+{
+  "schema_version": "rig.typesafe_verifier.build_context.v1",
+  "goal": "Install a TypeSafe semantic verification layer for direct OMP and Orca-launched OMP sessions without treating Jev as a truth oracle.",
+  "scope": {
+    "source_root": "/Users/rig128gb/.rig/typesafe-verifier",
+    "omp_install": "/Users/rig128gb/.omp/agent/extensions/rig-typesafe-verifier.ts",
+    "skill_install": "/Users/rig128gb/.agents/skills/rig-typesafe-verifier",
+    "firstmate_repo_mutation": false,
+    "reason": "The Firstmate fleet lock is held by another live session, so this build does not mutate Firstmate tracked or private state."
+  },
+  "startup": {
+    "firstmate": {
+      "packet_id": "startup-52e536a165be49a1af04fd91ab3ab473",
+      "status": "PASS",
+      "hard_stop": false,
+      "fleet_lock": "read_only_other_owner"
+    },
+    "rig_capabilities": {
+      "packet_id": "startup-0e060888a561415b8031f3b7abbce91f",
+      "status": "PASS",
+      "hard_stop": false,
+      "graft": "stale_due_to_unrelated_concurrent_changes"
+    }
+  },
+  "lattice": {
+    "cell_id": "L3-D2-A2-I1",
+    "primary_coordinate": "L3-D2-A2",
+    "archetype": "A2.1",
+    "mode": "A2",
+    "budget_usd": 0.1
+  },
+  "bms": {
+    "confidence": 0.62,
+    "mode": "A2",
+    "failure_cost": 0.70,
+    "reversibility": 0.90,
+    "mechanism_clarity": 0.80,
+    "past_failure_rate": 0.50,
+    "data_volume": 0.20,
+    "level": "L3",
+    "model_in_decision_path": true
+  },
+  "design": {
+    "selected": "one user-level OMP extension plus one universal agent skill",
+    "rejected": [
+      "a resident verifier daemon adds lifecycle and deployment failure modes",
+      "editing Firstmate while another session owns its fleet lock violates the repository contract",
+      "registering Jev as an OpenAI chat model cannot work because /v1/systemone is not a chat-completions API"
+    ],
+    "default_mode": "off",
+    "rollout_state": "shadow_activated",
+    "automatic_call_cap_per_process": 25,
+    "input_price_per_million_tokens_usd": 0.042,
+    "reserved_input_tokens_per_attempt": 32000,
+    "worst_case_reserved_call_cost_usd": 0.001344,
+    "worst_case_reserved_process_budget_usd": 0.0336,
+    "global_daily_budget_usd": 0.10,
+    "global_daily_call_cap": 100,
+    "effective_daily_call_cap_at_default_budget": 74,
+    "failed_attempts_refunded": false,
+    "quota_lock": "O_EXCL owner-token file; PID/token checked release; SQLite BEGIN IMMEDIATE serializes stale reclaim; reclaim only after the recorded PID is dead",
+    "global_quota_ledger": "/Users/rig128gb/.rig/typesafe-verifier/state/quota.json",
+    "activation_boundary": "SATISFIED 2026-09-16: independent cross-family PASS bound to final bytes plus canonical Gate-D approval apr_1789593625550 for this exact scope.",
+    "gate_d": {
+      "request_id": "gd_1789593625550",
+      "approval_id": "apr_1789593625550",
+      "approved_at": "2026-09-16T21:38:20.927Z",
+      "how": "direct user message; exact typed phrase APPROVE gd_1789593625550 (session entry 76cb37d9)",
+      "scope": "install extension+skill; enable RIG_TYPESAFE_MODE=shadow for direct and Orca-launched OMP; bounded redacted latest-turn POSTs to api.typesafe.ai; advisory only; $0.10/day and 100 calls shared, 25 per process",
+      "account_balance": "USD 5.00 observed at console.typesafe.ai/home 2026-09-17T00:10Z; usage 4.6K tokens since Sep 1; not checked per call"
+    }
+  },
+  "d85": {
+    "process_id": "rig-typesafe-verifier-v2",
+    "status": "BLOCK",
+    "inventory_reason": "UNKNOWN_PROCESS",
+    "registration_reason": "The released registrar requires Python AST entrypoints; this TypeScript extension cannot be registered source-derived without a false Python wrapper.",
+    "certifier_support": "A1 only; the selected L3-D2-A2-I1 build is A2.",
+    "certified": false
+  }
+}
