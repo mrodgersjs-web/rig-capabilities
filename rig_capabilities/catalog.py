@@ -57,6 +57,14 @@ DEFAULT_EXTERNAL_ROOTS = [
     {"label": "codex-skills", "kind": "skill", "path": "~/.codex/skills", "pattern": "*/SKILL.md"},
     {"label": "hermes-skills", "kind": "skill", "path": "~/.hermes/skills", "pattern": "*/SKILL.md"},
     {"label": "agents-skills", "kind": "skill", "path": "~/.agents/skills", "pattern": "*/SKILL.md"},
+    # ULTRA cell tree: the one root where skills are deliberately nested
+    # (L1 phases / L2 stages / L3 tactics / X studios). nested_ids derives the
+    # asset id from the path relative to the root, so cells register as
+    # `ultraplan/intent`, not bare `intent` colliding with flat skills.
+    {"label": "ultraplan-cells", "kind": "skill", "path": "~/.agents/skills/ultraplan",
+     "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "rig-tac-system", "kind": "skill", "path": "~/Developer/rig-tac-system/.claude/skills",
+     "pattern": "*/SKILL.md"},
     {"label": "claude-agents", "kind": "agent", "path": "~/.claude/agents", "pattern": "*.md"},
     {"label": "codex-agents", "kind": "agent", "path": "~/.codex/agents", "pattern": "*.toml"},
     {"label": "hermes-agents", "kind": "agent", "path": "~/.hermes/agents", "pattern": "*.json"},
@@ -322,8 +330,13 @@ class Repo:
             name = fm.get("name") or fm.get("title") or _first_heading(text) or m.stem
             if kind == "skill" and m.name == "SKILL.md":
                 name = fm.get("name") or m.parent.name
+            if kind == "skill" and m.name == "SKILL.md" and root.get("nested_ids"):
+                rel_parent = str(m.parent.relative_to(base))
+                asset_id = base.name if rel_parent == "." else f"{base.name}/{rel_parent}"
+            else:
+                asset_id = m.parent.name if (kind == "skill" and m.name == "SKILL.md") else m.name
             out.append({
-                "id": m.parent.name if (kind == "skill" and m.name == "SKILL.md") else m.name,
+                "id": asset_id,
                 "kind": kind,
                 "source": label,
                 "path": str(m.relative_to(base)),
