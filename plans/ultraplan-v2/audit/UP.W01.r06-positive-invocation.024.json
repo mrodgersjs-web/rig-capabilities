@@ -1,37 +1,39 @@
 {
  "id": "UP.W01.r06-positive-invocation.024",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.92,
- "evidence_samples": [
-  0.92,
-  0.91,
-  0.92
+ "pass": false,
+ "reasons": [
+  "atomic-calls 1/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.91,
+ "evidence_samples": [
+  0.91,
+  0.92,
+  0.91
+ ],
+ "atomic_ok": 1,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.48 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.79
+     "noul": 0.48
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 215,
-   "advisory": false,
-   "state_sha256": "93bfe8c1cf11988b5466804b1c90225a855f7d2045734059b09dec54622ec73f",
-   "state_preview": "The evidence command recorded for manifest item UP.W01.r06-positive-invocation.024 reproduces green on disk today",
+   "latency_ms": 197,
+   "advisory": true,
+   "state_sha256": "7e4294ac0af033030918003e7b1d226fba63bb99d883e45c5d81b4beecc6e48e",
+   "state_preview": "The evidence command for the requirement 'Exercise accepted path for Add BDD feature files for every track and studio oper' reproduces green on disk today",
    "error": null,
-   "decision_id": 14086
+   "decision_id": 21036
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W01.r06-positive-invocation.024 reproduces green on disk today",
- "secs": 1.8
+ "claim": "The evidence command for the requirement 'Exercise accepted path for Add BDD feature files for every track and studio oper' reproduces green on disk today",
+ "secs": 1.6
 }

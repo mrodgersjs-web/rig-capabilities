@@ -1,37 +1,40 @@
 {
  "id": "UP.W02.r03-contract.003",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.86,
- "evidence_samples": [
-  0.87,
-  0.86,
-  0.83
+ "pass": false,
+ "reasons": [
+  "evidence_median 0.840 < captain bar 0.85",
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.84,
+ "evidence_samples": [
+  0.84,
+  0.84,
+  0.85
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.35 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.78
+     "noul": 0.35
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 182,
-   "advisory": false,
-   "state_sha256": "a9cc40c45b6b20060e427d56de8445be47d68f13b2e2afe9854bce228ee13ce2",
-   "state_preview": "The evidence command recorded for manifest item UP.W02.r03-contract.003 reproduces green on disk today",
+   "latency_ms": 206,
+   "advisory": true,
+   "state_sha256": "57d7e9a73017dfb3bd20ee016b91e9344f24c54ce7ef93ff5e0933d3559e9d78",
+   "state_preview": "The evidence command for the requirement 'Specify Add command IDs, idempotency keys, expected sequences, and writer fences' reproduces green on disk today",
    "error": null,
-   "decision_id": 14206
+   "decision_id": 21156
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W02.r03-contract.003 reproduces green on disk today",
- "secs": 2.1
+ "claim": "The evidence command for the requirement 'Specify Add command IDs, idempotency keys, expected sequences, and writer fences' reproduces green on disk today",
+ "secs": 1.8
 }

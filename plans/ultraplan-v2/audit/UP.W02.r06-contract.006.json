@@ -1,37 +1,39 @@
 {
  "id": "UP.W02.r06-contract.006",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.91,
- "evidence_samples": [
-  0.91,
-  0.91,
-  0.9
+ "pass": false,
+ "reasons": [
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.89,
+ "evidence_samples": [
+  0.89,
+  0.89,
+  0.88
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.49 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.77
+     "noul": 0.49
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 199,
-   "advisory": false,
-   "state_sha256": "0ab08c1943fb8283719b24c1363526ad7dc8995104fad4b54f0ad9ebf0d860d4",
-   "state_preview": "The evidence command recorded for manifest item UP.W02.r06-contract.006 reproduces green on disk today",
+   "latency_ms": 188,
+   "advisory": true,
+   "state_sha256": "e4eb8777fee0c79c56c124ea3a2cf2a305fc7694df07432bb18144b69eb55f23",
+   "state_preview": "The evidence command for the requirement 'Specify Enforce decision, cost, time, and tool budgets inherited by children' reproduces green on disk today",
    "error": null,
-   "decision_id": 14224
+   "decision_id": 21174
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W02.r06-contract.006 reproduces green on disk today",
+ "claim": "The evidence command for the requirement 'Specify Enforce decision, cost, time, and tool budgets inherited by children' reproduces green on disk today",
  "secs": 1.6
 }

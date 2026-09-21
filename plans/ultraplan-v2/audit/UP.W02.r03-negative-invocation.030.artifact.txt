@@ -1,6 +1,13 @@
-$ cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest tests.test_ledger
-...............
-----------------------------------------------------------------------
-Ran 15 tests in 0.073s
+$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_ledger.TestLedger.test_stale_sequence_guard tests.test_commands.TestHandler.test_schema_rejects_before_state_touch 2>&1"
+000gn/T/tmpdr5577kj'>
+  _warnings.warn(warn_message, ResourceWarning)
 
-OK
+======================================================================
+ERROR: test_stale_sequence_guard (unittest.loader._FailedTest.test_stale_sequence_guard)
+----------------------------------------------------------------------
+AttributeError: type object 'TestLedger' has no attribute 'test_stale_sequence_guard'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.022s
+
+FAILED (errors=1)

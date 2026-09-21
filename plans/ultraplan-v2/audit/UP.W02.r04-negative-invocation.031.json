@@ -1,37 +1,39 @@
 {
  "id": "UP.W02.r04-negative-invocation.031",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.9,
- "evidence_samples": [
-  0.89,
-  0.9,
-  0.9
+ "pass": false,
+ "reasons": [
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.88,
+ "evidence_samples": [
+  0.88,
+  0.88,
+  0.88
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.47 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.8
+     "noul": 0.47
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 239,
-   "advisory": false,
-   "state_sha256": "e92fe2880d15185989ed366dc136c390d51579cfdbd22e6288fedceba9e0a4e1",
-   "state_preview": "The evidence command recorded for manifest item UP.W02.r04-negative-invocation.031 reproduces green on disk today",
+   "latency_ms": 209,
+   "advisory": true,
+   "state_sha256": "e9ec4ec87356fe66e5ca2758f26c3b30f68cf2a760b87b1df3335aa58668d3c5",
+   "state_preview": "The evidence command for the requirement 'Exercise rejected path for Commit outbox entries transactionally and store effec' reproduces green on disk today",
    "error": null,
-   "decision_id": 14302
+   "decision_id": 21249
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W02.r04-negative-invocation.031 reproduces green on disk today",
+ "claim": "The evidence command for the requirement 'Exercise rejected path for Commit outbox entries transactionally and store effec' reproduces green on disk today",
  "secs": 1.6
 }

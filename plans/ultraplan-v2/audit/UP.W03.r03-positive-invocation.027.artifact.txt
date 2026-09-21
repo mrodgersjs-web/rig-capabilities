@@ -1,6 +1,11 @@
-$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest tests.test_cli_ledger.TestCli.test_create_advance_status_verify tests.test_cli_ledger.TestCli.test_parked_mission_refuses_advance_until_resumed"
-..
-----------------------------------------------------------------------
-Ran 2 tests in 0.505s
-
-OK
+$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ledger.TestLedger.test_idempotency_key_short_circuits_second_delivery tests.test_commands.TestHandler.test_actor_authority_is_decided_not_claimed 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
+der._FailedTest.test_ledger) ... ERROR
+test_commands (unittest.loader._FailedTest.test_commands) ... ERROR
+ERROR: test_ledger (unittest.loader._FailedTest.test_ledger)
+ImportError: Failed to import test module: test_ledger
+ModuleNotFoundError: No module named 'tests.test_ledger'
+ERROR: test_commands (unittest.loader._FailedTest.test_commands)
+ImportError: Failed to import test module: test_commands
+ModuleNotFoundError: No module named 'tests.test_commands'
+Ran 2 tests in 0.000s
+FAILED (errors=2)

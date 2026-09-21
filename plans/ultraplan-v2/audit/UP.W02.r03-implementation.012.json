@@ -1,37 +1,39 @@
 {
  "id": "UP.W02.r03-implementation.012",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.87,
- "evidence_samples": [
-  0.87,
-  0.88,
-  0.87
+ "pass": false,
+ "reasons": [
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.88,
+ "evidence_samples": [
+  0.88,
+  0.9,
+  0.86
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.34 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.8
+     "noul": 0.34
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 218,
-   "advisory": false,
-   "state_sha256": "8bcdcd96b3f68c089fe3b9153462c368514f30c6dbae9d6ca6f90541c2a736a2",
-   "state_preview": "The evidence command recorded for manifest item UP.W02.r03-implementation.012 reproduces green on disk today",
+   "latency_ms": 281,
+   "advisory": true,
+   "state_sha256": "7daf1f17109a59ff8d97ccf6c21b271a455081e430c3a4a8bc2ad1095705d68d",
+   "state_preview": "The evidence command for the requirement 'Implement Add command IDs, idempotency keys, expected sequences, and writer fenc' reproduces green on disk today",
    "error": null,
-   "decision_id": 14236
+   "decision_id": 21186
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W02.r03-implementation.012 reproduces green on disk today",
+ "claim": "The evidence command for the requirement 'Implement Add command IDs, idempotency keys, expected sequences, and writer fenc' reproduces green on disk today",
  "secs": 2.0
 }

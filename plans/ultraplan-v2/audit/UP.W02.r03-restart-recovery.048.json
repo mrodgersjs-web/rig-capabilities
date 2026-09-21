@@ -1,37 +1,39 @@
 {
  "id": "UP.W02.r03-restart-recovery.048",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.87,
- "evidence_samples": [
-  0.87,
-  0.86,
-  0.87
+ "pass": false,
+ "reasons": [
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.92,
+ "evidence_samples": [
+  0.93,
+  0.92,
+  0.91
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.46 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.8
+     "noul": 0.46
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 163,
-   "advisory": false,
-   "state_sha256": "7e5ce1061ee14e88254ecd6ec13970377b95bd729a7eda9a7fedffcce18522ba",
-   "state_preview": "The evidence command recorded for manifest item UP.W02.r03-restart-recovery.048 reproduces green on disk today",
+   "latency_ms": 181,
+   "advisory": true,
+   "state_sha256": "5be3b8b5eafe82482e79f047c27944f4fdaf8eb22c3f0f2ee7f8f21c84e83b31",
+   "state_preview": "The evidence command for the requirement 'Recover after interruption for Add command IDs, idempotency keys, expected seque' reproduces green on disk today",
    "error": null,
-   "decision_id": 14356
+   "decision_id": 21303
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W02.r03-restart-recovery.048 reproduces green on disk today",
- "secs": 1.9
+ "claim": "The evidence command for the requirement 'Recover after interruption for Add command IDs, idempotency keys, expected seque' reproduces green on disk today",
+ "secs": 2.1
 }

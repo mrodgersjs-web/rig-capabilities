@@ -1,37 +1,39 @@
 {
  "id": "UP.W01.r04-independent-verification.067",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.92,
- "evidence_samples": [
-  0.92,
-  0.91,
-  0.92
+ "pass": false,
+ "reasons": [
+  "atomic-calls 0/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.89,
+ "evidence_samples": [
+  0.89,
+  0.87,
+  0.9
+ ],
+ "atomic_ok": 0,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.43 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.79
+     "noul": 0.43
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 217,
-   "advisory": false,
-   "state_sha256": "f7c9d6eac8fd4c50bfc3695d35265b54dae2bc415b0a617b731e483a3990f397",
-   "state_preview": "The evidence command recorded for manifest item UP.W01.r04-independent-verification.067 reproduces green on disk today",
+   "latency_ms": 205,
+   "advisory": true,
+   "state_sha256": "4b7622485cc7df3d338861d078dd10ae8cf36ec8226540ddc539a0813ceb2906",
+   "state_preview": "The evidence command for the requirement 'Independently verify Reject missing slots, empty bindings, absent children, inva' reproduces green on disk today",
    "error": null,
-   "decision_id": 14170
+   "decision_id": 21120
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W01.r04-independent-verification.067 reproduces green on disk today",
- "secs": 1.7
+ "claim": "The evidence command for the requirement 'Independently verify Reject missing slots, empty bindings, absent children, inva' reproduces green on disk today",
+ "secs": 1.8
 }

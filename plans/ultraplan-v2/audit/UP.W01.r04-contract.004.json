@@ -1,37 +1,39 @@
 {
  "id": "UP.W01.r04-contract.004",
- "pass": true,
- "reasons": [],
- "evidence_median": 0.92,
- "evidence_samples": [
-  0.93,
-  0.92,
-  0.92
+ "pass": false,
+ "reasons": [
+  "atomic-calls 1/3 (need 2)"
  ],
- "atomic_ok": 3,
+ "evidence_median": 0.9,
+ "evidence_samples": [
+  0.89,
+  0.9,
+  0.9
+ ],
+ "atomic_ok": 1,
  "atomic_scores": [
   {
    "rubric": "atomic.claim",
-   "verdict": "PASS",
-   "enforced": true,
+   "verdict": "ESCALATE",
+   "enforced": false,
    "reasons": [
-    "no rule tripped; all confidences at or above floor"
+    "ESCALATE: compound claim cannot be verified or falsified as written: split it [claim_atomic.noul=0.47 <= 0.4968]"
    ],
    "answers": {
     "claim_atomic": {
      "type": "noul",
-     "noul": 0.78
+     "noul": 0.47
     }
    },
    "model": "jev-1.13.0",
-   "latency_ms": 385,
-   "advisory": false,
-   "state_sha256": "ef322509ea9d39b020a575d204c3e229b62dcbcab1b28fc3e4d72cabb9a6582b",
-   "state_preview": "The evidence command recorded for manifest item UP.W01.r04-contract.004 reproduces green on disk today",
+   "latency_ms": 219,
+   "advisory": true,
+   "state_sha256": "5ca91bca4ed2ca6670cbb5bae54ff2edc46ff4a651e22fee57810be67ba5c0a9",
+   "state_preview": "The evidence command for the requirement 'Specify Reject missing slots, empty bindings, absent children, invalid route pre' reproduces green on disk today",
    "error": null,
-   "decision_id": 14044
+   "decision_id": 20994
   }
  ],
- "claim": "The evidence command recorded for manifest item UP.W01.r04-contract.004 reproduces green on disk today",
- "secs": 1.8
+ "claim": "The evidence command for the requirement 'Specify Reject missing slots, empty bindings, absent children, invalid route pre' reproduces green on disk today",
+ "secs": 1.7
 }
