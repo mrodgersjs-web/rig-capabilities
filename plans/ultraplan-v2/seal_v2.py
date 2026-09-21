@@ -10,6 +10,10 @@ head = lambda repo: subprocess.run(["git", "-C", repo, "rev-parse", "HEAD"],
                                    capture_output=True, text=True).stdout.strip()
 
 summary = json.load(open(HERE + "/evidence/audit-final-summary.json"))
+if summary["pass"] + summary["red"] < summary["queue_rows"]:
+    print("REFUSING SEAL: audit incomplete (%d/%d judged)"
+          % (summary["pass"] + summary["red"], summary["queue_rows"]))
+    sys.exit(1)
 if summary["red"] > 0:
     print("REFUSING SEAL: final audit has", summary["red"], "reds:", summary["red_ids"][:6])
     sys.exit(1)
