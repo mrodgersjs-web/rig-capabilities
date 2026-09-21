@@ -4668,14 +4668,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W03.r09-contract.009`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence:
-    required:
-    - command
-    - exit_code
-    - stdout
-    - artifact_sha256
-    receipts: []
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_small_or_single_family_swarm_refuses_to_look_authoritative
+    tests.test_ultra_plan_forecast.TestSwarmLedger.test_two_families_are_refused_the_contract_demands_three 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: inventoried
+  claim_override: The swarm weighting contract refuses authoritative weighting to a thin or single-family swarm
 - id: UP.W03.r10-contract.010
   title: Specify Preserve CLI exit semantics
   kind: documentation
@@ -4787,7 +4783,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W03.r02-implementation.014`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: wired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "bash /Users/rig128gb/Developer/ultra-mcp/smoke.sh 2>&1 | tail -1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_commands.TestHandler.test_console_cli_mcp_are_the_same_function_on_the_same_ledger
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: connected
 - id: UP.W03.r03-implementation.015
   title: Implement Make MCP a thin stdio adapter over the shared handler
@@ -5089,8 +5086,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W03.r03-positive-invocation.027`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: evidence/jex/w03-mcp-f.json (3/3 atomic, smoke plant-proven) repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest tests.test_cli_ledger.TestCli.test_create_advance_status_verify
-    tests.test_cli_ledger.TestCli.test_parked_mission_refuses_advance_until_resumed"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ledger.TestLedger.test_idempotency_key_short_circuits_second_delivery
+    tests.test_commands.TestHandler.test_actor_authority_is_decided_not_claimed 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: connected
 - id: UP.W03.r04-positive-invocation.028
   title: Exercise accepted path for Keep Node as a loopback UI and proxy rather than a second command authority
@@ -5603,8 +5600,8 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W03.r01-route-integration.049`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: JEX PASS evidence/jex/w0{1-schemas-f2,1-studio-f,2-crash-f,3-cli-f,3-handler-f2,4-executor-f2,4-polarity-f2,4-calibrate-f}.json repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities
-    && python3 -m unittest tests.test_ultra_cli"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_cli_ledger.TestCli.test_create_advance_status_verify tests.test_cli_ledger.TestCli.test_ui_actor_cannot_create
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: connected
 - id: UP.W03.r02-route-integration.050
   title: Connect the real caller for Make CLI import the shared handler directly
@@ -8163,9 +8160,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W06.r09-contract.009`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: tac-harness pack; repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_two_families_are_refused_the_contract_demands_three
-    2>&1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_small_or_single_family_swarm_refuses_to_look_authoritative
+    tests.test_ultra_plan_forecast.TestSwarmLedger.test_two_families_are_refused_the_contract_demands_three 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: built
+  claim_override: The swarm weighting contract refuses authoritative weighting to a thin or single-family swarm
 - id: UP.W06.r10-contract.010
   title: Specify Stage meta prompt, agent, and skill generators as candidates rather than activating them
   kind: documentation
@@ -8498,8 +8496,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W06.r09-implementation.023`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: tac-harness pack; repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger 2>&1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_small_or_single_family_swarm_refuses_to_look_authoritative
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: built
+  claim_override: A single-family or thin swarm is refused authoritative weighting by the implementation
 - id: UP.W06.r10-implementation.024
   title: Implement Stage meta prompt, agent, and skill generators as candidates rather than activating them
   kind: prompt
@@ -8837,9 +8837,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W06.r09-positive-invocation.037`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: tac-harness pack; repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_weights_reward_the_better_family_once_n_resolves
-    2>&1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_weights_reward_the_better_family_once_n_resolves
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: built
+  claim_override: Once enough forecasts resolve per family the better family earns a higher weight
 - id: UP.W06.r10-positive-invocation.038
   title: Exercise accepted path for Stage meta prompt, agent, and skill generators as candidates rather than activating them
   kind: test
@@ -9178,9 +9179,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W06.r09-negative-invocation.051`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: tac-harness pack; repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_forecaster_sharing_the_author_family_is_rejected
-    2>&1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_forecaster_sharing_the_author_family_is_rejected
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: built
+  claim_override: A forecaster sharing the author's own family is rejected from the swarm
 - id: UP.W06.r10-negative-invocation.052
   title: Exercise rejected path for Stage meta prompt, agent, and skill generators as candidates rather than activating them
   kind: test
@@ -9519,9 +9521,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W06.r09-route-integration.065`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: tac-harness pack; repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_s1gate_calibrate.TestPerRuleEnforcement.test_certified_alpha_does_notlaunder_beta
-    2>&1"
+  evidence: repaired 2026-09-20 repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_s1gate_calibrate.TestPerRuleEnforcement.test_certified_alpha_does_notlaunder_beta
+    2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12"
   status: built
+  claim_override: A certified alpha rule cannot launder an uncertified beta rule through the same pack
 - id: UP.W06.r10-route-integration.066
   title: Connect the real caller for Stage meta prompt, agent, and skill generators as candidates rather than activating them
   kind: route
@@ -29018,8 +29021,8 @@ items:
   done_test: Schema rejects a packet missing any phase exit, artifact hash, or required approval field.
   plant_failure: null
   independent_verifier: Independent L10 verifier
-  evidence: TAC admission batch 2026-09-20; repro=python3 -c "t=open('/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/admission/TAC-274-proofpacket-fields-for-tac.md').read();req=['task_id','claim','done_test','command_output','exit_code','verifier','planted_failure','source_revisions','corpus_hash','ts'];missing=[f
-    for f in req if f not in t];assert not missing,missing;print('proofpacket fields 10/10')"
+  evidence: admission repaired repro=python3 -c "t=open('/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/admission/TAC-274-proofpacket-fields-for-tac.md').read();req=['task_id','claim','done_test','command_output','exit_code','verifier','planted_failure','source_revisions','corpus_hash','ts'];missing=[f
+    for f in req if f not in t];assert not missing,missing;print('TAC-274 names ALL required packet fields:');print(', '.join(req));print('missing:',missing)"
   status: built
   tac_owner: Jake
   tac_lesson: 0

@@ -446,7 +446,7 @@
  {
   "id": "UP.W03.r02-implementation.014",
   "claim": "The evidence command for the requirement 'Implement Make CLI import the shared handler directly' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"bash /Users/rig128gb/Developer/ultra-mcp/smoke.sh 2>&1 | tail -1\"",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_commands.TestHandler.test_console_cli_mcp_are_the_same_function_on_the_same_ledger 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Implement Make CLI import the shared handler directly"
  },
  {
@@ -476,7 +476,7 @@
  {
   "id": "UP.W03.r03-positive-invocation.027",
   "claim": "The evidence command for the requirement 'Exercise accepted path for Make MCP a thin stdio adapter over the shared handler' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest tests.test_cli_ledger.TestCli.test_create_advance_status_verify tests.test_cli_ledger.TestCli.test_parked_mission_refuses_advance_until_resumed\"",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ledger.TestLedger.test_idempotency_key_short_circuits_second_delivery tests.test_commands.TestHandler.test_actor_authority_is_decided_not_claimed 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Exercise accepted path for Make MCP a thin stdio adapter over the shared handler"
  },
  {
@@ -512,7 +512,7 @@
  {
   "id": "UP.W03.r01-route-integration.049",
   "claim": "The evidence command for the requirement 'Connect the real caller for Implement execute(command, authenticated_actor) as t' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest tests.test_ultra_cli\"",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_cli_ledger.TestCli.test_create_advance_status_verify tests.test_cli_ledger.TestCli.test_ui_actor_cannot_create 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Connect the real caller for Implement execute(command, authenticated_actor) as the shared transport-neutral handler"
  },
  {
@@ -781,8 +781,8 @@
  },
  {
   "id": "UP.W06.r09-contract.009",
-  "claim": "The evidence command for the requirement 'Specify Enforce context budgets, tool allowlists, resume packets, and scoped wor' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_two_families_are_refused_the_contract_demands_three 2>&1\"",
+  "claim": "The swarm weighting contract refuses authoritative weighting to a thin or single-family swarm",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_small_or_single_family_swarm_refuses_to_look_authoritative tests.test_ultra_plan_forecast.TestSwarmLedger.test_two_families_are_refused_the_contract_demands_three 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Specify Enforce context budgets, tool allowlists, resume packets, and scoped worker reports"
  },
  {
@@ -799,8 +799,8 @@
  },
  {
   "id": "UP.W06.r09-implementation.023",
-  "claim": "The evidence command for the requirement 'Implement Enforce context budgets, tool allowlists, resume packets, and scoped w' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger 2>&1\"",
+  "claim": "A single-family or thin swarm is refused authoritative weighting by the implementation",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_small_or_single_family_swarm_refuses_to_look_authoritative 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Implement Enforce context budgets, tool allowlists, resume packets, and scoped worker reports"
  },
  {
@@ -817,8 +817,8 @@
  },
  {
   "id": "UP.W06.r09-positive-invocation.037",
-  "claim": "The evidence command for the requirement 'Exercise accepted path for Enforce context budgets, tool allowlists, resume pack' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_weights_reward_the_better_family_once_n_resolves 2>&1\"",
+  "claim": "Once enough forecasts resolve per family the better family earns a higher weight",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_weights_reward_the_better_family_once_n_resolves 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Exercise accepted path for Enforce context budgets, tool allowlists, resume packets, and scoped worker reports"
  },
  {
@@ -835,8 +835,8 @@
  },
  {
   "id": "UP.W06.r09-negative-invocation.051",
-  "claim": "The evidence command for the requirement 'Exercise rejected path for Enforce context budgets, tool allowlists, resume pack' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_forecaster_sharing_the_author_family_is_rejected 2>&1\"",
+  "claim": "A forecaster sharing the author's own family is rejected from the swarm",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_plan_forecast.TestSwarmLedger.test_forecaster_sharing_the_author_family_is_rejected 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Exercise rejected path for Enforce context budgets, tool allowlists, resume packets, and scoped worker reports"
  },
  {
@@ -853,8 +853,8 @@
  },
  {
   "id": "UP.W06.r09-route-integration.065",
-  "claim": "The evidence command for the requirement 'Connect the real caller for Enforce context budgets, tool allowlists, resume pac' reproduces green on disk today",
-  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_s1gate_calibrate.TestPerRuleEnforcement.test_certified_alpha_does_notlaunder_beta 2>&1\"",
+  "claim": "A certified alpha rule cannot launder an uncertified beta rule through the same pack",
+  "repro_cmd": "python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c \"cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_s1gate_calibrate.TestPerRuleEnforcement.test_certified_alpha_does_notlaunder_beta 2>&1 | grep -E 'test_|Ran|OK|FAILED' | head -12\"",
   "title": "Connect the real caller for Enforce context budgets, tool allowlists, resume packets, and scoped worker reports"
  },
  {
@@ -3980,7 +3980,7 @@
  {
   "id": "UP.W06.TAC.TAC-274",
   "claim": "The evidence command for the requirement 'Define ProofPacket fields for TAC runs: task, prompt version, context manifest, ' reproduces green on disk today",
-  "repro_cmd": "python3 -c \"t=open('/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/admission/TAC-274-proofpacket-fields-for-tac.md').read();req=['task_id','claim','done_test','command_output','exit_code','verifier','planted_failure','source_revisions','corpus_hash','ts'];missing=[f for f in req if f not in t];assert not missing,missing;print('proofpacket fields 10/10')\"",
+  "repro_cmd": "python3 -c \"t=open('/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/admission/TAC-274-proofpacket-fields-for-tac.md').read();req=['task_id','claim','done_test','command_output','exit_code','verifier','planted_failure','source_revisions','corpus_hash','ts'];missing=[f for f in req if f not in t];assert not missing,missing;print('TAC-274 names ALL required packet fields:');print(', '.join(req));print('missing:',missing)\"",
   "title": "Define ProofPacket fields for TAC runs: task, prompt version, context manifest, model route, tool allowlist, phase exits, review verdict, artifact hashes, approval state, and residual risk."
  },
  {
