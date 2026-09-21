@@ -1,17 +1,9 @@
-$ cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest tests.test_certifies_one_rule_only
-E
-======================================================================
-ERROR: test_certifies_one_rule_only (unittest.loader._FailedTest.test_certifies_one_rule_only)
-----------------------------------------------------------------------
-ImportError: Failed to import test module: test_certifies_one_rule_only
-Traceback (most recent call last):
-  File "/Users/rig128gb/.local/share/uv/python/cpython-3.11-macos-aarch64-none/lib/python3.11/unittest/loader.py", line 162, in loadTestsFromName
-    module = __import__(module_name)
-             ^^^^^^^^^^^^^^^^^^^^^^^
-ModuleNotFoundError: No module named 'tests.test_certifies_one_rule_only'
-
+$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_s1gate_calibrate.TestPerRuleCalibration 2>&1"
+sts.test_s1gate_calibrate.TestPerRuleCalibration.test_model_switch_voids_certification) ... ok
+test_second_certification_does_not_void_the_first (tests.test_s1gate_calibrate.TestPerRuleCalibration.test_second_certification_does_not_void_the_first) ... ok
+test_unmatched_signal_refused_without_write (tests.test_s1gate_calibrate.TestPerRuleCalibration.test_unmatched_signal_refused_without_write) ... ok
 
 ----------------------------------------------------------------------
-Ran 1 test in 0.000s
+Ran 6 tests in 0.149s
 
-FAILED (errors=1)
+OK

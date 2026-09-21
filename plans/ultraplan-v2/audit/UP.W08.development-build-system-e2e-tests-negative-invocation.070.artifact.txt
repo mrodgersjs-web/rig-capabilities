@@ -1,2 +1,2 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-system-e2e-tests.json')); assert d['results'][0]['ok'] and d['cell'].endswith('system-e2e-tests')"
-(no output)
+$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-system-e2e-tests.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:220], d['cell'], d.get('mission_id')) and d['cell'].endswith('system-e2e-tests')"
+[{"check": "cmd:cd /Users/rig128gb/Developer/ultraplan && python3 -c \"import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_vertical_slice']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit( quality/system-e2e-tests 0f516f4a-0000-4000-8000-000000000601

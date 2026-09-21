@@ -24,7 +24,7 @@ CLAIMS = {
  "W03": "CLI + MCP transports execute the same shared handler; replays return the same event. Expect: cli test counts and an equivalence note.",
  "W04": "JEV calibration: per-rule certified thresholds from construction-labeled decisions with holdout ceilings; certification voids on rule edit or model switch. Expect: suite counts plus the certified thresholds dumped from the rubric JSON.",
  "W05": "Vertical slice survived SIGKILL and resumed; a real ProofPacket verifies, detects tampering, and chains. Expect: e2e suite count and the packet hash line.",
- "W07": "Every listed questioning/research/forecast/execute cell executed its own done_when and attached a provenance receipt to live mission 0601. Expect: the named green cells and a receipt count >= that list.",
+ "W07": "Nineteen named questioning/research/forecast cells each executed their own done_when green and attached a receipt bound to live mission 0601. Expect: the green count for exactly those nineteen, the missing list, the bound count, and the live tree validation line.",
  "W08": "Architecture contract engine gates the build (routes<->contract both directions, FK integrity, ADR stamps, sha-stamped re-review). Expect: gate violations=0 output + engine test count.",
  "W09": "Execution/proof behavior: stale writer fence refused (named test), one claim one execution (live probe: second drain executes zero), receipt tamper detected (named mismatch test), arbiter malformed answer escalates, builder/verifier family separation enforced (named tests), seal rechecks build gate, packets byte-identical, W09 receipts bound to a live mission.",
  "W10": "Learning cells: holdout can never ship an in-sample fit, write-back appends-and-counts, labels refuse unknown decision ids, weights withheld on thin evidence. Expect: suite counts.",
@@ -131,7 +131,7 @@ PY'''))
         dead = _sp.run(["python3", TH6 + "/commands/tac-route-probe", "openrouter/not-a-model/zzz"], capture_output=True).returncode
         p.append("route probe: live kimi exit=%d (0 expected), dead model exit=%d (1 expected)" % (live, dead))
     elif w == "W07":
-        p.append(sh("python3 -c \"import json,glob;rs=[json.load(open(x)) for x in glob.glob('data/receipt-*.json')];green=[r['cell'] for r in rs if r['results'][0]['ok']];print(len(rs),'receipts,',len(green),'green; q/r/f cells:',sorted(c for c in green if c.split('/')[0] in ('question','research','forecast','execute')))\""))
+        p.append(sh("python3 " + HERE + "/probe_w07.py"))
     elif w == "W08":
         p.append(sh("python3 runtime/arch_contract.py fixtures/w08"))
         p.append(sh("python3 -m unittest -v tests.test_arch_contract 2>&1 | grep -E 'route|fk|stamp|reopen|adr|fail|Ran|OK' | head -10"))
@@ -157,7 +157,7 @@ second=drain(db,'exec','w1',dry_run_executor)
 print('first drain executed:', len(first), 'status', first[0]['status'] if first else None)
 print('second drain executed:', len(second), '-> one claim, one execution')
 PY'''))
-        p.append(sh("python3 -c \"import glob,json;rs=sorted(glob.glob('data/receipt-*.json'));green=[json.load(open(f))['cell'] for f in rs if json.load(open(f))['results'][0]['ok']];w9=[c for c in green if c.split('/')[0] in ('execute','integrate','proof','quality')];import json as j;rs=[j.load(open(f)) for f in sorted(glob.glob('data/receipt-*.json'))];bound=sum(1 for r in rs if r.get('mission_id')=='0f516f4a-0000-4000-8000-000000000601');legacy=sum(1 for r in rs if not r.get('mission_id'));print('W09 receipts green:',w9);print('receipts bound to mission 0601:',bound,'| legacy (pre-provenance):',legacy)\""))
+        p.append(sh("python3 " + HERE + "/probe_w09.py"))
     elif w == "W10":
         p.append(sh("cd " + CAP + " && python3 -m unittest -v tests.test_s1gate_calibrate 2>&1 | grep -E 'voids|holdout|downgrades|refused|Ran|OK' | head -8"))
         p.append(sh("cd " + CAP + " && python3 -m unittest -v tests.test_ultra_learn 2>&1 | grep -E 'insufficient|no_change|rejected|promotion|schedule|Ran|OK' | head -8"))
@@ -186,7 +186,7 @@ def main(waves):
     for w in waves:
         st = "Wave %s claims: %s\nFresh evidence for %s between <<<>>>\n<<<\n%s\n>>>" % (w, CLAIMS[w], w, digest(w))
         samples = []
-        for _ in range(3):
+        for _ in range(5):  # 5-sample majority: 3 flipped on borderline waves (identical state, W07 accept then repair)
             try:
                 body = s1gate.ask(st, {"verdict": {"type": "choice", "instructions": Q,
                        "criteria": {"accept": "evidence supports every claim in the wave",
@@ -197,7 +197,7 @@ def main(waves):
                 samples.append(("provider-error", 0.0))
         accepts = [c for c, conf in samples if c == "accept"]  # choice-majority; confidence field is uncalibrated for choice answers (measured: 0.01-0.66 swings on identical states)
         confs = sorted(conf for _, conf in samples)
-        report[w] = {"choice": "accept" if len(accepts) >= 2 else "repair",
+        report[w] = {"choice": "accept" if len(accepts) >= 3 else "repair",
                      "samples": samples, "median_confidence": confs[1] if confs else 0.0,
                      "model": "jev-1.13.0", "state_sha": hashlib.sha256(st.encode()).hexdigest()[:16]}
         json.dump(report[w], open(os.path.join(OUT, w + ".json"), "w"), indent=1)

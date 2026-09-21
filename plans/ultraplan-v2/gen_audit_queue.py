@@ -37,11 +37,13 @@ for it in d["items"]:
         name = m.group(0).removesuffix(".py")
         if "." not in name:          # bare test name with no module is NOT evidence
             m = None
+            name = None
         elif not name.startswith("tests."):
             name = "tests." + name.split(".", 1)[0]
-        mod = name.split(".")[1] if name.startswith("tests.") else name.split(".")[0]
-        repo = CAP if mod in CAP_TESTS else UP
-        repro = "%s bash -c \"cd %s && python3 -m unittest -v %s 2>&1\"" % (RS, repo, name)
+        if name:
+            mod = name.split(".")[1]
+            repo = CAP if mod in CAP_TESTS else UP
+            repro = "%s bash -c \"cd %s && python3 -m unittest -v %s 2>&1\"" % (RS, repo, name)
     elif mr:
         rec = "%s/data/receipt-%s.json" % (UP, mr.group(1))
         repro = ("python3 -c \"import json; d=json.load(open('%s')); "

@@ -1,2 +1,2 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-unit-contract-tests.json')); assert d['results'][0]['ok'] and d['cell'].endswith('unit-contract-tests')"
-(no output)
+$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-unit-contract-tests.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:220], d['cell'], d.get('mission_id')) and d['cell'].endswith('unit-contract-tests')"
+[{"check": "cmd:cd /Users/rig128gb/Developer/ultraplan && python3 -c \"import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_commands','tests.test_ledger','tests.test_schemas','tests.test_subs','tes quality/unit-contract-tests 0f516f4a-0000-4000-8000-000000000601

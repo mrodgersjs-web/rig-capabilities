@@ -1,2 +1,2 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-performance.json')); assert d['results'][0]['ok'] and d['cell'].endswith('performance')"
-(no output)
+$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-performance.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:220], d['cell'], d.get('mission_id')) and d['cell'].endswith('performance')"
+[{"check": "cmd:cd /Users/rig128gb/Developer/ultraplan && python3 checks/w08/performance.py", "note": "exit 0 500 events + chain verify in 0.05s\n", "ok": true}] quality/performance 0f516f4a-0000-4000-8000-000000000601

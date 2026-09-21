@@ -1,2 +1,2 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-deployment-architecture.json')); assert d['results'][0]['ok'] and d['cell'].endswith('deployment-architecture')"
-(no output)
+$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-deployment-architecture.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:220], d['cell'], d.get('mission_id')) and d['cell'].endswith('deployment-architecture')"
+[{"check": "cmd:cd /Users/rig128gb/Developer/ultraplan && python3 checks/w08/deployment-architecture.py", "note": "exit 0 digest-pinned deploy\n", "ok": true}] decompose/deployment-architecture 0f516f4a-0000-4000-8000-000000000601

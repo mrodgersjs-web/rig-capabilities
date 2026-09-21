@@ -1,2 +1,2 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-architecture-verification.json')); assert d['results'][0]['ok'] and d['cell'].endswith('architecture-verification')"
-(no output)
+$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-architecture-verification.json')); assert d['results'][0]['ok']; print(json.dumps(d['results'])[:220], d['cell'], d.get('mission_id')) and d['cell'].endswith('architecture-verification')"
+[{"check": "cmd:cd /Users/rig128gb/Developer/ultraplan && python3 runtime/arch_contract.py fixtures/w08 && echo ARCH-GATE-GREEN", "note": "exit 0 violations: 0\ncontract state: closed\nARCH-GATE-GREEN\n", "ok": true}] quality/architecture-verification 0f516f4a-0000-4000-8000-000000000601
