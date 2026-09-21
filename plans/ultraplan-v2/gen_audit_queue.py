@@ -23,11 +23,11 @@ for it in d["items"]:
             repro = "cd /Users/rig128gb/Desktop/TAC-Technology-Operating-System && shasum -a 256 -c 07-evidence/SHA256SUMS.txt | tail -2"
         else:
             repro = "python3 -c 'print(\"UNVERIFIABLE: TAC artifact not yet produced\")' && exit 3"
-        queue.append({"id": iid, "claim": "The manifest item %s titled %s is supported by its recorded evidence" % (iid, title), "repro_cmd": repro, "title": title})
+        queue.append({"id": iid, "claim": "The evidence command recorded for manifest item %s reproduces green on disk today" % iid, "repro_cmd": repro, "title": title})
         continue
     mrep = re.search(r"repro=(.+)$", ev)
     if mrep:
-        queue.append({"id": iid, "claim": "The manifest item %s titled %s is supported by its recorded evidence" % (iid, title), "repro_cmd": mrep.group(1).strip(), "title": title})
+        queue.append({"id": iid, "claim": "The evidence command recorded for manifest item %s reproduces green on disk today" % iid, "repro_cmd": mrep.group(1).strip(), "title": title})
         continue
     m = re.search(r"(tests\.)?(test_[a-z_]+(?:\.[A-Za-z_]+)?(?:\.[a-z_0-9]+)?)(?!\.py)", ev)
     mr = re.search(r"receipt-([a-z0-9-]+)\.json", ev)
@@ -49,6 +49,6 @@ for it in d["items"]:
     if repro is None:
         unver += 1
         repro = "python3 -c 'print(\"UNVERIFIABLE: no test, receipt, or commit named\")' && exit 3"
-    queue.append({"id": iid, "claim": "The manifest item %s titled %s is supported by its recorded evidence" % (iid, title), "repro_cmd": repro, "title": title})
+    queue.append({"id": iid, "claim": "The evidence command recorded for manifest item %s reproduces green on disk today" % iid, "repro_cmd": repro, "title": title})
 json.dump(queue, open("audit-queue.json", "w"), indent=1)
 print(len(queue), "rows;", unver, "unverifiable-by-design (audit REDs them honestly)")
