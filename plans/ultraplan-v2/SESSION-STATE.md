@@ -1,6 +1,7 @@
 # UltraPlan V2 — Session State (checkpoint 2026-09-20b)
 
-HEADS: ultraplan `545e5a7` · rig-capabilities (W07 evidence commit, post-fb7ce33)  (branch ultraplan-v2) · ultra-mcp `02a6338`
+HEADS: ultraplan `8ac6deb` · rig-capabilities (latest: W06 pack + verifier hardening) · ultra-mcp `02a6338`
+
 Manifest: 1207 items — 164 built, 53 connected, 2 specified, 988 inventoried. Board ~444 open.
 Live: console hub process `ultraconsole` :8902; ledger ultraplan/data/ledger.db mission 0f516f4a-…-0601 seq 17 chain-intact; JEV decision ledger ~/.rig/s1gate/decisions.db; tmux firstmate (pane 2 jake stale — codex pool limited).
 
@@ -28,8 +29,16 @@ Fix the 4 RED cells: rewrite their done_whens to be red-capable (altitude-walk) 
 1. OMP 18.1.17 -> 18.2.6 `--apply` repair  2. rig-tac-system registry write approval  3. Jake reroute
 4. **ROTATE PAT github_pat_11ABZYK6Y0… NOW** (in transcript history; remotes scrubbed, token not).
 
-## Next 5
-1. DONE 2026-09-20c: 14 thin cells live (7f0203d), all 14 JEX PASS per-cell (w07c-* receipts; envval needed claim re-split — judge enforced atomicity); only freshness-scheduler left in W07 (no engine — honest-negative JEX exists). Tree 61/61 (W09 batch: lease/dispatch/worker/verifier/arbiter/integrate/seal/proofpacket/sssf-gates all JEX PASS, ultraplan 4981130, seq 40). W07 down to freshness-scheduler+blocker-research; W09 down to wave-planner, firstmate-envelopes, slice-kind taxonomy. Next: W09 cells (worker/verifier/arbiter envelopes over cell_runner+fence), W13 soak, W10 attribution
+## Captain order (2026-09-20T19:00): COMPLETE ALL ITEMS + JEV ≥0.85 EVERY BUILT ITEM
+- jev-audit.py: bar = evidence median ≥0.85 + 2/3 atomic + repro green NOW. Selftest proven: weak claim RED (0.70), strong GREEN (0.91). Plant-failure = the harness rejects ungrounded claims.
+- gen_audit_queue.py builds queue from manifest (named unittest | receipt | git-show commit | repro= line | UNVERIFIABLE exit 3). 656 rows; pass-2 running; check audit-run.log + audit/_summary.json.
+- Independent verifier glm_verify.py (jev-1.13.0, fresh context, 3-sample majority): 12/13 waves ACCEPTED. W06 open: reviewer flagged PITER evidence 3x; digest now prints per-run fresh dir + EXPECTED-REFUSAL + exit=1/exit=0 both directions — VERIFY bg_2 result then ./glm_verify.py W06.
+- GLM lesson banked: reviewers read quoted source text as observation (a grep of a failure-message string caused 0.99 repairs); digests must print behavior + labels + exit codes; claim/evidence mismatch is REPAIRED not argued.
+- W03/W09/W07 accepted after evidence fixes; W09 found legacy receipts lacking mission binding (counted honestly); W13/soak idempotency GLOBAL-key bug found+fixed (e10f66a) via planted cross-mission replay.
+
+## Next 5 (supersedes)
+0. W06 verify loop → accept (or 3rd failure = escalate claim-wording to captain, NOT more quoting)
+1. DONE: 14 thin cells live (7f0203d), all 14 JEX PASS per-cell (w07c-* receipts; envval needed claim re-split — judge enforced atomicity); only freshness-scheduler left in W07 (no engine — honest-negative JEX exists). Tree 61/61 (W09 batch: lease/dispatch/worker/verifier/arbiter/integrate/seal/proofpacket/sssf-gates all JEX PASS, ultraplan 4981130, seq 40). W07 down to freshness-scheduler+blocker-research; W09 down to wave-planner, firstmate-envelopes, slice-kind taxonomy. Next: W09 cells (worker/verifier/arbiter envelopes over cell_runner+fence), W13 soak, W10 attribution
 2. DONE: W09 9 cells + W10 5 cells (quality/) + W12 views/vendor 3d5c230 + blocker-research cdc6f2d. Next: W13 soak harness, W05 proofpacket, remaining W10 outcomes (no_change/insufficient/candidate_rejected/T+N/resolve-once need engines): envelope = cell_runner output schema; family fields enforced
 3. W13 soak harness (100 missions x command mixes w/ 20% dupes, reconnect churn vs live console)
 4. W10 harvest->attribute->write-back on the decision-ledger + receipt corpus (attribution evidence exists now)

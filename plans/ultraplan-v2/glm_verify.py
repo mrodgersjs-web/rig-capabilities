@@ -30,7 +30,8 @@ CLAIMS = {
  "W10": "Learning cells: holdout can never ship an in-sample fit, write-back appends-and-counts, labels refuse unknown decision ids, weights withheld on thin evidence. Expect: suite counts.",
  "W11": "Sub-primitives incl. the structural 14-lens cap (prefix-stable, slice-bounded). Expect: subs suite count including the cap test.",
  "W12": "Console: session-gated tree/cells views (401 unauth), fully offline frontend (0 external script refs). Expect: console suite count, esm.sh count 0, live 401 + authenticated 200 view line.",
- "W13": "Soak: 100 missions x 10k commands with 20% replays collapsing to exact expected counts at ~1600 cmd/s, chains intact; 24 SIGKILL restarts with SSE cursor resumption. Expect: the soak summary line and drill line verbatim.",
+ "W06": "TAC leverage pack: 17 commands answer --help; PITER refuses a phase whose gate artifact is missing and passes sequential phases; C1 grader climbs 1..7 only with artifacts; port allocator issues a ranged console port and never protected 5173; workspace tool isolates a lane and refuses a duplicate owner; route probe live=0 dead=1.",
+ "W13": "Soak: 100 missions x 10k commands with 20% replays collapsing to exact expected counts at ~1600 cmd/s, chains intact; 24 SIGKILL restarts with SSE cursor resumption. Expect: the soak summary line and the drill line showing 24 kill-restarts with >=100 reconnect streams and a moved cursor.",
 }
 
 def sh(cmd):
@@ -43,8 +44,9 @@ def sh(cmd):
 def digest(w):
     p = []
     if w == "W01":
-        p.append(sh("python3 -m unittest -v tests.test_ultra_cell 2>&1 | grep -E 'slot|binding|child|predicate|namespace|studio|Ran|OK' | head -12"))
+        p.append(sh("cd " + CAP + " && python3 -m unittest -v tests.test_ultra_cell 2>&1 | grep -E 'slot|child|cycle|orphan|studio|vacuous|Ran|OK|FAILED' | head -14"))
         p.append(sh("python3 -c \"import sys;sys.path.insert(0,'" + CAP + "');from rig_capabilities.ultra_cell import validate_tree;v=validate_tree('" + UP + "');print('tree valid',v['valid'],'of',v['total'],'orphans',v['orphans'],'cycles',v['cycles'])\""))
+        p.append(sh("cd " + CAP + " && python3 -m unittest tests.test_ultra_cell 2>&1 | grep Ran"))
     elif w == "W02":
         p.append(sh("python3 -m unittest -v tests.test_ledger 2>&1 | grep -E 'crash|tamper|illegal|fence|idempotency|chain|Ran|OK' | head -14"))
         p.append(sh('''python3 - <<PY
@@ -95,6 +97,14 @@ PY'''))
     elif w == "W05":
         p.append(sh("python3 -m unittest -v tests.test_vertical_slice 2>&1 | grep -E 'survive|kill|resume|replay|Ran|OK' | head -8"))
         p.append(sh("cd .. && python3 -c 'import sys,json;sys.path.insert(0,\".\");sys.path.insert(0,\"/Users/rig128gb/Developer/rig-capabilities\");from rig_capabilities.afproof import verify_seal;p=json.load(open(\"/Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/evidence/w05-proofpacket.json\"));print(\"seal verify:\", verify_seal(p));t=dict(p);t[\"payload\"]=dict(p[\"payload\"]);t[\"payload\"][\"ledger_head_seq\"]=1;print(\"tamper now:\", verify_seal(t));print(\"hash:\", p[\"proof_hash\"][:16], \"head seq:\", p[\"payload\"][\"ledger_head_seq\"], \"tree:\", p[\"payload\"][\"tree_valid\"])'"))
+    elif w == "W06":
+        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && n=0; for f in commands/tac-*; do $f --help >/dev/null 2>&1 && n=$((n+1)); done; echo \"commands answering --help: $n\"; ls commands | wc -l"))
+        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && d=$(mktemp -d)/piter && bash adapters/piter.sh $d T; rc=$?; echo \"T-without-P exit=$rc (nonzero expected)\"; bash adapters/piter.sh $d P && bash adapters/piter.sh $d I && bash adapters/piter.sh $d T; echo \"T-after-P-and-I exit=$? (zero expected)\""))
+        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + "/adapters && python3 -m unittest test_grades -v 2>&1 | grep -E 'c1|c3|c2|Ran|OK'"))
+        p.append(sh("cd " + "/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness" + " && echo allocated-ui-port: $(python3 commands/tac-port ui)"))
+        p.append(sh("cd " + "/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness" + " && rm -rf /tmp/wsx /tmp/lanes/demo-A; git init -q /tmp/wsx; cd /tmp/wsx && git -c user.email=demo@x -c user.name=demo -c core.hooksPath=/var/empty commit -qm seed --allow-empty; cd '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' ; { bash commands/tac-workspace /tmp/wsx feat demo-A; } 2>&1 | sed 's/^/ISOLATE: /'; bash commands/tac-workspace /tmp/wsx feat demo-A > /tmp/dup.out 2>&1; echo duplicate-exit=$?; sed 's/^/EXPECTED-REFUSAL: /' /tmp/dup.out"))
+        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && python3 commands/tac-route-probe openrouter/moonshotai/kimi-k2.5 && echo LIVE=0 || echo dead"))
+        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && python3 commands/tac-route-probe openrouter/not-a-model/zzz || echo dead-route-exit-1"))
     elif w == "W07":
         p.append(sh("python3 -c \"import json,glob;rs=[json.load(open(x)) for x in glob.glob('data/receipt-*.json')];green=[r['cell'] for r in rs if r['results'][0]['ok']];print(len(rs),'receipts,',len(green),'green; q/r/f cells:',sorted(c for c in green if c.split('/')[0] in ('question','research','forecast','execute')))\""))
     elif w == "W08":
