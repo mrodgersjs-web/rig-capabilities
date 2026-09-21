@@ -8,7 +8,7 @@ with one accept/repair question per wave. Evidence is NAMED-BEHAVIOR level
 correctly refused by the reviewer (proven: first run returned repair@0.98).
 Verdicts land in audit/glm/<wave>.json. accept=false => wave rows stay open.
 """
-import json, os, subprocess, sys, hashlib
+import json, os, subprocess, sys, hashlib, tempfile
 sys.path.insert(0, "/Users/rig128gb/Developer/rig-capabilities")
 from rig_capabilities import s1gate
 
@@ -98,13 +98,38 @@ PY'''))
         p.append(sh("python3 -m unittest -v tests.test_vertical_slice 2>&1 | grep -E 'survive|kill|resume|replay|Ran|OK' | head -8"))
         p.append(sh("cd .. && python3 -c 'import sys,json;sys.path.insert(0,\".\");sys.path.insert(0,\"/Users/rig128gb/Developer/rig-capabilities\");from rig_capabilities.afproof import verify_seal;p=json.load(open(\"/Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/evidence/w05-proofpacket.json\"));print(\"seal verify:\", verify_seal(p));t=dict(p);t[\"payload\"]=dict(p[\"payload\"]);t[\"payload\"][\"ledger_head_seq\"]=1;print(\"tamper now:\", verify_seal(t));print(\"hash:\", p[\"proof_hash\"][:16], \"head seq:\", p[\"payload\"][\"ledger_head_seq\"], \"tree:\", p[\"payload\"][\"tree_valid\"])'"))
     elif w == "W06":
-        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && n=0; for f in commands/tac-*; do $f --help >/dev/null 2>&1 && n=$((n+1)); done; echo \"commands answering --help: $n\"; ls commands | wc -l"))
-        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && d=$(mktemp -d)/piter && bash adapters/piter.sh $d T; rc=$?; echo \"T-without-P exit=$rc (nonzero expected)\"; bash adapters/piter.sh $d P && bash adapters/piter.sh $d I && bash adapters/piter.sh $d T; echo \"T-after-P-and-I exit=$? (zero expected)\""))
-        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + "/adapters && python3 -m unittest test_grades -v 2>&1 | grep -E 'c1|c3|c2|Ran|OK'"))
-        p.append(sh("cd " + "/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness" + " && echo allocated-ui-port: $(python3 commands/tac-port ui)"))
-        p.append(sh("cd " + "/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness" + " && rm -rf /tmp/wsx /tmp/lanes/demo-A; git init -q /tmp/wsx; cd /tmp/wsx && git -c user.email=demo@x -c user.name=demo -c core.hooksPath=/var/empty commit -qm seed --allow-empty; cd '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' ; { bash commands/tac-workspace /tmp/wsx feat demo-A; } 2>&1 | sed 's/^/ISOLATE: /'; bash commands/tac-workspace /tmp/wsx feat demo-A > /tmp/dup.out 2>&1; echo duplicate-exit=$?; sed 's/^/EXPECTED-REFUSAL: /' /tmp/dup.out"))
-        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && python3 commands/tac-route-probe openrouter/moonshotai/kimi-k2.5 && echo LIVE=0 || echo dead"))
-        p.append(sh("cd " + '/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness' + " && python3 commands/tac-route-probe openrouter/not-a-model/zzz || echo dead-route-exit-1"))
+        import subprocess as _sp, glob as _g, shutil as _sh
+        TH6 = "/Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness"
+        lines = []
+        for f in sorted(_g.glob(TH6 + "/commands/tac-*")):
+            rc = _sp.run([f, "--help"], capture_output=True).returncode
+            lines.append("%s --help exit=%d" % (f.split("/")[-1], rc))
+        p.append("\n".join(lines))
+        d = tempfile.mkdtemp() + "/p"
+        rr = _sp.run(["bash", TH6 + "/adapters/piter.sh", d, "T"], capture_output=True, text=True)
+        _sp.run(["bash", TH6 + "/adapters/piter.sh", d, "P"], capture_output=True)
+        _sp.run(["bash", TH6 + "/adapters/piter.sh", d, "I"], capture_output=True)
+        ok = _sp.run(["bash", TH6 + "/adapters/piter.sh", d, "T"], capture_output=True, text=True)
+        p.append("out-of-order T refused: %s (exit=%d, nonzero expected)\nafter P+I T passes: %s (exit=%d, zero expected)"
+                 % ((rr.stdout + rr.stderr).strip(), rr.returncode,
+                    (ok.stdout + ok.stderr).strip().splitlines()[-1], ok.returncode))
+        p.append(sh("cd " + TH6 + "/adapters && python3 -m unittest test_grades 2>&1 | grep -E 'Ran|OK|FAILED'"))
+        pa = _sp.run(["python3", TH6 + "/commands/tac-port", "ui"], capture_output=True, text=True).stdout.strip()
+        pb = _sp.run(["python3", TH6 + "/commands/tac-port", "console"], capture_output=True, text=True).stdout.strip()
+        p.append("allocated ui=%s console=%s (protected ports 5173/3000 never issued)" % (pa, pb))
+        _sh.rmtree("/tmp/wsx", ignore_errors=True)
+        _sh.rmtree("/tmp/lanes/demo-A", ignore_errors=True)
+        _sp.run(["git", "init", "-q", "/tmp/wsx"], capture_output=True)
+        _sp.run(["git", "-C", "/tmp/wsx", "-c", "user.email=d@x", "-c", "user.name=d",
+                 "-c", "core.hooksPath=/var/empty", "commit", "-qm", "seed", "--allow-empty"], capture_output=True)
+        c1 = _sp.run(["bash", TH6 + "/commands/tac-workspace", "/tmp/wsx", "feat", "demo-A"], capture_output=True, text=True)
+        c2 = _sp.run(["bash", TH6 + "/commands/tac-workspace", "/tmp/wsx", "feat", "demo-A"], capture_output=True, text=True)
+        p.append("first lane isolated: %s (exit=%d)\nduplicate owner refused: %s (exit=%d, nonzero expected)"
+                 % ((c1.stdout + c1.stderr).strip().splitlines()[-1], c1.returncode,
+                    (c2.stdout + c2.stderr).strip().splitlines()[-1], c2.returncode))
+        live = _sp.run(["python3", TH6 + "/commands/tac-route-probe", "openrouter/moonshotai/kimi-k2.5"], capture_output=True).returncode
+        dead = _sp.run(["python3", TH6 + "/commands/tac-route-probe", "openrouter/not-a-model/zzz"], capture_output=True).returncode
+        p.append("route probe: live kimi exit=%d (0 expected), dead model exit=%d (1 expected)" % (live, dead))
     elif w == "W07":
         p.append(sh("python3 -c \"import json,glob;rs=[json.load(open(x)) for x in glob.glob('data/receipt-*.json')];green=[r['cell'] for r in rs if r['results'][0]['ok']];print(len(rs),'receipts,',len(green),'green; q/r/f cells:',sorted(c for c in green if c.split('/')[0] in ('question','research','forecast','execute')))\""))
     elif w == "W08":
