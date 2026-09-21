@@ -1,2 +1,5 @@
-$ bash /Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness/commands/tac-workspace --help && grep -q 'one owner per lane' /Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness/commands/tac-workspace
+$ bash /Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness/commands/tac-workspace --help && grep -h 'one owner per lane' /Users/rig128gb/Desktop/TAC-Technology-Operating-System/08-omp-build/tac-harness/commands/tac-workspace
 tac-workspace <repo> <branch> <lane-name> — one owner per lane, refuses existing lanes
+# Isolated workspaces: one git worktree per agent track; refuses to clobber (one owner per lane).
+if [ "${1:-}" = "--help" ]; then echo "tac-workspace <repo> <branch> <lane-name> — one owner per lane, refuses existing lanes"; exit 0; fi
+if [ -e "$dest" ]; then echo "refusing: lane $lane already exists (one owner per lane)" >&2; exit 1; fi

@@ -1,9 +1,10 @@
-$ git -C /Users/rig128gb/Developer/rig-capabilities show --stat -s 545e5a7 || git -C /Users/rig128gb/Developer/ultraplan show --stat -s 545e5a7
-commit 545e5a73d349d09eebd454fb5a52eaaeccf62b57
-Author: rig128gb <mike@mrodgers.tech>
-Date:   Sun Sep 20 16:54:52 2026 -0600
+$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 -m unittest -v tests.test_schemas 2>&1"
+n_staleness_is_boolean_not_prose (tests.test_schemas.TestSchemas.test_projection_staleness_is_boolean_not_prose) ... ok
+test_receipt_status_enum (tests.test_schemas.TestSchemas.test_receipt_status_enum) ... ok
+test_route_call_grammar (tests.test_schemas.TestSchemas.test_route_call_grammar) ... ok
+test_route_empty_routes_refused (tests.test_schemas.TestSchemas.test_route_empty_routes_refused) ... ok
 
-    W10 fix: recalibrate cells named a class that does not exist (TestCalibrate -> TestPerRuleCalibration); loader counted _FailedTest as 1 test — exact-count guard still went RED on wasSuccessful, proven here; both cells now execute and receipt green (5/5 W10 batch)
-fatal: ambiguous argument '545e5a7': unknown revision or path not in the working tree.
-Use '--' to separate paths from revisions, like this:
-'git <command> [<revision>...] -- [<file>...]'
+----------------------------------------------------------------------
+Ran 10 tests in 0.007s
+
+OK

@@ -1,0 +1,7 @@
+$ cd /Users/rig128gb/Developer/ultraplan && python3 checks/freshness-scheduler.py
+freshness_plan((30, 7, 30, 0, -5), now=1000.0):
+  -> [605800.0, 2593000.0]
+  expected [605800, 2593000]
+  -> two 30s deduped; sorted 7 before 30; non-positive 0 and -5 dropped
+  freshness_plan((0,)) refused with ValueError: freshness schedule needs at least one positive T+N offset
+VERIFIED: T+N due dates deduped and sorted, non-positive offsets dropped, empty schedule refused

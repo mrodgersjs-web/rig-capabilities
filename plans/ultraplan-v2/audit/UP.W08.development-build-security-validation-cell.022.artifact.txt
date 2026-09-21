@@ -1,2 +1,6 @@
-$ python3 -c "import json;d=json.load(open('/Users/rig128gb/Developer/ultraplan/data/receipt-security-validation.json')); assert d['results'][0]['ok'] and d['cell'].endswith('security-validation')"
-(no output)
+$ python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/ultraplan && python3 tools/live_cell.py quality/security-validation"
+CELL quality/security-validation — 1 checks
+  [1] ok=True named-tests tests.test_console_server.TestConsole.test_unauthenticated_command_refused,tests.test_console_server.TestConsole.test_path_traversal_refused,tests.test_console_server.TestConsole.test_foreign_origin_refused -> Ran 3 tests in 0.266s
+
+OK, result=OK
+RESULT ok=True

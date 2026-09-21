@@ -67,3 +67,22 @@ class TestGenuinelyDifferentPolarity(unittest.TestCase):
 
 if __name__ == "__main__":  # pragma: no cover
     unittest.main()
+
+
+class TestGenuinelyDifferentBoundary(unittest.TestCase):
+    """Fixtures at the rule edge: the certified rule is `noul <= 0.50`, so 0.50
+    must fire and 0.5001 must not -- the boundary is behavior, not prose."""
+
+    def test_exactly_at_boundary_escalates(self):
+        rb = s1gate.load_rubric("ultra.judgment")
+        with mock.patch.object(s1gate, "ask",
+                               return_value={"model": "t", "answers": judgment_answers(0.50)}):
+            res = s1gate.evaluate(rb, "borderline set")
+        self.assertIn("genuinely_different", " ".join(res.reasons or []))
+
+    def test_just_above_boundary_is_quiet(self):
+        rb = s1gate.load_rubric("ultra.judgment")
+        with mock.patch.object(s1gate, "ask",
+                               return_value={"model": "t", "answers": judgment_answers(0.5001)}):
+            res = s1gate.evaluate(rb, "just-divergent-enough set")
+        self.assertNotIn("genuinely_different", " ".join(res.reasons or []))

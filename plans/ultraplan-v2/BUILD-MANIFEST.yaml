@@ -5919,8 +5919,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r01-contract.001`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: rubric notes field + commit 6c886b7 message states the polarity law
-  status: specified
+  evidence: rig-capabilities s1gate ultra.judgment genuinely_different polarity FIXED (low-noul escalates, positively-framed prompt) + dated reason at ULTRA-INVENTORY:130; repro=cd /Users/rig128gb/Developer/rig-capabilities && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames(['tests.test_ultra_polarity.TestGenuinelyDifferentPolarity']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0
+    if r.wasSuccessful() and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"
+  status: built
+  claim_override: the s1gate ESCALATE rule for genuinely_different triggers when its noul is low
 - id: UP.W04.r02-contract.002
   title: Specify Add high, low, and boundary fixtures
   kind: documentation
@@ -5941,8 +5943,10 @@ items:
     procedure: Run `python3 -m ultraplan.contract_checks plant --item UP.W04.r02-contract.002`; require the guard to go RED, restore the fixture, then require GREEN.
     reason: null
   independent_verifier: GLM 5.3 in fresh context, with a model family different from the Blackwell builder
-  evidence: fixture set declared in test_ultra_polarity docstrings repro=python3 /Users/rig128gb/Developer/rig-capabilities/plans/ultraplan-v2/repro-show.py bash -c "cd /Users/rig128gb/Developer/rig-capabilities && python3 -m unittest -v tests.test_ultra_polarity 2>&1"
-  status: specified
+  evidence: 'rig-capabilities tests/test_ultra_polarity.py adds labeled boundary fixtures: noul 0.50 escalates, 0.5001 quiet, on top of high/low; repro=cd /Users/rig128gb/Developer/rig-capabilities && python3 -c "import unittest,sys;t=unittest.TestLoader().loadTestsFromNames([''tests.test_ultra_polarity.TestGenuinelyDifferentBoundary'']);r=unittest.TextTestRunner(verbosity=0).run(t);sys.exit(0
+    if r.wasSuccessful() and t.countTestCases()>0 and r.testsRun==t.countTestCases() else 1)"'
+  status: built
+  claim_override: the ESCALATE rule triggers at noul 0.50 exactly and not at 0.5001
 - id: UP.W04.r03-contract.003
   title: Specify Calibrate per rule and per signal instead of one rubric-wide flag
   kind: documentation
