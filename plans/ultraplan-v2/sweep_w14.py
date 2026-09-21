@@ -15,7 +15,7 @@ cells = [str(c) for c in (disc[0] if isinstance(disc, tuple) else disc)]
 ok = skip = 0
 skips = []
 for c in cells:
-    r = plant_failure(c)
+    r = plant_failure(c, root=ROOT)
     if r.get("ok"):
         ok += 1
     else:

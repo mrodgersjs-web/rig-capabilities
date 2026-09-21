@@ -420,15 +420,17 @@ def _sha(p: Path) -> str:
     return hashlib.sha256(p.read_bytes()).hexdigest()
 
 
-def plant_failure(cell_path, slot="routes.yaml"):
+def plant_failure(cell_path, slot="routes.yaml", root=None):
     """The M1 red path made executable: remove one slot, prove the validator goes
     red, restore byte-identical. Refuses to report a plant whose bytes did not
-    move (the vacuous-plant lesson). Never leaves the tree modified."""
+    move (the vacuous-plant lesson). Never leaves the tree modified.
+    root= gives the tree context so cells whose routes call `studio:` targets
+    validate green standalone exactly as they do inside validate_tree."""
     cell = Path(cell_path).resolve()
     target = cell / slot
     if not target.is_file():
         return {"ok": False, "reason": f"{slot} is not a file in {cell}"}
-    before = validate_cell(cell)
+    before = validate_cell(cell, root=root)
     sha0 = _sha(target)
     data = target.read_bytes()
     tmp = target.with_suffix(target.suffix + ".planted")
@@ -436,7 +438,7 @@ def plant_failure(cell_path, slot="routes.yaml"):
         target.rename(tmp)
         if target.exists():
             return {"ok": False, "reason": "plant did not move the file"}
-        during = validate_cell(cell)
+        during = validate_cell(cell, root=root)
     finally:
         if tmp.exists():
             tmp.rename(target)
