@@ -1,0 +1,65 @@
+{
+  "name": "memory.admission",
+  "stage": "measure",
+  "lane": "memory",
+  "description": "Admission triage for one RIG Memory OS item (event or knowledge record in unclassified/candidate status). Decides whether it deserves promotion effort, what it is, and the cheapest vehicle -- System-1 triage so the promotion pipeline spends frontier reasoning only where it changes a decision.",
+  "questions": {
+    "kind": {
+      "type": "choice",
+      "instructions": "What this item fundamentally is",
+      "criteria": {
+        "fact": "A checkable state-of-the-world claim (config, path, count, version, decision taken)",
+        "lesson": "A generalizable procedure or rule learned from a failure or success",
+        "preference": "How Mike or an operator wants something done (style, taste, policy)",
+        "activity": "Routine telemetry: run records, grade stamps, digests, session noise with no transferable claim",
+        "question": "An open thread or intention awaiting an outcome",
+        "sensitive": "Personal, credential-bearing, or privately identifiable content that should never be broadly indexed"
+      }
+    },
+    "promote_value": {
+      "type": "score",
+      "instructions": "Value of admitting this item into promoted memory, judged by whether a future agent session would act better because it was retrievable",
+      "criteria": [
+        "Nothing would change; retrieval would add noise",
+        "Mildly useful color; sessions would manage without it",
+        "Useful once: answers a specific future question",
+        "Repeatedly load-bearing: prevents a known mistake or encodes a standing preference",
+        "Durable doctrine: changes how multiple future sessions operate and is expensive to rediscover"
+      ]
+    },
+    "is_duplicate": {
+      "type": "noul",
+      "instructions": "This item restates something the surrounding corpus or prior events of the same kind already establish"
+    },
+    "evidence_anchored": {
+      "type": "noul",
+      "instructions": "The item cites concrete evidence (paths, hashes, commands, ids, measurements) that a verifier could check, rather than vague assertion"
+    }
+  },
+  "rules": [
+    {
+      "when": "kind.choice == sensitive",
+      "verdict": "BLOCK",
+      "reason": "do not admit into the broadly indexed plane; flag for gated handling"
+    },
+    {
+      "when": "is_duplicate.noul >= 0.75",
+      "verdict": "BLOCK",
+      "reason": "duplicate of existing canonical knowledge; admission would dilute retrieval"
+    },
+    {
+      "when": "kind.choice == activity",
+      "verdict": "BLOCK",
+      "reason": "routine activity noise; the canonical event chain is its home, not promoted memory"
+    },
+    {
+      "when": "promote_value.score >= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "admission-worthy -- queue for the promotion pipeline (frontier distillation if needed)"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

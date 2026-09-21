@@ -1,0 +1,36 @@
+{
+  "name": "doctrine.surface",
+  "stage": "verify",
+  "lane": "memory",
+  "description": "Verify an agent instruction surface (CLAUDE.md/AGENTS.md/skill file excerpt) actually carries the Jev System-1 cascade doctrine: an agent reading only this text would route semantic triage to Jev before frontier LLM and fail closed.",
+  "questions": {
+    "mandates_jev_first": {
+      "type": "noul",
+      "instructions": "An agent whose only context is this excerpt would send semantic triage/routing/classification to the rig-s1gate Jev path before any frontier LLM call"
+    },
+    "teaches_fail_closed": {
+      "type": "noul",
+      "instructions": "The excerpt tells the agent what to do when the fast classifier is unavailable: defer, never guess a verdict locally"
+    },
+    "findable_at_start": {
+      "type": "noul",
+      "instructions": "This text sits in an always-loaded instruction surface (not a deep reference an agent must already know about)"
+    }
+  },
+  "rules": [
+    {
+      "when": "mandates_jev_first.noul < 0.60",
+      "verdict": "ESCALATE",
+      "reason": "surface does not actually change agent routing"
+    },
+    {
+      "when": "findable_at_start.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "buried pointer -- the agent will never load it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}
