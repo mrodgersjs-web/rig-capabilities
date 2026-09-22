@@ -1,0 +1,585 @@
+{
+  "schema": "rig.automation-job-standard.v2",
+  "version": "2.0.0",
+  "score_set": [
+    0,
+    0.5,
+    1
+  ],
+  "unknown_score": null,
+  "note": "Sole policy input for estate/collect_automation_estate.py. Criterion predicates are implemented as pure functions keyed by criterion id in the collector; this file carries the prompts, weights, evidence requirements, curated goal/consumer mappings, vendor carve-outs, and the canonical two-owner precedence (`owner_table`: every job has a trigger owner and an operation owner). Unknown is never scored as zero.",
+  "goal_evidence_sources": [
+    "/Users/rig128gb/.jake/JAKE_DIRECTION.md",
+    "/Users/rig128gb/.jake/TELOS/CURRENT_STATE.md",
+    "/Users/rig128gb/.jake/TELOS/IDEAL_STATE.md"
+  ],
+  "goal_keys": [
+    "rig_destination",
+    "paid_deals",
+    "qualified_calls",
+    "offer_paths",
+    "fitness",
+    "james_affirmation",
+    "learning"
+  ],
+  "categories": {
+    "revenue_impact": "Does this job move the 90-day ladder (3 paid deals / 10 qualified calls / 4 offer paths)?",
+    "goal_alignment": "Does this job serve the signed direction in JAKE_DIRECTION.md and the TELOS gap lines?",
+    "operational_necessity": "Is this job actually needed, running, owned, and coherent on its authority?",
+    "platform_fit": "Does the current platform match the canonical framework precedence with evidence?"
+  },
+  "criteria": [
+    {
+      "id": "Q01",
+      "category": "revenue_impact",
+      "weight": 2,
+      "prompt": "Is a named consumer of this job's output evidenced (person, system, or owner contract)?",
+      "evidence": "consumer_map entry citing signed goal evidence, authority owner field, or vendor owner map; keyword similarity alone does not count."
+    },
+    {
+      "id": "Q02",
+      "category": "revenue_impact",
+      "weight": 3,
+      "prompt": "Is a named mechanism from this job to the 90-day revenue ladder recorded with a goal citation?",
+      "evidence": "consumer_map entry with mechanism + citation of JAKE_DIRECTION/TELOS; keyword match alone earns nothing."
+    },
+    {
+      "id": "Q03",
+      "category": "revenue_impact",
+      "weight": 2,
+      "prompt": "For revenue-bearing jobs: did the most recent observed execution succeed?",
+      "evidence": "last_status/recentActions/last exit from the owning authority; only answered for jobs with a consumer_map revenue hit."
+    },
+    {
+      "id": "Q04",
+      "category": "revenue_impact",
+      "weight": 1,
+      "prompt": "Does the job read or write a named revenue artifact (outreach, CRM, applypilot, postiz, publish paths)?",
+      "evidence": "script/workdir/command path matches the revenue_artifact_paths allowlist."
+    },
+    {
+      "id": "Q05",
+      "category": "revenue_impact",
+      "weight": 1,
+      "prompt": "Is the job's effect target unique across the estate (no duplicate sibling on any scheduler)?",
+      "evidence": "normalized command/workflow target + schedule + effect target; curated effect_groups plus mechanical identical-command detection."
+    },
+    {
+      "id": "Q06",
+      "category": "goal_alignment",
+      "weight": 2,
+      "prompt": "Does the job map to the RIG destination or an offer path with a cited mechanism?",
+      "evidence": "consumer_map goal_keys include rig_destination/paid_deals/qualified_calls/offer_paths with citation."
+    },
+    {
+      "id": "Q07",
+      "category": "goal_alignment",
+      "weight": 2,
+      "prompt": "Does the job map to the fitness floor (training block, bodybuilding) with a cited mechanism?",
+      "evidence": "consumer_map entry with goal_key fitness and mechanism; none expected in the current estate \u2014 proposals carry the gap."
+    },
+    {
+      "id": "Q08",
+      "category": "goal_alignment",
+      "weight": 2,
+      "prompt": "Does the job map to the James-affirmation floor with a cited mechanism?",
+      "evidence": "consumer_map entry with goal_key james_affirmation and mechanism."
+    },
+    {
+      "id": "Q09",
+      "category": "goal_alignment",
+      "weight": 1,
+      "prompt": "Does the job map to the learning/knowledge floor with a cited mechanism?",
+      "evidence": "consumer_map entry with goal_key learning and mechanism (e.g. corpus substrate feeding TELOS gap 4)."
+    },
+    {
+      "id": "Q10",
+      "category": "goal_alignment",
+      "weight": 1,
+      "prompt": "Is the job output reviewed by a human or downstream verifier channel?",
+      "evidence": "deliver channel (telegram/origin/all = 0.5 delivered, readback unproven; 1 only with named verifier in consumer_map); local-only remains UNKNOWN."
+    },
+    {
+      "id": "Q11",
+      "category": "operational_necessity",
+      "weight": 1,
+      "prompt": "Is a maintainer or owner named on the authority?",
+      "evidence": "vendor owner map (0.5, installer-owned), consumer_map owner (1), platform service label only (0.5), nothing (UNKNOWN)."
+    },
+    {
+      "id": "Q12",
+      "category": "operational_necessity",
+      "weight": 1,
+      "prompt": "Is a schedule or trigger actually configured on the authority?",
+      "evidence": "StartCalendarInterval/StartInterval/WatchPaths/Sockets (launchd), schedule.expr (hermes), rrule (orca), structuredCalendar (temporal), triggers in sourceCode (kestra)."
+    },
+    {
+      "id": "Q13",
+      "category": "operational_necessity",
+      "weight": 2,
+      "prompt": "Was there an execution (attempt or run) recorded within the last 7 days?",
+      "evidence": "last_run_at / lastRunAt / recentActions timestamps; authorities without run-result timestamps stay UNKNOWN."
+    },
+    {
+      "id": "Q14",
+      "category": "operational_necessity",
+      "weight": 1,
+      "prompt": "Is the last observed result free of failure?",
+      "evidence": "hermes last_status, launchctl last exit code, temporal recentActions status; no result evidence stays UNKNOWN."
+    },
+    {
+      "id": "Q15",
+      "category": "operational_necessity",
+      "weight": 1,
+      "prompt": "Is the authority state coherent (installed record parses, label joined against loaded state, latest revision only)?",
+      "evidence": "plist parses + launchctl label join; kestra latest revision; hermes state/disposition coherence."
+    },
+    {
+      "id": "Q16",
+      "category": "platform_fit",
+      "weight": 2,
+      "prompt": "Does the current platform match the canonical framework precedence given the job's evidenced shape?",
+      "evidence": "route_job precedence result equals current platform (1), differs with full evidence (0), routing evidence absent (UNKNOWN)."
+    },
+    {
+      "id": "Q17",
+      "category": "platform_fit",
+      "weight": 1,
+      "prompt": "Does the trigger shape fit the platform (resident resources on launchd, run-to-completion on Kestra, judgment on an agent coordinator)?",
+      "evidence": "periodic run-to-completion on launchd (0), resident-with-evidence on launchd (1), scheduled deterministic on Kestra (1), agent-loop job (0.5 pending reasoning justification), none (UNKNOWN)."
+    },
+    {
+      "id": "Q18",
+      "category": "platform_fit",
+      "weight": 1,
+      "prompt": "For launchd resident claims: is a held socket, watched directory, hardware, or sub-second resource evidenced?",
+      "evidence": "WatchPaths/WatchSystemFiles/Sockets/NetworkEvents/IOKit keys (1); KeepAlive alone earns 0 for a claimed resident; not-claimed rows are UNKNOWN."
+    },
+    {
+      "id": "Q19",
+      "category": "platform_fit",
+      "weight": 1,
+      "prompt": "Is the job body class evidenced for D85 (CODE script path observed, or MODEL agent loop declared)?",
+      "evidence": "existing script/ProgramArguments executable = CODE (1); declared agent loop without deterministic alternative recorded = MODEL (0.5); body not inspectable = UNKNOWN."
+    },
+    {
+      "id": "Q20",
+      "category": "platform_fit",
+      "weight": 1,
+      "prompt": "Is the lifecycle hygiene coherent (not retired/dead; enabled/paused intent recorded)?",
+      "evidence": "active + enabled (1), paused/disabled with recorded intent (0.5), retired/dead/completed (0)."
+    }
+  ],
+  "owner_table": {
+    "trigger_owners": [
+      "kestra",
+      "temporal",
+      "launchd",
+      "orca_pydantic",
+      "langgraph"
+    ],
+    "operation_owners": [
+      "code",
+      "model",
+      "effect"
+    ],
+    "default": {
+      "trigger_owner": "kestra",
+      "operation_owner": "code"
+    },
+    "evidence": {
+      "temporal": {
+        "consumer": "string",
+        "start_latency_ms": "int \u2264 60000",
+        "catch_up_policy": "string",
+        "mechanism": "string",
+        "deployment_evidence": "string"
+      },
+      "launchd": {
+        "resource": "string",
+        "kind": "listener|watcher|hardware|os_event"
+      },
+      "orca_pydantic": {
+        "surface": "string",
+        "deadline": "string"
+      },
+      "langgraph": {
+        "graph_shape": "cycle|dynamic_router|distributed_tracing|context_compression",
+        "note": "string, required"
+      },
+      "code": {
+        "steps": [
+          {
+            "step": "string",
+            "mechanism": "string"
+          }
+        ],
+        "model_countermeasures": [
+          "string"
+        ]
+      }
+    },
+    "non_canonical_retained": {
+      "flowise": {
+        "phase": "expiring",
+        "maps_to": "kestra"
+      }
+    },
+    "renames": {
+      "langchain": "langgraph"
+    }
+  },
+  "routing_sentence": "Every job carries exactly two owners: a trigger owner (kestra | temporal | launchd | orca_pydantic | langgraph) that owns clock, retries, and concurrency, and an operation owner (code | model | effect) naming what runs inside; default kestra + code. Pydantic AI thinks only at justified MODEL steps with necessity claims; Temporal requires the complete five-field evidence block; launchd serves evidenced held resources; LangGraph is conditional graph machinery; Flowise is retained non-canonical \u2014 expiring, maps to kestra, never durable-admissible.",
+  "platform_constraints": {
+    "vendor_managed": {
+      "note": "Vendor installer surfaces own their launchd entries; migration is a vendor-contract decision, not an estate decision. Recommendation stays on the current platform with this reason.",
+      "label_prefixes": [
+        "com.google.",
+        "com.microsoft.",
+        "com.adobe.",
+        "com.oracle.",
+        "com.citrix.",
+        "com.broadcom.",
+        "com.logi.",
+        "com.logitech.",
+        "com.tailscale.",
+        "com.docker.",
+        "com.electron.",
+        "com.nordvpn.",
+        "com.trellix.",
+        "com.mcafee.",
+        "com.carbonblack.",
+        "com.symantec.",
+        "com.sentinel.",
+        "com.slack.",
+        "com.figma.",
+        "com.openai.",
+        "com.anthropic.",
+        "com.spotlight.",
+        "com.apple.",
+        "io.tailscale.",
+        "com.nvidia.",
+        "com.canva.",
+        "com.descript.",
+        "com.adguard.",
+        "com.parksoftware.",
+        "com.magnet.",
+        "com.grammarly.",
+        "com.evernote.",
+        "com.dropbox.",
+        "com.zoom.",
+        "com.cisco.",
+        "com.bluejeans."
+      ],
+      "path_prefixes": [
+        "/Applications/",
+        "/Library/Application Support/Google",
+        "/Library/Application Support/Microsoft",
+        "/Library/Application Support/Adobe",
+        "/Library/PrivilegedHelperTools",
+        "/System/"
+      ]
+    }
+  },
+  "revenue_artifact_paths": [
+    "rig-gtm-studio",
+    "/.applypilot",
+    "Departments/darius",
+    "Departments/alfred",
+    "Departments/nadia",
+    "departments/gtm",
+    "departments/sales",
+    "postiz",
+    "twenty",
+    "outreach"
+  ],
+  "consumer_map": [
+    {
+      "match": "temporal:rig-linkedin-daily-v1",
+      "consumer": "RIG GTM outbound lane (Darius) feeding Mike's qualified fit calls",
+      "mechanism": "Executes LinkedInOutboundDailyV3 every business day; 2026-09-07/08/09 recentActions COMPLETED; schedule notes name the failure mode: 'consolidation-revert: pause broke V3 pinned business clock'",
+      "goal_keys": [
+        "qualified_calls",
+        "rig_destination"
+      ],
+      "revenue_bearing": true,
+      "evidence": "JAKE_DIRECTION 1.1 (signed 2026-06-29); TELOS CURRENT_STATE gap 1 (deals 0->3); TELOS IDEAL_STATE 90-day ideal (10 qualified calls); temporal schedule recentActions + notes"
+    },
+    {
+      "match": "hermes:RIG LinkedIn Daily Push",
+      "consumer": "RIG GTM outbound lane (Darius/Alfred)",
+      "mechanism": "Posts, comments, DMs and follow-ups at 09/13/17 windows that keep RIG visible to ICP accounts",
+      "goal_keys": [
+        "qualified_calls",
+        "rig_destination"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS CURRENT_STATE gap 1 + 'minimum live automation (7 enabled jobs -> the GTM slice that feeds deals)' (IDEAL_STATE system ideal); hermes disposition active"
+    },
+    {
+      "match": "hermes:DARIUS \u2014 Outreach Batch",
+      "consumer": "Darius GTM lane -> prospect outreach",
+      "mechanism": "Daily 13:00 outbound batch to scored prospects",
+      "goal_keys": [
+        "qualified_calls",
+        "offer_paths"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS CURRENT_STATE gap 3 'minimum live GTM slice (Darius pilot packet, Sep 12)'; hermes disposition active"
+    },
+    {
+      "match": "hermes:RIG Paced Cold Send",
+      "consumer": "Darius GTM lane -> cold email",
+      "mechanism": "Weekday warmup-capped cold-email send that feeds the outbound-to-call funnel",
+      "goal_keys": [
+        "qualified_calls"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS CURRENT_STATE 'recorded outbound-to-deal conversion = 0' is the tracked funnel this job feeds; disposition active"
+    },
+    {
+      "match": "hermes:darius-reply-closer",
+      "consumer": "Darius GTM lane -> reply handling",
+      "mechanism": "Every-30-minute sweep closes prospect replies into call bookings",
+      "goal_keys": [
+        "qualified_calls",
+        "offer_paths"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS IDEAL_STATE '10 recorded qualified fit calls'; disposition active"
+    },
+    {
+      "match": "hermes:nadia-lead-scorer",
+      "consumer": "Nadia lead scoring -> Darius outreach list",
+      "mechanism": "Four-hourly scoring pass ranks prospects for the daily outreach batch",
+      "goal_keys": [
+        "qualified_calls"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS CURRENT_STATE gap 3 (GTM slice feeding deals); disposition active"
+    },
+    {
+      "match": "hermes:RIG Engagement Poll",
+      "consumer": "Darius GTM lane -> email engagement telemetry",
+      "mechanism": "Four-hourly opens/clicks/bounces poll informs follow-up and list hygiene",
+      "goal_keys": [
+        "qualified_calls"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS IDEAL_STATE qualified-call funnel; disposition active"
+    },
+    {
+      "match": "hermes:ALFRED \u2014 LinkedIn DM Follow-ups",
+      "consumer": "Alfred LinkedIn lane -> DM follow-ups",
+      "mechanism": "Daily 14:00 LinkedIn DM follow-up sweep on engaged prospects",
+      "goal_keys": [
+        "qualified_calls"
+      ],
+      "revenue_bearing": true,
+      "evidence": "TELOS CURRENT_STATE gap 1; disposition active"
+    },
+    {
+      "match": "hermes:x10-substrate-pull",
+      "consumer": "Jake polymath knowledge corpus (TELOS gap 4)",
+      "mechanism": "Four-hourly substrate pull feeding the corpus that PROCESSES.md distillates are cut from",
+      "goal_keys": [
+        "learning"
+      ],
+      "revenue_bearing": false,
+      "evidence": "TELOS CURRENT_STATE gap 4 'polymath corpus raw -> PROCESSES.md distillate'; disposition active"
+    },
+    {
+      "match": "orca:Morning Brief",
+      "consumer": "Mike (reads the brief on his phone)",
+      "mechanism": "Weekday 07:30 decision-grade brief assembled from fleet health, reports, and repo state; supports daily RIG operator judgment",
+      "goal_keys": [
+        "rig_destination"
+      ],
+      "revenue_bearing": false,
+      "evidence": "JAKE_DIRECTION 1.1 operator posture; orca prompt reviewed 2026-09-10; enabled true",
+      "verifier": "Mike reads the brief daily (readback asserted by prompt contract, not machine-proven)"
+    },
+    {
+      "match": "orca:julie-coordinator",
+      "consumer": "Julie W2 lane (firewalled/dormant per TELOS)",
+      "mechanism": "Hourly deterministic applypilot tick coordinator",
+      "goal_keys": [],
+      "revenue_bearing": false,
+      "evidence": "TELOS CURRENT_STATE 'W2 lane: Julie job-search agent firewalled, dormant per peak-prep state' \u2014 enabled true contradicts declared lane state; flagged for review"
+    }
+  ],
+  "effect_groups": [
+    {
+      "id": "effect:linkedin-outbound-daily",
+      "members": [
+        "temporal:rig-linkedin-daily-v1",
+        "hermes:RIG LinkedIn Daily Push \u2014 Post, Comment, DM, Follow-up"
+      ],
+      "scheduler_of_record_candidate": "temporal:rig-linkedin-daily-v1",
+      "blockers": [
+        "cadence differs (daily 13:30Z vs three 09/13/17 windows)",
+        "confirm whether the Hermes push and Temporal V3 are complementary lanes or duplicated spend before consolidating"
+      ]
+    }
+  ],
+  "proposal_seeds": [
+    {
+      "id": "prop-manufacturing-lead-scoring",
+      "name": "Manufacturing ladder lead scoring",
+      "consumer": "Darius GTM lane / manufacturing ladder owner (Mike)",
+      "mechanism": "Score manufacturing prospects against the accepted opt-flagship ladder so the daily outreach batch draws from a ranked list",
+      "done_test": "Scored-list artifact regenerates daily; top-10 batch exported to outreach staging with count >= 10; the export row is readable by the outreach job without manual paste",
+      "goal_keys": [
+        "paid_deals",
+        "qualified_calls"
+      ],
+      "suggested_platform": "Kestra + Pydantic AI"
+    },
+    {
+      "id": "prop-pipeline-health",
+      "name": "Pipeline health monitor",
+      "consumer": "Mike via the morning brief",
+      "mechanism": "Daily read of deals / qualified calls / offer paths against the 3/10/4 targets with a breach flag; feeds the kill-review discipline",
+      "done_test": "Daily artifact names each metric vs target with breach flags; missing data renders UNKNOWN, never fabricated; one planted zero trips the breach flag",
+      "goal_keys": [
+        "paid_deals"
+      ],
+      "suggested_platform": "Kestra"
+    },
+    {
+      "id": "prop-proposal-followup",
+      "name": "Proposal and follow-up engine",
+      "consumer": "Eleanor closing lane / Mike",
+      "mechanism": "Every logged qualified call gets a drafted follow-up and next-step proposal without manual reminder",
+      "done_test": "A seeded call with no follow-up produces one drafted follow-up within 48h and a state transition; the seeded call with a follow-up produces none (no duplicates)",
+      "goal_keys": [
+        "offer_paths",
+        "paid_deals"
+      ],
+      "suggested_platform": "Kestra + Pydantic AI"
+    },
+    {
+      "id": "prop-client-delivery",
+      "name": "Client delivery tracker",
+      "consumer": "First build client + Mike (<=2 engagements, <=40 founder-hours)",
+      "mechanism": "Track delivery checklist state per engagement and measure Mike's founder-hours against the 40h ceiling",
+      "done_test": "Checklist transitions are recorded per engagement; weekly founder-hour total is computed from recorded entries and alerts above 40",
+      "goal_keys": [
+        "paid_deals",
+        "rig_destination"
+      ],
+      "suggested_platform": "Kestra"
+    },
+    {
+      "id": "prop-fitness-floor",
+      "name": "Fitness floor guard",
+      "consumer": "Mike (JAKE_DIRECTION 2.2 priority 1)",
+      "mechanism": "Detect scheduling conflicts with the protected daily training block and enforce the veto: a third weekly conflict reflows the RIG task, not the gym",
+      "done_test": "A planted third conflict in a week raises the veto alert and names the task to reflow; two conflicts raise no veto",
+      "goal_keys": [
+        "fitness"
+      ],
+      "suggested_platform": "Kestra (deterministic calendar check)"
+    },
+    {
+      "id": "prop-james-affirmation",
+      "name": "James affirmation nudge",
+      "consumer": "James (words of affirmation, JAKE_DIRECTION 2.2 priority 2)",
+      "mechanism": "Daily concrete affirmation prompt with sent-state ledger; drafts only \u2014 sending stays Mike's act under Gate-D",
+      "done_test": "One prompt artifact per day with a ledger row; a full rolling week with zero prompts raises the floor-breach alert; no artifact is ever auto-sent",
+      "goal_keys": [
+        "james_affirmation"
+      ],
+      "suggested_platform": "Kestra (draft staging) + human send"
+    },
+    {
+      "id": "prop-learning-digest",
+      "name": "Learning digest (corpus -> distillate)",
+      "consumer": "Mike (TELOS gap 4)",
+      "mechanism": "Weekly distillate cut from the polymath corpus, tracking per-domain silence so learning never zeroes in a rolling week",
+      "done_test": "Weekly distillate file exists with cited corpus sources; a domain silent 7 days is named; the zero-week case raises the JAKE_DIRECTION 5 veto",
+      "goal_keys": [
+        "learning"
+      ],
+      "suggested_platform": "Kestra + Pydantic AI"
+    },
+    {
+      "id": "prop-overcommitment-detector",
+      "name": "Overcommitment detector",
+      "consumer": "Jake load rules (soft 25 / hard 40)",
+      "mechanism": "Count open loops and parallel missions against the known overcommitment pattern and alert at the soft ceiling before the tilt",
+      "done_test": "A planted 26th open loop raises the soft-ceiling alert naming the loop; removal clears it; hard-40 case names the escalation rule",
+      "goal_keys": [
+        "fitness",
+        "james_affirmation",
+        "learning"
+      ],
+      "suggested_platform": "Kestra (deterministic counter) + Orca only for judgment triage"
+    },
+    {
+      "id": "prop-weekly-telos-review",
+      "name": "Weekly TELOS review",
+      "consumer": "Mike + Strategy Studio (kill review Dec 6)",
+      "mechanism": "Weekly current-vs-ideal diff written to the TELOS loop so the gap line stays in every greeting until the kill review",
+      "done_test": "Weekly diff artifact names every unchanged gap line; skipping a week raises a cadence breach; Dec 6 kill-review inputs are assembled by the same artifact",
+      "goal_keys": [
+        "paid_deals",
+        "rig_destination"
+      ],
+      "suggested_platform": "Kestra"
+    }
+  ],
+  "disposition_rules": [
+    "PROPOSED: rows in the proposals array only; never counted as live.",
+    "RETIRE: authority state is retired/dead/disabled, or explicit lack of consumer with coverage >= 0.6; uncertain rows never retire.",
+    "MIGRATE: route_job names one target platform with full precedence evidence and the target differs from the current platform; never vendor-managed.",
+    "KEEP: no migration recommendation, authority state coherent, and either a recent execution or a vendor/consumer contract evidenced.",
+    "INVESTIGATE: everything else; uncertainty is a state, not a score."
+  ],
+  "thresholds": {
+    "retire_min_coverage": 0.6,
+    "recent_run_window_days": 7
+  },
+  "evidence_fields": {
+    "clock_critical": {
+      "consumer": "string",
+      "start_latency_ms": "int \u2264 60000",
+      "catch_up_policy": "string",
+      "mechanism": "string",
+      "deployment_evidence": "string"
+    },
+    "resident_service": {
+      "resource_kind": "string",
+      "resource_detail": "string"
+    },
+    "non_engineer_surface": {
+      "maintainer": "string",
+      "maintainer_is_engineer": "bool",
+      "expiry_date": "string"
+    },
+    "multi_agent_graph": {
+      "graph_shape": "cycle|dynamic_router|distributed_tracing|context_compression",
+      "description": "string",
+      "agent_count": "int"
+    },
+    "agent_reasoning": {
+      "unstructured_input": "string",
+      "deterministic_alternative": "string",
+      "alternative_rejected_because": "string"
+    },
+    "deterministic_step": {
+      "steps": [
+        {
+          "step": "string",
+          "mechanism": "string"
+        }
+      ],
+      "model_countermeasures": [
+        "string"
+      ]
+    },
+    "model_necessity_claims": [
+      "string"
+    ]
+  }
+}

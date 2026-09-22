@@ -19,6 +19,7 @@ from __future__ import annotations
 import datetime as _dt
 import hashlib
 import json
+import math
 import re
 from pathlib import Path
 
@@ -275,12 +276,26 @@ CHECKLIST_KEYS = frozenset(
 )
 
 
-def check_build_checklist(build: dict, *, root: Path | None = None) -> dict:
+def check_build_checklist(
+    build: dict, *, root: Path | None = None, model_ops: int | None = None
+) -> dict:
     """The gate before going forward. Every item must be checked off.
 
     `root` resolves relative archify_diagram_path values (defaults to cwd).
+    `model_ops` is the bound authority count of MODEL-family operations, supplied only by
+    certify_build() from the classification: 0 forbids model evidence outright, N requires at
+    least N necessity records. When it is None this call is unbound and cannot know, so the
+    framework name stays the conservative proxy it has always been — an unbound verdict is
+    never enforceable anyway.
     A missing or failing item blocks; there is no partial pass.
     """
+    # Closed schema for the bound authority count: None, or an exact nonnegative int. `bool`
+    # is a subclass of int and would silently read True as "one MODEL op", so it is refused.
+    if model_ops is not None and (type(model_ops) is not int or model_ops < 0):
+        raise ToolSelectionBlock(
+            "TOOL_SELECTION_MALFORMED",
+            f"model_ops must be None or an exact nonnegative int, got {model_ops!r}",
+        )
     if not isinstance(build, dict):
         raise ToolSelectionBlock("TOOL_SELECTION_MALFORMED", "build must be an object")
     missing = CHECKLIST_KEYS - set(build)
@@ -332,20 +347,61 @@ def check_build_checklist(build: dict, *, root: Path | None = None) -> dict:
     )
 
     derived = derive_properties(build["properties"])
-    needs_models = bool(
+    declares_model_properties = bool(
         derived["agent_reasoning"] or derived["multi_agent_graph"]
-    ) or "pydantic" in str(framework)
+    )
+    declared_models = build["pydantic_models"]
+    declared_claims = build["model_necessity_claims"]
+    if model_ops is None:
+        # Unbound: no classification in hand, so keep the framework-name proxy. An unbound
+        # verdict is never an enforcement verdict, so it only has to stay conservative.
+        needs_models = declares_model_properties or "pydantic" in str(framework)
+        required_claims = 1 if needs_models else 0
+        evidence_matches = True
+        evidence_detail = "unbound submission: no classification consulted"
+    else:
+        # Bound: the classification is the ONLY authority on MODEL-family operations. The
+        # default framework is kestra_pydantic, so the framework-name proxy alone demanded
+        # pydantic schemas and necessity records from every model-free deterministic process
+        # (cockpit_v2_vercel_deploy_v2 classifies CODE:1 MODEL:0 and was blocked on two checks
+        # it could never satisfy). The submission cannot move this in either direction: it can
+        # neither hide MODEL ops behind empty `properties` nor invent model work the authority
+        # says is absent.
+        needs_models = model_ops > 0
+        required_claims = model_ops
+        if model_ops == 0 and (declared_models or declared_claims or declares_model_properties):
+            evidence_matches = False
+            evidence_detail = (
+                f"classification reports 0 MODEL-family operations but the build declares "
+                f"{len(declared_models)} pydantic model(s), {len(declared_claims)} necessity "
+                f"claim(s), model properties={declares_model_properties} — fabricated model "
+                "evidence is not cheaper to submit than an honest empty list"
+            )
+        elif len(declared_claims) < model_ops:
+            evidence_matches = False
+            evidence_detail = (
+                f"classification reports {model_ops} MODEL-family operation(s) but the build "
+                f"declares {len(declared_claims)} necessity claim(s); one record per operation"
+            )
+        else:
+            evidence_matches = True
+            evidence_detail = (
+                f"{model_ops} MODEL-family operation(s), {len(declared_claims)} necessity "
+                f"claim(s), {len(declared_models)} pydantic model(s)"
+            )
     record(
         "pydantic_models_present",
-        bool(build["pydantic_models"]) or not needs_models,
+        bool(declared_models) or not needs_models,
         "every MODEL op needs typed pydantic input/output schemas",
     )
 
     record(
         "model_necessity_claims_present",
-        bool(build["model_necessity_claims"]) or not needs_models,
+        len(declared_claims) >= required_claims,
         "every MODEL op needs a D85 necessity record",
     )
+
+    record("model_evidence_matches_classification", evidence_matches, evidence_detail)
 
     diagram = Path(build["archify_diagram_path"])
     escaped = False
@@ -449,6 +505,52 @@ def certify_build(build: dict, process_id: str | None, *, root: Path | None = No
             "against the current snapshot before certifying"
         )
         return result
+    # Bound: ask the authority classification whether MODEL-family operations exist, then
+    # recompute the checks with that answer. Hiding real MODEL ops behind empty `properties`
+    # cannot help — the classification, not the submission, decides. The result keeps the
+    # exact certificate schema verify_certification() enforces, so no new field is added.
+    from d85_gates import classify_process
+
+    kind_counts = classify_process(process_id).get("kind_counts") or {}
+    model_ops = sum(
+        int(kind_counts.get(kind) or 0) for kind in ("MODEL", "MODEL_AGENT", "MIXED")
+    )
+    result = check_build_checklist(build, root=root, model_ops=model_ops)
+    # `d85_realized_pass` above is only the submitter's claim. An enforcement verdict
+    # recomputes the registered source-derived score and requires all four ratios >= 0.85
+    # against THIS inventory hash. Ported from the estate_automation_ledger_v1 authority
+    # snapshot so the released certifier and that snapshot agree.
+    from d85_gates import score_process
+
+    try:
+        score = score_process(process_id)
+        ratios = score.get("ratios", {})
+        score_ok = (
+            score.get("verdict") == "REALIZED_PASS"
+            and score.get("process_id") == process_id
+            and score.get("inventory_sha256") == current
+            and set(ratios) == {
+                "aggregate_unweighted",
+                "aggregate_weighted",
+                "min_path_unweighted",
+                "min_path_weighted",
+            }
+            and all(
+                type(value) in (int, float) and math.isfinite(value) and 0.85 <= value <= 1
+                for value in ratios.values()
+            )
+            and type(score.get("scored_operation_count")) is int
+            and score["scored_operation_count"] > 0
+        )
+        detail = json.dumps(score, sort_keys=True, separators=(",", ":"))
+    except Exception as exc:
+        score_ok = False
+        detail = f"live source-derived D85 scoring failed: {exc}"
+    result["checks"].append({"check": "source_derived_d85", "pass": score_ok, "detail": detail})
+    if not score_ok:
+        result["verdict"] = "CHECKLIST_BLOCK"
+        result["binding_reason"] = "source-derived D85 score did not prove all four ratios >= 0.85"
+    result["checklist_sha256"] = checklist_digest(build)
     result["inventory_sha256"] = current
     result["inventory_binding"] = "bound"
     return result

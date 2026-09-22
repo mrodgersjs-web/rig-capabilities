@@ -1,0 +1,183 @@
+{
+  "_compiled": {
+    "source": "loop.yaml",
+    "source_sha256": "a0889349624eb22dc09ec25cbcee07c22ddabb87ce92bf319b5d9b70df71330e"
+  },
+  "closing_loop": {
+    "from": [
+      "V",
+      "T"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "B"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 3,
+    "step": "S"
+  },
+  "doctrine_source": [
+    "~/RIG-Doctrine-Repo/doctrines/PHASE-DISCIPLINE.md",
+    "~/.claude/rules/rig-build-doctrine.md"
+  ],
+  "family": "governance",
+  "id": "phase-discipline-loop",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 480
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Phase discipline loop",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "PlanPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "phases.md",
+      "gate": [
+        {
+          "path": "phases.md",
+          "patterns": [
+            "^## Phases",
+            "^## Dependencies",
+            "^## Reversibility"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "tag each phase reversible or one-way; bias to the reversible option on autonomous one-way doors",
+          "path": "phases.md",
+          "pattern": "\\b(reversible|one-way)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "O",
+      "name": "Order",
+      "write_policy": {
+        "deny_message": "Order the phases before building: phases.md with ## Phases (dependency order), ## Dependencies, ## Reversibility (reversible|one-way per phase).",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "build.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "files_written_min"
+        },
+        {
+          "path": "build.md",
+          "patterns": [
+            "^## Phase",
+            "^## Changed"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "B",
+      "name": "Build",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "verify.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "path": "verify.md",
+          "patterns": [
+            "^## Checks",
+            "^## Planted-failure"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "V",
+      "name": "Verify",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "tree.md",
+      "gate": [
+        {
+          "path": "tree.md",
+          "patterns": [
+            "^## Tree-verified"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "paste the real-tree command (git diff --stat / git status / sha256) and its output \u2014 verify the artifact, not the report",
+          "path": "tree.md",
+          "pattern": "^## Tree-verified[^\\n]*\\n(?:[^\\n]*\\n)*?[^\\n]*\\b(git diff --stat|git status|ls -la|wc -l|sha256)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "T",
+      "name": "Tree",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "commit.md",
+      "gate": [
+        {
+          "path": "commit.md",
+          "patterns": [
+            "^## Commit",
+            "^## Decision-log"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "the commit sha on green",
+          "path": "commit.md",
+          "pattern": "^## Commit[^\\n]*\\n[^\\n]*\\b[0-9a-f]{7,40}\\b",
+          "type": "regex"
+        },
+        {
+          "command": "git rev-parse --verify HEAD >/dev/null",
+          "failure_tier": "degrade",
+          "type": "cmd"
+        }
+      ],
+      "id": "C",
+      "name": "Commit",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

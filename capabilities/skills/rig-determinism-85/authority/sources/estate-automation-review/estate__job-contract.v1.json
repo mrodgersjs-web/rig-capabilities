@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "rig.automation-job-contract.v1",
+  "title": "RIG automation job contract",
+  "description": "Closed schema for one contract record at estate/job-contracts/<job_id>.json (sidecar <job_id>.json.sha256). C11 (failure_mode) and C12 (done_test) are PASS only from a record validating here with lid non-null; null lid = unsealed draft. code mechanism = file path; model mechanism = Pydantic-AI entrypoint + model; effect mechanism = Gate-D effect group; contract_id == job_id + '-c1' for the first generation (checked by the consuming validator, not expressible in JSON Schema).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["contract_id", "job_id", "source", "native_id", "owner_control", "operations", "failure_mode", "done_test", "freshness", "retention", "policy_sha256", "sealed_at", "lid", "seal_source"],
+  "properties": {
+    "contract_id": {"type": "string", "minLength": 1, "pattern": "-c[0-9]+$"},
+    "job_id": {"type": "string", "minLength": 1},
+    "source": {"type": "string", "minLength": 1},
+    "native_id": {"type": "string", "minLength": 1},
+    "owner_control": {"type": "string", "enum": ["kestra", "temporal", "launchd", "orca_pydantic", "langgraph"]},
+    "operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["op_id", "owner", "mechanism"],
+        "properties": {
+          "op_id": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "enum": ["code", "model", "effect"]},
+          "mechanism": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "failure_mode": {"type": "string", "minLength": 1},
+    "done_test": {"type": "string", "minLength": 1},
+    "freshness": {"type": "string", "pattern": "^P(?=.)(\\d+Y)?(\\d+M)?(\\d+D)?(T(?=.)(\\d+H)?(\\d+M)?(\\d+(\\.\\d+)?S)?)?$"},
+    "retention": {"type": "string", "minLength": 1},
+    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sealed_at": {"type": ["string", "null"]},
+    "lid": {"type": ["string", "null"]},
+    "seal_source": {"type": "string", "enum": ["gateway", "proposer"]}
+  }
+}

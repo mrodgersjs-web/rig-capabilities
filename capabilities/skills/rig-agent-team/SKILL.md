@@ -90,14 +90,14 @@ Start API:
 
 ```bash
 cd /Users/rig128gb/Startup-Intelligence-OS/apps/rig_agent_team
-./scripts/run_api.sh
+./
 ```
 
 LangGraph Studio:
 
 ```bash
 cd /Users/rig128gb/Startup-Intelligence-OS/apps/rig_agent_team
-./scripts/run_langgraph_studio.sh
+./
 ```
 
 Graph id: `rig_swarm_os`
@@ -118,7 +118,7 @@ Install daily desktop widget/monitor:
 
 ```bash
 cd /Users/rig128gb/Startup-Intelligence-OS/apps/rig_agent_team
-./scripts/install_desktop_widget.sh
+./
 ```
 
 Pinned intake sources:

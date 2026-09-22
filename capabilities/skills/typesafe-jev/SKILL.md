@@ -1,15 +1,9 @@
 ---
 name: typesafe-jev
-description: >
-  Call TypeSafe's Jev (System One) classifier from this machine: the request
-  shapes that actually validate, the live cost and latency, where the gate layer
-  already exists (capabilities_s1gate / rig-s1gate), and the data boundary that
-  decides when a judgment may leave the machine. Use when a task needs a fast
-  typed judgment - classify, rank, route, score, verify a claim - or when an
-  ad-hoc question falls outside the stored rubric packs (28 as of
-  2026-09-18; call action=list for the live set).
+description: "Call TypeSafe's Jev (System One) classifier from this machine: the request shapes that actually validate, the live cost and latency, where the gate layer already exists (capabilities_s1gate / rig-s1gate), and the data boundary that decides when a judgment may leave the machine. Use when a task needs a fast typed judgment - classify, rank, route, score, verify a claim - or when an ad-hoc question falls outside the stored rubric packs (28 as of 2026-09-18; call action=list for the live set)."
 tags: [rig, jev, typesafe, system-one, classifier, gates]
-verified: "2026-09-18, jev-1.13.0, live API from Denver; three primitives in one call, 292ms"
+metadata:
+  verified: "2026-09-18, jev-1.13.0, live API from Denver; three primitives in one call, 292ms"
 ---
 
 # Jev (TypeSafe System One) from this machine

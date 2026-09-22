@@ -67,7 +67,7 @@ Corrective ────► Respond and recover from attacks
 
 ## Templates and detailed worked examples
 
-Full template library and detailed mitigation/control mappings live in `references/details.md`. Read that file when you need the concrete templates for: Mitigation Model, Defense in Depth scoring, Executive Summary scaffolding, Critical Gaps reporting, Recommendations, Implementation Roadmap, Results by Control.
+Full template library and detailed mitigation/control mappings live in . Read that file when you need the concrete templates for: Mitigation Model, Defense in Depth scoring, Executive Summary scaffolding, Critical Gaps reporting, Recommendations, Implementation Roadmap, Results by Control.
 
 ## Best Practices
 

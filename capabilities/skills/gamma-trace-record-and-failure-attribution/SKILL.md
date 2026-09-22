@@ -208,8 +208,8 @@ cases.
 
 ## Sources (verified)
 
-- Videos: `.context/discover-ai/transcripts/F1XqqVNBa4o.txt`,
-  `.context/discover-ai/transcripts/1Tlv7XNsPy8.txt` — quote ground truth.
+- Videos: `.context/discover-ai/tran`,
+  `.context/discover-ai/tran` — quote ground truth.
 - Papers (verified in `link-verdicts.json`): arXiv:2608.24876 — Recursive
   Experiential-Working Memory Evolution for Long-Horizon Agent Harnesses;
   arXiv:2608.17528 — Agent Lightning v1.0: Towards Harnessed Agentic RL.

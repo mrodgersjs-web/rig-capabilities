@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the nvidia-developer corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/nvidia-developer_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-nvidia-developer/index.json
+  - grep:capabilities/skills/youtube-nvidia-developer/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 4
@@ -51,30 +50,30 @@ Channel-scope context for the **@NVIDIADeveloper** YouTube corpus — L4 lab tie
 - **mine-for**: The Jetson AI Lab meetings are week-to-week research-group transcripts that expose what embodied-AI labs actually iterate on (ROS2, Isaac Sim, OASIS, Iron Man) before it becomes a slides deck. The 2–6-minute how-tos are the pure GTM layer: each names a model, a hardware target, and a use case in one sentence — ideal for reverse-engineering NVIDIA's product-messaging cadence. The GTC keynotes plus 5-minute re-cuts (e.g., "NVIDIA Dynamo in 5 Minutes") show a deliberate long-form → short-form distillation pipeline you can mirror for agent-engineering content.
 
 ## Top videos (signal-sorted)
-`fgibRb_8T5I`  146m  NVIDIA RecSys Summit 2022 - China Day  https://www.youtube.com/watch?v=fgibRb_8T5I — 
-`Sdjn9FOkhnA`  125m  Accelerating Applications with Parallel Algorithms | CUDA C++ Class Part 1  https://www.youtube.com/watch?v=Sdjn9FOkhnA — 
-`9XB-LsfpvCU`  123m  Quantum Computing: Where We Are and Where We’re Headed | NVIDIA GTC 2025 Firesid  https://www.youtube.com/watch?v=9XB-LsfpvCU — 
-`7w3RHoIIkNE`  111m  JETSON AI LAB | Research Group Meeting (4/3/24)  https://www.youtube.com/watch?v=7w3RHoIIkNE — 
-`Oyon1QDpU6g`  101m  An Introduction to Building Humanoid Robots | NVIDIA GTC 2025  https://www.youtube.com/watch?v=Oyon1QDpU6g — 
-`mdDVkBeFy9A`  99m  GPU MODE at NVIDIA GTC 2025  https://www.youtube.com/watch?v=mdDVkBeFy9A — 
-`pURku7OAWuo`  93m  JETSON AI LAB | Research Group Meeting (7/23/2024)  https://www.youtube.com/watch?v=pURku7OAWuo — 
-`HfJR3NwsM4M`  92m  JETSON AI LAB | Research Group Meeting (10/1/2024)  https://www.youtube.com/watch?v=HfJR3NwsM4M — 
-`-C43j2HgQdY`  91m  JETSON AI LAB | NASA JPL ROSA in Isaac Sim & The OASIS Project with IronMan (10/  https://www.youtube.com/watch?v=-C43j2HgQdY — 
-`3C-6STonTLU`  89m  Introducing NVIDIA Dynamo: Low-Latency Distributed Inference for Scaling Reasoni  https://www.youtube.com/watch?v=3C-6STonTLU — 
-`Dpe48AVKc4c`  87m  JETSON AI LAB | HuggingFace LeRobot and Stanley the H1 Humanoid (10/15/2024)  https://www.youtube.com/watch?v=Dpe48AVKc4c — 
-`Ngaq2WCDlZM`  86m  JETSON AI LAB | Research Group Meeting (7/9/2024)  https://www.youtube.com/watch?v=Ngaq2WCDlZM — 
-`TR8VIjnQXdE`  2m  How to Profile and Optimize CUDA Tile Kernels with NVIDIA Nsight Compute  https://www.youtube.com/watch?v=TR8VIjnQXdE — 
-`mXYFcz27eDw`  6m  NVIDIA Dynamo in 5 Minutes: What Is It and Why Now?  https://www.youtube.com/watch?v=mXYFcz27eDw — 
-`MehBUQtb9qM`  3m  How to Connect Two DGX Sparks with NVIDIA Sync  https://www.youtube.com/watch?v=MehBUQtb9qM — 
-`2Tskr8an1oE`  6m  How to Route AI Agent Workloads Across Models with NVIDIA NeMo Switchyard  https://www.youtube.com/watch?v=2Tskr8an1oE — 
-`Lhy1Bu8fN8A`  5m  Run NVIDIA Nemotron 3.5 Lightning on DGX Spark  https://www.youtube.com/watch?v=Lhy1Bu8fN8A — 
-`VeYZ-MrJv3A`  3m  Introducing NVIDIA Alpamayo 2 Super  https://www.youtube.com/watch?v=VeYZ-MrJv3A — 
-`sYLU40u9L-k`  24m  Inside NVIDIA Cosmos | SIGGRAPH 2026 Keynote  https://www.youtube.com/watch?v=sYLU40u9L-k — 
-`2mg8tNIKvXE`  3m  Axolotl3D: a Unified Framework for Faithful 3D Shape Completion  https://www.youtube.com/watch?v=2mg8tNIKvXE — 
-`PXc_SlnT2g0`  66m  Building World-Class NLP Models with Transformers and Hugging Face | Grandmaster  https://www.youtube.com/watch?v=PXc_SlnT2g0 — 
-`y7FGo8F5bog`  24m  Interview with NVIDIA VP Jonathan Cohen on Reasoning Models for AI Agents  https://www.youtube.com/watch?v=y7FGo8F5bog — 
-`ZSPEyFqAGDc`  55m  Generally Capable Agents in Open-Ended Worlds, Jim Fan, NVIDIA Lead of Embodied   https://www.youtube.com/watch?v=ZSPEyFqAGDc — 
-`L1QKTPb6V_I`  55m  How to Build a World-Class ML Model for Melanoma Detection | Grandmaster Series   https://www.youtube.com/watch?v=L1QKTPb6V_I — 
+`fgibRb_8T5I`  146m  NVIDIA RecSys Summit 2022 - China Day  https://www.youtube.com/watch?v=fgibRb_8T5I —
+`Sdjn9FOkhnA`  125m  Accelerating Applications with Parallel Algorithms | CUDA C++ Class Part 1  https://www.youtube.com/watch?v=Sdjn9FOkhnA —
+`9XB-LsfpvCU`  123m  Quantum Computing: Where We Are and Where We’re Headed | NVIDIA GTC 2025 Firesid  https://www.youtube.com/watch?v=9XB-LsfpvCU —
+`7w3RHoIIkNE`  111m  JETSON AI LAB | Research Group Meeting (4/3/24)  https://www.youtube.com/watch?v=7w3RHoIIkNE —
+`Oyon1QDpU6g`  101m  An Introduction to Building Humanoid Robots | NVIDIA GTC 2025  https://www.youtube.com/watch?v=Oyon1QDpU6g —
+`mdDVkBeFy9A`  99m  GPU MODE at NVIDIA GTC 2025  https://www.youtube.com/watch?v=mdDVkBeFy9A —
+`pURku7OAWuo`  93m  JETSON AI LAB | Research Group Meeting (7/23/2024)  https://www.youtube.com/watch?v=pURku7OAWuo —
+`HfJR3NwsM4M`  92m  JETSON AI LAB | Research Group Meeting (10/1/2024)  https://www.youtube.com/watch?v=HfJR3NwsM4M —
+`-C43j2HgQdY`  91m  JETSON AI LAB | NASA JPL ROSA in Isaac Sim & The OASIS Project with IronMan (10/  https://www.youtube.com/watch?v=-C43j2HgQdY —
+`3C-6STonTLU`  89m  Introducing NVIDIA Dynamo: Low-Latency Distributed Inference for Scaling Reasoni  https://www.youtube.com/watch?v=3C-6STonTLU —
+`Dpe48AVKc4c`  87m  JETSON AI LAB | HuggingFace LeRobot and Stanley the H1 Humanoid (10/15/2024)  https://www.youtube.com/watch?v=Dpe48AVKc4c —
+`Ngaq2WCDlZM`  86m  JETSON AI LAB | Research Group Meeting (7/9/2024)  https://www.youtube.com/watch?v=Ngaq2WCDlZM —
+`TR8VIjnQXdE`  2m  How to Profile and Optimize CUDA Tile Kernels with NVIDIA Nsight Compute  https://www.youtube.com/watch?v=TR8VIjnQXdE —
+`mXYFcz27eDw`  6m  NVIDIA Dynamo in 5 Minutes: What Is It and Why Now?  https://www.youtube.com/watch?v=mXYFcz27eDw —
+`MehBUQtb9qM`  3m  How to Connect Two DGX Sparks with NVIDIA Sync  https://www.youtube.com/watch?v=MehBUQtb9qM —
+`2Tskr8an1oE`  6m  How to Route AI Agent Workloads Across Models with NVIDIA NeMo Switchyard  https://www.youtube.com/watch?v=2Tskr8an1oE —
+`Lhy1Bu8fN8A`  5m  Run NVIDIA Nemotron 3.5 Lightning on DGX Spark  https://www.youtube.com/watch?v=Lhy1Bu8fN8A —
+`VeYZ-MrJv3A`  3m  Introducing NVIDIA Alpamayo 2 Super  https://www.youtube.com/watch?v=VeYZ-MrJv3A —
+`sYLU40u9L-k`  24m  Inside NVIDIA Cosmos | SIGGRAPH 2026 Keynote  https://www.youtube.com/watch?v=sYLU40u9L-k —
+`2mg8tNIKvXE`  3m  Axolotl3D: a Unified Framework for Faithful 3D Shape Completion  https://www.youtube.com/watch?v=2mg8tNIKvXE —
+`PXc_SlnT2g0`  66m  Building World-Class NLP Models with Transformers and Hugging Face | Grandmaster  https://www.youtube.com/watch?v=PXc_SlnT2g0 —
+`y7FGo8F5bog`  24m  Interview with NVIDIA VP Jonathan Cohen on Reasoning Models for AI Agents  https://www.youtube.com/watch?v=y7FGo8F5bog —
+`ZSPEyFqAGDc`  55m  Generally Capable Agents in Open-Ended Worlds, Jim Fan, NVIDIA Lead of Embodied   https://www.youtube.com/watch?v=ZSPEyFqAGDc —
+`L1QKTPb6V_I`  55m  How to Build a World-Class ML Model for Melanoma Detection | Grandmaster Series   https://www.youtube.com/watch?v=L1QKTPb6V_I —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/nvidia-developer/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -88,7 +87,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/fgibRb_8T5I.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

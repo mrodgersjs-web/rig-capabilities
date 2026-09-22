@@ -13,7 +13,6 @@ Covers:
  10. CI/CD workflow files exist
 """
 from __future__ import annotations
-import importlib.util
 import os
 import sys
 import unittest
@@ -203,8 +202,10 @@ def test_notify_channel_status_dict():
 
 # ── 9. Dashboard (optional FastAPI dependency) ───────────────────────────
 def test_dashboard_app_loads():
-    if importlib.util.find_spec("fastapi") is None:
-        raise unittest.SkipTest("fastapi not installed; dashboard is optional")
+    try:
+        import fastapi  # noqa: F401 — importability, not just discoverability
+    except ImportError as exc:
+        raise unittest.SkipTest(f"fastapi unusable: {exc}") from exc
     from rig_lattice.dashboard.app import app
     paths = {r.path for r in app.routes if hasattr(r, "path")}
     for required in ("/", "/health", "/api/missions",

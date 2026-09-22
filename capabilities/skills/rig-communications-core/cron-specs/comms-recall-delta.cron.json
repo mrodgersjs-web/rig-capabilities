@@ -1,0 +1,16 @@
+{
+  "name": "comms-recall-delta",
+  "dormant": true,
+  "registered": false,
+  "schedule": "30 6 * * *",
+  "tz": "America/Denver",
+  "script": "scripts/recall_delta_sync.py",
+  "kill_switch": "~/.rig/comms/KILL_recall",
+  "kill_semantics": "same as corpus job",
+  "invariants": [
+    "never deletes a wound file",
+    "atomic replace",
+    "append-only delta log data/comms/recall_delta.log"
+  ],
+  "gate_d": "none \u2014 pulls already-authorized Recall cards into an already-public-in-repo lane"
+}

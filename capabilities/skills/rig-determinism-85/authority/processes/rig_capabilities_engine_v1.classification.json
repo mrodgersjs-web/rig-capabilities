@@ -1,0 +1,247 @@
+{
+  "inventory_sha256": "82d4cb9f34ed01cc6c44edb9a36541ab6679bb1a878a456bf4fcf6409e2135ad",
+  "model_necessity": [
+    {
+      "attempt_ceiling": 2,
+      "cost_ceiling_usd": 0.5,
+      "deterministic_alternative": "Bind the process's own deterministic checks as the verdict and skip external review.",
+      "expected_improvement": 0.2,
+      "failure_state_operation": "sha256:0a99ae05cdd25d49058fd320833333e0e71a8acc1f836db48bdc500d8c52d9a6",
+      "fallback_operation": "sha256:9991f62fcd398ea7386cfce4db94305daa668758351b44585c2e5a25f4bc0df8",
+      "input_schema": {
+        "schema": "rig_capabilities_engine_v1:RunRecord",
+        "source": "capabilities/skills/rig-determinism-85/authority/reference/rig_capabilities_engine_v1/rig_engine_schemas.py"
+      },
+      "inventory_id": "sha256:6364b4a5cdcc1904fa33a6f86234508eb0b4dd5aea58c8623520be887affa7a1",
+      "necessity_claim": "Advisory verdicts must come from a different model family than the builder's; no deterministic code can produce an independent reasoning-family judgment about an artifact set, and the acceptance contract requires cross-family review evidence.",
+      "output_schema": {
+        "schema": "rig_capabilities_engine_v1:VerdictReport",
+        "source": "capabilities/skills/rig-determinism-85/authority/reference/rig_capabilities_engine_v1/rig_engine_schemas.py"
+      },
+      "time_ceiling_seconds": 300.0,
+      "token_ceiling": 8000,
+      "tool_ceiling": 1,
+      "validator_operation": "sha256:1e131750fb4c6af38db70bd43a87f359412924417de16a013b9cf2fb5b722ba3"
+    }
+  ],
+  "operations": [
+    {
+      "inventory_id": "sha256:39b155ad079603893b3ee46d9004a1d47840ad391b85429ab492d54b98df75a4",
+      "predecessors": [],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:9e501cdf69973bc7009dc735dfeb73489ceca1da0efe99eaf42f3f9c5f31b148"
+      ],
+      "taxonomy": "control plane"
+    },
+    {
+      "inventory_id": "sha256:9e501cdf69973bc7009dc735dfeb73489ceca1da0efe99eaf42f3f9c5f31b148",
+      "predecessors": [
+        "sha256:39b155ad079603893b3ee46d9004a1d47840ad391b85429ab492d54b98df75a4"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:c5764d630c32fbaae87bf4c48d25eaaeb7bf4ded990ce18c0583a72682eeb9e4"
+      ],
+      "taxonomy": "side effect"
+    },
+    {
+      "inventory_id": "sha256:c5764d630c32fbaae87bf4c48d25eaaeb7bf4ded990ce18c0583a72682eeb9e4",
+      "predecessors": [
+        "sha256:9e501cdf69973bc7009dc735dfeb73489ceca1da0efe99eaf42f3f9c5f31b148"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:c8cf4f477d7aedfdc4c1dc1fc2a6fc071c744b705e0004b170a00340b39bfe5a"
+      ],
+      "taxonomy": "control plane"
+    },
+    {
+      "inventory_id": "sha256:c8cf4f477d7aedfdc4c1dc1fc2a6fc071c744b705e0004b170a00340b39bfe5a",
+      "predecessors": [
+        "sha256:c5764d630c32fbaae87bf4c48d25eaaeb7bf4ded990ce18c0583a72682eeb9e4"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:0c0507380de1ac0fe08a2df766f7d7f57336540f4c859dd05adecb5ee8910d43"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:0c0507380de1ac0fe08a2df766f7d7f57336540f4c859dd05adecb5ee8910d43",
+      "predecessors": [
+        "sha256:c8cf4f477d7aedfdc4c1dc1fc2a6fc071c744b705e0004b170a00340b39bfe5a"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:cbdead4f9708bdbb30df521c35fb9280ce6bfec3237f8237f9d960a18c6a08d6"
+      ],
+      "taxonomy": "side effect"
+    },
+    {
+      "inventory_id": "sha256:cbdead4f9708bdbb30df521c35fb9280ce6bfec3237f8237f9d960a18c6a08d6",
+      "predecessors": [
+        "sha256:0c0507380de1ac0fe08a2df766f7d7f57336540f4c859dd05adecb5ee8910d43"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:6364b4a5cdcc1904fa33a6f86234508eb0b4dd5aea58c8623520be887affa7a1"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:6364b4a5cdcc1904fa33a6f86234508eb0b4dd5aea58c8623520be887affa7a1",
+      "predecessors": [
+        "sha256:cbdead4f9708bdbb30df521c35fb9280ce6bfec3237f8237f9d960a18c6a08d6"
+      ],
+      "runtime_kind": "MODEL",
+      "successors": [
+        "sha256:32134a60696a6e055eb8e22847413a7aeff1207b5521c36e03b96e36bba2e086"
+      ],
+      "taxonomy": "decision"
+    },
+    {
+      "inventory_id": "sha256:32134a60696a6e055eb8e22847413a7aeff1207b5521c36e03b96e36bba2e086",
+      "predecessors": [
+        "sha256:6364b4a5cdcc1904fa33a6f86234508eb0b4dd5aea58c8623520be887affa7a1"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:1e131750fb4c6af38db70bd43a87f359412924417de16a013b9cf2fb5b722ba3"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:1e131750fb4c6af38db70bd43a87f359412924417de16a013b9cf2fb5b722ba3",
+      "predecessors": [
+        "sha256:32134a60696a6e055eb8e22847413a7aeff1207b5521c36e03b96e36bba2e086"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:e5cc5278f77e958868a40d24d52422c7cc4cb4f885c56e19bf576fb5fb8ae043"
+      ],
+      "taxonomy": "control plane"
+    },
+    {
+      "inventory_id": "sha256:e5cc5278f77e958868a40d24d52422c7cc4cb4f885c56e19bf576fb5fb8ae043",
+      "predecessors": [
+        "sha256:1e131750fb4c6af38db70bd43a87f359412924417de16a013b9cf2fb5b722ba3"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:9991f62fcd398ea7386cfce4db94305daa668758351b44585c2e5a25f4bc0df8"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:9991f62fcd398ea7386cfce4db94305daa668758351b44585c2e5a25f4bc0df8",
+      "predecessors": [
+        "sha256:e5cc5278f77e958868a40d24d52422c7cc4cb4f885c56e19bf576fb5fb8ae043"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:d7df89dceea9182dbf0e225ef0367ee2a340cd18c9e47d8c3dd50be1a78f2f00"
+      ],
+      "taxonomy": "control plane"
+    },
+    {
+      "inventory_id": "sha256:d7df89dceea9182dbf0e225ef0367ee2a340cd18c9e47d8c3dd50be1a78f2f00",
+      "predecessors": [
+        "sha256:9991f62fcd398ea7386cfce4db94305daa668758351b44585c2e5a25f4bc0df8"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:0a99ae05cdd25d49058fd320833333e0e71a8acc1f836db48bdc500d8c52d9a6"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:0a99ae05cdd25d49058fd320833333e0e71a8acc1f836db48bdc500d8c52d9a6",
+      "predecessors": [
+        "sha256:d7df89dceea9182dbf0e225ef0367ee2a340cd18c9e47d8c3dd50be1a78f2f00"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:1411cad9e16bbe5aff4ecf9b71d6e51a73abf0d2fb1004230ba28c74ff913cc5"
+      ],
+      "taxonomy": "control plane"
+    },
+    {
+      "inventory_id": "sha256:1411cad9e16bbe5aff4ecf9b71d6e51a73abf0d2fb1004230ba28c74ff913cc5",
+      "predecessors": [
+        "sha256:0a99ae05cdd25d49058fd320833333e0e71a8acc1f836db48bdc500d8c52d9a6"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:9bfa4ea3ae3a9e5a3a32f5844aa520d2a49cf926d501ff1fe34d02276a461858"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:9bfa4ea3ae3a9e5a3a32f5844aa520d2a49cf926d501ff1fe34d02276a461858",
+      "predecessors": [
+        "sha256:1411cad9e16bbe5aff4ecf9b71d6e51a73abf0d2fb1004230ba28c74ff913cc5"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:c1b3646eb302eae76faa7db8fe15675f0eab3c9172818e1b17ee6da72f5b43e9"
+      ],
+      "taxonomy": "side effect"
+    },
+    {
+      "inventory_id": "sha256:c1b3646eb302eae76faa7db8fe15675f0eab3c9172818e1b17ee6da72f5b43e9",
+      "predecessors": [
+        "sha256:9bfa4ea3ae3a9e5a3a32f5844aa520d2a49cf926d501ff1fe34d02276a461858"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:5a9986a330cc11ba1d2ef0c0403248df3c04ceb8901fee603fa64ad8171b5240"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:5a9986a330cc11ba1d2ef0c0403248df3c04ceb8901fee603fa64ad8171b5240",
+      "predecessors": [
+        "sha256:c1b3646eb302eae76faa7db8fe15675f0eab3c9172818e1b17ee6da72f5b43e9"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:46055e75b92ffb8ca1ae21383b534fb2c08af2f0c6aeabd78a29dcb4b1a165f1"
+      ],
+      "taxonomy": "side effect"
+    },
+    {
+      "inventory_id": "sha256:46055e75b92ffb8ca1ae21383b534fb2c08af2f0c6aeabd78a29dcb4b1a165f1",
+      "predecessors": [
+        "sha256:5a9986a330cc11ba1d2ef0c0403248df3c04ceb8901fee603fa64ad8171b5240"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:3d4d52a3125e345aaf849dca3083762ca2dc58af1645271049de7aa09adad5de"
+      ],
+      "taxonomy": "transformation"
+    },
+    {
+      "inventory_id": "sha256:3d4d52a3125e345aaf849dca3083762ca2dc58af1645271049de7aa09adad5de",
+      "predecessors": [
+        "sha256:46055e75b92ffb8ca1ae21383b534fb2c08af2f0c6aeabd78a29dcb4b1a165f1"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [
+        "sha256:174bdc862ad2281949a48c803501e021840da20fed8e64f76ce3fcf49d96e269"
+      ],
+      "taxonomy": "side effect"
+    },
+    {
+      "inventory_id": "sha256:174bdc862ad2281949a48c803501e021840da20fed8e64f76ce3fcf49d96e269",
+      "predecessors": [
+        "sha256:3d4d52a3125e345aaf849dca3083762ca2dc58af1645271049de7aa09adad5de"
+      ],
+      "runtime_kind": "CODE",
+      "successors": [],
+      "taxonomy": "presentation"
+    }
+  ],
+  "process_id": "rig_capabilities_engine_v1",
+  "schema": "rig.d85.classification.v1"
+}

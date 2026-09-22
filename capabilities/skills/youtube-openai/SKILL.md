@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the openai corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/openai_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-openai/index.json
+  - grep:capabilities/skills/youtube-openai/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 4
@@ -52,30 +51,30 @@ Channel-scope context for the **@OpenAI** YouTube corpus — L4 lab tier of the 
 - **mine-for**: Agent-engineering specifics from Build Hours (RFT loops, memory patterns, workspace agent routing); GTM segmentation between "ChatGPT Work" and "GPT-6 Astra for developers" — the split between consumer-agent surface and dev-compute surface; watch the gap between GPT-5.1 (current) and GPT-6 Astra (flagship) to read their next model-card pitch.
 
 ## Top videos (signal-sorted)
-`Zu2oET6Xjow`  86m  The Future of Math with o1 Reasoning with Terence Tao, Mark Chen, and James Dono  https://www.youtube.com/watch?v=Zu2oET6Xjow — 
-`WdbgNC80PMw`  74m  ChatGPT Atlas and the next era of web browsing — the OpenAI Podcast Ep. 9  https://www.youtube.com/watch?v=WdbgNC80PMw — 
-`atXyXP3yYZ4`  67m  Inside ChatGPT, AI assistants, and building at OpenAI — the OpenAI Podcast Ep. 2  https://www.youtube.com/watch?v=atXyXP3yYZ4 — 
-`XHqC70la8Xc`  65m  Brad Lightcap and Ronnie Chatterji on jobs, growth, and the AI economy — the Ope  https://www.youtube.com/watch?v=XHqC70la8Xc — 
-`1s_7RMG4O4U`  62m  Build Hour: Agent RFT  https://www.youtube.com/watch?v=1s_7RMG4O4U — 
-`ngDCxlZcecw`  62m  Sam, Jakub, and Wojciech on the future of OpenAI with audience Q&A  https://www.youtube.com/watch?v=ngDCxlZcecw — 
-`8St8elOrRPY`  61m  Build Hour: Built-In Tools  https://www.youtube.com/watch?v=8St8elOrRPY — 
-`rhsSqr0jdFw`  61m  Build Hour: API & Codex  https://www.youtube.com/watch?v=rhsSqr0jdFw — 
-`YWLOo_fc5oA`  60m  Build Hour: Reinforcement Fine-Tuning  https://www.youtube.com/watch?v=YWLOo_fc5oA — 
-`QCLkJra0PjY`  60m  Leah Belsky on how AI is transforming education — the OpenAI Podcast Ep. 4  https://www.youtube.com/watch?v=QCLkJra0PjY — 
-`ITMouQ_EuXI`  59m  Build Hour: GPT-5  https://www.youtube.com/watch?v=ITMouQ_EuXI — 
-`WsGVXiWzTpI`  58m  Build Hour: Agent Memory Patterns  https://www.youtube.com/watch?v=WsGVXiWzTpI — 
-`QDLlQ5IL2Bk`  3m  GPT-6 Astra with Tom Krcha  https://www.youtube.com/watch?v=QDLlQ5IL2Bk — 
-`A4BUbpKdenc`  3m  GPT-6 Astra with Peter Gostev  https://www.youtube.com/watch?v=A4BUbpKdenc — 
-`B-jjnydci50`  2m  GPT-6 Astra with Ben Davis  https://www.youtube.com/watch?v=B-jjnydci50 — 
-`bOC3DisEOfg`  3m  Introducing GPT-6 Astra for developers  https://www.youtube.com/watch?v=bOC3DisEOfg — 
-`5iu0nY9lIy8`  3m  Use ChatGPT Work to analyze ad performance and refine creative  https://www.youtube.com/watch?v=5iu0nY9lIy8 — 
-`D-QteDHdHes`  3m  Use ChatGPT Work to build custom creative tools  https://www.youtube.com/watch?v=D-QteDHdHes — 
-`Ez-anO32D_s`  2m  Use ChatGPT Images to explore campaign concepts  https://www.youtube.com/watch?v=Ez-anO32D_s — 
-`N-MJ1W8Vj9E`  3m  Use ChatGPT Work to create campaign emails  https://www.youtube.com/watch?v=N-MJ1W8Vj9E — 
-`wNWz5Hbh5VQ`  41m  How a reasoning model cracked an 80-year-old math problem — the OpenAI Podcast E  https://www.youtube.com/watch?v=wNWz5Hbh5VQ — 
-`kktBVmjA19A`  38m  Build Hour: Workspace agents in ChatGPT  https://www.youtube.com/watch?v=kktBVmjA19A — 
-`GXAAzKX6oaQ`  29m  Shaping model behavior in GPT-5.1— the OpenAI Podcast Ep. 11  https://www.youtube.com/watch?v=GXAAzKX6oaQ — 
-`mFG-4vUJ0kI`  49m  Build Hour: Apps in ChatGPT  https://www.youtube.com/watch?v=mFG-4vUJ0kI — 
+`Zu2oET6Xjow`  86m  The Future of Math with o1 Reasoning with Terence Tao, Mark Chen, and James Dono  https://www.youtube.com/watch?v=Zu2oET6Xjow —
+`WdbgNC80PMw`  74m  ChatGPT Atlas and the next era of web browsing — the OpenAI Podcast Ep. 9  https://www.youtube.com/watch?v=WdbgNC80PMw —
+`atXyXP3yYZ4`  67m  Inside ChatGPT, AI assistants, and building at OpenAI — the OpenAI Podcast Ep. 2  https://www.youtube.com/watch?v=atXyXP3yYZ4 —
+`XHqC70la8Xc`  65m  Brad Lightcap and Ronnie Chatterji on jobs, growth, and the AI economy — the Ope  https://www.youtube.com/watch?v=XHqC70la8Xc —
+`1s_7RMG4O4U`  62m  Build Hour: Agent RFT  https://www.youtube.com/watch?v=1s_7RMG4O4U —
+`ngDCxlZcecw`  62m  Sam, Jakub, and Wojciech on the future of OpenAI with audience Q&A  https://www.youtube.com/watch?v=ngDCxlZcecw —
+`8St8elOrRPY`  61m  Build Hour: Built-In Tools  https://www.youtube.com/watch?v=8St8elOrRPY —
+`rhsSqr0jdFw`  61m  Build Hour: API & Codex  https://www.youtube.com/watch?v=rhsSqr0jdFw —
+`YWLOo_fc5oA`  60m  Build Hour: Reinforcement Fine-Tuning  https://www.youtube.com/watch?v=YWLOo_fc5oA —
+`QCLkJra0PjY`  60m  Leah Belsky on how AI is transforming education — the OpenAI Podcast Ep. 4  https://www.youtube.com/watch?v=QCLkJra0PjY —
+`ITMouQ_EuXI`  59m  Build Hour: GPT-5  https://www.youtube.com/watch?v=ITMouQ_EuXI —
+`WsGVXiWzTpI`  58m  Build Hour: Agent Memory Patterns  https://www.youtube.com/watch?v=WsGVXiWzTpI —
+`QDLlQ5IL2Bk`  3m  GPT-6 Astra with Tom Krcha  https://www.youtube.com/watch?v=QDLlQ5IL2Bk —
+`A4BUbpKdenc`  3m  GPT-6 Astra with Peter Gostev  https://www.youtube.com/watch?v=A4BUbpKdenc —
+`B-jjnydci50`  2m  GPT-6 Astra with Ben Davis  https://www.youtube.com/watch?v=B-jjnydci50 —
+`bOC3DisEOfg`  3m  Introducing GPT-6 Astra for developers  https://www.youtube.com/watch?v=bOC3DisEOfg —
+`5iu0nY9lIy8`  3m  Use ChatGPT Work to analyze ad performance and refine creative  https://www.youtube.com/watch?v=5iu0nY9lIy8 —
+`D-QteDHdHes`  3m  Use ChatGPT Work to build custom creative tools  https://www.youtube.com/watch?v=D-QteDHdHes —
+`Ez-anO32D_s`  2m  Use ChatGPT Images to explore campaign concepts  https://www.youtube.com/watch?v=Ez-anO32D_s —
+`N-MJ1W8Vj9E`  3m  Use ChatGPT Work to create campaign emails  https://www.youtube.com/watch?v=N-MJ1W8Vj9E —
+`wNWz5Hbh5VQ`  41m  How a reasoning model cracked an 80-year-old math problem — the OpenAI Podcast E  https://www.youtube.com/watch?v=wNWz5Hbh5VQ —
+`kktBVmjA19A`  38m  Build Hour: Workspace agents in ChatGPT  https://www.youtube.com/watch?v=kktBVmjA19A —
+`GXAAzKX6oaQ`  29m  Shaping model behavior in GPT-5.1— the OpenAI Podcast Ep. 11  https://www.youtube.com/watch?v=GXAAzKX6oaQ —
+`mFG-4vUJ0kI`  49m  Build Hour: Apps in ChatGPT  https://www.youtube.com/watch?v=mFG-4vUJ0kI —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/openai/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -89,7 +88,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/Zu2oET6Xjow.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

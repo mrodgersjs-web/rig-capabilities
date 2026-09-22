@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the two-minute-papers corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/two-minute-papers_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-two-minute-papers/index.json
+  - grep:capabilities/skills/youtube-two-minute-papers/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 2
@@ -57,30 +56,30 @@ Channel-scope context for the **@TwoMinutePapers** YouTube corpus — L2 depth t
   The rendering series is a rare public corpus where importance-sampling and variance-reduction concepts are taught slowly — directly transferable to any agent framework that must allocate evaluation budget across combinatorial action spaces. Jeff Dean's compute-leap talk is the cleanest public statement on what "1M×" means for batch-size and data-efficiency regimes, useful for GTM narratives about when agent systems stop being margin-negative.
 
 ## Top videos (signal-sorted)
-`yz6I23VRbdg`  29m  What Happens After A 1,000,000x AI Compute Leap? | Jeff Dean  https://www.youtube.com/watch?v=yz6I23VRbdg — 
-`E69UxMz2Q9A`  25m  TU Wien Rendering #22 - Reinhard's Tone Mapper  https://www.youtube.com/watch?v=E69UxMz2Q9A — 
-`Zl36H9pwsHE`  25m  TU Wien Rendering #33 - Metropolis Light Transport  https://www.youtube.com/watch?v=Zl36H9pwsHE — 
-`cDi-uti2oLQ`  23m  TU Wien Rendering #29 - Path Tracing Implementation & Code Walkthrough  https://www.youtube.com/watch?v=cDi-uti2oLQ — 
-`Vhcwjzeukts`  23m  AlphaFold - The Most Important AI Breakthrough Ever Made  https://www.youtube.com/watch?v=Vhcwjzeukts — 
-`s6i8AV-m4W8`  22m  TU Wien Rendering #21 - Tone Mapping Basics  https://www.youtube.com/watch?v=s6i8AV-m4W8 — 
-`huAwz_BR8WM`  21m  Demis Hassabis On What AI Will Do Next  https://www.youtube.com/watch?v=huAwz_BR8WM — 
-`ua8Aaf-XIO8`  19m  TU Wien Rendering #20 - Space Partitioning 2  https://www.youtube.com/watch?v=ua8Aaf-XIO8 — 
-`RuBjYa4Q3dA`  19m  TU Wien Rendering #32 - Bidirectional Path Tracing, Multiple Importance Sampling  https://www.youtube.com/watch?v=RuBjYa4Q3dA — 
-`4gXPVoippTs`  18m  TU Wien Rendering #3 - BRDF models, The Rendering Equation  https://www.youtube.com/watch?v=4gXPVoippTs — 
-`i6KDgYk5Nzg`  18m  TU Wien Rendering #25 - Path Tracing, Next Event Estimation  https://www.youtube.com/watch?v=i6KDgYk5Nzg — 
-`FYVf0bRgO5Q`  18m  DeepMind AlphaFold: The Nobel Prize Winner!  🧬  https://www.youtube.com/watch?v=FYVf0bRgO5Q — 
-`B3LXEW4Pc-w`  5m  Claude Fable AI Is Much Stranger Than The Headlines Suggest  https://www.youtube.com/watch?v=B3LXEW4Pc-w — 
-`w9RDunJACkc`  5m  GLM 5.3: Powerful AI Is Becoming Almost Free  https://www.youtube.com/watch?v=w9RDunJACkc — 
-`LBiNcdGNgrg`  4m  The Billion Dollar AI Gap Is Collapsing  https://www.youtube.com/watch?v=LBiNcdGNgrg — 
-`L9mMfAFwbl4`  5m  DeepSeek’s New AI System Shouldn’t Be Possible  https://www.youtube.com/watch?v=L9mMfAFwbl4 — 
-`wMl6c_r0ubw`  3m  This Small AI Will Change Everything  https://www.youtube.com/watch?v=wMl6c_r0ubw — 
-`kyYepbhe1g8`  5m  DeepSeek Just Made Closed AI Look Ridiculous  https://www.youtube.com/watch?v=kyYepbhe1g8 — 
-`QnGNF8k_uoc`  4m  Claude AI Failed 650 Times…Then Beat The Human Record  https://www.youtube.com/watch?v=QnGNF8k_uoc — 
-`JQ97GiDwPxc`  7m  OpenAI’s AI Agents Just Crossed A Line  https://www.youtube.com/watch?v=JQ97GiDwPxc — 
-`ex1GeX0IhJQ`  11m  Gemini: ChatGPT-Like AI From Google DeepMind!  https://www.youtube.com/watch?v=ex1GeX0IhJQ — 
-`EXC2MOyGhO8`  9m  Here’s How ChatGPT is Changing The World!  https://www.youtube.com/watch?v=EXC2MOyGhO8 — 
-`9b7bx423SWk`  8m  Claude 3 AI: Smarter Than OpenAI's ChatGPT?  https://www.youtube.com/watch?v=9b7bx423SWk — 
-`V2RoqUr0qDU`  14m  OpenAI ChatGPT: The Future Is Here!  https://www.youtube.com/watch?v=V2RoqUr0qDU — 
+`yz6I23VRbdg`  29m  What Happens After A 1,000,000x AI Compute Leap? | Jeff Dean  https://www.youtube.com/watch?v=yz6I23VRbdg —
+`E69UxMz2Q9A`  25m  TU Wien Rendering #22 - Reinhard's Tone Mapper  https://www.youtube.com/watch?v=E69UxMz2Q9A —
+`Zl36H9pwsHE`  25m  TU Wien Rendering #33 - Metropolis Light Transport  https://www.youtube.com/watch?v=Zl36H9pwsHE —
+`cDi-uti2oLQ`  23m  TU Wien Rendering #29 - Path Tracing Implementation & Code Walkthrough  https://www.youtube.com/watch?v=cDi-uti2oLQ —
+`Vhcwjzeukts`  23m  AlphaFold - The Most Important AI Breakthrough Ever Made  https://www.youtube.com/watch?v=Vhcwjzeukts —
+`s6i8AV-m4W8`  22m  TU Wien Rendering #21 - Tone Mapping Basics  https://www.youtube.com/watch?v=s6i8AV-m4W8 —
+`huAwz_BR8WM`  21m  Demis Hassabis On What AI Will Do Next  https://www.youtube.com/watch?v=huAwz_BR8WM —
+`ua8Aaf-XIO8`  19m  TU Wien Rendering #20 - Space Partitioning 2  https://www.youtube.com/watch?v=ua8Aaf-XIO8 —
+`RuBjYa4Q3dA`  19m  TU Wien Rendering #32 - Bidirectional Path Tracing, Multiple Importance Sampling  https://www.youtube.com/watch?v=RuBjYa4Q3dA —
+`4gXPVoippTs`  18m  TU Wien Rendering #3 - BRDF models, The Rendering Equation  https://www.youtube.com/watch?v=4gXPVoippTs —
+`i6KDgYk5Nzg`  18m  TU Wien Rendering #25 - Path Tracing, Next Event Estimation  https://www.youtube.com/watch?v=i6KDgYk5Nzg —
+`FYVf0bRgO5Q`  18m  DeepMind AlphaFold: The Nobel Prize Winner!  🧬  https://www.youtube.com/watch?v=FYVf0bRgO5Q —
+`B3LXEW4Pc-w`  5m  Claude Fable AI Is Much Stranger Than The Headlines Suggest  https://www.youtube.com/watch?v=B3LXEW4Pc-w —
+`w9RDunJACkc`  5m  GLM 5.3: Powerful AI Is Becoming Almost Free  https://www.youtube.com/watch?v=w9RDunJACkc —
+`LBiNcdGNgrg`  4m  The Billion Dollar AI Gap Is Collapsing  https://www.youtube.com/watch?v=LBiNcdGNgrg —
+`L9mMfAFwbl4`  5m  DeepSeek’s New AI System Shouldn’t Be Possible  https://www.youtube.com/watch?v=L9mMfAFwbl4 —
+`wMl6c_r0ubw`  3m  This Small AI Will Change Everything  https://www.youtube.com/watch?v=wMl6c_r0ubw —
+`kyYepbhe1g8`  5m  DeepSeek Just Made Closed AI Look Ridiculous  https://www.youtube.com/watch?v=kyYepbhe1g8 —
+`QnGNF8k_uoc`  4m  Claude AI Failed 650 Times…Then Beat The Human Record  https://www.youtube.com/watch?v=QnGNF8k_uoc —
+`JQ97GiDwPxc`  7m  OpenAI’s AI Agents Just Crossed A Line  https://www.youtube.com/watch?v=JQ97GiDwPxc —
+`ex1GeX0IhJQ`  11m  Gemini: ChatGPT-Like AI From Google DeepMind!  https://www.youtube.com/watch?v=ex1GeX0IhJQ —
+`EXC2MOyGhO8`  9m  Here’s How ChatGPT is Changing The World!  https://www.youtube.com/watch?v=EXC2MOyGhO8 —
+`9b7bx423SWk`  8m  Claude 3 AI: Smarter Than OpenAI's ChatGPT?  https://www.youtube.com/watch?v=9b7bx423SWk —
+`V2RoqUr0qDU`  14m  OpenAI ChatGPT: The Future Is Here!  https://www.youtube.com/watch?v=V2RoqUr0qDU —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/two-minute-papers/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -94,7 +93,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/yz6I23VRbdg.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

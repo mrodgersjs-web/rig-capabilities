@@ -1,0 +1,114 @@
+{
+  "_compiled": {
+    "source": "loop.yaml",
+    "source_sha256": "416a2c29ae61007188e443c9b879a4bedd798ed40dbfbebc095e6f6795d2658d"
+  },
+  "closing_loop": {
+    "from": [
+      "V"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "B"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 2,
+    "step": "S"
+  },
+  "doctrine_source": [
+    "~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md"
+  ],
+  "family": "governance",
+  "id": "iqrsqpi-v20-slice",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_tool_calls": 300,
+    "max_wall_minutes": 240
+  },
+  "modes": {
+    "auto": {}
+  },
+  "name": "IQRSQPI v20 slice",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "SlicePacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "slice.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "files_written_min"
+        },
+        {
+          "path": "slice.md",
+          "patterns": [
+            "^## Slice",
+            "^## Changed"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "B",
+      "name": "Build",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "verify.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "path": "verify.md",
+          "patterns": [
+            "^## Checks",
+            "^## Planted-failure"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "V",
+      "name": "Verify",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "commit.md",
+      "gate": [
+        {
+          "path": "commit.md",
+          "patterns": [
+            "^## Commit"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "the commit sha on green (commit the slice before closing it)",
+          "path": "commit.md",
+          "pattern": "^## Commit[^\\n]*\\n[^\\n]*\\b[0-9a-f]{7,40}\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "C",
+      "name": "Commit",
+      "write_policy": {
+        "mode": "open"
+      }
+    }
+  ],
+  "version": "20.0.0"
+}

@@ -1,0 +1,43 @@
+{
+  "classification_path": "processes/ultraplan-v2.classification.json",
+  "entrypoints": [
+    {
+      "adapter_operation": "run_cell",
+      "adapter_path": "runtime/cell_runner.py",
+      "source_path": "runtime/cell_runner.py",
+      "symbol": "run_cell"
+    },
+    {
+      "adapter_operation": "apply_command",
+      "adapter_path": "runtime/ledger.py",
+      "source_path": "runtime/ledger.py",
+      "symbol": "Ledger"
+    },
+    {
+      "adapter_operation": "execute",
+      "adapter_path": "runtime/commands.py",
+      "source_path": "runtime/commands.py",
+      "symbol": "execute"
+    }
+  ],
+  "external_modules": [
+    {
+      "allowed_calls": [
+        "ultra_cell.validate_tree"
+      ],
+      "artifact_path": "/Users/rig128gb/Developer/rig-capabilities/rig_capabilities/ultra_cell.py",
+      "artifact_sha256": "6f61deba4f4910e6220c6ddd55df3d8506b1474eb598338b436542356aeed662",
+      "module": "ultra_cell"
+    }
+  ],
+  "file_hashes": {
+    "runtime/cell_runner.py": "ec667b40656365db34b6111e5edcd9d56e9a79811a917c24cb58096348f4c61b",
+    "runtime/cli.py": "2c0650436d23b10adfa3ed1ce2fd3df6b5d6400bbdeddc40293f5b11cc1790f0",
+    "runtime/commands.py": "6262c8c2e166c8aaee5778bc2b2e02a1169fe1456606fdbdfc20f72a9826c994",
+    "runtime/ledger.py": "a3d50bab98753d075e24ce8b534d24568af8c0289bc316d4bb3d43d54e1f8978",
+    "runtime/subs.py": "0ce5c40200b229956f703a5ba6c82a77d8ba90d7e1e6c25e0c7b6ab294d9b082"
+  },
+  "process_id": "ultraplan-v2",
+  "schema": "rig.d85.process-authority.v1",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/ultraplan-v2"
+}

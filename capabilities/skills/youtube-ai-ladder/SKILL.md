@@ -9,7 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Route to one of 18 channel skills or three indexed full-text newsletter corpora before making AI claims.
-done_when: Routing table covers 18 channels and 3 newsletters; catalog, stats, and cross-source text search demonstrated.
+done_when:
+  - cmd:test "$(find capabilities/skills -path '*/youtube-*/index.json' | wc -l | tr -d ' ')" -ge 18
+  - grep:capabilities/skills/youtube-ai-ladder/SKILL.md:## Newsletter sources
 quality_floor: All 18 child skills exist; all three newsletter indexes and full-text directories exist.
 metadata:
   corpus_root: /Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus

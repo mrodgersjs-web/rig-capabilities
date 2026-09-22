@@ -1,12 +1,13 @@
 ---
 name: d85-compliance-checklist
-description: "Determinism-85 compliance checklist for coding work in OMP sessions. Load at the start of every coding task and open the todo with its five gate phases. Use when writing, refactoring, reviewing, or shipping any code, job, product flow, program, or workflow that will run repeatedly or produce effects. Gates run via rig-determinism-85 (inventory/classify/score/checklist/verify-cert/gate-d/d85-run); grounding via reverify where applicable; registration via a process registered in authority/registry.json."
-version: 1.0.2
-author: RIG / Mike Rodgers
+description: "Determinism-85 build-quality checklist for RIG solutions, applications, and durable systems in OMP. Load for build certification and place its five gate phases last. Ordinary startup, research, reads, diagnostics, Python execution, memory capture, and authorized local edits do not require D85 admission. Gates run via rig-determinism-85 (inventory/classify/score/checklist/verify-cert/gate-d/d85-run); grounding via reverify where applicable; registration via a process registered in authority/registry.json."
+version: 1.0.4
 tags: [d85, determinism, enforcement, coding, gate-d, checklist]
+metadata:
+  author: RIG / Mike Rodgers
 ---
 
-# D85 Compliance Checklist — Deterministic Admission for All Coding Work
+# D85 Compliance Checklist — Build Quality and Certification
 
 **Authority:** D85 chain = released `rig-determinism-85/SKILL.md` (inventory → classification →
 four-ratio score → checklist build-binding → exact-action Gate-D → surface wiring). Lattice/BMS/
@@ -15,6 +16,19 @@ d85-hardening worktree, not production authority): treat A/L/BMS obligations bel
 doctrine until that document is released. Where this checklist and a RELEASED authority file
 disagree, the released file wins — re-read it, patch this one.
 
+**Current scope (Mike, 2026-09-11):** D85 gates build certification for RIG solutions,
+applications, and durable systems. It does not gate ordinary startup, research,
+file access, diagnostics, Python execution, memory capture, or authorized local edits.
+Do not infer build scope from a shell verb or directory. A failed or unknown gate
+prevents certified completion or promotion, not repair work. This scope supersedes
+older universal-admission wording below. Before building, record a canonical
+Lattice cell and recomputed BMS through `rig-lattice-system`; retain the Lattice
+audit with tests and artifact hashes. Before certification, run `checklist
+<build-file> --process-id <id>` and `verify-cert <build-file> <certificate-file>`.
+Use current source-derived inventory and all four ratios at or above 0.85.
+Self-authored failure JSON is not trusted execution evidence. Existing approval,
+privacy, repository-placement, and active-loop boundaries remain independent.
+
 **Rule zero:** D85 eligibility (may this process exist durably?) is separate from Gate-D
 authorization (may this ONE exact outward effect happen now?). Both gates must pass;
 neither substitutes for the other. Exit-2 BLOCK is terminal for the current version —
@@ -22,7 +36,7 @@ remediation requires a NEW immutable process version, never a retry of the same 
 
 ---
 
-## Phase 0 — Classify before mutating (every task)
+## Phase 0 — Classify the build (build missions only)
 
 - [ ] Run startup: `rig-meta-harness startup --agent <runtime> --cwd <repo> --format json` — honor `hard_stop`; only `status: PASS` counts (`null` is not a PASS).
 - [ ] Declare the coordinate BEFORE the first source edit: one cell `L{n}-D{d}-A{m}-{step}`. L1–L7 are ALTERNATIVE complexity altitudes, never sequential stages; advancing IQRSQPI changes the step, not level or mode. L0 is outside the lattice.
@@ -53,13 +67,13 @@ Taxonomy weights (fixed):
 - [ ] No credit padding: repeated call sites, trivial builtin normalization (one credit segment max), wrapper indirection, default-bound parameters, or classification-authored topology do NOT raise the score.
 - [ ] Source topology inventoried as-is with bounded, fail-closed ceilings: source size, structural nodes, emitted operations, recursive expansions, path expansions. Classification ID set must EQUAL the extracted inventory exactly (missing/unknown/duplicate/stale-bound = BLOCK). Edges mirrored, acyclic, self-edge-free, reachable from roots.
 
-## Phase 2 — Score, certify, admit
+## Phase 2 — Score and certify the build
 
 - [ ] `rig-determinism-85 score <process_id>`: ALL FOUR ratios ≥ 0.85 with `REALIZED_PASS` — aggregate unweighted, aggregate weighted, minimum-path unweighted, minimum-path weighted. Exit 2 = BLOCK = terminal for this version; produce a new version, never a retry.
 - [ ] Fresh bindings, no stored PASS strings, no caller-supplied booleans: `inventory_sha256`, `classification_sha256`, `realized_sha256` on the current (v1) certificate schema; re-check anytime with `verify-cert`.
 - [ ] `checklist <build-file> --process-id <id>` bound to the exact `inventory_sha256` snapshot: unbound / mismatched / stale = BLOCK.
 - [ ] Effects: `gate-d <process_id> --action <exact-action-file>` — signed, one-time, exact-action; expired/replay/unapproved/mismatch/corrupt = BLOCK. Durable runs launch via `d85-run <script>`: released guarantee = `sandbox-exec` denies writes to all protected roots except exact admitted literals. Network/process-fork isolation is CANDIDATE hardening, not a released guarantee — do not treat `d85-run` as a full sandbox.
-- [ ] Admission ceremony: `admit-request` → Mike types `APPROVE <id>` in chat → `admit-approve` in interactive TTY. `--phrase` is test-only. `RIG_D85_DISABLE=1` is operator break-glass only, never an agent switch.
+- [ ] Explicit legacy admission is only for deliberate admission/launcher consumers. It is not a prerequisite for ordinary tools or local edits. Never set `RIG_D85_DISABLE` to implement this scope.
 - [ ] Authority paths never come from caller HOME/env/sys.path. Security-sensitive invocations use the fixed hash-bound Python with `-I -B -S`.
 
 ## Phase 3 — Archetype conformance (A1–A4; one mode per attempt, thresholds bind)
@@ -74,7 +88,7 @@ Mode thresholds and budgets (ceilings, not permission to spend):
 | A4 HUMAN DECISION | < .25 | human decides; model cannot self-ratify or arm Gate-D | $0 |
 
 - [ ] A1 also requires the tool-selection predicate test: on-demand `native_typed_code` allowed only with no scheduler and no higher-precedence predicate (clock_critical → resident_service → non_engineer_surface → multi_agent_graph → agent_reasoning → on_demand_command).
-- [ ] A3 requires a REAL bounded runtime; an unavailable A3 must BLOCK — never execute A1 while reporting A3.
+- [ ] The current certifier supports A1 only. A2–A4 certification remains blocked until a trusted execution-receipt verifier exists. Ordinary work in those modes remains available; do not mislabel it as A1.
 - [ ] A4 binds an authority-declared human identity, exact scope, real UTC time, immutable build attempt, and process/cell/intent/BMS/inventory hashes; rechecked before final acceptance. A4 ≠ Gate-D.
 
 ## Phase 4 — Level conformance (L1–L7 altitudes; one selected, IQRSQPI runs inside it)
@@ -104,13 +118,15 @@ Mechanism honestly stated: this is a PERSISTENT INSTRUCTION in `~/.omp/agent/AGE
 by each OMP session at the instruction level. The `todo` tool does not read it — entries are not
 mechanically injected, and other harnesses (Claude/Codex/Hermes/Pi/Prime) are NOT covered until
 mirrored or the doctrine is released to them.
-Within OMP sessions: every coding `todo` init opens with
-`D85-Classify → D85-Score → D85-Archetype+Level → D85-Verify → Seal`,
-none marked done without its named artifact (startup packet JSON, score output, coordinate
-record, fresh command evidence, sealed ProofPacket); D85-Classify gates every downstream phase.
+Within OMP solution, application, and durable-system build sessions: the `todo` init ENDS with the phase group
+`D85-Classify → D85-Score → D85-Archetype+Level → D85-Verify → Seal`, placed last after all
+work phases; none marked done without its named artifact (startup packet JSON, score output,
+coordinate record, fresh command evidence, sealed ProofPacket). The group gates the done-claim,
+not ordinary tool access or the first edit. Unrelated tasks do not require this group. Solution/app loops declare a final `d85_certified` gate bound to the build record, certificate, and root.
+(Mike directive 2026-09-15: gate group moved from todo head to todo tail.)
 
 ## Enforcement surfaces (code, not prose)
 
 - `rig-determinism-85 inventory|compare|classify|score|select|checklist|verify-cert|estate-validate|gate-d|wiring|admit-request|admit-approve|admit-status|d85-run` (exact released command set) — production reads only `authority/registry.json`; no env/CLI override. Registration = process registered there with SOURCE-DERIVED inventory + authority classification; hand-authored JSON notes (including anything under `~/.rig/d85/processes/`) have zero gate standing.
-- Pre-tool hooks — deny mutation-class writes under `enforcement.json` roots without a signed admission (exact path + session + build digest + TTL ≤ 24h). Coverage is per-enforcement-config, not universal.
+- Ordinary pre-tool dispatch does not require D85 admission. Explicit admission/launcher consumers still validate their configured boundaries. A failed build gate withholds certification or promotion; repair tools remain available.
 - `reverify` hooks + MCP — context rollover/ledger for long sessions; claim grounding where a file/binary artifact exists.

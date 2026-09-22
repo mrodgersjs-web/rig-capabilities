@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the fireship corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/fireship_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-fireship/index.json
+  - grep:capabilities/skills/youtube-fireship/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 3
@@ -56,30 +55,30 @@ Channel-scope context for the **@Fireship** YouTube corpus — L3 credible tier 
 - **mine-for**: Model-comparison videos double as positioning briefs (which capability claim is "the win" this cycle). The "40x cheaper" and "grift" frames reveal how Fireship encodes GTM signals into narrative. MCP episode is the single best free artifact for understanding the agent-protocol layer before it consolidates. Use the "same app 10 times" structure as a template for internal stack evaluations.
 
 ## Top videos (signal-sorted)
-`q5J5ho7YUhA`  25m  Firebase - Back to the Basics  https://www.youtube.com/watch?v=q5J5ho7YUhA — 
-`iWEgpdVSZyg`  25m  100 Firebase Tips, Tricks, and Screw-ups  https://www.youtube.com/watch?v=iWEgpdVSZyg — 
-`c_8cplBi_gE`  24m  Content Platforms Explained in 100 Seconds // Build your own with Sanity  https://www.youtube.com/watch?v=c_8cplBi_gE — 
-`meTpMP0J5E8`  23m  Build a WEB3 app to mint unlimited NFTs… But should you?  https://www.youtube.com/watch?v=meTpMP0J5E8 — 
-`cuHDQhDhvPE`  22m  I built the same app 10 times // Which JS Framework is best?  https://www.youtube.com/watch?v=cuHDQhDhvPE — 
-`9kRgVxULbag`  22m  Firebase - Ultimate Beginner's Guide  https://www.youtube.com/watch?v=9kRgVxULbag — 
-`G0bBLvWXBvc`  21m  Angular for Beginners - Let's build a Tic-Tac-Toe PWA  https://www.youtube.com/watch?v=G0bBLvWXBvc — 
-`Cz3WcZLRaWc`  17m  MySQL - The Basics // Learn SQL in 23 Easy Steps  https://www.youtube.com/watch?v=Cz3WcZLRaWc — 
-`IF6k0uZuypA`  17m  Advanced Dropdown Menu - React & CSS Animation Tutorial for Beginners  https://www.youtube.com/watch?v=IF6k0uZuypA — 
-`Iq_r7IcNmUk`  17m  25 crazy software bugs explained  https://www.youtube.com/watch?v=Iq_r7IcNmUk — 
-`W_VV2Fx32_Y`  17m  Serverless Computing in 100 Seconds  https://www.youtube.com/watch?v=W_VV2Fx32_Y — 
-`pEfrdAtAmqk`  17m  God-Tier Developer Roadmap  https://www.youtube.com/watch?v=pEfrdAtAmqk — 
-`Y5rSSvXfL4g`  5m  5 open source tools that replaced my $320/mo AI stack...  https://www.youtube.com/watch?v=Y5rSSvXfL4g — 
-`FluKUJyeYD8`  7m  Did OpenAI actually build AGI? GPT-6 Astra first look  https://www.youtube.com/watch?v=FluKUJyeYD8 — 
-`0Rp9KJCEIvg`  7m  Did OpenAI accidentally create an AI civilization?  https://www.youtube.com/watch?v=0Rp9KJCEIvg — 
-`r-tzcMlQISk`  6m  The mystery is solved... and the answer is 40x cheaper than Claude  https://www.youtube.com/watch?v=r-tzcMlQISk — 
-`UuqSy1jPSUw`  5m  The most expensive software bug in history...  https://www.youtube.com/watch?v=UuqSy1jPSUw — 
-`xBByvFrqmWU`  6m  DeepSeek is back... and Silicon Valley is terrified  https://www.youtube.com/watch?v=xBByvFrqmWU — 
-`iuZPTE5qsJY`  6m  The summer Math fell to the machines...  https://www.youtube.com/watch?v=iuZPTE5qsJY — 
-`E7la7-dtfVM`  6m  This new startup can query anywhere you've been...  https://www.youtube.com/watch?v=E7la7-dtfVM — 
-`m_xoN8KlP3w`  4m  Claude 3 just destroyed GPT-4 and Gemini... AGI is near?  https://www.youtube.com/watch?v=m_xoN8KlP3w — 
-`Aa83vRghue4`  9m  5 ideas for your own AI grift with ChatGPT  https://www.youtube.com/watch?v=Aa83vRghue4 — 
-`HyzlYwjoXOQ`  8m  Claude's Model Context Protocol is here... Let's test it  https://www.youtube.com/watch?v=HyzlYwjoXOQ — 
-`FhqNN1LykWU`  6m  Claude crushed GPT-4o… and 13 other tech stories you missed in June  https://www.youtube.com/watch?v=FhqNN1LykWU — 
+`q5J5ho7YUhA`  25m  Firebase - Back to the Basics  https://www.youtube.com/watch?v=q5J5ho7YUhA —
+`iWEgpdVSZyg`  25m  100 Firebase Tips, Tricks, and Screw-ups  https://www.youtube.com/watch?v=iWEgpdVSZyg —
+`c_8cplBi_gE`  24m  Content Platforms Explained in 100 Seconds // Build your own with Sanity  https://www.youtube.com/watch?v=c_8cplBi_gE —
+`meTpMP0J5E8`  23m  Build a WEB3 app to mint unlimited NFTs… But should you?  https://www.youtube.com/watch?v=meTpMP0J5E8 —
+`cuHDQhDhvPE`  22m  I built the same app 10 times // Which JS Framework is best?  https://www.youtube.com/watch?v=cuHDQhDhvPE —
+`9kRgVxULbag`  22m  Firebase - Ultimate Beginner's Guide  https://www.youtube.com/watch?v=9kRgVxULbag —
+`G0bBLvWXBvc`  21m  Angular for Beginners - Let's build a Tic-Tac-Toe PWA  https://www.youtube.com/watch?v=G0bBLvWXBvc —
+`Cz3WcZLRaWc`  17m  MySQL - The Basics // Learn SQL in 23 Easy Steps  https://www.youtube.com/watch?v=Cz3WcZLRaWc —
+`IF6k0uZuypA`  17m  Advanced Dropdown Menu - React & CSS Animation Tutorial for Beginners  https://www.youtube.com/watch?v=IF6k0uZuypA —
+`Iq_r7IcNmUk`  17m  25 crazy software bugs explained  https://www.youtube.com/watch?v=Iq_r7IcNmUk —
+`W_VV2Fx32_Y`  17m  Serverless Computing in 100 Seconds  https://www.youtube.com/watch?v=W_VV2Fx32_Y —
+`pEfrdAtAmqk`  17m  God-Tier Developer Roadmap  https://www.youtube.com/watch?v=pEfrdAtAmqk —
+`Y5rSSvXfL4g`  5m  5 open source tools that replaced my $320/mo AI stack...  https://www.youtube.com/watch?v=Y5rSSvXfL4g —
+`FluKUJyeYD8`  7m  Did OpenAI actually build AGI? GPT-6 Astra first look  https://www.youtube.com/watch?v=FluKUJyeYD8 —
+`0Rp9KJCEIvg`  7m  Did OpenAI accidentally create an AI civilization?  https://www.youtube.com/watch?v=0Rp9KJCEIvg —
+`r-tzcMlQISk`  6m  The mystery is solved... and the answer is 40x cheaper than Claude  https://www.youtube.com/watch?v=r-tzcMlQISk —
+`UuqSy1jPSUw`  5m  The most expensive software bug in history...  https://www.youtube.com/watch?v=UuqSy1jPSUw —
+`xBByvFrqmWU`  6m  DeepSeek is back... and Silicon Valley is terrified  https://www.youtube.com/watch?v=xBByvFrqmWU —
+`iuZPTE5qsJY`  6m  The summer Math fell to the machines...  https://www.youtube.com/watch?v=iuZPTE5qsJY —
+`E7la7-dtfVM`  6m  This new startup can query anywhere you've been...  https://www.youtube.com/watch?v=E7la7-dtfVM —
+`m_xoN8KlP3w`  4m  Claude 3 just destroyed GPT-4 and Gemini... AGI is near?  https://www.youtube.com/watch?v=m_xoN8KlP3w —
+`Aa83vRghue4`  9m  5 ideas for your own AI grift with ChatGPT  https://www.youtube.com/watch?v=Aa83vRghue4 —
+`HyzlYwjoXOQ`  8m  Claude's Model Context Protocol is here... Let's test it  https://www.youtube.com/watch?v=HyzlYwjoXOQ —
+`FhqNN1LykWU`  6m  Claude crushed GPT-4o… and 13 other tech stories you missed in June  https://www.youtube.com/watch?v=FhqNN1LykWU —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/fireship/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -93,7 +92,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/q5J5ho7YUhA.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

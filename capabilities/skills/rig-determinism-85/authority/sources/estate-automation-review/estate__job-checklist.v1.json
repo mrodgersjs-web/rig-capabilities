@@ -1,0 +1,196 @@
+{
+  "schema": "rig.automation-job-checklist.v2",
+  "version": "2.0.0",
+  "purpose": "Full built-out checklist applied to every estate job row (live, archived, proposed); also serves as the intake checklist for future jobs (recommendation \u2014 see intake_rule; not enforced by disposition logic). A job is fully built out only when every item is PASS. UNKNOWN is never PASS, FAIL, or zero. This pass rate is NOT D85 admission: D85 requires rig-determinism-85 score (four ratios >= 0.85) plus a bound checklist artifact; d85_classification on a row is a body-class annotation, NOT_EVALUATED for D85 admission here.",
+  "intake_rule": "Governance recommendation \u2014 NOT enforced by the collector's disposition logic: before a future job enters KEEP, all identity/evidence/routing items should PASS, criteria coverage should reach >= 0.85, and no one-way (irreversible) effect should lack failure-mode + done-test evidence; otherwise treat as INVESTIGATE. Enforcement in disposition_for() is a named follow-up, not current behavior.",
+  "validation_semantics": "Per-item PASS/FAIL/UNKNOWN is CHECKLIST VALIDATION over evidence the authorities expose; it is NOT a test of job execution. Observed execution results live only in C08 (last run) and C09 (last result), and rows whose authority exposes neither are untestable-from-evidence, not failed. Prefect is unreachable, Kestra exposes no execution results, and most launchd plists carry no last-execution timestamp in this collection. C11/C12 and C19-C23 evaluate over facts attached by the collector's contract/classification passes, never over absence.",
+  "lattice_note": "Lattice coordinates come from rig_lattice.route_intent (pure keyword rules, no model) at neutral 0.5/0.5/0.5 BMS priors; per-row calibration is a named human decision, never model-filled.",
+  "items": [
+    {
+      "id": "C01",
+      "group": "identity",
+      "q": "Does the row carry a stable source:id?",
+      "mode": "non_null",
+      "field": "id",
+      "fix_hint": "record id for <id>"
+    },
+    {
+      "id": "C02",
+      "group": "identity",
+      "q": "Is the owning scheduler authority one of the six registered authorities?",
+      "mode": "authority",
+      "fix_hint": "assign the row to a registered authority"
+    },
+    {
+      "id": "C03",
+      "group": "lifecycle",
+      "q": "Are lifecycle facts recorded as separate installed/enabled/loaded flags (launchd) or an explicit lifecycle state (other)?",
+      "mode": "lifecycle",
+      "fix_hint": "record lifecycle flags for <id>"
+    },
+    {
+      "id": "C04",
+      "group": "trigger",
+      "q": "Is the trigger kind parsed from the authority record?",
+      "mode": "non_null",
+      "field": "trigger_kind",
+      "fix_hint": "record trigger_kind for <id>"
+    },
+    {
+      "id": "C05",
+      "group": "trigger",
+      "q": "Is the executable target known (command, workflow type, prompt body path, or workdir)?",
+      "mode": "target",
+      "fix_hint": "record the executable target for <id>"
+    },
+    {
+      "id": "C06",
+      "group": "evidence",
+      "q": "Is a named owner evidenced?",
+      "mode": "non_null",
+      "field": "owner",
+      "fix_hint": "name the owner for <id> in the worksheet"
+    },
+    {
+      "id": "C07",
+      "group": "evidence",
+      "q": "Is a named consumer evidenced (proposal consumer or goal mechanism)?",
+      "mode": "consumer",
+      "fix_hint": "name the consumer for <id> in the worksheet"
+    },
+    {
+      "id": "C08",
+      "group": "evidence",
+      "q": "Is a last run evidenced? (judged only for authorities that expose run history; other sources are UNKNOWN = untestable from evidence, not failed)",
+      "mode": "observed_execution",
+      "field": "last_run",
+      "capable": [
+        "hermes",
+        "orca",
+        "temporal"
+      ],
+      "fix_hint": "run <id> once with an evidenced timestamp"
+    },
+    {
+      "id": "C09",
+      "group": "evidence",
+      "q": "Is a last result evidenced? (judged only for authorities that expose a result field \u2014 hermes lastRun status, Temporal workflow status; Orca exposes lastRunAt but no result, launchd/Kestra results not collected; UNKNOWN = untestable from evidence, not failed)",
+      "mode": "observed_execution",
+      "field": "last_result",
+      "capable": [
+        "hermes",
+        "temporal"
+      ],
+      "fix_hint": "record a last result for <id>"
+    },
+    {
+      "id": "C10",
+      "group": "purpose",
+      "q": "Does the job map to a goal (revenue, fitness, James, learning, telos) through a named mechanism?",
+      "mode": "goal_mechanism",
+      "fix_hint": "name the goal mechanism for <id> in the worksheet"
+    },
+    {
+      "id": "C11",
+      "group": "purpose",
+      "q": "Is the failure mode documented?",
+      "mode": "attached_verdict",
+      "field": "contract",
+      "contract_field": "failure_mode",
+      "fix_hint": "issue contract for <id>"
+    },
+    {
+      "id": "C12",
+      "group": "purpose",
+      "q": "Is a measurable done-test recorded?",
+      "mode": "attached_verdict",
+      "field": "contract",
+      "contract_field": "done_test",
+      "fix_hint": "issue contract for <id>"
+    },
+    {
+      "id": "C13",
+      "group": "routing",
+      "q": "Was duplicate analysis run against normalized command/target/schedule (group evaluated, not label similarity)?",
+      "mode": "field_present",
+      "field": "duplicate_group",
+      "fix_hint": "run duplicate analysis for <id>"
+    },
+    {
+      "id": "C14",
+      "group": "routing",
+      "q": "Was the framework-precedence decision applied with a named reason?",
+      "mode": "non_null",
+      "field": "recommendation_reason",
+      "fix_hint": "record the selection reason for <id>"
+    },
+    {
+      "id": "C15",
+      "group": "routing",
+      "q": "Is a lattice coordinate assigned (Lx-Dy-Bz, deterministic keyword router)?",
+      "mode": "lattice_coordinate",
+      "fix_hint": "assign the lattice coordinate for <id>"
+    },
+    {
+      "id": "C16",
+      "group": "routing",
+      "q": "Is a BMS mode + confidence recorded for the job?",
+      "mode": "lattice_mode",
+      "fix_hint": "record the BMS mode for <id>"
+    },
+    {
+      "id": "C17",
+      "group": "completion",
+      "q": "Does 20-criterion evidence coverage reach 85% (unknown never scored)?",
+      "mode": "coverage_ge",
+      "fix_hint": "raise evidence coverage for <id> above 0.85"
+    },
+    {
+      "id": "C18",
+      "group": "completion",
+      "q": "Is a decided disposition recorded (KEEP/MIGRATE/RETIRE/PROPOSED; INVESTIGATE = undecided)?",
+      "mode": "disposition_decided",
+      "fix_hint": "decide a disposition for <id>"
+    },
+    {
+      "id": "C19",
+      "group": "routing",
+      "q": "Does exactly one live scheduler (off-state verified) hold the job?",
+      "mode": "attached_verdict",
+      "field": "record_owner_check",
+      "fix_hint": "retire \"<id>\" from group \"<g>\" (owner \"<candidate>\")"
+    },
+    {
+      "id": "C20",
+      "group": "routing",
+      "q": "Is the owner + rollback migration binding recorded?",
+      "mode": "attached_verdict",
+      "field": "migration_binding",
+      "fix_hint": "record the migration binding for <id>"
+    },
+    {
+      "id": "C21",
+      "group": "completion",
+      "q": "Does the owner scheduler show renewal evidence (schedule/keepalive/catch-up plus one green run)?",
+      "mode": "attached_verdict",
+      "field": "renewal_evidence",
+      "fix_hint": "exercise <id> once and verify output"
+    },
+    {
+      "id": "C22",
+      "group": "completion",
+      "q": "Is there a verified run within max(7d, contract.freshness) with an output reference?",
+      "mode": "attached_verdict",
+      "field": "execution_verified",
+      "fix_hint": "first-run gate for <id>"
+    },
+    {
+      "id": "C23",
+      "group": "completion",
+      "q": "Is the trigger-owner selection evidenced (or default_used via Kestra)?",
+      "mode": "attached_verdict",
+      "field": "owner_evidence",
+      "fix_hint": "record <property> evidence for <id>"
+    }
+  ]
+}

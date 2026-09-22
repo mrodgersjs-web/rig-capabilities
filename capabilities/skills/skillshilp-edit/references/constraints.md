@@ -1,0 +1,119 @@
+# Constraints
+
+Use this document to validate updated Agent Skills.
+
+## Directory
+
+A skill is a self-contained directory containing `SKILL.md` and, optionally, supporting resources.
+
+| Required | Optional |
+|----------|----------|
+| `SKILL.md` | `references/` |
+| | `scripts/` |
+| | `assets/` |
+
+Preserve the existing skill directory structure unless a structural change provides meaningful value.
+
+The parent directory used to discover or install the skill is a separate concern and should not be treated as part of the skill's portable structure.
+
+`.agents/skills/` is a widely adopted project- and user-level convention for cross-client skill discovery, but it is not required by the Agent Skills specification. Clients may use other discovery directories.
+
+When `.agents/skills/` is used, the structure is:
+
+```text
+.agents/
+└── skills/
+    └── my-skill/
+        ├── SKILL.md
+        ├── references/
+        ├── scripts/
+        └── assets/
+```
+
+Here `my-skill/` is the skill directory. `.agents/skills/` is the discovery directory.
+
+Do not move an existing skill solely to change its discovery directory.
+
+Create optional directories only when they provide meaningful value.
+
+Do not introduce empty or placeholder directories.
+
+Do not add product-specific metadata directories, client configs, or product-specific helper scripts when portability is the goal.
+
+---
+
+## Frontmatter
+
+| Field | Required | Rules |
+|--------|----------|------|
+| `name` | ✓ | 1–64 chars, lowercase letters/numbers/hyphens, no leading/trailing/consecutive hyphens, matches directory |
+| `description` | ✓ | Explains **what** the skill does, **when** it should be activated, and what distinguishes it from similar skills (≤1024 chars) |
+| `license` | | Include only if applicable |
+| `compatibility` | | Include only when environment requirements exist (≤500 chars) |
+| `metadata` | | Optional portable key-value metadata |
+| `allowed-tools` | | Space-separated string of pre-approved tools; support varies by client |
+
+Use only these portable fields.
+Unless explicitly requested, preserve existing portable frontmatter fields that remain valid.
+Keep descriptions as single-line scalars unless multiline YAML is truly necessary.
+
+---
+
+## `SKILL.md`
+
+Keep concise.
+
+Contains only:
+
+- activation criteria
+- workflow
+- critical rules
+- validation
+- references to supporting files
+
+Move implementation details elsewhere.
+Keep `SKILL.md` under 500 lines.
+
+---
+
+## File Placement
+
+| Content | Location |
+|---------|----------|
+| APIs | `references/` |
+| Algorithms | `references/` |
+| Schemas | `references/` |
+| Templates | `assets/` |
+| Example documents | `assets/` |
+| Repeated deterministic logic | `scripts/` |
+
+Do not relocate content unless doing so clearly improves maintainability or specification compliance.
+Scripts should be minimal Bash when possible. If Bash is not enough, document the dependency and do not assume it is portable.
+
+---
+
+## References
+
+- Use relative paths.
+- Avoid deep reference chains.
+- Prefer multiple focused files.
+- Preserve existing references unless they are incorrect or obsolete.
+- Link directly from `SKILL.md` to any reference the agent may need.
+- Add a table of contents to long reference files.
+
+---
+
+## Validation Checklist
+
+Before returning:
+
+- ✓ Valid frontmatter
+- ✓ Directory matches `name`
+- ✓ Searchable description
+- ✓ Correct file placement
+- ✓ Single responsibility
+- ✓ No duplicate documentation
+- ✓ Progressive disclosure
+- ✓ Existing behaviour preserved unless intentionally changed
+- ✓ No unnecessary product-specific metadata or scripts
+- ✓ Minimal, documented script dependencies

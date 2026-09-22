@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the matt-wolfe corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/matt-wolfe_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-matt-wolfe/index.json
+  - grep:capabilities/skills/youtube-matt-wolfe/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 1
@@ -52,30 +51,30 @@ Channel-scope context for the **@mreflow** YouTube corpus — L1 rarity tier of 
 - **mine-for**: Tracks the gap between frontier model capability and consumer tooling accessibility — useful for timing GTM moves. His "free" positioning and agent-optimism cycles are leading indicators of when paid tools become "table stakes." The Q&A episodes ("900k channel," "college") reveal audience composition and willingness-to-pay signals for creator-economy AI products.
 
 ## Top videos (signal-sorted)
-`UsnyU-9mbKE`  48m  What AI Image Generator Should YOU Be Using??  https://www.youtube.com/watch?v=UsnyU-9mbKE — 
-`oxerUfMFuCU`  48m  Should Kids Still Go To College? (Answering All Your Questions)  https://www.youtube.com/watch?v=oxerUfMFuCU — 
-`loaFHyvCS5k`  46m  AI News: The Busiest Week in AI in A Looong Time!  https://www.youtube.com/watch?v=loaFHyvCS5k — 
-`j-hV-Zy6wmU`  46m  29 Biggest AI Stories You Missed This Week  https://www.youtube.com/watch?v=j-hV-Zy6wmU — 
-`kyOPFFy3I38`  45m  AI News: These Google Updates Are Dividing People  https://www.youtube.com/watch?v=kyOPFFy3I38 — 
-`VWGkNvfkMys`  44m  After Decades, I stopped using Chrome (Why I Chose Comet)  https://www.youtube.com/watch?v=VWGkNvfkMys — 
-`jsP-eRriC0k`  43m  AI News: The Biggest Leap We've Seen This Year!  https://www.youtube.com/watch?v=jsP-eRriC0k — 
-`ncVQneK7FlE`  42m  How Much Does a 900k YouTube Channel Make? (Answering All Your Questions)  https://www.youtube.com/watch?v=ncVQneK7FlE — 
-`UZZBAYjhUV4`  40m  Side Hustle Ideas With Nick Loper  https://www.youtube.com/watch?v=UZZBAYjhUV4 — 
-`99fmkEYQuaM`  40m  AI News: New FREE Agent Is Blowing My Mind  https://www.youtube.com/watch?v=99fmkEYQuaM — 
-`0ahIpX6H2Fw`  39m  50+ Insane Ways To Use The NEW ChatGPT  https://www.youtube.com/watch?v=0ahIpX6H2Fw — 
-`BeTAVG5E07s`  39m  19 FREE AI Tools You Need In Your Life  https://www.youtube.com/watch?v=BeTAVG5E07s — 
-`GfPZm9yucQo`  31m  AI News: The Most Insane Week So Far This Year!  https://www.youtube.com/watch?v=GfPZm9yucQo — 
-`GGzT7zVrRTU`  20m  GPT-6 Astra Is Finally Here (And It’s REALLY Good)  https://www.youtube.com/watch?v=GGzT7zVrRTU — 
-`Po_Dh7WLgmM`  26m  The Most Overhyped and Underhyped New AI Models  https://www.youtube.com/watch?v=Po_Dh7WLgmM — 
-`TInwQglNkzo`  30m  AI News: OpenAI Made a Massive Move Against NVIDIA  https://www.youtube.com/watch?v=TInwQglNkzo — 
-`rKo9iLGjUbs`  28m  I Built a FREE App That Runs Your Entire Business  https://www.youtube.com/watch?v=rKo9iLGjUbs — 
-`EfGF7QbJItA`  33m  AI News: OpenAI Just Put the Brakes on AI  https://www.youtube.com/watch?v=EfGF7QbJItA — 
-`NC4h5kWH_-A`  34m  AI News: The AI Agent Race Just Exploded  https://www.youtube.com/watch?v=NC4h5kWH_-A — 
-`qK4nV_LnXxQ`  29m  Anyone Can Make Amazing Games Now (Easy)  https://www.youtube.com/watch?v=qK4nV_LnXxQ — 
-`BCW-wrDzWCs`  37m  AI NEWS: Can ChatGPT's Agent Do Everything For You Now?  https://www.youtube.com/watch?v=BCW-wrDzWCs — 
-`DbH8SWsUn30`  37m  Claude's AI is Amazing While New ChatGPT... Isn't.  https://www.youtube.com/watch?v=DbH8SWsUn30 — 
-`jnUhpLAuaBA`  36m  Claude 3: The AI That FINALLY Beats ChatGPT?  https://www.youtube.com/watch?v=jnUhpLAuaBA — 
-`m9Rweuhgtvk`  35m  ChatGPT vs. Bard vs. Claude 2 (Which is best?)  https://www.youtube.com/watch?v=m9Rweuhgtvk — 
+`UsnyU-9mbKE`  48m  What AI Image Generator Should YOU Be Using??  https://www.youtube.com/watch?v=UsnyU-9mbKE —
+`oxerUfMFuCU`  48m  Should Kids Still Go To College? (Answering All Your Questions)  https://www.youtube.com/watch?v=oxerUfMFuCU —
+`loaFHyvCS5k`  46m  AI News: The Busiest Week in AI in A Looong Time!  https://www.youtube.com/watch?v=loaFHyvCS5k —
+`j-hV-Zy6wmU`  46m  29 Biggest AI Stories You Missed This Week  https://www.youtube.com/watch?v=j-hV-Zy6wmU —
+`kyOPFFy3I38`  45m  AI News: These Google Updates Are Dividing People  https://www.youtube.com/watch?v=kyOPFFy3I38 —
+`VWGkNvfkMys`  44m  After Decades, I stopped using Chrome (Why I Chose Comet)  https://www.youtube.com/watch?v=VWGkNvfkMys —
+`jsP-eRriC0k`  43m  AI News: The Biggest Leap We've Seen This Year!  https://www.youtube.com/watch?v=jsP-eRriC0k —
+`ncVQneK7FlE`  42m  How Much Does a 900k YouTube Channel Make? (Answering All Your Questions)  https://www.youtube.com/watch?v=ncVQneK7FlE —
+`UZZBAYjhUV4`  40m  Side Hustle Ideas With Nick Loper  https://www.youtube.com/watch?v=UZZBAYjhUV4 —
+`99fmkEYQuaM`  40m  AI News: New FREE Agent Is Blowing My Mind  https://www.youtube.com/watch?v=99fmkEYQuaM —
+`0ahIpX6H2Fw`  39m  50+ Insane Ways To Use The NEW ChatGPT  https://www.youtube.com/watch?v=0ahIpX6H2Fw —
+`BeTAVG5E07s`  39m  19 FREE AI Tools You Need In Your Life  https://www.youtube.com/watch?v=BeTAVG5E07s —
+`GfPZm9yucQo`  31m  AI News: The Most Insane Week So Far This Year!  https://www.youtube.com/watch?v=GfPZm9yucQo —
+`GGzT7zVrRTU`  20m  GPT-6 Astra Is Finally Here (And It’s REALLY Good)  https://www.youtube.com/watch?v=GGzT7zVrRTU —
+`Po_Dh7WLgmM`  26m  The Most Overhyped and Underhyped New AI Models  https://www.youtube.com/watch?v=Po_Dh7WLgmM —
+`TInwQglNkzo`  30m  AI News: OpenAI Made a Massive Move Against NVIDIA  https://www.youtube.com/watch?v=TInwQglNkzo —
+`rKo9iLGjUbs`  28m  I Built a FREE App That Runs Your Entire Business  https://www.youtube.com/watch?v=rKo9iLGjUbs —
+`EfGF7QbJItA`  33m  AI News: OpenAI Just Put the Brakes on AI  https://www.youtube.com/watch?v=EfGF7QbJItA —
+`NC4h5kWH_-A`  34m  AI News: The AI Agent Race Just Exploded  https://www.youtube.com/watch?v=NC4h5kWH_-A —
+`qK4nV_LnXxQ`  29m  Anyone Can Make Amazing Games Now (Easy)  https://www.youtube.com/watch?v=qK4nV_LnXxQ —
+`BCW-wrDzWCs`  37m  AI NEWS: Can ChatGPT's Agent Do Everything For You Now?  https://www.youtube.com/watch?v=BCW-wrDzWCs —
+`DbH8SWsUn30`  37m  Claude's AI is Amazing While New ChatGPT... Isn't.  https://www.youtube.com/watch?v=DbH8SWsUn30 —
+`jnUhpLAuaBA`  36m  Claude 3: The AI That FINALLY Beats ChatGPT?  https://www.youtube.com/watch?v=jnUhpLAuaBA —
+`m9Rweuhgtvk`  35m  ChatGPT vs. Bard vs. Claude 2 (Which is best?)  https://www.youtube.com/watch?v=m9Rweuhgtvk —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/matt-wolfe/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -89,7 +88,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/UsnyU-9mbKE.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

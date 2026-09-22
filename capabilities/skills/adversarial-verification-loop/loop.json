@@ -1,0 +1,137 @@
+{
+  "_compiled": {
+    "source": "loop.yaml",
+    "source_sha256": "ee7aa40a4e25ca7e28eb1730f094328c7de08367eb70c51e76c7201c10c21fb8"
+  },
+  "closing_loop": {
+    "from": [
+      "R",
+      "N"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "G"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 2,
+    "step": "Q2"
+  },
+  "doctrine_source": [
+    "~/RIG-Doctrine-Repo/doctrines/ADVERSARIAL-VERIFICATION.md",
+    "~/.claude/rules/rig-build-doctrine.md"
+  ],
+  "family": "governance",
+  "id": "adversarial-verification-loop",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 120
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Adversarial verification loop",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "RedTeamPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "guard.md",
+      "gate": [
+        {
+          "path": "guard.md",
+          "patterns": [
+            "^## Gate-under-test",
+            "^## What-it-guards",
+            "^## Green-command"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "the guard's green command as `- cmd:<shell>`",
+          "path": "guard.md",
+          "pattern": "^## Green-command[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s*cmd:\\S",
+          "type": "regex"
+        }
+      ],
+      "id": "G",
+      "name": "Guard"
+    },
+    {
+      "artifact": "red.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "path": "red.md",
+          "patterns": [
+            "^## Planted-defect",
+            "^## Red-output"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "R",
+      "name": "Red"
+    },
+    {
+      "artifact": "green.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "path": "green.md",
+          "patterns": [
+            "^## Restored",
+            "^## Green-output"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "N",
+      "name": "Green"
+    },
+    {
+      "artifact": "fixture.md",
+      "gate": [
+        {
+          "path": "fixture.md",
+          "patterns": [
+            "^## Regression-fixture"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "where the planted failure lives as a permanent test: `- file:<path>` or `- cmd:<test command>`",
+          "path": "fixture.md",
+          "pattern": "^## Regression-fixture[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s*(file|cmd):\\S",
+          "type": "regex"
+        }
+      ],
+      "id": "K",
+      "name": "Keep"
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

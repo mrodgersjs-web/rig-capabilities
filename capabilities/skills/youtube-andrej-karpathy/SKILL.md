@@ -9,10 +9,9 @@ status: draft
 verified_by: rig-agent
 verified_on: 2026-09-08
 outcome: Load channel-scope context before mining the andrej-karpathy corpus or doing GTM/agent work informed by it.
-done_when: >
-  Digest + top-video index read from the skill body; grep/locate commands
-  demonstrated against the on-disk corpus for at least one landmark video.
-great_example: youtube_intel/digests/andrej-karpathy_brief.md (this repo, quarantine-rooted)
+done_when:
+  - file:capabilities/skills/youtube-andrej-karpathy/index.json
+  - grep:capabilities/skills/youtube-andrej-karpathy/SKILL.md:## Top videos
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 2
@@ -52,23 +51,23 @@ Channel-scope context for the **@AndrejKarpathy** YouTube corpus — L2 depth ti
 - **mine-for**: Tokenizer internals (where inference cost actually lives), the 124M baseline as cheapest honest grounding for agent systems, and the SFT/RLHF breakdown that maps directly to fine-tune-vs-prompt GTM decisions. "How I use LLMs" surfaces prompt-chaining patterns that still inform agent architectures.
 
 ## Top videos (signal-sorted)
-`l8pRSuU81PU`  241m  Let's reproduce GPT-2 (124M)  https://www.youtube.com/watch?v=l8pRSuU81PU — 
-`7xTGNNLPyMI`  211m  Deep Dive into LLMs like ChatGPT  https://www.youtube.com/watch?v=7xTGNNLPyMI — 
-`VMj-3S1tku0`  146m  The spelled-out intro to neural networks and backpropagation: building micrograd  https://www.youtube.com/watch?v=VMj-3S1tku0 — 
-`zduSFxRajkE`  134m  Let's build the GPT Tokenizer  https://www.youtube.com/watch?v=zduSFxRajkE — 
-`EWvNQjAaOHw`  131m  How I use LLMs  https://www.youtube.com/watch?v=EWvNQjAaOHw — 
-`PaCmpygFfXo`  118m  The spelled-out intro to language modeling: building makemore  https://www.youtube.com/watch?v=PaCmpygFfXo — 
-`kCc8FmEb1nY`  116m  Let's build GPT: from scratch, in code, spelled out.  https://www.youtube.com/watch?v=kCc8FmEb1nY — 
-`P6sfmUTpUmc`  116m  Building makemore Part 3: Activations & Gradients, BatchNorm  https://www.youtube.com/watch?v=P6sfmUTpUmc — 
-`q8SA3rM6ckI`  115m  Building makemore Part 4: Becoming a Backprop Ninja  https://www.youtube.com/watch?v=q8SA3rM6ckI — 
-`TCH_1BHY58I`  76m  Building makemore Part 2: MLP  https://www.youtube.com/watch?v=TCH_1BHY58I — 
-`zjkBMFhNj_g`  60m  [1hr Talk] Intro to Large Language Models  https://www.youtube.com/watch?v=zjkBMFhNj_g — 
-`t3YJ5hKiMQ0`  56m  Building makemore Part 5: Building a WaveNet  https://www.youtube.com/watch?v=t3YJ5hKiMQ0 — 
-`2oKjtvYslMY`  19m  Stable diffusion dreams of steampunk brains  https://www.youtube.com/watch?v=2oKjtvYslMY — 
-`vEnetcj_728`  5m  Stable diffusion dreams of "blueberry spaghetti" for one night  https://www.youtube.com/watch?v=vEnetcj_728 — 
-`kVpDARqZdrQ`  4m  Stable diffusion dreams of psychedelic faces  https://www.youtube.com/watch?v=kVpDARqZdrQ — 
-`Jv1ayv-04H4`  3m  Stable diffusion dreams of steam punk neural networks  https://www.youtube.com/watch?v=Jv1ayv-04H4 — 
-`sM9bozW295Q`  2m  Stable diffusion dreams of tattoos  https://www.youtube.com/watch?v=sM9bozW295Q — 
+`l8pRSuU81PU`  241m  Let's reproduce GPT-2 (124M)  https://www.youtube.com/watch?v=l8pRSuU81PU —
+`7xTGNNLPyMI`  211m  Deep Dive into LLMs like ChatGPT  https://www.youtube.com/watch?v=7xTGNNLPyMI —
+`VMj-3S1tku0`  146m  The spelled-out intro to neural networks and backpropagation: building micrograd  https://www.youtube.com/watch?v=VMj-3S1tku0 —
+`zduSFxRajkE`  134m  Let's build the GPT Tokenizer  https://www.youtube.com/watch?v=zduSFxRajkE —
+`EWvNQjAaOHw`  131m  How I use LLMs  https://www.youtube.com/watch?v=EWvNQjAaOHw —
+`PaCmpygFfXo`  118m  The spelled-out intro to language modeling: building makemore  https://www.youtube.com/watch?v=PaCmpygFfXo —
+`kCc8FmEb1nY`  116m  Let's build GPT: from scratch, in code, spelled out.  https://www.youtube.com/watch?v=kCc8FmEb1nY —
+`P6sfmUTpUmc`  116m  Building makemore Part 3: Activations & Gradients, BatchNorm  https://www.youtube.com/watch?v=P6sfmUTpUmc —
+`q8SA3rM6ckI`  115m  Building makemore Part 4: Becoming a Backprop Ninja  https://www.youtube.com/watch?v=q8SA3rM6ckI —
+`TCH_1BHY58I`  76m  Building makemore Part 2: MLP  https://www.youtube.com/watch?v=TCH_1BHY58I —
+`zjkBMFhNj_g`  60m  [1hr Talk] Intro to Large Language Models  https://www.youtube.com/watch?v=zjkBMFhNj_g —
+`t3YJ5hKiMQ0`  56m  Building makemore Part 5: Building a WaveNet  https://www.youtube.com/watch?v=t3YJ5hKiMQ0 —
+`2oKjtvYslMY`  19m  Stable diffusion dreams of steampunk brains  https://www.youtube.com/watch?v=2oKjtvYslMY —
+`vEnetcj_728`  5m  Stable diffusion dreams of "blueberry spaghetti" for one night  https://www.youtube.com/watch?v=vEnetcj_728 —
+`kVpDARqZdrQ`  4m  Stable diffusion dreams of psychedelic faces  https://www.youtube.com/watch?v=kVpDARqZdrQ —
+`Jv1ayv-04H4`  3m  Stable diffusion dreams of steam punk neural networks  https://www.youtube.com/watch?v=Jv1ayv-04H4 —
+`sM9bozW295Q`  2m  Stable diffusion dreams of tattoos  https://www.youtube.com/watch?v=sM9bozW295Q —
 
 ## On-disk corpus
 - transcripts: `/Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus/andrej-karpathy/transcripts/<id>.txt` (cleaned, one line per cue)
@@ -82,7 +81,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/transcripts/l8pRSuU81PU.txt
+cat $G/tran
 ```
 Known gap: /videos tab only — Shorts: Shorts-heavy, few/indexed.
 

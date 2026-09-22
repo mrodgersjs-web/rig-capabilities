@@ -1,0 +1,22 @@
+{
+ "deterministic_step": {
+  "steps": [
+   {
+    "step": "collect six scheduler estates into normalized rows",
+    "mechanism": "estate/collect_automation_estate.py:snapshot"
+   },
+   {
+    "step": "score and route every row deterministically",
+    "mechanism": "estate/collect_automation_estate.py:score_job/route_job"
+   },
+   {
+    "step": "validate packet against the checklist engine",
+    "mechanism": "estate/collect_automation_estate.py:self_check"
+   }
+  ],
+  "model_countermeasures": [
+   "no model may author owner classifications, verdicts, or evidence fields",
+   "unresolved evidence stays UNKNOWN, never model-filled"
+  ]
+ }
+}

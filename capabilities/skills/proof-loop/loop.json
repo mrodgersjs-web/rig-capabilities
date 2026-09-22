@@ -1,0 +1,153 @@
+{
+  "_compiled": {
+    "source": "loop.yaml",
+    "source_sha256": "824524fe38d8146bc3c1275eefa088491386dadc542c70c6b775e0d82ed3018f"
+  },
+  "closing_loop": {
+    "from": [
+      "E",
+      "N",
+      "V"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "C"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 2,
+    "step": "P"
+  },
+  "doctrine_source": [
+    "~/.claude/rules/honest-completion-doctrine.md",
+    "~/RIG-Doctrine-Repo/doctrines/PROOF-OR-IT-DIDNT-HAPPEN.md",
+    "~/RIG-Doctrine-Repo/doctrines/HONEST-COMPLETION-DOCTRINE.md"
+  ],
+  "family": "governance",
+  "id": "proof-loop",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 180
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Proof loop",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "ProofPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "claim.md",
+      "gate": [
+        {
+          "path": "claim.md",
+          "patterns": [
+            "^## Claim",
+            "^## Done-test",
+            "^## Artifacts"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "## Done-test needs executable lines (`- cmd:\u2026` `- file:\u2026` `- grep:\u2026`); a vacuous done-test is refused",
+          "path": "claim.md",
+          "pattern": "^\\s*[-*]\\s*(cmd|file|grep|mcp):\\S",
+          "type": "regex"
+        },
+        {
+          "path": "claim.md",
+          "pattern": "- cmd:(echo|true)\\s*$",
+          "type": "regex_absent"
+        }
+      ],
+      "id": "C",
+      "name": "Claim"
+    },
+    {
+      "artifact": "evidence.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "path": "evidence.md",
+          "patterns": [
+            "^## Commands",
+            "^## Output"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "E",
+      "name": "Evidence"
+    },
+    {
+      "artifact": "planted.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "path": "planted.md",
+          "patterns": [
+            "^## Planted-defect",
+            "^## Red",
+            "^## Green"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "N",
+      "name": "Non-vacuity"
+    },
+    {
+      "artifact": "verify.md",
+      "gate": [
+        {
+          "path": "verify.md",
+          "patterns": [
+            "^## Verifier",
+            "^## Verdict",
+            "^## Gaps"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "Verdict must be PERFECT / VERIFIED / PARTIAL (FEEDBACK or FAILED = stage fail, closing loop)",
+          "path": "verify.md",
+          "pattern": "^## Verdict[^\\n]*\\n[^\\n]*\\b(PERFECT|VERIFIED|PARTIAL)\\b",
+          "type": "regex"
+        },
+        {
+          "hint": "name the independent verifier \u2014 never the builder's own family",
+          "path": "verify.md",
+          "pattern": "^## Verifier[^\\n]*\\n(?:[^\\n]*\\n)*?[^\\n]*\\b(family|model|agent)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "V",
+      "name": "Verify"
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

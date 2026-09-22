@@ -1,0 +1,175 @@
+{
+  "_compiled": {
+    "source": "loop.yaml",
+    "source_sha256": "4f1b84c625c8504930b19c60c8acedb4692762f941c6fb5cb3febc89e9cf23ae"
+  },
+  "closing_loop": {
+    "from": [
+      "C"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "D"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D2",
+    "level": 3,
+    "step": "I1"
+  },
+  "doctrine_source": [
+    "~/.claude/rules/north-star-doctrine.md",
+    "~/.claude/rules/north-star-lock.md",
+    "~/.claude/rules/anchor-doctrine.md"
+  ],
+  "family": "governance",
+  "id": "north-star-lock-loop",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 720
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "North-Star Lock loop",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "IntentLockPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "goal-card.md",
+      "gate": [
+        {
+          "path": "goal-card.md",
+          "patterns": [
+            "^## GOAL",
+            "^## METRIC",
+            "^## DONE-TEST",
+            "^## OUT-OF-SCOPE",
+            "^## ACTIVE-PROJECT",
+            "^## EFFORT-BUDGET"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "DONE-TEST must be executable",
+          "path": "goal-card.md",
+          "pattern": "^\\s*[-*]\\s*(cmd|file|grep|mcp):\\S",
+          "type": "regex"
+        },
+        {
+          "hint": "banned working-metrics (fidelity to X, looks like, award-tier) may not be THE METRIC",
+          "path": "goal-card.md",
+          "pattern": "(?i)^## METRIC[^\\n]*\\n[^\\n]*\\b(fidelity|looks like|award|x/10|n/10)\\b",
+          "type": "regex_absent"
+        }
+      ],
+      "id": "L",
+      "name": "Lock",
+      "write_policy": {
+        "deny_message": "No build while the Goal Card is blank. Write goal-card.md: ## GOAL (outcome in Mike's words) ## METRIC (buyer/outcome terms) ## DONE-TEST (executable) ## OUT-OF-SCOPE ## ACTIVE-PROJECT ## EFFORT-BUDGET.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "drift-log.md",
+      "gate": [
+        {
+          "path": "drift-log.md",
+          "patterns": [
+            "^## Checks"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "each check line: `- <ts> NOW: <what I am optimizing> | MATCH: yes|no`",
+          "path": "drift-log.md",
+          "pattern": "NOW:[^\\n]*\\|\\s*MATCH:\\s*(yes|no)",
+          "type": "regex"
+        },
+        {
+          "counter": "drift_checks",
+          "min": 1,
+          "type": "min_counter"
+        }
+      ],
+      "id": "D",
+      "name": "Drift-check",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "scope.md",
+      "gate": [
+        {
+          "path": "scope.md",
+          "patterns": [
+            "^## Scope-changes"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "each scope change carries `named-cost: <what is given up>` or the section says `none`",
+          "path": "scope.md",
+          "pattern": "^## Scope-changes[^\\n]*\\n(?:[^\\n]*\\n)*?[^\\n]*\\b(none|named-cost:)",
+          "type": "regex"
+        },
+        {
+          "hint": "every `MATCH: no` line must end with RECONCILED: <re-lock or return>",
+          "path": "drift-log.md",
+          "pattern": "MATCH:\\s*no(?![^\\n]*RECONCILED)",
+          "type": "regex_absent"
+        }
+      ],
+      "id": "S",
+      "name": "Scope-alarm",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "close-card.md",
+      "gate": [
+        {
+          "path": "close-card.md",
+          "patterns": [
+            "^## Goal-met",
+            "^## Parked",
+            "^## Next-action",
+            "^## Proliferation-delta"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "Goal-met: yes|no \u2014 with proof if yes, with the honest gap if no",
+          "path": "close-card.md",
+          "pattern": "^## Goal-met[^\\n]*\\n[^\\n]*\\b(yes|no)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "C",
+      "name": "Close",
+      "write_policy": {
+        "mode": "open"
+      }
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

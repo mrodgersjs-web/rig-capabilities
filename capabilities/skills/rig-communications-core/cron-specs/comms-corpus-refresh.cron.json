@@ -1,0 +1,15 @@
+{
+  "name": "comms-corpus-refresh",
+  "dormant": true,
+  "registered": false,
+  "schedule": "0 6 * * *",
+  "tz": "America/Denver",
+  "script": "scripts/refresh_writing_craft.py",
+  "kill_switch": "~/.rig/comms/KILL_corpus",
+  "kill_semantics": "if the kill-switch file exists the runner must SKIP the job and log SKIP:kill-switch \u2014 deleting the file is the only resume",
+  "known_blockers": [
+    "YouTube IP block \u2014 job may legitimately no-op until it lifts"
+  ],
+  "proof": "prints step report json; non-zero only when every step fails",
+  "gate_d": "none \u2014 read-only scrape + local file writes, metadata only"
+}

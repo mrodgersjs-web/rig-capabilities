@@ -1,14 +1,9 @@
 ---
 name: s1gate
-description: >
-  The RIG System-1 Gate. A governed decision layer on TypeSafe's System One model (Jev)
-  that scores artifacts against calibrated rubrics and returns PASS / ESCALATE / BLOCK.
-  Use whenever a stage transition needs a quality bar: a plan before building, a diff
-  before merging, a post before publishing, a comment before sending, a lead before
-  routing. Also use when deciding whether a judgment belongs in code, in a System 1
-  model, or in a System 2 model.
+description: "The RIG System-1 Gate. A governed decision layer on TypeSafe's System One model (Jev) that scores artifacts against calibrated rubrics and returns PASS / ESCALATE / BLOCK. Use whenever a stage transition needs a quality bar: a plan before building, a diff before merging, a post before publishing, a comment before sending, a lead before routing. Also use when deciding whether a judgment belongs in code, in a System 1 model, or in a System 2 model."
 tags: [rig, doctrine, gates, verification, jev, typesafe, system-one]
-verified: "2026-09-18 against jev-1.13.0, live API, 13 rubrics, 25 unit tests"
+metadata:
+  verified: "2026-09-18 against jev-1.13.0, live API, 13 rubrics, 25 unit tests"
 ---
 
 # System-1 Gate (s1gate)

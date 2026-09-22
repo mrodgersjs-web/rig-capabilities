@@ -1,0 +1,28 @@
+{
+  "schema": "rig.d85.process-authority.v1",
+  "process_id": "cockpit_nightly_refresh_v3",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/cockpit_nightly_refresh_v3",
+  "file_hashes": {
+    "cockpit_nightly_worker.py": "75e079e4732b898de40f9449ec0f8df6a66a9e5ab3ae19ca0f0a8653cec7fe4b",
+    "cockpit_nightly_adapter.py": "24ab2a63d36501dfd1b8caea8adc93eab5091d62146d374b25ed17702f93d1db"
+  },
+  "external_modules": [
+    {
+      "module": "subprocess",
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "allowed_calls": [
+        "subprocess.call"
+      ]
+    }
+  ],
+  "entrypoints": [
+    {
+      "source_path": "cockpit_nightly_worker.py",
+      "symbol": "run_refresh",
+      "adapter_path": "cockpit_nightly_adapter.py",
+      "adapter_operation": "execute"
+    }
+  ],
+  "classification_path": "processes/cockpit_nightly_refresh_v3.classification.json"
+}

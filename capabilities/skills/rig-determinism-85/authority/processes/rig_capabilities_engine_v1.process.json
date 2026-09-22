@@ -1,0 +1,28 @@
+{
+ "schema": "rig.d85.process-authority.v1",
+ "process_id": "rig_capabilities_engine_v1",
+ "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/rig_capabilities_engine_v1",
+ "file_hashes": {
+  "rig_engine_worker.py": "e543907e8f1bcc3d737da594c478570fdefaf20694004da835b73cd881f2418c",
+  "rig_engine_adapter.py": "088f7405639f0f7dd9bc5c2f4c865cb9361d400ca6c3a7342b7ff8f54858f24b"
+ },
+ "external_modules": [
+  {
+   "module": "subprocess",
+   "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11.15-macos-aarch64-none/lib/python3.11/subprocess.py",
+   "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+   "allowed_calls": [
+    "subprocess.call"
+   ]
+  }
+ ],
+ "entrypoints": [
+  {
+   "source_path": "rig_engine_worker.py",
+   "symbol": "run_engine",
+   "adapter_path": "rig_engine_adapter.py",
+   "adapter_operation": "execute"
+  }
+ ],
+ "classification_path": "processes/rig_capabilities_engine_v1.classification.json"
+}

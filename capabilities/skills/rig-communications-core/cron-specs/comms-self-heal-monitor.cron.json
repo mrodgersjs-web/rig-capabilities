@@ -1,0 +1,12 @@
+{
+  "name": "comms-self-heal-monitor",
+  "dormant": true,
+  "registered": false,
+  "schedule": "0 */4 * * *",
+  "tz": "America/Denver",
+  "spec_doc": "references/ops/SELF-HEALING-MONITOR.md",
+  "script": null,
+  "kill_switch": "~/.rig/comms/KILL_monitor",
+  "kill_semantics": "monitor obeys its own kill switch (a watchdog that can't be stopped is a hazard)",
+  "authority": "alerts only + reversible drift fixes; never bulk-restart, never auto-resume frozen lanes (rig-emergency-freeze-discipline)"
+}
