@@ -17,6 +17,14 @@ Tier-1 meta-skill. Job to be done: When researching a topic, extracting doctrine
 2. **Skills** — load the named child skill's SKILL.md and follow it. Each child is written to route further when it owns a family.
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
+## Routing contract (binding)
+- MUST route through this meta-skill first for any job in its description; never load a child directly from memory of its name.
+- MUST load exactly ONE child skill per task step; never bulk-load children from the index.
+- MUST load only the single sub-skill the task needs, only when the loaded child names sub-skills.
+- MUST NOT load a second child to "compare"; if two children seem to match, pick by the routing table one-liner in references/routing.md, then load that one.
+- If no child matches the task, load `when-nothing-else-fits` instead of guessing.
+- If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
+
 ## How to route
 1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 60-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
