@@ -202,40 +202,40 @@
 | npcpy-run-jinx | hermes | Execute a jinx by name (already loaded on the team) or by filesystem path (e.g. a freshly created_ji | - |
 | onboarding | aside-builtin | Run the first-session onboarding - get to know the user from the tools they already use, show a coup | - |
 | prompting | hermes | Meta-prompting standard library — the PAI system for generating, optimizing, and composing prompts p | - |
-| tac-agent-ordering | hermes |     Use when orchestrating multiple agents or subagents and the default   plan-execute-review sequen | - |
+| tac-agent-ordering | hermes | Use when orchestrating multiple agents or subagents and the default plan-execute-review sequence is  | - |
 | tac-agents-md-corrections | hermes | The second time you correct the agent, write the correction into AGENTS.md/CLAUDE.md (short) or an o | - |
-| tac-break-code-bias-loop | hermes |     Use when an agent keeps producing the same flawed shape of code across   retries. Names the bias | - |
+| tac-break-code-bias-loop | hermes | Use when an agent keeps producing the same flawed shape of code across retries. Names the bias expli | - |
 | tac-bug-hunting-deep | hermes | Use when debugging complex issues — AI bug finding, deep bug hunting with subagents, systematic debu | - |
 | tac-business-agent-use | hermes | Use when applying agentic coding to business operations — goal-driven events, Microsoft Clarity anal | - |
 | tac-claude-md-mastery | hermes | Use when setting up or optimizing CLAUDE.md — init, hierarchical configs, auto memory, conditions, p | - |
 | tac-closed-loop | hermes | TAC closed loop pattern — Builder creates, Verifier checks, feedback loops. Use for ANY build that n | - |
-| tac-closing-loop | hermes |     Mandatory on every build pipeline. Separates Builder from Verifier in a   self-correcting loop.  | - |
+| tac-closing-loop | hermes | Mandatory on every build pipeline. Separates Builder from Verifier in a self-correcting loop. Builde | - |
 | tac-codex-parallel | hermes | Use when working with OpenAI Codex CLI — thread management, forking, agents.md, /goal mode, computer | - |
 | tac-context-before-code | hermes | Install current vendor context into the harness before prompting any integration — plugin first, the | - |
-| tac-context-engineering | hermes |     Use when setting up any new agent, project, or coding session. Applies the   12 context engineer | - |
+| tac-context-engineering | hermes | Use when setting up any new agent, project, or coding session. Applies the 12 context engineering te | - |
 | tac-context-layer | hermes | Use when managing context for large production codebases — signal-to-noise, progressive disclosure,  | - |
-| tac-cross-tool-handoff | hermes |     Use when combining multiple CLIs or models in a single workflow. Splits the   job by tool streng | - |
+| tac-cross-tool-handoff | hermes | Use when combining multiple CLIs or models in a single workflow. Splits the job by tool strength, ma | - |
 | tac-design-driven-agents | hermes | Use when building UI/UX with agents — design flow, interaction layer, HTML artifacts, component desi | - |
 | tac-doctrine | hermes | Tactical Agentic Coding (TAC) doctrine — IndyDevDan's 14-lesson system. The tactical layer beneath R | - |
-| tac-git-diff-review | hermes |     Use after any agent edit session, before committing, merging, or declaring   work done. Reviews  | - |
+| tac-git-diff-review | hermes | Use after any agent edit session, before committing, merging, or declaring work done. Reviews AI cha | - |
 | tac-headless-automation | hermes | Use when running agents without a UI — headless mode, background workflows, routines/scheduled tasks | - |
 | tac-loop-engineering | hermes | Use when building AI loops that work autonomously — builder-verifier patterns, /loop, /goal mode, mo | - |
 | tac-mission-command | hermes | Use when orchestrating complex multi-agent missions — removing bottlenecks, task lifecycle managemen | - |
 | tac-mixed-model-workflows | hermes | Use when combining multiple AI models or CLIs in a single workflow — model routing by complexity, co | - |
 | tac-model-routing | hermes | Route model cost to task class — strong models plan, cheap models recon and execute mechanical work; | - |
-| tac-one-pattern-per-pass | hermes |     Use when refactoring or cleaning legacy code with an agent and the target file   contains multip | - |
+| tac-one-pattern-per-pass | hermes | Use when refactoring or cleaning legacy code with an agent and the target file contains multiple dis | - |
 | tac-pan | hermes | Tactical Panopticon — the comprehensive GTM/commercial strategy orchestrator. Uses IQRSQPI (Intake → | - |
 | tac-parallel-tracks | hermes | Foundation first, then one git worktree per independent agent track, integrated through review gates | - |
 | tac-plan-artifact | hermes | The plan is a persisted, human-reviewed workspace artifact; execution happens in a fresh context tha | - |
-| tac-planning-convergence | hermes |     Use on non-trivial changes where you have two or more models or CLIs available   and the cost of | - |
-| tac-point-fix-vs-architectural | hermes |     Use when triaging a bug or messy code in a legacy codebase and deciding   whether to patch the s | - |
+| tac-planning-convergence | hermes | Use on non-trivial changes where you have two or more models or CLIs available and the cost of a wro | - |
+| tac-point-fix-vs-architectural | hermes | Use when triaging a bug or messy code in a legacy codebase and deciding whether to patch the symptom | - |
 | tac-prompt-architecture | hermes | Use when designing prompts for complex agent tasks — clarifying questions, anti-sycophancy, goal-in- | - |
 | tac-real-path-verify | hermes | Completion is the feature working on the real path — public URL logged out, provider event dashboard | - |
 | tac-review-gate | hermes | Checkpoint before every agent run, review every agent diff before merge — human for risk, agent revi | - |
 | tac-runtime-first-debug | hermes | No fix without runtime evidence — reproduce first, paste the exact error, keep provider/deployment l | - |
-| tac-scout-worker-synthesizer | hermes |     Use for any non-trivial task — multi-file edits, unfamiliar code, or anything   where a single m | - |
+| tac-scout-worker-synthesizer | hermes | Use for any non-trivial task — multi-file edits, unfamiliar code, or anything where a single monolit | - |
 | tac-skills-as-code | hermes | Use when creating, managing, or specifying models for agent skills — skill types, arguments, explore | - |
-| tac-stochastic-coverage | hermes |     Use when a single agent trajectory is a coin flip — ambiguous specs, large   search space, or "I | - |
+| tac-stochastic-coverage | hermes | Use when a single agent trajectory is a coin flip — ambiguous specs, large search space, or 'I'm not | - |
 | tac-subagent-orchestration | hermes | Use when coordinating multiple subagents — explore subagents, forked sessions, nested subagents, mul | - |
 | tac-v3-doctrine | hermes | TAC v3 execution doctrine — the Sonny-Sangha-corpus layer over tac-v2-doctrine. Twelve corpus-backed | - |
 | tac-verification-modes | hermes | Use when verifying agent output — three verifier types (deterministic, scored, real-world), verifier | - |

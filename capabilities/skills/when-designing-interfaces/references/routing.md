@@ -2,17 +2,6 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| harness-hC-01-design-system-audit-session | aside-user | Canonical RIG harness for design-system-audit-session." ---  # design-system-audit-session  Use this | - |
-| harness-hC-02-ui-design-session | aside-user | Canonical RIG harness for ui-design-session." ---  # ui-design-session  Use this as a hard-gated ses | - |
-| harness-hC-03-ux-research-session | aside-user | Canonical RIG harness for ux-research-session." ---  # ux-research-session  Use this as a hard-gated | - |
-| harness-hC-04-design-critique-session | aside-user | Canonical RIG harness for design-critique-session." ---  # design-critique-session  Use this as a ha | - |
-| harness-hC-05-design-token-build-session | aside-user | Canonical RIG harness for design-token-build-session." ---  # design-token-build-session  Use this a | - |
-| harness-hC-07-mobile-design-session | aside-user | Canonical RIG harness for mobile-design-session." ---  # mobile-design-session  Use this as a hard-g | - |
-| harness-hC-08-dashboard-design-session | aside-user | Canonical RIG harness for dashboard-design-session." ---  # dashboard-design-session  Use this as a  | - |
-| harness-hC-11-motion-design-session | aside-user | Canonical RIG harness for motion-design-session." ---  # motion-design-session  Use this as a hard-g | - |
-| harness-hC-12-design-handoff-session | aside-user | Canonical RIG harness for design-handoff-session." ---  # design-handoff-session  Use this as a hard | - |
-| Art | aside-user | Generates static visual content across 20+ formats via Flux, Nano Banana Pro (Gemini 3 Pro), and GPT | - |
-| Webdesign | aside-user | Design and integrate web interfaces using Anthropic's Claude Design (claude.ai/design) as the primar | - |
 | accessibility | hermes | Audit and improve web accessibility following WCAG 2.1 guidelines. Use when asked to "improve access | - |
 | accessibility-compliance | hermes | Implement WCAG 2.2 compliant interfaces with mobile accessibility, inclusive design patterns, and as | - |
 | ad-hoc-verification-scripts | hermes | >-   How to write and clean up ad-hoc verification scripts when the system says   "no canonical test | - |
@@ -40,7 +29,7 @@
 | archify | aside-user | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams | - |
 | architect | hermes | Sketch types, signatures, and module structure before code, then stay in the loop while implementati | - |
 | architecture-patterns | hermes | Implement proven backend architecture patterns including Clean Architecture, Hexagonal Architecture, | - |
-| art | hermes | Generates static visual content across 20+ formats via Flux, Nano Banana Pro (Gemini 3 Pro), and GPT | - |
+| art | aside-user | Generates static visual content across 20+ formats via Flux, Nano Banana Pro (Gemini 3 Pro), and GPT | - |
 | artifact-planning | hermes | [ACS-403] Intercept multi-step flow requests with a clickable HTML plan before code." --- When a req | - |
 | ask-docs | hermes | Query the official CrewAI documentation for answers. Use when the user has a CrewAI question that is | - |
 | ask-sonner | canonical | Guide to Sonner, the React toast library — install and wire up the Toaster, pick the right toast() c | - |
@@ -70,7 +59,7 @@
 | btw | hermes | Ask a quick side question about your current work without derailing the main task. Answers from exis | - |
 | buildcards | hermes | Shared RIG agent capabilities via the `buildcards` CLI — parse documents (LiteParse), generate decks | - |
 | bx-decision-modeler | hermes | Builds formal choice models from behavioral data using drift-diffusion, multi-attribute utility, and | - |
-| bx-experiment-runner | hermes | Designs and executes falsification experiments with pre-registration and power analysis. department: | - |
+| bx-experiment-runner | hermes | Designs and executes falsification experiments with pre-registration and power analysis. owner: Wren | - |
 | bx-influence-designer | hermes | Designs persuasion strategies with effect-size discipline when behavioral predictions require interv | - |
 | bx-intervention-designer | hermes | Designs behavioral interventions using COM-B and Behaviour Change Wheel when the department needs st | - |
 | bx-wren | hermes | Orchestrates the Behavioral Decision Lattice build for each deal, runs IQRSQPI workflow, convenes Co | - |
@@ -158,7 +147,7 @@
 | find-animation-opportunities | canonical | Search a codebase or UI for places that don't animate but should, and reject everything that shouldn | - |
 | finishing-a-development-branch | hermes | Use when implementation is complete, all tests pass, and you need to decide how to integrate the wor | - |
 | fixing-accessibility | aside-user | Audit and fix HTML accessibility issues including ARIA labels, keyboard navigation, focus management | - |
-| fixing-metadata | aside-user | >   Audit and fix HTML metadata including page titles, meta descriptions, canonical URLs, Open Graph | - |
+| fixing-metadata | aside-user | Audit and fix HTML metadata including page titles, meta descriptions, canonical URLs, Open Graph tag | - |
 | fixing-motion-performance | aside-user | Audit and fix animation performance issues including layout thrashing, compositor properties, scroll | - |
 | flutter-production-build | hermes | End-to-end Flutter production build workflow: agent swarm orchestration for massive feature buildout | - |
 | flutter-store-deployment | hermes | Publish Flutter apps to Apple App Store or Google Play." tags:   - flutter   - ios   - android   - a | - |
@@ -179,10 +168,19 @@
 | go-concurrency-patterns | hermes | Master Go concurrency with goroutines, channels, sync primitives, and context. Use when building con | - |
 | golang-patterns | hermes | Idiomatic Go patterns, best practices, and conventions for building robust, efficient, and maintaina | - |
 | grafana-dashboards | hermes | Create and manage production Grafana dashboards for real-time visualization of system and applicatio | - |
-| harness-hA-09-api-design | aside-user | Canonical RIG harness for api-design-session." ---  # api-design-session  Use this as a hard-gated s | - |
-| harness-hA-10-schema-design | aside-user | Canonical RIG harness for schema-design-session." ---  # schema-design-session  Use this as a hard-g | - |
-| harness-hA-12-ci-cd-design | aside-user | Canonical RIG harness for ci-cd-design-session." ---  # ci-cd-design-session  Use this as a hard-gat | - |
-| harness-hB-11-webinar-design | aside-user | Canonical RIG harness for webinar-design-session." ---  # webinar-design-session  Use this as a hard | - |
+| harness-ha-09-api-design | aside-user | Canonical RIG harness for api-design-session." ---  # api-design-session  Use this as a hard-gated s | - |
+| harness-ha-10-schema-design | aside-user | Canonical RIG harness for schema-design-session." ---  # schema-design-session  Use this as a hard-g | - |
+| harness-ha-12-ci-cd-design | aside-user | Canonical RIG harness for ci-cd-design-session." ---  # ci-cd-design-session  Use this as a hard-gat | - |
+| harness-hb-11-webinar-design | aside-user | Canonical RIG harness for webinar-design-session." ---  # webinar-design-session  Use this as a hard | - |
+| harness-hc-01-design-system-audit-session | aside-user | Canonical RIG harness for design-system-audit-session." ---  # design-system-audit-session  Use this | - |
+| harness-hc-02-ui-design-session | aside-user | Canonical RIG harness for ui-design-session." ---  # ui-design-session  Use this as a hard-gated ses | - |
+| harness-hc-03-ux-research-session | aside-user | Canonical RIG harness for ux-research-session." ---  # ux-research-session  Use this as a hard-gated | - |
+| harness-hc-04-design-critique-session | aside-user | Canonical RIG harness for design-critique-session." ---  # design-critique-session  Use this as a ha | - |
+| harness-hc-05-design-token-build-session | aside-user | Canonical RIG harness for design-token-build-session." ---  # design-token-build-session  Use this a | - |
+| harness-hc-07-mobile-design-session | aside-user | Canonical RIG harness for mobile-design-session." ---  # mobile-design-session  Use this as a hard-g | - |
+| harness-hc-08-dashboard-design-session | aside-user | Canonical RIG harness for dashboard-design-session." ---  # dashboard-design-session  Use this as a  | - |
+| harness-hc-11-motion-design-session | aside-user | Canonical RIG harness for motion-design-session." ---  # motion-design-session  Use this as a hard-g | - |
+| harness-hc-12-design-handoff-session | aside-user | Canonical RIG harness for design-handoff-session." ---  # design-handoff-session  Use this as a hard | - |
 | helm-chart-scaffolding | hermes | Design, organize, and manage Helm charts for templating and packaging Kubernetes applications with r | - |
 | help | hermes | Guide on using oh-my-codex plugin ---  # How OMX Works  **You don't need to learn any commands!** OM | - |
 | hookify-rules | hermes | This skill should be used when the user asks to create a hookify rule, write a hook rule, configure  | - |
@@ -270,11 +268,12 @@
 | research-packet | hermes | Use when the request needs rigorous definitions, methods, protocols, benchmarks, targets, or a struc | - |
 | responsive-design | hermes | Implement modern responsive layouts using container queries, fluid typography, CSS Grid, and mobile- | - |
 | review-animations | canonical | Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engin | - |
-| rig-95-harness | hermes | >   The measured design-excellence + impact + engineering harness: build any product surface set   ( | - |
-| rig-adler-coach | hermes |     RIG Adler Coach (AIder) / RIG App Builder — Tauri desktop cockpit for Aider, Kline/Cline, VS Cod | - |
+| rig-95-harness | hermes | The measured design-excellence + impact + engineering harness: build any product surface set (site + | - |
+| rig-adler-coach | hermes | RIG Adler Coach (AIder) / RIG App Builder — Tauri desktop cockpit for Aider, Kline/Cline, VS Code, a | - |
 | rig-adrien-doctrines | aside-user | Load the complete Adrien AI Designer doctrine system as one cohesive unit. Triggers when Mike says ' | - |
 | rig-adversarial-verification | hermes | Use when adding any new gate, test, regression, or load-bearing claim to a RIG build. The doctrine:  | - |
 | rig-agent-excellence-os | hermes | Build quality-control systems for agent teams — benchmark tasks, rubrics, scoring, scrape targets, f | - |
+| rig-agentic-engineering | hermes | RIG Agentic Engineering — RigForge CLI + DeerFlow 2.0 + Coli evaluator + 5-agent pipeline integratio | - |
 | rig-bell | hermes | RIG-BELL — Genuine non-local correlation; Bell  S >2. Single-agent invocation of the Entanglement de | - |
 | rig-build-mcp | canonical | How to drive the capabilities_build_* MCP tools over stdio correctly: the call order (store triage - | - |
 | rig-build-standard | canonical | RIG build standard (umbrella) — the one always-loaded policy for OMP, Claude Code, Hermes and Prime  | - |
@@ -282,7 +281,7 @@
 | rig-communications-behavior | canonical | >-   Behavioral-science fusion for the Communications OS (v4): maps each writing   surface to the bx | - |
 | rig-cron-diagnostics | hermes | Diagnose, repair, AND design/activate Hermes cron fleets — drift protection, batch pinning, goal-bou | - |
 | rig-design-harness | canonical | Route reusable design-harness work to the canonical rig-design-harness package without copying its r | - |
-| rig-design-studio-satori-apple | hermes | >   Communication-first product design director for RIG Design Studio.   Turns Satori Graphics lesso | - |
+| rig-design-studio-satori-apple | hermes | Communication-first product design director for RIG Design Studio. Turns Satori Graphics lessons int | - |
 | rig-domain-experts | hermes | Call RIG Studios domain experts across Hermes, Claude Code, and Codex. Backend architect, GTM strate | - |
 | rig-jtbd-life-workflows | hermes | Use when turning Mike's goals, life admin, research, builds, decisions, or personal operating reques | - |
 | rig-motion-prompt-library | hermes | The studio's prompt-library retrieval layer — MotionSites.ai (official MCP, OAuth-owned by the studi | - |
@@ -302,17 +301,18 @@
 | rig-top100-visual-design | aside-user | RIG Top 100 capability #93: Visual Design & Brand Identity. RIG brand must be instantly recognizable | - |
 | rig-zeropoint | hermes | RIG-ZEROPOINT — Even quiet systems must show baseline activity. Single-agent invocation of the Vacuu | - |
 | rig/rig-adrien-craft | hermes | Sister umbrella to rig-adrien-doctrines. Houses Adrien's design-style doctrines that scored below th | - |
-| rig/rig-adrien-craft/adrien-brutalist-experimental | hermes | >   Build brutalist, Swiss, and raw-experimental web layouts: monochrome palettes,   exposed grids,  | - |
-| rig/rig-adrien-craft/adrien-color-science | hermes | >   Build perceptually uniform, brand-locked color systems with OKLCH. Generates   palettes, tints,  | - |
-| rig/rig-adrien-craft/adrien-data-viz-design | hermes | >   Turn raw data into award-winning information design. Use when a site needs   charts, dashboards, | - |
-| rig/rig-adrien-craft/adrien-editorial-magazine | hermes | >   Build magazine/editorial web layouts: content-first hierarchy, multi-column   grids, pull quotes | - |
-| rig/rig-adrien-craft/adrien-glass-material-craft | hermes | >   Use backdrop-filter, blur, and layered materials (glass, neumorphism,   subtle 3D) with discipli | - |
-| rig/rig-adrien-craft/adrien-louis-borrego-method | hermes | >   Louis Borrego's systemized web design methodology: the Perfect Homepage Framework,   Claude Desi | - |
-| rig/rig-adrien-craft/adrien-mobile-native-craft | hermes | >   Design mobile like it is a native app, not a shrunk desktop site. Use when   the awwwards gate r | - |
-| rig/rig-adrien-craft/adrien-original-layouts | hermes | >   Build non-template, editorial, asymmetric web layouts. Use when a page looks   like a Bootstrap/ | - |
-| rig/rig-adrien-craft/adrien-page-transitions | hermes | >   Design seamless page transitions — preloaders, View Transitions API,   Framer/Next route transit | - |
-| rig/rig-adrien-craft/adrien-sound-interaction | hermes | >   Add intentional sound to UI interactions using the Web Audio API. Use when   the site needs mult | - |
-| rig/rig-adrien-craft/adrien-webgl-shaders | hermes | >   Build a GPU-driven hero craft moment with Three.js + custom GLSL shaders.   Use for the single " | - |
+| rig/rig-adrien-craft/adrien-brutalist-experimental | hermes | Build brutalist, Swiss, and raw-experimental web layouts: monochrome palettes, exposed grids, system | - |
+| rig/rig-adrien-craft/adrien-color-science | hermes | Build perceptually uniform, brand-locked color systems with OKLCH. Generates palettes, tints, shades | - |
+| rig/rig-adrien-craft/adrien-data-viz-design | hermes | Turn raw data into award-winning information design. Use when a site needs charts, dashboards, narra | - |
+| rig/rig-adrien-craft/adrien-editorial-magazine | hermes | Build magazine/editorial web layouts: content-first hierarchy, multi-column grids, pull quotes, figu | - |
+| rig/rig-adrien-craft/adrien-figma-mcp-loop | hermes | Bidirectional Figma MCP ↔ Claude Code workflow. Convert a written brief into three visual directions | - |
+| rig/rig-adrien-craft/adrien-glass-material-craft | hermes | Use backdrop-filter, blur, and layered materials (glass, neumorphism, subtle 3D) with discipline. De | - |
+| rig/rig-adrien-craft/adrien-louis-borrego-method | hermes | Louis Borrego's systemized web design methodology: the Perfect Homepage Framework, Claude Design 3.0 | - |
+| rig/rig-adrien-craft/adrien-mobile-native-craft | hermes | Design mobile like it is a native app, not a shrunk desktop site. Use when the awwwards gate require | - |
+| rig/rig-adrien-craft/adrien-original-layouts | hermes | Build non-template, editorial, asymmetric web layouts. Use when a page looks like a Bootstrap/Framer | - |
+| rig/rig-adrien-craft/adrien-page-transitions | hermes | Design seamless page transitions — preloaders, View Transitions API, Framer/Next route transitions,  | - |
+| rig/rig-adrien-craft/adrien-sound-interaction | hermes | Add intentional sound to UI interactions using the Web Audio API. Use when the site needs multi-sens | - |
+| rig/rig-adrien-craft/adrien-webgl-shaders | hermes | Build a GPU-driven hero craft moment with Three.js + custom GLSL shaders. Use for the single 'how di | - |
 | rig/rig-charlie-leaders-doctrines/charliehills-ai-agent-coding | hermes | Use when the user wants to build their first AI agent using Claude Code, without being a developer.  | - |
 | rig/rig-charlie-leaders-doctrines/charliehills-claude-agents-harness | hermes | Use when the user wants to build Claude-based agents that go beyond chat — agents that take actions, | - |
 | rig/rig-charlie-leaders-doctrines/charliehills-claude-code-website | hermes | Use when the user wants to build a real, premium-looking website using Claude Code without being a d | - |
@@ -392,7 +392,6 @@
 | wcag-audit-patterns | hermes | Conduct WCAG 2.2 accessibility audits with automated testing, manual verification, and remediation g | - |
 | web-component-design | hermes | Master React, Vue, and Svelte component patterns including CSS-in-JS, composition strategies, and re | - |
 | web-design-guidelines | hermes | Review UI code against Web Interface Guidelines — accessibility, interaction states, typography, spa | - |
-| webdesign | hermes | Design and integrate web interfaces using Anthropic's Claude Design (claude.ai/design) as the primar | - |
 | when-building-or-fixing-agents | aside-user | When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to r | - |
 | when-designing-interfaces | aside-user | When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to rou | - |
 | when-governing-rig-work | aside-user | When doing any RIG-internal build, review, or claim, use this to route to the governing doctrine (IQ | - |

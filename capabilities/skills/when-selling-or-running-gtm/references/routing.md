@@ -2,15 +2,6 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| harness-hD-01-outbound-sequence | aside-user | Canonical RIG harness for gtm-outbound-sequence." ---  # gtm-outbound-sequence  Use this as a hard-g | - |
-| harness-hD-02-icp-research | aside-user | Canonical RIG harness for gtm-icp-research." ---  # gtm-icp-research  Use this as a hard-gated sessi | - |
-| harness-hD-04-pricing-test | aside-user | Canonical RIG harness for gtm-pricing-experiment." ---  # gtm-pricing-experiment  Use this as a hard | - |
-| harness-hD-05-launch-prep | aside-user | Canonical RIG harness for gtm-launch-prep." ---  # gtm-launch-prep  Use this as a hard-gated session | - |
-| harness-hD-08-expansion-play | aside-user | Canonical RIG harness for gtm-expansion-play." ---  # gtm-expansion-play  Use this as a hard-gated s | - |
-| harness-hD-09-market-research | aside-user | Canonical RIG harness for gtm-market-research." ---  # gtm-market-research  Use this as a hard-gated | - |
-| harness-hD-10-competitive-intel | aside-user | Canonical RIG harness for gtm-competitive-intel." ---  # gtm-competitive-intel  Use this as a hard-g | - |
-| harness-hD-11-partner-discovery | aside-user | Canonical RIG harness for gtm-partner-discovery." ---  # gtm-partner-discovery  Use this as a hard-g | - |
-| harness-hD-12-growth-experiment | aside-user | Canonical RIG harness for gtm-growth-experiment." ---  # gtm-growth-experiment  Use this as a hard-g | - |
 | blueprintgtm-30k-jobs-prospects | aside-user | Use when scaling prospecting to 30K+ contacts. BlueprintGTM's 30K Jobs & Prospects — scale outbound  | - |
 | blueprintgtm-ai-lead-enrichment | aside-user | Use when enriching leads with AI. BlueprintGTM's AI Lead Enrichment — use ChatGPT/Claude to enrich p | - |
 | blueprintgtm-cannonball-method | aside-user | Use when building a full GTM motion from scratch. Jordan Crawford's Cannonball method — zero to ship | - |
@@ -69,7 +60,7 @@
 | gtm-campaign-orchestration-performance-tracking | hermes | Use when establishing measurement frameworks, dashboards, and optimization rhythms for live campaign | - |
 | gtm-campaign-roi-calculator | aside-user | Compute campaign ROI with fully-loaded costs, attributed revenue, and payback period — assumptions e | - |
 | gtm-cold-send-safety | hermes | RIG cold-send safety gate. Use PROACTIVELY before ANY cold outbound email — arming a batch, staging  | - |
-| gtm-cold-send-safety-gate | aside-user | Deterministic, fail-closed per-recipient pre-send gate for cold outbound: 8/8 checks or NO-GO.' doct | - |
+| gtm-cold-send-safety-gate | aside-user | Deterministic, fail-closed per-recipient pre-send gate for cold outbound: 8/8 checks or NO-GO.' vers | - |
 | gtm-community-building-champion-engagement-system | hermes | Framework for recruiting, activating, and rewarding community champions. ---  # Champion Engagement  | - |
 | gtm-community-building-closed-loop-community-playbook | hermes | Processes for routing community insights/actions and communicating outcomes   back to members. ---   | - |
 | gtm-community-building-community-insight-taxonomy | hermes | Tagging schema for classifying community signals by persona, journey,   and business impact. ---  #  | - |
@@ -171,7 +162,7 @@
 | gtm-intent-signal-orchestration-outbound-plays | hermes | Use to craft channel-specific outreach sequences that tie directly to   detected intent signals. --- | - |
 | gtm-intent-signal-orchestration-signal-scoring | hermes | Use to design composite intent scoring models with decay, weighting,   and governance. ---  # Signal | - |
 | gtm-intent-signal-orchestration-suppression-logic | hermes | Use to define guardrails that pause signal-driven plays when accounts   are risky, saturated, or in- | - |
-| gtm-launch-readiness-checklist | aside-user | Executable go/no-go checklist for GTM launches across assets, tracking, legal, and operations. doctr | - |
+| gtm-launch-readiness-checklist | aside-user | Executable go/no-go checklist for GTM launches across assets, tracking, legal, and operations. versi | - |
 | gtm-lead-nurture-orchestration-lifecycle-cadence | hermes | Use when defining nurture pacing, triggers, and suppression logic. ---  # Lifecycle Cadence Systems  | - |
 | gtm-lead-nurture-orchestration-nurture-testing | hermes | Use when planning, executing, and logging nurture experiments and regression   tests. ---  # Nurture | - |
 | gtm-lead-nurture-orchestration-personalization-logic | hermes | Use when defining dynamic content rules, tokens, and conditional offers   inside nurture programs. - | - |
@@ -301,7 +292,16 @@
 | gtm-webinar-automation-engagement-analytics | hermes | Use when measuring webinar funnel performance and diagnosing audience   behavior. ---  # Webinar Eng | - |
 | gtm-webinar-automation-registration-ops | hermes | Use when configuring registration flows, reminders, and data sync for   webinars. ---  # Registratio | - |
 | gtm-webinar-automation-webinar-design | hermes | Use when crafting compelling webinar narratives, engagement tactics,   and attendee experiences. --- | - |
-| harness-hB-10-lead-magnet | aside-user | Canonical RIG harness for lead-magnet-session." ---  # lead-magnet-session  Use this as a hard-gated | - |
+| harness-hb-10-lead-magnet | aside-user | Canonical RIG harness for lead-magnet-session." ---  # lead-magnet-session  Use this as a hard-gated | - |
+| harness-hd-01-outbound-sequence | aside-user | Canonical RIG harness for gtm-outbound-sequence." ---  # gtm-outbound-sequence  Use this as a hard-g | - |
+| harness-hd-02-icp-research | aside-user | Canonical RIG harness for gtm-icp-research." ---  # gtm-icp-research  Use this as a hard-gated sessi | - |
+| harness-hd-04-pricing-test | aside-user | Canonical RIG harness for gtm-pricing-experiment." ---  # gtm-pricing-experiment  Use this as a hard | - |
+| harness-hd-05-launch-prep | aside-user | Canonical RIG harness for gtm-launch-prep." ---  # gtm-launch-prep  Use this as a hard-gated session | - |
+| harness-hd-08-expansion-play | aside-user | Canonical RIG harness for gtm-expansion-play." ---  # gtm-expansion-play  Use this as a hard-gated s | - |
+| harness-hd-09-market-research | aside-user | Canonical RIG harness for gtm-market-research." ---  # gtm-market-research  Use this as a hard-gated | - |
+| harness-hd-10-competitive-intel | aside-user | Canonical RIG harness for gtm-competitive-intel." ---  # gtm-competitive-intel  Use this as a hard-g | - |
+| harness-hd-11-partner-discovery | aside-user | Canonical RIG harness for gtm-partner-discovery." ---  # gtm-partner-discovery  Use this as a hard-g | - |
+| harness-hd-12-growth-experiment | aside-user | Canonical RIG harness for gtm-growth-experiment." ---  # gtm-growth-experiment  Use this as a hard-g | - |
 | mission-control | hermes | Assemble and coordinate small specialist agent teams for GTM, content, development, and product miss | - |
 | product-marketing-context | hermes | Load and maintain the product-marketing context — positioning, personas, messaging pillars, proof po | - |
 | rep | hermes | Prepare personalized B2B outreach, objection responses, call scripts, and follow-up sequences for re | - |

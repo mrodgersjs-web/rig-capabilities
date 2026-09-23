@@ -9,7 +9,7 @@
 | adversarial-verification-loop | aside-user | RIG doctrine — Adversarial Verification (non-vacuity) as a code-enforced loop. For every gate you tr | - |
 | gate-d-loop | aside-user | RIG doctrine — Gate-D as a code-enforced loop. Wrap any outward or irreversible action (send, publis | - |
 | jake-lessons-ledger | aside-user | Consult Mike's distilled lesson ledger before coding, scraping, fleet, extension, or dispatch work,  | - |
-| jake-pai-doctrine | aside-user |     Jake PAI Operating Doctrine — the soul of the RIG agent ecosystem.   Merged intelligence layer o | - |
+| jake-pai-doctrine | aside-user | Jake PAI Operating Doctrine — the soul of the RIG agent ecosystem. Merged intelligence layer of 10 s | - |
 | jake-pai-doctrine-loader | aside-user | Load the canonical Jake PAI substrate for Jake, RIG, Hermes, OpenClaw, founder, co-founder, or PAI w | - |
 | north-star-lock-loop | aside-user | RIG doctrine — North-Star Lock + Anchor as a code-enforced loop. Lock a Goal Card (GOAL, buyer METRI | - |
 | phase-discipline-loop | aside-user | RIG doctrine — Phase Discipline as a code-enforced loop. Order phases by dependency (reversible vs o | - |
@@ -23,7 +23,7 @@
 | rig-doctrine-drift-detector | aside-user | Detect when skills, agents, or artifacts have drifted away from canonical RIG doctrine as doctrine f | - |
 | rig-doctrine-forge | aside-user | End-to-end doctrine pipeline: scrape channels, extract frameworks, score on rubric, upgrade to 1000x | - |
 | rig-doctrine-scoring-rubric | aside-user | Score extracted doctrines on a 100-point rubric before promoting to RIG standard. 10 dimensions x 10 | - |
-| rig-doctrine-versioner | aside-user | Version RIG doctrine files with semantic bump rules, changelogs, and downstream-impact manifests. do | - |
+| rig-doctrine-versioner | aside-user | Version RIG doctrine files with semantic bump rules, changelogs, and downstream-impact manifests. ve | - |
 | rig-engines | aside-user | List, describe, and explore the 40 RIG Deviation Engines. Lookup by codename (GRAVITON, ANCHOR, ...) | - |
 | rig-hash-chain-verifier | aside-user | Verify the integrity of a chain of sealed ProofPackets — detect tampering, reordering, or dropped li | - |
 | rig-idea-generator | aside-user | Deterministic idea evaluation and generation — the V3.1 Master Creativity Function with its four gat | - |

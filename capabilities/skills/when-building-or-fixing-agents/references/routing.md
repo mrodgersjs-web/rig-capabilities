@@ -8,7 +8,6 @@
 | harness-mh-04-deviation-expedition-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |
 | harness-mh-05-asset-pruning-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |
 | harness-mh-06-install-verification-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |
-| Agents | aside-user | Compose CUSTOM agents from Base Traits + Voice + Specialization, and manage predefined functional TE | nousresearch-ecosystem |
 | agency-agents | aside-user | Agency Agents roster — 232 installable Agency specs exposed to Codex as safe `agency-*` TOMLs, with  | - |
 | agent-bms-band-assigner | aside-user | Assign BMS bands to every agent in a roster so routing strictness matches each agent's blast radius. | - |
 | agent-browser | aside-user | Drive a real browser via the agent-browser CLI daemon to navigate, fill forms, click, screenshot, ex | - |
@@ -29,7 +28,7 @@
 | agent-platform-model-registry | hermes | >-   Agent Platform Model Registry Management. Use when you need to upload, list,   describe, update | - |
 | agent-platform-prompt-management | hermes | >-   Manages and orchestrates prompts in Agent Platform. Use when you need to create,   list, retrie | - |
 | agent-platform-rag-engine-management | hermes | >-   Manage and query Agent Platform RAG Engine Corpora and retrieve grounded   contexts using the G | - |
-| agent-platform-skill-registry | hermes | >   Interact with the Gemini Enterprise Agent Platform Skill Registry to create   and search for ava | - |
+| agent-platform-skill-registry | hermes | Interact with the Gemini Enterprise Agent Platform Skill Registry to create and search for available | - |
 | agent-platform-troubleshooting | hermes | >-   Troubleshoots Google Cloud Gemini Enterprise Agent Platform issues (Agent Gateway, Registry, Id | - |
 | agent-platform-tuning | hermes | >-   Agent Platform Model Tuning. Use when you need to fine-tune open models   or Gemini models usin | - |
 | agent-platform-tuning-management | hermes | >-   Manages GenAI tuning jobs in Agent Platform. Use this to list, get, or cancel   ongoing model t | - |
@@ -41,7 +40,6 @@
 | agent-task-router | aside-user | Route incoming tasks to the right agent by capability, band, load, and lattice proximity — with the  | - |
 | agent-transcript | hermes | Parse, analyze, and learn from agent session transcripts — extract tool-call patterns, failure modes | - |
 | agentic-doctrines | hermes | Complete agentic coding doctrine synthesized from 2,800+ hours of production practice. Covers the 10 | thread-engineering, loop-engineering, harness-engineering, context-engineering |
-| agents | hermes | Compose CUSTOM agents from Base Traits + Voice + Specialization, and manage predefined functional TE | nousresearch-ecosystem |
 | anti-reversing-techniques | hermes | Understand anti-reversing, obfuscation, and protection techniques encountered during software analys | - |
 | aside-browser | aside-user | Read when you need a browser, or have to work across user's logged-in websites (e.g. Gmail, Slack, c | - |
 | aside-codemode | aside-user | Use code mode for any directory or project search and for 2+ independent files, URLs, pages, queries | - |
@@ -56,7 +54,7 @@
 | azure-resource-lookup | hermes | List, find, and show Azure resources across subscriptions or resource groups. Handles prompts like \ | - |
 | batch-runner-gen | hermes | [ACS-043] Generate a headless parallel batch runner script (claude -p, JSON schema) for a repeated a | - |
 | bridgespace-bridge-skill-obsidian | hermes | Operate an Obsidian vault as an agent — vault structure, frontmatter, wikilinks, daily notes, and th | - |
-| browser-lane-recovery | aside-user | >   Failover lane for coding agents whose own browser automation has technically wedged   (CDP chann | - |
+| browser-lane-recovery | aside-user | Failover lane for coding agents whose own browser automation has technically wedged (CDP channel fre | - |
 | choose-process | hermes | Rank Startup Intelligence OS process cards and recommend the best slash command or agentic workflow  | - |
 | clawteam | hermes | This skill should be used when the user asks to 'create a team', 'spawn agents', 'assign tasks', 'co | - |
 | cloud-logging-query-generation | hermes | >-   Generates Logging Query Language (LQL) queries for Google Cloud Logging from natural language.  | - |
@@ -94,28 +92,28 @@
 | gke-ai-troubleshooting-tpu-vbar-oom | hermes | >-   Diagnoses and prevents vbar_control_agent segfaults, out-of-memory (OOM) errors,   and TPU devi | - |
 | goal-harness-creation | hermes | Teaches agents how to create world-class RIG goal harnesses. A goal harness is a runtime gate loop t | - |
 | harness-engineering | aside-user | Building the deterministic control layer around a non-deterministic LLM — from Ray Amjad / Agentic C | - |
-| harness-hA-11-infra-iac | aside-user | Canonical RIG harness for infra-iac-session." ---  # infra-iac-session  Use this as a hard-gated ses | - |
-| harness-hB-01-blog-post | aside-user | Canonical RIG harness for blog-post-session." ---  # blog-post-session  Use this as a hard-gated ses | - |
-| harness-hB-03-landing-page | aside-user | Canonical RIG harness for landing-page-session." ---  # landing-page-session  Use this as a hard-gat | - |
-| harness-hB-05-seo-content | aside-user | Canonical RIG harness for seo-content-session." ---  # seo-content-session  Use this as a hard-gated | - |
-| harness-hB-07-video-script | aside-user | Canonical RIG harness for video-script-session." ---  # video-script-session  Use this as a hard-gat | - |
-| harness-hB-08-podcast-prep | aside-user | Canonical RIG harness for podcast-prep-session." ---  # podcast-prep-session  Use this as a hard-gat | - |
-| harness-hB-09-content-audit | aside-user | Canonical RIG harness for content-audit-session." ---  # content-audit-session  Use this as a hard-g | - |
-| harness-hB-12-case-study | aside-user | Canonical RIG harness for case-study-session." ---  # case-study-session  Use this as a hard-gated s | - |
-| harness-hB-13-email-sequence | aside-user | Canonical RIG harness for email-sequence-session." ---  # email-sequence-session  Use this as a hard | - |
-| harness-hC-06-accessibility-audit-session | aside-user | Canonical RIG harness for accessibility-audit-session." ---  # accessibility-audit-session  Use this | - |
-| harness-hC-09-onboarding-flow-session | aside-user | Canonical RIG harness for onboarding-flow-session." ---  # onboarding-flow-session  Use this as a ha | - |
-| harness-hC-10-brand-identity-session | aside-user | Canonical RIG harness for brand-identity-session." ---  # brand-identity-session  Use this as a hard | - |
-| harness-hD-03-crm-hygiene | aside-user | Canonical RIG harness for ops-crm-hygiene." ---  # ops-crm-hygiene  Use this as a hard-gated session | - |
-| harness-hD-06-nps-analysis | aside-user | Canonical RIG harness for ops-nps-analysis." ---  # ops-nps-analysis  Use this as a hard-gated sessi | - |
-| harness-hD-07-churn-prevention | aside-user | Canonical RIG harness for ops-churn-prevention." ---  # ops-churn-prevention  Use this as a hard-gat | - |
+| harness-ha-11-infra-iac | aside-user | Canonical RIG harness for infra-iac-session." ---  # infra-iac-session  Use this as a hard-gated ses | - |
+| harness-hb-01-blog-post | aside-user | Canonical RIG harness for blog-post-session." ---  # blog-post-session  Use this as a hard-gated ses | - |
+| harness-hb-03-landing-page | aside-user | Canonical RIG harness for landing-page-session." ---  # landing-page-session  Use this as a hard-gat | - |
+| harness-hb-05-seo-content | aside-user | Canonical RIG harness for seo-content-session." ---  # seo-content-session  Use this as a hard-gated | - |
+| harness-hb-07-video-script | aside-user | Canonical RIG harness for video-script-session." ---  # video-script-session  Use this as a hard-gat | - |
+| harness-hb-08-podcast-prep | aside-user | Canonical RIG harness for podcast-prep-session." ---  # podcast-prep-session  Use this as a hard-gat | - |
+| harness-hb-09-content-audit | aside-user | Canonical RIG harness for content-audit-session." ---  # content-audit-session  Use this as a hard-g | - |
+| harness-hb-12-case-study | aside-user | Canonical RIG harness for case-study-session." ---  # case-study-session  Use this as a hard-gated s | - |
+| harness-hb-13-email-sequence | aside-user | Canonical RIG harness for email-sequence-session." ---  # email-sequence-session  Use this as a hard | - |
+| harness-hc-06-accessibility-audit-session | aside-user | Canonical RIG harness for accessibility-audit-session." ---  # accessibility-audit-session  Use this | - |
+| harness-hc-09-onboarding-flow-session | aside-user | Canonical RIG harness for onboarding-flow-session." ---  # onboarding-flow-session  Use this as a ha | - |
+| harness-hc-10-brand-identity-session | aside-user | Canonical RIG harness for brand-identity-session." ---  # brand-identity-session  Use this as a hard | - |
+| harness-hd-03-crm-hygiene | aside-user | Canonical RIG harness for ops-crm-hygiene." ---  # ops-crm-hygiene  Use this as a hard-gated session | - |
+| harness-hd-06-nps-analysis | aside-user | Canonical RIG harness for ops-nps-analysis." ---  # ops-nps-analysis  Use this as a hard-gated sessi | - |
+| harness-hd-07-churn-prevention | aside-user | Canonical RIG harness for ops-churn-prevention." ---  # ops-churn-prevention  Use this as a hard-gat | - |
 | higgsfield-generate | hermes | Generate and edit images, videos, 3D assets, audio, ads, and product media through Higgsfield AI." a | - |
-| higgsfield-product-photoshoot | hermes |     Generate brand-quality product images through Higgsfield product-photoshoot   prompt enhancement | - |
-| hud | hermes | Show or configure the OMX HUD (two-layer statusline)" role: "display" scope: ".omx/**" ---  # HUD Sk | - |
+| higgsfield-product-photoshoot | hermes | Generate brand-quality product images through Higgsfield product-photoshoot prompt enhancement on GP | - |
+| hud | hermes | Show or configure the OMX HUD (two-layer statusline)" metadata:   role: "display"   scope: ".omx/**" | - |
 | ima-sdk-basics | hermes | >-   Use this skill for Interactive Media Ads (IMA) SDK client-side ad insertion   when you are requ | - |
 | imagegen | aside-builtin | Generate a new image or edit an existing image from a text prompt. Use for illustrations, photos, te | - |
 | instruction-file-audit | hermes | [ACS-164] Discover every instruction file (CLAUDE.md/AGENTS.md) and score each against quality crite | - |
-| iterative-retrieval | hermes | Pattern for progressively refining context retrieval to solve the subagent context problem origin: E | - |
+| iterative-retrieval | hermes | Pattern for progressively refining context retrieval to solve the subagent context problem metadata: | - |
 | j-space | aside-user | Use this skill to establish and operate the model's inner workspace — the J-space — for any task tha | - |
 | l4-backlog-burndown | hermes | [ACS-574] Worker skill: drain open GitHub issues with no PR into one burndown run." --- 1. Read the  | - |
 | layer-node-audit | hermes | [ACS-454] Audit CLAUDE.md/AGENTS.md nodes: keep what earns a place, cut the noise." --- Audit the na | - |
@@ -152,7 +150,7 @@
 | on-call-handoff-patterns | hermes | Master on-call shift handoffs with context transfer, escalation procedures, and documentation. Use t | - |
 | open-gstack-browser | hermes | Wrapper alias for the Hermes GStack open-gstack-browser skill. Canonical instructions live at /Users | - |
 | openbot-process-map | hermes | Use when working in OpenBot's process-maps/ directory. Every process is a swim-lane: stages -> speci | - |
-| openviking-context-database | hermes | >   Use OpenViking from OpenClaw through @openviking/openclaw-plugin: long-term memory,   session ar | - |
+| openviking-context-database | hermes | Use OpenViking from OpenClaw through @openviking/openclaw-plugin: long-term memory, session archives | - |
 | ov-skills | hermes | Load when an agent needs to manage, install, update, remove, or validate OpenViking skills via the ` | - |
 | pair-agent | hermes | Pair a remote AI agent with your browser. One command generates a setup key and prints instructions  | - |
 | paperclip-board | hermes | Manage a Paperclip company as a board member via chat. Covers onboarding (company creation, CEO setu | - |
@@ -172,7 +170,6 @@
 | reflect | hermes | Spawn three parallel review subagents over the active transcript, surface learnings, and route each  | - |
 | rig | canonical | Route rig tasks to an existing child skill; this router adds no capabilities." ---  <!-- canonical-c | - |
 | rig-agent | hermes | Run one or many RIG Deviation Agents (40 autonomous per-engine agents). Each agent OWNS the full ±30 | - |
-| rig-agentic-engineering | hermes |     RIG Agentic Engineering — RigForge CLI + DeerFlow 2.0 + Coli evaluator + 5-agent pipeline integr | - |
 | rig-ai-engineering | aside-user | RIG AI Engineering — the local prompt-intelligence engine. Score, enhance, and fix prompts before th | - |
 | rig-albatross | hermes | RIG-ALBATROSS — Heavy-tail jumps escape local basins. Single-agent invocation of the Levy Flight dev | - |
 | rig-anchor | hermes | RIG-ANCHOR — Tie every claim to evidence. Single-agent invocation of the Reality Anchor deviation en | - |
@@ -263,7 +260,7 @@
 | thread-engineering | hermes | Multi-threaded agent execution patterns from Ray Amjad / Agentic Coding School — P-threads, C-thread | - |
 | trace-harness-launch-failure | aside-user | Empty session traces mean launch failure, not agent behavior — verify api_call_count/tool_call_count | - |
 | train-with-environments | hermes | Configure and diagnose prime-rl training with native verifiers.v1 tasksets, harnesses, runtimes, and | - |
-| typesafe-ai | aside-user | >   Build AI-powered software with TypeSafe: small units of AI intelligence you   can use like progr | - |
+| typesafe-ai | aside-user | Build AI-powered software with TypeSafe: small units of AI intelligence you can use like programming | - |
 | typesafe-jev | aside-user | Call TypeSafe's Jev (System One) classifier from this machine: the request shapes that actually vali | - |
 | ultra-goal | hermes | Use when a request has a measurable terminal outcome, says keep going until / overnight / build the  | - |
 | ultraloop | hermes | Use for mission-and-spec-driven work: when the outcome spans multiple systems or context windows, wh | - |
@@ -273,6 +270,7 @@
 | weekly-mission-kanban | hermes | Full weekly mission execution pattern — brain dump → audit → Kanban → agent swarms → ultraplan → gri | - |
 | when-producing-media | aside-user | When generating or editing audio, music, video, or film, use this to route to the right media skill. | - |
 | when-securing-the-estate | aside-user | When triaging vulnerabilities, sweeping secrets, investigating auth failures, or handling incidents, | - |
+| when-using-personal-tools | aside-user | When working in Gmail, Notion, Slack, password managers, Office files, PDFs, or browser utilities, u | - |
 | wikiskill-evolve | aside-user | Run the WikiSkill self-evolution loop (arXiv 2608.27454) on a Hermes workspace — raw→maintainer→prop | - |
 | wikiskill-maintainer | aside-user | Consolidate traces into the persistent wiki (WikiSkill). ---  # Wiki Maintainer (WikiSkill)  You are | - |
 | wikiskill-proposer | aside-user | Propose skills from wiki patterns and traces (WikiSkill). ---  # Skill Proposer (WikiSkill)  You are | - |

@@ -1,11 +1,11 @@
 ---
 name: when-designing-interfaces
-description: "When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to route to the right design skill so output clears the quality bar. Routes to 401 skills; read references/routing.md for the full table."
+description: "When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to route to the right design skill so output clears the quality bar. Routes to 400 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: design-ux
-  skill-count: "401"
+  skill-count: "400"
 ---
 
 # when-designing-interfaces
@@ -27,22 +27,22 @@ Tier-1 meta-skill. Job to be done: When designing, auditing, or polishing UI, de
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 401-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 400-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **harness-hC-01-design-system-audit-session** — Canonical RIG harness for design-system-audit-session." ---  # design-system-audit-session
-- **harness-hC-02-ui-design-session** — Canonical RIG harness for ui-design-session." ---  # ui-design-session  Use this as a hard
-- **harness-hC-03-ux-research-session** — Canonical RIG harness for ux-research-session." ---  # ux-research-session  Use this as a 
-- **harness-hC-04-design-critique-session** — Canonical RIG harness for design-critique-session." ---  # design-critique-session  Use th
-- **harness-hC-05-design-token-build-session** — Canonical RIG harness for design-token-build-session." ---  # design-token-build-session  
-- **harness-hC-07-mobile-design-session** — Canonical RIG harness for mobile-design-session." ---  # mobile-design-session  Use this a
-- **harness-hC-08-dashboard-design-session** — Canonical RIG harness for dashboard-design-session." ---  # dashboard-design-session  Use 
-- **harness-hC-11-motion-design-session** — Canonical RIG harness for motion-design-session." ---  # motion-design-session  Use this a
-- **harness-hC-12-design-handoff-session** — Canonical RIG harness for design-handoff-session." ---  # design-handoff-session  Use this
-- **Art** — Generates static visual content across 20+ formats via Flux, Nano Banana Pro (Gemini 3 Pro
-- **Webdesign** — Design and integrate web interfaces using Anthropic's Claude Design (claude.ai/design) as 
 - **accessibility** — Audit and improve web accessibility following WCAG 2.1 guidelines. Use when asked to "impr
+- **accessibility-compliance** — Implement WCAG 2.2 compliant interfaces with mobile accessibility, inclusive design patter
+- **ad-hoc-verification-scripts** — >-   How to write and clean up ad-hoc verification scripts when the system says   "no cano
+- **adrien-3d-scroll-website** — Build a scroll-driven 3D-feel website in about 30 minutes with the Nano Banana 2 + Kling 3
+- **adrien-ai-design-stack-2026** — The 7-tool AI design stack Adrien uses daily for shipped client work, not demos. Use when 
+- **adrien-ai-product-page** — Design a polished product page with AI in about 5 minutes using Adrien''s rapid product-pa
+- **adrien-ai-website-process** — The 4-hour AI website launch process: brand identity to live URL with premium design, cust
+- **adrien-claude-code-websites** — The full Claude Code for Websites workflow - brief to live URL with premium design, custom
+- **adrien-claude-design-workflows** — Three production workflows for Claude Design, Anthropic''s dedicated design app at claude.
+- **adrien-design-top-10** — Design quality principles that put work in the top 10 percent - Adrien''s framework for pr
+- **adrien-google-stitch-use-cases** — Three production use cases for Google Stitch, Google''s AI design agent. Use when deciding
+- **adrien-iphone-app-nocode** — Build and ship a real iPhone app to the App Store without writing Swift or opening Xcode. 
 
 Full table: `references/routing.md`

@@ -1,11 +1,11 @@
 ---
 name: when-working-with-data
-description: "When building pipelines, validating data contracts, measuring freshness or latency, or querying stores, use this to route to the right data skill. Routes to 62 skills; read references/routing.md for the full table."
+description: "When building pipelines, validating data contracts, measuring freshness or latency, or querying stores, use this to route to the right data skill. Routes to 72 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: data-analytics
-  skill-count: "62"
+  skill-count: "72"
 ---
 
 # when-working-with-data
@@ -27,7 +27,7 @@ Tier-1 meta-skill. Job to be done: When building pipelines, validating data cont
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 62-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 72-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

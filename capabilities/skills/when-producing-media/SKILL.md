@@ -32,11 +32,11 @@ Tier-1 meta-skill. Job to be done: When generating or editing audio, music, vide
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **audiocraft** — AudioCraft: MusicGen text-to-music, AudioGen text-to-sound." version: 1.0.0 author: Orches
+- **audiocraft** — AudioCraft: MusicGen text-to-music, AudioGen text-to-sound." version: 1.0.0 license: MIT m
 - **animate** — Build an animation from scratch, making the decisions in the order that determines whether
 - **animate-expo** — Build animations in React Native and Expo, making the decisions in the order that determin
 - **animation-vocabulary** — Reverse-lookup glossary that turns a vague description of a web animation or motion effect
-- **heartmula** — HeartMuLa: Suno-like song generation from lyrics + tags." version: 1.0.0 platforms: [linux
+- **heartmula** — HeartMuLa: Suno-like song generation from lyrics + tags." version: 1.0.0 metadata:   herme
 - **hudl-film-pipeline** — Acquire Jacob Rodgers' football film from Hudl or live YouTube and move it through the pri
 - **remotion** — Generate walkthrough videos from Stitch projects using Remotion with smooth transitions, z
 - **video-editing** — Edit video programmatically with ffmpeg   cuts, concatenation, transcode, audio normalizat

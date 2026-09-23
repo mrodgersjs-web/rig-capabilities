@@ -1,11 +1,11 @@
 ---
 name: when-researching-or-deciding
-description: "When researching a topic, extracting doctrine, synthesizing evidence, scoring ideas, or convening advisory deliberation, use this to route to the right research skill so claims carry sources. Routes to 98 skills; read references/routing.md for the full table."
+description: "When researching a topic, extracting doctrine, synthesizing evidence, scoring ideas, or convening advisory deliberation, use this to route to the right research skill so claims carry sources. Routes to 94 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: research-knowledge
-  skill-count: "98"
+  skill-count: "94"
 ---
 
 # when-researching-or-deciding
@@ -27,22 +27,22 @@ Tier-1 meta-skill. Job to be done: When researching a topic, extracting doctrine
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 98-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 94-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **hyperresearch** — >   Deep research via the HYPERRESEARCH V8 architecture   a tier-adaptive 16-step   pipeli
-- **Apify** — Scrape social media platforms, business data, and e-commerce via Apify actors   Instagram 
-- **Council** — Convene the Council of High Intelligence   multi-persona deliberation with historical thin
+- **hyperresearch** — Deep research via the HYPERRESEARCH V8 architecture   a tier-adaptive 16-step pipeline (li
 - **advise-project-approach** — Research and advise on the best way to approach a software project, including architecture
-- **apify** — Scrape social media platforms, business data, and e-commerce via Apify actors   Instagram 
 - **azure-ai** — Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector
 - **bridgespace-bridge-skill-bridgemind-mcp** — How to use the BridgeMind MCP (mcp__bridgemind__*) effectively   projects, tasks, agents, 
 - **context-restore** — Wrapper alias for the Hermes GStack context-restore skill. Canonical instructions live at 
 - **context-save** — Wrapper alias for the Hermes GStack context-save skill. Canonical instructions live at /Us
 - **context-search** — 2-phase context search across the PAI session registry, work directories, and ISAs for ins
 - **core-web-vitals** — Optimize Core Web Vitals (LCP, INP, CLS) for better page experience and search ranking. Us
-- **council** — Convene the Council of High Intelligence   multi-persona deliberation with historical thin
+- **council-of-high-intelligence** — Convene the Council of High Intelligence   multi-persona deliberation with historical thin
+- **devops/scrapers** — Global multi-engine scraper OS for any coding agent   /scrapers slash, scrapers rig-scrape
+- **embedding-strategies** — Select and optimize embedding models for semantic search and RAG applications. Use when ch
+- **find-skills** — Discover, search, and install skills from the skills.sh registry and local catalogs using 
 
 Full table: `references/routing.md`

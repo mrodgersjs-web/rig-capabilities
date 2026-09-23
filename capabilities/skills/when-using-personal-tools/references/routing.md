@@ -3,11 +3,9 @@
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
 | 1password | aside-builtin | Read this skill when the user uses 1Password. icon: https://static.asidehq.com/apps/builtin-skills/1 | - |
-| Browser | aside-user | Headless browser automation via agent-browser — Rust CLI daemon with persistent auth profiles for fa | - |
 | apple-passwords | aside-builtin | Use Apple Passwords on macOS when the user asks to save, retrieve, or autofill Apple/iCloud password | - |
 | aside | aside-builtin | Use this when you need to inspect or update Aside daemon settings, Projects, sessions, routines, tas | - |
 | bitwarden | aside-builtin | Read this skill when the user uses Bitwarden. icon: https://static.asidehq.com/apps/builtin-skills/b | - |
-| browser | hermes | Headless browser automation via agent-browser — Rust CLI daemon with persistent auth profiles for fa | - |
 | browser-harness | hermes | Direct browser control via CDP. Use when the user wants to automate, scrape, test, or interact with  | - |
 | browser-skill | hermes | Use when the user asks to automate their logged-in Chromium browser: visit and read pages, fill form | - |
 | browser-to-skill | hermes | [ACS-641][ACS-747] HAR-capture a site once, then generate an endpoint skill with self-healing select | - |
@@ -22,12 +20,12 @@
 | google-accounts | aside-builtin | IMPORTANT- Read this skill before interacting any Google apps! icon: https://static.asidehq.com/apps | - |
 | google-ads-api-account-diagnostics | hermes | >-   Diagnoses Google Ads account performance issues such as conversion loss (value or volume), low  | - |
 | google-ads-api-mcp-setup | hermes | Guides developers through downloading, configuring, and installing the official open-source Google A | - |
-| google-ads-api-quickstart | hermes |     Guides developers through Google Ads API quickstart: credential setup, choosing from 6 client li | - |
+| google-ads-api-quickstart | hermes | Guides developers through Google Ads API quickstart: credential setup, choosing from 6 client librar | - |
 | google-ads-api-setup-patterns | hermes | Hard-won patterns for setting up Google Ads API — service accounts don't work, OAuth project scoping | - |
 | google-agents-cli-onboarding | hermes | >-   Onboarding entrypoint for agents-cli in Agent Platform. It should be used   when the user wants | - |
 | google-analytics-admin-api-basics | hermes | >-   Manages Google Analytics account and property settings, enables the Analytics Admin API via the | - |
 | google-analytics-data-api-basics | hermes | >-   Manages Google Analytics reporting data, enables the Analytics Data API via the Cloud CLI, and  | - |
-| google-cloud-global-frontend-configuration | hermes |     Guides agents through a 6-step discovery process to design and deploy Google Cloud global extern | - |
+| google-cloud-global-frontend-configuration | hermes | Guides agents through a 6-step discovery process to design and deploy Google Cloud global external A | - |
 | google-cloud-networking-observability | hermes | >-   Investigates Google Cloud networking issues by analyzing logs, metrics, and diagnostics. Use wh | - |
 | google-cloud-recipe-auth | hermes | Provides expert guidance on authenticating and authorizing to Google Cloud services and APIs, coveri | - |
 | google-cloud-recipe-foundation-builder | hermes | >-   Deploys a baseline landing zone foundation for a Google Cloud Organization, establishing securi | - |

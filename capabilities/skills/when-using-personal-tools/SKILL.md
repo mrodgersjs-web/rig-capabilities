@@ -1,11 +1,11 @@
 ---
 name: when-using-personal-tools
-description: "When working in Gmail, Notion, Slack, password managers, Office files, PDFs, or browser utilities, use this to route to the right tool skill. Routes to 67 skills; read references/routing.md for the full table."
+description: "When working in Gmail, Notion, Slack, password managers, Office files, PDFs, or browser utilities, use this to route to the right tool skill. Routes to 65 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: personal-ops
-  skill-count: "67"
+  skill-count: "65"
 ---
 
 # when-using-personal-tools
@@ -27,22 +27,22 @@ Tier-1 meta-skill. Job to be done: When working in Gmail, Notion, Slack, passwor
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 67-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 65-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
 - **1password** — Read this skill when the user uses 1Password. icon: https://static.asidehq.com/apps/builti
-- **Browser** — Headless browser automation via agent-browser   Rust CLI daemon with persistent auth profi
 - **apple-passwords** — Use Apple Passwords on macOS when the user asks to save, retrieve, or autofill Apple/iClou
 - **aside** — Use this when you need to inspect or update Aside daemon settings, Projects, sessions, rou
 - **bitwarden** — Read this skill when the user uses Bitwarden. icon: https://static.asidehq.com/apps/builti
-- **browser** — Headless browser automation via agent-browser   Rust CLI daemon with persistent auth profi
 - **browser-harness** — Direct browser control via CDP. Use when the user wants to automate, scrape, test, or inte
 - **browser-skill** — Use when the user asks to automate their logged-in Chromium browser: visit and read pages,
 - **browser-to-skill** — [ACS-641][ACS-747] HAR-capture a site once, then generate an endpoint skill with self-heal
 - **captcha-solver** — Read this skill when a page has a CAPTCHA that needs solving (reCAPTCHA, Turnstile, hCaptc
 - **chrome** — Read this when you need to use Chrome extension APIs: managing bookmarks, tabs, windows, t
 - **chrome-cowork** — Full-task Chrome cowork agent. Completes multi-step browser jobs end-to-end in Mike's real
+- **dashlane** — Read this skill when the user uses Dashlane. icon: https://static.asidehq.com/apps/builtin
+- **docx** — Use this skill whenever a Word .docx file must be read, created, inspected, or edited, inc
 
 Full table: `references/routing.md`

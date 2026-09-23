@@ -39,7 +39,7 @@ Tier-1 meta-skill. Job to be done: When doing any RIG-internal build, review, or
 - **adversarial-verification-loop** — RIG doctrine   Adversarial Verification (non-vacuity) as a code-enforced loop. For every g
 - **gate-d-loop** — RIG doctrine   Gate-D as a code-enforced loop. Wrap any outward or irreversible action (se
 - **jake-lessons-ledger** — Consult Mike's distilled lesson ledger before coding, scraping, fleet, extension, or dispa
-- **jake-pai-doctrine** —     Jake PAI Operating Doctrine   the soul of the RIG agent ecosystem.   Merged intelligen
+- **jake-pai-doctrine** — Jake PAI Operating Doctrine   the soul of the RIG agent ecosystem. Merged intelligence lay
 - **jake-pai-doctrine-loader** — Load the canonical Jake PAI substrate for Jake, RIG, Hermes, OpenClaw, founder, co-founder
 - **north-star-lock-loop** — RIG doctrine   North-Star Lock + Anchor as a code-enforced loop. Lock a Goal Card (GOAL, b
 - **phase-discipline-loop** — RIG doctrine   Phase Discipline as a code-enforced loop. Order phases by dependency (rever

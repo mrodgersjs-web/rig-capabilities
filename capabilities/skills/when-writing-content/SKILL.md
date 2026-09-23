@@ -1,11 +1,11 @@
 ---
 name: when-writing-content
-description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 71 skills; read references/routing.md for the full table."
+description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 69 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: content-writing
-  skill-count: "71"
+  skill-count: "69"
 ---
 
 # when-writing-content
@@ -27,22 +27,22 @@ Tier-1 meta-skill. Job to be done: When writing articles, newsletters, copy, hoo
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 71-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 69-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **harness-hB-02-newsletter-issue** — Canonical RIG harness for newsletter-issue-session." ---  # newsletter-issue-session  Use 
-- **Aphorisms** — Manages a curated aphorism collection with full CRUD   content-based matching, themed sear
 - **angular-migration** — Migrate from AngularJS to Angular using hybrid mode, incremental component rewriting, and 
 - **anti-ai-writing** — Edit any piece of writing to remove AI tells. Strips banned words ("delve," "unlock," "lev
 - **anti-slop** — Turn AI-written copy into copy a human would ship. Lint for AI tells, rewrite, cleanse wit
-- **aphorisms** — Manages a curated aphorism collection with full CRUD   content-based matching, themed sear
 - **architecture-decision-records** — Write and maintain Architecture Decision Records (ADRs) following best practices for techn
 - **article-writing** — Write articles, guides, blog posts, tutorials, newsletter issues, and other long-form cont
 - **avoid-ai-writing** — Audit and rewrite content to remove AI writing patterns ("AI-isms"). Use this skill when a
 - **blog-post-template** —      ,   masthead hero figures pull quote     " tags: ["blog", "essay", "case study", "  "
 - **bridgespace-bridge-skill-github-commit** — Universal commit-and-push methodology. Stages every local change in the current repo, writ
 - **bridgespace-bridge-skill-seo** — Modern (2025/2026) SEO methodology for auditing and writing pages   title tags, meta, head
+- **coding-agent-failure-modes** — 11 coding-agent failure modes (write-for-agent, instruction rot, compact-is-not-memory, ho
+- **content-automation** — Route content-automation tasks to an existing child skill; this router adds no capabilitie
+- **content-automation/linkedin-content-planning** — Use for the Alfred LinkedIn content-planner cron job. ---  # LinkedIn Content Planning (Al
 
 Full table: `references/routing.md`

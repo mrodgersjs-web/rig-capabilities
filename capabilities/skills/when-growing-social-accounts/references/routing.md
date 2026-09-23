@@ -29,13 +29,13 @@
 | dykema-dm-campaign-learnings | hermes | Battle-tested learnings from Dykema 2026 DSO Conference LinkedIn DM campaign — 20/20 sent, 27 errors | - |
 | gemini-carousel | hermes | Generate a branded slide-by-slide LinkedIn carousel using Gemini. Takes source content, builds a des | - |
 | graphic-designer | hermes | Create LinkedIn post graphics. Decides between an HTML/CSS structured graphic or an AI-generated inf | - |
-| harness-hB-04-linkedin-post | aside-user | Canonical RIG harness for linkedin-post-session." ---  # linkedin-post-session  Use this as a hard-g | - |
-| harness-hB-06-twitter-thread | aside-user | Canonical RIG harness for twitter-thread-session." ---  # twitter-thread-session  Use this as a hard | - |
+| harness-hb-04-linkedin-post | aside-user | Canonical RIG harness for linkedin-post-session." ---  # linkedin-post-session  Use this as a hard-g | - |
+| harness-hb-06-twitter-thread | aside-user | Canonical RIG harness for twitter-thread-session." ---  # twitter-thread-session  Use this as a hard | - |
 | hook-generator | hermes | Generate 6 clickbait-style LinkedIn hook variations for any topic. Two-line hooks built on the formu | - |
 | ideawake-linkedin-weekly | aside-user | Run Coby Skonord's weekly LinkedIn engine for Ideawake: Mon/Wed/Fri publish-and-amplify days, Tue/Th | - |
 | jacob-x-growth | aside-user | >-   Operating doctrine for Jacob Rodgers' X account (@JacobRodge52987) — a 15-year-old   class-of-2 | - |
 | jake-x-account-ops | hermes | X (Twitter) account operations for Mike/RIG via the Grok CLI driver through OpenMausBot. Owns postin | - |
-| opencli-rs-skill | hermes |     Use opencli-rs CLI to interact with social/content websites (HackerNews, DevTo, Lobsters, StackO | - |
+| opencli-rs-skill | hermes | Use opencli-rs CLI to interact with social/content websites (HackerNews, DevTo, Lobsters, StackOverf | - |
 | patchright-linkedin-proofer | hermes | Use when a session needs to run patchright (the LinkedIn-undetected Playwright) against Mike Rodgers | - |
 | pinned-comment | hermes | Write LinkedIn pinned comments AND image generation prompts in Charlie Hills' signature style. Use w | - |
 | post-formatter | hermes | Turn a topic into a ready-to-publish LinkedIn post using PAS, AIDA, BAB, STAR, or SLAY frameworks. 2 | - |

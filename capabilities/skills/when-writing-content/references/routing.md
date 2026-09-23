@@ -2,12 +2,9 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| harness-hB-02-newsletter-issue | aside-user | Canonical RIG harness for newsletter-issue-session." ---  # newsletter-issue-session  Use this as a  | - |
-| Aphorisms | aside-user | Manages a curated aphorism collection with full CRUD — content-based matching, themed search, thinke | - |
 | angular-migration | hermes | Migrate from AngularJS to Angular using hybrid mode, incremental component rewriting, and dependency | - |
 | anti-ai-writing | canonical | Edit any piece of writing to remove AI tells. Strips banned words ("delve," "unlock," "leverage," "r | - |
 | anti-slop | aside-user | Turn AI-written copy into copy a human would ship. Lint for AI tells, rewrite, cleanse with a rival  | - |
-| aphorisms | hermes | Manages a curated aphorism collection with full CRUD — content-based matching, themed search, thinke | - |
 | architecture-decision-records | hermes | Write and maintain Architecture Decision Records (ADRs) following best practices for technical decis | - |
 | article-writing | aside-user | Write articles, guides, blog posts, tutorials, newsletter issues, and other long-form content in a d | - |
 | avoid-ai-writing | canonical | Audit and rewrite content to remove AI writing patterns ("AI-isms"). Use this skill when asked to "r | - |
@@ -19,7 +16,7 @@
 | content-automation/linkedin-content-planning | hermes | Use for the Alfred LinkedIn content-planner cron job. ---  # LinkedIn Content Planning (Alfred cron  | - |
 | content-cross-platform-repurposer | aside-user | Repurpose one canonical piece across platforms while holding voice constant and respecting each plat | - |
 | content-cta-optimizer | aside-user | Rewrite calls-to-action to match reader intent stage, with friction analysis and variant generation. | - |
-| content-headline-a-b-generator | aside-user | Generate headline A/B variant pairs with explicit hypotheses, ready for structured testing. doctrine | - |
+| content-headline-a-b-generator | aside-user | Generate headline A/B variant pairs with explicit hypotheses, ready for structured testing. version: | - |
 | content-hook-generator | aside-user | Generate scroll-stopping hooks from a post's core claim, across the proven hook families, scored by  | - |
 | content-humanizer | hermes | Transform robotic or AI-generated content into natural, engaging prose while preserving meaning, SEO | - |
 | content-matrix | aside-user | Generate 32+ LinkedIn post ideas in a single table by pairing the user's content pillars with 8 prov | - |
@@ -31,9 +28,10 @@
 | explain-change | hermes | [ACS-674] Render the change just made as an HTML before/after explainer." --- For the change in this | - |
 | gemini-infographic | hermes | Generate the hand-drawn whiteboard infographic prompt that pulled 480k impressions across 3 posts. T | - |
 | hads | hermes | Use when writing technical documentation that needs to be readable by both humans and AI models, con | - |
+| harness-hb-02-newsletter-issue | aside-user | Canonical RIG harness for newsletter-issue-session." ---  # newsletter-issue-session  Use this as a  | - |
 | interactive-artifact | hermes | [ACS-676] Make any HTML artifact interactive: click-to-comment, copy-comments button, hot reload." - | - |
 | obsidian-second-brain | hermes | Operate any Obsidian vault as a living, self-rewriting second brain (an evolution of Karpathy''s LLM | - |
-| plan | hermes | Write a markdown plan to .hermes/plans/; no execution. version: 2.0.0 author: Hermes Agent (writing- | - |
+| plan | hermes | Write a markdown plan to .hermes/plans/; no execution. version: 2.0.0 license: MIT metadata:   herme | - |
 | postmortem-writing | hermes | Write effective blameless postmortems with root cause analysis, timelines, and action items. Use whe | - |
 | principle-foundational-thinking | hermes | Apply before writing logic: choosing core types and data structures, sequencing scaffold-vs-feature  | - |
 | principle-outcome-oriented-execution | hermes | Apply during planned rewrites and migrations with explicit phase boundaries. Converge on the target  | - |

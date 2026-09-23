@@ -32,17 +32,17 @@ Tier-1 meta-skill. Job to be done: When prospecting, pricing, campaigning, forec
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **harness-hD-01-outbound-sequence** — Canonical RIG harness for gtm-outbound-sequence." ---  # gtm-outbound-sequence  Use this a
-- **harness-hD-02-icp-research** — Canonical RIG harness for gtm-icp-research." ---  # gtm-icp-research  Use this as a hard-g
-- **harness-hD-04-pricing-test** — Canonical RIG harness for gtm-pricing-experiment." ---  # gtm-pricing-experiment  Use this
-- **harness-hD-05-launch-prep** — Canonical RIG harness for gtm-launch-prep." ---  # gtm-launch-prep  Use this as a hard-gat
-- **harness-hD-08-expansion-play** — Canonical RIG harness for gtm-expansion-play." ---  # gtm-expansion-play  Use this as a ha
-- **harness-hD-09-market-research** — Canonical RIG harness for gtm-market-research." ---  # gtm-market-research  Use this as a 
-- **harness-hD-10-competitive-intel** — Canonical RIG harness for gtm-competitive-intel." ---  # gtm-competitive-intel  Use this a
-- **harness-hD-11-partner-discovery** — Canonical RIG harness for gtm-partner-discovery." ---  # gtm-partner-discovery  Use this a
-- **harness-hD-12-growth-experiment** — Canonical RIG harness for gtm-growth-experiment." ---  # gtm-growth-experiment  Use this a
 - **blueprintgtm-30k-jobs-prospects** — Use when scaling prospecting to 30K+ contacts. BlueprintGTM's 30K Jobs & Prospects   scale
 - **blueprintgtm-ai-lead-enrichment** — Use when enriching leads with AI. BlueprintGTM's AI Lead Enrichment   use ChatGPT/Claude t
 - **blueprintgtm-cannonball-method** — Use when building a full GTM motion from scratch. Jordan Crawford's Cannonball method   ze
+- **blueprintgtm-company-people-targeting** — Use when targeting specific people at specific companies. BlueprintGTM's Company & People 
+- **blueprintgtm-g2-reviews-analysis** — Use when analyzing competitor reviews for GTM insights. BlueprintGTM's G2 Reviews Analysis
+- **blueprintgtm-gtm-strategy-ocean** — Use when building GTM strategy with lookalike audiences. Jordan Crawford's Ocean.io strate
+- **blueprintgtm-icp-to-inbox** — Use when going from zero knowledge to a shipped outbound campaign. Jordan Crawford's ICP-t
+- **blueprintgtm-last-sdr** — Use when automating B2B outbound with AI. The Last SDR   how to use AI to replace manual o
+- **blueprintgtm-multi-persona-targeting** — Use when targeting multiple personas in one campaign. BlueprintGTM's multi-persona targeti
+- **blueprintgtm-vibe-engineering** — Use when identifying GTM strategy for a new company. Vibe Engineering   Jordan Crawford's 
+- **bp-company-search** — Use when applying the BlueprintGTM AI-Powered Company & People Search method. Drops into d
+- **bp-custom-gpt-builder** — Use when applying the BlueprintGTM Custom GPT Builder for GTM Operations method. Drops int
 
 Full table: `references/routing.md`

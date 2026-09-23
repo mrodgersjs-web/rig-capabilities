@@ -1,11 +1,11 @@
 ---
 name: when-shipping-code
-description: "When building, debugging, testing, refactoring, or reviewing software, use this to route to the right engineering skill so code ships correct and verified. Routes to 263 skills; read references/routing.md for the full table."
+description: "When building, debugging, testing, refactoring, or reviewing software, use this to route to the right engineering skill so code ships correct and verified. Routes to 262 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: code-engineering
-  skill-count: "263"
+  skill-count: "262"
 ---
 
 # when-shipping-code
@@ -27,22 +27,22 @@ Tier-1 meta-skill. Job to be done: When building, debugging, testing, refactorin
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 263-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 262-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **harness-hA-01-code-review** — Canonical RIG harness for code-review-session." ---  # code-review-session  Use this as a 
-- **harness-hA-02-code-refactor** — Canonical RIG harness for code-refactor-session." ---  # code-refactor-session  Use this a
-- **harness-hA-03-code-test-writing** — Canonical RIG harness for code-test-writing-session." ---  # code-test-writing-session  Us
-- **harness-hA-04-code-debug** — Canonical RIG harness for code-debug-session." ---  # code-debug-session  Use this as a ha
-- **harness-hA-05-code-migration** — Canonical RIG harness for code-migration-session." ---  # code-migration-session  Use this
-- **harness-hA-06-code-perf-audit** — Canonical RIG harness for code-perf-audit-session." ---  # code-perf-audit-session  Use th
-- **harness-hA-07-code-deps-upgrade** — Canonical RIG harness for code-deps-upgrade-session." ---  # code-deps-upgrade-session  Us
-- **harness-hA-08-code-pr-prep** — Canonical RIG harness for code-pr-prep-session." ---  # code-pr-prep-session  Use this as 
-- **harness-hA-13-code-security-audit** — Canonical RIG harness for code-security-audit-session." ---  # code-security-audit-session
 - **agentic-best-practices** — Complete best practices from Ray Amjad's 2,800+ hours with Claude Code. Context window man
 - **agentic-coding-school** — Techniques from Ray Amjad's Agentic Coding School (2,800+ hours with Claude Code). Context
 - **ai-regression-testing** — Regression testing strategies for AI-assisted development. Sandbox-mode API testing withou
+- **ai-slop-cleaner** — Run an anti-slop cleanup/refactor/deslop workflow ---  # AI Slop Cleaner Skill  Reduce AI-
+- **ai-user-testing** — Run governed AI user-testing for web, iOS, API, data, AI, vision, accessibility, security,
+- **app-store-ship** — Ship Flutter/native apps to Apple App Store + Google Play. ---  # app-store-ship  Ship a F
+- **autopilot** — Run a founder-grade autonomous execution lane from the canonical stack pack. ---  # autopi
+- **azure-aigateway** — Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. WHEN
+- **azure-cloud-migrate** — Assess and migrate cross-cloud workloads to Azure with reports and code conversion. Suppor
+- **azure-diagnostics** — Debug Azure production issues on Azure using AppLens, Azure Monitor, resource health, and 
+- **azure-rbac** — Helps users find the right Azure RBAC role for an identity with least privilege access, th
+- **azure-upgrade** — Assess and upgrade Azure workloads between plans, tiers, or SKUs, or modernize Azure SDK d
 
 Full table: `references/routing.md`

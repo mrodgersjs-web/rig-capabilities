@@ -2,15 +2,6 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| harness-hA-01-code-review | aside-user | Canonical RIG harness for code-review-session." ---  # code-review-session  Use this as a hard-gated | - |
-| harness-hA-02-code-refactor | aside-user | Canonical RIG harness for code-refactor-session." ---  # code-refactor-session  Use this as a hard-g | - |
-| harness-hA-03-code-test-writing | aside-user | Canonical RIG harness for code-test-writing-session." ---  # code-test-writing-session  Use this as  | - |
-| harness-hA-04-code-debug | aside-user | Canonical RIG harness for code-debug-session." ---  # code-debug-session  Use this as a hard-gated s | - |
-| harness-hA-05-code-migration | aside-user | Canonical RIG harness for code-migration-session." ---  # code-migration-session  Use this as a hard | - |
-| harness-hA-06-code-perf-audit | aside-user | Canonical RIG harness for code-perf-audit-session." ---  # code-perf-audit-session  Use this as a ha | - |
-| harness-hA-07-code-deps-upgrade | aside-user | Canonical RIG harness for code-deps-upgrade-session." ---  # code-deps-upgrade-session  Use this as  | - |
-| harness-hA-08-code-pr-prep | aside-user | Canonical RIG harness for code-pr-prep-session." ---  # code-pr-prep-session  Use this as a hard-gat | - |
-| harness-hA-13-code-security-audit | aside-user | Canonical RIG harness for code-security-audit-session." ---  # code-security-audit-session  Use this | - |
 | agentic-best-practices | hermes | Complete best practices from Ray Amjad's 2,800+ hours with Claude Code. Context window management, l | - |
 | agentic-coding-school | hermes | Techniques from Ray Amjad's Agentic Coding School (2,800+ hours with Claude Code). Context window ma | - |
 | ai-regression-testing | hermes | Regression testing strategies for AI-assisted development. Sandbox-mode API testing without database | - |
@@ -40,10 +31,10 @@
 | cloakbrowser | hermes | Stealth Chromium browser that passes every bot detection test (Cloudflare Turnstile, FingerprintJS,  | - |
 | code-changelog-generator | aside-user | Generate user-facing changelogs from commits and PRs, grouped by user impact, with breaking changes  | - |
 | code-deps-audit | aside-user | Audit dependencies for vulnerabilities, license risk, staleness, and unnecessary weight — with an ac | - |
-| code-error-pattern-aggregator | aside-user | Aggregate production/test errors into deduplicated patterns ranked by frequency and blast radius. do | - |
+| code-error-pattern-aggregator | aside-user | Aggregate production/test errors into deduplicated patterns ranked by frequency and blast radius. ve | - |
 | code-lint-suppression-justifier | aside-user | Audit lint suppressions for justification: every ignore/disable must carry a reason, an owner, and a | - |
 | code-llm-cost-optimizer | aside-user | Analyze LLM usage in a codebase for cost leaks: oversized prompts, wrong-tier models, missing caches | - |
-| code-optimizer | hermes | >   Deep code optimization audit using parallel specialist agents. Each agent hunts for performance  | - |
+| code-optimizer | hermes | Deep code optimization audit using parallel specialist agents. Each agent hunts for performance anti | - |
 | code-perf-bottleneck-finder | aside-user | Find real performance bottlenecks from profiles and traces — not guesses — ranked by user-facing imp | - |
 | code-pr-description-writer | aside-user | Write PR descriptions that reviewers can actually review from: intent, risk surface, test evidence,  | - |
 | code-review-excellence | hermes | Master effective code review practices to provide constructive feedback, catch bugs early, and foste | - |
@@ -96,6 +87,15 @@
 | gmail-api-send | hermes | Send email via Gmail REST API when himalaya SMTP fails. Uses refresh token from ~/.hermes/.env — no  | - |
 | golang-testing | hermes | Go testing patterns including table-driven tests, subtests, benchmarks, fuzzing, and test coverage.  | - |
 | graft | hermes | This repo is indexed by graft/. For ANY task here, whether   understanding how something works, find | - |
+| harness-ha-01-code-review | aside-user | Canonical RIG harness for code-review-session." ---  # code-review-session  Use this as a hard-gated | - |
+| harness-ha-02-code-refactor | aside-user | Canonical RIG harness for code-refactor-session." ---  # code-refactor-session  Use this as a hard-g | - |
+| harness-ha-03-code-test-writing | aside-user | Canonical RIG harness for code-test-writing-session." ---  # code-test-writing-session  Use this as  | - |
+| harness-ha-04-code-debug | aside-user | Canonical RIG harness for code-debug-session." ---  # code-debug-session  Use this as a hard-gated s | - |
+| harness-ha-05-code-migration | aside-user | Canonical RIG harness for code-migration-session." ---  # code-migration-session  Use this as a hard | - |
+| harness-ha-06-code-perf-audit | aside-user | Canonical RIG harness for code-perf-audit-session." ---  # code-perf-audit-session  Use this as a ha | - |
+| harness-ha-07-code-deps-upgrade | aside-user | Canonical RIG harness for code-deps-upgrade-session." ---  # code-deps-upgrade-session  Use this as  | - |
+| harness-ha-08-code-pr-prep | aside-user | Canonical RIG harness for code-pr-prep-session." ---  # code-pr-prep-session  Use this as a hard-gat | - |
+| harness-ha-13-code-security-audit | aside-user | Canonical RIG harness for code-security-audit-session." ---  # code-security-audit-session  Use this | - |
 | harness-load-verifier | hermes | Bridge skill for RIG harness load verification; canonical instructions live in ~/.codex/skills/harne | - |
 | health | hermes | Code quality dashboard. Wraps existing project tools (type checker, linter, test runner, dead code d | - |
 | health-studio | hermes | Run the health performance studio with recovery and readiness focus. ---  # health-studio  Use this  | - |
@@ -108,9 +108,9 @@
 | intel-newspaper | hermes | Publish the daily Startup OS newspaper from scraped data and runtime state. ---  # intel-newspaper   | - |
 | interrogate | hermes | Use for \"interrogate\", \"adversarial review\", \"multi-model review\", \"challenge this\", \"stres | - |
 | investigate | hermes | Systematic debugging with root cause investigation. Four phases: investigate, analyze, hypothesize,  | - |
-| jake-pai | hermes |     Invoke Jake as the RIG Agent execution body inside a Claude Code session. Jake parses the missio | - |
+| jake-pai | hermes | Invoke Jake as the RIG Agent execution body inside a Claude Code session. Jake parses the mission pa | - |
 | jake-qa | hermes | Run Jake's QA pipeline — browser testing via Playwright, console error detection, accessibility chec | - |
-| jake-rig-agent | hermes |     Invoke Jake as the RIG Agent execution body inside a Claude Code session. Jake parses the missio | - |
+| jake-rig-agent | hermes | Invoke Jake as the RIG Agent execution body inside a Claude Code session. Jake parses the mission pa | - |
 | javascript-testing-patterns | hermes | Implement comprehensive testing strategies using Jest, Vitest, and Testing Library for unit tests, i | - |
 | js-injection-extract | hermes | [ACS-090] Extract structured data from API-less sites via in-page JS, and save the working extractio | - |
 | kotlin-coroutines-flows | hermes | Kotlin Coroutines and Flow patterns for Android and KMP — structured concurrency, Flow operators, St | - |
@@ -232,7 +232,6 @@
 | rig-top100-rapid-prototyping | aside-user | RIG Top 100 capability #41: Rapid Prototyping & MVP. Test ideas fast, fail cheap" ---  # Rapid Proto | - |
 | rig-top100-testing-automation | aside-user | RIG Top 100 capability #43: Test Automation & CI/CD. Ship without breaking" ---  # Test Automation & | - |
 | rig-write-code | canonical | >-   Use to WRITE or DRAFT code (Communications OS v6 surface engine): assembles the write packet    | - |
-| rig/rig-adrien-craft/adrien-figma-mcp-loop | hermes | >   Bidirectional Figma MCP ↔ Claude Code workflow. Convert a written brief into   three visual dire | - |
 | rust-testing | hermes | Rust testing patterns including unit tests, integration tests, async testing, property-based testing | - |
 | sarif-parsing | canonical | >-   Parses and processes SARIF files from static analysis tools like CodeQL, Semgrep, or other   sc | - |
 | sast-configuration | hermes | Configure Static Application Security Testing (SAST) tools for automated vulnerability detection in  | - |
@@ -259,7 +258,7 @@
 | testsprite-engineering | aside-user | Plan, configure, run, diagnose, and prove TestSprite frontend web and backend API testing through it | - |
 | testsprite-engineering-alias | hermes | Use when a TestSprite engineering alias is invoked; route to the ai-user-testing skill and treat Tes | - |
 | track-management | hermes | Use this skill when creating, managing, or working with Conductor tracks - the logical work units fo | - |
-| verification-loop | hermes | A comprehensive verification system for Claude Code sessions." origin: ECC ---  # Verification Loop  | - |
+| verification-loop | hermes | A comprehensive verification system for Claude Code sessions." metadata:   origin: ECC ---  # Verifi | - |
 | voltagent | hermes | Use when Mike mentions VoltAgent, awesome-codex-subagents, Codex subagents, or wants a specialist Co | - |
 | web3-testing | hermes | Test smart contracts comprehensively using Hardhat and Foundry with unit tests, integration tests, a | - |
 | weekly-signal-diff | hermes | Turn a week's worth of noise into structural shifts, watchpoints, and next moves. ---  # weekly-sign | - |

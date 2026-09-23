@@ -1,11 +1,11 @@
 ---
 name: when-nothing-else-fits
-description: "When no other meta-skill claims the task, use this to search the unassigned remainder of the estate. Routes to 227 skills; read references/routing.md for the full table."
+description: "When no other meta-skill claims the task, use this to search the unassigned remainder of the estate. Routes to 216 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: misc
-  skill-count: "227"
+  skill-count: "216"
 ---
 
 # when-nothing-else-fits
@@ -27,7 +27,7 @@ Tier-1 meta-skill. Job to be done: When no other meta-skill claims the task, use
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 227-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 216-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

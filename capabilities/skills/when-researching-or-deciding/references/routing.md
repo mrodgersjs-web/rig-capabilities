@@ -2,18 +2,14 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| hyperresearch | aside-user | >   Deep research via the HYPERRESEARCH V8 architecture — a tier-adaptive 16-step   pipeline (light  | - |
-| Apify | aside-user | Scrape social media platforms, business data, and e-commerce via Apify actors — Instagram profiles/p | - |
-| Council | aside-user | Convene the Council of High Intelligence — multi-persona deliberation with historical thinkers for d | - |
+| hyperresearch | aside-user | Deep research via the HYPERRESEARCH V8 architecture — a tier-adaptive 16-step pipeline (light / full | - |
 | advise-project-approach | aside-user | Research and advise on the best way to approach a software project, including architecture, tech sta | - |
-| apify | hermes | Scrape social media platforms, business data, and e-commerce via Apify actors — Instagram profiles/p | - |
 | azure-ai | hermes | Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector/hybrid se | - |
 | bridgespace-bridge-skill-bridgemind-mcp | hermes | How to use the BridgeMind MCP (mcp__bridgemind__*) effectively — projects, tasks, agents, knowledge, | - |
 | context-restore | aside-user | Wrapper alias for the Hermes GStack context-restore skill. Canonical instructions live at /Users/rig | - |
 | context-save | aside-user | Wrapper alias for the Hermes GStack context-save skill. Canonical instructions live at /Users/rig128 | - |
 | context-search | hermes | 2-phase context search across the PAI session registry, work directories, and ISAs for instant cold- | - |
 | core-web-vitals | hermes | Optimize Core Web Vitals (LCP, INP, CLS) for better page experience and search ranking. Use when ask | - |
-| council | hermes | Convene the Council of High Intelligence — multi-persona deliberation with historical thinkers for d | - |
 | council-of-high-intelligence | aside-user | Convene the Council of High Intelligence — multi-persona deliberation with historical thinkers for d | council, council |
 | devops/scrapers | hermes | Global multi-engine scraper OS for any coding agent — /scrapers slash, scrapers rig-scraper rig-scra | - |
 | embedding-strategies | hermes | Select and optimize embedding models for semantic search and RAG applications. Use when choosing emb | - |
@@ -42,7 +38,7 @@
 | rig-continuous-learning | hermes | Operate, inspect, repair, and extend RIG's governed 24x7 intelligence loop across the 36GB scraper n | - |
 | rig-corpus-distillation-pipeline | hermes | Distill a primary source corpus into RIG assets. ---  # RIG Corpus→Distillation Pipeline  The patter | - |
 | rig-deviate | hermes | Generate ±30σ candidate variants of an artifact using the RIG Deviation Engine (40 engines × 14 anch | - |
-| rig-deviate-engines | aside-user |     RIG Deviate Engines — merged deviator and deviate-engine audit surface for evaluation and qualit | - |
+| rig-deviate-engines | aside-user | RIG Deviate Engines — merged deviator and deviate-engine audit surface for evaluation and quality co | - |
 | rig-hf-community-corpus | hermes | Scrape and query Higgsfield community projects for proven prompts. Use when Mike asks for the Higgsf | - |
 | rig-iqrsqpi-runner | aside-user | Execute the canonical 7-stage IQRSQPI production workflow (Intake, Question, Research, Synthesize, Q | - |
 | rig-swarm | hermes | RIG-SWARM — Detect when search has collapsed to one path. Single-agent invocation of the Pheromone S | - |
@@ -74,7 +70,7 @@
 | systems-thinking | hermes | Structural analysis of complex systems grounded in Donella Meadows, Peter Senge, Jay Forrester, Russ | - |
 | systems-thinking-studio | aside-user | Map a problem as a system — stocks, flows, loops, archetypes, Meadows leverage, polymath import — th | - |
 | vector-index-tuning | hermes | Optimize vector index performance for latency, recall, and memory. Use when tuning HNSW parameters,  | - |
-| when-nothing-else-fits | aside-user | Fallback only after checking the specific meta routes and finding no relevant owning family or skill | - |
+| when-nothing-else-fits | aside-user | When no other meta-skill claims the task, use this to search the unassigned remainder of the estate. | - |
 | when-researching-or-deciding | aside-user | When researching a topic, extracting doctrine, synthesizing evidence, scoring ideas, or convening ad | - |
 | when-running-the-job-search | aside-user | When sourcing roles, tailoring resumes, applying, prepping interviews, or filing unemployment certif | - |
 | youtube | aside-builtin | Use this skill when you need to search YouTube, read video transcripts, or inspect comments without  | - |
