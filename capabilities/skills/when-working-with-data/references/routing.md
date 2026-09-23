@@ -13,7 +13,8 @@
 | database-migration | hermes | Execute database migrations across ORMs and platforms with zero-downtime strategies, data transforma | - |
 | dav-genai-architecture | hermes | Architect GenAI systems: model selection, evaluation, deployment with UV" tags: [genai, architecture | - |
 | deck-pitch-template | hermes | 10 页融资 deck, 白底 + 蓝紫渐变 hero, traction 柱状, $X.XM ask" tags: ["pitch", "investor", "seed", "vc"] metad | - |
-| email | hermes | Triage an inbox: prioritize threads, draft replies safely." version: 0.2.0 license: MIT metadata:    | email-inbox-triage |
+| devops/sdlc-review | hermes | Review Kanban handoffs and route verified outcomes. version: 1.1.0 license: MIT metadata:   hermes:  | - |
+| email/email-inbox-triage | hermes | Triage an inbox: prioritize threads, draft replies safely." version: 0.2.0 license: MIT metadata:    | - |
 | excalidraw | hermes | Hand-drawn Excalidraw JSON diagrams (arch, flow, seq)." version: 1.0.1 license: MIT metadata:   herm | - |
 | finetuning | hermes | Fine-tune models on Azure AI Foundry using SFT (supervised), DPO (preference), or RFT (reinforcement | - |
 | himalaya | hermes | Himalaya CLI: IMAP/SMTP email from terminal." version: 1.1.0 license: MIT metadata:   hermes:     ta | - |
@@ -21,12 +22,16 @@
 | llama-cpp | hermes | llama.cpp local GGUF inference + HF Hub model discovery. version: 2.1.2 license: MIT metadata:   her | - |
 | make-pdf | hermes | Turn any markdown file into a publication-quality PDF. (gstack) allowed-tools: Bash Read AskUserQues | - |
 | obsidian-bases | hermes | Creates and edits Obsidian Bases (.base files) with valid YAML syntax, filters, formulas, and views. | - |
+| productivity/document-to-action-items | hermes | Extract cited obligations, deadlines, tasks from documents." version: 0.1.0 license: MIT metadata:   | - |
+| productivity/meeting-action-items | hermes | Turn meeting notes into cited decisions, owners, tickets." version: 0.1.0 license: MIT metadata:   h | - |
+| productivity/product-price-monitor | hermes | Watch product, flight, or listing prices; alert on target." version: 0.1.0 license: MIT metadata:    | - |
+| productivity/weekly-review-planning | hermes | Weekly reset: commitments, stalled work, next-week plan." version: 0.1.0 license: MIT metadata:   he | - |
 | rig-lan-inference-service-diagnosis | hermes | Read-only LAN inference service diagnosis on RIG nodes." metadata:   trigger_conditions:     - "Mike | - |
 | rig-operational-packets | hermes | Brain-dump to N runbook packets under a dated folder. license: rig-internal version: 1.0.0 metadata: | - |
 | rig-terminal-service-monitor | hermes | Use for RIG keep-alive cron: check services and nodes." version: 1.0.0 license: MIT metadata:   herm | - |
 | segment-anything | hermes | SAM: zero-shot image segmentation via points, boxes, masks." version: 1.0.0 license: MIT metadata:   | - |
 | setup-browser-cookies | hermes | Import cookies from your real Chromium browser into the headless browse session. (gstack) allowed-to | - |
-| smart-home | hermes | Control Philips Hue lights, scenes, rooms via OpenHue CLI." version: 1.0.1 license: MIT metadata:    | openhue |
+| smart-home/openhue | hermes | Control Philips Hue lights, scenes, rooms via OpenHue CLI." version: 1.0.1 license: MIT metadata:    | - |
 | terminal-native-response | hermes | Use for CLI mode responses. Concise plain text, no markdown." version: 1.0.0 license: MIT metadata:  | - |
 | unfreeze | hermes | Clear the freeze boundary set by /freeze, allowing edits to all directories again. (gstack) allowed- | - |
 | weights-and-biases | hermes | W&B: log ML experiments, sweeps, model registry, dashboards." version: 1.0.1 license: MIT metadata:  | - |

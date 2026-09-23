@@ -1,11 +1,11 @@
 ---
 name: when-designing-interfaces
-description: "When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to route to the right design skill so output clears the quality bar. Routes to 226 skills; read references/routing.md for the full table."
+description: "When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to route to the right design skill so output clears the quality bar. Routes to 248 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: design-ux
-  skill-count: "226"
+  skill-count: "248"
 ---
 
 # when-designing-interfaces
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When designing, auditing, or polishing UI, de
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 226-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 248-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

@@ -1,11 +1,11 @@
 ---
 name: when-shipping-code
-description: "When building, debugging, testing, refactoring, or reviewing software, use this to route to the right engineering skill so code ships correct and verified. Routes to 171 skills; read references/routing.md for the full table."
+description: "When building, debugging, testing, refactoring, or reviewing software, use this to route to the right engineering skill so code ships correct and verified. Routes to 174 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: code-engineering
-  skill-count: "171"
+  skill-count: "174"
 ---
 
 # when-shipping-code
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When building, debugging, testing, refactorin
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 171-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 174-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

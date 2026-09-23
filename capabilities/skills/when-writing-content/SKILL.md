@@ -1,11 +1,11 @@
 ---
 name: when-writing-content
-description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 46 skills; read references/routing.md for the full table."
+description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 47 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: content-writing
-  skill-count: "46"
+  skill-count: "47"
 ---
 
 # when-writing-content
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When writing articles, newsletters, copy, hoo
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 46-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 47-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

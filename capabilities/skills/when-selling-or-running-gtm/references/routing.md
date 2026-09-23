@@ -291,3 +291,4 @@
 | scout | hermes | Research and qualify B2B prospects, companies, buying signals, and account opportunities with eviden | - |
 | taki-doctrine | aside-user | Taki Moore's marketing frameworks extracted from 22 video transcripts — Marketing Map, Magic Model,  | - |
 | ten-signature-closer | hermes | Run the RIG Ten-Signature Engine — cold target to signed contract across 10 parallel GTM closer lane | - |
+| when-selling-or-running-gtm | aside-user | When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route  | - |

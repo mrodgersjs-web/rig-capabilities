@@ -1,11 +1,11 @@
 ---
 name: when-growing-social-accounts
-description: "When drafting, scheduling, engaging, or measuring on LinkedIn, Instagram, or X across any lane (RIG B2B, personal brand, Ideawake client, Jacob minor lane), use this to route to the correct lane skill so the right voice and guardrails apply. Routes to 52 skills; read references/routing.md for the full table."
+description: "When drafting, scheduling, engaging, or measuring on LinkedIn, Instagram, or X across any lane (RIG B2B, personal brand, Ideawake client, Jacob minor lane), use this to route to the correct lane skill so the right voice and guardrails apply. Routes to 56 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: social-growth
-  skill-count: "52"
+  skill-count: "56"
 ---
 
 # when-growing-social-accounts
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When drafting, scheduling, engaging, or measu
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 52-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 56-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

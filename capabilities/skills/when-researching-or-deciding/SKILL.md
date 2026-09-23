@@ -1,11 +1,11 @@
 ---
 name: when-researching-or-deciding
-description: "When researching a topic, extracting doctrine, synthesizing evidence, scoring ideas, or convening advisory deliberation, use this to route to the right research skill so claims carry sources. Routes to 56 skills; read references/routing.md for the full table."
+description: "When researching a topic, extracting doctrine, synthesizing evidence, scoring ideas, or convening advisory deliberation, use this to route to the right research skill so claims carry sources. Routes to 60 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: research-knowledge
-  skill-count: "56"
+  skill-count: "60"
 ---
 
 # when-researching-or-deciding
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When researching a topic, extracting doctrine
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 56-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 60-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
@@ -31,7 +31,7 @@ Tier-1 meta-skill. Job to be done: When researching a topic, extracting doctrine
 - **context-search** — /2/-/p/h/a/s/e/ /c/o/n/t/e/x/t/ /s/e/a/r/c/h/ /a/c/r/o/s/s/ /t/h/e/ /P/A/I/ /s/e/s/s/i/o/n
 - **council** — /C/o/n/v/e/n/e/ /t/h/e/ /C/o/u/n/c/i/l/ /o/f/ /H/i/g/h/ /I/n/t/e/l/l/i/g/e/n/c/e/ /—/ /m/u
 - **council-of-high-intelligence** — /C/o/n/v/e/n/e/ /t/h/e/ /C/o/u/n/c/i/l/ /o/f/ /H/i/g/h/ /I/n/t/e/l/l/i/g/e/n/c/e/ /—/ /m/u
-- **devops** — /G/l/o/b/a/l/ /m/u/l/t/i/-/e/n/g/i/n/e/ /s/c/r/a/p/e/r/ /O/S/ /f/o/r/ /a/n/y/ /c/o/d/i/n/g
+- **devops/scrapers** — /G/l/o/b/a/l/ /m/u/l/t/i/-/e/n/g/i/n/e/ /s/c/r/a/p/e/r/ /O/S/ /f/o/r/ /a/n/y/ /c/o/d/i/n/g
 - **embedding-strategies** — /S/e/l/e/c/t/ /a/n/d/ /o/p/t/i/m/i/z/e/ /e/m/b/e/d/d/i/n/g/ /m/o/d/e/l/s/ /f/o/r/ /s/e/m/a
 - **google-search** — /U/s/e/ /t/h/i/s/ /w/h/e/n/ /y/o/u/ /n/e/e/d/ /t/o/ /s/e/a/r/c/h/ /w/e/b/ /o/n/ /G/o/o/g/l
 - **gstack-context-restore** — /R/e/s/t/o/r/e/ /w/o/r/k/i/n/g/ /c/o/n/t/e/x/t/ /s/a/v/e/d/ /e/a/r/l/i/e/r/ /b/y/ ///c/o/n

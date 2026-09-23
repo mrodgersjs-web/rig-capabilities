@@ -1,11 +1,11 @@
 ---
 name: when-building-or-fixing-agents
-description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Routes to 99 skills; read references/routing.md for the full table."
+description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Routes to 103 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: agent-infrastructure
-  skill-count: "99"
+  skill-count: "103"
 ---
 
 # when-building-or-fixing-agents
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When creating, editing, installing, or evalua
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 99-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 103-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

@@ -1,11 +1,11 @@
 ---
 name: when-nothing-else-fits
-description: "When no other meta-skill claims the task, use this to search the unassigned remainder of the estate. Routes to 107 skills; read references/routing.md for the full table."
+description: "When no other meta-skill claims the task, use this to search the unassigned remainder of the estate. Routes to 110 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: misc
-  skill-count: "107"
+  skill-count: "110"
 ---
 
 # when-nothing-else-fits
@@ -18,14 +18,14 @@ Tier-1 meta-skill. Job to be done: When no other meta-skill claims the task, use
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 107-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 110-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
 - **archon** — /U/s/e/ /w/h/e/n/:/ /U/s/e/r/ /w/a/n/t/s/ /t/o/ /r/u/n/ /A/r/c/h/o/n/ /w/o/r/k/f/l/o/w/s/,
 - **audio-editor** — /A/I/-/p/o/w/e/r/e/d/ /a/u/d/i/o/ /a/n/d/ /v/i/d/e/o/ /e/d/i/t/i/n/g/ /p/i/p/e/l/i/n/e/:/ 
-- **automation** — /U/s/e/ /w/h/e/n/ /T/C/C/ /b/l/o/c/k/s/ /m/a/c/O/S/ /c/a/p/t/u/r/e/ /o/r/ /i/n/p/u/t/./
+- **automation/cua-driver-cli-desktop-control** — /U/s/e/ /w/h/e/n/ /T/C/C/ /b/l/o/c/k/s/ /m/a/c/O/S/ /c/a/p/t/u/r/e/ /o/r/ /i/n/p/u/t/./
 /-
 - **be-creative** — /D/i/v/e/r/g/e/n/t/ /i/d/e/a/t/i/o/n/ /a/n/d/ /c/o/r/p/u/s/ /e/x/p/a/n/s/i/o/n/ /u/s/i/n/g
 - **binary-explorer** — /[/A/C/S/-/6/0/0/]/ /W/a/l/k/ /a/ /./a/p/p/ /b/u/n/d/l/e/ /t/o/ /r/e/v/e/r/s/e/-/e/n/g/i/n

@@ -23,9 +23,11 @@
 | conference-outreach-playbook | hermes | Reusable conference outreach playbook — from attendee list to booked meetings. Battle-tested from Dy | - |
 | continue-cn-check | hermes | Install and run the Continue CLI (`cn`) to execute AI agent checks on local code changes. Use when a | - |
 | cpp-testing | hermes | Use only when writing/updating/fixing C++ tests, configuring GoogleTest/CTest, diagnosing failing or | - |
+| creative/ascii-art | hermes | ASCII art: pyfiglet, cowsay, boxes, image-to-ascii." version: 4.0.0 license: MIT metadata:   hermes: | - |
 | csharp-testing | hermes | C# and .NET testing patterns with xUnit, FluentAssertions, mocking, integration tests, and test orga | - |
 | cycle52-degraded-mode-filesystem-only-packet-carrier | hermes | Cycle 52 lesson — JAKE Self-Healing Monitor ran with ALL cron-mode probe channels blocked (execute_c | - |
 | debugging-strategies | hermes | Master systematic debugging techniques, profiling tools, and root cause analysis to efficiently trac | - |
+| devops/rig-provider-pack | hermes | Manage the cross-harness AI provider roster (subscriptions, API keys, OAuth balancing) via `jake pro | - |
 | differential-review | canonical | Performs security-focused differential review of code changes. Adapts analysis depth to codebase siz | - |
 | distributed-tracing | hermes | Implement distributed tracing with Jaeger and Tempo to track requests across microservices and ident | - |
 | django-tdd | hermes | Django testing strategies with pytest-django, TDD methodology, factory_boy, mocking, coverage, and t | - |
@@ -36,13 +38,13 @@
 | framework-migration-dependency-upgrade | hermes | Manage major dependency version upgrades with compatibility analysis, staged rollout, and comprehens | - |
 | fsharp-testing | hermes | F# testing patterns with xUnit, FsUnit, Unquote, FsCheck property-based testing, integration tests,  | - |
 | git-push-safety-loop | canonical | RIG doctrine — Gate-P (git push safety) as a code-enforced loop. Before any git push: record repo vi | - |
-| github | hermes | Carry a GitHub issue to a verified PR with honest CI state." version: 0.1.0 license: MIT metadata:   | github-issue-to-pr |
 | github-actions-templates | hermes | Create production-ready GitHub Actions workflows for automated testing, building, and deploying appl | - |
 | github-auth | hermes | GitHub auth setup: HTTPS tokens, SSH keys, gh CLI login." version: 1.1.0 license: MIT metadata:   he | - |
 | github-code-review | hermes | Review PRs: diffs, inline comments via gh or REST." version: 1.1.0 license: MIT metadata:   hermes:  | - |
 | github-issues | hermes | Create, triage, label, assign GitHub issues via gh or REST." version: 1.1.0 license: MIT metadata:   | - |
 | github-pr-workflow | hermes | GitHub PR lifecycle: branch, commit, open, CI, merge." version: 1.1.0 license: MIT metadata:   herme | - |
 | github-repo-management | hermes | Clone/create/fork repos; manage remotes, releases." version: 1.1.0 license: MIT metadata:   hermes:  | - |
+| github/github-issue-to-pr | hermes | Carry a GitHub issue to a verified PR with honest CI state." version: 0.1.0 license: MIT metadata:   | - |
 | gmail-api-send | hermes | Send email via Gmail REST API when himalaya SMTP fails. Uses refresh token from ~/.hermes/.env — no  | - |
 | golang-testing | hermes | Go testing patterns including table-driven tests, subtests, benchmarks, fuzzing, and test coverage.  | - |
 | health | hermes | Code quality dashboard. (gstack) allowed-tools: Bash Read Write Edit Glob Grep AskUserQuestion metad | - |
@@ -105,6 +107,7 @@
 | memory-safety-patterns | hermes | Implement memory-safe programming with RAII, ownership, smart pointers, and resource management acro | - |
 | ml-studio | hermes | Run the local-first ML and proprietary prediction lab. ---  # ml-studio  Use this skill when Claude  | - |
 | mobile-api-reverse | hermes | [ACS-602] Reverse-engineer a mobile app's API via Proxyman HAR capture and a custom front-end." ---  | - |
+| mobile/app-store-connect-api-ops | hermes | iOS store ops via ASC REST API when console won't automate. ---  # App Store Connect API Ops  Drive  | - |
 | multi-reviewer-patterns | hermes | Coordinate parallel code reviews across multiple quality dimensions with finding deduplication, seve | - |
 | nousresearch-ecosystem | hermes | NousResearch ecosystem — all repos cloned, installed, and wired globally for Claude, Hermes, and Cod | - |
 | optimize | hermes | Autonomous optimization loop — hill-climb any target. Code with metrics, or skills/prompts/agents wi | - |

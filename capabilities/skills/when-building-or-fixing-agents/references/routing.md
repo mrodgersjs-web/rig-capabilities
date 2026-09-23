@@ -14,7 +14,7 @@
 | aside-codemode | aside-user | Use code mode for any directory or project search and for 2+ independent files, URLs, pages, queries | - |
 | atomic-artifact-write | hermes | Write or patch a JSON/text artifact atomically so a crashed or interrupted run can never leave a hal | - |
 | authenticated-web-scrape | hermes | Scrape gated sites via ego-browser. Use on login walls. license: rig-internal ---  # Authenticated W | - |
-| autonomous-ai-agents | hermes | Neutral third-party resolution of agent merge conflicts." version: 1.0.0 license: MIT metadata:   he | merge-reconciler |
+| autonomous-ai-agents/merge-reconciler | hermes | Neutral third-party resolution of agent merge conflicts." version: 1.0.0 license: MIT metadata:   he | - |
 | autoplan | hermes | Wrapper alias for the Hermes GStack autoplan skill. Canonical instructions live at /Users/rig128gb/. | - |
 | batch-runner-gen | hermes | [ACS-043] Generate a headless parallel batch runner script (claude -p, JSON schema) for a repeated a | - |
 | benchmark-models | hermes | Cross-model benchmark for gstack skills. (gstack) allowed-tools: Bash Read AskUserQuestion metadata: | - |
@@ -61,15 +61,16 @@
 | plan-ceo-review | hermes | Wrapper alias for the Hermes GStack plan-ceo-review skill. Canonical instructions live at /Users/rig | - |
 | plan-devex-review | hermes | Wrapper alias for the Hermes GStack plan-devex-review skill. Canonical instructions live at /Users/r | - |
 | plan-eng-review | hermes | Wrapper alias for the Hermes GStack plan-eng-review skill. Canonical instructions live at /Users/rig | - |
-| productivity | hermes | Edit text in existing PDFs via natural-language prompts." version: 1.0.0 license: MIT metadata:   he | nano-pdf, session-librarian, box, document-to-action-items, meeting-action-items, product-price-monitor, weekly-review-planning |
+| productivity/nano-pdf | hermes | Edit text in existing PDFs via natural-language prompts." version: 1.0.0 license: MIT metadata:   he | - |
+| productivity/session-librarian | hermes | Organize sessions by prompt: find, rename, archive, prune." version: 1.0.0 license: MIT metadata:    | - |
 | record-web-flows | hermes | [ACS-275] Record hard-to-automate manual web flows; compile them into named replayable skills." ---  | - |
-| rig | hermes | The full doctrine substrate — router, pipeline, scoring rubric, reality-audit, wiring, deploy, seal, | rig-meta-substrate, rig-doctrine-router, rig-doctrine-catalog, cross-family-llm-swarm, rig-adrien-craft |
 | rig-anti-fabrication-dispatch | canonical | Use when dispatching coding work to an agent with a fabricated-completion history (Grok, Claude, any | - |
 | rig-comms-agent-craft | canonical | Agent craft translated into message engineering — job contracts, control graphs, earned autonomy, ve | - |
 | rig-status-verification | hermes | Use before delivering or trusting any operational status report — DM counts, LaunchAgent health, cro | - |
 | rig-strategy-studio | hermes | Mandatory RIG strategy harness: evidence intake, full 40-engine polar deviation, 11 hooked stages, 1 | - |
 | rig-tac-doctrine | aside-user | Tactical Agentic Coding (TAC) doctrine distilled from IndyDevDan's curriculum and public repos — the | - |
 | rig-video-doctrine-pipeline | hermes | Extract transcripts from agentic coding videos (YouTube), analyze for patterns/techniques/workflows, | - |
+| rig/rig-meta-substrate | hermes | The full doctrine substrate — router, pipeline, scoring rubric, reality-audit, wiring, deploy, seal, | - |
 | routine-promotion | hermes | [ACS-601] After a maintenance routine has run a few times, promote what works into a dedicated skill | - |
 | rsi-patterns | aside-user | Use the installed bounded RSI coding workflow in OMP for broad-then-deep recon, frozen memory, allow | - |
 | s1gate | aside-user | The RIG System-1 Gate. A governed decision layer on TypeSafe's System One model (Jev) that scores ar | - |
@@ -97,6 +98,9 @@
 | ultraloop | hermes | Use for mission-and-spec-driven work: when the outcome spans multiple systems or context windows, wh | - |
 | verify-output-readback | hermes | After write_file, re-read the deliverable (or ls + hexdump/line-print) and re-check the last format  | - |
 | weekly-mission-kanban | hermes | Full weekly mission execution pattern — brain dump → audit → Kanban → agent swarms → ultraplan → gri | - |
+| when-producing-media | aside-user | When generating or editing audio, music, video, or film, use this to route to the right media skill. | - |
+| when-securing-the-estate | aside-user | When triaging vulnerabilities, sweeping secrets, investigating auth failures, or handling incidents, | - |
+| when-using-personal-tools | aside-user | When working in Gmail, Notion, Slack, password managers, Office files, PDFs, or browser utilities, u | - |
 | wikiskill-evolve | hermes | Run the WikiSkill self-evolution loop (arXiv 2608.27454) on a Hermes workspace — raw→maintainer→prop | - |
 | wikiskill-maintainer | hermes | Consolidate traces into the persistent wiki (WikiSkill). ---  # Wiki Maintainer (WikiSkill)  You are | - |
 | wikiskill-proposer | hermes | Propose skills from wiki patterns and traces (WikiSkill). ---  # Skill Proposer (WikiSkill)  You are | - |

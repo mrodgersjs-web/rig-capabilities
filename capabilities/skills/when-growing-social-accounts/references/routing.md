@@ -46,11 +46,15 @@
 | rig-linkedin-scrape | hermes | Read-only LinkedIn engagement scraper (PROVEN). Pull a creator's recent posts + like/comment/repost  | - |
 | rig-linkedin-taki | aside-user | Apply Taki Moore's content, Hot Button Map, and Cash Campaign rules to Mike Rodgers' LinkedIn activi | - |
 | rig-write-linkedin | canonical | >-   Use to WRITE or DRAFT linkedin (Communications OS v6 surface engine): assembles the write packe | - |
-| social-media | hermes | X/Twitter via xurl CLI: raw post search, posting, DM, media." version: 1.1.3 license: MIT metadata:  | xurl, eden-linkedin-platform, reddit-reading |
+| site-specific/linkedin | aside-builtin | Read this when you need to use LinkedIn. icon: https://static.asidehq.com/apps/builtin-skills/linked | - |
+| social-media/eden-linkedin-platform | hermes | Eden MCP LinkedIn ops. Use for publishing, auto-DM, notes. ---  # Eden LinkedIn Platform Operations  | - |
+| social-media/reddit-reading | hermes | Read Reddit: subreddits, search, threads, users. No browser." version: 1.0.0 license: MIT metadata:  | - |
+| social-media/xurl | hermes | X/Twitter via xurl CLI: raw post search, posting, DM, media." version: 1.1.3 license: MIT metadata:  | - |
 | social-studio | hermes | Governed social-content operating system for RIG. Fires whenever a post, carousel, video, campaign,  | - |
 | us-metrics | hermes | Analyze and update 68 US economic and social indicators from five government APIs: FRED, EIA, Treasu | - |
 | vertical-domain-li-agents | hermes | Domain expertise agents (dental/law/cpa/pe from rig-verticals 21-spec packs) draft LinkedIn conferen | - |
 | voice-builder | hermes | Build a personalised voice profile inside a Cowork project from a short interview plus 3 to 5 sample | - |
 | warm-lead-priming-funnel | hermes | Multi-channel psychological priming funnel for warm lead generation. Uses behavioral science (mere e | - |
+| when-growing-social-accounts | aside-user | When drafting, scheduling, engaging, or measuring on LinkedIn, Instagram, or X across any lane (RIG  | - |
 | writer | hermes | Draft concise B2B sales emails, follow-up sequences, and LinkedIn content from a defined audience, a | - |
 | x-twitter | aside-builtin | Read this skill when you need to use X (Twitter). Don't have to open a browser tab. icon: https://st | - |

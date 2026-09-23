@@ -4,7 +4,7 @@
 |---|---|---|---|
 | archon | hermes | Use when: User wants to run Archon workflows, CREATE workflows or commands, set up Archon, or manage | - |
 | audio-editor | hermes | AI-powered audio and video editing pipeline: Whisper word-level transcription (insanely-fast-whisper | - |
-| automation | hermes | Use when TCC blocks macOS capture or input. ---  # cua-driver CLI: the desktop-control escape hatch  | cua-driver-cli-desktop-control |
+| automation/cua-driver-cli-desktop-control | hermes | Use when TCC blocks macOS capture or input. ---  # cua-driver CLI: the desktop-control escape hatch  | - |
 | be-creative | hermes | Divergent ideation and corpus expansion using Verbalized Sampling + extended thinking. Single-shot m | - |
 | binary-explorer | hermes | [ACS-600] Walk a .app bundle to reverse-engineer installed desktop apps from readable internals." -- | - |
 | brag | hermes | Turn the current project website into a short, polished, shareable launch video using Hyperframes. U | - |
@@ -94,6 +94,8 @@
 | rig-sssf-factory | hermes | RIG deterministic software factory — SSSF + doctrine." ---  # RIG Deterministic Software Factory  ## | - |
 | rig-triple-review | hermes | Run 3 independent adversarial reviewers in parallel, each with a different critical lens. Findings a | - |
 | rig-zen-doctrines | hermes | Load the complete Zazen-derived AI-engineering doctrine system as one cohesive unit. Triggers when M | - |
+| rig/cross-family-llm-swarm | hermes | 4+ external LLM reviewer lanes = real verdicts. tags: [llm-swarm, external-cli, multi-model, review, | - |
+| rig/rig-doctrine-catalog | hermes | The single source of truth for every RIG doctrine across all 8 umbrellas. Auto-loads on session star | - |
 | risk-metrics-calculation | hermes | Calculate portfolio risk metrics including VaR, CVaR, Sharpe, Sortino, and drawdown analysis. Use wh | - |
 | root-cause-analysis | hermes | Structured incident investigation grounded in Toyota Production System, Kaoru Ishikawa, James Reason | - |
 | safari-applescript-control | hermes | Control Safari via AppleScript when browser automation tools can't bypass authentication. Use when G | - |
@@ -108,4 +110,5 @@
 | uv-package-manager | hermes | Master the uv package manager for fast Python dependency management, virtual environments, and moder | - |
 | vercel-deploy-doctrine | hermes | Mandatory pre-send Vercel deployment verification. Prevents sending dead links to clients. Load befo | - |
 | weekly-mission-planner | hermes | Convert an unorganized brain dump into an executed weekly mission — audit, ultraplan, grill-me, swar | - |
+| when-using-vendored-packs | aside-user | When a task matches a third-party vendored collection (gstack, matt-*, acs-*, corey-*, zazen-*, dwk- | - |
 | xml-silence-editing | hermes | [ACS-752] Extract an editor's silence-removal prefs, align A/V, remove silences, output an editable  | - |

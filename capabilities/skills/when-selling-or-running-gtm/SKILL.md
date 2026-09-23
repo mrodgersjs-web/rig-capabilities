@@ -1,11 +1,11 @@
 ---
 name: when-selling-or-running-gtm
-description: "When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route to the right GTM skill so revenue work follows doctrine. Routes to 289 skills; read references/routing.md for the full table."
+description: "When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route to the right GTM skill so revenue work follows doctrine. Routes to 290 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: gtm-sales-revenue
-  skill-count: "289"
+  skill-count: "290"
 ---
 
 # when-selling-or-running-gtm
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When prospecting, pricing, campaigning, forec
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 289-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 290-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 

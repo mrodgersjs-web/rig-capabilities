@@ -1,11 +1,11 @@
 ---
 name: when-working-with-data
-description: "When building pipelines, validating data contracts, measuring freshness or latency, or querying stores, use this to route to the right data skill. Routes to 29 skills; read references/routing.md for the full table."
+description: "When building pipelines, validating data contracts, measuring freshness or latency, or querying stores, use this to route to the right data skill. Routes to 34 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: data-analytics
-  skill-count: "29"
+  skill-count: "34"
 ---
 
 # when-working-with-data
@@ -18,7 +18,7 @@ Tier-1 meta-skill. Job to be done: When building pipelines, validating data cont
 3. **Sub-skills** — a skill whose routing entry lists sub-skills delegates further; load only the one sub-skill the task needs.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 29-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 34-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
@@ -36,6 +36,6 @@ Tier-1 meta-skill. Job to be done: When building pipelines, validating data cont
 - **database-migration** — /E/x/e/c/u/t/e/ /d/a/t/a/b/a/s/e/ /m/i/g/r/a/t/i/o/n/s/ /a/c/r/o/s/s/ /O/R/M/s/ /a/n/d/ /p
 - **dav-genai-architecture** — /A/r/c/h/i/t/e/c/t/ /G/e/n/A/I/ /s/y/s/t/e/m/s/:/ /m/o/d/e/l/ /s/e/l/e/c/t/i/o/n/,/ /e/v/a
 - **deck-pitch-template** — /1/0/ /页/融/资/ /d/e/c/k/,/ /白/底/ /+/ /蓝/紫/渐/变/ /h/e/r/o/,/ /t/r/a/c/t/i/o/n/ /柱/状/,/ /$/X/.
-- **email** — /T/r/i/a/g/e/ /a/n/ /i/n/b/o/x/:/ /p/r/i/o/r/i/t/i/z/e/ /t/h/r/e/a/d/s/,/ /d/r/a/f/t/ /r/e
+- **devops/sdlc-review** — /R/e/v/i/e/w/ /K/a/n/b/a/n/ /h/a/n/d/o/f/f/s/ /a/n/d/ /r/o/u/t/e/ /v/e/r/i/f/i/e/d/ /o/u/t
 
 Full table: `references/routing.md`

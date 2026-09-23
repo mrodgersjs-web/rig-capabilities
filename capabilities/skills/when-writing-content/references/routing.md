@@ -15,7 +15,7 @@
 | bridgespace-bridge-skill-seo | hermes | Modern (2025/2026) SEO methodology for auditing and writing pages — title tags, meta, headings, stru | - |
 | canary | hermes | Post-deploy canary monitoring. (gstack) allowed-tools: Bash Read Write Glob AskUserQuestion metadata | - |
 | coding-agent-failure-modes | hermes | 11 coding-agent failure modes (write-for-agent, instruction rot, compact-is-not-memory, hooks not ma | - |
-| content-automation | hermes | Use for the Alfred LinkedIn content-planner cron job. ---  # LinkedIn Content Planning (Alfred cron  | linkedin-content-planning |
+| content-automation/linkedin-content-planning | hermes | Use for the Alfred LinkedIn content-planner cron job. ---  # LinkedIn Content Planning (Alfred cron  | - |
 | content-matrix | hermes | Generate 32+ LinkedIn post ideas in a single table by pairing the user's content pillars with 8 prov | - |
 | cso | hermes | Chief Security Officer mode. (gstack) allowed-tools: Bash Read Grep Glob Write Agent WebSearch AskUs | - |
 | document-release | hermes | Post-ship documentation update. (gstack) allowed-tools: Bash Read Write Edit Grep Glob AskUserQuesti | - |
@@ -46,5 +46,6 @@
 | setup-deploy | hermes | Configure deployment settings for /land-and-deploy. allowed-tools: Bash Read Write Edit Glob Grep As | - |
 | solidity-security | hermes | Master smart contract security best practices to prevent common vulnerabilities and implement secure | - |
 | unlazy | canonical | Enforces completion discipline for substantial autonomous work by writing acceptance gates before ex | - |
+| when-writing-content | aside-user | When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to  | - |
 | write-story | hermes | Constructs fiction across seven simultaneous narrative layers (Meaning, Character Change, Plot, Myst | - |
 | write-swift | canonical | How to write modern Swift well — modeling with value types, Swift 6 data-race safety and approachabl | - |

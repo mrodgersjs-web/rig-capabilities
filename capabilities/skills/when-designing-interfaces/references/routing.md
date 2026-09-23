@@ -59,7 +59,8 @@
 | cpp-coding-standards | hermes | C++ coding standards based on the C++ Core Guidelines (isocpp.github.io). Use when writing, reviewin | - |
 | cqrs-implementation | hermes | Implement Command Query Responsibility Segregation for scalable architectures. Use when separating r | - |
 | create-design-md | canonical | Create or update a DESIGN.md from an existing product repository or public website. Use when asked t | - |
-| creative | hermes | Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows | comfyui, ascii-art, sketch |
+| creative/comfyui | hermes | Generate images, video, and audio with ComfyUI — install, launch, manage nodes/models, run workflows | - |
+| creative/sketch | hermes | Throwaway HTML mockups: 2-3 design variants to compare." version: 1.0.1 license: MIT metadata:   her | - |
 | cua-driver | hermes | Drive a native GUI app (macOS, Windows, Linux) via the cua-driver CLI (default) or MCP server — snap | - |
 | customize | hermes | Interactive guided deployment flow for Azure OpenAI models with full customization control. Step-by- | - |
 | daemon | hermes | Manage the public daemon profile — a living digital representation of what you're working on, thinki | - |
@@ -140,9 +141,9 @@
 | microservices-patterns | hermes | Design microservices architectures with service boundaries, event-driven communication, and resilien | - |
 | mike-daily-execution-sprint | hermes | Use when Mike brain-dumps 5+ operational tasks for today." version: 1.0.0 license: MIT metadata:   a | - |
 | ml-pipeline-workflow | hermes | Build end-to-end MLOps pipelines from data preparation through model training, validation, and produ | - |
-| mobile | hermes | Use for TestFlight build, group, and tester operations. ---  # App Store Connect TestFlight operatio | app-store-connect-testflight, app-store-connect-api-ops |
 | mobile-android-design | hermes | Master Material Design 3 and Jetpack Compose patterns for building native Android apps. Use when des | - |
 | mobile-ios-design | hermes | Master iOS Human Interface Guidelines and SwiftUI patterns for building native iOS apps. Use when de | - |
+| mobile/app-store-connect-testflight | hermes | Use for TestFlight build, group, and tester operations. ---  # App Store Connect TestFlight operatio | - |
 | monorepo-management | hermes | Master monorepo management with Turborepo, Nx, and pnpm workspaces to build efficient, scalable mult | - |
 | motion-ui | hermes | Production-ready UI motion system for React/Next.js. Use when implementing animations, transitions,  | - |
 | multi-cloud-architecture | hermes | Design multi-cloud architectures using a decision framework to select and integrate services across  | - |
@@ -191,13 +192,29 @@
 | rig-design-harness | canonical | Route reusable design-harness work to the canonical rig-design-harness package without copying its r | - |
 | rig-motion-prompt-library | hermes | The studio's prompt-library retrieval layer — MotionSites.ai (official MCP, OAuth-owned by the studi | - |
 | rig-strategy-teaser | hermes | RIG see-themselves strategy-teaser production line (v2). Use PROACTIVELY when asked to build, rebuil | - |
+| rig/rig-adrien-craft | hermes | Sister umbrella to rig-adrien-doctrines. Houses Adrien's design-style doctrines that scored below th | - |
+| rig/rig-doctrine-router | hermes | Given a natural-language intent, route to the right RIG doctrine umbrella + child skill. The single  | - |
 | rust-async-patterns | hermes | Master Rust async programming with Tokio, async traits, error handling, and concurrent patterns. Use | - |
 | rust-patterns | hermes | Idiomatic Rust patterns, ownership, error handling, traits, concurrency, and best practices for buil | - |
 | screenpipe-api | hermes | Query the user's local and synced-device data via the screenpipe REST API at localhost:3030 — record | - |
 | security-requirement-extraction | hermes | Derive security requirements from threat models and business context. Use when translating threats i | - |
 | semgrep-rule-creator | canonical | Creates custom Semgrep rules for detecting security vulnerabilities, bug patterns, and code patterns | - |
 | similarity-search-patterns | hermes | Implement efficient similarity search with vector databases. Use when building semantic search, impl | - |
-| site-specific | aside-builtin | Discord web app channel and message workflow guidance. icon: https://static.asidehq.com/apps/builtin | discord, amazon, google-forms, linear, clickup, notion, google-calendar, airtable, jira, github, google-drive, confluence, google-slides, trello, asana, linkedin |
+| site-specific/airtable | aside-builtin | Airtable base, view, and record-pane guidance. icon: https://static.asidehq.com/apps/builtin-skills/ | - |
+| site-specific/amazon | aside-builtin | Amazon shopping, orders, and account-state guidance. icon: https://static.asidehq.com/apps/builtin-s | - |
+| site-specific/asana | aside-builtin | Asana inbox, my-tasks, and task-pane guidance. icon: https://static.asidehq.com/apps/builtin-skills/ | - |
+| site-specific/clickup | aside-builtin | ClickUp command-bar, task, and inbox guidance. icon: https://static.asidehq.com/apps/builtin-skills/ | - |
+| site-specific/confluence | aside-builtin | Confluence Cloud page and editor guidance. icon: https://static.asidehq.com/apps/builtin-skills/conf | - |
+| site-specific/discord | aside-builtin | Discord web app channel and message workflow guidance. icon: https://static.asidehq.com/apps/builtin | - |
+| site-specific/github | aside-builtin | GitHub repo, issue, PR, and review guidance. icon: https://static.asidehq.com/apps/builtin-skills/gi | - |
+| site-specific/google-calendar | aside-builtin | Google Calendar event browsing, search, and creation guidance. icon: https://static.asidehq.com/apps | - |
+| site-specific/google-drive | aside-builtin | Google Drive navigation and result-reading guidance. icon: https://static.asidehq.com/apps/builtin-s | - |
+| site-specific/google-forms | aside-builtin | Google Forms navigation and editing guidance. icon: https://static.asidehq.com/apps/builtin-skills/g | - |
+| site-specific/google-slides | aside-builtin | Google Slides reading and editing guidance. icon: https://static.asidehq.com/apps/builtin-skills/goo | - |
+| site-specific/jira | aside-builtin | Jira Cloud issue, search, and list-view guidance. icon: https://static.asidehq.com/apps/builtin-skil | - |
+| site-specific/linear | aside-builtin | Linear issue, inbox, and keyboard-driven workflow guidance. icon: https://static.asidehq.com/apps/bu | - |
+| site-specific/notion | aside-builtin | Notion workspace, page navigation, and block-editing guidance. icon: https://static.asidehq.com/apps | - |
+| site-specific/trello | aside-builtin | Trello board, inbox, and card workflow guidance. icon: https://static.asidehq.com/apps/builtin-skill | - |
 | springboot-patterns | hermes | Spring Boot architecture patterns, REST API design, layered services, data access, caching, async pr | - |
 | springboot-verification | hermes | Verification loop for Spring Boot projects: build, static analysis, tests with coverage, security sc | - |
 | startup-financial-modeling | hermes | Build comprehensive 3-5 year financial models with revenue projections, cost structures, cash flow a | - |
@@ -226,5 +243,10 @@
 | wcag-audit-patterns | hermes | Conduct WCAG 2.2 accessibility audits with automated testing, manual verification, and remediation g | - |
 | web-component-design | hermes | Master React, Vue, and Svelte component patterns including CSS-in-JS, composition strategies, and re | - |
 | webdesign | hermes | Design and integrate web interfaces using Anthropic's Claude Design (claude.ai/design) as the primar | - |
+| when-building-or-fixing-agents | aside-user | When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to r | - |
+| when-designing-interfaces | aside-user | When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to rou | - |
+| when-governing-rig-work | aside-user | When doing any RIG-internal build, review, or claim, use this to route to the governing doctrine (IQ | - |
+| when-shipping-code | aside-user | When building, debugging, testing, refactoring, or reviewing software, use this to route to the righ | - |
+| when-working-with-data | aside-user | When building pipelines, validating data contracts, measuring freshness or latency, or querying stor | - |
 | workflow-orchestration-patterns | hermes | Design durable workflows with Temporal for distributed systems. Covers workflow vs activity separati | - |
 | writing-plans | hermes | Use when you have a spec or requirements for a multi-step task, before touching code ---  > **Relate | - |
