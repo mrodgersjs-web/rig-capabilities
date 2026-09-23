@@ -134,7 +134,7 @@
 | god-zeus | hermes | USE WHEN opening a God Mode run, decomposing a goal into failure-class dispatches, minting capabilit | - |
 | godmode | hermes | Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN." version: 1.0.0 license: MIT metadata:   hermes | - |
 | godot-gdscript-patterns | hermes | Master Godot 4 GDScript patterns including signals, scenes, state machines, and optimization. Use wh | - |
-| gstack | hermes | Fast headless browser for QA testing and site dogfooding. Navigate pages, interact with elements, ve | pair-agent, benchmark, design-html, plan-tune, design-shotgun, plan-design-review, autoplan, design-consultation, learn, freeze, careful, cso, canary, gstack-openclaw-investigate, gstack-openclaw-office-hours, gstack-openclaw-ceo-review, gstack-openclaw-retro, open-gstack-browser, investigate, context-restore, document-release, health, gstack-upgrade, land-and-deploy, codex, qa, qa-only, setup-browser-cookies, review, plan-ceo-review, office-hours, retro, devex-review, benchmark-models, plan-devex-review, browse, design-review, ship, plan-eng-review, guard, make-pdf, unfreeze, context-save, setup-deploy |
+| gstack | hermes | Fast headless browser for QA testing and site dogfooding. Navigate pages, interact with elements, ve | setup-deploy, context-save, unfreeze, make-pdf, guard, plan-eng-review, ship, design-review, browse, plan-devex-review, benchmark-models, connect-chrome, devex-review, retro, office-hours, plan-ceo-review, review, setup-browser-cookies, qa-only, qa, codex, land-and-deploy, gstack-upgrade, health, document-release, context-restore, investigate, gstack-openclaw-retro, gstack-openclaw-ceo-review, gstack-openclaw-office-hours, gstack-openclaw-investigate, canary, cso, careful, freeze, learn, design-consultation, autoplan, plan-design-review, design-shotgun, plan-tune, design-html, benchmark, pair-agent |
 | gstack-autoplan | hermes | Auto-review pipeline — reads the full CEO, design, eng, and DX review skills from disk and runs them | - |
 | gstack-benchmark | hermes | Performance regression detection using the browse daemon. Establishes baselines for page load times, | - |
 | gstack-benchmark-models | hermes | Cross-model benchmark for gstack skills. Runs the same prompt through Claude, GPT (via Codex CLI), a | - |
@@ -177,7 +177,7 @@
 | gstack-setup-deploy | hermes | Configure deployment settings for /land-and-deploy. Detects your deploy platform (Fly.io, Render, Ve | - |
 | gstack-ship | hermes | Ship workflow: detect + merge base branch, run tests, review diff, bump VERSION, update CHANGELOG, c | - |
 | gstack-unfreeze | hermes | Clear the freeze boundary set by /freeze, allowing edits to all directories again. Use when you want | - |
-| gstack-upgrade | hermes | Upgrade gstack to the latest version. allowed-tools: Bash Read Write AskUserQuestion metadata:   tri | - |
+| gstack-upgrade | hermes | Upgrade gstack to the latest version. Detects global vs vendored install, runs the upgrade, and show | - |
 | hermes-agent | hermes | Use, configure, theme, extend, and orchestrate Hermes Agent." version: 3.1.0 license: MIT metadata:  | - |
 | hermes-and-buzz | hermes | Deploy Hermes Agent personas on the RIG fleet (rig128gb/96gb/36gb/256gb) as buzz-acp agents. Covers  | - |
 | hermes-backend-plugin-dev | hermes | Add/debug Hermes video_gen and image_gen backend plugins." version: 1.0.0 metadata:   hermes:     ta | - |
@@ -201,20 +201,46 @@
 | npcpy-knowledge-store-skill | hermes | Work with directory-local .knowledge.yaml memories through the npcpy KnowledgeStore, where the YAML  | - |
 | npcpy-run-jinx | hermes | Execute a jinx by name (already loaded on the team) or by filesystem path (e.g. a freshly created_ji | - |
 | onboarding | aside-builtin | Run the first-session onboarding - get to know the user from the tools they already use, show a coup | - |
-| prompting | hermes | 'Meta-prompting standard library — the PAI system for generating, optimizing, and composing prompts  | - |
+| prompting | hermes | Meta-prompting standard library — the PAI system for generating, optimizing, and composing prompts p | - |
+| tac-agent-ordering | hermes |     Use when orchestrating multiple agents or subagents and the default   plan-execute-review sequen | - |
 | tac-agents-md-corrections | hermes | The second time you correct the agent, write the correction into AGENTS.md/CLAUDE.md (short) or an o | - |
+| tac-break-code-bias-loop | hermes |     Use when an agent keeps producing the same flawed shape of code across   retries. Names the bias | - |
+| tac-bug-hunting-deep | hermes | Use when debugging complex issues — AI bug finding, deep bug hunting with subagents, systematic debu | - |
+| tac-business-agent-use | hermes | Use when applying agentic coding to business operations — goal-driven events, Microsoft Clarity anal | - |
+| tac-claude-md-mastery | hermes | Use when setting up or optimizing CLAUDE.md — init, hierarchical configs, auto memory, conditions, p | - |
 | tac-closed-loop | hermes | TAC closed loop pattern — Builder creates, Verifier checks, feedback loops. Use for ANY build that n | - |
+| tac-closing-loop | hermes |     Mandatory on every build pipeline. Separates Builder from Verifier in a   self-correcting loop.  | - |
+| tac-codex-parallel | hermes | Use when working with OpenAI Codex CLI — thread management, forking, agents.md, /goal mode, computer | - |
 | tac-context-before-code | hermes | Install current vendor context into the harness before prompting any integration — plugin first, the | - |
+| tac-context-engineering | hermes |     Use when setting up any new agent, project, or coding session. Applies the   12 context engineer | - |
+| tac-context-layer | hermes | Use when managing context for large production codebases — signal-to-noise, progressive disclosure,  | - |
+| tac-cross-tool-handoff | hermes |     Use when combining multiple CLIs or models in a single workflow. Splits the   job by tool streng | - |
+| tac-design-driven-agents | hermes | Use when building UI/UX with agents — design flow, interaction layer, HTML artifacts, component desi | - |
 | tac-doctrine | hermes | Tactical Agentic Coding (TAC) doctrine — IndyDevDan's 14-lesson system. The tactical layer beneath R | - |
+| tac-git-diff-review | hermes |     Use after any agent edit session, before committing, merging, or declaring   work done. Reviews  | - |
+| tac-headless-automation | hermes | Use when running agents without a UI — headless mode, background workflows, routines/scheduled tasks | - |
+| tac-loop-engineering | hermes | Use when building AI loops that work autonomously — builder-verifier patterns, /loop, /goal mode, mo | - |
+| tac-mission-command | hermes | Use when orchestrating complex multi-agent missions — removing bottlenecks, task lifecycle managemen | - |
+| tac-mixed-model-workflows | hermes | Use when combining multiple AI models or CLIs in a single workflow — model routing by complexity, co | - |
 | tac-model-routing | hermes | Route model cost to task class — strong models plan, cheap models recon and execute mechanical work; | - |
+| tac-one-pattern-per-pass | hermes |     Use when refactoring or cleaning legacy code with an agent and the target file   contains multip | - |
 | tac-pan | hermes | Tactical Panopticon — the comprehensive GTM/commercial strategy orchestrator. Uses IQRSQPI (Intake → | - |
 | tac-parallel-tracks | hermes | Foundation first, then one git worktree per independent agent track, integrated through review gates | - |
 | tac-plan-artifact | hermes | The plan is a persisted, human-reviewed workspace artifact; execution happens in a fresh context tha | - |
+| tac-planning-convergence | hermes |     Use on non-trivial changes where you have two or more models or CLIs available   and the cost of | - |
+| tac-point-fix-vs-architectural | hermes |     Use when triaging a bug or messy code in a legacy codebase and deciding   whether to patch the s | - |
+| tac-prompt-architecture | hermes | Use when designing prompts for complex agent tasks — clarifying questions, anti-sycophancy, goal-in- | - |
 | tac-real-path-verify | hermes | Completion is the feature working on the real path — public URL logged out, provider event dashboard | - |
 | tac-review-gate | hermes | Checkpoint before every agent run, review every agent diff before merge — human for risk, agent revi | - |
 | tac-runtime-first-debug | hermes | No fix without runtime evidence — reproduce first, paste the exact error, keep provider/deployment l | - |
+| tac-scout-worker-synthesizer | hermes |     Use for any non-trivial task — multi-file edits, unfamiliar code, or anything   where a single m | - |
+| tac-skills-as-code | hermes | Use when creating, managing, or specifying models for agent skills — skill types, arguments, explore | - |
+| tac-stochastic-coverage | hermes |     Use when a single agent trajectory is a coin flip — ambiguous specs, large   search space, or "I | - |
+| tac-subagent-orchestration | hermes | Use when coordinating multiple subagents — explore subagents, forked sessions, nested subagents, mul | - |
 | tac-v3-doctrine | hermes | TAC v3 execution doctrine — the Sonny-Sangha-corpus layer over tac-v2-doctrine. Twelve corpus-backed | - |
+| tac-verification-modes | hermes | Use when verifying agent output — three verifier types (deterministic, scored, real-world), verifier | - |
 | tac-workflow-first | hermes | Determinism-first triage — a task with a known sequence stays deterministic workflow code; agent aut | - |
+| tac-worktree-lanes | hermes | Use when running parallel agent sessions on the same repo — git worktrees as isolated agent lanes, w | - |
 | tool-deepeval | canonical | Build committed DeepEval datasets and LLM test cases for Design Harness golden-set regression evalua | - |
 | tool-dspy | canonical | Define typed DSPy signatures, modules, examples, and optimizer metrics for evidence-driven Design Ha | - |
 | tool-fastmcp | canonical | Build typed MCP Python servers for Design Harness tool adapters using the installed MCP SDK 2.x API. | - |

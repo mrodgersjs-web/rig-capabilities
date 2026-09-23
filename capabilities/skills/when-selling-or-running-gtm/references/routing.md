@@ -2,19 +2,28 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
-| blueprintgtm-30k-jobs-prospects | hermes | Use when scaling prospecting to 30K+ contacts. BlueprintGTM's 30K Jobs & Prospects — scale outbound  | - |
-| blueprintgtm-ai-lead-enrichment | hermes | Use when enriching leads with AI. BlueprintGTM's AI Lead Enrichment — use ChatGPT/Claude to enrich p | - |
-| blueprintgtm-cannonball-method | hermes | Use when building a full GTM motion from scratch. Jordan Crawford's Cannonball method — zero to ship | - |
-| blueprintgtm-company-people-targeting | hermes | Use when targeting specific people at specific companies. BlueprintGTM's Company & People Targeting  | - |
-| blueprintgtm-g2-reviews-analysis | hermes | Use when analyzing competitor reviews for GTM insights. BlueprintGTM's G2 Reviews Analysis — scrape  | - |
-| blueprintgtm-gtm-strategy-ocean | hermes | Use when building GTM strategy with lookalike audiences. Jordan Crawford's Ocean.io strategy — find  | - |
-| blueprintgtm-icp-to-inbox | hermes | Use when going from zero knowledge to a shipped outbound campaign. Jordan Crawford's ICP-to-Inbox pi | - |
-| blueprintgtm-last-sdr | hermes | Use when automating B2B outbound with AI. The Last SDR — how to use AI to replace manual outbound. S | - |
-| blueprintgtm-multi-persona-targeting | hermes | Use when targeting multiple personas in one campaign. BlueprintGTM's multi-persona targeting — defin | - |
-| blueprintgtm-vibe-engineering | hermes | Use when identifying GTM strategy for a new company. Vibe Engineering — Jordan Crawford's method for | - |
+| harness-hD-01-outbound-sequence | aside-user | Canonical RIG harness for gtm-outbound-sequence." ---  # gtm-outbound-sequence  Use this as a hard-g | - |
+| harness-hD-02-icp-research | aside-user | Canonical RIG harness for gtm-icp-research." ---  # gtm-icp-research  Use this as a hard-gated sessi | - |
+| harness-hD-04-pricing-test | aside-user | Canonical RIG harness for gtm-pricing-experiment." ---  # gtm-pricing-experiment  Use this as a hard | - |
+| harness-hD-05-launch-prep | aside-user | Canonical RIG harness for gtm-launch-prep." ---  # gtm-launch-prep  Use this as a hard-gated session | - |
+| harness-hD-08-expansion-play | aside-user | Canonical RIG harness for gtm-expansion-play." ---  # gtm-expansion-play  Use this as a hard-gated s | - |
+| harness-hD-09-market-research | aside-user | Canonical RIG harness for gtm-market-research." ---  # gtm-market-research  Use this as a hard-gated | - |
+| harness-hD-10-competitive-intel | aside-user | Canonical RIG harness for gtm-competitive-intel." ---  # gtm-competitive-intel  Use this as a hard-g | - |
+| harness-hD-11-partner-discovery | aside-user | Canonical RIG harness for gtm-partner-discovery." ---  # gtm-partner-discovery  Use this as a hard-g | - |
+| harness-hD-12-growth-experiment | aside-user | Canonical RIG harness for gtm-growth-experiment." ---  # gtm-growth-experiment  Use this as a hard-g | - |
+| blueprintgtm-30k-jobs-prospects | aside-user | Use when scaling prospecting to 30K+ contacts. BlueprintGTM's 30K Jobs & Prospects — scale outbound  | - |
+| blueprintgtm-ai-lead-enrichment | aside-user | Use when enriching leads with AI. BlueprintGTM's AI Lead Enrichment — use ChatGPT/Claude to enrich p | - |
+| blueprintgtm-cannonball-method | aside-user | Use when building a full GTM motion from scratch. Jordan Crawford's Cannonball method — zero to ship | - |
+| blueprintgtm-company-people-targeting | aside-user | Use when targeting specific people at specific companies. BlueprintGTM's Company & People Targeting  | - |
+| blueprintgtm-g2-reviews-analysis | aside-user | Use when analyzing competitor reviews for GTM insights. BlueprintGTM's G2 Reviews Analysis — scrape  | - |
+| blueprintgtm-gtm-strategy-ocean | aside-user | Use when building GTM strategy with lookalike audiences. Jordan Crawford's Ocean.io strategy — find  | - |
+| blueprintgtm-icp-to-inbox | aside-user | Use when going from zero knowledge to a shipped outbound campaign. Jordan Crawford's ICP-to-Inbox pi | - |
+| blueprintgtm-last-sdr | aside-user | Use when automating B2B outbound with AI. The Last SDR — how to use AI to replace manual outbound. S | - |
+| blueprintgtm-multi-persona-targeting | aside-user | Use when targeting multiple personas in one campaign. BlueprintGTM's multi-persona targeting — defin | - |
+| blueprintgtm-vibe-engineering | aside-user | Use when identifying GTM strategy for a new company. Vibe Engineering — Jordan Crawford's method for | - |
 | bp-company-search | hermes | Use when applying the BlueprintGTM AI-Powered Company & People Search method. Drops into dwk-06-qual | - |
-| bp-custom-gpt-builder | hermes | Use when applying the BlueprintGTM Custom GPT Builder for GTM Operations method. Drops into dwk-04-a | - |
-| bp-deep-research | hermes | Use when applying the BlueprintGTM ChatGPT Deep Research for GTM method. Drops into dwk-04-async-kno | - |
+| bp-custom-gpt-builder | aside-user | Use when applying the BlueprintGTM Custom GPT Builder for GTM Operations method. Drops into dwk-04-a | - |
+| bp-deep-research | aside-user | Use when applying the BlueprintGTM ChatGPT Deep Research for GTM method. Drops into dwk-04-async-kno | - |
 | bp-edge-copilot | hermes | Use when applying the BlueprintGTM Edge Copilot Workflow method. Drops into dwk-01-real-human + dwk- | - |
 | bp-g2-analysis | hermes | Use when applying the BlueprintGTM G2 Negative Review Analysis for Competitive Intel method. Drops i | - |
 | bp-gtm-vibe-engineering | hermes | Use when applying the BlueprintGTM GTM Vibe Engineering with Claude / ChatGPT / Gemini method. Drops | - |
@@ -24,9 +33,9 @@
 | bp-multi-persona-targeting | hermes | Use when applying the BlueprintGTM Multi-Persona Targeting by Problem at the Company Level method. D | - |
 | closer | hermes | Diagnose and advance B2B deals through proposals, qualification, negotiation, pricing, and close pla | - |
 | command-registry | hermes | Walk any marketing/experience site top-to-bottom, map each section to a customer feeling + story fun | - |
-| cs-churn-risk-triage | hermes | Triage a list of at-risk customer accounts into save-play tiers with owner and next action per tier. | - |
-| cs-health-score-audit | hermes | Compute and audit a customer health score from real product-usage, support, invoice, and sponsor sig | - |
-| cs-renewal-readiness-check | hermes | Run a pre-renewal checklist N days before contract end covering value delivered vs promised, open es | - |
+| cs-churn-risk-triage | aside-user | Triage a list of at-risk customer accounts into save-play tiers with owner and next action per tier. | - |
+| cs-health-score-audit | aside-user | Compute and audit a customer health score from real product-usage, support, invoice, and sponsor sig | - |
+| cs-renewal-readiness-check | aside-user | Run a pre-renewal checklist N days before contract end covering value delivered vs promised, open es | - |
 | darius-daily-outreach | hermes | Darius cold email pipeline: leads to scored staged emails." metadata:   author: RIG GTM   version: " | - |
 | do-we-know-our-customer | hermes | Compile customer evidence into a verified target, value thesis, trust position, human message, and l | - |
 | grill-me-pro | hermes | Grill Me Pro — 3-layer Bert-score evaluator for recipes. Patterns transfer to brand/content/GTM scor | - |
@@ -40,10 +49,12 @@
 | gtm-analytics-pipeline-orchestration-instrumentation | hermes | Use when defining events, fields, and governance for GTM analytics pipelines. ---  # Analytics Instr | - |
 | gtm-analytics-pipeline-orchestration-quality-gates | hermes | Use when establishing tests, monitoring, and incident response for analytics   models. ---  # Analyt | - |
 | gtm-analytics-pipeline-orchestration-visualization-patterns | hermes | Use when designing dashboards, reports, and narratives for GTM stakeholders. ---  # Analytics Visual | - |
+| gtm-attribution-model-selector | aside-user | Select the right attribution model for a sales motion given cycle length, touch density, and data qu | - |
 | gtm-b2b-saas-board-readiness-kit | hermes | Narrative and artifact system for preparing SaaS board/investor updates. ---  # Board Readiness Kit  | - |
 | gtm-b2b-saas-land-adopt-expand-blueprint | hermes | Template for orchestrating phased motions across strategic SaaS accounts. ---  # Land-Adopt-Expand B | - |
 | gtm-b2b-saas-usage-to-value-map | hermes | Method for translating product telemetry into ROI narratives and expansion   triggers. ---  # Usage- | - |
 | gtm-b2b-saas-vertical-solution-templates | hermes | Library of reusable solution briefs, architecture, and pricing frames per industry. ---  # Vertical  | - |
+| gtm-batch-capsule-builder | aside-user | Assemble sealed, review-ready outreach batch capsules with per-recipient personalization evidence at | - |
 | gtm-brand-strategy-brand-governance-os | hermes | Operating system for intake, approvals, QA, and training across brand   stakeholders. ---  # Brand G | - |
 | gtm-brand-strategy-brand-measurement-dashboard | hermes | KPI framework and reporting system for tracking brand health, consistency,   and impact. ---  # Bran | - |
 | gtm-brand-strategy-brand-narrative-playbook | hermes | Messaging and storytelling template that keeps positioning consistent   across audiences. ---  # Bra | - |
@@ -56,7 +67,9 @@
 | gtm-campaign-orchestration-campaign-planning | hermes | Use when developing campaign strategy, briefs, KPIs, and workback schedules before execution. ---  # | - |
 | gtm-campaign-orchestration-channel-integration | hermes | Use when synchronizing messaging, timing, and measurement across multiple campaign channels. ---  #  | - |
 | gtm-campaign-orchestration-performance-tracking | hermes | Use when establishing measurement frameworks, dashboards, and optimization rhythms for live campaign | - |
+| gtm-campaign-roi-calculator | aside-user | Compute campaign ROI with fully-loaded costs, attributed revenue, and payback period — assumptions e | - |
 | gtm-cold-send-safety | hermes | RIG cold-send safety gate. Use PROACTIVELY before ANY cold outbound email — arming a batch, staging  | - |
+| gtm-cold-send-safety-gate | aside-user | Deterministic, fail-closed per-recipient pre-send gate for cold outbound: 8/8 checks or NO-GO.' doct | - |
 | gtm-community-building-champion-engagement-system | hermes | Framework for recruiting, activating, and rewarding community champions. ---  # Champion Engagement  | - |
 | gtm-community-building-closed-loop-community-playbook | hermes | Processes for routing community insights/actions and communicating outcomes   back to members. ---   | - |
 | gtm-community-building-community-insight-taxonomy | hermes | Tagging schema for classifying community signals by persona, journey,   and business impact. ---  #  | - |
@@ -70,9 +83,10 @@
 | gtm-competitive-intelligence-executive-briefing-kit | hermes | Framework for packaging competitive updates into executive-ready narratives   and action plans. ---  | - |
 | gtm-competitive-intelligence-market-signal-tracker | hermes | Operating system for logging market/competitive signals with severity,   confidence, and routing. -- | - |
 | gtm-competitive-intelligence-win-loss-dataset | hermes | Structure for capturing qualitative + quantitative win/loss insights   with consistent tagging. ---  | - |
-| gtm-content-marketing-case-studies | hermes | Use when creating customer stories that prove ROI, highlight use cases, and equip sales with proof.  | - |
+| gtm-content-marketing-case-studies | aside-user | Use when creating customer stories that prove ROI, highlight use cases, and equip sales with proof.  | - |
 | gtm-content-marketing-editorial-ops | hermes | Use when planning multi-channel editorial calendars, enforcing publishing cadences, and coordinating | - |
 | gtm-content-marketing-seo-writing | hermes | Use when planning or drafting search-optimized content that balances keyword intent with GTM messagi | - |
+| gtm-content-marketing-storytelling | hermes | Use to craft compelling narratives and assets from customer advocacy   programs. ---  # Advocacy Sto | - |
 | gtm-content-marketing-storytelling-narrative | hermes | Use when crafting narratives that connect product value to customer pain through clear setup-conflic | - |
 | gtm-content-marketing-thought-leadership | hermes | Use when crafting executive POVs, visionary articles, or keynote narratives that elevate brand autho | - |
 | gtm-content-marketing-webinars | hermes | Use when planning, producing, and repurposing webinars or virtual events for GTM campaigns. ---  # W | - |
@@ -96,6 +110,7 @@
 | gtm-customer-feedback-orchestration-stakeholder-ops | hermes | Use to coordinate approvals, communications, and accountability across   teams for feedback programs | - |
 | gtm-customer-feedback-orchestration-survey-design | hermes | Use to craft rigorous survey instruments with sampling, question logic,   and QA standards. ---  # C | - |
 | gtm-customer-journey-governance-framework | hermes | Use to establish ownership, cadences, and compliance for customer journey   programs. ---  # Journey | - |
+| gtm-customer-journey-orchestration-governance | hermes | Use to enforce approvals, compliance, and auditability for personalization   programs. ---  # Person | - |
 | gtm-customer-journey-orchestration-journey-mapping | hermes | Use to facilitate cross-functional journey mapping with data-backed insights. ---  # Journey Mapping | - |
 | gtm-customer-journey-orchestration-voice-of-customer | hermes | Use to design, run, and synthesize customer feedback programs tied to   journey stages. ---  # Voice | - |
 | gtm-customer-marketing-advocacy-programs | hermes | Use when designing and scaling reference, story, advisory, or community   programs. ---  # Customer  | - |
@@ -115,6 +130,7 @@
 | gtm-design-creative-brand-governance | hermes | Use to manage brand guidelines, approvals, and ongoing refresh cadence. ---  # Brand Governance Tool | - |
 | gtm-design-creative-creative-brief-framework | hermes | Use to structure concise creative briefs with goals, audience, and guardrails. ---  # Creative Brief | - |
 | gtm-design-creative-creative-qa-checklist | hermes | Use to verify creative assets meet brand, accessibility, and localization   standards before launch. | - |
+| gtm-design-creative-enablement-kit | hermes | Use to package collateral, talk tracks, and systems guidance for routed   plays. ---  # Sales Handof | - |
 | gtm-design-creative-enablement-kit-adoption | hermes | Use to plan trainings, office hours, and adoption programs for new creative   or brand initiatives.  | - |
 | gtm-design-creative-mood-board-builder | hermes | Use to compile visual inspiration, color palettes, and typography references   for creative concepts | - |
 | gtm-design-creative-production-playbook | hermes | Use to convert creative briefs into actionable task plans with owners   and SLAs. ---  # Creative Pr | - |
@@ -151,9 +167,11 @@
 | gtm-healthcare-marketing-compliance-briefing-kit | hermes | Standardized template for campaign compliance intake, reviews, and approvals. ---  # Compliance Brie | - |
 | gtm-healthcare-marketing-patient-journey-mapping | hermes | Framework for documenting compliant patient journeys with touchpoints,   consent, and escalation pat | - |
 | gtm-healthcare-marketing-regulatory-review-checklist | hermes | Step-by-step checklist for routing healthcare marketing assets through   legal, medical, and privacy | - |
+| gtm-icp-fit-evaluator | aside-user | Evaluate a company or contact against the Ideal Customer Profile with a scored, criterion-by-criteri | - |
 | gtm-intent-signal-orchestration-outbound-plays | hermes | Use to craft channel-specific outreach sequences that tie directly to   detected intent signals. --- | - |
 | gtm-intent-signal-orchestration-signal-scoring | hermes | Use to design composite intent scoring models with decay, weighting,   and governance. ---  # Signal | - |
 | gtm-intent-signal-orchestration-suppression-logic | hermes | Use to define guardrails that pause signal-driven plays when accounts   are risky, saturated, or in- | - |
+| gtm-launch-readiness-checklist | aside-user | Executable go/no-go checklist for GTM launches across assets, tracking, legal, and operations. doctr | - |
 | gtm-lead-nurture-orchestration-lifecycle-cadence | hermes | Use when defining nurture pacing, triggers, and suppression logic. ---  # Lifecycle Cadence Systems  | - |
 | gtm-lead-nurture-orchestration-nurture-testing | hermes | Use when planning, executing, and logging nurture experiments and regression   tests. ---  # Nurture | - |
 | gtm-lead-nurture-orchestration-personalization-logic | hermes | Use when defining dynamic content rules, tokens, and conditional offers   inside nurture programs. - | - |
@@ -175,6 +193,7 @@
 | gtm-marketing-automation-data-governance | hermes | Use when defining data contracts, consent policies, and monitoring for   automation programs. ---  # | - |
 | gtm-marketing-automation-lifecycle-mapping | hermes | Use when designing automation programs aligned to lifecycle stages, SLAs,   and GTM objectives. ---  | - |
 | gtm-marketing-automation-workflow-testing | hermes | Use when validating automation builds before launch or after significant   changes. ---  # Workflow  | - |
+| gtm-outreach-sequence-architect | aside-user | Design multi-touch outreach sequences with spacing, escalation logic, and exit conditions per segmen | - |
 | gtm-paid-media-budget-optimization | hermes | Use when reallocating spend across channels/ad sets or setting guardrails   to stay on plan. ---  #  | - |
 | gtm-paid-media-campaign-architecture | hermes | Use when structuring paid media campaigns/ad sets to balance testing,   delivery, and optimization c | - |
 | gtm-paid-media-creative-variants | hermes | Use when developing hooks, visuals, and copy variations for paid campaigns   across channels. ---  # | - |
@@ -192,6 +211,7 @@
 | gtm-pr-communications-crisis-playbooks | hermes | Use when incidents occur and you need pre-approved workflows, templates,   and escalation paths. --- | - |
 | gtm-pr-communications-media-database | hermes | Use when researching, segmenting, and maintaining journalist/analyst   contact lists. ---  # Media D | - |
 | gtm-pr-communications-messaging-frameworks | hermes | Use when building message houses, key statements, and proof structures   for announcements or crises | - |
+| gtm-pricing-page-auditor | aside-user | Audit a pricing page for conversion friction: missing anchors, confusing tiers, weak CTAs, and trust | - |
 | gtm-pricing-strategy-elasticity-lab | hermes | Use to run pricing elasticity experiments with consistent assumptions   and guardrails. ---  # Elast | - |
 | gtm-pricing-strategy-enablement-kit | hermes | Use to plan rollout communications, trainings, and assets after pricing   changes. ---  # Pricing En | - |
 | gtm-pricing-strategy-packaging-framework | hermes | Use to structure pricing/packaging proposals with clear fences and value   pillars. ---  # Packaging | - |
@@ -217,6 +237,7 @@
 | gtm-revenue-analytics-deal-quality-model | hermes | Scoring system for opportunity hygiene, win likelihood, and inspection   prioritization. ---  # Deal | - |
 | gtm-revenue-analytics-exec-briefing-kit | hermes | Template for packaging revenue analytics into concise exec/board narratives. ---  # Executive Briefi | - |
 | gtm-revenue-analytics-revenue-health-dashboard | hermes | Visualization blueprint for revenue KPIs, guardrails, and action callouts. ---  # Revenue Health Das | - |
+| gtm-revenue-forecaster | aside-user | Forecast revenue from pipeline with stage-weighted probabilities, explicit assumptions, and confiden | - |
 | gtm-revenue-forecasting-pipeline-executive-briefs | hermes | Use to craft concise revenue updates for executives and boards. ---  # Executive Brief System Skill  | - |
 | gtm-revenue-forecasting-pipeline-forecast-modeling | hermes | Use when designing, tuning, or auditing revenue forecast models. ---  # Forecast Modeling System Ski | - |
 | gtm-revenue-forecasting-pipeline-variance-analysis | hermes | Use to attribute forecast vs actual deltas and recommend remediation   actions. ---  # Revenue Varia | - |
@@ -276,19 +297,70 @@
 | gtm-voice-of-customer-closed-loop-playbook | hermes | Governance system for routing VoC insights to owners and tracking follow-through. ---  # Closed-Loop | - |
 | gtm-voice-of-customer-customer-feedback-taxonomy | hermes | Standardized tagging schema for personas, lifecycle stages, drivers,   and sentiment. ---  # Custome | - |
 | gtm-voice-of-customer-signal-correlation-workbench | hermes | Toolkit for linking VoC feedback with telemetry, revenue, and operational   data. ---  # Signal Corr | - |
+| gtm-warm-lead-scorer | aside-user | Score warm leads (inbound, referred, or engaged) on fit and intent so outreach order is evidence-bas | - |
 | gtm-webinar-automation-engagement-analytics | hermes | Use when measuring webinar funnel performance and diagnosing audience   behavior. ---  # Webinar Eng | - |
 | gtm-webinar-automation-registration-ops | hermes | Use when configuring registration flows, reminders, and data sync for   webinars. ---  # Registratio | - |
 | gtm-webinar-automation-webinar-design | hermes | Use when crafting compelling webinar narratives, engagement tactics,   and attendee experiences. --- | - |
+| harness-hB-10-lead-magnet | aside-user | Canonical RIG harness for lead-magnet-session." ---  # lead-magnet-session  Use this as a hard-gated | - |
 | mission-control | hermes | Assemble and coordinate small specialist agent teams for GTM, content, development, and product miss | - |
+| product-marketing-context | hermes | Load and maintain the product-marketing context — positioning, personas, messaging pillars, proof po | - |
 | rep | hermes | Prepare personalized B2B outreach, objection responses, call scripts, and follow-up sequences for re | - |
 | rig-blueprintgtm-doctrines | hermes | Load the complete BlueprintGTM / Jordan Crawford doctrine system as one cohesive unit. Triggers when | - |
+| rig-crm | hermes | Query and update Mike's Twenty CRM instance at localhost:3000. Use whenever the task involves CRM da | - |
 | rig-fleet-diagnostics | hermes | Diagnose RIG fleet health issues. metadata:   trigger: Use when diagnosing or auditing the RIG infra | - |
 | rig-gtm-doctrines | hermes | Load the complete Corey Ganim AI-agency doctrine system as one cohesive unit. Triggers when Mike say | - |
 | rig-gtm-operations | hermes | Run a full GTM department — prospect sourcing, email outreach, pipeline management, conference prep, | - |
 | rig-revenue-cycle | aside-user | The RIG revenue engine at $30K/month, built on Taki Moore's cadence rules — offer cycle, Cash Campai | - |
+| rig-top100-board-reporting | aside-user | RIG Top 100 capability #81: Board & Investor Reporting. Investors need data, not stories" ---  # Boa | - |
+| rig-top100-cold-email-ai | aside-user | RIG Top 100 capability #51: AI Cold Email Generation. RIG needs 10 clients/month" ---  # AI Cold Ema | - |
+| rig-top100-competitive-moat | aside-user | RIG Top 100 capability #79: Competitive Moat Analysis. Moats protect margin" ---  # Competitive Moat | - |
+| rig-top100-competitor-intel | aside-user | RIG Top 100 capability #54: Competitive Intelligence. Win competitive deals" ---  # Competitive Inte | - |
+| rig-top100-deal-desk | aside-user | RIG Top 100 capability #60: Deal Desk Automation. Speed wins deals" ---  # Deal Desk Automation  Dom | - |
+| rig-top100-decision-framework | aside-user | RIG Top 100 capability #76: Decision-Making Framework. Mike makes 100 decisions/day — structure them | - |
+| rig-top100-discovery-questions | aside-user | RIG Top 100 capability #57: AI Discovery Questions. Better questions = better deals" ---  # AI Disco | - |
+| rig-top100-exit-planning | aside-user | RIG Top 100 capability #85: Exit Planning & Valuation. Start with the end in mind" ---  # Exit Plann | - |
+| rig-top100-finops | aside-user | RIG Top 100 capability #72: FinOps & Cost Management. Costs scale with growth — manage them" ---  #  | - |
+| rig-top100-followup-automation | aside-user | RIG Top 100 capability #56: Follow-Up Sequence Automation. Most deals are lost to poor follow-up" -- | - |
+| rig-top100-incident-response | aside-user | RIG Top 100 capability #74: Incident Response. Fast resolution builds trust" ---  # Incident Respons | - |
+| rig-top100-lead-scoring | aside-user | RIG Top 100 capability #52: Predictive Lead Scoring. Focus sales effort on high-probability deals" - | - |
+| rig-top100-market-positioning | aside-user | RIG Top 100 capability #77: Market Positioning & Messaging. Positioning determines pricing" ---  # M | - |
+| rig-top100-market-research | aside-user | RIG Top 100 capability #82: Market Research & Sizing. Know where the money is" ---  # Market Researc | - |
+| rig-top100-objection-handling | aside-user | RIG Top 100 capability #58: AI Objection Handling. Win the moments that matter" ---  # AI Objection  | - |
+| rig-top100-okrs | aside-user | RIG Top 100 capability #80: OKRs & Goal Tracking. What gets measured gets done" ---  # OKRs & Goal T | - |
+| rig-top100-ops-cadence | aside-user | RIG Top 100 capability #73: Ops Cadence & SOPs. Consistency without manual effort" ---  # Ops Cadenc | - |
+| rig-top100-partnership-strategy | aside-user | RIG Top 100 capability #84: Partnership Strategy. Partnerships unlock new markets" ---  # Partnershi | - |
+| rig-top100-pipeline-hygiene | aside-user | RIG Top 100 capability #59: Pipeline Hygiene & Data Quality. Bad data = bad forecasts" ---  # Pipeli | - |
+| rig-top100-pricing-strategy | aside-user | RIG Top 100 capability #83: Pricing Strategy & Optimization. Pricing is the highest-leverage growth  | - |
+| rig-top100-proposal-generation | aside-user | RIG Top 100 capability #55: AI Proposal Generation. Turn conversations into contracts fast" ---  # A | - |
+| rig-top100-sales-forecasting | aside-user | RIG Top 100 capability #53: Sales Pipeline Forecasting. Know what's coming" ---  # Sales Pipeline Fo | - |
+| rig-top100-scenario-planning | aside-user | RIG Top 100 capability #78: Scenario Planning & Premortems. Don't get surprised" ---  # Scenario Pla | - |
+| rig-top100-talent-pipeline | aside-user | RIG Top 100 capability #75: Talent Pipeline & Hiring. RIG needs the best people" ---  # Talent Pipel | - |
+| rig-top100-unit-economics | aside-user | RIG Top 100 capability #71: Unit Economics Tracking. Know what's profitable" ---  # Unit Economics T | - |
 | rig-website-taki | aside-user | Apply Taki Moore's Marketing Map, Magic Model, MicroMagnet, Offer Doc, 3 PPP, and Hot Button Map rul | - |
+| rig/rig-charlie-leaders-doctrines/charliehills-claude-code-features | hermes | Use when the user has Claude Code but is only using basic chat. There are 6 advanced features most u | - |
+| rig/rig-charlie-leaders-doctrines/charliehills-claude-code-setup | hermes | Use when the user has Claude Code installed but their sessions feel chaotic, inconsistent, or low-qu | - |
+| rig/rig-charlie-leaders-doctrines/charliehills-claude-cowork-code | hermes | Use when the user wants to use Claude Cowork (browser-based Claude) alongside Claude Code (CLI) for  | - |
+| rig/rig-charlie-leaders-doctrines/charliehills-claude-record-skill | hermes | Use when the user has a repetitive Claude Code workflow they want to convert into a reusable skill." | - |
+| rig/rig-reddit-gtm-wisdom/reddit-ai-sdr-hybrid | hermes | Use when the user is evaluating whether to replace or augment SDRs with AI. Synthesized from 6 Reddi | - |
+| rig/rig-reddit-gtm-wisdom/reddit-cold-email-tool-stack | hermes | Use when the user is choosing or migrating between Instantly, Smartlead, and Lemlist. Synthesized fr | - |
+| rig/rig-reddit-gtm-wisdom/reddit-cold-outreach-2026 | hermes | Use when the user is planning or optimizing a cold outreach motion and needs ground-truth from actua | - |
+| rig/rig-reddit-gtm-wisdom/reddit-gtm-wisdom-2026 | hermes | Use when the user wants a synthesized view of what works in 2026 GTM, grounded in real practitioner  | - |
+| rig/rig-reddit-gtm-wisdom/reddit-objection-handling | hermes | Use when the user is training reps or preparing for tough objections. Synthesized from 6 Reddit thre | - |
+| rig/rig-saastr-leaders-doctrines/saastr-abm | hermes | Use when the user wants to implement Account-Based Marketing for a B2B SaaS company with a defined I | - |
+| rig/rig-saastr-leaders-doctrines/saastr-close-more-deals | hermes | Use when the user wants to improve win rates and close rates, especially with constrained marketing/ | - |
+| rig/rig-saastr-leaders-doctrines/saastr-company-sale-checklist | hermes | Use when the user is considering selling their SaaS company. Covers preparation, valuation, deal str | - |
+| rig/rig-saastr-leaders-doctrines/saastr-hubspot-sales-manager-ramp | hermes | Use when the user is promoting AEs to managers or hiring new sales managers. Covers the front-line-m | - |
+| rig/rig-saastr-leaders-doctrines/saastr-hyper-competitive-sales | hermes | Use when the user is selling against 5+ entrenched competitors in a crowded market. Differentiation, | - |
+| rig/rig-saastr-leaders-doctrines/saastr-outbound-scale | hermes | Use when the user is scaling an outbound sales motion from a few reps to a full SDR + AE team. Cover | - |
+| rig/rig-saastr-leaders-doctrines/saastr-sales-leadership | hermes | Use when the user is a sales leader (manager, director, VP, CRO) and wants frameworks for coaching,  | - |
+| rig/rig-saastr-leaders-doctrines/saastr-seed-pitch | hermes | Use when the user is pitching a seed-stage startup to investors. Covers story structure, slide flow, | - |
+| rig/rig-tim-leaders-doctrines/timyakubson-claygency | hermes | Use when the user wants to start or scale a Clay-focused outbound agency. Tim Yakubson's $1M ARR pla | - |
+| rig/rig-tim-leaders-doctrines/timyakubson-cold-email-sequences | hermes | Use when the user has cold email infrastructure ready and needs to write the actual sequences. Cover | - |
+| rig/rig-tim-leaders-doctrines/timyakubson-gtm-engineer | hermes | Use when the user wants to break into or grow in GTM engineering — the role that combines sales, mar | - |
+| rig/rig-tim-leaders-doctrines/timyakubson-instantly-clay | hermes | Use when the user wants to use Clay for enrichment + Instantly for sending. This is the modern defau | - |
 | sales | hermes | Transforms product documentation into sales-ready narrative packages combining story explanation, ch | darius-outbound |
 | scout | hermes | Research and qualify B2B prospects, companies, buying signals, and account opportunities with eviden | - |
 | taki-doctrine | aside-user | Taki Moore's marketing frameworks extracted from 22 video transcripts — Marketing Map, Magic Model,  | - |
 | ten-signature-closer | hermes | Run the RIG Ten-Signature Engine — cold target to signed contract across 10 parallel GTM closer lane | - |
+| vertical-gtm-playbook-compiler | hermes | Compile a profession-specific (law, CPA, healthcare) GTM playbook — funnel templates, pricing packag | - |
 | when-selling-or-running-gtm | aside-user | When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route  | - |

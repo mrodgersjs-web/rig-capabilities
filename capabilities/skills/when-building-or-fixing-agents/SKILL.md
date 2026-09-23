@@ -1,11 +1,11 @@
 ---
 name: when-building-or-fixing-agents
-description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Routes to 103 skills; read references/routing.md for the full table."
+description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Routes to 276 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: agent-infrastructure
-  skill-count: "103"
+  skill-count: "276"
 ---
 
 # when-building-or-fixing-agents
@@ -22,26 +22,27 @@ Tier-1 meta-skill. Job to be done: When creating, editing, installing, or evalua
 - MUST load exactly ONE child skill per task step; never bulk-load children from the index.
 - MUST load only the single sub-skill the task needs, only when the loaded child names sub-skills.
 - MUST NOT load a second child to "compare"; if two children seem to match, pick by the routing table one-liner in references/routing.md, then load that one.
+- The quick index below is a relevance-ordered SAMPLE, not the full set; if no index entry fits the task, scan the full table in references/routing.md before choosing.
 - If no child matches the task, load `when-nothing-else-fits` instead of guessing.
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 103-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 276-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **agency-agents** — /A/g/e/n/c/y/ /A/g/e/n/t/s/ /r/o/s/t/e/r/ /—/ /2/3/2/ /i/n/s/t/a/l/l/a/b/l/e/ /A/g/e/n/c/y
-- **agent-chief-claude-code** — /R/o/u/t/e/ /e/v/e/r/y/t/h/i/n/g/ /n/o/t/e/w/o/r/t/h/y/ /t/h/r/o/u/g/h/ /C/h/i/e/f/ /i/n/s
-- **agent-chief-openclaw** — /R/o/u/t/e/ /e/v/e/r/y/t/h/i/n/g/ /n/o/t/e/w/o/r/t/h/y/ /t/h/r/o/u/g/h/ /C/h/i/e/f/ /i/n/s
-- **agent-harness** — /S/e/l/e/c/t/ /t/h/e/ /r/i/g/h/t/ /R/I/G/ /a/g/e/n/t/ /h/a/r/n/e/s/s/ /a/c/r/o/s/s/ /C/l/a
-- **agent-ready-api-audit** — /[/A/C/S/-/3/8/0/]/[/A/C/S/-/4/3/3/]/ /A/u/d/i/t/ /a/n/ /A/P/I/ /s/u/r/f/a/c/e/ /f/o/r/ /a
-- **agent-swarm-execution** — /R/u/n/ /r/e/a/l/ /w/o/r/k/ /t/h/r/o/u/g/h/ /p/a/r/a/l/l/e/l/ /a/g/e/n/t/ /s/w/a/r/m/s/./ 
-- **agentic-doctrines** — /C/o/m/p/l/e/t/e/ /a/g/e/n/t/i/c/ /c/o/d/i/n/g/ /d/o/c/t/r/i/n/e/ /s/y/n/t/h/e/s/i/z/e/d/ 
-- **agents** — /C/o/m/p/o/s/e/ /C/U/S/T/O/M/ /a/g/e/n/t/s/ /f/r/o/m/ /B/a/s/e/ /T/r/a/i/t/s/ /+/ /V/o/i/c
-- **anti-reversing-techniques** — /U/n/d/e/r/s/t/a/n/d/ /a/n/t/i/-/r/e/v/e/r/s/i/n/g/,/ /o/b/f/u/s/c/a/t/i/o/n/,/ /a/n/d/ /p
-- **aside-codemode** — /U/s/e/ /c/o/d/e/ /m/o/d/e/ /f/o/r/ /a/n/y/ /d/i/r/e/c/t/o/r/y/ /o/r/ /p/r/o/j/e/c/t/ /s/e
-- **atomic-artifact-write** — /W/r/i/t/e/ /o/r/ /p/a/t/c/h/ /a/ /J/S/O/N///t/e/x/t/ /a/r/t/i/f/a/c/t/ /a/t/o/m/i/c/a/l/l
-- **authenticated-web-scrape** — /S/c/r/a/p/e/ /g/a/t/e/d/ /s/i/t/e/s/ /v/i/a/ /e/g/o/-/b/r/o/w/s/e/r/./ /U/s/e/ /o/n/ /l/o
+- **harness-mh-01-skill-genesis-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **harness-mh-02-harness-forge-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **harness-mh-03-agent-composition-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **harness-mh-04-deviation-expedition-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **harness-mh-05-asset-pruning-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **harness-mh-06-install-verification-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
+- **Agents** — Compose CUSTOM agents from Base Traits + Voice + Specialization, and manage predefined fun
+- **agency-agents** — Agency Agents roster   232 installable Agency specs exposed to Codex as safe `agency-*` TO
+- **agent-bms-band-assigner** — Assign BMS bands to every agent in a roster so routing strictness matches each agent's bla
+- **agent-browser** — Drive a real browser via the agent-browser CLI daemon to navigate, fill forms, click, scre
+- **agent-chief-claude-code** — Route everything noteworthy through Chief instead of interrupting the user. Use whenever a
+- **agent-chief-openclaw** — Route everything noteworthy through Chief instead of messaging the user. Use whenever a he
 
 Full table: `references/routing.md`

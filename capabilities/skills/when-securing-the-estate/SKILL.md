@@ -1,11 +1,11 @@
 ---
 name: when-securing-the-estate
-description: "When triaging vulnerabilities, sweeping secrets, investigating auth failures, or handling incidents, use this to route to the right security skill. Routes to 4 skills; read references/routing.md for the full table."
+description: "When triaging vulnerabilities, sweeping secrets, investigating auth failures, or handling incidents, use this to route to the right security skill. Routes to 7 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: security-ops
-  skill-count: "4"
+  skill-count: "7"
 ---
 
 # when-securing-the-estate
@@ -22,18 +22,22 @@ Tier-1 meta-skill. Job to be done: When triaging vulnerabilities, sweeping secre
 - MUST load exactly ONE child skill per task step; never bulk-load children from the index.
 - MUST load only the single sub-skill the task needs, only when the loaded child names sub-skills.
 - MUST NOT load a second child to "compare"; if two children seem to match, pick by the routing table one-liner in references/routing.md, then load that one.
+- The quick index below is a relevance-ordered SAMPLE, not the full set; if no index entry fits the task, scan the full table in references/routing.md before choosing.
 - If no child matches the task, load `when-nothing-else-fits` instead of guessing.
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 4-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 7-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **red-team** — /M/i/l/i/t/a/r/y/-/g/r/a/d/e/ /a/d/v/e/r/s/a/r/i/a/l/ /a/n/a/l/y/s/i/s/ /t/h/a/t/ /d/e/p/l
-- **sec-auth-failure-investigation** — /I/n/v/e/s/t/i/g/a/t/e/ /s/p/i/k/e/s/ /i/n/ /a/u/t/h/e/n/t/i/c/a/t/i/o/n/ /f/a/i/l/u/r/e/s
-- **sec-dependency-vuln-triage** — /T/u/r/n/ /r/a/w/ /d/e/p/e/n/d/e/n/c/y/ /s/c/a/n/ /o/u/t/p/u/t/ /(/n/p/m/ /a/u/d/i/t/,/ /t
-- **sec-secret-leak-sweep** — /S/w/e/e/p/ /a/ /r/e/p/o/ /a/n/d/ /i/t/s/ /g/i/t/ /h/i/s/t/o/r/y/ /f/o/r/ /c/o/m/m/i/t/t/e
+- **sec-auth-failure-investigation** — Investigate spikes in authentication failures for Vera's security department: distinguish 
+- **sec-dependency-vuln-triage** — Turn raw dependency scan output (npm audit, trivy, gh advisories, semgrep) into a ranked a
+- **sec-secret-leak-sweep** — Sweep a repo and its git history for committed credentials, classify true vs false positiv
+- **red-team** — Military-grade adversarial analysis that deploys 32 parallel expert agents (engineers, arc
+- **rig-top100-deployment-automation** — RIG Top 100 capability #44: Deployment & Infrastructure. Ship fast, ship safe" ---  # Depl
+- **rig-top100-monitoring-alerting** — RIG Top 100 capability #45: Monitoring & Alerting. Downtime kills trust" ---  # Monitoring
+- **rig-top100-security-hardening** — RIG Top 100 capability #46: Security & Compliance. Enterprise clients require it" ---  # S
 
 Full table: `references/routing.md`

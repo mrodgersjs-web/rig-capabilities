@@ -1,11 +1,11 @@
 ---
 name: when-governing-rig-work
-description: "When doing any RIG-internal build, review, or claim, use this to route to the governing doctrine (IQRSQPI, gates, ProofPackets, lattice, deviation engines) so the work follows hard law instead of vibes. Routes to 17 skills; read references/routing.md for the full table."
+description: "When doing any RIG-internal build, review, or claim, use this to route to the governing doctrine (IQRSQPI, gates, ProofPackets, lattice, deviation engines) so the work follows hard law instead of vibes. Routes to 32 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: rig-core-doctrine
-  skill-count: "17"
+  skill-count: "32"
 ---
 
 # when-governing-rig-work
@@ -22,26 +22,27 @@ Tier-1 meta-skill. Job to be done: When doing any RIG-internal build, review, or
 - MUST load exactly ONE child skill per task step; never bulk-load children from the index.
 - MUST load only the single sub-skill the task needs, only when the loaded child names sub-skills.
 - MUST NOT load a second child to "compare"; if two children seem to match, pick by the routing table one-liner in references/routing.md, then load that one.
+- The quick index below is a relevance-ordered SAMPLE, not the full set; if no index entry fits the task, scan the full table in references/routing.md before choosing.
 - If no child matches the task, load `when-nothing-else-fits` instead of guessing.
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 17-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 32-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **adversarial-verification-loop** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /A/d/v/e/r/s/a/r/i/a/l/ /V/e/r/i/f/i/c/a/t/i/o/n/ /(/n/o/n/-
-- **gate-d-loop** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /G/a/t/e/-/D/ /a/s/ /a/ /c/o/d/e/-/e/n/f/o/r/c/e/d/ /l/o/o/p
-- **iqrsqpi-v10** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /I/Q/R/S/Q/P/I/ /v/1/0/ /a/s/ /a/n/ /e/x/e/c/u/t/a/b/l/e/ /s
-- **iqrsqpi-v11** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /I/Q/R/S/Q/P/I/ /v/1/1/,/ /t/h/e/ /g/a/t/e/d/ /l/o/o/p/./ /I
-- **iqrsqpi-v20** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /I/Q/R/S/Q/P/I/ /v/2/0/,/ /t/h/e/ /f/r/a/c/t/a/l/ /s/e/l/f/-
-- **iqrsqpi-v20-slice** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /t/h/e/ /c/h/i/l/d/ /l/o/o/p/ /o/f/ /I/Q/R/S/Q/P/I/ /v/2/0/:
-- **north-star-lock-loop** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /N/o/r/t/h/-/S/t/a/r/ /L/o/c/k/ /+/ /A/n/c/h/o/r/ /a/s/ /a/ 
-- **phase-discipline-loop** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /P/h/a/s/e/ /D/i/s/c/i/p/l/i/n/e/ /a/s/ /a/ /c/o/d/e/-/e/n/f
-- **prime-jake-pai** — /P/r/i/m/e/ /J/a/k/e/ /P/A/I/ /—/ /2/3/-/a/g/e/n/t/ /f/l/e/e/t/ /c/o/n/d/u/c/t/o/r/ /w/i/t
-- **proof-loop** — /R/I/G/ /d/o/c/t/r/i/n/e/ /—/ /H/o/n/e/s/t/ /C/o/m/p/l/e/t/i/o/n/ /+/ /P/r/o/o/f/-/o/r/-/i
-- **rig-deviation-engines** — /T/h/e/ /4/0/ /R/I/G/ /d/e/v/i/a/t/i/o/n/ /e/n/g/i/n/e/s/ /—/ /2/0/ /c/o/g/n/i/t/i/v/e/,/ 
-- **rig-doctrine-forge** — /E/n/d/-/t/o/-/e/n/d/ /d/o/c/t/r/i/n/e/ /p/i/p/e/l/i/n/e/:/ /s/c/r/a/p/e/ /c/h/a/n/n/e/l/s
+- **iqrsqpi-v10** — RIG doctrine   IQRSQPI v10 as an executable stdlib runtime, not a prose ritual. The seven 
+- **iqrsqpi-v11** — RIG doctrine   IQRSQPI v11, the gated loop. Intent   Question   Research   Solution   Qual
+- **iqrsqpi-v20** — RIG doctrine   IQRSQPI v20, the fractal self-verifying loop. Intent (executable done-tests
+- **iqrsqpi-v20-slice** — RIG doctrine   the child loop of IQRSQPI v20: one context-sized slice, Build   Verify (che
+- **adversarial-verification-loop** — RIG doctrine   Adversarial Verification (non-vacuity) as a code-enforced loop. For every g
+- **gate-d-loop** — RIG doctrine   Gate-D as a code-enforced loop. Wrap any outward or irreversible action (se
+- **jake-lessons-ledger** — Consult Mike's distilled lesson ledger before coding, scraping, fleet, extension, or dispa
+- **jake-pai-doctrine** —     Jake PAI Operating Doctrine   the soul of the RIG agent ecosystem.   Merged intelligen
+- **jake-pai-doctrine-loader** — Load the canonical Jake PAI substrate for Jake, RIG, Hermes, OpenClaw, founder, co-founder
+- **north-star-lock-loop** — RIG doctrine   North-Star Lock + Anchor as a code-enforced loop. Lock a Goal Card (GOAL, b
+- **phase-discipline-loop** — RIG doctrine   Phase Discipline as a code-enforced loop. Order phases by dependency (rever
+- **prime-jake-coding-fleet** — Prime Jake control plane for native Prime RLM children plus Claude, OMP, Codex, Hermes, an
 
 Full table: `references/routing.md`

@@ -1,11 +1,11 @@
 ---
 name: when-writing-content
-description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 47 skills; read references/routing.md for the full table."
+description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 71 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: content-writing
-  skill-count: "47"
+  skill-count: "71"
 ---
 
 # when-writing-content
@@ -22,27 +22,27 @@ Tier-1 meta-skill. Job to be done: When writing articles, newsletters, copy, hoo
 - MUST load exactly ONE child skill per task step; never bulk-load children from the index.
 - MUST load only the single sub-skill the task needs, only when the loaded child names sub-skills.
 - MUST NOT load a second child to "compare"; if two children seem to match, pick by the routing table one-liner in references/routing.md, then load that one.
+- The quick index below is a relevance-ordered SAMPLE, not the full set; if no index entry fits the task, scan the full table in references/routing.md before choosing.
 - If no child matches the task, load `when-nothing-else-fits` instead of guessing.
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 47-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 71-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
-- **angular-migration** — /M/i/g/r/a/t/e/ /f/r/o/m/ /A/n/g/u/l/a/r/J/S/ /t/o/ /A/n/g/u/l/a/r/ /u/s/i/n/g/ /h/y/b/r/i
-- **anti-ai-writing** — /E/d/i/t/ /a/n/y/ /p/i/e/c/e/ /o/f/ /w/r/i/t/i/n/g/ /t/o/ /r/e/m/o/v/e/ /A/I/ /t/e/l/l/s/.
-- **anti-slop** — /D/e/t/e/r/m/i/n/i/s/t/i/c/ /a/n/t/i/-/s/l/o/p/ /a/u/d/i/t/ /a/n/d/ /f/i/x/ /r/o/u/t/e/r/ 
-- **aphorisms** — /M/a/n/a/g/e/s/ /a/ /c/u/r/a/t/e/d/ /a/p/h/o/r/i/s/m/ /c/o/l/l/e/c/t/i/o/n/ /w/i/t/h/ /f/u
-- **architecture-decision-records** — /W/r/i/t/e/ /a/n/d/ /m/a/i/n/t/a/i/n/ /A/r/c/h/i/t/e/c/t/u/r/e/ /D/e/c/i/s/i/o/n/ /R/e/c/o
-- **article-writing** — /W/r/i/t/e/ /a/r/t/i/c/l/e/s/,/ /g/u/i/d/e/s/,/ /b/l/o/g/ /p/o/s/t/s/,/ /t/u/t/o/r/i/a/l/s
-- **avoid-ai-writing** — /A/u/d/i/t/ /a/n/d/ /r/e/w/r/i/t/e/ /c/o/n/t/e/n/t/ /t/o/ /r/e/m/o/v/e/ /A/I/ /w/r/i/t/i/n
-- **benchmark** — /P/e/r/f/o/r/m/a/n/c/e/ /r/e/g/r/e/s/s/i/o/n/ /d/e/t/e/c/t/i/o/n/ /u/s/i/n/g/ /t/h/e/ /b/r
-- **blog-post-template** — /杂/志/感/长/文/,/ /含/ /m/a/s/t/h/e/a/d/、/h/e/r/o/、/f/i/g/u/r/e/s/、/p/u/l/l/ /q/u/o/t/e/、/作/者/署
-- **bridgespace-bridge-skill-github-commit** — /U/n/i/v/e/r/s/a/l/ /c/o/m/m/i/t/-/a/n/d/-/p/u/s/h/ /m/e/t/h/o/d/o/l/o/g/y/./ /S/t/a/g/e/s
-- **bridgespace-bridge-skill-seo** — /M/o/d/e/r/n/ /(/2/0/2/5///2/0/2/6/)/ /S/E/O/ /m/e/t/h/o/d/o/l/o/g/y/ /f/o/r/ /a/u/d/i/t/i
-- **canary** — /P/o/s/t/-/d/e/p/l/o/y/ /c/a/n/a/r/y/ /m/o/n/i/t/o/r/i/n/g/./ /(/g/s/t/a/c/k/)/
-/a/l/l/o/w
+- **harness-hB-02-newsletter-issue** — Canonical RIG harness for newsletter-issue-session." ---  # newsletter-issue-session  Use 
+- **Aphorisms** — Manages a curated aphorism collection with full CRUD   content-based matching, themed sear
+- **angular-migration** — Migrate from AngularJS to Angular using hybrid mode, incremental component rewriting, and 
+- **anti-ai-writing** — Edit any piece of writing to remove AI tells. Strips banned words ("delve," "unlock," "lev
+- **anti-slop** — Turn AI-written copy into copy a human would ship. Lint for AI tells, rewrite, cleanse wit
+- **aphorisms** — Manages a curated aphorism collection with full CRUD   content-based matching, themed sear
+- **architecture-decision-records** — Write and maintain Architecture Decision Records (ADRs) following best practices for techn
+- **article-writing** — Write articles, guides, blog posts, tutorials, newsletter issues, and other long-form cont
+- **avoid-ai-writing** — Audit and rewrite content to remove AI writing patterns ("AI-isms"). Use this skill when a
+- **blog-post-template** —      ,   masthead hero figures pull quote     " tags: ["blog", "essay", "case study", "  "
+- **bridgespace-bridge-skill-github-commit** — Universal commit-and-push methodology. Stages every local change in the current repo, writ
+- **bridgespace-bridge-skill-seo** — Modern (2025/2026) SEO methodology for auditing and writing pages   title tags, meta, head
 
 Full table: `references/routing.md`
