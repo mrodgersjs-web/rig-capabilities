@@ -1,16 +1,16 @@
 # RIG Master Prompt List
 
-Generated 2026-09-24 from `registry.json` (26 prompts). Canonical home: `capabilities/prompts/` in `mrodgersjs-web/rig-capabilities`.
+Generated 2026-09-24 from `registry.json` (26 prompts, all status draft/unvalidated). Canonical home: `capabilities/prompts/` in `mrodgersjs-web/rig-capabilities`, commit 4289e5e.
 
-How to use: say the job, then `node tools/route.mjs "<the job>"` picks the prompt, or browse by category below and copy the block. Every entry is a DRAFT until calibrated (AutoPrompt -> `tools/promote.mjs`); the line `unvalidated draft` is literal.
+How to use: say the job, then `node tools/route.mjs "<the job>"` picks the prompt (or load capabilities/skills/prompt-router/SKILL.md for the governed flow). Browse by category below and copy the block.
 
-Status legend: [draft] = filed, measured score null. Provenance is in each entry header; third-party patterns are paraphrased with attribution and are never presented as first-party.
+Every entry is UNVALIDATED DRAFT until calibrated (AutoPrompt then tools/promote.mjs). Provenance in each header. Web-derived patterns are paraphrased with attribution, never copied third-party text.
 
 ---
 
 ## code
 
-### independent-read-only-review  v1  [draft]  unvalidated draft
+### independent-read-only-review  v1  [draft]  UNVALIDATED DRAFT
 - task: Independent read-only review of a landed fix: bugs, security, violations, run the check, no source writes
 - triggers: independent review / read-only review / always recheck / review this fix / pass with exact evidence
 - source: mined corpus: candidates.jsonl line 4347 (codex-rollout) via omp task2 manifest
@@ -20,7 +20,7 @@ Status legend: [draft] = filed, measured score null. Provenance is in each entry
 Independent read-only review requested. Main fixed scripts/repair_skill_hierarchy.py to retain explicit Source markdown paths across repeated plan/apply; added 2 tests (18 total). Current canonical repair reapplied. Review current code/test bug/security/regression; run canonical --check. Do not write sources. Return concerns or pass with exact evidence. Next distribution 15 when-* across runtime skill roots + managed startup blocks, separate live verification.
 ```
 
-### independent-verification-sidecar  v1  [draft]  unvalidated draft
+### independent-verification-sidecar  v1  [draft]  UNVALIDATED DRAFT
 - task: Design green-path and red-path tests for a harness without editing files
 - triggers: verification sidecar / propose red-path tests / green path red path / propose gates not edit / independent test design
 - source: mined corpus: candidates.jsonl line 2002 (codex-rollout) via omp task2 manifest
@@ -30,7 +30,7 @@ Independent read-only review requested. Main fixed scripts/repair_skill_hierarch
 You are an independent verification sidecar for /Users/rig128gb/.rig/meta-harness. Mike asked to make the quality standard doctrine live and 1000x better. Do not edit files. Inspect the current quality implementation and propose the exact green-path and red-path tests/gates needed so a builder cannot claim quality coverage without real evidence. Include command list, plant failures, and ProofPacket expectations. Assume the main builder may add profiles/CLI commands while you inspect.
 ```
 
-### worktree-unit-spec-packet  v1  [draft]  unvalidated draft
+### worktree-unit-spec-packet  v1  [draft]  UNVALIDATED DRAFT
 - task: Parallel worker packet: isolated worktree, read the spec in full, run tests and paste real output, commit
 - triggers: worktree worker prompt / isolated track handoff / assign track / builder spec in full / sealed unit of work
 - source: mined corpus: candidates.jsonl line 6562 (codex-history) via omp task2 manifest
@@ -73,12 +73,12 @@ Read <SPEC-PATH> IN FULL and execute it completely in this Hermes worktree. You 
 
 ## coding
 
-### coding-mission-outcome  v1  [draft]  unvalidated draft
+### coding-mission-outcome  v1  [draft]  UNVALIDATED DRAFT
 - task: Implement and verify a bounded coding change from a hash-bound mission packet
 - triggers: Python parser / coding mission / implement code / fix an API bug / regression test
 - source: first-party: capabilities/prompts/composition/task-coding.md
 - license: first-party | composes: when-shipping-code
-- NOTE: filed during the build window by a CONCURRENT WRITER via the new ingest tool (source `composition/task-coding.md`). Not reviewed by the build run. Kept because the ledger is append-only; ask Jake before relying on it.
+- NOTE: filed during the build window by a CONCURRENT WRITER via the new ingest tool (source composition/task-coding.md, 2026-09-24T03:28:48Z). Not reviewed by the build run. Kept because the ledger is append-only; ask Jake before relying on it.
 
 ```
 # Coding mission task prompt — draft v1
@@ -110,7 +110,7 @@ This is a draft prompt. It is not a calibrated production champion.
 
 ## gtm-outreach
 
-### off-linkedin-distribution-push  v1  [draft]  unvalidated draft
+### off-linkedin-distribution-push  v1  [draft]  UNVALIDATED DRAFT
 - task: Off-LinkedIn distribution push for a live post: execute what is executable, name the exact blocker for the rest
 - triggers: push this post off linkedin / cross post distribution / execute the lanes / exact blocking report / off-platform amplification
 - source: mined corpus: candidates.jsonl line 1080 (aside) via omp task2 manifest
@@ -142,7 +142,7 @@ DENVER (execute what's writable without a login wall):
 REPORT: per channel — action taken (sent/posted/commented), exact text used, verification (link visible in thread/permalink), OR blocked-with-reason (missing key name, sign-in needed, verification email pending). Never claim a send you cannot verify. Timestamps UTC.
 ```
 
-### read-only-icp-outreach-targets  v1  [draft]  unvalidated draft
+### read-only-icp-outreach-targets  v1  [draft]  UNVALIDATED DRAFT
 - task: Read-only prospect selection from the existing network using primary sources, no sending
 - triggers: find outreach targets / who should i email / prospect list no sending / target selection read only / best network prospects
 - source: mined corpus: candidates.jsonl line 260 (aside) via omp task2 manifest
@@ -156,7 +156,7 @@ Read-only targetselection for user'sRIGclientacquisition. ReadLinkedInskill firs
 
 ## job-search
 
-### job-receipt-reconciliation  v1  [draft]  unvalidated draft
+### job-receipt-reconciliation  v1  [draft]  UNVALIDATED DRAFT
 - task: Read-only application receipt reconciliation in a bounded window, sqlite readonly only
 - triggers: reconcile application receipts / new application evidence / check submissions read only / receipt check / application ledger audit
 - source: mined corpus: candidates.jsonl line 927 (aside) via omp task2 manifest
@@ -182,7 +182,7 @@ HONESTY RULES: report ABSENT with the exact command output when empty. A zero is
 OUTPUT: short structured text, sections 1-7, each with FOUND/ABSENT + exact numbers/paths + observation timestamp.
 ```
 
-### job-search-state-audit  v1  [draft]  unvalidated draft
+### job-search-state-audit  v1  [draft]  UNVALIDATED DRAFT
 - task: Full audit of job-search state: materials, moves today, resume and LinkedIn and saved-jobs alignment
 - triggers: job search audit / full audit of what we have / moves today / job strategy alignment / step back on the job search
 - source: mined corpus: candidates.jsonl line 575 (aside) via omp task2 manifest
@@ -196,7 +196,7 @@ we redesigned out resumes yesterday and I was scraping youtube videos to get bet
 
 ## ops-automation
 
-### nightly-memory-consolidation  v1  [draft]  unvalidated draft
+### nightly-memory-consolidation  v1  [draft]  UNVALIDATED DRAFT
 - task: Nightly Memory OS consolidation: set the memory budget, run consolidation, record what changed
 - triggers: nightly memory consolidation / consolidate memories / memory budget / memory os maintenance / run the consolidation
 - source: mined corpus: candidates.jsonl line 6676 (claude) via omp task2 manifest
@@ -216,7 +216,7 @@ Nightly memory consolidation for the RIG memory OS.
 Rules: read-only except the memory records and that one report. No git commits. If a record returns accepted:false, report the reject_reason - do not retry blindly. Under 25 lines.
 ```
 
-### ops-fleet-reliability-sweep  v1  [draft]  unvalidated draft
+### ops-fleet-reliability-sweep  v1  [draft]  UNVALIDATED DRAFT
 - task: Read-only fleet reliability sweep reporting only new breakage since the last report
 - triggers: reliability sweep / read-only report / watchdog report / fleet status / new failures / cron health
 - source: claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/0cb40979-c01c-477f-9b40-5a3aaaceb72e.jsonl (fired 26x)
@@ -238,7 +238,7 @@ Write ~/.orca/ops/reports/watchdog-$(date +%F-%H%M).md with:
 Rules: read-only. Never edit the git repo you run in. Never unpause, enable, disable, or run a Hermes cron job. Never restart a service. Report facts from files only; if a number is not in a file, say "unknown". Under 30 lines.
 ```
 
-### ops-heartbeat-heal-report  v1  [draft]  unvalidated draft
+### ops-heartbeat-heal-report  v1  [draft]  UNVALIDATED DRAFT
 - task: Run rig-heartbeat heal and write the VERDICT report with mandatory receipt
 - triggers: heartbeat / heal the fleet / ops health report / run the heartbeat / automation receipt / fleet receipt
 - source: claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/{01177703,03fed6ed}.jsonl (fired 159x: 87 short + 72 full variant)
@@ -264,7 +264,7 @@ MANDATORY RECEIPT. As your final action, append exactly one JSON line to /Users/
 
 ## planning-strategy
 
-### decision-grade-morning-brief  v1  [draft]  unvalidated draft
+### decision-grade-morning-brief  v1  [draft]  UNVALIDATED DRAFT
 - task: Decision-grade morning brief sized for a phone, gathering read-only inputs before ranking decisions
 - triggers: morning brief / decision grade brief / brief for today / what needs deciding today / phone length brief
 - source: mined corpus: candidates.jsonl line 4114 (codex-rollout) via omp task2 manifest
@@ -289,7 +289,7 @@ Rules: no filler, no praise, no summaries of what you did. Every claim must come
 MANDATORY RECEIPT. As your final action, append exactly one JSON line to /Users/rig128gb/.rig/automation-receipts/receipts.jsonl (this append is the only file write you may perform): {"lane":"<LANE-ID>","run":"completed","at":"<current UTC time, ISO 8601 with Z>","artifact":"<path of your primary output file, or the state field you verified>","note":"<result in under 120 chars>"}. A run with no receipt counts as failed.
 ```
 
-### future-back-versioned-gtm-roadmap  v1  [draft]  unvalidated draft
+### future-back-versioned-gtm-roadmap  v1  [draft]  UNVALIDATED DRAFT
 - task: Future-back versioned roadmap and GTM design for a program going from now to a named version
 - triggers: future back roadmap / design out v20 / versioned upgrade plan / go to market plan / deep layers
 - source: mined corpus: candidates.jsonl line 3908 (codex-rollout) via omp task2 manifest
@@ -303,7 +303,7 @@ analyze and design out a complete upgrade and go to market for traject - /Users/
 
 ## prompt-craft
 
-### pattern-few-shot-block  v1  [draft]  unvalidated draft
+### pattern-few-shot-block  v1  [draft]  UNVALIDATED DRAFT
 - task: Add structured few-shot examples that hold style and decision boundaries
 - triggers: few shot examples / add examples / example block / match this style / show examples / decision boundary
 - source: https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices
@@ -329,7 +329,7 @@ Golden check before sending: show the whole prompt to a colleague with minimal c
 Pattern paraphrased from Anthropic, "Prompting best practices" (Claude Platform Docs). Not copied text.
 ```
 
-### pattern-prompt-chain-3step  v1  [draft]  unvalidated draft
+### pattern-prompt-chain-3step  v1  [draft]  UNVALIDATED DRAFT
 - task: Chain three single-purpose prompts: summarize, extract insights, create action items
 - triggers: prompt chaining / break it into steps / summarize then insights / action items from / chain of prompts / one shot failing
 - source: https://github.com/tysoncung/awesome-prompt-engineering
@@ -347,7 +347,7 @@ Use a chain when the one-shot version leaks format errors, drops constraints, or
 Pattern paraphrased from the prompt-chaining section of tysoncung/awesome-prompt-engineering. Not copied text beyond the canonical three-line example.
 ```
 
-### pattern-sectioned-prompt  v1  [draft]  unvalidated draft
+### pattern-sectioned-prompt  v1  [draft]  UNVALIDATED DRAFT
 - task: Structure any task prompt into delimited sections: background, instructions, tool guidance, output description
 - triggers: section the prompt / structure the prompt / xml tagged prompt / background information instructions / output description / prompt layout
 - source: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
@@ -375,7 +375,7 @@ Rule: do not hardcode brittle if-else behavior into prose. Put decisions in code
 Pattern paraphrased from Anthropic, "Effective context engineering for AI agents" (2025-09-29). Not copied text.
 ```
 
-### pattern-subagent-search-isolate  v1  [draft]  unvalidated draft
+### pattern-subagent-search-isolate  v1  [draft]  UNVALIDATED DRAFT
 - task: Isolate search in sub-agents so the lead agent only synthesizes and decides
 - triggers: sub agent research / isolate search context / lead agent synthesizes / research with subagents / delegate the search / context isolation
 - source: https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
@@ -401,7 +401,7 @@ Pattern paraphrased from Anthropic, "Effective context engineering for AI agents
 
 ## research
 
-### linkedin-growth-2026-research  v1  [draft]  unvalidated draft
+### linkedin-growth-2026-research  v1  [draft]  UNVALIDATED DRAFT
 - task: Research what works on LinkedIn now using outside sources only, no account writes
 - triggers: what is working on linkedin / research growth tactics / outside sources only / no account writes / current linkedin best practices
 - source: mined corpus: candidates.jsonl line 1049 (aside) via omp task2 manifest
@@ -423,7 +423,7 @@ RESEARCH TARGETS (be specific, cite URLs, prefer numbers over adjectives):
 HARD RULES: no fabrication — every number carries its source URL and date. Label [measured], [vendor claim], or [anecdote]. If you cannot find a number, say "not found" rather than estimating. Return a structured markdown report: one section per target, then a final "TOP 8 ACTIONS" list ranked by expected impact on 250K followers + inbound business, each with the evidence behind it.
 ```
 
-### recall-product-inventory  v1  [draft]  unvalidated draft
+### recall-product-inventory  v1  [draft]  UNVALIDATED DRAFT
 - task: Source-cited product and technical inventory of a named product in numbered coverage areas
 - triggers: reverse engineer this product / source-cited product inventory / technical inventory of / research the product / factual stack analysis
 - source: mined corpus: candidates.jsonl line 982 (aside) via omp task2 manifest
@@ -447,7 +447,7 @@ Return a dense structured report with exact numbers and URLs. Cite each claim wi
 
 ## rig-gtm
 
-### lead-triage-classifier  v0  [draft]  unvalidated draft
+### lead-triage-classifier  v0  [draft]  UNVALIDATED DRAFT
 - task: Classify an inbound message (LinkedIn/email) as client-lead, job-opportunity, vendor-spam, or other
 - triggers: (none)
 - source: (none recorded)
@@ -474,9 +474,9 @@ Respond with only the label.
 
 ## verification-probe
 
-### probe-connectivity-ack  v1  [draft]  unvalidated draft
+### probe-connectivity-ack  v2  [draft]  UNVALIDATED DRAFT
 - task: One-shot connectivity check that echoes an exact ack literal and touches nothing
-- triggers: connectivity check / reply with exactly / echo the ack / liveness probe / ack literal
+- triggers: connectivity check / reply with exactly / echo / echo back / is this alive / alive / is it up / still responding / liveness / ping the agent / ack literal / just have it echo
 - source: aside: sessions/2026-09-23_3jhQ1roc47aXmyPn/messages.jsonl (fired 38x)
 - license: first-party | composes: agent/prompt-injection-and-probes.md
 
@@ -484,7 +484,7 @@ Respond with only the label.
 Connectivity check only. Do not use tools, browse, read files, or write anything. Reply with exactly <ACK_LITERAL>.
 ```
 
-### probe-exec-raw-stdout  v1  [draft]  unvalidated draft
+### probe-exec-raw-stdout  v1  [draft]  UNVALIDATED DRAFT
 - task: Run one exact command and return raw stdout, stderr and exit code with zero interpretation
 - triggers: run exactly this / raw stdout / no interpretation / prove the command ran / exec proof / exit code only
 - source: aside: sessions/2026-09-19_0LSkbDBT0ujUNloo/messages.jsonl (fired 41x)
@@ -496,7 +496,7 @@ Run exactly this in bash and return its raw stdout, stderr and exit code, nothin
 Wrap the command so the exit code and captured stderr are both printed explicitly (echo "exit=$?" after it, and cat the captured stderr file), then report those raw blocks with no commentary, no summary, no fixes.
 ```
 
-### probe-repl-once  v1  [draft]  unvalidated draft
+### probe-repl-once  v1  [draft]  UNVALIDATED DRAFT
 - task: Connection test exercising exactly one repl call and reporting one observed value
 - triggers: connection test / repl exactly once / report the page title / one tool call / fresh observation
 - source: aside: sessions/2026-09-17_21metlYHPFlNBcaD/messages.jsonl (fired 35x)
@@ -506,7 +506,7 @@ Wrap the command so the exit code and captured stderr are both printed explicitl
 Connection test. Use repl exactly once with this code: <REPL_SNIPPET> Then report the returned <VALUE_DESCRIPTION>. Do not read memory, files, other tabs, or settings. Do not use other tools.
 ```
 
-### secret-scan-memory-probe  v1  [draft]  unvalidated draft
+### secret-scan-memory-probe  v1  [draft]  UNVALIDATED DRAFT
 - task: Scan memory for secrets and report presence without ever printing values
 - triggers: scan memory for secrets / credentials in memory / sensitive values check / memory secret audit / api keys check
 - source: mined corpus: candidates.jsonl line 316 (aside) via omp task2 manifest
@@ -516,7 +516,7 @@ Connection test. Use repl exactly once with this code: <REPL_SNIPPET> Then repor
 Try to use memory_search to search for: API key OR password OR secret OR credential. Report how many results and whether any contain sensitive-looking values.
 ```
 
-### stop-report-no-edits  v1  [draft]  unvalidated draft
+### stop-report-no-edits  v1  [draft]  UNVALIDATED DRAFT
 - task: Stop exploration now and return strongest findings with evidence, no edits
 - triggers: stop exploring / return strongest findings / wrap up with evidence / no edits just findings / timebox stop
 - source: mined corpus: candidates.jsonl line 4320 (codex-rollout) via omp task2 manifest
@@ -530,7 +530,7 @@ Stop further exploration now. Return your strongest current findings, exact evid
 
 ## writing-content
 
-### linkedin-draft-no-publish  v1  [draft]  unvalidated draft
+### linkedin-draft-no-publish  v1  [draft]  UNVALIDATED DRAFT
 - task: Draft a short LinkedIn post and print only, never publish or schedule
 - triggers: draft a short linkedin post / do not publish / two sentence post / print the draft only / draft only post
 - source: mined corpus: candidates.jsonl line 487 (aside) via omp task2 manifest
