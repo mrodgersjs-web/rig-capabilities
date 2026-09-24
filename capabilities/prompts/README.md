@@ -8,6 +8,14 @@ by id — and every promote/pull is recorded in a hash-chained ledger.
 This is the **first-party** layer. (The separate `rig-design-studio/prompt-library`
 indexes *external* scaffolds — MotionSites, Magic UI, etc. — for web builds. Different job.)
 
+## Routing (use the skill, do not reinvent it)
+
+To pick the right prompt for a stated job, load
+`capabilities/skills/prompt-router/SKILL.md` and run `node tools/route.mjs "<the job>"`.
+That skill is the governed entry point: JEV decides the pick, the ranker supplies evidence,
+and the pack names provenance and status. Do not author a new prompt for a job this library
+already serves; route first, then draft only what is missing.
+
 ## Layout
 
 ```
@@ -82,6 +90,9 @@ tools/                   zero-dependency Node CLIs (see below)
 | `tools/pull.mjs` | print a prompt by id (ledger-logged) |
 | `tools/list.mjs` | table of the registry |
 | `tools/lib.mjs` | shared hash/ledger/registry helpers |
+| `tools/route.mjs` | deterministic lexical ranker: job statement to ranked prompt ids; `--write-routing` regenerates the prompt-router skill's routing table |
+| `tools/ingest.mjs` | file a DRAFT prompt with honest provenance (never marks anything calibrated) |
+| `tools/mine_sessions.mjs` | read-only corpus miner over local session stores (Aside, Codex, Claude, prompt files); writes gitignored `dump/` |
 | `tools/from_dump.py` | AutoPrompt `history.pkl` → JSON (run with AutoPrompt venv python) |
 
 ## GitHub

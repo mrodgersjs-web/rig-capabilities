@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-09-18",
+  "updated": "2026-09-24",
   "doctrine": "First-party prompt library. A prompt enters as a draft, earns its place through AutoPrompt calibration (measured score on a saved edge-case dataset), and is versioned immutably. Every promote/pull is logged in the hash-chained ledger.jsonl. Nothing ships uncalibrated; scores are bound to a model name and a dataset, never quoted bare.",
   "prompts": [
     {
@@ -14,6 +14,636 @@
       "score": null,
       "added": "2026-09-18",
       "provenance": "hand draft, never calibrated"
+    },
+    {
+      "id": "ops-heartbeat-heal-report",
+      "path": "prompts/ops-heartbeat-heal-report/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Run rig-heartbeat heal and write the VERDICT report with mandatory receipt",
+      "category": "ops-automation",
+      "domain": "ops-automation",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/{01177703,03fed6ed}.jsonl (fired 159x: 87 short + 72 full variant)",
+      "triggers": [
+        "heartbeat",
+        "heal the fleet",
+        "ops health report",
+        "run the heartbeat",
+        "automation receipt",
+        "fleet receipt"
+      ],
+      "compose": [
+        "agent/orca-omp-terminal-control.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/{01177703,03fed6ed}.jsonl (fired 159x: 87 short + 72 full variant) | distilled from 2 near-identical mined variants; fired 159x combined"
+    },
+    {
+      "id": "probe-exec-raw-stdout",
+      "path": "prompts/probe-exec-raw-stdout/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Run one exact command and return raw stdout, stderr and exit code with zero interpretation",
+      "category": "verification-probe",
+      "domain": "verification-probe",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "aside: sessions/2026-09-19_0LSkbDBT0ujUNloo/messages.jsonl (fired 41x)",
+      "triggers": [
+        "run exactly this",
+        "raw stdout",
+        "no interpretation",
+        "prove the command ran",
+        "exec proof",
+        "exit code only"
+      ],
+      "compose": [
+        "agent/prompt-injection-and-probes.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "aside: sessions/2026-09-19_0LSkbDBT0ujUNloo/messages.jsonl (fired 41x) | fabrication-probe template from the acceptance suite"
+    },
+    {
+      "id": "probe-connectivity-ack",
+      "path": "prompts/probe-connectivity-ack/prompt.md",
+      "version": 2,
+      "status": "draft",
+      "task": "One-shot connectivity check that echoes an exact ack literal and touches nothing",
+      "category": "verification-probe",
+      "domain": "verification-probe",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "aside: sessions/2026-09-23_3jhQ1roc47aXmyPn/messages.jsonl (fired 38x)",
+      "triggers": [
+        "connectivity check",
+        "reply with exactly",
+        "echo",
+        "echo back",
+        "is this alive",
+        "alive",
+        "is it up",
+        "still responding",
+        "liveness",
+        "ping the agent",
+        "ack literal",
+        "just have it echo"
+      ],
+      "compose": [
+        "agent/prompt-injection-and-probes.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "aside: sessions/2026-09-23_3jhQ1roc47aXmyPn/messages.jsonl (fired 38x) | v2: triggers widened after selftest regression (echo vs echoes token gap); body unchanged"
+    },
+    {
+      "id": "probe-repl-once",
+      "path": "prompts/probe-repl-once/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Connection test exercising exactly one repl call and reporting one observed value",
+      "category": "verification-probe",
+      "domain": "verification-probe",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "aside: sessions/2026-09-17_21metlYHPFlNBcaD/messages.jsonl (fired 35x)",
+      "triggers": [
+        "connection test",
+        "repl exactly once",
+        "report the page title",
+        "one tool call",
+        "fresh observation"
+      ],
+      "compose": [
+        "agent/prompt-injection-and-probes.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "aside: sessions/2026-09-17_21metlYHPFlNBcaD/messages.jsonl (fired 35x) | observe-an-external-value probe shape"
+    },
+    {
+      "id": "ops-fleet-reliability-sweep",
+      "path": "prompts/ops-fleet-reliability-sweep/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Read-only fleet reliability sweep reporting only new breakage since the last report",
+      "category": "ops-automation",
+      "domain": "ops-automation",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/0cb40979-c01c-477f-9b40-5a3aaaceb72e.jsonl (fired 26x)",
+      "triggers": [
+        "reliability sweep",
+        "read-only report",
+        "watchdog report",
+        "fleet status",
+        "new failures",
+        "cron health"
+      ],
+      "compose": [
+        "agent/orca-omp-terminal-control.md",
+        "projects/workstream-kanban.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "claude: .claude/projects/-Users-rig128gb-Desktop-NeoMatrix/0cb40979-c01c-477f-9b40-5a3aaaceb72e.jsonl (fired 26x) | standing read-only watchdog procedure"
+    },
+    {
+      "id": "coding-mission-outcome",
+      "path": "prompts/coding-mission-outcome/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Implement and verify a bounded coding change from a hash-bound mission packet",
+      "category": "coding",
+      "domain": "coding",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/task-coding.md",
+      "triggers": [
+        "Python parser",
+        "coding mission",
+        "implement code",
+        "fix an API bug",
+        "regression test"
+      ],
+      "compose": [
+        "when-shipping-code"
+      ],
+      "added": "2026-09-24",
+      "provenance": "first-party: capabilities/prompts/composition/task-coding.md | Informed by Aside meta-step-sub structure; uncalibrated draft"
+    },
+    {
+      "id": "nightly-memory-consolidation",
+      "path": "prompts/nightly-memory-consolidation/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Nightly Memory OS consolidation: set the memory budget, run consolidation, record what changed",
+      "category": "ops-automation",
+      "domain": "ops-automation",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 6676 (claude) via omp task2 manifest",
+      "triggers": [
+        "nightly memory consolidation",
+        "consolidate memories",
+        "memory budget",
+        "memory os maintenance",
+        "run the consolidation"
+      ],
+      "compose": [
+        "agent/orca-omp-terminal-control.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 6676 (claude) via omp task2 manifest | OMP task2 distillation, fired 8x"
+    },
+    {
+      "id": "secret-scan-memory-probe",
+      "path": "prompts/secret-scan-memory-probe/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Scan memory for secrets and report presence without ever printing values",
+      "category": "verification-probe",
+      "domain": "verification-probe",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 316 (aside) via omp task2 manifest",
+      "triggers": [
+        "scan memory for secrets",
+        "credentials in memory",
+        "sensitive values check",
+        "memory secret audit",
+        "api keys check"
+      ],
+      "compose": [
+        "agent/prompt-injection-and-probes.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 316 (aside) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "stop-report-no-edits",
+      "path": "prompts/stop-report-no-edits/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Stop exploration now and return strongest findings with evidence, no edits",
+      "category": "verification-probe",
+      "domain": "verification-probe",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 4320 (codex-rollout) via omp task2 manifest",
+      "triggers": [
+        "stop exploring",
+        "return strongest findings",
+        "wrap up with evidence",
+        "no edits just findings",
+        "timebox stop"
+      ],
+      "compose": [],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 4320 (codex-rollout) via omp task2 manifest | OMP task2 distillation, verbatim, fired 8x"
+    },
+    {
+      "id": "recall-product-inventory",
+      "path": "prompts/recall-product-inventory/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Source-cited product and technical inventory of a named product in numbered coverage areas",
+      "category": "research",
+      "domain": "research",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 982 (aside) via omp task2 manifest",
+      "triggers": [
+        "reverse engineer this product",
+        "source-cited product inventory",
+        "technical inventory of",
+        "research the product",
+        "factual stack analysis"
+      ],
+      "compose": [
+        "when-researching-or-deciding"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 982 (aside) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "linkedin-growth-2026-research",
+      "path": "prompts/linkedin-growth-2026-research/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Research what works on LinkedIn now using outside sources only, no account writes",
+      "category": "research",
+      "domain": "research",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 1049 (aside) via omp task2 manifest",
+      "triggers": [
+        "what is working on linkedin",
+        "research growth tactics",
+        "outside sources only",
+        "no account writes",
+        "current linkedin best practices"
+      ],
+      "compose": [
+        "when-growing-social-accounts"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 1049 (aside) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "worktree-unit-spec-packet",
+      "path": "prompts/worktree-unit-spec-packet/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Parallel worker packet: isolated worktree, read the spec in full, run tests and paste real output, commit",
+      "category": "code",
+      "domain": "code",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 6562 (codex-history) via omp task2 manifest",
+      "triggers": [
+        "worktree worker prompt",
+        "isolated track handoff",
+        "assign track",
+        "builder spec in full",
+        "sealed unit of work"
+      ],
+      "compose": [
+        "when-shipping-code"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 6562 (codex-history) via omp task2 manifest | OMP task2 distillation, slotted worker/team/path names"
+    },
+    {
+      "id": "independent-verification-sidecar",
+      "path": "prompts/independent-verification-sidecar/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Design green-path and red-path tests for a harness without editing files",
+      "category": "code",
+      "domain": "code",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 2002 (codex-rollout) via omp task2 manifest",
+      "triggers": [
+        "verification sidecar",
+        "propose red-path tests",
+        "green path red path",
+        "propose gates not edit",
+        "independent test design"
+      ],
+      "compose": [
+        "when-governing-rig-work"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 2002 (codex-rollout) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "independent-read-only-review",
+      "path": "prompts/independent-read-only-review/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Independent read-only review of a landed fix: bugs, security, violations, run the check, no source writes",
+      "category": "code",
+      "domain": "code",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 4347 (codex-rollout) via omp task2 manifest",
+      "triggers": [
+        "independent review",
+        "read-only review",
+        "always recheck",
+        "review this fix",
+        "pass with exact evidence"
+      ],
+      "compose": [
+        "when-shipping-code"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 4347 (codex-rollout) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "decision-grade-morning-brief",
+      "path": "prompts/decision-grade-morning-brief/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Decision-grade morning brief sized for a phone, gathering read-only inputs before ranking decisions",
+      "category": "planning-strategy",
+      "domain": "planning-strategy",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 4114 (codex-rollout) via omp task2 manifest",
+      "triggers": [
+        "morning brief",
+        "decision grade brief",
+        "brief for today",
+        "what needs deciding today",
+        "phone length brief"
+      ],
+      "compose": [
+        "projects/workstream-kanban.md"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 4114 (codex-rollout) via omp task2 manifest | OMP task2 distillation, fired 10x across 2 stores"
+    },
+    {
+      "id": "future-back-versioned-gtm-roadmap",
+      "path": "prompts/future-back-versioned-gtm-roadmap/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Future-back versioned roadmap and GTM design for a program going from now to a named version",
+      "category": "planning-strategy",
+      "domain": "planning-strategy",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 3908 (codex-rollout) via omp task2 manifest",
+      "triggers": [
+        "future back roadmap",
+        "design out v20",
+        "versioned upgrade plan",
+        "go to market plan",
+        "deep layers"
+      ],
+      "compose": [
+        "when-governing-rig-work"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 3908 (codex-rollout) via omp task2 manifest | OMP task2 distillation, fired 8x"
+    },
+    {
+      "id": "linkedin-draft-no-publish",
+      "path": "prompts/linkedin-draft-no-publish/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Draft a short LinkedIn post and print only, never publish or schedule",
+      "category": "writing-content",
+      "domain": "writing-content",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 487 (aside) via omp task2 manifest",
+      "triggers": [
+        "draft a short linkedin post",
+        "do not publish",
+        "two sentence post",
+        "print the draft only",
+        "draft only post"
+      ],
+      "compose": [
+        "when-growing-social-accounts"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 487 (aside) via omp task2 manifest | OMP task2 distillation, verbatim; boundary is the point"
+    },
+    {
+      "id": "off-linkedin-distribution-push",
+      "path": "prompts/off-linkedin-distribution-push/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Off-LinkedIn distribution push for a live post: execute what is executable, name the exact blocker for the rest",
+      "category": "gtm-outreach",
+      "domain": "gtm-outreach",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 1080 (aside) via omp task2 manifest",
+      "triggers": [
+        "push this post off linkedin",
+        "cross post distribution",
+        "execute the lanes",
+        "exact blocking report",
+        "off-platform amplification"
+      ],
+      "compose": [
+        "when-growing-social-accounts"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 1080 (aside) via omp task2 manifest | OMP task2 distillation, post URL and handles slotted"
+    },
+    {
+      "id": "read-only-icp-outreach-targets",
+      "path": "prompts/read-only-icp-outreach-targets/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Read-only prospect selection from the existing network using primary sources, no sending",
+      "category": "gtm-outreach",
+      "domain": "gtm-outreach",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 260 (aside) via omp task2 manifest",
+      "triggers": [
+        "find outreach targets",
+        "who should i email",
+        "prospect list no sending",
+        "target selection read only",
+        "best network prospects"
+      ],
+      "compose": [
+        "when-selling-or-running-gtm"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 260 (aside) via omp task2 manifest | OMP task2 distillation, verbatim"
+    },
+    {
+      "id": "job-search-state-audit",
+      "path": "prompts/job-search-state-audit/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Full audit of job-search state: materials, moves today, resume and LinkedIn and saved-jobs alignment",
+      "category": "job-search",
+      "domain": "job-search",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 575 (aside) via omp task2 manifest",
+      "triggers": [
+        "job search audit",
+        "full audit of what we have",
+        "moves today",
+        "job strategy alignment",
+        "step back on the job search"
+      ],
+      "compose": [
+        "when-running-the-job-search"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 575 (aside) via omp task2 manifest | OMP task2 distillation, verbatim, fired 2x"
+    },
+    {
+      "id": "job-receipt-reconciliation",
+      "path": "prompts/job-receipt-reconciliation/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Read-only application receipt reconciliation in a bounded window, sqlite readonly only",
+      "category": "job-search",
+      "domain": "job-search",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "mined corpus: candidates.jsonl line 927 (aside) via omp task2 manifest",
+      "triggers": [
+        "reconcile application receipts",
+        "new application evidence",
+        "check submissions read only",
+        "receipt check",
+        "application ledger audit"
+      ],
+      "compose": [
+        "when-running-the-job-search"
+      ],
+      "added": "2026-09-24",
+      "provenance": "mined corpus: candidates.jsonl line 927 (aside) via omp task2 manifest | OMP task2 distillation, datetimes and ids slotted"
+    },
+    {
+      "id": "pattern-sectioned-prompt",
+      "path": "prompts/pattern-sectioned-prompt/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Structure any task prompt into delimited sections: background, instructions, tool guidance, output description",
+      "category": "prompt-craft",
+      "domain": "prompt-craft",
+      "model": "unspecified",
+      "score": null,
+      "license": "pattern-with-attribution",
+      "source": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "triggers": [
+        "section the prompt",
+        "structure the prompt",
+        "xml tagged prompt",
+        "background information instructions",
+        "output description",
+        "prompt layout"
+      ],
+      "compose": [],
+      "added": "2026-09-24",
+      "provenance": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents | paraphrased pattern with attribution, not copied text"
+    },
+    {
+      "id": "pattern-few-shot-block",
+      "path": "prompts/pattern-few-shot-block/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Add structured few-shot examples that hold style and decision boundaries",
+      "category": "prompt-craft",
+      "domain": "prompt-craft",
+      "model": "unspecified",
+      "score": null,
+      "license": "pattern-with-attribution",
+      "source": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+      "triggers": [
+        "few shot examples",
+        "add examples",
+        "example block",
+        "match this style",
+        "show examples",
+        "decision boundary"
+      ],
+      "compose": [],
+      "added": "2026-09-24",
+      "provenance": "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices | paraphrased pattern with attribution, not copied text"
+    },
+    {
+      "id": "pattern-prompt-chain-3step",
+      "path": "prompts/pattern-prompt-chain-3step/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Chain three single-purpose prompts: summarize, extract insights, create action items",
+      "category": "prompt-craft",
+      "domain": "prompt-craft",
+      "model": "unspecified",
+      "score": null,
+      "license": "pattern-with-attribution",
+      "source": "https://github.com/tysoncung/awesome-prompt-engineering",
+      "triggers": [
+        "prompt chaining",
+        "break it into steps",
+        "summarize then insights",
+        "action items from",
+        "chain of prompts",
+        "one shot failing"
+      ],
+      "compose": [],
+      "added": "2026-09-24",
+      "provenance": "https://github.com/tysoncung/awesome-prompt-engineering | paraphrased pattern with attribution; canonical 3-line example quoted"
+    },
+    {
+      "id": "pattern-subagent-search-isolate",
+      "path": "prompts/pattern-subagent-search-isolate/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Isolate search in sub-agents so the lead agent only synthesizes and decides",
+      "category": "prompt-craft",
+      "domain": "prompt-craft",
+      "model": "unspecified",
+      "score": null,
+      "license": "pattern-with-attribution",
+      "source": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents",
+      "triggers": [
+        "sub agent research",
+        "isolate search context",
+        "lead agent synthesizes",
+        "research with subagents",
+        "delegate the search",
+        "context isolation"
+      ],
+      "compose": [],
+      "added": "2026-09-24",
+      "provenance": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents | paraphrased pattern with attribution, not copied text"
     }
   ]
 }

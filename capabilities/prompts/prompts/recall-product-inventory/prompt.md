@@ -1,0 +1,29 @@
+---
+id: recall-product-inventory
+version: 1
+status: draft
+updated: 2026-09-24
+task: Source-cited product and technical inventory of a named product in numbered coverage areas
+category: research
+domain: research
+model_target: unspecified
+score: null
+license: first-party
+source: mined corpus: candidates.jsonl line 982 (aside) via omp task2 manifest
+triggers: reverse engineer this product source-cited product inventory technical inventory of research the product factual stack analysis
+compose: when-researching-or-deciding
+provenance: mined corpus: candidates.jsonl line 982 (aside) via omp task2 manifest | OMP task2 distillation, verbatim
+content_sha256: 58a3ea3ed7387e9b7520154a3a5f32bf561beb8bb8674d5e2aabaa665b191218
+---
+
+Research the product Recall (recall.it / app.recall.it) — an AI-powered personal knowledge base / read-later app. I need a factual, source-cited product + technical inventory to reverse-engineer it. Use websearch and webfetch. Cover:
+
+1. Official marketing site (recall.it) — all pages: features, pricing (every tier, exact prices, limits/quotas per tier), download pages, changelog, roadmap, integrations, extension pages, mobile app pages, comparison pages (vs Readwise/Notion etc.), blog.
+2. Help center / docs (likely help.recall.it or recall.it/docs or intercomNotion) — enumerate every documented article title, especially: import sources (YouTube, Twitter/X, LinkedIn, RSS, newsletters, Podcasts, Instapaper, Readwise, Zotero, Notion, files), AI features (Chat, Daily Digest, Discovery, Knowledge Graph, Spaces, auto-tagging, summaries), browser extension setup, mobile apps, keyboard shortcuts, export options, notification settings, integrations (Slack/Email/etc.), API.
+3. Public API / developer docs — recall.it has an MCP server and/or API. Find base URL, auth model, endpoints, and the npm package name. Search for "recall mcp server", "recall.it api", "getrecall.ai".
+4. Browser extension: Chrome Web Store + Firefox listing — permission list, features described, version history, size.
+5. Any technical writeup about its architecture: ingestion pipeline, summarization models, embedding/vector store, knowledge graph generation, chunking, "AI agents" (Recall markets agents that auto-capture content).
+6. Keyboard shortcut list if documented.
+7. Pricing quota specifics: cards/month, AI chat messages, storage, team seats, upload sizes.
+
+Return a dense structured report with exact numbers and URLs. Cite each claim with its URL. Mark clearly anything you could NOT verify (do not guess). Do not write files.
