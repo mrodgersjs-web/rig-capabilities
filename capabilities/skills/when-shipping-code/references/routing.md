@@ -204,6 +204,7 @@
 | python-resilience | hermes | Python resilience patterns including automatic retries, exponential backoff, timeouts, and fault-tol | - |
 | python-resource-management | hermes | Python resource management with context managers, cleanup patterns, and streaming. Use when managing | - |
 | python-testing | hermes | Python testing strategies using pytest, TDD methodology, fixtures, mocking, parametrization, and cov | - |
+| openapi-spec-generation | hermes | Generate and maintain OpenAPI 3.1 specifications from code, design-first specs, and validation patte | - |
 | python-testing-patterns | hermes | Implement comprehensive testing strategies with pytest, fixtures, mocking, and test-driven developme | - |
 | python-type-safety | hermes | Python type safety with type hints, generics, protocols, and strict type checking. Use when adding t | - |
 | qa-only | hermes | Report-only QA testing. Systematically tests a web application and produces a structured report with | - |
@@ -212,7 +213,6 @@
 | react-modernization | hermes | Upgrade React applications to latest versions, migrate from class components to hooks, and adopt con | - |
 | react-native-architecture | hermes | Build production React Native apps with Expo, navigation, native modules, offline sync, and cross-pl | - |
 | react-native-design | hermes | Master React Native styling, navigation, and Reanimated animations for cross-platform mobile develop | - |
-| react-patterns | hermes | React 18/19 patterns including hooks discipline, server/client component boundaries, Suspense + erro | - |
 | react-performance | hermes | React and Next.js performance optimization patterns adapted from Vercel Engineering's React Best Pra | - |
 | react-state-management | hermes | Master modern React state management with Redux Toolkit, Zustand, Jotai, and React Query. Use when s | - |
 | react-testing | hermes | React component testing with React Testing Library, Vitest/Jest, MSW for network mocking, accessibil | - |
@@ -237,7 +237,6 @@
 | sast-configuration | hermes | Configure Static Application Security Testing (SAST) tools for automated vulnerability detection in  | - |
 | scan | hermes | Scans the codebase to generate project-doc.md and AGENTS.md. Use when bootstrapping a new agent-driv | - |
 | screen-reader-testing | hermes | Test web applications with screen readers including VoiceOver, NVDA, and JAWS. Use when validating s | - |
-| security-review | hermes | Run a comprehensive security review on code ---  # Security Review Skill  Conduct a thorough securit | - |
 | semgrep | canonical | >-   Runs a Semgrep security scan over a codebase: detects languages, selects   rulesets, presents t | - |
 | sentinel-harness | hermes | Converge-until-proven loop. Won't stop until the goal-card's executable done-test passes, or budget  | - |
 | service-mesh-observability | hermes | Implement comprehensive observability for service meshes including distributed tracing, metrics, and | - |
@@ -247,7 +246,6 @@
 | skill-vetter | hermes | Audit and validate SKILL.md files for structural correctness, trigger accuracy, executable done test | - |
 | spark-optimization | hermes | Optimize Apache Spark jobs with partitioning, caching, shuffle optimization, and memory tuning. Use  | - |
 | springboot-tdd | hermes | Test-driven development for Spring Boot using JUnit 5, Mockito, MockMvc, Testcontainers, and JaCoCo. | - |
-| sql-optimization-patterns | hermes | Master SQL query optimization, indexing strategies, and EXPLAIN analysis to dramatically improve dat | - |
 | stack-audit | hermes | Audit local tools, generated pack outputs, and routing health across Claude, Hermes, and OpenClaw. - | - |
 | stack-research | hermes | Run the official-doc and current-platform scrape for the unified agentic stack. ---  # stack-researc | - |
 | supacode-cli | hermes | Control Supacode from the terminal. Use when running Supacode CLI commands, managing worktrees, tabs | - |
@@ -257,7 +255,19 @@
 | test-min-skill | hermes | test --- # Test  | - |
 | testsprite-engineering | aside-user | Plan, configure, run, diagnose, and prove TestSprite frontend web and backend API testing through it | - |
 | testsprite-engineering-alias | hermes | Use when a TestSprite engineering alias is invoked; route to the ai-user-testing skill and treat Tes | - |
+| tg-agent-prompt-craft | canonical | Corpus-derived prompting craft for coding agents on full-stack builds: one-feature tasks, named vendors, docs-in-prompt integration, component-level edits,... | - |
+| tg-agentic-build-workflow | canonical | Build apps WITH coding agents per the TubeGuruji corpus: plan-mode first, review-the-plan gate, error paste-back loops, CodeRabbit diff review; platforms... | tg-agent-prompt-craft |
+| tg-ai-media-pipeline | canonical | Media generation steps from the TubeGuruji corpus: JSON-spec prompts, config-first two-stage generation, ImageKit URL-param transforms, Remotion rendering,... | - |
+| tg-auth-wiring | canonical | Drop-in auth recipes from the TubeGuruji corpus (Clerk/NextAuth/Kinde/Firebase/Supabase/Convex) plus the production OAuth failures: access-blocked origins,... | - |
+| tg-deploy-gotchas | canonical | Deploy-day failure catalog from the TubeGuruji corpus: env redeploy rule, Inngest signing-key sync, ngrok webhooks, SPA rewrites, image domain whitelists,... | - |
+| tg-durable-ai-pipelines | canonical | Durable background workflows for multi-step AI generation (Inngest step.run chains, Trigger.dev, n8n in-app) with production key-sync and progress UX from the... | tg-ai-media-pipeline |
+| tg-expo-mobile-ai | canonical | React Native/Expo lane of the TubeGuruji skeleton: Figma-first builds, Expo Router, EAS APK/AAB, Firebase App Distribution, and the mobile-only gotchas... | - |
+| tg-free-tier-engineering | canonical | Free-tier-first vendor selection and credit monetization from the TubeGuruji corpus: Gemini free credits, Neon/Convex free DBs, credits-as-product, upgrade... | tg-quota-gates |
+| tg-quota-gates | canonical | The three quota-gate implementations from the TubeGuruji corpus: Arcjet token buckets as product quotas, DB counters, entitlement flags; gate-at-creation rule... | - |
+| tg-saas-skeleton | canonical | The seven-stage AI SaaS skeleton from the TubeGuruji corpus (landing, auth, dashboard, form+quota, generation with progress, artifact/share, credits gate) with... | tg-auth-wiring, tg-voice-agent-stack, tg-deploy-gotchas |
+| tg-voice-agent-stack | canonical | Voice-agent products per the TubeGuruji corpus: shared skeleton (intake, generated session, share link, live call, report, gate) with Vapi/AssemblyAI vendor... | - |
 | track-management | hermes | Use this skill when creating, managing, or working with Conductor tracks - the logical work units fo | - |
+| tubeguruji-doctrine | canonical | META: router for the TubeGuruji build doctrine - 8 laws, default stack table, and the tg-* skill family distilled from the full @tubeguruji corpus (221 videos,... | tg-saas-skeleton, tg-durable-ai-pipelines, tg-free-tier-engineering, tg-agentic-build-workflow, tg-expo-mobile-ai |
 | verification-loop | hermes | A comprehensive verification system for Claude Code sessions." metadata:   origin: ECC ---  # Verifi | - |
 | voltagent | hermes | Use when Mike mentions VoltAgent, awesome-codex-subagents, Codex subagents, or wants a specialist Co | - |
 | web3-testing | hermes | Test smart contracts comprehensively using Hardhat and Foundry with unit tests, integration tests, a | - |
