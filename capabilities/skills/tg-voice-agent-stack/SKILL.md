@@ -41,6 +41,7 @@ done_when:
   - "grep:capabilities/skills/tg-voice-agent-stack/SKILL.md:Vapi"
   - "grep:capabilities/skills/tg-voice-agent-stack/SKILL.md:AssemblyAI"
   - "grep:data/corpora/how-to/manifest.jsonl:zjwj21wzs4U"
+great_example: examples/great/code-engineering/great-tg-voice-agent-saas.md
 out_of_scope:
   - telephony/PSTN integration, compliance-grade medical records (HIPAA-class)
   - voice cloning (that is tg-ai-media-pipeline, cost table there)

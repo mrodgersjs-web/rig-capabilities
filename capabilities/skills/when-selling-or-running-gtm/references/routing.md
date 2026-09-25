@@ -2,6 +2,13 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
+| rig-revenue-meta | [rig-revenue-meta](/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-revenue-meta/SKILL.md) | Route governed revenue, SEO, AI-citation, and content work to the revenue family. | - |
+| pmm-cold-email-deliverability | aside-user | Cold email deliverability and sending infrastructure at small scale (2-20 domains, under 5K sends/we | - |
+| pmm-google-ads-local-b2b | aside-user | Google Ads for local B2B service businesses at small budgets ($1-50/day) - campaign structure, biddi | - |
+| pmm-productized-service-offers | aside-user | Productized-service offer design and pricing for $3-10K and retainer services - packaging, niche sel | - |
+| pmm-discovery-closing-calls | aside-user | Discovery and closing calls for $3-10K services - question control, reframing objections, no-oriente | - |
+| pmm-referral-partner-programs | aside-user | Referral partner program design for a small B2B service business - ideal referral definition, incent | - |
+| pmm-service-landing-pages-cro | aside-user | High-converting landing pages for local B2B service offers - goal-first page planning, message match | - |
 | blueprintgtm-30k-jobs-prospects | aside-user | Use when scaling prospecting to 30K+ contacts. BlueprintGTM's 30K Jobs & Prospects — scale outbound  | - |
 | blueprintgtm-ai-lead-enrichment | aside-user | Use when enriching leads with AI. BlueprintGTM's AI Lead Enrichment — use ChatGPT/Claude to enrich p | - |
 | blueprintgtm-cannonball-method | aside-user | Use when building a full GTM motion from scratch. Jordan Crawford's Cannonball method — zero to ship | - |

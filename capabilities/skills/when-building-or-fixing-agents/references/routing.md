@@ -2,6 +2,9 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
+| (retired 2026-09-24 — rig-coding-agent-router) | — | **Replaced by JevRouter** (BillionsBobby/JevRouter, installed in each coding-agent harness: ~/.codex, ~/.claude, ~/.cursor, ~/.hermes, ~/.omp, ~/.agents). The CLI gate runs a Jev Choice over the live candidate set before any model/subagent execution. Authoritative installer: `~/Developer/JevRouter/bin/jevrouter.mjs agent setup --agent <name>`. Key by keychain `com.rig.env.TYPESAFE_API_KEY`. Decisions are receipted under `~/.rig/jevrouter/decisions/`. | - |
+| jev-everywhere | [jev-everywhere](/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/jev-everywhere/SKILL.md) | Apply Jev-first typed judgment and fail-closed routing across agent surfaces. | - |
+| prompt-router | [prompt-router](/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/prompt-router/SKILL.md) | Select an existing prompt and compose its skill, memory, and doctrine context. | - |
 | harness-mh-01-skill-genesis-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |
 | harness-mh-02-harness-forge-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |
 | harness-mh-03-agent-composition-session | aside-user | Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. Read [harne | - |

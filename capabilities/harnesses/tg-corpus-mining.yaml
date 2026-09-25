@@ -1,0 +1,41 @@
+---
+outcome: research-intel: a corpus-mining stage returns a cited match packet (videoId, transcript, thumbnail, stack, features with timestamps, gotchas) or an explicit no-match - the only legal input to a build spec
+done_when:
+  - file:capabilities/harnesses/tg-corpus-mining.yaml
+  - grep:capabilities/harnesses/tg-corpus-mining.yaml:registry.jsonl
+  - grep:capabilities/harnesses/tg-corpus-mining.yaml:ASR
+quality_floor: 0.7
+---
+
+harness_id: tg-corpus-mining
+harness_name: corpus mining process (TubeGuruji build-craft)
+status: stable
+lane: research-intel
+session_type: corpus-mining-stage
+harness_tuple: H_mine(registry_lookup, transcript_mine, asr_verify, spec_rows)
+parent: capabilities/harnesses/tg-app-studio-session.yaml
+executor: capabilities/agents/tg-corpus-miner.md
+sources:
+  registry: data/corpora/how-to/build-craft/tubeguruji-registry.jsonl
+  manifest: data/corpora/how-to/manifest.jsonl
+  transcripts: data/corpora/how-to/build-craft/tubeguruji/
+  thumbnails: data/corpora/how-to/build-craft/tubeguruji-images/
+
+identity_lock:
+  startup_phrase: "No citation, no feature."
+  gates:
+    - id: M1
+      requirement: "lookup runs against registry.jsonl + manifest.jsonl first; a hit names videoId, transcript path, thumbnail path"
+      proof: "match block with the three paths"
+      failure_tier: halt
+    - id: M2
+      requirement: "feature extraction reads the transcript with timestamps; every spec row carries videoId@mm:ss"
+      proof: "features array, zero uncited rows"
+      failure_tier: halt
+    - id: M3
+      requirement: "ASR-garbled vendor names are verified against the vendor's docs before entering the spec (Inngest/'an ingest', E2B/'A2B desktop', Vercel/'versel')"
+      proof: "vendor list with resolved names"
+      failure_tier: degrade
+anti_patterns:
+  - "Spec from the video TITLE alone - titles name the stack, not the features"
+  - "Quoting a garbled ASR name as the vendor name"

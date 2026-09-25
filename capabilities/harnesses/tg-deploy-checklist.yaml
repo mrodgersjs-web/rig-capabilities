@@ -1,0 +1,41 @@
+---
+outcome: infra-ops: the deploy-checklist sub-process walks the tg-deploy-gotchas catalog row by row against the target, records observed output per row, and holds the actual deploy at Gate-D
+done_when:
+  - file:capabilities/harnesses/tg-deploy-checklist.yaml
+  - grep:capabilities/harnesses/tg-deploy-checklist.yaml:Gate-D
+  - grep:capabilities/harnesses/tg-deploy-checklist.yaml:SKIPPED
+quality_floor: 0.7
+---
+
+harness_id: tg-deploy-checklist
+harness_name: deploy checklist sub-process (gotcha catalog walk)
+status: stable
+lane: infra-ops
+session_type: deploy-stage
+harness_tuple: H_deploy(local_build, ritual, catalog_walk, gate_d)
+parent: capabilities/harnesses/tg-ship-verify.yaml
+executor: capabilities/agents/tg-deploy-check-runner.md
+doctrine: capabilities/skills/tg-deploy-gotchas
+
+identity_lock:
+  startup_phrase: "Rendered page is not a working deploy."
+  gates:
+    - id: D1
+      requirement: "build executed locally before any deploy attempt (-AVtkiG0laE habit)"
+      proof: "build cmd + exit 0"
+      failure_tier: halt
+    - id: D2
+      requirement: "catalog walked in order: env redeploy, OAuth origins, Clerk production, Inngest sync, webhooks/ngrok, SPA rewrites, image domains, middleware public routes, StrictMode, dev-vs-prod data - each row PASS/RED/SKIPPED-with-reason"
+      proof: "row list with observed outputs"
+      failure_tier: halt
+    - id: D3
+      requirement: "end-to-end production-path run: one sign-in, one generation, one webhook, one background job on the deployed URL"
+      proof: "four run records"
+      failure_tier: halt
+    - id: D4
+      requirement: "the deploy/publish itself is executed only under a Gate-D approval id; the checklist may run read-only without it"
+      proof: "gate_d id in mission record or held_at_gate set"
+      failure_tier: stop
+anti_patterns:
+  - "Deploying to 'see if it works' - the build happens locally first"
+  - "Treating a rendered landing page as proof the app deployed"

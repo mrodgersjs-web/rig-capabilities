@@ -1,6 +1,6 @@
 ---
 name: youtube-dwarkesh-patel
-description: Dwarkesh Patel (@DwarkeshPatel): L5 bridge AI-stack channel (207-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
+description: "Dwarkesh Patel (@DwarkeshPatel): L5 bridge AI-stack channel (207-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames."
 when_to_use: mining @DwarkeshPatel videos; quoting Dwarkesh Patel as evidence for GTM/agent-engineering work; choosing what to absorb from lab/bridge/rarity tier (L5 bridge)
 version: 0.1.0
 owner: rig
@@ -15,7 +15,7 @@ done_when:
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 5
-  handle: @DwarkeshPatel
+  handle: "@DwarkeshPatel"
   corpus_root: /Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus
 hooks: []
 ---
@@ -87,7 +87,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/tran
+cat $G/transcripts/zdbVtZIn9IM.txt
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

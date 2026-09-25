@@ -1,0 +1,59 @@
+---
+outcome: agent-engineering: a named app mission produces a corpus-grounded spec, built slices with executed checks, JEV-scored stage transitions, an independent verification pass, and a video-vs-build comparison - or a named blocker at the exact stage it stopped
+done_when:
+  - file:capabilities/harnesses/tg-app-studio-session.yaml
+  - grep:capabilities/harnesses/tg-app-studio-session.yaml:G1
+  - grep:capabilities/harnesses/tg-app-studio-session.yaml:failure_tier
+quality_floor: 0.75
+---
+
+harness_id: tg-app-studio-session
+harness_name: RIG App Studio session (TubeGuruji doctrine mission harness)
+harness_name_short: app-studio meta process
+status: stable
+lane: code-engineering
+session_type: app-studio-session
+harness_tuple: H_appstudio(intake, corpus_spec, skeleton_build, integration_fit, verify, compare, gate_d)
+parent_doctrine: capabilities/skills/tubeguruji-doctrine
+conductor: capabilities/agents/app-studio-conductor.md
+sub_processes:
+  - capabilities/harnesses/tg-corpus-mining.yaml
+  - capabilities/harnesses/tg-skeleton-implementation.yaml
+  - capabilities/harnesses/tg-ship-verify.yaml
+stake: |
+  "Build me X like his video" resolves into evidence, not vibes: every feature
+  traces to a transcript timestamp, every stage transition carries a JEV noul
+  above 0.9 or defers, and nothing public leaves the machine without Gate-D.
+
+identity_lock:
+  startup_phrase: "I build from cited evidence; I do not certify my own work."
+  gates:
+    - id: G1
+      requirement: "mission intake names the corpus match (videoId + transcript path) before any scaffold; no match = explicit no-match, conductor decides partial or stop"
+      proof: "mission record contains registry.jsonl row id and transcript path"
+      failure_tier: halt
+    - id: G2
+      requirement: "spec derived from the transcript carries videoId@timestamp per feature; features without evidence are dropped or marked speculative"
+      proof: "spec table in mission record; zero uncited rows"
+      failure_tier: halt
+    - id: G3
+      requirement: "every BUILD->VERIFY transition scored via rig-s1gate (required noul > 0.9); classifier unavailable = DEFER the transition, never guess"
+      proof: "stage_scores entries with rubric + noul in mission record"
+      failure_tier: halt
+    - id: G4
+      requirement: "independent verification pass (tg-ship-verifier) completed: build proof, route proof, deny paths, gotcha catalog; BLOCKED is a legal verdict, assumed-PASS is not"
+      proof: "verdicts array with per-feature proof lines"
+      failure_tier: halt
+    - id: G5
+      requirement: "video-vs-build comparison produced feature-by-feature before mission close"
+      proof: "comparison array with in_video/in_build/proof per row"
+      failure_tier: degrade
+    - id: G6
+      requirement: "any public action (deploy, domain, purchase, push) stops at Gate-D with the stop recorded; the mission may close HELD"
+      proof: "held_at_gate field set or Gate-D approval id recorded"
+      failure_tier: stop
+anti_patterns:
+  - "Scaffolding before the corpus match is named (G1) - that is how invented specs happen"
+  - "Accepting a builder slice on prose instead of an executed check"
+  - "Marking BLOCKED integrations PASS to close the mission"
+  - "Treating a JEV ESCALATE as advisory decoration instead of a held transition"

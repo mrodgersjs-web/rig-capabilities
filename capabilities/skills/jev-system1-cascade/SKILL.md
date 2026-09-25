@@ -1,6 +1,6 @@
 ---
 name: jev-system1-cascade
-description: Use Jev (TypeSafe System-1) for every semantic triage/routing/classification decision before any frontier LLM. Use when bulk-classifying notes or files, building a judgment/routing pipeline, triaging the Obsidian Inbox, or when a decision could be a typed choice/probability instead of generated prose. Full doctrine: ~/.rig/agent-doctrine/JEV_SYSTEM1_CASCADE_DOCTRINE.md
+description: "Use Jev (TypeSafe System-1) for every semantic triage/routing/classification decision before any frontier LLM. Use when bulk-classifying notes or files, building a judgment/routing pipeline, triaging the Obsidian Inbox, or when a decision could be a typed choice/probability instead of generated prose. Full doctrine: ~/.rig/agent-doctrine/JEV_SYSTEM1_CASCADE_DOCTRINE.md"
 ---
 
 # Jev System-1 Cascade
@@ -11,3 +11,4 @@ description: Use Jev (TypeSafe System-1) for every semantic triage/routing/class
 4. Redact secrets before any state leaves the machine. Fail closed when the provider is down (defer, don't guess). Respect `TYPESAFE_DAILY_MAX_CALLS` in `~/.rig-secrets/typesafe.env`.
 5. Label right decisions (`rig-s1gate label <id> good|bad`); calibrate when ~20+ labels exist — calibration is what turns advisory gates into enforcing ones.
 6. D85: a model in the deployed decision path is A2 by rule; never launder it through an A1 wrapper. Ship, prove live, seal with `d85_certified` honestly FAILED and the refusal chain preserved.
+7. Session layer (how an agent applies this after it knows its mission) + per-situation good/bad criteria + per-surface embedding (coding agents, programs, Aside): skill `jev-everywhere` (same repo).

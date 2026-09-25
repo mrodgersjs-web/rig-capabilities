@@ -43,6 +43,7 @@ done_when:
   - "grep:capabilities/skills/tg-ai-media-pipeline/SKILL.md:config"
   - "grep:capabilities/skills/tg-ai-media-pipeline/SKILL.md:ImageKit"
   - "grep:data/corpora/how-to/manifest.jsonl:c9qA-uhysIY"
+great_example: examples/great/code-engineering/great-tg-media-pipeline.md
 out_of_scope:
   - training/fine-tuning models; self-hosting GPU inference
   - the pipeline engine itself (tg-durable-ai-pipelines)

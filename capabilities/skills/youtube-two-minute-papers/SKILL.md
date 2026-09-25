@@ -1,6 +1,6 @@
 ---
 name: youtube-two-minute-papers
-description: Two Minute Papers (@TwoMinutePapers): L2 depth AI-stack channel (1086-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
+description: "Two Minute Papers (@TwoMinutePapers): L2 depth AI-stack channel (1086-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames."
 when_to_use: mining @TwoMinutePapers videos; quoting Two Minute Papers as evidence for GTM/agent-engineering work; choosing what to absorb from lab/bridge/rarity tier (L2 depth)
 version: 0.1.0
 owner: rig
@@ -15,7 +15,7 @@ done_when:
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 2
-  handle: @TwoMinutePapers
+  handle: "@TwoMinutePapers"
   corpus_root: /Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus
 hooks: []
 ---
@@ -93,7 +93,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/tran
+cat $G/transcripts/yz6I23VRbdg.txt
 ```
 Known gap: /videos tab only — Shorts: negligible.
 

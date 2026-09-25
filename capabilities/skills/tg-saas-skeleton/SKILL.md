@@ -46,6 +46,7 @@ done_when:
   - "grep:capabilities/skills/tg-saas-skeleton/SKILL.md:credits"
   - "grep:capabilities/skills/tg-saas-skeleton/SKILL.md:navigator.clipboard.writeText"
   - "grep:data/corpora/how-to/manifest.jsonl:zcYM_Gqoph4"
+great_example: examples/great/code-engineering/great-tg-voice-agent-saas.md
 out_of_scope:
   - auth provider mechanics (tg-auth-wiring)
   - background job internals (tg-durable-ai-pipelines)

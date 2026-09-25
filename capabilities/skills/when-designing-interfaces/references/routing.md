@@ -24,6 +24,7 @@
 | aperture-oscillation | hermes | 3-pass scope oscillation that holds a question constant while shifting the scope envelope — narrow/t | - |
 | api-design | hermes | REST API design patterns including resource naming, status codes, pagination, filtering, error respo | - |
 | api-design-principles | hermes | Master REST and GraphQL API design principles to build intuitive, scalable, and maintainable APIs th | - |
+| react-patterns | hermes | React 18/19 patterns including hooks discipline, server/client component boundaries, Suspense + erro | - |
 | appinsights-instrumentation | hermes | Guidance for instrumenting webapps with Azure Application Insights. Provides telemetry patterns, SDK | - |
 | apple-design | canonical | Apple's approach to interface design and fluid, physical motion, translated for the web. Use when bu | - |
 | archify | aside-user | Create polished, validated architecture, workflow, sequence, data-flow, and lifecycle/state diagrams | - |
@@ -230,7 +231,6 @@
 | nooa-rig-agents | hermes | Use when building RIG agents with NVIDIA OO Agents framework" metadata:   category: rig   triggers:  | - |
 | nx-workspace-patterns | hermes | Configure and optimize Nx monorepo workspaces. Use when setting up Nx, configuring project boundarie | - |
 | open-source-control-plane | hermes | Replace closed AI UI with local ODS control plane." metadata:   author: RIG Agent   version: "1.0.0" | - |
-| openapi-spec-generation | hermes | Generate and maintain OpenAPI 3.1 specifications from code, design-first specs, and validation patte | - |
 | openviking | hermes | OpenViking context database for AI agents — filesystem-backed L0/L1/L2 context tiers and VikingBot i | - |
 | operating-system-room | hermes | Build Mike's 30-day Operating System room in JakeStudio. version: 1.0.0 metadata:   hermes:     tags | - |
 | outbound-machine-swarm-pattern | hermes | Pattern for building a complete GTM outbound machine via parallel agent swarms — 9 agents across 3 b | - |

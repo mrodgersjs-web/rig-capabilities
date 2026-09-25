@@ -11,6 +11,7 @@
 | data-query-latency-audit | aside-user | Find and rank the slowest SQL queries, capture p95 not mean, and prove latency improvements with bef | - |
 | data-report-template | hermes | 把 CSV/Excel/JSON 数据转成漂亮的可视化报告页" tags: ["data", "report", "chart", "数据", "报告"] metadata:   zh_name: " | - |
 | data-storytelling | hermes | Transform data into compelling narratives using visualization, context, and persuasive structure. Us | - |
+| sql-optimization-patterns | hermes | Master SQL query optimization, indexing strategies, and EXPLAIN analysis to dramatically improve dat | - |
 | alloydb-basics | hermes | >-   Manages clusters, instances, and backups for AlloyDB for PostgreSQL, and   integrates with Allo | - |
 | android-clean-architecture | hermes | Clean Architecture patterns for Android and Kotlin Multiplatform projects — module structure, depend | - |
 | azure-kusto | hermes | Query and analyze data in Azure Data Explorer (Kusto/ADX) using KQL for log analytics, telemetry, an | - |

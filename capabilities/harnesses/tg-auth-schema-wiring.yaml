@@ -1,0 +1,35 @@
+---
+outcome: code-engineering: auth + DB schema sub-process lands the provider recipe (tg-auth-wiring) and the Drizzle schema with both proofs executed - sign-in observed, migration applied
+done_when:
+  - file:capabilities/harnesses/tg-auth-schema-wiring.yaml
+  - grep:capabilities/harnesses/tg-auth-schema-wiring.yaml:production pass
+quality_floor: 0.7
+---
+
+harness_id: tg-auth-schema-wiring
+harness_name: auth + schema sub-process
+status: stable
+lane: code-engineering
+session_type: integration-stage
+harness_tuple: H_authschema(provider_recipe, schema_migration, production_pass)
+parent: capabilities/harnesses/tg-skeleton-implementation.yaml
+doctrine: capabilities/skills/tg-auth-wiring
+
+identity_lock:
+  startup_phrase: "Localhost auth is not auth."
+  gates:
+    - id: A1
+      requirement: "provider chosen per the tg-auth-wiring table; wiring copied from the provider's documented recipe, not invented"
+      proof: "provider choice + recipe source noted"
+      failure_tier: halt
+    - id: A2
+      requirement: "schema migrations apply against the target DB (Neon/local Postgres) and a seed row round-trips"
+      proof: "migration cmd + exit 0, round-trip note"
+      failure_tier: halt
+    - id: A3
+      requirement: "production pass prepared: OAuth origins, Clerk production instance, Kinde redirect URLs, Expo SHA-1 - each checked on the deployed URL before ship"
+      proof: "production-pass checklist rows"
+      failure_tier: degrade
+anti_patterns:
+  - "Calling auth done on a localhost-only demo"
+  - "Owning data without an ownership gate on mutations (corpus P6dha4Sq8gQ)"

@@ -42,6 +42,7 @@ done_when:
   - "grep:capabilities/skills/tg-durable-ai-pipelines/SKILL.md:step.run"
   - "grep:capabilities/skills/tg-durable-ai-pipelines/SKILL.md:sync app"
   - "grep:data/corpora/how-to/manifest.jsonl:31-Qfr2Pc5Q"
+great_example: examples/great/code-engineering/great-tg-media-pipeline.md
 out_of_scope:
   - cron scheduling strategy, multi-tenant queue architecture
   - media-step specifics (tg-ai-media-pipeline)

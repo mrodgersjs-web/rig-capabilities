@@ -1,0 +1,49 @@
+---
+outcome: code-engineering: the skeleton implementation stage lands the seven stages in order with an executed check per slice - landing, auth gate, dashboard, form+quota, generation with progress, artifact/share, credits gate
+done_when:
+  - file:capabilities/harnesses/tg-skeleton-implementation.yaml
+  - grep:capabilities/harnesses/tg-skeleton-implementation.yaml:npm run build
+  - grep:capabilities/harnesses/tg-skeleton-implementation.yaml:seven stages
+quality_floor: 0.75
+---
+
+harness_id: tg-skeleton-implementation
+harness_name: skeleton implementation process (TubeGuruji seven stages)
+status: stable
+lane: code-engineering
+session_type: skeleton-implementation-stage
+harness_tuple: H_impl(stage_slices, executed_checks, stack_table)
+parent: capabilities/harnesses/tg-app-studio-session.yaml
+executors:
+  - capabilities/agents/tg-web-builder.md
+  - capabilities/agents/tg-mobile-builder.md
+  - capabilities/agents/tg-integration-fitter.md
+doctrine:
+  - capabilities/skills/tg-saas-skeleton
+  - capabilities/skills/tg-auth-wiring
+  - capabilities/skills/tg-quota-gates
+  - capabilities/skills/tg-durable-ai-pipelines
+
+identity_lock:
+  startup_phrase: "One slice, one executed check."
+  gates:
+    - id: S1
+      requirement: "stack picked from the tubeguruji-doctrine default-stack table; every deviation recorded with its reason"
+      proof: "stack table in mission record with deviation notes"
+      failure_tier: halt
+    - id: S2
+      requirement: "the seven stages land in skeleton order; no stage starts before its predecessor's check ran green"
+      proof: "slice records in order with per-slice check output"
+      failure_tier: halt
+    - id: S3
+      requirement: "code slices end with `npm run build` (or the project's build cmd) executed and exit 0; UI slices additionally render their route"
+      proof: "per-slice command + exit code"
+      failure_tier: halt
+    - id: S4
+      requirement: "integrations follow tg-integration-fitter: env-gated vendors with named fallbacks, migration applied, deny path exercised"
+      proof: "integration verdicts array"
+      failure_tier: halt
+anti_patterns:
+  - "Building artifact/credits screens before the form+quota stage exists"
+  - "A slice closed on the builder's say-so without the command output"
+  - "Hard-coded vendor keys to make an integration 'work' (corpus anti-pattern lUMIj6I9fR8)"

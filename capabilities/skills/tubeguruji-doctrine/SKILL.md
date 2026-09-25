@@ -37,6 +37,7 @@ done_when:
   - "cmd:test $(ls data/corpora/how-to/build-craft/tubeguruji | wc -l | tr -d ' ') -eq 220"
   - "grep:capabilities/skills/tubeguruji-doctrine/SKILL.md:default stack"
   - "grep:capabilities/skills/tubeguruji-doctrine/SKILL.md:5qF8w6ISIKg"
+great_example: examples/great/code-engineering/great-tg-grok-bot-clone.md
 out_of_scope:
   - enterprise multi-tenant architecture, compliance regimes, SOC2-style controls
   - test/CI strategy and backend-security hardening (corpus has almost none — add from RIG doctrine, not from tubeguruji-doctrine)
@@ -45,6 +46,33 @@ out_of_scope:
 ---
 
 # TubeGuruji Build Doctrine
+
+JEV FIRST, and it binds every build under this doctrine: an agent whose only
+context is this excerpt sends semantic triage, routing, and classification to the
+rig-s1gate Jev path BEFORE any frontier LLM call - stack picks, gate placement,
+stage transitions, and artifact verdicts are typed judgments, not vibes. When the
+fast classifier is unavailable: DEFER, never guess a verdict locally. A required
+noul passes only above 0.9; below that the stage does not advance.
+
+
+## Load surface
+
+This doctrine is an always-loaded task-start surface for app-building work: the
+tg-app-studio-session harness, the app-studio-conductor agent, and every tg-*
+builder agent load it before their first action - not a deep reference an agent
+must already know about.
+
+## JEV-first decision routing (binding on every build that loads this doctrine)
+
+Concretely, before any frontier LLM call during an app build, route each typed decision:
+CODE first (deterministic rule: stack table, quota numbers, deploy gotcha catalog),
+then JEV via `rig-s1gate check <rubric> --file <artifact> --subject <kind> --json`
+(a required noul passes only above 0.9), then SYSTEM 2 (generation: writing the
+feature), then HUMAN (Gate-D: deploy, publish, purchase, push). When the fast
+classifier is unavailable or the kind is absent from work-criteria.json: DEFER -
+never guess a verdict locally, and never let an unjudged stage advance. Stage
+transitions in this doctrine's processes are JEV-scored surfaces: BUILD before
+VERIFY, VERIFY before SHIP, and SHIP stops at Gate-D.
 
 <objective>
 The governed distillation of one creator's 221-video corpus on building and shipping

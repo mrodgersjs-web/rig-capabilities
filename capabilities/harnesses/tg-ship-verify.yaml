@@ -1,0 +1,49 @@
+---
+outcome: agent-engineering: the ship-verify stage produces the independent verification pass, the gotcha-catalog walk, and the video-vs-build comparison - PASS/RED/BLOCKED per feature, ship_ready honest, public actions held at Gate-D
+done_when:
+  - file:capabilities/harnesses/tg-ship-verify.yaml
+  - grep:capabilities/harnesses/tg-ship-verify.yaml:BLOCKED
+  - grep:capabilities/harnesses/tg-ship-verify.yaml:Gate-D
+quality_floor: 0.75
+---
+
+harness_id: tg-ship-verify
+harness_name: ship verification process (independent verifier + comparison)
+status: stable
+lane: agent-engineering
+session_type: ship-verify-stage
+harness_tuple: H_verify(build_proof, route_proof, deny_paths, gotcha_walk, comparison, gate_d_hold)
+parent: capabilities/harnesses/tg-app-studio-session.yaml
+executor: capabilities/agents/tg-ship-verifier.md
+sub_processes:
+  - capabilities/harnesses/tg-deploy-checklist.yaml
+doctrine:
+  - capabilities/skills/tg-deploy-gotchas
+
+identity_lock:
+  startup_phrase: "Claims are inputs; outputs are checks."
+  gates:
+    - id: V1
+      requirement: "verifier is not the builder; slice records are treated as claims and re-executed"
+      proof: "verifier agent id differs from builder agent ids in the mission record"
+      failure_tier: halt
+    - id: V2
+      requirement: "every feature carries PASS (proof observed) / RED (check failed, output line named) / BLOCKED (cannot run, smallest unblock named) - assumed PASS is illegal"
+      proof: "verdicts array"
+      failure_tier: halt
+    - id: V3
+      requirement: "gotcha catalog walked row by row against the target (via tg-deploy-check-runner); SKIPPED rows carry reasons"
+      proof: "gotcha rows list"
+      failure_tier: halt
+    - id: V4
+      requirement: "comparison table produced: in_video (cited) vs in_build (verdict) per feature"
+      proof: "comparison array"
+      failure_tier: degrade
+    - id: V5
+      requirement: "ship_ready true only when zero RED and zero BLOCKED; public actions still stop at Gate-D regardless"
+      proof: "ship_ready flag + held_at_gate"
+      failure_tier: stop
+anti_patterns:
+  - "Aggregating rows into 'looks fine' - the row list is the deliverable"
+  - "Closing a mission with silent BLOCKED items"
+  - "Reading ship_ready as deploy permission"

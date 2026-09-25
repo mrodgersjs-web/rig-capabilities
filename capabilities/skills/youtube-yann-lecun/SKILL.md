@@ -1,6 +1,6 @@
 ---
 name: youtube-yann-lecun
-description: Yann LeCun (@YannLeCunPhD): L4 lab AI-stack channel (26-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames.
+description: "Yann LeCun (@YannLeCunPhD): L4 lab AI-stack channel (26-video corpus) with transcript-mining commands. Load before digging this channel's transcripts or quoting its frames."
 when_to_use: mining @YannLeCunPhD videos; quoting Yann LeCun as evidence for GTM/agent-engineering work; choosing what to absorb from lab/bridge/rarity tier (L4 lab)
 version: 0.1.0
 owner: rig
@@ -15,7 +15,7 @@ done_when:
 quality_floor: Digest sections complete; top-video table >= 10 rows; corpus paths verified to exist.
 metadata:
   ladder_level: 4
-  handle: @YannLeCunPhD
+  handle: "@YannLeCunPhD"
   corpus_root: /Users/rig128gb/orca/workspaces/rig-gtm-studio-v2/youtube-channels/youtube_corpus
 hooks: []
 ---
@@ -86,7 +86,7 @@ python3 -c "import json;d=json.load(open('$G/videos.json'));[print(v['id'],round
 # grep a theme across transcripts
 grep -ril "scaling" $G/transcripts/ | head -20
 # open one transcript
-cat $G/tran
+cat $G/transcripts/DokLw1tILlw.txt
 ```
 Known gap: /videos tab only — Shorts: Shorts-heavy, few/indexed.
 

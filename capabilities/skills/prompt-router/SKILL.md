@@ -1,43 +1,49 @@
 ---
 name: prompt-router
-activation: The operator states a job to be done in plain language and wants the stored prompt that already does it, plus the system around it, instead of a blank chat turn.
-instruction: Turn one stated job into an assembled prompt pack: the best stored prompt from capabilities/prompts, the when-* skill route governing the work, the memory pages it must respect, and the governing doctrine. Never author a fresh prompt when a stored one earns its place.
-applies_when:
-  env: any local agent runtime on Mike's machine (Aside, OMP/Orca, Codex, Claude)
-  runtime: local-first; the deterministic ranker needs Node >= 18 and no network
-  deps: node, capabilities/prompts/registry.json, optional bin/rig-s1gate and the rig-capabilities MCP
-  params: one natural-language job statement; optional --top N and --json
-  budget: one routing turn; a model call happens only to break a scored tie through JEV
-  scale: one job to one pack; bulk corpus mining runs offline into the gitignored dump/
-permissions:
-  - fs.read: capabilities/prompts/** (registry, ledger, prompt bodies, tools)
-  - fs.read: ~/.codex/commands, ~/.codex/prompts, ~/.rig/universal-commands, ~/.omp/commands
-  - fs.read: local session stores (~/.aside/u/0/sessions, ~/.codex/archived_sessions, ~/.codex/thread_history_1.sqlite, ~/.claude/projects)
-  - fs.write: capabilities/prompts/dump/** (gitignored staging only)
-  - fs.write: capabilities/prompts/ledger.jsonl (append-only pull log)
-  - fs.write: capabilities/skills/prompt-router/references/routing.md (generated, never hand-edited)
-  - exec: node tools/route.mjs, node tools/pull.mjs, node tools/ingest.mjs, node tools/list.mjs, node tools/mine_sessions.mjs
-  - mcp.read: rig-capabilities.capabilities_route, rig-capabilities.capabilities_context_pack
-  - exec: bin/rig-s1gate rank|check (advisory only)
-  - deny: network writes, git push, publish, send, deploy, spend, credential reads
-flow:
-  - 1 JEV FIRST: the routing judgment is a typed JEV decision, not a local guess - generate candidates with node tools/route.mjs (lexical, offline, scores reported) and put the pick through bin/rig-s1gate rank before any choice is presented; when no rubric covers the kind or the gate errors, DEFER to the operator with the named candidates and their scores
-  - 2 CODE EVIDENCE: the deterministic ranker supplies the candidate list and scores so the JEV rank judges real candidates; run node tools/route.mjs --selftest after any trigger or registry change (fixture intents with expected picks, exit 1 on a wrong top-1)
-  - 3 COMPOSE: assemble the pack - prompt body verbatim, the when-* meta-skill route plus exactly one child skill, the lane memory pages and named pre-checks, and the governing doctrine for the action class
-  - 4 DELIVER: copy-paste pack with header PROMPT <id> v<version> [status] | SKILL <when-*>/<child> | PROVENANCE <src>, and the line unvalidated draft attached whenever score is null
-  - 5 LOG: append one pull entry to ledger.jsonl and re-read it to confirm the append landed
-done_when:
-  - a pack is delivered naming prompt id, version, status (draft or calibrated) and provenance
-  - the skill route, memory pages and doctrine it composes are each named
-  - an unmatched job reports NO_STORED_PROMPT with the nearest three candidates and their scores instead of an invented prompt
-  - one pull entry is appended to ledger.jsonl and confirmed by re-read
-  - no raw session text appears in the pack and nothing leaves the local machine
-out_of_scope:
-  - calibrating prompts (AutoPrompt runs are promote.mjs territory; ingest only ever files drafts)
-  - editing, exporting, deleting or re-syncing session stores
-  - publishing, git push, sending, deploying, purchasing or signing anything
-  - authoring a new prompt while a stored prompt fits the job
-  - content about a minor (routes to its own lane skills first; never auto-scheduled)
+description: Select a stored RIG prompt and compose it with the matching skill, memory, and doctrine for a natural-language job.
+metadata:
+  activation: The operator states a job to be done in plain language and wants the stored prompt that already does it, plus the system around it, instead of a blank chat turn.
+  instruction: >-
+    Turn one stated job into an assembled prompt pack: the best stored prompt from
+    capabilities/prompts, the when-* skill route governing the work, the memory
+    pages it must respect, and the governing doctrine. Never author a fresh prompt
+    when a stored one earns its place.
+  applies_when:
+    env: any local agent runtime on Mike's machine (Aside, OMP/Orca, Codex, Claude)
+    runtime: local-first; the deterministic ranker needs Node >= 18 and no network
+    deps: node, capabilities/prompts/registry.json, optional bin/rig-s1gate and the rig-capabilities MCP
+    params: one natural-language job statement; optional --top N and --json
+    budget: one routing turn; a model call happens only to break a scored tie through JEV
+    scale: one job to one pack; bulk corpus mining runs offline into the gitignored dump/
+  permissions:
+    - fs.read: capabilities/prompts/** (registry, ledger, prompt bodies, tools)
+    - fs.read: ~/.codex/commands, ~/.codex/prompts, ~/.rig/universal-commands, ~/.omp/commands
+    - fs.read: local session stores (~/.aside/u/0/sessions, ~/.codex/archived_sessions, ~/.codex/thread_history_1.sqlite, ~/.claude/projects)
+    - fs.write: capabilities/prompts/dump/** (gitignored staging only)
+    - fs.write: capabilities/prompts/ledger.jsonl (append-only pull log)
+    - fs.write: capabilities/skills/prompt-router/references/routing.md (generated, never hand-edited)
+    - exec: node tools/route.mjs, node tools/pull.mjs, node tools/ingest.mjs, node tools/list.mjs, node tools/mine_sessions.mjs
+    - mcp.read: rig-capabilities.capabilities_route, rig-capabilities.capabilities_context_pack
+    - exec: bin/rig-s1gate rank|check (advisory only)
+    - deny: network writes, git push, publish, send, deploy, spend, credential reads
+  flow:
+    - 1 JEV FIRST: the routing judgment is a typed JEV decision, not a local guess - generate candidates with node tools/route.mjs (lexical, offline, scores reported) and put the pick through bin/rig-s1gate rank before any choice is presented; when no rubric covers the kind or the gate errors, DEFER to the operator with the named candidates and their scores
+    - 2 CODE EVIDENCE: the deterministic ranker supplies the candidate list and scores so the JEV rank judges real candidates; run node tools/route.mjs --selftest after any trigger or registry change (fixture intents with expected picks, exit 1 on a wrong top-1)
+    - 3 COMPOSE: assemble the pack - prompt body verbatim, the when-* meta-skill route plus exactly one child skill, the lane memory pages and named pre-checks, and the governing doctrine for the action class
+    - 4 DELIVER: copy-paste pack with header PROMPT <id> v<version> [status] | SKILL <when-*>/<child> | PROVENANCE <src>, and the line unvalidated draft attached whenever score is null
+    - 5 LOG: append one pull entry to ledger.jsonl and re-read it to confirm the append landed
+  done_when:
+    - a pack is delivered naming prompt id, version, status (draft or calibrated) and provenance
+    - the skill route, memory pages and doctrine it composes are each named
+    - an unmatched job reports NO_STORED_PROMPT with the nearest three candidates and their scores instead of an invented prompt
+    - one pull entry is appended to ledger.jsonl and confirmed by re-read
+    - no raw session text appears in the pack and nothing leaves the local machine
+  out_of_scope:
+    - calibrating prompts (AutoPrompt runs are promote.mjs territory; ingest only ever files drafts)
+    - editing, exporting, deleting or re-syncing session stores
+    - publishing, git push, sending, deploying, purchasing or signing anything
+    - authoring a new prompt while a stored prompt fits the job
+    - content about a minor (routes to its own lane skills first; never auto-scheduled)
 ---
 
 # prompt-router
@@ -45,6 +51,10 @@ out_of_scope:
 The "I just tell it what to do" layer over the prompt estate. One stated job in, one
 assembled pack out: the prompt that already does that job, and the system that keeps
 the work governed.
+
+Run the `node tools/*.mjs` commands below from
+`/Users/rig128gb/Developer/rig-capabilities/capabilities/prompts/`. Installed skill
+copies contain this router, not the prompt registry or its tools.
 
 FINDABILITY (load this skill, do not reinvent it): this is the router for
 `capabilities/prompts/`. It is named from three places an agent already reads: the

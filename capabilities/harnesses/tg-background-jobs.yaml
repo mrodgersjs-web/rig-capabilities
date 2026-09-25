@@ -1,0 +1,39 @@
+---
+outcome: code-engineering: background-jobs sub-process lands the durable pipeline (Inngest step.run chains, recurring routines with cron + timezone) with the job visible in the vendor dashboard and progress rendered per step
+done_when:
+  - file:capabilities/harnesses/tg-background-jobs.yaml
+  - grep:capabilities/harnesses/tg-background-jobs.yaml:sync app
+quality_floor: 0.7
+---
+
+harness_id: tg-background-jobs
+harness_name: background jobs sub-process (durable pipelines + routines)
+status: stable
+lane: code-engineering
+session_type: integration-stage
+harness_tuple: H_jobs(step_chain, routine_schedule, dashboard_sync)
+parent: capabilities/harnesses/tg-skeleton-implementation.yaml
+doctrine: capabilities/skills/tg-durable-ai-pipelines
+
+identity_lock:
+  startup_phrase: "No long AI job inside a request handler."
+  gates:
+    - id: J1
+      requirement: "multi-step generation decomposed one provider-call/DB-write per step (Inngest step.run / Trigger.dev task); zero generation work in API-route request paths"
+      proof: "step chain listing + code path showing no in-request generation"
+      failure_tier: halt
+    - id: J2
+      requirement: "recurring routines persist to DB with cron + timezone and execute via the scheduler, not client timers"
+      proof: "routine row + scheduler config"
+      failure_tier: halt
+    - id: J3
+      requirement: "production wiring executed: keys injected, REDEPLOY, sync app in the vendor dashboard; key rotation forces redeploy (corpus 6niOEjus2Vg)"
+      proof: "sync confirmation or local dev dashboard equivalent"
+      failure_tier: degrade
+    - id: J4
+      requirement: "per-step progress rendered in the UI; a silent pipeline is RED"
+      proof: "progress component bound to step events"
+      failure_tier: degrade
+anti_patterns:
+  - "Awaiting a 6-step media chain inside a serverless function"
+  - "Claiming scheduled jobs work without seeing one fire"

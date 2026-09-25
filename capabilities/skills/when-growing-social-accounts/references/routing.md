@@ -73,3 +73,5 @@
 | when-growing-social-accounts | aside-user | When drafting, scheduling, engaging, or measuring on LinkedIn, Instagram, or X across any lane (RIG  | - |
 | writer | hermes | Draft concise B2B sales emails, follow-up sequences, and LinkedIn content from a defined audience, a | - |
 | x-twitter | aside-builtin | Read this skill when you need to use X (Twitter). Don't have to open a browser tab. icon: https://st | - |
+| linkedin-influencer-os | aside-user | Meta router for the 1% LinkedIn influencer build: hooks, visuals (images/carousels/video), growth and cadence, corpus work. Canonical doctrine: ~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/li-* | - |
+| xs-growth-os | canonical | Route Mike Rodgers' X audience-growth work to source, plan, profile, draft, amplify, measure, and compliance specialists; never publishes directly. | - |

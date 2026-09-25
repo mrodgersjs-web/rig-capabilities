@@ -1,11 +1,11 @@
 ---
 name: when-building-or-fixing-agents
-description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Routes to 274 skills; read references/routing.md for the full table."
+description: "When creating, editing, installing, or evaluating agents, skills, hooks, or harnesses, use this to route to the agent-infrastructure skills so the fleet gets stronger instead of snowflaked. Read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: agent-infrastructure
-  skill-count: "274"
+  skill-count: "275"
 ---
 
 # when-building-or-fixing-agents
@@ -27,11 +27,12 @@ Tier-1 meta-skill. Job to be done: When creating, editing, installing, or evalua
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 274-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full routing table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
+- **JevRouter** (BillionsBobby/JevRouter, replaces retired rig-coding-agent-router) — Select the lead, specialist, subagent, skill, and stored prompt for a coding mission. Lives in each coding-agent harness (Codex/Claude/Cursor/Hermes/OMP/Prime Agent); routes via TypeSafe Jev Choice over the live candidate set with receipts at `~/.jevrouter/decisions/`. Do not re-add rig-coding-agent-router — that path is closed.
 - **harness-mh-01-skill-genesis-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
 - **harness-mh-02-harness-forge-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R
 - **harness-mh-03-agent-composition-session** — Canonical RIG harness for meta." ---  # meta  Use this as a hard-gated session contract. R

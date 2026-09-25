@@ -1,7 +1,7 @@
 ---
 name: caveman
 description: "Ultra-compressed communication mode that cuts output tokens while keeping technical accuracy. Levels: lite, full, ultra and the wenyan variants. Use for /caveman, 'caveman mode', 'talk like caveman', 'be brief' or 'less tokens'."
-outcome: misc: >
+outcome: "A shorter response that keeps every technical qualification and instruction intact."
 done_when:
   - file:capabilities/skills/caveman/SKILL.md
 quality_floor: 0.6
