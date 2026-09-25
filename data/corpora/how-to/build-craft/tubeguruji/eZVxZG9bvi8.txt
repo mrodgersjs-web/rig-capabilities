@@ -1,0 +1,811 @@
+[00:00 - 00:05] to the popular series of learning react
+[00:01 - 00:08] native in 2 hours so in the last video
+[00:05 - 00:10] we start uh developing the react native
+[00:08 - 00:13] application if you did not watch the
+[00:10 - 00:16] video please watch the video and in this
+[00:13 - 00:19] video we will uh cover different type of
+[00:16 - 00:19] concept so let's
+[00:22 - 00:27] begin so in this video we will learn how
+[00:25 - 00:30] to integrate video player in the
+[00:27 - 00:32] application then we will learn about the
+[00:30 - 00:35] react n navigations and after that we
+[00:32 - 00:37] will learn how to send data to the new
+[00:35 - 00:39] screen using the react n
+[00:37 - 00:41] navigations then we will also learn
+[00:39 - 00:45] about how to send data from parent
+[00:41 - 00:47] component to a child component and then
+[00:45 - 00:49] we will come uh build the complete
+[00:47 - 00:51] application and we will try to finish
+[00:49 - 00:54] the application in this video so please
+[00:51 - 00:56] do watch this full video and if you did
+[00:54 - 00:58] not subscribe to my channel subscribe to
+[00:56 - 01:01] my channel so that you will get the
+[00:58 - 01:03] notification whenever I post a new video
+[01:01 - 01:05] so let's
+[01:03 - 01:09] begin
+[01:05 - 01:11] so we Design This a beautiful slider
+[01:09 - 01:14] then we have this top course list and
+[01:11 - 01:18] then we we design the grid for our video
+[01:14 - 01:20] list now in this video we will see how
+[01:18 - 01:23] to play the video on the click of any of
+[01:20 - 01:27] this thumbnail okay so for example if I
+[01:23 - 01:29] click on this uh Grid or any course list
+[01:27 - 01:32] or any slider we will pass the
+[01:29 - 01:35] information to the next page in order to
+[01:32 - 01:38] play the video and also we will show the
+[01:35 - 01:38] recommended video
+[01:40 - 01:47] underne in order to show the YouTube
+[01:43 - 01:49] video on the screen we need this um
+[01:47 - 01:53] Library called react n YouTube If frame
+[01:49 - 01:57] okay I will uh paste this link in a
+[01:53 - 02:00] description so you can just um use it
+[01:57 - 02:03] directly so first step of installation
+[02:00 - 02:07] to install this uh react native web view
+[02:03 - 02:08] which we already done then we have to
+[02:07 - 02:10] install this dependency in P install
+[02:08 - 02:14] react native YouTube If frame and the
+[02:10 - 02:16] Legacy PR dependency okay so I installed
+[02:14 - 02:20] this already so you can just copy it and
+[02:16 - 02:24] paste it in your command
+[02:20 - 02:27] okay in your terminal and once it
+[02:24 - 02:30] install then go to the basic use it will
+[02:27 - 02:32] show how to use this YouTube player um
+[02:30 - 02:35] if frame Library
+[02:32 - 02:37] okay and for now we will just copy this
+[02:35 - 02:40] code okay in order to
+[02:37 - 02:44] show so for example if I just copy and
+[02:40 - 02:48] paste it here right so make sure you
+[02:44 - 02:53] will install you will import this
+[02:48 - 02:55] uh Library so if you see you can just
+[02:53 - 02:58] copy this uh import statement from here
+[02:55 - 03:01] and paste it on our project now if you
+[02:58 - 03:04] see right we have this on change State a
+[03:01 - 03:06] method and also the the playing status
+[03:04 - 03:09] right whether the playing is false or
+[03:06 - 03:13] true and depends on that the video will
+[03:09 - 03:15] get played so we will create um the
+[03:13 - 03:18] state for this one so just write
+[03:15 - 03:23] constant and we here we have to write
+[03:18 - 03:27] playing column set playing okay it's
+[03:23 - 03:31] like a get seor material and write the
+[03:27 - 03:31] um react native Inu who call you
+[03:32 - 03:37] State and initially we will give the
+[03:35 - 03:39] value of playing to be false okay and it
+[03:37 - 03:43] will mention here so in order to
+[03:39 - 03:47] implement on change status method it
+[03:43 - 03:48] Define here right how to use it so you
+[03:47 - 03:51] can write it or you can remove this
+[03:48 - 03:52] method uh for now I will just copy and
+[03:51 - 03:55] paste it here
+[03:52 - 03:58] okay so it it give the status where the
+[03:55 - 04:00] state is uh for for example if video is
+[03:58 - 04:02] ended right it will show okay the video
+[04:00 - 04:04] is finished playing something like that
+[04:02 - 04:07] right so for now I will
+[04:04 - 04:09] just uh comment this out because I don't
+[04:07 - 04:12] want to show the alert when the video is
+[04:09 - 04:16] play okay and that's
+[04:12 - 04:19] all now if you save it okay then you
+[04:16 - 04:22] will see this video you see you're able
+[04:19 - 04:23] to see this video and you can able to
+[04:22 - 04:28] play the video
+[04:23 - 04:31] as if you're a c right all the YouTube
+[04:28 - 04:34] um in controller be display on this
+[04:31 - 04:37] screen perfect so we are able to uh show
+[04:34 - 04:40] the video as per the markup if you see
+[04:37 - 04:43] this marck up right we can show the
+[04:40 - 04:46] video now we can extend this width size
+[04:43 - 04:52] completely okay it's up to you how much
+[04:46 - 04:55] do you want okay so now let's begin
+[04:52 - 04:58] to uh give the title of this video and
+[04:55 - 05:00] the Subscribe Button as well
+[04:58 - 05:03] okay
+[05:00 - 05:06] if you see we will show this yoube
+[05:03 - 05:10] player right and by uh passing the video
+[05:06 - 05:12] ID but we hard code this value directly
+[05:10 - 05:15] into the video
+[05:12 - 05:17] player but what and how we can pass the
+[05:15 - 05:19] information from the uh click of
+[05:17 - 05:21] previous page to this page right so
+[05:19 - 05:24] let's build that
+[05:21 - 05:26] one so if you go to the video grid list
+[05:24 - 05:29] page
+[05:26 - 05:33] right here we will uh change this URL
+[05:29 - 05:37] right we just need the ID so
+[05:33 - 05:37] just put the ID
+[05:39 - 05:43] here oh this is
+[05:44 - 05:49] URL
+[05:46 - 05:52] and here as
+[05:49 - 05:55] well I not sure this is ID but let's see
+[05:52 - 05:58] okay
+[05:55 - 06:01] and in the flat list right change this
+[05:58 - 06:01] view to
+[06:02 - 06:05] touchable
+[06:05 - 06:13] touchable opacity okay so I will tell
+[06:09 - 06:16] you what it do okay so now go to the
+[06:13 - 06:18] app.js and make
+[06:16 - 06:21] our this home
+[06:18 - 06:23] screen and remove this okay home screen
+[06:21 - 06:25] now
+[06:23 - 06:30] correct so if you see the home screen is
+[06:25 - 06:33] the default now if I click here right
+[06:30 - 06:35] if I click here it show this effect
+[06:33 - 06:39] right opacity effect so it
+[06:35 - 06:42] means this kind of small animation okay
+[06:39 - 06:44] so it means the video is get click okay
+[06:42 - 06:48] so in order to check that one as well go
+[06:44 - 06:50] to video grid list and for this right we
+[06:48 - 06:55] have uh the touchable opacity we have
+[06:50 - 06:58] the props like uh on press okay so on
+[06:55 - 07:01] the Press of this view we will write
+[06:58 - 07:06] consolid
+[07:01 - 07:09] console.log video click so on press this
+[07:06 - 07:11] is the function call okay and on that
+[07:09 - 07:15] one we have to write video click and if
+[07:11 - 07:17] I save it and just observe this long if
+[07:15 - 07:21] I click
+[07:17 - 07:24] it you see video is Click so it
+[07:21 - 07:26] right but you need to know which video
+[07:24 - 07:30] you click right so you can pass the
+[07:26 - 07:32] index here comma Index right
+[07:30 - 07:36] and instead of video click
+[07:32 - 07:38] here can attach the index so you will
+[07:36 - 07:41] need you will get to know which video I
+[07:38 - 07:45] click for example I I click the it's
+[07:41 - 07:48] zero zero video here is one here is two
+[07:45 - 07:52] right so in this way you will get to
+[07:48 - 07:55] know which video you click okay
+[07:52 - 07:57] now so we have this item information
+[07:55 - 07:59] right and we have to pass this item
+[07:57 - 08:01] information to the next page but the
+[07:59 - 08:05] interesting thing is how to navigate to
+[08:01 - 08:09] the next page here the react navigation
+[08:05 - 08:10] play an important role so we will add
+[08:09 - 08:12] the react
+[08:10 - 08:14] navigation uh there is a pre-built
+[08:12 - 08:19] Library called react navigation and we
+[08:14 - 08:19] will use this one okay so let's
+[08:21 - 08:29] start so now we will do we will do the
+[08:25 - 08:31] navigation part okay so in order to
+[08:29 - 08:34] click on any of this video and uh jump
+[08:31 - 08:37] to the new screen we need the
+[08:34 - 08:40] navigations so type on Google just react
+[08:37 - 08:41] navigation and this is official website
+[08:40 - 08:43] of react
+[08:41 - 08:47] navigation. where you will find this
+[08:43 - 08:49] navigation Library okay so first uh if
+[08:47 - 08:51] you go to the hello react navigation
+[08:49 - 08:54] page you will see this uh dependency
+[08:51 - 08:57] command to install the stack navigation
+[08:54 - 08:59] okay so um react navigation lab will
+[08:57 - 09:00] provide different types of navigation
+[08:59 - 09:02] like like tab navigation stack
+[09:00 - 09:05] navigation right stack navigation is
+[09:02 - 09:09] nothing but uh once you click on any of
+[09:05 - 09:12] the screen on top top uh on the previous
+[09:09 - 09:14] screen you will see the new screen right
+[09:12 - 09:17] uh when you click on any of the
+[09:14 - 09:19] navigations uh or you build any
+[09:17 - 09:21] navigations so that's the reason we will
+[09:19 - 09:26] using the stack navigation in this
+[09:21 - 09:31] example so let's copy this command
+[09:26 - 09:31] and uh paste it in our terminal
+[09:34 - 09:40] so I will uh
+[09:36 - 09:40] rebuild the
+[09:45 - 09:52] project so in meantime in the app folder
+[09:48 - 09:53] create a new folder called
+[09:52 - 09:55] nav
+[09:53 - 10:01] gation inside
+[09:55 - 10:01] that create another folder called home
+[10:04 - 10:09] screen
+[10:07 - 10:12] navigation do
+[10:09 - 10:16] CH okay once you are inside of this one
+[10:12 - 10:20] just type our default template
+[10:16 - 10:24] RFC and remove this
+[10:20 - 10:28] tag we'll write view for now
+[10:24 - 10:30] okay and here uh let's wait for this uh
+[10:28 - 10:33] install this
+[10:30 - 10:36] dependency now what install make sure
+[10:33 - 10:38] you have to reild the application when
+[10:36 - 10:40] once um whenever you install a new
+[10:38 - 10:45] dependency or new
+[10:40 - 10:45] library you have to uh rebuild the
+[10:58 - 11:01] application
+[11:27 - 11:30] for
+[11:39 - 11:43] so now I will Define one constant here
+[11:42 - 11:48] called
+[11:43 - 11:50] stack and is equal to
+[11:48 - 11:52] create uh stack Navigator if you see
+[11:50 - 11:53] right we we will choose this create
+[11:52 - 11:58] native stack
+[11:53 - 12:01] Navigator and it also import this uh
+[11:58 - 12:04] create n stack Ator okay and just save
+[12:01 - 12:06] it instead of view right remove this
+[12:04 - 12:10] view we will
+[12:06 - 12:14] write stack Dot and we have to write
+[12:10 - 12:16] Navigator okay and inside that we will
+[12:14 - 12:19] write all the navigation for example
+[12:16 - 12:23] stack dot the screen which screen we
+[12:19 - 12:26] want to uh show in this stack
+[12:23 - 12:30] right so here we have to write
+[12:26 - 12:32] the components and here we have home
+[12:30 - 12:35] screen right so we'll Define the home
+[12:32 - 12:38] screen so for this right we already have
+[12:35 - 12:40] the documentation documentation on the
+[12:38 - 12:43] the official website of react navigation
+[12:40 - 12:45] and here you will see this how to write
+[12:43 - 12:48] this stack Navigator if you are new and
+[12:45 - 12:52] you don't know how to do it you can use
+[12:48 - 12:54] this one right also uh once you define
+[12:52 - 12:56] the stack screen uh and this component
+[12:54 - 13:01] we have to give name of this tag right
+[12:56 - 13:03] so here we will give this home
+[13:01 - 13:06] okay
+[13:03 - 13:06] also write
+[13:08 - 13:12] another uh screen we have to show
+[13:10 - 13:14] another screen which is
+[13:12 - 13:18] called
+[13:14 - 13:23] play video screen okay and here we'll
+[13:18 - 13:27] write play video and save it okay so our
+[13:23 - 13:30] stack negation uh script is completed
+[13:27 - 13:33] okay here you can we have lot of
+[13:30 - 13:36] different uh props uh you can apply it
+[13:33 - 13:39] right and uh for now we don't need
+[13:36 - 13:41] anything if you want to know learn more
+[13:39 - 13:45] about the navigation you can check this
+[13:41 - 13:47] website now let's go to app.js here we
+[13:45 - 13:51] have to wrap this home
+[13:47 - 13:53] screen uh inside navigation right if you
+[13:51 - 13:55] see in this
+[13:53 - 13:57] example we have to Define this tag
+[13:55 - 14:01] Navigator inside the navigation
+[13:57 - 14:04] container right so so we will Define
+[14:01 - 14:07] app.js navigation
+[14:04 - 14:10] container and just close this Tack and
+[14:07 - 14:13] just save it and see is there any change
+[14:10 - 14:15] no
+[14:13 - 14:18] perfect now we
+[14:15 - 14:20] actually work on how navigation part
+[14:18 - 14:22] works in the sense when you click we
+[14:20 - 14:24] want to move to the next screen
+[14:22 - 14:29] right
+[14:24 - 14:30] oops so here something change let's is
+[14:29 - 14:31] not getting applied the style that's why
+[14:30 - 14:35] we defining the
+[14:31 - 14:38] view now let's go to the
+[14:35 - 14:40] components of this grid video grid list
+[14:38 - 14:44] right here we Define this console log on
+[14:40 - 14:45] video uh video click Index right so here
+[14:44 - 14:48] we will
+[14:45 - 14:52] Define uh different function or you can
+[14:48 - 14:54] just write it here right just type
+[14:52 - 14:56] before typing right we have to define
+[14:54 - 14:58] the navigation at the top navigation
+[14:56 - 14:59] hook right so in order to do that we
+[14:58 - 15:00] have
+[14:59 - 15:05] you can write
+[15:00 - 15:09] constant navigation is equal to use
+[15:05 - 15:11] navigations okay that's all and now you
+[15:09 - 15:13] can use this navigation in order to
+[15:11 - 15:15] navigate to the other
+[15:13 - 15:19] screen so
+[15:15 - 15:20] here you can write
+[15:19 - 15:23] navigation
+[15:20 - 15:25] Dot and navigate where you want to
+[15:23 - 15:29] navigate so if you see right in the home
+[15:25 - 15:31] screen navigation we Define this name
+[15:29 - 15:33] this name can be used to navigate to the
+[15:31 - 15:36] other screen right so we will Define
+[15:33 - 15:40] name navigate to this
+[15:36 - 15:42] screen and we will close this tank okay
+[15:40 - 15:47] and if I save and if I click
+[15:42 - 15:47] now right it's same we we got the
+[15:49 - 15:53] error if you see we got the the
+[15:51 - 15:57] navigation object has been initialized
+[15:53 - 15:59] yet okay so here if you see we got this
+[15:57 - 16:03] white color right
+[15:59 - 16:06] so and also go to the app.js
+[16:03 - 16:08] file so I will jump to app.js file here
+[16:06 - 16:10] instead of home home screen you have to
+[16:08 - 16:12] write home screen navigation because we
+[16:10 - 16:14] Define the home all the screen in the
+[16:12 - 16:18] home screen navigation right so we have
+[16:14 - 16:19] to Define in the screen and uh remove
+[16:18 - 16:20] this background color because we don't
+[16:19 - 16:24] need
+[16:20 - 16:26] anymore or you can keep like this right
+[16:24 - 16:28] if you see we got this but if you see
+[16:26 - 16:33] for the screen we are uh it's showing
+[16:28 - 16:37] the um the white color right so go to
+[16:33 - 16:39] the uh home screen okay
+[16:37 - 16:42] here in
+[16:39 - 16:44] style you can do the inline St as well
+[16:42 - 16:49] here and write background color to be
+[16:44 - 16:53] black okay and import the
+[16:49 - 16:56] color and save it now if using it's done
+[16:53 - 17:00] right same thing you have to do for our
+[16:56 - 17:03] other screens so we have this um play
+[17:00 - 17:05] video screen here also we have to Define
+[17:03 - 17:09] same thing we already give the padding
+[17:05 - 17:12] in i.j so you don't need to do that now
+[17:09 - 17:15] if you see if I click on this
+[17:12 - 17:18] grid uh okay we have to import this
+[17:15 - 17:22] color on this screen as
+[17:18 - 17:25] well okay if I click on this video it
+[17:22 - 17:28] jump to this another screen right
+[17:25 - 17:30] perfect so it it's working now you see
+[17:28 - 17:34] we got this white color because we don't
+[17:30 - 17:37] have any data and once you add the data
+[17:34 - 17:40] uh you will able to uh show me white
+[17:37 - 17:43] color be change to black or you can do
+[17:40 - 17:47] the flex let's try doing the flex to be
+[17:43 - 17:47] one o uh here we have to do
+[17:47 - 17:52] comma if you see boom so now everything
+[17:51 - 17:55] is
+[17:52 - 17:59] a dark mode color
+[17:55 - 18:04] perfect and you can go back uh with the
+[17:59 - 18:06] help of um device back button okay and
+[18:04 - 18:09] if you see our application is working if
+[18:06 - 18:11] I click on this video is going to this
+[18:09 - 18:14] next page but if you see the video is
+[18:11 - 18:16] contain is same because we did not pass
+[18:14 - 18:21] the data it
+[18:16 - 18:24] so let's go to our video
+[18:21 - 18:26] grid so here we have to we are
+[18:24 - 18:30] navigating the data right here you can
+[18:26 - 18:35] pass the data just do comma and here in
+[18:30 - 18:38] the curly bra you can write um video
+[18:35 - 18:41] data okay that is the variable
+[18:38 - 18:44] or where we can pass the data okay and
+[18:41 - 18:47] this video data can be refer in another
+[18:44 - 18:50] screen so and here you can pass the item
+[18:47 - 18:50] and the item contains all the
+[18:55 - 19:00] information once you define this
+[18:57 - 19:04] navigation a. navigate and when uh you
+[19:00 - 19:09] pass this uh item okay you have to go to
+[19:04 - 19:10] go to the play video screen here this is
+[19:09 - 19:12] this is the screen where we will get the
+[19:10 - 19:15] data okay once you pass data from the
+[19:12 - 19:18] previous uh screen so here you have to
+[19:15 - 19:21] Define constant and you can Define some
+[19:18 - 19:24] constant variable and you will get the
+[19:21 - 19:28] data by using the user route hook okay
+[19:24 - 19:30] and uh the data is in params okay
+[19:28 - 19:34] so in order to display it in the console
+[19:30 - 19:37] I will use effect function here just to
+[19:34 - 19:41] make sure that our data uh whatever data
+[19:37 - 19:42] we pass we are getting correctly okay
+[19:41 - 19:46] and I will call this us effect only once
+[19:42 - 19:48] so I passing this empty array and in the
+[19:46 - 19:52] console
+[19:48 - 19:55] oops long I will write
+[19:52 - 20:00] par and let's see I will click this
+[19:55 - 20:02] video and if you see right
+[20:00 - 20:02] let
+[20:02 - 20:07] me okay perfect so if you see right uh I
+[20:06 - 20:10] don't know what is the error but now
+[20:07 - 20:13] it's working now once you click on this
+[20:10 - 20:14] uh any of this uh screen right if I
+[20:13 - 20:19] click
+[20:14 - 20:21] here I'm getting this object with the ID
+[20:19 - 20:24] image URL everything
+[20:21 - 20:27] okay and that's what we want if I click
+[20:24 - 20:30] on this one I'm getting ID to if I click
+[20:27 - 20:33] this one and getting ID3 with all the
+[20:30 - 20:37] information now we will use this
+[20:33 - 20:37] parameter and we will pass this to
+[20:38 - 20:48] our YouTube player okay so what I will
+[20:42 - 20:53] do here I will just type um video
+[20:48 - 20:54] info or I can write par as it is as well
+[20:53 - 20:59] and here I will pass
+[20:54 - 21:03] this par variable okay so in YT
+[20:59 - 21:05] player this is the child component okay
+[21:03 - 21:08] and this is the parent component okay so
+[21:05 - 21:11] we have to pass that here so inside the
+[21:08 - 21:14] Y player okay we have to just Define
+[21:11 - 21:17] this par that's it okay this is the
+[21:14 - 21:19] props that we pass from this parent comp
+[21:17 - 21:22] child component and if you want to check
+[21:19 - 21:24] whether we are getting or not let me
+[21:22 - 21:28] remove this console from
+[21:24 - 21:31] here and in this YT player we can Define
+[21:28 - 21:31] the use
+[21:31 - 21:35] effect use
+[21:36 - 21:42] effect pass empty
+[21:39 - 21:44] array and here in the
+[21:42 - 21:49] console.
+[21:44 - 21:53] L right param colon and we will write
+[21:49 - 21:55] this parameter and let's
+[21:53 - 21:58] see so in the console right just ignore
+[21:55 - 22:00] this above console and if I click this
+[21:58 - 22:01] if you see right parameter object
+[22:00 - 22:06] undefined
+[22:01 - 22:09] okay again we miss anything let me
+[22:06 - 22:11] check okay we did not save the previous
+[22:09 - 22:13] one that's the reason let's check now
+[22:11 - 22:15] okay perfect now we are getting the
+[22:13 - 22:18] parameter object right and this
+[22:15 - 22:22] information perfect now we will use this
+[22:18 - 22:24] in order to show the data so here
+[22:22 - 22:27] right you can use this parameter you can
+[22:24 - 22:29] store it in your in uh some variable as
+[22:27 - 22:32] well but I will use this parameter
+[22:29 - 22:34] because that object is already there so
+[22:32 - 22:37] I will use param
+[22:34 - 22:41] Dot and this URL which is nothing but
+[22:37 - 22:43] the our video ID and if I save
+[22:41 - 22:47] it let's see whether we are getting
+[22:43 - 22:52] anything updated so if I click
+[22:47 - 22:53] here and I should able to get this video
+[22:52 - 22:55] I don't know whether this ID is correct
+[22:53 - 22:57] or not it's a correct incorrect ID
+[22:55 - 23:00] actually so we will replace the ID in
+[22:57 - 23:06] our data later on
+[23:00 - 23:10] okay so now next we will uh add this
+[23:06 - 23:13] title then this uh GUI subscribe button
+[23:10 - 23:16] section okay and this popular
+[23:13 - 23:20] video in the previous uh so previously
+[23:16 - 23:22] we did this par. URL right but uh if you
+[23:20 - 23:25] see the object we have video data we
+[23:22 - 23:28] part the video data so what we'll do to
+[23:25 - 23:33] get the video data content only
+[23:28 - 23:35] we write one Conant called video data
+[23:33 - 23:39] colon set
+[23:35 - 23:43] video data is equal to use State
+[23:39 - 23:45] and okay so initially it will be empty
+[23:43 - 23:49] and in the
+[23:45 - 23:53] console we will set this video data like
+[23:49 - 23:56] parameter do video data okay and then we
+[23:53 - 23:58] will use this video
+[23:56 - 24:00] data pass it like this
+[23:58 - 24:04] and if I save it let's try
+[24:00 - 24:08] to click here if you see we are getting
+[24:04 - 24:11] this uh video Perfect it's working now
+[24:08 - 24:13] let's add the title so here we will add
+[24:11 - 24:16] the
+[24:13 - 24:18] text and in video data we already have
+[24:16 - 24:22] the name right so we will Define video
+[24:18 - 24:26] data do name so if you see in the conso
+[24:22 - 24:28] we have this name and save it let's see
+[24:26 - 24:29] we are yes we are getting this name but
+[24:28 - 24:34] it's in black color we will give the
+[24:29 - 24:34] style so just write style equal
+[24:35 - 24:41] to style
+[24:37 - 24:43] dot styles. title okay and we will
+[24:41 - 24:46] Define the style in the Styles
+[24:43 - 24:48] sheet title
+[24:46 - 24:52] col we'll Define the
+[24:48 - 24:55] color color do
+[24:52 - 24:59] white and we will change the font size
+[24:55 - 25:01] to be a 20 pixel 20
+[24:59 - 25:05] let's see how it
+[25:01 - 25:08] looks okay perfect it's looking good I
+[25:05 - 25:10] think I'm okay with this font and all
+[25:08 - 25:11] okay and I will keep as it is if you see
+[25:10 - 25:14] the
+[25:11 - 25:17] mockup is perfect right we can make it
+[25:14 - 25:22] bold little bit so let's make it
+[25:17 - 25:24] bold font style this should be a bold oh
+[25:22 - 25:29] sorry uh font
+[25:24 - 25:29] weight it should be a bold
+[25:31 - 25:34] [Music]
+[25:47 - 25:52] now we will Define this uh subscribe
+[25:49 - 25:56] section okay so if you see we have this
+[25:52 - 25:59] card then we have this uh logo this name
+[25:56 - 25:59] and the Subscribe button
+[26:02 - 26:08] so let's create another
+[26:04 - 26:12] component call
+[26:08 - 26:14] subscribe chel subscribe section I will
+[26:12 - 26:19] call it subscribe section.
+[26:14 - 26:19] CH and enter default
+[26:19 - 26:26] template remove this
+[26:22 - 26:26] view enter a
+[26:26 - 26:31] text
+[26:28 - 26:34] subscribe okay and I will import this
+[26:31 - 26:37] view button view SE view as
+[26:34 - 26:40] well and then go to the our um play
+[26:37 - 26:42] video screen here you have to import
+[26:40 - 26:44] that component so it's called
+[26:42 - 26:47] subscribe
+[26:44 - 26:50] section and let's see we able to see
+[26:47 - 26:52] this text subscribe perfect now go to
+[26:50 - 26:52] subscribe
+[26:52 - 27:00] section here I will Define we already
+[26:56 - 27:02] defined the view right so let's define
+[27:00 - 27:05] image import that
+[27:02 - 27:07] image and
+[27:05 - 27:10] Source Define the
+[27:07 - 27:12] require because we are using the local
+[27:10 - 27:12] assets
+[27:13 - 27:19] okay or you can Define the variable
+[27:15 - 27:23] sorry URL as well just type
+[27:19 - 27:25] URI and let's we get
+[27:23 - 27:29] the and we give the Styles sheet as well
+[27:25 - 27:29] so Define the stylesheet for this uh
+[27:32 - 27:40] logo oh sorry so
+[27:35 - 27:40] rnss the Styles sheet import the Styles
+[27:40 - 27:43] sheet like
+[27:44 - 27:48] this did we miss anything
+[27:53 - 27:59] here and import the Styles sheet
+[27:58 - 28:03] here Define
+[27:59 - 28:06] logo and we Define width of
+[28:03 - 28:10] 70 and the height
+[28:06 - 28:10] of of
+[28:11 - 28:20] this height of 70 okay and we apply this
+[28:15 - 28:21] style to our image Styles
+[28:20 - 28:25] dot
+[28:21 - 28:25] oops will be oh let
+[28:26 - 28:31] me
+[28:28 - 28:31] I clear this
+[28:34 - 28:41] one the image is too big
+[28:37 - 28:45] actually so here we'll Define the
+[28:41 - 28:47] style styles do logo complete and if I
+[28:45 - 28:50] save
+[28:47 - 28:53] it I can able to see this logo it's too
+[28:50 - 28:57] big we change size to
+[28:53 - 28:59] 40 okay then we have this text gu and
+[28:57 - 29:03] learn with
+[28:59 - 29:03] fun so in a view
+[29:04 - 29:11] tag I will Define a
+[29:07 - 29:13] text it will say
+[29:11 - 29:17] to Guru
+[29:13 - 29:22] G and I will Define another
+[29:17 - 29:26] text call learn with
+[29:22 - 29:30] for if I save it I will see this text as
+[29:26 - 29:33] well okay after that I have button
+[29:30 - 29:35] another view tag and here I will Define
+[29:33 - 29:35] the
+[29:36 - 29:41] text write subscribe button okay we did
+[29:39 - 29:44] not apply style so now we will apply the
+[29:41 - 29:49] style okay so we want everything
+[29:44 - 29:53] horizontal right so we Define style
+[29:49 - 29:55] here Styles dot
+[29:53 - 29:59] container and we will Define this
+[29:55 - 29:59] container style sheet here
+[30:04 - 30:10] so here weine like
+[30:06 - 30:16] padding 20 PX
+[30:10 - 30:20] 20 of FL we Define on display as
+[30:16 - 30:20] F let's see how it
+[30:21 - 30:28] looks sorry yeah like
+[30:25 - 30:30] this okay and and we have to display
+[30:28 - 30:33] flex and then we have to display Flex
+[30:30 - 30:35] direction to be in row because we want
+[30:33 - 30:39] everything in one
+[30:35 - 30:42] row right if you see it's
+[30:39 - 30:46] see now give the color of this text
+[30:42 - 30:46] first okay because it's not visible
+[30:46 - 30:53] so uh I will write style for this uh
+[30:51 - 30:58] channel name and channel description so
+[30:53 - 31:00] I will write channel name
+[30:58 - 31:03] to be color
+[31:00 - 31:08] of color to
+[31:03 - 31:11] height and then Channel
+[31:08 - 31:15] description color.
+[31:11 - 31:17] white Define the color first
+[31:15 - 31:21] here and just apply this
+[31:17 - 31:22] stylesheet to
+[31:21 - 31:26] respective
+[31:22 - 31:27] um uh do
+[31:26 - 31:31] so
+[31:27 - 31:34] Styles dot channel
+[31:31 - 31:36] name and copy this I will apply I want
+[31:34 - 31:38] to apply here but just change this style
+[31:36 - 31:41] to channel description and if I save it
+[31:38 - 31:43] you will see this in white text and same
+[31:41 - 31:47] you have to apply for this text sorry
+[31:43 - 31:49] the button so here I will Define Styles
+[31:47 - 31:53] dot
+[31:49 - 31:53] button and Define
+[31:55 - 32:03] button button time
+[31:59 - 32:06] here and just I will copy
+[32:03 - 32:08] this okay and save it if you see now but
+[32:06 - 32:11] will be Chang to subscribe but if you
+[32:08 - 32:13] see it's connecting to each other so we
+[32:11 - 32:15] have to give spacing between that so in
+[32:13 - 32:19] the container right just type stify
+[32:15 - 32:19] contain and space evenly
+[32:20 - 32:26] okay if you see it's spacing evenly now
+[32:24 - 32:29] okay and we want to vertically to be a
+[32:26 - 32:31] center so just write
+[32:29 - 32:33] item
+[32:31 - 32:35] um align
+[32:33 - 32:38] item
+[32:35 - 32:40] align item to be in the
+[32:38 - 32:43] center you see it's change it will
+[32:40 - 32:46] change to Center okay now we want to
+[32:43 - 32:48] give the background color like this
+[32:46 - 32:54] right it's in black
+[32:48 - 32:54] color so just change to background color
+[32:55 - 33:00] to color dot I don't know which color do
+[32:59 - 33:04] we
+[33:00 - 33:06] have let's check primary color how it
+[33:04 - 33:09] looks so is nothing but right so we will
+[33:06 - 33:12] add another color
+[33:09 - 33:14] here and it should be a black so black
+[33:12 - 33:17] code is
+[33:14 - 33:22] oops the
+[33:17 - 33:25] has say dark black because we already
+[33:22 - 33:30] have black water which we give L darkest
+[33:25 - 33:32] blue so we change to dark black and save
+[33:30 - 33:36] it
+[33:32 - 33:39] okay we have to save the color as well
+[33:36 - 33:42] and if you save you see like this so we
+[33:39 - 33:44] give the padding a lot so I decrease the
+[33:42 - 33:48] padding it to
+[33:44 - 33:52] 10 and we let's give margin from the top
+[33:48 - 33:55] so we margin from the top like
+[33:52 - 33:57] 20 and we'll make the
+[33:55 - 34:01] radius
+[33:57 - 34:01] of 10
+[34:01 - 34:08] maybe
+[34:03 - 34:11] okay you can do more padding like
+[34:08 - 34:13] this okay perfect now I want the tube G
+[34:11 - 34:15] if you see right tube G name is little
+[34:13 - 34:19] bigger and and the learn with fun is
+[34:15 - 34:21] smaller so go to the channel name and
+[34:19 - 34:25] change the font
+[34:21 - 34:27] siid to be a 20 maybe and let's see how
+[34:25 - 34:31] it looks
+[34:27 - 34:33] perfect and learn with phun
+[34:31 - 34:36] right
+[34:33 - 34:38] uh if you're hearing some noise my
+[34:36 - 34:41] outside the lawn moving is going on so
+[34:38 - 34:46] ignore the voice sorry for that
+[34:41 - 34:48] one and here I have to Define like color
+[34:46 - 34:50] to be a little transparent right we want
+[34:48 - 34:53] color to transparent so we don't have
+[34:50 - 34:55] transer code
+[34:53 - 34:58] here
+[34:55 - 35:00] but can add the gray as well I'm not
+[34:58 - 35:03] sure okay
+[35:00 - 35:05] so we can change this color to transer
+[35:03 - 35:10] as well okay now if you see we have this
+[35:05 - 35:10] subscribe button in the red color
+[35:10 - 35:16] okay so just sh um
+[35:14 - 35:19] background
+[35:16 - 35:22] color let
+[35:19 - 35:26] me here background color will be
+[35:22 - 35:28] color do primary I think primary is um
+[35:26 - 35:31] red
+[35:28 - 35:34] color you see you got this color but you
+[35:31 - 35:35] want to give padding and all padding to
+[35:34 - 35:38] your
+[35:35 - 35:42] five and we want to give the
+[35:38 - 35:45] radius to be 50 because we want to round
+[35:42 - 35:49] um button like this and we give padding
+[35:45 - 35:52] to left padding like
+[35:49 - 35:55] 10 padding
+[35:52 - 35:55] right
+[35:55 - 36:00] to
+[35:57 - 36:02] perfect if you see our mockup it look
+[36:00 - 36:05] good that the color is dark our color is
+[36:02 - 36:07] little bit little bit difficult but
+[36:05 - 36:10] that's completely fine now we can give
+[36:07 - 36:12] the elevation here right if you go here
+[36:10 - 36:15] and just type elevation it will give the
+[36:12 - 36:16] shadow for our card okay it's not
+[36:15 - 36:20] visible
+[36:16 - 36:24] here but the shadow will be applied
+[36:20 - 36:27] okay so and if you see uh the mockup the
+[36:24 - 36:29] icon is around right so we will give the
+[36:27 - 36:31] logo to be
+[36:29 - 36:34] radius
+[36:31 - 36:37] 50 and the logo will be now wrong color
+[36:34 - 36:40] perfect now what I want to do on the
+[36:37 - 36:45] click of subscribe button uh it will
+[36:40 - 36:47] jump to the uh our YouTube app or URL
+[36:45 - 36:52] whatever URL which we Define is
+[36:47 - 36:55] subscribe so here in view we have to
+[36:52 - 36:58] change view to touchable opacity okay so
+[36:55 - 37:00] that we can implement in the on PR click
+[36:58 - 37:02] event right I will there have lot of
+[37:00 - 37:06] touchable
+[37:02 - 37:09] um highlights opacity or many different
+[37:06 - 37:12] way right I will prefer use T
+[37:09 - 37:15] oppacity if I click it as you see if I
+[37:12 - 37:18] click this subscribe button we get a
+[37:15 - 37:18] good animation as
+[37:23 - 37:31] well now on the place want to move to uh
+[37:27 - 37:37] jump to the URL for that we
+[37:31 - 37:38] need um so if you type in Expo open link
+[37:37 - 37:42] right in
+[37:38 - 37:44] browser so there is one uh Library
+[37:42 - 37:47] called linking so make sure you install
+[37:44 - 37:47] this linking
+[37:47 - 37:53] Library
+[37:49 - 37:53] [Music]
+[37:53 - 37:59] so let me okay so if let's try to import
+[37:58 - 38:01] this I'm not sure whether this we need
+[37:59 - 38:05] to import it newly or not so here we
+[38:01 - 38:07] create one function okay called open
+[38:05 - 38:10] URL
+[38:07 - 38:14] okay in Define function you have Define
+[38:10 - 38:17] like this okay and here let's see
+[38:14 - 38:19] linking it's already there I think and
+[38:17 - 38:24] just type open
+[38:19 - 38:28] URL and the free paste my channels URL
+[38:24 - 38:28] so whatever URL you want to P you can
+[38:28 - 38:33] so I will past my channel URL if you did
+[38:31 - 38:35] not subscribe subcribe to my Channel
+[38:33 - 38:38] please subscribe to my channel
+[38:35 - 38:42] okay okay let's go back here and put the
+[38:38 - 38:46] channel URL okay now call this open URL
+[38:42 - 38:48] method on click of this button so I will
+[38:46 - 38:51] press on
+[38:48 - 38:53] press and here I will press click this
+[38:51 - 38:55] open URL so this is function called if
+[38:53 - 38:57] you did not Define this one right and
+[38:55 - 38:59] you define like this this open will
+[38:57 - 39:03] called get infinite time so make sure
+[38:59 - 39:06] you'll Define like this and save
+[39:03 - 39:08] it if I click subscribe button is jump
+[39:06 - 39:10] to the YouTube app directly because this
+[39:08 - 39:11] is YouTube url right that's why it's
+[39:10 - 39:15] jumping to the YouTube URL and it's
+[39:11 - 39:18] working perfectly fine perfect so we
+[39:15 - 39:20] easily uh completed this section as well
+[39:18 - 39:23] if you see right
+[39:20 - 39:26] uh this this button the spacing is
+[39:23 - 39:28] little bit different so we can change by
+[39:26 - 39:31] inad of space
+[39:28 - 39:33] evenly we can Define
+[39:31 - 39:38] like
+[39:33 - 39:41] space between maybe let's see how it
+[39:38 - 39:45] looks yeah that's perfect so if you see
+[39:41 - 39:45] right that's how we want it
+[39:45 - 39:51] okay so I think we completed this
+[39:47 - 39:51] section okay now next
+[39:51 - 39:57] we'll add this popular video right now
+[39:54 - 39:59] what you can do right I told you before
+[39:57 - 40:02] that creating the component we can you
+[39:59 - 40:05] uh reuse that component in any uh screen
+[40:02 - 40:08] right same thing we can do here so for
+[40:05 - 40:11] example let's go to home screen sorry in
+[40:08 - 40:13] play video screen and you can Define
+[40:11 - 40:15] here like I want to show the slider for
+[40:13 - 40:18] example and we can Define the not slider
+[40:15 - 40:22] but we can Define this uh playlist
+[40:18 - 40:24] section here right just like just type
+[40:22 - 40:27] playlist import this
+[40:24 - 40:30] section playlist import this section
+[40:27 - 40:34] here and save it and
+[40:30 - 40:37] now get imported so if you see right
+[40:34 - 40:40] everything as expected so autoally
+[40:37 - 40:42] imported you can add the existing
+[40:40 - 40:44] component called video
+[40:42 - 40:50] grid list as
+[40:44 - 40:51] well and paste it right perfect boom so
+[40:50 - 40:52] don't need to actually write the code
+[40:51 - 40:55] again and again that's the reason we
+[40:52 - 40:57] created different component and you can
+[40:55 - 41:00] reuse it right and now even though you
+[40:57 - 41:03] can also Define the same navigations for
+[41:00 - 41:05] this uh slider as well just you need to
+[41:03 - 41:08] add the on press event and you can open
+[41:05 - 41:11] the URL or pass the URL as well so in
+[41:08 - 41:14] this way uh you can design the component
+[41:11 - 41:17] as you want and you can rest structurize
+[41:14 - 41:18] it okay so right now we show it in green
+[41:17 - 41:21] format you can show in the list format
+[41:18 - 41:24] so it will come uh the similar way that
+[41:21 - 41:26] uh that is in the YouTube right so in in
+[41:24 - 41:29] this case I show G but you can show in
+[41:26 - 41:32] the list view as well
+[41:29 - 41:33] so that's all for this video If you
+[41:32 - 41:37] really like this video please subscribe
+[41:33 - 41:41] to my channel and uh
+[41:37 - 41:42] also uh if you want to know how can we
+[41:41 - 41:45] pH data from the API and show it on the
+[41:42 - 41:48] screen uh we will create a third video
+[41:45 - 41:53] for that one because right now right in
+[41:48 - 41:56] our data we show the we show this uh
+[41:53 - 41:58] video list it is in the it's a static
+[41:56 - 42:01] right it's not Dynamic and we harded in
+[41:58 - 42:05] our application but we can do with using
+[42:01 - 42:07] the API as well so two things uh without
+[42:05 - 42:09] any writing the code we can uh create
+[42:07 - 42:11] the API I will tell you in our next
+[42:09 - 42:13] lecture so please subscribe to my
+[42:11 - 42:18] channel and so that you can't miss my
+[42:13 - 42:23] next lecture okay and uh let's uh see
+[42:18 - 42:23] you in next video keep smiling thank you

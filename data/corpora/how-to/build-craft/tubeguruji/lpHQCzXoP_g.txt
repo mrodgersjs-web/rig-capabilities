@@ -1,0 +1,2461 @@
+[00:00 - 00:05] hey there welcome back to TU guu Channel
+[00:03 - 00:08] today we are going to develop this
+[00:05 - 00:10] beautiful Pinterest clone application
+[00:08 - 00:13] and this application is completely
+[00:10 - 00:16] responsive and user friendly also we
+[00:13 - 00:19] will learn a lot of Technology this app
+[00:16 - 00:23] completely built on nextjs 13 react
+[00:19 - 00:26] telin CSS Firebase next o and so on so
+[00:23 - 00:28] watch this complete video and let's let
+[00:26 - 00:30] me walk through this application first
+[00:28 - 00:31] and then we'll talk about the technology
+[00:30 - 00:34] which we are going to use uh in this
+[00:31 - 00:35] particular course so if you see right uh
+[00:34 - 00:38] once you land on this page you will see
+[00:35 - 00:41] this beautiful grid option where you can
+[00:38 - 00:43] open any of the pins which you want to
+[00:41 - 00:45] see right for example if I open this
+[00:43 - 00:47] particular pin you will see the
+[00:45 - 00:51] beautiful view right you can even open
+[00:47 - 00:54] the URL along with this one okay also if
+[00:51 - 00:56] you want to create a new um post right
+[00:54 - 00:58] obviously you have to login First so
+[00:56 - 01:01] with the help of Google authentication
+[00:58 - 01:03] we add the login uh functionality and
+[01:01 - 01:06] once you log in you you can able to
+[01:03 - 01:08] access your profiles pin as well right
+[01:06 - 01:10] here you will create a new pins you will
+[01:08 - 01:12] have option to upload image add all the
+[01:10 - 01:15] details required for this particular
+[01:12 - 01:17] post also you can go to a profile and
+[01:15 - 01:19] here you will see all your pins which
+[01:17 - 01:22] you created before okay sounds cool
+[01:19 - 01:24] right so this complete application we
+[01:22 - 01:28] are going to build with the help of
+[01:24 - 01:31] nextjs 13 and react and with the help of
+[01:28 - 01:34] TN CSS we are going to style this
+[01:31 - 01:36] application and we store this all the
+[01:34 - 01:39] data on Firebase fire store and the
+[01:36 - 01:42] storage which is completely free okay
+[01:39 - 01:45] you will not find the course like this
+[01:42 - 01:51] anywhere on the internet so watch this
+[01:45 - 01:54] complete video and we'll see you in
+[01:51 - 01:56] next so to build this Pinterest loone
+[01:54 - 01:59] application we are going to use a react
+[01:56 - 02:01] framework which is the next CH and
+[01:59 - 02:04] current is the most popular framework in
+[02:01 - 02:08] the market and we are going to use next
+[02:04 - 02:11] js13 uh in this course then we are going
+[02:08 - 02:14] to use Firebase to store the data uh and
+[02:11 - 02:16] the images as well okay so Firebase is
+[02:14 - 02:19] completely free to use and we are going
+[02:16 - 02:21] to use with the nextjs and you will not
+[02:19 - 02:24] find this course anywhere on the
+[02:21 - 02:27] internet so watch that one then for
+[02:24 - 02:30] styling H we are going to use telin CSS
+[02:27 - 02:32] which is the one of the best I framework
+[02:30 - 02:35] in the market right now okay and if you
+[02:32 - 02:37] don't know how to use tells don't worry
+[02:35 - 02:39] I'm going to teach you everything okay
+[02:37 - 02:41] then for the authentication we want to
+[02:39 - 02:44] use next .js which is the best
+[02:41 - 02:48] authentication for nextjs
+[02:44 - 02:50] and uh how to use next or with the next
+[02:48 - 02:54] js13 I'm going to teach you in this
+[02:50 - 02:56] particular course okay and last but not
+[02:54 - 02:57] the least we going to use the react icon
+[02:56 - 03:00] I will teach you how to use this
+[02:57 - 03:03] beautiful react icons okay so you don't
+[03:00 - 03:05] need to save any assets for you with the
+[03:03 - 03:06] help of react icons you can Implement a
+[03:05 - 03:10] bunch of different icons in your
+[03:06 - 03:12] application okay so guys watch this
+[03:10 - 03:13] complete video and if you did not
+[03:12 - 03:16] subscribe to my Channel please subscribe
+[03:13 - 03:18] to my channel and please share this
+[03:16 - 03:20] video with your friends family watch
+[03:18 - 03:23] complete video and if you have any doubt
+[03:20 - 03:25] any question put in the comment section
+[03:23 - 03:27] and the source code of this particular
+[03:25 - 03:30] one is in the uh description so you can
+[03:27 - 03:32] check it out anytime but try this
+[03:30 - 03:35] Pinterest clone and is quite interesting
+[03:32 - 03:37] and various Technologies you will learn
+[03:35 - 03:39] in this particular course so watch it
+[03:37 - 03:42] and uh without doing any further delay
+[03:39 - 03:42] let's
+[03:47 - 03:54] begin so in this particular tutorial we
+[03:50 - 03:56] are going to use nextjs 13 okay and if
+[03:54 - 03:59] you don't know about the nextjs uh 13 or
+[03:56 - 04:01] nextjs don't worry we will learn it
+[03:59 - 04:03] everything from the scratch if you go to
+[04:01 - 04:05] the official website of NEX js. org you
+[04:03 - 04:07] will find this particular command in
+[04:05 - 04:10] order to create the project okay so just
+[04:07 - 04:13] copy this command and go to a project
+[04:10 - 04:16] folder where you want to create the
+[04:13 - 04:19] project then open the
+[04:16 - 04:21] CMD and then just type the command which
+[04:19 - 04:25] you pasted
+[04:21 - 04:28] okay like this so npm create D next- app
+[04:25 - 04:30] at the latest okay at the latest will
+[04:28 - 04:33] help you to create a next JS uh 13
+[04:30 - 04:36] application along with use some option
+[04:33 - 04:38] to select manually if I click
+[04:36 - 04:41] enter then it will ask the project name
+[04:38 - 04:44] so in in this case we will
+[04:41 - 04:48] pinest FL
+[04:44 - 04:50] okay I will do like this and then it
+[04:48 - 04:52] will ask you to use the typescript with
+[04:50 - 04:55] this project right we are going to use
+[04:52 - 04:58] typescript for this project then uh will
+[04:55 - 05:01] you like to use es link I will say no
+[04:58 - 05:04] then like to use telin CSS this project
+[05:01 - 05:07] CS so you don't need to manually add the
+[05:04 - 05:09] telin CSS with this right this uh
+[05:07 - 05:11] particular command uh to create the next
+[05:09 - 05:15] application at the latest will help you
+[05:11 - 05:17] to install tmin CSS as well okay say yes
+[05:15 - 05:19] and it's saying you would like to use
+[05:17 - 05:23] Source directory with this project say
+[05:19 - 05:25] no and use app router say yes and we
+[05:23 - 05:29] like to customize the default import Al
+[05:25 - 05:31] so no okay now if you see right this all
+[05:29 - 05:33] the things are getting uh these are the
+[05:31 - 05:36] dependency getting installed for the
+[05:33 - 05:40] application so we'll wait for a few
+[05:36 - 05:43] seconds a few minutes later now our
+[05:40 - 05:46] project is uh created okay now let's go
+[05:43 - 05:50] to a project by typing CD and the name
+[05:46 - 05:50] of the project so in this case is
+[05:54 - 06:01] Pinterest okay and then open the vs code
+[05:58 - 06:05] right using the command codespace do
+[06:01 - 06:07] okay and with the help of that one we
+[06:05 - 06:11] open our project in vs code along with
+[06:07 - 06:11] all the files okay
+[06:16 - 06:23] perfect now let's me explain the uh
+[06:20 - 06:25] project structure okay so here very
+[06:23 - 06:27] first we have this app folder right and
+[06:25 - 06:32] inside the app folder we have Global CSS
+[06:27 - 06:36] layout. TSX and txx txx is stand for the
+[06:32 - 06:40] typescript XML okay now if you know the
+[06:36 - 06:43] next JS okay so before it was _ app.js
+[06:40 - 06:46] instead of layout. TSX okay otherwise
+[06:43 - 06:48] it's quite similar okay but uh when we
+[06:46 - 06:52] created the project uh we will learn
+[06:48 - 06:54] more about that one okay so in L uh. txx
+[06:52 - 06:57] okay you will see you will see this
+[06:54 - 06:59] metadata and then you will see this body
+[06:57 - 07:01] tag and inside the body tag we have
+[06:59 - 07:02] children okay so children nothing but
+[07:01 - 07:06] the page we are going to render in
+[07:02 - 07:10] between that one okay uh and there's
+[07:06 - 07:12] nothing else okay when we are uh start
+[07:10 - 07:15] developing the project then you'll learn
+[07:12 - 07:18] much better okay next we have page. TSX
+[07:15 - 07:20] which is our default page okay right now
+[07:18 - 07:22] and the routing is quite easy you don't
+[07:20 - 07:25] need to do any configuration for that
+[07:22 - 07:27] one so we will learn that one as well
+[07:25 - 07:29] after that we have node modules okay we
+[07:27 - 07:31] will ignore that part then we have
+[07:29 - 07:33] public folder where we will store all
+[07:31 - 07:35] our assets like image video music
+[07:33 - 07:38] whatever we want to store we will store
+[07:35 - 07:43] in public folder okay then uh we have
+[07:38 - 07:45] next do uh d. TS file okay uh it just to
+[07:43 - 07:48] um it's new file for this particular one
+[07:45 - 07:50] and it's environment kind of file then
+[07:48 - 07:52] we have next. config.js where we will
+[07:50 - 07:57] put all configuration for application
+[07:52 - 07:59] okay so regarding the next uh JS then we
+[07:57 - 08:01] have the packet. Json okay and which
+[07:59 - 08:04] contain the dependence and everything
+[08:01 - 08:06] the post CSS and tailin config.js is
+[08:04 - 08:10] used for the tvin CSS right and if you
+[08:06 - 08:12] see the where need to apply this TN CSS
+[08:10 - 08:14] classes that path is defined here if you
+[08:12 - 08:16] are doing some manually you are adding
+[08:14 - 08:20] some new folder make sure you have to
+[08:16 - 08:23] add it here in order to apply thein CSS
+[08:20 - 08:26] okay and then last is types config.js
+[08:23 - 08:28] okay so first of all let's go to
+[08:26 - 08:30] terminal inside vs codes click new
+[08:28 - 08:35] terminal and let's run the project so
+[08:30 - 08:38] just type npm run there okay and uh if
+[08:35 - 08:42] you see our project is running on the
+[08:38 - 08:43] Local Host 3,000 Port okay so let's open
+[08:42 - 08:47] this
+[08:43 - 08:48] port and it's loading so we'll wait for
+[08:47 - 08:50] a few
+[08:48 - 08:54] seconds and if you see our project is
+[08:50 - 08:55] loaded okay let me show you the code and
+[08:54 - 08:57] uh
+[08:55 - 08:59] Associated uh view for this one right so
+[08:57 - 09:03] if you go to the app right and and if
+[08:59 - 09:05] you see here in page. TSX right here you
+[09:03 - 09:07] will see this code okay so get started
+[09:05 - 09:09] by editing so you'll see get started by
+[09:07 - 09:12] editing right so this is our default
+[09:09 - 09:14] page which called page. TSX okay so
+[09:12 - 09:16] right now I don't want this code so what
+[09:14 - 09:20] I will do I will remove this everything
+[09:16 - 09:23] okay like this and just put a simple
+[09:20 - 09:25] empty tag like this okay and inside that
+[09:23 - 09:29] I will put h2 tag
+[09:25 - 09:31] like type to tube gou
+[09:29 - 09:34] okay if you do not subscribe to TU
+[09:31 - 09:36] guruji please do subscribe and save it
+[09:34 - 09:39] now you'll see subscribe to TU guruji
+[09:36 - 09:41] Channel right now interesting part you
+[09:39 - 09:44] will see here you'll see these lines
+[09:41 - 09:47] right the reason is if you go to the uh
+[09:44 - 09:51] Global CSS right in this root folder
+[09:47 - 09:53] they added the start RGB RGB and end RGB
+[09:51 - 09:54] right it's give the gradient kind of
+[09:53 - 09:57] effect right and we don't want that one
+[09:54 - 09:59] so remove that one okay along with you
+[09:57 - 10:02] can remove this one you don't want it
+[09:59 - 10:04] and like this and if you see our page is
+[10:02 - 10:06] completely clean and that's where we
+[10:04 - 10:10] will start our applic application to
+[10:06 - 10:10] develop from the scratch
+[10:13 - 10:18] okay now if you see the Pinterest
+[10:15 - 10:19] website right you will see the header
+[10:18 - 10:23] section okay we can we can call
+[10:19 - 10:25] navigation bar and in that we have logo
+[10:23 - 10:28] some button search bar user image this
+[10:25 - 10:29] message icon and everything right and
+[10:28 - 10:33] then we have the list of
+[10:29 - 10:35] all the uh pins we can say all the post
+[10:33 - 10:37] that which user posted right so we will
+[10:35 - 10:40] divide this application into small
+[10:37 - 10:43] components uh in order to implement
+[10:40 - 10:45] right also if you if I go any of this
+[10:43 - 10:46] particular post right you will see this
+[10:45 - 10:50] navigation bar keep constant throughout
+[10:46 - 10:52] the application okay so that's what we
+[10:50 - 10:54] need to implement okay so let's go back
+[10:52 - 10:57] to our application first okay I will
+[10:54 - 11:00] open here and here I will create a new
+[10:57 - 11:03] uh folder called components okay so
+[11:00 - 11:03] let's call
+[11:04 - 11:10] components okay and inside this
+[11:06 - 11:15] component I will call header. TSX file
+[11:10 - 11:17] okay so header. txx okay and here will
+[11:15 - 11:20] add the template so if you did not watch
+[11:17 - 11:22] my previous video okay please do what
+[11:20 - 11:25] because in my previous video every time
+[11:22 - 11:27] in the application I I informed or told
+[11:25 - 11:29] user to add this beautiful extension
+[11:27 - 11:33] called react
+[11:29 - 11:36] uh es es7 plus okay so this extension
+[11:33 - 11:38] will help you to uh write the code much
+[11:36 - 11:41] faster okay so make sure you'll install
+[11:38 - 11:45] this uh vs code extension so what it
+[11:41 - 11:48] will do if you type RFC which is a react
+[11:45 - 11:51] function export component right and
+[11:48 - 11:54] enter it you will see this beautiful
+[11:51 - 11:57] template created by the extension right
+[11:54 - 11:59] without doing or writing any code it
+[11:57 - 12:01] will automatically generate for you okay
+[11:59 - 12:03] so you don't need to write every time
+[12:01 - 12:06] right so that's the reason make sure you
+[12:03 - 12:08] import that particular extension now our
+[12:06 - 12:11] heer is component component is ready
+[12:08 - 12:13] right save it now if you go to the
+[12:11 - 12:16] layout. TSX here we will import that
+[12:13 - 12:19] header component the reason is we want
+[12:16 - 12:21] to use that header throughout the
+[12:19 - 12:24] application okay so that's the reason we
+[12:21 - 12:26] will put it in the header so what I will
+[12:24 - 12:29] do because in children all our component
+[12:26 - 12:32] is getting not component but page is
+[12:29 - 12:34] getting rendered right and here I will
+[12:32 - 12:34] add the
+[12:35 - 12:41] header and make sure you import it the
+[12:38 - 12:44] uh header from the component okay and
+[12:41 - 12:45] then save it as soon as save it you'll
+[12:44 - 12:49] see the header is displaying on the
+[12:45 - 12:52] screen okay perfect now let's go back to
+[12:49 - 12:55] heer and just write uh just start
+[12:52 - 12:57] implementing it okay so if I go to this
+[12:55 - 13:00] Pinterest website right let's go back to
+[12:57 - 13:03] homepage you will see this beautiful um
+[13:00 - 13:04] header section right so I already added
+[13:03 - 13:08] the
+[13:04 - 13:12] logo.png file in my public folder okay
+[13:08 - 13:13] now we also want to use this icons right
+[13:12 - 13:16] so what you have to do go to the react
+[13:13 - 13:19] icons this official website of the react
+[13:16 - 13:21] icons okay and here just copy this
+[13:19 - 13:23] command in order to install it in your
+[13:21 - 13:25] project right and then I will explain
+[13:23 - 13:27] you how to use it first of all go to the
+[13:25 - 13:30] project and paste it in your terminal
+[13:27 - 13:32] okay now here you will see the bunch of
+[13:30 - 13:34] different type of Icon where you can use
+[13:32 - 13:35] it right if I go to the icon and if you
+[13:34 - 13:38] see right different type of bunch of
+[13:35 - 13:40] Icon you will find it you can just go
+[13:38 - 13:42] copy it uh this name of the icon and
+[13:40 - 13:45] paste it right and make sure to import
+[13:42 - 13:48] this particular statement
+[13:45 - 13:51] okay now let's start implementing the
+[13:48 - 13:55] header so first of all we want to show
+[13:51 - 13:58] the logo okay so let me open the project
+[13:55 - 14:01] side by side as well okay so here first
+[13:58 - 14:02] of all let's add the image right so in
+[14:01 - 14:05] this case we will add the image from the
+[14:02 - 14:07] next SL image okay and if you know about
+[14:05 - 14:09] the image HTML tag it's similar to like
+[14:07 - 14:12] that one only the image tag we are
+[14:09 - 14:14] importing from the next image okay and
+[14:12 - 14:19] then we have to provide the source okay
+[14:14 - 14:21] so Source from the local um uh public
+[14:19 - 14:24] folder only so I can do like
+[14:21 - 14:27] logo.png okay and then we have to give
+[14:24 - 14:29] some properties like Al tag so in this
+[14:27 - 14:32] case I will write logo
+[14:29 - 14:38] and then I will also mention the width
+[14:32 - 14:40] okay of 50 height of 50 okay and save it
+[14:38 - 14:43] and if you see logo is displaying on the
+[14:40 - 14:45] screen okay now if you go back here and
+[14:43 - 14:48] you'll see right on a how you'll see
+[14:45 - 14:50] this uh gray color right on how so we'll
+[14:48 - 14:53] Implement that that one as well so what
+[14:50 - 14:57] what we can do do class name to this one
+[14:53 - 14:59] and over here just write on how right so
+[14:57 - 15:02] Intel wies it's very easy to implement
+[14:59 - 15:06] that one right on how we can change the
+[15:02 - 15:09] background color to Gray and this is the
+[15:06 - 15:11] color code right see if I open like this
+[15:09 - 15:13] and you will see the bunch of different
+[15:11 - 15:16] type of color combination right uh so in
+[15:13 - 15:18] this case I will select this 300 and if
+[15:16 - 15:21] you hover on this one you will see the
+[15:18 - 15:24] CSS property this is how in CSS we can
+[15:21 - 15:27] return return but with the T CSS is just
+[15:24 - 15:29] few line of it's just one line of code
+[15:27 - 15:32] right then
+[15:29 - 15:35] uh let's give some padding to P2 okay
+[15:32 - 15:37] and if i h on it see it's coming right
+[15:35 - 15:42] but we want the circular so what we can
+[15:37 - 15:46] do uh just make rounded to be full
+[15:42 - 15:49] okay and uh so put it like this round it
+[15:46 - 15:52] to be full and I will make the cursor to
+[15:49 - 15:55] be pointer okay and if I hold on it see
+[15:52 - 15:59] how easily efficiently it's Hing okay
+[15:55 - 16:02] perfect now let's add the some button
+[15:59 - 16:04] okay so if you go to spest we have this
+[16:02 - 16:07] U button called home explor create right
+[16:04 - 16:12] so we will add home and
+[16:07 - 16:12] create so let me add that one as
+[16:13 - 16:17] well o sorry so let
+[16:15 - 16:20] [Music]
+[16:17 - 16:22] me bring this here like this okay then
+[16:20 - 16:25] we will add these two buttons so let's
+[16:22 - 16:29] add button
+[16:25 - 16:33] so first button is uh home
+[16:29 - 16:36] and the second is to
+[16:33 - 16:38] create then we want to add the input as
+[16:36 - 16:42] well okay
+[16:38 - 16:46] so we can add the input uh uh Button as
+[16:42 - 16:49] well so input text okay Division and if
+[16:46 - 16:51] you see right here let me open this the
+[16:49 - 16:53] search bar right we have this logo as
+[16:51 - 16:57] well and the search icon right and we
+[16:53 - 17:01] can take this logo from the um icons
+[16:57 - 17:01] right so if I search so
+[17:02 - 17:07] [Music]
+[17:04 - 17:10] I'm I'm using this High sear right and
+[17:07 - 17:15] I'm using this uh hero icons
+[17:10 - 17:18] okay so let me bring this bigger size
+[17:15 - 17:22] and here you can add this icon so I will
+[17:18 - 17:26] add High search like this okay and make
+[17:22 - 17:28] sure to import this uh statement as well
+[17:26 - 17:30] right so I will import it I'm using this
+[17:28 - 17:34] H Bill and chart icon as well okay from
+[17:30 - 17:39] the same then after that one let's add
+[17:34 - 17:39] the input okay so input of type
+[17:39 - 17:45] text okay and I will add the placeholder
+[17:43 - 17:45] as a
+[17:45 - 17:51] search and after that uh two more icon
+[17:49 - 17:55] I'm going to add so first is high Bill
+[17:51 - 17:59] okay and the second is the high
+[17:55 - 18:02] chop okay and lastly we want to show the
+[17:59 - 18:04] image of the user right so if you go
+[18:02 - 18:06] back here we want to show this image
+[18:04 - 18:07] right and if you see right how we are
+[18:06 - 18:12] getting this effect as well so we will
+[18:07 - 18:15] add that one so let's see image source
+[18:12 - 18:19] okay and I already have this
+[18:15 - 18:21] uh image in the public folder right
+[18:19 - 18:26] man.png so you can access it through the
+[18:21 - 18:31] source code give the alt tag like user
+[18:26 - 18:36] image you width of
+[18:31 - 18:40] 50 and height of 50
+[18:36 - 18:42] okay and same uh class name I will add
+[18:40 - 18:45] it here as
+[18:42 - 18:45] well like
+[18:48 - 18:53] this it be class name and save it now if
+[18:52 - 18:56] you go back to our application it will
+[18:53 - 18:59] look like this okay now let's bring
+[18:56 - 19:02] everything uh in one line before that we
+[18:59 - 19:04] will add the um styling to each of them
+[19:02 - 19:07] okay so first of all let's add The
+[19:04 - 19:09] Styling for this button so just write
+[19:07 - 19:11] class name we want the background of
+[19:09 - 19:14] black color so I will add black and text
+[19:11 - 19:17] need to be white okay after that I will
+[19:14 - 19:20] give some padding to uh two okay and
+[19:17 - 19:23] let's see how it looks so see okay now
+[19:20 - 19:26] let's make the corner to be rounded okay
+[19:23 - 19:31] let me bring this side by
+[19:26 - 19:33] side and uh I will make sorry I'll make
+[19:31 - 19:38] the rounded to be
+[19:33 - 19:40] full okay and
+[19:38 - 19:44] uh also what I will do I will give the
+[19:40 - 19:49] some padding on the xaxis to be uh four
+[19:44 - 19:52] okay like this okay same class I will
+[19:49 - 19:54] apply it for the create only thing is I
+[19:52 - 19:58] will remove this black background and
+[19:54 - 20:01] white text okay like this and I will add
+[19:58 - 20:05] the the font here to
+[20:01 - 20:08] semibold okay like this now uh these are
+[20:05 - 20:11] ready Let's uh give styling to this
+[20:08 - 20:14] input search box right so here I will
+[20:11 - 20:17] add the class name okay background and I
+[20:14 - 20:20] have the color code already right so in
+[20:17 - 20:22] order to use the your own custom color
+[20:20 - 20:24] code right you have to write the value
+[20:22 - 20:26] in the bracket okay not only the
+[20:24 - 20:29] background but everywhere else okay so
+[20:26 - 20:31] like this so hash and the color code
+[20:29 - 20:33] okay and if I save it you'll see the
+[20:31 - 20:36] color code as
+[20:33 - 20:38] well let's do some padding to three okay
+[20:36 - 20:42] and what I want I want the two things in
+[20:38 - 20:45] one line right okay so actually we'll
+[20:42 - 20:47] put this bail chart and image outside of
+[20:45 - 20:51] this de like
+[20:47 - 20:53] this good then I will add the flex and I
+[20:51 - 20:56] will add the
+[20:53 - 20:58] gap of three so gap of three means the
+[20:56 - 21:01] distance between these two right now if
+[20:58 - 21:07] you go to the twiin CSS
+[21:01 - 21:09] okay go to Twin CSS okay and if you open
+[21:07 - 21:11] it right and if you want to search
+[21:09 - 21:13] anything okay how to use the particular
+[21:11 - 21:15] thing for example if you want to Gap
+[21:13 - 21:17] what is gap right you can just search it
+[21:15 - 21:21] and then you will find it how to use it
+[21:17 - 21:24] okay let me search capap open it and see
+[21:21 - 21:26] okay so it will explain you how it works
+[21:24 - 21:29] okay so it give the distance between two
+[21:26 - 21:31] items okay as simple as that so that's
+[21:29 - 21:33] the reason I give the gap of three I
+[21:31 - 21:35] will make item to be Center so it will
+[21:33 - 21:39] become vertically to be Center
+[21:35 - 21:44] okay and let's make the rounded uh
+[21:39 - 21:48] corner to be full like this okay and we
+[21:44 - 21:50] add the padding everything looks good so
+[21:48 - 21:53] and what we will do uh let's add some
+[21:50 - 21:57] styling to this uh search bar so add
+[21:53 - 21:59] class name okay so this SE icon act like
+[21:57 - 22:02] a text only so so let's give the same
+[21:59 - 22:04] property like a text okay so if you see
+[22:02 - 22:07] right I give the text value but you can
+[22:04 - 22:10] give the in buil tell CSS text value
+[22:07 - 22:13] like five oh sorry 5 Xcel 2 XEL like
+[22:10 - 22:16] this right but you can also use a custom
+[22:13 - 22:19] value like 25 pixel which is similar to
+[22:16 - 22:22] the CSS and if you hun it you'll see the
+[22:19 - 22:26] font size of 25 pixel
+[22:22 - 22:31] okay and then I will change the color of
+[22:26 - 22:35] this one to T to gra 500 like this okay
+[22:31 - 22:37] perfect then for this input right first
+[22:35 - 22:39] thing we want to make this transparent I
+[22:37 - 22:42] don't want the white right so let's add
+[22:39 - 22:44] class name BG background and transparent
+[22:42 - 22:46] okay and if you H you will see the
+[22:44 - 22:49] property background color transparent
+[22:46 - 22:51] like this okay and uh let's save it
+[22:49 - 22:53] perfect if I click on it you'll see this
+[22:51 - 22:57] border we don't want that border as well
+[22:53 - 22:58] so just write outline n and save it okay
+[22:57 - 23:02] perfect
+[22:58 - 23:09] also uh I will change the Bell icon size
+[23:02 - 23:13] so text to be 40 pixel and text Gray
+[23:09 - 23:17] 500 color of that one like this I will
+[23:13 - 23:20] copy the same for the chart
+[23:17 - 23:23] icon perfect now if I open it right it's
+[23:20 - 23:25] showing vertically right now okay now
+[23:23 - 23:28] let's bring everything horizontally so
+[23:25 - 23:31] for this uh parent
+[23:28 - 23:33] add class name and let's write Flex okay
+[23:31 - 23:36] as soon as you write Flex everything
+[23:33 - 23:38] will be in one line right now let's give
+[23:36 - 23:40] some gap between the items so I will say
+[23:38 - 23:44] gap of three and I will make sure that
+[23:40 - 23:47] item to be vertical be Center okay and
+[23:44 - 23:49] see how it looks see okay so if you see
+[23:47 - 23:53] we have some padding all around all
+[23:49 - 23:57] right so let's go padding of six for
+[23:53 - 24:00] example and see it looks good right but
+[23:57 - 24:02] if you search bar is acquiring the whole
+[24:00 - 24:05] um the full size of the screen right so
+[24:02 - 24:07] very easy for this particular search bar
+[24:05 - 24:11] du right we have this D here just write
+[24:07 - 24:15] we to be full and save it as as we to be
+[24:11 - 24:16] full save see our header is almost
+[24:15 - 24:19] complete
+[24:16 - 24:21] okay and if you see this one is similar
+[24:19 - 24:24] to this one the icon little bit Chang
+[24:21 - 24:26] because we are using some different
+[24:24 - 24:29] icons but that's fine the main point is
+[24:26 - 24:32] we got the header similar to the
+[24:29 - 24:36] Pinterest okay
+[24:32 - 24:38] perfect here I made some few changes so
+[24:36 - 24:41] if you go to here right and if I
+[24:38 - 24:43] decrease the screen size right it
+[24:41 - 24:46] automatically uh remove the search bar
+[24:43 - 24:48] right uh it's similar it's kind of
+[24:46 - 24:49] similar to uh this one okay if I go to
+[24:48 - 24:52] the inspect
+[24:49 - 24:54] panel okay and if I decree the size you
+[24:52 - 24:57] will see this one right I change the
+[24:54 - 24:59] size the layout and everything okay the
+[24:57 - 25:02] similar kind of of things I did it here
+[24:59 - 25:05] it's quite easy uh many times we did
+[25:02 - 25:08] this before as well in my tutorial right
+[25:05 - 25:11] so uh here first thing when the screen
+[25:08 - 25:14] size is smaller I made the gap of three
+[25:11 - 25:18] or screen size is medium I made gap of
+[25:14 - 25:22] two and then for this search bar do
+[25:18 - 25:25] right uh I'm hiding mean I put the uh
+[25:22 - 25:26] class called hidden when the screen size
+[25:25 - 25:30] is smaller and when the screen size is
+[25:26 - 25:33] medium we will showing it as a flex okay
+[25:30 - 25:35] and uh outside that I added this search
+[25:33 - 25:38] bar it only display when the screen size
+[25:35 - 25:41] is smaller otherwise on all other screen
+[25:38 - 25:43] it will be hidden okay so this few
+[25:41 - 25:46] tricks few ticks I added in this one
+[25:43 - 25:49] okay if you have face any issue you can
+[25:46 - 25:51] always check the source code and the
+[25:49 - 25:51] link is in the
+[25:56 - 26:02] description now let's implement the
+[25:59 - 26:05] Google authentication using next okay so
+[26:02 - 26:09] for that one uh we are using next okay
+[26:05 - 26:12] and which is the best and easiest uh way
+[26:09 - 26:16] to add the authentication in our nextjs
+[26:12 - 26:19] application as we are using next JS 13
+[26:16 - 26:20] uh version right for the next JS it's
+[26:19 - 26:22] little bit different to uh
+[26:20 - 26:25] implementation and you will not find
+[26:22 - 26:27] anywhere on the YouTube how to add next
+[26:25 - 26:30] authentication in nextjs 13 uh very
+[26:27 - 26:33] easily okay so first of all go to the
+[26:30 - 26:36] next .js this website okay and just say
+[26:33 - 26:38] get started here you will see this uh
+[26:36 - 26:40] steps to follow right you have to
+[26:38 - 26:43] install this next off first so then copy
+[26:40 - 26:46] this command and go to your uh project
+[26:43 - 26:49] folder and paste it here and click enter
+[26:46 - 26:51] so it will install for you okay then you
+[26:49 - 26:54] have to come down and then you have to
+[26:51 - 26:56] add this API route okay so if you see
+[26:54 - 27:00] right uh if you are using the normal
+[26:56 - 27:03] next uh CHS so you have to add this you
+[27:00 - 27:06] have to create this file in Pages folder
+[27:03 - 27:08] SL API folder SL folder and then you
+[27:06 - 27:10] have to create this file okay and then
+[27:08 - 27:14] you have to paste this all of this code
+[27:10 - 27:17] but if you if you are using nextjs
+[27:14 - 27:18] 13.2 above version then we have to
+[27:17 - 27:21] follow some different step as we are
+[27:18 - 27:23] using the uh next JS 13 right then we
+[27:21 - 27:26] have to follow this router Handler guide
+[27:23 - 27:29] okay so click on this guide and here you
+[27:26 - 27:31] will see how to add that okay so first
+[27:29 - 27:33] of all if you see right in the app
+[27:31 - 27:36] folder we have to create API folder
+[27:33 - 27:38] inside that we have create o folder and
+[27:36 - 27:42] next o folder okay so let's go to our
+[27:38 - 27:45] application let me bring this
+[27:42 - 27:49] here and inside the app folder first I
+[27:45 - 27:51] will create the API folder inside that I
+[27:49 - 27:55] will create another folder called
+[27:51 - 27:58] a then copy this name of the
+[27:55 - 28:01] folder and inside Au only I have to
+[27:58 - 28:04] create this folder okay and then inside
+[28:01 - 28:06] that we'll create a route. JS folder
+[28:04 - 28:10] okay and then we have to paste this
+[28:06 - 28:12] lineup code like this okay just paste
+[28:10 - 28:17] it now we want to use the Google
+[28:12 - 28:19] authentication correct so go back here
+[28:17 - 28:21] and just click on providers you will see
+[28:19 - 28:23] a bunch of different type of Provider as
+[28:21 - 28:26] Google is very popular so I will cck
+[28:23 - 28:30] Google and here you have to paste this
+[28:26 - 28:34] lineup code provid ERS okay so copy this
+[28:30 - 28:38] and just paste it in this Handler
+[28:34 - 28:40] okay now once you paste it here we have
+[28:38 - 28:42] this client ID and then we have this
+[28:40 - 28:45] client secret key correct so you have to
+[28:42 - 28:47] add that one so if you don't have any
+[28:45 - 28:49] account on Google Cloud go to Google
+[28:47 - 28:52] cloud and create a new project in that
+[28:49 - 28:55] one and in the API and service section
+[28:52 - 28:57] you will find a credential okay here you
+[28:55 - 28:59] have to add new credential before that
+[28:57 - 29:02] we have you have to add all consent
+[28:59 - 29:04] screen okay and then you have to go to
+[29:02 - 29:08] the credential and then you have to add
+[29:04 - 29:11] the credential okay then click on
+[29:08 - 29:13] authentication and uh here you have to
+[29:11 - 29:15] just fill the form click next and then
+[29:13 - 29:17] you'll get the client ID and client
+[29:15 - 29:21] secret key okay copy this client ID and
+[29:17 - 29:25] client secret key let me bring this here
+[29:21 - 29:28] and create a new file called EnV which
+[29:25 - 29:31] is used to uh add this all important and
+[29:28 - 29:33] secret keys so that it will not expose
+[29:31 - 29:35] uh to the other user right and add
+[29:33 - 29:38] Google client key Google client secret
+[29:35 - 29:40] key here okay so that it can be
+[29:38 - 29:43] accessible and we can provide it to this
+[29:40 - 29:48] provider okay and save
+[29:43 - 29:52] it next let's go back here okay let me
+[29:48 - 29:54] go back and O
+[29:52 - 29:55] sorry and then if you scroll down right
+[29:54 - 29:58] then we have to add this session
+[29:55 - 30:02] provider now what in this case
+[29:58 - 30:05] right we don't have this pagesor app.
+[30:02 - 30:07] jxx right so this is the simplest way I
+[30:05 - 30:09] I'm going to uh tell you how to
+[30:07 - 30:13] implement right so first of all let's go
+[30:09 - 30:16] here and inside app folder okay let's
+[30:13 - 30:18] create one file called provider. TSX
+[30:16 - 30:18] okay I already
+[30:21 - 30:28] [Music]
+[30:26 - 30:30] created
+[30:28 - 30:33] now let's go to app do
+[30:30 - 30:35] app so now go to the app folder and here
+[30:33 - 30:39] create a file called
+[30:35 - 30:43] provider. JS okay oh sorry it's TSX so
+[30:39 - 30:47] TSX okay and here add the default
+[30:43 - 30:51] template and here we
+[30:47 - 30:55] will uh uh get props like
+[30:51 - 30:56] children okay and here we will add the
+[30:55 - 31:01] session provider okay so this session
+[30:56 - 31:01] provider we will add it here
+[31:01 - 31:07] okay and we don't want this session so I
+[31:04 - 31:11] will remove this session
+[31:07 - 31:14] okay and inside that we'll accept this
+[31:11 - 31:17] or we'll pass this children okay like
+[31:14 - 31:19] this and make sure you'll import this
+[31:17 - 31:21] session provider as well okay now what
+[31:19 - 31:24] you have to do just ignore this error
+[31:21 - 31:28] now close this one and then go to this
+[31:24 - 31:30] um layout. TXS where we want to wrap
+[31:28 - 31:32] this session provider right but here we
+[31:30 - 31:36] can't wrap it directly right so that you
+[31:32 - 31:40] have to add providers like this
+[31:36 - 31:43] okay so so it will be a provider
+[31:40 - 31:46] actually provider and let me remove
+[31:43 - 31:48] this okay and wrap this all content and
+[31:46 - 31:52] children inside the provider so that
+[31:48 - 31:55] this will render inside your provider
+[31:52 - 31:58] okay and save everything now we we are
+[31:55 - 31:59] pretty close now go go to our header
+[31:58 - 32:01] right we have we created a header so
+[31:59 - 32:04] inside component we have header file
+[32:01 - 32:07] correct let me go in our application as
+[32:04 - 32:09] well and if you see right we saying
+[32:07 - 32:10] react Conta is unavailable in server
+[32:09 - 32:13] component right we are getting this
+[32:10 - 32:16] error because inside the provider we
+[32:13 - 32:19] have to mark this provider as a client
+[32:16 - 32:22] side so just inside the de basis we have
+[32:19 - 32:24] to say client use client okay as soon as
+[32:22 - 32:26] we Mark client the error will gone
+[32:24 - 32:28] because this provider is available on
+[32:26 - 32:30] the Cent side and not the server side
+[32:28 - 32:34] okay that's the reason we have to mark
+[32:30 - 32:37] this particular file as a client okay
+[32:34 - 32:39] now here we will change this user to the
+[32:37 - 32:43] button when the user is not login
+[32:39 - 32:45] correct so go to the header. TSX for now
+[32:43 - 32:48] for the testing purpose I will uh
+[32:45 - 32:51] comment this image and I will copy this
+[32:48 - 32:55] button okay and paste it here like this
+[32:51 - 32:59] okay and just say
+[32:55 - 33:02] login and if I inre size see login is
+[32:59 - 33:02] coming up
+[33:02 - 33:07] okay perfect now if you go to the next
+[33:05 - 33:10] auth right if you scroll down here is
+[33:07 - 33:14] the way you can login right so if I copy
+[33:10 - 33:17] this on click method to sign in right ni
+[33:14 - 33:19] on click sign in okay and make sure you
+[33:17 - 33:19] inut this
+[33:20 - 33:25] one and then in order to get the session
+[33:23 - 33:27] you have to copy this command Okay this
+[33:25 - 33:29] will help you to check whether you user
+[33:27 - 33:31] is login or not okay this session
+[33:29 - 33:35] information contains user image email
+[33:31 - 33:37] and everything okay and then sign in
+[33:35 - 33:39] perfect now we pretty much ready let's
+[33:37 - 33:41] go back to our
+[33:39 - 33:43] application and if you see right we got
+[33:41 - 33:45] the error that use session is unable in
+[33:43 - 33:48] server component again this header we
+[33:45 - 33:52] need to mark it as a client side okay so
+[33:48 - 33:57] just Mark use client and save
+[33:52 - 34:00] it and you see array is gone now if you
+[33:57 - 34:02] click login button okay so it's saying
+[34:00 - 34:06] Google is Prov is not defined so we did
+[34:02 - 34:06] not Define the Google provider
+[34:06 - 34:12] so here right uh let me go to the
+[34:09 - 34:15] provider and select the
+[34:12 - 34:18] Google right you have to import this
+[34:15 - 34:23] statement Google okay
+[34:18 - 34:25] so inside the route. jss we have to add
+[34:23 - 34:27] this provider okay now if you go back to
+[34:25 - 34:29] our application let's see
+[34:27 - 34:32] let's go back first refresh the screen
+[34:29 - 34:34] and click login you'll see this login
+[34:32 - 34:36] button now if you click on sign in
+[34:34 - 34:39] you'll see bunch of option click any of
+[34:36 - 34:41] this and see we login right now button
+[34:39 - 34:43] is still there okay in order to check
+[34:41 - 34:46] whether this user is login or not right
+[34:43 - 34:49] you can print out the session okay so in
+[34:46 - 34:51] header we already accepting this session
+[34:49 - 34:54] right what you have to do just
+[34:51 - 34:58] console.log and say session okay and
+[34:54 - 35:01] save it and if you if you refresh
+[34:58 - 35:03] it you'll see session information the
+[35:01 - 35:07] user is login you'll see user email user
+[35:03 - 35:09] image and user name perfect right now
+[35:07 - 35:11] what you have to do once user log in you
+[35:09 - 35:14] have to change this button to log out or
+[35:11 - 35:16] user image right so what you have to do
+[35:14 - 35:19] just scroll
+[35:16 - 35:23] down okay and just uncomment this one
+[35:19 - 35:28] right so what I will do if session is
+[35:23 - 35:31] there a session question mark you
+[35:28 - 35:34] user is there then show the image
+[35:31 - 35:36] otherwise show the signin button okay
+[35:34 - 35:39] and if I save it now now you will see
+[35:36 - 35:41] this user image because user is login
+[35:39 - 35:45] now what you have to do you have to pass
+[35:41 - 35:47] this image as a user image correct so
+[35:45 - 35:49] very simple right you have to replace
+[35:47 - 35:52] this
+[35:49 - 35:56] source with the
+[35:52 - 35:58] session. user. image okay make sure it
+[35:56 - 36:02] will be like
+[35:58 - 36:02] this so what we got there
+[36:03 - 36:09] undefined okay like this and save
+[36:07 - 36:12] it if you go
+[36:09 - 36:15] back you'll find the error that we need
+[36:12 - 36:18] to add this particular domain the host
+[36:15 - 36:21] name sorry or domain in your next config
+[36:18 - 36:23] because we are trying to access the
+[36:21 - 36:24] third party URL in our application and
+[36:23 - 36:28] that's the reason we need to add this
+[36:24 - 36:30] host name in Next docon .js okay that we
+[36:28 - 36:33] will add that error we will solve this
+[36:30 - 36:35] error now now in order to solve this
+[36:33 - 36:39] error we have to make sure we will add
+[36:35 - 36:42] this host name in our N.C config.js okay
+[36:39 - 36:45] so let's go to a project and in here we
+[36:42 - 36:49] have this next. config.js right inside
+[36:45 - 36:52] this next config uh we have to add
+[36:49 - 36:55] images okay and in that
+[36:52 - 36:58] one in that one we have to add domains
+[36:55 - 37:00] okay and we will provide array of all
+[36:58 - 37:05] the domains which we want to add it here
+[37:00 - 37:08] right so in this case is our lh3
+[37:05 - 37:12] googleusercontent.com okay and let add
+[37:08 - 37:15] it here like this okay and save it now
+[37:12 - 37:18] once you update this config.js file you
+[37:15 - 37:20] have to make sure that you have to stop
+[37:18 - 37:24] the existing uh Bill and you have to run
+[37:20 - 37:27] it again okay so it's running okay let's
+[37:24 - 37:30] go back to our project and then refresh
+[37:27 - 37:30] it and wait for a few
+[37:30 - 37:34] seconds so whenever you add any uh
+[37:33 - 37:37] images from any different types of
+[37:34 - 37:39] domain URL uh in the next days you have
+[37:37 - 37:42] to add it
+[37:39 - 37:44] okay now if you see right uh once is
+[37:42 - 37:47] loaded it's showing it on the screen and
+[37:44 - 37:50] uh you will see the user image is
+[37:47 - 37:52] displaying on the screen okay perfect so
+[37:50 - 37:54] that's what we wanted now sometimes if
+[37:52 - 37:56] you refresh the screen you will see this
+[37:54 - 37:59] login page until unless this get loaded
+[37:56 - 38:03] correct so if you go to the uh header
+[37:59 - 38:07] right you can add the condition uh to
+[38:03 - 38:07] whether you want to display it or not
+[38:10 - 38:15] okay now when user sign in with the help
+[38:13 - 38:19] of Google authentication we need to save
+[38:15 - 38:21] user data in a Firebase so uh in order
+[38:19 - 38:24] to store data we are going to use fire
+[38:21 - 38:27] storage Firebase database so let's go to
+[38:24 - 38:29] firebase.com and create a new account if
+[38:27 - 38:31] you don't have and just go to the
+[38:29 - 38:33] console so once uh you are on the
+[38:31 - 38:36] console create a new project if you
+[38:33 - 38:38] don't have any new project okay and open
+[38:36 - 38:42] the project here once you land on this
+[38:38 - 38:44] page okay uh it will ask you to create a
+[38:42 - 38:46] new application otherwise if you have
+[38:44 - 38:49] already existing project you can create
+[38:46 - 38:52] new application from here okay and just
+[38:49 - 38:54] click on the web application okay now
+[38:52 - 38:58] here do the name of the application so
+[38:54 - 38:58] in this case is pin
+[38:59 - 39:05] interest
+[39:00 - 39:05] clone and just say register
+[39:06 - 39:12] application so now here we need to
+[39:09 - 39:15] install this npm install Firebase in our
+[39:12 - 39:20] uh project so let's go to our project
+[39:15 - 39:20] and in the terminal past this command
+[39:20 - 39:27] okay and then you have to add this
+[39:24 - 39:28] Firebase config so just copy every okay
+[39:27 - 39:31] because we need
+[39:28 - 39:34] everything and let's go back to our pro
+[39:31 - 39:36] project and here I will create a new
+[39:34 - 39:38] folder called shared okay otherwise you
+[39:36 - 39:40] can create a new file directly here it's
+[39:38 - 39:43] up to you
+[39:40 - 39:46] okay so let's create a new folder call
+[39:43 - 39:48] shared and inside that I will create a
+[39:46 - 39:52] new file called
+[39:48 - 39:55] Firebase config.js okay inside that
+[39:52 - 39:57] paste the code uh code which you copied
+[39:55 - 39:59] okay so this is the Firebase
+[39:57 - 40:01] configuration which contain the API key
+[39:59 - 40:03] and everything right now you can remove
+[40:01 - 40:05] this API key from here and put it in
+[40:03 - 40:07] environment variable as well okay right
+[40:05 - 40:11] now I will keep as it
+[40:07 - 40:13] is and uh make sure your fire bases uh
+[40:11 - 40:15] you initialize the fire Bas here okay
+[40:13 - 40:15] and save
+[40:18 - 40:24] everything so now let's try to add uh
+[40:21 - 40:25] user information to Firebase right if
+[40:24 - 40:28] you go to the Firebase here is a
+[40:25 - 40:30] documentation to how to add the uh data
+[40:28 - 40:32] to the cloud fire store okay and it's
+[40:30 - 40:34] quite simple so first of all you have to
+[40:32 - 40:36] initialize the Firebase which we already
+[40:34 - 40:38] did right and then we have to initialize
+[40:36 - 40:41] the uh Cloud fire store okay using this
+[40:38 - 40:44] particular line so before that if you go
+[40:41 - 40:47] to uh go to the Firebase config and here
+[40:44 - 40:48] we have to export default application so
+[40:47 - 40:50] that we can use throughout the
+[40:48 - 40:53] application right so just add export
+[40:50 - 40:55] default and then we have to uh export
+[40:53 - 40:57] this app uh reference right so that we
+[40:55 - 40:59] can use it
+[40:57 - 41:03] and save it now after that let's go to
+[40:59 - 41:05] header. JS jsx where we are added the
+[41:03 - 41:09] sign in and sign out functionality right
+[41:05 - 41:11] so here what we will do uh we will use
+[41:09 - 41:13] this line of account just copy it and
+[41:11 - 41:15] paste it okay and make sure to add the
+[41:13 - 41:18] import statement okay so I added from
+[41:15 - 41:21] here and the application as well okay so
+[41:18 - 41:23] if you see the import statement okay and
+[41:21 - 41:25] then for the app as well the import
+[41:23 - 41:27] statement for that okay now we
+[41:25 - 41:29] initialize the database file store as
+[41:27 - 41:31] well okay now if you scroll down right
+[41:29 - 41:34] it's quite easy uh just this line of
+[41:31 - 41:37] code to uh add the data in a Firebase
+[41:34 - 41:43] database before that I will Define one
+[41:37 - 41:46] method called constant save user info
+[41:43 - 41:49] okay and this will uh help you to save
+[41:46 - 41:52] the user data okay so what we'll do
+[41:49 - 41:55] inside that we will check if session.
+[41:52 - 41:58] user is there means user is login or not
+[41:55 - 41:59] then only we will save the data so I
+[41:58 - 42:04] will copy this one and paste it here
+[41:59 - 42:07] okay now uh it's it use a so we have to
+[42:04 - 42:09] make this function as a sync okay and
+[42:07 - 42:10] make sure to add this set Doc and the
+[42:09 - 42:12] document as well the import statement
+[42:10 - 42:15] and if you see it's here
+[42:12 - 42:18] right then you have to give the
+[42:15 - 42:21] collection name so in this case user
+[42:18 - 42:25] okay and then we have to give the
+[42:21 - 42:27] document ID okay so let me show you the
+[42:25 - 42:29] example right
+[42:27 - 42:31] so let me go here right and if you see
+[42:29 - 42:33] uh this is the collection name and this
+[42:31 - 42:35] is the document name so sorry document
+[42:33 - 42:37] ID and we give the document ID as a
+[42:35 - 42:40] email ID and document ID should be of
+[42:37 - 42:42] unique okay as we know email ID is
+[42:40 - 42:45] unique that's the reason we said
+[42:42 - 42:47] document ID as a email ID so I right now
+[42:45 - 42:50] I will delete this okay uh this is for
+[42:47 - 42:52] just for the demo purpose okay right now
+[42:50 - 42:55] we don't have anything any uh collection
+[42:52 - 42:58] name user okay that's fine now let's go
+[42:55 - 43:00] back to our code Cod here we have to
+[42:58 - 43:03] give
+[43:00 - 43:06] session. user and inside that we have
+[43:03 - 43:08] the user's email right as a document ID
+[43:06 - 43:10] then we have to give username so I will
+[43:08 - 43:12] write
+[43:10 - 43:17] username then
+[43:12 - 43:22] email and then user image okay and usern
+[43:17 - 43:27] name will be session dot user.name
+[43:22 - 43:30] okay same thing I will copy paste here
+[43:27 - 43:34] and just change this to email and change
+[43:30 - 43:35] this to image okay now we all are set
+[43:34 - 43:39] okay and now we have to call this
+[43:35 - 43:44] function in use effect
+[43:39 - 43:46] okay and pass the empty okay so here
+[43:44 - 43:49] right uh we have to we we don't need to
+[43:46 - 43:50] pass empty we have to pass the session
+[43:49 - 43:52] okay whenever session change because
+[43:50 - 43:54] initially when you refresh the scene you
+[43:52 - 43:56] will get the undefined sometimes because
+[43:54 - 43:58] you'll get some it takes some time to
+[43:56 - 44:00] verify or check whether us loging or not
+[43:58 - 44:02] right to get the session information so
+[44:00 - 44:03] that's the reason whenever get the
+[44:02 - 44:05] session information this use effect will
+[44:03 - 44:08] execute right that's the reason I added
+[44:05 - 44:12] the session uh I'm passing session in
+[44:08 - 44:13] this particular array and then just type
+[44:12 - 44:16] call this session information okay and
+[44:13 - 44:20] save it now already log in that's fine
+[44:16 - 44:21] right and if you see uh if you go back
+[44:20 - 44:23] Let me refresh this screen okay just to
+[44:21 - 44:26] make sure and now if you go back to this
+[44:23 - 44:28] one right let me refresh this one f
+[44:26 - 44:31] store as well and then you'll see this
+[44:28 - 44:34] new collection is get created with the
+[44:31 - 44:36] email ID as our document ID and all Feld
+[44:34 - 44:39] is created as well right email user
+[44:36 - 44:42] image and username as well right perfect
+[44:39 - 44:44] that's what we are looking so even
+[44:42 - 44:48] though uh right now I don't know why
+[44:44 - 44:49] okay so we got the error but so it's
+[44:48 - 44:52] saying that right cannot read property
+[44:49 - 44:55] of user undefined the reason
+[44:52 - 44:58] is here uh we are checking we are hard
+[44:55 - 45:00] Cod checking with the session. US iable
+[44:58 - 45:03] so make it as a optional and then save
+[45:00 - 45:05] it now you'll not get that error okay
+[45:03 - 45:07] and even though you sign out and sign in
+[45:05 - 45:09] right and whenever the session in uh
+[45:07 - 45:11] information is available obviously this
+[45:09 - 45:14] use effect will execute and saving user
+[45:11 - 45:17] info we'll get call and then we can able
+[45:14 - 45:18] to save this information perfect and
+[45:17 - 45:21] don't worry even though we refresh the
+[45:18 - 45:24] screen and and we will add the data in
+[45:21 - 45:28] the fire store but obviously the ID
+[45:24 - 45:31] document ID is unique then it's not
+[45:28 - 45:33] create any duplicate uh information it
+[45:31 - 45:37] will not s duplicate data in firor okay
+[45:33 - 45:37] so don't worry about that
+[45:42 - 45:48] perfect now once user click on this
+[45:45 - 45:51] particular profile image we want to
+[45:48 - 45:54] navigate to the user profile page okay
+[45:51 - 45:57] and you can access the user profile page
+[45:54 - 45:59] by just providing the uh ID of the user
+[45:57 - 46:02] right and for ID we are using uh going
+[45:59 - 46:05] to use users email ID because that is
+[46:02 - 46:09] unique okay so for example if I uh go to
+[46:05 - 46:12] this URL okay and type for example tube
+[46:09 - 46:15] guruji the
+[46:12 - 46:17] gmail.com and if I click enter it should
+[46:15 - 46:18] supposed to open the profile page right
+[46:17 - 46:21] now we don't have a page that's the
+[46:18 - 46:23] reason it's showing a 404 error okay but
+[46:21 - 46:26] if you passed the email address which is
+[46:23 - 46:28] our ID then we should open this
+[46:26 - 46:33] particular page okay so what you have to
+[46:28 - 46:35] do let's go back to a uh uh application
+[46:33 - 46:38] right and inside the app we will create
+[46:35 - 46:41] one folder okay but this folder will
+[46:38 - 46:44] give the name Dynamic name okay for the
+[46:41 - 46:48] dynamic routing so in order to give the
+[46:44 - 46:49] dynamic name we want to give the we want
+[46:48 - 46:51] to write the name of this particular
+[46:49 - 46:55] folder in square bracket right and here
+[46:51 - 46:57] we will pass the user ID like this okay
+[46:55 - 47:01] and then in inside that with the help of
+[46:57 - 47:05] new nextjs we want to give the file name
+[47:01 - 47:07] as page. jsx okay you can give TSX or
+[47:05 - 47:10] jss I will give right now okay and add
+[47:07 - 47:12] the default template okay and I will
+[47:10 - 47:14] change this to
+[47:12 - 47:17] profile
+[47:14 - 47:20] and you whatever you want I will write
+[47:17 - 47:23] profile okay and just to make sure like
+[47:20 - 47:25] this and save it now if you go back here
+[47:23 - 47:26] right right now we are on the homepage
+[47:25 - 47:29] right
+[47:26 - 47:31] now just type slash and the any user ID
+[47:29 - 47:33] right so in this case I will add this to
+[47:31 - 47:37] gmail.com as ID and if I click
+[47:33 - 47:40] enter okay you will see I landed on the
+[47:37 - 47:42] profile page okay this is how easy is
+[47:40 - 47:45] you don't need any any special
+[47:42 - 47:48] configuration for the routing okay so I
+[47:45 - 47:51] hope you understand this how to uh route
+[47:48 - 47:54] to the new page and just now we'll learn
+[47:51 - 47:56] how to do the dynamic routing okay this
+[47:54 - 47:58] is called Dynamic routing so for example
+[47:56 - 48:01] if there is some user called XY j.g.
+[47:58 - 48:03] comom okay and enter it you will see
+[48:01 - 48:07] still you are on the profile page right
+[48:03 - 48:10] it means uh the ID whatever the ID you
+[48:07 - 48:12] provided it will uh jump to the profile
+[48:10 - 48:15] okay now what we will do from here we
+[48:12 - 48:17] will take this ID and then we will Fage
+[48:15 - 48:20] the user information from our database
+[48:17 - 48:23] if they is there anything okay
+[48:20 - 48:25] perfect now let's implement the routing
+[48:23 - 48:28] okay so first of all we have to Define
+[48:25 - 48:32] the router here okay so Define route
+[48:28 - 48:36] constant router is equal to use router
+[48:32 - 48:39] okay so in this case uh as we know you
+[48:36 - 48:42] know right we are using next 13 next JS
+[48:39 - 48:44] 13 and in next JS 13 if you see this
+[48:42 - 48:46] import statement use router right
+[48:44 - 48:49] instead of importing from the next SL
+[48:46 - 48:52] router we have to make sure we are
+[48:49 - 48:55] importing from the next SL navigation
+[48:52 - 48:57] okay otherwise it will not work so make
+[48:55 - 49:00] make sure that you will import the user
+[48:57 - 49:03] router using the next SL navigation okay
+[49:00 - 49:06] then on the click of image right user
+[49:03 - 49:09] profile image we want to navigate to the
+[49:06 - 49:12] profile page right so here I will put on
+[49:09 - 49:14] click event okay and you can Define
+[49:12 - 49:17] method on image click or you can
+[49:14 - 49:21] directly uh call the function here right
+[49:17 - 49:24] like this so router dot okay and here
+[49:21 - 49:27] you have to write push okay and inside
+[49:24 - 49:32] that we want to only want to send the
+[49:27 - 49:35] user ID okay so just write slash plus
+[49:32 - 49:39] and session do user. email which is our
+[49:35 - 49:41] user ID correct and that's what I Define
+[49:39 - 49:45] uh I explained earlier how we want to
+[49:41 - 49:47] navigate right and save it now now let's
+[49:45 - 49:48] go back to our project let me clean this
+[49:47 - 49:52] one
+[49:48 - 49:55] okay um let
+[49:52 - 49:58] me right now we are on this page right
+[49:55 - 50:01] if I click on this one right if you see
+[49:58 - 50:05] we navigate uh to the profile page right
+[50:01 - 50:07] and this is this ID we are passing right
+[50:05 - 50:09] it means even though if you share this
+[50:07 - 50:12] URL right it will directly open this
+[50:09 - 50:16] particular page right now another thing
+[50:12 - 50:19] we want to get this uh uh email ID
+[50:16 - 50:22] whatever the user ID okay when we jump
+[50:19 - 50:25] on this jump onto this profile page
+[50:22 - 50:29] so go to this profile page okay under
+[50:25 - 50:31] this uh user ID uh folder and here we
+[50:29 - 50:34] have to accept the parameter okay so you
+[50:31 - 50:36] can Define params okay make sure you'll
+[50:34 - 50:39] Define the param because when you route
+[50:36 - 50:42] it right it dest structurize as a params
+[50:39 - 50:44] okay and uh let's define a use effect
+[50:42 - 50:47] and in that we will just consolle the
+[50:44 - 50:50] parameter value okay so here I will pass
+[50:47 - 50:53] the params okay so whenever we rece this
+[50:50 - 50:56] param um value right then obviously this
+[50:53 - 50:58] use effect will get called okay and just
+[50:56 - 51:01] write console.log inside that we'll
+[50:58 - 51:05] write the params okay and save it let me
+[51:01 - 51:08] bring the project on the side okay and
+[51:05 - 51:11] if you see right it's saying you u f uh
+[51:08 - 51:13] issue right because we need to convert
+[51:11 - 51:14] this part page. jxx as a server site so
+[51:13 - 51:17] just
+[51:14 - 51:20] write uh we need to convert into client
+[51:17 - 51:21] site so just write use client and save
+[51:20 - 51:25] it
+[51:21 - 51:29] okay and if you see now the error go
+[51:25 - 51:31] right and if I go to the inspect panel
+[51:29 - 51:33] and go to the
+[51:31 - 51:36] console you will see this object right
+[51:33 - 51:38] and inside object we have the user ID
+[51:36 - 51:39] okay so now you can just print the user
+[51:38 - 51:43] ID as well
+[51:39 - 51:47] so into the into this console log like
+[51:43 - 51:50] you can Define params do user ID to just
+[51:47 - 51:53] display the user ID right and if I clean
+[51:50 - 51:56] this one Let me refresh the screen and
+[51:53 - 51:58] then you will see the email ID
+[51:56 - 52:02] okay now one more thing if You observe
+[51:58 - 52:06] right the user ID contains this per 4
+[52:02 - 52:08] instead of at the rate right so in order
+[52:06 - 52:10] to uh remove this particular issue right
+[52:08 - 52:14] what you have to
+[52:10 - 52:19] do just in the user ID dot just say
+[52:14 - 52:21] replace okay and we have person 4 Z with
+[52:19 - 52:26] ADD theate and then save
+[52:21 - 52:28] it now if you let me refresh it
+[52:26 - 52:31] and now you will see the exact email
+[52:28 - 52:33] address whatever we are passing okay now
+[52:31 - 52:35] here is thing right you can just pass
+[52:33 - 52:37] this ID as well or you can create your
+[52:35 - 52:39] own uh number ID or whatever the
+[52:37 - 52:41] username uh you want to create you can
+[52:39 - 52:44] create it right but as a Simplicity as
+[52:41 - 52:46] this course is beginner friendly we
+[52:44 - 52:50] don't want to go into deep okay so I
+[52:46 - 52:53] hope you understand this part to one now
+[52:50 - 52:55] we will use this email ID to fet the
+[52:53 - 52:58] user information from the Firebase
+[52:55 - 53:00] because we already save the fire um our
+[52:58 - 53:04] uh users information in Firebase right
+[53:00 - 53:06] so with the help of this um email ID we
+[53:04 - 53:06] will face the
+[53:11 - 53:17] data now once we land on the uh our
+[53:15 - 53:21] profile page right and we already have
+[53:17 - 53:24] this uh user ID as well as a email then
+[53:21 - 53:27] we will face that uh document from the
+[53:24 - 53:28] Firebase with the help pop email ID okay
+[53:27 - 53:30] so if you go to this Firebase
+[53:28 - 53:33] documentation here is the simple way to
+[53:30 - 53:35] phas the data so before that we have to
+[53:33 - 53:37] make sure we will initialize the
+[53:35 - 53:41] database okay so just write constant DB
+[53:37 - 53:44] is equal to get Firebase get fire store
+[53:41 - 53:48] and we have to pass app okay as simple
+[53:44 - 53:51] as that then I will Define one method
+[53:48 - 53:56] called get user
+[53:51 - 53:58] info okay and we Define and like
+[53:56 - 54:02] constant and Define the arrow
+[53:58 - 54:04] function okay and inside that I will
+[54:02 - 54:08] just copy this code
+[54:04 - 54:12] okay now once you copy this
+[54:08 - 54:15] code as we are using a make it a sync
+[54:12 - 54:18] function and now we have to import this
+[54:15 - 54:21] top right and after
+[54:18 - 54:23] that um we have to define the collection
+[54:21 - 54:26] name so in this way in this case the
+[54:23 - 54:29] collection is user and then we have to
+[54:26 - 54:31] define the document ID which document we
+[54:29 - 54:35] want to F uh fet right so in this case
+[54:31 - 54:38] the document ID is this one correct so I
+[54:35 - 54:41] will use this one or what you can do we
+[54:38 - 54:44] can pass email as this one right and we
+[54:41 - 54:46] will use the email okay and what we will
+[54:44 - 54:49] do we will copy this get username and
+[54:46 - 54:52] we'll call it here okay if we have the
+[54:49 - 54:55] parameter value then we will call this
+[54:52 - 54:59] one okay and we will pass our email ID
+[54:55 - 55:02] like this okay now we have the email ID
+[54:59 - 55:04] and we have the document reference okay
+[55:02 - 55:06] and we will just get the snapshot of
+[55:04 - 55:08] this particular document reference using
+[55:06 - 55:10] this G Talk method and make sure you'll
+[55:08 - 55:13] import this G talk and we also import
+[55:10 - 55:17] the document already
+[55:13 - 55:20] okay then it will check whether document
+[55:17 - 55:23] snap has some value or not right if you
+[55:20 - 55:25] put you put the wrong email ID then
+[55:23 - 55:27] obviously documents s will be empty
+[55:25 - 55:29] right if document snap exist then we
+[55:27 - 55:32] will return the document snap. data it
+[55:29 - 55:35] will return the uh documents so it will
+[55:32 - 55:37] return email the name and user image
+[55:35 - 55:40] okay otherwise it will say no such a
+[55:37 - 55:44] document okay so let's try this
+[55:40 - 55:48] particular uh code save it and then go
+[55:44 - 55:50] back to a project okay let me clean
+[55:48 - 55:52] everything and refresh the data as as
+[55:50 - 55:55] refresh right you will see we got the
+[55:52 - 55:57] document right so we got the email we
+[55:55 - 55:59] got the user image and the username as
+[55:57 - 56:02] well so this data we already storing in
+[55:59 - 56:04] our database right that's the reason we
+[56:02 - 56:07] got the data now for example if I open
+[56:04 - 56:10] in uh some other terminal right and let
+[56:07 - 56:11] me go to the inspect panel as well right
+[56:10 - 56:14] and here we did not login if you
+[56:11 - 56:17] remember right we did not log in here
+[56:14 - 56:20] and if I enter it right still we are
+[56:17 - 56:23] getting data right but we did not log in
+[56:20 - 56:26] here right because we already stor the
+[56:23 - 56:28] data okay so that you can share your
+[56:26 - 56:31] profile as well just with the help of
+[56:28 - 56:33] URL and user can see it right if they
+[56:31 - 56:35] want to post something obviously they
+[56:33 - 56:37] need to log to their account and then
+[56:35 - 56:40] only they can post on the Pinterest so
+[56:37 - 56:41] that's how uh Pinterest will going to
+[56:40 - 56:43] work and that's what we are going to
+[56:41 - 56:45] implement as well okay I hope you
+[56:43 - 56:47] understand this particular uh scenario
+[56:45 - 56:49] or particular section okay if you have
+[56:47 - 56:52] any question any doubts let me know in
+[56:49 - 56:55] the comment section or you face some
+[56:52 - 56:58] challenges you can anytime you can uh um
+[56:55 - 57:00] refer the source code the source code is
+[56:58 - 57:03] in the the link is in the description so
+[57:00 - 57:06] you can check it out
+[57:03 - 57:08] anytime now let's implement the profile
+[57:06 - 57:11] page we already have the all the
+[57:08 - 57:12] information which we required so in this
+[57:11 - 57:15] case we will Define the uh we will
+[57:12 - 57:17] display the user profile image usern
+[57:15 - 57:20] name and the user ID which is the email
+[57:17 - 57:23] ID okay so let's go back to our project
+[57:20 - 57:26] let me close this one and here uh we are
+[57:23 - 57:28] already in the profile page right and we
+[57:26 - 57:30] will divide it into two components so I
+[57:28 - 57:32] will create a new component in the
+[57:30 - 57:35] component folder and I I will call it as
+[57:32 - 57:39] a uh user
+[57:35 - 57:43] profile or just write user info user
+[57:39 - 57:47] info. jss okay and add the default
+[57:43 - 57:50] template using the RFC okay and we have
+[57:47 - 57:52] the US user info as well here okay now
+[57:50 - 57:57] just import this user
+[57:52 - 58:01] info okay so you can add the user
+[57:57 - 58:04] info like this o sorry user
+[58:01 - 58:07] info I don't know why it did not import
+[58:04 - 58:08] directly let me import it here okay so
+[58:07 - 58:13] just
+[58:08 - 58:18] add import user info
+[58:13 - 58:18] from so it need to be user
+[58:18 - 58:25] Ino and then give the path okay in this
+[58:23 - 58:30] case components
+[58:25 - 58:32] slash user info okay and save it as soon
+[58:30 - 58:34] as save you got the user info here right
+[58:32 - 58:38] so it get imported
+[58:34 - 58:40] successfully now go to the user info and
+[58:38 - 58:43] let's define some information before
+[58:40 - 58:46] that we have to make sure we will pass
+[58:43 - 58:48] the necessary information so we got this
+[58:46 - 58:51] data right um so that we will store it
+[58:48 - 58:56] in one state so we'll call
+[58:51 - 58:58] constant user info comma set user info
+[58:56 - 59:01] is equal to use
+[58:58 - 59:01] St
+[59:02 - 59:07] okay and then make sure to add this used
+[59:05 - 59:11] State okay means you have to import it
+[59:07 - 59:14] here like this and save it right and now
+[59:11 - 59:15] go to this um our method here right
+[59:14 - 59:21] where we are consoling the user
+[59:15 - 59:25] information and set WR set user info and
+[59:21 - 59:27] here we'll set this doc snap data
+[59:25 - 59:29] like this I will remove this one and
+[59:27 - 59:32] then save it now we have to pass this
+[59:29 - 59:35] user information into this one okay so
+[59:32 - 59:39] write user info like this and we'll pass
+[59:35 - 59:41] it like this okay and for the uh I will
+[59:39 - 59:43] check it first right whether do we have
+[59:41 - 59:45] the user info and then only it will
+[59:43 - 59:47] render the data otherwise it will show
+[59:45 - 59:50] null okay and save
+[59:47 - 59:53] it now I accept it as a parameter so I
+[59:50 - 59:56] will just write user info here okay and
+[59:53 - 59:59] save it now you can console it whether
+[59:56 - 01:00:02] we got the user info or not so let's
+[59:59 - 01:00:05] console user info
+[01:00:02 - 01:00:09] say and save let's go back to our
+[01:00:05 - 01:00:13] project go to the inspect panel say
+[01:00:09 - 01:00:15] console and clean it and just refresh it
+[01:00:13 - 01:00:18] right and if you see we got the user
+[01:00:15 - 01:00:22] info right at the line phone number four
+[01:00:18 - 01:00:24] four and we have email username and user
+[01:00:22 - 01:00:26] image now we got the all the necessary
+[01:00:24 - 01:00:29] information which we want right now
+[01:00:26 - 01:00:31] let's display that so first of all let's
+[01:00:29 - 01:00:33] define
+[01:00:31 - 01:00:34] image inside that we have to Define
+[01:00:33 - 01:00:36] source so before that we have to make
+[01:00:34 - 01:00:39] sure that we'll import the image from
+[01:00:36 - 01:00:40] the next SL image okay then we have to
+[01:00:39 - 01:00:43] provide the
+[01:00:40 - 01:00:49] source inside that we have to give the
+[01:00:43 - 01:00:53] user info dot user image that's what it
+[01:00:49 - 01:01:00] is and then use alt tag call user
+[01:00:53 - 01:01:04] image may have to give width of maybe uh
+[01:01:00 - 01:01:06] 80 and a height of 80 okay and let's
+[01:01:04 - 01:01:09] save it and just check whether we are
+[01:01:06 - 01:01:12] getting data perfect we got the data now
+[01:01:09 - 01:01:15] let's give some style so go class name
+[01:01:12 - 01:01:19] say rounded to be
+[01:01:15 - 01:01:23] full okay so it will be rounded okay
+[01:01:19 - 01:01:25] next we want to show name of the user
+[01:01:23 - 01:01:26] right so I will increase the size of
+[01:01:25 - 01:01:31] this one little bit bigger so just make
+[01:01:26 - 01:01:35] it 100 and here also make it
+[01:01:31 - 01:01:41] 100 then Define some tag and inside that
+[01:01:35 - 01:01:45] we'll show the username so user info do
+[01:01:41 - 01:01:50] username okay and then apply some class
+[01:01:45 - 01:01:53] is for this one so I will say text of 30
+[01:01:50 - 01:01:56] pixel
+[01:01:53 - 01:01:57] okay and then then I will make font to
+[01:01:56 - 01:02:01] be semi
+[01:01:57 - 01:02:03] bold and save it I think this is look
+[01:02:01 - 01:02:06] good right similar to this one perfect
+[01:02:03 - 01:02:07] and then at the last we have to show the
+[01:02:06 - 01:02:12] email
+[01:02:07 - 01:02:13] address just write user info do email
+[01:02:12 - 01:02:16] okay and save
+[01:02:13 - 01:02:18] it see we got the email address we'll
+[01:02:16 - 01:02:26] change the color so what we will
+[01:02:18 - 01:02:27] do L right so just type last name t Gray
+[01:02:26 - 01:02:31] maybe this
+[01:02:27 - 01:02:34] one okay yeah it look good to me okay
+[01:02:31 - 01:02:36] now bring everything into the center so
+[01:02:34 - 01:02:38] right class name
+[01:02:36 - 01:02:41] Flex okay and we want
+[01:02:38 - 01:02:41] Flex
+[01:02:42 - 01:02:49] column and item to be
+[01:02:46 - 01:02:52] Center like this as simple as that right
+[01:02:49 - 01:02:56] if I increase size it look good just
+[01:02:52 - 01:02:58] think uh the margin is okay I think okay
+[01:02:56 - 01:03:01] you can increase the size if you want I
+[01:02:58 - 01:03:03] will keep as it is and you can check
+[01:03:01 - 01:03:05] every time when you are doing right how
+[01:03:03 - 01:03:07] it looks on the mobile view as well
+[01:03:05 - 01:03:11] right and the UN responsive site as well
+[01:03:07 - 01:03:13] right see it's perfectly
+[01:03:11 - 01:03:16] responsive I hope you understand this
+[01:03:13 - 01:03:18] one okay so we easily uh implemented
+[01:03:16 - 01:03:19] this one now if you have new email
+[01:03:18 - 01:03:21] address you can just type it and you can
+[01:03:19 - 01:03:23] with the help of this one you can just
+[01:03:21 - 01:03:25] share it okay with your friends and
+[01:03:23 - 01:03:27] family next next we have these two
+[01:03:25 - 01:03:29] buttons called share and profile right
+[01:03:27 - 01:03:32] we will not add the profile
+[01:03:29 - 01:03:33] functionality we will just add the share
+[01:03:32 - 01:03:36] so I will add the share button as well
+[01:03:33 - 01:03:40] here so after this S2
+[01:03:36 - 01:03:41] time I will add the button and it will
+[01:03:40 - 01:03:44] say
+[01:03:41 - 01:03:47] share and let's give some styling to
+[01:03:44 - 01:03:49] this one say add class name and let's
+[01:03:47 - 01:03:56] say background to be
+[01:03:49 - 01:03:58] gray 400 okay 400 is it darker me 300
+[01:03:56 - 01:04:02] give padding to be
+[01:03:58 - 01:04:06] two okay and I will give padding X to
+[01:04:02 - 01:04:10] three and then round it to be
+[01:04:06 - 01:04:12] full like this and let's see whether is
+[01:04:10 - 01:04:16] similar to this one okay if perfectly
+[01:04:12 - 01:04:16] similar I will make more
+[01:04:17 - 01:04:24] lighter and again let's make font of
+[01:04:21 - 01:04:27] semibold and it will look similar kind
+[01:04:24 - 01:04:30] of similar let's VI Mar top to
+[01:04:27 - 01:04:33] five perfect and let's see how it looks
+[01:04:30 - 01:04:36] perfect it's similar to this one now
+[01:04:33 - 01:04:37] okay next uh we pretty much completed
+[01:04:36 - 01:04:40] this section as well right we
+[01:04:37 - 01:04:43] successfully um showing the user
+[01:04:40 - 01:04:45] information now next what we'll do on
+[01:04:43 - 01:04:48] the click of create button we will show
+[01:04:45 - 01:04:50] the form okay and then we will implement
+[01:04:48 - 01:04:52] the form information how to F the form
+[01:04:50 - 01:04:56] and how to save it in the fire store F
+[01:04:52 - 01:04:56] database okay
+[01:04:59 - 01:05:04] now if you go to the create and create
+[01:05:02 - 01:05:06] PL right it will navigate to the pin Das
+[01:05:04 - 01:05:09] Builder and there you will see this form
+[01:05:06 - 01:05:12] okay the same kind of form will buil in
+[01:05:09 - 01:05:15] our project so first of all let's go to
+[01:05:12 - 01:05:19] our code and here we'll create a new
+[01:05:15 - 01:05:23] folder okay so called pin Das Builder
+[01:05:19 - 01:05:24] okay inside that we'll create a page.
+[01:05:23 - 01:05:27] jsx
+[01:05:24 - 01:05:33] okay and add the default template so we
+[01:05:27 - 01:05:37] can call it as a pin Builder okay
+[01:05:33 - 01:05:39] and and save it now let's start make
+[01:05:37 - 01:05:43] sure we navigating correctly so let's go
+[01:05:39 - 01:05:46] to the header so in components we have
+[01:05:43 - 01:05:47] header right and here on the click off
+[01:05:46 - 01:05:51] create we already have this button
+[01:05:47 - 01:05:55] called create right so let me bring this
+[01:05:51 - 01:06:00] down and we'll add the on click method
+[01:05:55 - 01:06:01] okay and on this one we will say uh
+[01:06:00 - 01:06:04] router.
+[01:06:01 - 01:06:09] push and here we will push
+[01:06:04 - 01:06:13] the pin dash Builder Okay and then save
+[01:06:09 - 01:06:17] it I click on this create okay let me
+[01:06:13 - 01:06:17] check let me ref the
+[01:06:18 - 01:06:25] screen o
+[01:06:21 - 01:06:28] sorry to local 300 okay
+[01:06:25 - 01:06:30] okay and if I click on create you see
+[01:06:28 - 01:06:33] it's navigate to the pin Builder and
+[01:06:30 - 01:06:36] we'll jump it on the pin Builder okay
+[01:06:33 - 01:06:40] here we will Design this particular form
+[01:06:36 - 01:06:43] so I already created the form uh to add
+[01:06:40 - 01:06:45] the post in a Pinterest okay so let me
+[01:06:43 - 01:06:49] explain how I implemented so first of
+[01:06:45 - 01:06:51] all in the our main page okay I added
+[01:06:49 - 01:06:54] this du and inside that I added the
+[01:06:51 - 01:06:56] component called form okay and I added
+[01:06:54 - 01:06:58] some background some padding here okay
+[01:06:56 - 01:07:02] depends on the screen size inside the
+[01:06:58 - 01:07:05] form. jsx okay I divided the form into
+[01:07:02 - 01:07:07] two section okay one is the upload image
+[01:07:05 - 01:07:10] to upload the image section and the
+[01:07:07 - 01:07:15] other is uh the user input okay and I
+[01:07:10 - 01:07:18] kept in one single uh form. jsx okay in
+[01:07:15 - 01:07:21] upload. image if I go to the upload.
+[01:07:18 - 01:07:23] image I just added the some uh styling
+[01:07:21 - 01:07:24] and margin I will show you how it looks
+[01:07:23 - 01:07:27] okay
+[01:07:24 - 01:07:29] and uh also I created one more component
+[01:07:27 - 01:07:32] called user tag which contains the user
+[01:07:29 - 01:07:34] image name and email address okay and
+[01:07:32 - 01:07:37] that I will uh that will as well I will
+[01:07:34 - 01:07:40] show you to you okay so let me show you
+[01:07:37 - 01:07:43] everything so let me put this this way
+[01:07:40 - 01:07:46] okay and this is our sorry so this is
+[01:07:43 - 01:07:48] our form okay it will looks on mobile
+[01:07:46 - 01:07:50] like this if I extend it it will look
+[01:07:48 - 01:07:54] like this okay and it's quite similar to
+[01:07:50 - 01:07:58] this one let me delete this see okay now
+[01:07:54 - 01:07:59] as I say uh to upload the image I create
+[01:07:58 - 01:08:01] this particular component this is
+[01:07:59 - 01:08:04] completely separate component and this
+[01:08:01 - 01:08:06] form which on the right hand side is
+[01:08:04 - 01:08:09] completely another different component
+[01:08:06 - 01:08:11] this so two components I put together
+[01:08:09 - 01:08:15] okay and the save button and the form.
+[01:08:11 - 01:08:17] jsx another component I made it which is
+[01:08:15 - 01:08:21] the user tag okay which contains this
+[01:08:17 - 01:08:24] image name and uh email okay so let me
+[01:08:21 - 01:08:27] show you that one so if you see right
+[01:08:24 - 01:08:30] user tag so here is the image and two h2
+[01:08:27 - 01:08:32] tag to show the usern name and email
+[01:08:30 - 01:08:35] okay very straightforward uh with the
+[01:08:32 - 01:08:39] help of TN CSS only I implement this one
+[01:08:35 - 01:08:41] okay so if you face any issue then uh
+[01:08:39 - 01:08:43] you can anytime you can refer my source
+[01:08:41 - 01:08:46] code with the link is in the description
+[01:08:43 - 01:08:48] but you can try this one okay which is
+[01:08:46 - 01:08:52] quite simple form and as I say it's
+[01:08:48 - 01:08:55] responsive okay perfect so now our task
+[01:08:52 - 01:08:58] is when the user enter this information
+[01:08:55 - 01:09:00] okay we have to make sure uh we are fing
+[01:08:58 - 01:09:03] that information and we'll save it in
+[01:09:00 - 01:09:05] one state okay and after that we will
+[01:09:03 - 01:09:09] store it in the
+[01:09:05 - 01:09:12] database now let's record the user input
+[01:09:09 - 01:09:14] value okay so when user select image or
+[01:09:12 - 01:09:17] enter some value and on the click of
+[01:09:14 - 01:09:20] save we will console all the information
+[01:09:17 - 01:09:22] okay so that we will structurize it and
+[01:09:20 - 01:09:26] then we will send it to the Firebase
+[01:09:22 - 01:09:28] fire store okay so first of all uh let's
+[01:09:26 - 01:09:29] define some of the states so first of
+[01:09:28 - 01:09:33] all I will Define
+[01:09:29 - 01:09:36] constant uh data and session okay so
+[01:09:33 - 01:09:39] from this one we will get the users
+[01:09:36 - 01:09:42] information okay the current login user
+[01:09:39 - 01:09:44] information which we need when we click
+[01:09:42 - 01:09:45] the save button right and then along
+[01:09:44 - 01:09:47] with the post information we will send
+[01:09:45 - 01:09:49] the user information as well so that in
+[01:09:47 - 01:09:52] the database we will get to know okay
+[01:09:49 - 01:09:55] who save the uh data and everything okay
+[01:09:52 - 01:09:57] then second is the
+[01:09:55 - 01:10:01] constant
+[01:09:57 - 01:10:05] title set title to set the title
+[01:10:01 - 01:10:08] information okay use State make sure to
+[01:10:05 - 01:10:10] add this uh use state in the react
+[01:10:08 - 01:10:15] okay then
+[01:10:10 - 01:10:18] constant set description comma set
+[01:10:15 - 01:10:21] description is equal to use
+[01:10:18 - 01:10:24] State this will be used to save this
+[01:10:21 - 01:10:28] information and last is link
+[01:10:24 - 01:10:34] okay it need to be a description
+[01:10:28 - 01:10:36] only and the link equal to set link okay
+[01:10:34 - 01:10:39] and the last is file so we also want to
+[01:10:36 - 01:10:42] store the file information so I will set
+[01:10:39 - 01:10:45] file like this okay now first what we'll
+[01:10:42 - 01:10:47] do uh so we got one error let's see
+[01:10:45 - 01:10:50] what's the error okay so we have to
+[01:10:47 - 01:10:55] import the user session okay use session
+[01:10:50 - 01:10:59] so I will copy from the existing one
+[01:10:55 - 01:11:01] and paste it here so uh one one more
+[01:10:59 - 01:11:04] thing right uh we by mistakely putting
+[01:11:01 - 01:11:08] put keep this in upage we want to put it
+[01:11:04 - 01:11:11] in form okay I will keep it here in
+[01:11:08 - 01:11:16] form. jss we have to add this all this
+[01:11:11 - 01:11:19] uh State and all Okay then if you scroll
+[01:11:16 - 01:11:23] down for each input we will add the on
+[01:11:19 - 01:11:24] change method okay and we will uh save
+[01:11:23 - 01:11:26] the
+[01:11:24 - 01:11:31] information in state okay so for example
+[01:11:26 - 01:11:35] for this title we'll set on change okay
+[01:11:31 - 01:11:36] and this will be a event e okay and we
+[01:11:35 - 01:11:42] will set the value so in this case we
+[01:11:36 - 01:11:47] will set set title e. Target do value
+[01:11:42 - 01:11:51] okay like this I will copy this and P to
+[01:11:47 - 01:11:54] for the second input which is here and
+[01:11:51 - 01:11:57] here will be set description okay
+[01:11:54 - 01:12:00] and another is okay
+[01:11:57 - 01:12:03] so so this need to be here actually and
+[01:12:00 - 01:12:06] for this one it's a set link okay
+[01:12:03 - 01:12:08] perfect now let's try to print it out
+[01:12:06 - 01:12:11] okay so what I will do I will create one
+[01:12:08 - 01:12:15] method called on Save okay so this will
+[01:12:11 - 01:12:18] be execute on the save button click okay
+[01:12:15 - 01:12:18] and I will just
+[01:12:18 - 01:12:25] console.log
+[01:12:21 - 01:12:25] title title will be
+[01:12:28 - 01:12:31] sorry
+[01:12:32 - 01:12:35] title
+[01:12:36 - 01:12:43] description
+[01:12:38 - 01:12:43] destion description and then
+[01:12:44 - 01:12:50] Link Link
+[01:12:46 - 01:12:53] okay and then I will call this on save
+[01:12:50 - 01:12:55] for this button so on so we'll add the
+[01:12:53 - 01:13:01] on click method
+[01:12:55 - 01:13:04] here on click we will call the on Save
+[01:13:01 - 01:13:07] method and save everything now let's
+[01:13:04 - 01:13:11] open our application and let's open the
+[01:13:07 - 01:13:14] inspect panel as well and in the console
+[01:13:11 - 01:13:18] just type title
+[01:13:14 - 01:13:21] info some information this link console
+[01:13:18 - 01:13:24] and if I click save okay we got the
+[01:13:21 - 01:13:27] error that discrimination is not defined
+[01:13:24 - 01:13:30] let me check what the issue here okay so
+[01:13:27 - 01:13:34] it need to be a small
+[01:13:30 - 01:13:36] DC we clean this one and then click save
+[01:13:34 - 01:13:38] if you see that we got the title we got
+[01:13:36 - 01:13:41] the description and we got the link as
+[01:13:38 - 01:13:44] well okay perfect now let's impl for the
+[01:13:41 - 01:13:46] image so obviously we put this image in
+[01:13:44 - 01:13:49] component in different component right
+[01:13:46 - 01:13:51] so that's from where we have to handle
+[01:13:49 - 01:13:53] this uh file and then we have to store
+[01:13:51 - 01:13:55] it here right so let's go to upload
+[01:13:53 - 01:13:59] image
+[01:13:55 - 01:14:02] first and here we have method called on
+[01:13:59 - 01:14:06] input right in in that we have to call
+[01:14:02 - 01:14:09] property called on change okay so on
+[01:14:06 - 01:14:10] chain method will give us a selected
+[01:14:09 - 01:14:13] file input right first of all let's
+[01:14:10 - 01:14:15] console what we are getting right so
+[01:14:13 - 01:14:17] this will be a event
+[01:14:15 - 01:14:23] e and inside
+[01:14:17 - 01:14:24] that e. Target do files and we have
+[01:14:23 - 01:14:27] first
+[01:14:24 - 01:14:30] first file okay and if I save it let's
+[01:14:27 - 01:14:32] open this one I open any of this image
+[01:14:30 - 01:14:35] right and see we got the file
+[01:14:32 - 01:14:37] information okay now this file
+[01:14:35 - 01:14:40] information we have to pass back to the
+[01:14:37 - 01:14:42] parent component which is the form. jsx
+[01:14:40 - 01:14:45] right so let me remove this console.log
+[01:14:42 - 01:14:50] and we will say set file like this okay
+[01:14:45 - 01:14:52] and this set file will pass it as prop
+[01:14:50 - 01:14:56] okay so in the form. jsx we have to
+[01:14:52 - 01:14:59] accept here okay like this and again we
+[01:14:56 - 01:15:02] already have the set file here correct
+[01:14:59 - 01:15:04] we will set the file again so it should
+[01:15:02 - 01:15:07] be
+[01:15:04 - 01:15:13] like let me Define
+[01:15:07 - 01:15:15] file and set file the file value okay
+[01:15:13 - 01:15:18] now what we'll do let's print the file
+[01:15:15 - 01:15:22] value as well okay
+[01:15:18 - 01:15:23] so I will say file and I will just show
+[01:15:22 - 01:15:26] the file
+[01:15:23 - 01:15:27] here like this and save it now let's
+[01:15:26 - 01:15:32] test
+[01:15:27 - 01:15:36] it C everything let's upload some image
+[01:15:32 - 01:15:38] okay and if I click save you will see
+[01:15:36 - 01:15:40] the file okay so title along with the
+[01:15:38 - 01:15:42] file information obviously it's not
+[01:15:40 - 01:15:44] showing on the screen but we will show
+[01:15:42 - 01:15:49] it don't worry
+[01:15:44 - 01:15:51] okay now in the upload image okay uh I
+[01:15:49 - 01:15:54] added one state called selected file and
+[01:15:51 - 01:15:56] say selected file okay and and uh on the
+[01:15:54 - 01:15:59] change of this particular input right of
+[01:15:56 - 01:16:02] type file first we already added this
+[01:15:59 - 01:16:04] set file and along with that I also
+[01:16:02 - 01:16:07] added this set selected file okay and
+[01:16:04 - 01:16:09] the same value I'm setting so this value
+[01:16:07 - 01:16:12] selected file I'm using to check whether
+[01:16:09 - 01:16:14] the file is selected or not okay if the
+[01:16:12 - 01:16:17] file is selected then I'm showing this
+[01:16:14 - 01:16:20] image okay or if the file is not
+[01:16:17 - 01:16:22] selected then I'm hiding the uh the
+[01:16:20 - 01:16:23] click to upload and this icon okay let's
+[01:16:22 - 01:16:26] test it out
+[01:16:23 - 01:16:29] so if I click on um this particular one
+[01:16:26 - 01:16:32] right and I open any of this particular
+[01:16:29 - 01:16:34] Banner for example this Banner you see
+[01:16:32 - 01:16:36] it's displaying on the screen along with
+[01:16:34 - 01:16:40] that we also hiding this click to upload
+[01:16:36 - 01:16:44] and this um upload icon as well okay
+[01:16:40 - 01:16:45] perfect so this is how it works and we
+[01:16:44 - 01:16:47] also showing the preview of the image as
+[01:16:45 - 01:16:49] well right if you click again it will
+[01:16:47 - 01:16:52] again select some other image for
+[01:16:49 - 01:16:57] example you select this one and you'll
+[01:16:52 - 01:17:00] see the image okay and then we will uh
+[01:16:57 - 01:17:00] upload this one to the fire
+[01:17:03 - 01:17:09] store so let's upload the file on
+[01:17:07 - 01:17:12] Firebase storage okay if you don't know
+[01:17:09 - 01:17:14] about the storage then it's uh go to
+[01:17:12 - 01:17:16] this Firebase uh console and you will
+[01:17:14 - 01:17:21] find this option storage where we can
+[01:17:16 - 01:17:23] upload the file images video music lot
+[01:17:21 - 01:17:25] of things okay just say get started and
+[01:17:23 - 01:17:28] you will be launched on this page okay
+[01:17:25 - 01:17:30] make sure to update the rules okay so
+[01:17:28 - 01:17:33] that you can able to write it or upload
+[01:17:30 - 01:17:37] the file on the storage okay now this is
+[01:17:33 - 01:17:39] the documentation uh for the upload the
+[01:17:37 - 01:17:41] file on the storage okay so with the
+[01:17:39 - 01:17:44] help of that we will upload the file so
+[01:17:41 - 01:17:48] first of all I will create a new method
+[01:17:44 - 01:17:52] constant upload file
+[01:17:48 - 01:17:54] okay and here the first thing we need to
+[01:17:52 - 01:17:57] do if you you see here right we have to
+[01:17:54 - 01:18:00] define the um reference of the storage
+[01:17:57 - 01:18:03] so just Define constant storage and get
+[01:18:00 - 01:18:06] storage okay make sure to import this G
+[01:18:03 - 01:18:10] Storage and pass the app reference
+[01:18:06 - 01:18:13] okay now inside the upload file we have
+[01:18:10 - 01:18:16] to Define constant storage reference
+[01:18:13 - 01:18:18] okay is equal to so this line okay then
+[01:18:16 - 01:18:20] we have to give the reference make sure
+[01:18:18 - 01:18:24] to import the reference right I imported
+[01:18:20 - 01:18:26] already and then
+[01:18:24 - 01:18:29] add the storage uh the storage reference
+[01:18:26 - 01:18:31] here and then you have to give the path
+[01:18:29 - 01:18:32] and the file name so in this case the
+[01:18:31 - 01:18:34] path is
+[01:18:32 - 01:18:37] [Music]
+[01:18:34 - 01:18:41] pinest slash okay and the name of the
+[01:18:37 - 01:18:44] file so in this case our file name is we
+[01:18:41 - 01:18:46] are getting from file. name because we
+[01:18:44 - 01:18:49] already store the file name here right
+[01:18:46 - 01:18:51] sure to add plus sign here okay like
+[01:18:49 - 01:18:53] this so this file name contains the name
+[01:18:51 - 01:18:55] of the file along with this extension
+[01:18:53 - 01:18:57] okay this is very important you have to
+[01:18:55 - 01:18:59] add the
+[01:18:57 - 01:19:01] extension once you add that right just
+[01:18:59 - 01:19:03] if you scroll down here what we have to
+[01:19:01 - 01:19:07] do we have to upload the file right this
+[01:19:03 - 01:19:10] particular documentation now let's say
+[01:19:07 - 01:19:13] upload byes okay and then we have to
+[01:19:10 - 01:19:17] pass the storage reference and then we
+[01:19:13 - 01:19:21] have to pass the file okay and they say
+[01:19:17 - 01:19:26] then get snapshot of that
+[01:19:21 - 01:19:30] one and just console it that up file
+[01:19:26 - 01:19:33] uploaded file uploaded okay and then
+[01:19:30 - 01:19:35] let's test this out now on the save
+[01:19:33 - 01:19:37] button you have to call this upload file
+[01:19:35 - 01:19:40] okay so just call upload file here like
+[01:19:37 - 01:19:43] this that's all and save it right now go
+[01:19:40 - 01:19:46] back to our application let me clean
+[01:19:43 - 01:19:49] everything and uh let me refresh the
+[01:19:46 - 01:19:53] screen as well okay now if I click on
+[01:19:49 - 01:19:58] click upload and if I uh upload this
+[01:19:53 - 01:20:01] file add some sample text test test okay
+[01:19:58 - 01:20:04] and just click save so as you click save
+[01:20:01 - 01:20:06] right you got this um message called
+[01:20:04 - 01:20:08] file uploaded okay and let's check it
+[01:20:06 - 01:20:10] out whether it's uploaded or not so just
+[01:20:08 - 01:20:13] refresh these files and if you see this
+[01:20:10 - 01:20:17] folder is created okay very first time
+[01:20:13 - 01:20:18] and then the images uh store or uploaded
+[01:20:17 - 01:20:21] on this particular storage if you see
+[01:20:18 - 01:20:22] right our image is stored you can click
+[01:20:21 - 01:20:26] on this one and you see this upload the
+[01:20:22 - 01:20:29] URL of this one right now our file is
+[01:20:26 - 01:20:32] uploaded so we are good with that right
+[01:20:29 - 01:20:35] but we need the URL of uploaded file
+[01:20:32 - 01:20:39] right so if you see right
+[01:20:35 - 01:20:41] uh this okay so this URL we need it
+[01:20:39 - 01:20:43] right so how to get this URL because
+[01:20:41 - 01:20:46] this URL we have to store in our
+[01:20:43 - 01:20:48] database right so again for this one
+[01:20:46 - 01:20:52] right just uh refer the documentation
+[01:20:48 - 01:20:54] and if you scroll down okay here you
+[01:20:52 - 01:20:57] will see to uh one method called get
+[01:20:54 - 01:21:00] download URL right and from there we
+[01:20:57 - 01:21:05] will get the URL so it's very
+[01:21:00 - 01:21:08] easy just write then here okay then the
+[01:21:05 - 01:21:10] response and inside that you can write
+[01:21:08 - 01:21:13] get download URL okay so make sure to
+[01:21:10 - 01:21:16] import that method and pass the storage
+[01:21:13 - 01:21:19] reference here okay so go don't go one
+[01:21:16 - 01:21:22] by one I refer my code because this is
+[01:21:19 - 01:21:24] more uh cleared and more simplified okay
+[01:21:22 - 01:21:28] and wants to pass the T reference then
+[01:21:24 - 01:21:30] pass 10 because this is promise and then
+[01:21:28 - 01:21:33] uh
+[01:21:30 - 01:21:36] URL is
+[01:21:33 - 01:21:39] console.log and just pass URL like this
+[01:21:36 - 01:21:42] right let me pass download with console
+[01:21:39 - 01:21:44] this URL first and let's see whether we
+[01:21:42 - 01:21:46] are getting correctly or not okay and
+[01:21:44 - 01:21:49] then save it now let's go back and test
+[01:21:46 - 01:21:53] it so let me refresh the
+[01:21:49 - 01:21:55] screen add some test some value
+[01:21:53 - 01:21:59] and let's upload the image
+[01:21:55 - 01:22:02] now if I upload the image and click save
+[01:21:59 - 01:22:06] you will see the URL okay perfect if I
+[01:22:02 - 01:22:09] open this URL you'll see the the image
+[01:22:06 - 01:22:11] is open right now this URL we will store
+[01:22:09 - 01:22:15] along with our object okay and then we
+[01:22:11 - 01:22:15] will store everything in our
+[01:22:20 - 01:22:26] database now let's store the information
+[01:22:23 - 01:22:29] okay so in the upload file right and we
+[01:22:26 - 01:22:32] get this download URL okay so here I
+[01:22:29 - 01:22:36] will create one object called
+[01:22:32 - 01:22:39] constant um post data is equal to and
+[01:22:36 - 01:22:42] inside that I will add the title which
+[01:22:39 - 01:22:45] is title okay so this is the fill name
+[01:22:42 - 01:22:46] and this is the title value right we
+[01:22:45 - 01:22:49] which we are getting from this state
+[01:22:46 - 01:22:52] okay then we have description and we
+[01:22:49 - 01:22:55] give the description then we fill name
+[01:22:52 - 01:22:59] name link and we give link and last it
+[01:22:55 - 01:23:02] image which is the URL okay and now we
+[01:22:59 - 01:23:05] will send this we will store this in our
+[01:23:02 - 01:23:08] Firebase store fire store okay so first
+[01:23:05 - 01:23:10] of all we have to define or initialize
+[01:23:08 - 01:23:15] the Firebase so let's constant DB is
+[01:23:10 - 01:23:19] equal to get sto get sorry uh fire store
+[01:23:15 - 01:23:21] and just pass the app okay and then if
+[01:23:19 - 01:23:24] you see this documentation right uh how
+[01:23:21 - 01:23:28] to set the documented document so it's
+[01:23:24 - 01:23:32] quite easy right so inside this one I
+[01:23:28 - 01:23:34] have to define a wa okay say
+[01:23:32 - 01:23:36] Doc and set doc make sure you'll import
+[01:23:34 - 01:23:39] the set Doc and you have to set only one
+[01:23:36 - 01:23:42] doc so just set doc give the reference
+[01:23:39 - 01:23:43] of database and here you have to give
+[01:23:42 - 01:23:47] the collection name so in this case the
+[01:23:43 - 01:23:50] collection name is we will give the
+[01:23:47 - 01:23:55] Pinterest sorry Dash post okay after
+[01:23:50 - 01:23:56] that we will add the uh ID of the
+[01:23:55 - 01:24:00] document right so what we will do in
+[01:23:56 - 01:24:02] order to add the ID right so here at the
+[01:24:00 - 01:24:05] top we will Define the ID okay so what
+[01:24:02 - 01:24:10] we will do uh after this one I will say
+[01:24:05 - 01:24:12] constant post ID is equal to date do now
+[01:24:10 - 01:24:14] okay so it will give this time stamp uh
+[01:24:12 - 01:24:16] which is obviously unique because every
+[01:24:14 - 01:24:18] time uh we get the current time it will
+[01:24:16 - 01:24:21] be unique right and we have to convert
+[01:24:18 - 01:24:24] it into string okay so let's just write
+[01:24:21 - 01:24:26] to string we got document ID should be a
+[01:24:24 - 01:24:30] string only okay now this post ID we
+[01:24:26 - 01:24:33] will use it here okay as our document
+[01:24:30 - 01:24:35] ID and after that we have to send the
+[01:24:33 - 01:24:37] our data right so we already have this
+[01:24:35 - 01:24:39] post data so I will pass it
+[01:24:37 - 01:24:44] here like
+[01:24:39 - 01:24:46] this and then that's all okay and right
+[01:24:44 - 01:24:50] now it's AWA so we have to make this as
+[01:24:46 - 01:24:54] async okay so I will just write here as
+[01:24:50 - 01:24:57] async okay perfect and the error is gone
+[01:24:54 - 01:25:00] okay and uh that's all right and you can
+[01:24:57 - 01:25:02] put the do then method whether it's say
+[01:25:00 - 01:25:05] or not or you want when we are going to
+[01:25:02 - 01:25:07] show loader and everything that time you
+[01:25:05 - 01:25:12] can set the value here okay so just
+[01:25:07 - 01:25:14] write uh save okay and save it now now
+[01:25:12 - 01:25:18] let's test this one okay so let's go
+[01:25:14 - 01:25:20] back to our project so right now okay so
+[01:25:18 - 01:25:24] everything is good let me go to the
+[01:25:20 - 01:25:26] inspect panel go to the console okay
+[01:25:24 - 01:25:30] just to make sure everything is clean
+[01:25:26 - 01:25:32] and add the first uh post right so taste
+[01:25:30 - 01:25:34] first one
+[01:25:32 - 01:25:38] okay
+[01:25:34 - 01:25:40] first link test okay and upload the
+[01:25:38 - 01:25:43] image so in this case I will upload some
+[01:25:40 - 01:25:46] image okay take this image and just
+[01:25:43 - 01:25:48] click save so as soon as you save right
+[01:25:46 - 01:25:52] we got some error that the doc is not
+[01:25:48 - 01:25:55] defined right so what happened uh here
+[01:25:52 - 01:25:57] we have to import the document right so
+[01:25:55 - 01:26:00] make sure to add the document I don't
+[01:25:57 - 01:26:02] know what happened here and add the
+[01:26:00 - 01:26:06] document okay from fire store and I
+[01:26:02 - 01:26:08] think then we are good let's try it
+[01:26:06 - 01:26:12] now let me clean this one and let's
+[01:26:08 - 01:26:14] click save okay so as I save it it said
+[01:26:12 - 01:26:16] saved right and along with the you file
+[01:26:14 - 01:26:20] image also uploaded and data is also
+[01:26:16 - 01:26:22] saved Let's uh check in our uh fire
+[01:26:20 - 01:26:25] store right let me refresh the store and
+[01:26:22 - 01:26:27] if you see the Pinterest post is get the
+[01:26:25 - 01:26:29] new collection is getting created and
+[01:26:27 - 01:26:33] the new ID is get created document ID
+[01:26:29 - 01:26:35] and along with the uh information right
+[01:26:33 - 01:26:37] but there is one missing part here right
+[01:26:35 - 01:26:40] now we had all the information but we
+[01:26:37 - 01:26:42] don't know who post this one right so
+[01:26:40 - 01:26:44] obviously we need to add the user
+[01:26:42 - 01:26:47] information as well for each post okay
+[01:26:44 - 01:26:51] so what we can do after this one right
+[01:26:47 - 01:26:53] you can add the usern name okay as a
+[01:26:51 - 01:26:58] from the session so you can add the
+[01:26:53 - 01:27:02] username from the session dot uh user
+[01:26:58 - 01:27:07] dot name okay after that we have to add
+[01:27:02 - 01:27:11] email so just add session. user do email
+[01:27:07 - 01:27:13] okay and then again we can add the uh
+[01:27:11 - 01:27:21] user image as
+[01:27:13 - 01:27:24] session sorry session. user do
+[01:27:21 - 01:27:26] image uh it's okay image only right and
+[01:27:24 - 01:27:27] then save it now we have this
+[01:27:26 - 01:27:29] information as well let's try it and
+[01:27:27 - 01:27:32] test it whether we are getting all the
+[01:27:29 - 01:27:35] data correctly right so I have ADD test
+[01:27:32 - 01:27:38] first two first two link test two and
+[01:27:35 - 01:27:41] save it right now I saved this one and
+[01:27:38 - 01:27:44] now let's go back to our Firebase fire
+[01:27:41 - 01:27:47] store the new ID is get created and
+[01:27:44 - 01:27:50] which contain our username user image
+[01:27:47 - 01:27:52] and the name where is the
+[01:27:50 - 01:27:54] user email as well right and all the
+[01:27:52 - 01:27:57] information perfect that's what all we
+[01:27:54 - 01:27:59] need right so I hope you understand this
+[01:27:57 - 01:28:01] one and every time it's get created new
+[01:27:59 - 01:28:04] ID it's a unique so don't worry about
+[01:28:01 - 01:28:07] that one as well right
+[01:28:04 - 01:28:09] perfect now here we will make some quick
+[01:28:07 - 01:28:12] update so first thing on the click of
+[01:28:09 - 01:28:15] this uh logo right we want to go to the
+[01:28:12 - 01:28:17] homepage right so first Implement that
+[01:28:15 - 01:28:20] one so go to the header okay where we
+[01:28:17 - 01:28:22] have the logo and for this image right
+[01:28:20 - 01:28:25] this is a logo image We'll add the on
+[01:28:22 - 01:28:29] click method and then we will route it
+[01:28:25 - 01:28:31] right so just add router. push okay and
+[01:28:29 - 01:28:34] just add add the homepage right like
+[01:28:31 - 01:28:37] this slash only and save it and now if I
+[01:28:34 - 01:28:41] click on this one right it will go to
+[01:28:37 - 01:28:44] the homepage see right perfect so now I
+[01:28:41 - 01:28:46] also added this log out button in the
+[01:28:44 - 01:28:49] profile section okay and on this click
+[01:28:46 - 01:28:52] of this log out we will uh log out from
+[01:28:49 - 01:28:55] the session and as well as we also uh
+[01:28:52 - 01:28:57] navigate to the homepage right so on I
+[01:28:55 - 01:28:58] added this on click method for this
+[01:28:57 - 01:29:01] logout button and I created one method
+[01:28:58 - 01:29:04] called on log out click here I will add
+[01:29:01 - 01:29:07] the sign out method okay and which is
+[01:29:04 - 01:29:09] coming from this um next okay make sure
+[01:29:07 - 01:29:12] to import this one after the sign out we
+[01:29:09 - 01:29:14] also want to navigate to the homepage so
+[01:29:12 - 01:29:20] uh we will add the router here so let
+[01:29:14 - 01:29:22] add conone router is equal to use router
+[01:29:20 - 01:29:25] okay like this and and make sure to
+[01:29:22 - 01:29:28] import this router oh sorry it's need to
+[01:29:25 - 01:29:31] be use router okay and make sure to
+[01:29:28 - 01:29:34] import this uh use router from next SL
+[01:29:31 - 01:29:40] navigation okay because this is next
+[01:29:34 - 01:29:42] js13 and just Define router do push and
+[01:29:40 - 01:29:45] we want to navigate to the homepage so I
+[01:29:42 - 01:29:51] just Define default slash okay and save
+[01:29:45 - 01:29:54] it now let me uh go back here right here
+[01:29:51 - 01:29:57] and and if I login now sign in with
+[01:29:54 - 01:30:01] Google let me log
+[01:29:57 - 01:30:03] in and if you see I log in now okay I if
+[01:30:01 - 01:30:05] I go to the profile page we will see
+[01:30:03 - 01:30:08] this everything and if I click on log
+[01:30:05 - 01:30:10] out right we log out and we navigate to
+[01:30:08 - 01:30:12] the jump page I think I don't know
+[01:30:10 - 01:30:15] whether we naate to Homage or not let me
+[01:30:12 - 01:30:17] go to the spect panel and check go to
+[01:30:15 - 01:30:20] the
+[01:30:17 - 01:30:23] console and I think we don't I did not
+[01:30:20 - 01:30:25] navigate to the uh homepage actually
+[01:30:23 - 01:30:29] okay also one more thing we want to make
+[01:30:25 - 01:30:31] sure that if user is not current user
+[01:30:29 - 01:30:34] that then we don't want to show this log
+[01:30:31 - 01:30:39] out button right so let's define the
+[01:30:34 - 01:30:42] constant here okay data colon
+[01:30:39 - 01:30:45] session is equal to
+[01:30:42 - 01:30:48] use session okay make sure to import
+[01:30:45 - 01:30:52] this use session let me get the input
+[01:30:48 - 01:30:54] statement from here okay and add it here
+[01:30:52 - 01:30:54] like this
+[01:30:56 - 01:31:02] so and then we have to make sure that
+[01:30:59 - 01:31:04] the session email ID is equal to that um
+[01:31:02 - 01:31:07] user email ID then only we want to show
+[01:31:04 - 01:31:12] this logout button so I will Define here
+[01:31:07 - 01:31:14] session do user. email okay and make
+[01:31:12 - 01:31:18] sure is optional
+[01:31:14 - 01:31:19] field session. user. email is equal to
+[01:31:18 - 01:31:25] equal
+[01:31:19 - 01:31:28] to the user info. email user info. email
+[01:31:25 - 01:31:33] then only show this button otherwise
+[01:31:28 - 01:31:37] show null okay and save it so if you see
+[01:31:33 - 01:31:39] it's not uh able to see anymore okay now
+[01:31:37 - 01:31:42] let's go back to homepage let's log in
+[01:31:39 - 01:31:46] it now sign with
+[01:31:42 - 01:31:50] Google me close this one let me sign
+[01:31:46 - 01:31:52] in and if you see profile image is
+[01:31:50 - 01:31:54] showing now let's go to profile and then
+[01:31:52 - 01:31:57] you will see this log out button as well
+[01:31:54 - 01:32:00] okay now on the create button if user is
+[01:31:57 - 01:32:02] log out right we have to make sure that
+[01:32:00 - 01:32:04] a user need to First login right so
+[01:32:02 - 01:32:10] let's go to header so let me go to the
+[01:32:04 - 01:32:11] header. jsx right and uh inside the uh
+[01:32:10 - 01:32:14] create button right so we have this
+[01:32:11 - 01:32:16] create button here right right now we
+[01:32:14 - 01:32:18] are pushing pin Builder right I will
+[01:32:16 - 01:32:23] remove this code and I will add
+[01:32:18 - 01:32:27] on create click okay method so we'll add
+[01:32:23 - 01:32:29] the on create click so constant on
+[01:32:27 - 01:32:32] create click
+[01:32:29 - 01:32:35] okay and in this meod I will check if
+[01:32:32 - 01:32:39] session dot or maybe a session is
+[01:32:35 - 01:32:42] available then go to this pinu Builder
+[01:32:39 - 01:32:44] else go to
+[01:32:42 - 01:32:45] the
+[01:32:44 - 01:32:50] router.
+[01:32:45 - 01:32:52] push right and the login uh button right
+[01:32:50 - 01:32:55] so if you see
+[01:32:52 - 01:32:58] we already have the
+[01:32:55 - 01:33:00] login uh this one right it is so sign in
+[01:32:58 - 01:33:02] button sorry okay then we have to click
+[01:33:00 - 01:33:05] sign in not we don't need to navigate
+[01:33:02 - 01:33:09] because we are directly log in okay so
+[01:33:05 - 01:33:11] just say sign in and save it you see
+[01:33:09 - 01:33:14] right I'm on create button the user is
+[01:33:11 - 01:33:16] not login if I click create it will
+[01:33:14 - 01:33:18] never get to the signin first right
+[01:33:16 - 01:33:21] perfect that's what we
+[01:33:18 - 01:33:22] wanted otherwise you can show the
+[01:33:21 - 01:33:26] message that okay you have to first log
+[01:33:22 - 01:33:28] in okay here I added the loading
+[01:33:26 - 01:33:31] indicator right so I added this image
+[01:33:28 - 01:33:36] tag and inside that I added this um uh
+[01:33:31 - 01:33:38] loading indicator PNG file okay and uh I
+[01:33:36 - 01:33:41] also wrap this save button inside this
+[01:33:38 - 01:33:43] Pam okay not button just a text okay now
+[01:33:41 - 01:33:44] it will look like this if you see right
+[01:33:43 - 01:33:46] it's saving button now what we have to
+[01:33:44 - 01:33:48] do on the click of that one we have to
+[01:33:46 - 01:33:50] show this loading and we we want to hide
+[01:33:48 - 01:33:52] the save button okay and then we will it
+[01:33:50 - 01:33:54] will navigate to the homepage not sorry
+[01:33:52 - 01:33:58] it's on profile page
+[01:33:54 - 01:34:00] okay so let's go back here and Define
+[01:33:58 - 01:34:04] one state okay so I will Define one
+[01:34:00 - 01:34:08] state called constant loading comma set
+[01:34:04 - 01:34:11] loading okay equal to use State okay the
+[01:34:08 - 01:34:14] default value I will show it as a false
+[01:34:11 - 01:34:16] okay now once you click on Save Right uh
+[01:34:14 - 01:34:20] let me remove this console now we'll set
+[01:34:16 - 01:34:23] the loading value as true okay and once
+[01:34:20 - 01:34:26] the uh loading is is completed we will
+[01:34:23 - 01:34:30] set the loading value as a true so set
+[01:34:26 - 01:34:33] loading to be true okay
+[01:34:30 - 01:34:35] now here in the image right we have to
+[01:34:33 - 01:34:38] Define one condition if
+[01:34:35 - 01:34:42] loading true mean if it's true then show
+[01:34:38 - 01:34:44] this image otherwise show the span sorry
+[01:34:42 - 01:34:46] show the save button okay and save it
+[01:34:44 - 01:34:49] now and let as soon as I save it will
+[01:34:46 - 01:34:51] look like this now let's try to update
+[01:34:49 - 01:34:52] upload something right so let's upload
+[01:34:51 - 01:34:57] some
+[01:34:52 - 01:34:59] image so let me copy some image from
+[01:34:57 - 01:35:06] somewhere I don't know okay so let me
+[01:34:59 - 01:35:10] copy this one okay so uiux design
+[01:35:06 - 01:35:12] web we copy the same here I don't know I
+[01:35:10 - 01:35:15] don't have any URL let me copy some
+[01:35:12 - 01:35:17] random URL okay so I have this URL I
+[01:35:15 - 01:35:19] will paste it
+[01:35:17 - 01:35:21] here okay and just click save as soon as
+[01:35:19 - 01:35:23] you click save it will show loading
+[01:35:21 - 01:35:26] button okay and now it will navigate to
+[01:35:23 - 01:35:30] this homepage on this homepage we going
+[01:35:26 - 01:35:34] to show all the users uh post on uh or
+[01:35:30 - 01:35:34] pins on this particular
+[01:35:38 - 01:35:45] screen now in order to display the uh
+[01:35:42 - 01:35:48] users spin right we want to create a new
+[01:35:45 - 01:35:52] folder in the component section okay so
+[01:35:48 - 01:35:54] I will create a new folder called um
+[01:35:52 - 01:35:57] pins
+[01:35:54 - 01:35:59] okay and inside that I will create one
+[01:35:57 - 01:36:03] file called pins list okay so let's
+[01:35:59 - 01:36:06] create file pin list.
+[01:36:03 - 01:36:08] jsx and add the default template okay
+[01:36:06 - 01:36:11] now let's import this pin list in under
+[01:36:08 - 01:36:15] this paid. jsx okay so under the user
+[01:36:11 - 01:36:16] info we want to show the pins list okay
+[01:36:15 - 01:36:20] so
+[01:36:16 - 01:36:25] pin list okay make sure to import it so
+[01:36:20 - 01:36:25] let's go back back here and
+[01:36:25 - 01:36:32] import pin list from and Define the path
+[01:36:31 - 01:36:34] sometimes it will give you the
+[01:36:32 - 01:36:38] suggestion sometimes not so you have to
+[01:36:34 - 01:36:40] import it manually okay pin list okay
+[01:36:38 - 01:36:42] and then save everything now let's go
+[01:36:40 - 01:36:44] back to our project and this is how we
+[01:36:42 - 01:36:47] want to display right let's go back to
+[01:36:44 - 01:36:52] our project and so it's saying pin list
+[01:36:47 - 01:36:55] is not defined Let me refresh it let me
+[01:36:52 - 01:36:59] bring this on the right side okay so
+[01:36:55 - 01:37:02] it's supposed to be pin list and save
+[01:36:59 - 01:37:05] it and as you save it's showing the pin
+[01:37:02 - 01:37:06] list right right here perfect that's
+[01:37:05 - 01:37:10] what we
+[01:37:06 - 01:37:13] wanted now let's face the user pins okay
+[01:37:10 - 01:37:15] so first of all let's go to page. jsx
+[01:37:13 - 01:37:18] and here we have to pass this user info
+[01:37:15 - 01:37:22] to the pin list as well okay like this
+[01:37:18 - 01:37:24] and accept it here so we will get the
+[01:37:22 - 01:37:27] user information on this particular pin
+[01:37:24 - 01:37:28] list component okay after that Define
+[01:37:27 - 01:37:31] the constant
+[01:37:28 - 01:37:34] DB and then we have to initialize this
+[01:37:31 - 01:37:38] fire store right is equal to get fire
+[01:37:34 - 01:37:41] store and then add the app as well okay
+[01:37:38 - 01:37:42] so we already did this right to face the
+[01:37:41 - 01:37:45] user information same thing we have to
+[01:37:42 - 01:37:49] do it here as well after that I will
+[01:37:45 - 01:37:54] Define one method called constant G user
+[01:37:49 - 01:37:56] pins okay and here let's uh F the
+[01:37:54 - 01:38:00] information right so here is thing right
+[01:37:56 - 01:38:02] uh we need to add uh we have to uh face
+[01:38:00 - 01:38:05] the multiple documents right and here is
+[01:38:02 - 01:38:07] the documentation uh on Firebase to face
+[01:38:05 - 01:38:09] the multiple documents from The
+[01:38:07 - 01:38:11] Collection right here for that one we
+[01:38:09 - 01:38:12] have to create the query first then we
+[01:38:11 - 01:38:15] have to create the snapshot of that
+[01:38:12 - 01:38:19] query and then we have to uh face the
+[01:38:15 - 01:38:22] data okay so we'll do one by one so
+[01:38:19 - 01:38:23] first of all let's add constant
+[01:38:22 - 01:38:25] I already have the query right I will
+[01:38:23 - 01:38:28] just paste it here so let's add this
+[01:38:25 - 01:38:30] query so in this query right uh we have
+[01:38:28 - 01:38:32] this collection passing the database
+[01:38:30 - 01:38:35] then I'm adding this Pinterest post as a
+[01:38:32 - 01:38:37] collection name and here we are passing
+[01:38:35 - 01:38:39] the we condition okay and where in the
+[01:38:37 - 01:38:41] we condition we will check whether email
+[01:38:39 - 01:38:44] is equal to equal to users info. email
+[01:38:41 - 01:38:47] right that current users information
+[01:38:44 - 01:38:49] okay then only uh uh face the
+[01:38:47 - 01:38:53] information right and after
+[01:38:49 - 01:38:54] that just C copy this line of code and
+[01:38:53 - 01:38:57] just paste it
+[01:38:54 - 01:38:59] here perfect right now we are just
+[01:38:57 - 01:39:01] consoling the information okay so it
+[01:38:59 - 01:39:04] will print the document ID along with
+[01:39:01 - 01:39:07] the document data it's uh we are using
+[01:39:04 - 01:39:10] AWA so we have to make this function a
+[01:39:07 - 01:39:13] okay and now in the US
+[01:39:10 - 01:39:15] effect we have to call this gate user
+[01:39:13 - 01:39:17] pins okay so I will pass the empty so
+[01:39:15 - 01:39:19] only once we will call when the
+[01:39:17 - 01:39:23] component get
+[01:39:19 - 01:39:25] load and like this and save it now let's
+[01:39:23 - 01:39:28] go back to our
+[01:39:25 - 01:39:31] project here go to the inspect
+[01:39:28 - 01:39:34] panel go to the console let me clean
+[01:39:31 - 01:39:37] everything Let me
+[01:39:34 - 01:39:38] refresh and right now we got one error
+[01:39:37 - 01:39:41] right so it's saying query is not
+[01:39:38 - 01:39:44] defined so it means we have to import
+[01:39:41 - 01:39:47] the query so here we have query right so
+[01:39:44 - 01:39:49] just import it query okay so here it's
+[01:39:47 - 01:39:51] imported and what else we need to import
+[01:39:49 - 01:39:54] collection as well we need to import get
+[01:39:51 - 01:39:56] talks so make sure you import everything
+[01:39:54 - 01:39:59] okay we have to import where as well
+[01:39:56 - 01:40:02] okay and save it now now if you go back
+[01:39:59 - 01:40:05] clean this one Let me refresh the
+[01:40:02 - 01:40:07] screen and now you'll see we got the ID
+[01:40:05 - 01:40:10] and user information in the user
+[01:40:07 - 01:40:12] information we have description email I
+[01:40:10 - 01:40:14] also added the ID okay the image link
+[01:40:12 - 01:40:16] title user image the ID is nothing but
+[01:40:14 - 01:40:20] document ID so I I'm also saving it in
+[01:40:16 - 01:40:23] our database okay so let me show you the
+[01:40:20 - 01:40:25] so in jxs I added one more field called
+[01:40:23 - 01:40:27] ID okay and I'm passing this post ID
+[01:40:25 - 01:40:29] which we already defined here okay
+[01:40:27 - 01:40:31] perfect so now we got the information
+[01:40:29 - 01:40:34] let's store it in one
+[01:40:31 - 01:40:37] state so here we will do some quick
+[01:40:34 - 01:40:39] modification so pin list we going to use
+[01:40:37 - 01:40:42] this here right but we also want to use
+[01:40:39 - 01:40:45] same component on our homepage okay to
+[01:40:42 - 01:40:48] display the list of pins so in order to
+[01:40:45 - 01:40:51] do that right let me go to profile and I
+[01:40:48 - 01:40:55] will just copy everything okay uh this
+[01:40:51 - 01:40:57] line of code I will cut it from here and
+[01:40:55 - 01:41:01] in the page.
+[01:40:57 - 01:41:05] jsx okay so this is our uh page right
+[01:41:01 - 01:41:09] and here I will add it so I will add one
+[01:41:05 - 01:41:12] more we have get user info right after
+[01:41:09 - 01:41:14] that I will add this one okay so and
+[01:41:12 - 01:41:16] make sure to add everything so
+[01:41:14 - 01:41:18] constantly we already defined so no need
+[01:41:16 - 01:41:22] to use this
+[01:41:18 - 01:41:25] one we will use get user me so we
+[01:41:22 - 01:41:27] already have one use effect here right
+[01:41:25 - 01:41:32] so you can use that or we can use
+[01:41:27 - 01:41:33] separately as well okay and uh then make
+[01:41:32 - 01:41:37] sure to import all the input statement
+[01:41:33 - 01:41:39] so I will just copy everything from here
+[01:41:37 - 01:41:44] and paste
+[01:41:39 - 01:41:45] it like this okay perfect and what we
+[01:41:44 - 01:41:49] have to do instead of passing this user
+[01:41:45 - 01:41:51] info right we will pass the actual data
+[01:41:49 - 01:41:53] once we store it
+[01:41:51 - 01:41:55] uh in one state right and this data will
+[01:41:53 - 01:41:58] pass it to the pin list okay so I will
+[01:41:55 - 01:41:59] remove this one right now let's save
+[01:41:58 - 01:42:01] everything make sure everything correct
+[01:41:59 - 01:42:04] so right now we got one error called get
+[01:42:01 - 01:42:05] fire is not defined is defined multiple
+[01:42:04 - 01:42:07] times so let's see where we Define
+[01:42:05 - 01:42:11] multiple
+[01:42:07 - 01:42:14] times so maybe okay so I think we copy
+[01:42:11 - 01:42:16] this one again right so I will remove
+[01:42:14 - 01:42:16] this
+[01:42:17 - 01:42:25] one doc here and let me remove this
+[01:42:22 - 01:42:28] okay want to show
+[01:42:25 - 01:42:30] do and let me save it
+[01:42:28 - 01:42:33] now let's see whether we are getting any
+[01:42:30 - 01:42:36] error now everything's look good let me
+[01:42:33 - 01:42:39] clean this one Let me refresh the
+[01:42:36 - 01:42:40] screen and we got one error let's see
+[01:42:39 - 01:42:45] what is in cannot read property of
+[01:42:40 - 01:42:45] undefined email right
+[01:42:45 - 01:42:51] so here what we can do uh once we get
+[01:42:48 - 01:42:54] this one in use effect right
+[01:42:51 - 01:42:57] we'll Define
+[01:42:54 - 01:42:59] if okay so sorry so right now if you see
+[01:42:57 - 01:43:02] right we are using the user info right
+[01:42:59 - 01:43:05] but user info is not set so what we can
+[01:43:02 - 01:43:07] do we pass this user info here and only
+[01:43:05 - 01:43:11] one user info is there then only execute
+[01:43:07 - 01:43:14] this get user pins okay and I will also
+[01:43:11 - 01:43:19] write G us like
+[01:43:14 - 01:43:23] this okay and save it now let's test it
+[01:43:19 - 01:43:23] let me clean this one Let me refresh the
+[01:43:24 - 01:43:29] screen and now we don't have any error
+[01:43:27 - 01:43:32] and we are getting the all the data
+[01:43:29 - 01:43:34] perfect now we got the pins and we conso
+[01:43:32 - 01:43:36] it right now let's store it in one state
+[01:43:34 - 01:43:39] so let's define one state called
+[01:43:36 - 01:43:44] constant let's say
+[01:43:39 - 01:43:47] list of pins comma set list of pins is
+[01:43:44 - 01:43:48] equal to use State okay and pass the
+[01:43:47 - 01:43:51] empty
+[01:43:48 - 01:43:54] array now with the help of set list of
+[01:43:51 - 01:43:56] pins we will set the value so let's come
+[01:43:54 - 01:44:00] down and inside this do data right so
+[01:43:56 - 01:44:02] here is the thing we want to because
+[01:44:00 - 01:44:04] right now we are getting document one by
+[01:44:02 - 01:44:07] one right and we want to append that
+[01:44:04 - 01:44:11] document in the array so what we can do
+[01:44:07 - 01:44:11] here we have to Define in such a way
+[01:44:13 - 01:44:22] sorry so here we have to define the I
+[01:44:18 - 01:44:25] will say list of pin okay you can give
+[01:44:22 - 01:44:28] any name and
+[01:44:25 - 01:44:32] then you have to define the dot dot
+[01:44:28 - 01:44:37] dot then again list of pins because the
+[01:44:32 - 01:44:39] previous pins with the new pins so doc.
+[01:44:37 - 01:44:41] data like
+[01:44:39 - 01:44:44] this and now it will save the list of
+[01:44:41 - 01:44:47] pins now this list of pins we have to
+[01:44:44 - 01:44:49] pass it I will remove this console and
+[01:44:47 - 01:44:51] this list of pins we have to pass to the
+[01:44:49 - 01:44:51] pin list okay so I will just pass it
+[01:44:51 - 01:44:55] like
+[01:44:51 - 01:44:58] this list of pins perfect and now go to
+[01:44:55 - 01:45:02] the pin list accept this
+[01:44:58 - 01:45:06] here and just consolid the pin list of
+[01:45:02 - 01:45:09] pins okay and save it now let's open
+[01:45:06 - 01:45:12] this one clean everything and if you see
+[01:45:09 - 01:45:15] we got the list of pins okay so we got
+[01:45:12 - 01:45:17] this five list of pins I think okay
+[01:45:15 - 01:45:19] perfect that's what we
+[01:45:17 - 01:45:22] wanted now here in order to display it
+[01:45:19 - 01:45:24] let's iterate this list of pins so just
+[01:45:22 - 01:45:27] Define list of pins do
+[01:45:24 - 01:45:28] map inside that we will provide item
+[01:45:27 - 01:45:33] comma index as
+[01:45:28 - 01:45:37] well and then we have to Define du tag
+[01:45:33 - 01:45:39] okay and let's define key value as well
+[01:45:37 - 01:45:43] okay so in this case I will put
+[01:45:39 - 01:45:46] index now inside this one just try to
+[01:45:43 - 01:45:48] print item. title and check whether we
+[01:45:46 - 01:45:51] are getting information or not so if you
+[01:45:48 - 01:45:55] see right you got this
+[01:45:51 - 01:45:58] uh six pins right the one which this
+[01:45:55 - 01:46:01] user is created okay perfect now what I
+[01:45:58 - 01:46:03] will do uh instead of writing the code
+[01:46:01 - 01:46:09] here I will create another component
+[01:46:03 - 01:46:12] inside the pins folder call pin item do
+[01:46:09 - 01:46:13] jsx okay and add the default template
+[01:46:12 - 01:46:18] let remove this
+[01:46:13 - 01:46:21] one okay and now let me save this one
+[01:46:18 - 01:46:23] and instead of item. tile I I will call
+[01:46:21 - 01:46:28] add this pin
+[01:46:23 - 01:46:32] item item okay don't know why it's not
+[01:46:28 - 01:46:34] suggesting me but let's import it in
+[01:46:32 - 01:46:38] item
+[01:46:34 - 01:46:41] from slash do/ pin
+[01:46:38 - 01:46:44] item this see we got the pin item P item
+[01:46:41 - 01:46:46] now this item value we'll pass it here
+[01:46:44 - 01:46:49] so I will add as a
+[01:46:46 - 01:46:52] pin add the item value okay and in pin
+[01:46:49 - 01:46:55] item just accept it as a pin okay and if
+[01:46:52 - 01:46:59] you try to print the title here now with
+[01:46:55 - 01:47:03] the pin. title you will see the title
+[01:46:59 - 01:47:06] see now we have to design this
+[01:47:03 - 01:47:10] component let me go to the Pinterest
+[01:47:06 - 01:47:14] like this right so see how it looks so
+[01:47:10 - 01:47:17] it's simple image and the name of the
+[01:47:14 - 01:47:21] uh title of this particular post and
+[01:47:17 - 01:47:24] users image okay and the name and on how
+[01:47:21 - 01:47:25] it uh it's showing these buttons okay
+[01:47:24 - 01:47:29] this link this upload button and
+[01:47:25 - 01:47:32] everything right so let's do it this is
+[01:47:29 - 01:47:34] challenge for you if you face anything
+[01:47:32 - 01:47:36] uh then uh you can let me know in the
+[01:47:34 - 01:47:39] comment section or you can
+[01:47:36 - 01:47:41] um access the source code any time the
+[01:47:39 - 01:47:44] link is in the
+[01:47:41 - 01:47:46] description so I already created one
+[01:47:44 - 01:47:50] component called pin item and inside
+[01:47:46 - 01:47:52] that I already defined The Styling an
+[01:47:50 - 01:47:56] HTML tag right it's quite simpler you
+[01:47:52 - 01:47:58] can refer it anytime right and uh right
+[01:47:56 - 01:48:02] now it's not structured right and on how
+[01:47:58 - 01:48:03] you'll see this uh overlay okay so if
+[01:48:02 - 01:48:05] you see it's not structurized correct
+[01:48:03 - 01:48:08] it's showing only if I increase the
+[01:48:05 - 01:48:11] screen size it's just showing in one
+[01:48:08 - 01:48:13] line now go to the pin list okay and
+[01:48:11 - 01:48:16] here is we are rendering this list of
+[01:48:13 - 01:48:19] pins right so let's define class name
+[01:48:16 - 01:48:20] okay and uh If You observe one thing
+[01:48:19 - 01:48:23] right
+[01:48:20 - 01:48:25] this Pinterest uh grid is little
+[01:48:23 - 01:48:28] different and this kind of grid we want
+[01:48:25 - 01:48:30] to ACH and it's quite simple in t CSS
+[01:48:28 - 01:48:34] that's what I'm going to teach you now
+[01:48:30 - 01:48:36] so here uh we want to First Define the
+[01:48:34 - 01:48:40] for the small screen right this is small
+[01:48:36 - 01:48:41] screen we have to Define like uh columns
+[01:48:40 - 01:48:45] okay so how many columns do you want so
+[01:48:41 - 01:48:48] in this case we want to show the two
+[01:48:45 - 01:48:52] columns right so two columns I as as
+[01:48:48 - 01:48:54] right see the magic right immediately it
+[01:48:52 - 01:48:58] change the layout and it show the
+[01:48:54 - 01:49:00] similar gr grid like the Pinterest okay
+[01:48:58 - 01:49:03] now let's apply some styling as well
+[01:49:00 - 01:49:07] before that uh I will give
+[01:49:03 - 01:49:09] some um margin top to seven okay so it
+[01:49:07 - 01:49:13] will come like this and I will also give
+[01:49:09 - 01:49:18] the padding X to two Okay and when
+[01:49:13 - 01:49:18] screen size is medium and you padding uh
+[01:49:18 - 01:49:24] x25 now on for the smaller screen size
+[01:49:21 - 01:49:26] we have we already G this Columns of two
+[01:49:24 - 01:49:31] when the screen size is medium we will
+[01:49:26 - 01:49:34] give the columns sorry columns to three
+[01:49:31 - 01:49:38] okay when screen size is larger we do
+[01:49:34 - 01:49:42] columns to four and when the screen size
+[01:49:38 - 01:49:45] is extra larger we will give The Columns
+[01:49:42 - 01:49:48] of five okay so if You observe right a
+[01:49:45 - 01:49:51] Pinterest right if I this is on extra
+[01:49:48 - 01:49:53] last screen and 1 2 3 four five five
+[01:49:51 - 01:49:55] column is showing on the screen okay and
+[01:49:53 - 01:49:58] as soon as I decrease the size see the
+[01:49:55 - 01:50:02] change right so now on medium is showing
+[01:49:58 - 01:50:05] three on large it will show four and on
+[01:50:02 - 01:50:06] maximum it show five okay perfect so
+[01:50:05 - 01:50:11] that's how we are going to
+[01:50:06 - 01:50:13] show also uh let me show you so here as
+[01:50:11 - 01:50:16] well right is touching to this next p
+[01:50:13 - 01:50:18] pin right so let's do some spacing so
+[01:50:16 - 01:50:21] add set space on the y- axis means
+[01:50:18 - 01:50:24] vertically I I want to give the space of
+[01:50:21 - 01:50:28] for example six and then save it right
+[01:50:24 - 01:50:32] and margin X I will keep it
+[01:50:28 - 01:50:34] ATO now if you see right it's completely
+[01:50:32 - 01:50:38] perfect right if I increase the size
+[01:50:34 - 01:50:40] right let me refresh the
+[01:50:38 - 01:50:44] screen right right now it's showing
+[01:50:40 - 01:50:48] three only because let me go back here
+[01:50:44 - 01:50:50] right we have to uh did we miss anything
+[01:50:48 - 01:50:52] okay so on medium we we showing three
+[01:50:50 - 01:50:53] see on large screen we have to show four
+[01:50:52 - 01:50:58] so not column span it should be a
+[01:50:53 - 01:50:59] columns four and here as well columns
+[01:50:58 - 01:51:02] five
+[01:50:59 - 01:51:07] okay I did it if I increase the size see
+[01:51:02 - 01:51:09] 1 2 3 4 five five post is visible on the
+[01:51:07 - 01:51:10] screen okay you can give some Gap more
+[01:51:09 - 01:51:13] gap between this one I will keep as it
+[01:51:10 - 01:51:15] is it look good to me okay and if I
+[01:51:13 - 01:51:18] decrease the screen size okay as soon as
+[01:51:15 - 01:51:21] decrease the screen size see on this
+[01:51:18 - 01:51:24] this is the last screen this is the now
+[01:51:21 - 01:51:27] this is a medium screen and now this is
+[01:51:24 - 01:51:28] a smaller screen okay and if you see
+[01:51:27 - 01:51:31] right the GRE structure you don't need
+[01:51:28 - 01:51:34] to do any uh special configuration for
+[01:51:31 - 01:51:36] this kind of gr structure right uh T CS
+[01:51:34 - 01:51:39] is already taken care of that one and if
+[01:51:36 - 01:51:41] you want to see the behind CSS class for
+[01:51:39 - 01:51:43] example if I hover on this one you'll
+[01:51:41 - 01:51:46] see the minimum width and everything
+[01:51:43 - 01:51:48] everything will be already defined okay
+[01:51:46 - 01:51:50] so I hope you understand this one if you
+[01:51:48 - 01:51:53] have any doubt any question
+[01:51:50 - 01:51:55] then please uh reach out to me or you
+[01:51:53 - 01:51:59] can put a comment in the comment section
+[01:51:55 - 01:51:59] and anytime you can access my code
+[01:52:03 - 01:52:09] okay so in know homepage as well if you
+[01:52:06 - 01:52:12] go to page. jsx right uh the same logic
+[01:52:09 - 01:52:15] which we use for the to face the user
+[01:52:12 - 01:52:17] spin right I copy the same logic in
+[01:52:15 - 01:52:19] page. jsx only change it I remove the
+[01:52:17 - 01:52:21] wear condition because we want all the
+[01:52:19 - 01:52:24] pins which is available in that
+[01:52:21 - 01:52:26] collection okay so that's the reason I
+[01:52:24 - 01:52:29] use this one and I'm setting the same
+[01:52:26 - 01:52:33] value whatever we have okay now what you
+[01:52:29 - 01:52:37] have to do let's remove this one for now
+[01:52:33 - 01:52:39] okay and here we'll Define the pin list
+[01:52:37 - 01:52:41] okay and for this pin list if you see
+[01:52:39 - 01:52:43] right we want to pass the list of pins
+[01:52:41 - 01:52:47] okay
+[01:52:43 - 01:52:50] sorry so let me go to this
+[01:52:47 - 01:52:53] um p. jxx and hit here we will pass the
+[01:52:50 - 01:52:57] list of pins okay is equal to list of
+[01:52:53 - 01:52:59] pins if I save it and now you will see
+[01:52:57 - 01:53:03] the all the list of pin will display on
+[01:52:59 - 01:53:05] the screen okay uh let me check what
+[01:53:03 - 01:53:08] okay so it's not showing because we want
+[01:53:05 - 01:53:10] we need to call this first right so here
+[01:53:08 - 01:53:10] in use
+[01:53:11 - 01:53:18] effect we have to call get list of pins
+[01:53:14 - 01:53:20] and let's pass empty ARR when the um
+[01:53:18 - 01:53:21] component Lo first time and if you see
+[01:53:20 - 01:53:24] the list of pin is displaying on the
+[01:53:21 - 01:53:24] screen Let me refresh the
+[01:53:26 - 01:53:31] ones okay and if you see the list of pin
+[01:53:29 - 01:53:33] is displaying
+[01:53:31 - 01:53:36] perfect so I hope you understand this
+[01:53:33 - 01:53:38] section as well right so if you go to
+[01:53:36 - 01:53:40] profile right now only profile pin will
+[01:53:38 - 01:53:43] show and if you go to the homepage all
+[01:53:40 - 01:53:43] the pins will display on the
+[01:53:46 - 01:53:53] screen now uh due to the the video
+[01:53:50 - 01:53:56] length right is getting longer I also
+[01:53:53 - 01:53:58] implemented the uh details of this pin
+[01:53:56 - 01:54:00] right if I if you click on any of this
+[01:53:58 - 01:54:03] particular pin for example if I click on
+[01:54:00 - 01:54:04] this one right it will show you the uh
+[01:54:03 - 01:54:06] pin detail right if you see it's
+[01:54:04 - 01:54:10] beautifully showing the pin detail with
+[01:54:06 - 01:54:13] the image um the title the user who
+[01:54:10 - 01:54:15] added this pin uh the link on if you
+[01:54:13 - 01:54:17] click on this link it will open the
+[01:54:15 - 01:54:20] source of that one right and you can go
+[01:54:17 - 01:54:23] back as well from this Arrow okay if I
+[01:54:20 - 01:54:25] open this one see how easily it's open
+[01:54:23 - 01:54:29] right so this one is I already added
+[01:54:25 - 01:54:31] it's quite simple it's uh the layout is
+[01:54:29 - 01:54:33] similar to what we designed for the
+[01:54:31 - 01:54:36] create uh page right so let's show let
+[01:54:33 - 01:54:39] me show you so I created the W folder
+[01:54:36 - 01:54:43] called pin uh sorry uh the pin / pin ID
+[01:54:39 - 01:54:45] right and if you go to the let me go to
+[01:54:43 - 01:54:48] the home and if you open any of this pin
+[01:54:45 - 01:54:50] right you will see the routing so I
+[01:54:48 - 01:54:52] create one for C pin and inside that I
+[01:54:50 - 01:54:56] added this uh another folder with the
+[01:54:52 - 01:54:59] pin ID and then page. jsx okay in that
+[01:54:56 - 01:55:02] page. jsx I first I added this back
+[01:54:59 - 01:55:05] button and then I added the layout okay
+[01:55:02 - 01:55:07] and uh in the format of grid and I
+[01:55:05 - 01:55:10] divided pin image and pin info in two
+[01:55:07 - 01:55:12] different column okay p in pin image
+[01:55:10 - 01:55:14] straightforward just displaying pin and
+[01:55:12 - 01:55:17] making the corner to be
+[01:55:14 - 01:55:19] rounded and in the pain info I'm showing
+[01:55:17 - 01:55:21] on the right hand side what are the
+[01:55:19 - 01:55:24] information we want right for example
+[01:55:21 - 01:55:27] the title the user tag which I jum
+[01:55:24 - 01:55:29] passing the user right and we already
+[01:55:27 - 01:55:33] getting the pin detail as well and then
+[01:55:29 - 01:55:36] button to open the URL also in order to
+[01:55:33 - 01:55:38] get the pin detail right um we already
+[01:55:36 - 01:55:41] have the parameter which we are getting
+[01:55:38 - 01:55:45] right so in this case is this ID and I'm
+[01:55:41 - 01:55:47] using that ID to pass it uh here to get
+[01:55:45 - 01:55:49] the document of that particular ID this
+[01:55:47 - 01:55:51] logic we already implemented for the
+[01:55:49 - 01:55:54] user right is similar one only just
+[01:55:51 - 01:55:55] change is the collection uh right the
+[01:55:54 - 01:55:58] collection name is in this case
+[01:55:55 - 01:56:00] different and we are using get doc only
+[01:55:58 - 01:56:02] not docs okay we are using get doc
+[01:56:00 - 01:56:05] because we are only fetching single uh
+[01:56:02 - 01:56:07] document and then we are saving it in a
+[01:56:05 - 01:56:09] set pin detail which is the state okay
+[01:56:07 - 01:56:12] pin detail and set pin detail like this
+[01:56:09 - 01:56:16] and that's all this is how uh we are
+[01:56:12 - 01:56:18] going to uh show the details of the pin
+[01:56:16 - 01:56:20] okay I hope you understand this one if
+[01:56:18 - 01:56:23] you have any question you can use uh my
+[01:56:20 - 01:56:26] source code to work it out okay and as I
+[01:56:23 - 01:56:28] say it's completely responsive okay and
+[01:56:26 - 01:56:30] if you open this one right and even
+[01:56:28 - 01:56:32] though if I decrease screen size it
+[01:56:30 - 01:56:35] responds you okay on mobile view it will
+[01:56:32 - 01:56:40] look like this okay let me go
+[01:56:35 - 01:56:42] back okay see perfect so let me know uh
+[01:56:40 - 01:56:44] if you have any questions okay and this
+[01:56:42 - 01:56:47] is the end of our course I know it's
+[01:56:44 - 01:56:48] little bit fast for this Pinterest but
+[01:56:47 - 01:56:51] next tutorial will be very very
+[01:56:48 - 01:56:53] interesting and you will like it right
+[01:56:51 - 01:56:55] so in next tutorial we are um willing
+[01:56:53 - 01:56:58] I'm creating two different course one is
+[01:56:55 - 01:57:01] to drag and drop talk manager second is
+[01:56:58 - 01:57:05] video streaming application and another
+[01:57:01 - 01:57:07] one is uh the uh document manager okay
+[01:57:05 - 01:57:09] so these are the uh courses is coming up
+[01:57:07 - 01:57:12] next so if you did not subscribe to my
+[01:57:09 - 01:57:14] Channel Please Subscribe now and tell
+[01:57:12 - 01:57:16] your friends to subscribe my channel as
+[01:57:14 - 01:57:20] well and if you like this video press
+[01:57:16 - 01:57:23] like button if I get the 150 to 200
+[01:57:20 - 01:57:25] likes I will uh release the next course
+[01:57:23 - 01:57:29] immediately so guys uh see you in the
+[01:57:25 - 01:57:29] next tutorial

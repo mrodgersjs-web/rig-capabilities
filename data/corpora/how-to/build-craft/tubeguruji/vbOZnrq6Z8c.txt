@@ -1,0 +1,2968 @@
+[00:00 - 00:04] Hello everyone. Welcome back to our
+[00:01 - 00:07] channel Tube Guruji. And today we are
+[00:04 - 00:09] going to develop the news application,
+[00:07 - 00:12] the Apple news applications and we can
+[00:09 - 00:14] say 2.0 with the help of React Native.
+[00:12 - 00:17] Okay. And we are building complete
+[00:14 - 00:19] application from the scratch. If you
+[00:17 - 00:22] don't know anything about the React
+[00:19 - 00:24] Native, don't worry because I will teach
+[00:22 - 00:25] you all the concept of the React Native
+[00:24 - 00:27] in this video.
+[00:25 - 00:28] So let's see what we are going to build
+[00:27 - 00:30] today.
+[00:28 - 00:32] And then we'll see what we are going to
+[00:30 - 00:34] learn in this video.
+[00:32 - 00:36] So this is complete tutorial video and
+[00:34 - 00:38] if you see right, we are designing this
+[00:36 - 00:39] beautiful application. I give the Tube
+[00:38 - 00:41] Guruji news
+[00:39 - 00:45] application name.
+[00:41 - 00:46] And you see the list of um
+[00:45 - 00:49] news, right? If you want to go to the
+[00:46 - 00:50] latest news, you can go and it will open
+[00:49 - 00:52] the latest news for you. Let's see,
+[00:50 - 00:54] right?
+[00:52 - 00:56] We have horizontal scrolls. Then we have
+[00:54 - 00:57] vertical scrolling.
+[00:56 - 00:59] Then if you want to open any of the
+[00:57 - 01:01] news, just click on that news and it
+[00:59 - 01:03] will open for you, right? And it will
+[01:01 - 01:06] show the details of the news.
+[01:03 - 01:08] Also,
+[01:06 - 01:10] you can read this news. Just click on
+[01:08 - 01:13] read more and it will open the URL of
+[01:10 - 01:14] the source for this news.
+[01:13 - 01:16] Also,
+[01:14 - 01:19] you can share this
+[01:16 - 01:22] particular news with your friends, okay?
+[01:19 - 01:23] On WhatsApp or any on Facebook.
+[01:22 - 01:25] Also, we will learn about the
+[01:23 - 01:28] navigation.
+[01:25 - 01:31] The if you see this category sliding,
+[01:28 - 01:33] right? That also we can implement the
+[01:31 - 01:36] loading effect and many more things.
+[01:33 - 01:38] So guys, watch this full video and I
+[01:36 - 01:41] hope you will love this
+[01:38 - 01:43] video and that tutorial. And if you did
+[01:41 - 01:46] not subscribe to my channel, go and
+[01:43 - 01:48] subscribe because if you want to get
+[01:46 - 01:50] more video like this,
+[01:48 - 01:52] then press the bell icon as well. So
+[01:50 - 01:55] guys, without doing any further delay,
+[01:52 - 01:55] let's begin.
+[01:55 - 02:01] So today we will going to learn a lot of
+[01:58 - 02:03] things in this project. So, first we'll
+[02:01 - 02:05] learn how to create React Native / Expo
+[02:03 - 02:07] application.
+[02:05 - 02:09] Then, we'll understand the different
+[02:07 - 02:12] types of hooks like use effect, use
+[02:09 - 02:13] navigation, and a lot of things.
+[02:12 - 02:16] Then, we'll learn how to do styling in
+[02:13 - 02:20] the React Native and the most popular
+[02:16 - 02:22] how to use the flat list. So, in this
+[02:20 - 02:25] video we'll teach how to use flat list
+[02:22 - 02:28] in a horizontal way or vertical way and
+[02:25 - 02:31] with many properties.
+[02:28 - 02:32] Also, then we'll learn how to call the
+[02:31 - 02:36] API. We'll
+[02:32 - 02:39] register for our own free news API and
+[02:36 - 02:41] we'll learn how to call the any API
+[02:39 - 02:44] uh in our application.
+[02:41 - 02:46] The next and important part is how to do
+[02:44 - 02:47] the navigations and routing in the React
+[02:46 - 02:49] Native.
+[02:47 - 02:52] And we'll also learn how to pass data
+[02:49 - 02:54] between the parent components and to
+[02:52 - 02:55] child component and child component to
+[02:54 - 02:57] parent components.
+[02:55 - 03:00] Also, we will learn about the in-app
+[02:57 - 03:03] browsing. So, if you want to
+[03:00 - 03:05] open some external URL in a inside our
+[03:03 - 03:07] application, we will learn about that
+[03:05 - 03:09] one and uh
+[03:07 - 03:10] how to open that particular URL outside
+[03:09 - 03:13] the application, we'll also learn that
+[03:10 - 03:15] one. And then in the last, we will
+[03:13 - 03:17] publish our application so that user can
+[03:15 - 03:20] use it, your friends can use it.
+[03:17 - 03:23] And there are a lot of many more things
+[03:20 - 03:25] we will learn in this particular
+[03:23 - 03:29] video course.
+[03:25 - 03:31] So, guys, watch this full video and
+[03:29 - 03:33] before doing any further delay, let's
+[03:31 - 03:33] begin.
+[03:36 - 03:40] So, let's create a
+[03:38 - 03:42] React Native app. So, in order to create
+[03:40 - 03:43] the React Native app, we are using the
+[03:42 - 03:46] Expo.
+[03:43 - 03:49] So, there are two ways we can create the
+[03:46 - 03:51] React Native application. One with Expo
+[03:49 - 03:53] and without Expo. The reason is to
+[03:51 - 03:55] create the application with Expo,
+[03:53 - 03:58] it helps us to build the application
+[03:55 - 04:00] much easier and more faster. If you are
+[03:58 - 04:01] a beginner, then I will suggest go with
+[04:00 - 04:03] the Expo.
+[04:01 - 04:07] All the features
+[04:03 - 04:10] which needed like any native features
+[04:07 - 04:12] you want in the application, Expo will
+[04:10 - 04:15] provide all everything
+[04:12 - 04:17] and each feature for the application,
+[04:15 - 04:19] okay? And it's very easy to use, so
+[04:17 - 04:20] that's the reason we are we will use
+[04:19 - 04:22] Expo.
+[04:20 - 04:23] If you go to the expo.dev, right? You
+[04:22 - 04:25] will see this
+[04:23 - 04:26] their homepage. So, let's go to
+[04:25 - 04:28] documentation.
+[04:26 - 04:31] And here
+[04:28 - 04:32] you can see the statement to create the
+[04:31 - 04:33] Expo
+[04:32 - 04:35] Expo, right?
+[04:33 - 04:36] application. So, you can install the
+[04:35 - 04:40] Angular CLI first if you did not
+[04:36 - 04:42] install, okay? And there is a some steps
+[04:40 - 04:45] and you have to create the account.
+[04:42 - 04:47] And with the this Expo you can directly
+[04:45 - 04:50] use the your device in order to test the
+[04:47 - 04:52] application, okay? In the real time.
+[04:50 - 04:54] If you don't have emulator or you can
+[04:52 - 04:57] use emulator as well, okay?
+[04:54 - 04:59] So, just go and install this Expo first,
+[04:57 - 05:01] okay? Using the CLI.
+[04:59 - 05:03] And in order to create the application,
+[05:01 - 05:05] here are the some step
+[05:03 - 05:08] some command, you know, you can use it,
+[05:05 - 05:10] okay? And open command prompt in the
+[05:08 - 05:12] desired location.
+[05:10 - 05:13] And here you can type
+[05:12 - 05:15] the
+[05:13 - 05:17] in order to create the project, you have
+[05:15 - 05:21] to type the command. So, the command is
+[05:17 - 05:25] NPX create Expo app and the application
+[05:21 - 05:28] name. In this case, I will write
+[05:25 - 05:28] Apple News
+[05:30 - 05:35] 2.0, okay?
+[05:33 - 05:35] Apple News.
+[05:40 - 05:45] It will take some time to create the
+[05:42 - 05:48] project to install the all the packages
+[05:45 - 05:48] and dependency.
+[05:49 - 05:55] So, our project is created. Let's go to
+[05:52 - 05:56] the project folder using the CD
+[05:55 - 05:58] menu.
+[05:56 - 06:01] And once you are in that project folder
+[05:58 - 06:05] path, just open the VS code with the
+[06:01 - 06:05] help of command line code space dot.
+[06:07 - 06:14] Now, it will open this
+[06:10 - 06:14] our application in your VS code. Okay?
+[06:17 - 06:21] Now, let's understand the folder
+[06:19 - 06:24] structure.
+[06:21 - 06:26] If you see on the left-hand side,
+[06:24 - 06:28] you will see this dot VS code. Just
+[06:26 - 06:30] ignore that part. In this folder, the
+[06:28 - 06:32] assets, all your images and everything
+[06:30 - 06:35] is stored in this folder, right?
+[06:32 - 06:37] Then, we have this app.js, which is our
+[06:35 - 06:38] starting point for the application.
+[06:37 - 06:40] Okay?
+[06:38 - 06:41] And
+[06:40 - 06:44] so, your code will be start here. You
+[06:41 - 06:46] have to write uh start writing code uh
+[06:44 - 06:49] in the in the app.js file.
+[06:46 - 06:51] Then, we have have app.json file, where
+[06:49 - 06:53] we'll write all our application
+[06:51 - 06:55] configurations, like application name,
+[06:53 - 06:58] the slug name, what is the version
+[06:55 - 07:00] number for the applications, the icons,
+[06:58 - 07:03] uh the package name for the Android
+[07:00 - 07:07] application, iOS application, etc.
+[07:03 - 07:09] Okay? And this package.json is uh
+[07:07 - 07:11] it define where what what are the
+[07:09 - 07:14] dependencies installed and with the
+[07:11 - 07:16] version number and script to run the
+[07:14 - 07:18] applications.
+[07:16 - 07:21] So, this is all our file structure. Uh
+[07:18 - 07:22] when you create the application, uh then
+[07:21 - 07:24] uh
+[07:22 - 07:25] creating the files and folders is very
+[07:24 - 07:30] important in order to maintain the
+[07:25 - 07:30] application structured way. Okay?
+[07:32 - 07:37] Now, let's run the application.
+[07:35 - 07:39] So,
+[07:37 - 07:41] go to the terminal.
+[07:39 - 07:45] Here, Uh, click new terminal. So, in VS
+[07:41 - 07:47] code, it will open the terminal for you.
+[07:45 - 07:48] And just type expo
+[07:47 - 07:49] start.
+[07:48 - 07:51] Okay.
+[07:49 - 07:52] So, there are two way you can run the
+[07:51 - 07:57] application. I will explain both of the
+[07:52 - 08:00] way. So, I just type expo start.
+[07:57 - 08:02] And it will ask you can you want to use
+[08:00 - 08:06] another port because I already using
+[08:02 - 08:06] this port, right? So, I will say yes.
+[08:06 - 08:11] And it will open the browser. Okay.
+[08:11 - 08:15] And in the browser,
+[08:13 - 08:16] um, you will see on the left-hand side,
+[08:15 - 08:18] you have
+[08:16 - 08:20] you will see the some option, right? To
+[08:18 - 08:22] run the application or to publish the
+[08:20 - 08:24] application, a lot of things and a lot
+[08:22 - 08:25] of options, right?
+[08:24 - 08:26] Now,
+[08:25 - 08:28] as I say, in order to run this
+[08:26 - 08:30] application
+[08:28 - 08:32] in your device, right? You have to
+[08:30 - 08:33] choose the connection type as a tunnel.
+[08:32 - 08:34] Okay.
+[08:33 - 08:36] So, what will happen? You have to
+[08:34 - 08:38] install the application from the Play
+[08:36 - 08:40] Store or App Store, depending on
+[08:38 - 08:42] depending on whether you are using the
+[08:40 - 08:44] Android or iOS phone.
+[08:42 - 08:45] And then, you have to download expo go
+[08:44 - 08:48] app.
+[08:45 - 08:49] You have to log in it. And then, once
+[08:48 - 08:51] you,
+[08:49 - 08:52] um, in the same network, right?
+[08:51 - 08:54] And you when you click the tunnel, you
+[08:52 - 08:55] will see this URL.
+[08:54 - 08:57] And then, you can access your
+[08:55 - 09:00] application or
+[08:57 - 09:02] you can scan this QR code as well, okay?
+[09:00 - 09:04] And this will open the expo go app and
+[09:02 - 09:06] your application will get running on
+[09:04 - 09:08] that device, okay?
+[09:06 - 09:11] So, for this project, uh, I will use
+[09:08 - 09:14] Android device emulator because, um,
+[09:11 - 09:16] it's easy for me to show it when while
+[09:14 - 09:19] we are doing the coding.
+[09:16 - 09:20] So, let's run on the Android device.
+[09:19 - 09:23] So,
+[09:20 - 09:25] if you don't want to know how can you,
+[09:23 - 09:28] um,
+[09:25 - 09:30] add a emulator, right, in a Windows PC,
+[09:28 - 09:33] then, uh, I will create a video for you.
+[09:30 - 09:33] Just let me know in the comment section.
+[09:34 - 09:37] So, it's building. So, this is my
+[09:35 - 09:39] Android emulator, okay? And if you see
+[09:37 - 09:40] on the bottom side, it's saying
+[09:39 - 09:42] building, right?
+[09:40 - 09:44] So, it will take some time
+[09:42 - 09:46] when we are launching first time, okay?
+[09:44 - 09:48] So, it's
+[09:46 - 09:49] it's take some time to
+[09:48 - 09:51] So, if you see our application will
+[09:49 - 09:54] completed and app is loading
+[09:51 - 09:56] successfully, okay? And it's showing the
+[09:54 - 09:58] message like open up app.js to start
+[09:56 - 10:00] working on your app. Now, if you go to
+[09:58 - 10:01] your
+[10:00 - 10:03] code
+[10:01 - 10:05] and go to your app.js as I told you
+[10:03 - 10:08] before that this is our starting
+[10:05 - 10:10] So, if you see in the text, right?
+[10:08 - 10:12] So, it's mentioning
+[10:10 - 10:14] the text whatever you are able to see on
+[10:12 - 10:16] the screen, right? It's same text, you
+[10:14 - 10:18] see? Okay?
+[10:16 - 10:20] So, you can write anything. For example,
+[10:18 - 10:23] I will give
+[10:20 - 10:23] right
+[10:23 - 10:26] Welcome to
+[10:25 - 10:28] Guruji.
+[10:26 - 10:29] Okay?
+[10:28 - 10:32] And
+[10:29 - 10:33] if I save it, you will see this message,
+[10:32 - 10:35] okay?
+[10:33 - 10:36] Now, let me explain what is this app.js
+[10:35 - 10:39] is.
+[10:36 - 10:41] So, in the app.js, right? This is our
+[10:39 - 10:43] starting point and in the view, if you
+[10:41 - 10:44] know the HTML CSS, right? We have new
+[10:43 - 10:45] tag.
+[10:44 - 10:47] Here
+[10:45 - 10:48] in order to display the data on the
+[10:47 - 10:51] screen in a mobile
+[10:48 - 10:53] you have to use word view. View itself
+[10:51 - 10:54] meaning to show, right?
+[10:53 - 10:56] And
+[10:54 - 10:59] just ignore the style part for now. I
+[10:56 - 11:02] will explain how it works and all.
+[10:59 - 11:03] Then we are have text uh
+[11:02 - 11:05] tag
+[11:03 - 11:07] and inside tag we enter some text,
+[11:05 - 11:09] right? And ignore this one as well.
+[11:07 - 11:12] And save it, okay?
+[11:09 - 11:14] So
+[11:12 - 11:16] let's start uh
+[11:14 - 11:19] creating files and folder for our
+[11:16 - 11:19] application now.
+[11:21 - 11:25] If you see our application, right? This
+[11:23 - 11:27] is the home page for our applications,
+[11:25 - 11:28] right? So, first we'll create the home
+[11:27 - 11:29] page
+[11:28 - 11:31] and then
+[11:29 - 11:33] uh on the top section you'll see this uh
+[11:31 - 11:34] beautiful
+[11:33 - 11:36] application name.
+[11:34 - 11:38] Then we have this bell icon, right? And
+[11:36 - 11:41] then we have this slider.
+[11:38 - 11:44] So, we can call it a slider and then we
+[11:41 - 11:46] have slider of the news, okay? And then
+[11:44 - 11:48] we have vertical sliders. Oh, sorry,
+[11:46 - 11:50] vertical list of news, right?
+[11:48 - 11:53] So, we will divide this
+[11:50 - 11:55] each
+[11:53 - 11:58] section into the components. So, and
+[11:55 - 12:00] then we will bring together, okay? In
+[11:58 - 12:02] one single page.
+[12:00 - 12:05] So, first let's create a some files and
+[12:02 - 12:07] folders.
+[12:05 - 12:09] So, here
+[12:07 - 12:11] we will in the um
+[12:09 - 12:13] main directory, right? We'll create a
+[12:11 - 12:16] folder called app.
+[12:13 - 12:18] Okay? And inside the app
+[12:16 - 12:21] we will create the folder.
+[12:18 - 12:24] Um we can name it like
+[12:21 - 12:26] pages or screen.
+[12:24 - 12:26] Okay?
+[12:26 - 12:30] Oh, sorry. So, we have to create a
+[12:29 - 12:32] folder actually.
+[12:30 - 12:33] So, inside app we will create a folder
+[12:32 - 12:35] called
+[12:33 - 12:37] uh screen.
+[12:35 - 12:41] And inside that folder
+[12:37 - 12:42] we can create one file called home. dot
+[12:41 - 12:45] js, okay?
+[12:42 - 12:46] So, we are writing in the JavaScript.
+[12:45 - 12:48] So, that's the reason I give the
+[12:46 - 12:52] extension dot js and which is our home.
+[12:48 - 12:53] dot js which is our home screen, okay?
+[12:52 - 12:55] Again, inside the app
+[12:53 - 12:56] we will create another folder called
+[12:55 - 12:57] components.
+[12:56 - 13:00] Okay?
+[12:57 - 13:02] And inside this components
+[13:00 - 13:04] I will create one more folder called
+[13:02 - 13:04] home.
+[13:06 - 13:09] Uh this home component can be used in
+[13:07 - 13:12] the home section this as the reason I
+[13:09 - 13:14] called home, okay? And inside the home
+[13:12 - 13:19] we can call
+[13:14 - 13:21] Um so, if you see our um
+[13:19 - 13:23] screenshot, right? So, we have this
+[13:21 - 13:26] first thing we have this
+[13:23 - 13:28] categories slider, we can say.
+[13:26 - 13:31] So, I can
+[13:28 - 13:33] create a car
+[13:31 - 13:36] category
+[13:33 - 13:36] slider.js.
+[13:37 - 13:40] text slider
+[13:41 - 13:45] And then we have
+[13:45 - 13:51] top headline
+[13:48 - 13:51] slider.js.
+[13:52 - 13:57] And then we have
+[13:53 - 13:59] headline list.
+[13:57 - 14:01] dot
+[13:59 - 14:03] js.
+[14:01 - 14:05] So, three files I created.
+[14:03 - 14:08] In VS code
+[14:05 - 14:11] uh we have one extension called
+[14:08 - 14:13] React Native Snippet, okay? So, I will
+[14:11 - 14:15] say just go and install this one. This
+[14:13 - 14:17] is very helpful in order to get the
+[14:15 - 14:20] default template within
+[14:17 - 14:22] a few word. So, for example, let's go
+[14:20 - 14:24] back in our project and for this
+[14:22 - 14:26] category text slider, right? I will just
+[14:24 - 14:27] type R N S C
+[14:26 - 14:29] and it will create a template for me,
+[14:27 - 14:31] right? So, it is a React template, but
+[14:29 - 14:33] just remove this one and we will wrap
+[14:31 - 14:35] this in a view
+[14:33 - 14:36] because we want Oops, sorry. So, we want
+[14:35 - 14:39] to
+[14:36 - 14:41] show our data on the screen, right?
+[14:39 - 14:43] So, if you see, right? You have to Once
+[14:41 - 14:46] you add this tag, you have to
+[14:43 - 14:49] make sure that you will install this
+[14:46 - 14:52] you will import this view uh
+[14:49 - 14:55] uh dependency, right? So, if you see, I
+[14:52 - 14:57] installed the So, I import this view
+[14:55 - 14:59] from React Native, right? You have to
+[14:57 - 15:00] make sure that you will do it, otherwise
+[14:59 - 15:02] you will get error.
+[15:00 - 15:05] So, for example, if this is not imported
+[15:02 - 15:05] and save it,
+[15:05 - 15:10] Let me check. Okay, so it's it's not
+[15:08 - 15:12] giving error because I I did not
+[15:10 - 15:16] I'm not using this uh component yet,
+[15:12 - 15:18] right? But, if I go to the home.js,
+[15:16 - 15:21] right? And let's create a
+[15:18 - 15:25] default template here first.
+[15:21 - 15:25] And set template, I will create a view.
+[15:26 - 15:32] Inside, I will write text here for now,
+[15:28 - 15:35] okay? So, I will say home page.
+[15:32 - 15:38] And inside that, I will just import this
+[15:35 - 15:40] category text slider.
+[15:38 - 15:42] And if you see the top, right? It's
+[15:40 - 15:44] imported automatically. If it's not,
+[15:42 - 15:46] then you can you have to put the cursor
+[15:44 - 15:49] point at the end and just
+[15:46 - 15:52] click on control and space. Okay? You
+[15:49 - 15:54] will get option to add it.
+[15:52 - 15:55] And once you install,
+[15:54 - 15:56] just save.
+[15:55 - 15:57] Okay?
+[15:56 - 15:59] So,
+[15:57 - 16:01] if you see the emulator, right? It's not
+[15:59 - 16:04] affecting anything. The reason is
+[16:01 - 16:05] it's disconnected off from our metro.
+[16:04 - 16:08] So, what you have to do,
+[16:05 - 16:10] you have to refresh it again, okay?
+[16:08 - 16:11] Or otherwise,
+[16:10 - 16:14] you can just type
+[16:11 - 16:16] R in the terminal and it will reload for
+[16:14 - 16:17] you, okay?
+[16:16 - 16:21] So, still our home we are not pointing
+[16:17 - 16:23] to home, right? Because as I say, app.js
+[16:21 - 16:25] is our starting point. So, remove this
+[16:23 - 16:26] text for now. And if you see blank on
+[16:25 - 16:30] the screen,
+[16:26 - 16:32] okay? And just add this home component
+[16:30 - 16:35] inside our app, right? And make sure you
+[16:32 - 16:37] will import it and save it.
+[16:35 - 16:39] Once you save it,
+[16:37 - 16:42] you will see this home page text appear
+[16:39 - 16:43] on the screen, okay? Because in the home
+[16:42 - 16:45] component, we have this home page
+[16:43 - 16:47] component. And let's try to add this
+[16:45 - 16:49] category text slider.
+[16:47 - 16:51] Then you will see this error, okay? That
+[16:49 - 16:53] view does not exist because we did not
+[16:51 - 16:54] import that view. So, go to the category
+[16:53 - 16:56] text slider
+[16:54 - 16:59] and make sure you will import this view,
+[16:56 - 17:01] okay? So, make sure you import this view
+[16:59 - 17:03] in from the React Native and not the
+[17:01 - 17:04] slash type view. So, React Native and
+[17:03 - 17:07] save it.
+[17:04 - 17:08] And now you see the home page, okay?
+[17:07 - 17:10] So, right now we don't have anything in
+[17:08 - 17:12] the view.
+[17:10 - 17:15] So, for example, if I add here the text
+[17:12 - 17:17] I want to add the text, right?
+[17:15 - 17:18] So, just go to the text and make sure
+[17:17 - 17:20] you import the text again from the React
+[17:18 - 17:24] Native.
+[17:20 - 17:24] And here inside that you can mention
+[17:25 - 17:29] the text what you want to show. Okay,
+[17:27 - 17:30] this is your Tube Guruji home page. If
+[17:29 - 17:33] you see right now it's coming in the
+[17:30 - 17:37] middle because in app.js, right, we have
+[17:33 - 17:39] applied this style. Right? And uh if you
+[17:37 - 17:41] see, this is how we can apply the style
+[17:39 - 17:42] the style.container. So, in the
+[17:41 - 17:45] container
+[17:42 - 17:47] it the the style is defined, right? And
+[17:45 - 17:48] so, it's saying the align item and just
+[17:47 - 17:50] working in the center, so I will remove
+[17:48 - 17:52] it and save it. Okay?
+[17:50 - 17:55] So, it's going in the top of the
+[17:52 - 17:56] section, right? So, make sure
+[17:55 - 17:58] uh
+[17:56 - 18:02] in the Android, right, you have to give
+[17:58 - 18:03] the padding from the top manually. Okay?
+[18:02 - 18:04] If you are using the
+[18:03 - 18:07] uh
+[18:04 - 18:09] iOS, right, you have the one tag called
+[18:07 - 18:12] safe area view,
+[18:09 - 18:13] which automatically uh give the padding.
+[18:12 - 18:15] Okay?
+[18:13 - 18:17] So, right now what I will do, I will do
+[18:15 - 18:17] some padding.
+[18:17 - 18:21] Top, okay?
+[18:19 - 18:23] Give 20.
+[18:21 - 18:26] And it comes down, right? That's what we
+[18:23 - 18:26] want.
+[18:26 - 18:30] Now, let's go to home page.
+[18:32 - 18:34] Which
+[18:32 - 18:37] I will remove this one, okay, because we
+[18:34 - 18:40] don't want it now. And we will work on
+[18:37 - 18:43] the category text slider only because
+[18:40 - 18:45] first thing we want to display this one.
+[18:43 - 18:47] Tube Guruji news, okay?
+[18:45 - 18:47] So,
+[18:48 - 18:54] So, in the home page, right?
+[18:51 - 18:55] So, remove this. This is not where we
+[18:54 - 18:57] we'll show.
+[18:55 - 18:59] So, category
+[18:57 - 19:02] slider will come here, right?
+[18:59 - 19:05] And here we want to show the app name.
+[19:02 - 19:05] So, in the text
+[19:06 - 19:13] uh you have to mention Tube Guruji news,
+[19:10 - 19:13] for example. Okay?
+[19:13 - 19:16] And
+[19:15 - 19:19] if you see, right?
+[19:16 - 19:21] Go here. So, we have some apply some
+[19:19 - 19:23] font and some color as well, right?
+[19:21 - 19:26] So, there are two way that you can apply
+[19:23 - 19:29] the style. Okay? The first way we can
+[19:26 - 19:32] call inline styling. Okay? So, here we
+[19:29 - 19:33] how you can do that. The style. Okay?
+[19:32 - 19:35] You have to go
+[19:33 - 19:37] give that in the double curly braces you
+[19:35 - 19:41] have to define style, right? It's
+[19:37 - 19:43] similar to the uh CSS not exactly.
+[19:41 - 19:45] So, for example, here you want to
+[19:43 - 19:48] increase the font. So, you have to write
+[19:45 - 19:50] font size. Okay? And then how much font
+[19:48 - 19:52] you want to increase like 24.
+[19:50 - 19:54] We are not giving any pixels or
+[19:52 - 19:56] something like that, just the number and
+[19:54 - 19:58] save it. Okay? If you see on the
+[19:56 - 20:00] right-hand side, the font is increased.
+[19:58 - 20:02] Okay? Then
+[20:00 - 20:05] you comma and then you have can increase
+[20:02 - 20:06] the you have um
+[20:05 - 20:10] font style.
+[20:06 - 20:14] Oh, sorry, font weight. So, I will
+[20:10 - 20:14] give bold, right?
+[20:19 - 20:23] And then
+[20:20 - 20:25] uh the color, right? So, here is thing,
+[20:23 - 20:26] right?
+[20:25 - 20:29] In our application, we are using the
+[20:26 - 20:31] color again and again, right? So,
+[20:29 - 20:35] instead of defining the color code every
+[20:31 - 20:38] each component on every screen, you can
+[20:35 - 20:41] define the color at you know, one um
+[20:38 - 20:43] uh file and you can use it. Okay?
+[20:41 - 20:48] So, let's for now let's define a color
+[20:43 - 20:48] here. So, I will say color.
+[20:48 - 20:53] And uh let's see, red, for example.
+[20:52 - 20:55] Right? And you see,
+[20:53 - 20:57] the color is uh the text is showing in
+[20:55 - 21:00] the red. Okay?
+[20:57 - 21:02] So, this is how you can
+[21:00 - 21:04] um do some styling, right? It's called
+[21:02 - 21:06] inline styling.
+[21:04 - 21:08] Now, let's do the external styling. So,
+[21:06 - 21:09] external styling, right? After uh
+[21:08 - 21:12] outside this function,
+[21:09 - 21:13] just type RNSS with the help of
+[21:12 - 21:16] extension, right? It will create a
+[21:13 - 21:17] template for the style sheet.
+[21:16 - 21:19] Make sure you will import the style
+[21:17 - 21:22] sheet. So, do control space and import
+[21:19 - 21:25] the style sheet from the React Native.
+[21:22 - 21:28] And here you can define the style, okay?
+[21:25 - 21:30] So, you can I will just copy-paste this
+[21:28 - 21:33] one and paste it here. Oh, sorry. So,
+[21:30 - 21:36] you have to define uh the class on the
+[21:33 - 21:37] style name, right? So, I will write
+[21:36 - 21:38] heading.
+[21:37 - 21:40] Okay.
+[21:38 - 21:42] Or maybe the
+[21:40 - 21:46] app name. Okay.
+[21:42 - 21:46] And here you can define the style.
+[21:48 - 21:52] Now,
+[21:49 - 21:54] to access this style here, right?
+[21:52 - 21:55] You just need one curly braces and then
+[21:54 - 21:59] you have to define access from the
+[21:55 - 22:00] styles dot application name.
+[21:59 - 22:02] And save it.
+[22:00 - 22:04] And if you see, our style is still there
+[22:02 - 22:07] because we are using same style. If I
+[22:04 - 22:09] change the color to green,
+[22:07 - 22:12] it will change to green. Okay.
+[22:09 - 22:14] So, hope you understand the styling
+[22:12 - 22:16] uh because everywhere we are using the
+[22:14 - 22:18] styling, right? Uh mostly we will go
+[22:16 - 22:19] with the inline styling. Now, let's
+[22:18 - 22:22] define a
+[22:19 - 22:24] uh colors in separate file.
+[22:22 - 22:27] Okay. So, go to the app and here we can
+[22:24 - 22:29] create one folder called shared so where
+[22:27 - 22:31] we can put all the shared uh resources
+[22:29 - 22:35] here, right? And inside that I'll create
+[22:31 - 22:36] one file called color.js.
+[22:35 - 22:39] Okay.
+[22:36 - 22:42] So, in color.js, I already I have this
+[22:39 - 22:44] uh couple of three colors.
+[22:42 - 22:46] So, this is my primary color. It's kind
+[22:44 - 22:48] of blue.
+[22:46 - 22:50] Then I have gray color and then light
+[22:48 - 22:52] gray, okay? And then you have to just
+[22:50 - 22:55] export and default. So, mention export
+[22:52 - 22:57] default so you can access this color.
+[22:55 - 23:00] So, for example, let's go to our
+[22:57 - 23:03] uh home.js file.
+[23:00 - 23:05] And for this application name, right?
+[23:03 - 23:07] It's showing green before, so you can
+[23:05 - 23:09] access by colors. Make sure you will
+[23:07 - 23:10] import this.
+[23:09 - 23:12] And then
+[23:10 - 23:14] And then if you click if you click on my
+[23:12 - 23:15] sorry, if you enter dot, you will see
+[23:14 - 23:18] these three options, right? Because we
+[23:15 - 23:19] have three color in the color.js file.
+[23:18 - 23:22] So in this case, I will select the
+[23:19 - 23:22] primary and save it.
+[23:22 - 23:27] So if you see this, right? The none of
+[23:25 - 23:28] this file exist because we created in
+[23:27 - 23:31] this newly file and application don't
+[23:28 - 23:33] know it's not built actually. So that's
+[23:31 - 23:36] the reason it's not getting built.
+[23:33 - 23:37] So I will stop this server.
+[23:36 - 23:39] So
+[23:37 - 23:41] And now if you see, right? I just run
+[23:39 - 23:44] this application and
+[23:41 - 23:45] color file is imported, right? And now
+[23:44 - 23:47] you can able to see this table view
+[23:45 - 23:50] news, right?
+[23:47 - 23:52] And that's what we are we wanted, right?
+[23:50 - 23:55] But if you see, we need to give padding
+[23:52 - 23:58] from all the side.
+[23:55 - 23:59] So in order to do that, go to the app.js
+[23:58 - 24:02] and throughout the application, we can
+[23:59 - 24:04] do the padding, right? In the container.
+[24:02 - 24:07] You can mention padding
+[24:04 - 24:10] to 20 and save it.
+[24:07 - 24:12] And it will give padding, correct?
+[24:10 - 24:14] Perfect.
+[24:12 - 24:17] So next, we want the
+[24:14 - 24:19] uh bell icon.
+[24:17 - 24:21] Like this.
+[24:19 - 24:24] So
+[24:21 - 24:28] This is the one more uh one site called
+[24:24 - 24:28] icon uh
+[24:28 - 24:32] expo, right? So you can type my expo
+[24:31 - 24:34] icon.
+[24:32 - 24:36] So it will open this
+[24:34 - 24:38] icon.expo.fyi
+[24:36 - 24:42] site, right? Here you will see all type
+[24:38 - 24:45] of icons. Just search what icon do you
+[24:42 - 24:48] want? For example, I will simply
+[24:45 - 24:51] So you see bell icon, right? So
+[24:48 - 24:53] select the one which you want, right? So
+[24:51 - 24:56] in this case
+[24:53 - 24:59] let's enter notification.
+[24:56 - 24:59] This is much better, actually.
+[25:02 - 25:07] And let's search the better one.
+[25:05 - 25:09] So, I will select this one, right? The
+[25:07 - 25:12] notification outline. Click on it and
+[25:09 - 25:13] you will see this import statement.
+[25:12 - 25:15] Just import it. You don't need to
+[25:13 - 25:17] install any dependency for it because
+[25:15 - 25:18] it's by default when you install the
+[25:17 - 25:20] Expo app, right?
+[25:18 - 25:22] And uh
+[25:20 - 25:25] in home.js, import this statement
+[25:22 - 25:27] and go back and copy this
+[25:25 - 25:29] um statement as well,
+[25:27 - 25:31] which you want to use it, right? So, I
+[25:29 - 25:34] will use it here and save it.
+[25:31 - 25:34] And if you see,
+[25:36 - 25:39] um
+[25:37 - 25:41] why it's not going? Okay, yeah. It's
+[25:39 - 25:42] It's getting some delay, but if you see,
+[25:41 - 25:44] right?
+[25:42 - 25:45] This um bell icon is not showing on the
+[25:44 - 25:47] screen.
+[25:45 - 25:48] Now, we want it in in the same line of
+[25:47 - 25:50] this
+[25:48 - 25:51] uh application name. So, I will wrap
+[25:50 - 25:54] this
+[25:51 - 25:55] uh text and Ionic icon, you know,
+[25:54 - 25:58] another view.
+[25:55 - 25:58] Okay.
+[26:03 - 26:08] And we can give some style, right? So, I
+[26:05 - 26:10] will give the inline style in this case.
+[26:08 - 26:13] So, we can show it as a display as a
+[26:10 - 26:13] flex.
+[26:13 - 26:18] And then we can show the flex direction.
+[26:16 - 26:19] The direction of the flex we which we
+[26:18 - 26:20] want is a
+[26:19 - 26:22] row.
+[26:20 - 26:24] And save it. If you see, it's in line.
+[26:22 - 26:26] And we want this bell at the right. So,
+[26:24 - 26:29] we want to give space, right? Between
+[26:26 - 26:31] these two uh items. So, just define
+[26:29 - 26:33] justify content
+[26:31 - 26:34] and it will say space between and save
+[26:33 - 26:35] it.
+[26:34 - 26:36] Right?
+[26:35 - 26:38] And also,
+[26:36 - 26:40] this If you see, this bell icon is at
+[26:38 - 26:41] the little top, right?
+[26:40 - 26:44] So,
+[26:41 - 26:45] add align item and which need to be a
+[26:44 - 26:47] center.
+[26:45 - 26:51] And if you see this changes, right? Now,
+[26:47 - 26:51] it's in center.
+[26:51 - 26:55] So, I will this part. Sorry.
+[26:56 - 27:00] Font size to 25.
+[27:00 - 27:05] And also the size of this icon also 25.
+[27:03 - 27:08] Okay. And now if you see, it's working
+[27:05 - 27:08] perfectly.
+[27:10 - 27:14] Get this
+[27:11 - 27:14] uh slider. Okay.
+[27:15 - 27:18] So,
+[27:16 - 27:20] go to our category text slider
+[27:18 - 27:23] and uh make sure you will input this in
+[27:20 - 27:26] a home.js file. Okay. So, you you added
+[27:23 - 27:28] that in our home.js.
+[27:26 - 27:30] And our category slider text is
+[27:28 - 27:32] displaying because we added it here,
+[27:30 - 27:33] right?
+[27:32 - 27:36] So,
+[27:33 - 27:38] uh I already have some category which I
+[27:36 - 27:41] I'm going to use, right? So, I enter in
+[27:38 - 27:43] the category list on the array of object
+[27:41 - 27:45] with the ID and the name of the
+[27:43 - 27:47] category. Okay, if you see, everything
+[27:45 - 27:47] is here.
+[27:48 - 27:52] So, what you have to do,
+[27:50 - 27:54] remove this text for now, and we want to
+[27:52 - 27:57] show this category, right?
+[27:54 - 27:59] So, you have to iterate that particular
+[27:57 - 28:00] list of object, right?
+[27:59 - 28:03] So, in order to do that,
+[28:00 - 28:06] Expo uh uh React Native,
+[28:03 - 28:09] we are using flat list in order to show
+[28:06 - 28:11] this list of the category, right? So, in
+[28:09 - 28:13] order to define it, I need to use flat
+[28:11 - 28:15] list, import it.
+[28:13 - 28:16] And inside the flat list, there are some
+[28:15 - 28:19] properties.
+[28:16 - 28:21] So, what data need to be load in the in
+[28:19 - 28:25] this list, right? So, you have to define
+[28:21 - 28:26] data. And which what data? The name of
+[28:25 - 28:28] this
+[28:26 - 28:29] uh category list. So, let's say category
+[28:28 - 28:31] list. Okay.
+[28:29 - 28:32] And now you have to render that data,
+[28:31 - 28:34] right?
+[28:32 - 28:38] So, just type render item.
+[28:34 - 28:40] Inside that, double curly braces,
+[28:38 - 28:41] like this.
+[28:40 - 28:43] So, this uh
+[28:41 - 28:46] curly braces, just don't forget it
+[28:43 - 28:48] because this is very important. Okay.
+[28:46 - 28:50] And then like this.
+[28:48 - 28:51] So, here you can write what you want to
+[28:50 - 28:54] show it, okay?
+[28:51 - 28:56] So in this case, for example, I will say
+[28:54 - 28:59] view.
+[28:56 - 29:03] So I will say touchable opacity. So
+[28:59 - 29:03] what is touchable opacity, right?
+[29:04 - 29:08] Let me explain this one, okay? In then
+[29:06 - 29:11] just a minute.
+[29:08 - 29:13] So in touchable opacity
+[29:11 - 29:15] provide some functionality that which
+[29:13 - 29:17] view cannot provide. For example, if you
+[29:15 - 29:18] want to click the item, right? So
+[29:17 - 29:20] touchable opacity we provide the on
+[29:18 - 29:21] press
+[29:20 - 29:23] function. When you click on the
+[29:21 - 29:25] particular item
+[29:23 - 29:26] the click event will occur.
+[29:25 - 29:28] But if you go to the view, right? You
+[29:26 - 29:30] can't
+[29:28 - 29:32] use this on press event which is very
+[29:30 - 29:34] important when you want to click
+[29:32 - 29:36] the item and all. That's the reason we
+[29:34 - 29:38] use touchable opacity. We have different
+[29:36 - 29:40] type of touchable which is touchable
+[29:38 - 29:43] highlight, touchable opacity. The
+[29:40 - 29:45] opacity which give you some
+[29:43 - 29:47] click animation, right? I will show you
+[29:45 - 29:50] how it looks.
+[29:47 - 29:51] So right now just inside touchable
+[29:50 - 29:53] opacity, right?
+[29:51 - 29:56] We will define
+[29:53 - 29:58] in a text.
+[29:56 - 29:59] We will define this list of more
+[29:58 - 30:01] category.
+[29:59 - 30:04] So just in the curly braces, right? You
+[30:01 - 30:05] can define item dot
+[30:04 - 30:07] and name. So you want to show the name,
+[30:05 - 30:09] right? This name.
+[30:07 - 30:11] So and this is the item
+[30:09 - 30:13] which we are going to iterate every
+[30:11 - 30:15] time. Item not anything but this object,
+[30:13 - 30:17] okay?
+[30:15 - 30:19] And we are accessing the each object
+[30:17 - 30:22] name.
+[30:19 - 30:23] So just type item.name and save it.
+[30:22 - 30:25] And you will see
+[30:23 - 30:27] we have all these object name now.
+[30:25 - 30:28] Latest world, business, sport, live, and
+[30:27 - 30:30] movie.
+[30:28 - 30:33] But it is in vertical, right? If you
+[30:30 - 30:34] want horizontal. So flat list by default
+[30:33 - 30:36] uh
+[30:34 - 30:37] give you the result in a vertical
+[30:36 - 30:39] format.
+[30:37 - 30:42] But in this case we want a horizontal.
+[30:39 - 30:44] So in the flat list
+[30:42 - 30:46] in order to define horizontal, right?
+[30:44 - 30:47] Just type horizontal. I want horizontal
+[30:46 - 30:50] flat list, right? So, it's a true or
+[30:47 - 30:51] false. By default, it's a false.
+[30:50 - 30:53] So, if you define the horizontal like
+[30:51 - 30:55] this only, that's all fine. Or you can
+[30:53 - 30:57] define like
+[30:55 - 31:01] uh horizontal to be true and save it.
+[30:57 - 31:03] Now, you see it's coming horizontally.
+[31:01 - 31:05] You want to if you define like this,
+[31:03 - 31:08] that also work.
+[31:05 - 31:09] Now, give give some styling to the text.
+[31:08 - 31:10] So,
+[31:09 - 31:14] inside text
+[31:10 - 31:18] Okay. I will give some inline styling.
+[31:14 - 31:21] So, I will give margin
+[31:18 - 31:22] from the right. I want 10.
+[31:21 - 31:24] Okay.
+[31:22 - 31:27] Then,
+[31:24 - 31:29] we want to give some uh font We want to
+[31:27 - 31:31] give the font size. So, I will give some
+[31:29 - 31:32] 17.
+[31:31 - 31:34] Okay.
+[31:32 - 31:36] Then,
+[31:34 - 31:39] I want font
+[31:36 - 31:39] weight to be bold.
+[31:40 - 31:44] Okay.
+[31:41 - 31:46] And we'll do some more uh
+[31:44 - 31:48] margin in between these two items.
+[31:46 - 31:49] That's the reason I give margin right,
+[31:48 - 31:51] okay?
+[31:49 - 31:53] And now, if you see,
+[31:51 - 31:54] it's scrollable, right? That's what we
+[31:53 - 31:56] want.
+[31:54 - 31:58] But, it you will see this bar, right?
+[31:56 - 32:01] Horizontal scroll bar. And we don't want
+[31:58 - 32:03] that one. It's not look good.
+[32:01 - 32:05] So, what you have to do
+[32:03 - 32:08] for this flat list, we have another
+[32:05 - 32:10] property called show horizontal scroll
+[32:08 - 32:12] indicator. And we have another vertical
+[32:10 - 32:15] We are not using for now.
+[32:12 - 32:17] So, just define horizontal, right? And
+[32:15 - 32:21] mention it to false. By default, it's
+[32:17 - 32:23] true. And save it. And now, if you try,
+[32:21 - 32:24] the scroll bar is no more.
+[32:23 - 32:26] Okay.
+[32:24 - 32:27] And let's go to our application. And if
+[32:26 - 32:30] you see this font is a little bigger,
+[32:27 - 32:33] and we have margin from the top as well.
+[32:30 - 32:34] So, here, we can give the font to be
+[32:33 - 32:36] like
+[32:34 - 32:38] 20.
+[32:36 - 32:41] Okay. And uh for this touchable opacity,
+[32:38 - 32:42] right? For this view, because this is a
+[32:41 - 32:47] whole component,
+[32:42 - 32:48] we can give margin from the top.
+[32:47 - 32:50] Give margin
+[32:48 - 32:52] top
+[32:50 - 32:54] maybe 20.
+[32:52 - 32:58] Not 20, 10.
+[32:54 - 32:59] Okay. And this is perfect fine.
+[32:58 - 33:01] Now, another way,
+[32:59 - 33:04] uh if you want to click any of this,
+[33:01 - 33:06] right? You will see this effect, right?
+[33:04 - 33:08] So, what happened in in when you are
+[33:06 - 33:11] using the touchable opacity,
+[33:08 - 33:14] you will see this light effect, but
+[33:11 - 33:17] if you use the touchable highlight for
+[33:14 - 33:17] example, right?
+[33:17 - 33:20] And see the result.
+[33:20 - 33:24] It's not showing anything,
+[33:22 - 33:25] right?
+[33:24 - 33:27] Because it's not It is clickable, but
+[33:25 - 33:29] it's not giving any effect. That the
+[33:27 - 33:31] reason I use opacity.
+[33:29 - 33:33] It's up to you what you want to use, but
+[33:31 - 33:36] opacity give you the
+[33:33 - 33:38] nice animation, okay?
+[33:36 - 33:40] Now, when I click it,
+[33:38 - 33:43] I want to change the color of this
+[33:40 - 33:46] particular category, so user can able to
+[33:43 - 33:49] see, okay, this is the selected category
+[33:46 - 33:51] or active category, you can say.
+[33:49 - 33:53] So, in order to do that, first define
+[33:51 - 33:56] some variable, right? So,
+[33:53 - 33:58] in a React Native, we can call as a in
+[33:56 - 34:01] beta using the use state, right?
+[33:58 - 34:03] So, let's define constant.
+[34:01 - 34:06] You can say set uh
+[34:03 - 34:09] You can store in active
+[34:06 - 34:11] and set active in order to set the value
+[34:09 - 34:13] for this active variable.
+[34:11 - 34:14] And this is the inbuilt hook in order to
+[34:13 - 34:16] use
+[34:14 - 34:22] use state, right? So, by default, we can
+[34:16 - 34:22] say first element. Okay. And save it.
+[34:22 - 34:28] And let's go back here.
+[34:26 - 34:31] So, what do you have to do?
+[34:28 - 34:33] You have to change the color, right?
+[34:31 - 34:35] So,
+[34:33 - 34:38] So, what do I have to do uh
+[34:35 - 34:39] in this case, I will remove this styling
+[34:38 - 34:42] and I will put it as a external styling,
+[34:39 - 34:44] right? We need to style sheet, import
+[34:42 - 34:46] the style sheet.
+[34:44 - 34:48] I will say this
+[34:46 - 34:51] unselect
+[34:48 - 34:52] text, for example. Inside that, you can
+[34:51 - 34:53] define it.
+[34:52 - 34:58] Right?
+[34:53 - 34:58] Let's remove this extra. Yeah.
+[34:58 - 35:01] Right?
+[34:59 - 35:04] And for unselect text, right? I will
+[35:01 - 35:05] apply this uh style sheet and I will
+[35:04 - 35:07] give the color
+[35:05 - 35:09] to be
+[35:07 - 35:11] gray
+[35:09 - 35:13] from our colors uh
+[35:11 - 35:14] file.
+[35:13 - 35:16] Gray.
+[35:14 - 35:16] Okay.
+[35:18 - 35:21] And this we are giving error because we
+[35:20 - 35:23] don't have any style sheet for now,
+[35:21 - 35:26] right? And just access that styling
+[35:23 - 35:26] sheet using styles.
+[35:27 - 35:31] unselect text, right? And you'll see in
+[35:29 - 35:33] order to change this uh
+[35:31 - 35:36] on click active color, right? We have to
+[35:33 - 35:38] define some condition here.
+[35:36 - 35:40] So, the condition is
+[35:38 - 35:41] I will put index here.
+[35:40 - 35:43] Okay.
+[35:41 - 35:44] Which is nothing but 0 1 2 3 kind of
+[35:43 - 35:46] thing.
+[35:44 - 35:47] But, you can
+[35:46 - 35:49] it's up to you how you want to write the
+[35:47 - 35:50] conditions, right? In this case, what I
+[35:49 - 35:52] will do,
+[35:50 - 35:55] I will write item
+[35:52 - 35:57] .id. The item's ID is equal to is equal
+[35:55 - 35:59] to
+[35:57 - 36:00] active.
+[35:59 - 36:03] Right? Same uh
+[36:00 - 36:04] if um the current ID and active ID is
+[36:03 - 36:05] same,
+[36:04 - 36:07] then I will apply this
+[36:05 - 36:10] uh style another style sheet, otherwise
+[36:07 - 36:14] apply this unselect style sheet. So, I
+[36:10 - 36:17] will create another style sheet here.
+[36:14 - 36:18] We can call select text, and we can
+[36:17 - 36:20] change color to
+[36:18 - 36:22] primary. Right?
+[36:20 - 36:25] So, when
+[36:22 - 36:26] my item is active, I will apply styles.
+[36:25 - 36:28] dot
+[36:26 - 36:30] select text.
+[36:28 - 36:30] Otherwise,
+[36:30 - 36:34] I will apply the unselected, right? And
+[36:33 - 36:35] save it.
+[36:34 - 36:38] Now, if I
+[36:35 - 36:40] save it, right? By default, our item is
+[36:38 - 36:42] one, right? And it's matching the first
+[36:40 - 36:43] element. That's the reason the latest is
+[36:42 - 36:45] by default
+[36:43 - 36:47] color, right? And it's showing as a
+[36:45 - 36:50] selected.
+[36:47 - 36:51] You can see in the font
+[36:50 - 36:53] as well. For example, you can increase
+[36:51 - 36:54] the font size.
+[36:53 - 36:55] Okay?
+[36:54 - 36:56] Uh
+[36:55 - 37:00] let me decrease the font size of this
+[36:56 - 37:00] one like uh 200.
+[37:02 - 37:08] And make it 900.
+[37:05 - 37:10] Okay? Kind of thing.
+[37:08 - 37:11] And now, if you see, you it can't change
+[37:10 - 37:12] because you have to
+[37:11 - 37:14] uh
+[37:12 - 37:16] provide a on place function. So, in a
+[37:14 - 37:19] touchable opacity, you can place on
+[37:16 - 37:22] place on the place of this one, right?
+[37:19 - 37:24] You can call the function.
+[37:22 - 37:25] Okay? And I will write
+[37:24 - 37:28] on
+[37:25 - 37:30] category click function, okay? And make
+[37:28 - 37:32] sure you will define this function.
+[37:30 - 37:34] And pass the argument, right? So, in
+[37:32 - 37:36] this case, I will pass the item ID
+[37:34 - 37:38] item.id.
+[37:36 - 37:41] And define this on category click
+[37:38 - 37:42] function.
+[37:41 - 37:45] So, in order to define it, I write
+[37:42 - 37:48] constant, define this function.
+[37:45 - 37:50] And inside function,
+[37:48 - 37:52] make sure that
+[37:50 - 37:52] ID you're passing, you have to define
+[37:52 - 37:55] here as well, right? That's the
+[37:52 - 37:57] parameter.
+[37:55 - 37:58] And
+[37:57 - 38:00] in order to
+[37:58 - 38:03] apply this ID to the active, right? You
+[38:00 - 38:06] have to apply using the set active. I'm
+[38:03 - 38:09] just type ID. So, if you see,
+[38:06 - 38:11] active set active, and in order to set
+[38:09 - 38:12] the value of this active,
+[38:11 - 38:14] you have to do with the help of set
+[38:12 - 38:15] active. That's the reason I applied this
+[38:14 - 38:18] one. I'm saving it.
+[38:15 - 38:20] Now, if I go click on this one, it's
+[38:18 - 38:23] changing, right?
+[38:20 - 38:26] Perfect. This is what we want.
+[38:23 - 38:29] Perfect. So, you are able to
+[38:26 - 38:32] um add this business list uh listing
+[38:29 - 38:35] slider as well. The Sorry, the category
+[38:32 - 38:35] listing slider, okay?
+[38:37 - 38:41] Next,
+[38:38 - 38:43] we have to use the API, right? In order
+[38:41 - 38:44] to face the news.
+[38:43 - 38:46] So,
+[38:44 - 38:48] just go to the
+[38:46 - 38:49] uh news Just type news API on the Google
+[38:48 - 38:52] and you will
+[38:49 - 38:55] see this newsapi.org
+[38:52 - 38:57] site, right? Which provide you the one
+[38:55 - 38:59] of the best API news API, and which is
+[38:57 - 39:00] completely free. If you go to the
+[38:59 - 39:02] pricing, right?
+[39:00 - 39:03] And
+[39:02 - 39:04] uh it's free
+[39:03 - 39:06] uh
+[39:04 - 39:09] for 100 requests per day, which is
+[39:06 - 39:12] sufficient for your uh learning purpose,
+[39:09 - 39:16] okay? And if you want to start business
+[39:12 - 39:18] or you want more than 100 requests, so
+[39:16 - 39:20] you can go with this um depends on your
+[39:18 - 39:22] own size, you can go with your plan.
+[39:20 - 39:24] But, for now, we will use this plan,
+[39:22 - 39:26] right? So, just create account your
+[39:24 - 39:28] account, okay? If you don't have
+[39:26 - 39:30] already, so I already have account, so I
+[39:28 - 39:31] will log in with the existing account.
+[39:30 - 39:33] And once you log in, right? You will see
+[39:31 - 39:35] this API, correct?
+[39:33 - 39:38] So, don't use mine.
+[39:35 - 39:38] And uh
+[39:38 - 39:42] So, you will see how much usage I have
+[39:40 - 39:43] done and everything, right?
+[39:42 - 39:46] Now, go back to home and see the
+[39:43 - 39:47] documentation of this one, right? So, on
+[39:46 - 39:49] the left-hand side,
+[39:47 - 39:50] uh
+[39:49 - 39:54] if you want to search the news article,
+[39:50 - 39:56] right? This is the API get API uh
+[39:54 - 39:59] endpoint that you can use it.
+[39:56 - 40:02] So, for example, if you want the top
+[39:59 - 40:04] headlines, right? And uh when you search
+[40:02 - 40:06] the top headline,
+[40:04 - 40:08] this is the API endpoint. So, for
+[40:06 - 40:10] example, let me copy it and open it in
+[40:08 - 40:11] browser.
+[40:10 - 40:13] So, you'll see this all this JSON. This
+[40:11 - 40:16] is JSON, actually.
+[40:13 - 40:18] And you will see this JSON now, correct?
+[40:16 - 40:20] So, these are the all top headlines. So,
+[40:18 - 40:23] you can search by the
+[40:20 - 40:25] source by CNN or some news headline
+[40:23 - 40:29] asked the kind of thing, right?
+[40:25 - 40:31] But, for this um
+[40:29 - 40:33] we have a screenshot. So, okay. So, for
+[40:31 - 40:36] this one, right? We will use a top
+[40:33 - 40:37] headline from the US. So,
+[40:36 - 40:40] let's
+[40:37 - 40:43] copy this and that's what we are using.
+[40:40 - 40:45] So, in order to use the API, right? We
+[40:43 - 40:46] want to use the HTTP function feed the
+[40:45 - 40:49] record, right?
+[40:46 - 40:52] So, in React Native, there are lot with
+[40:49 - 40:56] the help of dot face dot A A X I O S,
+[40:52 - 40:58] right? Um we can use or we can feed the
+[40:56 - 41:00] result from the API.
+[40:58 - 41:01] In this example, there are um
+[41:00 - 41:02] beautiful
+[41:01 - 41:06] um
+[41:02 - 41:07] API uh library called API Sauce.
+[41:06 - 41:09] Okay.
+[41:07 - 41:11] And if you go here,
+[41:09 - 41:14] uh this is how you can install this and
+[41:11 - 41:16] very this is very easy and convenient to
+[41:14 - 41:19] use and very fast, right? And if you
+[41:16 - 41:21] see, uh it
+[41:19 - 41:23] it build on the base on the Axios HTTP
+[41:21 - 41:26] client library.
+[41:23 - 41:26] So, what you have to do?
+[41:27 - 41:34] Uh first, you have to install this. So,
+[41:29 - 41:35] this is the command line. So, go and
+[41:34 - 41:38] paste in the terminal. Open a new
+[41:35 - 41:38] terminal.
+[41:38 - 41:43] And paste it here. And once it
+[41:40 - 41:43] installed, right?
+[41:44 - 41:46] We will
+[41:45 - 41:49] uh in meantime, right? We will create
+[41:46 - 41:51] one more folder in the app. And we can
+[41:49 - 41:53] call it as a services.
+[41:51 - 41:57] And inside that,
+[41:53 - 41:57] create one folder called global
+[41:57 - 42:00] API
+[42:00 - 42:05] .js where we can store our all all APIs,
+[42:04 - 42:09] okay?
+[42:05 - 42:11] So, here, let's go back to our
+[42:09 - 42:12] this API GitHub
+[42:11 - 42:15] page.
+[42:12 - 42:17] And there how you can use it, right? So,
+[42:15 - 42:18] let's copy this one
+[42:17 - 42:20] uh in order to
+[42:18 - 42:21] at very first time how to create the
+[42:20 - 42:23] API, right?
+[42:21 - 42:25] And make sure you import this create
+[42:23 - 42:27] statement from the API source. Okay?
+[42:25 - 42:29] Right now, I I don't want header, so I
+[42:27 - 42:31] will remove it. And instead of this base
+[42:29 - 42:34] URL, you can put your own base URL.
+[42:31 - 42:38] So, in our case,
+[42:34 - 42:40] we want this news API uh URL, right? So,
+[42:38 - 42:43] copy this URL.
+[42:40 - 42:45] And paste it here.
+[42:43 - 42:48] But, we want only base URL.
+[42:45 - 42:51] Uh so, we can keep it
+[42:48 - 42:54] up to this point. Okay?
+[42:51 - 42:57] And let me keep this here for now.
+[42:54 - 43:01] Okay? So, this is our base URL.
+[42:57 - 43:03] Now, in order to call the API,
+[43:01 - 43:04] right? Uh
+[43:03 - 43:06] so, this is the
+[43:04 - 43:08] method in order to call it, right? So,
+[43:06 - 43:10] it's very simple.
+[43:08 - 43:13] I will write it for you, actually. So,
+[43:10 - 43:14] we have to write for a simple constant
+[43:13 - 43:15] and get
+[43:14 - 43:18] top
+[43:15 - 43:19] headline. You can uh give any uh
+[43:18 - 43:21] variable name.
+[43:19 - 43:23] And here you have to you have to call
+[43:21 - 43:24] API dot
+[43:23 - 43:26] get record because we are fetching the
+[43:24 - 43:29] record, right?
+[43:26 - 43:30] And you have to define this
+[43:29 - 43:32] what
+[43:30 - 43:34] uh what is the endpoint?
+[43:32 - 43:38] Right? So, top headline. And we have to
+[43:34 - 43:39] pass this country and the API API key.
+[43:38 - 43:42] But, this is constant every time, right?
+[43:39 - 43:44] So, I will define it here as a constant.
+[43:42 - 43:48] So,
+[43:44 - 43:50] uh API key, for example, is equal to
+[43:48 - 43:51] I'll keep like this. Okay?
+[43:50 - 43:54] So, you can put this API key in a
+[43:51 - 43:56] environment variable in order to
+[43:54 - 43:57] uh for security purposes, okay?
+[43:56 - 44:00] And here,
+[43:57 - 44:03] you can define this API key.
+[44:00 - 44:05] So, this include this all statement
+[44:03 - 44:06] uh is nothing but
+[44:05 - 44:08] uh
+[44:06 - 44:12] this one, for example, right? To get the
+[44:08 - 44:14] record. And now you have to export this
+[44:12 - 44:16] get top headlines so that you use the
+[44:14 - 44:17] other we can access this
+[44:16 - 44:19] uh
+[44:17 - 44:21] particular
+[44:19 - 44:24] You can call this endpoint, right? From
+[44:21 - 44:26] any other file. So, I will export save
+[44:24 - 44:29] default and inside that you can call get
+[44:26 - 44:33] top headline. That's it. And then
+[44:29 - 44:35] So, this is quite easy, very simple, and
+[44:33 - 44:37] within few line of code you can able to
+[44:35 - 44:38] define the API from this is a client
+[44:37 - 44:41] side
+[44:38 - 44:41] API call, right?
+[44:42 - 44:45] Now,
+[44:44 - 44:48] uh, go back our
+[44:45 - 44:50] components, right? And we have this
+[44:48 - 44:51] top headline slider component, right?
+[44:50 - 44:54] Just
+[44:51 - 44:57] add the default template.
+[44:54 - 44:57] I'll let add the view.
+[44:58 - 45:01] Save it.
+[44:59 - 45:04] And uh
+[45:01 - 45:06] in the screen, make sure you will import
+[45:04 - 45:09] this item.
+[45:06 - 45:13] So, what I will do first is I will
+[45:09 - 45:13] top headline
+[45:14 - 45:17] slider, right?
+[45:19 - 45:22] And uh
+[45:22 - 45:28] right here, you can define this
+[45:26 - 45:30] top headline slider, right? I This is
+[45:28 - 45:34] the comma comment.
+[45:30 - 45:39] Comment comment I gave, right?
+[45:34 - 45:40] Just for our easiness to understand.
+[45:39 - 45:42] category
+[45:40 - 45:43] list
+[45:42 - 45:45] Right?
+[45:43 - 45:48] And just do the control slash and it
+[45:45 - 45:48] will give you like this, right?
+[45:49 - 45:54] And make sure it's imported, okay? And
+[45:51 - 45:54] save it.
+[45:54 - 45:57] So, it it gave the error like it could
+[45:56 - 46:00] not find within the project something
+[45:57 - 46:02] there. I had to type because if you go
+[46:00 - 46:06] here, right? I put it a few from the
+[46:02 - 46:09] incorrect uh, package. So, make sure you
+[46:06 - 46:11] import from the correct package.
+[46:09 - 46:13] And boom, right.
+[46:11 - 46:15] So, just type something. Make sure it's
+[46:13 - 46:18] coming on the screen.
+[46:15 - 46:19] All right. Top headline.
+[46:18 - 46:21] And save it.
+[46:19 - 46:23] And you see, top headline is coming.
+[46:21 - 46:24] Perfect.
+[46:23 - 46:26] Now,
+[46:24 - 46:28] we have a inbuilt hook called use
+[46:26 - 46:31] effect, right? So, define that use
+[46:28 - 46:33] effect. I will tell how it works, okay?
+[46:31 - 46:35] And why we are using it.
+[46:33 - 46:38] Okay? So, once you define this uh
+[46:35 - 46:41] inbuilt use effect, right? It help us
+[46:38 - 46:43] and this use effect will call every time
+[46:41 - 46:47] when this component is loaded, right?
+[46:43 - 46:50] And uh it will load continuously if you
+[46:47 - 46:52] define like this. But, in order to load
+[46:50 - 46:55] only once, right? You have to define the
+[46:52 - 46:57] square bracket. So, it will only uh
+[46:55 - 47:00] execute once once this component is
+[46:57 - 47:02] getting loaded, right? Or you want to
+[47:00 - 47:04] uh load this use effect at certain
+[47:02 - 47:06] point. For example, some update happens,
+[47:04 - 47:08] right? On the particular variable
+[47:06 - 47:09] change, and you want to load this, you
+[47:08 - 47:11] can define that variable name here,
+[47:09 - 47:14] right? Variable name. And whenever this
+[47:11 - 47:16] variable name change, this use effect
+[47:14 - 47:18] will execute.
+[47:16 - 47:20] I want to execute only once, so I will
+[47:18 - 47:23] do like this, right? And define one
+[47:20 - 47:23] another const uh function or method
+[47:23 - 47:26] um
+[47:23 - 47:28] to get top headline, right? From the
+[47:26 - 47:28] API.
+[47:28 - 47:33] So, I will define like this.
+[47:31 - 47:35] And this will be our async function for
+[47:33 - 47:37] we are calling API, right?
+[47:35 - 47:40] So, inside that, I will write result,
+[47:37 - 47:40] constant result.
+[47:40 - 47:44] Is equal to and we have to call that
+[47:43 - 47:48] global API
+[47:44 - 47:51] and dot our get top headline, right?
+[47:48 - 47:53] And dot we have one data. So, define
+[47:51 - 47:54] like this. So, automatically we will add
+[47:53 - 47:57] await
+[47:54 - 47:59] in front of this one, okay?
+[47:57 - 48:01] And what I will do, I will console this
+[47:59 - 48:03] result so make sure this result is
+[48:01 - 48:04] coming. Okay.
+[48:03 - 48:07] And
+[48:04 - 48:09] this uh get top headline
+[48:07 - 48:11] Oh, let me check the spelling. Yeah.
+[48:09 - 48:13] Headline in the use way because when a
+[48:11 - 48:14] component load we want to uh
+[48:13 - 48:17] uh
+[48:14 - 48:19] execute this method, right? We want to
+[48:17 - 48:22] get this
+[48:19 - 48:25] uh result from the API. So, I will
+[48:22 - 48:26] call like this and save it.
+[48:25 - 48:28] As you know, once you save it, right?
+[48:26 - 48:29] It's saying none of the file exists,
+[48:28 - 48:32] right? This global API file is not able
+[48:29 - 48:35] to find it. So, what I have to do, just
+[48:32 - 48:38] stop the server
+[48:35 - 48:40] and run it again. So, recently uh Expo
+[48:38 - 48:42] updated a lot of things, okay? That's
+[48:40 - 48:45] the reason sometimes it happen,
+[48:42 - 48:45] sometimes not.
+[48:45 - 48:50] Now, if you see in the console, right?
+[48:47 - 48:51] We got a lot of data. You see? It's a
+[48:50 - 48:55] lot of data, right?
+[48:51 - 48:57] It means we are able to get this result.
+[48:55 - 48:58] Right? Now, we want to store that result
+[48:57 - 49:01] in some variable, right? So, in order to
+[48:58 - 49:03] do that, do the constant and we will use
+[49:01 - 49:05] the use state.
+[49:03 - 49:05] We'll say
+[49:06 - 49:09] say
+[49:07 - 49:12] uh news
+[49:09 - 49:16] this for example and then say it new
+[49:12 - 49:18] list. And inside that, we'll use state
+[49:16 - 49:19] and by default I will put it as a empty,
+[49:18 - 49:22] right?
+[49:19 - 49:25] And let's go back to our API and if you
+[49:22 - 49:28] see, right? Our articles means all the
+[49:25 - 49:28] news in the articles. Uh
+[49:28 - 49:31] uh
+[49:28 - 49:34] I write. So,
+[49:31 - 49:36] in save news list, right?
+[49:34 - 49:38] You have to get only articles because we
+[49:36 - 49:39] only want care about the news, right?
+[49:38 - 49:41] The
+[49:39 - 49:46] the list of object of the news. So, I
+[49:41 - 49:48] will write result and then
+[49:46 - 49:50] let's copy this articles and articles,
+[49:48 - 49:53] right? And remove this console.
+[49:50 - 49:56] Save it, right? So, what happens?
+[49:53 - 49:58] All these news, right? If you see all
+[49:56 - 50:00] these news are stored
+[49:58 - 50:02] in this
+[50:00 - 50:03] news list.
+[50:02 - 50:05] Okay, because we with the help of save
+[50:03 - 50:07] news list.
+[50:05 - 50:09] Now, we want to show on the screen,
+[50:07 - 50:12] right? If you remember, uh we use the
+[50:09 - 50:14] flat list for this one because we want
+[50:12 - 50:16] to show horizontally and it's
+[50:14 - 50:19] scrollable, right? Same thing we have to
+[50:16 - 50:23] define for this horizontal top heading
+[50:19 - 50:28] lines slider. So, remove this one.
+[50:23 - 50:28] And define the flat list first.
+[50:28 - 50:32] Inside this flat list
+[50:32 - 50:36] can define the data, which data you we
+[50:34 - 50:38] want to use. So, in this case, the news
+[50:36 - 50:42] list.
+[50:38 - 50:44] We have to render items, right?
+[50:42 - 50:44] So,
+[50:44 - 50:48] item I will say.
+[50:47 - 50:49] Okay.
+[50:48 - 50:50] Kind of things and you have to define
+[50:49 - 50:52] like this.
+[50:50 - 50:53] Inside that, it should be a touchable,
+[50:52 - 50:55] right? Again, this item should be
+[50:53 - 50:57] touchable when you click
+[50:55 - 51:01] you have you can read the full news,
+[50:57 - 51:04] right? So, I will say touchable
+[51:01 - 51:06] opacity.
+[51:04 - 51:08] And inside that
+[51:06 - 51:09] you can define all the
+[51:08 - 51:11] uh
+[51:09 - 51:13] add your all the things. Now, if you see
+[51:11 - 51:16] we want image, the big size image and
+[51:13 - 51:19] then the title of this
+[51:16 - 51:22] uh particular news and this source.
+[51:19 - 51:24] So, we want image. So, define image. So,
+[51:22 - 51:26] this is the image tag, right? We want to
+[51:24 - 51:28] use in the React Native.
+[51:26 - 51:30] Close this tag.
+[51:28 - 51:32] And uh
+[51:30 - 51:34] we have to provide the source. We
+[51:32 - 51:36] uh in this case, we have URL, right?
+[51:34 - 51:40] So, we have to define double curly
+[51:36 - 51:42] braces URI, right? Colon.
+[51:40 - 51:44] And then item. Though this you want to
+[51:42 - 51:47] access the particular item, right?
+[51:44 - 51:49] So, make sure what is the image URL. So,
+[51:47 - 51:52] this is the URL to image. Where we
+[51:49 - 51:55] define the URL for the image, right? So,
+[51:52 - 51:57] define item.url image.
+[51:55 - 51:58] Perfect, right? Now, we want to give the
+[51:57 - 52:00] style.
+[51:58 - 52:01] Because without style, I don't think so
+[52:00 - 52:03] it will show it, right?
+[52:01 - 52:06] Define the style. So, in this case, we
+[52:03 - 52:09] will show the height.
+[52:06 - 52:10] We want to show a height to be like uh
+[52:09 - 52:12] maybe 400.
+[52:10 - 52:14] Okay.
+[52:12 - 52:16] And save it.
+[52:14 - 52:18] So, if you see, it's coming, right? The
+[52:16 - 52:22] height is too much for I think.
+[52:18 - 52:22] So, I will define 350.
+[52:22 - 52:25] Okay.
+[52:23 - 52:27] It's refreshing. It's taking time, but
+[52:25 - 52:27] it's now coming, right?
+[52:29 - 52:34] And uh yeah, that's okay, right? But,
+[52:32 - 52:38] the width is full screen right now,
+[52:34 - 52:40] right? We want to uh limit some width.
+[52:38 - 52:43] And uh that's the reason I will in the
+[52:40 - 52:44] touchable opacity, we can use style.
+[52:43 - 52:47] Right?
+[52:44 - 52:49] And in order to access the screen width
+[52:47 - 52:51] and height, right? So, I will let me
+[52:49 - 52:54] show width first.
+[52:51 - 52:57] And let me get it down.
+[52:54 - 52:59] Okay, so just put dimension. Import this
+[52:57 - 53:00] dimension from the React Native package.
+[52:59 - 53:03] Then,
+[53:00 - 53:05] we will see get dimension of what? You
+[53:03 - 53:06] have to get from the screen or window.
+[53:05 - 53:08] I'll say screen.
+[53:06 - 53:11] And what you want? Height or width? So,
+[53:08 - 53:13] in this case, I want width, right?
+[53:11 - 53:16] And it will take the width of the
+[53:13 - 53:19] screen, right? But, I want I
+[53:16 - 53:22] I want some other 90% of this width,
+[53:19 - 53:23] right? So, I'll put like 0. In this
+[53:22 - 53:26] case, it's
+[53:23 - 53:27] 0.88. And save it.
+[53:26 - 53:31] I will put 80.
+[53:27 - 53:31] Okay. And save it like this.
+[53:31 - 53:34] Okay.
+[53:32 - 53:36] And we want it horizontal. So, what you
+[53:34 - 53:38] have to do?
+[53:36 - 53:39] Just mark it as a horizontal and save
+[53:38 - 53:41] it.
+[53:39 - 53:43] Right? And you will see that next is
+[53:41 - 53:44] coming here.
+[53:43 - 53:46] Correct?
+[53:44 - 53:47] So, what I'll do, I'll put it 80 only
+[53:46 - 53:50] because we haven't give margin and
+[53:47 - 53:51] everything. And if you see, you can able
+[53:50 - 53:53] to see the next image as well a little
+[53:51 - 53:56] bit and that's what we want to show.
+[53:53 - 53:59] That's how we want to show, right?
+[53:56 - 54:00] So, if you go to width 80, that is fine
+[53:59 - 54:04] for now. Okay?
+[54:00 - 54:06] And for this image,
+[54:04 - 54:08] we want to also give the margin uh the
+[54:06 - 54:10] radius the border radius
+[54:08 - 54:13] and which is like 10.
+[54:10 - 54:15] And here,
+[54:13 - 54:18] I can give margin from the right
+[54:15 - 54:21] as a 10 and save it.
+[54:18 - 54:23] You can give more more.
+[54:21 - 54:24] All right, perfect. So, this is what we
+[54:23 - 54:25] want.
+[54:24 - 54:27] Okay?
+[54:25 - 54:28] And
+[54:27 - 54:30] uh
+[54:28 - 54:34] for this view, give some margin from the
+[54:30 - 54:37] top. So, uh at the parent level,
+[54:34 - 54:40] I will give margin
+[54:37 - 54:40] top to be like 10.
+[54:40 - 54:45] And let's see how it looks here. 10,
+[54:43 - 54:48] maybe 50. Okay?
+[54:45 - 54:51] Okay? Yeah, that is okay.
+[54:48 - 54:52] And I will decrease the little height
+[54:51 - 54:53] here.
+[54:52 - 54:55] Okay?
+[54:53 - 54:59] So, what you can do, you can use this
+[54:55 - 55:00] same uh method here instead of 350,
+[54:59 - 55:03] right?
+[55:00 - 55:04] And just change the 080 to something
+[55:03 - 55:05] like 77.
+[55:04 - 55:08] And boom.
+[55:05 - 55:11] Perfect. Okay?
+[55:08 - 55:12] Cool. You can use this uh reuse this.
+[55:11 - 55:14] Okay?
+[55:12 - 55:16] Uh I use the width and in order to
+[55:14 - 55:17] maintain this application, right? If you
+[55:16 - 55:19] the screen size is bigger, larger,
+[55:17 - 55:21] depends on that, it will take the
+[55:19 - 55:22] dimension of the screen and
+[55:21 - 55:24] uh
+[55:22 - 55:26] uh the dimension of the width and then
+[55:24 - 55:29] it will apply the particular width and
+[55:26 - 55:33] height accordingly. Okay?
+[55:29 - 55:34] Perfect. Now, let's add the text.
+[55:33 - 55:37] So,
+[55:34 - 55:38] here, I'll define the text.
+[55:37 - 55:41] Okay.
+[55:38 - 55:44] And text content view what you want if
+[55:41 - 55:46] you go to in a if if you are response.
+[55:44 - 55:49] You want the title.
+[55:46 - 55:51] Okay. So, item.title and save it. You
+[55:49 - 55:54] see this title.
+[55:51 - 55:56] And another one we what we want is the
+[55:54 - 55:58] source. So, if you see the source,
+[55:56 - 56:00] right? Here in the source and then we
+[55:58 - 56:01] have to access the source.name. So, I
+[56:00 - 56:04] will add
+[56:01 - 56:06] use source.name.
+[56:04 - 56:07] If sometimes this happen the source will
+[56:06 - 56:10] not available. So, in this case we mark
+[56:07 - 56:11] as a question mark. So, it's optional.
+[56:10 - 56:13] And if
+[56:11 - 56:15] sometimes if source is not there, it
+[56:13 - 56:17] will not throw error because you mark it
+[56:15 - 56:18] as a option. Okay. So, I will keep like
+[56:17 - 56:20] this.
+[56:18 - 56:22] And if you see
+[56:20 - 56:24] uh this Rolling Stone, Associated Press,
+[56:22 - 56:28] that is our source.
+[56:24 - 56:28] Now, let's give some style to this one.
+[56:28 - 56:36] So, first I will give margin top to 10.
+[56:32 - 56:40] Then I will increase the font size
+[56:36 - 56:44] to 20. Then I will make it bold.
+[56:40 - 56:46] So, I want font family to be
+[56:44 - 56:49] No, I'm going to the font weight
+[56:46 - 56:51] to be bold.
+[56:49 - 56:55] And let's see how it looks.
+[56:51 - 56:55] I think this should look perfect.
+[56:56 - 57:01] And let's define for this one as well.
+[56:59 - 57:06] So, for our source
+[57:01 - 57:06] do margin top to 10 again.
+[57:06 - 57:09] Maybe five. I don't want 10. It's too
+[57:08 - 57:12] much.
+[57:09 - 57:14] And then can give color.
+[57:12 - 57:16] And in this case we want to give the
+[57:14 - 57:18] colors of the our primary color of the
+[57:16 - 57:20] application. And that's the reason,
+[57:18 - 57:22] right? You don't need to define the code
+[57:20 - 57:22] and that is the reason we use the color
+[57:22 - 57:25] uh
+[57:22 - 57:26] for the color we define separate file
+[57:25 - 57:27] name.
+[57:26 - 57:29] And you see
+[57:27 - 57:31] it's coming perfectly fine.
+[57:29 - 57:33] Yeah, yeah, I know you see this
+[57:31 - 57:35] particular horizontal scroll, right? So,
+[57:33 - 57:36] just remove it. You know how to remove
+[57:35 - 57:39] it, right?
+[57:36 - 57:42] So, go here. Say show
+[57:39 - 57:45] horizontal scroll indicator as a false.
+[57:42 - 57:48] Perfect. Let's save it and see.
+[57:45 - 57:50] It's not showing anymore, right?
+[57:48 - 57:52] Perfect.
+[57:50 - 57:54] You able to crack the code, right?
+[57:52 - 57:56] Now, one more thing you face here,
+[57:54 - 57:57] right? Somewhere it's showing four,
+[57:56 - 58:00] somewhere it's showing three, and the
+[57:57 - 58:03] layout get changed. Yes.
+[58:00 - 58:05] So, in order to avoid that,
+[58:03 - 58:06] in this text, right?
+[58:05 - 58:08] You can define the number how many lines
+[58:06 - 58:11] you want to show, right?
+[58:08 - 58:13] Not in style. So, in the text, text will
+[58:11 - 58:15] give you one in-built property called
+[58:13 - 58:18] number of lines. So, I want to show only
+[58:15 - 58:18] three lines maximum. And if you save it,
+[58:18 - 58:21] right?
+[58:18 - 58:24] So, those news title has more than three
+[58:21 - 58:26] lines, it will show you the dot dot dot,
+[58:24 - 58:28] right? It looks perfectly awesome,
+[58:26 - 58:31] correct?
+[58:28 - 58:34] So, that's what
+[58:31 - 58:35] all about this particular slider, right?
+[58:34 - 58:37] And let's see
+[58:35 - 58:39] if it is matching, right? If you see
+[58:37 - 58:43] this font is little bigger, you can
+[58:39 - 58:46] make it font little bigger as well. So,
+[58:43 - 58:49] let's make it 900.
+[58:46 - 58:52] And the font size as well, you can make
+[58:49 - 58:55] it like 24.
+[58:52 - 58:55] 123.
+[58:57 - 59:01] Okay.
+[58:58 - 59:01] I think this is okay for me.
+[59:01 - 59:04] Yeah.
+[59:01 - 59:06] That's look good.
+[59:04 - 59:08] Now, I think we are pretty much done.
+[59:06 - 59:10] And obviously, we use this touchable
+[59:08 - 59:11] opacity, and that's the reason if you
+[59:10 - 59:12] see this click event, right? It's
+[59:11 - 59:14] perfectly
+[59:12 - 59:15] giving some animation on our click.
+[59:14 - 59:18] Okay?
+[59:15 - 59:21] Now, next we will design this list for
+[59:18 - 59:21] this news.
+[59:23 - 59:27] Now,
+[59:25 - 59:29] if you see our screenshot, we want to
+[59:27 - 59:32] design this
+[59:29 - 59:33] list for the news, right? So, on the
+[59:32 - 59:35] left-hand side, we have image, and on
+[59:33 - 59:38] the right-hand side, we have the
+[59:35 - 59:42] news source and the title.
+[59:38 - 59:43] So, let's go to our project.
+[59:42 - 59:46] And
+[59:43 - 59:48] we have this headline list
+[59:46 - 59:51] component, so just
+[59:48 - 59:54] add the template.
+[59:51 - 59:54] Add the view.
+[59:54 - 01:00:00] And let's add text to make sure it's
+[59:57 - 01:00:00] working.
+[01:00:00 - 01:00:05] Headline
+[01:00:02 - 01:00:06] list, okay.
+[01:00:05 - 01:00:11] Now, go to your
+[01:00:06 - 01:00:11] home.js file, and here we will add the
+[01:00:12 - 01:00:16] headline
+[01:00:14 - 01:00:16] list.
+[01:00:25 - 01:00:29] So, this is our emulator.
+[01:00:30 - 01:00:34] And if you save it, right, you will see
+[01:00:32 - 01:00:36] this headline list is coming up, okay.
+[01:00:34 - 01:00:39] So, let me close all this tab and open
+[01:00:36 - 01:00:39] only this headline list, okay.
+[01:00:40 - 01:00:44] So, couple of things, right? What we
+[01:00:43 - 01:00:47] have to do,
+[01:00:44 - 01:00:49] once this home page is loaded, we want
+[01:00:47 - 01:00:51] to load the
+[01:00:49 - 01:00:54] data. It means we have to call the API,
+[01:00:51 - 01:00:55] and then we have to pass it to the every
+[01:00:54 - 01:00:56] component which you want to send it,
+[01:00:55 - 01:00:59] correct?
+[01:00:56 - 01:01:01] So, if you go to the home.js, right, we
+[01:00:59 - 01:01:03] are just showing the information, and in
+[01:01:01 - 01:01:07] top headline, we are sending data.
+[01:01:03 - 01:01:11] So, I will remove all this API call from
+[01:01:07 - 01:01:14] this top headline slider.
+[01:01:11 - 01:01:18] And I will keep it in home.js, okay.
+[01:01:14 - 01:01:19] Make sure you will import all of these
+[01:01:18 - 01:01:22] packages.
+[01:01:19 - 01:01:24] So, use effect, then what we on this
+[01:01:22 - 01:01:26] global API.
+[01:01:24 - 01:01:28] Okay, that's all.
+[01:01:26 - 01:01:30] And if you see, it's similar, just we
+[01:01:28 - 01:01:32] are calling instead of top headline
+[01:01:30 - 01:01:35] slider, we will call uh we will call
+[01:01:32 - 01:01:36] this API from the home page.
+[01:01:35 - 01:01:38] And
+[01:01:36 - 01:01:40] now in
+[01:01:38 - 01:01:43] top headline slider, we want to pass
+[01:01:40 - 01:01:45] this data. Okay? So, in order to pass
+[01:01:43 - 01:01:46] it, we have to pass with the some
+[01:01:45 - 01:01:48] variable.
+[01:01:46 - 01:01:50] For example, headline
+[01:01:48 - 01:01:51] list.
+[01:01:50 - 01:01:56] Okay?
+[01:01:51 - 01:01:59] And then or I can say news list. Okay?
+[01:01:56 - 01:02:02] And inside that, what data do we want to
+[01:01:59 - 01:02:05] pass? So, in this case is news list,
+[01:02:02 - 01:02:07] right? So, news list. So, whatever the
+[01:02:05 - 01:02:08] variable name you want to do, that one.
+[01:02:07 - 01:02:10] And this
+[01:02:08 - 01:02:12] what data do you want to pass?
+[01:02:10 - 01:02:14] Now, you have to go to the top headline
+[01:02:12 - 01:02:16] slider, and inside this, we'll call it
+[01:02:14 - 01:02:17] as a props.
+[01:02:16 - 01:02:20] Okay? So,
+[01:02:17 - 01:02:22] we are getting data from the home to
+[01:02:20 - 01:02:24] this component, right? So, we have to
+[01:02:22 - 01:02:26] mention the props. Uh in this case, I
+[01:02:24 - 01:02:28] will mention like headline
+[01:02:26 - 01:02:30] or I can mention like news list only.
+[01:02:28 - 01:02:33] Okay? So, you don't need to change
+[01:02:30 - 01:02:36] anything here. And I will keep it keep
+[01:02:33 - 01:02:38] as it is the name whatever it is, right?
+[01:02:36 - 01:02:39] And I pass as a news list. And if I save
+[01:02:38 - 01:02:42] it,
+[01:02:39 - 01:02:44] it will show no change because we just
+[01:02:42 - 01:02:46] passing data. Everything is similar,
+[01:02:44 - 01:02:49] right? Instead of calling the API from
+[01:02:46 - 01:02:51] this um top headline list slider, we are
+[01:02:49 - 01:02:54] calling from the home news. Okay?
+[01:02:51 - 01:02:57] Now, next, we want to pass this news
+[01:02:54 - 01:02:59] list on this headline list, right?
+[01:02:57 - 01:03:02] Obviously, uh for headline list, we will
+[01:02:59 - 01:03:04] call different API. But for the
+[01:03:02 - 01:03:07] uh testing purpose, we will pass this
+[01:03:04 - 01:03:08] same information. Okay?
+[01:03:07 - 01:03:11] Headline list.
+[01:03:08 - 01:03:13] Now, next, we have to
+[01:03:11 - 01:03:15] add this props here.
+[01:03:13 - 01:03:18] And
+[01:03:15 - 01:03:21] news list, right? News list. Make sure
+[01:03:18 - 01:03:22] um mostly we have to use the same name
+[01:03:21 - 01:03:26] uh
+[01:03:22 - 01:03:27] in this props, so it will be consistent.
+[01:03:26 - 01:03:28] Okay.
+[01:03:27 - 01:03:31] Now,
+[01:03:28 - 01:03:33] we have the list of all the news. Now,
+[01:03:31 - 01:03:36] we have to iterate it. So, we'll use the
+[01:03:33 - 01:03:36] flat list.
+[01:03:41 - 01:03:46] So, inside the flat list,
+[01:03:43 - 01:03:48] I will add the data. What What data we
+[01:03:46 - 01:03:49] want to pass? So, in this case is a news
+[01:03:48 - 01:03:51] list.
+[01:03:49 - 01:03:54] News list.
+[01:03:51 - 01:03:56] And then we have to render the item.
+[01:03:54 - 01:03:56] Okay.
+[01:03:57 - 01:04:00] item
+[01:04:00 - 01:04:04] Okay.
+[01:04:01 - 01:04:07] And inside that,
+[01:04:04 - 01:04:10] we'll add the touchable opacity
+[01:04:07 - 01:04:12] because it's a clickable.
+[01:04:10 - 01:04:13] opacity
+[01:04:12 - 01:04:15] Okay.
+[01:04:13 - 01:04:19] And now, we have to do an image on the
+[01:04:15 - 01:04:19] left-hand side. So, I will put
+[01:04:19 - 01:04:22] uh
+[01:04:20 - 01:04:25] image
+[01:04:22 - 01:04:27] and let me close the tag and we'll add
+[01:04:25 - 01:04:29] the source. Okay.
+[01:04:27 - 01:04:31] So,
+[01:04:29 - 01:04:35] in this case, item.url
+[01:04:31 - 01:04:35] to image. Okay.
+[01:04:35 - 01:04:39] And save it.
+[01:04:37 - 01:04:41] So, we'll see no information because we
+[01:04:39 - 01:04:42] want to give a height and width. So,
+[01:04:41 - 01:04:46] here,
+[01:04:42 - 01:04:46] inside style,
+[01:04:46 - 01:04:52] we'll give a width
+[01:04:48 - 01:04:54] of maybe 100 and height
+[01:04:52 - 01:04:55] maybe 100. We will add this later if
+[01:04:54 - 01:04:57] needed.
+[01:04:55 - 01:04:59] So, if you see,
+[01:04:57 - 01:05:00] we are not we are not getting any data,
+[01:04:59 - 01:05:02] correct?
+[01:05:00 - 01:05:04] So, let's see whether
+[01:05:02 - 01:05:06] uh in console we are getting any error
+[01:05:04 - 01:05:08] or not. So,
+[01:05:06 - 01:05:11] if you see, it's saying some failed prop
+[01:05:08 - 01:05:14] invalid prop. Okay. So,
+[01:05:11 - 01:05:17] if you go back here
+[01:05:14 - 01:05:18] right? We have to add this URI tag,
+[01:05:17 - 01:05:20] right?
+[01:05:18 - 01:05:21] And also double curly braces to this
+[01:05:20 - 01:05:23] source.
+[01:05:21 - 01:05:25] And then save it.
+[01:05:23 - 01:05:27] And then you'll see this
+[01:05:25 - 01:05:31] all the list, correct?
+[01:05:27 - 01:05:34] So, let's increase the size to 130
+[01:05:31 - 01:05:36] and 130 for example.
+[01:05:34 - 01:05:39] And this is much better, I will say.
+[01:05:36 - 01:05:39] Okay, yeah.
+[01:05:42 - 01:05:46] So, now
+[01:05:43 - 01:05:48] let's round this
+[01:05:46 - 01:05:51] corner.
+[01:05:48 - 01:05:53] And give
+[01:05:51 - 01:05:57] not margin, but give mar
+[01:05:53 - 01:05:58] Okay, let's round this corner first and
+[01:05:57 - 01:06:02] from the margin bottom so on the
+[01:05:58 - 01:06:05] touchable opacity we give style.
+[01:06:02 - 01:06:07] And here we can give margin maybe
+[01:06:05 - 01:06:09] bottom.
+[01:06:07 - 01:06:10] Let's say top.
+[01:06:09 - 01:06:12] 10.
+[01:06:10 - 01:06:15] Okay, yeah.
+[01:06:12 - 01:06:18] This is perfect. If you see
+[01:06:15 - 01:06:18] yeah, this is perfect, okay.
+[01:06:19 - 01:06:23] Now, we want to
+[01:06:21 - 01:06:25] name and
+[01:06:23 - 01:06:29] source name, title and source name. So,
+[01:06:25 - 01:06:29] I will put one view here.
+[01:06:29 - 01:06:34] So, you can put empty things as well
+[01:06:31 - 01:06:37] like this, okay? It doesn't matter.
+[01:06:34 - 01:06:37] And inside that
+[01:06:39 - 01:06:44] uh we'll add the title, right? So,
+[01:06:42 - 01:06:44] inside text
+[01:06:47 - 01:06:50] item.title.
+[01:06:50 - 01:06:53] Okay.
+[01:06:51 - 01:06:56] And another one we want
+[01:06:53 - 01:06:56] item.source.name.
+[01:06:58 - 01:07:02] Okay, so
+[01:07:00 - 01:07:04] if source is not there, we'll put it
+[01:07:02 - 01:07:06] optional.
+[01:07:04 - 01:07:08] And now we want the
+[01:07:06 - 01:07:10] this all this information data
+[01:07:08 - 01:07:11] in one row with the image. So, in
+[01:07:10 - 01:07:14] touchable opacity
+[01:07:11 - 01:07:17] uh style, we want to show it as a
+[01:07:14 - 01:07:20] one under line, so make it as a
+[01:07:17 - 01:07:20] flex.
+[01:07:20 - 01:07:27] And then
+[01:07:23 - 01:07:27] make flex direction as a row.
+[01:07:28 - 01:07:31] And if you see, it's coming.
+[01:07:30 - 01:07:33] Okay.
+[01:07:31 - 01:07:36] So, if you see, our text is going
+[01:07:33 - 01:07:38] uh on the right-hand side, right?
+[01:07:36 - 01:07:40] So, what I will do
+[01:07:38 - 01:07:42] I will put some margin, or you can put
+[01:07:40 - 01:07:45] the width, but uh here
+[01:07:42 - 01:07:48] in style
+[01:07:45 - 01:07:51] I will put some margin.
+[01:07:48 - 01:07:51] So, margin
+[01:07:53 - 01:07:57] So, it's better to give you a view
+[01:07:54 - 01:07:57] because we are giving style.
+[01:08:00 - 01:08:03] View, okay.
+[01:08:01 - 01:08:07] And view here.
+[01:08:03 - 01:08:07] Margin right
+[01:08:09 - 01:08:13] 130. I will give 135.
+[01:08:14 - 01:08:17] If you see, all text in one line now.
+[01:08:18 - 01:08:24] And also, I will give some margin from
+[01:08:21 - 01:08:24] the left, like 10.
+[01:08:25 - 01:08:29] And we'll give 130.
+[01:08:28 - 01:08:31] Okay, yeah.
+[01:08:29 - 01:08:34] Now, we want to give a
+[01:08:31 - 01:08:37] style to this text. So, style
+[01:08:34 - 01:08:41] link with the font size first.
+[01:08:37 - 01:08:45] I will make it 80 and let make the font
+[01:08:41 - 01:08:45] uh weight to be bold.
+[01:08:45 - 01:08:50] Okay, yeah. This is look perfect. Now,
+[01:08:48 - 01:08:52] we have to uh limit the number of lines.
+[01:08:50 - 01:08:54] So, in this case, I will limit to four,
+[01:08:52 - 01:08:54] maybe. Yeah.
+[01:08:55 - 01:08:58] So,
+[01:08:56 - 01:09:01] inside this, we will limit the number of
+[01:08:58 - 01:09:01] lines to be four only.
+[01:09:02 - 01:09:06] Uh yeah, you see, our number line says
+[01:09:04 - 01:09:08] four now.
+[01:09:06 - 01:09:10] Also
+[01:09:08 - 01:09:12] in this one right we want to give style
+[01:09:10 - 01:09:15] to style.
+[01:09:12 - 01:09:17] And I will keep this text as it is just
+[01:09:15 - 01:09:20] I will change the color
+[01:09:17 - 01:09:22] to primary.
+[01:09:20 - 01:09:23] colors
+[01:09:22 - 01:09:25] color.primary
+[01:09:23 - 01:09:27] and also I will give some margin from
+[01:09:25 - 01:09:30] the top
+[01:09:27 - 01:09:31] to six maybe and let's see how it looks.
+[01:09:30 - 01:09:33] Yeah.
+[01:09:31 - 01:09:34] And this is looking much better. But if
+[01:09:33 - 01:09:36] you see right it's only scrolling this
+[01:09:34 - 01:09:38] part and not
+[01:09:36 - 01:09:40] on the whole
+[01:09:38 - 01:09:42] page right?
+[01:09:40 - 01:09:45] So in order to
+[01:09:42 - 01:09:47] do it right let's go to home.js and here
+[01:09:45 - 01:09:50] you have to you have to apply
+[01:09:47 - 01:09:53] scroll level view
+[01:09:50 - 01:09:55] and import the package if you see it's
+[01:09:53 - 01:09:57] importing from the react native.
+[01:09:55 - 01:09:59] And this type on the scroll type of view
+[01:09:57 - 01:10:01] and now save it.
+[01:09:59 - 01:10:05] Now if you see
+[01:10:01 - 01:10:08] we are getting right all this page
+[01:10:05 - 01:10:10] is scrolling now.
+[01:10:08 - 01:10:11] One more thing if you observe here we
+[01:10:10 - 01:10:13] have this
+[01:10:11 - 01:10:16] horizontal line right?
+[01:10:13 - 01:10:17] So like HTML or CSS we don't have HR
+[01:10:16 - 01:10:20] tag.
+[01:10:17 - 01:10:22] So we have to add this line.
+[01:10:20 - 01:10:24] So let's go to top headlines slider
+[01:10:22 - 01:10:26] sorry in the headline list
+[01:10:24 - 01:10:27] and outside of this
+[01:10:26 - 01:10:28] uh touch
+[01:10:27 - 01:10:32] touchable view
+[01:10:28 - 01:10:35] maybe yeah touchable view opacity.
+[01:10:32 - 01:10:37] Let's let's add here only let's for
+[01:10:35 - 01:10:38] let's add view.
+[01:10:37 - 01:10:41] Okay.
+[01:10:38 - 01:10:41] And for view we only use style.
+[01:10:41 - 01:10:44] Okay.
+[01:10:41 - 01:10:47] So I will give a height of one
+[01:10:44 - 01:10:50] and I will give color
+[01:10:47 - 01:10:50] colors.
+[01:10:50 - 01:10:53] uh
+[01:10:50 - 01:10:56] light gray
+[01:10:53 - 01:10:58] color.light gray
+[01:10:56 - 01:11:01] and we will see it's our color, but we
+[01:10:58 - 01:11:01] will see the background color.
+[01:11:03 - 01:11:08] And let me check why it's not showing.
+[01:11:11 - 01:11:15] Let's increase the height.
+[01:11:19 - 01:11:22] Let me add
+[01:11:23 - 01:11:26] This is need to be here.
+[01:11:29 - 01:11:34] So, let's
+[01:11:30 - 01:11:34] wrap this touchable view inside view.
+[01:11:41 - 01:11:47] So, make sure you're wrapping correctly.
+[01:11:43 - 01:11:47] So, this is okay.
+[01:11:50 - 01:11:53] Let me check what the issue here.
+[01:12:11 - 01:12:17] Let's go to the wrap this
+[01:12:13 - 01:12:20] view and let's put this line of code
+[01:12:17 - 01:12:20] the horizontal.
+[01:12:21 - 01:12:25] I will style
+[01:12:24 - 01:12:27] height
+[01:12:25 - 01:12:31] one
+[01:12:27 - 01:12:32] and background color as a
+[01:12:31 - 01:12:35] color
+[01:12:32 - 01:12:35] dot
+[01:12:38 - 01:12:43] Oh, wait. So,
+[01:12:40 - 01:12:45] we wanted to remove this one.
+[01:12:43 - 01:12:46] Just add this color.
+[01:12:45 - 01:12:47] Color
+[01:12:46 - 01:12:50] dot
+[01:12:47 - 01:12:50] gray.
+[01:12:50 - 01:12:55] And you see line is coming. So, we want
+[01:12:51 - 01:12:57] to light gray, so add the light gray.
+[01:12:55 - 01:13:00] And yeah. And now, let's give margin
+[01:12:57 - 01:13:00] from the top.
+[01:13:03 - 01:13:08] Yeah. And this is perfectly fine.
+[01:13:06 - 01:13:10] If you want to give margin from the left
+[01:13:08 - 01:13:11] and right, you can give it. So, it will
+[01:13:10 - 01:13:12] be
+[01:13:11 - 01:13:14] uh touched to the screen as well. So, if
+[01:13:12 - 01:13:19] you see margin
+[01:13:14 - 01:13:21] left, it will become minus 20.
+[01:13:19 - 01:13:22] So, actually we don't want it if you
+[01:13:21 - 01:13:25] see.
+[01:13:22 - 01:13:25] This is okay.
+[01:13:27 - 01:13:33] And it is working perfectly fine. So,
+[01:13:31 - 01:13:36] So, we want the line here as well. So,
+[01:13:33 - 01:13:39] what we can do, we can just
+[01:13:36 - 01:13:41] cut this one and we'll paste above this
+[01:13:39 - 01:13:43] touchable opacity. So, line will become
+[01:13:41 - 01:13:46] at the top, you see.
+[01:13:43 - 01:13:46] Perfect.
+[01:13:46 - 01:13:53] And here we have this page, correct? And
+[01:13:50 - 01:13:55] now, if you see it's clickable.
+[01:13:53 - 01:13:58] So,
+[01:13:55 - 01:14:00] if you want you understand how it uh
+[01:13:58 - 01:14:04] need to be done, right? Perfectly fine.
+[01:14:00 - 01:14:05] So, let's move on to the next uh
+[01:14:04 - 01:14:07] section,
+[01:14:05 - 01:14:09] which is the routing. How can we
+[01:14:07 - 01:14:11] navigate from
+[01:14:09 - 01:14:12] uh one page to another? So, if I click
+[01:14:11 - 01:14:15] on this page, we have to navigate to
+[01:14:12 - 01:14:15] another. So, let's see that.
+[01:14:15 - 01:14:19] Now,
+[01:14:16 - 01:14:21] the reason we use the touchable opacity
+[01:14:19 - 01:14:24] is to whenever user want to click it,
+[01:14:21 - 01:14:26] right? We can add this uh click event,
+[01:14:24 - 01:14:29] correct? So, for example, on the click,
+[01:14:26 - 01:14:30] we can add the on press event. So, go to
+[01:14:29 - 01:14:32] the
+[01:14:30 - 01:14:35] top headline slider, and inside this
+[01:14:32 - 01:14:35] touchable opacity, right? We'll add on
+[01:14:35 - 01:14:38] press.
+[01:14:35 - 01:14:39] And inside the on press,
+[01:14:38 - 01:14:40] just console it.
+[01:14:39 - 01:14:43] Okay.
+[01:14:40 - 01:14:43] Click.
+[01:14:43 - 01:14:45] Let me
+[01:14:44 - 01:14:47] Okay.
+[01:14:45 - 01:14:49] And uh
+[01:14:47 - 01:14:50] that's all. So, I'm just calling the
+[01:14:49 - 01:14:52] console and I'm
+[01:14:50 - 01:14:54] the click will print in the console. So,
+[01:14:52 - 01:14:57] open the console.
+[01:14:54 - 01:15:00] And if I click this, if you see, right?
+[01:14:57 - 01:15:01] The click is coming. Perfect. So, our on
+[01:15:00 - 01:15:04] press
+[01:15:01 - 01:15:06] event is working.
+[01:15:04 - 01:15:07] Now, we have to add the navigation,
+[01:15:06 - 01:15:11] correct?
+[01:15:07 - 01:15:14] So, let's go and search for the React
+[01:15:11 - 01:15:15] Native Navigation, right?
+[01:15:14 - 01:15:16] You will see this site,
+[01:15:15 - 01:15:19] reactnavigation.org,
+[01:15:16 - 01:15:20] right? Which is the one of the official
+[01:15:19 - 01:15:22] and base
+[01:15:20 - 01:15:24] uh library in order to add the
+[01:15:22 - 01:15:25] navigation and routing. So, go to the
+[01:15:24 - 01:15:27] docs.
+[01:15:25 - 01:15:29] Here, you will see how can you
+[01:15:27 - 01:15:31] uh install using this
+[01:15:29 - 01:15:33] uh command, right? So, copy this
+[01:15:31 - 01:15:34] command.
+[01:15:33 - 01:15:38] And uh
+[01:15:34 - 01:15:40] go back to the application.
+[01:15:38 - 01:15:42] And run this command, okay? So, it will
+[01:15:40 - 01:15:45] install the React Native
+[01:15:42 - 01:15:47] um routing or navigation, sorry.
+[01:15:45 - 01:15:50] Again, go back here.
+[01:15:47 - 01:15:52] Okay? And we don't want to install any
+[01:15:50 - 01:15:56] other things because our project is the
+[01:15:52 - 01:15:58] Expo one, and this is totally support um
+[01:15:56 - 01:16:00] support to Expo, okay?
+[01:15:58 - 01:16:02] Now, there are a lot of uh different
+[01:16:00 - 01:16:05] types of navigation. We can call it
+[01:16:02 - 01:16:05] stack navigation or
+[01:16:05 - 01:16:07] um
+[01:16:05 - 01:16:09] tab navigation, okay? Drawer navigation,
+[01:16:07 - 01:16:12] kind of things.
+[01:16:09 - 01:16:14] So, in this particular tutorial, we will
+[01:16:12 - 01:16:17] use the stack navigation, okay? So,
+[01:16:14 - 01:16:20] search for the stack navigation.
+[01:16:17 - 01:16:21] Stack. I see stack navigator, right? And
+[01:16:20 - 01:16:23] if you go to stack navigator, this is
+[01:16:21 - 01:16:26] how it works. So, if you click it, the
+[01:16:23 - 01:16:28] new page will come on top of this
+[01:16:26 - 01:16:30] existing page.
+[01:16:28 - 01:16:33] So, we have to install this uh stack
+[01:16:30 - 01:16:33] navigation as well.
+[01:16:34 - 01:16:38] So, I'm pasting here.
+[01:16:36 - 01:16:40] And if you see, it will install it,
+[01:16:38 - 01:16:43] okay?
+[01:16:40 - 01:16:45] Now, go back again.
+[01:16:43 - 01:16:47] And make sure you install this gesture
+[01:16:45 - 01:16:51] handler, okay?
+[01:16:47 - 01:16:51] Uh to stack or stack navigator.
+[01:16:51 - 01:16:55] Um if you see, right? If you have Expo
+[01:16:53 - 01:16:57] managed project in your project, then
+[01:16:55 - 01:16:58] you have to run this command, otherwise
+[01:16:57 - 01:17:01] this command, right?
+[01:16:58 - 01:17:04] So, I will install this one.
+[01:17:01 - 01:17:04] That's all, okay? So, our
+[01:17:04 - 01:17:07] React
+[01:17:04 - 01:17:09] navigation all the file or packages or
+[01:17:07 - 01:17:11] library is installed.
+[01:17:09 - 01:17:14] Now, the point is how to
+[01:17:11 - 01:17:17] uh use it, right?
+[01:17:14 - 01:17:17] So,
+[01:17:17 - 01:17:22] go to our files and inside this app
+[01:17:19 - 01:17:25] folder, right?
+[01:17:22 - 01:17:26] Create another folder called
+[01:17:25 - 01:17:28] navigations,
+[01:17:26 - 01:17:30] okay? So, we'll keep all our navigation
+[01:17:28 - 01:17:31] here.
+[01:17:30 - 01:17:33] So, inside that, what we have to do from
+[01:17:31 - 01:17:35] the home page, we have to navigate to
+[01:17:33 - 01:17:39] somewhere, right? So, we can write home
+[01:17:35 - 01:17:41] navigator, okay? Dot js.
+[01:17:39 - 01:17:44] Inside that,
+[01:17:41 - 01:17:45] define the constant first and we have to
+[01:17:44 - 01:17:47] define stack.
+[01:17:45 - 01:17:48] Okay, is equal to
+[01:17:47 - 01:17:50] create
+[01:17:48 - 01:17:52] stack navigator.
+[01:17:50 - 01:17:53] Simple.
+[01:17:52 - 01:17:54] Okay?
+[01:17:53 - 01:17:56] And
+[01:17:54 - 01:17:59] I'll also define this
+[01:17:56 - 01:18:03] uh for template default template.
+[01:17:59 - 01:18:03] I'll keep this here, okay?
+[01:18:06 - 01:18:10] And in this home navigator, right? We
+[01:18:08 - 01:18:11] have this to remove this one and we'll
+[01:18:10 - 01:18:15] put a view.
+[01:18:11 - 01:18:17] Uh or or we can put a stack and dot
+[01:18:15 - 01:18:19] um
+[01:18:17 - 01:18:21] navigator, okay?
+[01:18:19 - 01:18:22] And inside that navigator, right?
+[01:18:21 - 01:18:24] Because uh this is stack navigator, we
+[01:18:22 - 01:18:27] have to define like this and we have
+[01:18:24 - 01:18:29] stack and then we have to define screen.
+[01:18:27 - 01:18:30] How many screen we want to show it,
+[01:18:29 - 01:18:32] okay?
+[01:18:30 - 01:18:32] So,
+[01:18:33 - 01:18:38] oops. Yeah, okay? And if you don't know
+[01:18:36 - 01:18:40] the coding and all of these is right in
+[01:18:38 - 01:18:41] the documentation it's clearly mentioned
+[01:18:40 - 01:18:45] everything.
+[01:18:41 - 01:18:47] Right? So, you can use in a similar way.
+[01:18:45 - 01:18:49] You can use like this or you can in the
+[01:18:47 - 01:18:51] tag in the React like this as well,
+[01:18:49 - 01:18:53] right? And then name this screen what
+[01:18:51 - 01:18:54] the screen is. So, in this case I will
+[01:18:53 - 01:18:57] name home
+[01:18:54 - 01:18:58] and attach the component
+[01:18:57 - 01:19:01] for this particular screen. So, in this
+[01:18:58 - 01:19:02] case I will attach as a
+[01:19:01 - 01:19:05] home.
+[01:19:02 - 01:19:08] And that's all, right?
+[01:19:05 - 01:19:08] Let me get this in.
+[01:19:09 - 01:19:13] Make sure the home component is imported
+[01:19:11 - 01:19:15] successfully. I don't think so it's
+[01:19:13 - 01:19:15] imported.
+[01:19:16 - 01:19:21] Home. Okay. Yeah, perfect. So, it's a H
+[01:19:19 - 01:19:22] capital is that's it this is a home,
+[01:19:21 - 01:19:25] okay.
+[01:19:22 - 01:19:27] Now, go back to app.js.
+[01:19:25 - 01:19:29] Right? And here we define the CP review
+[01:19:27 - 01:19:32] everything, correct?
+[01:19:29 - 01:19:35] So, inside that define the
+[01:19:32 - 01:19:38] navigation container navigator dot Oh,
+[01:19:35 - 01:19:39] sorry, navigator container.
+[01:19:38 - 01:19:40] Okay.
+[01:19:39 - 01:19:43] Uh navigation
+[01:19:40 - 01:19:46] Oh, yeah, navigation container.
+[01:19:43 - 01:19:47] And inside that you have to define this
+[01:19:46 - 01:19:48] navigation which we created that is your
+[01:19:47 - 01:19:51] home navigation.
+[01:19:48 - 01:19:54] Navigator, okay.
+[01:19:51 - 01:19:56] And just comment out this home
+[01:19:54 - 01:19:58] and save it.
+[01:19:56 - 01:20:00] So, it will give you an error that React
+[01:19:58 - 01:20:02] navigation not found because we
+[01:20:00 - 01:20:04] installed a new library, right? So, we
+[01:20:02 - 01:20:07] have to refresh the project. So, let's
+[01:20:04 - 01:20:10] stop the uh project.
+[01:20:07 - 01:20:11] And now if you see, right? I just reload
+[01:20:10 - 01:20:14] the applications
+[01:20:11 - 01:20:15] and uh you see screen like this, right?
+[01:20:14 - 01:20:17] The background is
+[01:20:15 - 01:20:19] little grayish and some padding, okay?
+[01:20:17 - 01:20:20] And you will see this tab as well, home
+[01:20:19 - 01:20:22] tab, right?
+[01:20:20 - 01:20:25] So, go to the home navigator again.
+[01:20:22 - 01:20:27] And inside this stack navigator, right?
+[01:20:25 - 01:20:29] We have the lot of different options,
+[01:20:27 - 01:20:31] right? So, we we have one property
+[01:20:29 - 01:20:32] called screen options. And inside screen
+[01:20:31 - 01:20:34] option
+[01:20:32 - 01:20:36] you can type header shown. Right, we
+[01:20:34 - 01:20:39] have the header shown.
+[01:20:36 - 01:20:42] Let me get back get this down and you
+[01:20:39 - 01:20:42] have to make it as a
+[01:20:43 - 01:20:47] false.
+[01:20:44 - 01:20:49] And save it. And you'll see
+[01:20:47 - 01:20:51] uh particular header here
+[01:20:49 - 01:20:54] are not showing. And this is applicable
+[01:20:51 - 01:20:56] for the all the screen. You can define
+[01:20:54 - 01:20:57] um this property for each individual
+[01:20:56 - 01:20:59] screen as well.
+[01:20:57 - 01:21:02] It's up to you.
+[01:20:59 - 01:21:04] Now, we'll define one more screen.
+[01:21:02 - 01:21:07] Uh but we have to create that screen
+[01:21:04 - 01:21:09] first. So, go to the
+[01:21:07 - 01:21:11] screens and add new file called
+[01:21:09 - 01:21:14] read
+[01:21:11 - 01:21:15] news.js.
+[01:21:14 - 01:21:17] Okay.
+[01:21:15 - 01:21:21] We call like this.
+[01:21:17 - 01:21:22] Inside that, we'll add the template.
+[01:21:21 - 01:21:24] We remove this one and we'll add the
+[01:21:22 - 01:21:27] view. Okay.
+[01:21:24 - 01:21:30] And inside view, I'll add some text in
+[01:21:27 - 01:21:30] order to test it.
+[01:21:31 - 01:21:35] Read news. Import this.
+[01:21:37 - 01:21:43] Perfect. And inside home navigator, now
+[01:21:39 - 01:21:47] add this screen stack. screen.
+[01:21:43 - 01:21:47] The name of the screen is uh
+[01:21:48 - 01:21:51] read news.
+[01:21:51 - 01:21:55] And the component which you want to
+[01:21:53 - 01:21:57] attach
+[01:21:55 - 01:21:59] is
+[01:21:57 - 01:22:02] read news component. If you see, it's
+[01:21:59 - 01:22:04] here. Right? And it's imported as well.
+[01:22:02 - 01:22:06] And now, save it.
+[01:22:04 - 01:22:07] It doesn't affect anything because we
+[01:22:06 - 01:22:09] just add the screen but because we are
+[01:22:07 - 01:22:11] not um
+[01:22:09 - 01:22:13] navigate yet, okay? So, this is the just
+[01:22:11 - 01:22:15] for the routing purpose, okay? This is
+[01:22:13 - 01:22:17] the home page. This is the read news.
+[01:22:15 - 01:22:19] Another important things here, right?
+[01:22:17 - 01:22:21] So, whatever the first screen which you
+[01:22:19 - 01:22:23] define in the stack navigator, it
+[01:22:21 - 01:22:25] um then stack navigator
+[01:22:23 - 01:22:28] uh considered this as a default first
+[01:22:25 - 01:22:31] screen for this navigator, Okay?
+[01:22:28 - 01:22:32] If I want this read news as a first one,
+[01:22:31 - 01:22:35] you can just go here,
+[01:22:32 - 01:22:36] paste here, and save it. You will see
+[01:22:35 - 01:22:39] the that screen
+[01:22:36 - 01:22:42] as a first one. Okay? It's up to
+[01:22:39 - 01:22:44] uh what you want to show.
+[01:22:42 - 01:22:45] So, here, right? Uh our in the stack
+[01:22:44 - 01:22:47] navigator, you have option called
+[01:22:45 - 01:22:49] initial routing name. And you can define
+[01:22:47 - 01:22:50] the name, for example, home in this
+[01:22:49 - 01:22:51] case.
+[01:22:50 - 01:22:53] Like this. Okay?
+[01:22:51 - 01:22:56] So, let's go to app.js and see
+[01:22:53 - 01:23:00] everything is okay.
+[01:22:56 - 01:23:03] Home navigator is okay. Read news.
+[01:23:00 - 01:23:05] Now, we see this background, right? So,
+[01:23:03 - 01:23:07] for now, what I will do,
+[01:23:05 - 01:23:11] let's go to the home.js.
+[01:23:07 - 01:23:13] And uh in home.js, in a
+[01:23:11 - 01:23:14] in a display, right? We already have the
+[01:23:13 - 01:23:16] uh
+[01:23:14 - 01:23:18] style for this view. I will just add the
+[01:23:16 - 01:23:21] background color.
+[01:23:18 - 01:23:23] And I will do the white. So,
+[01:23:21 - 01:23:24] you can do 000, sorry, FFF code for the
+[01:23:23 - 01:23:27] white.
+[01:23:24 - 01:23:29] And see if it's working.
+[01:23:27 - 01:23:32] It's not working somehow. Let me check
+[01:23:29 - 01:23:32] the issue.
+[01:23:46 - 01:23:51] Uh also, uh view is applicable only for
+[01:23:49 - 01:23:52] this one, right? So, we have to apply
+[01:23:51 - 01:23:53] for the whole screen. So, in scroll
+[01:23:52 - 01:23:56] view, I have write this background
+[01:23:53 - 01:23:57] color. It's my mistake.
+[01:23:56 - 01:24:00] Okay? If you see,
+[01:23:57 - 01:24:02] uh you can add this code in a color uh
+[01:24:00 - 01:24:05] in our shared folder and color.js file.
+[01:24:02 - 01:24:09] So, I will add it here as a white.
+[01:24:05 - 01:24:09] And different hash FFFFFF.
+[01:24:09 - 01:24:12] Save this one and just call this color
+[01:24:11 - 01:24:13] here.
+[01:24:12 - 01:24:15] So, color
+[01:24:13 - 01:24:16] .white.
+[01:24:15 - 01:24:17] Oop.
+[01:24:16 - 01:24:18] And we are going to be able to you are
+[01:24:17 - 01:24:21] going to be able to see everything.
+[01:24:18 - 01:24:21] Okay?
+[01:24:21 - 01:24:27] Now, let's go to our headline.js, right?
+[01:24:24 - 01:24:29] So,
+[01:24:27 - 01:24:31] in component, we have this headline list
+[01:24:29 - 01:24:32] Sorry, the top headline slider, right?
+[01:24:31 - 01:24:34] And we have this on place event,
+[01:24:32 - 01:24:35] correct? So, now what we have to do? We
+[01:24:34 - 01:24:38] have to
+[01:24:35 - 01:24:40] go to the next page.
+[01:24:38 - 01:24:44] Close this one. Here, you first you have
+[01:24:40 - 01:24:46] to define one constant called navigator
+[01:24:44 - 01:24:48] or navigation in
+[01:24:46 - 01:24:51] Whatever name you want to give. And you
+[01:24:48 - 01:24:53] have to use inbuilt hook called uh
+[01:24:51 - 01:24:55] use navigations.
+[01:24:53 - 01:24:59] Okay, which is imported from the
+[01:24:55 - 01:25:02] uh react navigation/native, okay?
+[01:24:59 - 01:25:05] So, what it will do? It have some um
+[01:25:02 - 01:25:08] property which is used to navigate,
+[01:25:05 - 01:25:12] okay? So,
+[01:25:08 - 01:25:13] let's go to this on place event.
+[01:25:12 - 01:25:15] And inside the on place event, instead
+[01:25:13 - 01:25:17] of the I will remove this console and I
+[01:25:15 - 01:25:19] what I will do, I will write navigation
+[01:25:17 - 01:25:20] navigation
+[01:25:19 - 01:25:21] dot
+[01:25:20 - 01:25:22] navigate.
+[01:25:21 - 01:25:23] Okay, because we define this constant
+[01:25:22 - 01:25:24] and we have this property called
+[01:25:23 - 01:25:26] navigate.
+[01:25:24 - 01:25:27] And we have want to navigate. So, in
+[01:25:26 - 01:25:30] this case,
+[01:25:27 - 01:25:32] I will say read news and save it. So,
+[01:25:30 - 01:25:35] read news is nothing but the name which
+[01:25:32 - 01:25:37] we do give for this screen, correct? So,
+[01:25:35 - 01:25:39] that's the reason I kept read news.
+[01:25:37 - 01:25:41] And if I click it,
+[01:25:39 - 01:25:43] it's going to the read news.
+[01:25:41 - 01:25:46] Perfect. Go back.
+[01:25:43 - 01:25:48] Go to some other Sorry, because we apply
+[01:25:46 - 01:25:50] only this on place to this slider. Click
+[01:25:48 - 01:25:52] it, it's going to the news screen.
+[01:25:50 - 01:25:55] Perfect.
+[01:25:52 - 01:25:57] Now, also we want to pass this some uh
+[01:25:55 - 01:25:58] selected news, right? When the user
+[01:25:57 - 01:26:00] click on the news, we want to pass this
+[01:25:58 - 01:26:03] information to the next screen, right?
+[01:26:00 - 01:26:05] So, here
+[01:26:03 - 01:26:06] um you have to pass the information,
+[01:26:05 - 01:26:10] right? So, give
+[01:26:06 - 01:26:11] in curly braces, you have to pass news,
+[01:26:10 - 01:26:14] right? So, whatever the variable name
+[01:26:11 - 01:26:16] which we want to give and the
+[01:26:14 - 01:26:17] value. So, in this case it's item,
+[01:26:16 - 01:26:21] right? Because we want to only pass a
+[01:26:17 - 01:26:23] single object. So, item. That's it.
+[01:26:21 - 01:26:25] Go to the
+[01:26:23 - 01:26:27] Uh if you go to the
+[01:26:25 - 01:26:32] read news, right? Inside read news, we
+[01:26:27 - 01:26:32] can define the the particular page.
+[01:26:33 - 01:26:36] So, you can define the code here because
+[01:26:34 - 01:26:38] if you see
+[01:26:36 - 01:26:40] Uh let me
+[01:26:38 - 01:26:43] we have this image, the top navigation
+[01:26:40 - 01:26:46] bar, and this uh information as well.
+[01:26:43 - 01:26:48] So, it's not too much I It's not making
+[01:26:46 - 01:26:50] sense to divide this component.
+[01:26:48 - 01:26:54] So, I will define everything in the read
+[01:26:50 - 01:26:56] news only. Okay? And inside read news
+[01:26:54 - 01:26:58] accept that props. Oh, sorry. Uh so,
+[01:26:56 - 01:27:01] here is we are navigating, right? So, we
+[01:26:58 - 01:27:02] are not passing value from one component
+[01:27:01 - 01:27:04] to other, but on the navigation, we are
+[01:27:02 - 01:27:06] passing, right? So, here we have to
+[01:27:04 - 01:27:09] define one constant. You can call it as
+[01:27:06 - 01:27:10] a news. And here, you have to use use
+[01:27:09 - 01:27:11] route.
+[01:27:10 - 01:27:14] So, whatever the
+[01:27:11 - 01:27:16] uh this this route hooks help us uh from
+[01:27:14 - 01:27:18] here
+[01:27:16 - 01:27:20] um you jump or from which page you jump
+[01:27:18 - 01:27:21] and what are the parameter passing and
+[01:27:20 - 01:27:25] everything. And inside that, we have to
+[01:27:21 - 01:27:27] call params. So, params is nothing but
+[01:27:25 - 01:27:30] which parameter is passed. And inside
+[01:27:27 - 01:27:31] that, we have one parameter called news.
+[01:27:30 - 01:27:33] Okay?
+[01:27:31 - 01:27:35] So, inside news, we all have all this
+[01:27:33 - 01:27:37] information. So, if you want to check,
+[01:27:35 - 01:27:39] you can just uh use use effect. Console
+[01:27:37 - 01:27:41] it, you will see this news item.
+[01:27:39 - 01:27:45] So, right now
+[01:27:41 - 01:27:47] here, you see I will define first this
+[01:27:45 - 01:27:49] uh screen. Uh I will add this later on.
+[01:27:47 - 01:27:53] But first, we'll just add image, this
+[01:27:49 - 01:27:56] title, and this all the description.
+[01:27:53 - 01:27:56] So, first, image.
+[01:27:58 - 01:28:05] And inside the image, we have source.
+[01:28:02 - 01:28:08] And inside source, we have URI and news.
+[01:28:05 - 01:28:09] So, we have to access from news dot
+[01:28:08 - 01:28:13] URL
+[01:28:09 - 01:28:15] to image. Okay?
+[01:28:13 - 01:28:18] And uh so, you saying cannot read
+[01:28:15 - 01:28:21] property news of undefined. Okay.
+[01:28:18 - 01:28:23] So this is news and it is undefined
+[01:28:21 - 01:28:25] because it's a constant we are getting
+[01:28:23 - 01:28:26] we have to add it in the
+[01:28:25 - 01:28:29] um
+[01:28:26 - 01:28:29] use effect. Okay.
+[01:28:47 - 01:28:49] So
+[01:28:52 - 01:28:57] So in use effect make sure
+[01:28:55 - 01:28:59] uh you're getting this value first.
+[01:28:57 - 01:29:01] So I will define the use effect here.
+[01:28:59 - 01:29:03] And we want to run that only once so
+[01:29:01 - 01:29:04] that's the reason I added that um empty
+[01:29:03 - 01:29:08] array.
+[01:29:04 - 01:29:10] And console this news.
+[01:29:08 - 01:29:12] And save it.
+[01:29:10 - 01:29:12] Okay.
+[01:29:13 - 01:29:18] So if I click this one
+[01:29:16 - 01:29:20] and make sure you're getting this value.
+[01:29:18 - 01:29:23] And if you see you're getting this
+[01:29:20 - 01:29:23] value, right?
+[01:29:23 - 01:29:27] So right now it's showing empty but here
+[01:29:25 - 01:29:29] um because we did not define any width
+[01:29:27 - 01:29:31] or height for this image.
+[01:29:29 - 01:29:35] So define a height and
+[01:29:31 - 01:29:38] width for this one so width I will give
+[01:29:35 - 01:29:38] 100%.
+[01:29:39 - 01:29:45] And I will define height as well.
+[01:29:43 - 01:29:48] Height
+[01:29:45 - 01:29:51] for example 300 for now. And if you see
+[01:29:48 - 01:29:53] I'm able to see this one. Correct? Also
+[01:29:51 - 01:29:55] we'll check set the background to be
+[01:29:53 - 01:29:57] white.
+[01:29:55 - 01:30:01] Background color and inside that we have
+[01:29:57 - 01:30:01] the color dot white.
+[01:30:03 - 01:30:08] Let's see how I is not showing so it's
+[01:30:05 - 01:30:10] we want flex one.
+[01:30:08 - 01:30:13] And now it's showing because flex one is
+[01:30:10 - 01:30:13] vertical, it's covered all the screen.
+[01:30:13 - 01:30:17] Let's go back select another image
+[01:30:15 - 01:30:19] because the background is white. Okay,
+[01:30:17 - 01:30:21] so we select at this image and this size
+[01:30:19 - 01:30:24] is I think pretty much good. Okay.
+[01:30:21 - 01:30:28] Now round the corner.
+[01:30:24 - 01:30:31] Border radius to be 20.
+[01:30:28 - 01:30:31] Maybe 15.
+[01:30:32 - 01:30:36] And now we want to add the title.
+[01:30:35 - 01:30:40] Text.
+[01:30:36 - 01:30:43] Inside text we have news
+[01:30:40 - 01:30:44] .title.
+[01:30:43 - 01:30:46] And before that we have source. Okay, we
+[01:30:44 - 01:30:49] add the source as well. So before this
+[01:30:46 - 01:30:51] title we have source. So news
+[01:30:49 - 01:30:52] source.name.
+[01:30:51 - 01:30:54] name.
+[01:30:52 - 01:30:56] So we have the source name and we have
+[01:30:54 - 01:30:58] this title, right?
+[01:30:56 - 01:31:00] And then we have the description. So add
+[01:30:58 - 01:31:02] that as well.
+[01:31:00 - 01:31:04] So let's see what is the
+[01:31:02 - 01:31:06] endpoint or sorry field name for this
+[01:31:04 - 01:31:09] description. So we have this title and
+[01:31:06 - 01:31:11] we have this description.
+[01:31:09 - 01:31:14] So we'll add that one.
+[01:31:11 - 01:31:18] You see all the description is here.
+[01:31:14 - 01:31:18] Now let's start applying the style.
+[01:31:18 - 01:31:25] So here we'll add the style.
+[01:31:22 - 01:31:28] First we'll give margin from the top 10.
+[01:31:25 - 01:31:31] Then we change the color
+[01:31:28 - 01:31:31] to primary.
+[01:31:31 - 01:31:35] Color.primary.
+[01:31:33 - 01:31:38] And we increase the font size a little
+[01:31:35 - 01:31:40] bit to 16 and save it.
+[01:31:38 - 01:31:42] And this is look good.
+[01:31:40 - 01:31:43] Now apply the style for this
+[01:31:42 - 01:31:45] uh title.
+[01:31:43 - 01:31:49] Style.
+[01:31:45 - 01:31:50] We give margin from the top first.
+[01:31:49 - 01:31:54] 10.
+[01:31:50 - 01:31:55] Then we increase the font size to 20.
+[01:31:54 - 01:31:57] Two maybe.
+[01:31:55 - 01:31:59] And we will
+[01:31:57 - 01:32:01] add the font weight to be
+[01:31:59 - 01:32:02] in bold.
+[01:32:01 - 01:32:05] And save it.
+[01:32:02 - 01:32:08] And this is good.
+[01:32:05 - 01:32:12] And for description we'll add style.
+[01:32:08 - 01:32:12] The margin top again a 10.
+[01:32:12 - 01:32:18] And then we will add the font size to be
+[01:32:16 - 01:32:20] 18.
+[01:32:18 - 01:32:22] And save it.
+[01:32:20 - 01:32:23] So, if you see right, the font size is
+[01:32:22 - 01:32:26] not
+[01:32:23 - 01:32:29] is we can decrease a little bit size.
+[01:32:26 - 01:32:31] And we'll add the color.
+[01:32:29 - 01:32:32] So, in this case I'll add the color to
+[01:32:31 - 01:32:36] be
+[01:32:32 - 01:32:36] color. dark gray not
+[01:32:37 - 01:32:42] And this is okay.
+[01:32:39 - 01:32:44] And 18 only. But if you see right here,
+[01:32:42 - 01:32:46] there's a much gap between this one,
+[01:32:44 - 01:32:47] right? And some place gap.
+[01:32:46 - 01:32:50] So,
+[01:32:47 - 01:32:53] there's another style property
+[01:32:50 - 01:32:56] call line height. Okay. Here you can
+[01:32:53 - 01:32:58] define for example, define 100.
+[01:32:56 - 01:33:01] Oops, sorry.
+[01:32:58 - 01:33:01] 100.
+[01:33:03 - 01:33:09] So, line height like this, right? So,
+[01:33:06 - 01:33:12] decrease the size.
+[01:33:09 - 01:33:13] And this is I think okay.
+[01:33:12 - 01:33:16] Okay.
+[01:33:13 - 01:33:17] Let's see how it looks. So, we have this
+[01:33:16 - 01:33:19] title.
+[01:33:17 - 01:33:21] Then this uh
+[01:33:19 - 01:33:23] source name. So, actually we want to put
+[01:33:21 - 01:33:24] this
+[01:33:23 - 01:33:26] below this
+[01:33:24 - 01:33:28] news heading.
+[01:33:26 - 01:33:30] Yeah, like this. Perfect.
+[01:33:28 - 01:33:32] And one more thing we have is a read
+[01:33:30 - 01:33:35] more. So, once we click on this read
+[01:33:32 - 01:33:37] more, it will open the URL or source URL
+[01:33:35 - 01:33:39] for this news and you can read
+[01:33:37 - 01:33:40] the full news from there.
+[01:33:39 - 01:33:42] So,
+[01:33:40 - 01:33:44] another text which is similar to this
+[01:33:42 - 01:33:44] one.
+[01:33:45 - 01:33:49] And I will
+[01:33:47 - 01:33:52] just type like
+[01:33:49 - 01:33:54] read more.
+[01:33:52 - 01:33:56] Okay.
+[01:33:54 - 01:33:58] And I will make it bold a little bit
+[01:33:56 - 01:34:01] fun.
+[01:33:58 - 01:34:01] Wait to be bold.
+[01:34:02 - 01:34:05] Perfect.
+[01:34:03 - 01:34:07] So, if you see everything is set up.
+[01:34:05 - 01:34:10] Now, only thing remaining is giving the
+[01:34:07 - 01:34:13] back button and this or the share arrow
+[01:34:10 - 01:34:17] because we add the feature to share this
+[01:34:13 - 01:34:18] news on WhatsApp or any other media.
+[01:34:17 - 01:34:21] Or any other app.
+[01:34:18 - 01:34:22] So, let's do that now.
+[01:34:21 - 01:34:25] Now, here
+[01:34:22 - 01:34:28] about this we want to add the
+[01:34:25 - 01:34:32] back button and the share button, okay?
+[01:34:28 - 01:34:33] So, let's add a view.
+[01:34:32 - 01:34:35] Let's go to
+[01:34:33 - 01:34:37] our icon.
+[01:34:35 - 01:34:39] Let's type icon
+[01:34:37 - 01:34:41] .expo.fy
+[01:34:39 - 01:34:44] and you want to back button, right?
+[01:34:41 - 01:34:47] Back. So, we have couple of option to go
+[01:34:44 - 01:34:50] back button. I will use this arrow back.
+[01:34:47 - 01:34:50] Copy this import statement.
+[01:34:52 - 01:34:56] Paste it here.
+[01:34:54 - 01:34:57] Go back here again and copy this
+[01:34:56 - 01:35:00] um
+[01:34:57 - 01:35:00] component.
+[01:35:00 - 01:35:04] And if I save it, you will see this back
+[01:35:02 - 01:35:08] button, right?
+[01:35:04 - 01:35:08] So, let's give some margin from the top.
+[01:35:08 - 01:35:13] Margin from the top 10, margin from
+[01:35:11 - 01:35:15] bottom
+[01:35:13 - 01:35:15] 10.
+[01:35:15 - 01:35:22] And also you want the share button. So,
+[01:35:19 - 01:35:25] let's go back here.
+[01:35:22 - 01:35:25] Let add the share.
+[01:35:26 - 01:35:32] So, we have few option for sharing. I
+[01:35:29 - 01:35:34] will use this share or not not this one.
+[01:35:32 - 01:35:34] We use this one.
+[01:35:35 - 01:35:39] Paste it here. Oh, sorry. We have to
+[01:35:37 - 01:35:41] paste this import statement over here.
+[01:35:39 - 01:35:41] You
+[01:35:41 - 01:35:45] Oh, we already have Ionic one, so no
+[01:35:43 - 01:35:48] need to import it again.
+[01:35:45 - 01:35:49] And then we have to import this Ionic
+[01:35:48 - 01:35:51] icon component.
+[01:35:49 - 01:35:53] This one and save it.
+[01:35:51 - 01:35:56] And if you see, it's showing it here.
+[01:35:53 - 01:35:57] Now we want in one
+[01:35:56 - 01:36:01] one row.
+[01:35:57 - 01:36:01] Display make it display as a flex.
+[01:36:03 - 01:36:07] And then
+[01:36:05 - 01:36:10] make it
+[01:36:07 - 01:36:12] flex direction as a
+[01:36:10 - 01:36:12] flex
+[01:36:13 - 01:36:16] flex direction as a row.
+[01:36:17 - 01:36:20] Now it will come in one line.
+[01:36:19 - 01:36:22] I will increase this size of this one to
+[01:36:20 - 01:36:24] 30 maybe.
+[01:36:22 - 01:36:28] How it looks.
+[01:36:24 - 01:36:28] Maybe 28 and the 28.
+[01:36:29 - 01:36:35] And specify the space between that one.
+[01:36:32 - 01:36:37] Just to back and that has space between.
+[01:36:35 - 01:36:39] And save it. And you see it's showing
+[01:36:37 - 01:36:41] like here. Okay.
+[01:36:39 - 01:36:43] Now one more thing that this item is
+[01:36:41 - 01:36:46] need to be a clickable. So obviously you
+[01:36:43 - 01:36:49] have to wrap this any icon
+[01:36:46 - 01:36:51] inside touchable opacity.
+[01:36:49 - 01:36:52] Or you can use the button as well. It's
+[01:36:51 - 01:36:55] up to you. I will use the touchable
+[01:36:52 - 01:36:55] opacity.
+[01:36:56 - 01:37:00] And icon
+[01:36:58 - 01:37:03] and the same
+[01:37:00 - 01:37:05] touchable opacity
+[01:37:03 - 01:37:08] and put this icon.
+[01:37:05 - 01:37:11] Okay. So this will be clickable.
+[01:37:08 - 01:37:13] Now once you click on this now back
+[01:37:11 - 01:37:15] button it should be cool. We need to go
+[01:37:13 - 01:37:18] back to the previous page. So I will add
+[01:37:15 - 01:37:19] the on press event on this one.
+[01:37:18 - 01:37:21] And
+[01:37:19 - 01:37:22] define this use navigation because we
+[01:37:21 - 01:37:24] have to navigate back, right? So
+[01:37:22 - 01:37:28] constant maybe
+[01:37:24 - 01:37:30] navigation is equal to use
+[01:37:28 - 01:37:31] navigate navigation.
+[01:37:30 - 01:37:33] And
+[01:37:31 - 01:37:36] we have one property in previously used
+[01:37:33 - 01:37:37] the navigation.navigate property. Now in
+[01:37:36 - 01:37:41] this case
+[01:37:37 - 01:37:43] we have to use go back property.
+[01:37:41 - 01:37:44] And it will go back. If I save it and
+[01:37:43 - 01:37:46] click on it
+[01:37:44 - 01:37:49] it will go go
+[01:37:46 - 01:37:51] Okay. So same. If you open this one,
+[01:37:49 - 01:37:55] click on go back, it will go back. Okay?
+[01:37:51 - 01:37:55] Perfect. It's working perfectly fine.
+[01:37:56 - 01:37:59] Now,
+[01:37:58 - 01:38:01] uh
+[01:37:59 - 01:38:03] share method, right? We have to
+[01:38:01 - 01:38:06] uh do for sharing, right? So, here we
+[01:38:03 - 01:38:08] will add the on press event.
+[01:38:06 - 01:38:11] And inside on press event, I will call
+[01:38:08 - 01:38:15] my function called share
+[01:38:11 - 01:38:16] news. So, we will define this method.
+[01:38:15 - 01:38:18] Uh
+[01:38:16 - 01:38:21] over here, right? The constant share
+[01:38:18 - 01:38:21] news equal to
+[01:38:21 - 01:38:24] So, I define this method, right? And I
+[01:38:23 - 01:38:26] did not pass any event because we
+[01:38:24 - 01:38:28] already have event news, right? Which
+[01:38:26 - 01:38:29] contains all this information which you
+[01:38:28 - 01:38:30] want to share.
+[01:38:29 - 01:38:33] Now,
+[01:38:30 - 01:38:37] Expo has inbuilt uh share functionality.
+[01:38:33 - 01:38:37] So, just type info sharing.
+[01:38:37 - 01:38:42] Sharing maybe. Okay.
+[01:38:40 - 01:38:43] And if you go to the documentation of
+[01:38:42 - 01:38:45] the info sharing,
+[01:38:43 - 01:38:46] this is how uh it will give the option
+[01:38:45 - 01:38:48] for sharing, right?
+[01:38:46 - 01:38:50] And it's
+[01:38:48 - 01:38:52] um this compatible to all the platforms,
+[01:38:50 - 01:38:53] so no worry.
+[01:38:52 - 01:38:56] Just make sure you will import uh you
+[01:38:53 - 01:38:58] will install this Expo sharing using
+[01:38:56 - 01:39:01] this command line. Copy this command
+[01:38:58 - 01:39:01] line, paste it here.
+[01:39:01 - 01:39:04] Okay?
+[01:39:02 - 01:39:06] You might need to restart, but let's
+[01:39:04 - 01:39:06] see.
+[01:39:07 - 01:39:13] And once it's installed, right? So,
+[01:39:11 - 01:39:16] inside the share, you can have
+[01:39:13 - 01:39:18] uh share method, you see. And dot
+[01:39:16 - 01:39:20] again share.
+[01:39:18 - 01:39:22] And inside this share, right? This is
+[01:39:20 - 01:39:24] how you can write it. You have to define
+[01:39:22 - 01:39:26] the message which you want to share. So,
+[01:39:24 - 01:39:30] in this case, I will write the title of
+[01:39:26 - 01:39:31] the news. So, I will write news.title
+[01:39:30 - 01:39:32] plus
+[01:39:31 - 01:39:33] uh
+[01:39:32 - 01:39:35] I will write the click here method,
+[01:39:33 - 01:39:38] okay? Means the read more, something
+[01:39:35 - 01:39:41] like read more.
+[01:39:38 - 01:39:45] And then I will so define like this. So,
+[01:39:41 - 01:39:46] it's a complete text and the new
+[01:39:45 - 01:39:47] dot
+[01:39:46 - 01:39:48] description.
+[01:39:47 - 01:39:50] And
+[01:39:48 - 01:39:53] save it.
+[01:39:50 - 01:39:55] Don't put the semicolon and save it.
+[01:39:53 - 01:39:57] Once you save it, right? And we do
+[01:39:55 - 01:39:59] already calling the share news. Let's
+[01:39:57 - 01:40:00] see on click of this one.
+[01:39:59 - 01:40:02] Right?
+[01:40:00 - 01:40:04] Emulator takes some time. You'll see
+[01:40:02 - 01:40:07] this option to share and with this
+[01:40:04 - 01:40:09] particular beautiful news heading and
+[01:40:07 - 01:40:11] the link as well. Okay.
+[01:40:09 - 01:40:13] So, if I go to the messaging, right?
+[01:40:11 - 01:40:14] Let's
+[01:40:13 - 01:40:17] I don't know. We don't have anything
+[01:40:14 - 01:40:19] here emulator, but our share is working
+[01:40:17 - 01:40:24] now.
+[01:40:19 - 01:40:24] Now, go back. Open another news.
+[01:40:24 - 01:40:27] And you'll see this particular news with
+[01:40:26 - 01:40:31] beautiful
+[01:40:27 - 01:40:31] design and and styling everything.
+[01:40:31 - 01:40:36] Now, last thing remaining is on the
+[01:40:34 - 01:40:39] click of read more. So, on read more, we
+[01:40:36 - 01:40:40] want to open in-built browser which will
+[01:40:39 - 01:40:42] open the URL.
+[01:40:40 - 01:40:46] Okay.
+[01:40:42 - 01:40:46] So, wrap this text.
+[01:40:46 - 01:40:51] I will write touchable opacity.
+[01:40:49 - 01:40:53] Okay. So, another thing, right? Instead
+[01:40:51 - 01:40:54] of you don't want to use touchable
+[01:40:53 - 01:40:55] opacity, right? You can use the button
+[01:40:54 - 01:40:57] as well.
+[01:40:55 - 01:40:59] Okay.
+[01:40:57 - 01:41:03] And define button here. And for button,
+[01:40:59 - 01:41:04] you have to define this text in in this
+[01:41:03 - 01:41:06] way. Title.
+[01:41:04 - 01:41:08] And inside that, you can define the
+[01:41:06 - 01:41:10] button. And if you save it, it doesn't
+[01:41:08 - 01:41:12] change anything, right? You see. Okay.
+[01:41:10 - 01:41:14] So, we have this read more button
+[01:41:12 - 01:41:15] directly actually. Okay, it's coming as
+[01:41:14 - 01:41:17] a button.
+[01:41:15 - 01:41:20] But, it's up to you whether do you want
+[01:41:17 - 01:41:22] to show it or not. Let me remove this.
+[01:41:20 - 01:41:24] Let's see how it looks.
+[01:41:22 - 01:41:26] It doesn't affect anything. That's fine.
+[01:41:24 - 01:41:29] But, if you want button, you can put
+[01:41:26 - 01:41:30] button. If you're not, I will or rather
+[01:41:29 - 01:41:31] prefer that particular
+[01:41:30 - 01:41:34] uh
+[01:41:31 - 01:41:36] text only and I will wrap it in a
+[01:41:34 - 01:41:38] touchable opacity.
+[01:41:36 - 01:41:38] Okay.
+[01:41:39 - 01:41:43] Touchable opacity.
+[01:41:41 - 01:41:45] and then I will add the on press event
+[01:41:43 - 01:41:45] here.
+[01:41:45 - 01:41:50] I don't know what the console for now.
+[01:41:50 - 01:41:55] So in order to open browser right Expo
+[01:41:53 - 01:41:58] as
+[01:41:55 - 01:42:00] Expo
+[01:41:58 - 01:42:03] linking
+[01:42:00 - 01:42:05] and if you go to linking right
+[01:42:03 - 01:42:06] you will see this
+[01:42:05 - 01:42:08] different type of linking how to open
+[01:42:06 - 01:42:10] URL and everything right. So in this
+[01:42:08 - 01:42:13] case
+[01:42:10 - 01:42:15] we want to open the URL in a browser
+[01:42:13 - 01:42:16] correct. So there is another method
+[01:42:15 - 01:42:19] called okay. So if you come to down
+[01:42:16 - 01:42:21] right we have this called in a browser.
+[01:42:19 - 01:42:24] Copy this
+[01:42:21 - 01:42:26] and install this particular dependency
+[01:42:24 - 01:42:28] or library.
+[01:42:26 - 01:42:30] And then this is how you can do it. So
+[01:42:28 - 01:42:32] you can import this web browser right
+[01:42:30 - 01:42:33] once it's installed
+[01:42:32 - 01:42:35] and just you have to call web browser
+[01:42:33 - 01:42:36] dot
+[01:42:35 - 01:42:38] open
+[01:42:36 - 01:42:40] browser async right. So it will open in
+[01:42:38 - 01:42:42] browser. If you want to open in a some
+[01:42:40 - 01:42:44] system
+[01:42:42 - 01:42:46] browser like Chrome
+[01:42:44 - 01:42:49] so then you have to use linking dot open
+[01:42:46 - 01:42:51] URL. So in this case we want to open in
+[01:42:49 - 01:42:54] in our app only.
+[01:42:51 - 01:42:55] So first I will import this statement.
+[01:42:54 - 01:42:57] Okay.
+[01:42:55 - 01:42:58] And then
+[01:42:57 - 01:43:02] I will just
+[01:42:58 - 01:43:05] copy this line of code and I will paste
+[01:43:02 - 01:43:07] it here for the read more on press event
+[01:43:05 - 01:43:09] So here we have on press event instead
+[01:43:07 - 01:43:11] of console
+[01:43:09 - 01:43:13] I will put the
+[01:43:11 - 01:43:14] put this line of code and instead of
+[01:43:13 - 01:43:16] this
+[01:43:14 - 01:43:18] URL right I will put our new URL. So
+[01:43:16 - 01:43:21] news dot
+[01:43:18 - 01:43:23] Let's go back here see the URL. So we
+[01:43:21 - 01:43:25] just have URL right.
+[01:43:23 - 01:43:28] So just type URL
+[01:43:25 - 01:43:28] and save it.
+[01:43:28 - 01:43:32] Now if you click on it
+[01:43:31 - 01:43:35] Uh,
+[01:43:32 - 01:43:38] don't know why it's not working.
+[01:43:35 - 01:43:42] So, on browser web on press, let's see
+[01:43:38 - 01:43:42] if we are getting any error or not.
+[01:43:44 - 01:43:47] So, it's saying the web browser is not
+[01:43:46 - 01:43:49] defined. So, we have to restart it
+[01:43:47 - 01:43:51] again, right?
+[01:43:49 - 01:43:55] Our application is get loaded.
+[01:43:51 - 01:43:57] And now let's open
+[01:43:55 - 01:43:59] one of the political news.
+[01:43:57 - 01:44:01] And here you have read more. So, if I
+[01:43:59 - 01:44:04] click read more, right? It opened the
+[01:44:01 - 01:44:06] web browser. So, right now I'm on
+[01:44:04 - 01:44:08] emulator, so it's looking too bad.
+[01:44:06 - 01:44:09] But on your system, it looks perfectly
+[01:44:08 - 01:44:11] fine.
+[01:44:09 - 01:44:13] So, we completely design and complete
+[01:44:11 - 01:44:16] this particular page. Now, another
+[01:44:13 - 01:44:17] thing, right? We have to on the press of
+[01:44:16 - 01:44:20] event we are navigating, right? Same
+[01:44:17 - 01:44:22] thing we have to do for this uh
+[01:44:20 - 01:44:23] uh news as well.
+[01:44:22 - 01:44:26] So,
+[01:44:23 - 01:44:28] go back your uh headline list, right?
+[01:44:26 - 01:44:31] Define the same code which you defined.
+[01:44:28 - 01:44:33] So, I will just copy paste for now.
+[01:44:31 - 01:44:36] So, I will do this navigation, put it in
+[01:44:33 - 01:44:39] headline list.
+[01:44:36 - 01:44:40] Import the use navigation.
+[01:44:39 - 01:44:44] And
+[01:44:40 - 01:44:44] also we have this on press event, right?
+[01:44:45 - 01:44:49] So, I'll copy this on press and put it
+[01:44:47 - 01:44:49] here.
+[01:44:50 - 01:44:53] So, we have this one, right?
+[01:44:54 - 01:44:58] So, in this is touchable opacity. I
+[01:44:55 - 01:44:59] press this read navigation, right? And
+[01:44:58 - 01:45:00] we have this news item. Everything's
+[01:44:59 - 01:45:03] good.
+[01:45:00 - 01:45:05] So, if I click this one, right?
+[01:45:03 - 01:45:07] Still not working. It's showing some
+[01:45:05 - 01:45:07] error.
+[01:45:08 - 01:45:12] Let's try it again.
+[01:45:10 - 01:45:14] And it's working now. So, first time, I
+[01:45:12 - 01:45:16] don't know what the issue, but if I open
+[01:45:14 - 01:45:19] this one, right? I'm getting this news.
+[01:45:16 - 01:45:21] But yes, it's not scrollable here. So,
+[01:45:19 - 01:45:23] do you remember, right? It's correct.
+[01:45:21 - 01:45:25] You have to add the scroll view.
+[01:45:23 - 01:45:28] So, go to the
+[01:45:25 - 01:45:30] read news and here at the top
+[01:45:28 - 01:45:33] instead of this view, you can add the
+[01:45:30 - 01:45:33] scroll view.
+[01:45:34 - 01:45:39] So, whole page is scrollable now.
+[01:45:36 - 01:45:39] Save it.
+[01:45:39 - 01:45:44] And it's scrollable. You can remove this
+[01:45:42 - 01:45:48] vertical bar if you don't want it, but
+[01:45:44 - 01:45:48] yeah. So, perfect.
+[01:45:49 - 01:45:54] Okay.
+[01:45:51 - 01:45:56] If you go to this uh news API, right?
+[01:45:54 - 01:45:57] So, we have this API call, everything,
+[01:45:56 - 01:45:58] and we have to just pass the query,
+[01:45:57 - 01:46:01] right?
+[01:45:58 - 01:46:02] So, if I pass the query as a business or
+[01:46:01 - 01:46:04] um
+[01:46:02 - 01:46:06] as a latest
+[01:46:04 - 01:46:09] you'll get the result.
+[01:46:06 - 01:46:10] So, in our global API, I add this
+[01:46:09 - 01:46:12] another endpoint called get by category,
+[01:46:10 - 01:46:13] and I'm passing this category in this
+[01:46:12 - 01:46:17] way, okay?
+[01:46:13 - 01:46:19] And then I'm uh calling this get API
+[01:46:17 - 01:46:21] for this uh endpoint, everything. And we
+[01:46:19 - 01:46:22] are passing the query as a category,
+[01:46:21 - 01:46:23] okay? So, this category, whatever we
+[01:46:22 - 01:46:25] pass,
+[01:46:23 - 01:46:28] we'll pass it here.
+[01:46:25 - 01:46:32] So, in a home.js, okay? I just commented
+[01:46:28 - 01:46:32] uh this get top hill uh top headline
+[01:46:32 - 01:46:35] uh
+[01:46:32 - 01:46:37] method call. And I'm created another
+[01:46:35 - 01:46:39] method called get news by category, and
+[01:46:37 - 01:46:41] here I'm passing the by default as the
+[01:46:39 - 01:46:44] latest one, okay?
+[01:46:41 - 01:46:46] Now, on the click, we have to call this
+[01:46:44 - 01:46:50] method, right? But this method is
+[01:46:46 - 01:46:52] defined uh the this particular code,
+[01:46:50 - 01:46:54] right? It is in the category text
+[01:46:52 - 01:46:56] slider, correct?
+[01:46:54 - 01:47:00] So, what do we have to do?
+[01:46:56 - 01:47:02] On press uh of this event, right? So,
+[01:47:00 - 01:47:04] this is on press, correct?
+[01:47:02 - 01:47:08] And on category click,
+[01:47:04 - 01:47:08] uh we are calling this item.id, so
+[01:47:09 - 01:47:12] So, here, right? We have
+[01:47:11 - 01:47:14] uh setting the whether this is active or
+[01:47:12 - 01:47:16] not, right?
+[01:47:14 - 01:47:18] Same we have to
+[01:47:16 - 01:47:20] send some value
+[01:47:18 - 01:47:22] to this one, correct?
+[01:47:20 - 01:47:24] So, that's what we are doing now. Now,
+[01:47:22 - 01:47:27] what we have to do, we have to pass on
+[01:47:24 - 01:47:29] press event and we have to send value
+[01:47:27 - 01:47:31] from this child component to our parent
+[01:47:29 - 01:47:33] component, correct?
+[01:47:31 - 01:47:36] So, here what I have to do,
+[01:47:33 - 01:47:38] uh wrap this um because uh inside this
+[01:47:36 - 01:47:40] we'll call two methods, okay, at a time.
+[01:47:38 - 01:47:42] So, first is on category click and
+[01:47:40 - 01:47:44] second we will call
+[01:47:42 - 01:47:47] uh select
+[01:47:44 - 01:47:51] category, okay?
+[01:47:47 - 01:47:54] And inside that we'll pass the item dot
+[01:47:51 - 01:47:57] name of the category, okay?
+[01:47:54 - 01:47:59] And then you have to pass this mm
+[01:47:57 - 01:48:01] function call, right? Oh, sorry. We have
+[01:47:59 - 01:48:03] to pass this function call uh in this
+[01:48:01 - 01:48:06] props, okay?
+[01:48:03 - 01:48:09] And in the home.js, if you go here,
+[01:48:06 - 01:48:11] right, in the category text slider, here
+[01:48:09 - 01:48:13] you have to call it.
+[01:48:11 - 01:48:15] So, what it will do, uh it automatically
+[01:48:13 - 01:48:17] take whether you're passing from child
+[01:48:15 - 01:48:20] to parent or parent to child, right? And
+[01:48:17 - 01:48:23] here you can call
+[01:48:20 - 01:48:25] uh get news category, right? So, call
+[01:48:23 - 01:48:26] get news category.
+[01:48:25 - 01:48:28] And we have here selected category,
+[01:48:26 - 01:48:29] right? So, I will write just category
+[01:48:28 - 01:48:31] for now.
+[01:48:29 - 01:48:32] And you can just pass this category
+[01:48:31 - 01:48:34] here.
+[01:48:32 - 01:48:37] Okay, perfect.
+[01:48:34 - 01:48:39] And if I save it, right? It's
+[01:48:37 - 01:48:41] refreshing. So, by default it's calling
+[01:48:39 - 01:48:43] the latest. And if I change, for
+[01:48:41 - 01:48:45] example, now I change to business,
+[01:48:43 - 01:48:47] right? It will take some time because
+[01:48:45 - 01:48:50] it's loading the data, right? And then
+[01:48:47 - 01:48:52] it's showing, do you see? It's changed.
+[01:48:50 - 01:48:56] If we want sport,
+[01:48:52 - 01:48:56] it will change to sport now.
+[01:48:56 - 01:49:01] Okay, but the other thing that it's
+[01:48:59 - 01:49:03] taking time, right? And obviously you
+[01:49:01 - 01:49:04] don't like it, so we have to show it
+[01:49:03 - 01:49:07] loading whether it's loading or not,
+[01:49:04 - 01:49:07] correct?
+[01:49:08 - 01:49:12] So, to do that, we define one constant
+[01:49:11 - 01:49:14] called loading,
+[01:49:12 - 01:49:17] okay?
+[01:49:14 - 01:49:20] And I will set loading
+[01:49:17 - 01:49:23] is equal to use state.
+[01:49:20 - 01:49:25] Initially, we set this as a true.
+[01:49:23 - 01:49:30] So, loading value is true initially.
+[01:49:25 - 01:49:33] And here, we'll set loading as a true.
+[01:49:30 - 01:49:35] And after this, we'll set loading
+[01:49:33 - 01:49:38] as a false.
+[01:49:35 - 01:49:41] We'll remove this console.
+[01:49:38 - 01:49:41] Now, what loading will do?
+[01:49:41 - 01:49:44] Uh
+[01:49:41 - 01:49:46] inside this scroll view, right?
+[01:49:44 - 01:49:50] Uh we will define
+[01:49:46 - 01:49:53] if it's a loading, right?
+[01:49:50 - 01:49:56] Then, we will show the loader, okay? So,
+[01:49:53 - 01:49:57] we have inbuilt function called activate
+[01:49:56 - 01:49:58] activity indicator.
+[01:49:57 - 01:50:01] Okay?
+[01:49:58 - 01:50:05] And otherwise, we'll show the result.
+[01:50:01 - 01:50:05] So, inside this view, let me
+[01:50:07 - 01:50:10] wrap this up actually.
+[01:50:12 - 01:50:15] Yeah.
+[01:50:14 - 01:50:18] Okay?
+[01:50:15 - 01:50:21] And we want to wrap everything
+[01:50:18 - 01:50:21] together.
+[01:50:21 - 01:50:24] View.
+[01:50:31 - 01:50:34] Oops, we already have this one, okay?
+[01:50:33 - 01:50:36] Yeah.
+[01:50:34 - 01:50:38] So, we wrap this one. And if it's
+[01:50:36 - 01:50:40] loading, we will show an activity
+[01:50:38 - 01:50:43] indicator. So, activity indicator also
+[01:50:40 - 01:50:47] have some method called how how much
+[01:50:43 - 01:50:49] size. So, I will put it large.
+[01:50:47 - 01:50:52] And the color of the activity indicator.
+[01:50:49 - 01:50:54] So, if you see the color, right? So, you
+[01:50:52 - 01:50:57] can define the color as well.
+[01:50:54 - 01:50:59] So, I will pick the I'll put the
+[01:50:57 - 01:51:00] uh color uh primary color
+[01:50:59 - 01:51:02] and
+[01:51:00 - 01:51:04] save it, okay?
+[01:51:02 - 01:51:05] As you see, you see this activity
+[01:51:04 - 01:51:07] indicator thing. If I click world,
+[01:51:05 - 01:51:09] right?
+[01:51:07 - 01:51:11] You see activity indicator. If I select
+[01:51:09 - 01:51:12] the business,
+[01:51:11 - 01:51:15] it will show the activity indicator,
+[01:51:12 - 01:51:17] correct? But if you see that this
+[01:51:15 - 01:51:19] particular space also is
+[01:51:17 - 01:51:21] going and we want to keep it as it is,
+[01:51:19 - 01:51:24] right? So just replace this activity
+[01:51:21 - 01:51:26] indicator from here.
+[01:51:24 - 01:51:29] Along with I will say
+[01:51:26 - 01:51:32] along with this one
+[01:51:29 - 01:51:33] to the slider.
+[01:51:32 - 01:51:36] Okay.
+[01:51:33 - 01:51:39] And let's see how it looks.
+[01:51:36 - 01:51:41] So it will refresh it. Okay. If I change
+[01:51:39 - 01:51:45] to you see
+[01:51:41 - 01:51:47] perfect. If I change to one
+[01:51:45 - 01:51:48] it will change to one.
+[01:51:47 - 01:51:49] So right now in the emulator it's a
+[01:51:48 - 01:51:53] little slow.
+[01:51:49 - 01:51:54] But when you actually run on the
+[01:51:53 - 01:51:57] what do you say?
+[01:51:54 - 01:51:59] Your device it will be real fast.
+[01:51:57 - 01:52:01] You can give margin or padding to this
+[01:51:59 - 01:52:03] activity indicator as well. So let's
+[01:52:01 - 01:52:05] give some margin padding. So I will give
+[01:52:03 - 01:52:08] style.
+[01:52:05 - 01:52:09] And I will give margin top.
+[01:52:08 - 01:52:11] Okay.
+[01:52:09 - 01:52:15] So what I will do? I will give margin
+[01:52:11 - 01:52:18] top to dimension of the screen. Whatever
+[01:52:15 - 01:52:18] the height is.
+[01:52:19 - 01:52:23] So dimension the screen
+[01:52:23 - 01:52:25] and dot
+[01:52:24 - 01:52:27] height.
+[01:52:25 - 01:52:31] So
+[01:52:27 - 01:52:33] into 0.45 for example half. Okay.
+[01:52:31 - 01:52:35] So if I refresh it
+[01:52:33 - 01:52:37] let's see. It's showing like here,
+[01:52:35 - 01:52:38] right?
+[01:52:37 - 01:52:40] We'll decrease this the size a little
+[01:52:38 - 01:52:40] bit.
+[01:52:43 - 01:52:48] After you see, right? It's showing
+[01:52:45 - 01:52:49] perfectly on the place where I want to
+[01:52:48 - 01:52:52] see.
+[01:52:49 - 01:52:54] Perfect and now everything is working
+[01:52:52 - 01:52:54] fine.
+[01:52:56 - 01:52:59] So now
+[01:52:57 - 01:53:01] once we
+[01:52:59 - 01:53:03] complete development of the application,
+[01:53:01 - 01:53:04] the time is to deploy the application,
+[01:53:03 - 01:53:06] right?
+[01:53:04 - 01:53:08] So I will teach you how to deploy on
+[01:53:06 - 01:53:10] Play Store and the App Store in my
+[01:53:08 - 01:53:12] another video.
+[01:53:10 - 01:53:14] But, you can
+[01:53:12 - 01:53:16] still share this app with your friends
+[01:53:14 - 01:53:18] and family, okay? So, just you have to
+[01:53:16 - 01:53:20] do you can send the link with the email.
+[01:53:18 - 01:53:22] That's also one of the reason or one of
+[01:53:20 - 01:53:25] the way, okay?
+[01:53:22 - 01:53:28] And you can publish this app on Expo.
+[01:53:25 - 01:53:31] So, what I will do, I'll just click on
+[01:53:28 - 01:53:35] publish app. I will change to
+[01:53:31 - 01:53:37] Apple News App 2.0.
+[01:53:35 - 01:53:39] You can put the GitHub source URL if you
+[01:53:37 - 01:53:42] want or description, okay? I will keep
+[01:53:39 - 01:53:45] it blank for now.
+[01:53:42 - 01:53:47] And just say publish project.
+[01:53:45 - 01:53:52] So, it will take some few
+[01:53:47 - 01:53:52] seconds. A few minutes later.
+[01:53:53 - 01:53:57] So, if you see our application published
+[01:53:55 - 01:53:59] and this is the URL that you can access
+[01:53:57 - 01:54:01] the application. I will open I will open
+[01:53:59 - 01:54:04] this URL.
+[01:54:01 - 01:54:05] And you will see, okay? So, right now
+[01:54:04 - 01:54:07] uh you will see the application name. We
+[01:54:05 - 01:54:09] did not add the logo, but you can add
+[01:54:07 - 01:54:12] the logo.
+[01:54:09 - 01:54:14] And uh here you will see this QR code or
+[01:54:12 - 01:54:16] you can have this URL as well that you
+[01:54:14 - 01:54:18] can share it, okay?
+[01:54:16 - 01:54:20] And just the thing you have to
+[01:54:18 - 01:54:23] uh with the help of Expo Go app
+[01:54:20 - 01:54:25] you have to scan and anyone gets then
+[01:54:23 - 01:54:28] use this application, okay?
+[01:54:25 - 01:54:29] And there are some other method to
+[01:54:28 - 01:54:31] publish it or something like that, but
+[01:54:29 - 01:54:34] it's up to you.
+[01:54:31 - 01:54:36] So, guys, uh that's all for this video.
+[01:54:34 - 01:54:38] I hope you enjoy this video and you
+[01:54:36 - 01:54:39] learn a lot of uh different concept of
+[01:54:38 - 01:54:42] the React Native.
+[01:54:39 - 01:54:44] And uh yeah, you can go and try it. And
+[01:54:42 - 01:54:47] definitely uh if you did not subscribe
+[01:54:44 - 01:54:49] to my channel, subscribe to my channel.
+[01:54:47 - 01:54:51] Uh press like button. And if you have
+[01:54:49 - 01:54:53] any thought or any comments or if you
+[01:54:51 - 01:54:55] don't understand any of the topic,
+[01:54:53 - 01:54:57] please comment uh in the comment section
+[01:54:55 - 01:54:58] so I can uh tell you in the personal or
+[01:54:57 - 01:55:01] you can
+[01:54:58 - 01:55:03] uh direct message me on the Instagram.
+[01:55:01 - 01:55:04] So, my Instagram ID is
+[01:55:03 - 01:55:06] Tube Guruji.
+[01:55:04 - 01:55:08] And you can check it out or and follow
+[01:55:06 - 01:55:12] me on the Instagram as well. So, guys,
+[01:55:08 - 01:55:12] see you in next video. Thank you.

@@ -1,0 +1,1511 @@
+[00:00 - 00:05] In one of my last video, we designed
+[00:03 - 00:07] this beautiful application in Figma.
+[00:05 - 00:10] And today, we are going to develop this
+[00:07 - 00:13] full application in React Native.
+[00:10 - 00:15] So, in this video, we will develop this
+[00:13 - 00:17] video streaming application
+[00:15 - 00:19] completely from the scratch in React
+[00:17 - 00:20] Native.
+[00:19 - 00:22] So,
+[00:20 - 00:25] we will learn about the
+[00:22 - 00:27] how the app we are developing, then we
+[00:25 - 00:30] will install the React Native and the
+[00:27 - 00:32] Expo where we'll use
+[00:30 - 00:33] to develop the application.
+[00:32 - 00:35] Then,
+[00:33 - 00:36] we will learn to create a React Native
+[00:35 - 00:38] project.
+[00:36 - 00:41] After that, we will understand the basic
+[00:38 - 00:43] file structure uh in the React Native
+[00:41 - 00:45] project. And then, we will start
+[00:43 - 00:48] building the application completely from
+[00:45 - 00:50] the scratch. So, watch this full video
+[00:48 - 00:53] and we will learn everything basic about
+[00:50 - 00:55] the React Native even though you don't
+[00:53 - 00:56] know about anything, we will learn in
+[00:55 - 00:57] this video.
+[00:56 - 01:00] So,
+[00:57 - 01:03] before we start of this video, we will
+[01:00 - 01:03] Please subscribe to my channel.
+[01:05 - 01:10] In this tutorial, we are
+[01:07 - 01:12] uh using the create native Expo, okay?
+[01:10 - 01:15] So, in this
+[01:12 - 01:17] Expo CLI, uh
+[01:15 - 01:21] we are using our application.
+[01:17 - 01:24] So, in order to install this Expo,
+[01:21 - 01:26] uh the If you go to the expo.dev
+[01:24 - 01:29] uh website, you will find this
+[01:26 - 01:31] um installation command, okay? Just go
+[01:29 - 01:34] uh in your command prompt and run this
+[01:31 - 01:37] command, okay? But, make sure that you
+[01:34 - 01:38] already have Node.js installed, okay?
+[01:37 - 01:40] So,
+[01:38 - 01:43] in order to test whether it's
+[01:40 - 01:46] Node.js is uh installed or not, you can
+[01:43 - 01:49] type by uh checking the version number
+[01:46 - 01:51] of the node. So, just type node -v
+[01:49 - 01:53] and you will see the version number. If
+[01:51 - 01:55] it's not there, it means node is not
+[01:53 - 02:01] installed. And then, you have to install
+[01:55 - 02:02] it uh from the node.org website, okay?
+[02:01 - 02:04] So, if you go here
+[02:02 - 02:07] on nodejs.org, sorry, and you can
+[02:04 - 02:09] download it and install it, okay?
+[02:07 - 02:11] So, once you have this installed
+[02:09 - 02:13] then we'll go to create a new project,
+[02:11 - 02:16] okay? So, in order to create a new
+[02:13 - 02:17] project go to this Expo Dev or you can
+[02:16 - 02:19] just
+[02:17 - 02:21] search like Expo
+[02:19 - 02:23] create app, okay? Something like that.
+[02:21 - 02:25] And if you see, the first link will open
+[02:23 - 02:26] like create a new app, okay?
+[02:25 - 02:29] And in this
+[02:26 - 02:32] you have to run this command NPX, then
+[02:29 - 02:35] we have command create Expo app and then
+[02:32 - 02:39] you have to give the app name. So let's
+[02:35 - 02:39] start doing this in a command prompt.
+[02:41 - 02:44] So, now in order to create project, go
+[02:43 - 02:46] to the
+[02:44 - 02:47] uh specific folder where you want to
+[02:46 - 02:50] create the project.
+[02:47 - 02:53] Then on this path, just click it like
+[02:50 - 02:57] this and type CMD.
+[02:53 - 02:59] So automatically CMD will open in this
+[02:57 - 03:04] uh folder, okay? So, you don't need to
+[02:59 - 03:04] go and specify folder in the CMD.
+[03:04 - 03:09] Then you have to run command
+[03:07 - 03:13] NPM NPX
+[03:09 - 03:14] create Expo app and then you have to
+[03:13 - 03:15] give the app name like
+[03:14 - 03:17] You
+[03:15 - 03:20] Tube
+[03:17 - 03:22] or I will give like uh video
+[03:20 - 03:23] streaming
+[03:22 - 03:26] app.
+[03:23 - 03:28] Okay? And just click enter.
+[03:26 - 03:29] So, it will take some few seconds in
+[03:28 - 03:31] order to
+[03:29 - 03:33] uh generate all packages and everything.
+[03:31 - 03:35] So, it's asking us need to install the
+[03:33 - 03:38] following package create Expo app. You
+[03:35 - 03:39] have to say yes.
+[03:38 - 03:41] So, it will install the all the Expo
+[03:39 - 03:43] packages which is needed for our
+[03:41 - 03:46] applications.
+[03:43 - 03:46] So, we will wait.
+[03:47 - 03:53] A few minutes later. So, our project is
+[03:51 - 03:56] ready, Okay?
+[03:53 - 03:58] And now you have to go to our project
+[03:56 - 04:01] folder. So, just type CD and the project
+[03:58 - 04:01] folder name.
+[04:02 - 04:06] And click enter. Now, if you see, you
+[04:04 - 04:07] are in the your project.
+[04:06 - 04:08] Okay?
+[04:07 - 04:10] So,
+[04:08 - 04:13] uh make sure we right now we are using
+[04:10 - 04:15] the Visual Studio Code. Okay? So, make
+[04:13 - 04:17] sure you install in your application.
+[04:15 - 04:21] If you don't know Visual Studio Code, so
+[04:17 - 04:21] just type Visual
+[04:22 - 04:28] Studio Code and you can download it from
+[04:25 - 04:29] this link. I will write uh the link in
+[04:28 - 04:32] description. So, if you are using
+[04:29 - 04:34] Windows, download for Windows or depends
+[04:32 - 04:37] on Mac or you are using Ubuntu or
+[04:34 - 04:39] something like uh OS,
+[04:37 - 04:41] download for that one. Okay?
+[04:39 - 04:44] So, once it installed, right, and you
+[04:41 - 04:46] are in the project folder, uh you with
+[04:44 - 04:49] the help of CMD, you can just type code
+[04:46 - 04:52] space dot. So, once you type like this,
+[04:49 - 04:55] it will open uh project in Visual Studio
+[04:52 - 04:57] Code automatically. Or you can open the
+[04:55 - 04:59] VS Code and open the folder from
+[04:57 - 05:01] uh file as well. Okay?
+[04:59 - 05:04] So, I enter.
+[05:01 - 05:07] And uh automatically uh
+[05:04 - 05:09] project is open in this VS Code. So, we
+[05:07 - 05:12] are not using this CMD anymore, so I
+[05:09 - 05:12] will close it.
+[05:15 - 05:19] So,
+[05:16 - 05:23] in order to run the project, make sure
+[05:19 - 05:25] you will install this Expo Go app in
+[05:23 - 05:27] your Android device.
+[05:25 - 05:29] It is also available for the iOS device
+[05:27 - 05:33] as well. Okay?
+[05:29 - 05:35] Once you install this application,
+[05:33 - 05:37] open it and log in it. Uh create account
+[05:35 - 05:40] if necessary. Okay?
+[05:37 - 05:43] Once you create the account,
+[05:40 - 05:45] go to your project in terminal, create a
+[05:43 - 05:45] new terminal,
+[05:47 - 05:52] and just run the command expo
+[05:50 - 05:54] start in order to build and run the
+[05:52 - 05:57] project.
+[05:54 - 05:59] So, it will take a few seconds
+[05:57 - 06:00] to build the project, okay?
+[05:59 - 06:02] Once the project is built, it will
+[06:00 - 06:04] automatically opens
+[06:02 - 06:06] this port on your browser. If it's not
+[06:04 - 06:09] open, just type this
+[06:06 - 06:11] enter this URL, okay? The local host
+[06:09 - 06:13] 19002.
+[06:11 - 06:15] Then, you will see on the left-hand side
+[06:13 - 06:17] you can run on Android device simulator
+[06:15 - 06:18] or iOS simulator.
+[06:17 - 06:21] Okay?
+[06:18 - 06:22] You can publish or publish the project
+[06:21 - 06:25] as well, okay? I will teach you how we
+[06:22 - 06:28] can we do that and building the APK for
+[06:25 - 06:29] this Android and making a iOS file as
+[06:28 - 06:31] well, okay?
+[06:29 - 06:33] Then,
+[06:31 - 06:34] in order to run project in a Android
+[06:33 - 06:35] device,
+[06:34 - 06:37] you have to select the connection type
+[06:35 - 06:39] as a tunnel.
+[06:37 - 06:41] Okay? Online, it will not work. So, make
+[06:39 - 06:43] sure you will select the connection type
+[06:41 - 06:45] as a tunnel.
+[06:43 - 06:46] Once you selected the connection type as
+[06:45 - 06:47] a tunnel,
+[06:46 - 06:52] go to your
+[06:47 - 06:55] project and on your Android device,
+[06:52 - 06:57] you will see this option video streaming
+[06:55 - 06:59] one, which is the local LAN connection,
+[06:57 - 07:01] and another is the tunnel one.
+[06:59 - 07:02] You have to click on this tunnel one,
+[07:01 - 07:04] okay?
+[07:02 - 07:07] Now, it will take again a couple of few
+[07:04 - 07:09] seconds to build the application in your
+[07:07 - 07:11] Android device, okay? It's first time
+[07:09 - 07:13] only
+[07:11 - 07:16] when first time you are launching the
+[07:13 - 07:17] application on a Expo Go app in a
+[07:16 - 07:20] Android device,
+[07:17 - 07:22] then it will build the application every
+[07:20 - 07:23] time, okay?
+[07:22 - 07:25] Now,
+[07:23 - 07:26] if you see,
+[07:25 - 07:30] we can able to
+[07:26 - 07:30] run the application in Android device.
+[07:31 - 07:36] Now, you see we have
+[07:33 - 07:38] simple text like open up app.js to start
+[07:36 - 07:41] working on your app, and which is
+[07:38 - 07:41] nothing but this text. This is a simple
+[07:41 - 07:42] text,
+[07:41 - 07:45] right?
+[07:42 - 07:48] Now, you I one thing.
+[07:45 - 07:50] app.js is our
+[07:48 - 07:53] main file. Main in the sense that is our
+[07:50 - 07:55] first starting point of our application.
+[07:53 - 07:59] Okay, so whatever you mention in this
+[07:55 - 08:00] application, it will start it from
+[07:59 - 08:04] first react
+[08:00 - 08:06] expo I will call this app.js and then
+[08:04 - 08:09] everything will define in the app.js
+[08:06 - 08:11] which render it on the screen.
+[08:09 - 08:14] So, we successfully run the application
+[08:11 - 08:17] in our Android iOS device, okay? It's
+[08:14 - 08:19] the same step you have to follow for iOS
+[08:17 - 08:21] as well. So, no different step uh you
+[08:19 - 08:23] need to follow. Just
+[08:21 - 08:25] keep it They keep it so much simple,
+[08:23 - 08:27] okay?
+[08:25 - 08:29] Now, on the left-hand side
+[08:27 - 08:31] just ignore all of the this file. This
+[08:29 - 08:34] is a package.json file. Uh we will
+[08:31 - 08:36] explain it later on once we start
+[08:34 - 08:38] building our application or building the
+[08:36 - 08:40] APK file. That time I will explain
+[08:38 - 08:41] everything, okay?
+[08:40 - 08:45] And uh
+[08:41 - 08:47] this is the JSON file, okay? If you see.
+[08:45 - 08:49] Uh we have this app name and slug name
+[08:47 - 08:50] and we'll define the package name over
+[08:49 - 08:52] here, okay?
+[08:50 - 08:54] And this is our main file.
+[08:52 - 08:56] So, this is our the assets, which is
+[08:54 - 08:59] nothing but the
+[08:56 - 09:01] our all the images, icons, mobile the
+[08:59 - 09:03] app icon and everything. Ignore the all
+[09:01 - 09:05] these top two files and node modules.
+[09:03 - 09:09] It's just a some of the packages which
+[09:05 - 09:09] need for the our application.
+[09:12 - 09:16] So, now
+[09:13 - 09:19] uh first thing we will do, we'll add a
+[09:16 - 09:20] Visual Studio Code plugin, okay?
+[09:19 - 09:22] So,
+[09:20 - 09:24] go to the plugin uh extension section
+[09:22 - 09:28] and just type uh react. You will see
+[09:24 - 09:30] this ES7 uh react redux uh
+[09:28 - 09:33] react native, okay? So, this will help
+[09:30 - 09:36] in order to uh define the
+[09:33 - 09:38] uh starting template for each
+[09:36 - 09:39] each uh
+[09:38 - 09:43] page, okay?
+[09:39 - 09:46] So, we don't need to define or write the
+[09:43 - 09:47] uh the template every time, okay?
+[09:46 - 09:50] So, this will help you to write it
+[09:47 - 09:51] automatically within a few uh word,
+[09:50 - 09:53] okay?
+[09:51 - 09:55] So, I will tell you how, but just make
+[09:53 - 09:56] sure you install this. I already
+[09:55 - 09:58] installed it, okay?
+[09:56 - 10:00] And I don't think so any other things we
+[09:58 - 10:01] needed.
+[10:00 - 10:02] Uh if
+[10:01 - 10:05] I remember anything,
+[10:02 - 10:05] I will let you know.
+[10:09 - 10:14] So, now
+[10:11 - 10:15] we successfully run the application,
+[10:14 - 10:18] okay?
+[10:15 - 10:19] So, let let's create uh some folder and
+[10:18 - 10:22] some file, okay? So, I created one
+[10:19 - 10:24] folder called name app.
+[10:22 - 10:27] Inside that, I will create one more
+[10:24 - 10:29] folder uh name
+[10:27 - 10:29] uh
+[10:29 - 10:33] I will name as a
+[10:31 - 10:35] screens, okay?
+[10:33 - 10:38] Inside the screen,
+[10:35 - 10:40] I will create three files, the home
+[10:38 - 10:43] tab
+[10:40 - 10:45] or I can home screen
+[10:43 - 10:47] .js, okay?
+[10:45 - 10:48] Then another is
+[10:47 - 10:51] playlist
+[10:48 - 10:51] .js.
+[10:51 - 10:54] And the third one is
+[10:55 - 10:58] profile.js.
+[11:02 - 11:08] So, if you remember, we added this uh
+[11:05 - 11:10] VS Code extension for our uh React
+[11:08 - 11:12] Native, okay?
+[11:10 - 11:14] So, with the help of this, we will
+[11:12 - 11:17] define the template automatically, okay?
+[11:14 - 11:19] So, let's go to home screen, and here
+[11:17 - 11:21] you can just type RF
+[11:19 - 11:23] Sorry, RFCE.
+[11:21 - 11:25] So, it will give the bunch of uh
+[11:23 - 11:27] suggestion, right? Select the first one.
+[11:25 - 11:29] If you click enter,
+[11:27 - 11:31] you will see uh
+[11:29 - 11:33] uh that extension will provide a default
+[11:31 - 11:35] template template for us. Okay?
+[11:33 - 11:38] So, this is very helpful, so you don't
+[11:35 - 11:40] need to type every time. Okay? Uh with
+[11:38 - 11:42] the help of that extension, you can um
+[11:40 - 11:43] that extension help you to define the uh
+[11:42 - 11:45] default
+[11:43 - 11:47] uh template. Okay?
+[11:45 - 11:49] Same thing you have to do here. Let me
+[11:47 - 11:51] change the
+[11:49 - 11:53] name here like screen.
+[11:51 - 11:57] Because these are the our tabs, and you
+[11:53 - 11:57] can call it screens. Okay?
+[11:57 - 12:01] You can name whatever you want.
+[11:59 - 12:02] And everywhere you have to define same
+[12:01 - 12:03] RFC
+[12:02 - 12:04] here.
+[12:03 - 12:08] Okay?
+[12:04 - 12:09] And then RFC
+[12:08 - 12:10] here.
+[12:09 - 12:13] Now, remove this code. We don't want
+[12:10 - 12:15] this due tag because in React Native we
+[12:13 - 12:17] don't use due tag. Instead of that, we
+[12:15 - 12:18] will use view tag.
+[12:17 - 12:20] Okay?
+[12:18 - 12:21] So, view is nothing but
+[12:20 - 12:22] the whatever we are showing on the
+[12:21 - 12:25] display.
+[12:22 - 12:26] Uh every content which we define in the
+[12:25 - 12:29] view tag, that will display on the
+[12:26 - 12:32] screen. Okay?
+[12:29 - 12:34] So, same when we in HTML you we use the
+[12:32 - 12:36] due tag or we can call up sometimes body
+[12:34 - 12:37] tag, right?
+[12:36 - 12:41] So, instead of that, we are using view.
+[12:37 - 12:44] Okay? And here as well.
+[12:41 - 12:45] I know body and due different, but it's
+[12:44 - 12:46] like
+[12:45 - 12:48] uh
+[12:46 - 12:50] uh section, right?
+[12:48 - 12:51] Cuz of that one.
+[12:50 - 12:53] Okay?
+[12:51 - 12:55] So, now we successfully
+[12:53 - 12:57] uh
+[12:55 - 13:00] added the default template for all of
+[12:57 - 13:02] our three screens. Okay?
+[13:00 - 13:05] So, let's let's try one simple example,
+[13:02 - 13:07] right? Uh type here. So, in order to
+[13:05 - 13:11] type a text, all right,
+[13:07 - 13:13] we have the text uh tag. Okay?
+[13:11 - 13:14] Which is a React Native tag. Inside
+[13:13 - 13:16] text, whatever you write, it will
+[13:14 - 13:18] display on the screen. So, for example,
+[13:16 - 13:19] home screen.
+[13:18 - 13:21] Okay? We'll write like this, home
+[13:19 - 13:22] screen.
+[13:21 - 13:23] And save it.
+[13:22 - 13:26] But if you see, you don't see anything,
+[13:23 - 13:29] right? Because we have to define home
+[13:26 - 13:32] screen inside the app.js. Okay? So,
+[13:29 - 13:34] remove everything from here.
+[13:32 - 13:35] Remove this
+[13:34 - 13:37] CSS
+[13:35 - 13:40] stylesheet tag.
+[13:37 - 13:41] And define home screen. If you see, if
+[13:40 - 13:43] you type home screen, the VS code
+[13:41 - 13:45] suggestion will give you the home screen
+[13:43 - 13:47] and the path. And if you enter it,
+[13:45 - 13:50] automatically import the
+[13:47 - 13:52] uh path for you, okay? And just close
+[13:50 - 13:54] the tag.
+[13:52 - 13:56] And save it.
+[13:54 - 13:58] Now, it's saying that, if you see in the
+[13:56 - 13:59] right side, right? It's saying that
+[13:58 - 14:02] can't find variable view
+[13:59 - 14:05] because in home screen, we added the
+[14:02 - 14:08] view, right? But, we did not import it.
+[14:05 - 14:11] So, in order to get the suggestion,
+[14:08 - 14:13] right? Just do the select the not
+[14:11 - 14:16] select, but at the end of this tag, do
+[14:13 - 14:18] control space, and it will give you the
+[14:16 - 14:20] bunch of option. Make sure you are
+[14:18 - 14:23] importing view from the React Native,
+[14:20 - 14:25] okay? And then, click save. If you see
+[14:23 - 14:27] on the screen, you will see this home
+[14:25 - 14:29] screen, right? The text home screen,
+[14:27 - 14:33] which we kept. If you see home screen,
+[14:29 - 14:33] display something like this.
+[14:35 - 14:41] And save it. It will display it, right?
+[14:38 - 14:41] Perfect. Now, we are able to
+[14:41 - 14:44] um
+[14:41 - 14:45] add the all the templates, and we are
+[14:44 - 14:49] able to render in the home screen on the
+[14:45 - 14:51] screen. Now, next we are uh going to
+[14:49 - 14:53] implement
+[14:51 - 14:56] uh the upper section, right? Welcome
+[14:53 - 14:57] browser and this image. We will call as
+[14:56 - 14:59] a
+[14:57 - 15:01] um maybe a header, okay? Okay?
+[14:59 - 15:04] Heading section, okay? So, let's do
+[15:01 - 15:04] that.
+[15:07 - 15:10] Now,
+[15:11 - 15:17] consider every single uh thing we are
+[15:14 - 15:19] displaying, okay? Divide that into the
+[15:17 - 15:20] components, okay? The section. So, for
+[15:19 - 15:22] example, this heading is a one
+[15:20 - 15:25] component, this slider is a one
+[15:22 - 15:26] the top course list, right? That is one
+[15:25 - 15:28] component, and so on.
+[15:26 - 15:30] So, same way we are
+[15:28 - 15:32] defining in the React Native, which help
+[15:30 - 15:35] us to
+[15:32 - 15:37] restructurize the our code file, and
+[15:35 - 15:40] it's a good practice, okay? You can
+[15:37 - 15:42] define everything in one, but when you
+[15:40 - 15:44] add the apply the logic, it's going to
+[15:42 - 15:46] be hard. So, make sure you will divide
+[15:44 - 15:48] the
+[15:46 - 15:51] screen in the components, okay? So, in
+[15:48 - 15:54] the go to the app, and we'll create one
+[15:51 - 15:54] components.
+[15:54 - 15:57] Inside this components, we'll create a
+[15:56 - 16:00] folder
+[15:57 - 16:00] header.js.
+[16:01 - 16:05] And do RFC in order to add the default
+[16:04 - 16:09] template.
+[16:05 - 16:10] Here, we'll define view tag.
+[16:09 - 16:13] Make sure it you will import that one,
+[16:10 - 16:15] and then text tag.
+[16:13 - 16:18] Just to make sure, okay, we added the
+[16:15 - 16:20] we can able to render the header on the
+[16:18 - 16:22] screen.
+[16:20 - 16:24] I will save it. Go to the home screen,
+[16:22 - 16:26] right? Because we already rendering the
+[16:24 - 16:29] home screen. So, here instead of this
+[16:26 - 16:29] text, we will add
+[16:30 - 16:33] header tag.
+[16:32 - 16:37] So, we have to If you see, right? We
+[16:33 - 16:40] have only one header, but we wanted our
+[16:37 - 16:42] custom created components header.
+[16:40 - 16:43] And close the tag.
+[16:42 - 16:46] Now, if you see, we see this header,
+[16:43 - 16:47] right? So, which we define
+[16:46 - 16:49] in this
+[16:47 - 16:50] component.
+[16:49 - 16:52] Now,
+[16:50 - 16:53] again, let's see the what we are wanting
+[16:52 - 16:55] to. On the left-hand side, we have
+[16:53 - 16:58] welcome, then name, and the right-hand
+[16:55 - 17:00] side, we have image.
+[16:58 - 17:02] So,
+[17:00 - 17:04] let's create one view.
+[17:02 - 17:07] Inside that,
+[17:04 - 17:07] we'll create text tag.
+[17:07 - 17:11] Okay?
+[17:08 - 17:12] And in that, we want to define
+[17:11 - 17:13] welcome.
+[17:12 - 17:15] Okay?
+[17:13 - 17:19] And below that, we want to define name
+[17:15 - 17:19] of person, for example,
+[17:19 - 17:23] something like this.
+[17:21 - 17:25] And if you see, you can able to see
+[17:23 - 17:27] this, right?
+[17:25 - 17:28] Same thing.
+[17:27 - 17:31] After the view tag
+[17:28 - 17:32] we'll define image.
+[17:31 - 17:35] So, in order to display image, we have
+[17:32 - 17:37] the image tag. Okay?
+[17:35 - 17:39] And then, we have to give source, source
+[17:37 - 17:40] for that image.
+[17:39 - 17:42] Now,
+[17:40 - 17:44] if you have already
+[17:42 - 17:46] saved assets
+[17:44 - 17:49] or saved image in your assets folder,
+[17:46 - 17:50] then you have to just write require.
+[17:49 - 17:53] Okay?
+[17:50 - 17:56] Require.
+[17:53 - 17:57] And then, the path.
+[17:56 - 18:00] Okay?
+[17:57 - 18:03] So, something like this.
+[18:00 - 18:05] So, in assets folder, we have
+[18:03 - 18:07] I don't know what file name, but we can
+[18:05 - 18:09] define like icon.png and g, for example,
+[18:07 - 18:11] icon.
+[18:09 - 18:13] .png.
+[18:11 - 18:13] Okay?
+[18:17 - 18:22] But, if you see, right? You see, we are
+[18:20 - 18:24] too much big, right? And we want a
+[18:22 - 18:27] smaller one.
+[18:24 - 18:29] So, in order to apply the style,
+[18:27 - 18:33] just scroll down after this function.
+[18:29 - 18:35] Okay? Just type r n s s. Okay?
+[18:33 - 18:37] Which give us a default style sheet.
+[18:35 - 18:39] Okay? This template.
+[18:37 - 18:43] Make sure
+[18:39 - 18:45] you will import the style sheet. Okay?
+[18:43 - 18:47] Style sheet package. And then, you have
+[18:45 - 18:50] to define like
+[18:47 - 18:51] uh user image. Give the
+[18:50 - 18:54] style sheet name.
+[18:51 - 18:57] And inside that, you have to write
+[18:54 - 18:59] width, for example,
+[18:57 - 19:01] 50. Okay? Here, we don't apply any pixel
+[18:59 - 19:06] something. We directly give value. Okay?
+[19:01 - 19:08] And height to be a colon 50. That's it.
+[19:06 - 19:10] Now, copy this user image in order to
+[19:08 - 19:13] apply the style.
+[19:10 - 19:13] Yeah.
+[19:13 - 19:18] You have to define
+[19:14 - 19:20] style. Okay? And then is equal to in
+[19:18 - 19:21] double curly braces.
+[19:20 - 19:23] I think in single curly braces you have
+[19:21 - 19:24] to define styles
+[19:23 - 19:25] dot
+[19:24 - 19:28] user image.
+[19:25 - 19:30] If you see style then apply the styles
+[19:28 - 19:31] and then user image.
+[19:30 - 19:33] And if you save it
+[19:31 - 19:34] you will see this image, right? It's
+[19:33 - 19:37] small now.
+[19:34 - 19:38] Correct? That is what we are looking.
+[19:37 - 19:40] Now
+[19:38 - 19:43] if you see with the text is
+[19:40 - 19:46] we don't apply any font, we don't apply
+[19:43 - 19:48] any style to this, but we want to apply
+[19:46 - 19:50] it, right? Because if you see the name
+[19:48 - 19:52] welcome is in white color.
+[19:50 - 19:55] And then this Rahul right?
+[19:52 - 19:58] One more thing if you see we want
+[19:55 - 20:00] background to be black color, right? If
+[19:58 - 20:02] up to us you want put white you can. If
+[20:00 - 20:05] you want to black you can change to
+[20:02 - 20:05] black as well.
+[20:10 - 20:16] So now if you see on the right hand
+[20:12 - 20:17] side, right? Our welcome name is going
+[20:16 - 20:20] at the top section, that's why it's not
+[20:17 - 20:20] clearly visible.
+[20:23 - 20:26] So
+[20:24 - 20:29] what you have to do?
+[20:26 - 20:30] Go to the app.js, okay? And in the
+[20:29 - 20:32] container because the style is already
+[20:30 - 20:36] applied to this
+[20:32 - 20:38] view. So give just give padding
+[20:36 - 20:40] 20 px or 20
+[20:38 - 20:42] not px.
+[20:40 - 20:46] Okay?
+[20:42 - 20:49] And give margin from the top.
+[20:46 - 20:50] So margin I'm sorry.
+[20:49 - 20:52] So here right you have to give comma
+[20:50 - 20:53] first and then you will give all the
+[20:52 - 20:55] suggestion.
+[20:53 - 20:59] So to write the margin top, right? We
+[20:55 - 21:02] have like margin T capital for top. And
+[20:59 - 21:04] give like 20.
+[21:02 - 21:06] Okay? Something like this.
+[21:04 - 21:08] Correct? So that's all.
+[21:06 - 21:11] And go to our header.
+[21:08 - 21:13] And here, we want to give style to the
+[21:11 - 21:14] welcome word. Okay?
+[21:13 - 21:18] In order to apply colors, right? We will
+[21:14 - 21:20] keep all the colors code in one file.
+[21:18 - 21:23] So, go to our app folder and keep create
+[21:20 - 21:26] one folder called shared. Okay?
+[21:23 - 21:29] In the shared folder, call one file name
+[21:26 - 21:32] called color.js.
+[21:29 - 21:35] Inside this, we will keep all our color
+[21:32 - 21:37] code. Okay? So, just type here export
+[21:35 - 21:39] default. Okay?
+[21:37 - 21:42] And inside that, we will define our
+[21:39 - 21:45] color. So,
+[21:42 - 21:47] uh we will on the background side, we
+[21:45 - 21:49] want dark color. So, I will say black.
+[21:47 - 21:51] Okay? It's not actually a black color
+[21:49 - 21:54] code, if you see, right? I will It's a
+[21:51 - 21:55] little bit bluish dark.
+[21:54 - 21:58] So,
+[21:55 - 22:00] I will keep like this, right?
+[21:58 - 22:02] For the
+[22:00 - 22:04] as a primary color,
+[22:02 - 22:06] we'll be a red, right?
+[22:04 - 22:08] So, if you go here, and we'll pick the
+[22:06 - 22:11] red color.
+[22:08 - 22:12] Little darkish red like this.
+[22:11 - 22:15] Okay?
+[22:12 - 22:15] This one.
+[22:16 - 22:18] Hash.
+[22:19 - 22:23] This.
+[22:20 - 22:24] Then we have white color we needed.
+[22:23 - 22:26] FFFF.
+[22:24 - 22:27] Right?
+[22:26 - 22:28] Comma here.
+[22:27 - 22:30] And save it, right?
+[22:28 - 22:33] Uh depends on the requirement, we can
+[22:30 - 22:34] add later on. Okay? Now, go to app.js
+[22:33 - 22:36] here.
+[22:34 - 22:36] Define background color
+[22:36 - 22:38] as
+[22:36 - 22:41] take it from colors.
+[22:38 - 22:43] color.dark Um
+[22:41 - 22:45] blank. Oh.
+[22:43 - 22:47] So, it's supposed to be black. You see,
+[22:45 - 22:51] keep blank.
+[22:47 - 22:53] And I will change to black and save it.
+[22:51 - 22:55] And if you see, nice change. Perfect.
+[22:53 - 22:56] So, it's changed throughout the
+[22:55 - 22:59] application because whatever we keep in
+[22:56 - 23:02] the app.js, it will apply automatically.
+[22:59 - 23:04] So, go to the our header.js file.
+[23:02 - 23:08] Here, we want to welcome
+[23:04 - 23:09] text font to be changed. We want bigger
+[23:08 - 23:13] and bold.
+[23:09 - 23:16] So, here I create another style sheet
+[23:13 - 23:17] which is the called welcome
+[23:16 - 23:19] text.
+[23:17 - 23:22] Inside that, we want
+[23:19 - 23:24] font size
+[23:22 - 23:29] to be uh 20.
+[23:24 - 23:29] Then, wait, font weight to be
+[23:31 - 23:35] inside double quote or single quote,
+[23:33 - 23:39] bold.
+[23:35 - 23:41] And save it. Let's see how it looks.
+[23:39 - 23:42] So, it doesn't affect because we have to
+[23:41 - 23:46] apply style.
+[23:42 - 23:48] Okay. So, write style is equal to
+[23:46 - 23:50] and the styles
+[23:48 - 23:52] dot
+[23:50 - 23:54] welcome text and save it.
+[23:52 - 23:56] If you see there, it's changed. But, we
+[23:54 - 23:57] want it's not visible because the color
+[23:56 - 24:01] is black.
+[23:57 - 24:03] So, just type color and from the colors
+[24:01 - 24:07] our color
+[24:03 - 24:07] file, take white color.
+[24:07 - 24:11] Perfect.
+[24:09 - 24:12] If you want to increase font, you can,
+[24:11 - 24:14] okay? But, right now we'll keep as it
+[24:12 - 24:14] is.
+[24:14 - 24:19] So, now we have this text
+[24:16 - 24:20] Rahul Sanap, right? So, we call it as a
+[24:19 - 24:21] user
+[24:20 - 24:23] name
+[24:21 - 24:24] text.
+[24:23 - 24:26] Inside that,
+[24:24 - 24:27] just change the color
+[24:26 - 24:29] to
+[24:27 - 24:31] uh red.
+[24:29 - 24:32] So, it's like color
+[24:31 - 24:34] dot
+[24:32 - 24:34] red.
+[24:35 - 24:39] Oops. Oh, don't have red color. Let me
+[24:37 - 24:43] check.
+[24:39 - 24:45] We don't have a red color, actually. So,
+[24:43 - 24:47] or we can go, sorry, we have primary
+[24:45 - 24:50] color. So, it's nothing but primary
+[24:47 - 24:50] color dot primary.
+[24:50 - 24:55] Why it's not coming? Okay, so it's
+[24:52 - 24:58] capital C, color dot primary.
+[24:55 - 25:00] And save it.
+[24:58 - 25:03] And we have applied this style
+[25:00 - 25:03] to this name.
+[25:07 - 25:13] If you see, but it's not visible.
+[25:10 - 25:15] So, it's quite darkish actually. So,
+[25:13 - 25:17] what we'll do
+[25:15 - 25:19] right for for now we'll keep as a white
+[25:17 - 25:21] color.
+[25:19 - 25:23] So, it will be visible. Okay?
+[25:21 - 25:25] Now, we want this
+[25:23 - 25:26] image to be a
+[25:25 - 25:29] circular, right?
+[25:26 - 25:31] So, in user image just write
+[25:29 - 25:33] border radius
+[25:31 - 25:36] to be a 50.
+[25:33 - 25:37] You see, it will be a circle.
+[25:36 - 25:40] I want to make it that image a little
+[25:37 - 25:43] bit smaller. I will make it like 45 and
+[25:40 - 25:44] 45. Okay?
+[25:43 - 25:47] Okay.
+[25:44 - 25:50] Now, in order to put uh this one and
+[25:47 - 25:52] this in a one line, right?
+[25:50 - 25:55] We have to apply
+[25:52 - 25:57] a flex. Okay? So, if you want to
+[25:55 - 25:59] understand more about flex and how it
+[25:57 - 26:02] works, please comment down in a
+[25:59 - 26:03] comment section so I can make a video
+[26:02 - 26:06] for you. Okay?
+[26:03 - 26:06] So, here
+[26:07 - 26:11] I will create one more style sheet
+[26:08 - 26:12] called container.
+[26:11 - 26:16] Okay.
+[26:12 - 26:16] And inside that I will say
+[26:17 - 26:21] uh
+[26:19 - 26:22] flex direction
+[26:21 - 26:24] to be
+[26:22 - 26:28] in one row. I want a row in a flex
+[26:24 - 26:28] direction, right? And I apply style
+[26:29 - 26:32] styles.container.
+[26:32 - 26:35] Okay? If you see,
+[26:33 - 26:37] now it is in one row, but
+[26:35 - 26:40] in order to put at the end
+[26:37 - 26:41] we have another property for the flex
+[26:40 - 26:44] called
+[26:41 - 26:45] justify content. Okay?
+[26:44 - 26:49] So, what justify content do? We have
+[26:45 - 26:51] multiple option. Okay? So, like
+[26:49 - 26:53] flex end, flex start, okay? We want the
+[26:51 - 26:55] space between.
+[26:53 - 26:57] So, space between means
+[26:55 - 26:59] two items, right? This one and this one.
+[26:57 - 27:00] So, if you write space between
+[26:59 - 27:03] and save it,
+[27:00 - 27:05] it will give the distance, okay?
+[27:03 - 27:06] If you write space, for example, we have
+[27:05 - 27:09] you can write lot of options. Space
+[27:06 - 27:10] around, it will give the equal space
+[27:09 - 27:12] around these two
+[27:10 - 27:14] uh content, right? From here, from
+[27:12 - 27:16] between this and this one, right? But,
+[27:14 - 27:19] we want the space between, so I will
+[27:16 - 27:21] give like this, okay? Perfect.
+[27:19 - 27:24] But, as I know, right?
+[27:21 - 27:27] We are putting this image from our asset
+[27:24 - 27:29] folder. What if you want to put an
+[27:27 - 27:30] image from the URL, right? So, go to the
+[27:29 - 27:34] um
+[27:30 - 27:36] Google and just type user image. We'll
+[27:34 - 27:38] get one dummy image, okay? In order to
+[27:36 - 27:40] display it. So, we'll just get the URL,
+[27:38 - 27:42] okay?
+[27:40 - 27:46] So, for example, this image, okay?
+[27:42 - 27:46] Just copy the image address.
+[27:47 - 27:50] This is for just for our understanding
+[27:49 - 27:52] purpose.
+[27:50 - 27:55] Copy the image address. Instead of
+[27:52 - 27:57] require, right? Require can be only used
+[27:55 - 27:58] when you are using the local files,
+[27:57 - 28:00] okay?
+[27:58 - 28:02] So, we are using the URL.
+[28:00 - 28:04] You have to write source, double quote,
+[28:02 - 28:07] and here write URL.
+[28:04 - 28:10] Okay? URL.
+[28:07 - 28:12] Colon, and inside a quote, you have to
+[28:10 - 28:14] paste this
+[28:12 - 28:16] uh URL, okay?
+[28:14 - 28:16] I know.
+[28:19 - 28:25] So, my bad. So, instead of URL, it's a
+[28:22 - 28:27] URI, actually, okay? I forgot. So, URI,
+[28:25 - 28:29] and if you see, right? We have our image
+[28:27 - 28:31] is displayed. So, just pay I paste your
+[28:29 - 28:34] link and uh
+[28:31 - 28:36] uh text. So, here write I What I will
+[28:34 - 28:37] do,
+[28:36 - 28:39] I will
+[28:37 - 28:41] cut this one, and I will make one
+[28:39 - 28:43] constant here, right?
+[28:41 - 28:45] Constant
+[28:43 - 28:47] image URL
+[28:45 - 28:49] or user image, you can call.
+[28:47 - 28:51] Image is equal to and we'll paste this
+[28:49 - 28:53] one, okay?
+[28:51 - 28:56] So, we save this user image, right? In a
+[28:53 - 28:59] one constant. So, in order you use this,
+[28:56 - 29:00] you can just put this constant name here
+[28:59 - 29:04] and save it.
+[29:00 - 29:06] Still, our image is not displayed.
+[29:04 - 29:09] Perfect. So, we are pretty much ready
+[29:06 - 29:11] with our uh header section, correct?
+[29:09 - 29:14] Now, we will learn how can we add the
+[29:11 - 29:14] sliders, okay?
+[29:18 - 29:22] Now,
+[29:20 - 29:25] in order to clear create slider, we
+[29:22 - 29:27] create one folder, or sorry, one file in
+[29:25 - 29:29] components called
+[29:27 - 29:31] slider.js.
+[29:29 - 29:34] Here, we have to define our default
+[29:31 - 29:36] template by using the RFC uh
+[29:34 - 29:38] and this template is ready.
+[29:36 - 29:40] Enter view.
+[29:38 - 29:42] Put some text in order to check whether
+[29:40 - 29:45] this is rendering or not.
+[29:42 - 29:47] So, just type like this text inside
+[29:45 - 29:50] that. I want to make sure all these tags
+[29:47 - 29:55] are imported, okay? Then, go to our home
+[29:50 - 29:57] screen and import the slider page.
+[29:55 - 30:00] Slider component, sorry.
+[29:57 - 30:04] And you see, you see this slider over
+[30:00 - 30:04] here, okay? Perfect.
+[30:04 - 30:09] So, now I created a one constant called
+[30:07 - 30:13] slider list in
+[30:09 - 30:14] It's a JSON object. It contains
+[30:13 - 30:16] two objects.
+[30:14 - 30:18] One is a slider
+[30:16 - 30:21] one and slider two, which is having the
+[30:18 - 30:23] image URL and the ID, okay?
+[30:21 - 30:25] So, this is just a
+[30:23 - 30:28] uh some dummy data which we are using
+[30:25 - 30:28] uh for our sliders.
+[30:29 - 30:33] So, first,
+[30:30 - 30:34] remove this text slider, right?
+[30:33 - 30:36] So,
+[30:34 - 30:39] slider is nothing but a list, right?
+[30:36 - 30:41] List of images. And in order to show in
+[30:39 - 30:44] list in the
+[30:41 - 30:46] uh React Native Expo, we are using the
+[30:44 - 30:47] FlatList, okay? So, if you go to the
+[30:46 - 30:50] Google
+[30:47 - 30:54] and just type FlatList
+[30:50 - 30:54] Expo or React Native, okay?
+[30:57 - 31:03] So, it This document will give you how
+[31:00 - 31:05] can you use the FlatList, okay?
+[31:03 - 31:07] So, if you see the way to use the
+[31:05 - 31:12] FlatList, okay?
+[31:07 - 31:14] So, now let's define a FlatList.
+[31:12 - 31:16] Okay?
+[31:14 - 31:17] So, inside the FlatList, we have to
+[31:16 - 31:20] define
+[31:17 - 31:21] the which data we are going to
+[31:20 - 31:24] uh, render it, right?
+[31:21 - 31:26] So, we have to call data.
+[31:24 - 31:28] Inside data, we have to define which
+[31:26 - 31:31] data, okay? So, we are using this slider
+[31:28 - 31:33] list. This is an object we'll define
+[31:31 - 31:34] like this.
+[31:33 - 31:35] Okay?
+[31:34 - 31:38] After that
+[31:35 - 31:40] we have to define keyExtractor,
+[31:38 - 31:41] okay? It's not uh,
+[31:40 - 31:43] mandatory,
+[31:41 - 31:44] but keyExtractor is like a
+[31:43 - 31:45] uh,
+[31:44 - 31:47] each
+[31:45 - 31:49] um,
+[31:47 - 31:53] record need a some identifier, right?
+[31:49 - 31:57] Like slider, this.id, okay?
+[31:53 - 32:00] Then, after that, we have to write
+[31:57 - 32:01] renderItem, item.
+[32:00 - 32:03] Okay?
+[32:01 - 32:05] So, in renderItem, where we actually
+[32:03 - 32:06] rendering the
+[32:05 - 32:07] uh,
+[32:06 - 32:10] image, okay?
+[32:07 - 32:13] In this case, it's image, so.
+[32:10 - 32:13] Like this, then
+[32:16 - 32:20] item,
+[32:18 - 32:20] index.
+[32:24 - 32:28] And then, we have to write like
+[32:29 - 32:33] Okay?
+[32:30 - 32:34] So, remember the syntax, right? First
+[32:33 - 32:37] uh, curly braces,
+[32:34 - 32:38] then inside that, we have this item.
+[32:37 - 32:41] Okay? So
+[32:38 - 32:42] the flat list used to iterate each item
+[32:41 - 32:44] one by one.
+[32:42 - 32:47] Okay?
+[32:44 - 32:50] Now, inside the view
+[32:47 - 32:50] we have to define image.
+[32:51 - 32:54] This image
+[32:52 - 32:56] then
+[32:54 - 33:00] source of the image.
+[32:56 - 33:03] Then in this URI and the URI is
+[33:00 - 33:05] item. And in that item we have this
+[33:03 - 33:06] image URL. So
+[33:05 - 33:07] image
+[33:06 - 33:08] URL.
+[33:07 - 33:10] Okay?
+[33:08 - 33:13] And close this tag
+[33:10 - 33:14] and save it.
+[33:13 - 33:16] Let's try whether we are getting
+[33:14 - 33:18] anything. No.
+[33:16 - 33:19] So let's define a style. Sometimes if
+[33:18 - 33:21] you did not define the style, it will
+[33:19 - 33:23] not come. We'll try to define a style
+[33:21 - 33:25] now.
+[33:23 - 33:25] So
+[33:25 - 33:29] here we have to find React Native style
+[33:28 - 33:32] sheet.
+[33:29 - 33:34] Make sure you import the style sheet.
+[33:32 - 33:37] And
+[33:34 - 33:40] slider image.
+[33:37 - 33:42] We'll define width. For example, I will
+[33:40 - 33:45] give 400 I will give 200.
+[33:42 - 33:47] And height I will give 100.
+[33:45 - 33:51] And let's attach the style sheet to the
+[33:47 - 33:51] our image. So style
+[33:51 - 33:54] styles.
+[33:53 - 33:55] image URL.
+[33:54 - 33:58] Okay.
+[33:55 - 34:00] But uh
+[33:58 - 34:01] slider image, sorry.
+[34:00 - 34:04] And save it.
+[34:01 - 34:07] We have to use a hook here, right?
+[34:04 - 34:09] So define constant and define
+[34:07 - 34:13] slider
+[34:09 - 34:15] list, comma set slider list.
+[34:13 - 34:19] And then use state. So use state is a
+[34:15 - 34:20] hook, right? If you define if you uh
+[34:19 - 34:22] think about Java
+[34:20 - 34:24] or any other language, right? We define
+[34:22 - 34:26] the variable and we store the value. In
+[34:24 - 34:28] the React it's same way, but
+[34:26 - 34:31] we have to define
+[34:28 - 34:33] the variable name and you know, uh which
+[34:31 - 34:36] can store the value and another
+[34:33 - 34:37] um name in order to set value for that
+[34:36 - 34:39] variable.
+[34:37 - 34:43] It's like a getter setter method, right?
+[34:39 - 34:45] Same way, we can use it. And if you see,
+[34:43 - 34:46] we have this use state.
+[34:45 - 34:49] So, you use state is a
+[34:46 - 34:51] um predefined inbuilt uh React Native
+[34:49 - 34:54] hook, okay?
+[34:51 - 34:57] So, if you let me
+[34:54 - 34:59] So, here what I will do,
+[34:57 - 35:01] right?
+[34:59 - 35:03] I will just uh
+[35:01 - 35:04] cut this one.
+[35:03 - 35:06] And
+[35:04 - 35:10] inside use effect, use effect is another
+[35:06 - 35:10] hook, inbuilt hook, right?
+[35:12 - 35:17] So, I will define this hook as well what
+[35:14 - 35:21] it is, right? And it set slider list.
+[35:17 - 35:21] We'll define our slider.
+[35:25 - 35:27] Okay.
+[35:26 - 35:29] So, use effect
+[35:27 - 35:33] is the hook. It It
+[35:29 - 35:35] uh execute every time if we did did not
+[35:33 - 35:39] define this empty array, right?
+[35:35 - 35:42] So, in every iteration, it will keep um
+[35:39 - 35:43] executing, okay? It's infinite loop. So,
+[35:42 - 35:46] in order in order to avoid this, you
+[35:43 - 35:48] have to give this empty array, okay? Or
+[35:46 - 35:50] if you want to execute this piece of
+[35:48 - 35:52] code, which called use effect,
+[35:50 - 35:54] when some value it change, then that
+[35:52 - 35:57] value you have to define
+[35:54 - 36:01] uh here, right? For example, set slider
+[35:57 - 36:03] list like that. Like the slider list.
+[36:01 - 36:06] Like that, right?
+[36:03 - 36:07] So, and whenever you want to execute
+[36:06 - 36:09] first time when it launch on this
+[36:07 - 36:11] component, write everything in the use
+[36:09 - 36:15] effect, okay? Because
+[36:11 - 36:19] uh use effect will run at least once if
+[36:15 - 36:19] uh if you define the empty array, okay?
+[36:20 - 36:26] Once we define this data in this um use
+[36:23 - 36:27] state, okay?
+[36:26 - 36:30] Just do here.
+[36:27 - 36:32] Uh here we define in the square bracket.
+[36:30 - 36:34] I define in the curly braces and save it
+[36:32 - 36:37] and you will able to
+[36:34 - 36:39] see this images, right? So, we don't
+[36:37 - 36:42] want text here. Remove it.
+[36:39 - 36:44] Now, I want the width to be a full width
+[36:42 - 36:47] of the screen, right?
+[36:44 - 36:47] So, what I will do
+[36:49 - 36:53] in the width section
+[36:51 - 36:55] we have inbuilt
+[36:53 - 36:58] property called dimensions.
+[36:55 - 37:01] dot Get the dimension of what?
+[36:58 - 37:02] Screen, okay?
+[37:01 - 37:05] dot Then we have to what you want?
+[37:02 - 37:06] Height or scale or width? I want the
+[37:05 - 37:09] width.
+[37:06 - 37:11] Okay, and save it. If you see, they
+[37:09 - 37:12] extended
+[37:11 - 37:14] until the width.
+[37:12 - 37:15] Correct?
+[37:14 - 37:17] Now, it's coming
+[37:15 - 37:20] one below down. Let's change the height
+[37:17 - 37:21] first. So, I will change the height to
+[37:20 - 37:24] 170.
+[37:21 - 37:28] It's bigger, but that's fine.
+[37:24 - 37:30] And I want to give margin from the top.
+[37:28 - 37:32] So,
+[37:30 - 37:35] you can give margin from here as well.
+[37:32 - 37:38] That's completely fine.
+[37:35 - 37:38] top 10
+[37:41 - 37:43] Okay.
+[37:44 - 37:49] And then
+[37:46 - 37:49] we'll give some radius.
+[37:51 - 37:57] Let me Oops. Let me come on.
+[37:55 - 37:59] radius of
+[37:57 - 38:01] 15
+[37:59 - 38:03] If you see, now it's it's been 15 is
+[38:01 - 38:05] more. I will give 10.
+[38:03 - 38:08] Now, the second thing
+[38:05 - 38:13] I want this on the horizontally, right?
+[38:08 - 38:13] So, in flatlist you have to just define
+[38:14 - 38:18] horizontal, okay? I want horizontal
+[38:17 - 38:19] which is to be
+[38:18 - 38:22] true.
+[38:19 - 38:24] Okay, and if you save it Now, it should
+[38:22 - 38:27] be horizontal if you go here, right?
+[38:24 - 38:27] And if you scroll it
+[38:28 - 38:33] you can able to scroll it. Correct?
+[38:31 - 38:34] Perfect. But if you see, right? I gave
+[38:33 - 38:36] the width
+[38:34 - 38:38] and that width is going to the right
+[38:36 - 38:40] hand side, right?
+[38:38 - 38:41] So
+[38:40 - 38:43] width is giving the
+[38:41 - 38:45] screen width, right? So what you have to
+[38:43 - 38:48] do, just multiply it by something less
+[38:45 - 38:51] number. 0.8.
+[38:48 - 38:51] Oh, sorry. 0.8.
+[38:53 - 38:59] 20.8 some.
+[38:56 - 39:01] And save it. Let's see, right? So little
+[38:59 - 39:02] bit more.
+[39:01 - 39:04] 9
+[39:02 - 39:06] 9 is more 80.
+[39:04 - 39:09] 8.
+[39:06 - 39:11] Perfect. Okay? And we can do margin to
+[39:09 - 39:13] right as well.
+[39:11 - 39:13] Margin
+[39:17 - 39:21] right to
+[39:19 - 39:24] 10.
+[39:21 - 39:24] Okay?
+[39:24 - 39:27] And if you see now
+[39:27 - 39:29] right?
+[39:28 - 39:32] Right?
+[39:29 - 39:36] It's working. That's what we want. Now
+[39:32 - 39:36] our slider is pretty much completed.
+[39:36 - 39:39] Okay?
+[39:41 - 39:48] Now we will define the next section.
+[39:45 - 39:51] Let me open our slider next image next
+[39:48 - 39:54] section is a course list, okay? Again,
+[39:51 - 39:56] it consist of the image, the text and
+[39:54 - 39:57] it's again slider. It's a horizontal
+[39:56 - 39:59] scroll,
+[39:57 - 40:02] right? But the only width is smaller. So
+[39:59 - 40:02] let's design that one.
+[40:04 - 40:09] Now next we have to
+[40:07 - 40:12] do that this section. So let's create
+[40:09 - 40:12] one component
+[40:12 - 40:16] So let's create one component
+[40:14 - 40:18] called
+[40:16 - 40:21] playlist
+[40:18 - 40:21] .js.
+[40:21 - 40:24] Inside that,
+[40:24 - 40:29] define our template.
+[40:27 - 40:31] Remove this one.
+[40:29 - 40:35] Tag
+[40:31 - 40:36] and then you text tag which called
+[40:35 - 40:38] top
+[40:36 - 40:38] playlist.
+[40:39 - 40:45] Top course list, sorry. Okay?
+[40:43 - 40:47] Or you can like top course playlist.
+[40:45 - 40:49] Course
+[40:47 - 40:49] playlist.
+[40:49 - 40:53] Okay? Like this top course list. Okay?
+[40:51 - 40:55] Save it.
+[40:53 - 40:56] Now, make sure you will add that
+[40:55 - 41:00] playlist in your home.
+[40:56 - 41:02] So, add playlist.
+[41:00 - 41:02] Okay?
+[41:03 - 41:07] Let's end the tag
+[41:05 - 41:09] and save it.
+[41:07 - 41:10] So, it's saying can't find variable. Go
+[41:09 - 41:13] here.
+[41:10 - 41:13] Add that.
+[41:14 - 41:16] Tag.
+[41:17 - 41:22] Okay? Now, you see top course list.
+[41:20 - 41:24] So, here, right?
+[41:22 - 41:28] Give the style sheet. Give the view. So,
+[41:24 - 41:30] here, define the uh style sheet for this
+[41:28 - 41:34] view.
+[41:30 - 41:34] And style sheet,
+[41:34 - 41:38] we have to define the style for the our
+[41:36 - 41:39] main container. So, you can call
+[41:38 - 41:42] container
+[41:39 - 41:44] and give margin of
+[41:42 - 41:45] top
+[41:44 - 41:48] to
+[41:45 - 41:50] 15. Okay?
+[41:48 - 41:51] And here, you just
+[41:50 - 41:54] add tag that style sheet
+[41:51 - 41:56] styles.container
+[41:54 - 41:57] and save it. Okay?
+[41:56 - 41:59] Then,
+[41:57 - 42:01] you have to give the
+[41:59 - 42:03] uh style for this
+[42:01 - 42:07] uh text list.
+[42:03 - 42:09] Sorry, text. So, define
+[42:07 - 42:09] heading.
+[42:10 - 42:18] Okay? Inside heading, we have to define
+[42:13 - 42:20] the font size first to 20 px 20 sorry
+[42:18 - 42:20] and then
+[42:21 - 42:25] uh color
+[42:23 - 42:27] to be uh
+[42:25 - 42:28] from the color
+[42:27 - 42:32] uh
+[42:28 - 42:35] file and which to be white. Okay.
+[42:32 - 42:38] And also I want this to be
+[42:35 - 42:38] a bold.
+[42:38 - 42:42] Okay, then single quote or double quote
+[42:41 - 42:45] whatever.
+[42:42 - 42:48] And make sure you will apply to this
+[42:45 - 42:48] text.
+[42:50 - 42:55] styles. dot heading
+[42:54 - 42:57] If you see
+[42:55 - 42:59] it's there. Perfect.
+[42:57 - 43:03] Okay.
+[42:59 - 43:06] So, I pasted all the liquor's list with
+[43:03 - 43:08] ID name and image URL URL.
+[43:06 - 43:12] This is the static information. Okay, we
+[43:08 - 43:13] are just hard coding the values for now.
+[43:12 - 43:15] Now
+[43:13 - 43:18] we have to define flat list, right? The
+[43:15 - 43:20] same way which we define for the slider.
+[43:18 - 43:23] So, under this one we have to define
+[43:20 - 43:24] flat list.
+[43:23 - 43:26] Okay.
+[43:24 - 43:28] Inside this flat list we have to define
+[43:26 - 43:31] data which data we are using. So, this
+[43:28 - 43:31] will be course list.
+[43:32 - 43:36] Okay.
+[43:33 - 43:38] Then we have to define we have to render
+[43:36 - 43:41] the items, right? So, in the rendered
+[43:38 - 43:41] items
+[43:42 - 43:45] the item
+[43:43 - 43:47] comma index
+[43:45 - 43:50] Index I'm using index is nothing but a 0
+[43:47 - 43:53] 1 2 3, right? If you we want to use
+[43:50 - 43:55] sometimes we can. If you did not define
+[43:53 - 43:57] that's completely up to you. Okay, and
+[43:55 - 44:00] then
+[43:57 - 44:01] we have to define here
+[44:00 - 44:03] view.
+[44:01 - 44:03] Okay.
+[44:04 - 44:06] view
+[44:05 - 44:10] Inside of view
+[44:06 - 44:10] hopefully let close this tag.
+[44:13 - 44:17] Inside view, we have defined image.
+[44:16 - 44:20] Okay.
+[44:17 - 44:21] And then source.
+[44:20 - 44:23] Inside the image source, we have to
+[44:21 - 44:26] define
+[44:23 - 44:27] the image from the URL. So, I will use
+[44:26 - 44:29] URI.
+[44:27 - 44:32] And the item.image
+[44:29 - 44:33] URL.
+[44:32 - 44:34] URL.
+[44:33 - 44:35] Okay.
+[44:34 - 44:39] Let's close it.
+[44:35 - 44:39] And let's see if it is working or not.
+[44:40 - 44:45] It looks like it's not working. Let's
+[44:42 - 44:47] give some height and width and let Let's
+[44:45 - 44:50] check again.
+[44:47 - 44:50] Okay.
+[44:50 - 44:54] So, in the slider, right? The way we
+[44:53 - 44:56] define
+[44:54 - 44:58] in the same way, we will we going to
+[44:56 - 45:01] define in the
+[44:58 - 45:02] uh playlist section. Okay.
+[45:01 - 45:05] So,
+[45:02 - 45:05] let's define
+[45:05 - 45:09] uh
+[45:06 - 45:11] image I can give image only.
+[45:09 - 45:12] Inside image, give width
+[45:11 - 45:15] of
+[45:12 - 45:17] 150.
+[45:15 - 45:19] Height of 100.
+[45:17 - 45:22] Okay.
+[45:19 - 45:22] And apply the style.
+[45:23 - 45:28] is equal to
+[45:25 - 45:28] styles.
+[45:29 - 45:33] Let's save it. You see, we've got this
+[45:30 - 45:35] result, right? Now, we want in
+[45:33 - 45:38] horizontal. So,
+[45:35 - 45:40] we have to define like horizontal view
+[45:38 - 45:43] need to be a true.
+[45:40 - 45:44] And save it. It will come horizontally.
+[45:43 - 45:47] Now, you want to give the
+[45:44 - 45:50] margin between these two, right?
+[45:47 - 45:53] So, here, just write
+[45:50 - 45:57] our image, give margin
+[45:53 - 45:58] from the right to be like 50.
+[45:57 - 46:00] Okay.
+[45:58 - 46:06] And give the
+[46:00 - 46:06] radius, border radius to be like 10.
+[46:07 - 46:12] It is much more. I want to give five.
+[46:11 - 46:14] And now you see
+[46:12 - 46:17] we got this
+[46:14 - 46:20] beautiful um
+[46:17 - 46:22] course list section. But we are not done
+[46:20 - 46:22] yet.
+[46:22 - 46:27] We have to define
+[46:25 - 46:29] this name as well. If you see right, we
+[46:27 - 46:32] can increase the width and height
+[46:29 - 46:34] because it's looking so small.
+[46:32 - 46:37] Okay. So, we can increase the width and
+[46:34 - 46:40] height of this images.
+[46:37 - 46:44] We can give 180 here.
+[46:40 - 46:44] And height to be like 460.
+[46:45 - 46:47] Um
+[46:47 - 46:52] Height is low 40 190. Let's see how it
+[46:50 - 46:56] looks.
+[46:52 - 46:56] Um 200.
+[46:56 - 47:01] 30. We have to check and we have to just
+[46:59 - 47:03] check, okay, which size it will look
+[47:01 - 47:03] good, okay.
+[47:04 - 47:11] And from heading we'll give margin
+[47:07 - 47:13] bottom, right? Margin bottom to 10.
+[47:11 - 47:13] Okay.
+[47:13 - 47:17] Um let me increase the width a little
+[47:16 - 47:23] bit more.
+[47:17 - 47:25] 20. Okay. So, this is look good to me.
+[47:23 - 47:25] Okay.
+[47:26 - 47:29] Now, under that we have to give the
+[47:27 - 47:32] title.
+[47:29 - 47:34] Right? So, inside this one
+[47:32 - 47:36] we'll define the
+[47:34 - 47:38] text.
+[47:36 - 47:42] Inside text we have to give the
+[47:38 - 47:42] we have to render the title.
+[47:42 - 47:47] Name, I think. Yeah.
+[47:45 - 47:49] Let's see if If you see, we got the
+[47:47 - 47:53] name, but it's black color.
+[47:49 - 47:58] So, we'll change the color as well.
+[47:53 - 48:03] Name, we'll give name text.
+[47:58 - 48:03] And color should be all white.
+[48:03 - 48:08] And I will increase the font little bit.
+[48:05 - 48:10] I will change to 17.
+[48:08 - 48:14] And save it.
+[48:10 - 48:17] And apply that name text
+[48:14 - 48:17] to this text.
+[48:19 - 48:25] You see?
+[48:20 - 48:27] It's perfect. But we'll give little bit
+[48:25 - 48:29] uh
+[48:27 - 48:31] I don't know because it's touching,
+[48:29 - 48:34] right? So
+[48:31 - 48:34] we'll give margin
+[48:35 - 48:40] from top
+[48:37 - 48:42] to like five.
+[48:40 - 48:46] And padding Oh, I will add padding
+[48:42 - 48:49] instead of margin we'll give padding.
+[48:46 - 48:49] You see? Okay, perfect.
+[48:50 - 48:53] Right?
+[48:51 - 48:54] It's look completely
+[48:53 - 48:56] wonderful.
+[48:54 - 49:00] Now, if you see, right? We are getting
+[48:56 - 49:03] this little bit uh scroll, right?
+[49:00 - 49:05] So in in order to avoid that
+[49:03 - 49:08] in flat list you have to define
+[49:05 - 49:11] show horizontal scroll indicator to be a
+[49:08 - 49:13] false. So that you will not able to see
+[49:11 - 49:15] the scroll bar. Okay, we don't want that
+[49:13 - 49:18] and it's not look good, right? That's
+[49:15 - 49:18] the reason we will remove that one.
+[49:18 - 49:23] So if you see, I'm not able to see
+[49:20 - 49:25] anymore that horizontal scroll bar.
+[49:23 - 49:27] Correct?
+[49:25 - 49:29] Perfect.
+[49:27 - 49:31] So we we pretty much completed this top
+[49:29 - 49:33] course list section as well. Okay? It's
+[49:31 - 49:34] similar to this one.
+[49:33 - 49:37] If you see.
+[49:34 - 49:39] Okay? The first one is the slider, then
+[49:37 - 49:43] we have the top course list.
+[49:39 - 49:47] Perfect. Now we have this grid format of
+[49:43 - 49:48] uh popular video uh section. Okay? We
+[49:47 - 49:50] will
+[49:48 - 49:53] do it that section now. We'll do that.
+[49:50 - 49:53] Okay, let's start.
+[49:56 - 50:01] Now, go to our component folder and
+[49:58 - 50:03] create one more component called
+[50:01 - 50:06] video grid list.
+[50:03 - 50:10] dot js
+[50:06 - 50:13] Define a default template.
+[50:10 - 50:14] Remove this view and add
+[50:13 - 50:16] view. Okay.
+[50:14 - 50:18] Inside view,
+[50:16 - 50:20] we have to define the title, the heading
+[50:18 - 50:21] of the section, which is a popular
+[50:20 - 50:24] video.
+[50:21 - 50:27] Then text.
+[50:24 - 50:30] And here we have to define popular
+[50:27 - 50:31] video. Okay.
+[50:30 - 50:34] Then
+[50:31 - 50:36] uh before
+[50:34 - 50:38] applying style sheet, make sure you will
+[50:36 - 50:43] add that uh this we will add this
+[50:38 - 50:43] component in our home screen. So,
+[50:43 - 50:49] uh
+[50:45 - 50:49] video grid list.
+[50:49 - 50:53] And make sure it's rendering, so it's
+[50:51 - 50:55] showing popular video. Okay.
+[50:53 - 50:55] Now,
+[50:56 - 51:01] apply style sheet for that. Okay. So,
+[50:58 - 51:01] we'll create that style sheet.
+[51:06 - 51:10] heading
+[51:08 - 51:14] We'll copy the same heading
+[51:10 - 51:14] style from the
+[51:15 - 51:20] We're creating playlist section, right?
+[51:17 - 51:23] Okay, so from here.
+[51:20 - 51:23] Copy this section as it is.
+[51:26 - 51:31] Container as well, so we'll apply
+[51:27 - 51:34] container to the this top view.
+[51:31 - 51:36] styles.container
+[51:34 - 51:39] And for style is equal to
+[51:36 - 51:39] styles.heading.
+[51:41 - 51:47] So,
+[51:42 - 51:51] color, okay, we import the color file.
+[51:47 - 51:51] Perfect. We are seen the popular video.
+[51:52 - 51:56] Now,
+[51:53 - 52:00] I already have this object, okay, which
+[51:56 - 52:03] has a ID, name, image URL, and URL of
+[52:00 - 52:06] the video. And this is the image URL.
+[52:03 - 52:08] So, let's create a flat list, right?
+[52:06 - 52:10] Even though you want to do the vertical
+[52:08 - 52:13] list, horizontal list, or grid type of
+[52:10 - 52:15] list, okay, you can use every time you
+[52:13 - 52:17] can use flat list. Flat map That's why
+[52:15 - 52:19] flat list is so popular and powerful,
+[52:17 - 52:23] okay, in this React.
+[52:19 - 52:25] So, let's create flat list.
+[52:23 - 52:27] Now, for data,
+[52:25 - 52:29] define the data, which is our course
+[52:27 - 52:31] list.
+[52:29 - 52:32] Oh, sorry. Uh it's a
+[52:31 - 52:35] Let me check with the
+[52:32 - 52:40] video video list, sorry.
+[52:35 - 52:40] And just render the item.
+[52:40 - 52:44] So,
+[52:41 - 52:47] in order to render item,
+[52:44 - 52:48] curly braces, then
+[52:47 - 52:50] um
+[52:48 - 52:54] square bracket uh sorry, the circular
+[52:50 - 52:54] brackets, and then again
+[52:54 - 52:59] curly braces. Okay, and you have to
+[52:56 - 53:02] define here, for example, item. Okay.
+[52:59 - 53:02] And
+[53:03 - 53:07] here, you can define view.
+[53:08 - 53:10] Okay.
+[53:14 - 53:18] Inside that, first we have to define
+[53:16 - 53:22] image, okay?
+[53:18 - 53:22] If you see, we have image and then text.
+[53:23 - 53:25] Then image.
+[53:26 - 53:29] Then source.
+[53:29 - 53:31] The
+[53:29 - 53:34] URI,
+[53:31 - 53:34] which is item.imageURL.
+[53:36 - 53:44] And let's apply style to create a
+[53:40 - 53:44] style for this image.
+[53:46 - 53:49] So, width
+[53:50 - 53:54] which is like
+[53:52 - 53:57] for now I will give like 200.
+[53:54 - 53:57] Height
+[54:02 - 54:07] Height I will give
+[54:04 - 54:07] 100.
+[54:07 - 54:10] And I will also define the radius.
+[54:10 - 54:12] I will
+[54:10 - 54:14] go
+[54:12 - 54:16] seven for now.
+[54:14 - 54:20] Now, apply this style sheet to your
+[54:16 - 54:20] image tag. So, style
+[54:23 - 54:27] styles. dog
+[54:25 - 54:31] image
+[54:27 - 54:33] And let's save it.
+[54:31 - 54:35] And you see, you can able to see this,
+[54:33 - 54:35] right?
+[54:35 - 54:39] But, it's coming one after another. We
+[54:37 - 54:43] want in the grid format. Grid format in
+[54:39 - 54:44] the same we want one here, second here,
+[54:43 - 54:47] third here.
+[54:44 - 54:47] Okay, like this way.
+[54:47 - 54:51] So, in order to define in that way,
+[54:50 - 54:52] right?
+[54:51 - 54:54] For now, what I will do, I will give
+[54:52 - 54:57] image width
+[54:54 - 55:00] screen width.
+[54:57 - 55:03] So, I will give dimension. Okay.
+[55:00 - 55:06] Define screen for example.
+[55:03 - 55:08] dot width
+[55:06 - 55:11] Something like this.
+[55:08 - 55:14] I will put 0.5 for example.
+[55:11 - 55:14] Okay, perfect.
+[55:16 - 55:20] So,
+[55:18 - 55:23] if in the flat list, right? There is one
+[55:20 - 55:25] more property called number of column.
+[55:23 - 55:27] Okay, it's called num columns. And you
+[55:25 - 55:29] have to define the column here. How many
+[55:27 - 55:31] column you want? In In this case, we
+[55:29 - 55:34] want two columns, so we'll define two
+[55:31 - 55:36] columns. Okay. So, this is first column
+[55:34 - 55:38] and this is second column.
+[55:36 - 55:40] Once you define, right? It will give the
+[55:38 - 55:43] error because whenever you change the
+[55:40 - 55:47] column in the flat list, you have to
+[55:43 - 55:50] reload the application again, okay? Then
+[55:47 - 55:52] So, in order to reload it, shake your
+[55:50 - 55:54] device, okay?
+[55:52 - 55:56] If it's not working, just remove it from
+[55:54 - 55:59] background.
+[55:56 - 56:02] Go to Go to the your Expo Go app
+[55:59 - 56:05] and open the application again. So, it
+[56:02 - 56:06] will rebuild the application, okay?
+[56:05 - 56:09] So,
+[56:06 - 56:10] just wait for that one to build it.
+[56:09 - 56:13] Okay?
+[56:10 - 56:15] Perfect. So, it build it, right?
+[56:13 - 56:16] But if you see,
+[56:15 - 56:18] we don't see the third one, right?
+[56:16 - 56:20] Because it's going
+[56:18 - 56:21] I think on the out of screen.
+[56:20 - 56:23] So,
+[56:21 - 56:25] now in this case, right, define the
+[56:23 - 56:27] width
+[56:25 - 56:30] is like half of the screen size, right?
+[56:27 - 56:32] So, width of and I will define point
+[56:30 - 56:34] 0.5,
+[56:32 - 56:36] which is 50% of the width.
+[56:34 - 56:39] You see? It's coming, right?
+[56:36 - 56:41] But if we give the padding from the both
+[56:39 - 56:45] side, right, that
+[56:41 - 56:47] value also we have to consider. So,
+[56:45 - 56:51] So, that's how That's why I gave the
+[56:47 - 56:52] height and like this 0.42, right?
+[56:51 - 56:55] Maybe 42
+[56:52 - 56:58] five, maybe.
+[56:55 - 57:00] And let's give the margin as well.
+[56:58 - 57:03] Margin of five.
+[57:00 - 57:04] Margin from all the sides, okay?
+[57:03 - 57:05] And
+[57:04 - 57:06] it
+[57:05 - 57:09] Okay.
+[57:06 - 57:11] That's fine. And let's change this to
+[57:09 - 57:13] something 40.42.
+[57:11 - 57:15] Okay, perfect.
+[57:13 - 57:16] Now if you see,
+[57:15 - 57:19] it's
+[57:16 - 57:21] It's look good, actually. Yeah, let's
+[57:19 - 57:23] 1.5.
+[57:21 - 57:25] A little correction.
+[57:23 - 57:27] Okay. Now it's look
+[57:25 - 57:29] good.
+[57:27 - 57:32] Now we have to
+[57:29 - 57:34] give the title for each
+[57:32 - 57:36] video. So, define the title below this
+[57:34 - 57:39] image.
+[57:36 - 57:42] So, inside text, we have to define the
+[57:39 - 57:42] video name.
+[57:43 - 57:47] So, item. name.
+[57:45 - 57:48] name
+[57:47 - 57:51] And save it.
+[57:48 - 57:55] Obviously, it's in black color.
+[57:51 - 57:55] So, define style for it.
+[57:57 - 58:02] So,
+[57:59 - 58:02] name text
+[58:02 - 58:09] And define the color pure white. Oh,
+[58:05 - 58:10] sorry. I'm going to color from white.
+[58:09 - 58:13] And then
+[58:10 - 58:15] font size. I will keep font size as it
+[58:13 - 58:17] is as it is.
+[58:15 - 58:20] Let's see.
+[58:17 - 58:20] Apply this style.
+[58:20 - 58:25] style
+[58:23 - 58:27] styles. down
+[58:25 - 58:31] name text
+[58:27 - 58:33] If you see, you're able to see, right?
+[58:31 - 58:37] Uh we can do margin from the bottom.
+[58:33 - 58:41] Let's give the image margin. Okay.
+[58:37 - 58:41] Let's add margin bottom and 10.
+[58:43 - 58:47] Sorry. We go to image instead of
+[58:46 - 58:49] this one.
+[58:47 - 58:52] bottom
+[58:49 - 58:52] Okay, 15.
+[58:52 - 58:55] Okay, perfect.
+[58:56 - 58:59] Okay.
+[58:58 - 59:01] Now,
+[58:59 - 59:04] we have pretty much completed. Uh if you
+[59:01 - 59:05] see that text is look little bit bigger
+[59:04 - 59:06] than the
+[59:05 - 59:08] video.
+[59:06 - 59:08] Right?
+[59:09 - 59:13] So, I will change the text size. I'm
+[59:11 - 59:15] going to make a little bit smaller.
+[59:13 - 59:19] So, change the font size
+[59:15 - 59:19] like 13.
+[59:19 - 59:23] 20
+[59:21 - 59:24] Okay. Now, it look
+[59:23 - 59:25] perfect.
+[59:24 - 59:27] Right?
+[59:25 - 59:30] So,
+[59:27 - 59:30] in this uh
+[59:30 - 59:34] quick section in the home screen, right?
+[59:32 - 59:36] We define the top section header, then
+[59:34 - 59:39] we define the sliders,
+[59:36 - 59:41] then the top course list uh
+[59:39 - 59:43] or the list in the slider format or it's
+[59:41 - 59:46] a horizontal scroll,
+[59:43 - 59:49] and then we define the grid. Okay?
+[59:46 - 59:51] Now, this uh that's all for this part
+[59:49 - 59:53] one video, okay? In part two, we'll
+[59:51 - 59:55] actually define this
+[59:53 - 59:56] uh
+[59:55 - 59:58] second page.
+[59:56 - 01:00:01] So, in that part two lecture, right? I
+[59:58 - 01:00:01] will tell you how can you pass data
+[01:00:01 - 01:00:03] uh
+[01:00:01 - 01:00:05] from the home screen to the next new
+[01:00:03 - 01:00:08] screen, right? So, for example, if I
+[01:00:05 - 01:00:09] click any of this course list or any of
+[01:00:08 - 01:00:11] the video,
+[01:00:09 - 01:00:12] I have to pass the URL of the video
+[01:00:11 - 01:00:15] along with the
+[01:00:12 - 01:00:17] uh disk um title of the video to the
+[01:00:15 - 01:00:20] next screen, okay?
+[01:00:17 - 01:00:22] So, that type of uh functionality
+[01:00:20 - 01:00:26] we will uh learn in the next video along
+[01:00:22 - 01:00:28] with designing the second screen, okay?
+[01:00:26 - 01:00:31] So, if you did not subscribe to my
+[01:00:28 - 01:00:33] channel yet, subscribe to my channel and
+[01:00:31 - 01:00:36] press that bell icon so you'll get
+[01:00:33 - 01:00:37] notification whenever I upload the new
+[01:00:36 - 01:00:38] video.
+[01:00:37 - 01:00:40] Also,
+[01:00:38 - 01:00:45] if you really like this video, share
+[01:00:40 - 01:00:45] with your friends and press like button.

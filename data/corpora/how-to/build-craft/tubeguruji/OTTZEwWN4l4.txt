@@ -1,0 +1,2843 @@
+[00:00 - 00:05] hey there and welcome back to tube GUI
+[00:02 - 00:08] Channel today we are going to build car
+[00:05 - 00:13] renting application with the help of
+[00:08 - 00:16] nextjs react telin CSS clerk for the
+[00:13 - 00:20] authentication Daisy UI which is based
+[00:16 - 00:23] on Tel CSS then graphql and high graph
+[00:20 - 00:25] and all of these whatever the technology
+[00:23 - 00:29] we are going to use is completely free
+[00:25 - 00:30] to use okay so before uh talk about the
+[00:29 - 00:33] Technologies let's walk through the
+[00:30 - 00:36] application and let's see what we are
+[00:33 - 00:38] going to build today so uh with the help
+[00:36 - 00:40] of clerk uh we added this authentication
+[00:38 - 00:43] okay so obviously once you launch on
+[00:40 - 00:45] this particular page uh you will uh you
+[00:43 - 00:47] need to sign in with the Gmail and then
+[00:45 - 00:49] you will land on this beautiful page
+[00:47 - 00:53] then if you see right at the top you
+[00:49 - 00:56] have beautiful logo the navigation bar
+[00:53 - 00:59] and this per user profile uh uh image as
+[00:56 - 01:01] well then we have this beautiful hero
+[00:59 - 01:03] section we added okay this beautiful
+[01:01 - 01:05] image and everything then we have this
+[01:03 - 01:07] beautiful search bar where you can
+[01:05 - 01:10] search with the location and date
+[01:07 - 01:12] whatever then if you scroll down we you
+[01:10 - 01:15] will see a bunch of different types of
+[01:12 - 01:18] cars available for the renting okay so
+[01:15 - 01:21] this beautiful uh styling everything we
+[01:18 - 01:24] are going to use uh uh tvin CSS for this
+[01:21 - 01:26] one okay and with the help of nextjs we
+[01:24 - 01:29] are going to build this complete
+[01:26 - 01:32] application responsive as well even
+[01:29 - 01:34] though so you can even uh filter this
+[01:32 - 01:37] out with the help
+[01:34 - 01:40] of uh filter options you will see the
+[01:37 - 01:41] brand you'll see the pricing and depends
+[01:40 - 01:45] on that you can filter out filter out
+[01:41 - 01:48] this particular uh car listing as well
+[01:45 - 01:50] now if you want to book this cars you
+[01:48 - 01:53] can just hold on this one you see
+[01:50 - 01:55] beautiful um UI is going to change
+[01:53 - 01:58] depends on your hour on the particular
+[01:55 - 02:00] car now you just need to open any of
+[01:58 - 02:02] this car which you want to rent it out
+[02:00 - 02:05] and once you rent it out right you canot
+[02:02 - 02:07] see the C information everything
+[02:05 - 02:09] regarding uh the form which you need to
+[02:07 - 02:12] fill you will see the pickup location
+[02:09 - 02:14] the available store nearby you then you
+[02:12 - 02:16] can just fill out the form and on the
+[02:14 - 02:19] submit we going to store this
+[02:16 - 02:21] information on the high graph so we are
+[02:19 - 02:24] going to use this High graph to manage
+[02:21 - 02:26] our content it's similar like of Sanity
+[02:24 - 02:30] but it's more advanced and with the help
+[02:26 - 02:31] of graphql we are going to build this or
+[02:30 - 02:34] integrate this High graph in our
+[02:31 - 02:36] application okay and very easy way I'm
+[02:34 - 02:39] going to tell you also we are going to
+[02:36 - 02:41] use uh reuse our component so that you
+[02:39 - 02:43] don't need to write this code again and
+[02:41 - 02:46] again and that I will tell you how to do
+[02:43 - 02:48] it and how to implement it okay so guys
+[02:46 - 02:52] uh this complete application we are
+[02:48 - 02:56] going to build with the help of NE js13
+[02:52 - 02:58] the app router and the telin CSS clerk H
+[02:56 - 03:02] graph graphql and lot of different
+[02:58 - 03:05] things okay so before doing any further
+[03:02 - 03:09] delay press like buttons press subscribe
+[03:05 - 03:09] buttons and watch this complete
+[03:13 - 03:19] video so in order to create the react
+[03:16 - 03:22] project we are going to use nextjs react
+[03:19 - 03:25] framework okay so if you go to this
+[03:22 - 03:28] particular uh official website of nextjs
+[03:25 - 03:30] you will see this command to create the
+[03:28 - 03:32] application and obviously we are going
+[03:30 - 03:36] to use nextjs 13 along with the app
+[03:32 - 03:37] router so just copy this command and uh
+[03:36 - 03:42] go to your desired
+[03:37 - 03:45] folder here open the command prompt and
+[03:42 - 03:48] uh once it open here you have to
+[03:45 - 03:54] type increase the size and here just
+[03:48 - 03:56] type npx create next app at latest okay
+[03:54 - 03:58] if you did not put at latest then it
+[03:56 - 04:01] will not create nextjs 13 project okay
+[03:58 - 04:04] with the default conf ation so just put
+[04:01 - 04:07] the add latest okay and click enter then
+[04:04 - 04:09] it will ask you the name of the project
+[04:07 - 04:11] okay so let's give
+[04:09 - 04:15] car
+[04:11 - 04:18] rental YouTube okay and save it then
+[04:15 - 04:20] would you like to use typescript say yes
+[04:18 - 04:23] then will you like to use es link say no
+[04:20 - 04:25] tellin CSS say yes so if you see right
+[04:23 - 04:27] it automatically installed the T CSS for
+[04:25 - 04:30] us as well you don't need to install
+[04:27 - 04:33] manually okay then the for Source
+[04:30 - 04:37] directory say no the app router say yes
+[04:33 - 04:39] and the import allies say no and then it
+[04:37 - 04:43] will install the all the requirement
+[04:39 - 04:46] dependency like react react Dom n
+[04:43 - 04:47] typescript t CSS and everything okay so
+[04:46 - 04:49] we'll wait for a few
+[04:47 - 04:52] seconds
+[04:49 - 04:54] and once it installed then we will open
+[04:52 - 04:54] the
+[04:55 - 05:01] project so if you see our project is get
+[04:58 - 05:03] created and let's go to the project now
+[05:01 - 05:08] okay so you can open the project like
+[05:03 - 05:11] just typing code space r rental YouTube
+[05:08 - 05:15] okay and then it will open the vs Cod
+[05:11 - 05:18] project okay so it's open here like this
+[05:15 - 05:21] so everything is here okay and uh your
+[05:18 - 05:23] project is open in vs code along with
+[05:21 - 05:23] all the files and
+[05:27 - 05:32] everything so let's see how the project
+[05:30 - 05:34] uh folder structure look likees okay so
+[05:32 - 05:37] on the left hand side we have all the
+[05:34 - 05:39] files which we requir for our project so
+[05:37 - 05:43] in the app folder we have the global CSS
+[05:39 - 05:47] layout. TSX and page. TXS so first the
+[05:43 - 05:49] layout. TSX contain this uh the metadata
+[05:47 - 05:51] okay this is the metadata along with the
+[05:49 - 05:53] HTML tag and body and inside the body we
+[05:51 - 05:56] have the children which we are passing
+[05:53 - 05:58] okay and this children contains uh
+[05:56 - 05:59] whatever the page we are going to render
+[05:58 - 06:02] it will render through the these
+[05:59 - 06:04] children okay inside this body tag
+[06:02 - 06:06] second the page. TXS which is our
+[06:04 - 06:08] default page and once we run the
+[06:06 - 06:10] application you'll uh you will
+[06:08 - 06:11] understand more in detail so this is our
+[06:10 - 06:15] default page when we first time we
+[06:11 - 06:17] launch okay uh then we have this global.
+[06:15 - 06:19] CSS which is applicable throughout the
+[06:17 - 06:22] application okay so if you define
+[06:19 - 06:26] everything like root or in body that
+[06:22 - 06:27] particular uh CSS styling is applicable
+[06:26 - 06:29] throughout the
+[06:27 - 06:31] application next we have the public
+[06:29 - 06:34] folder this public folder contain the
+[06:31 - 06:36] image all the files which is needed for
+[06:34 - 06:39] your application okay so for example it
+[06:36 - 06:42] contain a image a font or maybe audio
+[06:39 - 06:44] file video file whatever okay so mostly
+[06:42 - 06:47] we are going to use only images in the
+[06:44 - 06:49] particular uh project so we'll keep all
+[06:47 - 06:52] our images in this public
+[06:49 - 06:55] folder then we have this next. config.js
+[06:52 - 06:57] which helps to configure next related
+[06:55 - 07:01] things for example if you are using the
+[06:57 - 07:03] third party um image URL right from the
+[07:01 - 07:06] uh some domain that that domain need to
+[07:03 - 07:09] be added inside this next config.js you
+[07:06 - 07:11] will learn everything once we start uh
+[07:09 - 07:14] developing this particular project then
+[07:11 - 07:16] in packet. Json it contain the script to
+[07:14 - 07:18] run the application or to build the
+[07:16 - 07:20] application along with the dependency
+[07:18 - 07:23] which is required for this particular
+[07:20 - 07:25] project okay so we can uh these are the
+[07:23 - 07:28] already installed dependency but you can
+[07:25 - 07:30] add your own okay uh we are going to use
+[07:28 - 07:32] some more dependency so we'll learn uh
+[07:30 - 07:34] once we start
+[07:32 - 07:38] developing then we have this post css.
+[07:34 - 07:41] config.js and T.C config.js so it it
+[07:38 - 07:43] contains uh the all 10 whe CSS uh
+[07:41 - 07:45] configuration okay and if you see this
+[07:43 - 07:48] content right this is very important
+[07:45 - 07:51] because uh whenever you are adding any
+[07:48 - 07:54] files inside this uh Pages or components
+[07:51 - 07:57] or app folder the t is applicable for
+[07:54 - 07:59] that one if you are going to add a new
+[07:57 - 08:01] file which is not mentioned here in the
+[07:59 - 08:03] cont make sure to add that one okay
+[08:01 - 08:04] otherwise the T Series will not
+[08:03 - 08:07] applicable so you will learn that one as
+[08:04 - 08:08] well so uh that's all and this is a TS
+[08:07 - 08:11] config.js for the typescript
+[08:08 - 08:13] configuration okay so that's all for
+[08:11 - 08:15] this particular uh files and folder
+[08:13 - 08:17] structure then let's run the application
+[08:15 - 08:20] so go to the terminal and click new
+[08:17 - 08:23] terminal it will open the terminal
+[08:20 - 08:28] inside your vs code okay and just type
+[08:23 - 08:31] npm run de once you type it if you see
+[08:28 - 08:33] our server is started on the port 3,000
+[08:31 - 08:37] okay and this is the URL to access it so
+[08:33 - 08:39] copy this URL go to your project or
+[08:37 - 08:43] sorry go to your web browser and run
+[08:39 - 08:45] this particular uh URL okay so it will
+[08:43 - 08:49] take few uh seconds to build for the
+[08:45 - 08:51] first time okay so it's loading so we'll
+[08:49 - 08:53] wait and if you see the page is loaded
+[08:51 - 08:56] okay and this is our default page I told
+[08:53 - 09:00] you that the page. TXS which our default
+[08:56 - 09:02] page okay let's uh me show you
+[09:00 - 09:06] so if you see right inside the app we
+[09:02 - 09:09] have this page. TSX correct so inside
+[09:06 - 09:11] this one we have this uh all this
+[09:09 - 09:15] information which is showing on the
+[09:11 - 09:19] screen right if I remove this main okay
+[09:15 - 09:21] completely and just put the simple D tag
+[09:19 - 09:23] and save it you will see nothing will
+[09:21 - 09:27] show on the screen okay now let's type
+[09:23 - 09:29] something for example subscribe to tube
+[09:27 - 09:31] guruji guys if you did not sub subcribe
+[09:29 - 09:34] to my Channel please do subscribe and if
+[09:31 - 09:35] I save it see the Subscribe YouTube is
+[09:34 - 09:39] showing on the screen and if you see the
+[09:35 - 09:41] URL is the default URL okay so you will
+[09:39 - 09:43] learn uh how to navigate to the
+[09:41 - 09:45] different different URL how to create
+[09:43 - 09:47] everything uh in this particular course
+[09:45 - 09:49] as well okay if you don't know anything
+[09:47 - 09:51] about the nextjs or anything don't worry
+[09:49 - 09:54] we will learn everything from the basic
+[09:51 - 09:57] now if you see right we have this a
+[09:54 - 10:00] gradient um background effect right so
+[09:57 - 10:01] in the global. CSS we can remove it for
+[10:00 - 10:04] in this particular route right we have
+[10:01 - 10:06] this three line of code which help to
+[10:04 - 10:11] give the gradient effect so I remove and
+[10:06 - 10:11] save it and let's refresh the
+[10:12 - 10:19] screen Let Me Wait why it's not okay so
+[10:17 - 10:21] let's remove this one as well and save
+[10:19 - 10:24] it and if you see this particular
+[10:21 - 10:26] background is uh gone right that for
+[10:24 - 10:29] effect because in the CSS they applied
+[10:26 - 10:30] this particular gradient effect okay I I
+[10:29 - 10:33] hope you understand and you also learn
+[10:30 - 10:35] how to create the application the files
+[10:33 - 10:40] and folder structure and how to run the
+[10:35 - 10:40] next js13 application as well okay
+[10:44 - 10:52] perfect now next we are going to use a
+[10:48 - 10:54] cler to add the authentication for our
+[10:52 - 10:57] application okay so if you go to this
+[10:54 - 11:00] cl.com this is official website to add
+[10:57 - 11:03] uh for the uh authentication okay so if
+[11:00 - 11:06] you go to the pricing so it's completely
+[11:03 - 11:08] free okay until 5,000 active user and
+[11:06 - 11:10] for the development purpose or for a
+[11:08 - 11:14] small business I think it's sufficient
+[11:10 - 11:15] okay so if you don't have any account
+[11:14 - 11:18] then create a new account and then go to
+[11:15 - 11:21] the dashboard here you can create a new
+[11:18 - 11:24] uh application okay and then inside the
+[11:21 - 11:26] API Keys you will find this API key for
+[11:24 - 11:31] you okay so as simple as that now just
+[11:26 - 11:33] search for nijs Clerk okay and here it
+[11:31 - 11:36] start get started with uh nextjs
+[11:33 - 11:39] documentation here it help us step by
+[11:36 - 11:42] step how to install the clerk and how to
+[11:39 - 11:45] set up the environment for this um clerk
+[11:42 - 11:48] authentication so first of all Let's uh
+[11:45 - 11:51] copy this command to install this clerk
+[11:48 - 11:54] for in our application okay
+[11:51 - 11:56] so I will open here okay and inside a
+[11:54 - 11:59] terminal add new
+[11:56 - 12:02] terminal and just add this come on
+[11:59 - 12:04] okay it will install the clug for us
+[12:02 - 12:08] then we have to set up this environment
+[12:04 - 12:10] variable key okay so in env. loal we
+[12:08 - 12:13] have to copy this line of code so let's
+[12:10 - 12:16] create a new file in the root uh folder
+[12:13 - 12:20] and just type Here env.
+[12:16 - 12:22] Local here we'll P this uh clerk
+[12:20 - 12:24] publisher key and the secret
+[12:22 - 12:28] key then if you scroll
+[12:24 - 12:31] down inside the app router we have to
+[12:28 - 12:33] wrap our h inside the cler provider so
+[12:31 - 12:37] copy this cler
+[12:33 - 12:41] provider and inside the layout.
+[12:37 - 12:43] TSX so if you see right uh we are using
+[12:41 - 12:45] the app router that's why we have to use
+[12:43 - 12:47] layout. dxx if you are not using App
+[12:45 - 12:49] router then inside the page you have to
+[12:47 - 12:53] add this one okay but you are using App
+[12:49 - 12:55] router so I will wrap this up like this
+[12:53 - 12:59] in the
+[12:55 - 13:02] tag the provider and make sure to import
+[12:59 - 13:06] this CL provider okay from the nextjs
+[13:02 - 13:08] see and save everything now if I go to
+[13:06 - 13:11] our project and you refresh the screen
+[13:08 - 13:14] you will you will not see any changes
+[13:11 - 13:16] until this point okay
+[13:14 - 13:19] see
+[13:16 - 13:22] sorry then next step is if you scroll
+[13:19 - 13:24] down we have to protect your application
+[13:22 - 13:27] so we have to add the middleware dots
+[13:24 - 13:29] file and this contain we have to add it
+[13:27 - 13:33] so in the inside the root folder you had
+[13:29 - 13:37] to create a new folder called m.
+[13:33 - 13:40] TS I think it's a TS yeah and then copy
+[13:37 - 13:42] this line of code so I will copy it here
+[13:40 - 13:46] like this and save
+[13:42 - 13:49] it next now we can build our own signin
+[13:46 - 13:52] and sign up page okay so for this one we
+[13:49 - 13:55] have to follow this all the steps okay
+[13:52 - 13:57] but if you want to use their uh the
+[13:55 - 13:59] clerk sign in sign out page that also
+[13:57 - 14:02] you can build it okay so in this
+[13:59 - 14:05] particular course we will learn directly
+[14:02 - 14:08] how to use it instead of using our own
+[14:05 - 14:10] pages okay second thing if you want to
+[14:08 - 14:13] build your own pages and how to set up
+[14:10 - 14:15] right you can watch my previous video
+[14:13 - 14:17] okay this video and then here you can
+[14:15 - 14:20] learn how to build your own signin and
+[14:17 - 14:23] sign up page for a clerk
+[14:20 - 14:26] authentication so now here uh what we
+[14:23 - 14:29] can do in simple way we can implement
+[14:26 - 14:31] the cirk so first of all if the user is
+[14:29 - 14:34] sign in then we will show this children
+[14:31 - 14:36] okay so for that one just type sign in
+[14:34 - 14:40] see and this is importing from the clerk
+[14:36 - 14:43] NE J okay and inside that you can show
+[14:40 - 14:45] this children so what does it means that
+[14:43 - 14:48] once the user is sign in then it will
+[14:45 - 14:53] show this children page okay if user is
+[14:48 - 14:53] sign out okay so we'll add the sign
+[14:53 - 15:00] out okay if user is sign out then we
+[14:57 - 15:03] want to show the signin page okay just
+[15:00 - 15:08] addite sign in like this and make sure
+[15:03 - 15:13] to import this sign in inside the
+[15:08 - 15:15] uh pl. nextjs okay like this and save it
+[15:13 - 15:18] now let's go back to our application and
+[15:15 - 15:20] if you see I'm on the signin page okay
+[15:18 - 15:23] so this is the uh because right we are
+[15:20 - 15:25] not using our own signin sign up method
+[15:23 - 15:28] uh page that's why it's showing the
+[15:25 - 15:31] clerk URL okay if I go to local 3,000
+[15:28 - 15:34] okay it will redirect to this particular
+[15:31 - 15:37] page but if you go to the continue with
+[15:34 - 15:40] Google and if I click any uh Gmail
+[15:37 - 15:43] account if you
+[15:40 - 15:46] see the I'm signning and I'm re to our
+[15:43 - 15:49] original local 3,000 Port how simple it
+[15:46 - 15:52] is right now one more thing we will add
+[15:49 - 15:54] it here if I go to the page. TSX where
+[15:52 - 15:57] we have this text return right here we
+[15:54 - 15:59] have one U there is one more method
+[15:57 - 16:03] inside the or
+[15:59 - 16:06] inside this clerk next just call user
+[16:03 - 16:08] button okay and this user button if I go
+[16:06 - 16:10] to the documentation right this is a
+[16:08 - 16:14] user button and it will show you this
+[16:10 - 16:16] user profile Fe and some um information
+[16:14 - 16:18] like so let's Implement that one and
+[16:16 - 16:22] let's show you how it looks so this is
+[16:18 - 16:25] the input statement I will remove all
+[16:22 - 16:27] others like this okay and save it now if
+[16:25 - 16:29] I go back to our application see the
+[16:27 - 16:33] user profile p is showing if I click on
+[16:29 - 16:35] this one you will see this beautiful and
+[16:33 - 16:37] menu where you will see this user
+[16:35 - 16:39] information the manage account sign out
+[16:37 - 16:41] page and everything if I click manage
+[16:39 - 16:43] account you'll see all the information
+[16:41 - 16:46] where you login with this account and
+[16:43 - 16:48] everything okay even you can sign out
+[16:46 - 16:52] once you sign out you will get redirect
+[16:48 - 16:54] to this particular signin page okay and
+[16:52 - 16:57] this is how we can add the
+[16:54 - 16:59] authentication in our application okay
+[16:57 - 17:02] and as I say this is completely free and
+[16:59 - 17:05] completely beginner friendly okay so if
+[17:02 - 17:07] you have any question any doubts let me
+[17:05 - 17:10] know in the comment section and the
+[17:07 - 17:13] source codes is completely free you can
+[17:10 - 17:15] access the source code uh the link is in
+[17:13 - 17:17] the description okay and let me know how
+[17:15 - 17:20] you like my video If you really like
+[17:17 - 17:22] this video please like button and watch
+[17:20 - 17:24] this complete video you will learn a lot
+[17:22 - 17:24] of
+[17:27 - 17:32] things now now we will add the
+[17:30 - 17:35] navigation bar so for that one let's
+[17:32 - 17:37] create a folder in the root directory
+[17:35 - 17:40] called components and as I told you
+[17:37 - 17:42] right we have to make sure the name
+[17:40 - 17:45] should be like this components otherwise
+[17:42 - 17:47] the T C will not going to work okay
+[17:45 - 17:49] create a new folder called components
+[17:47 - 17:54] and inside this component folder we have
+[17:49 - 17:58] to create an uh file called navigar dosx
+[17:54 - 18:01] okay and add the default template so we
+[17:58 - 18:05] have this new bar and save it now this
+[18:01 - 18:09] na bar we will add it inside the folder
+[18:05 - 18:11] sorry inside the page uh layout. TSX
+[18:09 - 18:15] okay so inside in signin page so here we
+[18:11 - 18:17] will add it na bar like this okay and
+[18:15 - 18:20] make sure to import this new bar and
+[18:17 - 18:22] save everything make sure it's running
+[18:20 - 18:26] it's showing the on the screen see the
+[18:22 - 18:27] newbody showing on the screen okay so
+[18:26 - 18:31] let
+[18:27 - 18:34] me get this side by side okay now inside
+[18:31 - 18:34] the NAB bar.
+[18:35 - 18:41] TSX na bar okay here we will implement
+[18:38 - 18:45] the code so first thing we going to show
+[18:41 - 18:47] the logo of our uh website so here we'll
+[18:45 - 18:51] add the
+[18:47 - 18:55] image next image okay the
+[18:51 - 18:57] source and the intag so obviously we we
+[18:55 - 19:00] going to put our all the files inside
+[18:57 - 19:02] this public rout directory okay so what
+[19:00 - 19:05] I will do I will just copy this content
+[19:02 - 19:08] inside this public folder so I pasted
+[19:05 - 19:10] the logo inside the public folder okay
+[19:08 - 19:15] so if you see the hero.png and the logo.
+[19:10 - 19:18] PNG and now inside the image tag here we
+[19:15 - 19:22] can directly access our image by doing
+[19:18 - 19:24] logo.png okay because we put our uh all
+[19:22 - 19:26] the images inside the public folder and
+[19:24 - 19:29] you don't need to give a complete far
+[19:26 - 19:33] path okay then we have to
+[19:29 - 19:35] tag and we'll say logo then we'll give
+[19:33 - 19:40] the width so we'll give width of
+[19:35 - 19:42] 150 we give height of 100 and save it
+[19:40 - 19:45] and if you see uh let's save everything
+[19:42 - 19:49] and this see the logo it's showing on
+[19:45 - 19:54] the screen okay perfect next we will add
+[19:49 - 19:57] the uh the menu section okay so here I
+[19:54 - 20:00] also I will update the height and
+[19:57 - 20:01] WID we
+[20:00 - 20:04] 00
+[20:01 - 20:09] perfect next I will add one du and
+[20:04 - 20:12] inside d add the S2 tag and first is
+[20:09 - 20:16] home then we'll add
+[20:12 - 20:19] the uh another one which is
+[20:16 - 20:19] uh
+[20:19 - 20:26] history and the third
+[20:22 - 20:29] is contact us and save it and if you see
+[20:26 - 20:31] all three are sh okay and the last we
+[20:29 - 20:33] will add the user profile button okay so
+[20:31 - 20:36] what I will do I will remove it from the
+[20:33 - 20:39] page do TSX from here and I will put it
+[20:36 - 20:41] in the na bar like
+[20:39 - 20:44] this and make sure to import it
+[20:41 - 20:46] obviously we need to copy this import
+[20:44 - 20:49] statement I will cut it from here and
+[20:46 - 20:51] put it in the na bar okay and save it
+[20:49 - 20:53] and if you see the profile P also
+[20:51 - 20:57] showing next we want everything in one
+[20:53 - 20:59] line so make this class as a
+[20:57 - 21:02] flex okay and and it will come in one
+[20:59 - 21:05] line also make it item to be in the
+[21:02 - 21:07] center okay and for this as well we have
+[21:05 - 21:11] to make it Flex so it will be in one
+[21:07 - 21:14] line see okay then uh I will give some
+[21:11 - 21:17] Gap so let's give gap of
+[21:14 - 21:20] five okay and let's give some styling to
+[21:17 - 21:22] this one now okay so class name I will
+[21:20 - 21:26] say uh
+[21:22 - 21:28] onover we want to change background blue
+[21:26 - 21:33] 500 okay if I hover on it see the
+[21:28 - 21:38] background is changing okay
+[21:33 - 21:42] then also uh I want to add some uh more
+[21:38 - 21:46] styling so we'll give some padding of
+[21:42 - 21:46] two then round it to be
+[21:47 - 21:54] full uh on how I will also add
+[21:51 - 21:58] the TT to be
+[21:54 - 22:01] white and uh let's see how it looks so
+[21:58 - 22:03] if i h on it see also I will add the
+[22:01 - 22:06] padding
+[22:03 - 22:09] x23 okay like this make it cursor
+[22:06 - 22:13] pointer so once I hover the cursor will
+[22:09 - 22:14] change okay so same thing you can apply
+[22:13 - 22:18] to all
+[22:14 - 22:22] other um menu so I will copy this one
+[22:18 - 22:26] and paste it for class name paste it
+[22:22 - 22:28] here last name paste it here and save
+[22:26 - 22:32] it and if you see for all of the this
+[22:28 - 22:36] it's working okay now what we can do one
+[22:32 - 22:38] thing Al we want is when the screen size
+[22:36 - 22:42] is smaller we don't want to show this
+[22:38 - 22:45] menu so we can just say initially hidden
+[22:42 - 22:47] okay so initially hidden means uh
+[22:45 - 22:49] whenever you load the page right it's
+[22:47 - 22:52] load for the smaller page okay and all
+[22:49 - 22:54] the CSS is applied by default to smaller
+[22:52 - 22:56] screen if you want to apply something
+[22:54 - 22:58] for the medium or larger screen you can
+[22:56 - 22:59] Define like this medium screen and for
+[22:58 - 23:02] medium screen whenever the screen size
+[22:59 - 23:04] is medium you can show it as a flex if I
+[23:02 - 23:06] save it see the menu is gone but if I
+[23:04 - 23:10] increase the size the menu is showing on
+[23:06 - 23:15] the screen okay that's how it works next
+[23:10 - 23:17] uh here you can say justify between okay
+[23:15 - 23:18] and if you see this is how it looks for
+[23:17 - 23:21] the menu as well the menu will come in
+[23:18 - 23:24] Center the the profile Pi is coming on
+[23:21 - 23:25] the right hand side as well okay next
+[23:24 - 23:28] we'll give some
+[23:25 - 23:32] padding uh to this navigation bar okay
+[23:28 - 23:35] so let's do some padding so I will
+[23:32 - 23:38] say this one I will add the padding of
+[23:35 - 23:40] five okay and I will add the shadow
+[23:38 - 23:44] effect to be
+[23:40 - 23:48] small like this okay I make it
+[23:44 - 23:51] medium see like this okay make small and
+[23:48 - 23:53] you can add add the border at the bottom
+[23:51 - 23:55] of one
+[23:53 - 23:57] pixel okay so little darker with the
+[23:55 - 23:59] border and it will look like this the
+[23:57 - 24:02] Beautiful
+[23:59 - 24:03] buttons as well okay and the logo and
+[24:02 - 24:06] the user if I click user profile you'll
+[24:03 - 24:09] see the user information okay now what
+[24:06 - 24:12] you can do if you think the space is
+[24:09 - 24:15] much as as a lot you can make it padding
+[24:12 - 24:18] three and you can give padding X to five
+[24:15 - 24:20] and save it and see it will look like
+[24:18 - 24:24] this I think this is perfectly looking
+[24:20 - 24:25] fine okay so this is what we build the
+[24:24 - 24:27] navigation bar if you have any question
+[24:25 - 24:30] any doubts let me know in the comment
+[24:27 - 24:30] section
+[24:33 - 24:38] now let's implement the hero section so
+[24:36 - 24:42] let's go to our
+[24:38 - 24:45] application and let me get back like
+[24:42 - 24:47] this so here I will create a new folder
+[24:45 - 24:50] inside the component folder called home
+[24:47 - 24:53] okay so all home related components will
+[24:50 - 24:56] keep in this particular folder so inside
+[24:53 - 24:59] that I will get hero. TSX okay and add
+[24:56 - 25:02] the default template
+[24:59 - 25:05] now make sure to add this in page. TSX
+[25:02 - 25:07] so I will remove this uh and I will add
+[25:05 - 25:10] it here like this
+[25:07 - 25:13] uh the hero section
+[25:10 - 25:15] okay and save
+[25:13 - 25:18] everything right now if you see right
+[25:15 - 25:20] unsupported server components that error
+[25:18 - 25:23] is coming because we need to make sure
+[25:20 - 25:25] that this component is a client so to
+[25:23 - 25:28] make it client you have to write use
+[25:25 - 25:31] client at the top like this and if I
+[25:28 - 25:33] save it so it's saying you likely to
+[25:31 - 25:35] forgot export your component okay so
+[25:33 - 25:38] make sure to save everything okay and if
+[25:35 - 25:41] you see the hero component is showing on
+[25:38 - 25:44] the screen now okay perfect so make sure
+[25:41 - 25:46] whenever you want to uh make it the
+[25:44 - 25:50] client you have to write use client at
+[25:46 - 25:52] the top okay next what I will do uh for
+[25:50 - 25:55] this page I will give some padding here
+[25:52 - 25:58] okay so class name we give some padding
+[25:55 - 26:02] of five okay then when the size is
+[25:58 - 26:04] smaller I will give padding X to 10 and
+[26:02 - 26:07] when the screen size is medium I will
+[26:04 - 26:09] give padding X to 20 and save it okay so
+[26:07 - 26:11] it will look like this but if I increase
+[26:09 - 26:14] the screen size it will give more
+[26:11 - 26:18] padding next let's go back to our hero
+[26:14 - 26:22] section and inside this one we'll add
+[26:18 - 26:23] the uh title and the image okay so I
+[26:22 - 26:26] will add one
+[26:23 - 26:30] D and there is another D for the image
+[26:26 - 26:32] okay and for this one I we make it grid
+[26:30 - 26:35] okay when the screen size is smaller we
+[26:32 - 26:38] can make grid calls one and when the
+[26:35 - 26:40] screen size is medium or larger we can
+[26:38 - 26:45] make
+[26:40 - 26:45] medium and uh we can make
+[26:45 - 26:54] grid FSE two like this okay and save it
+[26:51 - 26:57] now if I see TT I will add it here like
+[26:54 - 26:59] this and image at the right hand side if
+[26:57 - 27:01] I save it right now the screen is
+[26:59 - 27:03] smaller that's why text is coming up and
+[27:01 - 27:05] image down if I increase the screen size
+[27:03 - 27:08] see the text and image coming like this
+[27:05 - 27:12] perfect that's what we wanted now I
+[27:08 - 27:14] already have the text of and button so I
+[27:12 - 27:19] will just copy paste it here on the text
+[27:14 - 27:23] area like this okay and if I save it see
+[27:19 - 27:25] it will look like this okay next I want
+[27:23 - 27:28] to add the image I also have an image in
+[27:25 - 27:30] my public folder called hero.png
+[27:28 - 27:34] I will paste it here like this make sure
+[27:30 - 27:36] to import image from the next slash
+[27:34 - 27:39] image okay and let's give width height
+[27:36 - 27:41] and save it and if you see we got this
+[27:39 - 27:44] part image if I increase the screen size
+[27:41 - 27:48] you will see the hero section and this
+[27:44 - 27:50] one as well okay perfect if you have any
+[27:48 - 27:52] question any doubt let me know in the
+[27:50 - 27:55] comment section and this is completely
+[27:52 - 27:56] responsive if you see right as soon as
+[27:55 - 27:59] we convert it into smaller screen or
+[27:56 - 28:02] mobile view see this will look like this
+[27:59 - 28:05] okay perfect I hope you understand this
+[28:02 - 28:08] one um The Styling and everything is
+[28:05 - 28:10] quite simple okay and uh if you have any
+[28:08 - 28:13] question you can access my source code
+[28:10 - 28:16] anytime okay and depends on the screen
+[28:13 - 28:19] size I change this text of font size as
+[28:16 - 28:21] well okay and also I added the Buton and
+[28:19 - 28:23] I also give some styling to this one
+[28:21 - 28:26] okay if you have any question related to
+[28:23 - 28:29] telin CSS anytime you can just search
+[28:26 - 28:32] telin CSS go to the official website of
+[28:29 - 28:34] the TN CSS okay and here you can search
+[28:32 - 28:36] anything for example if you want to
+[28:34 - 28:38] search a border related information
+[28:36 - 28:40] right so just click on search type
+[28:38 - 28:43] border and here you will find a lot of
+[28:40 - 28:46] example the this is the particular class
+[28:43 - 28:49] in the telin CSS and respond responding
+[28:46 - 28:50] CSS class okay so you just need to write
+[28:49 - 28:54] this one and you don't need to write
+[28:50 - 28:56] this CSS big uh lineup code okay I hope
+[28:54 - 28:57] you understand this one and if you have
+[28:56 - 29:00] any question any doubt let me know in
+[28:57 - 29:00] the comment
+[29:04 - 29:10] section now if you want to change the
+[29:07 - 29:13] font of your application it's very easy
+[29:10 - 29:15] in the nextjs 13 okay so let me show you
+[29:13 - 29:17] so in this particular section we are
+[29:15 - 29:19] going to change the font for our
+[29:17 - 29:22] application first of all let's go back
+[29:19 - 29:25] to our application let me open this uh
+[29:22 - 29:28] window on side by side and uh here
+[29:25 - 29:31] inside the layout. TSX if if you see
+[29:28 - 29:33] it's already have the inter so inter is
+[29:31 - 29:36] the font name okay so they already added
+[29:33 - 29:40] the inter uh type of default font here
+[29:36 - 29:43] we can change this font for example uh I
+[29:40 - 29:45] like to use outfit form and this form is
+[29:43 - 29:47] coming from the Google font okay if you
+[29:45 - 29:49] go to the Google uh font you will find
+[29:47 - 29:51] this outfit now replace this inter with
+[29:49 - 29:53] the outfit you can change this name or
+[29:51 - 29:56] you can keep it as it is okay it's just
+[29:53 - 29:59] a constant name and save it and if you
+[29:56 - 30:01] see the font name is change instantly
+[29:59 - 30:04] okay and this change is applicable
+[30:01 - 30:08] throughout the application okay now if I
+[30:04 - 30:12] change to something like uh Railway okay
+[30:08 - 30:15] so this is one font also I like Railway
+[30:12 - 30:18] and if I update this so if you see this
+[30:15 - 30:22] changed to railway okay so it's up to
+[30:18 - 30:25] you uh how the font you want to use okay
+[30:22 - 30:27] and this is how easy it is to change the
+[30:25 - 30:29] font in the application you don't need
+[30:27 - 30:31] to add any CSS you don't need to do any
+[30:29 - 30:34] configuration for that one or any add a
+[30:31 - 30:37] new font in your public folder just
+[30:34 - 30:39] within a few click with the help of next
+[30:37 - 30:40] you can add the font okay if you have
+[30:39 - 30:42] any question any doubt let me know in
+[30:40 - 30:44] the comment section and if you still
+[30:42 - 30:46] watching this video and if you did not
+[30:44 - 30:48] subscribe to my Channel please please
+[30:46 - 30:51] guys do subscribe and watch this
+[30:48 - 30:53] complete video but because there are lot
+[30:51 - 30:56] of things coming in this particular
+[30:53 - 30:56] course
+[31:00 - 31:05] now let's add the search input field
+[31:02 - 31:06] here okay it's kind of search bar and in
+[31:05 - 31:11] that we will provide the location as
+[31:06 - 31:13] well as date filter okay so uh first of
+[31:11 - 31:16] all let's create a new component file
+[31:13 - 31:21] inside this home so let's create a new
+[31:16 - 31:25] file called search input search input.
+[31:21 - 31:27] TSX okay and then add the default
+[31:25 - 31:29] template RFC it will add the default
+[31:27 - 31:31] template for us okay so if you're
+[31:29 - 31:33] wondering how I'm going to add this
+[31:31 - 31:36] default template by just typing a few
+[31:33 - 31:39] word right so for that one you have to
+[31:36 - 31:41] add uh add one extension in the vs code
+[31:39 - 31:43] called
+[31:41 - 31:45] es7
+[31:43 - 31:48] react uh this particular extension
+[31:45 - 31:50] called es plus react Redux R native okay
+[31:48 - 31:53] and this will give you the default
+[31:50 - 31:57] templates once you added uh just writing
+[31:53 - 32:00] a uh few words okay also make sure to
+[31:57 - 32:03] add the tail CSS uh Intel sense okay so
+[32:00 - 32:04] this uh particular extension give you
+[32:03 - 32:07] the suggestion when you are going to
+[32:04 - 32:10] write the tailin CSS classes okay this
+[32:07 - 32:13] is very important so make sure to add
+[32:10 - 32:15] that one now inside the search input
+[32:13 - 32:19] let's add
+[32:15 - 32:22] the text first okay so here we'll write
+[32:19 - 32:24] h2 tag and inside the h2 tag we will
+[32:22 - 32:28] write let's search what you need as a
+[32:24 - 32:32] text okay so I will past it here like
+[32:28 - 32:35] this okay and uh let's give some class
+[32:32 - 32:41] name let's say text to be
+[32:35 - 32:45] Center then we'll give text of 20 pixel
+[32:41 - 32:49] okay and I will make text of color gray
+[32:45 - 32:51] 400 and save it if I go back
+[32:49 - 32:53] here make sure it's not showing because
+[32:51 - 32:56] we have to make sure that you will add
+[32:53 - 32:58] that search input in the page. TSX okay
+[32:56 - 32:59] so here you can add it
+[32:58 - 33:03] like
+[32:59 - 33:05] this and save it and save everything
+[33:03 - 33:09] okay if you see the L search what you
+[33:05 - 33:12] need is showing on the screen next in
+[33:09 - 33:14] order to add the input let me bring this
+[33:12 - 33:14] on the left hand
+[33:15 - 33:23] side so after this I will add one more
+[33:19 - 33:26] D okay and inside that we will add
+[33:23 - 33:29] another D okay so this D will control
+[33:26 - 33:33] our container type thing okay and inside
+[33:29 - 33:35] that we'll add the input of type
+[33:33 - 33:39] text
+[33:35 - 33:42] okay and uh let's add the place folder
+[33:39 - 33:45] as a
+[33:42 - 33:49] location then we'll add some class name
+[33:45 - 33:51] so I will add padding of two outline I
+[33:49 - 33:54] need to be none and background I will
+[33:51 - 33:56] make the transparent okay like this and
+[33:54 - 33:58] save it and if you see the location is
+[33:56 - 34:02] showing on the screen
+[33:58 - 34:05] also uh I will add the icons so if you
+[34:02 - 34:07] go here right let me search for the hero
+[34:05 - 34:09] icons here you will find a bunch of
+[34:07 - 34:11] different icon okay so I want solid you
+[34:09 - 34:14] can select solid and just search the
+[34:11 - 34:16] type of Icon you want okay if you see we
+[34:14 - 34:19] got the icon copy this SVG or you can
+[34:16 - 34:21] copy jsx whatever you want and then just
+[34:19 - 34:26] paste it here like
+[34:21 - 34:28] this okay so let me bring everything in
+[34:26 - 34:30] format this one okay like this this and
+[34:28 - 34:33] save it now if you go back to
+[34:30 - 34:35] application it will look like this okay
+[34:33 - 34:40] so obviously I'm going to change color
+[34:35 - 34:43] so I will go text Gray 400 okay and for
+[34:40 - 34:47] this particular class I will make it
+[34:43 - 34:49] Flex so it will be the one line and also
+[34:47 - 34:51] make it item to be in the center so
+[34:49 - 34:55] vertically it will be Center okay like
+[34:51 - 34:57] this also for this class right okay
+[34:55 - 35:00] we'll wait we we'll implement the
+[34:57 - 35:03] function it as well so I will add du and
+[35:00 - 35:07] here I will add input of type is equal
+[35:03 - 35:08] to date okay so this is very important
+[35:07 - 35:12] because we are using
+[35:08 - 35:15] date and close the tag here I will add
+[35:12 - 35:18] the class name the similar uh uh classes
+[35:15 - 35:21] we applied like the one which we applied
+[35:18 - 35:24] to this one okay so just copy this one
+[35:21 - 35:27] and paste it here and save it and if you
+[35:24 - 35:30] see we got this one okay you can change
+[35:27 - 35:31] the color so I will give text
+[35:30 - 35:34] Gray
+[35:31 - 35:38] 400 like this okay and I will change
+[35:34 - 35:40] this color uh to the dark which is
+[35:38 - 35:43] matched to this uh color of this
+[35:40 - 35:46] particular calendar okay so you can just
+[35:43 - 35:49] change that color as
+[35:46 - 35:50] well so let where is the SVG here I will
+[35:49 - 35:54] change width and
+[35:50 - 35:58] height and I will make
+[35:54 - 36:01] it black only it like this
+[35:58 - 36:01] okay five
+[36:02 - 36:08] actually okay next we want to show in
+[36:05 - 36:11] one line okay so here I will add the
+[36:08 - 36:15] class name and we'll make it
+[36:11 - 36:19] Flex okay and once you make this as a
+[36:15 - 36:21] flex you will see it is will it comes in
+[36:19 - 36:25] one line okay and if I increase size it
+[36:21 - 36:29] will look like this okay then uh just
+[36:25 - 36:31] make sure to make it justify Center
+[36:29 - 36:33] it will not going to change it will look
+[36:31 - 36:36] like this okay and here now we need to
+[36:33 - 36:39] add the background okay so to add the
+[36:36 - 36:41] background we have to add another de and
+[36:39 - 36:44] we have to wrap everything in this
+[36:41 - 36:48] particular de okay this two component
+[36:44 - 36:51] like this again here add the class name
+[36:48 - 36:54] make it flex and uh then we can make
+[36:51 - 36:59] background of gray and
+[36:54 - 37:02] 100 adding of two make rounded to be
+[36:59 - 37:05] full and save it and if you see it will
+[37:02 - 37:10] look like this okay I will give padding
+[37:05 - 37:15] X maybe padding one padding X2 3 maybe
+[37:10 - 37:19] okay we give more like five and uh then
+[37:15 - 37:21] we'll give some gap of
+[37:19 - 37:27] two okay also if you want to put
+[37:21 - 37:28] horizontal line you can just add divider
+[37:27 - 37:31] divider
+[37:28 - 37:34] X okay so
+[37:31 - 37:37] divider X like this and save it and if
+[37:34 - 37:40] you see this horizontal line also get
+[37:37 - 37:44] added okay and if I increase the size it
+[37:40 - 37:47] will look like this okay see I can able
+[37:44 - 37:51] to type and this dat also I can able to
+[37:47 - 37:52] select it okay now you can put the width
+[37:51 - 37:55] uh some minimum be to this one okay it's
+[37:52 - 37:57] up to you but right now I think this
+[37:55 - 37:59] will work fine okay if you have any
+[37:57 - 38:01] question any doubt let me know in the
+[37:59 - 38:05] comment section and this is quite easy
+[38:01 - 38:07] okay uh it's just a simple HTML CSS
+[38:05 - 38:09] styling I applied okay now you can use
+[38:07 - 38:12] some more styling for example you can
+[38:09 - 38:13] give some padding uh from the top the
+[38:12 - 38:15] padding the margin between these two
+[38:13 - 38:19] okay so what you can
+[38:15 - 38:24] do uh here you can write margin bottom
+[38:19 - 38:27] to be three and save it if you see it
+[38:24 - 38:30] looks pretty good right so I will give
+[38:27 - 38:32] some margin so like class name margin
+[38:30 - 38:35] top to
+[38:32 - 38:39] five okay so yeah perfect this I think
+[38:35 - 38:41] looks good okay uh later on what we can
+[38:39 - 38:43] do we can implement the location okay so
+[38:41 - 38:45] it will once you start typing it will
+[38:43 - 38:47] aut complete the address it will give
+[38:45 - 38:50] the suggestion and then you can select
+[38:47 - 38:51] it okay also uh the date is already
+[38:50 - 38:54] there right now you can select the
+[38:51 - 38:57] previous date we can also add uh the
+[38:54 - 38:59] limit for this one the minimum uh date
+[38:57 - 39:01] and maximum imum dat kind of thing okay
+[38:59 - 39:03] and uh there are lot of things we are
+[39:01 - 39:05] going to implement but first of all we
+[39:03 - 39:09] just focusing on the some UI part as
+[39:05 - 39:11] well and then we will uh uh add the
+[39:09 - 39:15] implementation and some logic into this
+[39:11 - 39:15] particular uh
+[39:19 - 39:25] application now we going to add uh the
+[39:23 - 39:28] catalog name and the filter option so if
+[39:25 - 39:30] you see this right here if you see we
+[39:28 - 39:33] have this Catal car catalog as a text
+[39:30 - 39:35] here and then we have this at the right
+[39:33 - 39:37] hand side we have this filter option
+[39:35 - 39:40] okay so same thing we going to add so
+[39:37 - 39:44] first of all let's add uh we need to add
+[39:40 - 39:47] uh one Library UI Library called da UI
+[39:44 - 39:50] so if you go to this Daisy ui.com is one
+[39:47 - 39:52] of the best T CSS library and it it has
+[39:50 - 39:54] a lot of predefined components okay if
+[39:52 - 39:56] you scroll down you will see lot of
+[39:54 - 39:59] things and very easy to install first
+[39:56 - 40:02] you need to copy this command and run in
+[39:59 - 40:05] your application okay so let increase
+[40:02 - 40:06] the screen size and here I will execute
+[40:05 - 40:09] this
+[40:06 - 40:11] command then you have to add this
+[40:09 - 40:13] particular plug-in okay inside the T.C
+[40:11 - 40:15] config.js
+[40:13 - 40:19] okay so you just need to add this
+[40:15 - 40:23] required. Dei copy this one and then
+[40:19 - 40:25] let's go to this t. config.js
+[40:23 - 40:29] and inside plugin you have to paste it
+[40:25 - 40:31] here like this and save it okay uh you
+[40:29 - 40:33] can uh stop the server but if you see
+[40:31 - 40:36] right the D is running so I think it
+[40:33 - 40:38] will work next uh we are pretty much
+[40:36 - 40:41] completed by installing this da UI right
+[40:38 - 40:45] we are ready to use this Dai now first
+[40:41 - 40:48] of all let's add the text and then the
+[40:45 - 40:51] drop down Okay so let's add this one so
+[40:48 - 40:53] let's go to the component folder and
+[40:51 - 40:59] inside the home folder we get a new
+[40:53 - 41:02] component called calls filters option.
+[40:59 - 41:04] TSX close this one and here add the
+[41:02 - 41:06] default template by just typing RFC
+[41:04 - 41:07] click enter and it will give you the
+[41:06 - 41:09] default
+[41:07 - 41:12] template now
+[41:09 - 41:14] here uh make sure okay for first make
+[41:12 - 41:17] sure to add this component inside the
+[41:14 - 41:21] page. TSX so I will add it here cars
+[41:17 - 41:26] filters option like this okay and now
+[41:21 - 41:30] let's add some coding so inside one du I
+[41:26 - 41:33] will add the H2 tag and we can say just
+[41:30 - 41:36] C catalog okay here we can give the
+[41:33 - 41:39] styling so add the class name and we'll
+[41:36 - 41:42] make text of 30 pixel now if you see
+[41:39 - 41:44] right I'm giving this a size inside this
+[41:42 - 41:46] bracket it means I'm giving my custom
+[41:44 - 41:50] size okay if I if you want to give
+[41:46 - 41:53] something like this see uh text
+[41:50 - 41:56] of sorry text Off 2 Excel or kind of
+[41:53 - 41:57] thing right but if you want to use some
+[41:56 - 42:00] uh in the pixel you can can give in the
+[41:57 - 42:02] brackets okay so whenever you want to
+[42:00 - 42:04] give some custom size you have to give
+[42:02 - 42:09] in a square brackets and after this
+[42:04 - 42:11] let's make font be bold and save it and
+[42:09 - 42:13] let's see here how it
+[42:11 - 42:15] looks and if you see the car catalog is
+[42:13 - 42:17] showing on the screen okay so what I
+[42:15 - 42:19] will do I will also give some Mar class
+[42:17 - 42:22] name margin top to
+[42:19 - 42:25] 10 like
+[42:22 - 42:29] this okay perfect then the next h2 tag I
+[42:25 - 42:29] will add it here
+[42:29 - 42:35] and it will be explore the card you
+[42:32 - 42:39] might like like this and save it if you
+[42:35 - 42:43] see perfect like this okay perfect next
+[42:39 - 42:46] we want to add the uh drop down select
+[42:43 - 42:48] okay so if you see this one example
+[42:46 - 42:52] right we have this drop down so in order
+[42:48 - 42:54] to add right go to the daisy UI and here
+[42:52 - 42:57] you can just search for the select
+[42:54 - 42:59] option okay and if you see right
+[42:57 - 43:03] uh this is what we wanted you will see
+[42:59 - 43:05] the lot of different example okay see so
+[43:03 - 43:08] right now we want this kind of gray
+[43:05 - 43:11] border and this menu right so go to the
+[43:08 - 43:14] jsx okay and just copy this line of code
+[43:11 - 43:18] okay you can just click copy here and
+[43:14 - 43:20] then go back into the code and paste it
+[43:18 - 43:26] here like
+[43:20 - 43:26] this okay and uh here you can say price
+[43:27 - 43:32] perfect we can change this value later
+[43:30 - 43:34] on something for example you can say
+[43:32 - 43:39] price of
+[43:34 - 43:42] 45 SI of 70 okay like this or you can
+[43:39 - 43:44] write uh list
+[43:42 - 43:49] to mean to
+[43:44 - 43:54] Max we can do something filter mean to
+[43:49 - 43:57] Max and Max to mean something like this
+[43:54 - 44:00] okay and if I go back to our application
+[43:57 - 44:03] see this price tag is showing perfect
+[44:00 - 44:06] same thing you have to add one more so
+[44:03 - 44:08] what I will do I will copy this one and
+[44:06 - 44:11] paste it here like this okay and this is
+[44:08 - 44:14] for for example manufacturer I will add
+[44:11 - 44:18] manufacturer and here you can say
+[44:14 - 44:21] Honda or you can say
+[44:18 - 44:25] BMW or
+[44:21 - 44:27] maybe um Toyota kind of things okay and
+[44:25 - 44:31] save it if you see the manufactur Al
+[44:27 - 44:34] added now we want everything in one line
+[44:31 - 44:37] okay so what we can do first of all for
+[44:34 - 44:39] this one we can make it flex and if you
+[44:37 - 44:42] see it's coming like this okay obviously
+[44:39 - 44:45] we want this one as well uh as well as
+[44:42 - 44:49] mean that that one as well we want it in
+[44:45 - 44:51] horizontal line so make it Flex see it
+[44:49 - 44:53] will look like this and here I will make
+[44:51 - 44:56] item to be in the
+[44:53 - 44:58] center okay and here I will give some
+[44:56 - 45:02] gap of
+[44:58 - 45:04] F okay perfect see it look perfect now
+[45:02 - 45:06] when the screen size is smaller I want
+[45:04 - 45:09] to hide this particular manufacturer so
+[45:06 - 45:11] what I will do I will just on this
+[45:09 - 45:14] particular uh class name right we have
+[45:11 - 45:19] the select border everything here we can
+[45:14 - 45:22] say hidden initially okay and when the
+[45:19 - 45:24] screen size is U medium or larger we can
+[45:22 - 45:27] show it so right now if you see is it
+[45:24 - 45:31] done okay okay Ste is not working with
+[45:27 - 45:33] me check here on medium we need to make
+[45:31 - 45:35] it
+[45:33 - 45:37] block like this and if I if I increase
+[45:35 - 45:42] size see it's showing but if I decrease
+[45:37 - 45:45] the size right uh like this it's hide
+[45:42 - 45:47] okay next we want this particular uh
+[45:45 - 45:51] drop down at the right hand side so here
+[45:47 - 45:53] you have to make justify between okay so
+[45:51 - 45:55] just make justify between and it will be
+[45:53 - 45:57] in the right hand side
+[45:55 - 45:59] see both the things
+[45:57 - 46:02] okay so this will be manufacturer and
+[45:59 - 46:04] this will be the price and then we are
+[46:02 - 46:06] pretty much done with this filter option
+[46:04 - 46:10] okay obviously we going to add the logic
+[46:06 - 46:12] behind this once we get the list of car
+[46:10 - 46:15] okay I hope you understand this
+[46:12 - 46:17] particular section next section is quite
+[46:15 - 46:20] interesting because we going to use a
+[46:17 - 46:22] hypergraph which is one of the best CMS
+[46:20 - 46:25] in the market right now which using
+[46:22 - 46:28] which is us just a graphql okay so many
+[46:25 - 46:31] people are requested uh to uh uh create
+[46:28 - 46:33] a Content or course which uh uses the
+[46:31 - 46:35] graphql so that's what we are going to
+[46:33 - 46:35] use
+[46:40 - 46:46] today so today we are going to use high
+[46:44 - 46:49] graph CMS which is one of the best
+[46:46 - 46:52] graphql content management platform okay
+[46:49 - 46:56] if you know about the strappy or sanity
+[46:52 - 46:58] High graph is also a similar one okay
+[46:56 - 47:02] and but this High graph will provide a
+[46:58 - 47:05] very efficient way to handle our content
+[47:02 - 47:08] management okay so first thing if you go
+[47:05 - 47:11] to this hyra.com you will land on this
+[47:08 - 47:13] uh official website okay and if you want
+[47:11 - 47:16] to know the pricing let's go to the
+[47:13 - 47:18] pricing and let's see if you see right
+[47:16 - 47:21] it's this particular High graph is
+[47:18 - 47:26] completely free okay if you have medium
+[47:21 - 47:28] size business this graph uh free um tire
+[47:26 - 47:31] is completely sufficient for you so
+[47:28 - 47:34] don't worry whether it's $299 $799 don't
+[47:31 - 47:36] worry I'm telling you it's completely
+[47:34 - 47:37] free okay and this is very sufficient
+[47:36 - 47:39] for you if you are going to develop
+[47:37 - 47:42] something or you are a developer or you
+[47:39 - 47:45] a freelancer or you want to run a small
+[47:42 - 47:47] business this is perfect for you so uh
+[47:45 - 47:50] if you want to create account just say
+[47:47 - 47:53] get started and uh if you already
+[47:50 - 47:56] account just log in it so I already have
+[47:53 - 47:58] account so I'm loging it okay so once
+[47:56 - 48:01] you loging onto this one here you can
+[47:58 - 48:04] create a new project okay so you have
+[48:01 - 48:07] different different option like blog
+[48:04 - 48:09] shopping the documentation uh marketing
+[48:07 - 48:12] website a lot of things okay if they
+[48:09 - 48:14] have predefined templates or if you can
+[48:12 - 48:16] create your own template so click on
+[48:14 - 48:18] this add project and here give the
+[48:16 - 48:20] project name so in this case we give car
+[48:18 - 48:22] rental you can give the project
+[48:20 - 48:25] description I will keep as it is and you
+[48:22 - 48:28] can give the region which you want okay
+[48:25 - 48:31] so right now I will give the uh uh Us
+[48:28 - 48:32] East uh and you can have India as well
+[48:31 - 48:35] so you can select whatever the nearest
+[48:32 - 48:38] one you have okay and click on ADD
+[48:35 - 48:43] project so just wait for that one so it
+[48:38 - 48:45] will take some few times to uh set up um
+[48:43 - 48:48] the all the project for us so we'll
+[48:45 - 48:51] wait and if you see our project is set
+[48:48 - 48:53] up completely okay and if on the right
+[48:51 - 48:55] hand side uh if you first time right it
+[48:53 - 48:57] will show you the quick start checklist
+[48:55 - 49:00] what you need to do and every okay we'll
+[48:57 - 49:02] close this one and this is the dashboard
+[49:00 - 49:05] okay and if you see we have 1 million
+[49:02 - 49:07] call per month okay then we have 100gb
+[49:05 - 49:09] of traffic a contain entry and lot of
+[49:07 - 49:12] things first of all let's go to the
+[49:09 - 49:16] schema and we'll create a schema for our
+[49:12 - 49:19] cars information so here in the schema
+[49:16 - 49:21] you can create a new model so click on
+[49:19 - 49:24] new model and here you can give the
+[49:21 - 49:26] model name okay so I will give car list
+[49:24 - 49:28] and this is the API this a p you can
+[49:26 - 49:31] keep keep everything as it is and click
+[49:28 - 49:32] on ADD model okay once you click on the
+[49:31 - 49:35] add
+[49:32 - 49:37] model now you can add the field into
+[49:35 - 49:39] your particular model right what field
+[49:37 - 49:42] you do you need so for example I will
+[49:39 - 49:45] add the single line text and I will say
+[49:42 - 49:49] uh the name of car so I will say name
+[49:45 - 49:52] like this okay is you can use as a title
+[49:49 - 49:54] field and also you have validation you
+[49:52 - 49:57] can make it whatever you want I will
+[49:54 - 49:59] make it required field you have Advance
+[49:57 - 50:01] option and everything right so right now
+[49:59 - 50:04] just click
+[50:01 - 50:06] add and then you can add the remaining
+[50:04 - 50:09] one for example you want to show the
+[50:06 - 50:14] price um if you see right we want to
+[50:09 - 50:17] show the um the image right we have this
+[50:14 - 50:19] um car type how many seat iow the car
+[50:17 - 50:21] average and everything right so that you
+[50:19 - 50:24] can add it so for example if you want to
+[50:21 - 50:27] add image right we have this um asset
+[50:24 - 50:30] speaker as well so click on it you can
+[50:27 - 50:32] give image like this and uh you can
+[50:30 - 50:34] allow the multiple assets okay it's up
+[50:32 - 50:38] to you whatever you want to choose you
+[50:34 - 50:40] have complete hand uh complete control
+[50:38 - 50:42] on your field so how you want to display
+[50:40 - 50:44] okay so you can add the remaining one I
+[50:42 - 50:47] will add the remaining one and then I
+[50:44 - 50:49] will show you how it looks so I added
+[50:47 - 50:53] the all the remaining field which we
+[50:49 - 50:57] want uh to save the cars list okay so we
+[50:53 - 50:59] have the name image price car a average
+[50:57 - 51:01] the type of car and the brand okay so
+[50:59 - 51:03] these are the drop down and for that one
+[51:01 - 51:05] I added this numeration okay so if you
+[51:03 - 51:08] go to the car brand I added this list of
+[51:05 - 51:11] brand and the car type and this I added
+[51:08 - 51:14] with the help of this drop- down uh
+[51:11 - 51:18] field okay so quite easy uh and you can
+[51:14 - 51:20] just do it okay so uh you can go to the
+[51:18 - 51:22] content and inside the content you can
+[51:20 - 51:25] add the entry okay so you can add the
+[51:22 - 51:28] name the image price and everything and
+[51:25 - 51:32] just you can click save and publish okay
+[51:28 - 51:34] and it will save it okay so uh I will
+[51:32 - 51:37] add the some of the few information here
+[51:34 - 51:41] and then we'll go from there so here I
+[51:37 - 51:44] added few data inside this content uh
+[51:41 - 51:46] section okay so I added the F record and
+[51:44 - 51:49] it's very easy just click add entry and
+[51:46 - 51:51] just you add the fields and save it okay
+[51:49 - 51:54] now the important thing is if you see we
+[51:51 - 51:57] have this API playground okay and inside
+[51:54 - 52:00] this API playground here we going to
+[51:57 - 52:02] write our we can create our own query it
+[52:00 - 52:04] will return the result for us okay so
+[52:02 - 52:06] right now if you see right these are in
+[52:04 - 52:08] the car list these are the fill are
+[52:06 - 52:10] selected and if I click on this play
+[52:08 - 52:12] button it will give me the all the
+[52:10 - 52:15] result which we want okay so you can
+[52:12 - 52:17] even want unselect this uh things for
+[52:15 - 52:19] example if I unselect the seat now and
+[52:17 - 52:22] if I run it the seat will not be here
+[52:19 - 52:25] okay so is up to you what are the fields
+[52:22 - 52:26] you require and just select that field
+[52:25 - 52:29] and that's all you are done you you can
+[52:26 - 52:31] just uh run this uh play button and you
+[52:29 - 52:33] will get the result okay and then this
+[52:31 - 52:37] particular query we going to use in our
+[52:33 - 52:40] application to F this all the Json uh
+[52:37 - 52:42] formatted response from this particular
+[52:40 - 52:45] High graph okay so that particular
+[52:42 - 52:47] section we going to learn next but if
+[52:45 - 52:49] you did not subscribe to my Channel
+[52:47 - 52:51] please do subscribe and please do
+[52:49 - 52:53] explore this High graph okay you have a
+[52:51 - 52:55] lot of things here you have project
+[52:53 - 52:57] setting you will see a lot of different
+[52:55 - 52:58] things okay you can even change the
+[52:57 - 53:01] profile picture a lot of different thing
+[52:58 - 53:03] you can play around and let me know if
+[53:01 - 53:05] you find interesting into that in the
+[53:03 - 53:07] comment section and if you're really
+[53:05 - 53:11] enjoying enjoying this video please
+[53:07 - 53:11] press like button
+[53:14 - 53:21] okay so now in order to F uh this
+[53:18 - 53:24] particular information from the graph CU
+[53:21 - 53:26] first of all we need this graph qul uh
+[53:24 - 53:29] iPhone request
+[53:26 - 53:32] dependency and here this is how you can
+[53:29 - 53:35] install just copy this command and then
+[53:32 - 53:37] go to your project and install this
+[53:35 - 53:40] particular dependency
+[53:37 - 53:43] okay so I will paste it here like this
+[53:40 - 53:45] and enter it then this is how we can use
+[53:43 - 53:47] it right here just need to pass the
+[53:45 - 53:51] query which uh we have in this
+[53:47 - 53:53] particular High graph and then we'll get
+[53:51 - 53:56] the response okay so we'll implement it
+[53:53 - 53:57] in our application so first of all let's
+[53:56 - 54:01] go back back to our
+[53:57 - 54:03] project and inside here we'll create a
+[54:01 - 54:05] new folder in in the root directory
+[54:03 - 54:07] which called
+[54:05 - 54:10] services and inside that we'll create a
+[54:07 - 54:15] new folder a new file sorry called
+[54:10 - 54:19] index. TSX okay so inside index. TSX we
+[54:15 - 54:21] will uh add the one method which will
+[54:19 - 54:25] get the all the car list okay so here I
+[54:21 - 54:28] will write export constant we'll say get
+[54:25 - 54:32] cars
+[54:28 - 54:34] list and then uh this is the arrow
+[54:32 - 54:38] function okay so this method will be a
+[54:34 - 54:40] sync okay and inside here we need to
+[54:38 - 54:43] write the query first okay so we'll
+[54:40 - 54:45] write query and is equal to we have to
+[54:43 - 54:50] write
+[54:45 - 54:52] gql okay and then this particular this
+[54:50 - 54:56] need to be gql gql
+[54:52 - 54:59] graphql and then inside this particular
+[54:56 - 55:01] uh code we need to write our uh query so
+[54:59 - 55:04] what you have to do go to this uh High
+[55:01 - 55:07] graph and inside the API playground
+[55:04 - 55:09] right we we already have this particular
+[55:07 - 55:12] uh query right and if you run this one
+[55:09 - 55:14] you'll find the response as well right
+[55:12 - 55:17] and that's what we needed so copy this
+[55:14 - 55:21] query go back to our application and
+[55:17 - 55:24] here just paste it here like this okay
+[55:21 - 55:26] perfect next you just need to call the
+[55:24 - 55:28] request method so here I what I will do
+[55:26 - 55:31] constant result I'll get the result
+[55:28 - 55:34] inside this result and then
+[55:31 - 55:36] await request
+[55:34 - 55:40] okay
+[55:36 - 55:42] and make sure this request is coming not
+[55:40 - 55:45] from this HTTP but this request is
+[55:42 - 55:47] coming from the graphql request okay see
+[55:45 - 55:50] graphql request make sure this this is
+[55:47 - 55:53] very important inside this one we have
+[55:50 - 55:55] to pass the URL first and then the query
+[55:53 - 55:56] so this is the query right so that way
+[55:55 - 56:00] we'll pass it
+[55:56 - 56:02] like this okay but right now what is our
+[56:00 - 56:05] API endpoint which is nothing but the
+[56:02 - 56:08] URL okay so if you go back to this hi
+[56:05 - 56:12] graph inside the project setting you
+[56:08 - 56:14] will find this environments uh uh
+[56:12 - 56:16] section right ins inside this
+[56:14 - 56:19] environment folder we'll find the master
+[56:16 - 56:22] environment right this particular URL
+[56:19 - 56:25] copy this URL okay so I copy this URL
+[56:22 - 56:29] and then paste it here like this okay
+[56:25 - 56:32] perfect that's all okay now here we just
+[56:29 - 56:33] need to return the result so write
+[56:32 - 56:38] return
+[56:33 - 56:41] result and save it okay so if you see uh
+[56:38 - 56:43] we we have one error uh so it what is
+[56:41 - 56:46] saying the cannot find name gql okay so
+[56:43 - 56:49] we have to import this gql as well so
+[56:46 - 56:54] here we have to write
+[56:49 - 56:56] gql like this okay perfect you you can
+[56:54 - 56:59] um refer this documentation of this
+[56:56 - 57:02] graph K request okay it mention
+[56:59 - 57:06] everything now once we do this right we
+[57:02 - 57:09] our uh API endpoint is ready okay so
+[57:06 - 57:13] let's use this one now so inside the
+[57:09 - 57:16] page. txx we will call it here okay so
+[57:13 - 57:20] inside here we will call
+[57:16 - 57:24] console sorry I will add one method
+[57:20 - 57:29] Conant get car list
+[57:24 - 57:33] okay is equ Al to sync Arrow function
+[57:29 - 57:36] like this okay and here we can call
+[57:33 - 57:40] constant result is equal to we have to
+[57:36 - 57:42] call this particular um service right so
+[57:40 - 57:45] which is from index. TSX so you can just
+[57:42 - 57:49] call the get cars list see this get car
+[57:45 - 57:53] list is from at theate service okay like
+[57:49 - 57:56] this and it need to be await so let's
+[57:53 - 58:00] await like this okay and then print the
+[57:56 - 58:02] result so I will consolid the result
+[58:00 - 58:05] okay obviously you need to uh call this
+[58:02 - 58:07] me in use effect if you don't know about
+[58:05 - 58:11] the use effect so use effect is a react
+[58:07 - 58:15] hook and it will execute uh for every
+[58:11 - 58:17] instance okay and so once you define it
+[58:15 - 58:19] uh if you define it like this it will
+[58:17 - 58:21] keep executing for every instance and
+[58:19 - 58:24] infinite time right to avoid this and
+[58:21 - 58:26] you want to execute only once when the
+[58:24 - 58:29] component is load you have to pass the
+[58:26 - 58:32] empty array like this okay and then save
+[58:29 - 58:36] it now here we will call this method so
+[58:32 - 58:38] get car list and then save it okay now
+[58:36 - 58:41] if you go back to our
+[58:38 - 58:43] application so if we got one error okay
+[58:41 - 58:46] we'll see what's the
+[58:43 - 58:49] error and console so if you see right we
+[58:46 - 58:51] got this error that uh not allowed error
+[58:49 - 58:54] something like this right the particular
+[58:51 - 58:56] API endpoint is not working the reason
+[58:54 - 58:58] is
+[58:56 - 59:00] uh in the graphql right in the
+[58:58 - 59:04] environment we use this particular URL
+[59:00 - 59:07] right but if you go to this API access
+[59:04 - 59:09] and if you scroll down you have this
+[59:07 - 59:11] section called content permission here
+[59:09 - 59:13] you have to initialize the default okay
+[59:11 - 59:15] so just click yes initialize the default
+[59:13 - 59:18] so what it will do it will give the
+[59:15 - 59:21] permission for our contents okay now if
+[59:18 - 59:23] you see we got the all models to be read
+[59:21 - 59:27] permissions perfect that's what we
+[59:23 - 59:29] wanted now we save everything and then
+[59:27 - 59:32] let's try it again and if you see the
+[59:29 - 59:34] error is not there anymore let's see in
+[59:32 - 59:36] the console so if you see in the console
+[59:34 - 59:38] right just ignore this above error this
+[59:36 - 59:41] is different error but if you see in the
+[59:38 - 59:44] console in the page our number in the
+[59:41 - 59:48] page. TSS file line number 55 we got the
+[59:44 - 59:50] car list see the five car list we got it
+[59:48 - 59:52] with the all the details we which we
+[59:50 - 59:55] wanted see how easy it is right you
+[59:52 - 59:56] don't need to write any API cord for it
+[59:55 - 59:59] or you don't need need to write any
+[59:56 - 01:00:01] Express API code or backend code it
+[59:59 - 01:00:05] simply with the help of graphql you got
+[01:00:01 - 01:00:08] the result now this car list we going to
+[01:00:05 - 01:00:10] use to display the list of car like this
+[01:00:08 - 01:00:14] so if you see like this we're going to
+[01:00:10 - 01:00:17] display everything all the cards we are
+[01:00:14 - 01:00:19] beautifully designing this cards um
+[01:00:17 - 01:00:22] component and everything okay you will
+[01:00:19 - 01:00:23] learn everything so continue watching
+[01:00:22 - 01:00:26] this video and if you have any question
+[01:00:23 - 01:00:28] let me know in the comment section and
+[01:00:26 - 01:00:31] hopefully uh you understand how to get
+[01:00:28 - 01:00:34] this uh result from the graphql with the
+[01:00:31 - 01:00:37] help of hi graph okay so this is this is
+[01:00:34 - 01:00:41] how simple it is to face the data now we
+[01:00:37 - 01:00:43] will store this cars list in one state
+[01:00:41 - 01:00:46] so that we can pass it to the component
+[01:00:43 - 01:00:46] so what I will do I will write
+[01:00:46 - 01:00:56] constant here Will C list comma
+[01:00:51 - 01:00:59] set our list is equal to use State okay
+[01:00:56 - 01:01:02] is of type any and you'll pass
+[01:00:59 - 01:01:05] the empty array like this and here you
+[01:01:02 - 01:01:07] can just pass the cars list obviously in
+[01:01:05 - 01:01:09] the result if you see right in the
+[01:01:07 - 01:01:12] result we have another field call cars
+[01:01:09 - 01:01:18] list we only want this uh items I will
+[01:01:12 - 01:01:21] result. car list like this okay and uh
+[01:01:18 - 01:01:26] that's all so here if you see right um
+[01:01:21 - 01:01:28] we got that error because uh
+[01:01:26 - 01:01:31] we make we need to make this result of
+[01:01:28 - 01:01:33] type any okay and now see the gone
+[01:01:31 - 01:01:35] perfect now we set the car list and we
+[01:01:33 - 01:01:37] have the car information now that car
+[01:01:35 - 01:01:40] list we'll pass to our new components
+[01:01:37 - 01:01:40] that we are going to create
+[01:01:45 - 01:01:51] next so now uh in order to display the
+[01:01:48 - 01:01:54] list of cars we create a new file inside
+[01:01:51 - 01:01:56] the home uh folder uh we can call it as
+[01:01:54 - 01:02:00] a cars
+[01:01:56 - 01:02:03] list. TSX okay and then add the default
+[01:02:00 - 01:02:05] template like this make sure to add this
+[01:02:03 - 01:02:09] cast list inside this page component so
+[01:02:05 - 01:02:12] I will add it cars list here okay and
+[01:02:09 - 01:02:14] once you save everything make sure the
+[01:02:12 - 01:02:16] cars list is displaying on the screen
+[01:02:14 - 01:02:20] okay now let's go back to the cars
+[01:02:16 - 01:02:24] list inside here uh we going to add the
+[01:02:20 - 01:02:26] C list first of all we need a prop right
+[01:02:24 - 01:02:30] and this prop contain the the cars list
+[01:02:26 - 01:02:32] so inside this page. TSX we already have
+[01:02:30 - 01:02:33] the list of cars correct this list of
+[01:02:32 - 01:02:37] cars we need to
+[01:02:33 - 01:02:39] send uh to this particular car list
+[01:02:37 - 01:02:43] component so you can say cars list is
+[01:02:39 - 01:02:45] equal to car list okay now you send you
+[01:02:43 - 01:02:47] are sending to this one this to the car
+[01:02:45 - 01:02:49] list right now we have props you can
+[01:02:47 - 01:02:52] mention it as any so this error will
+[01:02:49 - 01:02:55] gone as because we are using uh
+[01:02:52 - 01:02:57] typescript each of this variable or
+[01:02:55 - 01:03:00] whatever you you are defining it's need
+[01:02:57 - 01:03:04] uh type okay that's the
+[01:03:00 - 01:03:06] reason now next here uh you have the
+[01:03:04 - 01:03:08] cars list okay so what you have to do
+[01:03:06 - 01:03:13] you have to first iterate the list of
+[01:03:08 - 01:03:15] car okay so here in the props sorry uh
+[01:03:13 - 01:03:18] not like this but here to iterate it we
+[01:03:15 - 01:03:21] have to write like this props in the
+[01:03:18 - 01:03:25] props we have the cars list see this one
+[01:03:21 - 01:03:26] okay so this car L and uh you have to
+[01:03:25 - 01:03:32] map it
+[01:03:26 - 01:03:36] okay so map R of type any comma index of
+[01:03:32 - 01:03:38] type number okay and here you have to
+[01:03:36 - 01:03:42] Define Arrow function like this okay
+[01:03:38 - 01:03:42] inside this one I will add one
+[01:03:42 - 01:03:48] do like this okay and let's try to print
+[01:03:45 - 01:03:51] the car name here okay so what I will do
+[01:03:48 - 01:03:54] I will just print car do name like this
+[01:03:51 - 01:03:58] and save it and if you see we got the
+[01:03:54 - 01:04:01] cars list it means the prop is working
+[01:03:58 - 01:04:03] and we are able to iterate the value
+[01:04:01 - 01:04:07] okay now for the card we which we want
+[01:04:03 - 01:04:10] to show on the screen we create a new uh
+[01:04:07 - 01:04:15] car card item okay so inside this home
+[01:04:10 - 01:04:18] folder only We'll add the card card. TSX
+[01:04:15 - 01:04:21] okay and add the default
+[01:04:18 - 01:04:24] template and this car card we
+[01:04:21 - 01:04:26] will uh iterate it here like this okay
+[01:04:24 - 01:04:29] so I will add this component here like
+[01:04:26 - 01:04:32] this remove this one and make sure to
+[01:04:29 - 01:04:36] import this car card and save it save
+[01:04:32 - 01:04:39] everything okay and if you save
+[01:04:36 - 01:04:40] it right uh we got the number of card
+[01:04:39 - 01:04:43] because right now we are not passing
+[01:04:40 - 01:04:46] anything it in car card we only have
+[01:04:43 - 01:04:48] this car card text return okay so here
+[01:04:46 - 01:04:54] we will pass the
+[01:04:48 - 01:04:57] car car like this okay and in a car card
+[01:04:54 - 01:05:00] accept it as a prop is of type
+[01:04:57 - 01:05:03] any obviously what I will do I will save
+[01:05:00 - 01:05:07] this prop value inside one state car
+[01:05:03 - 01:05:14] Comm set car is equal to use
+[01:05:07 - 01:05:16] State and uh the value is s props do car
+[01:05:14 - 01:05:19] okay so inside car we will have the
+[01:05:16 - 01:05:23] value which we are passing each time to
+[01:05:19 - 01:05:26] this uh particular component okay and
+[01:05:23 - 01:05:28] now if you want to print name of the
+[01:05:26 - 01:05:31] uh car here you can print it here like
+[01:05:28 - 01:05:34] this car name let's save everything and
+[01:05:31 - 01:05:36] if you see we got the result perfect I
+[01:05:34 - 01:05:39] hope you understand this one okay this
+[01:05:36 - 01:05:41] is how we can pass uh the data from
+[01:05:39 - 01:05:44] parent component to the child component
+[01:05:41 - 01:05:47] okay and this is how we iterate this
+[01:05:44 - 01:05:50] list of uh cars list and we are using
+[01:05:47 - 01:05:52] the component so that we can uh easily
+[01:05:50 - 01:05:55] manage our
+[01:05:52 - 01:05:57] code so now in inside a car card we will
+[01:05:55 - 01:06:01] implement it so I will remove this
+[01:05:57 - 01:06:04] one so first of all we need to add the
+[01:06:01 - 01:06:06] DU so add the DU here like this okay we
+[01:06:04 - 01:06:09] already have the actually so no need to
+[01:06:06 - 01:06:12] use this one and then I will add the h2
+[01:06:09 - 01:06:15] tag okay so h2 tag
+[01:06:12 - 01:06:17] sorry so I will just paste the h2 tag
+[01:06:15 - 01:06:20] here
+[01:06:17 - 01:06:23] okay and already I applied The Styling
+[01:06:20 - 01:06:26] and everything so and it I'm passing the
+[01:06:23 - 01:06:31] car name if I save it will look like
+[01:06:26 - 01:06:34] this okay next I will pass
+[01:06:31 - 01:06:36] the am amount thing okay for example if
+[01:06:34 - 01:06:39] you see right I'm just writing this you
+[01:06:36 - 01:06:43] can access my code
+[01:06:39 - 01:06:44] anytime so here I'm adding another h2
+[01:06:43 - 01:06:47] tag it mention
+[01:06:44 - 01:06:50] the per day amount okay and I'm passing
+[01:06:47 - 01:06:52] the car price and I'm using some span
+[01:06:50 - 01:06:57] and if I save it so it will look like
+[01:06:52 - 01:06:59] this okay then I'm adding the image it
+[01:06:57 - 01:07:01] means the car image so I will add the
+[01:06:59 - 01:07:06] car image
+[01:07:01 - 01:07:09] here and uh make sure to import this
+[01:07:06 - 01:07:12] image from the next SL image and then
+[01:07:09 - 01:07:14] save it and you will see the car image
+[01:07:12 - 01:07:16] okay now if you see right we got the
+[01:07:14 - 01:07:19] error and it not showing the reason is
+[01:07:16 - 01:07:22] if I go to the inspect panel inside the
+[01:07:19 - 01:07:27] console we got that image is missing and
+[01:07:22 - 01:07:30] require a source property okay
+[01:07:27 - 01:07:33] so the reason is we need to add the
+[01:07:30 - 01:07:35] domain okay so if let me go back to our
+[01:07:33 - 01:07:39] application okay so make sure the car
+[01:07:35 - 01:07:41] image we are passing the correct URL so
+[01:07:39 - 01:07:45] to check that one uh we need to check
+[01:07:41 - 01:07:46] the object what we are passing here so
+[01:07:45 - 01:07:49] inside this
+[01:07:46 - 01:07:51] playground we are not passing the image
+[01:07:49 - 01:07:54] if you see right we don't have the image
+[01:07:51 - 01:07:56] so for that one uh in the inside the
+[01:07:54 - 01:07:59] cars list right we have the
+[01:07:56 - 01:08:02] option called image okay and inside the
+[01:07:59 - 01:08:05] image you have to select the URL see
+[01:08:02 - 01:08:09] like this if I click play now you also
+[01:08:05 - 01:08:10] get this URL okay now just copy this uh
+[01:08:09 - 01:08:13] new change or you can copy everything
+[01:08:10 - 01:08:15] and replace with existing one but I know
+[01:08:13 - 01:08:18] what I'm I I what changes I made so I
+[01:08:15 - 01:08:21] will copy that only that changes and
+[01:08:18 - 01:08:23] inside our service index. TSX where we
+[01:08:21 - 01:08:26] have this query I we paste it here like
+[01:08:23 - 01:08:27] this and then save it okay
+[01:08:26 - 01:08:32] now if I go
+[01:08:27 - 01:08:34] back and refresh the screen okay now if
+[01:08:32 - 01:08:36] you see we got the one error it called
+[01:08:34 - 01:08:38] the host name this particular host name
+[01:08:36 - 01:08:41] is not configured under the image in
+[01:08:38 - 01:08:44] your next. config.js okay which I told
+[01:08:41 - 01:08:46] you at the very beginning that this is
+[01:08:44 - 01:08:50] why we need a configuration for the next
+[01:08:46 - 01:08:52] so just copy this domain and then let's
+[01:08:50 - 01:08:55] go back to our
+[01:08:52 - 01:08:59] application here inside the
+[01:08:55 - 01:09:05] uh next. config.js okay you have to add
+[01:08:59 - 01:09:08] a image fill images inside that sorry we
+[01:09:05 - 01:09:11] have to add the domains okay so we are
+[01:09:08 - 01:09:13] just making sure and telling the next J
+[01:09:11 - 01:09:16] this is the
+[01:09:13 - 01:09:19] uh White domain means uh it is a legal
+[01:09:16 - 01:09:22] domain which you can access okay it just
+[01:09:19 - 01:09:25] preventing from the security purpose if
+[01:09:22 - 01:09:27] I save it let's clean everything Let me
+[01:09:25 - 01:09:29] refresh the screen now obviously you
+[01:09:27 - 01:09:32] made the change in the next. config.js
+[01:09:29 - 01:09:34] file okay it will run your project or
+[01:09:32 - 01:09:37] you need to run your project again so I
+[01:09:34 - 01:09:40] will stop the server and I will run the
+[01:09:37 - 01:09:43] project again okay so obviously uh it
+[01:09:40 - 01:09:46] will again build uh with a new uh
+[01:09:43 - 01:09:50] configuration so I just refresh it and
+[01:09:46 - 01:09:50] let's wait for a few seconds
+[01:10:01 - 01:10:05] so if you see that our project is loaded
+[01:10:03 - 01:10:09] and if you see our cars list also
+[01:10:05 - 01:10:10] showing on the screen beautifully okay I
+[01:10:09 - 01:10:14] hope you understand this particular
+[01:10:10 - 01:10:17] section how we uh add the domains in the
+[01:10:14 - 01:10:21] next. config.js okay in order to show
+[01:10:17 - 01:10:25] the images from the URL next let's go
+[01:10:21 - 01:10:29] back to our car card here okay we going
+[01:10:25 - 01:10:32] to add add the some more value for
+[01:10:29 - 01:10:35] example we going to add this one okay
+[01:10:32 - 01:10:35] and
+[01:10:35 - 01:10:41] uh I am using this particular icons from
+[01:10:39 - 01:10:46] the react icons okay so what you can do
+[01:10:41 - 01:10:48] go to the react icons okay uh I'm using
+[01:10:46 - 01:10:50] a multiple times in my previous uh
+[01:10:48 - 01:10:53] course as well so copy this react icon
+[01:10:50 - 01:10:57] dependency and then paste it in your
+[01:10:53 - 01:10:57] terminal okay like this
+[01:10:57 - 01:11:03] and then you have to just import this
+[01:11:00 - 01:11:04] all this uh react import statement so I
+[01:11:03 - 01:11:07] I already have I will import it here
+[01:11:04 - 01:11:10] like this okay and if you see the error
+[01:11:07 - 01:11:12] is gone okay and now save
+[01:11:10 - 01:11:16] everything now if you go back to our
+[01:11:12 - 01:11:18] project and uh let me refresh the
+[01:11:16 - 01:11:20] screen sometime it refresh sometimes not
+[01:11:18 - 01:11:23] because we just made the change okay we
+[01:11:20 - 01:11:25] added the new dependency so if I scroll
+[01:11:23 - 01:11:28] down if you see we got this information
+[01:11:25 - 01:11:30] as well okay so if you see something is
+[01:11:28 - 01:11:33] missing let me see
+[01:11:30 - 01:11:38] what why it missing
+[01:11:33 - 01:11:40] so here we have the car DOT type right
+[01:11:38 - 01:11:42] make sure this is the correct one uh the
+[01:11:40 - 01:11:45] correct fi name which we are
+[01:11:42 - 01:11:50] using so if you see right we don't have
+[01:11:45 - 01:11:53] the type okay we need a type as well so
+[01:11:50 - 01:11:57] we have seat car average everything so
+[01:11:53 - 01:11:57] let's add that one as well
+[01:11:58 - 01:12:05] so we have this car type right we added
+[01:12:01 - 01:12:09] the car type if I run it now it's added
+[01:12:05 - 01:12:13] okay so that one we have to add it in
+[01:12:09 - 01:12:16] our uh again we need to add it here in
+[01:12:13 - 01:12:19] service. index. DSX okay after anywhere
+[01:12:16 - 01:12:21] you can add it no issue and save it and
+[01:12:19 - 01:12:25] now if I refresh the
+[01:12:21 - 01:12:27] screen you will see the car type as well
+[01:12:25 - 01:12:30] okay okay everything is working I don't
+[01:12:27 - 01:12:33] know what this error is coming okay so
+[01:12:30 - 01:12:37] we need to add the card type here
+[01:12:33 - 01:12:40] so this need to be a car
+[01:12:37 - 01:12:43] type and save it now see error is gone
+[01:12:40 - 01:12:47] we got this Auto auto it doesn't have
+[01:12:43 - 01:12:49] actually manual Auto okay perfect now we
+[01:12:47 - 01:12:50] need to bring everything in one line
+[01:12:49 - 01:12:54] okay so this is very
+[01:12:50 - 01:12:59] easy so first of all let me go back to
+[01:12:54 - 01:12:59] our application here like
+[01:12:59 - 01:13:09] this okay and uh oops my mouse
+[01:13:06 - 01:13:12] yeah so first of all I will add some
+[01:13:09 - 01:13:15] class to this one so class name okay
+[01:13:12 - 01:13:17] then uh I already have the property so I
+[01:13:15 - 01:13:20] will just copy paste it
+[01:13:17 - 01:13:22] here and save it and it will give some
+[01:13:20 - 01:13:25] background some padding and everything
+[01:13:22 - 01:13:28] see on the click I'm getting the the
+[01:13:25 - 01:13:33] effect like this okay also uh I'm adding
+[01:13:28 - 01:13:35] one button okay at the bottom so after
+[01:13:33 - 01:13:37] this one I will add that
+[01:13:35 - 01:13:41] button and save it if I hover on this
+[01:13:37 - 01:13:43] one right see this button is coming okay
+[01:13:41 - 01:13:46] if you have any question in the doubt
+[01:13:43 - 01:13:49] you can uh just uh access my source code
+[01:13:46 - 01:13:52] okay next let's go back to our cars list
+[01:13:49 - 01:13:56] okay so let's go back to C list inside
+[01:13:52 - 01:14:00] here Define class name and and here we
+[01:13:56 - 01:14:02] will Define the grid okay so once if the
+[01:14:00 - 01:14:05] screen is smaller we can uh divide this
+[01:14:02 - 01:14:08] particular column into two so just GD
+[01:14:05 - 01:14:10] calls two when the screen size is medium
+[01:14:08 - 01:14:14] we can Define GDs column
+[01:14:10 - 01:14:18] 3 sorry we don't need this
+[01:14:14 - 01:14:22] one and when the screen size is larger
+[01:14:18 - 01:14:22] then we can show read
+[01:14:22 - 01:14:30] calls read calls four and save it and
+[01:14:27 - 01:14:31] once we did it right if you see on the
+[01:14:30 - 01:14:35] smaller screen it will look like this if
+[01:14:31 - 01:14:37] I increase the size and see beautifully
+[01:14:35 - 01:14:40] showing on the screen like
+[01:14:37 - 01:14:42] this okay perfect I hope you understand
+[01:14:40 - 01:14:46] this one it's quite easy okay only thing
+[01:14:42 - 01:14:49] is you just need to add the uh uh some
+[01:14:46 - 01:14:51] uh specific styling to this one so that
+[01:14:49 - 01:14:53] you can achieve this kind of layout and
+[01:14:51 - 01:14:55] everything okay here I added the H
+[01:14:53 - 01:14:57] effect on H if you see right the
+[01:14:55 - 01:15:00] background is changed to White I'm
+[01:14:57 - 01:15:02] addding the border and also I'm hiding
+[01:15:00 - 01:15:05] this uh particular icons but I'm
+[01:15:02 - 01:15:08] replacing with the buttons okay and let
+[01:15:05 - 01:15:10] me show you how I did this one so inside
+[01:15:08 - 01:15:14] the car card
+[01:15:10 - 01:15:17] right if if you see here is for this du
+[01:15:14 - 01:15:20] right on the H I'm just hiding this
+[01:15:17 - 01:15:23] particular de okay and initially this
+[01:15:20 - 01:15:25] particular button is hidden but once I H
+[01:15:23 - 01:15:27] on it it will be visible
+[01:15:25 - 01:15:30] okay this is how it
+[01:15:27 - 01:15:32] works so I hope hopefully you'll
+[01:15:30 - 01:15:34] understand this one understand this and
+[01:15:32 - 01:15:36] if you have any question let me know in
+[01:15:34 - 01:15:38] the comment section and anytime you can
+[01:15:36 - 01:15:38] access my source
+[01:15:43 - 01:15:50] code so now we going to add uh this
+[01:15:48 - 01:15:53] filter functionality okay right now we
+[01:15:50 - 01:15:56] hardcoded this value but we actually f
+[01:15:53 - 01:15:58] it from the uh of this particular C list
+[01:15:56 - 01:16:02] and disting value of the brand we will
+[01:15:58 - 01:16:06] show in this drop down so let's first uh
+[01:16:02 - 01:16:10] go into this particular uh vs code and
+[01:16:06 - 01:16:14] uh inside this page. txx we will Define
+[01:16:10 - 01:16:17] the one more uh State okay so inside
+[01:16:14 - 01:16:20] here we will Define a similar state only
+[01:16:17 - 01:16:22] it will hold the original car list okay
+[01:16:20 - 01:16:25] so cars original
+[01:16:22 - 01:16:28] list car original list like this okay
+[01:16:25 - 01:16:31] and here we will set this C original
+[01:16:28 - 01:16:35] list along with this CS list
+[01:16:31 - 01:16:37] okay like this and save it okay now next
+[01:16:35 - 01:16:40] this car original list we will send it
+[01:16:37 - 01:16:43] to this cars filter option so I will
+[01:16:40 - 01:16:46] pass it as cars list
+[01:16:43 - 01:16:50] only like this okay now inside the car
+[01:16:46 - 01:16:54] filter option obviously we'll get it
+[01:16:50 - 01:16:56] like this cars list make sure this this
+[01:16:54 - 01:16:59] cars list
+[01:16:56 - 01:17:01] and of type any okay so I just
+[01:16:59 - 01:17:05] destructured the prop and WR in this
+[01:17:01 - 01:17:08] curly braces and I mention the type of
+[01:17:05 - 01:17:11] any now we have the cars list okay now
+[01:17:08 - 01:17:14] next we will we need to filter out the
+[01:17:11 - 01:17:17] distinct value from it okay so what I
+[01:17:14 - 01:17:20] will do I will Define one method
+[01:17:17 - 01:17:26] constant and uh it
+[01:17:20 - 01:17:26] will name is filter uh car list
+[01:17:27 - 01:17:33] and arrow function like this okay now
+[01:17:30 - 01:17:35] inside this we have the car list right
+[01:17:33 - 01:17:40] so for
+[01:17:35 - 01:17:43] each so we can have for each Loop for
+[01:17:40 - 01:17:43] each like
+[01:17:43 - 01:17:52] this and then
+[01:17:46 - 01:17:54] element of type any and inside that uh
+[01:17:52 - 01:17:56] we need to add the element okay but
+[01:17:54 - 01:17:58] before that we will Define the set so in
+[01:17:56 - 01:18:00] the set when we Define the set I will
+[01:17:58 - 01:18:05] Define set like
+[01:18:00 - 01:18:08] um brand set okay is equal to new set so
+[01:18:05 - 01:18:11] what it will do it will only set the
+[01:18:08 - 01:18:14] value with uh in the only un value it
+[01:18:11 - 01:18:16] will set okay the W value will not add
+[01:18:14 - 01:18:17] into this particular set and in that
+[01:18:16 - 01:18:20] brand
+[01:18:17 - 01:18:26] set we will just add the value so which
+[01:18:20 - 01:18:29] is our element dot r brand okay so where
+[01:18:26 - 01:18:31] is this car brand coming so in index. t
+[01:18:29 - 01:18:33] right we have this query we are also
+[01:18:31 - 01:18:36] added this car brand okay so we get the
+[01:18:33 - 01:18:41] brand of the car like this and we store
+[01:18:36 - 01:18:43] it here okay then next after that we
+[01:18:41 - 01:18:46] will we need to save this car brand so
+[01:18:43 - 01:18:50] what we can do we can Define one more uh
+[01:18:46 - 01:18:55] State here and we can call it as
+[01:18:50 - 01:19:00] a uh brand list comma set brand
+[01:18:55 - 01:19:03] list is equal to use state of type any
+[01:19:00 - 01:19:06] and the AR function okay and here we'll
+[01:19:03 - 01:19:08] Define the set brand list and then we
+[01:19:06 - 01:19:10] will set the brand list right now it is
+[01:19:08 - 01:19:14] in the set right so we need to convert
+[01:19:10 - 01:19:17] it into array so array from and then we
+[01:19:14 - 01:19:20] have to pass this brand set okay and
+[01:19:17 - 01:19:22] this brand set contain unit um set of
+[01:19:20 - 01:19:24] this Brands and we need to convert it
+[01:19:22 - 01:19:26] into array that's why and we store it
+[01:19:24 - 01:19:29] into the the brand list now we have the
+[01:19:26 - 01:19:31] brand list okay in order to make sure we
+[01:19:29 - 01:19:33] just console log it okay so you will
+[01:19:31 - 01:19:36] understand better and I will print the
+[01:19:33 - 01:19:39] brand list here like this okay obviously
+[01:19:36 - 01:19:42] in the use effect we need to call the
+[01:19:39 - 01:19:44] filter list okay so here what I will do
+[01:19:42 - 01:19:48] I will pass this cars list so whenever
+[01:19:44 - 01:19:50] the cars list is available okay or will
+[01:19:48 - 01:19:51] whenever car list change I will update
+[01:19:50 - 01:19:54] this use effect okay so I will add the
+[01:19:51 - 01:19:56] cars list if condition if car list is
+[01:19:54 - 01:19:59] there then only execute this particular
+[01:19:56 - 01:20:01] filter car list method and save
+[01:19:59 - 01:20:04] everything now let's go back to
+[01:20:01 - 01:20:07] application go to the inspect panel in
+[01:20:04 - 01:20:09] the console and if you see right in the
+[01:20:07 - 01:20:11] call filter option we have set and these
+[01:20:09 - 01:20:14] are the unique brand which we are
+[01:20:11 - 01:20:16] getting from the server so Honda Mazda
+[01:20:14 - 01:20:20] BMW Lexus right now this value we have
+[01:20:16 - 01:20:21] to set inside this particular uh drop
+[01:20:20 - 01:20:24] down right because right now we
+[01:20:21 - 01:20:27] hardcoded this value see okay so I will
+[01:20:24 - 01:20:30] just remove this two okay and uh in the
+[01:20:27 - 01:20:32] for Loop obviously we have to use for
+[01:20:30 - 01:20:34] Loop here we have to not for Loop but we
+[01:20:32 - 01:20:38] have to map it right we have to iterate
+[01:20:34 - 01:20:42] this value so uh we have this brand list
+[01:20:38 - 01:20:45] so just write brand list dot map and
+[01:20:42 - 01:20:49] then we have brand colon
+[01:20:45 - 01:20:52] name okay and then we have also index so
+[01:20:49 - 01:20:56] it need to be brand sorry brand type
+[01:20:52 - 01:21:00] string you can say and then uh um index
+[01:20:56 - 01:21:02] of type number okay and then Arrow
+[01:21:00 - 01:21:04] function like this and inside that I
+[01:21:02 - 01:21:07] will put the options okay and obviously
+[01:21:04 - 01:21:10] I will replace this hardcoded text with
+[01:21:07 - 01:21:11] the brand only okay because we just
+[01:21:10 - 01:21:13] saving the brand and nothing else right
+[01:21:11 - 01:21:15] only it contains the name of this brand
+[01:21:13 - 01:21:18] that's why I'm showing the only brand
+[01:21:15 - 01:21:22] obviously we have to provide a key of
+[01:21:18 - 01:21:23] type index in oh sorry of keys we have
+[01:21:22 - 01:21:25] to provide as a index and save
+[01:21:23 - 01:21:26] everything now let let see whether it's
+[01:21:25 - 01:21:29] drop down we are getting all this
+[01:21:26 - 01:21:32] information so right now we have four
+[01:21:29 - 01:21:34] Brands and if I drop down see our brand
+[01:21:32 - 01:21:37] is showing Honda Mazda see how
+[01:21:34 - 01:21:40] beautifully is showing okay so we are
+[01:21:37 - 01:21:42] able to successfully show the distinct
+[01:21:40 - 01:21:44] brand which is getting from the server
+[01:21:42 - 01:21:47] in this dropdown
+[01:21:44 - 01:21:50] perfect now next on the select of this
+[01:21:47 - 01:21:53] brand we need to pass this information
+[01:21:50 - 01:21:55] back to this our parent component which
+[01:21:53 - 01:21:58] is space. TSX okay so for for that one
+[01:21:55 - 01:22:04] first of all for this select right I
+[01:21:58 - 01:22:06] will add on change method okay like this
+[01:22:04 - 01:22:08] and in this on change method we'll first
+[01:22:06 - 01:22:11] print out whether we are getting this uh
+[01:22:08 - 01:22:15] brand name so obviously on change will
+[01:22:11 - 01:22:20] fire the event and I will console. log
+[01:22:15 - 01:22:22] here e do target. value okay and we'll
+[01:22:20 - 01:22:24] just print out once we select the brand
+[01:22:22 - 01:22:27] okay so let me clean everything if if I
+[01:22:24 - 01:22:30] select Mazda see the Mazda is printing
+[01:22:27 - 01:22:33] if I select the BMW or Lexus Lexus is
+[01:22:30 - 01:22:36] showing see okay it means on change is
+[01:22:33 - 01:22:37] working now what we need to do instead
+[01:22:36 - 01:22:42] of this console I will remove this
+[01:22:37 - 01:22:44] console log and we will uh set the brand
+[01:22:42 - 01:22:46] like this okay and then this method we
+[01:22:44 - 01:22:49] have to pass back to the parent so
+[01:22:46 - 01:22:53] obviously once you set this value like
+[01:22:49 - 01:22:55] this we have to pass it inside this D
+[01:22:53 - 01:22:56] structurized prop like this
+[01:22:55 - 01:23:00] okay and if you see the set brand is
+[01:22:56 - 01:23:02] there and the error error is also gone
+[01:23:00 - 01:23:04] now obviously in sub page. TSX we have
+[01:23:02 - 01:23:07] to accept it here okay so what we can do
+[01:23:04 - 01:23:09] we can print print it out here just to
+[01:23:07 - 01:23:13] make sure that it's working okay so s
+[01:23:09 - 01:23:13] brand we have
+[01:23:13 - 01:23:19] the
+[01:23:15 - 01:23:20] value and I will just console.log value
+[01:23:19 - 01:23:24] okay obviously we have to provide the
+[01:23:20 - 01:23:25] value of type string and save everything
+[01:23:24 - 01:23:28] now let's
+[01:23:25 - 01:23:30] see everything if I select Honda see
+[01:23:28 - 01:23:34] Honda is printing and it's printing in
+[01:23:30 - 01:23:37] page. TSX file at the line 28 which is
+[01:23:34 - 01:23:40] this one see the page. TSS line28 it
+[01:23:37 - 01:23:43] means we are able to successfully uh
+[01:23:40 - 01:23:46] pass data from Child component to this
+[01:23:43 - 01:23:49] parent component okay now what we need
+[01:23:46 - 01:23:51] to do we will create a new method called
+[01:23:49 - 01:23:55] constant
+[01:23:51 - 01:24:00] filter bar list okay
+[01:23:55 - 01:24:01] like this and here we'll pass the brand
+[01:24:00 - 01:24:07] okay of type
+[01:24:01 - 01:24:11] string obviously uh we will constant uh
+[01:24:07 - 01:24:15] filter list okay and what we can do we
+[01:24:11 - 01:24:16] can uh from the original list right here
+[01:24:15 - 01:24:20] we can use this original list from the
+[01:24:16 - 01:24:24] original list we will filter the data so
+[01:24:20 - 01:24:31] I will filter data item of type any
+[01:24:24 - 01:24:33] and here if item do uh car brand right
+[01:24:31 - 01:24:36] is equal to equal to
+[01:24:33 - 01:24:38] Brand then only that all this value will
+[01:24:36 - 01:24:42] store in the filter list okay very
+[01:24:38 - 01:24:44] important because uh here we need to
+[01:24:42 - 01:24:47] write this condition whether this uh the
+[01:24:44 - 01:24:50] current record uh Records brand name is
+[01:24:47 - 01:24:52] equal to the provid a brand then only it
+[01:24:50 - 01:24:55] will sa in filter list okay and then in
+[01:24:52 - 01:24:57] the car list we have State we have to
+[01:24:55 - 01:25:01] set this filter list like
+[01:24:57 - 01:25:04] this okay because this is the cars list
+[01:25:01 - 01:25:06] see okay and this we have to set it here
+[01:25:04 - 01:25:09] like this so that obviously it will
+[01:25:06 - 01:25:10] update this cars list as well okay let's
+[01:25:09 - 01:25:12] save everything and let's check whether
+[01:25:10 - 01:25:16] we are getting correct data or not okay
+[01:25:12 - 01:25:19] so right now if I select Mazda nothing
+[01:25:16 - 01:25:21] get changed if I select BMW if I leus
+[01:25:19 - 01:25:24] nothing can change because we never we
+[01:25:21 - 01:25:26] did not call this filter C uh card list
+[01:25:24 - 01:25:29] method okay so instead of console log I
+[01:25:26 - 01:25:32] will remove this and I will call filter
+[01:25:29 - 01:25:34] card list on this set brand method okay
+[01:25:32 - 01:25:37] now I save
+[01:25:34 - 01:25:41] everything refresh the
+[01:25:37 - 01:25:42] screen okay so we'll wait so right now
+[01:25:41 - 01:25:44] if you see right we got the error cannot
+[01:25:42 - 01:25:47] read property of undefined map the brand
+[01:25:44 - 01:25:50] list so it is we are getting that error
+[01:25:47 - 01:25:52] in C filter option okay so here in the
+[01:25:50 - 01:25:54] brand list so here we can write brand
+[01:25:52 - 01:25:57] list is available the only list show
+[01:25:54 - 01:26:01] this brand options okay and you see the
+[01:25:57 - 01:26:03] error is gone now if I scroll down okay
+[01:26:01 - 01:26:06] just ignore this error right now and if
+[01:26:03 - 01:26:09] I click on this and click Honda see the
+[01:26:06 - 01:26:12] Honda is coming but also Mazda is coming
+[01:26:09 - 01:26:15] okay if I select BMW only one uh list is
+[01:26:12 - 01:26:19] coming but not the correct one the
+[01:26:15 - 01:26:21] reason is if you go to this uh car card
+[01:26:19 - 01:26:24] right here we are directly Define this
+[01:26:21 - 01:26:26] props right and even though the props
+[01:26:24 - 01:26:29] check change is not updating the state
+[01:26:26 - 01:26:32] okay so only is updating the number of
+[01:26:29 - 01:26:35] uh record but not the value so what we
+[01:26:32 - 01:26:38] can do here we need to uh write
+[01:26:35 - 01:26:41] separately okay so in we'll use the use
+[01:26:38 - 01:26:43] effect for that one like this and we'll
+[01:26:41 - 01:26:49] pass the
+[01:26:43 - 01:26:51] props sorry props do carar okay so this
+[01:26:49 - 01:26:57] value so I will remove it from here and
+[01:26:51 - 01:27:00] I will type any and if prop. car prop.
+[01:26:57 - 01:27:03] car is available then set the car
+[01:27:00 - 01:27:06] information okay and I will pass this
+[01:27:03 - 01:27:09] prop. car here like this okay also we
+[01:27:06 - 01:27:12] have to make sure it is optional fill
+[01:27:09 - 01:27:14] okay other or else you can just pass it
+[01:27:12 - 01:27:19] like props doar is available for example
+[01:27:14 - 01:27:21] if you pass let's see sorry the car and
+[01:27:19 - 01:27:23] and okay and let's save everything and
+[01:27:21 - 01:27:25] let's see whether we are getting correct
+[01:27:23 - 01:27:28] result right now if BMW is selected BMW
+[01:27:25 - 01:27:32] is coming if I select Honda see two cars
+[01:27:28 - 01:27:34] of Honda is coming if I select the Lexus
+[01:27:32 - 01:27:37] the Lexus is coming okay so means it
+[01:27:34 - 01:27:39] works our filter option is working fine
+[01:27:37 - 01:27:42] now I hope you understand this
+[01:27:39 - 01:27:45] particular functionality and now we need
+[01:27:42 - 01:27:47] to implement same kind of functionality
+[01:27:45 - 01:27:52] uh for this particular price okay
+[01:27:47 - 01:27:55] everything similar except we need to uh
+[01:27:52 - 01:27:57] inside the page. TSX right we we use
+[01:27:55 - 01:28:01] this condition here if the brand change
+[01:27:57 - 01:28:03] right in this case we need to uh order
+[01:28:01 - 01:28:05] by ascending or descending depends on
+[01:28:03 - 01:28:07] the price okay so try it out and let me
+[01:28:05 - 01:28:10] know if you have any question and
+[01:28:07 - 01:28:12] anytime you can access my source code so
+[01:28:10 - 01:28:14] here I also implemented this minan to
+[01:28:12 - 01:28:17] Max okay so if I click on Max to minan
+[01:28:14 - 01:28:19] see it's coming from the maximum first
+[01:28:17 - 01:28:21] and the minimum last and if I do the
+[01:28:19 - 01:28:24] reverse the mean to Max the minimum will
+[01:28:21 - 01:28:27] come first and the maximum will go go
+[01:28:24 - 01:28:30] last so it's quite easy okay let me show
+[01:28:27 - 01:28:34] you the code how I did it so same thing
+[01:28:30 - 01:28:37] uh in the car filter option right I I
+[01:28:34 - 01:28:40] added this onchain method to this uh
+[01:28:37 - 01:28:41] pricing filter list okay uh which is I
+[01:28:40 - 01:28:44] call as as a order carard list and
+[01:28:41 - 01:28:46] passing back to the parent component
+[01:28:44 - 01:28:49] inside the parent component I added
+[01:28:46 - 01:28:52] another method okay and this logic will
+[01:28:49 - 01:28:53] help uh to filter it out on the
+[01:28:52 - 01:28:57] depending on the ascending order or
+[01:28:53 - 01:28:59] descending order okay one more thing uh
+[01:28:57 - 01:29:02] I passes here value as a minus one and
+[01:28:59 - 01:29:06] one instead of this complete value okay
+[01:29:02 - 01:29:09] so this this help me uh oh sorry where
+[01:29:06 - 01:29:11] is space. TX yeah this help me to check
+[01:29:09 - 01:29:14] if the order my order is minus one which
+[01:29:11 - 01:29:16] is a minimum to Max then I'm applying
+[01:29:14 - 01:29:18] this logic otherwise this one okay quite
+[01:29:16 - 01:29:21] easy you can check it out uh the source
+[01:29:18 - 01:29:23] code if you stuck anywhere okay and let
+[01:29:21 - 01:29:25] me know in the comment section if you
+[01:29:23 - 01:29:27] really like this video press like button
+[01:29:25 - 01:29:31] and if you did not subscribe to my
+[01:29:27 - 01:29:32] Channel please do subscribe okay next we
+[01:29:31 - 01:29:35] are going to implement on the click of
+[01:29:32 - 01:29:37] this particular uh car selection right
+[01:29:35 - 01:29:39] when you click on the rent now or
+[01:29:37 - 01:29:42] anywhere it will open the popup it will
+[01:29:39 - 01:29:44] show the cars information along with the
+[01:29:42 - 01:29:47] form to fill out to book the uh
+[01:29:44 - 01:29:50] particular car okay so that we'll see in
+[01:29:47 - 01:29:50] the next section
+[01:29:54 - 01:30:00] now once you click on this particular uh
+[01:29:57 - 01:30:02] car right and you want to rent it once
+[01:30:00 - 01:30:05] you click on it we want to show the
+[01:30:02 - 01:30:08] popup like this okay where you can add
+[01:30:05 - 01:30:11] the pickup location the date uh drop up
+[01:30:08 - 01:30:13] date and everything okay also uh once
+[01:30:11 - 01:30:15] you click save we going to store that
+[01:30:13 - 01:30:16] data in our hypergraph where we are
+[01:30:15 - 01:30:18] already storing this car and everything
+[01:30:16 - 01:30:20] right so that also we are looking into
+[01:30:18 - 01:30:23] in this particular
+[01:30:20 - 01:30:26] section also we are going to show the
+[01:30:23 - 01:30:28] location the available location to pick
+[01:30:26 - 01:30:32] up this car that also we are going to
+[01:30:28 - 01:30:35] show it okay so let's do that
+[01:30:32 - 01:30:37] now so first thing once you click on
+[01:30:35 - 01:30:40] this we need to open the model so let's
+[01:30:37 - 01:30:42] go to the daisy UI and inside here okay
+[01:30:40 - 01:30:45] under this action category we have this
+[01:30:42 - 01:30:48] SE uh option called Model okay go there
+[01:30:45 - 01:30:50] and if you see right uh you can see the
+[01:30:48 - 01:30:53] example if I click on this one the model
+[01:30:50 - 01:30:56] is opening okay so similar kind of model
+[01:30:53 - 01:30:57] we want to implement Ed okay also uh we
+[01:30:56 - 01:31:00] want the full width model so we are
+[01:30:57 - 01:31:02] going to use this particular code so go
+[01:31:00 - 01:31:07] to the J jsx Tab and copy this line of
+[01:31:02 - 01:31:09] code okay so uh let's go to the cars
+[01:31:07 - 01:31:11] list okay because on the click uh on the
+[01:31:09 - 01:31:14] click of the card we want to open it
+[01:31:11 - 01:31:17] correct so I'm here and I will past this
+[01:31:14 - 01:31:19] code like this okay and if you see right
+[01:31:17 - 01:31:23] this is on click method so this
+[01:31:19 - 01:31:25] particular uh method we have to call on
+[01:31:23 - 01:31:29] the click of the car okay so I will cut
+[01:31:25 - 01:31:31] it from here and on this du I will add
+[01:31:29 - 01:31:34] the on click method
+[01:31:31 - 01:31:38] okay like this
+[01:31:34 - 01:31:41] perfect and then this is the model 4 so
+[01:31:38 - 01:31:43] I will remove this particular
+[01:31:41 - 01:31:45] code and if you see right it's saying
+[01:31:43 - 01:31:47] the window we right now we are getting
+[01:31:45 - 01:31:49] error so what you have to do you have to
+[01:31:47 - 01:31:52] write as
+[01:31:49 - 01:31:55] any okay so what we are showing the
+[01:31:52 - 01:31:56] window is to of type any and the error
+[01:31:55 - 01:31:59] is gone okay and you can give the ID of
+[01:31:56 - 01:32:01] models to some meaningful name but right
+[01:31:59 - 01:32:03] now we'll give it as it is and if I save
+[01:32:01 - 01:32:06] it everything let's save everything and
+[01:32:03 - 01:32:08] let's go back to our application okay
+[01:32:06 - 01:32:12] and if I try to click it see the model
+[01:32:08 - 01:32:15] is opening okay now only thing we need
+[01:32:12 - 01:32:17] to do now we need to replace this all
+[01:32:15 - 01:32:20] the content with your actual form and
+[01:32:17 - 01:32:23] the uh uh this particular image okay so
+[01:32:20 - 01:32:24] what we can do uh I will remove this
+[01:32:23 - 01:32:26] form from here
+[01:32:24 - 01:32:28] okay and we'll create a new component so
+[01:32:26 - 01:32:32] inside the component folder create a new
+[01:32:28 - 01:32:34] folder called uh car
+[01:32:32 - 01:32:37] booking and inside that I will create a
+[01:32:34 - 01:32:40] new folder called
+[01:32:37 - 01:32:42] um booking
+[01:32:40 - 01:32:45] model.
+[01:32:42 - 01:32:49] PSX okay and add the default template
+[01:32:45 - 01:32:52] here like this and replace this D with
+[01:32:49 - 01:32:54] the code which we cut it and here I past
+[01:32:52 - 01:32:57] it here like this okay now what you have
+[01:32:54 - 01:33:00] to do copy this booking model and paste
+[01:32:57 - 01:33:00] it in between this
+[01:33:00 - 01:33:06] dialogue make sure to import this
+[01:33:03 - 01:33:06] component and save
+[01:33:07 - 01:33:10] everything and let's test it out whether
+[01:33:09 - 01:33:15] it's working or not and if you see it's
+[01:33:10 - 01:33:17] working only thing we did we replace uh
+[01:33:15 - 01:33:18] this all this code with the component
+[01:33:17 - 01:33:21] and inside the component we added this
+[01:33:18 - 01:33:24] particular line of codes okay next we
+[01:33:21 - 01:33:27] need to divide this particular
+[01:33:24 - 01:33:30] uh model into two section on the left
+[01:33:27 - 01:33:32] hand side we will show the image uh the
+[01:33:30 - 01:33:36] Cs information and on the right hand
+[01:33:32 - 01:33:36] side we'll give the form to fill all the
+[01:33:36 - 01:33:42] information next uh let's pass the uh
+[01:33:40 - 01:33:44] cars information to this model first
+[01:33:42 - 01:33:47] okay once you select the model so let's
+[01:33:44 - 01:33:49] go back to our application and inside
+[01:33:47 - 01:33:51] the cars list right here we call this
+[01:33:49 - 01:33:53] particular onclick method right in the
+[01:33:51 - 01:33:55] same on click method we'll call another
+[01:33:53 - 01:33:58] method to set the value for the car list
+[01:33:55 - 01:33:59] so before that let's define the one
+[01:33:58 - 01:34:03] state called
+[01:33:59 - 01:34:04] selected car set selected car to set the
+[01:34:03 - 01:34:08] car's
+[01:34:04 - 01:34:11] information is equal to use State and is
+[01:34:08 - 01:34:14] of type any and pass the empty array for
+[01:34:11 - 01:34:16] now now this selected car we will call
+[01:34:14 - 01:34:19] this inside this
+[01:34:16 - 01:34:21] particular method okay so on on this on
+[01:34:19 - 01:34:24] click we'll call it so obviously if you
+[01:34:21 - 01:34:26] are calling multiple function or method
+[01:34:24 - 01:34:28] you have to wrap this in a curly braces
+[01:34:26 - 01:34:30] and then you have to call this method
+[01:34:28 - 01:34:35] like this selected car and inside that
+[01:34:30 - 01:34:38] you have to pass this car item okay like
+[01:34:35 - 01:34:40] this now in selected car we have the
+[01:34:38 - 01:34:44] cars information this selected car we
+[01:34:40 - 01:34:46] have to pass to this booking model okay
+[01:34:44 - 01:34:52] so here we'll pass as
+[01:34:46 - 01:34:54] a selected car is equal to selected car
+[01:34:52 - 01:34:57] or just we can pass the car we can say
+[01:34:54 - 01:34:58] car and we pass selected car now inside
+[01:34:57 - 01:35:01] the booking model here you have to
+[01:34:58 - 01:35:05] accept as a prop so I will D structurize
+[01:35:01 - 01:35:06] the prop and I I will pass it as a any
+[01:35:05 - 01:35:10] okay now we have the cars information
+[01:35:06 - 01:35:12] okay so what we'll do uh right now let's
+[01:35:10 - 01:35:16] uh remove this all of this code okay
+[01:35:12 - 01:35:17] from this form and replace with the uh
+[01:35:16 - 01:35:21] your own code so right now what I will
+[01:35:17 - 01:35:24] do I give the title so inside the de
+[01:35:21 - 01:35:26] what I mention I added this title h2 tag
+[01:35:24 - 01:35:28] and just saying rent a car now okay
+[01:35:26 - 01:35:30] let's save everything and let's see how
+[01:35:28 - 01:35:32] it looks now if I click on this car the
+[01:35:30 - 01:35:36] rent car now is showing on the screen
+[01:35:32 - 01:35:39] okay now what we do instead of writing
+[01:35:36 - 01:35:42] the code to show the C information we
+[01:35:39 - 01:35:43] going to use the existing car if you see
+[01:35:42 - 01:35:47] right this existing model or existing
+[01:35:43 - 01:35:50] component we going to use it okay before
+[01:35:47 - 01:35:52] that uh I will undo this one I want this
+[01:35:50 - 01:35:55] line of code and I will remove only this
+[01:35:52 - 01:35:58] code and and then I will replace with my
+[01:35:55 - 01:36:01] new code like this okay it's just simple
+[01:35:58 - 01:36:03] uh styling with the app to3 tag okay
+[01:36:01 - 01:36:07] that's all
+[01:36:03 - 01:36:09] next I will add one du and for this du I
+[01:36:07 - 01:36:12] will divide the screen into two section
+[01:36:09 - 01:36:14] okay so let's add the class name and
+[01:36:12 - 01:36:17] inside that I will add the grid okay so
+[01:36:14 - 01:36:20] when the screen size is smaller We'll
+[01:36:17 - 01:36:22] add the grid columns one and when the
+[01:36:20 - 01:36:25] screen size is medium or larger We'll
+[01:36:22 - 01:36:28] add grid side column two okay then
+[01:36:25 - 01:36:31] inside that I will add two de obviously
+[01:36:28 - 01:36:36] one is for the uh car
+[01:36:31 - 01:36:38] info and another de is for a form okay
+[01:36:36 - 01:36:41] and let's save and see how it looks if
+[01:36:38 - 01:36:46] you see C INF and
+[01:36:41 - 01:36:49] form next uh let's add the component
+[01:36:46 - 01:36:51] called car card okay if you remember we
+[01:36:49 - 01:36:53] already have this card card component
+[01:36:51 - 01:36:56] and inside that we are just passing
+[01:36:53 - 01:36:58] props as a car see and it's already
+[01:36:56 - 01:37:01] taking care of the all the all these
+[01:36:58 - 01:37:03] things we already have this cars uh
+[01:37:01 - 01:37:08] object that we we are going to pass so
+[01:37:03 - 01:37:11] we'll pass as a car is equal to car okay
+[01:37:08 - 01:37:14] and save it if I go back see the car is
+[01:37:11 - 01:37:16] showing on the screen so easy right
+[01:37:14 - 01:37:20] because we already have the component
+[01:37:16 - 01:37:23] and this is what uh the usability of
+[01:37:20 - 01:37:25] component uh we just implemented right
+[01:37:23 - 01:37:27] we don't need to write any new code
+[01:37:25 - 01:37:29] existing component we use it here as
+[01:37:27 - 01:37:31] well and just we pass the required
+[01:37:29 - 01:37:34] information and that's all if you want
+[01:37:31 - 01:37:36] to check for for example the BMW X3 see
+[01:37:34 - 01:37:39] the BMW X3 is coming if I have hondai
+[01:37:36 - 01:37:42] Civic the hondai Civic is coming okay
+[01:37:39 - 01:37:44] perfect I hope you understand this one
+[01:37:42 - 01:37:47] okay next we implement the form so
+[01:37:44 - 01:37:51] obviously I I'm using this TN sorry the
+[01:37:47 - 01:37:53] tell CSS D UI form and if you go to this
+[01:37:51 - 01:37:54] data input right we have this text input
+[01:37:53 - 01:37:56] field
+[01:37:54 - 01:37:59] and inside here we have this multiple
+[01:37:56 - 01:38:01] forms right so you can pick it one and
+[01:37:59 - 01:38:03] depends on your requirement you just
+[01:38:01 - 01:38:05] paste it out okay so I I'm already have
+[01:38:03 - 01:38:07] one I will just copy it and paste it
+[01:38:05 - 01:38:09] here if you have any question any doubt
+[01:38:07 - 01:38:10] uh while implementing you can access my
+[01:38:09 - 01:38:13] source code
+[01:38:10 - 01:38:16] anytime now let's create another
+[01:38:13 - 01:38:18] component called form. PSX and inside
+[01:38:16 - 01:38:19] that we'll keep our form so add the
+[01:38:18 - 01:38:23] default
+[01:38:19 - 01:38:25] template and let's make sure to add this
+[01:38:23 - 01:38:29] form inside this booking model inside
+[01:38:25 - 01:38:32] this du okay form like this make sure
+[01:38:29 - 01:38:37] the form is imported okay and save
+[01:38:32 - 01:38:39] it now I will I I already I have the uh
+[01:38:37 - 01:38:44] form ready so I will just copy paste it
+[01:38:39 - 01:38:47] okay and uh let's add that one so remove
+[01:38:44 - 01:38:50] this form I will paste it here like this
+[01:38:47 - 01:38:52] okay it's simple form uh and as I told
+[01:38:50 - 01:38:53] you from the dayi I implemented this and
+[01:38:52 - 01:38:58] save everything and let's see how it
+[01:38:53 - 01:39:00] looks so this is our form let's open in
+[01:38:58 - 01:39:04] model and if you see that we have the
+[01:39:00 - 01:39:06] pickup location we have this uh pick up
+[01:39:04 - 01:39:09] date off dat drop up date you can select
+[01:39:06 - 01:39:12] the time and everything okay now just
+[01:39:09 - 01:39:15] this input right is I just providing the
+[01:39:12 - 01:39:17] type of date and or time depends on
+[01:39:15 - 01:39:19] depending on the what you need it right
+[01:39:17 - 01:39:22] whether you want text or do you want the
+[01:39:19 - 01:39:25] input of type date or time okay and also
+[01:39:22 - 01:39:26] for this location I am providing the
+[01:39:25 - 01:39:29] select
+[01:39:26 - 01:39:31] um um uh input field right so you can
+[01:39:29 - 01:39:34] just dra we have this drop down you can
+[01:39:31 - 01:39:38] just select the location which you want
+[01:39:34 - 01:39:41] okay now the next task is uh to add this
+[01:39:38 - 01:39:43] location into this drop down right so uh
+[01:39:41 - 01:39:46] in the hypergraph right I created this
+[01:39:43 - 01:39:48] uh new content called store location
+[01:39:46 - 01:39:50] okay so let's if you go to the schema
+[01:39:48 - 01:39:52] and in the store location I just added
+[01:39:50 - 01:39:54] this add this things okay and nothing
+[01:39:52 - 01:39:56] else and in the content you can just add
+[01:39:54 - 01:39:59] the store location whatever you want
+[01:39:56 - 01:40:02] okay and that's all nothing uh much in
+[01:39:59 - 01:40:06] this one and uh this particular API we
+[01:40:02 - 01:40:08] going to call so that we can show the uh
+[01:40:06 - 01:40:10] the store address in this particular
+[01:40:08 - 01:40:13] drop down if you have any question any
+[01:40:10 - 01:40:13] doubt let me know in the comment
+[01:40:17 - 01:40:22] section now here if you go to this uh
+[01:40:20 - 01:40:24] API playground right and view on the
+[01:40:22 - 01:40:27] stores location so search for the store
+[01:40:24 - 01:40:30] location uh here and inside store
+[01:40:27 - 01:40:32] location you have need addresses to
+[01:40:30 - 01:40:35] select address okay and just click play
+[01:40:32 - 01:40:37] and if you see okay so this is store
+[01:40:35 - 01:40:40] locations we want store locations okay
+[01:40:37 - 01:40:43] so you don't need to provide we clause
+[01:40:40 - 01:40:45] and like this and if I play now see the
+[01:40:43 - 01:40:47] store location is showing okay with the
+[01:40:45 - 01:40:50] address and everything so this
+[01:40:47 - 01:40:53] particular query we need to pass uh in
+[01:40:50 - 01:40:55] our code so inside the index. TSX under
+[01:40:53 - 01:40:58] the service folder we already have this
+[01:40:55 - 01:41:03] G car list right we will create another
+[01:40:58 - 01:41:06] one export constant gate store locations
+[01:41:03 - 01:41:09] okay use of that we Pro a sync function
+[01:41:06 - 01:41:12] and add a function like this now if you
+[01:41:09 - 01:41:14] see right here we pass the query first
+[01:41:12 - 01:41:18] with the gql and the passing the query
+[01:41:14 - 01:41:21] right same thing we going to do here so
+[01:41:18 - 01:41:25] constant is equal to okay then we have
+[01:41:21 - 01:41:27] to write gql and this particular code
+[01:41:25 - 01:41:30] okay and then the query which we
+[01:41:27 - 01:41:33] generated I will copy it here like this
+[01:41:30 - 01:41:34] and pass it okay make sure it's similar
+[01:41:33 - 01:41:38] to like this
+[01:41:34 - 01:41:41] see okay perfect next we need to call
+[01:41:38 - 01:41:45] the our request so
+[01:41:41 - 01:41:49] constant result is equal
+[01:41:45 - 01:41:51] to request and this particular URL we
+[01:41:49 - 01:41:55] need to pass it okay so what you can do
+[01:41:51 - 01:41:58] you can copy cut this UR L and you can
+[01:41:55 - 01:42:02] write a constant is equal to constant is
+[01:41:58 - 01:42:05] equal to master URL is equal to this
+[01:42:02 - 01:42:07] particular URL and this master URL you
+[01:42:05 - 01:42:10] can replace it so you don't need to
+[01:42:07 - 01:42:13] write every time right Master URL and
+[01:42:10 - 01:42:14] then you have to pass the query query
+[01:42:13 - 01:42:17] like this and then you have to return
+[01:42:14 - 01:42:21] the result that's all okay now let's
+[01:42:17 - 01:42:24] call this particular uh query or this
+[01:42:21 - 01:42:26] API endpoint in our
+[01:42:24 - 01:42:30] uh form okay so inside the form I will
+[01:42:26 - 01:42:34] call it here so that Define function
+[01:42:30 - 01:42:36] called constant gate store
+[01:42:34 - 01:42:39] location is equal
+[01:42:36 - 01:42:43] to function and is of type as
+[01:42:39 - 01:42:47] sync like this okay and constant
+[01:42:43 - 01:42:49] response is equal to a weit and the
+[01:42:47 - 01:42:50] function which we return so this one is
+[01:42:49 - 01:42:53] the G store
+[01:42:50 - 01:42:55] location copy this G store location and
+[01:42:53 - 01:42:59] here like this make sure to import it
+[01:42:55 - 01:43:01] from the service okay that's all now
+[01:42:59 - 01:43:03] let's print out in the console whether
+[01:43:01 - 01:43:06] we are getting the response or not so I
+[01:43:03 - 01:43:08] just print out in the response and we'll
+[01:43:06 - 01:43:11] call this in a use
+[01:43:08 - 01:43:14] effect will add the use effect and I
+[01:43:11 - 01:43:17] want only ex only once once the
+[01:43:14 - 01:43:20] application Ro that's why I providing as
+[01:43:17 - 01:43:23] empty and here call this G location
+[01:43:20 - 01:43:24] method and save everything let's go back
+[01:43:23 - 01:43:27] to our
+[01:43:24 - 01:43:29] application inside the inspect panel
+[01:43:27 - 01:43:31] inside the
+[01:43:29 - 01:43:35] console let's
+[01:43:31 - 01:43:37] see what we are missing so let's refresh
+[01:43:35 - 01:43:37] the
+[01:43:38 - 01:43:46] screen and uh I think we got a lot of
+[01:43:43 - 01:43:46] Errors
+[01:43:48 - 01:43:56] okay so this error is coming because
+[01:43:53 - 01:43:58] okay so let's go here I we added this
+[01:43:56 - 01:44:01] double code right so we don't want to
+[01:43:58 - 01:44:05] add this one remove this single code and
+[01:44:01 - 01:44:07] save it okay and let's clean this and if
+[01:44:05 - 01:44:10] you see the error is gone and if I click
+[01:44:07 - 01:44:11] on this one right uh I uncommented this
+[01:44:10 - 01:44:14] code so I will
+[01:44:11 - 01:44:17] just this save
+[01:44:14 - 01:44:21] it okay and if you see we got the store
+[01:44:17 - 01:44:23] locations okay perfect we have two
+[01:44:21 - 01:44:26] location and that's what we needed now
+[01:44:23 - 01:44:29] this store location we need to save in
+[01:44:26 - 01:44:34] one state so I will Define one state
+[01:44:29 - 01:44:35] constant uh store location comma set
+[01:44:34 - 01:44:40] store
+[01:44:35 - 01:44:43] location is equal to use State okay like
+[01:44:40 - 01:44:44] this passing empty and I will pass as of
+[01:44:43 - 01:44:47] type
+[01:44:44 - 01:44:50] any and this set to location we'll pass
+[01:44:47 - 01:44:51] it here and inside that we have this
+[01:44:50 - 01:44:53] store
+[01:44:51 - 01:44:57] location definition name so I will pass
+[01:44:53 - 01:44:59] it here like this response do store
+[01:44:57 - 01:45:02] locations okay and obviously you can
+[01:44:59 - 01:45:02] pass it off type
+[01:45:03 - 01:45:08] any perfect now we have the store
+[01:45:05 - 01:45:11] locations now what we need to do we need
+[01:45:08 - 01:45:16] to add this option here so I will remove
+[01:45:11 - 01:45:18] this one and I I store locations and and
+[01:45:16 - 01:45:22] means if store location is there then
+[01:45:18 - 01:45:25] only it uh show this particular select
+[01:45:22 - 01:45:30] options okay inside that I will type
+[01:45:25 - 01:45:32] location type any comma index of type
+[01:45:30 - 01:45:35] number and then AR function like this
+[01:45:32 - 01:45:36] okay and inside that we need to provide
+[01:45:35 - 01:45:39] the
+[01:45:36 - 01:45:43] option in this case it's location
+[01:45:39 - 01:45:47] dot address correct so
+[01:45:43 - 01:45:51] address like this okay and that's all I
+[01:45:47 - 01:45:54] I will provide the key of type
+[01:45:51 - 01:45:57] index and let's save everything let's go
+[01:45:54 - 01:45:59] back to application click and if you
+[01:45:57 - 01:46:02] drop down see you got the
+[01:45:59 - 01:46:04] option okay perfect that's what we
+[01:46:02 - 01:46:07] wanted I hope you understand this one
+[01:46:04 - 01:46:10] okay it's very easy you just need to uh
+[01:46:07 - 01:46:12] call this particular query okay which we
+[01:46:10 - 01:46:16] already created and you just pass it to
+[01:46:12 - 01:46:18] this particular drop down okay next we
+[01:46:16 - 01:46:20] will store everything okay before that
+[01:46:18 - 01:46:22] uh we need to add button okay so right
+[01:46:20 - 01:46:26] now only we have closed button so we
+[01:46:22 - 01:46:29] will add save button here so let's go
+[01:46:26 - 01:46:34] down okay inside the booking model we
+[01:46:29 - 01:46:36] have this button right so we can save it
+[01:46:34 - 01:46:36] here
+[01:46:36 - 01:46:42] only or
+[01:46:38 - 01:46:46] save and we can say background of
+[01:46:42 - 01:46:49] blue 500 and text to be white and save
+[01:46:46 - 01:46:51] it and this need to be after this one
+[01:46:49 - 01:46:54] and save it if you see we have now save
+[01:46:51 - 01:46:55] button okay on how I will change this
+[01:46:54 - 01:46:58] effect so what we will do
+[01:46:55 - 01:47:01] on our
+[01:46:58 - 01:47:05] effect background change to little
+[01:47:01 - 01:47:08] darker and if you see see it's
+[01:47:05 - 01:47:08] change okay
+[01:47:12 - 01:47:18] perfect next uh once we open this one
+[01:47:15 - 01:47:20] right and user fill the form uh by
+[01:47:18 - 01:47:22] filling all the details and on the click
+[01:47:20 - 01:47:25] of save we need to make sure that we
+[01:47:22 - 01:47:28] will captur all the data okay and then
+[01:47:25 - 01:47:30] we will send it to our server so first
+[01:47:28 - 01:47:33] of all let's go back to our
+[01:47:30 - 01:47:35] application and inside the form. TSX
+[01:47:33 - 01:47:39] here we have to Define one state so here
+[01:47:35 - 01:47:44] we saying constant and uh we say it has
+[01:47:39 - 01:47:47] a form value comma set form
+[01:47:44 - 01:47:47] value the
+[01:47:48 - 01:47:56] comma is equal to use State okay and
+[01:47:52 - 01:47:58] inside this I will Define some default
+[01:47:56 - 01:48:01] value for example the
+[01:47:58 - 01:48:06] location then the pick
+[01:48:01 - 01:48:08] up date it need to be pick up date okay
+[01:48:06 - 01:48:11] like this so I will just copy paste the
+[01:48:08 - 01:48:14] existing one
+[01:48:11 - 01:48:17] okay and okay so this need to be in the
+[01:48:14 - 01:48:18] bracket because we defin as a use State
+[01:48:17 - 01:48:21] and this are the default value I'm
+[01:48:18 - 01:48:23] providing okay then we have to make sure
+[01:48:21 - 01:48:25] for each of the input we have to provide
+[01:48:23 - 01:48:29] the name okay and which name should be
+[01:48:25 - 01:48:31] similar to this location okay so name or
+[01:48:29 - 01:48:35] uh for each of this one I added this
+[01:48:31 - 01:48:38] name tag okay name field so this is very
+[01:48:35 - 01:48:39] important after that we'll add one
+[01:48:38 - 01:48:41] method
+[01:48:39 - 01:48:43] call
+[01:48:41 - 01:48:46] constant
+[01:48:43 - 01:48:51] handle change okay this method we are
+[01:48:46 - 01:48:53] going to call when uh we are got uh when
+[01:48:51 - 01:48:55] some input is going going to change okay
+[01:48:53 - 01:48:59] this particular method will get called
+[01:48:55 - 01:49:04] so let's add the set form value okay
+[01:48:59 - 01:49:07] inside this uh we will uh uh what will
+[01:49:04 - 01:49:10] say con concate the previous value so I
+[01:49:07 - 01:49:12] will add dot dot dot from value and
+[01:49:10 - 01:49:15] after that I will add the
+[01:49:12 - 01:49:21] event.
+[01:49:15 - 01:49:24] target target. name okay colon event.
+[01:49:21 - 01:49:28] Target do
+[01:49:24 - 01:49:29] value okay like this and that's all so
+[01:49:28 - 01:49:34] what it will do it will store the value
+[01:49:29 - 01:49:36] in this particular form okay and uh
+[01:49:34 - 01:49:39] after that I will also add one another
+[01:49:36 - 01:49:43] method to submit the request okay this
+[01:49:39 - 01:49:47] will call when we save the uh when we
+[01:49:43 - 01:49:50] click the save button and just type
+[01:49:47 - 01:49:53] handle submit
+[01:49:50 - 01:49:54] okay this need to be Arrow function
+[01:49:53 - 01:49:57] like
+[01:49:54 - 01:50:00] this after that in this one right now
+[01:49:57 - 01:50:02] we'll just console do we'll add the
+[01:50:00 - 01:50:06] console.log and then we will print the
+[01:50:02 - 01:50:09] form value okay and save it now on each
+[01:50:06 - 01:50:11] of this on uh input right we have to add
+[01:50:09 - 01:50:13] the on change method and then we have to
+[01:50:11 - 01:50:15] call this handle change okay so this
+[01:50:13 - 01:50:17] will pass the mean this will call the
+[01:50:15 - 01:50:20] handle change and it will also pass this
+[01:50:17 - 01:50:22] event okay and this from the event we
+[01:50:20 - 01:50:25] are getting the name and the value so
+[01:50:22 - 01:50:27] just copy paste for each of them okay so
+[01:50:25 - 01:50:28] each of this input I will paste it here
+[01:50:27 - 01:50:33] like
+[01:50:28 - 01:50:36] this okay perfect and then let's save
+[01:50:33 - 01:50:38] everything and let's go back to our
+[01:50:36 - 01:50:40] application so let me open the inspect
+[01:50:38 - 01:50:43] panel in the
+[01:50:40 - 01:50:46] console C everything refresh the
+[01:50:43 - 01:50:49] screen
+[01:50:46 - 01:50:52] okay and it's loading the data and if
+[01:50:49 - 01:50:55] you see everything is good now let's
+[01:50:52 - 01:50:58] open in any of this particular uh car
+[01:50:55 - 01:51:01] select the location which you want to so
+[01:50:58 - 01:51:04] I select this location the pickup date
+[01:51:01 - 01:51:07] this uh drop up date select the some
+[01:51:04 - 01:51:10] time and some contact information okay
+[01:51:07 - 01:51:13] and then click save right now nothing is
+[01:51:10 - 01:51:15] happening because we did not call the
+[01:51:13 - 01:51:19] handle on submit method right so on
+[01:51:15 - 01:51:24] click of this save we have to
+[01:51:19 - 01:51:26] call andle submit okay and and save it
+[01:51:24 - 01:51:29] so let's fill it everything everything
+[01:51:26 - 01:51:32] is there and click save and see we got
+[01:51:29 - 01:51:35] the all the information which we've just
+[01:51:32 - 01:51:38] filled out okay perfect now another
+[01:51:35 - 01:51:42] thing we want to add in this one is this
+[01:51:38 - 01:51:46] car information right so we can pass the
+[01:51:42 - 01:51:49] car ID as well okay so that we can going
+[01:51:46 - 01:51:51] to add now so that we can attach that
+[01:51:49 - 01:51:54] particular information and save it in
+[01:51:51 - 01:51:56] our database
+[01:51:54 - 01:52:00] so before storing this information on
+[01:51:56 - 01:52:02] the uh H graph right which is our server
+[01:52:00 - 01:52:05] uh we have to make sure that inside this
+[01:52:02 - 01:52:07] uh schema right we will create a new
+[01:52:05 - 01:52:09] schema called booking and you can add
+[01:52:07 - 01:52:12] the required all this field right like
+[01:52:09 - 01:52:15] pick up dat and everything also I added
+[01:52:12 - 01:52:19] this car ID which is you can add it from
+[01:52:15 - 01:52:21] this um reference okay so once you add
+[01:52:19 - 01:52:24] this reference it will connect to this
+[01:52:21 - 01:52:26] cars information which we already have
+[01:52:24 - 01:52:28] in the cars list okay so I added this
+[01:52:26 - 01:52:30] reference and connect this car list it's
+[01:52:28 - 01:52:32] quite easy okay then if you go to the
+[01:52:30 - 01:52:35] API
+[01:52:32 - 01:52:37] playground inside the here in the bottom
+[01:52:35 - 01:52:39] right you can select the mutation and
+[01:52:37 - 01:52:42] click plus so it will add the mutation
+[01:52:39 - 01:52:43] query okay and then you will find a
+[01:52:42 - 01:52:46] different types of query like you can
+[01:52:43 - 01:52:48] create or update or delete everything in
+[01:52:46 - 01:52:50] this case we want to create a booking so
+[01:52:48 - 01:52:52] just click on create booking and select
+[01:52:50 - 01:52:56] the appropriate value and it will look
+[01:52:52 - 01:52:59] like this okay also if you see the query
+[01:52:56 - 01:53:01] is starting from the uh word mutation
+[01:52:59 - 01:53:02] okay regular query is starting from
+[01:53:01 - 01:53:05] query but this is starting from the
+[01:53:02 - 01:53:07] mutation and the name of the mutation
+[01:53:05 - 01:53:10] then we simply have this create booking
+[01:53:07 - 01:53:11] uh method where we passing the data and
+[01:53:10 - 01:53:14] inside the data we are passing all the
+[01:53:11 - 01:53:16] selected Feld which we need to pass it
+[01:53:14 - 01:53:18] from so in this example we have the
+[01:53:16 - 01:53:21] username pick up date drop up date drop
+[01:53:18 - 01:53:24] up time contact number and the car ID so
+[01:53:21 - 01:53:25] if you see right car ID I'm passing and
+[01:53:24 - 01:53:27] obviously we need to connect so we have
+[01:53:25 - 01:53:30] to write we have to select connect and
+[01:53:27 - 01:53:32] inside that we have to pass the ID of
+[01:53:30 - 01:53:34] the list of the particular card right I
+[01:53:32 - 01:53:37] will show you in our application how to
+[01:53:34 - 01:53:40] get that one okay also you have to make
+[01:53:37 - 01:53:44] sure that this the field name will match
+[01:53:40 - 01:53:46] to our existing um the this particular
+[01:53:44 - 01:53:49] field name okay or you can otherwise you
+[01:53:46 - 01:53:51] have to um manipulate it and and you
+[01:53:49 - 01:53:53] have to assign that particular value to
+[01:53:51 - 01:53:57] to this correct uh field name okay this
+[01:53:53 - 01:54:00] is very important so now first of all uh
+[01:53:57 - 01:54:03] we'll make this uh object look like this
+[01:54:00 - 01:54:05] so okay with all the information from
+[01:54:03 - 01:54:10] our application and then we will write
+[01:54:05 - 01:54:12] uh the m point in our index. TSX to
+[01:54:10 - 01:54:17] create a new booking okay
+[01:54:12 - 01:54:20] perfect so now we need to pass this uh
+[01:54:17 - 01:54:22] CS information to this form as well okay
+[01:54:20 - 01:54:23] so inside the booking model we already
+[01:54:22 - 01:54:27] have this cars information so I will
+[01:54:23 - 01:54:29] just pass it here car is equal to car
+[01:54:27 - 01:54:32] and in the form we have to accept it as
+[01:54:29 - 01:54:35] a prop I will D structurize it and pass
+[01:54:32 - 01:54:38] it as a type any and save everything now
+[01:54:35 - 01:54:40] we have the C information and from this
+[01:54:38 - 01:54:43] API pround we have this class ID right I
+[01:54:40 - 01:54:46] will copy this uh fields and everything
+[01:54:43 - 01:54:48] and paste it after this one okay I
+[01:54:46 - 01:54:50] remove this one extra curly Braes and I
+[01:54:48 - 01:54:53] will also remove this one so initially
+[01:54:50 - 01:54:56] it will be empty okay perfect now we
+[01:54:53 - 01:55:00] have the card ID fill as well inside our
+[01:54:56 - 01:55:01] form value okay now I will add one use
+[01:55:00 - 01:55:04] effect
+[01:55:01 - 01:55:07] okay and this use effect will get called
+[01:55:04 - 01:55:10] whenever the car uh information is
+[01:55:07 - 01:55:14] available okay so if car is available
+[01:55:10 - 01:55:18] what I will do I will copy this existing
+[01:55:14 - 01:55:21] code paste it here okay and instead of
+[01:55:18 - 01:55:26] this line of code I will just
+[01:55:21 - 01:55:28] add uh this particular code okay only
+[01:55:26 - 01:55:32] instead of ID I will replace it with the
+[01:55:28 - 01:55:35] car. ID okay and that's all we are done
+[01:55:32 - 01:55:38] everything will be remains as it is okay
+[01:55:35 - 01:55:42] to store this information now save
+[01:55:38 - 01:55:45] everything and then let's go back to our
+[01:55:42 - 01:55:45] application I refresh the
+[01:55:45 - 01:55:52] screen and uh we'll wait for a few
+[01:55:49 - 01:55:56] seconds and uh let's open this Honda
+[01:55:52 - 01:55:58] Civic Right add this
+[01:55:56 - 01:56:00] information we'll check everything
+[01:55:58 - 01:56:02] working as expected right now we also
+[01:56:00 - 01:56:05] expecting this car's ID will be added
+[01:56:02 - 01:56:07] okay and if I click save let's see this
+[01:56:05 - 01:56:09] console right if you see all the
+[01:56:07 - 01:56:12] information is there except this pickup
+[01:56:09 - 01:56:14] date and pickup time and the cars ID
+[01:56:12 - 01:56:18] also there in Connect we have the car ID
+[01:56:14 - 01:56:21] the pickup date and time is not working
+[01:56:18 - 01:56:26] because if you scroll down see this need
+[01:56:21 - 01:56:29] to be capital u and inside pick up time
+[01:56:26 - 01:56:32] as well this need to be U okay perfect
+[01:56:29 - 01:56:34] now it will work next we'll store this
+[01:56:32 - 01:56:38] information inside this hypog
+[01:56:34 - 01:56:41] graph now let's store this information
+[01:56:38 - 01:56:43] on the H graph okay so for that one if
+[01:56:41 - 01:56:45] you go to the API playground right and
+[01:56:43 - 01:56:49] this is the mutation query that we need
+[01:56:45 - 01:56:52] to use it okay so first of all uh I made
+[01:56:49 - 01:56:53] a quick uh change here so car ID before
+[01:56:52 - 01:56:55] it was different now I just providing
+[01:56:53 - 01:56:58] car ID instead of nesting connection and
+[01:56:55 - 01:57:01] everything okay because we are going to
+[01:56:58 - 01:57:04] provide this particular field one by one
+[01:57:01 - 01:57:06] so first thing we have to do we have to
+[01:57:04 - 01:57:08] write uh
+[01:57:06 - 01:57:10] the
+[01:57:08 - 01:57:12] new request here okay so here I will
+[01:57:10 - 01:57:17] write
+[01:57:12 - 01:57:22] constant then we can say it uh create
+[01:57:17 - 01:57:24] booking okay is of type uh we need
+[01:57:22 - 01:57:26] provide a sync and then it's Arrow
+[01:57:24 - 01:57:30] function inside that we have to provide
+[01:57:26 - 01:57:30] the mutation query so I will write
+[01:57:31 - 01:57:40] mutation like this is equal to
+[01:57:35 - 01:57:43] gql and this uh code okay inside that we
+[01:57:40 - 01:57:45] need to copy this particular query and
+[01:57:43 - 01:57:48] paste it out here okay so what it will
+[01:57:45 - 01:57:51] do it will whatever be provide inside
+[01:57:48 - 01:57:53] data it will store in the database okay
+[01:57:51 - 01:57:55] also it will return the value so if you
+[01:57:53 - 01:57:57] want to return value as a username you
+[01:57:55 - 01:58:00] can provide here right now I'm just
+[01:57:57 - 01:58:02] returning the ID which is created with
+[01:58:00 - 01:58:05] that particular record okay so it will
+[01:58:02 - 01:58:09] return return this created ID perfect
+[01:58:05 - 01:58:13] now next thing we have to do here
+[01:58:09 - 01:58:15] uh inside the handle submit right you
+[01:58:13 - 01:58:18] have to call this create booking API
+[01:58:15 - 01:58:22] okay so I don't know what's the error we
+[01:58:18 - 01:58:25] got let me remove this one and also make
+[01:58:22 - 01:58:28] sure it we export it so export constant
+[01:58:25 - 01:58:30] okay and then make sure to call this
+[01:58:28 - 01:58:33] create booking here like this okay so
+[01:58:30 - 01:58:35] inside it I call the create booking and
+[01:58:33 - 01:58:38] I pass the form value so make sure in
+[01:58:35 - 01:58:40] the for uh here as well you have to
+[01:58:38 - 01:58:42] accit it as a form value okay so we are
+[01:58:40 - 01:58:46] it's just a function called so it's just
+[01:58:42 - 01:58:49] simple value it's not a prop okay and
+[01:58:46 - 01:58:51] from this uh create booking I pass this
+[01:58:49 - 01:58:52] form value and this function I call in
+[01:58:51 - 01:58:55] the Handle Sub
+[01:58:52 - 01:58:58] okay and then inside this uh particular
+[01:58:55 - 01:59:00] credit booking method here we have to
+[01:58:58 - 01:59:03] call this request okay so I will just
+[01:59:00 - 01:59:05] copy the similar request and paste it
+[01:59:03 - 01:59:08] here and obviously query will be a
+[01:59:05 - 01:59:10] mutation query okay and the result so it
+[01:59:08 - 01:59:13] will return the result and save
+[01:59:10 - 01:59:16] everything okay so let's try with this
+[01:59:13 - 01:59:19] default uh and hardcoded value whether
+[01:59:16 - 01:59:22] is we are able to save it or not okay so
+[01:59:19 - 01:59:24] let's open any uh record
+[01:59:22 - 01:59:27] select something okay and just click
+[01:59:24 - 01:59:28] save and right now we are not showing
+[01:59:27 - 01:59:31] anything right whether it's successfully
+[01:59:28 - 01:59:35] saved or anything right and go back to
+[01:59:31 - 01:59:36] here insert a Content see the new query
+[01:59:35 - 01:59:40] uh new content is created with the name
+[01:59:36 - 01:59:43] Rahul and also the ID is attached to
+[01:59:40 - 01:59:45] this car ID okay so this content is
+[01:59:43 - 01:59:48] created if you see this time is just
+[01:59:45 - 01:59:52] created now okay I don't okay 30 or3
+[01:59:48 - 01:59:55] okay same time so perfect now it means
+[01:59:52 - 01:59:59] we are able to uh add this particular
+[01:59:55 - 02:00:02] value now what you need to do you need
+[01:59:59 - 02:00:05] to replace this Rahul okay with this
+[02:00:02 - 02:00:06] form value username so here here is
+[02:00:05 - 02:00:08] thing right it is very important you
+[02:00:06 - 02:00:10] will not find this tutorial anywhere
+[02:00:08 - 02:00:13] okay very very important so here first
+[02:00:10 - 02:00:16] of all add the double code then you have
+[02:00:13 - 02:00:20] to add this code Plus+ and then you have
+[02:00:16 - 02:00:23] to add the form value dot
+[02:00:20 - 02:00:26] username okay and this you have to do
+[02:00:23 - 02:00:29] for all of them so I already have so I
+[02:00:26 - 02:00:33] will just copy paste it okay
+[02:00:29 - 02:00:35] so just I will paste it here like
+[02:00:33 - 02:00:38] this okay perfect so in the have
+[02:00:35 - 02:00:41] username pickup dat and everything which
+[02:00:38 - 02:00:43] is getting from the form value and all
+[02:00:41 - 02:00:46] other things are as it is so save
+[02:00:43 - 02:00:49] everything and let's test out this uh
+[02:00:46 - 02:00:55] change okay so I went back here let's
+[02:00:49 - 02:00:58] try BMW so I something 26 I will add
+[02:00:55 - 02:00:58] pick up
+[02:00:58 - 02:01:05] time and drop up time and some contact
+[02:01:02 - 02:01:08] number and save it okay let's go back to
+[02:01:05 - 02:01:10] our H graph and go to the content and if
+[02:01:08 - 02:01:14] you see the new content is created and
+[02:01:10 - 02:01:17] this one we just created see everything
+[02:01:14 - 02:01:20] is there along with the time the car
+[02:01:17 - 02:01:22] which we connected and everything okay I
+[02:01:20 - 02:01:25] hope you understand this one now next
+[02:01:22 - 02:01:26] task you can do okay uh once we click
+[02:01:25 - 02:01:29] save right we need to send a
+[02:01:26 - 02:01:30] confirmation okay and if you go to the
+[02:01:29 - 02:01:33] daisy
+[02:01:30 - 02:01:34] UI in the component right here you will
+[02:01:33 - 02:01:37] find the
+[02:01:34 - 02:01:40] toast okay so implement this toast on
+[02:01:37 - 02:01:42] your own and let me know whether you
+[02:01:40 - 02:01:44] have faced any issue in this one or not
+[02:01:42 - 02:01:46] okay very easy you just need to call
+[02:01:44 - 02:01:49] this particular toast whenever you want
+[02:01:46 - 02:01:52] on your message whenever you uh created
+[02:01:49 - 02:01:54] the booking okay let's try this one I
+[02:01:52 - 02:01:56] will implement this one okay and
+[02:01:54 - 02:01:58] obviously if you face any issue the
+[02:01:56 - 02:02:01] source code is available for free and
+[02:01:58 - 02:02:02] the link is in the description and guys
+[02:02:01 - 02:02:05] if you still did not subscribe to my
+[02:02:02 - 02:02:05] Channel please do
+[02:02:09 - 02:02:14] subscribe now let's add the successful
+[02:02:11 - 02:02:17] message when the booking is created I
+[02:02:14 - 02:02:19] know uh I told you to do it but uh let
+[02:02:17 - 02:02:21] me show you how I I'm doing it okay
+[02:02:19 - 02:02:25] right now we want to show the toast MCH
+[02:02:21 - 02:02:27] message okay on this home screen correct
+[02:02:25 - 02:02:29] obviously we need to add this toast on
+[02:02:27 - 02:02:32] the home screen so what I will do I will
+[02:02:29 - 02:02:33] copy this one okay so jsx and this
+[02:02:32 - 02:02:37] particular
+[02:02:33 - 02:02:40] toast and uh I will create a new file
+[02:02:37 - 02:02:43] inside the component folder called toast
+[02:02:40 - 02:02:46] message. PSX okay and add the default
+[02:02:43 - 02:02:49] template like this obviously I will get
+[02:02:46 - 02:02:52] the message so this will the message
+[02:02:49 - 02:02:55] okay and is of type any and
+[02:02:52 - 02:02:57] try to send um you can pass the some
+[02:02:55 - 02:03:01] value as well if it's empty but I will
+[02:02:57 - 02:03:04] keep as it is now and here add
+[02:03:01 - 02:03:06] the message okay so you want the success
+[02:03:04 - 02:03:09] message you can s the success message as
+[02:03:06 - 02:03:12] well or if you want you face any error
+[02:03:09 - 02:03:13] you can add the error message okay like
+[02:03:12 - 02:03:16] this perfect and the message send
+[02:03:13 - 02:03:18] successfully it's showing and save
+[02:03:16 - 02:03:21] everything okay now obviously this to
+[02:03:18 - 02:03:23] message you have to add in the page. TSX
+[02:03:21 - 02:03:25] so
+[02:03:23 - 02:03:28] after this car list I will add it here
+[02:03:25 - 02:03:31] like this and save make sure to import
+[02:03:28 - 02:03:33] this toast message and save it now let's
+[02:03:31 - 02:03:35] go back to our application and let's
+[02:03:33 - 02:03:38] check the top matching is showing on the
+[02:03:35 - 02:03:42] screen see okay now this to message you
+[02:03:38 - 02:03:44] have to show only when uh this booking
+[02:03:42 - 02:03:47] is saved right so we have to add the
+[02:03:44 - 02:03:50] condition obviously but before that we
+[02:03:47 - 02:03:53] have to create a context because uh our
+[02:03:50 - 02:03:56] change our submit is in the form. TSX
+[02:03:53 - 02:03:58] and from there you have to send the
+[02:03:56 - 02:04:00] value to the page. TSX okay and which is
+[02:03:58 - 02:04:03] quite complicated if you send from the
+[02:04:00 - 02:04:05] Char to parent and again from that
+[02:04:03 - 02:04:07] parent to again their parents kind of
+[02:04:05 - 02:04:10] thing right so better create a context
+[02:04:07 - 02:04:12] so in the root directory I will create a
+[02:04:10 - 02:04:15] new folder called
+[02:04:12 - 02:04:18] context and inside that I create a new
+[02:04:15 - 02:04:23] context called um
+[02:04:18 - 02:04:27] booking created flag
+[02:04:23 - 02:04:30] context. TSX okay so let me explain what
+[02:04:27 - 02:04:32] is context so context what it will do
+[02:04:30 - 02:04:34] whenever you define the contact and
+[02:04:32 - 02:04:36] provide some value and in that
+[02:04:34 - 02:04:38] particular contact provider you put the
+[02:04:36 - 02:04:41] whatever the component you want okay and
+[02:04:38 - 02:04:43] for all the parent or child component
+[02:04:41 - 02:04:45] you which you provide in uh which you
+[02:04:43 - 02:04:47] added in the particular provider that
+[02:04:45 - 02:04:50] particular value which you send it to
+[02:04:47 - 02:04:53] the context it available to the all the
+[02:04:50 - 02:04:55] components with is a child of any others
+[02:04:53 - 02:04:58] or not doesn't matter okay that's what
+[02:04:55 - 02:05:01] I'm going to explain now so obviously I
+[02:04:58 - 02:05:03] I need this name so what I will do
+[02:05:01 - 02:05:08] constant obviously you have to make
+[02:05:03 - 02:05:10] export first constant book uh book
+[02:05:08 - 02:05:14] created flag
+[02:05:10 - 02:05:17] context is equal to create context and
+[02:05:14 - 02:05:20] this create context is from react okay
+[02:05:17 - 02:05:22] obviously it's of type any and here I'll
+[02:05:20 - 02:05:26] pass null for
+[02:05:22 - 02:05:29] now and save it then this book created
+[02:05:26 - 02:05:32] flag you have to add it in the layout so
+[02:05:29 - 02:05:36] you can add in in page. TSX as well so
+[02:05:32 - 02:05:40] go to the go to this to message okay oh
+[02:05:36 - 02:05:41] sorry uh go to the page. TSX actually so
+[02:05:40 - 02:05:45] where
+[02:05:41 - 02:05:48] is I for in app we have the page. TSX
+[02:05:45 - 02:05:50] here you can WP everything in that
+[02:05:48 - 02:05:53] particular provider so what I will do I
+[02:05:50 - 02:05:56] will add this book created context and
+[02:05:53 - 02:05:58] add in from the book created flag then
+[02:05:56 - 02:06:01] you have to sorry then you have to add
+[02:05:58 - 02:06:04] the provider okay and pass the value so
+[02:06:01 - 02:06:07] we'll add the value later
+[02:06:04 - 02:06:11] but and this we need to wrap it like
+[02:06:07 - 02:06:14] this see okay so inside this one you
+[02:06:11 - 02:06:16] added this all the components in between
+[02:06:14 - 02:06:17] this provider okay here you have to pass
+[02:06:16 - 02:06:19] the value so what I will do I will
+[02:06:17 - 02:06:23] Define one state
+[02:06:19 - 02:06:23] constant short to
+[02:06:23 - 02:06:33] message comma set show toast message is
+[02:06:28 - 02:06:35] equal to use state of type any and
+[02:06:33 - 02:06:37] initially I will pass it as a false you
+[02:06:35 - 02:06:40] can obviously provide the Boolean value
+[02:06:37 - 02:06:42] so you can set Boolean okay like this
+[02:06:40 - 02:06:45] now this set to message and this both
+[02:06:42 - 02:06:48] the message you have to pass to this
+[02:06:45 - 02:06:52] provider okay so this is accessible to
+[02:06:48 - 02:06:55] any uh provider uh sorry any comp in any
+[02:06:52 - 02:06:59] component okay so obviously if show
+[02:06:55 - 02:07:01] toast provider show toast message is uh
+[02:06:59 - 02:07:04] true then show the to message as well
+[02:07:01 - 02:07:06] show nothing okay and save everything
+[02:07:04 - 02:07:09] let's go back to our application if you
+[02:07:06 - 02:07:12] see the to Mage is gone okay so it's not
+[02:07:09 - 02:07:15] longer anyone any anymore because we
+[02:07:12 - 02:07:17] obviously said the value to false now in
+[02:07:15 - 02:07:20] the form let's go to the
+[02:07:17 - 02:07:23] form and let me copy this toast uh this
+[02:07:20 - 02:07:27] particular name names okay and in the
+[02:07:23 - 02:07:30] form so inside the car booking and form.
+[02:07:27 - 02:07:33] TSX here we will get the reference of
+[02:07:30 - 02:07:35] the context so constant when you are
+[02:07:33 - 02:07:37] defining the context you have to Define
+[02:07:35 - 02:07:40] in curly bases and add the name which
+[02:07:37 - 02:07:41] same name which you added for this uh
+[02:07:40 - 02:07:44] which you provide the value right is
+[02:07:41 - 02:07:46] equal to use context and here you have
+[02:07:44 - 02:07:51] to provide the context name so in this
+[02:07:46 - 02:07:53] case is uh book created flag context
+[02:07:51 - 02:07:55] okay so it's need to be booking the
+[02:07:53 - 02:07:58] spelling mistake but you can change
+[02:07:55 - 02:08:01] it now you just need to set the to
+[02:07:58 - 02:08:03] message to true to false here okay so
+[02:08:01 - 02:08:07] what I will do in handle
+[02:08:03 - 02:08:12] submit if response is there then I will
+[02:08:07 - 02:08:13] set this message to true and that's all
+[02:08:12 - 02:08:16] let's try it
+[02:08:13 - 02:08:20] now okay so right now nothing get
+[02:08:16 - 02:08:22] changed let me open anything pick up
+[02:08:20 - 02:08:26] location some
+[02:08:22 - 02:08:30] date some
+[02:08:26 - 02:08:32] value some number and save it and if you
+[02:08:30 - 02:08:35] see the message send successfully is
+[02:08:32 - 02:08:37] coming okay perfect now the thing is you
+[02:08:35 - 02:08:40] can send your own message right you can
+[02:08:37 - 02:08:42] set your own message so obviously I
+[02:08:40 - 02:08:44] added this message props here that
+[02:08:42 - 02:08:47] message prop you can you can add the
+[02:08:44 - 02:08:50] message here so you can set message is
+[02:08:47 - 02:08:52] equal to you can add here message custom
+[02:08:50 - 02:08:54] like um
+[02:08:52 - 02:08:56] looking
+[02:08:54 - 02:08:57] created
+[02:08:56 - 02:08:59] successfully now obviously I'm
+[02:08:57 - 02:09:01] hardcoding this but you can use
+[02:08:59 - 02:09:04] dynamically okay because right now this
+[02:09:01 - 02:09:09] clst message only for to uh to show the
+[02:09:04 - 02:09:12] successful message okay I read this one
+[02:09:09 - 02:09:12] and Let me refresh the
+[02:09:13 - 02:09:20] screen and then let's test it out so I
+[02:09:17 - 02:09:24] open this any uh open any record and
+[02:09:20 - 02:09:24] just try to fill this
+[02:09:25 - 02:09:29] form now here is thing right uh you can
+[02:09:27 - 02:09:32] add the validation and everything is
+[02:09:29 - 02:09:35] quite easy right now we did not add it
+[02:09:32 - 02:09:37] but you can do that now if I click save
+[02:09:35 - 02:09:40] and if you see the message sent
+[02:09:37 - 02:09:43] successfully showing right because we
+[02:09:40 - 02:09:48] still we added this message but we need
+[02:09:43 - 02:09:49] to sorry we need to add it in the this
+[02:09:48 - 02:09:51] message tag right right now it's showing
+[02:09:49 - 02:09:53] this message so here if you have you
+[02:09:51 - 02:09:55] have to replace this with the message
+[02:09:53 - 02:09:58] okay very important this one and now
+[02:09:55 - 02:10:01] save it and now let's test it out so
+[02:09:58 - 02:10:05] let's open this Honda jads all the
+[02:10:01 - 02:10:07] information are there and save it and uh
+[02:10:05 - 02:10:11] oops I need to refresh I did not refresh
+[02:10:07 - 02:10:14] it I think just refresh
+[02:10:11 - 02:10:16] it and uh we'll wait for a few seconds
+[02:10:14 - 02:10:20] okay so now I open this
+[02:10:16 - 02:10:20] dads fill this
+[02:10:20 - 02:10:26] information the pick up date pick up
+[02:10:23 - 02:10:29] time the number and then save it and if
+[02:10:26 - 02:10:31] you see the booking created successfully
+[02:10:29 - 02:10:34] perfect okay I hope you understand this
+[02:10:31 - 02:10:36] one so until now if you have any
+[02:10:34 - 02:10:39] question any doubt let me know in the
+[02:10:36 - 02:10:41] comment section and we successfully able
+[02:10:39 - 02:10:44] to search this particular C we can
+[02:10:41 - 02:10:46] filter it out even though not only this
+[02:10:44 - 02:10:48] but we on the click of that one we are
+[02:10:46 - 02:10:50] providing the form to fill all this
+[02:10:48 - 02:10:54] information and on the same we are
+[02:10:50 - 02:10:57] creating the booking okay so if you see
+[02:10:54 - 02:10:59] here right this to message is not uh
+[02:10:57 - 02:11:02] going off right and still on the screen
+[02:10:59 - 02:11:05] and we want to going went off or we
+[02:11:02 - 02:11:07] don't want to show after some time right
+[02:11:05 - 02:11:09] but still it's showing correct so to fix
+[02:11:07 - 02:11:12] this right here I will add the use
+[02:11:09 - 02:11:16] effect new use effect and this use
+[02:11:12 - 02:11:18] effect will execute whenever the to show
+[02:11:16 - 02:11:21] to to message got changed okay so
+[02:11:18 - 02:11:24] whenever this uh show to message changed
+[02:11:21 - 02:11:26] to false to true this user get called
+[02:11:24 - 02:11:29] and obviously when the short toast
+[02:11:26 - 02:11:32] message is true right then only I will
+[02:11:29 - 02:11:35] call the one uh function okay so here
+[02:11:32 - 02:11:38] what I will do I will write the timeout
+[02:11:35 - 02:11:41] function so here I will say set timeout
+[02:11:38 - 02:11:46] okay inside that I will write
+[02:11:41 - 02:11:47] function and here inside this we can set
+[02:11:46 - 02:11:49] the toast
+[02:11:47 - 02:11:53] message
+[02:11:49 - 02:11:55] set toast message message to false okay
+[02:11:53 - 02:11:59] and I will give here some second for
+[02:11:55 - 02:12:02] example 4 4,000 millisecond it means 4
+[02:11:59 - 02:12:03] seconds so after 4 second obviously we
+[02:12:02 - 02:12:05] will setting the message false and it
+[02:12:03 - 02:12:09] will not show anymore okay let's try
+[02:12:05 - 02:12:12] this out now so uh I click on this one
+[02:12:09 - 02:12:14] select this all this
+[02:12:12 - 02:12:17] information okay now you can make it the
+[02:12:14 - 02:12:19] field are required obviously okay and
+[02:12:17 - 02:12:20] this one and save it and if you see the
+[02:12:19 - 02:12:24] booking creat is successfully showing
+[02:12:20 - 02:12:26] and after 4 second it will go off see
+[02:12:24 - 02:12:28] okay perfect I hope you understand this
+[02:12:26 - 02:12:31] one quite easy just you need to set the
+[02:12:28 - 02:12:33] timeout function uh once it show and
+[02:12:31 - 02:12:36] then you have to make it
+[02:12:33 - 02:12:38] false so guys uh we pretty much
+[02:12:36 - 02:12:40] completed this application I also
+[02:12:38 - 02:12:43] deployed this application on this
+[02:12:40 - 02:12:46] particular domain uh on woral so it's
+[02:12:43 - 02:12:49] completely free also we learn a lot of
+[02:12:46 - 02:12:51] different things and many users have
+[02:12:49 - 02:12:53] issue for the database they have to
+[02:12:51 - 02:12:55] purchase it and everything right in this
+[02:12:53 - 02:12:57] case you don't need to do anything
+[02:12:55 - 02:12:58] because High graph is completely free
+[02:12:57 - 02:13:01] and then you can use it okay and you
+[02:12:58 - 02:13:03] also learn graphql how to use graphql
+[02:13:01 - 02:13:06] Query in our application and everything
+[02:13:03 - 02:13:10] okay as I say this is completely
+[02:13:06 - 02:13:12] responsive uh uh application and if you
+[02:13:10 - 02:13:16] see the response so we added and
+[02:13:12 - 02:13:18] everything is working perfectly fine so
+[02:13:16 - 02:13:20] now you can extend this application
+[02:13:18 - 02:13:22] further more okay you can add different
+[02:13:20 - 02:13:24] different feature depends on your
+[02:13:22 - 02:13:27] requirements and many more thing you can
+[02:13:24 - 02:13:29] Implement in this application so guys
+[02:13:27 - 02:13:31] that's all for this particular course
+[02:13:29 - 02:13:34] and I hope you enjoy this video If you
+[02:13:31 - 02:13:36] really like this video please press like
+[02:13:34 - 02:13:39] button if you did not subscribe to my
+[02:13:36 - 02:13:41] Channel please do subscribe and if you
+[02:13:39 - 02:13:44] give me the 500 likes to this particular
+[02:13:41 - 02:13:47] video I will develop a mobile
+[02:13:44 - 02:13:49] application for the car rental yes
+[02:13:47 - 02:13:52] that's right we will come come up with
+[02:13:49 - 02:13:55] the mobile application for car renting
+[02:13:52 - 02:13:57] but I need a 500 like and share this
+[02:13:55 - 02:13:59] video with your friends and family you
+[02:13:57 - 02:14:02] they can also help uh they can also
+[02:13:59 - 02:14:06] learn new technologies uh from this
+[02:14:02 - 02:14:08] particular video and guys uh we'll see
+[02:14:06 - 02:14:10] you in the next video Until then keep
+[02:14:08 - 02:14:10] smiling

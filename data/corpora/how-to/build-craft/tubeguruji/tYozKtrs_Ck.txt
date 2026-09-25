@@ -1,0 +1,2697 @@
+[00:00 - 00:05] hey there and welcome back to Du guruji
+[00:02 - 00:08] Channel today we are going to build this
+[00:05 - 00:12] beautiful taxi booking application with
+[00:08 - 00:17] the help of react nextjs 13 typescript
+[00:12 - 00:19] telin CSS mapbox API and the clerk so
+[00:17 - 00:21] let's walk through the application first
+[00:19 - 00:23] and then we will talk about the
+[00:21 - 00:26] technology and what we are going to
+[00:23 - 00:28] build today so if you see uh once you
+[00:26 - 00:30] launch on this particular uh URL you
+[00:28 - 00:33] need to sign in with the help of CL I'm
+[00:30 - 00:35] going to teach you how to use clerk
+[00:33 - 00:38] efficiently and to integrate in our
+[00:35 - 00:40] application so for example uh I'm going
+[00:38 - 00:43] to log with the Google so just click on
+[00:40 - 00:45] Google and here you will get the option
+[00:43 - 00:47] to sign in so select the account once
+[00:45 - 00:51] you select the account then you will
+[00:47 - 00:54] redirect to the homepage and boom here
+[00:51 - 00:57] is the homepage for the booking of your
+[00:54 - 01:00] taxi okay so on the top you will see
+[00:57 - 01:02] this beautiful uh navigation bar okay so
+[01:00 - 01:05] we have few option also on the right
+[01:02 - 01:07] hand side you have you can control on
+[01:05 - 01:09] your own account if I click on manage
+[01:07 - 01:11] account you will see all of these your
+[01:09 - 01:14] details and this we are going to
+[01:11 - 01:16] implement with the help of clerk okay
+[01:14 - 01:18] then on the left hand side you will see
+[01:16 - 01:20] the booking area where you can select
+[01:18 - 01:23] the source address the destination
+[01:20 - 01:25] address you can even select the cars
+[01:23 - 01:27] which you want okay the payment method
+[01:25 - 01:30] and on the right hand side you will see
+[01:27 - 01:31] the mapbox map okay and if you you see
+[01:30 - 01:34] right now it's showing one marker which
+[01:31 - 01:37] is my current location it means it will
+[01:34 - 01:40] show you the your current location on
+[01:37 - 01:44] the map now let's search and book the
+[01:40 - 01:47] particular um taxi okay so let's search
+[01:44 - 01:49] uh some address so I will select where I
+[01:47 - 01:51] want it from okay so I will select it
+[01:49 - 01:53] and if you see as as soon as type it
+[01:51 - 01:55] will give me the suggestion okay the
+[01:53 - 01:57] address suggestion that also we will
+[01:55 - 02:00] learn how to get the address suggestion
+[01:57 - 02:02] okay so if I select this one five Loop
+[02:00 - 02:05] okay then where I want to go so you can
+[02:02 - 02:07] add the destination address like this
+[02:05 - 02:09] okay again it will give me the B A lot
+[02:07 - 02:12] of suggestions you can select which you
+[02:09 - 02:16] want if I select it immediately you will
+[02:12 - 02:19] see the map is moved from source to
+[02:16 - 02:23] destination and it also showing the root
+[02:19 - 02:24] for us okay so beautifully see okay so
+[02:23 - 02:28] this is the root for our source to
+[02:24 - 02:31] destination also if you see the for each
+[02:28 - 02:34] of this car it giving us a price okay so
+[02:31 - 02:37] for this economies we are giving $26 for
+[02:34 - 02:40] Comfort it's giving $39 and so on not
+[02:37 - 02:42] only this but on the map if on the right
+[02:40 - 02:45] hand side you will see the distance how
+[02:42 - 02:47] much distance it is and what time you
+[02:45 - 02:48] will it will take to reach from your
+[02:47 - 02:51] Source
+[02:48 - 02:53] destination uh to the destination okay
+[02:51 - 02:56] so this is beautifully implemented with
+[02:53 - 02:59] the help of mabox now you can even
+[02:56 - 03:01] select the payment method select the car
+[02:59 - 03:02] which you want to to okay and if I if
+[03:01 - 03:05] you see right on how you will get
+[03:02 - 03:09] beautiful effect and that we'll learn
+[03:05 - 03:12] with the help of TN CSS all these cars
+[03:09 - 03:15] icons these effects you will learn in
+[03:12 - 03:17] this particular course okay and once you
+[03:15 - 03:21] click on book we going to store all our
+[03:17 - 03:24] data in our database okay also if you
+[03:21 - 03:26] see you can even move this particular
+[03:24 - 03:28] map it's beautifully integrated you can
+[03:26 - 03:30] add the route we beautifully added the
+[03:28 - 03:32] route and don't worry I'm I'm going to
+[03:30 - 03:35] teach you everything from the basic okay
+[03:32 - 03:38] if you don't know anything don't worry
+[03:35 - 03:40] because we going to learn nextjs 13 and
+[03:38 - 03:44] this complete course is for beginners
+[03:40 - 03:47] okay also we are going to build apis we
+[03:44 - 03:49] are going to integrate mapbx and we will
+[03:47 - 03:52] call the mapbox different typ types of
+[03:49 - 03:55] apis and to implement this beautiful
+[03:52 - 03:57] application so guys uh if you did not
+[03:55 - 04:00] subscribe to my Channel please do
+[03:57 - 04:03] subscribe and if I get the 500 likes to
+[04:00 - 04:06] this video I'm going to post the next
+[04:03 - 04:09] part of this particular video okay so
+[04:06 - 04:11] please do subscribe press like button
+[04:09 - 04:14] and if you really want to join my video
+[04:11 - 04:16] please join then you will get early
+[04:14 - 04:20] access to this videos okay so guys
+[04:16 - 04:20] before doing any further delay let's
+[04:24 - 04:31] begin so in this course we are going to
+[04:27 - 04:33] use next J to build our application okay
+[04:31 - 04:35] and if you go to this nj.org here you
+[04:33 - 04:37] will find the documentation and all the
+[04:35 - 04:41] details okay and we are going to use app
+[04:37 - 04:43] router in the nijs 13 so let's get
+[04:41 - 04:45] started okay and you if you want to
+[04:43 - 04:48] create a project with the nijs here is
+[04:45 - 04:51] the command to run the um to create the
+[04:48 - 04:54] project okay so go to desired folder
+[04:51 - 04:56] okay and open the command
+[04:54 - 05:02] prom and
+[04:56 - 05:07] then you can just type NP X create next
+[05:02 - 05:09] app at latest okay and if you see this
+[05:07 - 05:12] is the similar command I am using okay
+[05:09 - 05:14] so if you put the at latest it will uh
+[05:12 - 05:16] generate the next JS 13 project and if
+[05:14 - 05:20] you did not put at latest it will uh
+[05:16 - 05:23] generate a normal njs project okay so
+[05:20 - 05:26] just uh hit enter and then it will ask
+[05:23 - 05:30] you the project name so you can give
+[05:26 - 05:32] taxi Go YouTube okay
+[05:30 - 05:34] then it will ask do you like to use
+[05:32 - 05:37] typescript so yes because in this case
+[05:34 - 05:40] you are going to use typescript then you
+[05:37 - 05:42] want to use es L say no the telin CSS
+[05:40 - 05:45] say yes so you don't need to uh
+[05:42 - 05:48] externally add the telin CSS it
+[05:45 - 05:51] automatically um create or add or
+[05:48 - 05:53] integrate the T CSS for you say yes then
+[05:51 - 05:56] do you like to use Source directory say
+[05:53 - 05:58] no and the app router say yes and the
+[05:56 - 06:00] customiz default import allies say no
+[05:58 - 06:02] okay and if if you see now it's
+[06:00 - 06:06] installing all the required dependency
+[06:02 - 06:10] for application including react next
+[06:06 - 06:14] typescript T CSS and react Dom as well
+[06:10 - 06:16] okay also as I told you we are using the
+[06:14 - 06:18] app router for this nextjs 13
+[06:16 - 06:20] application okay if you see our
+[06:18 - 06:23] application get created now let's go to
+[06:20 - 06:25] our application okay just type CD or you
+[06:23 - 06:28] can directly open your application as
+[06:25 - 06:30] well just type in code okay space and
+[06:28 - 06:33] the name of your application so in this
+[06:30 - 06:36] case is text. go is supposed to be
+[06:33 - 06:38] actually taxi but we'll change the name
+[06:36 - 06:42] and uh once you type code it will open
+[06:38 - 06:42] your project in vs code directly
+[06:45 - 06:51] okay so if you see our project is open
+[06:48 - 06:53] in vs code so our project is get created
+[06:51 - 06:53] Su
+[06:56 - 07:02] successfully now let's talk about the
+[06:59 - 07:04] file and folder structure in nextjs 13
+[07:02 - 07:07] application so on the left hand side you
+[07:04 - 07:10] will see all our files right and if you
+[07:07 - 07:12] see the first folder is app folder okay
+[07:10 - 07:15] where we are going to write our all the
+[07:12 - 07:17] application all the routing uh of the
+[07:15 - 07:20] pages everything will come in this app
+[07:17 - 07:22] folder okay and the default if you see
+[07:20 - 07:25] we have the page. TSX right in the
+[07:22 - 07:28] previous next we have the uh
+[07:25 - 07:30] index.ts but in this case we have page.
+[07:28 - 07:32] TSX which is our default page and this
+[07:30 - 07:36] is layout. TSX where it Define the
+[07:32 - 07:38] layout including the metadata okay and
+[07:36 - 07:40] if you see we have this children here so
+[07:38 - 07:42] whatever the pages component getting
+[07:40 - 07:44] load is loading between this body tag
+[07:42 - 07:47] okay inside this children then we have
+[07:44 - 07:50] this global. CSS including all the
+[07:47 - 07:52] styling uh uh which is common for all
+[07:50 - 07:55] the throughout the application okay that
+[07:52 - 07:57] we are defining global. CSS and if you
+[07:55 - 08:00] see this tellin CSS automatically
+[07:57 - 08:02] integrated in our application as well
+[08:00 - 08:05] then we have this public folder which we
+[08:02 - 08:07] we can keep all our images assets which
+[08:05 - 08:10] we required in our application you will
+[08:07 - 08:12] get to know how to use it okay also in
+[08:10 - 08:15] app dot in app folder we will learn how
+[08:12 - 08:18] to create a new uh routing and
+[08:15 - 08:20] everything then we have this next.
+[08:18 - 08:22] config.js which include all
+[08:20 - 08:25] configuration related to the next
+[08:22 - 08:27] application so it's including the adding
+[08:25 - 08:29] the image domain and then you you will
+[08:27 - 08:31] you will get to know how to use this
+[08:29 - 08:34] config.js and we are going to use this
+[08:31 - 08:36] one we need it then we have this packet.
+[08:34 - 08:39] Json which include the all the script to
+[08:36 - 08:41] run this application and the dependency
+[08:39 - 08:44] which is installed in the for this
+[08:41 - 08:47] application we are going to also uh add
+[08:44 - 08:49] some few dependency in this one okay so
+[08:47 - 08:52] we'll learn how to do it then we have
+[08:49 - 08:55] this post css. config.js and tailn
+[08:52 - 08:58] config.js which is required to configure
+[08:55 - 09:00] configuration for the TN CSS okay
+[08:58 - 09:02] automatically there there and whenever
+[09:00 - 09:04] you create a folder make sure if you are
+[09:02 - 09:06] creating out a folder in the root
+[09:04 - 09:09] directory and the name is not included
+[09:06 - 09:11] here okay make sure to add it so that
+[09:09 - 09:14] that telin CSS styling is applicable to
+[09:11 - 09:17] that folder as well okay so this is very
+[09:14 - 09:21] important now let's run the project okay
+[09:17 - 09:23] as I told you the layout. JX here inside
+[09:21 - 09:25] this body tag all our page get rendered
+[09:23 - 09:28] okay and this is the default page which
+[09:25 - 09:32] going to render first so here in
+[09:28 - 09:36] terminal click new terminal and inside
+[09:32 - 09:38] here just run npm run da okay so this is
+[09:36 - 09:42] a command to run the application and if
+[09:38 - 09:45] you see right our server is ready and it
+[09:42 - 09:48] started on the port 3,000 okay and this
+[09:45 - 09:51] is the URL to access it so just copy it
+[09:48 - 09:53] go to your uh web browser and paste it
+[09:51 - 09:55] here like this okay so now once you
+[09:53 - 09:58] paste it right it will take a few
+[09:55 - 10:01] seconds to build it okay and if you see
+[09:58 - 10:03] uh here right it's getting compiling and
+[10:01 - 10:08] everything and once it build you will
+[10:03 - 10:10] see the UI like this okay now if let me
+[10:08 - 10:13] uh put this on the left hand side here
+[10:10 - 10:14] if you see it's similar structure okay
+[10:13 - 10:18] let me close this one uh the guest
+[10:14 - 10:21] started by editing see app.js everything
+[10:18 - 10:25] right let's do one thing let's remove
+[10:21 - 10:29] everything okay and here I will add the
+[10:25 - 10:31] simple do and inside there I will add uh
+[10:29 - 10:34] uh h2 tag
+[10:31 - 10:37] okay like this and we'll say subscribe
+[10:34 - 10:38] to tube Guru G okay if you did not
+[10:37 - 10:41] subscribe to my Channel please do
+[10:38 - 10:44] subscribe and if you see the Subscribe
+[10:41 - 10:46] gji is display and you will see this
+[10:44 - 10:49] gradient effect right the lines lines
+[10:46 - 10:51] that is because in global. CSS inside
+[10:49 - 10:53] this rout right this particular styling
+[10:51 - 10:55] or css styling is applied if I remove
+[10:53 - 10:58] this and save it you will see the plain
+[10:55 - 10:59] background okay so you can apply the
+[10:58 - 11:01] background from here it's it's up to you
+[10:59 - 11:02] how you want to apply okay and this is
+[11:01 - 11:05] applicable throughout the application
+[11:02 - 11:07] and in page. TSX where our application
+[11:05 - 11:10] you can write or start to writing this
+[11:07 - 11:13] code okay so right now if you see the uh
+[11:10 - 11:15] the URL as well is a default URL okay if
+[11:13 - 11:17] you want to go like about SL about
+[11:15 - 11:19] obviously you need to create a new
+[11:17 - 11:21] folder called about and inside that you
+[11:19 - 11:24] have to create a page. TSX file okay and
+[11:21 - 11:26] it will give the that new route okay so
+[11:24 - 11:27] we'll get to know once we uh start
+[11:26 - 11:30] developing this
+[11:27 - 11:30] application
+[11:34 - 11:40] now we are going to use clerk for our
+[11:38 - 11:43] user authentication and clerck is one of
+[11:40 - 11:46] the best um pre-build authentication
+[11:43 - 11:50] system okay and it's completely free up
+[11:46 - 11:52] to 5,000 users okay so it's more than
+[11:50 - 11:55] sufficient for the development purpose
+[11:52 - 11:56] or you can go directly with the Google
+[11:55 - 11:59] Cloud to integrate the Google
+[11:56 - 12:01] authentication okay and you can watch my
+[11:59 - 12:03] some of the previous video where you can
+[12:01 - 12:05] learn how to uh manually integrate the
+[12:03 - 12:07] Google authentication but in this
+[12:05 - 12:09] particular tutorial we are going to use
+[12:07 - 12:12] clerk okay it's very simple so first of
+[12:09 - 12:14] all uh create a new account and uh once
+[12:12 - 12:17] you created account you will go to the
+[12:14 - 12:19] dashboard and you have to create the new
+[12:17 - 12:21] application okay and inside that uh you
+[12:19 - 12:23] will find the API key I will let you
+[12:21 - 12:25] know how to do it okay but before that
+[12:23 - 12:28] let's go to the documentation and go to
+[12:25 - 12:30] the next.js okay on the left hand side
+[12:28 - 12:33] where uh for that one we are going to
+[12:30 - 12:36] build right say let's get started and
+[12:33 - 12:38] here first of all we need to uh install
+[12:36 - 12:41] this particular dependency for the clerk
+[12:38 - 12:43] okay so copy it and then go to back go
+[12:41 - 12:47] to your application and inside the
+[12:43 - 12:48] terminal add a new terminal and paste it
+[12:47 - 12:52] here
+[12:48 - 12:54] okay next if you scroll down right these
+[12:52 - 12:57] are the environment variable we need to
+[12:54 - 12:59] add in our application so copy it and
+[12:57 - 13:03] then if you if you see right this is we
+[12:59 - 13:06] have to add env. Lo file okay so here in
+[13:03 - 13:11] the root folder create a new file called
+[13:06 - 13:14] env. local and inside that add this uh
+[13:11 - 13:17] two API keys right now here it
+[13:14 - 13:19] prepopulated because I already log into
+[13:17 - 13:20] this particular uh clerk okay and once
+[13:19 - 13:22] you go to the documentation it will
+[13:20 - 13:25] automatically populate you don't need to
+[13:22 - 13:28] go and copy paste the API key Okay then
+[13:25 - 13:30] if you scroll down uh we have to add
+[13:28 - 13:33] this clu provider okay we have to wrap
+[13:30 - 13:36] the content of our HTML inside this clu
+[13:33 - 13:39] provider okay so copy this one go back
+[13:36 - 13:41] to our application and inside the layout
+[13:39 - 13:44] okay so we have to go to this app folder
+[13:41 - 13:48] inside that we have this layout. TSX and
+[13:44 - 13:51] here just paste this clu provider in the
+[13:48 - 13:53] tag and make sure to import okay so if
+[13:51 - 13:57] you see this clu provider is importing
+[13:53 - 14:00] from cl/ nextjs okay now save
+[13:57 - 14:02] everything now if you see right uh if
+[14:00 - 14:06] you go back to our application nothing
+[14:02 - 14:08] get changed okay or let's uh you can
+[14:06 - 14:11] just stop this one okay let
+[14:08 - 14:13] me stop even though you don't know stop
+[14:11 - 14:17] right it's build and if you see nothing
+[14:13 - 14:20] is get changed next if you scroll down
+[14:17 - 14:22] we have to add this middleware dots and
+[14:20 - 14:25] this in in that we have to paste this
+[14:22 - 14:27] all this content okay so just copy this
+[14:25 - 14:30] file name go to back go to your
+[14:27 - 14:33] application and inside the root folder
+[14:30 - 14:35] we have to create this file mware dots
+[14:33 - 14:38] okay and inside that you have to paste
+[14:35 - 14:40] all of these contents so copy it and
+[14:38 - 14:45] paste it
+[14:40 - 14:47] here and save it next if you scroll down
+[14:45 - 14:49] you have to create this sign up and
+[14:47 - 14:51] signin page okay this is the our own
+[14:49 - 14:54] sign up signin page okay so it will not
+[14:51 - 14:56] navigate their uh authentication URL it
+[14:54 - 14:58] will be in our authentication or in
+[14:56 - 14:59] inside our application only that's the
+[14:58 - 15:03] design we have going to create these
+[14:59 - 15:04] particular pages okay very easy just uh
+[15:03 - 15:07] inside the app folder we have to create
+[15:04 - 15:09] a new folder called sign up so inside
+[15:07 - 15:11] the app folder create a new folder
+[15:09 - 15:14] called sign up inside that folder we
+[15:11 - 15:16] have to create another folder okay so if
+[15:14 - 15:19] you see that that is a double bracket do
+[15:16 - 15:21] dot dot sign up okay same inside the
+[15:19 - 15:24] sign up we have to create this folder
+[15:21 - 15:27] and then we have to create page. TSX
+[15:24 - 15:29] file so just create another file page.
+[15:27 - 15:31] TSX inside that
+[15:29 - 15:35] and copy this content and paste it in
+[15:31 - 15:39] that one and save it okay next similar
+[15:35 - 15:43] thing we have to do for
+[15:39 - 15:46] the uh sign in okay so just copy this
+[15:43 - 15:48] sign in name create a new folder again
+[15:46 - 15:51] in app folder called signin inside
+[15:48 - 15:56] signin folder we have to create another
+[15:51 - 15:58] folder copy this one and paste it and
+[15:56 - 16:01] inside that we have to create this
+[15:58 - 16:04] folder called page.
+[16:01 - 16:07] TSX page. TSX and
+[16:04 - 16:09] then copy this code and paste it here
+[16:07 - 16:14] like this and save it okay as simple as
+[16:09 - 16:17] that now next we have to add this four
+[16:14 - 16:22] line of code okay this is a routing uh
+[16:17 - 16:25] en variable inside the env. local okay
+[16:22 - 16:28] so we just created this env. local
+[16:25 - 16:32] inside this we'll add this four lines
+[16:28 - 16:35] and save it okay and for testing purpose
+[16:32 - 16:37] we can add this user button inside the
+[16:35 - 16:41] page.
+[16:37 - 16:45] TSS here we can add it like this and
+[16:41 - 16:45] make sure to import this one
+[16:45 - 16:53] okay I will copy it and paste it here
+[16:49 - 16:56] and save it and once you save everything
+[16:53 - 16:57] let's go back to our application and see
+[16:56 - 17:01] our sign in page is ready okay let's
+[16:57 - 17:03] let's go to back to the uh 3,000 port
+[17:01 - 17:05] and directly it will jump to the signin
+[17:03 - 17:07] page because we did not log to the
+[17:05 - 17:09] application yet okay so it will ask you
+[17:07 - 17:11] this particular authentication system
+[17:09 - 17:13] called Facebook Google email address and
+[17:11 - 17:17] everything okay if you go to this
+[17:13 - 17:20] dashboard of the clerk right and you can
+[17:17 - 17:23] open any of them and here you have the
+[17:20 - 17:25] API Keys you here you will find API Keys
+[17:23 - 17:28] okay then in that user authentication
+[17:25 - 17:30] right in Social connection you will find
+[17:28 - 17:32] the Google Facebook Apple GitHub
+[17:30 - 17:35] whatever you want you can just enable it
+[17:32 - 17:38] okay and uh that will be on your
+[17:35 - 17:40] particular page okay so maybe I'm using
+[17:38 - 17:42] different one but uh this one I think so
+[17:40 - 17:45] that's the reason is open the Facebook
+[17:42 - 17:47] if I remove the Facebook right and then
+[17:45 - 17:49] if I go back to our application and
+[17:47 - 17:52] refresh the screen now Facebook will be
+[17:49 - 17:55] not there only Google is there okay this
+[17:52 - 17:57] is how it works and uh this is how
+[17:55 - 17:59] simple it is once you log in let's log
+[17:57 - 18:01] into our application
+[17:59 - 18:04] okay and once you
+[18:01 - 18:07] login it will jump on this page and you
+[18:04 - 18:09] will see this uh user profile page this
+[18:07 - 18:13] is coming because we added this user
+[18:09 - 18:15] button okay and if I click on it right
+[18:13 - 18:17] you'll see uh the option is beautifully
+[18:15 - 18:19] is coming up right the manage account or
+[18:17 - 18:21] sign out button as well if I click on
+[18:19 - 18:23] manage account you will see all the
+[18:21 - 18:26] details called uh where you login you
+[18:23 - 18:30] can delete the account you have all the
+[18:26 - 18:32] um uh option available okay you can add
+[18:30 - 18:34] the extra email address or inside
+[18:32 - 18:35] account you have all the information and
+[18:34 - 18:38] everything you can even change the
+[18:35 - 18:41] images Okay so this all functionality
+[18:38 - 18:43] you don't need to uh integrate your own
+[18:41 - 18:45] it's already provided by clerk okay
+[18:43 - 18:48] that's the reason we are using cler for
+[18:45 - 18:50] this application I hope you understand
+[18:48 - 18:52] this one don't worry it's completely
+[18:50 - 18:54] free you will not ask any credit card
+[18:52 - 18:56] anything okay you can try it and let me
+[18:54 - 18:58] know in the comment section how you feel
+[18:56 - 19:00] about this one okay and you really like
+[18:58 - 19:02] like it then please let me know as well
+[19:00 - 19:05] and still if you did not subscribe to my
+[19:02 - 19:05] Channel please do
+[19:10 - 19:16] subscribe so now we will add the custom
+[19:13 - 19:19] font for our application okay and if you
+[19:16 - 19:20] go search for on the font for the nextjs
+[19:19 - 19:23] right you will see this particular page
+[19:20 - 19:25] called font optimization and it's quite
+[19:23 - 19:28] easy to use right you need just need to
+[19:25 - 19:31] import the font which you want on from
+[19:28 - 19:33] this import statement okay then you have
+[19:31 - 19:36] to write this subset and then you have
+[19:33 - 19:38] to just add that as a class name okay I
+[19:36 - 19:39] will let you know how to do it first you
+[19:38 - 19:42] can find whatever the font you want
+[19:39 - 19:43] right uh I'm searching this uh I like
+[19:42 - 19:46] this outfit form so I'm going to use
+[19:43 - 19:49] this outfit okay and let's go back to
+[19:46 - 19:52] our application and here right inside
+[19:49 - 19:55] this uh layout.
+[19:52 - 19:58] TSX here you will see this import enter
+[19:55 - 20:01] right the this is the default font so
+[19:58 - 20:03] here you can just add outfit see it's
+[20:01 - 20:05] coming up okay so add this outfit and
+[20:03 - 20:08] then you have to replace this outfit
+[20:05 - 20:12] right here we don't want in so I will
+[20:08 - 20:14] change this one and we'll give the name
+[20:12 - 20:17] uh the constant name as outfit and just
+[20:14 - 20:20] you have to use this constant outfit in
+[20:17 - 20:23] the class name inside this body okay and
+[20:20 - 20:26] save it now once you save it you will
+[20:23 - 20:28] see this particular font will change
+[20:26 - 20:32] okay so this this is how easy you can
+[20:28 - 20:34] change the font of your application okay
+[20:32 - 20:35] and uh if you have any question let me
+[20:34 - 20:37] know in the comment section you can use
+[20:35 - 20:40] multiple font for example if you want
+[20:37 - 20:42] Railway for example this is also my one
+[20:40 - 20:45] of the favorite okay and if I add this
+[20:42 - 20:49] font okay and you can use globally if
+[20:45 - 20:53] you want okay and if I save it see the
+[20:49 - 20:55] font is changed okay this is how easily
+[20:53 - 20:57] you can change the font but for this
+[20:55 - 21:00] application we'll use the outfit
+[20:57 - 21:00] only
+[21:02 - 21:10] now let's add the navigation bar okay
+[21:07 - 21:13] so uh inside the root folder we create a
+[21:10 - 21:14] new folder okay and we have to make sure
+[21:13 - 21:16] the name of the folder should be
+[21:14 - 21:19] components okay means don't spell
+[21:16 - 21:21] mistake because otherwise the T CSS
+[21:19 - 21:22] class will not get applied okay so here
+[21:21 - 21:24] in the root folder I will create the
+[21:22 - 21:27] component folder and inside the
+[21:24 - 21:31] component folder I will create the na
+[21:27 - 21:34] bar. SX file okay and now you can add
+[21:31 - 21:35] the default template okay so here in
+[21:34 - 21:38] order to add default template I'm using
+[21:35 - 21:41] one extension and with that if I click
+[21:38 - 21:44] on RFC you'll see the template is get
+[21:41 - 21:47] added okay so for that one in vs code we
+[21:44 - 21:50] have one extension okay uh which called
+[21:47 - 21:53] es7 react du okay make sure to install
+[21:50 - 21:56] this uh extension so every time for the
+[21:53 - 21:58] react or react n application you don't
+[21:56 - 22:02] need to write the default template okay
+[21:58 - 22:04] just of few within type with few word
+[22:02 - 22:07] the default template will get created
+[22:04 - 22:10] also make sure to install the tailin CSS
+[22:07 - 22:13] uh extension okay so this will help us
+[22:10 - 22:14] uh to give the uh uh or to write the
+[22:13 - 22:17] tailin CSS classes okay it will give the
+[22:14 - 22:20] suggestion and everything I will let you
+[22:17 - 22:22] know how so once uh you added this
+[22:20 - 22:27] navigation bar make sure to import this
+[22:22 - 22:29] component inside the page. TSX okay uh
+[22:27 - 22:31] so obviously we want to use navigation
+[22:29 - 22:33] bar throughout the application so
+[22:31 - 22:35] instead of putting in page. txx we will
+[22:33 - 22:37] add in layout. TSX so before this
+[22:35 - 22:42] children right we will add that one so
+[22:37 - 22:44] just add the na bar okay so even though
+[22:42 - 22:45] pay change the navigation bar constant
+[22:44 - 22:48] throughout the application that's the
+[22:45 - 22:52] reason we added in the layout. TSX
+[22:48 - 22:55] instead of page. TSX once we added make
+[22:52 - 22:59] sure it's showing on the screen
+[22:55 - 23:01] see sorry and now our navigation bar
+[22:59 - 23:04] component is showing on the screen okay
+[23:01 - 23:06] now let's go back to the navigation bar
+[23:04 - 23:10] and let me open the application as well
+[23:06 - 23:10] side by side
+[23:12 - 23:20] okay so here let's remove this one and
+[23:17 - 23:23] let's add one du inside this du I will
+[23:20 - 23:26] add the logo first okay so in the public
+[23:23 - 23:27] folder I already added this logo okay
+[23:26 - 23:30] you can create or you can use my
+[23:27 - 23:31] existing one and the source code is in
+[23:30 - 23:34] the uh
+[23:31 - 23:36] description so once uh you added this uh
+[23:34 - 23:38] image in public fer right you can
+[23:36 - 23:41] directly access it but before that we
+[23:38 - 23:42] have to add the image tag that image tag
+[23:41 - 23:46] we are importing from the next SL image
+[23:42 - 23:49] okay then the source here we have to
+[23:46 - 23:51] give the uh path of that particular
+[23:49 - 23:53] logo.png and that you can give directly
+[23:51 - 23:56] like this PNG you don't need to go
+[23:53 - 23:58] complete part because we uh nextjs right
+[23:56 - 24:00] when you whatever you put in public fold
+[23:58 - 24:04] it can be accessible directly like this
+[24:00 - 24:06] okay then we have to add alt tag call
+[24:04 - 24:08] logo and once we add the alt tag the
+[24:06 - 24:11] error is gone okay let's add the width
+[24:08 - 24:14] so in this case we will add the width of
+[24:11 - 24:15] 120 you can add the height 60 and then
+[24:14 - 24:20] save
+[24:15 - 24:24] it okay let me refresh the
+[24:20 - 24:27] screen okay so let me check why it's not
+[24:24 - 24:28] showing maybe um we just rerun the
+[24:27 - 24:33] project
+[24:28 - 24:36] sometimes due to the cach issue uh
+[24:33 - 24:39] the application will not run properly
+[24:36 - 24:41] but just make sure uh you'll run the
+[24:39 - 24:41] project
+[24:43 - 24:48] okay and we will wait for a few more
+[24:50 - 24:56] seconds and we see the project is run
+[24:53 - 24:58] and the image is showing on the screen
+[24:56 - 25:01] okay then
+[24:58 - 25:05] after this uh we will add one more D tag
+[25:01 - 25:07] for our list of menus okay so here in h2
+[25:05 - 25:10] tag I will add first list called
+[25:07 - 25:12] home then I will add
+[25:10 - 25:16] the two
+[25:12 - 25:16] more call
+[25:18 - 25:24] history and then I will add one help
+[25:22 - 25:27] okay and save it and see all three are
+[25:24 - 25:30] showing now to make it in one line right
+[25:27 - 25:34] you can just add class name call flex
+[25:30 - 25:37] and save it okay next I will add this
+[25:34 - 25:39] this button right on the header so what
+[25:37 - 25:42] I will
+[25:39 - 25:44] do we added this in page. TSX we don't
+[25:42 - 25:47] want it here so I will copy I will cut
+[25:44 - 25:51] it from here and I will P paste it in
+[25:47 - 25:54] navigation bar TSX file after this uh
+[25:51 - 25:58] after this de okay and make sure to
+[25:54 - 26:01] import this one so let's add the import
+[25:58 - 26:01] statement
+[26:01 - 26:07] so it here like this okay so it's
+[26:04 - 26:11] importing from the next SL njs at clerk
+[26:07 - 26:15] okay and let's save everything if you
+[26:11 - 26:18] see everything is coming okay now first
+[26:15 - 26:22] uh let's bring everything in one line so
+[26:18 - 26:26] for this du let's add class name call
+[26:22 - 26:28] Flex okay like this and then for this D
+[26:26 - 26:30] as well because uh in this particular
+[26:28 - 26:33] subd subd right we added this image and
+[26:30 - 26:35] this particular menu so we'll add the
+[26:33 - 26:39] class name to be
+[26:35 - 26:44] flex and save it okay and for this Flex
+[26:39 - 26:50] I will give G of maybe six okay and save
+[26:44 - 26:51] it also for this Flex I will give Gap uh
+[26:50 - 26:54] of
+[26:51 - 26:55] pin and make sure to make the item to be
+[26:54 - 26:58] in the
+[26:55 - 27:02] center and save everything and see it
+[26:58 - 27:04] look beautiful okay and for this parent
+[27:02 - 27:06] VI we'll just make justifi between and
+[27:04 - 27:09] save it and see it's work perfectly fine
+[27:06 - 27:11] if I increase the screen size this is
+[27:09 - 27:14] how it looks now another thing we will
+[27:11 - 27:17] give some padding so let's add a padding
+[27:14 - 27:19] of three and I will add padding of xais
+[27:17 - 27:24] to the 10 okay and it will look like
+[27:19 - 27:26] this see perfectly uh looks good right
+[27:24 - 27:29] also when the screen size is smaller
+[27:26 - 27:31] right I don't want to show this uh menu
+[27:29 - 27:34] bar right because it's going inside this
+[27:31 - 27:37] particular uh users profile Pak right so
+[27:34 - 27:40] what we can do uh we can just hide it
+[27:37 - 27:41] okay so when the screen size is medium
+[27:40 - 27:43] we can just hide it and when the screen
+[27:41 - 27:45] size is Medi sorry when the screen size
+[27:43 - 27:49] is small we will hide and when there is
+[27:45 - 27:51] medium we'll make it as a flex like this
+[27:49 - 27:53] and save it now see when the screen is
+[27:51 - 27:55] smaller it's hiding right if I increase
+[27:53 - 27:58] the screen size it's showing on the
+[27:55 - 27:59] screen okay looks good now let's add
+[27:58 - 28:02] some styling to this particular buttons
+[27:59 - 28:06] right on a h effect so what we can do
+[28:02 - 28:10] for this class name we add H effect and
+[28:06 - 28:12] we'll say background gray 100 okay then
+[28:10 - 28:14] I will give padding of
+[28:12 - 28:17] two
+[28:14 - 28:21] then we'll make rounded corner to be
+[28:17 - 28:24] medium and save it and if you you see if
+[28:21 - 28:27] i h on it let me close this one see it's
+[28:24 - 28:28] beautifully Hing effect is coming
+[28:27 - 28:32] correct
+[28:28 - 28:34] so uh also I will add the cursor
+[28:32 - 28:37] pointer and for transition effect you
+[28:34 - 28:40] can add the transition all okay and same
+[28:37 - 28:45] thing you have to copy for all of
+[28:40 - 28:47] this uh others menu okay so add class
+[28:45 - 28:49] name and save
+[28:47 - 28:54] it and now if you
+[28:49 - 28:59] see I don't know what the help is there
+[28:54 - 29:02] okay for this one and save it
+[28:59 - 29:05] and if you see perfectly coming right
+[29:02 - 29:07] perfect that's what we wanted also we
+[29:05 - 29:09] will add one border at the bottom for
+[29:07 - 29:14] this particular uh navigation bar okay
+[29:09 - 29:19] so for this parent de let me bring this
+[29:14 - 29:21] down and here we will add the
+[29:19 - 29:24] Border uh at the bottom only so we can
+[29:21 - 29:26] just write bottom and the size so when
+[29:24 - 29:28] you are giving the size in double
+[29:26 - 29:30] brackets right sorry in square brackets
+[29:28 - 29:32] then it means you are giving the custom
+[29:30 - 29:34] size okay and you can give in the pixel
+[29:32 - 29:37] and save it and see the border is coming
+[29:34 - 29:40] on the screen if I increase the size or
+[29:37 - 29:43] width uh to four see it will look like
+[29:40 - 29:45] this okay so this is how you can show it
+[29:43 - 29:48] you can also add the shadow if you want
+[29:45 - 29:51] okay so this is how it look when you add
+[29:48 - 29:54] the shadow okay you can add small medium
+[29:51 - 29:56] depends on your choice but for now I'll
+[29:54 - 29:58] keep as it is and with a small Shadow
+[29:56 - 30:01] with the Border okay if I remove the
+[29:58 - 30:03] border so it will look like this but
+[30:01 - 30:08] let's skip the Border as well okay so it
+[30:03 - 30:08] looks beautiful see okay
+[30:13 - 30:19] perfect now uh we will divide our screen
+[30:17 - 30:21] into two section okay and this is very
+[30:19 - 30:24] important to update the layout right uh
+[30:21 - 30:25] let me show you how uh we want to
+[30:24 - 30:28] display right if you see this particular
+[30:25 - 30:29] prototype on the left hand side we have
+[30:28 - 30:32] this booking area and on the right hand
+[30:29 - 30:34] side we have this uh map right and this
+[30:32 - 30:36] is what we are going to uh divide the
+[30:34 - 30:40] screen okay in such a way that we can
+[30:36 - 30:43] add the both the things in one screen so
+[30:40 - 30:45] first of all let's go to the our
+[30:43 - 30:49] application and let's remove this
+[30:45 - 30:53] subscribe to TU guruji and then here uh
+[30:49 - 30:57] let's add one du okay
+[30:53 - 30:59] so add new do here like this okay and in
+[30:57 - 31:03] inside that I will add the class name I
+[30:59 - 31:08] will mark it as a grid okay so also I
+[31:03 - 31:11] will make grid of column three okay and
+[31:08 - 31:14] save it now inside this grid we need to
+[31:11 - 31:18] mention this columns okay so right now
+[31:14 - 31:23] we are going to use two column one is
+[31:18 - 31:26] for uh booking and one is for map okay
+[31:23 - 31:28] but we Define the three column right so
+[31:26 - 31:30] two column we will assigned to this map
+[31:28 - 31:32] so in order to do that right class name
+[31:30 - 31:35] inside a class name the tell say provide
+[31:32 - 31:39] a property called column span okay and
+[31:35 - 31:40] two so if you see red G column two so
+[31:39 - 31:42] two column is assigned to this one and
+[31:40 - 31:45] the remaining column is assigned to this
+[31:42 - 31:48] one which is one right so 2/3 is to this
+[31:45 - 31:50] map and 1/3 is to booking and save it
+[31:48 - 31:52] once you save see you will see the
+[31:50 - 31:56] layout right and if I increase size it
+[31:52 - 31:58] will look like this now one more thing
+[31:56 - 32:00] uh in order to to get better
+[31:58 - 32:02] understanding what I will do I will add
+[32:00 - 32:06] the background for this one okay so I
+[32:02 - 32:08] blue 100 I will also add some background
+[32:06 - 32:12] to
+[32:08 - 32:14] this okay see now you'll get better
+[32:12 - 32:16] understanding so 1/3 of this screen is
+[32:14 - 32:19] assigned to the booking and 2/3 is
+[32:16 - 32:22] assigning to this map
+[32:19 - 32:25] okay also when the screen size is
+[32:22 - 32:27] smaller right I want booking at the top
+[32:25 - 32:29] and then the map at the bottom or vice
+[32:27 - 32:32] versa it's up to you right so what we
+[32:29 - 32:34] can do we can give this grid when only
+[32:32 - 32:37] when the screen size is medium or larger
+[32:34 - 32:40] and when the screen size is smaller we
+[32:37 - 32:42] can just mention grid column one and
+[32:40 - 32:44] save it okay and if you see it will look
+[32:42 - 32:47] like this right when I increase the
+[32:44 - 32:49] screen size it will be in two column but
+[32:47 - 32:52] when screen size decrease it will be in
+[32:49 - 32:55] one column only okay also if you want
+[32:52 - 32:59] the map at the top you can just mention
+[32:55 - 33:00] here Order and first okay and if you see
+[32:59 - 33:03] it
+[33:00 - 33:06] switches but normally the map coming
+[33:03 - 33:08] here and booking coming here right but
+[33:06 - 33:11] when uh the screen size change it will
+[33:08 - 33:13] change right but this particular
+[33:11 - 33:15] functionality you can apply only when
+[33:13 - 33:17] the screen size is smaller when the
+[33:15 - 33:19] screen size is medium you can mention
+[33:17 - 33:22] order
+[33:19 - 33:24] last okay so if I increase size map will
+[33:22 - 33:27] be on the right hand side so what that
+[33:24 - 33:29] what we expected okay I hope you
+[33:27 - 33:31] understand this one but right now uh I
+[33:29 - 33:33] don't want this order thing so I will
+[33:31 - 33:36] remove it and I will save like this okay
+[33:33 - 33:38] perfect guys if you don't know how to
+[33:36 - 33:41] use this everything right you can just
+[33:38 - 33:43] go to the telin CSS site okay and here
+[33:41 - 33:46] you can just search so if you want to
+[33:43 - 33:48] search grid right and here you'll see
+[33:46 - 33:51] the grid template how to use row how to
+[33:48 - 33:53] use columns and everything the order how
+[33:51 - 33:55] I order right one two three the last
+[33:53 - 33:58] first everything everything will be here
+[33:55 - 34:00] okay so if if you face any issue just
+[33:58 - 34:02] search it you'll find the solution okay
+[34:00 - 34:05] on the T CSS
+[34:02 - 34:06] documentation so until now if you have
+[34:05 - 34:08] any question any doubt let me know in
+[34:06 - 34:12] the comment section now we will start
+[34:08 - 34:12] implementing this booking section
+[34:16 - 34:22] first now in the booking uh section we
+[34:19 - 34:25] will add the address search Fields okay
+[34:22 - 34:27] so we want to add two input field one is
+[34:25 - 34:30] for where uh where to start okay the
+[34:27 - 34:31] users location and the destination
+[34:30 - 34:35] location okay that's two fi we want to
+[34:31 - 34:37] add so for that one um let's go to the
+[34:35 - 34:38] component folder and inside the
+[34:37 - 34:41] component we'll create a new folder
+[34:38 - 34:43] called booking okay so all the booking
+[34:41 - 34:46] section we'll keep it here and we will
+[34:43 - 34:50] get we will create another folder called
+[34:46 - 34:53] map okay so these two folder we created
+[34:50 - 34:54] so all related components uh uh which we
+[34:53 - 34:57] are showing in the booking section will
+[34:54 - 35:00] come under this booking uh folder inside
+[34:57 - 35:05] the booking we'll create new file called
+[35:00 - 35:08] booking do TSX okay and add the default
+[35:05 - 35:11] template and uh make sure to add this
+[35:08 - 35:13] booking uh component inside a page. TSX
+[35:11 - 35:15] okay so in this booking section we will
+[35:13 - 35:20] add so let's add
+[35:15 - 35:21] booking and save it okay next if you see
+[35:20 - 35:23] right right now it's just showing
+[35:21 - 35:26] booking but if you change something
+[35:23 - 35:28] booking component and say see booking
+[35:26 - 35:30] component is coming okay now inside the
+[35:28 - 35:32] booking component we will have different
+[35:30 - 35:35] different sub components okay or child
+[35:32 - 35:36] components uh the first we will add it
+[35:35 - 35:38] as
+[35:36 - 35:43] a
+[35:38 - 35:44] complete address. TSX okay and add the
+[35:43 - 35:47] default
+[35:44 - 35:49] template so make sure to add this at
+[35:47 - 35:51] complete in book booking TSX okay
+[35:49 - 35:53] because here we are going to put all the
+[35:51 - 35:57] booking related component in into this
+[35:53 - 35:59] booking TSX and we already added this
+[35:57 - 36:03] booking component into the page. TSX
+[35:59 - 36:06] okay so just add a
+[36:03 - 36:09] complete comp complete
+[36:06 - 36:10] address and then save it and if you see
+[36:09 - 36:14] the aut complete address is showing now
+[36:10 - 36:18] on the screen okay perfect now let's
+[36:14 - 36:22] implement this atut complete address uh
+[36:18 - 36:25] component okay so here first of all uh
+[36:22 - 36:28] in Booking TSX we will Define the or we
+[36:25 - 36:32] will give the name okay
+[36:28 - 36:34] so inside this one I will add the h2 tag
+[36:32 - 36:38] and inside the h2 tag we add the word
+[36:34 - 36:40] called booking and save it okay here
+[36:38 - 36:42] let's add some styling so I will add a
+[36:40 - 36:47] class name which
+[36:42 - 36:49] CH make text of 20 pixel and font I make
+[36:47 - 36:53] semi
+[36:49 - 36:55] bold perfect uh also we'll give some
+[36:53 - 36:57] padding to this whole booking section so
+[36:55 - 37:00] let's do padding of
+[36:57 - 37:02] five like this okay and this aut
+[37:00 - 37:04] complete address will come under this
+[37:02 - 37:09] one okay now go to the autoc complete
+[37:04 - 37:12] address and here we'll add the One D
+[37:09 - 37:15] okay which is for the first
+[37:12 - 37:20] input and here we'll add the label
+[37:15 - 37:23] called where from okay and question mark
+[37:20 - 37:27] see like this we'll give
+[37:23 - 37:30] some maybe margin top to five like
+[37:27 - 37:34] this then we will add the input field so
+[37:30 - 37:37] let's add input of type is equal to
+[37:34 - 37:39] text okay and the tag see right now it's
+[37:37 - 37:43] not showing but it's here okay it's
+[37:39 - 37:46] somewhere here see okay now after this
+[37:43 - 37:49] we'll add the uh
+[37:46 - 37:52] styling class name so we'll get
+[37:49 - 37:56] backround to be white then we'll add
+[37:52 - 37:57] padding of one and Border We'll add as a
+[37:56 - 38:01] one
+[37:57 - 38:03] pixel okay then we'll add the WID to be
+[38:01 - 38:05] full so let's add WID full so it will
+[38:03 - 38:08] come down like this okay this is what we
+[38:05 - 38:10] wanted also I will make grounded corner
+[38:08 - 38:13] to be
+[38:10 - 38:16] medium okay perfect like this and if I
+[38:13 - 38:17] click on it right you see the black
+[38:16 - 38:20] outline is coming so I don't want that
+[38:17 - 38:23] outline so remove this Outline by using
+[38:20 - 38:25] this outline Das none okay and and
+[38:23 - 38:28] behind this uh this particular class we
+[38:25 - 38:30] have this CSS out out line and outline
+[38:28 - 38:34] offset to pixel and save it and now we
+[38:30 - 38:36] don't have that particular uh style also
+[38:34 - 38:39] when we focus on it right I want to
+[38:36 - 38:43] change color so just on Focus we'll
+[38:39 - 38:47] change color to Yellow 300 you see okay
+[38:43 - 38:50] so this is what it changed but um I
+[38:47 - 38:52] don't want complete uh background so we
+[38:50 - 38:56] don't want background actually so just
+[38:52 - 38:58] say border here see this changes okay
+[38:56 - 39:04] also I will give the some styling to
+[38:58 - 39:09] this one so let's add text um maybe gray
+[39:04 - 39:11] 400 and save it okay perfect like this
+[39:09 - 39:13] and now same thing you have to copy
+[39:11 - 39:15] paste for the another input so I will
+[39:13 - 39:18] copy this same du and paste it here and
+[39:15 - 39:21] save it okay and we have where from so
+[39:18 - 39:25] just for this du I will give some margin
+[39:21 - 39:30] top to maybe three okay and we'll say
+[39:25 - 39:34] here we two and save it okay perfect so
+[39:30 - 39:37] this two input we added okay another
+[39:34 - 39:40] thing uh in Booking TSX okay here I want
+[39:37 - 39:44] to add the border to this complete uh
+[39:40 - 39:48] booking component okay so uh for that
+[39:44 - 39:51] one what we'll do uh we will wrap this
+[39:48 - 39:52] uh let's wrap this at complete address
+[39:51 - 39:57] inside One
+[39:52 - 40:01] D put this here okay and let's give
+[39:57 - 40:04] class name let's say border of
+[40:01 - 40:08] one one pixel okay and see the border is
+[40:04 - 40:10] coming let's give some padding to five
+[40:08 - 40:12] okay so it will look like this you can
+[40:10 - 40:16] remove this padding if you don't want it
+[40:12 - 40:19] okay and then we'll make rounded to be
+[40:16 - 40:23] medium see
+[40:19 - 40:26] perfect now uh right now if you see
+[40:23 - 40:28] right the the height is if I increase
+[40:26 - 40:30] size right is not look good to me so we
+[40:28 - 40:32] want complete uh full screen height
+[40:30 - 40:33] right so what we can do uh first of all
+[40:32 - 40:38] let's
+[40:33 - 40:38] define um constant say
+[40:39 - 40:47] screen screen height is equal to window
+[40:44 - 40:50] Dot and here we have property called
+[40:47 - 40:54] inner height okay and now this height
+[40:50 - 40:56] you can mention uh to this class name
+[40:54 - 40:59] okay or you can Define like this style
+[40:56 - 41:02] inside style you can Define height and
+[40:59 - 41:03] the uh the value of the height right the
+[41:02 - 41:06] constant name you can give and if I save
+[41:03 - 41:08] it see it's coming like this right but I
+[41:06 - 41:11] don't want this scroll see it's
+[41:08 - 41:14] scrolling right so to avoid this one you
+[41:11 - 41:18] can just multiply this height with the
+[41:14 - 41:20] some uh value right 0.72 and save it and
+[41:18 - 41:22] now if I increase size see it's
+[41:20 - 41:24] particularly showing on this one right
+[41:22 - 41:26] now depends on if you decrease size
+[41:24 - 41:28] obviously they calculate the inner
+[41:26 - 41:30] height and depends on that it will show
+[41:28 - 41:33] so you don't need to scroll um
+[41:30 - 41:36] vertically okay so that's thing we are
+[41:33 - 41:39] avoiding and also we have perfectly
+[41:36 - 41:43] added this particular uh input box now
+[41:39 - 41:45] next what we can do um we going to
+[41:43 - 41:48] change this um input text to the aut
+[41:45 - 41:51] complete okay and for that one we we are
+[41:48 - 41:54] going to use a API to get once user type
+[41:51 - 41:56] it right we want to get suggestion uh
+[41:54 - 41:58] from that API so that's what we are
+[41:56 - 42:02] going to implement and for that one we
+[41:58 - 42:05] are going to use mapbox um search API
+[42:02 - 42:07] okay so next we'll learn how to create
+[42:05 - 42:10] account in mabox and how to use and how
+[42:07 - 42:10] to create the API from
+[42:13 - 42:21] it so we are going to use mapbox to add
+[42:18 - 42:23] map in our application also we are use
+[42:21 - 42:26] uh we are using Mac boox for uh
+[42:23 - 42:28] direction as well as uh to find the
+[42:26 - 42:30] address okay so right now mabox is
+[42:28 - 42:33] completely free if you go to the pricing
+[42:30 - 42:35] right and here you will see uh the
+[42:33 - 42:38] pricing of this each of the API right if
+[42:35 - 42:40] you are trying to find direction API the
+[42:38 - 42:42] one lakh request monthly is completely
+[42:40 - 42:45] free okay and which is more than
+[42:42 - 42:49] sufficient for a small business or for
+[42:45 - 42:52] the development also okay so right now
+[42:49 - 42:53] uh if you don't have any account okay
+[42:52 - 42:56] then create a new account and once you
+[42:53 - 42:58] create account you will see the
+[42:56 - 43:01] dashboard like this okay and here you
+[42:58 - 43:05] will find the public key this public key
+[43:01 - 43:07] we we need uh for our API as well to add
+[43:05 - 43:10] the map in our application as well okay
+[43:07 - 43:12] so before that uh let's jump on the
+[43:10 - 43:14] documentation of the map box okay and
+[43:12 - 43:18] very quick so right now first thing we
+[43:14 - 43:22] are going to use is the search box okay
+[43:18 - 43:24] this search box is used to uh to aut
+[43:22 - 43:26] complete our address okay and here if
+[43:24 - 43:28] you see the documentation right you will
+[43:26 - 43:31] find all the information regarding the
+[43:28 - 43:33] API how to use it everything right and
+[43:31 - 43:35] if you see the we have to just pass the
+[43:33 - 43:37] query okay and then it will return it
+[43:35 - 43:40] will return the result I will show you
+[43:37 - 43:43] the example as well also uh you can just
+[43:40 - 43:46] try it here okay and if I try to search
+[43:43 - 43:48] like 155 right and this particular drop
+[43:46 - 43:51] down uh where we are getting this list
+[43:48 - 43:52] of addresses right this particular
+[43:51 - 43:54] things we are going to implement and
+[43:52 - 43:56] that's the reason we are going to use
+[43:54 - 43:59] this search boox API okay
+[43:56 - 44:01] so uh you you have this API and
+[43:59 - 44:05] everything right and here um there a
+[44:01 - 44:08] sample result okay sample response or
+[44:05 - 44:10] how to use it everything is there right
+[44:08 - 44:14] if you see along with the API you just
+[44:10 - 44:18] need to P generated U ID and this ID
+[44:14 - 44:21] okay so let me show you example directly
+[44:18 - 44:23] by running it on the screen so I already
+[44:21 - 44:25] have API with all the fields ready if I
+[44:23 - 44:28] enter it right you will see I'm passing
+[44:25 - 44:30] this 155 Cali loop as address right mean
+[44:28 - 44:32] just typing it and I'm getting a bunch
+[44:30 - 44:35] of suggestion okay and this suggestion
+[44:32 - 44:38] you can show in your at complete uh drop
+[44:35 - 44:41] down menu okay so let's go back to our
+[44:38 - 44:44] application we have our API almost ready
+[44:41 - 44:46] okay and uh this is how we are going to
+[44:44 - 44:50] use okay
+[44:46 - 44:53] so uh inside this app folder let's
+[44:50 - 44:55] create a new folder called API and
+[44:53 - 44:58] inside the API folder we will create
+[44:55 - 45:01] another folder called let's create a
+[44:58 - 45:04] folder actually so called uh search
+[45:01 - 45:06] address okay and this is our API
+[45:04 - 45:08] endpoint okay and inside that we will
+[45:06 - 45:10] add the route.
+[45:08 - 45:14] JS
+[45:10 - 45:16] TSX like this okay now uh we will we
+[45:14 - 45:21] going to use this route as our default
+[45:16 - 45:23] route okay mean uh for the search uh
+[45:21 - 45:26] address here you have to write export
+[45:23 - 45:29] okay then default
+[45:26 - 45:34] and uh or maybe not default but we can
+[45:29 - 45:37] make a function so assing function
+[45:34 - 45:40] okay function and the function name will
+[45:37 - 45:42] be a gate because this is a gate request
+[45:40 - 45:47] and here we will pass the
+[45:42 - 45:51] request okay and inside this uh request
+[45:47 - 45:53] we will just try to return the next
+[45:51 - 45:56] response so just write the next response
+[45:53 - 45:58] which is importing from this next server
+[45:56 - 46:03] and then you have to write do guess on
+[45:58 - 46:08] so okay and here we'll uh pass some in
+[46:03 - 46:12] test as a response okay and here you can
+[46:08 - 46:14] pass any okay like this and save it once
+[46:12 - 46:17] you save let's go back to our
+[46:14 - 46:22] application okay here now you can access
+[46:17 - 46:26] this endpoint using SL API slash search
+[46:22 - 46:28] Dash address okay and save it and once I
+[46:26 - 46:32] hit enter see the response in the
+[46:28 - 46:33] response we are getting data uh and test
+[46:32 - 46:36] okay
+[46:33 - 46:39] perfect next now let's implement the uh
+[46:36 - 46:43] actual call for that particular API
+[46:39 - 46:46] right so before that in do. Leal I
+[46:43 - 46:48] created one uh en environment variable
+[46:46 - 46:51] called mapbox access token and just
+[46:48 - 46:52] pasted this access token okay and this
+[46:51 - 46:55] access token you will get it from your
+[46:52 - 46:57] dashboard okay this is very important so
+[46:55 - 47:03] get this this token and paste it in your
+[46:57 - 47:06] local uh file then in inside root. jsx
+[47:03 - 47:09] now whatever if you see right uh let me
+[47:06 - 47:11] okay here if I put question query okay
+[47:09 - 47:13] and pass anything right this value we
+[47:11 - 47:16] need to F it first okay because this
+[47:13 - 47:19] value is important to pass it to the API
+[47:16 - 47:22] so to get that value we just need to
+[47:19 - 47:28] write constant here we can write
+[47:22 - 47:31] search Aram okay is equal to new
+[47:28 - 47:33] URL and here we'll get the request.
+[47:31 - 47:36] URL
+[47:33 - 47:36] okay maybe
+[47:36 - 47:46] this URL after this we'll get this value
+[47:41 - 47:50] in a search XT con XT constant is equal
+[47:46 - 47:53] to search params okay and Dot get the
+[47:50 - 47:55] value and which value you want uh we
+[47:53 - 47:58] want to get right from that parameter
+[47:55 - 48:02] name we want to pass so in this case is
+[47:58 - 48:05] Q you can pass it as a uh input and then
+[48:02 - 48:07] input need to be pass it here okay that
+[48:05 - 48:09] value we need to pass now we have search
+[48:07 - 48:11] text let's let's just make sure that
+[48:09 - 48:15] search text we are getting so I paste it
+[48:11 - 48:17] here save it and Q will be here and
+[48:15 - 48:21] enter it okay so right now we are
+[48:17 - 48:22] getting uh some issue let's see what's
+[48:21 - 48:25] the
+[48:22 - 48:28] error okay so just refresh it okay or
+[48:25 - 48:32] you can go back here and uh make sure
+[48:28 - 48:34] it's login and then uh try to access the
+[48:32 - 48:37] API endpoint Okay the reason is
+[48:34 - 48:39] sometimes it's not authorized because uh
+[48:37 - 48:41] the session get expired okay because we
+[48:39 - 48:44] are using uh Clerk and it's checking
+[48:41 - 48:47] whether the session is uh uh valid or
+[48:44 - 48:49] not okay so right now if you see the
+[48:47 - 48:53] data is working okay so let's go back to
+[48:49 - 48:55] our uh application here and let's uh
+[48:53 - 48:58] implement the other code so we can able
+[48:55 - 49:02] to get the SE text okay now here we will
+[48:58 - 49:05] write constant result is equal to
+[49:02 - 49:09] await F and inside that we will add the
+[49:05 - 49:11] actual URL which you want to F okay so
+[49:09 - 49:15] uh this is the base URL that we are
+[49:11 - 49:17] going to use okay the API mapbox.com and
+[49:15 - 49:21] this is for the search box okay and
+[49:17 - 49:26] after that I'm just passing the quer and
+[49:21 - 49:29] the session ID okay so if you see right
+[49:26 - 49:34] here we will add the base URL plus the
+[49:29 - 49:36] query which is s text and then um here
+[49:34 - 49:38] is the session token which we are
+[49:36 - 49:40] passing okay which session we are we
+[49:38 - 49:42] need to add and the country right now
+[49:40 - 49:45] it's a us that's why the you will get
+[49:42 - 49:48] only the addresses from the US okay if
+[49:45 - 49:51] you are from India you can just I change
+[49:48 - 49:54] this to iron okay or you can also access
+[49:51 - 49:57] or pass the uh country over here okay as
+[49:54 - 49:59] a second parameter
+[49:57 - 50:02] once you done with this one you have to
+[49:59 - 50:05] make sure you'll also add the header
+[50:02 - 50:08] okay so you have to add
+[50:05 - 50:11] headers and in that one you have to add
+[50:08 - 50:15] content sorry the content type which is
+[50:11 - 50:18] obviously uh the Json okay so like this
+[50:15 - 50:22] and once you done with this one you just
+[50:18 - 50:26] need to get the result so constant
+[50:22 - 50:31] search result is equal to a
+[50:26 - 50:37] and it will be a result do
+[50:31 - 50:38] Json sorry result dot Json okay and this
+[50:37 - 50:41] one you have
+[50:38 - 50:44] to send it to the search result and save
+[50:41 - 50:46] it now go back to application and search
+[50:44 - 50:51] this one okay so right now if you get
+[50:46 - 50:52] authorization issue okay let's try it
+[50:51 - 50:56] again
+[50:52 - 51:00] API and search it if you see it's not
+[50:56 - 51:03] authorized no token okay
+[51:00 - 51:05] because here we did not pass the token
+[51:03 - 51:08] okay so we have to pass the access token
+[51:05 - 51:11] as well and that access
+[51:08 - 51:14] token sorry this access token which we
+[51:11 - 51:16] stored in the EnV file right so the
+[51:14 - 51:20] mapbox access token this one we pass and
+[51:16 - 51:22] save it now now let's refresh it again
+[51:20 - 51:24] and if you see we got the result okay
+[51:22 - 51:26] and in that result we got a multiple
+[51:24 - 51:29] result okay so right now we got the
+[51:26 - 51:32] three result now here here is thing uh
+[51:29 - 51:34] you can also uh change this limit right
+[51:32 - 51:36] right now it's six limit you um you can
+[51:34 - 51:39] search up to 10 okay you will get the up
+[51:36 - 51:41] to 10 result so here I will change to
+[51:39 - 51:45] eight that is maximum I want to get the
+[51:41 - 51:49] result in this particular response and
+[51:45 - 51:52] then this particular uh sorry
+[51:49 - 51:55] the this full address we are going to
+[51:52 - 51:58] show it on the search bar Okay so so
+[51:55 - 52:00] that's what we are going to do now and
+[51:58 - 52:02] uh until now if you have any question
+[52:00 - 52:05] any doubts let me know in the comment
+[52:02 - 52:08] section and now we will implement the
+[52:05 - 52:11] auto complete feature in our application
+[52:08 - 52:12] right so we are going to call this
+[52:11 - 52:15] particular API actually in our
+[52:12 - 52:18] application to get the uh required
+[52:15 - 52:21] result and then we will show it in the
+[52:18 - 52:24] drop- down okay in this input along with
+[52:21 - 52:24] the drop down as
+[52:24 - 52:27] well
+[52:29 - 52:36] so now what we can do we can call our um
+[52:33 - 52:39] the search address API inside our
+[52:36 - 52:40] application okay so obviously inside
+[52:39 - 52:43] this auto complete address right if you
+[52:40 - 52:46] see this is what we have in the aut
+[52:43 - 52:52] complete address so here we will uh call
+[52:46 - 52:56] our API okay so we can call constant get
+[52:52 - 52:59] address okay and it will be a sync
+[52:56 - 53:03] so like this okay and inside this we'll
+[52:59 - 53:08] say constant result we'll use
+[53:03 - 53:11] fet and this is our API Endo right
+[53:08 - 53:15] search address okay question
+[53:11 - 53:18] mark and here we will pass the value
+[53:15 - 53:20] which we want to get it right so
+[53:18 - 53:22] whenever user input some value this
+[53:20 - 53:24] value we will pass it here okay so let's
+[53:22 - 53:26] define that particular state so we'll
+[53:24 - 53:29] State Define c
+[53:26 - 53:34] constant uh Source okay so this is the
+[53:29 - 53:34] source address and set
+[53:34 - 53:43] source is equal to your state like this
+[53:39 - 53:47] okay and I will put any type okay and
+[53:43 - 53:49] here we'll pass the source okay then
+[53:47 - 53:51] obviously after this one we have to pass
+[53:49 - 53:53] the header okay the header value so I
+[53:51 - 53:56] will just copy this header value like
+[53:53 - 53:59] this okay after this we have to Define
+[53:56 - 54:02] constant result we'll get the
+[53:59 - 54:06] result from this result. Json okay so
+[54:02 - 54:09] result. Json like
+[54:06 - 54:11] this okay and obviously this need to be
+[54:09 - 54:16] await so let's make it a
+[54:11 - 54:16] wait and uh what
+[54:17 - 54:23] else so because we are getting error
+[54:20 - 54:25] right the Json does not exit op Ty
+[54:23 - 54:28] promise the reason is
+[54:25 - 54:32] uh we made this function a sync as well
+[54:28 - 54:35] okay just we call G list meaningful
+[54:32 - 54:38] name we will see that one and here we
+[54:35 - 54:40] have to set this what whenever whatever
+[54:38 - 54:43] the result we will get we are getting
+[54:40 - 54:46] right this result value we have to set
+[54:43 - 54:48] it okay and also make this fet await so
+[54:46 - 54:52] that this error will gone so we'll
+[54:48 - 54:57] Define one more Conant here the address
+[54:52 - 54:59] list okay Comm set address list so it it
+[54:57 - 55:02] contains all the address which we are
+[54:59 - 55:05] getting from the search suggestion okay
+[55:02 - 55:08] and is equal to use State okay of type
+[55:05 - 55:12] any obviously I will pass the empty for
+[55:08 - 55:15] now and to set the address set address
+[55:12 - 55:17] list and here we will set the result
+[55:15 - 55:21] okay whatever the result we are getting
+[55:17 - 55:22] we will set it to this address list okay
+[55:21 - 55:26] now obviously we have to call this
+[55:22 - 55:30] function in use effect so use effect
+[55:26 - 55:34] okay like this okay and for now I will
+[55:30 - 55:37] pass the empty value and save it now
+[55:34 - 55:39] whenever the input change right we have
+[55:37 - 55:42] to make sure we will call this gate
+[55:39 - 55:46] address list okay so obviously here we
+[55:42 - 55:49] will add the on change method so on
+[55:46 - 55:54] change and here I will say set Source
+[55:49 - 55:58] okay and obviously this is the
+[55:54 - 56:01] event and event. Target do value so it
+[55:58 - 56:03] will get the actual value okay so once
+[56:01 - 56:06] user input something we will set the
+[56:03 - 56:08] value in the set Source okay and once
+[56:06 - 56:10] the set Source value changes obviously
+[56:08 - 56:12] we have to call this use effect method
+[56:10 - 56:16] okay so that get address list will get
+[56:12 - 56:18] updated so here I will say uh Source
+[56:16 - 56:20] okay whenever the value of source change
+[56:18 - 56:24] this will get called that's the reason
+[56:20 - 56:26] I'm passing this Source okay also uh not
+[56:24 - 56:28] every time I want to change because
+[56:26 - 56:30] sometimes user type every time we are
+[56:28 - 56:34] calling that API okay and to avoid that
+[56:30 - 56:40] one what we can do we can add the some
+[56:34 - 56:42] um timeout okay so you can just set set
+[56:40 - 56:45] timeout okay like
+[56:42 - 56:49] this and you can call this
+[56:45 - 56:52] get add this list inside this one okay
+[56:49 - 56:54] and here you can pass how much after how
+[56:52 - 56:57] much time you want to execute this okay
+[56:54 - 57:01] so after 1 second I I'm going to call
+[56:57 - 57:02] this one okay but here as well uh let's
+[57:01 - 57:05] define
+[57:02 - 57:08] uh constant for this one so I will
+[57:05 - 57:11] Define this bounce function and
+[57:08 - 57:14] uh I will also close this one okay so
+[57:11 - 57:17] what you can do you can just uh return
+[57:14 - 57:20] it and clear this time out like this
+[57:17 - 57:22] okay so I just clear out this timeout
+[57:20 - 57:26] and whenever this is
+[57:22 - 57:27] executing uh every whenever user type
+[57:26 - 57:30] something right if you type 10 words for
+[57:27 - 57:33] every word this us getting execut right
+[57:30 - 57:35] and after 1 second this getting call but
+[57:33 - 57:37] if you put this one right obviously it
+[57:35 - 57:40] will clear the time for the next
+[57:37 - 57:43] iteration okay this is very important it
+[57:40 - 57:45] might feel you confusion confusing but
+[57:43 - 57:47] you can check the code pause the video
+[57:45 - 57:51] and just watch it out just understand
+[57:47 - 57:54] this particular um logic okay now
+[57:51 - 57:57] obviously we got this one okay and now
+[57:54 - 58:00] we have this address list as well so
+[57:57 - 58:02] here we also set the value so value
+[58:00 - 58:04] nothing but will be the source okay now
+[58:02 - 58:06] we have everything but we need to show
+[58:04 - 58:09] the address or suggestion address list
+[58:06 - 58:13] in the drop down right this uh so that
+[58:09 - 58:15] user can pick it up right so here so
+[58:13 - 58:18] here we'll add the list of address list
+[58:15 - 58:20] okay so let's add the just iterate the
+[58:18 - 58:23] list okay so dot
+[58:20 - 58:29] suggestion okay so here we have the
+[58:23 - 58:30] suggestion as a field okay dot map okay
+[58:29 - 58:34] and then we will map
+[58:30 - 58:38] it index of type
+[58:34 - 58:42] number and this of type
+[58:38 - 58:42] any and after this we
+[58:42 - 58:50] add and we will add the h2 tag okay like
+[58:46 - 58:55] this and inside that we just add item
+[58:50 - 58:56] dot uh can add item Dot
+[58:55 - 58:59] the full address okay though we have the
+[58:56 - 59:01] full address we showing the list of
+[58:59 - 59:04] address okay and just make sure I will
+[59:01 - 59:10] wrap this everything in one de okay like
+[59:04 - 59:12] this and save it okay now if I go back
+[59:10 - 59:15] so if you see right we have the issue in
+[59:12 - 59:17] map can read property of map let's make
+[59:15 - 59:20] sure it will
+[59:17 - 59:23] be the reason is right you might get
+[59:20 - 59:25] this error because right now uh the
+[59:23 - 59:29] address list I don't have any right so
+[59:25 - 59:31] in order to avoid this issue right what
+[59:29 - 59:34] we can do we can just wrap this complete
+[59:31 - 59:39] VI in one condition if the suggestion is
+[59:34 - 59:42] there okay so obviously this suggestion
+[59:39 - 59:46] is there right then only show this data
+[59:42 - 59:49] otherwise show null like this okay and
+[59:46 - 59:51] now try it if I save this one now let's
+[59:49 - 59:56] refresh the screen if you see the error
+[59:51 - 59:59] is gone okay now if I type something 155
+[59:56 - 01:00:03] Cali Loop okay you see you we are
+[59:59 - 01:00:07] getting the list of all the uh address
+[01:00:03 - 01:00:11] with the name5 c Loop okay perfect now
+[01:00:07 - 01:00:14] let's apply some styling to this one so
+[01:00:11 - 01:00:17] for this h2 tag We'll add the class name
+[01:00:14 - 01:00:19] and uh we'll add the padding of three
+[01:00:17 - 01:00:22] then on Hover I want to change
+[01:00:19 - 01:00:25] background to gray
+[01:00:22 - 01:00:29] 100 and we'll make the cursor
+[01:00:25 - 01:00:35] pointer like this and save it okay let
+[01:00:29 - 01:00:38] me bring uh side by side and if I do c
+[01:00:35 - 01:00:40] Loop something like this see perfectly
+[01:00:38 - 01:00:42] coming okay now let's make it some
+[01:00:40 - 01:00:44] little uh round corner and everything
+[01:00:42 - 01:00:48] okay
+[01:00:44 - 01:00:51] so me close this one and for this du I
+[01:00:48 - 01:00:53] will add the class name and uh just add
+[01:00:51 - 01:00:55] the little
+[01:00:53 - 01:00:58] shadow
+[01:00:55 - 01:01:03] then padding of one and we'll make
+[01:00:58 - 01:01:06] corner to be rounded U medium size okay
+[01:01:03 - 01:01:07] and we'll make it absolute position okay
+[01:01:06 - 01:01:10] and we need to be a
+[01:01:07 - 01:01:13] full and also make the background to be
+[01:01:10 - 01:01:16] white okay and save it and see this is
+[01:01:13 - 01:01:19] how it looks okay so if I put one
+[01:01:16 - 01:01:22] Cali something like this see it's
+[01:01:19 - 01:01:24] looking okay but if you see it's going
+[01:01:22 - 01:01:26] out of this particular screen okay and
+[01:01:24 - 01:01:29] that's what we don't want it right so in
+[01:01:26 - 01:01:31] order to fix it okay for this du you can
+[01:01:29 - 01:01:34] mark this du as a
+[01:01:31 - 01:01:36] relative okay so if you mark this do as
+[01:01:34 - 01:01:37] a relative and save it see it's come
+[01:01:36 - 01:01:42] back
+[01:01:37 - 01:01:45] to in uh given de only okay so I search
+[01:01:42 - 01:01:47] it see it's coming back to give de
+[01:01:45 - 01:01:50] perfect and this is working perfectly
+[01:01:47 - 01:01:52] fine okay now you can select this one
+[01:01:50 - 01:01:57] and then that need to be show it here
+[01:01:52 - 01:01:58] right so uh for this address list right
+[01:01:57 - 01:02:01] this h2
+[01:01:58 - 01:02:04] tag we'll add the on click method so
+[01:02:01 - 01:02:07] here you can write on click okay and on
+[01:02:04 - 01:02:09] the click of this one what we can do we
+[01:02:07 - 01:02:13] can set the source
+[01:02:09 - 01:02:16] value okay to be the this particular
+[01:02:13 - 01:02:19] address okay but we also need to show
+[01:02:16 - 01:02:22] make sure once you select the address we
+[01:02:19 - 01:02:25] want to clear this list right so you can
+[01:02:22 - 01:02:27] just write set address list
+[01:02:25 - 01:02:30] and it need to be empty okay but if you
+[01:02:27 - 01:02:32] see right I added two function uh or
+[01:02:30 - 01:02:34] calls right inside one on click method
+[01:02:32 - 01:02:38] so that's we have to add this curly
+[01:02:34 - 01:02:41] braces okay so you can add multiple uh
+[01:02:38 - 01:02:43] calls here and save it now let's test
+[01:02:41 - 01:02:47] everything so if I
+[01:02:43 - 01:02:49] type K right and if you see I get the
+[01:02:47 - 01:02:53] suggestion now if I click anything right
+[01:02:49 - 01:02:56] so I click this one see the uh you got
+[01:02:53 - 01:02:58] only one one and if I click on this one
+[01:02:56 - 01:03:00] oop yeah nothing uh you will not see any
+[01:02:58 - 01:03:02] drop down okay sometime the address is
+[01:03:00 - 01:03:04] changed then only you will see the drop
+[01:03:02 - 01:03:06] down okay if you made some changes for
+[01:03:04 - 01:03:09] example if you make something like this
+[01:03:06 - 01:03:14] okay see you get the suggestion click on
+[01:03:09 - 01:03:16] it and that's all you are done okay now
+[01:03:14 - 01:03:18] uh this is challenge or task for you
+[01:03:16 - 01:03:22] same thing you have to implement for the
+[01:03:18 - 01:03:23] we to okay so let's try it and if you
+[01:03:22 - 01:03:25] have any question you can access my
+[01:03:23 - 01:03:28] source code or you can ask uh ask me any
+[01:03:25 - 01:03:30] question in the comment section okay and
+[01:03:28 - 01:03:32] if you have faced any challenges or you
+[01:03:30 - 01:03:35] don't understand any points let me know
+[01:03:32 - 01:03:37] in the comment section as well so here I
+[01:03:35 - 01:03:40] also added updated the destination
+[01:03:37 - 01:03:44] change okay and let me show you how it
+[01:03:40 - 01:03:47] looks so inside here if you see I can
+[01:03:44 - 01:03:49] able to type whatever I want right and
+[01:03:47 - 01:03:51] if you get we are getting the result as
+[01:03:49 - 01:03:55] well okay
+[01:03:51 - 01:03:57] now you have to um maintain one flag for
+[01:03:55 - 01:03:59] the source change and destination change
+[01:03:57 - 01:04:01] okay when you change something you have
+[01:03:59 - 01:04:04] to make sure that you are uh saving that
+[01:04:01 - 01:04:06] one so that you can apply and you can
+[01:04:04 - 01:04:08] show which drop down you need to show it
+[01:04:06 - 01:04:10] okay this is very important and that's
+[01:04:08 - 01:04:14] the reason I added with the address list
+[01:04:10 - 01:04:16] added this destination change uh
+[01:04:14 - 01:04:18] condition for the source and for the
+[01:04:16 - 01:04:21] destination as well okay and that's the
+[01:04:18 - 01:04:24] reason only that particular drop down is
+[01:04:21 - 01:04:26] showing okay and obviously we have to
+[01:04:24 - 01:04:29] make it false once we selected the
+[01:04:26 - 01:04:31] result okay now it's little confusing
+[01:04:29 - 01:04:34] and I can understand this one but you
+[01:04:31 - 01:04:37] can just um access my source code and
+[01:04:34 - 01:04:39] it's completely free and then you can uh
+[01:04:37 - 01:04:41] check whether you are implementing
+[01:04:39 - 01:04:42] correctly or not and if you have any
+[01:04:41 - 01:04:46] doubt let me know in the comment section
+[01:04:42 - 01:04:51] as well and yeah so that's how we can
+[01:04:46 - 01:04:51] implement the uh address for source and
+[01:04:53 - 01:04:57] destination
+[01:04:55 - 01:05:00] now we will implement the car list
+[01:04:57 - 01:05:03] component so for that one I already
+[01:05:00 - 01:05:06] added the list of cars which we needed
+[01:05:03 - 01:05:09] okay so it contains the ID the name
+[01:05:06 - 01:05:12] means which is economy or minivan then
+[01:05:09 - 01:05:14] the image the image is already in the uh
+[01:05:12 - 01:05:16] local storage okay so in the public
+[01:05:14 - 01:05:19] folder I added a different kind of imag
+[01:05:16 - 01:05:21] as well okay you can use any of them and
+[01:05:19 - 01:05:23] the charges okay so for the economy the
+[01:05:21 - 01:05:24] whatever the charges we are going to
+[01:05:23 - 01:05:27] calculate
+[01:05:24 - 01:05:30] uh it's only one into multiply by one
+[01:05:27 - 01:05:33] okay if the it's us select mini then we
+[01:05:30 - 01:05:36] charge depends on the dist multiply by
+[01:05:33 - 01:05:40] 1.2 okay so kind of things so you'll get
+[01:05:36 - 01:05:42] to know once we start implementing so uh
+[01:05:40 - 01:05:45] inside the booking folder right inside a
+[01:05:42 - 01:05:50] component we will create a new uh file
+[01:05:45 - 01:05:53] called cars. TSX okay and then add the
+[01:05:50 - 01:05:54] default template and make sure to import
+[01:05:53 - 01:05:56] this car compon component inside this
+[01:05:54 - 01:05:59] booking after the auto
+[01:05:56 - 01:06:02] completed uh address okay so here I will
+[01:05:59 - 01:06:02] import the
+[01:06:02 - 01:06:09] cost C component okay so here is the C
+[01:06:05 - 01:06:13] component and save it and if you see we
+[01:06:09 - 01:06:17] get this car text here okay
+[01:06:13 - 01:06:21] perfect next inside the car component we
+[01:06:17 - 01:06:24] will Implement our imple all this uh UI
+[01:06:21 - 01:06:27] okay so here first of all inside the D
+[01:06:24 - 01:06:32] let's add the h2 tag and let's
+[01:06:27 - 01:06:34] say Select Car okay and let's apply some
+[01:06:32 - 01:06:37] styling so for this one I will give some
+[01:06:34 - 01:06:41] margin from the top maybe
+[01:06:37 - 01:06:43] three and here I will add the font way
+[01:06:41 - 01:06:47] font to be semi
+[01:06:43 - 01:06:50] bold and save it okay perfect after this
+[01:06:47 - 01:06:53] now we will iterate the list of the car
+[01:06:50 - 01:06:56] list okay so inside the one this de I
+[01:06:53 - 01:06:58] will get the the cars list so let's say
+[01:06:56 - 01:06:59] cars list and if you see right it is
+[01:06:58 - 01:07:05] importing from the
+[01:06:59 - 01:07:08] data uh SL car list okay dot map now we
+[01:07:05 - 01:07:10] have to map this one okay so let's say
+[01:07:08 - 01:07:13] item
+[01:07:10 - 01:07:17] and here we will add the
+[01:07:13 - 01:07:21] DU like this okay and also add the index
+[01:07:17 - 01:07:24] here okay so we'll add the key as index
+[01:07:21 - 01:07:26] so each of this uh the
+[01:07:24 - 01:07:28] means for example each of this
+[01:07:26 - 01:07:30] particular element we need to add the
+[01:07:28 - 01:07:34] key okay so that a mandatory in the
+[01:07:30 - 01:07:37] react next once we add this du let's add
+[01:07:34 - 01:07:39] the image so let's say image we have to
+[01:07:37 - 01:07:41] import uh means this import image is
+[01:07:39 - 01:07:43] importing from next SL image then we
+[01:07:41 - 01:07:47] have to provide the source so in this
+[01:07:43 - 01:07:48] case source is item Dot and if you see
+[01:07:47 - 01:07:51] we have different different option in
+[01:07:48 - 01:07:54] this case is image so image okay and
+[01:07:51 - 01:07:57] then close the tag now you are getting
+[01:07:54 - 01:07:58] error because it asking provide the alt
+[01:07:57 - 01:08:02] tag so in this case I will give the alt
+[01:07:58 - 01:08:04] tag as a name okay so you can give
+[01:08:02 - 01:08:08] anything it's not mandat that you have
+[01:08:04 - 01:08:11] to give fix okay then let's give width
+[01:08:08 - 01:08:16] so in this case we'll give width of uh
+[01:08:11 - 01:08:19] let's say width 75 height will give
+[01:08:16 - 01:08:22] 90 and save it as soon as you save
+[01:08:19 - 01:08:24] you'll see the list of cars
+[01:08:22 - 01:08:26] okay now next next thing you what you
+[01:08:24 - 01:08:29] have to do you want it in a grid format
+[01:08:26 - 01:08:33] okay so for this parent de let's change
+[01:08:29 - 01:08:35] the layout to the grid okay and when the
+[01:08:33 - 01:08:38] screen size is smaller I will provide
+[01:08:35 - 01:08:40] the grid of column three okay when the
+[01:08:38 - 01:08:42] screen size is medium I will provide the
+[01:08:40 - 01:08:46] grids of column
+[01:08:42 - 01:08:49] two okay and uh this is up to you how
+[01:08:46 - 01:08:51] you want to display okay and for large I
+[01:08:49 - 01:08:55] will put the GE of column three
+[01:08:51 - 01:08:59] again okay like this now for this image
+[01:08:55 - 01:09:02] class name okay let make withd to be
+[01:08:59 - 01:09:04] full okay so it will look like this so
+[01:09:02 - 01:09:06] it depends on the screen size itally
+[01:09:04 - 01:09:09] change the size of the image as well
+[01:09:06 - 01:09:15] okay and that is what we
+[01:09:09 - 01:09:18] wanted so next uh uh let's add the other
+[01:09:15 - 01:09:20] information like S2 tag and here we will
+[01:09:18 - 01:09:22] say whether this card is economy or
+[01:09:20 - 01:09:24] Comfort kind of thing right so here I
+[01:09:22 - 01:09:28] will add the item
+[01:09:24 - 01:09:30] dot name okay so sorry it's not supposed
+[01:09:28 - 01:09:33] to be name and save it if you see the
+[01:09:30 - 01:09:36] name of car is coming okay and after
+[01:09:33 - 01:09:40] this I will add the span tag and inside
+[01:09:36 - 01:09:43] that I will add the charges so item do
+[01:09:40 - 01:09:46] charges into right now we multiply by a
+[01:09:43 - 01:09:48] random number we will change it later on
+[01:09:46 - 01:09:52] okay and it will look like this and
+[01:09:48 - 01:09:54] after that we'll put dollar okay now we
+[01:09:52 - 01:09:56] want this at the right hand side so what
+[01:09:54 - 01:09:58] we can do you can mark it class name you
+[01:09:56 - 01:10:01] can make it Flex or you can make it
+[01:09:58 - 01:10:03] float right for example if you make this
+[01:10:01 - 01:10:06] float
+[01:10:03 - 01:10:10] right okay so that is also working no
+[01:10:06 - 01:10:13] issue okay and here um we'll change the
+[01:10:10 - 01:10:16] text size to 12
+[01:10:13 - 01:10:19] pixel okay perfect like this now some
+[01:10:16 - 01:10:23] give some margin so for this parent de I
+[01:10:19 - 01:10:26] will add some margin to be uh one and
+[01:10:23 - 01:10:30] then padding I will add to be
+[01:10:26 - 01:10:34] two okay so it will look like this so
+[01:10:30 - 01:10:37] let's uh I don't know whether margin is
+[01:10:34 - 01:10:39] sufficient or not let's see okay so
+[01:10:37 - 01:10:42] actually we have to give margin to this
+[01:10:39 - 01:10:44] uh D actually okay so we'll give margin
+[01:10:42 - 01:10:47] to be uh
+[01:10:44 - 01:10:51] two okay so I will remove this
+[01:10:47 - 01:10:54] margin I will add padding of two and not
+[01:10:51 - 01:10:57] here okay now now after this we'll add
+[01:10:54 - 01:11:00] the border for each of this one okay so
+[01:10:57 - 01:11:03] border of one
+[01:11:00 - 01:11:04] pixel okay and I will make it rounded to
+[01:11:03 - 01:11:07] be
+[01:11:04 - 01:11:12] medium okay see how beautifully it's
+[01:11:07 - 01:11:14] showing right also um you can add the
+[01:11:12 - 01:11:17] border for this one
+[01:11:14 - 01:11:21] so when users hover on it we will change
+[01:11:17 - 01:11:25] the Border color so on H sorry on
+[01:11:21 - 01:11:28] H and border to be
+[01:11:25 - 01:11:29] yellow 100 okay if I however you see the
+[01:11:28 - 01:11:34] body is
+[01:11:29 - 01:11:38] changing okay perfect make it cursor
+[01:11:34 - 01:11:41] pointer see okay I hope you understand
+[01:11:38 - 01:11:44] this point now on the click of it right
+[01:11:41 - 01:11:46] we want to change the Border uh color to
+[01:11:44 - 01:11:48] the yellow and it it should be there
+[01:11:46 - 01:11:52] okay if I select this the Border should
+[01:11:48 - 01:11:54] be fixed to this particular selected car
+[01:11:52 - 01:11:56] so for that one we have to
+[01:11:54 - 01:11:57] uh Save Our State so I will Define one
+[01:11:56 - 01:12:03] state called constant
+[01:11:57 - 01:12:07] selected car comma set selected car is
+[01:12:03 - 01:12:10] equal to your state okay and inside this
+[01:12:07 - 01:12:14] one right now you can mention it any
+[01:12:10 - 01:12:16] okay and now on the click of this one
+[01:12:14 - 01:12:17] particular de right we can add that m
+[01:12:16 - 01:12:22] method
+[01:12:17 - 01:12:25] so on click of this one we'll just store
+[01:12:22 - 01:12:28] the given index okay say selected car
+[01:12:25 - 01:12:31] and we will store the index okay now we
+[01:12:28 - 01:12:35] can apply this class name dynamically
+[01:12:31 - 01:12:38] okay so for that one select this and
+[01:12:35 - 01:12:42] wrap in a curly Braes and then you have
+[01:12:38 - 01:12:43] to give this type of code okay and
+[01:12:42 - 01:12:46] inside that now you can write the
+[01:12:43 - 01:12:49] condition using dollar double uh mean
+[01:12:46 - 01:12:51] the single curly braces and inside that
+[01:12:49 - 01:12:54] you can write condition if index is
+[01:12:51 - 01:12:56] matches is equal to selected index
+[01:12:54 - 01:13:00] selected
+[01:12:56 - 01:13:03] car then you can apply the uh style so
+[01:13:00 - 01:13:06] in this case it's border need to be
+[01:13:03 - 01:13:10] yellow 400
+[01:13:06 - 01:13:15] okay and uh
+[01:13:10 - 01:13:18] if sorry if it's not there then show
+[01:13:15 - 01:13:21] nothing okay I also change the Border
+[01:13:18 - 01:13:24] width border width to 2 pixel like this
+[01:13:21 - 01:13:27] and save it now if I click on this but
+[01:13:24 - 01:13:32] okay so see it's there right so if I
+[01:13:27 - 01:13:33] click this one see okay beautifully if
+[01:13:32 - 01:13:35] you want to change the border of this
+[01:13:33 - 01:13:37] one as well
+[01:13:35 - 01:13:39] border width so you can just change
+[01:13:37 - 01:13:44] width to two
+[01:13:39 - 01:13:47] pixel like this see okay so beautifully
+[01:13:44 - 01:13:49] it's showing and if I increase the size
+[01:13:47 - 01:13:50] see it's beautifully showing on the in
+[01:13:49 - 01:13:52] side as well this particular dollar is
+[01:13:50 - 01:13:57] amount is showing now you can do one
+[01:13:52 - 01:14:01] thing okay just add um text bold or you
+[01:13:57 - 01:14:02] can make this text Gray for this
+[01:14:01 - 01:14:06] one
+[01:14:02 - 01:14:11] okay like this and then you can just
+[01:14:06 - 01:14:16] make text black the dollar only okay see
+[01:14:11 - 01:14:19] you can also make font
+[01:14:16 - 01:14:22] medium little larger and see how
+[01:14:19 - 01:14:23] beautifully is showing okay I hope you
+[01:14:22 - 01:14:25] understand this one we will actually
+[01:14:23 - 01:14:28] going to change this value everything we
+[01:14:25 - 01:14:31] going to calculate depends on the uh
+[01:14:28 - 01:14:34] location the selected you use source and
+[01:14:31 - 01:14:35] da location and depends on the how far
+[01:14:34 - 01:14:39] it is right we'll calculate the distance
+[01:14:35 - 01:14:42] for each of this car okay after that we
+[01:14:39 - 01:14:45] will implement the payment method okay
+[01:14:42 - 01:14:48] what payment method you can select and
+[01:14:45 - 01:14:51] then button to submit or uh put the
+[01:14:48 - 01:14:51] request for the car
+[01:14:52 - 01:14:55] okay
+[01:14:56 - 01:15:00] now we are going to implement the
+[01:14:58 - 01:15:03] payment method okay so for this payment
+[01:15:00 - 01:15:05] method I added uh some of these payment
+[01:15:03 - 01:15:07] method uh icons okay and that we are
+[01:15:05 - 01:15:09] going to use uh in this particular
+[01:15:07 - 01:15:11] component so first of all in the booking
+[01:15:09 - 01:15:17] folder let's create a new component
+[01:15:11 - 01:15:17] called cards. PSX and add the default
+[01:15:18 - 01:15:22] template once you added that one make
+[01:15:20 - 01:15:26] sure to add that component into the
+[01:15:22 - 01:15:28] booking uh component okay so here you
+[01:15:26 - 01:15:32] have to add the
+[01:15:28 - 01:15:33] cards okay and end the tag and save it
+[01:15:32 - 01:15:36] and if you see the cards is displaying
+[01:15:33 - 01:15:41] on the screen next let's go to the
+[01:15:36 - 01:15:44] cards. TSX and add the title called uh
+[01:15:41 - 01:15:46] payment methods okay so here in this two
+[01:15:44 - 01:15:51] tag We'll add
+[01:15:46 - 01:15:52] payment methods okay and inside that one
+[01:15:51 - 01:15:55] uh we can give the some styling for
+[01:15:52 - 01:15:59] example let's style class name text of
+[01:15:55 - 01:16:01] 14 pixel and also I will make the font
+[01:15:59 - 01:16:06] of semi
+[01:16:01 - 01:16:07] bold say medium okay and save it if you
+[01:16:06 - 01:16:10] see the payment method text is
+[01:16:07 - 01:16:14] displaying on the screen next we'll
+[01:16:10 - 01:16:17] iterate the list of cards okay so what I
+[01:16:14 - 01:16:19] did in the data folder right along with
+[01:16:17 - 01:16:22] the cards list I also added new file
+[01:16:19 - 01:16:26] called cards list and here I will I
+[01:16:22 - 01:16:28] added the all the uh cards which is like
+[01:16:26 - 01:16:30] uh Master Card and the image the Visa
+[01:16:28 - 01:16:34] card Apple pay Google pay and cash okay
+[01:16:30 - 01:16:37] so here uh we will iterate that so let's
+[01:16:34 - 01:16:40] get cards first cards
+[01:16:37 - 01:16:41] dot oh sorry it's need to be cards list
+[01:16:40 - 01:16:46] okay do
+[01:16:41 - 01:16:51] map and it should be item comma
+[01:16:46 - 01:16:54] index and here I will add the D
+[01:16:51 - 01:16:57] okay D like this
+[01:16:54 - 01:16:57] now inside here we'll add the image so
+[01:16:57 - 01:16:59] add
+[01:16:57 - 01:17:03] image
+[01:16:59 - 01:17:08] source and uh here will be item. image
+[01:17:03 - 01:17:11] okay and in the tag then give the alt uh
+[01:17:08 - 01:17:15] name so in this case I will give item.
+[01:17:11 - 01:17:18] name then width you can give width like
+[01:17:15 - 01:17:22] um any width you want like 30 height I
+[01:17:18 - 01:17:25] will give 50 and save it and as soon as
+[01:17:22 - 01:17:27] you save you see the list of cards okay
+[01:17:25 - 01:17:29] now let's apply some styling before that
+[01:17:27 - 01:17:33] for this D right let's apply class name
+[01:17:29 - 01:17:35] and grid okay and I I will apply grid of
+[01:17:33 - 01:17:36] column five okay so if you see it will
+[01:17:35 - 01:17:41] look like
+[01:17:36 - 01:17:46] this also uh for this inner du right for
+[01:17:41 - 01:17:50] this du I will add width of 50 pixel
+[01:17:46 - 01:17:53] okay so and uh then I will add the
+[01:17:50 - 01:17:57] border of one pixel
+[01:17:53 - 01:18:00] like this okay and uh we can Center it
+[01:17:57 - 01:18:02] okay so make it Flex make it item to be
+[01:18:00 - 01:18:04] in the center and justify in the center
+[01:18:02 - 01:18:07] so it will be in the center like this
+[01:18:04 - 01:18:11] okay then
+[01:18:07 - 01:18:14] border uh you can set rounded border
+[01:18:11 - 01:18:19] okay rounded uh border to be medium and
+[01:18:14 - 01:18:22] save it perfect and uh let's give some
+[01:18:19 - 01:18:23] margin to this one margin top to maybe
+[01:18:22 - 01:18:27] two
+[01:18:23 - 01:18:30] okay yeah that's let's look good next uh
+[01:18:27 - 01:18:32] you can change the Border L the the
+[01:18:30 - 01:18:37] Border color can be dark if you want but
+[01:18:32 - 01:18:40] I will keep as it is okay uh let's on H
+[01:18:37 - 01:18:41] let's go H effect so here first of all I
+[01:18:40 - 01:18:44] will make cursor
+[01:18:41 - 01:18:49] pointer and then on
+[01:18:44 - 01:18:50] H I will scale the size to 110 okay and
+[01:18:49 - 01:18:52] for smooth transition I'll make
+[01:18:50 - 01:18:55] Transition all and save it now once I
+[01:18:52 - 01:18:59] have however it see how beautifully it's
+[01:18:55 - 01:19:01] changing okay perfect next once we click
+[01:18:59 - 01:19:03] on this one right we want to set the
+[01:19:01 - 01:19:06] Border color okay so right now we don't
+[01:19:03 - 01:19:09] have border color and on H also what I
+[01:19:06 - 01:19:12] will do I will change the Border
+[01:19:09 - 01:19:15] color um border to be
+[01:19:12 - 01:19:17] yellow like this so if you see like this
+[01:19:15 - 01:19:18] right like this only I'm setting to this
+[01:19:17 - 01:19:22] one
+[01:19:18 - 01:19:23] okay then oh sorry it's only app to
+[01:19:22 - 01:19:26] write
+[01:19:23 - 01:19:27] now it's perfect okay now what you have
+[01:19:26 - 01:19:30] to do once you select like like this
+[01:19:27 - 01:19:35] right we want to pered the width color
+[01:19:30 - 01:19:39] right so to do that uh let's define some
+[01:19:35 - 01:19:45] one constant constant and here we'll say
+[01:19:39 - 01:19:50] um active index comma set active index
+[01:19:45 - 01:19:54] is equal to use State and of type
+[01:19:50 - 01:19:54] any now on the click of this D
+[01:19:54 - 01:20:00] you can set the active index okay so
+[01:19:57 - 01:20:02] here I can set set active index and here
+[01:20:00 - 01:20:06] you can set the value of the index so
+[01:20:02 - 01:20:08] this value you can set it here okay and
+[01:20:06 - 01:20:11] uh once it's set right once you click on
+[01:20:08 - 01:20:15] now on this m method it will get set the
+[01:20:11 - 01:20:17] active index but here as before right we
+[01:20:15 - 01:20:21] have to apply Dynamic styling Dynamic T
+[01:20:17 - 01:20:25] CSS class okay so I wrap this in curly
+[01:20:21 - 01:20:28] braces and remove this quod single C
+[01:20:25 - 01:20:29] okay now in the dollar sign whatever the
+[01:20:28 - 01:20:31] condition you want to add you can add it
+[01:20:29 - 01:20:35] here for example if active index is
+[01:20:31 - 01:20:38] equal to equal to index then we want to
+[01:20:35 - 01:20:43] I want to apply the Border okay so here
+[01:20:38 - 01:20:46] we can set border yellow 400 otherwise
+[01:20:43 - 01:20:48] don't show anything okay and also I will
+[01:20:46 - 01:20:50] change the
+[01:20:48 - 01:20:53] Border
+[01:20:50 - 01:20:56] width border of two pixel only like like
+[01:20:53 - 01:21:00] this and save it now if I click on any
+[01:20:56 - 01:21:02] of these one right see and the car okay
+[01:21:00 - 01:21:05] this is how it
+[01:21:02 - 01:21:07] works and uh if you think it's not in
+[01:21:05 - 01:21:10] one line you can just give some margin
+[01:21:07 - 01:21:14] okay so for
+[01:21:10 - 01:21:18] example uh you can give margin of
+[01:21:14 - 01:21:20] two okay and or just margin left I will
+[01:21:18 - 01:21:23] you
+[01:21:20 - 01:21:26] okay like this okay but perfect and if I
+[01:21:23 - 01:21:29] increase size see how beautifully is
+[01:21:26 - 01:21:31] showing okay the you can select the car
+[01:21:29 - 01:21:35] you can add this one okay now let's add
+[01:21:31 - 01:21:37] a button to book the car okay so that
+[01:21:35 - 01:21:40] button we we can add it inside the
+[01:21:37 - 01:21:42] booking do TSX after this particular or
+[01:21:40 - 01:21:44] inside this D only after this card okay
+[01:21:42 - 01:21:47] so I already have button I will just
+[01:21:44 - 01:21:51] copy paste it here okay so for this
+[01:21:47 - 01:21:53] button we have the sorry we have the
+[01:21:51 - 01:21:55] book word and then we added some styling
+[01:21:53 - 01:21:58] to this one if I save it it will look
+[01:21:55 - 01:22:01] like this okay if I increase the size
+[01:21:58 - 01:22:03] see how beautifully it's showing okay
+[01:22:01 - 01:22:04] now I hope you understand this
+[01:22:03 - 01:22:07] particular part and we pretty much
+[01:22:04 - 01:22:10] completed this booking section okay the
+[01:22:07 - 01:22:12] UI things we we completed next what we
+[01:22:10 - 01:22:15] can do we will add the map on the right
+[01:22:12 - 01:22:18] hand side okay and then on the select of
+[01:22:15 - 01:22:21] this particular address okay we will get
+[01:22:18 - 01:22:23] the latitude and longitude of the source
+[01:22:21 - 01:22:26] and destination address
+[01:22:23 - 01:22:29] that uh latitude and longitude uh
+[01:22:26 - 01:22:31] location uh we will add as a marker on
+[01:22:29 - 01:22:35] the Google Map okay and then we will
+[01:22:31 - 01:22:37] show the root between that two uh
+[01:22:35 - 01:22:40] destinations and then uh from that one
+[01:22:37 - 01:22:42] we can calculate the how much distance
+[01:22:40 - 01:22:45] it is and then depends on that we can
+[01:22:42 - 01:22:48] show the amount for each of this car
+[01:22:45 - 01:22:51] okay and the last once us just select
+[01:22:48 - 01:22:54] everything and click on book we will
+[01:22:51 - 01:22:57] store our data in the database okay
+[01:22:54 - 01:22:59] that's all we are remaining with so guys
+[01:22:57 - 01:23:03] if you did not subscribe to my Channel
+[01:22:59 - 01:23:05] please do subscribe and uh if you really
+[01:23:03 - 01:23:08] want to join my Channel please do join
+[01:23:05 - 01:23:10] okay and the subscription or membership
+[01:23:08 - 01:23:14] will just start from 299 so you can just
+[01:23:10 - 01:23:14] join it and let's move
+[01:23:17 - 01:23:24] forward now we are going to implement
+[01:23:21 - 01:23:27] and integrate the mapbox map okay so
+[01:23:24 - 01:23:30] it's uh very easy to integrate so first
+[01:23:27 - 01:23:32] of all Let's uh go to this particular
+[01:23:30 - 01:23:36] website called vg.
+[01:23:32 - 01:23:39] github.io which is one of the best react
+[01:23:36 - 01:23:42] library for to or to integrate this mic
+[01:23:39 - 01:23:44] box uh in your application okay so once
+[01:23:42 - 01:23:47] you go into this uh particular website
+[01:23:44 - 01:23:49] just get click on get started and here
+[01:23:47 - 01:23:52] first of all you have to install this
+[01:23:49 - 01:23:54] particular dependency so copy this
+[01:23:52 - 01:23:57] particular dependency go to your
+[01:23:54 - 01:24:00] terminal and paste it here okay enter it
+[01:23:57 - 01:24:03] once it install and if you scroll down
+[01:24:00 - 01:24:06] right you will see the sample code to
+[01:24:03 - 01:24:08] add the map in your application okay so
+[01:24:06 - 01:24:10] here what you have to do you have to
+[01:24:08 - 01:24:13] just copy this lineup code okay so I
+[01:24:10 - 01:24:15] will just copy this lineup code and
+[01:24:13 - 01:24:17] let's go back to our application once it
+[01:24:15 - 01:24:19] install
+[01:24:17 - 01:24:23] right uh you have to make sure it's
+[01:24:19 - 01:24:25] installed and then in the map M folder
+[01:24:23 - 01:24:31] which we have already right create a new
+[01:24:25 - 01:24:35] file uh I will call it map mapbox map.
+[01:24:31 - 01:24:38] PSX okay and add the default
+[01:24:35 - 01:24:40] template now here we will paste our a
+[01:24:38 - 01:24:43] particular line of code okay but before
+[01:24:40 - 01:24:45] that make sure to import this map box
+[01:24:43 - 01:24:48] inside your page. txx because in page.
+[01:24:45 - 01:24:51] txx we have this section called map
+[01:24:48 - 01:24:56] right so here I will add the map
+[01:24:51 - 01:24:58] box box map okay perfect like this and
+[01:24:56 - 01:25:01] save everything now if you go back to
+[01:24:58 - 01:25:05] our application right this is our mapbx
+[01:25:01 - 01:25:09] it will print the map right so copy this
+[01:25:05 - 01:25:13] code and then inside the mabox map app I
+[01:25:09 - 01:25:15] will paste it here like this okay here
+[01:25:13 - 01:25:18] and make sure to import it so if I go
+[01:25:15 - 01:25:22] here right you will see the map react
+[01:25:18 - 01:25:25] map GL okay also I will give the name so
+[01:25:22 - 01:25:29] here I will say h2 tag and inside I will
+[01:25:25 - 01:25:32] say map okay and let's give some styling
+[01:25:29 - 01:25:37] so class name I will add the padding of
+[01:25:32 - 01:25:40] five and for the text I class name text
+[01:25:37 - 01:25:43] of 20 pixel and font I will add semi
+[01:25:40 - 01:25:45] bold okay perfect like this now if you
+[01:25:43 - 01:25:48] see right this is the mapbox access
+[01:25:45 - 01:25:50] token which we need to provide okay and
+[01:25:48 - 01:25:52] this is the initial view state so it
+[01:25:50 - 01:25:54] already give the latitude and LA itude
+[01:25:52 - 01:25:57] okay this is a hardcoded one we can
+[01:25:54 - 01:26:00] change it later on and it also give the
+[01:25:57 - 01:26:02] style width and height and the map boox
+[01:26:00 - 01:26:06] typ okay so first of all let's add the
+[01:26:02 - 01:26:09] access token okay so in. loal we already
+[01:26:06 - 01:26:12] have this mabox access token right also
+[01:26:09 - 01:26:14] add this nextore public mcbo access
+[01:26:12 - 01:26:16] token and same token you have to copy so
+[01:26:14 - 01:26:19] once you added this nextore public
+[01:26:16 - 01:26:22] underscore right and the name of the uh
+[01:26:19 - 01:26:24] API or name of the token it will beess
+[01:26:22 - 01:26:26] is accessible to in your application so
+[01:26:24 - 01:26:30] that's the reason we added this nextore
+[01:26:26 - 01:26:34] public okay so now once we added I will
+[01:26:30 - 01:26:38] just copy this one and over here replace
+[01:26:34 - 01:26:40] this one as a process. EnV because we
+[01:26:38 - 01:26:43] have to access that particular access
+[01:26:40 - 01:26:45] token here right so this is how access
+[01:26:43 - 01:26:47] and now everything looks good just save
+[01:26:45 - 01:26:49] it let's go back to our application and
+[01:26:47 - 01:26:52] check whether you are getting map and if
+[01:26:49 - 01:26:54] you see the map is showing on the screen
+[01:26:52 - 01:26:57] okay okay perfect so let's add some
+[01:26:54 - 01:27:00] styling so we want full width and the
+[01:26:57 - 01:27:04] height so what we can do um over here
+[01:27:00 - 01:27:08] right I will add the width
+[01:27:04 - 01:27:11] 100% And I will add the height of 450
+[01:27:08 - 01:27:15] okay and save it and if you
+[01:27:11 - 01:27:17] see see how beautifully it's showing
+[01:27:15 - 01:27:19] okay also I want the corner to be
+[01:27:17 - 01:27:23] rounded right so that also you can add
+[01:27:19 - 01:27:25] it so here you can say border red
+[01:27:23 - 01:27:28] of 10
+[01:27:25 - 01:27:31] okay and what you have to do for you
+[01:27:28 - 01:27:32] have to wrap this de okay so just wrap
+[01:27:31 - 01:27:37] this
+[01:27:32 - 01:27:39] de like this and for this de you have to
+[01:27:37 - 01:27:42] um just mention the class
+[01:27:39 - 01:27:46] name
+[01:27:42 - 01:27:49] rounded uh large and overflow
+[01:27:46 - 01:27:52] hidden and that's how you can add the
+[01:27:49 - 01:27:55] rounded corner like this okay and right
+[01:27:52 - 01:27:59] now if you see right our uh latitude
+[01:27:55 - 01:28:01] longitude we mention here right we don't
+[01:27:59 - 01:28:03] know from where but this is what this
+[01:28:01 - 01:28:05] the center is automatically okay this is
+[01:28:03 - 01:28:07] the latitude longitude that the reason
+[01:28:05 - 01:28:09] we are it's showing this one but you can
+[01:28:07 - 01:28:12] easily scroll somewhere if you want you
+[01:28:09 - 01:28:15] can zoom in you can zoom out okay so it
+[01:28:12 - 01:28:17] look like it's a s Francisco okay but
+[01:28:15 - 01:28:19] now next we will add the markers and
+[01:28:17 - 01:28:21] everything but I hopefully you
+[01:28:19 - 01:28:24] understand how to add the map box in
+[01:28:21 - 01:28:27] your application okay also if you go to
+[01:28:24 - 01:28:30] this mapbox uh dashboard right in your
+[01:28:27 - 01:28:32] account you will see this default token
+[01:28:30 - 01:28:37] on the right hand side you will see how
+[01:28:32 - 01:28:40] much a uh the free Cota C youa you use
+[01:28:37 - 01:28:45] okay so for example in search we use 35
+[01:28:40 - 01:28:48] out of 500 the load we use 57 50,000 and
+[01:28:45 - 01:28:49] which is nominal means as I told you
+[01:28:48 - 01:28:51] right because right now we are
+[01:28:49 - 01:28:54] developing we are using more but once we
+[01:28:51 - 01:28:57] launch in production it will be lce okay
+[01:28:54 - 01:29:01] so this is how we can easily integrate
+[01:28:57 - 01:29:03] the m boox and I already show how to uh
+[01:29:01 - 01:29:05] how the statistics look in the dashboard
+[01:29:03 - 01:29:08] as well okay so next we will implement
+[01:29:05 - 01:29:10] the markers and lot of more interesting
+[01:29:08 - 01:29:12] things guys so if you did not subscribe
+[01:29:10 - 01:29:14] to my Channel please do subscribe now
+[01:29:12 - 01:29:18] and if you really like this video please
+[01:29:14 - 01:29:18] do like and keep watching this
+[01:29:20 - 01:29:26] video
+[01:29:23 - 01:29:29] now we will get the users location okay
+[01:29:26 - 01:29:33] and to get the location we will fet the
+[01:29:29 - 01:29:36] user location in our layout. TSX okay
+[01:29:33 - 01:29:38] and once we f it here we will share that
+[01:29:36 - 01:29:40] particular location throughout the
+[01:29:38 - 01:29:43] application with the help of context so
+[01:29:40 - 01:29:46] that we don't need to F the location
+[01:29:43 - 01:29:47] every time okay so it's very easy and if
+[01:29:46 - 01:29:48] you don't know how to use context don't
+[01:29:47 - 01:29:53] worry we are going to implement right
+[01:29:48 - 01:29:56] now okay so first of all uh uh here
+[01:29:53 - 01:29:57] let's define one state which can hold
+[01:29:56 - 01:30:02] the user's location okay so let's say
+[01:29:57 - 01:30:06] user location comma set user location
+[01:30:02 - 01:30:10] okay is equal to use State okay like
+[01:30:06 - 01:30:13] this next uh let's define one uh method
+[01:30:10 - 01:30:16] so constant gate user
+[01:30:13 - 01:30:18] location is equal to Arrow function and
+[01:30:16 - 01:30:21] inside that we'll face the location so
+[01:30:18 - 01:30:22] to get the location we have to get it
+[01:30:21 - 01:30:24] from Navigator
+[01:30:22 - 01:30:28] dot
+[01:30:24 - 01:30:29] geolocation dog current position right
+[01:30:28 - 01:30:32] and if you see right you'll get this
+[01:30:29 - 01:30:35] suggestion as well the function which
+[01:30:32 - 01:30:38] contain the position okay so you can
+[01:30:35 - 01:30:40] Define like this and then inside that
+[01:30:38 - 01:30:43] you will get the coordinates right if I
+[01:30:40 - 01:30:45] console this one console. log and
+[01:30:43 - 01:30:47] position you will see the coordinates
+[01:30:45 - 01:30:50] okay and make sure you will call this
+[01:30:47 - 01:30:53] gate user location in use effect okay
+[01:30:50 - 01:30:56] only once so
+[01:30:53 - 01:31:00] here I will call this one okay so get
+[01:30:56 - 01:31:02] user location like this okay and save
+[01:31:00 - 01:31:04] everything now if I go back to our
+[01:31:02 - 01:31:07] application so if you see right we got
+[01:31:04 - 01:31:09] the error that the importing is need a
+[01:31:07 - 01:31:11] client component okay so right now uh
+[01:31:09 - 01:31:14] it's a server side right if you try to
+[01:31:11 - 01:31:17] make it client use
+[01:31:14 - 01:31:21] client then this error will gone okay
+[01:31:17 - 01:31:25] because use state only use in the uh
+[01:31:21 - 01:31:27] client only okay so let's see okay so if
+[01:31:25 - 01:31:30] you say we got this another called Next
+[01:31:27 - 01:31:32] router is not mounted okay because we
+[01:31:30 - 01:31:34] also use this clerk okay and clerk
+[01:31:32 - 01:31:37] provider use on the server side so what
+[01:31:34 - 01:31:39] we can do uh you can implement this same
+[01:31:37 - 01:31:42] functionality in page. TSX okay so what
+[01:31:39 - 01:31:46] I will do I will just cut everything
+[01:31:42 - 01:31:47] from here save it and in page. txx okay
+[01:31:46 - 01:31:50] because right now we only we are only
+[01:31:47 - 01:31:54] using one page okay and you can paste it
+[01:31:50 - 01:31:56] here sorry uh let me go back copy this
+[01:31:54 - 01:32:00] from here CR
+[01:31:56 - 01:32:02] X and in page. TSX I'm here paste it
+[01:32:00 - 01:32:04] okay and make sure to import this use
+[01:32:02 - 01:32:07] State and use effect and we also already
+[01:32:04 - 01:32:09] mentioned this as a use uh client okay
+[01:32:07 - 01:32:12] and now if I save it I hopefully this
+[01:32:09 - 01:32:12] error will
+[01:32:12 - 01:32:20] gone okay let's see what the issue again
+[01:32:16 - 01:32:22] so in layout. TSX we forgot to remove
+[01:32:20 - 01:32:24] this used client and and also remove
+[01:32:22 - 01:32:27] this statement okay the import statement
+[01:32:24 - 01:32:29] and then save everything okay and if I
+[01:32:27 - 01:32:32] go back to the application see now this
+[01:32:29 - 01:32:35] error is gone okay and let's see in the
+[01:32:32 - 01:32:38] panel we are getting this
+[01:32:35 - 01:32:40] uh Z location if you see right we got
+[01:32:38 - 01:32:43] this ge location which is on the line in
+[01:32:40 - 01:32:46] the file page and in the line 16 okay so
+[01:32:43 - 01:32:49] if I go to the page the line number
+[01:32:46 - 01:32:51] 16 see and here we got the location in
+[01:32:49 - 01:32:55] the coordinates we have the user
+[01:32:51 - 01:32:58] latitude and the longitude okay see how
+[01:32:55 - 01:33:00] uh easily you got this one now this
+[01:32:58 - 01:33:02] latitude and longitude we will save in
+[01:33:00 - 01:33:05] our state
+[01:33:02 - 01:33:08] so so inside this one I will remove this
+[01:33:05 - 01:33:11] one and just add the state user location
+[01:33:08 - 01:33:13] and inside that we can add the
+[01:33:11 - 01:33:16] latitude at
+[01:33:13 - 01:33:18] position do
+[01:33:16 - 01:33:23] cordinates do
+[01:33:18 - 01:33:23] latitude okay and same we will do it
+[01:33:24 - 01:33:32] for
+[01:33:26 - 01:33:35] longitude position do coordinates dot
+[01:33:32 - 01:33:37] longitude okay like this now if you got
+[01:33:35 - 01:33:40] we got the error because we will change
+[01:33:37 - 01:33:43] this to type any okay as we are doing
+[01:33:40 - 01:33:45] typescript see the is gone now we use
+[01:33:43 - 01:33:49] this set user location to set the
+[01:33:45 - 01:33:51] latitud and longitude of the user now we
+[01:33:49 - 01:33:53] with the help of context right we will
+[01:33:51 - 01:33:57] pass this to the all other this
+[01:33:53 - 01:34:01] component okay so to do to do that right
+[01:33:57 - 01:34:04] uh we will create a new folder okay so
+[01:34:01 - 01:34:07] inside root folder you can call it as a
+[01:34:04 - 01:34:13] context and inside that we'll create a
+[01:34:07 - 01:34:16] user location context. TSX file okay and
+[01:34:13 - 01:34:19] here easy just need to write export
+[01:34:16 - 01:34:23] constant I will use the same name for
+[01:34:19 - 01:34:27] the context as a file name is equal to
+[01:34:23 - 01:34:31] create uh context okay this
+[01:34:27 - 01:34:33] one and let's pass null value okay and
+[01:34:31 - 01:34:35] you also exported that Theon it will be
+[01:34:33 - 01:34:39] accessible throughout the application
+[01:34:35 - 01:34:43] okay now once you added this one let's
+[01:34:39 - 01:34:46] go back to uh page. TSX file so inside
+[01:34:43 - 01:34:49] the app we have this page. TSX and here
+[01:34:46 - 01:34:51] I will wrap everything inside that
+[01:34:49 - 01:34:55] particular context so you will see say
+[01:34:51 - 01:34:57] user location context dot see this
+[01:34:55 - 01:35:00] provider is coming right so pass add
+[01:34:57 - 01:35:02] provider and wrap this whole D okay
+[01:35:00 - 01:35:05] because we want to pass it to this
+[01:35:02 - 01:35:08] component so I will wrap this in D like
+[01:35:05 - 01:35:11] this okay and then we have to pass the
+[01:35:08 - 01:35:15] value so in this case the value is user
+[01:35:11 - 01:35:20] location comma set user location okay
+[01:35:15 - 01:35:23] and uh so it's can be dispatched to be
+[01:35:20 - 01:35:25] uh that way I will figure out why this
+[01:35:23 - 01:35:28] error is coming that's fine okay we need
+[01:35:25 - 01:35:31] to pass the some value with it null or
+[01:35:28 - 01:35:32] not but here if you see right we passing
+[01:35:31 - 01:35:34] this user location and state user
+[01:35:32 - 01:35:37] location okay so with the help of
+[01:35:34 - 01:35:39] context if you want to change the value
+[01:35:37 - 01:35:41] from anywhere you can do it okay if you
+[01:35:39 - 01:35:42] go to the magbox magbox map and if you
+[01:35:41 - 01:35:44] want to change the user location value
+[01:35:42 - 01:35:46] you can change it and that will reflect
+[01:35:44 - 01:35:48] to throughout the component each
+[01:35:46 - 01:35:50] component which you define in this
+[01:35:48 - 01:35:52] particular provider okay so that's the
+[01:35:50 - 01:35:54] reason the context is very powerful when
+[01:35:52 - 01:35:56] you are going to pass some value from
+[01:35:54 - 01:35:59] one component to other and want to share
+[01:35:56 - 01:36:02] in the value in nested components okay
+[01:35:59 - 01:36:03] so like this one so make sure you
+[01:36:02 - 01:36:06] understand this particular
+[01:36:03 - 01:36:09] concept and uh for this error right if I
+[01:36:06 - 01:36:11] H on it it's saying that we Define the
+[01:36:09 - 01:36:14] user location of type any but this
+[01:36:11 - 01:36:16] context of type null okay so if you go
+[01:36:14 - 01:36:18] to this user location context right now
+[01:36:16 - 01:36:22] we pass as a n right just make it as a
+[01:36:18 - 01:36:24] any here like this okay and then save
+[01:36:22 - 01:36:27] everything and if you see now this error
+[01:36:24 - 01:36:28] is gone okay and if you go back to our
+[01:36:27 - 01:36:32] application as well make sure everything
+[01:36:28 - 01:36:35] is running properly even let me refresh
+[01:36:32 - 01:36:38] it and see nothing got changed okay
+[01:36:35 - 01:36:40] right now we just fet the users location
+[01:36:38 - 01:36:43] and put it in our context so that we can
+[01:36:40 - 01:36:46] use in our booking or mapbx whenever we
+[01:36:43 - 01:36:46] requir okay
+[01:36:50 - 01:36:56] perfect now now let's implement the
+[01:36:52 - 01:36:58] marker for the users location okay so if
+[01:36:56 - 01:37:01] you go to this documentation of this uh
+[01:36:58 - 01:37:04] react map G right here if you go to this
+[01:37:01 - 01:37:07] API reference and inside that you'll see
+[01:37:04 - 01:37:10] the marker documentation okay and we
+[01:37:07 - 01:37:13] it's very easy don't be uh get confused
+[01:37:10 - 01:37:15] or don't uh feel it's complicated but if
+[01:37:13 - 01:37:17] you see right inside this map right
+[01:37:15 - 01:37:19] which we already have they added this
+[01:37:17 - 01:37:22] marker okay so what we'll do we'll just
+[01:37:19 - 01:37:25] copy this marker
+[01:37:22 - 01:37:28] and inside this map we want it right so
+[01:37:25 - 01:37:31] what I will do I will remove this and I
+[01:37:28 - 01:37:33] will add the map closing tag here like
+[01:37:31 - 01:37:36] this and inside that we will add the map
+[01:37:33 - 01:37:39] marker okay like this now make sure to
+[01:37:36 - 01:37:42] import this marker so we have to import
+[01:37:39 - 01:37:45] it here marker like this okay and save
+[01:37:42 - 01:37:49] it now here we have to pass the latitude
+[01:37:45 - 01:37:51] and longitude of the users's location so
+[01:37:49 - 01:37:51] same thing we have to copy and paste it
+[01:37:51 - 01:37:54] it
+[01:37:51 - 01:37:58] here okay and us your
+[01:37:54 - 01:38:01] latitude so latitude like this okay and
+[01:37:58 - 01:38:03] the anchor is bottom everything also
+[01:38:01 - 01:38:06] there is very important step okay if I
+[01:38:03 - 01:38:10] go to this documentation okay get
+[01:38:06 - 01:38:12] started if I scroll down they added this
+[01:38:10 - 01:38:14] particular uh link right styling and
+[01:38:12 - 01:38:17] this is very important to add so just
+[01:38:14 - 01:38:19] copy this okay and where whereever your
+[01:38:17 - 01:38:21] marker is imported right this you have
+[01:38:19 - 01:38:25] to add this CSS okay
+[01:38:21 - 01:38:27] and and save it otherwise marker will
+[01:38:25 - 01:38:30] show on map but it will not at the
+[01:38:27 - 01:38:32] precise location that the reason that we
+[01:38:30 - 01:38:35] have to add CSS and if you see the
+[01:38:32 - 01:38:38] marker is showing on the screen okay but
+[01:38:35 - 01:38:40] if you see this size is too big right uh
+[01:38:38 - 01:38:42] and this you can add your own image
+[01:38:40 - 01:38:45] right in the marker if you see we added
+[01:38:42 - 01:38:47] this latitude longitude the anchor typ
+[01:38:45 - 01:38:50] and then if you if you see right this
+[01:38:47 - 01:38:53] image we added okay and this PNG file it
+[01:38:50 - 01:38:56] is in our local uh folder is sorry it is
+[01:38:53 - 01:38:58] in public folder so here you can just
+[01:38:56 - 01:39:03] add your taes classes so I will say
+[01:38:58 - 01:39:07] width of 10 and height of 10 and save it
+[01:39:03 - 01:39:08] so as I save see the marker sorry this
+[01:39:07 - 01:39:11] refresh the Mark is showing on the
+[01:39:08 - 01:39:15] screen okay so this is how easily you
+[01:39:11 - 01:39:18] can add it Let me refresh the
+[01:39:15 - 01:39:21] screen and is here the latitude and
+[01:39:18 - 01:39:24] longitude of the users marker okay so
+[01:39:21 - 01:39:26] this is the location that we are getting
+[01:39:24 - 01:39:28] so this is how we can add the marker
+[01:39:26 - 01:39:30] okay and very easy you can add multiple
+[01:39:28 - 01:39:31] marker you have to just paste this one
+[01:39:30 - 01:39:34] and you have to change the lude
+[01:39:31 - 01:39:37] longitude it will have multiple marker
+[01:39:34 - 01:39:40] also you can use the users image as a
+[01:39:37 - 01:39:43] marker okay and for that one you have to
+[01:39:40 - 01:39:45] use this use session okay so you from
+[01:39:43 - 01:39:47] the use sorry use
+[01:39:45 - 01:39:50] user uh and if you see right is
+[01:39:47 - 01:39:53] importing from the clerk nextjs okay you
+[01:39:50 - 01:39:55] can import this one and once you get
+[01:39:53 - 01:39:57] that right you'll get the user profile
+[01:39:55 - 01:39:59] image name everything but for now we'll
+[01:39:57 - 01:40:02] use this pin only okay which is our
+[01:39:59 - 01:40:04] local file and that's how we will we
+[01:40:02 - 01:40:06] show it on the screen okay if you have
+[01:40:04 - 01:40:09] any question any doubt let me know in
+[01:40:06 - 01:40:09] the comment
+[01:40:12 - 01:40:18] section now in this particular section
+[01:40:15 - 01:40:20] we are going to get the source and
+[01:40:18 - 01:40:25] destination address latitude and
+[01:40:20 - 01:40:28] longitude okay so uh for that one if I
+[01:40:25 - 01:40:31] uh if you go to the uh map box uh
+[01:40:28 - 01:40:33] documentation right we already use this
+[01:40:31 - 01:40:36] search uh API to search the address
+[01:40:33 - 01:40:38] right and in that only we have this
+[01:40:36 - 01:40:41] another API call to retrive the
+[01:40:38 - 01:40:44] suggested feature okay so if you go here
+[01:40:41 - 01:40:48] right and this is the particular uh API
+[01:40:44 - 01:40:50] endpoint to get the um uh addresses
+[01:40:48 - 01:40:51] coordinates okay which is latitude and
+[01:40:50 - 01:40:53] longitude
+[01:40:51 - 01:40:56] and if you see right this is the
+[01:40:53 - 01:41:00] particular API endpoint SL retri and
+[01:40:56 - 01:41:02] here we have to pass the mapbox ID okay
+[01:41:00 - 01:41:05] so I will show you what mybox id means
+[01:41:02 - 01:41:08] and session token and access token is
+[01:41:05 - 01:41:10] similar okay so if I go here right and
+[01:41:08 - 01:41:12] this is the suggested API when you
+[01:41:10 - 01:41:14] search the address right and this is the
+[01:41:12 - 01:41:16] list of address we are getting so in
+[01:41:14 - 01:41:19] that one we have this long big Long Key
+[01:41:16 - 01:41:24] which is the mapbox ID and this ID we
+[01:41:19 - 01:41:26] have to provide in order to uh to this
+[01:41:24 - 01:41:29] particular retri API right here instead
+[01:41:26 - 01:41:33] of ID we have to provide that mapbox ID
+[01:41:29 - 01:41:35] to get the list of all the IDS okay and
+[01:41:33 - 01:41:36] if you want to see how it response look
+[01:41:35 - 01:41:39] like right let me show you the response
+[01:41:36 - 01:41:42] how it look like so this is the if you
+[01:41:39 - 01:41:44] see R and this is the map boox IDE I'm
+[01:41:42 - 01:41:49] providing okay and if you see this is
+[01:41:44 - 01:41:52] the big URL is uh we are uh accessing
+[01:41:49 - 01:41:54] okay so in inside that one right for
+[01:41:52 - 01:41:56] example uh this is the particular
+[01:41:54 - 01:41:59] address we are checking and this is the
+[01:41:56 - 01:42:02] coordinates which we are getting okay
+[01:41:59 - 01:42:04] and this coordinate we needed to uh for
+[01:42:02 - 01:42:07] the addresses latitude and longitude
+[01:42:04 - 01:42:11] okay so this is nothing but longitude
+[01:42:07 - 01:42:15] and latitude okay so here uh to get that
+[01:42:11 - 01:42:18] one right uh make sure to you can able
+[01:42:15 - 01:42:21] to uh know understand this API endpoint
+[01:42:18 - 01:42:24] okay and then we will implement it so
+[01:42:21 - 01:42:26] let's go back to our application and
+[01:42:24 - 01:42:29] inside the aut complete address we will
+[01:42:26 - 01:42:32] write our function okay because uh let
+[01:42:29 - 01:42:34] me show you how we are going to call
+[01:42:32 - 01:42:37] that particular API endpoint and where
+[01:42:34 - 01:42:39] we want to call okay so here if I
+[01:42:37 - 01:42:41] search5 or something some address right
+[01:42:39 - 01:42:44] we are getting some suggestion correct
+[01:42:41 - 01:42:46] when we click on this particular address
+[01:42:44 - 01:42:49] right if I click this one we have to
+[01:42:46 - 01:42:53] call that particular API to get the
+[01:42:49 - 01:42:55] latitude and longitud itude so to get
+[01:42:53 - 01:42:57] that first of all what we can do we can
+[01:42:55 - 01:43:00] write one function method called
+[01:42:57 - 01:43:03] constant on
+[01:43:00 - 01:43:08] Source on
+[01:43:03 - 01:43:11] Source address click okay on Source
+[01:43:08 - 01:43:13] address click we can say okay and I I'm
+[01:43:11 - 01:43:17] giving some meaningful name to my method
+[01:43:13 - 01:43:21] okay and on Source address click we are
+[01:43:17 - 01:43:23] going to uh call that in this particular
+[01:43:21 - 01:43:25] onclick method okay so what I will do I
+[01:43:23 - 01:43:27] will just copy all this function uh
+[01:43:25 - 01:43:30] function calls from here and I will
+[01:43:27 - 01:43:32] paste it inside this one okay and here I
+[01:43:30 - 01:43:35] will pass the item so because we need
+[01:43:32 - 01:43:37] the mabox ID as well okay so just call
+[01:43:35 - 01:43:42] this
+[01:43:37 - 01:43:46] here uh inside this one and then pass
+[01:43:42 - 01:43:49] the item like this okay and on Source
+[01:43:46 - 01:43:51] address make sure to accept this item
+[01:43:49 - 01:43:54] and is of type any
+[01:43:51 - 01:43:56] now we have the S source and set add
+[01:43:54 - 01:43:59] this make sure everything is working as
+[01:43:56 - 01:44:03] expected so I saved everything and let's
+[01:43:59 - 01:44:08] try to find something right so 5 to5
+[01:44:03 - 01:44:10] not TR on okay some something so so this
+[01:44:08 - 01:44:12] address is coming if I click it so
+[01:44:10 - 01:44:14] everything is working fine okay now once
+[01:44:12 - 01:44:16] we click on this obviously we have to
+[01:44:14 - 01:44:19] call the ltitude and longitude uh method
+[01:44:16 - 01:44:21] okay so for that one uh I will add the
+[01:44:19 - 01:44:24] API endpoint and session token at the
+[01:44:21 - 01:44:26] top of this particular function okay so
+[01:44:24 - 01:44:29] this is the API endpoint and I'm calling
+[01:44:26 - 01:44:32] it as a magbox retrival URL and the
+[01:44:29 - 01:44:36] session token which is the random uu ID
+[01:44:32 - 01:44:39] okay so inside this one we will write
+[01:44:36 - 01:44:43] the F method okay so you can write
+[01:44:39 - 01:44:46] constant result okay and this need to
+[01:44:43 - 01:44:50] make a sync function so we can use weit
+[01:44:46 - 01:44:51] so await F first of all uh we have to
+[01:44:50 - 01:44:56] write
+[01:44:51 - 01:44:59] the URL so which is the mapbox retal URL
+[01:44:56 - 01:45:04] plus we have to pass the mapbox ID so
+[01:44:59 - 01:45:07] mapbox ID is item dot mapbox ID let me
+[01:45:04 - 01:45:12] see so this one right so mapbox
+[01:45:07 - 01:45:15] ID and we are passing here mapbox ID
+[01:45:12 - 01:45:19] then we want to pass the session token
+[01:45:15 - 01:45:23] okay so question mark session underscore
+[01:45:19 - 01:45:26] token is equal to the one which we have
+[01:45:23 - 01:45:30] already defined okay so session token
+[01:45:26 - 01:45:35] then we want to pass the access token so
+[01:45:30 - 01:45:37] andate accessor token okay is equal to
+[01:45:35 - 01:45:41] and that token we are getting from the
+[01:45:37 - 01:45:45] local environment file so process. EnV
+[01:45:41 - 01:45:48] okay and let me go back to this
+[01:45:45 - 01:45:51] particular file just copy this one and
+[01:45:48 - 01:45:54] paste it here en do
+[01:45:51 - 01:45:57] Public Access token okay once we have
+[01:45:54 - 01:45:58] this one let's get the data so constant
+[01:45:57 - 01:46:04] result is equal
+[01:45:58 - 01:46:07] to AIT okay and here we uh send the
+[01:46:04 - 01:46:09] response. Json like this okay and let's
+[01:46:07 - 01:46:12] print out whether we are getting this
+[01:46:09 - 01:46:15] response or not so we'll write result
+[01:46:12 - 01:46:19] here like this okay and save
+[01:46:15 - 01:46:21] everything now let me go back here go to
+[01:46:19 - 01:46:24] inspect panel
+[01:46:21 - 01:46:28] to the console clean
+[01:46:24 - 01:46:31] everything okay so here we'll type 155
+[01:46:28 - 01:46:34] Cali Loop just ignore this
+[01:46:31 - 01:46:37] error okay and if I click on this one
+[01:46:34 - 01:46:39] see as as soon I click right we get the
+[01:46:37 - 01:46:44] response and in the response in the
+[01:46:39 - 01:46:46] features we we got the first um uh item
+[01:46:44 - 01:46:47] okay inside that one if you see right
+[01:46:46 - 01:46:50] this is the property name the full
+[01:46:47 - 01:46:51] address and everything right and in the
+[01:46:50 - 01:46:54] geometry
+[01:46:51 - 01:46:58] we have the coordinates see the latitude
+[01:46:54 - 01:47:00] and sorry longitude and latitude okay
+[01:46:58 - 01:47:02] now we will need to store it in some
+[01:47:00 - 01:47:06] state so what we can
+[01:47:02 - 01:47:08] do uh here we can
+[01:47:06 - 01:47:11] say
+[01:47:08 - 01:47:13] constant
+[01:47:11 - 01:47:15] Source
+[01:47:13 - 01:47:18] coordinates
+[01:47:15 - 01:47:18] set
+[01:47:19 - 01:47:25] source
+[01:47:21 - 01:47:28] Source coordinates is equal to use State
+[01:47:25 - 01:47:32] okay of type I will do
+[01:47:28 - 01:47:36] any like this okay and uh we pass empty
+[01:47:32 - 01:47:39] for now and to set the coordinates we
+[01:47:36 - 01:47:41] come down here and make sure set
+[01:47:39 - 01:47:42] coordinates we only set the coordinates
+[01:47:41 - 01:47:46] so it is in the
+[01:47:42 - 01:47:48] result okay so let me okay result inside
+[01:47:46 - 01:47:50] that we have the
+[01:47:48 - 01:47:51] features inside how we have first
+[01:47:50 - 01:47:54] element
+[01:47:51 - 01:47:58] so
+[01:47:54 - 01:48:02] okay features first element
+[01:47:58 - 01:48:04] dot we have the geometry again in
+[01:48:02 - 01:48:07] coordinates so
+[01:48:04 - 01:48:08] geometry in
+[01:48:07 - 01:48:10] again
+[01:48:08 - 01:48:13] coordinates
+[01:48:10 - 01:48:16] okay coordinates again now we have to
+[01:48:13 - 01:48:17] provide a different so what I will do I
+[01:48:16 - 01:48:19] will put
+[01:48:17 - 01:48:22] latitude
+[01:48:19 - 01:48:22] okay this is the
+[01:48:23 - 01:48:30] latitude coordinates of zero okay and
+[01:48:27 - 01:48:32] then we have the longitude maybe this is
+[01:48:30 - 01:48:35] the I don't know which one is which but
+[01:48:32 - 01:48:37] we'll check it out okay so this is the
+[01:48:35 - 01:48:37] first
+[01:48:37 - 01:48:43] one and
+[01:48:40 - 01:48:47] then maybe this is a longitude
+[01:48:43 - 01:48:51] actually LNG we'll say and this is
+[01:48:47 - 01:48:52] latitude have first okay right like this
+[01:48:51 - 01:48:56] and this is we store the latitude and
+[01:48:52 - 01:48:58] longitude for the set Source coordinates
+[01:48:56 - 01:49:01] okay same thing you have to do it for
+[01:48:58 - 01:49:03] the destination address okay once we
+[01:49:01 - 01:49:06] click on this one select the destination
+[01:49:03 - 01:49:09] address we have to call that API and
+[01:49:06 - 01:49:11] then we have to set the uh destination
+[01:49:09 - 01:49:16] coordinates okay so try it on your own
+[01:49:11 - 01:49:17] so this is the source address I uh I I
+[01:49:16 - 01:49:21] implement the method same method you
+[01:49:17 - 01:49:25] have to implement for the destination C
+[01:49:21 - 01:49:28] now I implemented uh this particular
+[01:49:25 - 01:49:31] Logic for the getting the coordinates
+[01:49:28 - 01:49:34] for the destination as well okay so okay
+[01:49:31 - 01:49:37] so only thing that I mismatch here it's
+[01:49:34 - 01:49:40] a source and this is the destination
+[01:49:37 - 01:49:42] okay and this is the same uh
+[01:49:40 - 01:49:44] implementation only I change the
+[01:49:42 - 01:49:48] destination and saving in destination
+[01:49:44 - 01:49:49] okay and I tested it is working fine now
+[01:49:48 - 01:49:51] another thing we need to make some
+[01:49:49 - 01:49:54] change changes okay so what we have to
+[01:49:51 - 01:49:57] do once we save it here right we want to
+[01:49:54 - 01:49:59] share it across the all the components
+[01:49:57 - 01:50:04] in the application right to do that we
+[01:49:59 - 01:50:06] need to use uh the uh context okay so if
+[01:50:04 - 01:50:10] you see right we have
+[01:50:06 - 01:50:12] the uh context already we defined it
+[01:50:10 - 01:50:15] right and we use it in our application
+[01:50:12 - 01:50:17] for the look user location we will
+[01:50:15 - 01:50:19] create another one to save the source
+[01:50:17 - 01:50:21] coordinates and the destination
+[01:50:19 - 01:50:24] coordinate right so so here we'll we'll
+[01:50:21 - 01:50:26] create a new uh context called
+[01:50:24 - 01:50:30] Source
+[01:50:26 - 01:50:34] coordinates context okay
+[01:50:30 - 01:50:39] PSX and here obviously we have to export
+[01:50:34 - 01:50:43] constant we say Source
+[01:50:39 - 01:50:47] coordinates context is equal to create
+[01:50:43 - 01:50:50] context okay it is of type any and
+[01:50:47 - 01:50:53] passing nothing so pass
+[01:50:50 - 01:50:55] right now okay now I don't know why but
+[01:50:53 - 01:50:59] got explained zero create contact right
+[01:50:55 - 01:51:02] now we okay so this need to be from the
+[01:50:59 - 01:51:03] react like this and save it now same
+[01:51:02 - 01:51:05] thing you have to do it for the
+[01:51:03 - 01:51:06] destination so we get another one for
+[01:51:05 - 01:51:08] the
+[01:51:06 - 01:51:10] destination
+[01:51:08 - 01:51:14] coordinates context.
+[01:51:10 - 01:51:15] DSX and here again export
+[01:51:14 - 01:51:17] constant
+[01:51:15 - 01:51:22] destination
+[01:51:17 - 01:51:26] coordinates context is equal to create
+[01:51:22 - 01:51:30] context is of type any and is passing
+[01:51:26 - 01:51:33] null initially okay perfect now
+[01:51:30 - 01:51:35] obviously same thing we have to do uh if
+[01:51:33 - 01:51:38] you go to the page TSX right we did it
+[01:51:35 - 01:51:41] for the location same thing you have to
+[01:51:38 - 01:51:44] do for the uh this source and
+[01:51:41 - 01:51:46] destination so I will add Source in a
+[01:51:44 - 01:51:51] context. provider
+[01:51:46 - 01:51:55] okay and uh wrap this
+[01:51:51 - 01:52:00] up like this and again you can also add
+[01:51:55 - 01:52:00] the destination inside okay do
+[01:52:02 - 01:52:07] provider like this okay now obviously we
+[01:52:05 - 01:52:10] are getting error because we we did not
+[01:52:07 - 01:52:13] provide any value right so if you go
+[01:52:10 - 01:52:16] back to this our um components called
+[01:52:13 - 01:52:17] AOC compete address you have to copy
+[01:52:16 - 01:52:21] this one because we are using this one
+[01:52:17 - 01:52:23] okay over here same name and this value
+[01:52:21 - 01:52:27] we are passing so here for the source
+[01:52:23 - 01:52:29] coordinates we passing Source coordinate
+[01:52:27 - 01:52:33] Source
+[01:52:29 - 01:52:35] uh coordinates comma set Source
+[01:52:33 - 01:52:36] coordinates and for the destination we
+[01:52:35 - 01:52:40] are
+[01:52:36 - 01:52:43] passing destination coordinates comma
+[01:52:40 - 01:52:44] say destination coordinates okay perfect
+[01:52:43 - 01:52:46] now we pass this Source coordinates and
+[01:52:44 - 01:52:49] destination coordinates and here right
+[01:52:46 - 01:52:51] now it's empty okay that's fine but once
+[01:52:49 - 01:52:53] in aut Complete because this is
+[01:52:51 - 01:52:55] accessible in aut complete address as
+[01:52:53 - 01:52:57] well okay in this component here instead
+[01:52:55 - 01:53:00] of use State we are going to change it
+[01:52:57 - 01:53:03] with the use context okay so obviously
+[01:53:00 - 01:53:04] change this C square brackets to the
+[01:53:03 - 01:53:08] circular because we are going to change
+[01:53:04 - 01:53:11] to use context remove this
+[01:53:08 - 01:53:15] completely and here we will use a source
+[01:53:11 - 01:53:18] context like this okay and same thing we
+[01:53:15 - 01:53:21] have to do for the destination okay and
+[01:53:18 - 01:53:23] if you remember as I told you before
+[01:53:21 - 01:53:26] once you define this context you can
+[01:53:23 - 01:53:27] update this context anywhere from any
+[01:53:26 - 01:53:29] component and that will reflect
+[01:53:27 - 01:53:33] throughout the application and that's
+[01:53:29 - 01:53:34] the reason we are updating from this aut
+[01:53:33 - 01:53:37] complete address okay and that will
+[01:53:34 - 01:53:40] reflect throughout the app uh any other
+[01:53:37 - 01:53:42] components okay so this is how uh useful
+[01:53:40 - 01:53:45] it is
+[01:53:42 - 01:53:48] okay so let me move this one and this is
+[01:53:45 - 01:53:52] the destination
+[01:53:48 - 01:53:54] coordinates context
+[01:53:52 - 01:53:57] actually
+[01:53:54 - 01:53:59] destination context okay perfect now we
+[01:53:57 - 01:54:02] already setting this value so no need to
+[01:53:59 - 01:54:05] change anywhere okay perfect now we save
+[01:54:02 - 01:54:08] this one and we are able to successfully
+[01:54:05 - 01:54:11] save this data for example if I search
+[01:54:08 - 01:54:12] uh some different address right
+[01:54:11 - 01:54:14] Cornelius I don't know whether it will
+[01:54:12 - 01:54:15] find or
+[01:54:14 - 01:54:18] not
+[01:54:15 - 01:54:20] Cornelius let's find my address only
+[01:54:18 - 01:54:26] because this is much more
+[01:54:20 - 01:54:29] easier okay and 52 525 not
+[01:54:26 - 01:54:31] trying okay see this one is got see for
+[01:54:29 - 01:54:33] source and address I'm getting the both
+[01:54:31 - 01:54:35] the coordinates okay and this we are
+[01:54:33 - 01:54:38] already saving perfect
+[01:54:35 - 01:54:39] so uh I hope you understand this one and
+[01:54:38 - 01:54:41] if you have any question any doubt let
+[01:54:39 - 01:54:43] me know in the comment section okay so
+[01:54:41 - 01:54:46] this is how easily we can uh get the
+[01:54:43 - 01:54:49] coordinates now next what we can do we
+[01:54:46 - 01:54:51] will pass this coordinates to this part
+[01:54:49 - 01:54:54] particular map okay so once we select
+[01:54:51 - 01:54:56] this particular uh Source address and
+[01:54:54 - 01:55:00] destination address we going to add the
+[01:54:56 - 01:55:02] marker for them on the map and once you
+[01:55:00 - 01:55:06] select the both the address okay after
+[01:55:02 - 01:55:08] selecting destination then we will uh
+[01:55:06 - 01:55:10] pass or we will add the root between
+[01:55:08 - 01:55:12] this particular source and destination
+[01:55:10 - 01:55:14] okay and we will show it on the map
+[01:55:12 - 01:55:17] again I know this is actic but again we
+[01:55:14 - 01:55:19] have to call one more API to get the
+[01:55:17 - 01:55:22] coordinates list of coordinates to draw
+[01:55:19 - 01:55:25] the uh root okay that we will see uh in
+[01:55:22 - 01:55:25] next
+[01:55:28 - 01:55:34] section so in this section we are going
+[01:55:31 - 01:55:37] to show a source and distination
+[01:55:34 - 01:55:38] addresses marker on the map okay because
+[01:55:37 - 01:55:41] uh we already have the latitude and
+[01:55:38 - 01:55:43] longitude for the source and the
+[01:55:41 - 01:55:45] destination with the help of that we
+[01:55:43 - 01:55:48] will add the marker on the screen so
+[01:55:45 - 01:55:50] let's go back to our application and
+[01:55:48 - 01:55:53] inside the
+[01:55:50 - 01:55:56] component folder we have this map folder
+[01:55:53 - 01:55:58] right inside that create a new folder
+[01:55:56 - 01:56:01] called
+[01:55:58 - 01:56:04] markers TSX inside that we will store
+[01:56:01 - 01:56:06] all our markers so add the default
+[01:56:04 - 01:56:08] template and uh if I go back to the
+[01:56:06 - 01:56:11] mapbox map right here we added this
+[01:56:08 - 01:56:13] marker for the user okay so what I will
+[01:56:11 - 01:56:17] do I will remove it from here and add it
+[01:56:13 - 01:56:20] in this our markers component okay like
+[01:56:17 - 01:56:23] this and uh just to make
+[01:56:20 - 01:56:27] sure to differentiate right I will add
+[01:56:23 - 01:56:29] the user marker okay like this and here
+[01:56:27 - 01:56:31] make sure to import all the statements
+[01:56:29 - 01:56:33] so just copy it import
+[01:56:31 - 01:56:36] statement copy it from here paste it
+[01:56:33 - 01:56:38] here and the user location as well okay
+[01:56:36 - 01:56:41] so this one as well need to
+[01:56:38 - 01:56:42] copy it here make sure to import this
+[01:56:41 - 01:56:46] use
+[01:56:42 - 01:56:49] contact as well as user location contact
+[01:56:46 - 01:56:51] okay now once you add this one here you
+[01:56:49 - 01:56:53] have to make sure that you are adding
+[01:56:51 - 01:56:56] the marker component inside this map so
+[01:56:53 - 01:57:00] add the markers
+[01:56:56 - 01:57:00] component markers
+[01:57:02 - 01:57:10] component let me check markers so the
+[01:57:06 - 01:57:15] spelling is incorrect let me
+[01:57:10 - 01:57:18] have markers. DSX okay update it here as
+[01:57:15 - 01:57:21] well
+[01:57:18 - 01:57:21] just
+[01:57:21 - 01:57:29] this okay and then we'll import it
+[01:57:25 - 01:57:30] here and save everything now if you go
+[01:57:29 - 01:57:32] back to our application make sure the
+[01:57:30 - 01:57:34] marker is showing on the screen okay
+[01:57:32 - 01:57:38] this is the users location
+[01:57:34 - 01:57:40] marker next what we can do uh now we
+[01:57:38 - 01:57:42] want to show the users a source
+[01:57:40 - 01:57:45] destination marker source and
+[01:57:42 - 01:57:47] destination marker on the um screen
+[01:57:45 - 01:57:50] right so for that one uh let's create
+[01:57:47 - 01:57:52] another marker here so I will say Source
+[01:57:50 - 01:57:56] marker
+[01:57:52 - 01:58:00] okay and then will come
+[01:57:56 - 01:58:03] destination marker okay so I will copy
+[01:58:00 - 01:58:04] the existing one same like this okay so
+[01:58:03 - 01:58:09] just copy this
+[01:58:04 - 01:58:11] one obviously this Mar need to be closed
+[01:58:09 - 01:58:14] here o sorry so
+[01:58:11 - 01:58:16] actually we need to paste this one not
+[01:58:14 - 01:58:20] here in the markers okay so here we need
+[01:58:16 - 01:58:22] to add it okay
+[01:58:20 - 01:58:25] and then I will just copy existing one
+[01:58:22 - 01:58:27] paste it here and instead of passing
+[01:58:25 - 01:58:30] this users location latitude and
+[01:58:27 - 01:58:35] longitude we are going to pass the uh
+[01:58:30 - 01:58:36] Source uh coordinates okay so as you
+[01:58:35 - 01:58:38] know right we already have the contact
+[01:58:36 - 01:58:41] for that one so I will just copy paste
+[01:58:38 - 01:58:43] it here okay this is for Source
+[01:58:41 - 01:58:45] coordinates and this is for the
+[01:58:43 - 01:58:47] destinction coordinates okay and make
+[01:58:45 - 01:58:50] sure to import it as well so let me
+[01:58:47 - 01:58:53] import that one
+[01:58:50 - 01:58:55] so here I will import it like this okay
+[01:58:53 - 01:58:57] so now we have the source coordinates
+[01:58:55 - 01:58:59] and the destination coordinates this
+[01:58:57 - 01:59:01] coordinate we need to pass it here okay
+[01:58:59 - 01:59:05] so just paste the source coordinates
+[01:59:01 - 01:59:07] like this latitude and longitude okay
+[01:59:05 - 01:59:11] and U everything is good
+[01:59:07 - 01:59:14] also um here we we need to make sure
+[01:59:11 - 01:59:15] that we have the source coordinate
+[01:59:14 - 01:59:17] because initially when you load the app
+[01:59:15 - 01:59:19] we don't have the source coordinate okay
+[01:59:17 - 01:59:22] let's check how what happen if you did
+[01:59:19 - 01:59:25] not provide any condition and if you see
+[01:59:22 - 01:59:26] we got this NN okay because this error
+[01:59:25 - 01:59:28] because we don't have the source
+[01:59:26 - 01:59:32] coordinate so here we need to check
+[01:59:28 - 01:59:34] Source coordinates okay so
+[01:59:32 - 01:59:38] Source coordinates I don't know why it's
+[01:59:34 - 01:59:39] not coming let's copy this one okay
+[01:59:38 - 01:59:41] question mark if the source coordinate
+[01:59:39 - 01:59:45] is there then only show this marker
+[01:59:41 - 01:59:47] otherwise show nothing okay and now save
+[01:59:45 - 01:59:51] this one make sure this length I will
+[01:59:47 - 01:59:53] provide the length not equal to zero you
+[01:59:51 - 01:59:55] can mention like this okay you have to
+[01:59:53 - 01:59:57] check whether which condition is
+[01:59:55 - 02:00:00] perfectly work for you okay and now see
+[01:59:57 - 02:00:02] the error is gone now let's search the
+[02:00:00 - 02:00:08] address okay so I will
+[02:00:02 - 02:00:11] search uh 153 Al Loop okay and if I
+[02:00:08 - 02:00:15] select this one see the second marker is
+[02:00:11 - 02:00:18] on the screen okay see one55 and 153
+[02:00:15 - 02:00:20] immediately right now same thing we have
+[02:00:18 - 02:00:22] to do it for the
+[02:00:20 - 02:00:25] um destination one okay so what I will
+[02:00:22 - 02:00:27] do I will copy a similar thing and paste
+[02:00:25 - 02:00:29] it for the destination and instead of
+[02:00:27 - 02:00:31] this Source we have to copy for the
+[02:00:29 - 02:00:34] destination coordinates destination
+[02:00:31 - 02:00:36] coordinate destination destination okay
+[02:00:34 - 02:00:38] and save it now let's see whether this
+[02:00:36 - 02:00:44] both the coordin is coming or
+[02:00:38 - 02:00:47] not so I will say 153 Cali
+[02:00:44 - 02:00:52] Loop okay and I selected see second
+[02:00:47 - 02:00:56] marker is came here then 525 not trying
+[02:00:52 - 02:00:58] Street okay and if I select this one
+[02:00:56 - 02:01:01] okay so now it's not showing because
+[02:00:58 - 02:01:05] it's little far from my but if I scroll
+[02:01:01 - 02:01:07] down you see this marker is here okay
+[02:01:05 - 02:01:09] perfect now the question is when I
+[02:01:07 - 02:01:12] select the marker right our map need to
+[02:01:09 - 02:01:15] move to to that particular marker's
+[02:01:12 - 02:01:17] location okay it's actually move like
+[02:01:15 - 02:01:19] this to that particular location so that
+[02:01:17 - 02:01:20] is very important because right now you
+[02:01:19 - 02:01:23] don't know where is the marker right you
+[02:01:20 - 02:01:25] have to zoom in out or zoom out zoom in
+[02:01:23 - 02:01:28] right to check where is the marker which
+[02:01:25 - 02:01:31] are the this Source or destination which
+[02:01:28 - 02:01:34] we selected okay so for that one let's
+[02:01:31 - 02:01:37] go back to our application and inside
+[02:01:34 - 02:01:40] this ma mapbx map component here we are
+[02:01:37 - 02:01:43] going to implement some logic okay so
+[02:01:40 - 02:01:46] first of all uh we have to add the
+[02:01:43 - 02:01:48] whenever this Source uh or destination
+[02:01:46 - 02:01:51] coordinates we found found it right that
+[02:01:48 - 02:01:54] time we have to call one a particular
+[02:01:51 - 02:01:56] method called Fly 2 okay and if you go
+[02:01:54 - 02:01:59] here right here it Define how to use the
+[02:01:56 - 02:02:01] Fly 2 see okay so let don't worry uh
+[02:01:59 - 02:02:03] let's Implement directly okay so you'll
+[02:02:01 - 02:02:06] get understand so first of all you have
+[02:02:03 - 02:02:08] to define the reference of the map okay
+[02:02:06 - 02:02:12] you can write my
+[02:02:08 - 02:02:14] reference um map reference is equal to
+[02:02:12 - 02:02:19] use
+[02:02:14 - 02:02:21] reference okay and of type any like this
+[02:02:19 - 02:02:26] okay after
+[02:02:21 - 02:02:26] that uh you have to add use effect use
+[02:02:26 - 02:02:33] effect okay and this us effect will
+[02:02:30 - 02:02:35] execute whenever the source coordinate
+[02:02:33 - 02:02:37] changes okay now obviously we have to
+[02:02:35 - 02:02:38] add the source coordinates and the
+[02:02:37 - 02:02:42] destination coordinates in our
+[02:02:38 - 02:02:46] application okay from with the help of
+[02:02:42 - 02:02:46] context okay so make sure to import
+[02:02:47 - 02:02:52] everything okay so with the help of
+[02:02:50 - 02:02:53] context we added this source and dist
+[02:02:52 - 02:02:55] coordinates so whenever the source
+[02:02:53 - 02:02:59] coordinates changes means it available
+[02:02:55 - 02:03:01] right uh then that time we have to make
+[02:02:59 - 02:03:05] sure
+[02:03:01 - 02:03:08] that in inside bracket we have to uh
+[02:03:05 - 02:03:11] move our um camera position we can say
+[02:03:08 - 02:03:15] to the markers position so map reference
+[02:03:11 - 02:03:19] do current okay and we have to Lo flight
+[02:03:15 - 02:03:22] to method and inside that we have to
+[02:03:19 - 02:03:24] Center Center at the coordinates okay so
+[02:03:22 - 02:03:26] here we have to provide the coordinates
+[02:03:24 - 02:03:31] so in this case is Source longitude and
+[02:03:26 - 02:03:35] Source latitude okay like this and then
+[02:03:31 - 02:03:40] we have to part the duration as well so
+[02:03:35 - 02:03:42] duration 255 like this okay and uh let's
+[02:03:40 - 02:03:45] test out whether it's working or not
+[02:03:42 - 02:03:48] okay and what else I think that's all
+[02:03:45 - 02:03:51] also make sure that reference you are
+[02:03:48 - 02:03:55] referring to this particular map I will
+[02:03:51 - 02:03:58] map reference like this okay and save
+[02:03:55 - 02:04:00] it now let's go back to our application
+[02:03:58 - 02:04:03] now select this some marker okay so I
+[02:04:00 - 02:04:06] I'm something here okay select the
+[02:04:03 - 02:04:10] marker C
+[02:04:06 - 02:04:12] Loop search it and see how camera move
+[02:04:10 - 02:04:16] automatically okay same thing you have
+[02:04:12 - 02:04:19] to do it for the destination so I will
+[02:04:16 - 02:04:22] copy this use effect okay
+[02:04:19 - 02:04:23] and instead of source I will put the
+[02:04:22 - 02:04:25] destination coordinates okay so
+[02:04:23 - 02:04:27] destination here we'll check with the
+[02:04:25 - 02:04:30] destination coordinates available and
+[02:04:27 - 02:04:33] then provation latitude and longitude
+[02:04:30 - 02:04:36] okay and save it now let's test both of
+[02:04:33 - 02:04:39] these things okay so first of
+[02:04:36 - 02:04:42] all5 Al
+[02:04:39 - 02:04:44] Loop see the map will move to this
+[02:04:42 - 02:04:47] particular location
+[02:04:44 - 02:04:50] then not
+[02:04:47 - 02:04:50] trying
+[02:04:53 - 02:05:00] and if I click on this one see how it
+[02:04:57 - 02:05:03] move immediately okay perfect that's
+[02:05:00 - 02:05:05] what um we want to Achi in okay so
+[02:05:03 - 02:05:06] hopefully you understand how to do it
+[02:05:05 - 02:05:08] okay and if you have any question let me
+[02:05:06 - 02:05:13] know in the comment section so this
+[02:05:08 - 02:05:18] particular use effect used to use to fly
+[02:05:13 - 02:05:25] to Source markers location okay and this
+[02:05:18 - 02:05:25] use effect we are calling use to fly to
+[02:05:25 - 02:05:32] destination Markus location how easy it
+[02:05:30 - 02:05:34] is right you don't need to do any kind
+[02:05:32 - 02:05:36] of implementation for that one just you
+[02:05:34 - 02:05:39] have to pass the coordinates to this
+[02:05:36 - 02:05:40] flight 2 method okay I hope you
+[02:05:39 - 02:05:42] understand this one and if you have any
+[02:05:40 - 02:05:45] question any doubts let me know in the
+[02:05:42 - 02:05:45] comment
+[02:05:47 - 02:05:53] section
+[02:05:49 - 02:05:56] so friends um we are stopping here okay
+[02:05:53 - 02:05:58] and uh for this particular video in next
+[02:05:56 - 02:06:00] video we will continue uh the remaining
+[02:05:58 - 02:06:03] implementation because this video is
+[02:06:00 - 02:06:06] getting much longer than what I expected
+[02:06:03 - 02:06:09] but don't worry uh the next part will
+[02:06:06 - 02:06:12] come within a uh two to 3 days okay so
+[02:06:09 - 02:06:14] please watch this complete video
+[02:06:12 - 02:06:16] Implement whatever you learn and in next
+[02:06:14 - 02:06:17] part we will learn a different things so
+[02:06:16 - 02:06:20] let let me show you what we are going to
+[02:06:17 - 02:06:24] implement in next video so if I search
+[02:06:20 - 02:06:26] something like this okay so5 Cali Loop
+[02:06:24 - 02:06:29] okay sub address I'm putting some
+[02:06:26 - 02:06:29] destination
+[02:06:29 - 02:06:37] address okay and once you select it
+[02:06:33 - 02:06:39] right you'll get the the route as well
+[02:06:37 - 02:06:42] see the beautiful route you'll getting
+[02:06:39 - 02:06:45] the marker I change then also if you see
+[02:06:42 - 02:06:47] this uh particular amount for each of
+[02:06:45 - 02:06:50] this vehicle is changed depends on the
+[02:06:47 - 02:06:52] distance and the time and if you see the
+[02:06:50 - 02:06:55] distance and the duration also showing
+[02:06:52 - 02:06:58] on the map itself okay that's also we'll
+[02:06:55 - 02:07:00] learn how to add that one okay also this
+[02:06:58 - 02:07:03] calculation of this amount for each of
+[02:07:00 - 02:07:05] the vehicle and after that we can select
+[02:07:03 - 02:07:07] payment method and the booking
+[02:07:05 - 02:07:09] implementation once you select the book
+[02:07:07 - 02:07:12] we going to save this all of this data
+[02:07:09 - 02:07:17] in our database and we will notify to
+[02:07:12 - 02:07:19] the user as well as uh to the car driver
+[02:07:17 - 02:07:22] okay the taxi driver so guys watch this
+[02:07:19 - 02:07:24] complete video okay and in wait for the
+[02:07:22 - 02:07:27] next video it's coming in within a few
+[02:07:24 - 02:07:31] days and if you give me the 500 like to
+[02:07:27 - 02:07:33] this video I'm going to um publish the
+[02:07:31 - 02:07:35] video as soon as possible so hit the
+[02:07:33 - 02:07:37] like button and subscribe to my channel
+[02:07:35 - 02:07:41] don't forget to subscribe and see you in
+[02:07:37 - 02:07:41] the next video

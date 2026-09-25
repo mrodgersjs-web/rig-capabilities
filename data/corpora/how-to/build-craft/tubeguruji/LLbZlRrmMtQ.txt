@@ -1,0 +1,1671 @@
+[00:00 - 00:05] hello everyone welcome back to channel
+[00:02 - 00:08] uh today in this video we are designing
+[00:05 - 00:11] this beautiful uh application uh which
+[00:08 - 00:13] is called online courses U listing
+[00:11 - 00:16] application okay so where you can post
+[00:13 - 00:19] your videos you can post your portfolios
+[00:16 - 00:22] and lot of things and this application
+[00:19 - 00:25] we are building using the react and
+[00:22 - 00:28] telin CSS so you don't need any prior
+[00:25 - 00:30] knowledge of react or telin css because
+[00:28 - 00:34] in this video I'm going through each St
+[00:30 - 00:36] by step um coding and how can you create
+[00:34 - 00:39] the react application how can you
+[00:36 - 00:42] integrate the telin CSS and from the
+[00:39 - 00:45] point we will learn a lot of different
+[00:42 - 00:45] Concept in the react
+[00:46 - 00:52] okay so in this video we are designing
+[00:49 - 00:53] this um online video course listing
+[00:52 - 00:56] applications
+[00:53 - 00:58] so let's walk through what application
+[00:56 - 01:00] include and what we are going to build
+[00:58 - 01:02] in this particular video so if you see
+[01:00 - 01:05] in the top navigation bar we have uh
+[01:02 - 01:08] this beautiful navigations and U then we
+[01:05 - 01:12] have this uh with the with the help of T
+[01:08 - 01:15] CSS we'll use this beautiful uh styling
+[01:12 - 01:16] of our text the cards and all then we
+[01:15 - 01:19] have the search bar so that user can
+[01:16 - 01:23] able to filter it out or you can search
+[01:19 - 01:25] anything okay then U if you see this
+[01:23 - 01:28] icon right so with the help of react
+[01:25 - 01:30] icons we'll um add these icons in our
+[01:28 - 01:32] applications
+[01:30 - 01:35] then we have these beautiful animations
+[01:32 - 01:38] okay if you see we have these animations
+[01:35 - 01:41] uh for all our videos and some of these
+[01:38 - 01:44] buttons so you can click on any of this
+[01:41 - 01:47] um video and we will integrate uh this
+[01:44 - 01:50] uh YouTube player in our application as
+[01:47 - 01:53] well okay then we have this uh course
+[01:50 - 01:55] Rel information below that video and on
+[01:53 - 01:59] the right we will show the recommended
+[01:55 - 02:02] video when you click on any of these uh
+[01:59 - 02:04] uh particular cards it will play video
+[02:02 - 02:07] for you in YouTube okay you can go back
+[02:04 - 02:09] so we learn navigations then as I
+[02:07 - 02:11] control you right you can decrease size
+[02:09 - 02:12] of this one and it depends on your
+[02:11 - 02:15] screen
+[02:12 - 02:18] size uh it will change the layout so
+[02:15 - 02:21] it's fully responsive uh mobile friendly
+[02:18 - 02:24] and easy to build so I will cover all
+[02:21 - 02:28] the uh basic concept of this react
+[02:24 - 02:28] anding CSS
+[02:31 - 02:35] so in this video we will learn how to
+[02:33 - 02:38] create the react app and how can you
+[02:35 - 02:40] integrate with the tailin CSS then we
+[02:38 - 02:43] will learn about the react hooks the
+[02:40 - 02:45] inbuilt react hols how can we use that
+[02:43 - 02:48] one then we will learn react navigation
+[02:45 - 02:50] with the help of react routing Dome then
+[02:48 - 02:54] we will learn the how can you pass the
+[02:50 - 02:56] data from Child component to sorry the
+[02:54 - 02:59] from parent component to child component
+[02:56 - 03:01] and vice versa okay then we will use
+[02:59 - 03:03] react icon in our application and you
+[03:01 - 03:06] will get to know how can you use the
+[03:03 - 03:08] react application react icons then we
+[03:06 - 03:11] will integrate the YouTube player in our
+[03:08 - 03:14] applications and we will play actual
+[03:11 - 03:17] video okay then we will build the
+[03:14 - 03:19] complete uh this application and we will
+[03:17 - 03:23] learn the different way to deploy this
+[03:19 - 03:25] application okay also uh we will learn
+[03:23 - 03:30] how can we Face data from the
+[03:25 - 03:32] API and uh with the help of uh live API
+[03:30 - 03:33] okay we are not using the any dummy data
+[03:32 - 03:35] so you will learn how can do that and
+[03:33 - 03:38] there are lot of many more things okay
+[03:35 - 03:38] so watch this full
+[03:42 - 03:50] video now let's create a new react
+[03:46 - 03:54] project so open Comm PR in desired
+[03:50 - 03:59] folder and just type
+[03:54 - 04:02] npx create react app and you can give
+[03:59 - 04:04] any name uh you want so in this case I
+[04:02 - 04:05] will give
+[04:04 - 04:10] online
+[04:05 - 04:13] course web course app okay or web or
+[04:10 - 04:16] enter it will take few second to build
+[04:13 - 04:20] all the files and to install all the
+[04:16 - 04:23] packages so we'll wait for a few
+[04:20 - 04:27] seconds a few moments
+[04:23 - 04:31] later now our project is get created so
+[04:27 - 04:31] let's go into the project CD
+[04:34 - 04:41] online and open the uh vs code using the
+[04:38 - 04:45] command code space do uh dot okay so it
+[04:41 - 04:45] will open your project in a vs code
+[04:47 - 04:53] automatically so once you are in the
+[04:50 - 04:57] project let's make sure it's running
+[04:53 - 04:58] properly okay so close this window okay
+[04:57 - 05:00] on the left hand side you will see all
+[04:58 - 05:05] the folders and
+[05:00 - 05:08] all let's go to terminal and click new
+[05:05 - 05:11] terminal this is the inbuilt vs code
+[05:08 - 05:15] terminal okay and just type npm Run
+[05:11 - 05:15] start in order to run the react
+[05:19 - 05:24] project so if you see um it's
+[05:21 - 05:29] automatically open the pages for us okay
+[05:24 - 05:29] and uh is getting loaded
+[05:31 - 05:38] so if you see right our project is run
+[05:33 - 05:40] on the Local Host 3 okay so let's see
+[05:38 - 05:41] and if you see we are getting this
+[05:40 - 05:45] spinning logo and some
+[05:41 - 05:48] text now if you go to the source folder
+[05:45 - 05:52] you will see this app.js file inside
+[05:48 - 05:57] that we have this logo and the text okay
+[05:52 - 05:59] and this uh link so if you know more
+[05:57 - 06:02] about this how the uh project is
+[05:59 - 06:04] structurize the files and all you can
+[06:02 - 06:08] watch my previous uh react need
+[06:04 - 06:11] tutorials uh react tutorials video and
+[06:08 - 06:11] you'll get to know
+[06:13 - 06:21] okay now let's remove this all this code
+[06:17 - 06:22] we don't want it okay and if you save it
+[06:21 - 06:25] and if you check it we don't have
+[06:22 - 06:26] anything on the screen okay now we want
+[06:25 - 06:29] to install the tailin
+[06:26 - 06:30] CSS so go to website and just type
+[06:29 - 06:35] tailin
+[06:30 - 06:38] CSS okay and create react app so once
+[06:35 - 06:40] you landed on this page you will see the
+[06:38 - 06:44] step to install the react native sorry
+[06:40 - 06:46] uh to install the T CSS so we already
+[06:44 - 06:48] created the project by the this command
+[06:46 - 06:51] okay and we are in the project so now we
+[06:48 - 06:54] want to install this TN CSS so copy this
+[06:51 - 06:57] command and run in your terminal so just
+[06:54 - 07:01] click on this plus sign to uh uh create
+[06:57 - 07:04] new terminal and paste it here
+[07:01 - 07:06] same copy this NPS TN CSS initiate
+[07:04 - 07:10] command so this command will create this
+[07:06 - 07:13] twiin config.js file
+[07:10 - 07:16] okay so I will paste this command okay
+[07:13 - 07:19] and let's get executed if you see right
+[07:16 - 07:21] the created TN CSS config file twiin
+[07:19 - 07:26] config.js on left hand side panel you'll
+[07:21 - 07:29] see this file T.C config.js okay now if
+[07:26 - 07:30] you go here the next step is to copy
+[07:29 - 07:34] this all all of this code and you have
+[07:30 - 07:37] to paste in a T.C config.js file so
+[07:34 - 07:41] paste it here you you can uh replace
+[07:37 - 07:45] this with this um code okay and last
+[07:41 - 07:48] step is not last but we have to copy
+[07:45 - 07:51] this Comm uh all this uh code and you
+[07:48 - 07:52] have to paste in index. CSS file so if
+[07:51 - 07:56] you go here right we have this index.
+[07:52 - 07:59] CSS file so I will paste it at the top
+[07:56 - 08:02] you can paste it anywhere and save it
+[07:59 - 08:04] Next Step you have to rerun your project
+[08:02 - 08:06] using this command okay this is the
+[08:04 - 08:11] command we use for to create sorry to
+[08:06 - 08:15] run the project okay and also I will
+[08:11 - 08:17] copy this code okay this is uh thein CSS
+[08:15 - 08:21] applied for this particular code okay so
+[08:17 - 08:25] we'll paste in app do uh app.js file
+[08:21 - 08:28] right inside this folder so what it will
+[08:25 - 08:30] do it will add the text size of third 3
+[08:28 - 08:31] XL in the font siite
+[08:30 - 08:33] and font should be a bold and it should
+[08:31 - 08:37] be underline right I will save it
+[08:33 - 08:40] everything using the control K and S and
+[08:37 - 08:42] uh let's go to my previous uh terminal
+[08:40 - 08:44] where we run the project right so we
+[08:42 - 08:47] will stop the project first and we will
+[08:44 - 08:49] run it again so what it will do it will
+[08:47 - 08:52] build the react along with the tailn CSS
+[08:49 - 08:55] which we just now integrated correct so
+[08:52 - 08:58] let's wait for a few seconds load the
+[08:55 - 08:58] project
+[09:02 - 09:06] so if you see right we got the hello
+[09:04 - 09:08] word with this font size and this was
+[09:06 - 09:12] bold
+[09:08 - 09:14] also oops is a underline correct perfect
+[09:12 - 09:18] so we are able to successfully install
+[09:14 - 09:18] and integrated the tailin
+[09:19 - 09:26] CES so as per our mockup if you see
+[09:24 - 09:28] right we have couple of components we
+[09:26 - 09:30] can create the first we can consider
+[09:28 - 09:32] this section header as one section or
+[09:30 - 09:37] one component then we have this middle
+[09:32 - 09:39] section to search um the videos and all
+[09:37 - 09:43] right and third is the list
+[09:39 - 09:46] of video videos okay the cards and all
+[09:43 - 09:50] everything and the last is footer so
+[09:46 - 09:54] create three um file called Comm header
+[09:50 - 09:57] then this um what it called this search
+[09:54 - 10:01] the list of video and for footer and we
+[09:57 - 10:04] we call it as a uh um homepage
+[10:01 - 10:06] or yeah homepage okay we call it as a
+[10:04 - 10:10] homepage and let's
+[10:06 - 10:13] see so in the source folder create a new
+[10:10 - 10:17] folder called
+[10:13 - 10:17] screens okay or we can call
+[10:18 - 10:25] Pages pages okay inside the pages we can
+[10:23 - 10:30] call
+[10:25 - 10:33] home page.js or just we can call home
+[10:30 - 10:38] okay so another thing you have to
+[10:33 - 10:40] install this uh us code plugin
+[10:38 - 10:44] called
+[10:40 - 10:46] react uh es7 This es7 plus react
+[10:44 - 10:49] reduction H snipet right I already
+[10:46 - 10:51] installed so install this command so in
+[10:49 - 10:52] order to write the default compl right
+[10:51 - 10:54] you don't need to write everything from
+[10:52 - 10:57] the scratch so just type
+[10:54 - 11:00] RFC and it will create the template
+[10:57 - 11:02] automatically so just type RFC and enter
+[11:00 - 11:06] it will create this template
+[11:02 - 11:08] okay now this template in the DU we
+[11:06 - 11:12] return this home right make sure you
+[11:08 - 11:14] will add this component in the app.js
+[11:12 - 11:17] right in order to render
+[11:14 - 11:20] it so I will remove this all of these
+[11:17 - 11:22] things and I will add home here right
+[11:20 - 11:25] and make sure you will import it so
+[11:22 - 11:28] import home from the pages right and
+[11:25 - 11:32] close the tag I will remove the class
+[11:28 - 11:36] for now I don't need it and save
+[11:32 - 11:38] it so if you go to the web browser right
+[11:36 - 11:44] you will see this home word correct
+[11:38 - 11:46] which we added on this page perfect
+[11:44 - 11:49] now in inside this home right create
+[11:46 - 11:51] some few more uh folders so go to the
+[11:49 - 11:53] source and create another folder
+[11:51 - 11:56] called
+[11:53 - 11:58] components inside
+[11:56 - 12:01] that uh so what we want on the homepage
+[11:58 - 12:03] we want to to uh create some component
+[12:01 - 12:06] for the homepage right so you can create
+[12:03 - 12:10] a folder called homepage
+[12:06 - 12:12] components correct also uh the heer and
+[12:10 - 12:15] footer should be common for all of them
+[12:12 - 12:19] correct so inside the component we can
+[12:15 - 12:25] just create a new uh file called
+[12:19 - 12:29] hjs and another we can create footer. JS
+[12:25 - 12:31] okay so just type RFC and create the
+[12:29 - 12:33] default template of our heer and same
+[12:31 - 12:36] for IC to create default template of our
+[12:33 - 12:39] footer we will save everything now
+[12:36 - 12:43] inside the homepage that the folder we
+[12:39 - 12:44] created right we want to add if you see
+[12:43 - 12:49] the markup we want to add this search
+[12:44 - 12:51] bar and then this list correct this
+[12:49 - 12:53] search bar will be common for many of
+[12:51 - 12:55] this but we'll see we can move it
+[12:53 - 12:56] afterward okay we can move the file
+[12:55 - 13:00] that's
+[12:56 - 13:03] fine then we can call it as a search
+[13:00 - 13:04] H search component and this is the uh
+[13:03 - 13:09] list component video list component
+[13:04 - 13:13] right so create search do search
+[13:09 - 13:21] section. JS and create another
+[13:13 - 13:24] file called um video list video grid
+[13:21 - 13:27] list.js okay and just import a default
+[13:24 - 13:30] template for all of them and save
+[13:27 - 13:34] everything right now go to the home.js
+[13:30 - 13:37] file and import all of these uh
+[13:34 - 13:40] components right the way which we want
+[13:37 - 13:44] right the first thing we want as a heer
+[13:40 - 13:49] just type heers okay so
+[13:44 - 13:50] heer then we want the video sorry the
+[13:49 - 13:53] search right we have
+[13:50 - 13:59] search search
+[13:53 - 13:59] section then we have video list
+[13:59 - 14:06] and then we have
+[14:01 - 14:09] footer perfect okay now we have to wrap
+[14:06 - 14:12] this in a de because in in
+[14:09 - 14:16] react uh we have to wrap everything in
+[14:12 - 14:17] one HTML tag or any tag right I can call
+[14:16 - 14:21] it as
+[14:17 - 14:23] a homepage like this o sorry and you
+[14:21 - 14:26] have to make sure you will wrap this
+[14:23 - 14:29] okay hom page you can call like this
+[14:26 - 14:30] right perfect and you wrap the thing in
+[14:29 - 14:34] react right you have to wrap everything
+[14:30 - 14:37] as as I say so we wrap everything let's
+[14:34 - 14:37] save
+[14:37 - 14:41] everything let's save it and let's see
+[14:39 - 14:44] whether we are getting so it's saying
+[14:41 - 14:48] homepage is not defined right
+[14:44 - 14:49] so just replace this with a du so
+[14:48 - 14:52] sometimes it not work so I will replace
+[14:49 - 14:55] with the DU and save it now and if you
+[14:52 - 14:58] see you will see heer section then we
+[14:55 - 15:01] have this search section video re list
+[14:58 - 15:03] and footer perfect Another Thing If You
+[15:01 - 15:06] observe
+[15:03 - 15:08] right this hiter and footer will be
+[15:06 - 15:12] common for throughout the applications
+[15:08 - 15:14] right so we don't want to add in every
+[15:12 - 15:17] page so we what we can do we can remove
+[15:14 - 15:20] this heer and we can go to the app.js
+[15:17 - 15:24] and we can paste it here okay and same
+[15:20 - 15:26] we can uh add a footer as
+[15:24 - 15:29] well
+[15:26 - 15:31] okay and we will remove from here
+[15:29 - 15:34] correct and let's see how it
+[15:31 - 15:37] looks so we are getting error that H is
+[15:34 - 15:40] not defined so go back and opjs and make
+[15:37 - 15:43] sure you will import the heer
+[15:40 - 15:45] okay and let's go and if you see
+[15:43 - 15:48] everything has similar only thing that
+[15:45 - 15:52] you will change this page whenever you
+[15:48 - 15:54] require right and I will save
+[15:52 - 15:57] everything so first thing we will Design
+[15:54 - 15:59] This homepage right so we made we
+[15:57 - 16:04] created all the required file for the B
+[15:59 - 16:04] let's begin to start working on the heer
+[16:04 - 16:08] section now we will start design the
+[16:07 - 16:11] hiter
+[16:08 - 16:14] section so if you see the mockup we have
+[16:11 - 16:17] this logo then this menu and another
+[16:14 - 16:21] YouTube um images or logo okay on the
+[16:17 - 16:25] right hand side
+[16:21 - 16:29] so uh we will add one D here and inside
+[16:25 - 16:31] that we will add the uh logo first right
+[16:29 - 16:34] so in order to add logo we have to
+[16:31 - 16:37] access the uh image or logo from the
+[16:34 - 16:41] asset folder right so for that we need
+[16:37 - 16:42] the curly braces inside that we want to
+[16:41 - 16:45] mention the
+[16:42 - 16:48] required and then we have to give the
+[16:45 - 16:52] path for the logo then it is in assets
+[16:48 - 16:55] and the file name okay if I save it and
+[16:52 - 17:00] if you see the image size is too big
+[16:55 - 17:05] correct so we will add the class name
+[17:00 - 17:08] and so this is what we are um adding the
+[17:05 - 17:10] telin CSS properties right so in order
+[17:08 - 17:13] to give width right we can give width
+[17:10 - 17:15] like this okay but we if we want to give
+[17:13 - 17:18] the custom width so we we have to
+[17:15 - 17:21] mention in the um square bracket right
+[17:18 - 17:23] so in this case I will give like 35 PX
+[17:21 - 17:27] okay and if I save it let's see how it
+[17:23 - 17:29] looks if you see right it's looking good
+[17:27 - 17:32] now we want this part particular logo in
+[17:29 - 17:34] a circular format so we have to Route
+[17:32 - 17:37] rounded and you want rounded to be full
+[17:34 - 17:40] so full rounded right and if I save it
+[17:37 - 17:43] you'll see the circle right IM in the
+[17:40 - 17:48] form of circle now we will add the menu
+[17:43 - 17:51] and the remaining item okay so we put
+[17:48 - 17:54] ul and inside that you can put a list
+[17:51 - 17:57] right so first is
+[17:54 - 18:03] home I paste that one and then you just
+[17:57 - 18:05] type course and here we have videos okay
+[18:03 - 18:08] and then we have one more image at the
+[18:05 - 18:10] last so in outside this we will add the
+[18:08 - 18:14] image
+[18:10 - 18:19] source inside uh bracket and we want to
+[18:14 - 18:19] access the YouTube logo right
+[18:21 - 18:29] so oh we have to write require sorry
+[18:26 - 18:33] require and uh
+[18:29 - 18:33] access that particular file from the
+[18:34 - 18:40] assets youtube.png as a file name okay
+[18:37 - 18:43] and we can give the class name simulator
+[18:40 - 18:46] this okay so I'll copy paste this
+[18:43 - 18:49] one perfect and let's see how it looks
+[18:46 - 18:50] so if you see right this one right this
+[18:49 - 18:53] is our section this is different one
+[18:50 - 18:55] right that's that is our sections but
+[18:53 - 18:58] this is our heer section right now we
+[18:55 - 18:59] want everything in one line correct so
+[18:58 - 19:03] first we'll
+[18:59 - 19:06] put um the main the main d right the
+[19:03 - 19:10] topmost de the class name and we'll put
+[19:06 - 19:13] as a flex once you made it as a flex
+[19:10 - 19:17] you'll see this is look like this right
+[19:13 - 19:20] it comes you know uh the in one
+[19:17 - 19:25] row but we want to give the you can
+[19:20 - 19:25] mention D here let's see how it looks
+[19:27 - 19:31] okay and if you you see right it look
+[19:29 - 19:31] good
+[19:32 - 19:39] now then we have to give the flex for
+[19:35 - 19:41] this one okay and same Flex for this one
+[19:39 - 19:43] so it will come in horizontally
+[19:41 - 19:46] everything will come horizontally
+[19:43 - 19:49] perfect right now we want if you see the
+[19:46 - 19:52] mockup we want this um YouTube logo at
+[19:49 - 19:56] the end correct so in the parent de we
+[19:52 - 19:57] will mention justify between okay and
+[19:56 - 20:00] once you click on justify between you
+[19:57 - 20:03] will see it is on the end of this one
+[20:00 - 20:06] right and now we'll give the gap between
+[20:03 - 20:10] this one first so just
+[20:06 - 20:12] mention Gap here I will put seven and
+[20:10 - 20:15] for the gap between these three menu
+[20:12 - 20:18] items I will give like Gap four let's
+[20:15 - 20:20] see how it looks and it's look good
+[20:18 - 20:22] right but if you see right we want to
+[20:20 - 20:25] give the padding like this right it's
+[20:22 - 20:29] touching to the um agge of the
+[20:25 - 20:34] browser so here we can give the padding
+[20:29 - 20:37] like three and if you see right if I H
+[20:34 - 20:39] on this particular uh T CSS class name
+[20:37 - 20:42] it will show how much padding we are
+[20:39 - 20:44] giving right so in in the CSS format the
+[20:42 - 20:47] padding is
+[20:44 - 20:52] 12px and if you see and it look
+[20:47 - 20:56] perfectly fine okay now if you see this
+[20:52 - 21:00] this menu is not um a center right to to
+[20:56 - 21:04] these logos and all so to do that we
+[21:00 - 21:09] have to give item to be Center here so
+[21:04 - 21:13] that uh this de and this D come in the
+[21:09 - 21:15] uh vertically center right and same
+[21:13 - 21:18] sorry same we have to give for for this
+[21:15 - 21:23] device well and let's see how it looks
+[21:18 - 21:23] okay now if you see it look perfectly
+[21:25 - 21:33] fine next we will uh onover this right
+[21:29 - 21:35] we want the button uh to be like glow
+[21:33 - 21:38] out something like that let's see let's
+[21:35 - 21:40] let's see how we can do so first we'll
+[21:38 - 21:44] see if i h on it right I want a pointer
+[21:40 - 21:48] to be a cursor right so to do
+[21:44 - 21:49] that in like class name right you can
+[21:48 - 21:53] mention
+[21:49 - 21:55] cursor to be a pointer if I see I apply
+[21:53 - 21:57] only for the home and if you who on it
+[21:55 - 21:59] right it's it's showing the cursor
+[21:57 - 22:02] pointer with the it Ching the hand but
+[21:59 - 22:05] if it's not on course right if you see
+[22:02 - 22:08] so we will apply this all to this class
+[22:05 - 22:10] name but before that uh I will apply
+[22:08 - 22:15] some more style okay
+[22:10 - 22:19] so I will put H method and on H I want
+[22:15 - 22:22] to change the background color okay so I
+[22:19 - 22:26] will change the background color to be
+[22:22 - 22:26] uh PG
+[22:29 - 22:34] background to be like U I don't know
+[22:31 - 22:37] this one is let's see how it looks if we
+[22:34 - 22:39] H IT background is changing correct but
+[22:37 - 22:41] now we can give some padding and
+[22:39 - 22:43] everything right and on how we also want
+[22:41 - 22:48] to change this color of this text to
+[22:43 - 22:48] White so before that I will use
+[22:48 - 22:57] some uh padding here so I will
+[22:52 - 22:59] mention padding on X sorry padding on X
+[22:57 - 23:02] to be like uh uh
+[22:59 - 23:05] two and
+[23:02 - 23:11] padding on
+[23:05 - 23:11] y to be like one maybe let's see how it
+[23:13 - 23:18] looks okay it's look quite good
+[23:18 - 23:25] right I can okay that let's and then we
+[23:23 - 23:28] want the count count uh the corner to be
+[23:25 - 23:30] rounded so I want make it full
+[23:28 - 23:33] so that it will be full right and if you
+[23:30 - 23:35] see that on the top side it's the
+[23:33 - 23:37] padding is more than the bottom side so
+[23:35 - 23:39] you can give the padding on the bottom
+[23:37 - 23:43] side as well as a two and let's see how
+[23:39 - 23:45] it looks now it's look good and I will
+[23:43 - 23:50] also give the padding on
+[23:45 - 23:55] the uh padding on the x-axis L um little
+[23:50 - 24:00] more so like three okay and if you see
+[23:55 - 24:03] yeah this is fine for me okay
+[24:00 - 24:05] now let's me put it here now we want to
+[24:03 - 24:07] change the color on how right so I will
+[24:05 - 24:10] change the text to be
+[24:07 - 24:14] white right and if you see the text to
+[24:10 - 24:17] be white okay so this is perfectly
+[24:14 - 24:19] working fine for the home now we'll just
+[24:17 - 24:22] copy copy paste this all the class name
+[24:19 - 24:25] and we'll paste it for all the remaining
+[24:22 - 24:29] uh menu and if I save it you will see
+[24:25 - 24:33] this one perfect okay and we can give
+[24:29 - 24:35] the uh if you see on the this one right
+[24:33 - 24:39] we can it's it's white color and for all
+[24:35 - 24:40] other it's Le brownish so next we will
+[24:39 - 24:44] do
+[24:40 - 24:46] that so uh this is pretty much for this
+[24:44 - 24:48] heer section we completely Design This
+[24:46 - 24:52] header section so whatever linking and
+[24:48 - 24:52] all we'll do it on uh later
+[24:52 - 24:58] okay now according to this mockup right
+[24:55 - 25:00] uh if you see the background of this uh
+[24:58 - 25:05] whole page is little grayish right so we
+[25:00 - 25:08] will do that so to do that go to the uh
+[25:05 - 25:10] app. CSS file right or sorry uh index.
+[25:08 - 25:13] CSS file here we have body correct so
+[25:10 - 25:17] inside body this is pure c um CSS so
+[25:13 - 25:19] just write background color and uh I'm
+[25:17 - 25:22] pasting this color right this background
+[25:19 - 25:25] one and save it and let's see now if you
+[25:22 - 25:27] see the background color is Chang but we
+[25:25 - 25:29] want this heer to be white so go to the
+[25:27 - 25:32] heer again
+[25:29 - 25:35] and inside this right ins theide the big
+[25:32 - 25:37] hiter you can just change BG to be white
+[25:35 - 25:40] background to be a white color and if
+[25:37 - 25:42] you see perfect so background need to be
+[25:40 - 25:45] white now and if you see right the
+[25:42 - 25:47] padding is more you can decrease it but
+[25:45 - 25:50] for now I keep it keep as it is and if
+[25:47 - 25:50] needed I will change
+[25:52 - 26:00] it so now we will uh uh start developing
+[25:56 - 26:02] this uh search section so if you see uh
+[26:00 - 26:06] we have this gradient uh text uh with
+[26:02 - 26:08] the name videos and then we have this uh
+[26:06 - 26:11] subheading after that we have the search
+[26:08 - 26:14] bar with a icon so I will tell you how
+[26:11 - 26:17] can we add a react icon and then the we
+[26:14 - 26:20] have these buttons okay so it's a uh
+[26:17 - 26:22] these buttons are for the filter purpose
+[26:20 - 26:26] okay so let's go to our
+[26:22 - 26:28] project so let's go to search section I
+[26:26 - 26:31] already have these buttons tags uh which
+[26:28 - 26:36] is react angular Tel CSS and chart
+[26:31 - 26:41] jpd so let's create the uh Title First
+[26:36 - 26:44] H2 and just WR videos okay then we have
+[26:41 - 26:49] input so I will put uh inside the D and
+[26:44 - 26:52] I will put as a input okay it type of uh
+[26:49 - 26:55] type is equal to text and I will close
+[26:52 - 26:59] it after that uh outside that we have
+[26:55 - 27:03] the text so again uh we'll
+[26:59 - 27:09] H3 and uh I will copy paste
+[27:03 - 27:11] the the tag line which we have right
+[27:09 - 27:15] so I'm paste it
+[27:11 - 27:17] here and then last we have the um bunch
+[27:15 - 27:20] of buttons so power button right I
+[27:17 - 27:26] already have the list of object
+[27:20 - 27:28] here uh so inside D I will wrap it so so
+[27:26 - 27:32] in order to iterate this buttons right
+[27:28 - 27:37] you have to put in the curly places and
+[27:32 - 27:40] then uh sorry not this so in react we
+[27:37 - 27:44] never use this okay then
+[27:40 - 27:47] search search buttons TXS Das map you
+[27:44 - 27:49] have to map it in order to itate it okay
+[27:47 - 27:49] and then write
+[27:52 - 27:57] item okay and inside this Square
+[27:55 - 27:59] circular braacket you have to mention
+[27:57 - 28:03] the DU
+[27:59 - 28:03] and uh just wrap this
+[28:04 - 28:13] D and then you can put this uh tag
+[28:08 - 28:15] directly here like item dot so item do
+[28:13 - 28:18] tag
+[28:15 - 28:21] okay tag that's all and let's see what
+[28:18 - 28:25] we are able to see so let's go to our
+[28:21 - 28:28] application we got this title video uh
+[28:25 - 28:31] this input this text and this buttons as
+[28:28 - 28:36] as well okay now let's start giving the
+[28:31 - 28:40] uh Styles so if you see right uh we want
+[28:36 - 28:43] this text to be a gradient
+[28:40 - 28:48] okay so let's go to our
+[28:43 - 28:51] project and here uh for the H2 give the
+[28:48 - 28:54] class so in the class name we will give
+[28:51 - 28:54] the font to be extra
+[28:54 - 29:02] bold and after that uh we will put this
+[28:58 - 29:04] text to be transparent okay text
+[29:02 - 29:06] transparent and we increase the text
+[29:04 - 29:10] size to
+[29:06 - 29:13] six Excel okay so we want a big text and
+[29:10 - 29:15] then we give the uh gradient color okay
+[29:13 - 29:17] so we want the gradient so from where
+[29:15 - 29:19] you want from the left to right top to
+[29:17 - 29:22] bottom something like that right so in
+[29:19 - 29:26] this case we want to gradient to uh
+[29:22 - 29:28] right so we'll put right and on the left
+[29:26 - 29:31] which gradient do you want so from we
+[29:28 - 29:34] want I will keep pink
+[29:31 - 29:38] 600 and two you can mention I will
+[29:34 - 29:41] mention this case a blue 900 I want dark
+[29:38 - 29:44] one right and if I save it and let's see
+[29:41 - 29:47] so if you see that we'll get
+[29:44 - 29:50] the the background like this right but
+[29:47 - 29:52] if you see if I select this uh I will
+[29:50 - 29:55] get this video text right so what you
+[29:52 - 29:59] have to do it's actually uh it consider
+[29:55 - 30:03] it as a mask so you have to write BG
+[29:59 - 30:07] climp and you have to clip the text okay
+[30:03 - 30:10] so if you see now we got this text okay
+[30:07 - 30:14] perfect so that's what we want correct
+[30:10 - 30:19] only thing I will change here make it uh
+[30:14 - 30:19] capital and if you see we got it
+[30:21 - 30:28] right now we will add this uh we will
+[30:25 - 30:30] give the style to input and add the
+[30:28 - 30:34] icons so just
+[30:30 - 30:36] search react icons okay and you will
+[30:34 - 30:38] find this first page react icon make
+[30:36 - 30:42] sure you will install this dependency
+[30:38 - 30:44] which called react icons okay and you
+[30:42 - 30:46] can uh check the documentation how to
+[30:44 - 30:48] use it okay on on the left hand side you
+[30:46 - 30:52] will see the bunch of uh different types
+[30:48 - 30:53] of icon in this case I will use this um
+[30:52 - 30:58] hero
+[30:53 - 30:59] icon so I want the search uh
+[30:58 - 31:01] search icon so just scroll
+[30:59 - 31:05] [Music]
+[31:01 - 31:08] down let's
+[31:05 - 31:13] here
+[31:08 - 31:16] search so I will use this uh search icon
+[31:13 - 31:20] okay so go here and paste it like this
+[31:16 - 31:23] okay make sure you will import this
+[31:20 - 31:26] one okay so if you see uh this high
+[31:23 - 31:29] magnif glass get imported okay and save
+[31:26 - 31:31] it if you see on the in our application
+[31:29 - 31:34] you will see this uh icon come under
+[31:31 - 31:38] this uh input button so let's bring it
+[31:34 - 31:40] uh in one line okay so just mention the
+[31:38 - 31:44] class name to be a
+[31:40 - 31:47] flex and after that uh you have to give
+[31:44 - 31:49] background to be white okay and if you
+[31:47 - 31:51] see the background to be white perfect
+[31:49 - 31:53] okay then you have to mention the weight
+[31:51 - 31:56] because the right now width is too much
+[31:53 - 31:58] right so we have to mention the width so
+[31:56 - 32:03] I will give WID to for example
+[31:58 - 32:07] uh in this case I will give with uh 200
+[32:03 - 32:10] PX okay and let's see how it look so
+[32:07 - 32:13] this is decent this we can change to 300
+[32:10 - 32:18] for now and then we'll give
+[32:13 - 32:23] padding uh to we padding X to three and
+[32:18 - 32:23] padding y padding bottom I give
+[32:24 - 32:31] one so input is like this and and if you
+[32:28 - 32:33] see right input we are uh it's in fixed
+[32:31 - 32:35] size so we have to extend the input size
+[32:33 - 32:37] as
+[32:35 - 32:40] well so I will remove this pading and
+[32:37 - 32:41] actually I will give it to input okay so
+[32:40 - 32:45] like class
+[32:41 - 32:49] name and we we'll change the BD to 95%
+[32:45 - 32:52] of the D okay so this D has a 300 okay
+[32:49 - 32:55] so 95% of this we can give to input time
+[32:52 - 32:58] because we want to show the icon as well
+[32:55 - 33:01] okay so like this so it's look
+[32:58 - 33:03] good also we'll give more
+[33:01 - 33:06] [Music]
+[33:03 - 33:10] padding more padding
+[33:06 - 33:12] to like this maybe let's see how it
+[33:10 - 33:17] looks okay
+[33:12 - 33:21] so it's too much you one let's see okay
+[33:17 - 33:21] and we'll make the corner to be
+[33:21 - 33:27] rounded uh medium size and also if you
+[33:24 - 33:29] see in the screen on the when you um
+[33:27 - 33:31] click on this input you'll see this
+[33:29 - 33:35] border so we'll remove this border so
+[33:31 - 33:38] just write uh outliner to be none okay
+[33:35 - 33:40] and we want everything in one line okay
+[33:38 - 33:44] the alignment should be a proper so here
+[33:40 - 33:48] you have to uh just
+[33:44 - 33:50] mention align items our item to be align
+[33:48 - 33:52] okay in the
+[33:50 - 33:54] center and let's see how it looks so if
+[33:52 - 33:57] you see it's looking perfectly fine
+[33:54 - 34:00] right so similar to this one you can
+[33:57 - 34:02] give more padding if you want it's up to
+[34:00 - 34:04] you so we can give more padding on the
+[34:02 - 34:09] xaxis and let's see how it
+[34:04 - 34:11] looks more padding on x-axis okay and
+[34:09 - 34:15] this
+[34:11 - 34:15] is perfect
+[34:16 - 34:21] okay and let's give padding to Y little
+[34:24 - 34:30] bit ping
+[34:26 - 34:30] top ping y to be
+[34:33 - 34:37] one and
+[34:37 - 34:41] this actually we have padding bottom
+[34:40 - 34:44] here
+[34:41 - 34:46] padding can remove padding bottom and
+[34:44 - 34:49] let's see how it looks
+[34:46 - 34:53] okay and py d
+[34:49 - 34:57] one okay now it's look good
+[34:53 - 35:01] okay so if your text is not visible
+[34:57 - 35:03] uh the reason is let me check oh so we
+[35:01 - 35:06] put this bracket by mistakely so we'll
+[35:03 - 35:09] remove the bracket and now it will see
+[35:06 - 35:11] the text okay now we'll keep this
+[35:09 - 35:14] everything we'll put in the center so
+[35:11 - 35:17] here just Define the class name the uh
+[35:14 - 35:19] top division the parent de and make it
+[35:17 - 35:22] flex and then make it Justified to be
+[35:19 - 35:24] Center and then it will come like this
+[35:22 - 35:26] so you have to mention it as a column
+[35:24 - 35:28] because by default it consider as a row
+[35:26 - 35:30] so you have to Define play direction to
+[35:28 - 35:30] be
+[35:30 - 35:34] column so
+[35:37 - 35:42] Flex column okay and in order to put in
+[35:40 - 35:45] the center you have to mention the text
+[35:42 - 35:47] align for the div to be a center and if
+[35:45 - 35:50] you see it come into the center except
+[35:47 - 35:53] this um search bar because we put the
+[35:50 - 35:57] search bar uh inside the de right so
+[35:53 - 36:00] that we have to mention uh in the parent
+[35:57 - 36:03] item to in the center okay and if you
+[36:00 - 36:06] see now it's in the center okay so now
+[36:03 - 36:07] we will uh give the space between this
+[36:06 - 36:10] margin between this video search bar and
+[36:07 - 36:14] this text as well so just mention
+[36:10 - 36:18] padding oh sorry not here so we'll give
+[36:14 - 36:22] the margin top to three same for this de
+[36:18 - 36:24] we can give margin top to two maybe
+[36:22 - 36:24] let's see how it
+[36:24 - 36:31] looks and uh let's give class name here
+[36:28 - 36:34] and margin top to three and we will
+[36:31 - 36:39] change this color and font so text to
+[36:34 - 36:43] maybe 14 PX and we'll change the color
+[36:39 - 36:46] to maybe gray 500 okay and save it and
+[36:43 - 36:49] let's see how it looks okay this look
+[36:46 - 36:51] good okay so right now it's little
+[36:49 - 36:53] bigger but you can change it if you want
+[36:51 - 36:56] or we can keep as it is and if you see
+[36:53 - 36:58] that if I extend it it's working fine
+[36:56 - 37:02] only thing now we have to do we have to
+[36:58 - 37:06] give padding from the uh left and right
+[37:02 - 37:09] right so for this deal right uh we can
+[37:06 - 37:13] give padding to X and we can give
+[37:09 - 37:15] padding X to 10 maybe and let's see how
+[37:13 - 37:18] it
+[37:15 - 37:20] looks even though you squeeze it
+[37:18 - 37:22] right it squeeze like this and if you
+[37:20 - 37:24] change to mobile view it looks perfectly
+[37:22 - 37:27] fine
+[37:24 - 37:31] okay now we want to give the buttons and
+[37:27 - 37:31] we have to align the buttons so let's go
+[37:32 - 37:40] here let's go to our code and to do
+[37:36 - 37:43] right we can uh first in this par do we
+[37:40 - 37:46] can mtion it as a flex and we give gap
+[37:43 - 37:48] between this to be like four and so that
+[37:46 - 37:53] will be in one line right then we G we
+[37:48 - 37:56] will give the margin top to
+[37:53 - 37:59] four in this case um for this particular
+[37:56 - 38:05] tank we I can give background to be
+[37:59 - 38:09] white okay uh text size uh I will change
+[38:05 - 38:13] it to 14
+[38:09 - 38:18] PX and corner to be rounded we can give
+[38:13 - 38:20] medium round corner and let's save it
+[38:18 - 38:24] and it look like this so we have to give
+[38:20 - 38:24] padding um to the
+[38:25 - 38:29] x-axis so we'll give
+[38:29 - 38:39] um padding X to two padding bottom to
+[38:34 - 38:42] one let's see so it's working good okay
+[38:39 - 38:46] also we'll put the pointer to be
+[38:42 - 38:48] cursor I I will keep addding to one as
+[38:46 - 38:51] well let's see how it
+[38:48 - 38:53] looks okay yeah and then we have to put
+[38:51 - 38:58] the cursor pointer so just type cursor
+[38:53 - 39:00] pointer and save it after that on how we
+[38:58 - 39:03] want the effect right if you see in in
+[39:00 - 39:03] this uh
+[39:04 - 39:09] tutorial uh you can able to see this
+[39:07 - 39:13] right the animation effect so that
+[39:09 - 39:13] animation effect we have to apply
+[39:14 - 39:23] here so just how uh on the H right we
+[39:19 - 39:26] have to scale size to 110 okay and we
+[39:23 - 39:28] want the transition to be smooth
+[39:26 - 39:31] transition trans ition so make it
+[39:28 - 39:37] transition to be all and duration should
+[39:31 - 39:40] be uh 300 and make it EAS in out okay
+[39:37 - 39:45] also uh we can change the font size on
+[39:40 - 39:49] how we can change the uh font to be
+[39:45 - 39:53] bold and save it so if you h on it right
+[39:49 - 39:56] just change the font okay but we want
+[39:53 - 39:59] also want to change the background
+[39:56 - 39:59] Okay so
+[39:59 - 40:03] let's go here and change the background
+[40:01 - 40:07] so on
+[40:03 - 40:10] Hover we can change background to be red
+[40:07 - 40:13] in the red we will give this uh
+[40:10 - 40:17] 400 and how we can change the text color
+[40:13 - 40:19] as well we change text to Y and save it
+[40:17 - 40:23] now let's see
+[40:19 - 40:25] perfect okay so that this is what we
+[40:23 - 40:27] want so we completely achieve these
+[40:25 - 40:31] things we can decrease the font size if
+[40:27 - 40:35] you want to 12px
+[40:31 - 40:35] okay now it's look
+[40:35 - 40:39] good now let's start building the video
+[40:40 - 40:47] grid we will develop this video grid
+[40:43 - 40:49] list uh this section here if you see uh
+[40:47 - 40:52] we need a list of all this video with
+[40:49 - 40:55] the title and description so I already
+[40:52 - 40:57] have this API created okay uh if you
+[40:55 - 41:01] want to know how to create API without
+[40:57 - 41:03] writing any code then uh write it in the
+[41:01 - 41:05] comment so I can create a video for you
+[41:03 - 41:08] okay so I created this AP without
+[41:05 - 41:11] writing any line of code uh you just
+[41:08 - 41:13] need to add your data that's all okay
+[41:11 - 41:16] and I will let you know how to do that
+[41:13 - 41:18] so if you see uh in the data section
+[41:16 - 41:21] right we have title we have
+[41:18 - 41:23] descriptions then we have images and we
+[41:21 - 41:25] have tag which I attached for example
+[41:23 - 41:29] for this video we have the tag called
+[41:25 - 41:32] name react and they say right so I will
+[41:29 - 41:34] use this API uh so this is the end point
+[41:32 - 41:39] for
+[41:34 - 41:43] that next uh let's go
+[41:39 - 41:49] to our code okay here first we will
+[41:43 - 41:52] install uh this exos ax iio okay uh
+[41:49 - 41:55] Library it helps us to face the uh
+[41:52 - 41:58] respond from the HTTP URL okay so go
+[41:55 - 42:00] ahead and install this one I already
+[41:58 - 42:04] installed so I will just uh skip this
+[42:00 - 42:07] step now on the on in your Source folder
+[42:04 - 42:11] right uh create one folder
+[42:07 - 42:15] called Global or Services call
+[42:11 - 42:17] services okay inside that you can create
+[42:15 - 42:23] one variable or one
+[42:17 - 42:28] file called Global API do uh JS okay
+[42:23 - 42:33] where we will add all our API API okay
+[42:28 - 42:33] so here you can write export default
+[42:35 - 42:42] okay and here we will export all our
+[42:39 - 42:42] apis
+[42:42 - 42:47] now uh you can search it what is the
+[42:44 - 42:50] Syntax for this right so if you see I
+[42:47 - 42:53] have find this um Syntax for this how to
+[42:50 - 42:57] face the data from the URL right so I
+[42:53 - 43:00] will just paste it here and uh
+[42:57 - 43:03] I will tell you how can you do that
+[43:00 - 43:08] right so you can mention one constant
+[43:03 - 43:13] here which is our base URL okay in this
+[43:08 - 43:17] case our base URL is uh the URL Local
+[43:13 - 43:20] Host 1337 right/
+[43:17 - 43:22] API so once you hosted this particular
+[43:20 - 43:24] API it will be a different but right now
+[43:22 - 43:28] I'm using Local Host so I will using
+[43:24 - 43:30] this uh as my base URL okay we remove
+[43:28 - 43:34] this
+[43:30 - 43:35] one and uh you can write constant okay
+[43:34 - 43:39] and
+[43:35 - 43:44] uh right get video
+[43:39 - 43:47] list so get all video list is equal to
+[43:44 - 43:49] this one and the base URL plus the end
+[43:47 - 43:52] point the end point
+[43:49 - 43:54] is video list question
+[43:52 - 43:58] populate star which is
+[43:54 - 44:02] R this one okay and what we'll do we'll
+[43:58 - 44:05] export this uh particular construct okay
+[44:02 - 44:09] so that we can use uh
+[44:05 - 44:11] anywhere so now I uh just make sure you
+[44:09 - 44:13] will import this ex okay you have to
+[44:11 - 44:16] import this one and save it now go to
+[44:13 - 44:21] our video grid list so react Pro by
+[44:16 - 44:25] default one um inbuilt hook called
+[44:21 - 44:28] U and inside us we will call that method
+[44:25 - 44:31] so what US effect will do whenever
+[44:28 - 44:34] uh we launch this particular component
+[44:31 - 44:36] or page this us will get called it will
+[44:34 - 44:39] get called infinitely if you did not
+[44:36 - 44:41] mention the Mt okay so if you mention
+[44:39 - 44:46] the empt then it will call once so make
+[44:41 - 44:48] sure you will uh add this Mt also uh if
+[44:46 - 44:50] you want to execute this use effect then
+[44:48 - 44:53] you have to add that particular variable
+[44:50 - 44:55] name here so whenever the V variable
+[44:53 - 44:59] name change then this use will get
+[44:55 - 45:01] called and also I will add the one um
+[44:59 - 45:05] new state effect that is again in buil
+[45:01 - 45:10] react hook I will say
+[45:05 - 45:12] uh video list and sa video list if you
+[45:10 - 45:16] know the Java or something like that we
+[45:12 - 45:19] have set and G method so similar to that
+[45:16 - 45:22] uh here we have to set video list and
+[45:19 - 45:25] set video list in order to set the all
+[45:22 - 45:28] the video and to get the data we will do
+[45:25 - 45:31] the video list and then
+[45:28 - 45:35] so like this and initially be empty so
+[45:31 - 45:38] what you have to do uh this is our API
+[45:35 - 45:42] respon V API right so you have to call
+[45:38 - 45:46] this let's call the API so write Global
+[45:42 - 45:49] API then we have get all video list do
+[45:46 - 45:51] then okay so inside that we will write
+[45:49 - 45:53] the
+[45:51 - 45:56] response inside that we will Define a
+[45:53 - 45:58] constant called result because we want
+[45:56 - 46:01] to map the data
+[45:58 - 46:03] cor so what we will do uh first we will
+[46:01 - 46:06] check whether we are getting all the
+[46:03 - 46:09] information or not so just WR response.
+[46:06 - 46:13] data and save it right and make sure we
+[46:09 - 46:16] confer that one in order to
+[46:13 - 46:18] check okay so I save it go
+[46:16 - 46:21] here refresh the
+[46:18 - 46:24] screen and if you see we you got this
+[46:21 - 46:27] data correct we have uh five uh Records
+[46:24 - 46:30] so we on to five records and that we
+[46:27 - 46:33] have for all the
+[46:30 - 46:37] records so now what we will do we will
+[46:33 - 46:41] map this data okay so do again we have
+[46:37 - 46:44] data do map inside that we write
+[46:41 - 46:48] item
+[46:44 - 46:51] then uh you have to go uh C bracket then
+[46:48 - 46:55] cly brackets okay inside
+[46:51 - 46:59] that uh let's first Define ID so just
+[46:55 - 47:00] type item. ID then we have title and
+[46:59 - 47:03] item
+[47:00 - 47:07] dot
+[47:03 - 47:10] attributes do title okay if you
+[47:07 - 47:12] see after data we have these attributes
+[47:10 - 47:16] and inside attribute we have title and
+[47:12 - 47:22] then description okay and again we have
+[47:16 - 47:27] called description item do attribute do
+[47:22 - 47:27] description now let's see image
+[47:27 - 47:34] so in this case right if you see our API
+[47:31 - 47:36] response so inside the attribute we have
+[47:34 - 47:38] image and inside the image we again have
+[47:36 - 47:42] data again have
+[47:38 - 47:48] attributes and then we have image and
+[47:42 - 47:53] item do attributes do image. data do
+[47:48 - 47:59] attributes do image U so if you go here
+[47:53 - 48:04] and see or we just have not the url
+[47:59 - 48:04] url and also we want tags
+[48:04 - 48:09] correct
+[48:06 - 48:12] so this case we can write
+[48:09 - 48:17] TXS and we have list of tags correct so
+[48:12 - 48:20] you see we want this list of tax so for
+[48:17 - 48:23] now what we'll do we'll get tax and all
+[48:20 - 48:23] data
+[48:23 - 48:31] okay you can item
+[48:27 - 48:34] do attributes do
+[48:31 - 48:38] tax tax do
+[48:34 - 48:40] data data that's all okay and if you see
+[48:38 - 48:44] the result we canol this result and
+[48:40 - 48:47] let's go back here this play the
+[48:44 - 48:50] screen and we got to file record right
+[48:47 - 48:52] so if you see we have description ID
+[48:50 - 48:57] image and then title and then we have
+[48:52 - 48:59] TXS okay so we use all the are of tax
+[48:57 - 49:02] here right so we want to show it that's
+[48:59 - 49:02] the reason we kept it like
+[49:03 - 49:09] this now what we will do uh let's start
+[49:07 - 49:12] designing this video list okay I will
+[49:09 - 49:15] close this so we can see
+[49:12 - 49:18] everything so we have the data now now
+[49:15 - 49:18] let's start designing video
+[49:20 - 49:27] list
+[49:23 - 49:30] now so if you see right we need to build
+[49:27 - 49:33] this card design okay so let's uh once
+[49:30 - 49:36] you create this video card file in a
+[49:33 - 49:38] homepage component okay uh add default
+[49:36 - 49:42] template and let's start building the
+[49:38 - 49:43] card so first We'll add one D here and
+[49:42 - 49:46] inside that I will add the image source
+[49:43 - 49:48] because we want the image first right so
+[49:46 - 49:52] in the video item which we passed from
+[49:48 - 49:56] the video gri video gri right so in this
+[49:52 - 50:00] video item it contains all our our um
+[49:56 - 50:03] object right so what I will do so here
+[50:00 - 50:07] you can just mention like this and we
+[50:03 - 50:09] have video item and we have image right
+[50:07 - 50:12] so which contain the
+[50:09 - 50:14] URL and where we can give the class name
+[50:12 - 50:15] and we want the video um image corner to
+[50:14 - 50:18] be
+[50:15 - 50:22] rounded so we can mention
+[50:18 - 50:26] here rounded to be um medium or we can
+[50:22 - 50:29] make it large okay after that we have
+[50:26 - 50:34] text so the heading right so we can give
+[50:29 - 50:38] the S2 tag for now and the class
+[50:34 - 50:41] name and inside that uh we can mention
+[50:38 - 50:45] the title of the video so I will mention
+[50:41 - 50:47] video item do title okay and for this
+[50:45 - 50:49] one right I will keep as it is and we
+[50:47 - 50:51] will give the class name later on and we
+[50:49 - 50:57] can go the H3 item for the description
+[50:51 - 51:00] right so we can mention video item Dot
+[50:57 - 51:03] description okay so remember one thing
+[51:00 - 51:04] right whenever uh you are showing the
+[51:03 - 51:07] dynamic data right you have to show it
+[51:04 - 51:10] in the curly braces okay so in this
+[51:07 - 51:12] video item object we have this all this
+[51:10 - 51:15] information right and I'm accessing with
+[51:12 - 51:17] the uh particular field name so make
+[51:15 - 51:20] sure uh when you are showing the dynamic
+[51:17 - 51:23] you have to show it in a curly braces
+[51:20 - 51:25] okay now let's save it and let's see
+[51:23 - 51:27] whether what we are getting now okay so
+[51:25 - 51:31] this is old
+[51:27 - 51:34] and if you see right we are getting uh
+[51:31 - 51:40] data like this the reason is right uh in
+[51:34 - 51:42] video G list what I did I'm uh uh I'm
+[51:40 - 51:45] iterate this video list right by mapping
+[51:42 - 51:47] the item to the video card and I'm
+[51:45 - 51:50] passing each item to the video item
+[51:47 - 51:52] right so this is a prop and this is the
+[51:50 - 51:55] parent parent component right and this
+[51:52 - 51:57] is our child one and the video item we
+[51:55 - 51:59] are passing to the video card that's why
+[51:57 - 52:02] we are receiving here and this video
+[51:59 - 52:05] item we are using uh in order to display
+[52:02 - 52:08] data okay and also I app the class name
+[52:05 - 52:11] so I give the margin from the top also
+[52:08 - 52:14] I'm giving the um padding from the xaxis
+[52:11 - 52:15] to four right and if it is medium size
+[52:14 - 52:17] screen size then I'm giving padding to
+[52:15 - 52:21] eight and if it's large I'm giving
+[52:17 - 52:25] padding to 12 after that uh I put this
+[52:21 - 52:27] um video list and by default when the
+[52:25 - 52:29] screen size is smaller okay or default
+[52:27 - 52:33] screen size then I'm showing the two
+[52:29 - 52:35] column okay if you want to see it so if
+[52:33 - 52:38] I decrease the size right and is a
+[52:35 - 52:41] smaller size you see this two right when
+[52:38 - 52:43] I maximize this size and when I make it
+[52:41 - 52:45] medium right I'm showing three columns
+[52:43 - 52:48] and when it's a large I'm showing four
+[52:45 - 52:52] columns so that's what it displayed
+[52:48 - 52:54] here so on medium we show three columns
+[52:52 - 52:58] and when is large we are showing four
+[52:54 - 53:01] column that's all so no any um logic is
+[52:58 - 53:03] very similar simple so let's uh design
+[53:01 - 53:05] style this one description and after
+[53:03 - 53:08] that right if you remember we have the
+[53:05 - 53:09] TXS list of tags cor the code and I will
+[53:08 - 53:13] paste this code okay which contain this
+[53:09 - 53:17] H5 and I give the tag and everything
+[53:13 - 53:20] okay now we'll give the uh class for
+[53:17 - 53:24] this title okay so I will give
+[53:20 - 53:28] padding uh sorry we'll give the font to
+[53:24 - 53:31] be bold okay and then I will give text
+[53:28 - 53:36] size to your 13 PX maybe because I'm
+[53:31 - 53:39] already G the size maybe bigger and I
+[53:36 - 53:41] want um line to be clamed to three okay
+[53:39 - 53:45] so I don't
+[53:41 - 53:48] want um what is more line more than
+[53:45 - 53:49] three okay so this line clamp three will
+[53:48 - 53:52] only work we have to install the
+[53:49 - 53:55] dependency for it okay so if you go to
+[53:52 - 53:57] TA CSS and type line clamp okay line
+[53:55 - 53:59] clamp
+[53:57 - 54:03] you can put T
+[53:59 - 54:05] CSS okay so you will see this multi-line
+[54:03 - 54:08] trunet right so how many lines you want
+[54:05 - 54:10] to display you can use it but for that
+[54:08 - 54:12] you have to install this dependency I
+[54:10 - 54:15] already installed and then you have to
+[54:12 - 54:16] uh add this plugin in config.js file
+[54:15 - 54:18] okay and that's all so for example you
+[54:16 - 54:21] put this much text right and you want
+[54:18 - 54:23] only three line to show you can do that
+[54:21 - 54:25] so in this case right if you see we have
+[54:23 - 54:27] lot of big description and we only want
+[54:25 - 54:29] the first three column to be first the
+[54:27 - 54:31] line to be display on the screen so kind
+[54:29 - 54:36] of thing we can show it
+[54:31 - 54:39] so that's why I use this clamp uh method
+[54:36 - 54:43] okay mean clamp class and we will also
+[54:39 - 54:46] give the style to this uh description as
+[54:43 - 54:51] well so we get text to be 9
+[54:46 - 54:55] PX and then margin top to one then text
+[54:51 - 54:58] to be a gay so I don't want uh uh dark
+[54:55 - 55:00] and here I will again use clam okay I
+[54:58 - 55:03] want only three line first three lines
+[55:00 - 55:07] okay so let's save and let's see how it
+[55:03 - 55:09] looks okay it looks pretty good but I
+[55:07 - 55:11] want padding and white button if you see
+[55:09 - 55:14] our uh application right the white in
+[55:11 - 55:16] the background and this uh white color
+[55:14 - 55:18] as well and padding for the de so what
+[55:16 - 55:21] you have to do in this case you have to
+[55:18 - 55:25] wrap this all of this thing after this
+[55:21 - 55:28] image in a de okay copy this and I'll
+[55:25 - 55:31] put tag as as
+[55:28 - 55:34] well so you'll make sure you will close
+[55:31 - 55:36] the correct d type okay and then you can
+[55:34 - 55:38] give the class name for this one so
+[55:36 - 55:40] class name I give padding to two and
+[55:38 - 55:45] then I will give the background to be
+[55:40 - 55:49] white and height to be 160 PX
+[55:45 - 55:49] okay and we do
+[55:49 - 55:58] rounded I want rounded bottom
+[55:54 - 56:00] um what is say bottom uh Corner only
+[55:58 - 56:03] right so if you see we bottom corner
+[56:00 - 56:06] only downed so I want I don't want this
+[56:03 - 56:09] corner to be rounded
+[56:06 - 56:11] so you have to remove like here right
+[56:09 - 56:14] you have to just right top uh rounded
+[56:11 - 56:17] Corner top last corner and you see
+[56:14 - 56:19] perfect this is what we wanted okay now
+[56:17 - 56:22] if you see there is no how effect right
+[56:19 - 56:24] now right so in order to apply this hor
+[56:22 - 56:26] effect let's go to the par View and here
+[56:24 - 56:30] can give the class name
+[56:26 - 56:33] so on how you can write scale the size
+[56:30 - 56:35] of image of this hold you to
+[56:33 - 56:38] 105 and you can do the
+[56:35 - 56:41] transition all for the smooth animation
+[56:38 - 56:45] okay and make the duration to be of 300
+[56:41 - 56:47] or may be 200 and cursor to be pointer
+[56:45 - 56:50] and let's
+[56:47 - 56:54] see and E it it's
+[56:50 - 56:56] working perfect so and and again as I
+[56:54 - 56:58] say right this is totally this
+[56:56 - 57:02] responsive if you see totally
+[56:58 - 57:04] responsive okay even though if you go to
+[57:02 - 57:05] the inspect panel and if you want to Che
+[57:04 - 57:08] for mobile view just click on mobile
+[57:05 - 57:11] view and this is how it looks in mobile
+[57:08 - 57:14] view perfect so we will stop here
+[57:11 - 57:16] because video getting too much long I
+[57:14 - 57:19] will create a second part of this video
+[57:16 - 57:22] okay so if you really want to uh see the
+[57:19 - 57:24] next uh page how can we build it and we
+[57:22 - 57:28] are going to extend this application
+[57:24 - 57:30] until we EX um we more topics okay so if
+[57:28 - 57:32] I click on this one we'll get this
+[57:30 - 57:35] player and everything right so we will
+[57:32 - 57:37] cover this in the next video so please
+[57:35 - 57:40] subscribe to my channel so that you will
+[57:37 - 57:42] not miss my next video for this course
+[57:40 - 57:44] okay so I hope you like this video
+[57:42 - 57:47] subscribe to my channel and please like
+[57:44 - 57:50] buttons and
+[57:47 - 57:52] uh keep watching my videos okay and I
+[57:50 - 57:53] hope you like this video so see you in
+[57:52 - 57:57] next
+[57:53 - 57:59] time so one of the last video
+[57:57 - 58:02] to develop this online course listing
+[57:59 - 58:05] website and we develop this beautiful
+[58:02 - 58:06] page okay and as you know this is
+[58:05 - 58:10] completely
+[58:06 - 58:12] responsive now in this video we will go
+[58:10 - 58:15] further and we will
+[58:12 - 58:17] develop the when you click on any of
+[58:15 - 58:19] this course you will see the detail and
+[58:17 - 58:22] you can watch the video for example if I
+[58:19 - 58:25] click on this video you can see the
+[58:22 - 58:28] video and we integrate the YouTube also
+[58:25 - 58:30] you you will see the recommended video
+[58:28 - 58:32] and the description for this particular
+[58:30 - 58:35] video which youed and also you will
+[58:32 - 58:39] learn how to navigate from one page to
+[58:35 - 58:41] another page okay so watch this full
+[58:39 - 58:44] video and if you did not subscribe to my
+[58:41 - 58:48] channel subscribe to my channel and
+[58:44 - 58:48] before doing any further delay let's
+[58:53 - 59:00] begin so now first we will install the
+[58:56 - 59:04] react router okay because if you
+[59:00 - 59:08] see let's go to our uh project and once
+[59:04 - 59:10] you click any of this um card or course
+[59:08 - 59:15] list right you want to navigate to the
+[59:10 - 59:17] new page so in order to do that right we
+[59:15 - 59:20] need a routing so let's search just
+[59:17 - 59:23] react router and you will launch on this
+[59:20 - 59:25] uh official website of react routing and
+[59:23 - 59:27] uh in the tutorial section you will see
+[59:25 - 59:29] this command in PM install react router
+[59:27 - 59:31] Dom you just inst install this one you
+[59:29 - 59:33] can install this one as well but for now
+[59:31 - 59:37] for the Simplicity purpose I will
+[59:33 - 59:40] install this uh command
+[59:37 - 59:40] line and paste
+[59:42 - 59:46] it a few minutes
+[59:47 - 59:56] later once it install just run the
+[59:50 - 59:57] application okay now go back to uh
+[59:56 - 01:00:02] index.
+[59:57 - 01:00:02] chairs and here we want to wrap
+[01:00:02 - 01:00:08] this um routing to the browser router
+[01:00:06 - 01:00:10] right if it's not there so make sure you
+[01:00:08 - 01:00:13] will add this browser router if it's not
+[01:00:10 - 01:00:15] already there okay and now go back to
+[01:00:13 - 01:00:15] the
+[01:00:18 - 01:00:27] app.js now go back to app do app.js and
+[01:00:22 - 01:00:31] here you have to add the router okay
+[01:00:27 - 01:00:34] because whatever the
+[01:00:31 - 01:00:36] uh make sure it's routes okay so make
+[01:00:34 - 01:00:38] sure whatever the link you want to add
+[01:00:36 - 01:00:40] or routing you want want to add you have
+[01:00:38 - 01:00:43] to add in inside between this routes tag
+[01:00:40 - 01:00:46] okay and inside that whatever the route
+[01:00:43 - 01:00:48] you want to mention you can add it here
+[01:00:46 - 01:00:51] okay
+[01:00:48 - 01:00:55] so by default right uh for example we
+[01:00:51 - 01:00:58] will add the path which is equal to just
+[01:00:55 - 01:01:01] uh whenever we launch right and we are
+[01:00:58 - 01:01:04] not the any URL that time this route
+[01:01:01 - 01:01:06] will go to particular component so we we
+[01:01:04 - 01:01:09] have to add the
+[01:01:06 - 01:01:12] element and in this case our default
+[01:01:09 - 01:01:12] route is
+[01:01:13 - 01:01:22] home okay now next route we want to go
+[01:01:19 - 01:01:24] to the another uh page right so let's go
+[01:01:22 - 01:01:27] back in the page section and add another
+[01:01:24 - 01:01:30] page called play
+[01:01:27 - 01:01:33] video.js okay so this is our new
+[01:01:30 - 01:01:37] page add
+[01:01:33 - 01:01:38] the uh default template okay now in
+[01:01:37 - 01:01:42] app.js we have to
+[01:01:38 - 01:01:47] Define play video the URL which you want
+[01:01:42 - 01:01:49] to uh navigate to and we want to pass ID
+[01:01:47 - 01:01:52] here okay the reason that we want to
+[01:01:49 - 01:01:54] pass ID when you uh user click on any of
+[01:01:52 - 01:01:57] the video we will pass the ID and from
+[01:01:54 - 01:01:58] the ID we will F the all the video
+[01:01:57 - 01:02:00] related information that's the reason we
+[01:01:58 - 01:02:05] are passing the
+[01:02:00 - 01:02:09] ID and that's all right so let me save
+[01:02:05 - 01:02:12] it and let's go back to our application
+[01:02:09 - 01:02:16] I refresh it right it's coming to this
+[01:02:12 - 01:02:20] one right if you see we are getting two
+[01:02:16 - 01:02:22] uh um component on the same page because
+[01:02:20 - 01:02:24] we also Define home so remove this home
+[01:02:22 - 01:02:27] and save it so by default we mention
+[01:02:24 - 01:02:29] this slash with which is means the
+[01:02:27 - 01:02:31] default routing right whenever we launch
+[01:02:29 - 01:02:34] and it's the component is homepage and
+[01:02:31 - 01:02:38] if you see now we are getting the
+[01:02:34 - 01:02:40] homepage only right now on the click we
+[01:02:38 - 01:02:45] have to navigate it
+[01:02:40 - 01:02:46] correct so go back to uh video grid list
+[01:02:45 - 01:02:48] and
+[01:02:46 - 01:02:54] here right on the click we have to
+[01:02:48 - 01:02:54] define the routing so
+[01:02:56 - 01:03:03] so this is yeah so here we will Define
+[01:03:00 - 01:03:05] the on click method right but uh we will
+[01:03:03 - 01:03:05] wrap
+[01:03:05 - 01:03:14] this in De and let's see how it
+[01:03:11 - 01:03:18] looks okay so save it for now let's see
+[01:03:14 - 01:03:22] nothing is changed okay and then inside
+[01:03:18 - 01:03:24] that inside this D we'll put the on
+[01:03:22 - 01:03:27] click method
+[01:03:24 - 01:03:30] okay so make make sure on the console
+[01:03:27 - 01:03:34] you are getting on click okay so once
+[01:03:30 - 01:03:37] you click it you'll get so on the spec
+[01:03:34 - 01:03:40] panel go to console clear
+[01:03:37 - 01:03:42] everything and when you click you'll get
+[01:03:40 - 01:03:45] the click right if you click on this
+[01:03:42 - 01:03:49] you'll get the click now
+[01:03:45 - 01:03:51] here first Define this uh constant
+[01:03:49 - 01:03:54] called navigate is equal to use
+[01:03:51 - 01:03:56] navigation okay so we make sure you
+[01:03:54 - 01:03:59] imported and this is get imported from
+[01:03:56 - 01:04:03] the react router down Okay so this
+[01:03:59 - 01:04:07] navigate we can use to navigate to the
+[01:04:03 - 01:04:11] our page which we want okay in this
+[01:04:07 - 01:04:14] case we want to navigate and so inside
+[01:04:11 - 01:04:18] navigate we want to give
+[01:04:14 - 01:04:20] the uh the routing which we Define in
+[01:04:18 - 01:04:23] the app.js which is the play video
+[01:04:20 - 01:04:26] correct so we have to Define like play
+[01:04:23 - 01:04:29] video and slash we want to pass the ID
+[01:04:26 - 01:04:33] so here add the index so index is
+[01:04:29 - 01:04:36] nothing but 0 1 2 3 4 right but our
+[01:04:33 - 01:04:38] video is can be anything right so we'll
+[01:04:36 - 01:04:42] keep an item and here we will pass the
+[01:04:38 - 01:04:47] ID of the item right so item do
+[01:04:42 - 01:04:50] ID that's all right and save it so
+[01:04:47 - 01:04:52] here make sure you will add this route
+[01:04:50 - 01:04:55] and the element need to be a play video
+[01:04:52 - 01:04:57] okay so that when you route to the play
+[01:04:55 - 01:05:01] video any ID it will go to the play
+[01:04:57 - 01:05:05] video and uh make sure you will naate to
+[01:05:01 - 01:05:07] this item. ID okay and save everything
+[01:05:05 - 01:05:09] now go back to our application and click
+[01:05:07 - 01:05:13] any of this video If you see right the
+[01:05:09 - 01:05:17] routing is play video/ one one is our uh
+[01:05:13 - 01:05:20] the video ID and this we launch to this
+[01:05:17 - 01:05:23] play video uh page
+[01:05:20 - 01:05:25] okay so we successfully able to uh
+[01:05:23 - 01:05:28] navigate from one page to another if I
+[01:05:25 - 01:05:30] navigate to if I open some another video
+[01:05:28 - 01:05:33] right if you see the ID change
+[01:05:30 - 01:05:35] automatically so depends on the item you
+[01:05:33 - 01:05:37] click right the ID is change
+[01:05:35 - 01:05:41] automatically and you will launch to the
+[01:05:37 - 01:05:45] new page now next we have to F this ID
+[01:05:41 - 01:05:49] from the URL and from that we have to F
+[01:05:45 - 01:05:52] uh or call the API with this ID so that
+[01:05:49 - 01:05:52] we will get this
+[01:05:53 - 01:06:02] information next Let's uh try to get
+[01:05:58 - 01:06:03] this ID so go back to our code and in a
+[01:06:02 - 01:06:06] play video
+[01:06:03 - 01:06:09] right here you have to
+[01:06:06 - 01:06:13] Define uh so one
+[01:06:09 - 01:06:19] constant okay so constant and we want ID
+[01:06:13 - 01:06:21] right and is equal to so whatever the um
+[01:06:19 - 01:06:24] parameter we are getting in the URL you
+[01:06:21 - 01:06:27] can access using the use params method
+[01:06:24 - 01:06:31] Okay and like this right so in the ID
+[01:06:27 - 01:06:34] you will get this parameter correct and
+[01:06:31 - 01:06:36] uh let's try to console that one using
+[01:06:34 - 01:06:38] the U
+[01:06:36 - 01:06:41] fet
+[01:06:38 - 01:06:46] okay and I will just write the console
+[01:06:41 - 01:06:50] and ID and save it now go back here in
+[01:06:46 - 01:06:54] the sorry
+[01:06:50 - 01:06:56] so in the expect panel right in the
+[01:06:54 - 01:06:58] console
+[01:06:56 - 01:07:01] you will see this ID just ignore this
+[01:06:58 - 01:07:03] one uh this is just a different error
+[01:07:01 - 01:07:06] but if you see
+[01:07:03 - 01:07:08] the ID is printing as a five if I open
+[01:07:06 - 01:07:11] this one it prints as a six right and if
+[01:07:08 - 01:07:14] you see so we are successfully able to
+[01:07:11 - 01:07:14] get the ID
+[01:07:22 - 01:07:31] okay now uh I will Define one one uh
+[01:07:26 - 01:07:35] State method here so it will be a video
+[01:07:31 - 01:07:39] item comma say video
+[01:07:35 - 01:07:42] item is equal to use
+[01:07:39 - 01:07:47] State the blank
+[01:07:42 - 01:07:50] initially okay and uh also I will Define
+[01:07:47 - 01:07:54] one method which will uh get me the all
+[01:07:50 - 01:07:56] video not all but video uh List
+[01:07:54 - 01:08:00] information video item information so
+[01:07:56 - 01:08:03] this is the um method so here I Define
+[01:08:00 - 01:08:08] one I have to Define one
+[01:08:03 - 01:08:12] uh API right in uh our Global API
+[01:08:08 - 01:08:14] response so inside this I will Define
+[01:08:12 - 01:08:18] this another
+[01:08:14 - 01:08:22] API so this one and which we be passing
+[01:08:18 - 01:08:24] this ID and uh this is the end point
+[01:08:22 - 01:08:27] with the ID information okay which will
+[01:08:24 - 01:08:28] get um get me the selected video items
+[01:08:27 - 01:08:32] information
+[01:08:28 - 01:08:33] okay and if you go back here so I'm just
+[01:08:32 - 01:08:38] passing the ID which we are getting from
+[01:08:33 - 01:08:42] the use parameter and I'm just
+[01:08:38 - 01:08:45] um putting in object okay and setting in
+[01:08:42 - 01:08:48] the video item list that's all and let
+[01:08:45 - 01:08:51] let call in use
+[01:08:48 - 01:08:54] effect and I will make sure that we are
+[01:08:51 - 01:08:55] getting the data so I will print it in
+[01:08:54 - 01:08:58] the console
+[01:08:55 - 01:09:01] save it so we are getting one error
+[01:08:58 - 01:09:01] what's the
+[01:09:01 - 01:09:09] error so let's come here and
+[01:09:05 - 01:09:09] uh so we have
+[01:09:11 - 01:09:17] to oh make sure you'll import This
+[01:09:13 - 01:09:18] Global API okay so if not imported then
+[01:09:17 - 01:09:22] that's the reason we are getting error
+[01:09:18 - 01:09:24] okay so if I open any of this item and
+[01:09:22 - 01:09:27] if you see we are getting the data so we
+[01:09:24 - 01:09:30] are getting description ID tags title
+[01:09:27 - 01:09:33] the topics and video ID okay so
+[01:09:30 - 01:09:33] everything we are
+[01:09:34 - 01:09:39] getting go back to the components folder
+[01:09:38 - 01:09:42] create new folder
+[01:09:39 - 01:09:43] called play
+[01:09:42 - 01:09:46] video
+[01:09:43 - 01:09:49] component and inside that first we will
+[01:09:46 - 01:09:52] create the YouTube
+[01:09:49 - 01:09:55] player. JS and another
+[01:09:52 - 01:09:58] is recommend
+[01:09:55 - 01:10:02] dead
+[01:09:58 - 01:10:07] video.js Okay so add the default
+[01:10:02 - 01:10:10] template and for recom as well okay so
+[01:10:07 - 01:10:12] now let's go back to our play video here
+[01:10:10 - 01:10:15] we want to show this two components
+[01:10:12 - 01:10:16] right if you go back to the applications
+[01:10:15 - 01:10:18] we have on the left hand side we have
+[01:10:16 - 01:10:21] this player and on the right hand side
+[01:10:18 - 01:10:26] we have this recommended video
+[01:10:21 - 01:10:31] so here I will Define YouTube
+[01:10:26 - 01:10:34] player okay and then I will add another
+[01:10:31 - 01:10:34] uh component
+[01:10:39 - 01:10:47] okay so another is a play video oh sorry
+[01:10:45 - 01:10:49] uh the recommended
+[01:10:47 - 01:10:52] video
+[01:10:49 - 01:10:57] recommended video okay
+[01:10:52 - 01:10:59] now just add some uh Style think so so
+[01:10:57 - 01:11:02] initially uh we have to add this as a
+[01:10:59 - 01:11:06] grip and when the screen is smaller we
+[01:11:02 - 01:11:08] will add the green column as a one okay
+[01:11:06 - 01:11:14] and when the screen size is larger We'll
+[01:11:08 - 01:11:16] add green columns two okay and save it
+[01:11:14 - 01:11:19] now if you go back to our applications
+[01:11:16 - 01:11:21] and you open any of
+[01:11:19 - 01:11:25] them you will see YT player and
+[01:11:21 - 01:11:27] recommended video correct so now let's
+[01:11:25 - 01:11:30] add the title like
+[01:11:27 - 01:11:33] this but uh if you want you can give
+[01:11:30 - 01:11:34] some padding margin okay so let's add
+[01:11:33 - 01:11:38] some padding make sure you will import
+[01:11:34 - 01:11:40] the file add the and and make sure to
+[01:11:38 - 01:11:43] this text is displaying on the screen
+[01:11:40 - 01:11:44] looks perfect okay I think this is okay
+[01:11:43 - 01:11:47] the very first thing we have to do add
+[01:11:44 - 01:11:51] the title to the player
+[01:11:47 - 01:11:53] now so this section we consider as a YT
+[01:11:51 - 01:11:56] player and on the right let's add the
+[01:11:53 - 01:11:56] back
+[01:11:57 - 01:12:04] so here we'll Define the title first so
+[01:12:02 - 01:12:06] we in P
+[01:12:04 - 01:12:09] tag and
+[01:12:06 - 01:12:13] uh make sure you will pass
+[01:12:09 - 01:12:18] this um in the play video we'll pass
+[01:12:13 - 01:12:20] this video item to this YT player okay
+[01:12:18 - 01:12:25] so I will say video item I'll keep this
+[01:12:20 - 01:12:28] name same video item and in YT player
+[01:12:25 - 01:12:30] take it as a props okay so in video
+[01:12:28 - 01:12:34] item.
+[01:12:30 - 01:12:38] title and save all right so go back here
+[01:12:34 - 01:12:41] and if you see we are getting this title
+[01:12:38 - 01:12:43] okay let's uh add some styling to this
+[01:12:41 - 01:12:48] so I will add the class name and some
+[01:12:43 - 01:12:50] tell in CSS uh classes so Tex size to be
+[01:12:48 - 01:12:55] 30
+[01:12:50 - 01:12:56] PX then font to be bold
+[01:12:55 - 01:13:00] and let's see how it
+[01:12:56 - 01:13:03] looks if you see we are getting it right
+[01:13:00 - 01:13:07] I will decrease the font to be like
+[01:13:03 - 01:13:10] 26 and let's see how it looks perfect
+[01:13:07 - 01:13:12] now if I decrease the screen size
+[01:13:10 - 01:13:15] right screen side it will look like this
+[01:13:12 - 01:13:19] and automatically change the layout
+[01:13:15 - 01:13:20] correct perfect now let's add the TXS
+[01:13:19 - 01:13:24] like this
+[01:13:20 - 01:13:27] correct so in order to add the tags
+[01:13:24 - 01:13:29] right now the TXS is in the uh array of
+[01:13:27 - 01:13:32] object
+[01:13:29 - 01:13:35] so it's very easy to iterate that we
+[01:13:32 - 01:13:40] have to iterate it right so just need to
+[01:13:35 - 01:13:44] do that so in one t we have to add the
+[01:13:40 - 01:13:47] video items do TX do map it right and we
+[01:13:44 - 01:13:47] have to map in
+[01:13:48 - 01:13:53] item cor and add another
+[01:13:53 - 01:14:00] de here
+[01:13:56 - 01:14:03] perfect okay and I will add some H4 H5
+[01:14:00 - 01:14:04] tag whatever tag you want to add and
+[01:14:03 - 01:14:10] inside
+[01:14:04 - 01:14:11] that I will add the TX so item
+[01:14:10 - 01:14:14] dot
+[01:14:11 - 01:14:18] attributes do
+[01:14:14 - 01:14:21] name okay and save it uh that means
+[01:14:18 - 01:14:23] anything okay we have to close this one
+[01:14:21 - 01:14:27] and save it now let's go back and if you
+[01:14:23 - 01:14:31] see we are getting the tags as well so
+[01:14:27 - 01:14:32] let's add some uh font style to this one
+[01:14:31 - 01:14:36] okay
+[01:14:32 - 01:14:41] so class name we'll add text of 8
+[01:14:36 - 01:14:42] pixel then we'll add the color of blue
+[01:14:41 - 01:14:45] uh
+[01:14:42 - 01:14:48] 500 then we will change the text to be
+[01:14:45 - 01:14:51] white so this is background color okay
+[01:14:48 - 01:14:56] we will adding pading X to
+[01:14:51 - 01:15:00] two then padding bottom to one one sorry
+[01:14:56 - 01:15:01] padding bottom to one then padding top
+[01:15:00 - 01:15:04] to
+[01:15:01 - 01:15:07] one and we'll add the rounded to be
+[01:15:04 - 01:15:11] small and let's save it let's go back
+[01:15:07 - 01:15:14] here it look like this correct now we
+[01:15:11 - 01:15:16] want in one horal way right so just add
+[01:15:14 - 01:15:18] the class name and to
+[01:15:16 - 01:15:20] be o
+[01:15:18 - 01:15:23] sorry to be
+[01:15:20 - 01:15:25] flex and we'll go gap between the two
+[01:15:23 - 01:15:27] item to be three and Mar top we will go
+[01:15:25 - 01:15:30] to
+[01:15:27 - 01:15:32] two and once you see this we are getting
+[01:15:30 - 01:15:37] this tax as well
+[01:15:32 - 01:15:37] perfect now next we will add this video
+[01:15:39 - 01:15:47] player let's add the YouTube frame uh
+[01:15:42 - 01:15:49] YouTube Okay so let's add YouTube player
+[01:15:47 - 01:15:53] so in order to add the YouTube player
+[01:15:49 - 01:15:55] okay uh like this we are using the I
+[01:15:53 - 01:16:01] frame and we are passing the URL in the
+[01:15:55 - 01:16:05] I frame okay so let's go back here
+[01:16:01 - 01:16:08] and Define one with the you video URL
+[01:16:05 - 01:16:11] and if you see this is a invited YouTube
+[01:16:08 - 01:16:13] video and just we are passing the ID
+[01:16:11 - 01:16:17] which we are getting from the video item
+[01:16:13 - 01:16:19] and here I will just put it as a zero at
+[01:16:17 - 01:16:23] a start
+[01:16:19 - 01:16:25] right and let's add this URL in the I
+[01:16:23 - 01:16:30] frame so Define
+[01:16:25 - 01:16:34] iframe ID Define some ID here so YouTube
+[01:16:30 - 01:16:39] player then uh you have to define the
+[01:16:34 - 01:16:42] type type is equal to text/html
+[01:16:39 - 01:16:44] then let's give width so in this case I
+[01:16:42 - 01:16:48] will give 100%
+[01:16:44 - 01:16:51] width and the height so let's go height
+[01:16:48 - 01:16:54] to 360 so these are the iframe
+[01:16:51 - 01:16:56] properties and also Source the main
+[01:16:54 - 01:17:00] important thing to provide the source
+[01:16:56 - 01:17:04] which is nothing but a URL
+[01:17:00 - 01:17:07] okay so Source in this o
+[01:17:04 - 01:17:11] sorry I frame and Source in this case is
+[01:17:07 - 01:17:14] our video URL video
+[01:17:11 - 01:17:16] URL which is this constant correct and
+[01:17:14 - 01:17:20] we are passing
+[01:17:16 - 01:17:23] it let wrap this uh I frame into the
+[01:17:20 - 01:17:26] inside the DU and we can give some
+[01:17:23 - 01:17:29] margin from the top so give margin top
+[01:17:26 - 01:17:32] to maybe four and save
+[01:17:29 - 01:17:35] it let's go back to our application if
+[01:17:32 - 01:17:37] you see oh sorry if you see we are able
+[01:17:35 - 01:17:39] to see this YouTube player integrated
+[01:17:37 - 01:17:42] successfully perfect make sure you to
+[01:17:39 - 01:17:44] see so with the help of if frame you
+[01:17:42 - 01:17:48] can't detect whether this if frame or
+[01:17:44 - 01:17:48] not right it's very easy to integrate
+[01:17:50 - 01:17:59] it now next let's add the description
+[01:17:55 - 01:18:03] uh like this okay so go back
+[01:17:59 - 01:18:04] here so create one another new tag
+[01:18:03 - 01:18:09] inside the DU
+[01:18:04 - 01:18:11] tag h2 tag and we will say
+[01:18:09 - 01:18:13] about this
+[01:18:11 - 01:18:16] course you can write about this video
+[01:18:13 - 01:18:18] okay anything is fine and I will give
+[01:18:16 - 01:18:20] the class
+[01:18:18 - 01:18:23] name
+[01:18:20 - 01:18:28] font to be
+[01:18:23 - 01:18:32] p and Tex size I will assign to 20
+[01:18:28 - 01:18:35] pixel and margin bottom to be two
+[01:18:32 - 01:18:39] okay and if you save it let's see how it
+[01:18:35 - 01:18:41] looks so if you see but I want the white
+[01:18:39 - 01:18:46] background and the card like structure
+[01:18:41 - 01:18:49] okay so for this do do the class name
+[01:18:46 - 01:18:51] and here you have to Define padding to
+[01:18:49 - 01:18:55] be four then Define the background to be
+[01:18:51 - 01:18:57] white and margin top to be four and we
+[01:18:55 - 01:19:01] make the rounded uh the corner to be
+[01:18:57 - 01:19:03] rounded to be medium and if I save it
+[01:19:01 - 01:19:07] and you'll see it's
+[01:19:03 - 01:19:09] working now let's add the P tag and
+[01:19:07 - 01:19:12] inside the P
+[01:19:09 - 01:19:16] tag we need to show the description okay
+[01:19:12 - 01:19:17] so just write description I will make it
+[01:19:16 - 01:19:19] optional if description is not there I
+[01:19:17 - 01:19:22] will not get any error that's the reason
+[01:19:19 - 01:19:26] we can put this option thing and let's
+[01:19:22 - 01:19:27] go back here we'll see but it's coming
+[01:19:26 - 01:19:30] in one line and if you see right this
+[01:19:27 - 01:19:34] start start coming because it's a HTML
+[01:19:30 - 01:19:37] markdown okay so in order to update
+[01:19:34 - 01:19:40] it we have to install the dependency
+[01:19:37 - 01:19:42] called react markdown okay so I already
+[01:19:40 - 01:19:46] install you application just go and
+[01:19:42 - 01:19:47] install this one and instead of ptag
+[01:19:46 - 01:19:50] just type react
+[01:19:47 - 01:19:52] markdown in this tag and you will see
+[01:19:50 - 01:19:55] the changes
+[01:19:52 - 01:19:57] now if you go back up application if you
+[01:19:55 - 01:20:02] see this is coming B let's take another
+[01:19:57 - 01:20:03] example for example this one if you see
+[01:20:02 - 01:20:07] it's coming new lines and everything
+[01:20:03 - 01:20:11] because our response in this in that way
+[01:20:07 - 01:20:14] okay so we are successfully complete
+[01:20:11 - 01:20:17] this uh section as well in the next
+[01:20:14 - 01:20:20] right we will add this uh recommended
+[01:20:17 - 01:20:20] video things
+[01:20:22 - 01:20:28] okay so in order to show this
+[01:20:25 - 01:20:30] recommended video I'm using the existing
+[01:20:28 - 01:20:33] uh grid and the response okay you can
+[01:20:30 - 01:20:35] use another one another API call it's up
+[01:20:33 - 01:20:38] to you but for this demo purpose I will
+[01:20:35 - 01:20:41] use the existing one so let's go back to
+[01:20:38 - 01:20:45] our application in the recommended video
+[01:20:41 - 01:20:49] right I will call the video grid list
+[01:20:45 - 01:20:51] component which is already there okay so
+[01:20:49 - 01:20:54] this is the component we are already
+[01:20:51 - 01:20:57] using it and save it and if you see
+[01:20:54 - 01:21:00] we will able to see this but here we
+[01:20:57 - 01:21:02] want only two video okay because this
+[01:21:00 - 01:21:07] this particular component is nothing but
+[01:21:02 - 01:21:11] this this component okay so we want only
+[01:21:07 - 01:21:14] two uh video to be show on one line so
+[01:21:11 - 01:21:17] what I will do in order to know the
+[01:21:14 - 01:21:20] component whether this is uh this uh
+[01:21:17 - 01:21:23] compon is showing the recommended video
+[01:21:20 - 01:21:25] or it's showing on a homepage so that I
+[01:21:23 - 01:21:27] added this um one pro call is
+[01:21:25 - 01:21:31] recommended and by default I said is
+[01:21:27 - 01:21:33] false in the video G from the
+[01:21:31 - 01:21:35] recommended video I will pass is
+[01:21:33 - 01:21:39] recommended video is recommended as a
+[01:21:35 - 01:21:43] true so that this component know okay
+[01:21:39 - 01:21:45] this video G is we are using in a
+[01:21:43 - 01:21:48] recommended video as a recommended video
+[01:21:45 - 01:21:51] correct so this recommended we are using
+[01:21:48 - 01:21:55] in order to switch this line of code so
+[01:21:51 - 01:21:59] first I will wrap this um
+[01:21:55 - 01:22:02] D okay I will copy same d uh code and
+[01:21:59 - 01:22:03] paste it here okay so what I will do
+[01:22:02 - 01:22:07] first I
+[01:22:03 - 01:22:10] will say if it's not recommended video
+[01:22:07 - 01:22:15] then show this lineup code
+[01:22:10 - 01:22:18] okay otherwise show me this line of code
+[01:22:15 - 01:22:19] okay here what I will do I will remove
+[01:22:18 - 01:22:23] this uh
+[01:22:19 - 01:22:26] columns and I will show two column every
+[01:22:23 - 01:22:27] time and Save sa it right even this
+[01:22:26 - 01:22:30] medium large doesn't matter I will show
+[01:22:27 - 01:22:34] two columns and if I go back here now I
+[01:22:30 - 01:22:36] can able to see two only right but if
+[01:22:34 - 01:22:39] you see our
+[01:22:36 - 01:22:41] example right you can able to see only
+[01:22:39 - 01:22:44] four
+[01:22:41 - 01:22:46] uh items right we can show four I will
+[01:22:44 - 01:22:49] in this case I will I will show you the
+[01:22:46 - 01:22:53] only six first first six items correct
+[01:22:49 - 01:22:56] so let's add a condition so I will add
+[01:22:53 - 01:22:59] the index index in nothing 0 1 2 3 uh
+[01:22:56 - 01:23:02] limit this right you can just add here
+[01:22:59 - 01:23:07] as index is less than
+[01:23:02 - 01:23:10] 6 six and N right so if it's less than
+[01:23:07 - 01:23:13] six then only okay those only for six
+[01:23:10 - 01:23:17] item will be able to see if you see
+[01:23:13 - 01:23:24] perfect okay now we want to add this
+[01:23:17 - 01:23:24] text like this recommended video cor so
+[01:23:24 - 01:23:27] let's go back
+[01:23:27 - 01:23:35] here um
+[01:23:31 - 01:23:38] so here we'll add one du
+[01:23:35 - 01:23:44] tag just add this du tag
+[01:23:38 - 01:23:47] here maybe here okay and then just add
+[01:23:44 - 01:23:47] the
+[01:23:47 - 01:23:56] text and here I will give margin top to
+[01:23:51 - 01:23:56] two oops inside class name
+[01:23:56 - 01:24:04] I do margin top to two and this medium
+[01:24:01 - 01:24:06] the margin top to four okay and save it
+[01:24:04 - 01:24:09] and if you see you are getting this
+[01:24:06 - 01:24:12] recommended video as well you can give
+[01:24:09 - 01:24:15] more margin which helps you to align
+[01:24:12 - 01:24:20] with this one so just give margin
+[01:24:15 - 01:24:23] to8 so margin X to4 and
+[01:24:20 - 01:24:27] uh do padding actually and when it's
+[01:24:23 - 01:24:30] medium then margin X to 8 and when it's
+[01:24:27 - 01:24:34] large you margin X to 12 which is
+[01:24:30 - 01:24:38] similar to this one okay because we want
+[01:24:34 - 01:24:40] to align together if you go back you see
+[01:24:38 - 01:24:44] it's align now
+[01:24:40 - 01:24:46] perfect which is similar to this one
+[01:24:44 - 01:24:48] okay we did not give more padding from
+[01:24:46 - 01:24:50] the top because we don't want to show
+[01:24:48 - 01:24:53] this plank space here that's the reason
+[01:24:50 - 01:24:56] I keep as it is so guys that's all for
+[01:24:53 - 01:24:58] this video video because we are able to
+[01:24:56 - 01:25:01] uh add this
+[01:24:58 - 01:25:04] particular um requirements also if I
+[01:25:01 - 01:25:07] decree the screen size right and if you
+[01:25:04 - 01:25:09] see if I touch the small point it
+[01:25:07 - 01:25:11] changes the layout and it's coming this
+[01:25:09 - 01:25:14] recomended video at the down and that's
+[01:25:11 - 01:25:17] what we want right so as I said this is
+[01:25:14 - 01:25:19] fully responsive try this this is the
+[01:25:17 - 01:25:22] very basic uh tutorial and anyone who
+[01:25:19 - 01:25:26] want to learn the react with the telin
+[01:25:22 - 01:25:28] CES this is very helpful so try this and
+[01:25:26 - 01:25:30] I hope you will understand and if you
+[01:25:28 - 01:25:32] really like this video press like button
+[01:25:30 - 01:25:35] subscribe to my channel also one one
+[01:25:32 - 01:25:38] more thing here right if I click on
+[01:25:35 - 01:25:40] homepage it's going back correct so the
+[01:25:38 - 01:25:44] reason is if you go back our heer
+[01:25:40 - 01:25:47] section right I added this link tag and
+[01:25:44 - 01:25:51] I'm when I click on the home right I'm
+[01:25:47 - 01:25:54] link it to the default page which is our
+[01:25:51 - 01:25:57] slash right so that's the reason is uh
+[01:25:54 - 01:26:00] um reacting to the homepage if I open
+[01:25:57 - 01:26:03] this one right uh I can able to play
+[01:26:00 - 01:26:05] video and if I click on it's going back
+[01:26:03 - 01:26:08] perfect so guys that's all for this
+[01:26:05 - 01:26:10] video um I hope you really enjoyed this
+[01:26:08 - 01:26:13] video and if you did not watch the first
+[01:26:10 - 01:26:16] part of this video go and watch that one
+[01:26:13 - 01:26:19] and then Design This complete beautiful
+[01:26:16 - 01:26:22] website then you can find this uh video
+[01:26:19 - 01:26:24] called how to host or deplay the react
+[01:26:22 - 01:26:26] applications and once to complete this
+[01:26:24 - 01:26:29] you can deploy this react application
+[01:26:26 - 01:26:31] using the versal or with the help of
+[01:26:29 - 01:26:35] share hosting okay the in this case I
+[01:26:31 - 01:26:39] use the host iner so you
+[01:26:35 - 01:26:42] can uh use this your own default custom
+[01:26:39 - 01:26:45] domain okay so I use this subdomain
+[01:26:42 - 01:26:47] called so courses. to.com so you can do
+[01:26:45 - 01:26:49] you can also do that one okay so watch
+[01:26:47 - 01:26:51] my all this video subscribe to my
+[01:26:49 - 01:26:56] channel and we'll see you next time in
+[01:26:51 - 01:26:56] next video Until That skips my really

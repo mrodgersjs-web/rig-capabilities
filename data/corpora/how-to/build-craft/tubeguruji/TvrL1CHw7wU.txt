@@ -1,0 +1,421 @@
+[00:05 - 00:10] so now we will develop the slider if you
+[00:07 - 00:13] see this Disney application it has this
+[00:10 - 00:15] beautiful slider and it has a navigation
+[00:13 - 00:18] as well okay so we'll Implement that one
+[00:15 - 00:20] and if you see on a h right we get this
+[00:18 - 00:22] beautiful border as well so we will add
+[00:20 - 00:24] that with the telin CSS so let's go back
+[00:22 - 00:26] to our applications so let's go back to
+[00:24 - 00:30] our
+[00:26 - 00:33] project and here go uh create new file
+[00:30 - 00:37] in a components called slider.
+[00:33 - 00:39] jsx and add the default template okay
+[00:37 - 00:42] after that go to the app.jsx and make
+[00:39 - 00:45] sure after heer you will add the slider
+[00:42 - 00:48] as well
+[00:45 - 00:51] okay so
+[00:48 - 00:53] here after here you will see the slider
+[00:51 - 00:54] whatever slider we added and if you go
+[00:53 - 00:57] back to application we will see the
+[00:54 - 01:00] slider word right perfect now go back
+[00:57 - 01:04] slider and here first we will f the all
+[01:00 - 01:05] the trending um movies okay so we
+[01:04 - 01:09] already developed the
+[01:05 - 01:12] API and uh if you see right this is our
+[01:09 - 01:14] API and we are from that API end point
+[01:12 - 01:17] we will face the all the movie trending
+[01:14 - 01:20] movie list okay so here we will use the
+[01:17 - 01:24] inbuilt hook called use effect okay so
+[01:20 - 01:25] this use effect will help you to execute
+[01:24 - 01:28] whenever you launch this particular
+[01:25 - 01:30] component okay so if you're passing this
+[01:28 - 01:33] empty array right then it will execute
+[01:30 - 01:36] once once you um component get loaded if
+[01:33 - 01:40] you did not pass any of this uh empt or
+[01:36 - 01:43] anything right then use effect will um
+[01:40 - 01:45] execute every time every second you can
+[01:43 - 01:48] say okay and it will get executed So to
+[01:45 - 01:50] avoid that avoid it you can just pass uh
+[01:48 - 01:53] the empty array if you want to execute
+[01:50 - 01:55] this use effect uh only when some
+[01:53 - 01:57] variable uh some component change then
+[01:55 - 01:59] you can pass this uh the value of the
+[01:57 - 02:02] that one and whenever this value is
+[01:59 - 02:04] change this use effect will get executed
+[02:02 - 02:09] but for now we will pass the Mt okay
+[02:04 - 02:13] then create one method uh called get
+[02:09 - 02:13] trending movies
+[02:13 - 02:21] okay and uh this is the arrow function
+[02:17 - 02:23] okay and here in we have this Global API
+[02:21 - 02:25] where we Define the endpoint at this
+[02:23 - 02:28] Global API and then access the G
+[02:25 - 02:32] trending videos okay after that uh just
+[02:28 - 02:35] write then okay okay and the
+[02:32 - 02:37] response okay so make sure you will
+[02:35 - 02:39] access with the global API and this uh
+[02:37 - 02:42] get trending videos right which we added
+[02:39 - 02:45] here and then you have method called
+[02:42 - 02:47] then and to uh Arrow function to get the
+[02:45 - 02:50] response make sure uh you are getting
+[02:47 - 02:52] the correct result so write the response
+[02:50 - 02:56] okay and in order to call this function
+[02:52 - 02:58] right go to the use call this particular
+[02:56 - 03:00] method in use effect right so when
+[02:58 - 03:02] whenever this slider
+[03:00 - 03:05] compon will get load this great trending
+[03:02 - 03:09] mve will get uh called okay now let's go
+[03:05 - 03:11] back to the application okay and when if
+[03:09 - 03:13] I load this application right just
+[03:11 - 03:15] ignore this above part and if you see we
+[03:13 - 03:18] are getting data so in this data we have
+[03:15 - 03:21] the config and data where all our F data
+[03:18 - 03:24] is uh you'll find it here okay so right
+[03:21 - 03:25] now in the results right we have all the
+[03:24 - 03:28] list of movies so right now we are
+[03:25 - 03:30] getting the 20 top 20 trending movies
+[03:28 - 03:34] okay so in order to access this results
+[03:30 - 03:38] right just go here and type response dot
+[03:34 - 03:40] uh data and inside that we want the
+[03:38 - 03:44] results only right and if you go back
+[03:40 - 03:47] here now if you see right we get only 20
+[03:44 - 03:50] movies okay and nothing else so in order
+[03:47 - 03:53] to store this right we want to uh put it
+[03:50 - 03:55] in some state right so Define one uh
+[03:53 - 04:00] variable um and with the help of use
+[03:55 - 04:01] state so I will Define movie list okay
+[04:00 - 04:04] and in order to set it I will write set
+[04:01 - 04:09] movie
+[04:04 - 04:11] list and this is the use State okay so
+[04:09 - 04:14] right now I will pass the empt array and
+[04:11 - 04:17] now in order to set this mov list just
+[04:14 - 04:19] set it here and whatever response. data
+[04:17 - 04:21] result we will set it to the movie list
+[04:19 - 04:23] okay I will remove I will keep it as it
+[04:21 - 04:26] is to refer this field name and
+[04:23 - 04:28] everything okay now in our movie list we
+[04:26 - 04:30] have all this uh movie list which we fet
+[04:28 - 04:32] right now let's Implement and show it on
+[04:30 - 04:36] the screen so here I will Define image
+[04:32 - 04:39] source first okay so sorry uh first we
+[04:36 - 04:45] want to iterate this movie list right so
+[04:39 - 04:48] I will Define this mov list okay dot
+[04:45 - 04:51] map and here I will Define the item I
+[04:48 - 04:54] will also Define the index
+[04:51 - 04:57] okay and then the arrow
+[04:54 - 05:01] function so here I will Define the image
+[04:57 - 05:03] source okay and inside that that right
+[05:01 - 05:07] we want to define
+[05:03 - 05:08] the this backdrop path okay so this is
+[05:07 - 05:10] nothing but if you see this is extension
+[05:08 - 05:12] jpg this is nothing but the image that
+[05:10 - 05:15] we want to show it right but this is not
+[05:12 - 05:21] a complete part this is just a file name
+[05:15 - 05:24] correct so uh our our uh tmdb database
+[05:21 - 05:27] right that which which we are using it
+[05:24 - 05:30] already has um a one end point in order
+[05:27 - 05:34] to access the uh complete delete image
+[05:30 - 05:35] URL right so I will just copy it for now
+[05:34 - 05:37] and I will paste it here if you see
+[05:35 - 05:41] right I created one constant called
+[05:37 - 05:44] image base URL and this is the base URL
+[05:41 - 05:46] okay so uh and after that we will attach
+[05:44 - 05:51] this file name so you can write like
+[05:46 - 05:54] this uh image base URL plus you want to
+[05:51 - 05:58] show item Dot and the field name which
+[05:54 - 06:01] is the backdrop path so paste like this
+[05:58 - 06:02] okay and give some class name um it
+[06:01 - 06:06] means we will give the some width and
+[06:02 - 06:07] height so here in this case right I will
+[06:06 - 06:11] give
+[06:07 - 06:13] um I will give the width so let say
+[06:11 - 06:16] minimum we want to show minimum WID to
+[06:13 - 06:20] be full screen okay and the height I
+[06:16 - 06:22] will give the 310 pixel okay so I give
+[06:20 - 06:23] the custom height so that I need to
+[06:22 - 06:26] write in a square bracket okay and save
+[06:23 - 06:31] it so here uh instead of this uh curly
+[06:26 - 06:33] Braes right we want to uh add this uh
+[06:31 - 06:35] circular bracket right and if you go
+[06:33 - 06:38] back to our application now you'll see
+[06:35 - 06:41] this list of all the movies right now I
+[06:38 - 06:44] will do the object cover first so do the
+[06:41 - 06:47] object cover okay and save it now we'll
+[06:44 - 06:50] see the perfect uh image okay now it's
+[06:47 - 06:53] coming horizontally sorry vertically and
+[06:50 - 06:57] we want it horizontally right so to this
+[06:53 - 07:01] uh d right just add the class name and
+[06:57 - 07:04] to be Flex okay and save it and if you
+[07:01 - 07:06] see now it coming horizontally right but
+[07:04 - 07:10] you can't able to scroll it right just
+[07:06 - 07:13] uh so here you just mention the Overflow
+[07:10 - 07:16] X ATO okay so if you hold on this so it
+[07:13 - 07:20] will this is the CSS property orlow X
+[07:16 - 07:23] Auto okay and if you go back now you can
+[07:20 - 07:27] able to scroll it okay perfect now if
+[07:23 - 07:29] you see that our image is getting cut uh
+[07:27 - 07:34] uh the top section is getting uh
+[07:29 - 07:35] cut it right so you can just say after
+[07:34 - 07:39] object core you can say
+[07:35 - 07:42] object object left crop right so left
+[07:39 - 07:47] top so the top section you will see this
+[07:42 - 07:50] top section now you'll see okay and then
+[07:47 - 07:54] uh you can add some marging and padding
+[07:50 - 07:57] so uh in this case I will first give the
+[07:54 - 07:58] margin to the right okay so you will get
+[07:57 - 08:02] some margin you will not able to see
+[07:58 - 08:05] here but I'm giving margin and here
+[08:02 - 08:09] let's give it full and then um I will
+[08:05 - 08:12] give padding x axis okay to 16 and on
+[08:09 - 08:15] padding y I will give four okay and save
+[08:12 - 08:18] it now you'll see the change right it's
+[08:15 - 08:21] coming like this okay now let me add
+[08:18 - 08:23] some uh rounded corner so I will add
+[08:21 - 08:27] rounded corner to be large maybe I will
+[08:23 - 08:30] add this medium only okay and if you see
+[08:27 - 08:32] it's working perfectly fine okay now I
+[08:30 - 08:34] don't want this uh scroll bar if you see
+[08:32 - 08:36] thisne application it don't have scroll
+[08:34 - 08:42] bar but instead that we have the buttons
+[08:36 - 08:45] right so just type uh TN CSS um no
+[08:42 - 08:49] scroll bar npm right you will see this
+[08:45 - 08:52] uh npm Library so just copy this one and
+[08:49 - 08:55] paste it in your terminal okay I already
+[08:52 - 08:58] install it so just go here and paste it
+[08:55 - 08:59] and execute this one okay once you do uh
+[08:58 - 09:01] did it right
+[08:59 - 09:05] uh if you see this documentation so in
+[09:01 - 09:07] T.C config.js file uh you have to add
+[09:05 - 09:09] this plugin okay so go to a twin.
+[09:07 - 09:11] config.js file and make sure in the
+[09:09 - 09:14] plug-in section you will add this
+[09:11 - 09:17] particular uh line okay
+[09:14 - 09:21] now uh let's go back to our page which
+[09:17 - 09:24] is our uh slider and inside this one uh
+[09:21 - 09:27] you just need to write uh scroll bar
+[09:24 - 09:28] none okay if you go uh to this one right
+[09:27 - 09:32] you'll see how to use this one so you
+[09:28 - 09:34] just TR to scroll bar none and for this
+[09:32 - 09:36] do I will Define scroll barall as a none
+[09:34 - 09:39] okay and if you see it let's go back
+[09:36 - 09:41] here if you see you don't see anymore
+[09:39 - 09:42] right right now you can't scroll but
+[09:41 - 09:45] with the help of keyboard Arrow you can
+[09:42 - 09:48] able to scroll it okay
+[09:45 - 09:52] perfect now the next thing that we want
+[09:48 - 09:57] right uh to add these buttons okay
+[09:52 - 10:00] so uh I will use this hero icon again
+[09:57 - 10:04] and if you see right I will use this Hi
+[10:00 - 10:08] H sh on left and right right so uh just
+[10:04 - 10:13] copy that one I already have okay
+[10:08 - 10:17] so let me copy this one okay so left
+[10:13 - 10:20] one and I will add it um just before
+[10:17 - 10:21] this one so I will wrap with one more D
+[10:20 - 10:24] I will paste it
+[10:21 - 10:27] here and if you see error right you will
+[10:24 - 10:29] see this error because this return item
+[10:27 - 10:32] should be in one uhml tag so that's the
+[10:29 - 10:36] reason we have to Define like this okay
+[10:32 - 10:40] and same I will do the for right
+[10:36 - 10:42] okay and make sure you will add it so I
+[10:40 - 10:46] will import it is right if you see I
+[10:42 - 10:48] imported that uh two icons okay and if I
+[10:46 - 10:50] save and if you go back
+[10:48 - 10:52] here uh you will see this icon at the
+[10:50 - 10:55] corner right it's not visible right now
+[10:52 - 10:59] but let's uh give some styling so style
+[10:55 - 11:02] it I will say text to be uh oh sorry so
+[10:59 - 11:02] it need to be a class
+[11:02 - 11:09] name and this need to be a double Cur
+[11:06 - 11:12] double bracket okay like this and uh
+[11:09 - 11:16] here I give the text to be white okay so
+[11:12 - 11:18] it will it will be more visible okay and
+[11:16 - 11:23] now let give some styling so first I
+[11:18 - 11:26] will add the text size to be 30 pixel
+[11:23 - 11:29] and then I will make it absolute because
+[11:26 - 11:32] I want this particular one right on the
+[11:29 - 11:35] image so that's the reason I give the
+[11:32 - 11:39] position to be absolute and then uh
+[11:35 - 11:43] let's give some margin X on uh
+[11:39 - 11:45] 8 and uh if you see this is how it looks
+[11:43 - 11:50] for now right and let's give some margin
+[11:45 - 11:53] top to be 150 pixel
+[11:50 - 11:56] okay and if you see now it's coming in
+[11:53 - 11:59] the center right now how I decided 150
+[11:56 - 12:01] pixel if you see uh the height of height
+[11:59 - 12:06] of our image is 310 right so uh depends
+[12:01 - 12:08] on that one I add did this U margin from
+[12:06 - 12:10] the top okay so same thing you have to
+[12:08 - 12:12] apply for the right one as well but I
+[12:10 - 12:15] will also add the cursor pointer and
+[12:12 - 12:19] save it now same thing I will add it
+[12:15 - 12:21] here and paste it but in this case right
+[12:19 - 12:24] we want this on the right hand side so
+[12:21 - 12:26] just type right to be zero because we
+[12:24 - 12:28] added the position to be absolute okay
+[12:26 - 12:32] if I save it you will see this both the
+[12:28 - 12:35] icons okay right now uh it will not work
+[12:32 - 12:38] because we did not add anything right
+[12:35 - 12:39] now uh one more thing right if I
+[12:38 - 12:42] decrease the screen size right if I
+[12:39 - 12:45] decrease the screen size I don't want
+[12:42 - 12:47] this uh navigation bar anymore because
+[12:45 - 12:50] uh with the help of mobile view right I
+[12:47 - 12:52] can easily navigate it so in order to
+[12:50 - 12:55] avoid that right first when the screen
+[12:52 - 12:58] is smaller you can just hide it okay and
+[12:55 - 12:59] when screen is medium or larger you can
+[12:58 - 13:03] show it or you you can say okay just
+[12:59 - 13:06] show as a block okay display as a block
+[13:03 - 13:09] uh sorry uh so we have to paste it uh
+[13:06 - 13:11] this both this line for this uh icon as
+[13:09 - 13:14] well and then save it now if you go back
+[13:11 - 13:16] here I will decrease the screen size and
+[13:14 - 13:19] if you see right right now it's medium
+[13:16 - 13:22] but as soon as I touches the uh small
+[13:19 - 13:25] screen size it will it will be uh
+[13:22 - 13:29] invisible right and if you select the
+[13:25 - 13:31] mobile view right let me refresh it
+[13:29 - 13:33] you'll see this uh image right and it's
+[13:31 - 13:37] vertical right now we don't want that
+[13:33 - 13:38] one right so for the image as well uh
+[13:37 - 13:41] just give this height when the screen
+[13:38 - 13:43] size is medium otherwise you don't need
+[13:41 - 13:47] to give any size and if you see now
+[13:43 - 13:50] you'll see this right perfect okay and
+[13:47 - 13:52] when I increase the screen size you will
+[13:50 - 13:56] see this and also we'll get the
+[13:52 - 13:58] navigation uh Arrow as well now add the
+[13:56 - 14:00] click events to the navigation slider so
+[13:58 - 14:05] on the click C off right or left slider
+[14:00 - 14:07] will navigate okay so first uh just give
+[14:05 - 14:10] the first use the one in built hook
+[14:07 - 14:13] again the react in Hook okay so Define
+[14:10 - 14:15] one constant and I will write element
+[14:13 - 14:18] reference which is equal to use
+[14:15 - 14:20] reference okay so what it will do it
+[14:18 - 14:22] will refer to the element right and it
+[14:20 - 14:25] will give the access to that HTML
+[14:22 - 14:29] elements so only thing you need to do
+[14:25 - 14:30] here uh to write the reference here okay
+[14:29 - 14:34] so just write reference which is equal
+[14:30 - 14:36] to element reference okay now you can
+[14:34 - 14:38] access this element you have control on
+[14:36 - 14:40] that one that's the reason we give the
+[14:38 - 14:42] element reference right and now here you
+[14:40 - 14:45] can Define on click method but before
+[14:42 - 14:47] that we will Define two uh function so
+[14:45 - 14:52] constant
+[14:47 - 14:55] slider uh right okay which is equal to
+[14:52 - 14:58] element so we will pass the element and
+[14:55 - 15:01] then the some uh operation we can do
+[14:58 - 15:03] here so here I can write element dot
+[15:01 - 15:07] scroll here in this case we want to
+[15:03 - 15:09] scroll left and then on the left we will
+[15:07 - 15:12] add the Value Plus is equal to right so
+[15:09 - 15:15] in this case we will add for example 800
+[15:12 - 15:19] okay and same thing you have to copy for
+[15:15 - 15:22] the left scroll okay so you can say left
+[15:19 - 15:24] but here now we'll do the minus okay so
+[15:22 - 15:27] this is very uh important to understand
+[15:24 - 15:30] how it works okay and now here you can
+[15:27 - 15:33] Define the on click
+[15:30 - 15:35] method okay and so Define the function
+[15:33 - 15:36] and on the because you have to Define
+[15:35 - 15:39] this one very carefully otherwise it
+[15:36 - 15:41] will execute uh every time if you define
+[15:39 - 15:44] like this uh for example if I Define
+[15:41 - 15:47] like this okay it will get executed
+[15:44 - 15:50] multiple times okay uh it's infinite
+[15:47 - 15:51] time it will get executed So to avoid
+[15:50 - 15:54] that you have to write Arrow function
+[15:51 - 15:57] like this okay so here I will write
+[15:54 - 16:01] oider left right this is a left arrow
+[15:57 - 16:03] and then I will again copy this for our
+[16:01 - 16:06] right arrow so I will just write right
+[16:03 - 16:08] and here you have to pass the element
+[16:06 - 16:11] reference okay dot
+[16:08 - 16:13] current so current element so whatever
+[16:11 - 16:16] the current uh value for the slider is
+[16:13 - 16:19] showing on the screen for that one uh we
+[16:16 - 16:21] are passing to this element okay now if
+[16:19 - 16:24] I save it go back to our application if
+[16:21 - 16:26] I click on it you will see is getting um
+[16:24 - 16:28] changed right and if you see like this
+[16:26 - 16:32] but is very fast uh we want smooth
+[16:28 - 16:36] animation right so go back to our um
+[16:32 - 16:38] code and here you can Define uh scroll
+[16:36 - 16:41] to be a smooth so just write
+[16:38 - 16:44] scroll with smooth right and if I save
+[16:41 - 16:47] it go back to application if I see now
+[16:44 - 16:50] you can able to scroll it smoothly
+[16:47 - 16:52] correct but you'll see if you see right
+[16:50 - 16:54] uh you're getting both the image at one
+[16:52 - 16:57] right and we don't want that one if you
+[16:54 - 16:59] see here at once you will see this right
+[16:57 - 17:02] so
+[16:59 - 17:04] uh the only thing here we have to do to
+[17:02 - 17:07] uh depends on the dimension of the
+[17:04 - 17:09] screen uh we will provide this value
+[17:07 - 17:12] okay so Define one
+[17:09 - 17:15] constant and just uh write a diamond
+[17:12 - 17:19] width
+[17:15 - 17:22] screen width okay and I will Define like
+[17:19 - 17:24] window Dot and you can Define the
+[17:22 - 17:26] dimension here so it it Prov a lot of
+[17:24 - 17:30] different uh properties so I want inner
+[17:26 - 17:33] width okay so inner width nothing
+[17:30 - 17:35] but the screen uh the width of this
+[17:33 - 17:39] screen okay and now let's take the
+[17:35 - 17:40] screen width and Define here okay now
+[17:39 - 17:43] depends on the plus minus we'll Define
+[17:40 - 17:45] screen withd and also uh we already give
+[17:43 - 17:49] the padding on the both the x-axis right
+[17:45 - 17:51] so I will remove that one here and same
+[17:49 - 17:54] with this one okay and then save it now
+[17:51 - 17:57] if you go back here refresh the
+[17:54 - 18:00] application if I click next you'll see
+[17:57 - 18:03] only whole image get changed you see
+[18:00 - 18:06] right beautifully and that's what we
+[18:03 - 18:08] wanted and it work for the left uh
+[18:06 - 18:11] navigation or the right navigation
+[18:08 - 18:14] perfectly okay now the last thing we
+[18:11 - 18:15] remaining is on a h right we'll get this
+[18:14 - 18:19] border
+[18:15 - 18:21] correct so go to the image uh here we
+[18:19 - 18:24] will Define on
+[18:21 - 18:28] H we want to give the border so just
+[18:24 - 18:31] give the Border uh of uh with four
+[18:28 - 18:34] pixels so custom width I give okay and
+[18:31 - 18:37] also give the border of gray color okay
+[18:34 - 18:39] so gray and we'll get a lot of options
+[18:37 - 18:42] so you can select either any of them so
+[18:39 - 18:44] right now I select 400 and then save it
+[18:42 - 18:46] and if you see I can to get broader but
+[18:44 - 18:48] it's very instant right there's no
+[18:46 - 18:51] animation so you can just write
+[18:48 - 18:53] transition all to give the smooth
+[18:51 - 18:56] animation and the duration as well so in
+[18:53 - 18:58] this case I will give 100 and the
+[18:56 - 19:01] animation type which is is in out okay
+[18:58 - 19:03] so if you see perfect so you can just
+[19:01 - 19:07] give is
+[19:03 - 19:09] in and let's see how it looks look right
+[19:07 - 19:13] if you go back here you'll
+[19:09 - 19:15] see and same way we did it okay perfect
+[19:13 - 19:18] so I hope you understand this particular
+[19:15 - 19:21] section uh to add the slider uh similar
+[19:18 - 19:23] to a Disney application okay uh if you
+[19:21 - 19:26] have any doubt any questions just
+[19:23 - 19:27] comment uh in the comment section or you
+[19:26 - 19:31] can directly message me on my Instagram
+[19:27 - 19:32] Channel which is at the TU gurji and if
+[19:31 - 19:35] you did not subscribe to my channel then
+[19:32 - 19:39] please subscribe to my channel and in
+[19:35 - 19:41] next uh video uh we will uh add this
+[19:39 - 19:43] beautiful category and if you see that
+[19:41 - 19:44] beautiful animation on the background
+[19:43 - 19:48] the video is playing on the background
+[19:44 - 19:51] on the H so that particular uh uh
+[19:48 - 19:53] styling we will add uh in our next video
+[19:51 - 19:56] okay so please watch the next video as
+[19:53 - 19:56] well

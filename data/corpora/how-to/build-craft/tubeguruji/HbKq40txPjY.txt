@@ -1,0 +1,430 @@
+[00:04 - 00:10] so welcome back to another episode of
+[00:07 - 00:12] react native building the educational
+[00:10 - 00:15] application so if you did not watch uh
+[00:12 - 00:17] my previous uh course or previous video
+[00:15 - 00:19] of this particular course then go and
+[00:17 - 00:21] watch that first so in this particular
+[00:19 - 00:24] section we are covering very important
+[00:21 - 00:26] topic called uh to track the user
+[00:24 - 00:28] progress when your user complete the
+[00:26 - 00:32] particular section okay and that
+[00:28 - 00:35] particular um data we are storing in our
+[00:32 - 00:38] database okay so if uh I open any of
+[00:35 - 00:39] this particular uh course right uh if I
+[00:38 - 00:41] open this one you'll see that I
+[00:39 - 00:44] completed this first particular chapter
+[00:41 - 00:47] right and it will do with this green
+[00:44 - 00:49] tick mark for example if I open this
+[00:47 - 00:52] getting started right I completed this
+[00:49 - 00:55] section if I click next right I'm here I
+[00:52 - 00:57] can run this one if I go next you will
+[00:55 - 00:59] see this progress by as well right and
+[00:57 - 01:01] if I click finish as soon as I click
+[00:59 - 01:04] click finish right it will jump back to
+[01:01 - 01:06] this uh course detail page and if you
+[01:04 - 01:09] see right this tick mark is get uh
+[01:06 - 01:11] display on the screen as soon as you
+[01:09 - 01:13] finish that particular chapter okay so
+[01:11 - 01:16] this particular section we are covering
+[01:13 - 01:18] so in this particular one right once uh
+[01:16 - 01:20] user click on the Finish button right we
+[01:18 - 01:23] are sending all the uh required
+[01:20 - 01:27] information in our database in our
+[01:23 - 01:30] strapy so if you go back here right and
+[01:27 - 01:34] here I created the course progress um
+[01:30 - 01:35] uh collection here okay so if I go to
+[01:34 - 01:37] course progr you will see the user ID
+[01:35 - 01:39] I'm saving the course ID the course
+[01:37 - 01:43] content ID all these things right type
+[01:39 - 01:46] is just uh the variable but if you see
+[01:43 - 01:48] this all the variable um in core
+[01:46 - 01:51] progress I am storing okay and once we
+[01:48 - 01:54] store it I'm also using the gate API in
+[01:51 - 01:55] order to face that information so all
+[01:54 - 01:59] everything
+[01:55 - 02:01] um including this how to fetch it how to
+[01:59 - 02:04] display it how to post it everything
+[02:01 - 02:07] we'll learn in this par section so now
+[02:04 - 02:10] let's implement the uh course uh
+[02:07 - 02:13] progress right so here first of all uh
+[02:10 - 02:15] in global do uh Global api.js right I
+[02:13 - 02:17] added these two end points one is to set
+[02:15 - 02:19] the course progress and this is the end
+[02:17 - 02:20] point and I'm passing the data
+[02:19 - 02:23] information because this is the post
+[02:20 - 02:26] request and in order to get the course
+[02:23 - 02:29] progress right I am using this uh
+[02:26 - 02:32] endpoint and I'm filtering it with the
+[02:29 - 02:35] I'm passing user ID and the uh course ID
+[02:32 - 02:38] okay so that we'll get the some result
+[02:35 - 02:41] so now let's save this information okay
+[02:38 - 02:44] and let's go back to our course uh
+[02:41 - 02:48] chapter page right here if you see right
+[02:44 - 02:51] uh we have finish button uh on Place
+[02:48 - 02:53] event right so if you come here right
+[02:51 - 02:55] here we have on click next correct and
+[02:53 - 02:58] this is the Finish button so if you go
+[02:55 - 03:01] back here right uh if in this catch
+[02:58 - 03:03] block we added this navigation. go back
+[03:01 - 03:06] right so if you finish it it will go
+[03:03 - 03:11] back to the screen correct so over here
+[03:06 - 03:12] we will add the uh our data means we'll
+[03:11 - 03:17] post the data in a server so first of
+[03:12 - 03:19] all I will write the constant data right
+[03:17 - 03:22] and inside that I have to write like
+[03:19 - 03:24] data like this right and again inside
+[03:22 - 03:26] that I have to write the all the field
+[03:24 - 03:30] which I need to send it right so in this
+[03:26 - 03:34] case the first is U ID okay
+[03:30 - 03:38] so then uh next field is the course
+[03:34 - 03:41] ID and then next field is a course
+[03:38 - 03:44] content ID okay this one so these three
+[03:41 - 03:46] fields we need it first of all we have
+[03:44 - 03:49] to take user ID right so with the help
+[03:46 - 03:52] of au authenticating context we can uh
+[03:49 - 03:54] you can use this uh user data and from
+[03:52 - 03:58] the user data you can get the user ID
+[03:54 - 04:00] right so it's very easy you have to do
+[03:58 - 04:01] like this and then use use the context
+[04:00 - 04:03] and Au context right because in
+[04:01 - 04:07] authentication context we have the user
+[04:03 - 04:08] data so I will just access that ID using
+[04:07 - 04:11] user data.
+[04:08 - 04:13] ID then we have the course ID right so
+[04:11 - 04:17] in for this course
+[04:13 - 04:20] ID uh we have to F it uh from
+[04:17 - 04:22] the uh we are getting this parameter
+[04:20 - 04:24] right from that we can f it so I will
+[04:22 - 04:27] just write
+[04:24 - 04:30] par is param
+[04:27 - 04:32] dot SCE ID
+[04:30 - 04:34] okay because we are passing the course
+[04:32 - 04:37] ID so right now we are not passing but
+[04:34 - 04:39] we have to pass it so for example if you
+[04:37 - 04:43] go back to the course detail page right
+[04:39 - 04:47] here we have the uh course content
+[04:43 - 04:48] and uh not here actually so if you when
+[04:47 - 04:50] we are navigating right so maybe in the
+[04:48 - 04:52] course
+[04:50 - 04:54] content right here we are navigating
+[04:52 - 04:57] right here we have to pass
+[04:54 - 05:00] the uh this particular variable called
+[04:57 - 05:03] course uh ID so here we will pass the
+[05:00 - 05:05] course ID oh actually we are passing the
+[05:03 - 05:06] course ID here right if you are not
+[05:05 - 05:09] passing make sure you'll pass this
+[05:06 - 05:11] course ID okay and course ID is nothing
+[05:09 - 05:14] but course. ID and this course ID you
+[05:11 - 05:16] have to accept it here right you'll give
+[05:14 - 05:19] comma here so you'll not get any error
+[05:16 - 05:21] and the last is the course content ID
+[05:19 - 05:23] right so from the course content we have
+[05:21 - 05:25] we are getting this course content right
+[05:23 - 05:28] and each course content has its own ID
+[05:25 - 05:30] so just uh to access the ID you can
+[05:28 - 05:31] write like this okay
+[05:30 - 05:34] make sure if you are not passing the
+[05:31 - 05:36] course ID you will pass it in the uh
+[05:34 - 05:38] navigation uh when you are click on the
+[05:36 - 05:40] particular uh content right and that
+[05:38 - 05:44] course ID you have to pass it okay
+[05:40 - 05:46] that's all and save it now we have the
+[05:44 - 05:48] data now you you have you might might
+[05:46 - 05:52] have a question why we are passing data
+[05:48 - 05:56] right so here so let's go back in
+[05:52 - 05:59] strappy post API and if you search that
+[05:56 - 06:01] right uh you will get how what type of
+[05:59 - 06:02] all all this type of post right so
+[06:01 - 06:05] create a new entry and everything right
+[06:02 - 06:08] so for example in order to post the data
+[06:05 - 06:10] right uh this is a gate entry this is a
+[06:08 - 06:12] post request right if you see and this
+[06:10 - 06:14] is the example so whatever the field you
+[06:12 - 06:16] want to pass you have to pass in the
+[06:14 - 06:19] data uh object right so that's the
+[06:16 - 06:23] reason we pass in a data
+[06:19 - 06:25] object now let's call the global API dot
+[06:23 - 06:28] we have to set the course progress so
+[06:25 - 06:31] set the course progress pass this data
+[06:28 - 06:31] information
+[06:31 - 06:39] then and the response
+[06:34 - 06:41] okay now uh on this response we will go
+[06:39 - 06:44] back so we will write the navigation do
+[06:41 - 06:47] go back and save it okay as simple as
+[06:44 - 06:48] that now let's try it and make sure uh
+[06:47 - 06:51] we are getting some
+[06:48 - 06:55] data so I am here right right now we
+[06:51 - 06:55] have only uh let me check we
+[06:58 - 07:06] have so we have uh three records okay so
+[07:02 - 07:06] what I will do I will go to the
+[07:06 - 07:10] introduction and uh let me go
+[07:11 - 07:16] back so right now we don't have anything
+[07:14 - 07:17] go back introduction run this we don't
+[07:16 - 07:19] have
+[07:17 - 07:22] anything and
+[07:19 - 07:26] finish okay
+[07:22 - 07:29] so we try to push the data let's refresh
+[07:26 - 07:32] it and if you see we got the new record
+[07:29 - 07:34] one 13 right the course Content ID is
+[07:32 - 07:38] three and the ID is four okay and we got
+[07:34 - 07:41] this data perfect that is what we
+[07:38 - 07:44] want now we are successfully able to uh
+[07:41 - 07:47] set the course okay now let's go back to
+[07:44 - 07:51] our uh course detail page okay over here
+[07:47 - 07:54] we will F this uh particular uh data
+[07:51 - 07:58] okay all this data by using the user ID
+[07:54 - 08:00] okay so first of all what I will do um
+[07:58 - 08:04] let's let's just Define
+[08:00 - 08:11] the uh new method okay so let's
+[08:04 - 08:12] call constant get course progress okay
+[08:11 - 08:15] and the arrow
+[08:12 - 08:18] function so here we'll define global API
+[08:15 - 08:21] do get course progress and over here you
+[08:18 - 08:24] have to pass two parameter if you see
+[08:21 - 08:27] right user ID and course ID correct so
+[08:24 - 08:29] make sure you will add the uh you will
+[08:27 - 08:32] get this user ID from the user context
+[08:29 - 08:34] use context the one which we are using
+[08:32 - 08:39] that which is the O context so I will
+[08:34 - 08:43] write like this user data comma set user
+[08:39 - 08:45] data is equal to use context make sure
+[08:43 - 08:47] you input the all the model and then we
+[08:45 - 08:51] have the authentication
+[08:47 - 08:54] context now we have the user user data.
+[08:51 - 08:56] ID which we needed and the second is the
+[08:54 - 09:00] course ID right so course ID in this
+[08:56 - 09:03] case is parameter do course data
+[09:00 - 09:06] do ID okay I will I'm not using the
+[09:03 - 09:08] course do ID I can use it but sometimes
+[09:06 - 09:09] right when you set this value for this
+[09:08 - 09:12] particular course it not immediately
+[09:09 - 09:14] reflected right so that's the reason I'm
+[09:12 - 09:15] using parameter because parameter has
+[09:14 - 09:17] very initially we are getting this value
+[09:15 - 09:20] right so that's the reason I'm using the
+[09:17 - 09:23] parameter. course do course data. ID
+[09:20 - 09:28] okay
+[09:23 - 09:30] then then we have response okay now we
+[09:28 - 09:33] are getting the respon response so if
+[09:30 - 09:33] you write like
+[09:33 - 09:38] console.log response. data because in
+[09:36 - 09:41] this is a so our response is will be in
+[09:38 - 09:46] the response. data right I will write
+[09:41 - 09:51] here my response like this okay and save
+[09:46 - 09:53] it now if you check here right if
+[09:51 - 09:56] you um in the conso sometimes console
+[09:53 - 09:58] will not work properly but that's fine
+[09:56 - 09:59] uh we will ignore it okay and we will
+[09:58 - 10:04] just set the data
+[09:59 - 10:05] okay so here I will add the new state
+[10:04 - 10:11] called
+[10:05 - 10:12] constant um user progress comma set user
+[10:11 - 10:17] progress oh
+[10:12 - 10:20] sorry progress and is equal to your
+[10:17 - 10:23] state
+[10:20 - 10:26] okay inside this I will set the user
+[10:23 - 10:28] progress data so here right uh first of
+[10:26 - 10:29] all I will manipulate the data so I will
+[10:28 - 10:32] check response
+[10:29 - 10:36] dot data
+[10:32 - 10:40] okay data because I need the actual data
+[10:36 - 10:41] and here uh I will check I will
+[10:40 - 10:44] manipulate the data as I say right so I
+[10:41 - 10:49] will constant result equal to response.
+[10:44 - 10:54] data. data then I will map it
+[10:49 - 10:56] okay like this and I will just copy
+[10:54 - 10:59] existing code okay so I'm am adding ID
+[10:56 - 11:03] the course ID and course content ID
+[10:59 - 11:05] which we are getting from here okay and
+[11:03 - 11:08] that's all I needed right and this
+[11:05 - 11:11] result I will set like uh set user
+[11:08 - 11:15] progress for a set user
+[11:11 - 11:17] progress perfect that's all okay now
+[11:15 - 11:19] make sure you will call this one right
+[11:17 - 11:22] you have to call this particular one
+[11:19 - 11:26] only when we you have this course data.
+[11:22 - 11:30] ID so here you can write param do course
+[11:26 - 11:33] data. ID if it's available then you can
+[11:30 - 11:36] call this function otherwise don't call
+[11:33 - 11:38] it and I will pass it as a null okay now
+[11:36 - 11:41] once it call it right it will set the
+[11:38 - 11:43] value and that value you have to pass to
+[11:41 - 11:45] this course content because we have to
+[11:43 - 11:47] set this symbol right so what I will do
+[11:45 - 11:49] I will write
+[11:47 - 11:51] course
+[11:49 - 11:56] um
+[11:51 - 11:59] user progress is equal to user progress
+[11:56 - 12:01] okay progress okay and access this part
+[11:59 - 12:02] parameter in course content so if you go
+[12:01 - 12:04] to course content here you have to pass
+[12:02 - 12:08] it like this right user progress that's
+[12:04 - 12:10] all correct and let's try to print it
+[12:08 - 12:14] out here so in use
+[12:10 - 12:18] effect I will print the
+[12:14 - 12:21] value like this okay so I have the user
+[12:18 - 12:25] progress and let's save
+[12:21 - 12:28] everything okay so if you see right
+[12:25 - 12:30] uh this is the user progress and we are
+[12:28 - 12:35] getting value right we are getting three
+[12:30 - 12:37] value for this particular course ID and
+[12:35 - 12:39] the course uh sorry particular course ID
+[12:37 - 12:43] and that particular user only right if
+[12:39 - 12:45] you see the uh the user ID is the 111
+[12:43 - 12:48] right now don't ignore because course ID
+[12:45 - 12:50] also matters okay and that's what we get
+[12:48 - 12:52] it if is it duplicate obviously
+[12:50 - 12:55] sometimes it avoid it right so don't
+[12:52 - 12:59] worry about that one so we have all the
+[12:55 - 13:04] data okay and uh now what you have to do
+[12:59 - 13:08] you have to add one method to verify to
+[13:04 - 13:11] check whether uh this particular um
+[13:08 - 13:14] course is completed or not right so in
+[13:11 - 13:15] order to add that method uh you have to
+[13:14 - 13:18] go to
+[13:15 - 13:20] the uh in a course content only right
+[13:18 - 13:24] you have to check the user
+[13:20 - 13:27] progress and here you can check user you
+[13:24 - 13:29] can add one method
+[13:27 - 13:33] okay
+[13:29 - 13:35] and over here you have to just pass the
+[13:33 - 13:38] uh ID so here you have to pass the
+[13:35 - 13:40] course Content ID right mean
+[13:38 - 13:43] because
+[13:40 - 13:44] uh here right uh here only we will add
+[13:43 - 13:48] that met so right now what I will do I
+[13:44 - 13:51] will just write the uh content ID to
+[13:48 - 13:53] check each content right and then I will
+[13:51 - 13:56] return true or false depends on the
+[13:53 - 13:58] condition for example in this case user
+[13:56 - 14:01] progress I in this user progress right
+[13:58 - 14:07] because we have the data I will
+[14:01 - 14:08] find from the item with the item do
+[14:07 - 14:13] course
+[14:08 - 14:17] Content ID is equal to equal
+[14:13 - 14:19] to uh content ID okay this content ID if
+[14:17 - 14:21] it's find in this part user progress it
+[14:19 - 14:24] means this user already completed the
+[14:21 - 14:26] particular course correct and then we do
+[14:24 - 14:29] uh we will show the check mark so make
+[14:26 - 14:32] sure this check user progress you will
+[14:29 - 14:35] call somewhere here like this right
+[14:32 - 14:37] so um after this index plus one right we
+[14:35 - 14:41] will add that condition so right now
+[14:37 - 14:43] what we have to do let's add this icon
+[14:41 - 14:46] this is a check mark Circle icon and I
+[14:43 - 14:48] also applied some color and everything
+[14:46 - 14:50] and the condition is quite simple right
+[14:48 - 14:52] so condition is just you have to check
+[14:50 - 14:53] whether the progress uh check user
+[14:52 - 14:56] progress you have to call and you have
+[14:53 - 14:59] to pass the item id okay and if it is
+[14:56 - 15:02] true then show this icon otherwise don't
+[14:59 - 15:04] show anything okay and if I save it
+[15:02 - 15:08] right if you see right we got this
+[15:04 - 15:10] icon correct go back come here you see
+[15:08 - 15:12] because two of this per course is
+[15:10 - 15:14] completed that's the reason it's showing
+[15:12 - 15:16] correct but now we don't want to show
+[15:14 - 15:18] this one and to we just want to Icon if
+[15:16 - 15:23] it's completed right so what you have to
+[15:18 - 15:25] do you have to uh cut this text and put
+[15:23 - 15:27] it here instead of null right so if the
+[15:25 - 15:30] course is not completed then show this
+[15:27 - 15:33] text otherwise show the icon if you see
+[15:30 - 15:36] it look like this perfect right I hope
+[15:33 - 15:38] you understand until this point now next
+[15:36 - 15:40] let's go back let's try to come on this
+[15:38 - 15:42] particular page we are getting Perfect
+[15:40 - 15:46] all everything ready right now if I try
+[15:42 - 15:49] to complete this python syntax go to the
+[15:46 - 15:53] next go to the next and finish
+[15:49 - 15:55] it right you see the we completed the
+[15:53 - 15:58] third of the uh chapter but it's not
+[15:55 - 16:00] showing it right but if you come back
+[15:58 - 16:04] and and go to this basic course it will
+[16:00 - 16:06] show it now this is the glitch you can
+[16:04 - 16:07] say right because even though you finish
+[16:06 - 16:09] first time you will not get showing
+[16:07 - 16:12] first time but you come back and come to
+[16:09 - 16:15] this course again then it will show so
+[16:12 - 16:17] in order to resolve that issue right go
+[16:15 - 16:19] to the course chapter and if you
+[16:17 - 16:22] remember right uh we added this
+[16:19 - 16:25] navigation. go back correct so what will
+[16:22 - 16:27] do we will little bit modified so I will
+[16:25 - 16:29] remove this particular one and just add
+[16:27 - 16:32] the navigate so okay so we actually
+[16:29 - 16:34] navigate it instead of go uh calling the
+[16:32 - 16:37] go back function from the navigation
+[16:34 - 16:39] right so we'll navigate it so name
+[16:37 - 16:44] navigation of name of for the navigation
+[16:39 - 16:46] is the course details okay sorry course
+[16:44 - 16:49] details and then we have to pass some
+[16:46 - 16:51] parameters here right in order to
+[16:49 - 16:53] trigger the use effect from the course
+[16:51 - 16:57] detail page so I will pass the
+[16:53 - 16:59] params and here we'll pass the
+[16:57 - 17:04] course
+[16:59 - 17:09] Content ID okay is equal to parm doour
+[17:04 - 17:12] Content ID forry course content do ID
+[17:09 - 17:15] okay and one more important parameter
+[17:12 - 17:17] you have to write merge and you have to
+[17:15 - 17:21] provide the value as a true okay this is
+[17:17 - 17:23] very important once you navigate to the
+[17:21 - 17:26] course detail page right go to the
+[17:23 - 17:28] course detail page and over here
+[17:26 - 17:31] right in this course detail page here
+[17:28 - 17:34] you have to Define uh one value in use
+[17:31 - 17:36] effect so here you have to call the use
+[17:34 - 17:39] effect meod because this use effect meod
+[17:36 - 17:42] help us to face the value from the user
+[17:39 - 17:45] course user progress right particular
+[17:42 - 17:47] course progress so in order to um
+[17:45 - 17:49] execute this line of Command right mean
+[17:47 - 17:52] this particular use effect you have to
+[17:49 - 17:55] pass the parameter that is parameters
+[17:52 - 17:58] dot the one which we Define here right
+[17:55 - 18:02] the course Content ID okay what you will
+[17:58 - 18:04] do when you navigate it it will check
+[18:02 - 18:06] okay this value is change and once the
+[18:04 - 18:10] value is Chang right then it will call
+[18:06 - 18:14] this use effect okay remember when you
+[18:10 - 18:16] uh use the navigate. go back it will not
+[18:14 - 18:18] uh call this use effect because you just
+[18:16 - 18:19] go back to the previous page without
+[18:18 - 18:21] doing anything right because that's the
+[18:19 - 18:24] reason content will be same you are not
+[18:21 - 18:27] calling any new API but when you uh
+[18:24 - 18:29] implement this kind of navigation right
+[18:27 - 18:31] and passing the parameter merge you
+[18:29 - 18:34] mention the true that that time it will
+[18:31 - 18:37] execute this uh use effect and it will
+[18:34 - 18:41] execute our uh two methods which we need
+[18:37 - 18:43] right now if I save everything now try
+[18:41 - 18:45] to okay let's go back here okay let's
+[18:43 - 18:49] try to complete this python commands
+[18:45 - 18:51] right if I here next and finish it now
+[18:49 - 18:53] you see python command is completed now
+[18:51 - 18:56] without doing anything right we don't go
+[18:53 - 18:58] back and don't need to do anything if I
+[18:56 - 19:00] go back still it's there right let's try
+[18:58 - 19:05] on different course so I will select
+[19:00 - 19:07] this Advan Python and only two contain
+[19:05 - 19:11] there right so try to complete the first
+[19:07 - 19:14] one select next and finish and if you
+[19:11 - 19:16] see it's completed perfect so I hope you
+[19:14 - 19:18] understand this uh particular section I
+[19:16 - 19:22] I know this uh video is going getting
+[19:18 - 19:24] longer so in the next part we'll see uh
+[19:22 - 19:26] another uh part of this particular
+[19:24 - 19:27] course and see you in the next video if
+[19:26 - 19:29] you did not subscribe to my channel
+[19:27 - 19:31] subscribe to my channel and watch all
+[19:29 - 19:35] the previous video if you have any doubt
+[19:31 - 19:39] any uh any error in the uh doing any
+[19:35 - 19:40] anything you can DM me on my Instagram
+[19:39 - 19:42] Channel or you can put in the comment in
+[19:40 - 19:44] the comment box and if you really like
+[19:42 - 19:46] this video please press like button
+[19:44 - 19:46] thank you

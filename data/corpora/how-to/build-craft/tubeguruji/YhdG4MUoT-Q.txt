@@ -1,0 +1,769 @@
+[00:00 - 00:05] in one of my last video we developed
+[00:02 - 00:08] this beautiful blog uh landing page and
+[00:05 - 00:10] if you did not watch my previous video
+[00:08 - 00:12] of this particular course then please
+[00:10 - 00:15] watch it before watching this course so
+[00:12 - 00:17] in the last video we develop this header
+[00:15 - 00:21] and this search section this filter
+[00:17 - 00:23] section and this uh list of blocks okay
+[00:21 - 00:27] in this particular video we are going to
+[00:23 - 00:29] cover how to navigate um and see the
+[00:27 - 00:32] details of the block right so if I click
+[00:29 - 00:34] on any of this particular uh blog post
+[00:32 - 00:37] it will navigate to the new page and it
+[00:34 - 00:40] will show and you can read the full blog
+[00:37 - 00:43] on that particular page and if you see
+[00:40 - 00:45] this page uh the page uh view will look
+[00:43 - 00:47] like this so if you see right when I
+[00:45 - 00:49] click on any of the post it will jump on
+[00:47 - 00:53] the new page where it will you will able
+[00:49 - 00:55] to read the whole blog post okay so it's
+[00:53 - 00:57] very straightforward uh very easy to
+[00:55 - 00:59] design and that's what we are covering
+[00:57 - 01:02] in this particular section so main two
+[00:59 - 01:04] topics how to navigate um from one
+[01:02 - 01:07] screen to other screen so for that one
+[01:04 - 01:10] we are using the react router and then
+[01:07 - 01:14] we will uh implement this particular
+[01:10 - 01:17] blog post detail uh page okay so before
+[01:14 - 01:20] doing any further delay let's
+[01:17 - 01:23] begin so right now uh we are in our
+[01:20 - 01:27] application right and in app.jsx we have
+[01:23 - 01:30] this information so what we will do uh
+[01:27 - 01:34] we have to add the react Dom okay in our
+[01:30 - 01:37] application so for that one let's go to
+[01:34 - 01:38] browser and search for this react router
+[01:37 - 01:41] right uh this is the official website of
+[01:38 - 01:45] react router Dom where you have to
+[01:41 - 01:47] install this react router Dom so just uh
+[01:45 - 01:49] install this lineup command so we
+[01:47 - 01:51] already created the V project right uh
+[01:49 - 01:53] and we have to install this react router
+[01:51 - 01:56] down so I copy this
+[01:53 - 01:59] command uh open a new
+[01:56 - 02:01] terminal and over here I will paste this
+[01:59 - 02:03] lineup command
+[02:01 - 02:05] okay so it will take few second to
+[02:03 - 02:08] install all the dependency which is
+[02:05 - 02:11] needed for our react router Dom now once
+[02:08 - 02:14] it installed right first thing uh you
+[02:11 - 02:16] can check the example how it use and
+[02:14 - 02:19] everything right uh in this case we are
+[02:16 - 02:20] using the um browser router okay so
+[02:19 - 02:22] there are different different components
+[02:20 - 02:24] and each component is meant to be for
+[02:22 - 02:27] different purpose in this case we are
+[02:24 - 02:29] using browser router and if you see the
+[02:27 - 02:31] browser router is basically used to
+[02:29 - 02:33] store the curent location in the browser
+[02:31 - 02:35] address by bar using the clean URL and
+[02:33 - 02:37] navigate using the browser built-in
+[02:35 - 02:39] history okay so what we will do in this
+[02:37 - 02:42] case right for example if you want to uh
+[02:39 - 02:46] see the blog post right you will just
+[02:42 - 02:49] type uh some for example blog detail
+[02:46 - 02:51] something like this slash and the blog
+[02:49 - 02:54] ID okay and once you click on that one
+[02:51 - 02:57] you will see the blog okay then let's go
+[02:54 - 03:00] back to our application here we will
+[02:57 - 03:01] replace this uh react. strick mode with
+[03:00 - 03:06] the
+[03:01 - 03:10] browser uh router okay and uh make sure
+[03:06 - 03:10] you will end this tag
+[03:13 - 03:19] okay and save it make sure everything is
+[03:17 - 03:21] running okay and if you see everything
+[03:19 - 03:24] as it is I will remove this one this is
+[03:21 - 03:26] just for the example okay and if you see
+[03:24 - 03:28] everything is running as
+[03:26 - 03:30] expected now let's go back to our
+[03:28 - 03:33] app.jsx
+[03:30 - 03:36] right so over here we have to add the
+[03:33 - 03:40] router okay before that I will create a
+[03:36 - 03:41] new page so here I will create a new
+[03:40 - 03:44] page called blog.
+[03:41 - 03:48] jsx a read blog a Blog detail I will say
+[03:44 - 03:53] blog detail
+[03:48 - 03:57] okay blog detail. jsx okay and I will
+[03:53 - 03:57] add the default
+[03:58 - 04:04] function okay like
+[04:01 - 04:07] this so here okay just a
+[04:04 - 04:10] second we have to change name we don't
+[04:07 - 04:11] need to give the dash over here so I
+[04:10 - 04:15] will just
+[04:11 - 04:19] write blog detail
+[04:15 - 04:22] okay and now I will add the default
+[04:19 - 04:24] function like this and save it now we
+[04:22 - 04:26] have the block detail page okay now if
+[04:24 - 04:30] you go back to
+[04:26 - 04:32] app.jsx here we will add the routes okay
+[04:30 - 04:33] which is very important so first of all
+[04:32 - 04:37] just write
+[04:33 - 04:39] routes okay and inside this one we have
+[04:37 - 04:41] to give the route route in the sense
+[04:39 - 04:43] which Pages we want to uh show it here
+[04:41 - 04:45] right so for example in this case the
+[04:43 - 04:48] route you have to Define like this okay
+[04:45 - 04:50] then you have Define the path okay so
+[04:48 - 04:53] initially when uh we open this
+[04:50 - 04:56] particular URL of our website right so
+[04:53 - 04:58] we will give the uh default page and the
+[04:56 - 05:01] default page will be uh we have to
+[04:58 - 05:04] mention in the element tag okay so in
+[05:01 - 05:06] this case our default page is home right
+[05:04 - 05:09] so I will copy it and paste it here as
+[05:06 - 05:11] simple as that so once the page is load
+[05:09 - 05:14] it will uh default jump to the home uh
+[05:11 - 05:16] component right and if I save it I will
+[05:14 - 05:19] go back to our
+[05:16 - 05:21] application and just refresh it so right
+[05:19 - 05:22] now you get error right go to the
+[05:21 - 05:25] inspect
+[05:22 - 05:26] panel go to the console and see what
+[05:25 - 05:30] error you are getting so it's saying
+[05:26 - 05:33] router is not defined Okay so in this
+[05:30 - 05:36] case make sure you add oh sorry make
+[05:33 - 05:39] sure you have to add the routes okay the
+[05:36 - 05:41] import you have to import the statement
+[05:39 - 05:43] and make sure the route is also there so
+[05:41 - 05:46] add the route if you see both the
+[05:43 - 05:49] statement are imported and now save it
+[05:46 - 05:52] now go back to application let remove
+[05:49 - 05:53] this console refresh the screen and you
+[05:52 - 05:55] will see you don't see any this is
+[05:53 - 05:58] different ER we will remove that later
+[05:55 - 06:00] on but if you see it jump to default
+[05:58 - 06:05] homepage right right because we give the
+[06:00 - 06:08] path just as a slash okay now another
+[06:05 - 06:10] route so if uh I just copy paste the
+[06:08 - 06:15] same uh line of code but here in this
+[06:10 - 06:18] case we'll say blog detail okay and I
+[06:15 - 06:21] want jump once I click on this blog
+[06:18 - 06:23] detail I want to jump to blog detail
+[06:21 - 06:26] page right which we just created okay
+[06:23 - 06:31] and I save it right now if I go to this
+[06:26 - 06:33] URL right copy I will copy this URL
+[06:31 - 06:36] and I will paste it here right it will
+[06:33 - 06:38] jump to this blog detail page you see
+[06:36 - 06:41] right and the page which we created is
+[06:38 - 06:44] just like this okay and it only contain
+[06:41 - 06:47] the block detail okay this is how simple
+[06:44 - 06:49] it is the routing is okay you don't need
+[06:47 - 06:51] to do anything just you need to add two
+[06:49 - 06:53] is a two-step process right just need to
+[06:51 - 06:56] add the browser router in main. jsx
+[06:53 - 06:58] which you need to wrap uh the app in
+[06:56 - 07:00] between the browser router and then you
+[06:58 - 07:02] have to Define the which are the
+[07:00 - 07:04] different routes you are going to use in
+[07:02 - 07:06] your application so in this case we we
+[07:04 - 07:08] are using two routes obviously one is
+[07:06 - 07:12] the default route we need to mention
+[07:08 - 07:14] okay and another one is the blog detail
+[07:12 - 07:17] page
+[07:14 - 07:19] now let's add the on click function so
+[07:17 - 07:21] once you click on any of the post we
+[07:19 - 07:25] should jump to the blog detail page
+[07:21 - 07:28] right so go to the block. jsx where we
+[07:25 - 07:30] have this block right and you can add
+[07:28 - 07:34] the on click function here or uh you can
+[07:30 - 07:36] go to the let's go to home. jxs we have
+[07:34 - 07:38] this intro block and blocks right let's
+[07:36 - 07:43] go to the blocks and here we will add
+[07:38 - 07:45] the onclick uh function okay so for this
+[07:43 - 07:49] do what I do I will add the on click
+[07:45 - 07:52] method so let's add on click
+[07:49 - 07:55] okay and here I have to add the
+[07:52 - 07:57] navigation right so we have uh in router
+[07:55 - 07:59] Prov the inbuilt hook called use
+[07:57 - 08:03] navigate so let's define that so I will
+[07:59 - 08:05] Bank constant navigate is equal to use
+[08:03 - 08:07] navigate okay make sure you input this
+[08:05 - 08:09] use navigate from the react router Dom
+[08:07 - 08:13] so sorry this is the react router Dom
+[08:09 - 08:16] hooks okay not um react hook okay once
+[08:13 - 08:18] you define this navigate you just simple
+[08:16 - 08:21] mention the navigate and then you have
+[08:18 - 08:25] to specify the route so okay so in this
+[08:21 - 08:27] case if you see right this is our rou
+[08:25 - 08:30] name which you need to go it's nothing
+[08:27 - 08:31] but a path name okay so if I go to the
+[08:30 - 08:34] blog.
+[08:31 - 08:37] jsx and then here I will Define like
+[08:34 - 08:39] this okay and save everything now go
+[08:37 - 08:42] back to our
+[08:39 - 08:45] application so I will back go back to
+[08:42 - 08:48] this page I will refresh it once okay
+[08:45 - 08:50] and if I click on any of this page if
+[08:48 - 08:52] you see it jump to the blog detail page
+[08:50 - 08:55] okay so if I click on this one it jump
+[08:52 - 08:58] to the blog detail page same thing you
+[08:55 - 09:00] have to add for this um Blog the intro
+[08:58 - 09:03] blog as as well right so I will what I
+[09:00 - 09:05] will do I will copy this on click
+[09:03 - 09:07] method okay and I will go to the introp
+[09:05 - 09:11] post.
+[09:07 - 09:14] jsx over here in the this
+[09:11 - 09:16] du I will add this blog detail and I
+[09:14 - 09:19] make sure you will add this navigation
+[09:16 - 09:22] as well you have defined constant
+[09:19 - 09:25] navigate is equal to use navigate from
+[09:22 - 09:28] the react router Dom okay and now if you
+[09:25 - 09:30] go back if I even though if I click on
+[09:28 - 09:32] this one it will go to the blog detail
+[09:30 - 09:34] just if you see right the cursor pointer
+[09:32 - 09:39] is not correct one so what I will do I
+[09:34 - 09:42] will make the cursor to be pointer okay
+[09:39 - 09:45] and now you see if I click it's going
+[09:42 - 09:47] back to the block dat perfect now one
+[09:45 - 09:50] more important thing right you need to
+[09:47 - 09:52] know which um ID you click or something
+[09:50 - 09:55] like that right so you you have to pass
+[09:52 - 09:59] some ID of the block right like this for
+[09:55 - 10:01] example six or seven right so in order
+[09:59 - 10:03] order to achieve this right you have to
+[10:01 - 10:07] make sure in the router you will pass
+[10:03 - 10:11] the ID of the block so go to the app.jsx
+[10:07 - 10:14] right in this app.jsx you have to add
+[10:11 - 10:16] the ID so in order obviously this is the
+[10:14 - 10:18] default uh this is dynamic ID right the
+[10:16 - 10:19] ID can be changed anytime so in order
+[10:18 - 10:24] Define like this you have to Define like
+[10:19 - 10:27] slash colon and Define the ID okay like
+[10:24 - 10:29] this so This ID will be 5 6 7 1 2
+[10:27 - 10:31] whatever right so you have to Define
+[10:29 - 10:35] like this and
+[10:31 - 10:39] then now if you go back to the
+[10:35 - 10:45] uh blocks right over here you have to
+[10:39 - 10:51] define the uh ID you have to pass the ID
+[10:45 - 10:53] okay so here just Define slash okay and
+[10:51 - 10:59] you have to pass the ID so in this case
+[10:53 - 11:01] is item. ID okay that's all and if I
+[10:59 - 11:05] save it make sure in intro post Al you
+[11:01 - 11:08] have you have to pass that one okay so
+[11:05 - 11:08] here I will I will add
+[11:10 - 11:18] the here I will pass the post. id post.
+[11:15 - 11:21] id okay and save everything now go back
+[11:18 - 11:23] to our application if I click in this
+[11:21 - 11:26] right if you see block details slash one
+[11:23 - 11:28] is coming okay if I click on this this
+[11:26 - 11:31] uh third block right you see block
+[11:28 - 11:34] details SL Three is coming okay perfect
+[11:31 - 11:38] now this ID we will use in order to F
+[11:34 - 11:40] the blog details okay from the API there
+[11:38 - 11:42] are two things right you can on the
+[11:40 - 11:44] click you can pass the information
+[11:42 - 11:46] directly on this page or you can face
+[11:44 - 11:48] the information I will prefer to face
+[11:46 - 11:51] the information the reason is right even
+[11:48 - 11:53] the user come on this particular page
+[11:51 - 11:55] and search for blog detail /1 it's
+[11:53 - 11:57] supposed to get some information on the
+[11:55 - 12:00] screen that's the reason we will F the
+[11:57 - 12:03] information from the API depends on the
+[12:00 - 12:05] ID selection so right now if you see
+[12:03 - 12:06] right uh once you land on this blog
+[12:05 - 12:08] detail page we don't have header right
+[12:06 - 12:11] and if you see the mockup we want the
+[12:08 - 12:15] header on the blog detail page right the
+[12:11 - 12:17] similar header which we have on this um
+[12:15 - 12:19] front page right this header okay so in
+[12:17 - 12:22] order to do that right in order to use
+[12:19 - 12:25] the uh or write the same different code
+[12:22 - 12:27] for the header what we can do go to the
+[12:25 - 12:29] home. jsx and here we have the header
+[12:27 - 12:33] defined right remove this header from
+[12:29 - 12:36] here and go to the app.jsx and add it
+[12:33 - 12:39] here like this right and save everything
+[12:36 - 12:41] now go back to our application if I
+[12:39 - 12:44] click on any of this one you see you got
+[12:41 - 12:47] the heer but we don't have any padding
+[12:44 - 12:49] on this screen right so again go back to
+[12:47 - 12:52] home. j6 if you see right we give the
+[12:49 - 12:55] padding in home. j6 okay so remove this
+[12:52 - 13:00] padding so I will remove this padding
+[12:55 - 13:04] from here right save it and in app. JX I
+[13:00 - 13:07] will wrap everything in D okay like this
+[13:04 - 13:11] add this uh padding as well and drag
+[13:07 - 13:14] this into and save it right and now if
+[13:11 - 13:17] you go back you will see the change see
+[13:14 - 13:20] you want though if I go back right the
+[13:17 - 13:22] um header is still there if I jump any
+[13:20 - 13:26] of this one you'll see the header along
+[13:22 - 13:28] with this blog detail page okay perfect
+[13:26 - 13:32] now let's implement the API call so go
+[13:28 - 13:35] back to the global API over here right I
+[13:32 - 13:38] will paste like this and it say uh you
+[13:35 - 13:41] can just mention get post by ID right
+[13:38 - 13:43] here you have to pass the ID so in this
+[13:41 - 13:47] case I will pass the ID like this and
+[13:43 - 13:51] make it as Arrow function okay and here
+[13:47 - 13:53] you have to pass that ID so I will just
+[13:51 - 13:53] add the
+[13:57 - 14:00] id id like this
+[14:01 - 14:07] okay perfect okay so base is there block
+[14:04 - 14:08] is there just I'm passing this ID and if
+[14:07 - 14:11] you want to see the end point this is
+[14:08 - 14:14] how it looks right I'm passing the ID as
+[14:11 - 14:16] a one and I'm getting the result okay
+[14:14 - 14:20] all the images blogs details and
+[14:16 - 14:22] everything okay make sure you will add
+[14:20 - 14:23] it here so that it can be accessible
+[14:22 - 14:25] throughout the
+[14:23 - 14:27] application now go back to block detail
+[14:25 - 14:29] right here if you remember right we are
+[14:27 - 14:32] passing the ID
+[14:29 - 14:35] so in order to get that ID right you
+[14:32 - 14:38] have to accept that ID here so you can
+[14:35 - 14:40] mention like constant okay then the name
+[14:38 - 14:45] of the ID which we pass so in this case
+[14:40 - 14:47] is word ID is equal to use param okay
+[14:45 - 14:51] again this Ed param is from is a react
+[14:47 - 14:55] is a react router Dom hook okay and
+[14:51 - 14:58] mention like this okay now in use effect
+[14:55 - 15:00] okay we'll check whether we are getting
+[14:58 - 15:04] the ID or or not okay so I will Define
+[15:00 - 15:06] us effect with the mty uh array and I
+[15:04 - 15:11] will just write the
+[15:06 - 15:13] console.log ID comma ID okay and save
+[15:11 - 15:16] everything right now go back to our
+[15:13 - 15:19] application go to the inspect
+[15:16 - 15:21] panel go to the console okay and if you
+[15:19 - 15:24] see ignore this um above error and if
+[15:21 - 15:27] you see we got the ID as Z one okay
+[15:24 - 15:29] perfect now here we are getting this key
+[15:27 - 15:32] prop because
+[15:29 - 15:35] uh let me uh explain that one as well so
+[15:32 - 15:38] in the blogs. jsx right here we we
+[15:35 - 15:40] iterate this P the post but we have to
+[15:38 - 15:42] define the key for each of these
+[15:40 - 15:45] elements so you can just Define the key
+[15:42 - 15:48] like this and in this case I can Define
+[15:45 - 15:52] item. ID like this okay and save it now
+[15:48 - 15:54] if I go back okay clean everything go
+[15:52 - 15:57] back to our application and if I refresh
+[15:54 - 15:59] it now right you don't see any error
+[15:57 - 16:01] okay now now let's go back to any of
+[15:59 - 16:04] this post now if you see ID is coming as
+[16:01 - 16:06] a one okay if I go back and if I check
+[16:04 - 16:09] another one if you see ID is coming as a
+[16:06 - 16:11] two and this is nothing but the URL ID
+[16:09 - 16:14] okay this is the parameter which we are
+[16:11 - 16:16] passing now this ID uh let's go back to
+[16:14 - 16:19] our block detail page and this ID we are
+[16:16 - 16:21] using in order to face the block detail
+[16:19 - 16:26] page right so here I will add new method
+[16:21 - 16:29] called constant get blog by ID
+[16:26 - 16:35] okay like this and here you can define
+[16:29 - 16:37] global API dot get post by ID okay and
+[16:35 - 16:42] here you can Define the you can pass the
+[16:37 - 16:44] ID right you can have to pass the ID dot
+[16:42 - 16:48] then and accept the
+[16:44 - 16:50] response okay so here we'll get only one
+[16:48 - 16:53] response okay because we are passing the
+[16:50 - 16:58] ID so you can write the response as
+[16:53 - 16:59] console.log response. data okay that's
+[16:58 - 17:02] all
+[16:59 - 17:07] and make sure you will call this in use
+[17:02 - 17:10] effect okay like this and save it now go
+[17:07 - 17:12] back to our application and here right
+[17:10 - 17:14] if right now is said two and if you see
+[17:12 - 17:19] we got the data right so inside data we
+[17:14 - 17:19] have the data attributes and all the
+[17:20 - 17:25] details hello see we got the all the
+[17:22 - 17:29] details right now we have to map this
+[17:25 - 17:32] information the one which we map it in a
+[17:29 - 17:34] uh maybe block. JX right or no not here
+[17:32 - 17:37] let me
+[17:34 - 17:41] check so over here right we map it
+[17:37 - 17:43] correct so I will copy all of this code
+[17:41 - 17:46] and now go to the blog
+[17:43 - 17:51] details right and paste it here now here
+[17:46 - 17:54] right instead of uh so we are not going
+[17:51 - 17:57] to map directly because we only have the
+[17:54 - 17:59] one item right so directly we will uh
+[17:57 - 18:03] map it so we don't need a word called
+[17:59 - 18:05] map so we can just Define like this
+[18:03 - 18:07] result is equal
+[18:05 - 18:11] to
+[18:07 - 18:14] right like this and this response data
+[18:11 - 18:16] is nothing but the response. data do
+[18:14 - 18:18] data we have to map so what I will do I
+[18:16 - 18:21] make one
+[18:18 - 18:25] constant called item is equal to
+[18:21 - 18:27] respond. data dot data okay so it's
+[18:25 - 18:28] contain item and then item I think this
+[18:27 - 18:31] will work
+[18:28 - 18:35] okay and I will remove this console from
+[18:31 - 18:35] here and I will paste it
+[18:36 - 18:42] console.log result comma result okay
+[18:40 - 18:44] make sure the mapping is correct so
+[18:42 - 18:48] let's go back to our application right
+[18:44 - 18:50] clean it and refresh the
+[18:48 - 18:52] screen and now if you see we got the
+[18:50 - 18:56] result right so we have the image
+[18:52 - 18:59] description ID tag title everything okay
+[18:56 - 19:03] so mapping is correctly done now let's
+[18:59 - 19:07] store this in a one state so let's add
+[19:03 - 19:11] constant post comma say post equal to
+[19:07 - 19:11] use State
+[19:11 - 19:19] okay and what I can do we can just pass
+[19:16 - 19:21] this and means you have to you can set
+[19:19 - 19:24] the post using the set post and we have
+[19:21 - 19:28] the post Val now okay so inside this
+[19:24 - 19:32] post we have this F information okay now
+[19:28 - 19:35] next what you can do we have to uh add
+[19:32 - 19:37] the UI right so if you see in the UI
+[19:35 - 19:40] right first of all we have the tag and
+[19:37 - 19:43] then we have the title
+[19:40 - 19:46] okay so first of all we add the we can
+[19:43 - 19:50] add the tag so inside this I will add
+[19:46 - 19:54] the tag so here you just need to Define
+[19:50 - 19:56] like post. tag that's all and save and
+[19:54 - 20:01] if you go back you will see this react
+[19:56 - 20:03] native see react native Okay add the all
+[20:01 - 20:06] information and then we will add The
+[20:03 - 20:10] Styling to this one after this we have
+[20:06 - 20:14] the title and then we have this um user
+[20:10 - 20:17] logo the name and everything right
+[20:14 - 20:19] so we have the title so I will add the
+[20:17 - 20:22] H3 tag
+[20:19 - 20:26] again post. title
+[20:22 - 20:28] okay we will add this um author's
+[20:26 - 20:30] information later on okay for
+[20:28 - 20:36] um before that we will add the image and
+[20:30 - 20:36] description so after that we'll add the
+[20:37 - 20:47] image source oh sorry
+[20:42 - 20:47] uh Source only
+[20:47 - 20:52] okay like this and here you can add the
+[20:50 - 20:58] post
+[20:52 - 21:00] dot uh cover image okay and then last
+[20:58 - 21:04] actually we
+[21:00 - 21:06] have post. description okay and save
+[21:04 - 21:08] everything now go back to our
+[21:06 - 21:12] application and make sure everything is
+[21:08 - 21:15] coming up you see everything is there
+[21:12 - 21:19] okay now let's give some styling
+[21:15 - 21:23] according to this one correct so now
+[21:19 - 21:27] first of all uh add styling to this uh
+[21:23 - 21:28] tag so here we'll
+[21:27 - 21:31] get class
+[21:28 - 21:35] name and we'll say
+[21:31 - 21:42] the uh text
+[21:35 - 21:45] red oop sorry uh text rid 500 right like
+[21:42 - 21:50] this and uh I will change the font size
+[21:45 - 21:51] as well to 16 PX and save it let's see
+[21:50 - 21:55] how it
+[21:51 - 21:57] looks I think this is okay then if you
+[21:55 - 22:01] see the title title is in bold color and
+[21:57 - 22:04] the font is little bit bigger
+[22:01 - 22:07] okay change to 14 then I will add the
+[22:04 - 22:11] class name okay first of all I will add
+[22:07 - 22:12] the text size to 30 pixel then I will
+[22:11 - 22:15] make
+[22:12 - 22:18] the uh font to be bold so you have to
+[22:15 - 22:22] write font
+[22:18 - 22:25] bold and then save it let's see how it
+[22:22 - 22:28] looks so let see it look good just I
+[22:25 - 22:31] will decrease the size little bit
+[22:28 - 22:36] so I will decrease to
+[22:31 - 22:40] 26 okay and this is 26 is I think okay
+[22:36 - 22:43] okay let's decrease little bit like 23
+[22:40 - 22:45] okay then we have the cover image okay
+[22:43 - 22:47] and if you see right we want everything
+[22:45 - 22:50] to be in the center right we we are uh
+[22:47 - 22:53] putting some padding from the x-axis so
+[22:50 - 22:55] what I will do for this de right class
+[22:53 - 22:59] name and I will give the some padding
+[22:55 - 23:02] from x-axis to 20
+[22:59 - 23:05] okay um okay 20 let's see how it
+[23:02 - 23:07] looks okay and this is much better okay
+[23:05 - 23:12] even though if I decrease the
+[23:07 - 23:14] size right it looks perfectly fine okay
+[23:12 - 23:16] when the screen size is much smaller we
+[23:14 - 23:20] can um minimize the size so what I can
+[23:16 - 23:22] do I will do I will add this pixel 20 on
+[23:20 - 23:25] medium size screen and if the smaller
+[23:22 - 23:29] sign screen add the 10 and if you
+[23:25 - 23:33] see maybe six
+[23:29 - 23:35] only and this is okay okay also we give
+[23:33 - 23:38] some padding from the margin top mean we
+[23:35 - 23:41] give the margin from the top so here you
+[23:38 - 23:44] can say margin top
+[23:41 - 23:49] to maybe
+[23:44 - 23:52] 10 okay perfect okay and I want to
+[23:49 - 23:56] decrease the size of this much smaller
+[23:52 - 24:00] maybe 20 okay yeah perfect okay now
+[23:56 - 24:02] let's add some uh height and width for
+[24:00 - 24:07] this uh
+[24:02 - 24:11] image so first of all add the class
+[24:07 - 24:14] name and here I will round it the corner
+[24:11 - 24:16] so I will round it to 2 XEL okay and if
+[24:14 - 24:19] you see right if you see the mockup we
+[24:16 - 24:23] have the rounded corner so I'll rounded
+[24:19 - 24:28] corner for this one and I will use some
+[24:23 - 24:32] margin uh from from the top to be five
+[24:28 - 24:35] and margin bottom to be five okay or you
+[24:32 - 24:39] can give margin y actually okay that's
+[24:35 - 24:41] that also work for you and if I remove
+[24:39 - 24:44] this one if you see it's perfectly fine
+[24:41 - 24:48] but it's still it's not in center and
+[24:44 - 24:50] the let's let's add some styling so if
+[24:48 - 24:52] um the p uh screen size is medium we
+[24:50 - 24:55] give the padding X to 20 but if screen
+[24:52 - 24:56] size is larger we can give padding x to
+[24:55 - 24:58] the maybe
+[24:56 - 25:02] 35
+[24:58 - 25:05] maybe 36 and let's see how it looks okay
+[25:02 - 25:05] this is I thing
+[25:06 - 25:12] okay maybe more I want to give let's
+[25:12 - 25:18] see
+[25:15 - 25:21] 56 okay like this uh this is I think
+[25:18 - 25:23] okay okay and make sure this uh image
+[25:21 - 25:26] will be in the center okay or you can do
+[25:23 - 25:29] this width to be full so let's say WID
+[25:26 - 25:30] to be full
+[25:29 - 25:34] okay like
+[25:30 - 25:37] this and uh I think this is perfectly
+[25:34 - 25:39] fine right this this look good to me and
+[25:37 - 25:43] if I decrease the screen size obviously
+[25:39 - 25:46] it will match the width and height okay
+[25:43 - 25:50] see okay also padding is Chang depend on
+[25:46 - 25:53] the uh screen size as well right and
+[25:50 - 25:56] everything is look good now the next
+[25:53 - 25:59] part we have to uh change the layout of
+[25:56 - 26:01] this one okay if you see see our mockup
+[25:59 - 26:05] how structurized uh this will be right
+[26:01 - 26:08] and the same way we have to add for uh
+[26:05 - 26:08] this particular
+[26:08 - 26:14] description now
+[26:11 - 26:16] next now next if you see uh the
+[26:14 - 26:18] description is not in the format right
+[26:16 - 26:20] the correct format which we want and if
+[26:18 - 26:22] you see the star star is coming the
+[26:20 - 26:26] reason is in the
+[26:22 - 26:28] strappy uh here right in the strappy uh
+[26:26 - 26:30] we have the reach text format okay and
+[26:28 - 26:33] if you preview the code this is how it's
+[26:30 - 26:36] supposed to be look like okay and right
+[26:33 - 26:41] now it look like this only the uh plain
+[26:36 - 26:43] um html text okay so in order to update
+[26:41 - 26:46] this one right um we are going to use
+[26:43 - 26:49] this uh react markdown Library okay this
+[26:46 - 26:53] is third party Library which help us uh
+[26:49 - 26:56] to um export or to uh style the given
+[26:53 - 26:58] HTML okay in the correct format so it's
+[26:56 - 27:00] very easy to use just use you need to
+[26:58 - 27:02] install this dependency and once you
+[27:00 - 27:04] install this dependency you have to
+[27:02 - 27:06] write this particular line of code okay
+[27:04 - 27:08] so I already installed that dependency
+[27:06 - 27:11] if you did not install just go ahead and
+[27:08 - 27:13] install that particular dependency okay
+[27:11 - 27:16] and over here you just need to add this
+[27:13 - 27:18] react markdown tag and in the tag you
+[27:16 - 27:20] have to provide children as the post.
+[27:18 - 27:22] description okay so this is the children
+[27:20 - 27:23] property of the react markdown where you
+[27:22 - 27:26] have to provide the data which you want
+[27:23 - 27:29] to display and here you can provide
+[27:26 - 27:32] Escape HTML something like this right
+[27:29 - 27:35] also I added this TN CSS styling the
+[27:32 - 27:37] leading line is nothing but the height
+[27:35 - 27:39] okay line height if you go to the TN CSS
+[27:37 - 27:41] official website and search for the line
+[27:39 - 27:45] height in the CSS you will see this
+[27:41 - 27:47] class name okay so right now I gave uh
+[27:45 - 27:49] leading line okay so it gave the space
+[27:47 - 27:51] between the two lines okay and I save
+[27:49 - 27:52] everything I will remove this line of
+[27:51 - 27:55] code from
+[27:52 - 27:57] here and now if you go back to our
+[27:55 - 27:59] application you will see the formatted
+[27:57 - 28:02] data you see now everything is formatted
+[27:59 - 28:06] some of the text is bold okay and if you
+[28:02 - 28:07] see this our uh see our code okay if you
+[28:06 - 28:11] go to the preview mode this is how it
+[28:07 - 28:13] looks okay so it's quite easy and make
+[28:11 - 28:17] sure you will use the react markdown
+[28:13 - 28:21] okay and that's all next if you see our
+[28:17 - 28:22] mockup right we have this uh tube guruji
+[28:21 - 28:24] and everything this author information
+[28:22 - 28:28] everything right so we already have this
+[28:24 - 28:30] component so let's go back here
+[28:28 - 28:32] uh maybe going to go to the block. jsx
+[28:30 - 28:34] and here we have this component right
+[28:32 - 28:37] this particular one I'll copy all of
+[28:34 - 28:42] these things go to the blog
+[28:37 - 28:44] details and after title I will paste it
+[28:42 - 28:46] like this okay I don't think so anything
+[28:44 - 28:48] we need to import this is because this
+[28:46 - 28:52] is totally a purely hard-coded value
+[28:48 - 28:54] okay and now if you see I'm getting this
+[28:52 - 28:57] particular author information as well
+[28:54 - 29:02] okay and it is quite similar to this uh
+[28:57 - 29:04] our mockup okay so everything is ready
+[29:02 - 29:05] on the screen okay now go back to the
+[29:04 - 29:08] home
+[29:05 - 29:10] screen okay you will see the footer over
+[29:08 - 29:13] here but if you go any of this block you
+[29:10 - 29:17] don't see footer the reason is you need
+[29:13 - 29:19] to um remove the footer from the home.
+[29:17 - 29:22] jsx and you have to paste it in the
+[29:19 - 29:24] app.jsx the same thing which we did for
+[29:22 - 29:30] the header right so I will paste it here
+[29:24 - 29:30] like this and save it now if you
+[29:30 - 29:35] see okay yeah make sure you'll import
+[29:32 - 29:39] this footer okay so import the
+[29:35 - 29:42] footer and now I open any of this one
+[29:39 - 29:43] okay you see the footer like this okay
+[29:42 - 29:45] if you don't want it pading to the
+[29:43 - 29:48] footer you can put this uh footer
+[29:45 - 29:53] outside of this de okay like this for
+[29:48 - 29:57] example put like this it will work see
+[29:53 - 29:59] perfect okay also now this home button
+[29:57 - 30:01] about us contact us is not working right
+[29:59 - 30:03] now right now if you want to click on
+[30:01 - 30:05] the home button it's supposed to go on
+[30:03 - 30:10] the hom page correct
+[30:05 - 30:14] so go to the uh header okay and for this
+[30:10 - 30:17] home right you can put the on click
+[30:14 - 30:21] method and here you can navigate to the
+[30:17 - 30:24] homepage so here first of all Define the
+[30:21 - 30:26] navigate is equal to use navigate which
+[30:24 - 30:28] need to be which will imported from the
+[30:26 - 30:30] react router down
+[30:28 - 30:30] and use this
+[30:30 - 30:36] navigate
+[30:33 - 30:40] to the Home uh through home screen right
+[30:36 - 30:44] so I'm save it let's test it click home
+[30:40 - 30:47] it will go to the homepage okay and as I
+[30:44 - 30:49] say this is fully responsive okay even
+[30:47 - 30:51] though if I change the screen size see
+[30:49 - 30:54] it how it looks right if I open any of
+[30:51 - 30:56] this one it open and this fully respon
+[30:54 - 30:59] you even though if you go to the mobile
+[30:56 - 31:01] view or any iPad
+[30:59 - 31:03] view it's fully responsive depends on
+[31:01 - 31:06] your screen
+[31:03 - 31:08] size I hope you understand uh all of
+[31:06 - 31:10] these things okay if you have any any
+[31:08 - 31:13] question any doubts or anything put it
+[31:10 - 31:14] in the comment section or you can DM me
+[31:13 - 31:17] on my Instagram
+[31:14 - 31:19] channel so now if you see right we have
+[31:17 - 31:22] this filter option but right now it's
+[31:19 - 31:25] not working so let's implement the
+[31:22 - 31:29] feature to filter filter out this
+[31:25 - 31:32] particular um post okay so first of all
+[31:29 - 31:35] let's go to search. jsx here we have the
+[31:32 - 31:38] all the tags okay which we are using so
+[31:35 - 31:42] in this uh on click method right you can
+[31:38 - 31:44] um add one more uh method here so like
+[31:42 - 31:49] this and you can
+[31:44 - 31:52] set selected tag value right and here
+[31:49 - 31:56] you can pass the name of the tag so in
+[31:52 - 31:58] this case name is item. name okay and
+[31:56 - 32:02] this selected tag we will pass back to
+[31:58 - 32:04] the parent component okay so this is how
+[32:02 - 32:06] you have to do you have to pass the
+[32:04 - 32:10] value that value you have to pass it in
+[32:06 - 32:14] this uh props and in the home. jsx you
+[32:10 - 32:17] have to um um accept it here right so
+[32:14 - 32:19] same name you have to use it and then
+[32:17 - 32:20] you can Define like this right so in
+[32:19 - 32:22] this case if you want to conso it you
+[32:20 - 32:25] can console and just make sure that you
+[32:22 - 32:28] you are getting the correct value I will
+[32:25 - 32:32] write tag and save it right now if you
+[32:28 - 32:33] go back to application if I click on any
+[32:32 - 32:35] of this particular filter right you will
+[32:33 - 32:38] see react if I select the angular then
+[32:35 - 32:40] angular is displaying okay now this
+[32:38 - 32:43] value the tag name we are using in order
+[32:40 - 32:46] to filter uh filter out this particular
+[32:43 - 32:50] post right so I will write one method
+[32:46 - 32:51] called filter post is equal to I will
+[32:50 - 32:55] accept the tag value
+[32:51 - 32:57] here then arror function so instead of
+[32:55 - 33:00] this console.log what I I will do I will
+[32:57 - 33:03] just call this filter post and I will
+[33:00 - 33:06] pass this tag value okay and now we are
+[33:03 - 33:09] getting tag value here now we have to
+[33:06 - 33:09] use this post in order to filter filter
+[33:09 - 33:13] the
+[33:09 - 33:15] value uh here I will do one more uh
+[33:13 - 33:20] State okay so I will
+[33:15 - 33:21] say original post and set original post
+[33:20 - 33:24] like
+[33:21 - 33:24] this
+[33:25 - 33:30] okay original post then this set
+[33:28 - 33:33] original post will contains all this
+[33:30 - 33:37] post okay so here you just use to set
+[33:33 - 33:39] the set original post okay so make sure
+[33:37 - 33:42] very initially in the set post you will
+[33:39 - 33:46] set all the uh result which we are
+[33:42 - 33:48] getting from the API right now here you
+[33:46 - 33:51] can Define constant result is equal to
+[33:48 - 33:55] you will filter on the set original post
+[33:51 - 33:57] okay so set original post dot
+[33:55 - 34:01] filter
+[33:57 - 34:04] and you can filter on the item
+[34:01 - 34:08] dot tag which is equal to the
+[34:04 - 34:10] tag if the item tag is equal to equal to
+[34:08 - 34:13] tag then only it will store and filter
+[34:10 - 34:17] filter and store in the result okay and
+[34:13 - 34:20] then you set post value to set the value
+[34:17 - 34:23] for the Post okay and save it now if you
+[34:20 - 34:27] go back to our application okay and if I
+[34:23 - 34:31] click create right you get any
+[34:27 - 34:32] fil is not a function set okay so here
+[34:31 - 34:35] instead of set original post we have to
+[34:32 - 34:38] use original post
+[34:35 - 34:41] okay this and now save
+[34:38 - 34:45] it go back refresh the screen
+[34:41 - 34:48] once okay now if I click on react if you
+[34:45 - 34:50] see only two post is coming okay if I
+[34:48 - 34:53] click on react n only three post is
+[34:50 - 34:56] coming means this is the same Post in
+[34:53 - 34:57] angular we don't have any post UI we
+[34:56 - 35:00] don't have post if if I click on react
+[34:57 - 35:03] again it'll show react but if I click on
+[35:00 - 35:05] all we don't have anything for all right
+[35:03 - 35:07] so here we have to add a
+[35:05 - 35:11] condition
+[35:07 - 35:15] if tag value is equal equal to
+[35:11 - 35:18] all we have to save
+[35:15 - 35:21] post the original post so original post
+[35:18 - 35:25] contain all the post right we say return
+[35:21 - 35:28] nothing okay now if you
+[35:25 - 35:31] see C create Rea only two post react
+[35:28 - 35:34] native and if I click all you'll see all
+[35:31 - 35:36] the post okay I hope you understand this
+[35:34 - 35:40] one so this filter is working
+[35:36 - 35:44] now so we pretty much completed our blog
+[35:40 - 35:47] website okay and uh everything is ready
+[35:44 - 35:49] to deploy on the web server so if you
+[35:47 - 35:51] don't know how to deploy the react or V
+[35:49 - 35:53] application on the versal or a share
+[35:51 - 35:56] host team you can watch uh this two
+[35:53 - 35:59] video where it explain how to deploy on
+[35:56 - 36:03] weell and also how to deplay on share
+[35:59 - 36:05] hosting so guys uh that's all for this
+[36:03 - 36:07] particular uh video I hope you
+[36:05 - 36:11] understand uh how to create the blog
+[36:07 - 36:13] using the react and the telin CSS and if
+[36:11 - 36:15] you did not subscribe to my Channel
+[36:13 - 36:18] please do subscribe to my channel and
+[36:15 - 36:21] press like button share with uh with
+[36:18 - 36:23] your friends and family and in the next
+[36:21 - 36:26] video if you're really are looking for
+[36:23 - 36:29] how to add the loading Shimmer effect uh
+[36:26 - 36:30] when we are calling the API right that
+[36:29 - 36:34] time we want we can show the Shimmer
+[36:30 - 36:36] effect so that effect we can also show
+[36:34 - 36:37] so if you really want that tutorial
+[36:36 - 36:40] please comment down in the comment
+[36:37 - 36:42] section um and just type Shimmer uh in
+[36:40 - 36:47] the comment section and that's all okay
+[36:42 - 36:50] so until that time see you in next
+[36:47 - 36:50] video

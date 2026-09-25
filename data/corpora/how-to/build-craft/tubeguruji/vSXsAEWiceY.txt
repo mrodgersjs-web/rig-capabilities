@@ -1,0 +1,2396 @@
+[00:00 - 00:06] hey there and welcome back to G Channel
+[00:03 - 00:09] today we are going to develop this
+[00:06 - 00:10] beautiful discover Place application
+[00:09 - 00:16] with the help of
+[00:10 - 00:18] nextjs react tailn CSS Google Map API
+[00:16 - 00:21] typescript and then we are going to
+[00:18 - 00:25] deploy this complete application on the
+[00:21 - 00:27] versal Yes you heard right so this uh
+[00:25 - 00:30] particular tutorial is completely
+[00:27 - 00:32] beginner friendly uh and we are going to
+[00:30 - 00:36] develop the application from the scratch
+[00:32 - 00:38] until we are deploying on the versal
+[00:36 - 00:41] okay so uh before talk about the
+[00:38 - 00:43] technology in the detail let's walk
+[00:41 - 00:46] through the application first and let's
+[00:43 - 00:48] see what going to build today so if you
+[00:46 - 00:51] see on the screen right we are going to
+[00:48 - 00:52] develop this beautiful header section on
+[00:51 - 00:55] on the left hand side we have this
+[00:52 - 00:57] beautiful logo called disc and you if
+[00:55 - 01:00] you see right we are using the custom
+[00:57 - 01:02] Google font in our application so that
+[01:00 - 01:05] you can change the font whenever you
+[01:02 - 01:08] like next we have this hero section with
+[01:05 - 01:11] the beautiful uh search bar capabilities
+[01:08 - 01:14] and this uh beautiful animation effect
+[01:11 - 01:17] for each of this category when you hover
+[01:14 - 01:20] on it okay you can search whatever you
+[01:17 - 01:22] want and once you scroll down you will
+[01:20 - 01:24] find the result section where you will
+[01:22 - 01:26] see the place list near by you okay so
+[01:24 - 01:30] you can search anything for example if I
+[01:26 - 01:33] try to search hotels in New York okay
+[01:30 - 01:35] and click search button see the gradient
+[01:33 - 01:38] effect is coming the skeleton effect is
+[01:35 - 01:41] coming right and then you will see the
+[01:38 - 01:44] result immediately and if you see I got
+[01:41 - 01:47] the all the um requested hotels in the
+[01:44 - 01:49] New York and now on whatever the hotels
+[01:47 - 01:52] you want to see in detail click on it
+[01:49 - 01:55] and on the right hand side on the drawer
+[01:52 - 01:57] you will see the hotels details okay so
+[01:55 - 01:59] we have this beautiful image uh we have
+[01:57 - 02:01] this address and everything and if you
+[01:59 - 02:04] see we have this button Direction button
+[02:01 - 02:07] if I click on this one it will jump on
+[02:04 - 02:09] on the Google map with the direction and
+[02:07 - 02:12] if you see it get all the details and
+[02:09 - 02:15] everything okay next we have this Google
+[02:12 - 02:18] Map integrated with the actual location
+[02:15 - 02:22] with the marker okay so I will teach you
+[02:18 - 02:24] in less minimum code how to add the
+[02:22 - 02:28] Google Map for the respective place in
+[02:24 - 02:30] our application okay so uh you can close
+[02:28 - 02:33] this one and then you can also search
+[02:30 - 02:35] what are the uh with the help of
+[02:33 - 02:37] category for example if I click on this
+[02:35 - 02:40] restaurant category see the restaurant
+[02:37 - 02:42] is comes up nearby me automatically okay
+[02:40 - 02:45] and you can click it you will see all
+[02:42 - 02:46] the details on the right hand side with
+[02:45 - 02:49] the help of
+[02:46 - 02:54] draw so guys
+[02:49 - 02:56] um if if you really love this video
+[02:54 - 02:58] please press like button and now let's
+[02:56 - 03:00] talk about the
+[02:58 - 03:02] Technologies so
+[03:00 - 03:05] in order to develop this complete
+[03:02 - 03:07] application we are going to use nextjs
+[03:05 - 03:10] which is one of the best react framework
+[03:07 - 03:13] in the market right now and if you did
+[03:10 - 03:15] not use nextjs before don't worry I'm
+[03:13 - 03:17] going to teach you everything from
+[03:15 - 03:20] creating the application until the
+[03:17 - 03:22] deployment of the application okay then
+[03:20 - 03:26] for styling purpose we are going to use
+[03:22 - 03:28] telin CSS which is one of the best CSS
+[03:26 - 03:30] library in the market right now okay and
+[03:28 - 03:33] if if you go
+[03:30 - 03:35] go to my uh Channel you will find a lot
+[03:33 - 03:38] of different tutorial where we I'm using
+[03:35 - 03:40] the tailin CSS okay next we are going to
+[03:38 - 03:43] use Google Map to fet the place
+[03:40 - 03:46] information okay nearby you according to
+[03:43 - 03:48] your category so in this particular
+[03:46 - 03:51] section as well uh tutorial as well we
+[03:48 - 03:54] are going to learn how to create the API
+[03:51 - 03:56] key how to enable uh that particular API
+[03:54 - 03:59] uh in a Google Cloud console okay and
+[03:56 - 04:02] it's completely free so don't worry and
+[03:59 - 04:04] uh last but not least is deploying the
+[04:02 - 04:07] application on the verel so that you can
+[04:04 - 04:09] share your project with your friends and
+[04:07 - 04:12] you can even put your project on your
+[04:09 - 04:14] portfolio Okay and if you never um
+[04:12 - 04:16] deploy any application woral don't worry
+[04:14 - 04:18] I'm going to teach you how to deploy it
+[04:16 - 04:23] with the help of GitHub gitlab or beit
+[04:18 - 04:26] bucket okay so guys uh if you want to
+[04:23 - 04:28] explore more project go to my channel
+[04:26 - 04:30] called tub guruji and if you did not
+[04:28 - 04:32] subscribe before please subscribe to my
+[04:30 - 04:34] channel here you'll find a lot of
+[04:32 - 04:36] different application with the help of
+[04:34 - 04:39] building with the help of nextjs the all
+[04:36 - 04:41] the full stack application also you can
+[04:39 - 04:44] learn a lot of react native project from
+[04:41 - 04:48] it okay so uh before doing any further
+[04:44 - 04:52] delay click subscribe button and let's
+[04:48 - 04:52] uh start building our
+[04:56 - 05:01] application so in order to create our
+[04:59 - 05:04] react application uh we are going to use
+[05:01 - 05:07] nextjs in order to build our react
+[05:04 - 05:09] application and nijs is one of the best
+[05:07 - 05:11] react framework currently in the market
+[05:09 - 05:14] okay and it contains a lot of different
+[05:11 - 05:16] feature the most important part uh
+[05:14 - 05:19] regarding this nextjs is you don't need
+[05:16 - 05:21] to do uh the routing configuration okay
+[05:19 - 05:24] the nextjs is taking care of everything
+[05:21 - 05:27] and we will learn all all of this um
+[05:24 - 05:29] Concept in this particular course so uh
+[05:27 - 05:31] if you go to this next j.org off offal
+[05:29 - 05:35] website and if you scroll down you will
+[05:31 - 05:37] see this uh command Okay in order to
+[05:35 - 05:40] create the next application okay so
+[05:37 - 05:41] first let's go back to um your desired
+[05:40 - 05:44] folder where you want to create a
+[05:41 - 05:47] project and just type CMD in order to
+[05:44 - 05:50] open the Comm prompt in a desired folder
+[05:47 - 05:54] like this okay then in order to create a
+[05:50 - 05:58] project you have to type npx create
+[05:54 - 06:01] next app okay at latest so at latest
+[05:58 - 06:04] will give you the nextjs 13 okay and
+[06:01 - 06:06] there are some more configuration which
+[06:04 - 06:08] aut configured for our application okay
+[06:06 - 06:11] and if you go here right this is the
+[06:08 - 06:14] same command which I type so just enter
+[06:11 - 06:17] it now and then it will ask you do you
+[06:14 - 06:19] want to proceed so say yes and here if
+[06:17 - 06:21] you want you have to give the project
+[06:19 - 06:26] name so in this case I will give
+[06:21 - 06:28] discover uh we say discover places okay
+[06:26 - 06:30] then it will ask you would you like to
+[06:28 - 06:34] use TPT say yes because we are going to
+[06:30 - 06:36] use typescript the es link I will say no
+[06:34 - 06:40] now here I it asking us do you want to
+[06:36 - 06:42] install 10 CSS okay and obviously we are
+[06:40 - 06:44] going to use TN CS in this particular
+[06:42 - 06:47] course and you don't need to configure
+[06:44 - 06:49] separately okay this particular uh
+[06:47 - 06:51] command will taking care of installing
+[06:49 - 06:54] the tailin CSS as well say so say click
+[06:51 - 06:57] s The Source directory say no and app
+[06:54 - 07:00] router say yes the import allies say no
+[06:57 - 07:03] and then we'll wait for a few seconds to
+[07:00 - 07:05] install all this dependency which uh
+[07:03 - 07:09] which is required for our application
+[07:05 - 07:14] okay so once it installed right so it's
+[07:09 - 07:17] about to install now we'll wait few more
+[07:14 - 07:19] seconds and if you see the list of all
+[07:17 - 07:22] the dependency which is uh going to
+[07:19 - 07:25] install right now okay and if you see
+[07:22 - 07:28] all of the dependen is installed and the
+[07:25 - 07:30] project is get created okay now in order
+[07:28 - 07:33] to open this project you know vs code
+[07:30 - 07:36] you have to type code and then you have
+[07:33 - 07:38] to give the name of the project folder
+[07:36 - 07:42] so in this case it's
+[07:38 - 07:45] discover places okay and if you see our
+[07:42 - 07:48] project is open directly in the vs code
+[07:45 - 07:51] okay like this and on the left hand side
+[07:48 - 07:52] you will see this all the project files
+[07:51 - 07:56] uh which is get created with the help of
+[07:52 - 07:56] this command okay
+[07:58 - 08:02] perfect
+[08:00 - 08:04] now let's run the application so in
+[08:02 - 08:06] order to run the application you have to
+[08:04 - 08:08] open the terminal by going to this
+[08:06 - 08:11] terminal and the new terminal okay so it
+[08:08 - 08:13] will open the terminal inside your vs
+[08:11 - 08:18] code only then you have to type npm run
+[08:13 - 08:20] da and it will build the our application
+[08:18 - 08:23] okay and if you see it will open this
+[08:20 - 08:25] port local uh colon 3000 okay on this
+[08:23 - 08:29] port number your application will get
+[08:25 - 08:31] open so let's open this port by just uh
+[08:29 - 08:34] cck on clicking on it and if you see
+[08:31 - 08:37] it's getting built okay within some few
+[08:34 - 08:39] seconds uh our application will run on
+[08:37 - 08:43] this particular port and if you see this
+[08:39 - 08:46] is the default page uh for this nextjs
+[08:43 - 08:50] application let me bring this like this
+[08:46 - 08:51] okay now if I go to this app folder and
+[08:50 - 08:54] inside the app folder you will see some
+[08:51 - 08:58] of the files like global. CSS layout.
+[08:54 - 09:01] TSX and page. TSX okay so the default
+[08:58 - 09:04] page is the page. TSX okay and inside
+[09:01 - 09:07] the page. TSX if you see we have a lot
+[09:04 - 09:10] of different things okay see so if I
+[09:07 - 09:12] remove this code so for example if I
+[09:10 - 09:15] select all of this code and remove it
+[09:12 - 09:19] okay and just add the empty do and save
+[09:15 - 09:21] it so if you see now let me refresh the
+[09:19 - 09:23] screen and if you see nothing is showing
+[09:21 - 09:27] on the screen okay let's type something
+[09:23 - 09:29] if I type any h2 tag like subscribe to
+[09:27 - 09:31] tube guruji okay and if you did not
+[09:29 - 09:34] subscribe to my Channel please do
+[09:31 - 09:37] subscribe to our Channel and save it
+[09:34 - 09:39] okay and uh let me ref sometime oh see
+[09:37 - 09:42] the subscribe to TU G is showing on the
+[09:39 - 09:45] screen okay but along with that you'll
+[09:42 - 09:48] see this gradient lining okay that is
+[09:45 - 09:51] because inside the global. CSS inside
+[09:48 - 09:54] this root and this root right we they
+[09:51 - 09:55] applied some default CSS okay so I will
+[09:54 - 09:59] just remove this
+[09:55 - 10:02] CSS and then the particular line is con
+[09:59 - 10:05] right and background is white now inside
+[10:02 - 10:07] the layout. TSX here you will see some
+[10:05 - 10:11] of the metadata applied okay that is
+[10:07 - 10:13] very important for the SEO purpose also
+[10:11 - 10:15] if I see in the body tag right this is
+[10:13 - 10:17] the children this children is nothing
+[10:15 - 10:19] but whatever the page you are going to
+[10:17 - 10:23] render it will render inside this
+[10:19 - 10:24] children uh tag okay and uh this is the
+[10:23 - 10:27] class name is applied and this is
+[10:24 - 10:29] nothing but the font okay so these are
+[10:27 - 10:31] the default font right now is applied to
+[10:29 - 10:33] this application throughout the
+[10:31 - 10:35] application okay so we'll learn how to
+[10:33 - 10:37] change the default font to some other
+[10:35 - 10:40] font we'll learn that one as well but
+[10:37 - 10:42] for now I hope you understand how to run
+[10:40 - 10:45] the application and how to edit the
+[10:42 - 10:47] default page after that on the left hand
+[10:45 - 10:50] side you will see this public folder
+[10:47 - 10:52] where we can save all our images or
+[10:50 - 10:54] assets okay and you don't need to give
+[10:52 - 10:58] complete path when you are trying to
+[10:54 - 11:00] access this particular um uh image
+[10:58 - 11:03] images or assets right you can directly
+[11:00 - 11:05] use it uh so I will teach you how to do
+[11:03 - 11:08] it then after that we have this next.
+[11:05 - 11:12] config.js where it use to configure next
+[11:08 - 11:14] related uh things okay so that uh we we
+[11:12 - 11:16] will learn how to use this and how to
+[11:14 - 11:18] write the configuration for the nextjs
+[11:16 - 11:20] okay so we are going to use for our
+[11:18 - 11:23] nextjs images as well when we we are
+[11:20 - 11:26] going to use a third party URL images
+[11:23 - 11:29] URL then that time we need to configure
+[11:26 - 11:31] in inside this next. config.js
+[11:29 - 11:33] after that we have this packet. Json
+[11:31 - 11:35] where it is return the script to run the
+[11:33 - 11:37] application to build the application the
+[11:35 - 11:39] name of the application along with the
+[11:37 - 11:42] version and the dependency which is
+[11:39 - 11:44] installed for this particular project
+[11:42 - 11:47] then we have this post. CSS and T.C
+[11:44 - 11:50] config.js uh which is related to the
+[11:47 - 11:53] twiin CSS configuration and if you see
+[11:50 - 11:55] right this right now the twiin uh telin
+[11:53 - 11:57] CS is applicable to this particular
+[11:55 - 12:00] folder called Pages components and app
+[11:57 - 12:01] you can add your own as well okay so
+[12:00 - 12:03] make sure when whenever you create a new
+[12:01 - 12:05] folder this folder name should be
+[12:03 - 12:07] contains in this particular content okay
+[12:05 - 12:10] then only the tel CSS applicable to that
+[12:07 - 12:11] folder okay perfect I hope you
+[12:10 - 12:14] understand this particular part and how
+[12:11 - 12:16] to run the application next we will
+[12:14 - 12:20] start building and writing the code and
+[12:16 - 12:20] we'll start developing our header
+[12:24 - 12:30] section now let's uh implement the
+[12:27 - 12:33] header section I already added this logo
+[12:30 - 12:36] PNG file okay for our uh for our
+[12:33 - 12:38] application logo now inside the root
+[12:36 - 12:41] folder I will create a new folder called
+[12:38 - 12:43] components okay and inside the component
+[12:41 - 12:47] we'll create a new uh file called
+[12:43 - 12:51] header. TSX so TSX is stand for
+[12:47 - 12:52] transcript XML okay now here you have to
+[12:51 - 12:55] add the
+[12:52 - 12:57] template so if you see my uh saw my
+[12:55 - 13:00] previous video right every time I'm
+[12:57 - 13:02] using some one a couple of extension so
+[13:00 - 13:05] here first of all if you go to the react
+[13:02 - 13:07] vs react sorry U the vs code extension
+[13:05 - 13:10] right and just type react you will see
+[13:07 - 13:12] this es7 plus react extension uh install
+[13:10 - 13:14] this extension and then you have to
+[13:12 - 13:17] install another extension called tellin
+[13:14 - 13:20] CSS okay make sure this two extension
+[13:17 - 13:23] you install and this extension which
+[13:20 - 13:25] will help you to write the default
+[13:23 - 13:27] template okay so for example if I want
+[13:25 - 13:30] to write the default template and if you
+[13:27 - 13:33] see if I Type R see which is stand for
+[13:30 - 13:35] react function export component and see
+[13:33 - 13:38] the default template is cre created
+[13:35 - 13:41] immediately okay now save this
+[13:38 - 13:44] template and after this once your
+[13:41 - 13:47] component is ready make sure to import
+[13:44 - 13:49] this header inside the layout. TSX
+[13:47 - 13:51] because header we want throughout the
+[13:49 - 13:54] application right so that's the reason
+[13:51 - 13:57] we are going to import this header about
+[13:54 - 14:01] inside this body like this so
+[13:57 - 14:04] header okay and make sure it's imported
+[14:01 - 14:08] so if you see the components header okay
+[14:04 - 14:09] and save it as soon as you save me the
+[14:08 - 14:13] header is showing on the
+[14:09 - 14:15] screen now inside the header let's add
+[14:13 - 14:18] one more View and inside that we will
+[14:15 - 14:20] add the image and if you see we are
+[14:18 - 14:23] going to add image from the next SL
+[14:20 - 14:25] image okay and everything else as it is
+[14:23 - 14:28] once you add this image tag from the
+[14:25 - 14:31] next SL image make sure it's imported
+[14:28 - 14:34] okay and close the tag now as I told in
+[14:31 - 14:36] initially right our asset is in the
+[14:34 - 14:37] public folder and in order to access
+[14:36 - 14:41] just write
+[14:37 - 14:43] logo.png so/ logo.png okay and give some
+[14:41 - 14:44] alternate name so in this case I will
+[14:43 - 14:47] write
+[14:44 - 14:49] logo then we have to give width and
+[14:47 - 14:54] height so in this case I will give width
+[14:49 - 15:00] of 50 height of 50 okay and then save
+[14:54 - 15:00] everything let me open side by side
+[15:00 - 15:05] so let me open it
+[15:06 - 15:09] here
+[15:10 - 15:16] oops like this okay and uh let me
+[15:13 - 15:20] refresh the screen okay if you see the
+[15:16 - 15:23] logo is showing on the screen now okay
+[15:20 - 15:26] perfect after this we need to give the
+[15:23 - 15:30] name okay so I after this one I will
+[15:26 - 15:34] write the h2 tag and inside that I will
+[15:30 - 15:36] write discover like this okay and if you
+[15:34 - 15:38] see the disc discover is showing now
+[15:36 - 15:41] let's apply some styling to this one so
+[15:38 - 15:47] I will add the class name I will add
+[15:41 - 15:49] text of 25 pixel then I will also add uh
+[15:47 - 15:53] the text color so in this case I will
+[15:49 - 15:55] add red 500 see you get the suggestion
+[15:53 - 15:56] now when you want to give your custom
+[15:55 - 15:59] size you have to give in a square
+[15:56 - 16:01] bracket okay otherwise you can can use
+[15:59 - 16:04] the T
+[16:01 - 16:07] CSS size as well like this right 2 XL 3
+[16:04 - 16:09] XL but in order to get custom side you
+[16:07 - 16:13] have to write in a square bracket like
+[16:09 - 16:14] this 25 pixel and save it okay and if
+[16:13 - 16:17] you see
+[16:14 - 16:21] it's I don't know what is okay yeah so
+[16:17 - 16:23] Discord is showing on the screen okay
+[16:21 - 16:26] then I want to give some gap between
+[16:23 - 16:29] these letters okay so in order to add
+[16:26 - 16:33] the Gap the telin Cs provide a beautiful
+[16:29 - 16:35] uh property we can call tracking widest
+[16:33 - 16:38] okay so you have multiple option okay
+[16:35 - 16:40] for example if I go tracking and you
+[16:38 - 16:44] have TI normal wider widest so I will
+[16:40 - 16:49] give widest okay and if you see now you
+[16:44 - 16:53] get some Gap also I will give font of
+[16:49 - 16:57] semibold okay and and it will look like
+[16:53 - 17:01] this okay now bring this in one line so
+[16:57 - 17:04] for this D we'll make Flex okay and also
+[17:01 - 17:06] I will use some gap of three and it will
+[17:04 - 17:08] be new one line okay for making
+[17:06 - 17:12] vertically to be Center you can mark it
+[17:08 - 17:16] as a items centers okay so it will look
+[17:12 - 17:20] like this perfect okay next we need to
+[17:16 - 17:23] add the uh some menu like home contact
+[17:20 - 17:25] us about us right so in order to add
+[17:23 - 17:27] menu I will add the unorder list and
+[17:25 - 17:29] inside that I will add the list and
+[17:27 - 17:33] we'll say home
+[17:29 - 17:38] okay and then
+[17:33 - 17:41] about about us and then contact us and
+[17:38 - 17:44] save it and if you see this three menu
+[17:41 - 17:46] is showing on the screen now bring this
+[17:44 - 17:49] everything in one line okay so what I
+[17:46 - 17:52] will do I will add class name to be Flex
+[17:49 - 17:55] item to be in the center and now it will
+[17:52 - 17:59] be in the one line okay now let's add
+[17:55 - 18:04] some Gap as well so what we can do we'll
+[17:59 - 18:07] add some gap of eight maybe okay and now
+[18:04 - 18:09] apply some styling to this l so I will
+[18:07 - 18:11] get text of 18
+[18:09 - 18:14] pixel
+[18:11 - 18:17] then uh let's save this one and let's
+[18:14 - 18:19] see how it looks see okay now next what
+[18:17 - 18:21] we have to do once user hover on this
+[18:19 - 18:24] one we want to change the color to Red
+[18:21 - 18:27] okay so in order to add that effect
+[18:24 - 18:29] right you have to write H colon and
+[18:27 - 18:31] whatever the effect you want to apply so
+[18:29 - 18:36] in this case I want to change the text
+[18:31 - 18:39] color to text red 500 okay and save it
+[18:36 - 18:41] and if I hover on this one right see the
+[18:39 - 18:44] home because right now we just applied
+[18:41 - 18:47] to this home um menu that's why it's
+[18:44 - 18:49] showing on there right also right now if
+[18:47 - 18:51] I hover on this one right the cursor is
+[18:49 - 18:55] not changing so what I will do I make it
+[18:51 - 18:57] cursor to be pointer okay so me refresh
+[18:55 - 18:59] and if you see the cursor changeed to
+[18:57 - 19:01] pointer now
+[18:59 - 19:05] now I will just copy all of this T
+[19:01 - 19:08] SES uh class name and paste it for
+[19:05 - 19:10] remaining one okay and if you see it's
+[19:08 - 19:12] applicable to all of the three menu now
+[19:10 - 19:16] bring everything in one line so for this
+[19:12 - 19:19] de make it Flex okay once you make it
+[19:16 - 19:21] Flex it will be in one line and we want
+[19:19 - 19:24] this menu on the right hand side so you
+[19:21 - 19:26] can mark it at justify
+[19:24 - 19:28] between okay once you mark justify
+[19:26 - 19:31] between it will go at the in and if you
+[19:28 - 19:34] see if I increase sign it will look like
+[19:31 - 19:37] this now let's give some padding so I
+[19:34 - 19:39] will add a padding of five okay so if
+[19:37 - 19:42] you see the padding of five is
+[19:39 - 19:47] equivalent to 20 pixel and save it and
+[19:42 - 19:49] if you see it will look like this okay
+[19:47 - 19:53] so it's up to you how much padding you
+[19:49 - 19:55] want to apply also uh for Visible
+[19:53 - 19:58] purpose right uh I will also add the
+[19:55 - 20:01] shadow to this uh
+[19:58 - 20:04] header so I will add the
+[20:01 - 20:06] shadow small size okay and save it you
+[20:04 - 20:08] have refresh the screen see thetical
+[20:06 - 20:12] Shadow effect is
+[20:08 - 20:14] coming okay this is how beautifully uh
+[20:12 - 20:17] we can
+[20:14 - 20:17] design
+[20:18 - 20:24] and perfect okay I hope you understand
+[20:21 - 20:27] this one this is simple uh header we are
+[20:24 - 20:29] developed for this application now this
+[20:27 - 20:31] particular course is for uh is
+[20:29 - 20:34] completely beginner friendly okay and
+[20:31 - 20:37] that's the reason we kept all the things
+[20:34 - 20:39] simpler okay we I don't want to um uh
+[20:37 - 20:44] confuse you guys and that's the reason
+[20:39 - 20:46] we keep uh UI simple and we will learn a
+[20:44 - 20:50] basic and
+[20:46 - 20:52] advanced um concept of the next js13
+[20:50 - 20:55] okay one by one because this is very
+[20:52 - 20:57] important to learn the basic first and
+[20:55 - 20:59] then we will go from basic to advance
+[20:57 - 21:01] okay okay I hope you understand this
+[20:59 - 21:03] particular section how to develop this
+[21:01 - 21:06] beautiful header and it's completely
+[21:03 - 21:06] responsive as
+[21:10 - 21:18] well now we will going to change the
+[21:15 - 21:21] font of the application okay so it's
+[21:18 - 21:23] very easy and with the help of nijs it's
+[21:21 - 21:26] quite uh easy to configure the font
+[21:23 - 21:28] whatever the font you like okay so first
+[21:26 - 21:31] of all you can choose the font whatever
+[21:28 - 21:33] font you want to add in your application
+[21:31 - 21:35] so you can go to the Google fonts and
+[21:33 - 21:39] here you can choose the font which you
+[21:35 - 21:42] like okay it's up to you and just uh you
+[21:39 - 21:44] need to get the name of this font okay
+[21:42 - 21:47] after that let's go back to our
+[21:44 - 21:49] application and here inside the layout.
+[21:47 - 21:53] txx because this is our default layout
+[21:49 - 21:55] right inside the layout of layout. TSX
+[21:53 - 21:57] here you have to import that particular
+[21:55 - 22:00] font so by default currently it's inter
+[21:57 - 22:02] font right and I'm going to change to
+[22:00 - 22:07] the railway okay so I'm going to use
+[22:02 - 22:09] this Railway font okay now obviously um
+[22:07 - 22:12] here you have to replace enter with the
+[22:09 - 22:15] railway okay and I will change this
+[22:12 - 22:20] constant name as the railway like this
+[22:15 - 22:22] okay and now your um the font is ready
+[22:20 - 22:24] right this font you have to make sure to
+[22:22 - 22:27] add in the body tag okay so inside the
+[22:24 - 22:28] class of the body you have to add that
+[22:27 - 22:30] particular RB font
+[22:28 - 22:34] and you have to add this reference like
+[22:30 - 22:36] this okay and save it now once you save
+[22:34 - 22:39] this font refresh this particular screen
+[22:36 - 22:42] and if you see the font is changed okay
+[22:39 - 22:44] previously it was different but now it's
+[22:42 - 22:47] completely changed now obviously you can
+[22:44 - 22:50] add your font bold semi bold medium
+[22:47 - 22:52] whatever you like okay it is applicable
+[22:50 - 22:54] only thing you have to add in the class
+[22:52 - 22:58] name but other than that you updated the
+[22:54 - 23:01] font uh completely for your application
+[22:58 - 23:05] this is how easy it is with the help of
+[23:01 - 23:08] nijs 13 to add and configure the your
+[23:05 - 23:08] own custom Google
+[23:13 - 23:19] font now next we are going to build this
+[23:16 - 23:21] hero section for our application so if
+[23:19 - 23:23] you see we have this beautiful um
+[23:21 - 23:26] application name called discover okay
+[23:23 - 23:28] then we have this search bar with this
+[23:26 - 23:30] um onover button effect okay for this
+[23:28 - 23:33] search bar button and then we have the
+[23:30 - 23:35] list of category see okay once you hover
+[23:33 - 23:39] on this one the border is going to
+[23:35 - 23:41] change the uh it's showing the beautiful
+[23:39 - 23:45] animation and the button is also pop up
+[23:41 - 23:47] once you H or your mouse pointer on this
+[23:45 - 23:50] particular category okay so this
+[23:47 - 23:53] particular uh hero section we are going
+[23:50 - 23:55] to uh we are going to developing in this
+[23:53 - 23:59] particular
+[23:55 - 24:01] section now first uh uh let's create a
+[23:59 - 24:03] new file called inside the component
+[24:01 - 24:05] folder so let's go to component folder
+[24:03 - 24:08] and here I will create a new file called
+[24:05 - 24:12] hero do PSX and add the default template
+[24:08 - 24:15] by just typing RFC and click enter and
+[24:12 - 24:19] our component is ready okay save this
+[24:15 - 24:21] component and then inside this public F
+[24:19 - 24:24] sorry inside this uh app folder right
+[24:21 - 24:27] inside the page. TSX I will remove this
+[24:24 - 24:29] one and here I will add the hero
+[24:27 - 24:33] component like this okay make sure it's
+[24:29 - 24:34] imported and then save it okay and if
+[24:33 - 24:36] you see the hero component is showing on
+[24:34 - 24:39] the screen
+[24:36 - 24:41] now the first thing we need to add is
+[24:39 - 24:43] the background okay so in the public
+[24:41 - 24:45] folder I added all the required assets
+[24:43 - 24:47] for this particular hero section right
+[24:45 - 24:50] and inside that we have this bg.png
+[24:47 - 24:53] background okay so obviously uh you can
+[24:50 - 24:56] access this all the assets uh uh using
+[24:53 - 24:58] my GitHub uh Source link okay so you can
+[24:56 - 25:01] access that link and it is in the
+[24:58 - 25:04] description below now let's go to the
+[25:01 - 25:07] hero uh component and inside this one I
+[25:04 - 25:10] will add one du and inside here I will
+[25:07 - 25:13] add the image tag like this okay so
+[25:10 - 25:16] obviously this image uh tag is importing
+[25:13 - 25:19] from the next / image now we have to
+[25:16 - 25:22] provide the source so in this case the
+[25:19 - 25:25] source is/ bg.png
+[25:22 - 25:30] okay then we have to provide the alt so
+[25:25 - 25:34] in this case we can save BG or hero you
+[25:30 - 25:36] can say hero image okay then we have to
+[25:34 - 25:37] provide the width so I will provide the
+[25:36 - 25:42] width of
+[25:37 - 25:46] 800 height of 200 obviously uh this you
+[25:42 - 25:49] have to provide uh as a required field
+[25:46 - 25:51] okay and uh then I will add some class
+[25:49 - 25:53] name as well but let's save it and let's
+[25:51 - 25:57] see how it looking on the screen right
+[25:53 - 25:58] now okay see it look like this now what
+[25:57 - 26:01] you have to do
+[25:58 - 26:04] uh I will make it WID to be
+[26:01 - 26:06] full and save it and if you see once I
+[26:04 - 26:09] make the WID to be full it will look
+[26:06 - 26:12] like this okay stretch uh throughout the
+[26:09 - 26:15] screen and that's what we wanted okay
+[26:12 - 26:17] then I need to make this uh image
+[26:15 - 26:20] absolute because on the top of this
+[26:17 - 26:23] image we are going to put our um other
+[26:20 - 26:26] content right so I will make this
+[26:23 - 26:31] absolute and I will mark it at margin
+[26:26 - 26:34] top minus 50 pixel okay because I want
+[26:31 - 26:37] uh this image at the top so I just
+[26:34 - 26:40] provide this minus value okay so and see
+[26:37 - 26:41] let okay and it will look like this
+[26:40 - 26:45] right now
+[26:41 - 26:48] okay next we'll add our content so after
+[26:45 - 26:52] this uh this image I will add one more
+[26:48 - 26:54] du and inside that I will add our S2 tag
+[26:52 - 26:58] and the name will
+[26:54 - 27:01] be discover okay now OB obviously for
+[26:58 - 27:06] this one I will use some class
+[27:01 - 27:09] name so here I will provide the text of
+[27:06 - 27:14] sorry text of 55
+[27:09 - 27:15] pixel okay and then we make it text of
+[27:14 - 27:17] red
+[27:15 - 27:20] 600 and I want the space between the
+[27:17 - 27:23] words so I will say tracking Wiest which
+[27:20 - 27:28] we already use right in our uh header
+[27:23 - 27:31] section and I also make font semi
+[27:28 - 27:34] world and save everything and if you see
+[27:31 - 27:37] it's showing on the screen okay now we
+[27:34 - 27:40] want all this contain in the center so
+[27:37 - 27:43] to make it right so to this parent de
+[27:40 - 27:48] right you can just Mark class name and
+[27:43 - 27:50] just say t to be Center and save it and
+[27:48 - 27:54] let refresh it and if you see it's
+[27:50 - 27:56] coming in the center okay perfect now
+[27:54 - 28:00] for this VI I will give some margin from
+[27:56 - 28:04] the top so margin top to we can give 70
+[28:00 - 28:06] pixel okay so it will be little bottom
+[28:04 - 28:11] like this okay
+[28:06 - 28:13] perfect now next we want to add the
+[28:11 - 28:16] another h2 tag okay so after this one I
+[28:13 - 28:20] will add another S2 tag and for this we
+[28:16 - 28:23] can say your
+[28:20 - 28:26] amazing City discore your amazing City
+[28:23 - 28:28] kind of thing okay and also I will add
+[28:26 - 28:32] the class name
+[28:28 - 28:32] add text of 25
+[28:33 - 28:40] pixel okay make it
+[28:37 - 28:44] amazing like
+[28:40 - 28:48] this perfect and let's save and let's
+[28:44 - 28:50] see how it looks okay let me decrease
+[28:48 - 28:55] the size to maybe
+[28:50 - 28:57] 20 and yeah that's that's is better okay
+[28:55 - 29:00] next we want to add the input field
+[28:57 - 29:03] right the search input field so to add
+[29:00 - 29:05] that one
+[29:03 - 29:07] uh let's add after this du let's add one
+[29:05 - 29:10] more de
+[29:07 - 29:13] okay and inside that I will add the
+[29:10 - 29:16] input of type
+[29:13 - 29:19] text and I will close this
+[29:16 - 29:20] tag here I will add the placeholder and
+[29:19 - 29:23] we can say
+[29:20 - 29:26] search anything okay you can add any
+[29:23 - 29:29] placeold you want and I will add some
+[29:26 - 29:32] class name let's see how it looks here
+[29:29 - 29:37] see okay but it's not clickable right
+[29:32 - 29:41] because our image is uh is absolute
+[29:37 - 29:43] right and this is on it's not top of uh
+[29:41 - 29:45] top of this particular image so what you
+[29:43 - 29:47] have to do you have to give the J index
+[29:45 - 29:50] okay so I will give J index to 10 and if
+[29:47 - 29:54] you see uh let me
+[29:50 - 29:56] see so we can give the J index to this
+[29:54 - 29:59] one I'm not sure why it's not working
+[29:56 - 30:03] let me check take
+[29:59 - 30:03] okay let's do some little bit
+[30:06 - 30:11] more see it's showing okay but let's
+[30:09 - 30:13] let's do one thing uh let's add some
+[30:11 - 30:16] styling to this first
+[30:13 - 30:20] so here we can see background to be
+[30:16 - 30:23] white then we'll give some padding of
+[30:20 - 30:26] three maybe okay then I will add a
+[30:23 - 30:29] border of one pixel and that border need
+[30:26 - 30:32] to be a rounded full okay like this and
+[30:29 - 30:36] I will give padding X as well to
+[30:32 - 30:38] five and let's see how it looks see okay
+[30:36 - 30:40] now I want to increase the width so what
+[30:38 - 30:43] you can do you can just write width of
+[30:40 - 30:46] 30 I will do
+[30:43 - 30:47] 36% okay and we'll give some Shadow to
+[30:46 - 30:52] be
+[30:47 - 30:54] small and if you see okay perfect right
+[30:52 - 30:56] now after this one for this due right
+[30:54 - 30:58] this is our parent du for this
+[30:56 - 31:00] particular uh input so what I will do I
+[30:58 - 31:02] will add the class
+[31:00 - 31:04] name let first of all let's add the
+[31:02 - 31:11] margin top to
+[31:04 - 31:14] five like this okay and uh yeah that's
+[31:11 - 31:16] everything let's add J here because I
+[31:14 - 31:19] not sure why it's not working there
+[31:16 - 31:19] let's
+[31:19 - 31:23] see it's still not is behind right
+[31:22 - 31:27] that's the reason the background also
+[31:23 - 31:30] not apply applicable to this one so so
+[31:27 - 31:34] another thing we can
+[31:30 - 31:37] do is because Z index is the important
+[31:34 - 31:40] thing let's try to give J index to this
+[31:37 - 31:40] one as
+[31:43 - 31:49] well uh we give the input J of
+[31:52 - 31:58] 10 and say okay background white input
+[31:55 - 32:01] type is equal to text
+[31:58 - 32:01] and everything looks good to
+[32:04 - 32:10] me oop sorry okay we'll check that in a
+[32:07 - 32:12] moment but I hope you understand this
+[32:10 - 32:15] particular part right only thing is
+[32:12 - 32:17] paining is not button so let's add the
+[32:15 - 32:19] button as well so after this input I
+[32:17 - 32:22] will add the
+[32:19 - 32:25] button and
+[32:22 - 32:28] uh inside this button right we want to
+[32:25 - 32:32] add the icon so just search for the hero
+[32:28 - 32:34] icons and uh here you can search we want
+[32:32 - 32:38] search icons so just search and copy.
+[32:34 - 32:42] jsx okay and just paste it here like
+[32:38 - 32:44] this okay now from here we have this
+[32:42 - 32:48] class name okay we have width and height
+[32:44 - 32:50] as well so inside this one you need to
+[32:48 - 32:53] give the text of white because right now
+[32:50 - 32:54] it's black color okay and for this
+[32:53 - 32:57] particular
+[32:54 - 32:59] button we add some class name so so here
+[32:57 - 33:01] first of all I want to change the
+[32:59 - 33:05] background so I will background rate to
+[33:01 - 33:08] be 600 and I want round it to be full
+[33:05 - 33:12] okay and save everything and let's see
+[33:08 - 33:15] how it looks see okay but we want to use
+[33:12 - 33:18] some padding and all so add this padding
+[33:15 - 33:22] of three then I also add Shadow
+[33:18 - 33:23] medium and I will add J index to 10 make
+[33:22 - 33:26] it cursor
+[33:23 - 33:31] pointer and on how effect we want to
+[33:26 - 33:34] scale this size to maybe 105 and save it
+[33:31 - 33:36] okay so you already know how this how
+[33:34 - 33:38] effect used right whatever you return
+[33:36 - 33:41] return after the after this hour when
+[33:38 - 33:43] you move the cursor pointer on the uh
+[33:41 - 33:45] that particular element this particular
+[33:43 - 33:49] styling will get applied to this
+[33:45 - 33:51] particular uh component okay if you see
+[33:49 - 33:53] the how button is coming now let's bring
+[33:51 - 33:56] everything in one line and and
+[33:53 - 33:59] vertically to be in the center so for
+[33:56 - 34:02] this de you just need to make it Flex so
+[33:59 - 34:05] make it flex and I will use some gap of
+[34:02 - 34:09] two make item to be in the center and
+[34:05 - 34:11] then save it okay and let's see okay so
+[34:09 - 34:13] right now if you see it's coming on the
+[34:11 - 34:14] left hand side because we make it Flex
+[34:13 - 34:17] so what you have to do you have to make
+[34:14 - 34:19] it justifi to be in the
+[34:17 - 34:22] center okay and once you make justify
+[34:19 - 34:24] Center yeah see okay and if you see our
+[34:22 - 34:27] J index also applied because we make it
+[34:24 - 34:30] flex and we make it also justify Center
+[34:27 - 34:33] along with item item to be in the center
+[34:30 - 34:35] and then this the issue was we have the
+[34:33 - 34:39] right the J index that also applied and
+[34:35 - 34:41] now it's completely clickable also this
+[34:39 - 34:43] animation Al showing on the screen right
+[34:41 - 34:47] but this animation is quite quickly
+[34:43 - 34:50] right so to for smooth animation you can
+[34:47 - 34:52] just mark it as a transition all right
+[34:50 - 34:54] so whenever you marking H effect right
+[34:52 - 34:56] make make sure you will add this
+[34:54 - 34:59] transition all so it applied smooth
+[34:56 - 35:01] smooth animation okay you can give the
+[34:59 - 35:04] uh duration as well how much duration
+[35:01 - 35:07] you you want to add this for this
+[35:04 - 35:09] particular animation right and this is
+[35:07 - 35:12] how easily we design the search bar
+[35:09 - 35:13] along with the button okay if you have
+[35:12 - 35:15] any question until this point let me
+[35:13 - 35:19] know in the comment section next we will
+[35:15 - 35:23] add this uh category as well okay so
+[35:19 - 35:25] let's do that now in order to add the
+[35:23 - 35:28] category right I will add the all the
+[35:25 - 35:29] list of category inside one file right
+[35:28 - 35:32] so what I will do I will create a new
+[35:29 - 35:34] folder here uh in the root directory
+[35:32 - 35:37] called data and inside the data I will
+[35:34 - 35:39] create a new file called category. TSX
+[35:37 - 35:42] okay and I will paste this uh all the
+[35:39 - 35:43] list of category okay so first thing is
+[35:42 - 35:46] important that I'm just exporting the
+[35:43 - 35:47] default value okay so that I can
+[35:46 - 35:51] directly access with the help of
+[35:47 - 35:54] category and the and I will get this
+[35:51 - 35:57] list of category so inside this uh each
+[35:54 - 36:00] object consist of ID the name of of the
+[35:57 - 36:03] category and the icon okay so this icon
+[36:00 - 36:05] are uh accessing from this public folder
+[36:03 - 36:07] so if I see the restaurant right this
+[36:05 - 36:11] restur is here see okay so it is in the
+[36:07 - 36:15] black color so and so on so let's save
+[36:11 - 36:18] this one and then inside the components
+[36:15 - 36:23] in the heroes. TSX after this one we
+[36:18 - 36:25] will add our list of category okay so
+[36:23 - 36:28] after this de We'll add the list of
+[36:25 - 36:35] category so after this D We'll add the
+[36:28 - 36:35] h2 tag H2 and here I will say r
+[36:35 - 36:42] or browse the category kind of thing
+[36:40 - 36:45] okay and save it and let's see how it
+[36:42 - 36:47] looks see okay so obviously for this du
+[36:45 - 36:51] you can give some margin so I will give
+[36:47 - 36:53] margin top five okay and save it next we
+[36:51 - 36:56] want to add the list of categories so I
+[36:53 - 36:58] will wrap this in one de obviously when
+[36:56 - 37:02] you are trying to access it and you want
+[36:58 - 37:04] to iterate this value right you have to
+[37:02 - 37:06] you have to write it in the curly Braes
+[37:04 - 37:08] okay then you have to write the data so
+[37:06 - 37:10] in this case it's category and if you
+[37:08 - 37:13] type the category it will give the
+[37:10 - 37:17] suggestion the category from the data/
+[37:13 - 37:20] category okay so import that one do map
+[37:17 - 37:24] okay inside that one we have to give
+[37:20 - 37:27] item comma index okay and then the arrow
+[37:24 - 37:31] function like this if you
+[37:27 - 37:35] see right now uh inside this particular
+[37:31 - 37:36] uh map okay you can add your code to
+[37:35 - 37:39] whatever the value you want to show on
+[37:36 - 37:44] the UI okay so I will add the
+[37:39 - 37:47] D like this just end that D and if I
+[37:44 - 37:51] type something for example if I type uh
+[37:47 - 37:53] category and save it right so this
+[37:51 - 37:57] category name will display multiple
+[37:53 - 38:00] times see because it's iterating
+[37:57 - 38:04] correctly for example if it's there are
+[38:00 - 38:08] seven or eight uh list sorry object list
+[38:04 - 38:11] then it will itate that much time okay
+[38:08 - 38:14] perfect now inside this one uh let's add
+[38:11 - 38:18] the image first so I will add the image
+[38:14 - 38:21] tag okay this image tag is importing
+[38:18 - 38:24] from the next SL image then Source tag
+[38:21 - 38:28] and here I will add the item do icon
+[38:24 - 38:31] okay this item do icon is coming from
+[38:28 - 38:33] this category see this one okay that's
+[38:31 - 38:36] what I'm accessing do the alt name so
+[38:33 - 38:41] alt name I will give the name of the
+[38:36 - 38:44] category only item. name okay like this
+[38:41 - 38:48] then we have to give some width so width
+[38:44 - 38:52] will be 30 height will be
+[38:48 - 38:54] 30 okay like this and save everything
+[38:52 - 38:56] now let's go back to application and if
+[38:54 - 39:00] you see our category is showing on the
+[38:56 - 39:02] this l left hand side see okay now let's
+[39:00 - 39:05] apply some styling to this image so for
+[39:02 - 39:06] this de We'll add the class name and
+[39:05 - 39:11] first thing I will add the
+[39:06 - 39:13] border border of one pixel then I will
+[39:11 - 39:18] add
+[39:13 - 39:22] the width of 60 pixel okay for this
+[39:18 - 39:25] particular de then I will add the
+[39:22 - 39:27] padding so let's add padding of four
+[39:25 - 39:31] background to be y
+[39:27 - 39:35] and uh I will make round it to be
+[39:31 - 39:38] full okay and save it and let's see how
+[39:35 - 39:40] it looks see it's showing with the
+[39:38 - 39:43] beautiful uh styling is applied to this
+[39:40 - 39:46] particular category now we want to bring
+[39:43 - 39:49] everything here okay so in order to
+[39:46 - 39:51] bring it right to this d uh about this
+[39:49 - 39:53] list of category right here you have to
+[39:51 - 39:56] apply class name and you have to mark it
+[39:53 - 39:59] as a grid okay so whenever the screen
+[39:56 - 40:00] size is smaller start from there right
+[39:59 - 40:03] you have to think if the screen size is
+[40:00 - 40:04] smaller how many category you want to
+[40:03 - 40:08] show on the screen so in this case I
+[40:04 - 40:10] will say grid column three so three
+[40:08 - 40:13] column I want to show when the screen
+[40:10 - 40:14] size is medium or larger how many column
+[40:13 - 40:19] you want to show so in this case you can
+[40:14 - 40:21] say maybe six or seven okay and then
+[40:19 - 40:24] save
+[40:21 - 40:27] it and uh you have to also let's see how
+[40:24 - 40:30] it looks first okay
+[40:27 - 40:32] and see it's it's uh spread through
+[40:30 - 40:35] throughout the screen so
+[40:32 - 40:37] let's uh add some width okay so here you
+[40:35 - 40:41] can say width of
+[40:37 - 40:44] 50% okay 50% and you have to make it
+[40:41 - 40:47] Justified to be in the center okay let's
+[40:44 - 40:49] give some Gap if needed and we'll also
+[40:47 - 40:51] add the margin from the top and let's
+[40:49 - 40:54] save
+[40:51 - 40:58] everything and if you see it will look
+[40:54 - 40:59] like this okay perfectly fine now
+[40:58 - 41:01] obviously we want to want everything to
+[40:59 - 41:05] be in the center so for this particular
+[41:01 - 41:08] D just make Flex make Flex
+[41:05 - 41:11] column because you are adding here right
+[41:08 - 41:13] you are adding this uh tag as well right
+[41:11 - 41:17] that's the reason we want um in the
+[41:13 - 41:20] column type and make it justify
+[41:17 - 41:25] Center and if I see here
+[41:20 - 41:27] okay okay so I don't know why let's make
+[41:25 - 41:30] it item to be in enter because it's
+[41:27 - 41:30] column
+[41:30 - 41:35] right uh still it's showing on the left
+[41:33 - 41:38] hand side
+[41:35 - 41:42] right so what else we
+[41:38 - 41:46] miss Flex column justify
+[41:42 - 41:46] Center we mark it as a flex as
+[41:47 - 41:53] well so here we make one mistake called
+[41:50 - 41:55] here you have you don't need to write
+[41:53 - 41:58] this first letter and then save it right
+[41:55 - 42:01] and now if if you the screen see it's
+[41:58 - 42:04] coming in the center right but we want
+[42:01 - 42:06] this background to be white right this
+[42:04 - 42:08] all this background to be white and we
+[42:06 - 42:12] want we also want to add some styling to
+[42:08 - 42:16] this one okay so let's go back to this D
+[42:12 - 42:19] right and make the J index to be 10 okay
+[42:16 - 42:21] and let's try it now see see the white
+[42:19 - 42:24] background is showing on the screen now
+[42:21 - 42:26] right now once you h on this one right
+[42:24 - 42:29] we want to do couple of things first we
+[42:26 - 42:31] want to change this cursor pointer then
+[42:29 - 42:33] on how we want to scale the size and
+[42:31 - 42:38] then we want to change back the Border
+[42:33 - 42:41] color to Red okay so here on how we want
+[42:38 - 42:45] to change the Border color so let's say
+[42:41 - 42:48] text red to 600 on how we want to scale
+[42:45 - 42:51] the size so I will say 110 and we want
+[42:48 - 42:53] to make the cursor pointer okay so these
+[42:51 - 42:56] three things which we discussed we
+[42:53 - 42:59] implemented and then save everything and
+[42:56 - 43:02] let's try it now if I H see the effect
+[42:59 - 43:05] is showing right but the Border color is
+[43:02 - 43:09] not applied okay see on
+[43:05 - 43:12] how instead of text we want border okay
+[43:09 - 43:15] and save it also let's add the
+[43:12 - 43:17] transition as well okay for the smooth
+[43:15 - 43:19] animation and if I see the Border color
+[43:17 - 43:23] is saying the animation is showing
+[43:19 - 43:25] smoothly perfect okay also this search
+[43:23 - 43:28] bar is working now if you don't want
+[43:25 - 43:30] this border you can remove it or you can
+[43:28 - 43:36] change this border color right so it's
+[43:30 - 43:40] quite easy so for this input right here
+[43:36 - 43:40] so here you can say
+[43:40 - 43:46] outline outline to be
+[43:43 - 43:47] red the spelling is not
+[43:46 - 43:49] correct
+[43:47 - 43:53] outline
+[43:49 - 43:58] red 600 let's save it and let's try it
+[43:53 - 44:00] now okay so see oop sorry and if you see
+[43:58 - 44:04] the Border color is Chang you can little
+[44:00 - 44:08] bit change this color to 300 again we
+[44:04 - 44:10] don't want darker oops what is happening
+[44:08 - 44:12] and see perfect okay and this color is
+[44:10 - 44:15] also showing
+[44:12 - 44:18] beautifully so that's all for this this
+[44:15 - 44:20] hero section right I hope you understand
+[44:18 - 44:23] uh how how we implemented and how what
+[44:20 - 44:25] are the concept we covered in this one
+[44:23 - 44:27] right now one question you might have
+[44:25 - 44:31] why we are using this index and what is
+[44:27 - 44:33] the purpose of this index uh variable so
+[44:31 - 44:35] whenever you are iterating this value
+[44:33 - 44:38] right we have this item is nothing but
+[44:35 - 44:41] the object from this list and then we
+[44:38 - 44:43] have this index which is which is
+[44:41 - 44:46] nothing but it's tracking the number of
+[44:43 - 44:48] uh value we are showing right for
+[44:46 - 44:50] example is zero element or one or two
+[44:48 - 44:54] three four kind of thing okay so this is
+[44:50 - 44:57] tracking the number the index ID right
+[44:54 - 45:01] so you you uh whenever you are uh
+[44:57 - 45:04] applying some uh you writing some um
+[45:01 - 45:06] code in tag right every time you have to
+[45:04 - 45:08] provide the key okay and it need to be
+[45:06 - 45:10] unique so that time you can provide the
+[45:08 - 45:14] index value okay because obviously index
+[45:10 - 45:16] will be a unique every time okay so and
+[45:14 - 45:19] you can provide the um item id as well
+[45:16 - 45:20] but sometimes if Item ID is duplicate
+[45:19 - 45:23] then it will give the error so better
+[45:20 - 45:26] give the index value okay obviously it
+[45:23 - 45:27] not going to change anything but it's
+[45:26 - 45:29] the only thing that you can avoid
+[45:27 - 45:33] sometime the error and the key is very
+[45:29 - 45:35] important okay anyway so I hope you
+[45:33 - 45:37] understand this one the hero section
+[45:35 - 45:39] obviously the logical part we are going
+[45:37 - 45:42] to implement once we integrate that the
+[45:39 - 45:44] Google Map API in our application we
+[45:42 - 45:46] will learn how once you type some
+[45:44 - 45:48] category or you want to search something
+[45:46 - 45:51] and click on the search button we are
+[45:48 - 45:54] going to f the Google Maps
+[45:51 - 45:56] API um the data from the Google Map API
+[45:54 - 45:59] and then we will show the list of places
+[45:56 - 46:02] nearby you on this particular screen
+[45:59 - 46:04] okay and obviously uh you will see the
+[46:02 - 46:05] details of the places and everything a
+[46:04 - 46:08] lot of things we are going to implement
+[46:05 - 46:10] in this particular course so guys if you
+[46:08 - 46:13] did not subscribe to my Channel please
+[46:10 - 46:16] do subscribe first and let's watch this
+[46:13 - 46:16] complete
+[46:21 - 46:27] video so in this section we are going to
+[46:24 - 46:30] configure Google Place API okay so first
+[46:27 - 46:33] of all let's go to the Google place uh
+[46:30 - 46:36] API documentation okay and here if you
+[46:33 - 46:39] go on this particular URL I will put the
+[46:36 - 46:41] URL in the link in the description and
+[46:39 - 46:44] uh here you have find a different type
+[46:41 - 46:46] of option right to find the place nearby
+[46:44 - 46:48] search or Tex search so Tex search means
+[46:46 - 46:50] you can just enter something and it will
+[46:48 - 46:52] give the result okay so obviously we are
+[46:50 - 46:54] going to use text search but you can do
+[46:52 - 46:57] the F place or nearby search as well
+[46:54 - 47:00] okay so click on take search and here
+[46:57 - 47:03] you'll find the API Endo right this is
+[47:00 - 47:06] the basic structure how to call this API
+[47:03 - 47:08] endpoint and if you scroll further down
+[47:06 - 47:10] you will find the end point okay for
+[47:08 - 47:12] example you have to call this one and in
+[47:10 - 47:14] the query you have to pass the value
+[47:12 - 47:17] which you want to find so in this case
+[47:14 - 47:19] the user is searching restaurant in
+[47:17 - 47:23] Sydney and then you'll get the result
+[47:19 - 47:26] okay also uh you have to pass this API
+[47:23 - 47:28] key as well okay I will um let you know
+[47:26 - 47:31] how to create the API key in a moment
+[47:28 - 47:35] okay but if you scroll more down you can
+[47:31 - 47:37] also find uh the all the nearby places
+[47:35 - 47:40] depend on your location okay so here you
+[47:37 - 47:42] have to send your location uh to this
+[47:40 - 47:46] API endpoint and then you have to pass
+[47:42 - 47:48] the query as well as simple as that okay
+[47:46 - 47:51] along with the radius you can pass it
+[47:48 - 47:54] and the API key okay so this is how
+[47:51 - 47:57] simple it is right now we are just using
+[47:54 - 47:59] this basic example or basic API endpoint
+[47:57 - 48:01] in order to get the result now the
+[47:59 - 48:05] question is how to get the API key okay
+[48:01 - 48:09] so on Google just type uh Google uh
+[48:05 - 48:12] Cloud console okay and then this is the
+[48:09 - 48:14] uh official URL okay so Cloud console
+[48:12 - 48:17] here you have to say go to console if
+[48:14 - 48:19] you did not have account create one now
+[48:17 - 48:23] many user have issue that they don't
+[48:19 - 48:25] have the credit card details okay so in
+[48:23 - 48:27] this case obviously you cannot use the
+[48:25 - 48:30] Google API endpoint some in some country
+[48:27 - 48:31] it's allowed in some it's not right so
+[48:30 - 48:33] you can also add the debit card or
+[48:31 - 48:35] credit card if you have your parents
+[48:33 - 48:38] debit card or credit card okay it's
+[48:35 - 48:41] totally fine again it's completely free
+[48:38 - 48:43] okay the free trial is available and
+[48:41 - 48:45] it's completely free to use so don't
+[48:43 - 48:46] worry that uh you will get charge
+[48:45 - 48:49] immediately no you will not get any
+[48:46 - 48:52] charge okay so this is very important uh
+[48:49 - 48:53] just add the credit card if you have and
+[48:52 - 48:56] if you don't have I will let you know
+[48:53 - 48:58] what to do and if you if you don't have
+[48:56 - 49:02] the credit card okay you can create your
+[48:58 - 49:05] own API with the back end like stripy or
+[49:02 - 49:07] uh something else graphy uh you can
+[49:05 - 49:11] refer my some of the previous video
+[49:07 - 49:14] right I I use a own CMS and then you can
+[49:11 - 49:17] add your own data in inside that and use
+[49:14 - 49:20] that API uh to show the information on
+[49:17 - 49:22] the UI side as well okay but right now
+[49:20 - 49:25] we are going to use this Google Play API
+[49:22 - 49:28] so once you on this homepage of this uh
+[49:25 - 49:30] Google Cloud console here uh on the left
+[49:28 - 49:34] hand side you have to go to this API
+[49:30 - 49:36] service okay inside this API Service uh
+[49:34 - 49:39] you can enable the API service okay you
+[49:36 - 49:43] can just search the API like Google
+[49:39 - 49:45] place API right and uh once you are in
+[49:43 - 49:49] this Google Play API you have to enable
+[49:45 - 49:52] that API okay and you will find a bunch
+[49:49 - 49:54] of different type of API here okay so in
+[49:52 - 49:56] this case this place API and here you
+[49:54 - 49:59] will see this button kind of enable and
+[49:56 - 50:03] just click enable Okay after that uh
+[49:59 - 50:05] once again go back to this API service I
+[50:03 - 50:07] let me go back okay so once you are in
+[50:05 - 50:10] this API service section go to this key
+[50:07 - 50:12] and credentials and here you can create
+[50:10 - 50:15] a new credential that's all and you have
+[50:12 - 50:18] to say API key okay so I already have
+[50:15 - 50:20] this API key don't use mine okay and
+[50:18 - 50:22] just copy this API key from here you
+[50:20 - 50:24] have to fill some of the information and
+[50:22 - 50:25] then click next okay once you have this
+[50:24 - 50:28] API key
+[50:25 - 50:31] go back to your application and here you
+[50:28 - 50:35] have to create a new file okay so you
+[50:31 - 50:38] can say env. local okay inside that
+[50:35 - 50:42] enter your API key Google
+[50:38 - 50:46] place key I will say is equal to and
+[50:42 - 50:51] paste your API key okay that's all now
+[50:46 - 50:55] you have the uh API key uh ready okay
+[50:51 - 50:58] and uh now we need to create the next
+[50:55 - 51:02] API okay so in next 13 API uh we will
+[50:58 - 51:05] call that API in the API uh in API and
+[51:02 - 51:07] then you have to uh use that particular
+[51:05 - 51:11] API in our application okay but before
+[51:07 - 51:13] that now you have the API key okay let's
+[51:11 - 51:17] for now I will paste it here like this
+[51:13 - 51:20] okay and then go to this API Endo okay I
+[51:17 - 51:23] will copy this API Endo until this point
+[51:20 - 51:26] okay and I paste it here like this okay
+[51:23 - 51:29] so this is the simple API Point call
+[51:26 - 51:32] along with the API key and click enter
+[51:29 - 51:34] okay as soon as you click enter you will
+[51:32 - 51:36] find the result right if you see the
+[51:34 - 51:37] business status the address along with
+[51:36 - 51:39] this
+[51:37 - 51:42] location then you have the restaurant
+[51:39 - 51:45] name the opening hours the photo as well
+[51:42 - 51:48] okay the photo reference then it also
+[51:45 - 51:50] have the rating and lot of things okay
+[51:48 - 51:52] and it has a bunch of it's not only one
+[51:50 - 51:55] result but you will find around 20
+[51:52 - 51:57] result in one go okay so perfect it's
+[51:55 - 52:00] working perfectly fine our API inpoint
+[51:57 - 52:04] is working now the question is how to
+[52:00 - 52:06] call it in the next 13 application so if
+[52:04 - 52:10] you go to this routing okay uh routing
+[52:06 - 52:13] Handler and in uh next JS js13
+[52:10 - 52:16] documentation here you will find how to
+[52:13 - 52:17] add the API uh inside the next 13
+[52:16 - 52:19] application okay so inside the app
+[52:17 - 52:21] folder we have to create a new folder
+[52:19 - 52:24] called API and inside that we have to
+[52:21 - 52:26] create route. JS okay and it will create
+[52:24 - 52:28] a default rout obviously if you want
+[52:26 - 52:30] endpoint you have to give the folder
+[52:28 - 52:33] name and inste that you have to write
+[52:30 - 52:35] route. JS okay so obviously I will I
+[52:33 - 52:38] will uh teach you how to create it and
+[52:35 - 52:43] how to uh use this place API inside this
+[52:38 - 52:43] nextjs 13 API so that we can use in our
+[52:49 - 52:55] application now inside the API folder we
+[52:53 - 52:58] have to create a uh inside app folder we
+[52:55 - 53:01] had to create a new folder called API so
+[52:58 - 53:03] we'll call Api inside that I will create
+[53:01 - 53:06] a new again new folder okay and that
+[53:03 - 53:07] will be our API endpoint so I will call
+[53:06 - 53:12] it
+[53:07 - 53:16] Google place API okay and inside that we
+[53:12 - 53:18] have to create file called rot.js oh
+[53:16 - 53:21] sorry we can call TSX because this a
+[53:18 - 53:24] typescript okay so now this is our API
+[53:21 - 53:27] endpoint okay so first thing what you
+[53:24 - 53:32] have to do write constant okay and the
+[53:27 - 53:36] base URL for our API endpoint okay so in
+[53:32 - 53:39] this case is this one okay and of which
+[53:36 - 53:43] is nothing but the one which we copied
+[53:39 - 53:47] okay until this point question mark
+[53:43 - 53:51] okay then we have we need to get the
+[53:47 - 53:53] Google API key so I will write Google
+[53:51 - 53:59] t p is equal
+[53:53 - 54:02] to process Dov Dot and just copy this
+[53:59 - 54:09] name okay like
+[54:02 - 54:11] this next we have to write export a sync
+[54:09 - 54:15] function then we have to give name so in
+[54:11 - 54:18] this case it's a get request okay and
+[54:15 - 54:23] the request of type
+[54:18 - 54:27] any inside that we need to call the our
+[54:23 - 54:29] API in point okay and and we also get we
+[54:27 - 54:31] have to write return so return will be
+[54:29 - 54:34] in the form of next response and it is
+[54:31 - 54:36] importing from the next SL server okay
+[54:34 - 54:41] dot
+[54:36 - 54:41] Json and if I say like
+[54:41 - 54:48] data hi okay let's try to call this API
+[54:46 - 54:51] endpoint now okay this is simple API
+[54:48 - 54:54] endpoint rning High okay so let's go
+[54:51 - 54:59] back to our browser and here I will call
+[54:54 - 55:03] Local Host 3 3,000 SL API SL Google
+[54:59 - 55:06] place API and enter okay and if you see
+[55:03 - 55:09] we got the response as a data and high
+[55:06 - 55:12] okay it means our API endpoint is
+[55:09 - 55:15] created successfully and it's working
+[55:12 - 55:19] now we have to call the actual API so
+[55:15 - 55:24] constant result is equal to
+[55:19 - 55:27] await it will be a fet and inside this
+[55:24 - 55:32] fet we have to call the Endo so base
+[55:27 - 55:35] URL plus is equal to query
+[55:32 - 55:38] so this will be similar like this okay
+[55:35 - 55:41] query AP ke we just paste it here like
+[55:38 - 55:42] this
+[55:41 - 55:45] okay
+[55:42 - 55:48] plus it will be
+[55:45 - 55:51] colon and the API key is nothing but
+[55:48 - 55:54] this Google place key so I paste it here
+[55:51 - 55:57] like this okay
+[55:54 - 56:01] then uh you have to pass the header as
+[55:57 - 56:05] well just pass header here
+[56:01 - 56:06] comma erer okay
+[56:05 - 56:10] then
+[56:06 - 56:14] constant here we'll say uh response is
+[56:10 - 56:17] equal to a wait result.
+[56:14 - 56:20] Json okay so in inside this response
+[56:17 - 56:22] we'll get the result and I will just
+[56:20 - 56:26] write
+[56:22 - 56:28] the response here like this
+[56:26 - 56:31] okay perfect and let's test it out
+[56:28 - 56:33] obviously query is passing uh the the
+[56:31 - 56:37] hardcoded okay we will later on change
+[56:33 - 56:40] it but for now we'll keep it like this
+[56:37 - 56:43] okay and go back in our API endpoint
+[56:40 - 56:45] enter it and if you see we got the
+[56:43 - 56:48] result okay and this result nothing but
+[56:45 - 56:50] the restaurant in the Sydney okay so it
+[56:48 - 56:53] has address and everything see how
+[56:50 - 56:56] beautifully okay now obviously uh you
+[56:53 - 56:59] can pass the query here and then that
+[56:56 - 57:01] query you need to replace it with here
+[56:59 - 57:05] okay so it's very simple try it on your
+[57:01 - 57:07] own here we can say Q is equal to and
+[57:05 - 57:10] then you have to pass some value okay
+[57:07 - 57:13] here and this value we have to fetch it
+[57:10 - 57:16] here okay and then pass it inside this
+[57:13 - 57:17] query okay try it give the try and let
+[57:16 - 57:19] me know in the comment section if you
+[57:17 - 57:21] have question I will let you know and
+[57:19 - 57:24] obviously you can access my source code
+[57:21 - 57:27] as well now here you just need to write
+[57:24 - 57:30] this uh search param okay uh is equal to
+[57:27 - 57:33] new URL and from the request uh variable
+[57:30 - 57:36] you have to get the URL and then you
+[57:33 - 57:38] have to get the value whatever the uh
+[57:36 - 57:39] value you are passing to the field name
+[57:38 - 57:42] okay that field name you have to pass it
+[57:39 - 57:45] here and then save it in a one variable
+[57:42 - 57:48] or constant and then I add it pass it uh
+[57:45 - 57:50] it as a query okay now save this one and
+[57:48 - 57:54] let's go back and just type for example
+[57:50 - 57:55] question mark query is equal to hotels
+[57:54 - 57:59] in
+[57:55 - 58:01] New York and enter and if you see we got
+[57:59 - 58:04] the hotels in New York okay so this is
+[58:01 - 58:07] how simple it is only thing we have to
+[58:04 - 58:11] pass the uh API endpoint with the query
+[58:07 - 58:14] and then we'll get the result now next
+[58:11 - 58:17] we are going to use this uh nextjs API
+[58:14 - 58:19] inside our application to call this
+[58:17 - 58:22] place API endpoint okay that's what we
+[58:19 - 58:22] are looking
+[58:23 - 58:26] now
+[58:26 - 58:33] now let's go back to our uh vs code okay
+[58:30 - 58:36] and inside here inside the components
+[58:33 - 58:41] we'll create a new component uh and we
+[58:36 - 58:44] can call a place list. TSX okay and add
+[58:41 - 58:47] the default template like this and save
+[58:44 - 58:51] it now import this place list inside the
+[58:47 - 58:54] page. txx after this hero okay so I will
+[58:51 - 58:55] paste it here like this and import this
+[58:54 - 58:57] place list
+[58:55 - 59:02] okay and save it now let's go back to
+[58:57 - 59:04] our application and uh okay and you see
+[59:02 - 59:07] the place list is showing
+[59:04 - 59:10] okay now once you add this place list
+[59:07 - 59:14] right uh couple of things uh we need to
+[59:10 - 59:17] take care of so first thing uh let's go
+[59:14 - 59:20] to the place list and here what I will
+[59:17 - 59:23] do sorry I will add the class name and I
+[59:20 - 59:25] will add the padding X to 10 pixel when
+[59:23 - 59:27] the screen size is smaller and when the
+[59:25 - 59:31] screen size is medium I will add the
+[59:27 - 59:35] padding X to 120 pixel okay and I will
+[59:31 - 59:39] give some margin from top to
+[59:35 - 59:43] seven and this will be Place list and I
+[59:39 - 59:46] will give the heading in S2 tag as a
+[59:43 - 59:46] search
+[59:48 - 59:56] result SS okay oop
+[59:53 - 59:56] sorry
+[59:57 - 01:00:03] result and I add the class name I will
+[01:00:00 - 01:00:07] add text of P
+[01:00:03 - 01:00:10] pixel and then font to be Bol okay and
+[01:00:07 - 01:00:12] save everything okay and if you see the
+[01:00:10 - 01:00:16] search result is showing on the screen
+[01:00:12 - 01:00:19] now perfect now here what we need to do
+[01:00:16 - 01:00:23] first of all let's F the response F the
+[01:00:19 - 01:00:27] API right so we'll f it in page. TSX
+[01:00:23 - 01:00:31] Okay so so let's go to the page. TSX and
+[01:00:27 - 01:00:35] here I will make one me function called
+[01:00:31 - 01:00:38] so we let's say Conant gate Place list
+[01:00:35 - 01:00:43] is equal to it will be a
+[01:00:38 - 01:00:48] sync like this okay now constant result
+[01:00:43 - 01:00:51] is equal to await fet and obviously we
+[01:00:48 - 01:00:56] need to fetch it from our local so you
+[01:00:51 - 01:01:00] need just need to uh add slash API SL
+[01:00:56 - 01:01:03] Google place API this is our end point
+[01:01:00 - 01:01:06] right question mark query you need to
+[01:01:03 - 01:01:08] pass is equal to so for now I will pass
+[01:01:06 - 01:01:13] it as a hot
+[01:01:08 - 01:01:17] Tails we pass uh the dumy one so hotels
+[01:01:13 - 01:01:22] in New York like this
+[01:01:17 - 01:01:28] okay and after this one we need to get
+[01:01:22 - 01:01:31] constant data is equal to await
+[01:01:28 - 01:01:33] result.
+[01:01:31 - 01:01:36] Json like
+[01:01:33 - 01:01:38] this now we'll console this result so
+[01:01:36 - 01:01:42] console this data whatever data we are
+[01:01:38 - 01:01:44] getting we'll see and obviously our this
+[01:01:42 - 01:01:47] function is ready but we need to call it
+[01:01:44 - 01:01:49] right so in order to call it we are
+[01:01:47 - 01:01:51] using this use effect in buil Hook if
+[01:01:49 - 01:01:54] you don't know about the use effect
+[01:01:51 - 01:01:57] right so let me explain so this use
+[01:01:54 - 01:02:00] effect is the react hook okay and it
+[01:01:57 - 01:02:01] will execute for each instance okay
+[01:02:00 - 01:02:04] whenever the application is load it it
+[01:02:01 - 01:02:08] will execute uh in infinite time okay if
+[01:02:04 - 01:02:10] you define like this okay but once we uh
+[01:02:08 - 01:02:12] load this component we only want to
+[01:02:10 - 01:02:15] execute only once so in order to do that
+[01:02:12 - 01:02:17] you need to Pro write this use effect
+[01:02:15 - 01:02:19] and here you have to pass the empty
+[01:02:17 - 01:02:22] array like this okay so it will execute
+[01:02:19 - 01:02:24] only once if you want to execute uh
+[01:02:22 - 01:02:27] whenever the some variable change that
+[01:02:24 - 01:02:28] variable name x y z whatever variable
+[01:02:27 - 01:02:32] name is here you have to provide like
+[01:02:28 - 01:02:35] this okay so we'll see uh next but right
+[01:02:32 - 01:02:37] now we only want to execute only once
+[01:02:35 - 01:02:40] okay and now you can call this get Place
+[01:02:37 - 01:02:43] list here so whenever the this component
+[01:02:40 - 01:02:46] load this us will get load and this get
+[01:02:43 - 01:02:49] Place list will get called now save
+[01:02:46 - 01:02:52] everything open the inspect panel okay
+[01:02:49 - 01:02:56] go to the console clean everything and
+[01:02:52 - 01:02:58] refresh the screen let's see
+[01:02:56 - 01:03:01] okay so why it's taking time let me
+[01:02:58 - 01:03:03] check everything's good
+[01:03:01 - 01:03:05] right
+[01:03:03 - 01:03:08] yeah so right now if you see right we
+[01:03:05 - 01:03:12] got one error that near this use effect
+[01:03:08 - 01:03:14] right so this error saying that right uh
+[01:03:12 - 01:03:16] you are trying to access this use effect
+[01:03:14 - 01:03:19] which is the client side but our
+[01:03:16 - 01:03:21] component is acting as a server site so
+[01:03:19 - 01:03:23] here you have to mark it as a use client
+[01:03:21 - 01:03:26] you have to write like this use client
+[01:03:23 - 01:03:28] you it it means means we are telling to
+[01:03:26 - 01:03:30] the application this particular page
+[01:03:28 - 01:03:32] need to execute on the client side
+[01:03:30 - 01:03:35] that's the reason we write use client
+[01:03:32 - 01:03:38] now and if you see we got the response
+[01:03:35 - 01:03:41] okay and inside the response we have
+[01:03:38 - 01:03:44] this results okay object and inside that
+[01:03:41 - 01:03:47] we have the list of all the places okay
+[01:03:44 - 01:03:51] so in order to access this result we can
+[01:03:47 - 01:03:55] just write uh data do response do
+[01:03:51 - 01:03:59] results okay and now we will only get
+[01:03:55 - 01:04:02] the uh the expected result see the 20
+[01:03:59 - 01:04:05] Place list is showing on the screen okay
+[01:04:02 - 01:04:08] I hope you understand this one now we
+[01:04:05 - 01:04:10] need to save it in one state so that we
+[01:04:08 - 01:04:13] can pass it into the place list right so
+[01:04:10 - 01:04:18] here Define a state constant uh we'll
+[01:04:13 - 01:04:20] say Place list comma set Place list is
+[01:04:18 - 01:04:23] equal to use State again use state is a
+[01:04:20 - 01:04:26] react in built hook and which use to
+[01:04:23 - 01:04:28] hold the value okay so this place list
+[01:04:26 - 01:04:30] will hold the value and set Place list
+[01:04:28 - 01:04:33] will set the value for this place list
+[01:04:30 - 01:04:36] okay so initially I pass the empty array
+[01:04:33 - 01:04:39] and over here I will just set set Place
+[01:04:36 - 01:04:43] list and I will pass this value which we
+[01:04:39 - 01:04:46] required okay and now what I will do I
+[01:04:43 - 01:04:48] will say here if Place list is there
+[01:04:46 - 01:04:51] then only show this place list component
+[01:04:48 - 01:04:54] otherwise show nothing and so that I
+[01:04:51 - 01:04:58] will pass as a null and here just pass
+[01:04:54 - 01:05:00] the place list is equal to place list
+[01:04:58 - 01:05:02] okay like this now if you see we got the
+[01:05:00 - 01:05:04] error because inside the place list
+[01:05:02 - 01:05:07] component we don't have any props so you
+[01:05:04 - 01:05:11] can accept it as a props like this okay
+[01:05:07 - 01:05:14] and I will pass the type any now uh the
+[01:05:11 - 01:05:17] reason that I'm passing any because uh
+[01:05:14 - 01:05:21] if you see right this object list is too
+[01:05:17 - 01:05:23] big right and I don't want to put
+[01:05:21 - 01:05:25] everything in one an interface so that
+[01:05:23 - 01:05:28] is the reason I'm passing any so that
+[01:05:25 - 01:05:30] it's type object type of any and any
+[01:05:28 - 01:05:33] value can hold uh this place list can
+[01:05:30 - 01:05:36] hold okay perfect now we have the place
+[01:05:33 - 01:05:39] list here inside this uh Place list
+[01:05:36 - 01:05:43] component and the page. TXS are fing
+[01:05:39 - 01:05:44] this get Place list from the API Okay so
+[01:05:43 - 01:05:46] until this point if you have any
+[01:05:44 - 01:05:48] question let me know in the comment
+[01:05:46 - 01:05:50] section you can directly DM me on my
+[01:05:48 - 01:05:53] Instagram Channel and you can follow my
+[01:05:50 - 01:05:54] Instagram Channel there as well okay
+[01:05:53 - 01:05:59] next
+[01:05:54 - 01:06:01] we are going to uh implement or show the
+[01:05:59 - 01:06:04] uh show it on the UI the all the place
+[01:06:01 - 01:06:06] list which we faced okay and uh guys if
+[01:06:04 - 01:06:09] you did not subscribe to my Channel
+[01:06:06 - 01:06:11] please do subscribe and you can go to
+[01:06:09 - 01:06:13] this uh my channel and then you can find
+[01:06:11 - 01:06:16] a lot of different contents you can
+[01:06:13 - 01:06:19] learn a react njs and lot of different
+[01:06:16 - 01:06:22] things okay go ahead and watch it and
+[01:06:19 - 01:06:22] let's move
+[01:06:23 - 01:06:26] forward
+[01:06:27 - 01:06:34] now let's create the list uh of places
+[01:06:31 - 01:06:36] and display it on the UI screen okay so
+[01:06:34 - 01:06:38] first of all let's go to this components
+[01:06:36 - 01:06:41] and inside the place list uh we have
+[01:06:38 - 01:06:45] this place list right here below
+[01:06:41 - 01:06:49] that we will add the D tag okay inside
+[01:06:45 - 01:06:51] the DU tag I will add the place list
+[01:06:49 - 01:06:55] okay do map because we want to iterate
+[01:06:51 - 01:06:59] the list right inside that I will write
+[01:06:55 - 01:07:01] Place comma index okay I already
+[01:06:59 - 01:07:04] explained why we are using index okay so
+[01:07:01 - 01:07:07] index is nothing but the number 0 1 2 3
+[01:07:04 - 01:07:11] and here I type place of type
+[01:07:07 - 01:07:12] any and the in the tag okay let's define
+[01:07:11 - 01:07:16] One
+[01:07:12 - 01:07:18] D like this okay now let's make sure
+[01:07:16 - 01:07:21] that we are getting the list of places
+[01:07:18 - 01:07:23] okay so we will just write the list uh
+[01:07:21 - 01:07:25] the place name okay we will itate the
+[01:07:23 - 01:07:27] place name like this and save it now
+[01:07:25 - 01:07:30] let's go back to our
+[01:07:27 - 01:07:34] application okay it's close I don't know
+[01:07:30 - 01:07:36] okay and over here if you see we got the
+[01:07:34 - 01:07:40] place list okay and the name of the
+[01:07:36 - 01:07:43] places perfect it means our logic or our
+[01:07:40 - 01:07:45] Implement implementation is working we
+[01:07:43 - 01:07:48] are able to successfully iterate the
+[01:07:45 - 01:07:50] list of places okay now what I will do I
+[01:07:48 - 01:07:53] will create a new component for the
+[01:07:50 - 01:07:56] place item so I will call Place item. t
+[01:07:53 - 01:08:01] TSX or we can call place
+[01:07:56 - 01:08:04] card item card okay TSX add the default
+[01:08:01 - 01:08:07] template like this okay and here we will
+[01:08:04 - 01:08:10] iterate the place item card in this case
+[01:08:07 - 01:08:12] Okay so go to the place list and replace
+[01:08:10 - 01:08:16] this with the place item card import the
+[01:08:12 - 01:08:18] component and save everything okay now
+[01:08:16 - 01:08:21] we'll sa the place card a place item
+[01:08:18 - 01:08:24] card text only because right now we are
+[01:08:21 - 01:08:26] only displaying the place item card now
+[01:08:24 - 01:08:28] we need to pass the place information so
+[01:08:26 - 01:08:31] I will pass it as like this place so
+[01:08:28 - 01:08:33] this place we need to pass it here and
+[01:08:31 - 01:08:36] make sure we you will accept it as a
+[01:08:33 - 01:08:39] prop here okay is of type any okay now
+[01:08:36 - 01:08:42] we have the place here and save
+[01:08:39 - 01:08:44] everything now I already coded uh write
+[01:08:42 - 01:08:48] the code for this particular card right
+[01:08:44 - 01:08:52] I will just copy paste it here
+[01:08:48 - 01:08:54] so I'll paste it here like this okay and
+[01:08:52 - 01:08:56] make sure to import this image so I will
+[01:08:54 - 01:08:58] import the image and only thing that I
+[01:08:56 - 01:09:01] did it here right I add did this
+[01:08:58 - 01:09:02] placeholder for now okay the blank image
+[01:09:01 - 01:09:07] I will import this placeholder in public
+[01:09:02 - 01:09:10] folder as well and uh
+[01:09:07 - 01:09:13] also uh I'm adding this where is these
+[01:09:10 - 01:09:16] things okay so I adding this address the
+[01:09:13 - 01:09:19] place. formatted address then the name
+[01:09:16 - 01:09:21] the rating and everything okay see place
+[01:09:19 - 01:09:24] name and everything is there only thing
+[01:09:21 - 01:09:27] we need to add is the
+[01:09:24 - 01:09:29] image okay so inside the public
+[01:09:27 - 01:09:31] folder we need to add the placeholder
+[01:09:29 - 01:09:34] image okay so
+[01:09:31 - 01:09:36] just placeholder image I will find it
+[01:09:34 - 01:09:37] here like this go to the image select
+[01:09:36 - 01:09:41] any
+[01:09:37 - 01:09:46] images which you want to add so let's
+[01:09:41 - 01:09:49] save image ads and save it okay I will
+[01:09:46 - 01:09:49] just copy this
+[01:09:49 - 01:09:55] image and inside
+[01:09:52 - 01:09:57] this
+[01:09:55 - 01:10:01] I'll paste it here okay and I will
+[01:09:57 - 01:10:04] rename this one as a placeholder
+[01:10:01 - 01:10:07] Place holder okay
+[01:10:04 - 01:10:09] perfect and save everything now let's go
+[01:10:07 - 01:10:09] back to our
+[01:10:10 - 01:10:16] application okay so right now I don't
+[01:10:13 - 01:10:20] know placeholder is not showing as
+[01:10:16 - 01:10:24] expected let's see placeholder.jpg
+[01:10:20 - 01:10:24] right okay it's a JPG only so let's name
+[01:10:24 - 01:10:29] that
+[01:10:24 - 01:10:31] one and save it okay now you see we got
+[01:10:29 - 01:10:34] this card but this card too big and it's
+[01:10:31 - 01:10:39] not structu right so in order to fix
+[01:10:34 - 01:10:42] this right what you need to do uh you
+[01:10:39 - 01:10:45] need to apply the grid okay so that it
+[01:10:42 - 01:10:47] will uh reflect the change okay so first
+[01:10:45 - 01:10:50] of all let's go to the place list and
+[01:10:47 - 01:10:54] inside this de let's say class name okay
+[01:10:50 - 01:10:56] so here uh you have to mention it as a
+[01:10:54 - 01:10:59] uh grid okay first okay sorry first of
+[01:10:56 - 01:11:02] all you have to add it as a grid then
+[01:10:59 - 01:11:05] when the screen size is smaller you can
+[01:11:02 - 01:11:07] make the grid you will only show the two
+[01:11:05 - 01:11:12] columns okay when the grid size is
+[01:11:07 - 01:11:14] medium or larger you can make grid
+[01:11:12 - 01:11:16] sorry medium when the screen size is
+[01:11:14 - 01:11:19] medium you can show grid column to be
+[01:11:16 - 01:11:23] maybe three okay and when the screen
+[01:11:19 - 01:11:26] size is larger you can say grid calls
+[01:11:23 - 01:11:29] four okay and save everything now let's
+[01:11:26 - 01:11:31] test it out and if you see right now
+[01:11:29 - 01:11:34] screen size is larger it's showing four
+[01:11:31 - 01:11:36] column okay let's go to inspect panel
+[01:11:34 - 01:11:38] when the screen is smaller is showing
+[01:11:36 - 01:11:43] three and when it's smaller is two a
+[01:11:38 - 01:11:46] medium for three and large is four okay
+[01:11:43 - 01:11:50] now let's apply some styling so let
+[01:11:46 - 01:11:52] me uh bring this down like this and now
+[01:11:50 - 01:11:54] here you can give some Gap okay so I
+[01:11:52 - 01:11:57] will say give Gap of
+[01:11:54 - 01:12:01] five let's see now see the gap of five
+[01:11:57 - 01:12:04] is added now also for this placeholder
+[01:12:01 - 01:12:07] right we add for this item card we'll
+[01:12:04 - 01:12:09] add the height so we'll add the height
+[01:12:07 - 01:12:13] of 100 pixel
+[01:12:09 - 01:12:14] maybe okay like this see we can add more
+[01:12:13 - 01:12:17] 150
+[01:12:14 - 01:12:22] pixel okay maybe this is
+[01:12:17 - 01:12:25] okay and also we want to uh it's right
+[01:12:22 - 01:12:29] now if you see right image stretch so
+[01:12:25 - 01:12:32] just say object cover and then it will
+[01:12:29 - 01:12:37] completely fill this particular area
+[01:12:32 - 01:12:42] okay also make this uh
+[01:12:37 - 01:12:46] particular uh Place list du to be maybe
+[01:12:42 - 01:12:50] we can apply J index here only okay so J
+[01:12:46 - 01:12:50] to 10 let's see how it
+[01:12:50 - 01:12:56] looks last name Z index because right
+[01:12:54 - 01:12:58] now we added this image absolute right
+[01:12:56 - 01:13:01] that's the reason we need to give and if
+[01:12:58 - 01:13:05] you see it's work okay also this place
+[01:13:01 - 01:13:07] item card okay we have this image
+[01:13:05 - 01:13:10] correct and
+[01:13:07 - 01:13:12] uh we added the rounded Excel I don't
+[01:13:10 - 01:13:14] know why it's not
+[01:13:12 - 01:13:17] applied okay so what you can do you can
+[01:13:14 - 01:13:21] apply this rounded corner to image as
+[01:13:17 - 01:13:21] well so here you can say
+[01:13:22 - 01:13:26] rounded top
+[01:13:24 - 01:13:30] uh maybe Excel right and save it and if
+[01:13:26 - 01:13:34] you see for Excel uh the top corner is
+[01:13:30 - 01:13:36] rounded okay perfect and how beautifully
+[01:13:34 - 01:13:37] it's showing okay now if I decrease the
+[01:13:36 - 01:13:42] screen
+[01:13:37 - 01:13:44] size see is change the layout
+[01:13:42 - 01:13:49] immediately
+[01:13:44 - 01:13:51] okay perfect so uh until this point if
+[01:13:49 - 01:13:53] you have any question any doubt let me
+[01:13:51 - 01:13:55] know in the comment section now you you
+[01:13:53 - 01:13:59] can add more field okay because if you
+[01:13:55 - 01:14:02] go to our uh response right we have lot
+[01:13:59 - 01:14:03] of different field okay okay right now
+[01:14:02 - 01:14:07] if you see we have this error but we'll
+[01:14:03 - 01:14:09] Sol in a moment U moment but here if you
+[01:14:07 - 01:14:11] see right we have the business status
+[01:14:09 - 01:14:15] which is oper operational or not we have
+[01:14:11 - 01:14:18] the photo in a in the next uh section we
+[01:14:15 - 01:14:21] will cover this one as well and also we
+[01:14:18 - 01:14:22] have the types we have the ratings so
+[01:14:21 - 01:14:25] all of these things are there you can
+[01:14:22 - 01:14:30] use it here to display it on the UI as
+[01:14:25 - 01:14:32] well okay so now another thing right uh
+[01:14:30 - 01:14:34] that we have this error this error is
+[01:14:32 - 01:14:37] because it's saying that each child in
+[01:14:34 - 01:14:40] the list should have the unique key prop
+[01:14:37 - 01:14:42] okay so inside the place list right
+[01:14:40 - 01:14:45] inside this du we need to provide the
+[01:14:42 - 01:14:47] key props and that's the reason we added
+[01:14:45 - 01:14:50] this index so obviously index is unique
+[01:14:47 - 01:14:52] and that's it is showing here now clean
+[01:14:50 - 01:14:55] everything refresh the screen and make
+[01:14:52 - 01:14:59] sure that error is no longer there see
+[01:14:55 - 01:15:00] okay perfect so guys until this point if
+[01:14:59 - 01:15:03] you have any question let me know in the
+[01:15:00 - 01:15:05] comment section now you can go ahead and
+[01:15:03 - 01:15:07] do some uh styling to this one okay so
+[01:15:05 - 01:15:10] it look more beautiful it is look
+[01:15:07 - 01:15:12] beautiful as right now as well but yeah
+[01:15:10 - 01:15:15] you can try it on your own you can add
+[01:15:12 - 01:15:17] the custom tailin CSS classes and it's
+[01:15:15 - 01:15:21] up to you how you want to show it on the
+[01:15:17 - 01:15:21] UI okay
+[01:15:22 - 01:15:25] perfect
+[01:15:25 - 01:15:30] so now we need to show the actual place
+[01:15:29 - 01:15:33] image here right right now we are
+[01:15:30 - 01:15:35] showing the uh placeholder but we need
+[01:15:33 - 01:15:38] to replace it with the actual image okay
+[01:15:35 - 01:15:40] and uh if you see the response right
+[01:15:38 - 01:15:43] let's go to the inspect panel and let's
+[01:15:40 - 01:15:45] see the response inside this response
+[01:15:43 - 01:15:47] right we have this photos object and
+[01:15:45 - 01:15:49] inside that the first element we have
+[01:15:47 - 01:15:52] this photo reference and if you see we
+[01:15:49 - 01:15:54] don't have any URL in order to show the
+[01:15:52 - 01:15:58] image right so with the help of this
+[01:15:54 - 01:16:00] photo reference we need to fet the photo
+[01:15:58 - 01:16:03] for this place okay and for that one the
+[01:16:00 - 01:16:06] Google is providing another API called
+[01:16:03 - 01:16:10] Place photos okay and if you scroll down
+[01:16:06 - 01:16:14] right here is the example in order to F
+[01:16:10 - 01:16:16] the photo so this is the part particular
+[01:16:14 - 01:16:18] end point and this is the photo
+[01:16:16 - 01:16:20] reference and the this photo reference
+[01:16:18 - 01:16:22] we here we need to pass it to this photo
+[01:16:20 - 01:16:25] reference variable okay so if you see
+[01:16:22 - 01:16:29] this photo reference we need to pass and
+[01:16:25 - 01:16:32] then the last is API key okay so first
+[01:16:29 - 01:16:35] of all uh let's copy this end point okay
+[01:16:32 - 01:16:38] I will copy this one and let's go back
+[01:16:35 - 01:16:40] to our application so here right I
+[01:16:38 - 01:16:43] already defined this base URL photo see
+[01:16:40 - 01:16:46] okay so this base URL nothing but the
+[01:16:43 - 01:16:48] one one which we copied and then inside
+[01:16:46 - 01:16:50] this Source I will remove this one
+[01:16:48 - 01:16:52] because this is the dynamic one we have
+[01:16:50 - 01:16:55] to write in a curly braces so first
+[01:16:52 - 01:16:58] thing we have to write base URL
+[01:16:55 - 01:17:01] photo then we have to add the next thing
+[01:16:58 - 01:17:05] is this photo reference is equal to okay
+[01:17:01 - 01:17:08] so photo reference is equal to and we
+[01:17:05 - 01:17:09] need to add this photo reference uh this
+[01:17:08 - 01:17:12] particular photo reference so it is in
+[01:17:09 - 01:17:16] the photos okay and this photo reference
+[01:17:12 - 01:17:22] so we have to write let me bring this
+[01:17:16 - 01:17:26] down so Place question mark photos of
+[01:17:22 - 01:17:28] zero Dot and we have photo reference so
+[01:17:26 - 01:17:30] photo reference like this okay I'm
+[01:17:28 - 01:17:32] giving the question mark because if it's
+[01:17:30 - 01:17:35] not there it will not throw any error
+[01:17:32 - 01:17:39] okay next we have to
+[01:17:35 - 01:17:41] add the uh key right so this is the
+[01:17:39 - 01:17:46] sorry this is the key we need to add so
+[01:17:41 - 01:17:49] add key is equal to add key is equal to
+[01:17:46 - 01:17:52] okay so this need to be in the curly
+[01:17:49 - 01:17:53] Braes code and here we are going to
+[01:17:52 - 01:17:56] provide the process
+[01:17:53 - 01:17:58] EnV right and now in this case right
+[01:17:56 - 01:18:02] because we are accessing the API on the
+[01:17:58 - 01:18:06] client side right we need to write API
+[01:18:02 - 01:18:10] key like this next public and this name
+[01:18:06 - 01:18:13] of the key okay and is equal to this
+[01:18:10 - 01:18:15] particular API key okay because we are
+[01:18:13 - 01:18:16] accessing this API key on the client
+[01:18:15 - 01:18:20] side and that's the reason we have to
+[01:18:16 - 01:18:23] mark it AP as a public okay now let's
+[01:18:20 - 01:18:27] save this one and now here we need to
+[01:18:23 - 01:18:30] add this API ke as well okay and now
+[01:18:27 - 01:18:32] save everything let's go back to our
+[01:18:30 - 01:18:34] application and if you see we got one
+[01:18:32 - 01:18:37] error right this error is showing that
+[01:18:34 - 01:18:40] the host name maps. gooogle ai.com is
+[01:18:37 - 01:18:44] not configured under the images in your
+[01:18:40 - 01:18:48] next. config.js okay so whenever you are
+[01:18:44 - 01:18:51] trying to access uh any URL inside the
+[01:18:48 - 01:18:53] uh next config for the image you need to
+[01:18:51 - 01:18:55] uh configure the whole post name or a
+[01:18:53 - 01:18:58] domain name inside the next. config.js
+[01:18:55 - 01:19:01] okay this is for the security purpose so
+[01:18:58 - 01:19:02] let's go to this next. config.js and
+[01:19:01 - 01:19:04] inside this next config we have to write
+[01:19:02 - 01:19:07] image
+[01:19:04 - 01:19:09] images inside this one we have to write
+[01:19:07 - 01:19:11] domains and here we need to give the
+[01:19:09 - 01:19:14] list of domain so in this case we have
+[01:19:11 - 01:19:16] to mark it we have to add this domain
+[01:19:14 - 01:19:18] okay if you have multiple domain just
+[01:19:16 - 01:19:21] give comma and add the remaining domain
+[01:19:18 - 01:19:23] okay so I saved this one obviously once
+[01:19:21 - 01:19:25] you save right you need to restart the
+[01:19:23 - 01:19:29] because you modified the configuration
+[01:19:25 - 01:19:33] file okay so I will write npm
+[01:19:29 - 01:19:35] R and our project is running let's uh
+[01:19:33 - 01:19:39] refresh the screen and just wait for a
+[01:19:35 - 01:19:39] few seconds to build the
+[01:19:40 - 01:19:47] application so okay so if you see our
+[01:19:43 - 01:19:50] application is builded and uh we see we
+[01:19:47 - 01:19:53] got the result as well okay so if you
+[01:19:50 - 01:19:56] see we have this all this information
+[01:19:53 - 01:19:59] with the image the place information and
+[01:19:56 - 01:20:01] everything okay and as I say this is
+[01:19:59 - 01:20:04] completely responsive okay if I decrease
+[01:20:01 - 01:20:06] the size see how beautifully it's
+[01:20:04 - 01:20:10] changing the layout along with this
+[01:20:06 - 01:20:14] category along with this uh list of
+[01:20:10 - 01:20:16] places as well okay so I hope you
+[01:20:14 - 01:20:19] understand how to use the Google Map
+[01:20:16 - 01:20:24] Place photo API uh in order to show the
+[01:20:19 - 01:20:24] image for each the place okay perfect
+[01:20:28 - 01:20:33] now on the click of this particular uh
+[01:20:32 - 01:20:37] place right we want to show the details
+[01:20:33 - 01:20:38] of the place so once we click on any of
+[01:20:37 - 01:20:41] these place right we are going to show
+[01:20:38 - 01:20:43] the drawer on the right hand side okay
+[01:20:41 - 01:20:45] so if I click any of this particular
+[01:20:43 - 01:20:47] place we are going to show drawer and on
+[01:20:45 - 01:20:51] that one we are showing the all the
+[01:20:47 - 01:20:53] place information okay so first of all
+[01:20:51 - 01:20:56] let's go back to our application
+[01:20:53 - 01:20:59] and in vs code and inside this component
+[01:20:56 - 01:21:01] folder we will create a new component
+[01:20:59 - 01:21:03] and we can call it as side
+[01:21:01 - 01:21:05] drawer.
+[01:21:03 - 01:21:08] PSX add the default
+[01:21:05 - 01:21:10] template and save it now make sure to
+[01:21:08 - 01:21:13] import this side drawer inside the place
+[01:21:10 - 01:21:15] list okay so go to the place list and
+[01:21:13 - 01:21:16] inside after this T right I will add
+[01:21:15 - 01:21:20] another
+[01:21:16 - 01:21:24] du and here I will add that side drawer
+[01:21:20 - 01:21:26] okay make sure to import it like this
+[01:21:24 - 01:21:30] and save it now if I go back to our
+[01:21:26 - 01:21:32] application and Let me refresh it okay
+[01:21:30 - 01:21:35] so if you see right here the side drawer
+[01:21:32 - 01:21:39] is coming the text side drawer is coming
+[01:21:35 - 01:21:41] okay perfect it means our um side draw
+[01:21:39 - 01:21:45] component is imported inside this place
+[01:21:41 - 01:21:47] list now the next part is to give the
+[01:21:45 - 01:21:51] width and height for the side drawer
+[01:21:47 - 01:21:53] okay so go to the side drawer and here I
+[01:21:51 - 01:21:57] add the class name inside that I will
+[01:21:53 - 01:22:01] add the height to the full screen of the
+[01:21:57 - 01:22:02] height right then uh WID will be the
+[01:22:01 - 01:22:04] screen when the screen size is smaller
+[01:22:02 - 01:22:06] okay note down this is very important
+[01:22:04 - 01:22:09] when the screen size is smaller we will
+[01:22:06 - 01:22:11] give WID to the full screen but if the
+[01:22:09 - 01:22:16] screen size is medium or larger will
+[01:22:11 - 01:22:20] give width of 400 pixel okay then I will
+[01:22:16 - 01:22:22] add the background to be white okay and
+[01:22:20 - 01:22:25] let's add some Shadow so I'll shadow
+[01:22:22 - 01:22:29] medium okay we'll add some padding of
+[01:22:25 - 01:22:31] five and J index to 20 okay and let's go
+[01:22:29 - 01:22:33] back to our application and if you see
+[01:22:31 - 01:22:35] the side drawer is coming but it's
+[01:22:33 - 01:22:37] coming below this place list right and
+[01:22:35 - 01:22:39] you want it on the right hand side so
+[01:22:37 - 01:22:42] what to make it that one right you have
+[01:22:39 - 01:22:44] two option you can make it absolute or
+[01:22:42 - 01:22:46] you can make uh sticky okay there is
+[01:22:44 - 01:22:49] some difference if you make the absolute
+[01:22:46 - 01:22:51] right it will at the top side only and
+[01:22:49 - 01:22:53] when you scroll you will not see that
+[01:22:51 - 01:22:56] one okay so make it as a stick
+[01:22:53 - 01:22:58] so let's go back here and make it sticky
+[01:22:56 - 01:23:02] and let's see how it looks
+[01:22:58 - 01:23:05] now so let me refresh the screen see
+[01:23:02 - 01:23:07] right now you don't see any change right
+[01:23:05 - 01:23:09] because even though you make sticky you
+[01:23:07 - 01:23:12] will not find any change here okay
+[01:23:09 - 01:23:15] because we also need to apply some
+[01:23:12 - 01:23:18] styling on the place list inside the
+[01:23:15 - 01:23:20] place list component as well okay so
+[01:23:18 - 01:23:24] let's go back to our place list so what
+[01:23:20 - 01:23:26] we'll do
+[01:23:24 - 01:23:29] let's go back to the place list and
+[01:23:26 - 01:23:31] inside this de right here uh we need to
+[01:23:29 - 01:23:36] apply some classes okay so add class
+[01:23:31 - 01:23:39] name and uh here we can make fix then we
+[01:23:36 - 01:23:42] want at the top of zero and let's see
+[01:23:39 - 01:23:47] how it looks see it's coming at the top
+[01:23:42 - 01:23:50] right then we need to make it right to z
+[01:23:47 - 01:23:53] and j to 20 okay so J index to 20 and if
+[01:23:50 - 01:23:57] you see even though if I scroll
+[01:23:53 - 01:23:59] doesn't it it does not change okay uh in
+[01:23:57 - 01:24:02] side drawer I don't think so we need
+[01:23:59 - 01:24:04] sticky let's see how it looks okay yeah
+[01:24:02 - 01:24:07] you can remove the stick option okay
+[01:24:04 - 01:24:10] perfect now our side draw is showing but
+[01:24:07 - 01:24:12] if I decrease the screen size right see
+[01:24:10 - 01:24:15] if I make the screen size smaller you'll
+[01:24:12 - 01:24:18] see it is it's in the full screen okay
+[01:24:15 - 01:24:20] if I go to the mobile view see it's it's
+[01:24:18 - 01:24:22] will be a full screen this this is the
+[01:24:20 - 01:24:24] padding that there is and it's showing
+[01:24:22 - 01:24:26] like this but this this is how it looks
+[01:24:24 - 01:24:28] okay
+[01:24:26 - 01:24:31] perfect now
+[01:24:28 - 01:24:34] next uh what we will do we will add
+[01:24:31 - 01:24:36] toggle okay so only one only when we
+[01:24:34 - 01:24:40] click on this particular place list we
+[01:24:36 - 01:24:42] want to open this drawer okay so what I
+[01:24:40 - 01:24:45] will do first of all uh let's go back to
+[01:24:42 - 01:24:48] our place list and inside here for on
+[01:24:45 - 01:24:50] this uh de right we'll add the on click
+[01:24:48 - 01:24:53] method like this
+[01:24:50 - 01:24:55] okay and before that let me make one
+[01:24:53 - 01:24:59] state so
+[01:24:55 - 01:25:03] constant we'll say we'll set set uh
+[01:24:59 - 01:25:05] sorry selected place okay this will hold
+[01:25:03 - 01:25:08] the place which we
+[01:25:05 - 01:25:08] selected
+[01:25:08 - 01:25:14] selected place is equal to use State
+[01:25:11 - 01:25:17] okay and the value is empty initially
+[01:25:14 - 01:25:20] and when you click on the place right
+[01:25:17 - 01:25:22] inside this on click method we will add
+[01:25:20 - 01:25:24] set selected place and we'll pass the
+[01:25:22 - 01:25:26] place place value okay only one place
+[01:25:24 - 01:25:28] information will store in this selected
+[01:25:26 - 01:25:31] Place uh
+[01:25:28 - 01:25:34] state next uh once we have this one
+[01:25:31 - 01:25:37] right we can only show this drawer when
+[01:25:34 - 01:25:40] the selected place has some information
+[01:25:37 - 01:25:43] so I will give name like this okay and
+[01:25:40 - 01:25:46] otherwise don't show this drawer now if
+[01:25:43 - 01:25:48] you see you got the error because this
+[01:25:46 - 01:25:50] stage is of type is the type is
+[01:25:48 - 01:25:52] undefined right so you can Define the
+[01:25:50 - 01:25:55] type the specific type by using the
+[01:25:52 - 01:25:59] interface but for now I'm showing it as
+[01:25:55 - 01:26:01] a type of any okay now many people will
+[01:25:59 - 01:26:03] say why we are using every any right
+[01:26:01 - 01:26:07] because uh for the Simplicity purpose
+[01:26:03 - 01:26:09] right if I Define the interface with
+[01:26:07 - 01:26:12] the like this right and you have to
+[01:26:09 - 01:26:14] define a lot of different uh Fields okay
+[01:26:12 - 01:26:16] it's very time consuming you can do it
+[01:26:14 - 01:26:19] on your own but for now for the simp
+[01:26:16 - 01:26:22] Simplicity purpose and as your beginner
+[01:26:19 - 01:26:26] I will likely using any okay and if you
+[01:26:22 - 01:26:29] see now this error is gone okay now if I
+[01:26:26 - 01:26:31] save it and let's go back to application
+[01:26:29 - 01:26:33] right let me close this one if I click
+[01:26:31 - 01:26:36] this see the side draw is coming but how
+[01:26:33 - 01:26:39] to close it now all right so on and this
+[01:26:36 - 01:26:41] one we are we will add the close button
+[01:26:39 - 01:26:44] okay so let's go
+[01:26:41 - 01:26:46] back let's go back to our application in
+[01:26:44 - 01:26:49] the side drawer We'll add the close
+[01:26:46 - 01:26:51] button okay so what I will do for now I
+[01:26:49 - 01:26:54] will add one button let's call it as a
+[01:26:51 - 01:26:55] close okay and on this button I will add
+[01:26:54 - 01:26:58] on click
+[01:26:55 - 01:27:03] method like this okay and we'll
+[01:26:58 - 01:27:05] say uh we just call close okay and this
+[01:27:03 - 01:27:07] close method we have to pass it here
+[01:27:05 - 01:27:11] like this as of type any I will put
+[01:27:07 - 01:27:13] it and obviously this is the p uh child
+[01:27:11 - 01:27:14] component then obviously this close we
+[01:27:13 - 01:27:18] need to pass it to the place list right
+[01:27:14 - 01:27:19] so here like this you can say close and
+[01:27:18 - 01:27:21] inside
+[01:27:19 - 01:27:25] here what we will do once the close
+[01:27:21 - 01:27:28] method of button get click this close
+[01:27:25 - 01:27:31] will get call inside this place list and
+[01:27:28 - 01:27:34] then here we'll set we will set the
+[01:27:31 - 01:27:36] selected place value to empty obviously
+[01:27:34 - 01:27:38] if it's empty then this method will get
+[01:27:36 - 01:27:41] false and this draw will get closed
+[01:27:38 - 01:27:42] automatically okay let's save this save
+[01:27:41 - 01:27:45] everything let's go back to our
+[01:27:42 - 01:27:47] application if I close it see it's Clos
+[01:27:45 - 01:27:50] if I open anything right see the D is
+[01:27:47 - 01:27:54] open if I click close the D is closed
+[01:27:50 - 01:27:57] see how beautifully is changing okay
+[01:27:54 - 01:28:00] perfect so this is how it works uh if
+[01:27:57 - 01:28:02] you have any question any doubt let me
+[01:28:00 - 01:28:06] know in the comment
+[01:28:02 - 01:28:09] section now once we have this uh drawer
+[01:28:06 - 01:28:10] ready right let's display some data
+[01:28:09 - 01:28:13] right so first of all I will replace
+[01:28:10 - 01:28:15] this close button to this some icon okay
+[01:28:13 - 01:28:19] so just type close and this icon I will
+[01:28:15 - 01:28:23] use okay and copy this copy this jsx go
+[01:28:19 - 01:28:26] to your uh side drawer and instead of
+[01:28:23 - 01:28:29] close I will add this SVG icon okay for
+[01:28:26 - 01:28:31] a close button and save it and let's see
+[01:28:29 - 01:28:33] how it looks so let's go back to our
+[01:28:31 - 01:28:35] application and you see I can able to
+[01:28:33 - 01:28:39] close it now with the
+[01:28:35 - 01:28:42] icon next we will add uh display some
+[01:28:39 - 01:28:44] data right so for that one we have to
+[01:28:42 - 01:28:47] make sure that we'll pass the place
+[01:28:44 - 01:28:49] information to this side drawer okay so
+[01:28:47 - 01:28:52] what I will do I will pass the prop as a
+[01:28:49 - 01:28:54] place and here I will will pass the
+[01:28:52 - 01:28:56] selected place because in selected place
+[01:28:54 - 01:28:59] we have the selected Place information
+[01:28:56 - 01:29:01] okay and inside the side drawer after
+[01:28:59 - 01:29:04] this maybe before this close I will add
+[01:29:01 - 01:29:07] the place okay and is of type any that's
+[01:29:04 - 01:29:10] fine now we have the place information
+[01:29:07 - 01:29:14] okay ready and save everything now let's
+[01:29:10 - 01:29:17] display the one by one uh component okay
+[01:29:14 - 01:29:20] not component but one by one uh the name
+[01:29:17 - 01:29:22] and everything so inside one view I will
+[01:29:20 - 01:29:25] add the
+[01:29:22 - 01:29:27] uh h2 tag okay so I will just copy paste
+[01:29:25 - 01:29:30] it because I already have so first of
+[01:29:27 - 01:29:32] all I'm displaying place. name okay so
+[01:29:30 - 01:29:35] it will show the place name let me bring
+[01:29:32 - 01:29:38] this down okay and I applied some
+[01:29:35 - 01:29:41] styling as well okay so if you go back
+[01:29:38 - 01:29:44] we see the place name is showing okay
+[01:29:41 - 01:29:47] then we'll show the image okay so for
+[01:29:44 - 01:29:49] image uh first of all obviously if you
+[01:29:47 - 01:29:53] remember right inside the place item
+[01:29:49 - 01:29:55] card we Define this base URL and this
+[01:29:53 - 01:29:57] particular uh image and everything right
+[01:29:55 - 01:29:59] so similar kind of thing we are doing
+[01:29:57 - 01:30:03] here so first of all I will Define the
+[01:29:59 - 01:30:05] base URL and then I will Define the
+[01:30:03 - 01:30:09] image okay so I already have I will just
+[01:30:05 - 01:30:12] copy it here so after this h2 tag I will
+[01:30:09 - 01:30:17] add this image okay and make sure to
+[01:30:12 - 01:30:21] import this image from the next SL image
+[01:30:17 - 01:30:23] okay let me bring this P one one line
+[01:30:21 - 01:30:26] and save it and if you go back here so
+[01:30:23 - 01:30:27] right now we got one error we'll see
+[01:30:26 - 01:30:31] what's the error
+[01:30:27 - 01:30:33] here so we have the image we have the
+[01:30:31 - 01:30:37] photo base photo URL here okay let's
+[01:30:33 - 01:30:40] make sure yes and then we are bringing
+[01:30:37 - 01:30:42] the photo reference right look like
+[01:30:40 - 01:30:44] everything's
+[01:30:42 - 01:30:46] correct okay so API key need to be I
+[01:30:44 - 01:30:49] think the name is little different let
+[01:30:46 - 01:30:49] me check
+[01:30:50 - 01:30:57] okay and save it now and let's see see
+[01:30:54 - 01:31:00] the image is showing on the screen okay
+[01:30:57 - 01:31:02] perfect now obviously um if you think
+[01:31:00 - 01:31:04] okay this is too big you can decrease
+[01:31:02 - 01:31:07] the size so what I will do I will change
+[01:31:04 - 01:31:09] this to maybe 20
+[01:31:07 - 01:31:14] pixel let
+[01:31:09 - 01:31:14] me and then I will make the height
+[01:31:14 - 01:31:17] to
+[01:31:18 - 01:31:22] 170 this I think this is much better
+[01:31:21 - 01:31:24] okay
+[01:31:22 - 01:31:27] after that we'll Define one du and
+[01:31:24 - 01:31:29] inside that I will add uh some other
+[01:31:27 - 01:31:33] information okay so first of all I will
+[01:31:29 - 01:31:36] add the formatted address and then other
+[01:31:33 - 01:31:38] details okay so let's
+[01:31:36 - 01:31:42] me put it
+[01:31:38 - 01:31:44] here like this
+[01:31:42 - 01:31:47] okay this in one
+[01:31:44 - 01:31:49] line and save it and let's see how it
+[01:31:47 - 01:31:52] looks see the address is coming okay
+[01:31:49 - 01:31:55] similar way I will add the the other a
+[01:31:52 - 01:31:57] few more details okay so I will add the
+[01:31:55 - 01:32:00] opening hours and
+[01:31:57 - 01:32:02] all I means the rating and all sorry
+[01:32:00 - 01:32:07] okay so maybe after this
+[01:32:02 - 01:32:12] de another de and see opening hours is
+[01:32:07 - 01:32:15] showing perfect then I will add the two
+[01:32:12 - 01:32:18] buttons okay so this button will act for
+[01:32:15 - 01:32:20] uh Direction and sharing the screen okay
+[01:32:18 - 01:32:21] so after this I will paste it here so
+[01:32:20 - 01:32:24] obviously if you have any question you
+[01:32:21 - 01:32:26] can just refer my uh source code okay uh
+[01:32:24 - 01:32:30] for the time being uh I'm just copy and
+[01:32:26 - 01:32:33] paste it's simple uh uh HTML tag with
+[01:32:30 - 01:32:35] some information okay and save it if you
+[01:32:33 - 01:32:40] see we got the button now what we need
+[01:32:35 - 01:32:43] to do we need to show the uh map okay
+[01:32:40 - 01:32:46] the location of the particular uh
+[01:32:43 - 01:32:48] selected Place below this one okay but
+[01:32:46 - 01:32:50] question is how to show it so again
+[01:32:48 - 01:32:53] Google Map is providing this embedded
+[01:32:50 - 01:32:55] API okay to show the Google Map on the
+[01:32:53 - 01:32:57] screen with the help of if frame okay if
+[01:32:55 - 01:33:01] you go to this official documentation of
+[01:32:57 - 01:33:04] the uh Maps embeded API here you'll see
+[01:33:01 - 01:33:06] the how it works okay so inside the
+[01:33:04 - 01:33:08] iframe you need to provide the source
+[01:33:06 - 01:33:11] okay and inside that you have to provide
+[01:33:08 - 01:33:13] the API key I will um in a moment I will
+[01:33:11 - 01:33:14] teach you how to do it and then query
+[01:33:13 - 01:33:16] inside query we will pass the actual
+[01:33:14 - 01:33:18] address because we already have address
+[01:33:16 - 01:33:21] and this is the result you will get it
+[01:33:18 - 01:33:23] okay so you can just say quick uh go to
+[01:33:21 - 01:33:26] quick start and here we'll find how to
+[01:33:23 - 01:33:30] do it okay so before that obviously we
+[01:33:26 - 01:33:33] need to go to the um Google Google Cloud
+[01:33:30 - 01:33:35] console okay so just
+[01:33:33 - 01:33:38] say project selector page so it will
+[01:33:35 - 01:33:42] jump to the Google Cloud console okay
+[01:33:38 - 01:33:45] and inside the app API admin right make
+[01:33:42 - 01:33:49] sure you have everything set up see here
+[01:33:45 - 01:33:52] right so here you have to search uh
+[01:33:49 - 01:33:55] embedded map okay something like this on
+[01:33:52 - 01:33:57] the search panel and then you will find
+[01:33:55 - 01:33:59] you you can scroll little bit down and
+[01:33:57 - 01:34:01] you will find this option called Maps
+[01:33:59 - 01:34:04] embedded API okay so make sure it's
+[01:34:01 - 01:34:06] enabled so right now is enabled for me
+[01:34:04 - 01:34:07] okay so you'll find the dis enable
+[01:34:06 - 01:34:10] button so click on it and it will be
+[01:34:07 - 01:34:14] enabled okay and once you enable with
+[01:34:10 - 01:34:18] the existing API uh the you can able to
+[01:34:14 - 01:34:20] use this Google Map API service okay so
+[01:34:18 - 01:34:23] it's quite simple again uh what you have
+[01:34:20 - 01:34:23] to do uh let's go back here and let me
+[01:34:23 - 01:34:27] go
+[01:34:23 - 01:34:31] back and you have to copy this I frame
+[01:34:27 - 01:34:32] okay sorry so you can copy this all of
+[01:34:31 - 01:34:35] this code
+[01:34:32 - 01:34:37] okay this is Javascript code but we are
+[01:34:35 - 01:34:39] using the react typescript so little bit
+[01:34:37 - 01:34:44] different but that's fine we will cover
+[01:34:39 - 01:34:46] it okay how to do it so here uh after
+[01:34:44 - 01:34:49] this
+[01:34:46 - 01:34:51] T we add this if frame okay so for the
+[01:34:49 - 01:34:53] if frame what I will do I will change
+[01:34:51 - 01:34:56] this little bit so I will be change
+[01:34:53 - 01:34:59] width height okay in the format like
+[01:34:56 - 01:35:01] this we don't want styling and all full
+[01:34:59 - 01:35:04] screen is not applicable and this one
+[01:35:01 - 01:35:07] also not applicable
+[01:35:04 - 01:35:10] okay obviously in the source right uh we
+[01:35:07 - 01:35:12] have to wrap it in a curly
+[01:35:10 - 01:35:15] braces and
+[01:35:12 - 01:35:19] then we need to replace this with the
+[01:35:15 - 01:35:22] apow okay so we have to add the
+[01:35:19 - 01:35:27] process. EnV
+[01:35:22 - 01:35:31] dot API name like this
+[01:35:27 - 01:35:35] okay then we have to add plus
+[01:35:31 - 01:35:38] colon like this okay and obviously we
+[01:35:35 - 01:35:38] need to replace
+[01:35:39 - 01:35:49] this so let me copy directly I
+[01:35:44 - 01:35:53] have with the actual formatted address
+[01:35:49 - 01:35:53] okay why getting err
+[01:35:55 - 01:36:00] okay okay so for this query we added
+[01:35:58 - 01:36:02] this formatted address and everything is
+[01:36:00 - 01:36:06] as it is let
+[01:36:02 - 01:36:09] me this one okay perfect now we have the
+[01:36:06 - 01:36:11] width height and everything now if I
+[01:36:09 - 01:36:14] save this one and let's go back to our
+[01:36:11 - 01:36:16] application okay you see the map is
+[01:36:14 - 01:36:18] showing but it's not formatted correctly
+[01:36:16 - 01:36:20] so what I will do I will add some class
+[01:36:18 - 01:36:21] name and here I will say width to be
+[01:36:20 - 01:36:25] full
+[01:36:21 - 01:36:25] height of 200 pixel and then I will make
+[01:36:25 - 01:36:29] the
+[01:36:25 - 01:36:31] rounded large okay the corner will be
+[01:36:29 - 01:36:33] rounded and if you see the corner is
+[01:36:31 - 01:36:36] rounded the height is perfectly matching
+[01:36:33 - 01:36:38] and everything okay so what I will I
+[01:36:36 - 01:36:39] will give also give some margin to top
+[01:36:38 - 01:36:42] for this
+[01:36:39 - 01:36:45] deal top to
+[01:36:42 - 01:36:47] five if you see the map is showing on
+[01:36:45 - 01:36:50] the screen if I change to some other
+[01:36:47 - 01:36:54] right if I go to Mana Time Square see
+[01:36:50 - 01:36:55] the map is changing immediately see so
+[01:36:54 - 01:36:58] beautifully right and you don't need to
+[01:36:55 - 01:37:02] do anything within some few uh click we
+[01:36:58 - 01:37:05] added this uh Google Map integration in
+[01:37:02 - 01:37:06] our app with the help of iframe embedded
+[01:37:05 - 01:37:10] Google Map
+[01:37:06 - 01:37:12] API perfect okay until this point if you
+[01:37:10 - 01:37:13] have any question any doubt let me know
+[01:37:12 - 01:37:17] in the comment
+[01:37:13 - 01:37:19] section now on the click of this uh
+[01:37:17 - 01:37:22] direction right we want to jump it on
+[01:37:19 - 01:37:26] the actual Google map with the direction
+[01:37:22 - 01:37:28] and all okay so for that one uh let's go
+[01:37:26 - 01:37:31] back to our Direction button okay so I
+[01:37:28 - 01:37:34] will just find it here Direction and
+[01:37:31 - 01:37:38] here I will write on click method okay
+[01:37:34 - 01:37:41] so here I will add the on click method
+[01:37:38 - 01:37:43] like this and we'll add method on
+[01:37:41 - 01:37:45] Direction click
+[01:37:43 - 01:37:49] method so we have to Define this on
+[01:37:45 - 01:37:53] Direction click method so here constant
+[01:37:49 - 01:37:53] I will add on Direction
+[01:37:53 - 01:38:01] click like this and here I will add the
+[01:37:57 - 01:38:04] window. open method okay with the URL
+[01:38:01 - 01:38:06] and inside the query I will pass the
+[01:38:04 - 01:38:08] place name so here I will pass the place
+[01:38:06 - 01:38:11] name the formatted address along with
+[01:38:08 - 01:38:14] that one okay and this is the uh Google
+[01:38:11 - 01:38:16] Maps search uh URL okay it's simple URL
+[01:38:14 - 01:38:18] you can just access from source code and
+[01:38:16 - 01:38:21] this is how it looks now save everything
+[01:38:18 - 01:38:24] let's go back to our application okay
+[01:38:21 - 01:38:26] refresh it once to make sure that
+[01:38:24 - 01:38:28] changes is U affected here okay and now
+[01:38:26 - 01:38:31] if I click on this one right you'll get
+[01:38:28 - 01:38:34] the beautiful view if I click on
+[01:38:31 - 01:38:37] direction see the Google Map is opening
+[01:38:34 - 01:38:40] with the name of this particular uh what
+[01:38:37 - 01:38:43] you say Google Map information the place
+[01:38:40 - 01:38:46] information and everything okay this is
+[01:38:43 - 01:38:49] how it works I hope you understand it
+[01:38:46 - 01:38:51] and uh simply way you just add this uh
+[01:38:49 - 01:38:55] open this particular Place information
+[01:38:51 - 01:38:55] on the Google Map
+[01:38:58 - 01:39:05] okay now we need to implement the search
+[01:39:02 - 01:39:07] functionality so that we can actually
+[01:39:05 - 01:39:09] pass whatever the user type inside this
+[01:39:07 - 01:39:11] search box and once user click on this
+[01:39:09 - 01:39:16] button search button we will get and
+[01:39:11 - 01:39:18] show the actual result okay so let's go
+[01:39:16 - 01:39:22] back to our application and inside this
+[01:39:18 - 01:39:24] page. txx right we have the hero uh
+[01:39:22 - 01:39:27] component right so inside the hero
+[01:39:24 - 01:39:30] component we have our search input uh
+[01:39:27 - 01:39:33] field right so inside this input field
+[01:39:30 - 01:39:36] whenever user type we need to accept it
+[01:39:33 - 01:39:40] okay so here what I will do I will add
+[01:39:36 - 01:39:43] the on change method okay so this on
+[01:39:40 - 01:39:45] change method will return the event okay
+[01:39:43 - 01:39:47] and let's console this event so in order
+[01:39:45 - 01:39:50] to get what the actual user return the
+[01:39:47 - 01:39:55] value right we have we can get it using
+[01:39:50 - 01:39:57] uh e which is event. target. value okay
+[01:39:55 - 01:40:00] and save it now let's go back to our
+[01:39:57 - 01:40:03] application open the inspect panel and
+[01:40:00 - 01:40:05] inside the console right when you you
+[01:40:03 - 01:40:06] type something right some for example
+[01:40:05 - 01:40:10] New York
+[01:40:06 - 01:40:13] C each for each uh uh key press right
+[01:40:10 - 01:40:15] you will see the event is occurred and
+[01:40:13 - 01:40:19] it's showing on the console okay so once
+[01:40:15 - 01:40:21] you type uh New York hotels write
+[01:40:19 - 01:40:23] something like this and click on this
+[01:40:21 - 01:40:26] button we need to make sure that this
+[01:40:23 - 01:40:29] particular text we will send back from
+[01:40:26 - 01:40:33] this hero txx file which is the child
+[01:40:29 - 01:40:35] component to this parent component okay
+[01:40:33 - 01:40:37] so first of all what we will do I will
+[01:40:35 - 01:40:42] Define one state called
+[01:40:37 - 01:40:46] constant search input comma set search
+[01:40:42 - 01:40:48] input is equal to use State okay is of
+[01:40:46 - 01:40:52] type
+[01:40:48 - 01:40:54] string like this okay Now search set
+[01:40:52 - 01:40:57] search input so here we'll change to set
+[01:40:54 - 01:40:59] search input like this okay now inside
+[01:40:57 - 01:41:02] the search input we have the value when
+[01:40:59 - 01:41:05] user entered right now on this button
+[01:41:02 - 01:41:09] click so what I will do bring this down
+[01:41:05 - 01:41:11] and here I will add on click method okay
+[01:41:09 - 01:41:15] so on the click of this one we'll some
+[01:41:11 - 01:41:20] set some value so I will just say um
+[01:41:15 - 01:41:23] user input okay user input and I will
+[01:41:20 - 01:41:25] pass this value which is search input
+[01:41:23 - 01:41:27] okay so in this we have search input and
+[01:41:25 - 01:41:29] this is the user input um method we we
+[01:41:27 - 01:41:31] are calling so obviously we need to
+[01:41:29 - 01:41:34] Define so I will copy this one and in
+[01:41:31 - 01:41:36] order to uh pass to the parent right
+[01:41:34 - 01:41:41] here we have to Define it as a props and
+[01:41:36 - 01:41:43] I will mark it as a type any okay see
+[01:41:41 - 01:41:46] now obviously save this one and go back
+[01:41:43 - 01:41:50] to page. TSX here you have to accept it
+[01:41:46 - 01:41:53] here user input okay now to test it out
+[01:41:50 - 01:41:55] right what we can
+[01:41:53 - 01:41:59] do we will say
+[01:41:55 - 01:42:01] value and just console this value
+[01:41:59 - 01:42:05] obviously this value is of type string
+[01:42:01 - 01:42:09] mark it as a string and save it okay
+[01:42:05 - 01:42:11] clean everything type something set okay
+[01:42:09 - 01:42:16] let me
+[01:42:11 - 01:42:18] refresh set data okay
+[01:42:16 - 01:42:22] and uh if I click on this one right say
+[01:42:18 - 01:42:25] we are getting data we say
+[01:42:22 - 01:42:28] sure click it see shortl it is coming
+[01:42:25 - 01:42:32] okay so this is how we can get the data
+[01:42:28 - 01:42:34] here now obviously we need to call this
+[01:42:32 - 01:42:37] get Place list method okay so what I
+[01:42:34 - 01:42:39] will do I will on this user input I will
+[01:42:37 - 01:42:40] call this method and I'm passing this
+[01:42:39 - 01:42:43] value so obviously you have to pass some
+[01:42:40 - 01:42:46] value here value like this as of type
+[01:42:43 - 01:42:50] string okay and
+[01:42:46 - 01:42:53] then we will pass this in a query okay
+[01:42:50 - 01:42:55] like like this so I will change this to
+[01:42:53 - 01:42:59] and pass the value okay obviously here
+[01:42:55 - 01:42:59] you can pass some uh default value so
+[01:42:59 - 01:43:04] for
+[01:42:59 - 01:43:08] example hotels in New
+[01:43:04 - 01:43:11] York New York okay something like this
+[01:43:08 - 01:43:13] and save everything let's go back to our
+[01:43:11 - 01:43:16] application refresh the
+[01:43:13 - 01:43:18] screen okay so right now we are getting
+[01:43:16 - 01:43:22] hotels in New York for example if I
+[01:43:18 - 01:43:27] write one hotels in sh
+[01:43:22 - 01:43:30] Chicago and search it okay see it Chang
+[01:43:27 - 01:43:32] completely okay and we got the hotel in
+[01:43:30 - 01:43:35] Chicago only see if I open this one
+[01:43:32 - 01:43:39] Central Loop see the map is coming
+[01:43:35 - 01:43:41] everything is coming okay perfect now
+[01:43:39 - 01:43:44] I'm giving one task to you right
+[01:43:41 - 01:43:47] whenever I search something if I search
+[01:43:44 - 01:43:49] a cafe in Chicago okay and search it
+[01:43:47 - 01:43:52] it's it's taking some time and then it's
+[01:43:49 - 01:43:55] changing this UI right so you can show
+[01:43:52 - 01:43:58] the loader on this particular page so
+[01:43:55 - 01:44:00] that you will see the result okay try it
+[01:43:58 - 01:44:02] you can use two different types of
+[01:44:00 - 01:44:04] loader you can use actual the simple
+[01:44:02 - 01:44:07] loader okay on the click when you are
+[01:44:04 - 01:44:11] get searching some result or you can use
+[01:44:07 - 01:44:13] the skeleton effect for this one okay so
+[01:44:11 - 01:44:15] we are using the skeleton effect but you
+[01:44:13 - 01:44:19] can try on your own in the next section
+[01:44:15 - 01:44:22] we will see how we can use the skeleton
+[01:44:19 - 01:44:22] effect
+[01:44:24 - 01:44:30] now let's add loading skeleton effect
+[01:44:26 - 01:44:32] okay so for that one uh tilin CSS
+[01:44:30 - 01:44:35] provide this beautiful uh pulse
+[01:44:32 - 01:44:38] animation okay and it which act like a
+[01:44:35 - 01:44:40] uh skeleton effect only okay so let's
+[01:44:38 - 01:44:43] copy this line of code and modify
+[01:44:40 - 01:44:45] according to your layout okay so I
+[01:44:43 - 01:44:47] already made this one file called
+[01:44:45 - 01:44:49] skeleton. txx inside the component
+[01:44:47 - 01:44:52] folder and inside here I added this
+[01:44:49 - 01:44:54] skeleton structure okay you can refer
+[01:44:52 - 01:44:58] this from my source code the link of my
+[01:44:54 - 01:45:01] source code is in the description now
+[01:44:58 - 01:45:04] let's go back to our place list okay so
+[01:45:01 - 01:45:06] what we'll do whenever uh the place list
+[01:45:04 - 01:45:10] is available we'll show this line of
+[01:45:06 - 01:45:12] code and when Place list uh is empty
+[01:45:10 - 01:45:15] then we will show our skeleton effect
+[01:45:12 - 01:45:19] okay so for that one what I will do I
+[01:45:15 - 01:45:21] will copy this uh same de okay over
+[01:45:19 - 01:45:26] here let me bring this down here like
+[01:45:21 - 01:45:28] this okay see so this is grid structure
+[01:45:26 - 01:45:30] we needed okay to show the skeleton
+[01:45:28 - 01:45:32] effect and obviously we need to show it
+[01:45:30 - 01:45:35] so what I will do inside the curly
+[01:45:32 - 01:45:39] braces we need to iterate the skeleton
+[01:45:35 - 01:45:42] uh component multiple times so I will
+[01:45:39 - 01:45:45] put the array like this okay dot map and
+[01:45:42 - 01:45:48] inside that I will add item comma
+[01:45:45 - 01:45:51] index like this okay and inside that I
+[01:45:48 - 01:45:54] will add the skeleton component okay and
+[01:45:51 - 01:45:55] if I save everything let's go back to
+[01:45:54 - 01:45:58] our
+[01:45:55 - 01:46:00] application and below that you see the
+[01:45:58 - 01:46:02] skeleton effect is showing and see the
+[01:46:00 - 01:46:04] all the seven uh component is showing on
+[01:46:02 - 01:46:08] the screen
+[01:46:04 - 01:46:11] okay now what you need to do uh you need
+[01:46:08 - 01:46:13] to give the condition okay here so if
+[01:46:11 - 01:46:16] plac list.
+[01:46:13 - 01:46:21] length is greater isal equal to zero
+[01:46:16 - 01:46:24] okay this condition you need to write
+[01:46:21 - 01:46:26] so question mark if the place list
+[01:46:24 - 01:46:28] length is zero then you need to show
+[01:46:26 - 01:46:33] this code
+[01:46:28 - 01:46:36] otherwise show null okay and let's test
+[01:46:33 - 01:46:39] this out I will put question
+[01:46:36 - 01:46:41] mark and see okay now let's refresh the
+[01:46:39 - 01:46:43] screen and see the skeleton effect is
+[01:46:41 - 01:46:45] showing okay and once the data is
+[01:46:43 - 01:46:47] available then actual data is showing
+[01:46:45 - 01:46:49] and the skeleton effect is gone okay
+[01:46:47 - 01:46:50] let's search something if I search Cafe
+[01:46:49 - 01:46:53] and search it
+[01:46:50 - 01:46:55] right now it's immediately replacing
+[01:46:53 - 01:46:57] this Cafe but what you can do when you
+[01:46:55 - 01:46:59] click on search button you can empty
+[01:46:57 - 01:47:02] this selected place and
+[01:46:59 - 01:47:04] then uh you can make the change okay so
+[01:47:02 - 01:47:07] what I will do on the get Place list
+[01:47:04 - 01:47:08] here I will make the set Place list to
+[01:47:07 - 01:47:12] be
+[01:47:08 - 01:47:15] empty like this
+[01:47:12 - 01:47:18] okay and if you see the initial is empty
+[01:47:15 - 01:47:21] if I search see the immediate effect is
+[01:47:18 - 01:47:24] happen right if I search gas
+[01:47:21 - 01:47:27] station search it see the effect is come
+[01:47:24 - 01:47:30] and once the data is available it's
+[01:47:27 - 01:47:33] immediately showing this uh actual data
+[01:47:30 - 01:47:37] and the uh skeleton effect is gone okay
+[01:47:33 - 01:47:37] so I hope you understand this
+[01:47:41 - 01:47:47] one so our application is completely
+[01:47:44 - 01:47:49] ready now it's time to deploy it on the
+[01:47:47 - 01:47:53] server so that you can share it with
+[01:47:49 - 01:47:56] your friends and family so first of all
+[01:47:53 - 01:48:00] we will uh deploy it on worel okay so
+[01:47:56 - 01:48:03] worel is one of the best and free um
+[01:48:00 - 01:48:06] hosting provider okay so it's a if you
+[01:48:03 - 01:48:07] go to this ver.com okay then you have to
+[01:48:06 - 01:48:10] log to
+[01:48:07 - 01:48:12] the um account and create a new account
+[01:48:10 - 01:48:15] if you don't have and then you can go to
+[01:48:12 - 01:48:17] this viral.com okay/ dashboard and you
+[01:48:15 - 01:48:20] will see the screen like this but before
+[01:48:17 - 01:48:22] that we need to move this code on the G
+[01:48:20 - 01:48:25] iub okay if you don't have account on
+[01:48:22 - 01:48:27] GitHub create a one on github.com and
+[01:48:25 - 01:48:29] once you create the account here um you
+[01:48:27 - 01:48:32] have to create a new repository okay so
+[01:48:29 - 01:48:34] click uh on create new repository and
+[01:48:32 - 01:48:39] here you need to give the name so in
+[01:48:34 - 01:48:41] this case I will discover places okay
+[01:48:39 - 01:48:44] and you can make it public or private I
+[01:48:41 - 01:48:46] will keep it public and then click
+[01:48:44 - 01:48:48] create a repository okay once you create
+[01:48:46 - 01:48:51] a repository here the some of the step
+[01:48:48 - 01:48:54] you need to uh follow okay so first of
+[01:48:51 - 01:48:57] all you need to uh initialize the git in
+[01:48:54 - 01:49:01] your uh application okay so inside a
+[01:48:57 - 01:49:03] terminal just type git in it so it will
+[01:49:01 - 01:49:06] initialize the git okay so see it's
+[01:49:03 - 01:49:09] initialized the git then you have
+[01:49:06 - 01:49:13] to add this particular uh read MD if you
+[01:49:09 - 01:49:16] don't have okay or you can just uh do
+[01:49:13 - 01:49:19] the G space add dot okay so it will add
+[01:49:16 - 01:49:23] all your files okay then you have to
+[01:49:19 - 01:49:26] commit it okay so you can say uh final
+[01:49:23 - 01:49:29] changes okay you can give the commit
+[01:49:26 - 01:49:32] message and enter it see and then you
+[01:49:29 - 01:49:34] can just push it so here okay so here
+[01:49:32 - 01:49:37] you need
+[01:49:34 - 01:49:39] to push with this particular command
+[01:49:37 - 01:49:42] okay because first time you are pushing
+[01:49:39 - 01:49:44] so say get push origin main okay so it's
+[01:49:42 - 01:49:47] saying fail to push reference to
+[01:49:44 - 01:49:50] origin just try
+[01:49:47 - 01:49:53] to this one and let's try to to push it
+[01:49:50 - 01:49:55] now so it's saying could not orig not to
+[01:49:53 - 01:49:59] the G repor could not read from the
+[01:49:55 - 01:50:02] reporter make sure you have the correct
+[01:49:59 - 01:50:02] accessit G
+[01:50:04 - 01:50:09] status what's the
+[01:50:07 - 01:50:14] issue okay so okay so what we miss right
+[01:50:09 - 01:50:16] we need to uh add this origin okay so
+[01:50:14 - 01:50:19] once we add the origin then we can able
+[01:50:16 - 01:50:22] to push the code see we we forgot to add
+[01:50:19 - 01:50:24] the origin right because we need to tell
+[01:50:22 - 01:50:27] to this particular vs code that okay you
+[01:50:24 - 01:50:28] have to point you have to connect this
+[01:50:27 - 01:50:30] particular application to this
+[01:50:28 - 01:50:32] particular repository okay now if I
+[01:50:30 - 01:50:37] refresh the screen because we push the
+[01:50:32 - 01:50:42] code see our code is live now okay and
+[01:50:37 - 01:50:44] all all our uh code asset files are here
+[01:50:42 - 01:50:46] inside this GitHub okay now it's time to
+[01:50:44 - 01:50:50] deploy so go to the wor.com and say
+[01:50:46 - 01:50:52] click add new project okay in said that
+[01:50:50 - 01:50:55] here you will have to connect with the
+[01:50:52 - 01:50:58] git repository first okay you have
+[01:50:55 - 01:51:00] multiple option called gitlab GitHub or
+[01:50:58 - 01:51:03] bit bucket so in this case the GitHub
+[01:51:00 - 01:51:05] and as soon as you see right here is the
+[01:51:03 - 01:51:08] uh repository and just now we created
+[01:51:05 - 01:51:10] that's why string uh 45 second ago now
+[01:51:08 - 01:51:12] Okay click
+[01:51:10 - 01:51:15] import and then project name you have to
+[01:51:12 - 01:51:17] give everything is there right uh if you
+[01:51:15 - 01:51:19] want to set the environment variable
+[01:51:17 - 01:51:20] okay you can set it so what you have to
+[01:51:19 - 01:51:22] do go to
+[01:51:20 - 01:51:26] EnV and just copy this environment
+[01:51:22 - 01:51:27] variable like this okay and the value
+[01:51:26 - 01:51:30] for
+[01:51:27 - 01:51:34] it see add it's the same value for other
+[01:51:30 - 01:51:34] and this public as
+[01:51:34 - 01:51:42] well this add it and then click
+[01:51:39 - 01:51:44] deploy so it will take few seconds to
+[01:51:42 - 01:51:45] deploy the application so I will pause
+[01:51:44 - 01:51:49] the
+[01:51:45 - 01:51:51] video and boom our uh application has
+[01:51:49 - 01:51:53] get deployed and this beautiful uh
+[01:51:51 - 01:51:55] preview is showing that okay this is how
+[01:51:53 - 01:51:58] it it looks okay now if you click on
+[01:51:55 - 01:52:01] this particular preview it will open new
+[01:51:58 - 01:52:04] uh window and this is the URL uh they
+[01:52:01 - 01:52:06] assigned for this particular application
+[01:52:04 - 01:52:09] and now you can share this URL with your
+[01:52:06 - 01:52:12] friends and family now you can also
+[01:52:09 - 01:52:13] change the url or domain name okay so if
+[01:52:12 - 01:52:16] I go to the dashboard for this
+[01:52:13 - 01:52:18] particular application and then go to
+[01:52:16 - 01:52:20] the
+[01:52:18 - 01:52:22] setting and here we have domain section
+[01:52:20 - 01:52:25] okay now you can say edit and then you
+[01:52:22 - 01:52:27] can edit this domain so I will
+[01:52:25 - 01:52:31] say this
+[01:52:27 - 01:52:33] play.com and I will save it okay now if
+[01:52:31 - 01:52:35] I open this one see our uh that
+[01:52:33 - 01:52:38] particular application is running on
+[01:52:35 - 01:52:41] this particular uh edited domain you can
+[01:52:38 - 01:52:44] attach your own domain as well okay
+[01:52:41 - 01:52:47] perfect so guys uh that's all for this
+[01:52:44 - 01:52:50] com uh particular course and uh I hope
+[01:52:47 - 01:52:52] you enjoy this uh uh tutorial
+[01:52:50 - 01:52:54] if you have any question any doubt let
+[01:52:52 - 01:52:57] me know in the comment section or you
+[01:52:54 - 01:52:59] can DM me on my Instagram Channel also
+[01:52:57 - 01:53:01] if you did not subscribe to my Channel
+[01:52:59 - 01:53:04] please do subscribe join my channel and
+[01:53:01 - 01:53:08] you'll get a beautiful a lot of bugs uh
+[01:53:04 - 01:53:12] from my channel okay also um soon very
+[01:53:08 - 01:53:14] soon we are going to uh get uh we are
+[01:53:12 - 01:53:17] going to conduct live sessions okay it
+[01:53:14 - 01:53:19] will be a uh some of the free and some
+[01:53:17 - 01:53:20] of the paid session will be available so
+[01:53:19 - 01:53:22] I will
+[01:53:20 - 01:53:25] uh schedule it and I will let you know
+[01:53:22 - 01:53:27] the schedule for the live session okay
+[01:53:25 - 01:53:28] it will be it will be a one toone
+[01:53:27 - 01:53:32] session as well as it will be a group
+[01:53:28 - 01:53:34] session okay so be tuned uh subscribe to
+[01:53:32 - 01:53:36] my channel and uh if you really like
+[01:53:34 - 01:53:39] this video press like button share this
+[01:53:36 - 01:53:42] video with your friends and family so
+[01:53:39 - 01:53:46] guys we'll meet you next time until then
+[01:53:42 - 01:53:46] see you bye-bye keep smiling

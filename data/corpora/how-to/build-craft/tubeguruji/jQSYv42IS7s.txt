@@ -1,0 +1,149 @@
+[00:05 - 00:10] so in this section we are going to
+[00:07 - 00:13] implement this progress bar so depends
+[00:10 - 00:15] on the current status means uh if you
+[00:13 - 00:18] are on the first content or second or
+[00:15 - 00:20] third the progress bar will help you to
+[00:18 - 00:23] show the progress of your current
+[00:20 - 00:26] chapter which you are working on okay so
+[00:23 - 00:30] in order to um add this progress bar
+[00:26 - 00:31] right we are going to implement uh we
+[00:30 - 00:34] going to use this react native progress
+[00:31 - 00:38] Library okay this is third party library
+[00:34 - 00:40] and uh which is quite easy and quite um
+[00:38 - 00:42] interesting to you so you just need to
+[00:40 - 00:46] install this particular dependency so
+[00:42 - 00:49] copy this dependency go to your
+[00:46 - 00:53] project and uh install it I already
+[00:49 - 00:56] install it in my uh project so once you
+[00:53 - 00:59] install it okay let's uh go back to our
+[00:56 - 01:03] course chapter okay and uh if you see
+[00:59 - 01:06] right where we want to show it correct
+[01:03 - 01:09] so go back to the components and here
+[01:06 - 01:12] create a new component called progress
+[01:09 - 01:16] bar. JS Okay add
+[01:12 - 01:18] the react native function and this
+[01:16 - 01:22] progress bar is there right now in
+[01:18 - 01:25] course chapter come to this um View and
+[01:22 - 01:26] below this view right uh the back the
+[01:25 - 01:29] back button right we have this back
+[01:26 - 01:31] button below this we will add this
+[01:29 - 01:33] progress bar so just add this progress
+[01:31 - 01:36] bar and if I save it you will see the
+[01:33 - 01:38] name progress bar right now over here we
+[01:36 - 01:40] are going to implement progress bar so I
+[01:38 - 01:43] will delete this one and save
+[01:40 - 01:46] it now if you see the documentation of
+[01:43 - 01:48] this progress bar it's very easy to use
+[01:46 - 01:51] you just need to use this progress bar
+[01:48 - 01:53] you have to provide the value how much
+[01:51 - 01:56] progress you want to show and the width
+[01:53 - 02:00] okay so I will copy this
+[01:56 - 02:02] one and just paste it like this okay and
+[02:00 - 02:05] make sure you'll import this progress
+[02:02 - 02:07] bar uh import statement right so I will
+[02:05 - 02:10] just import this
+[02:07 - 02:13] statement okay and save it now if you
+[02:10 - 02:15] see on the screen right once you save
+[02:13 - 02:18] it now you can change the size for
+[02:15 - 02:20] example if I put 0.8 and save it right
+[02:18 - 02:24] you will see this change correct so the
+[02:20 - 02:25] value is ranging from 0 to 1 okay and
+[02:24 - 02:27] the width you can give whatever you want
+[02:25 - 02:29] so in this case what we will do we'll
+[02:27 - 02:31] give the width is equal to the width of
+[02:29 - 02:34] the screen right so what we'll do we'll
+[02:31 - 02:38] update this one and we'll WR
+[02:34 - 02:41] Dimensions do get we want to get the
+[02:38 - 02:44] screen width so let's say screen okay
+[02:41 - 02:49] and then width property okay and I will
+[02:44 - 02:51] also give the 0 85 okay so like this
+[02:49 - 02:54] perfect okay now you can change the
+[02:51 - 02:57] value 0.2 for example if you see 0.4
+[02:54 - 03:00] like this right and it will work now the
+[02:57 - 03:02] thing is depends on our
+[03:00 - 03:05] um next button right we are going to
+[03:02 - 03:08] change this and we provide this value to
+[03:05 - 03:10] this uh progress bar okay so go back to
+[03:08 - 03:15] our course chapter here what we will do
+[03:10 - 03:20] we will Define one constant we'll say
+[03:15 - 03:24] progress uh then we'll set progress okay
+[03:20 - 03:26] use State now this progress will help us
+[03:24 - 03:28] uh to set the value first of all what we
+[03:26 - 03:31] will do initially I will pass the zero
+[03:28 - 03:33] okay and also for each chapter right I
+[03:31 - 03:36] will set this progress bar to zero first
+[03:33 - 03:38] so I will set to zero okay the value of
+[03:36 - 03:40] the set progress bar it depends um we
+[03:38 - 03:43] are going to pass between the zero to
+[03:40 - 03:45] one okay now if you come back right we
+[03:43 - 03:47] have this onclick next button and we
+[03:45 - 03:49] have this index value because we know
+[03:47 - 03:51] whether this is next first index or this
+[03:49 - 03:53] is second index or this is third Index
+[03:51 - 03:57] right and depends on that we have to
+[03:53 - 04:00] provide the value correct so here what I
+[03:57 - 04:02] will do I will sa the progress okay and
+[04:00 - 04:04] instead of providing IND this because we
+[04:02 - 04:07] want to provide the value from 0 to 1
+[04:04 - 04:09] right 0.5 0.7 right we have to do some
+[04:07 - 04:11] calculations so what I will do I will do
+[04:09 - 04:14] index +
+[04:11 - 04:17] one/ we have the chapter. length right
+[04:14 - 04:18] so we have the chapter so we know okay
+[04:17 - 04:20] in this particular course for example
+[04:18 - 04:23] let's go back here and in this
+[04:20 - 04:25] particular course we have two chapter
+[04:23 - 04:27] right or let's go back let's check
+[04:25 - 04:30] bigger one okay so in this particular
+[04:27 - 04:32] course we have first the if I click next
+[04:30 - 04:33] we have second and again next we have
+[04:32 - 04:36] third so in this one we have three
+[04:33 - 04:38] chapters so that length I'm getting it
+[04:36 - 04:41] here and then the current index which
+[04:38 - 04:43] I'm on + one and then I'm dividing it
+[04:41 - 04:46] right so you will get the value between
+[04:43 - 04:48] 0o and one okay and this set the value
+[04:46 - 04:50] now that once you have all the value
+[04:48 - 04:53] right make sure you pass that value as a
+[04:50 - 04:55] props so here you can say progress is
+[04:53 - 04:58] equal
+[04:55 - 05:00] to value of the progress so we'll say
+[04:58 - 05:03] progress okay okay so we are passing the
+[05:00 - 05:06] value go back to progress bar and accept
+[05:03 - 05:09] it here as a prop I will say
+[05:06 - 05:11] progress now this value we have to
+[05:09 - 05:12] replace with this one okay and save it
+[05:11 - 05:16] save
+[05:12 - 05:18] everything okay go back now if I have S
+[05:16 - 05:20] python syntax right right now it's zero
+[05:18 - 05:23] nothing is there if I click next you see
+[05:20 - 05:26] we got the first if I click next we got
+[05:23 - 05:31] the second is fully completed and if I
+[05:26 - 05:35] go next it ends perfect one 1 2 and
+[05:31 - 05:38] three right so this is how it works one
+[05:35 - 05:41] two right mean half of the you already
+[05:38 - 05:44] completed and this is last one so last
+[05:41 - 05:46] so this is how PR will work okay if you
+[05:44 - 05:48] have any question regarding progress bar
+[05:46 - 05:51] anything let me know in the comment
+[05:48 - 05:53] section now the next uh in the next
+[05:51 - 05:55] section what we are going to do once
+[05:53 - 05:59] this particular uh chapter is completed
+[05:55 - 06:01] right and once it um it user is on the
+[05:59 - 06:03] last screen right make we have to make
+[06:01 - 06:06] sure that this uh button name will
+[06:03 - 06:08] change to finish okay after that
+[06:06 - 06:10] clicking on the Finish button we have to
+[06:08 - 06:13] make sure we are we are giving the tick
+[06:10 - 06:15] mark here the the uh green tick mark
+[06:13 - 06:16] right the one which we have in the
+[06:15 - 06:19] screen for example if you see this
+[06:16 - 06:21] screen right we have this tick mark so
+[06:19 - 06:24] that kind of tick mark we want to give
+[06:21 - 06:26] it okay so that particular functionality
+[06:24 - 06:28] we are going to implement in our next
+[06:26 - 06:30] video so if you did not subscribe to my
+[06:28 - 06:32] channel subscribe to my channel watch
+[06:30 - 06:36] the complete course for this particular
+[06:32 - 06:40] react by um building the educational app
+[06:36 - 06:40] and we'll see you in the next video

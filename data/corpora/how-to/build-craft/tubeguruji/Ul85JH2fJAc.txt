@@ -1,0 +1,219 @@
+[00:00 - 00:05] hello guys so in this lecture we will
+[00:02 - 00:08] learn about basic of the component in
+[00:05 - 00:11] angular a component is a class that
+[00:08 - 00:13] control the part of the app UI it is
+[00:11 - 00:15] responsible for rendering The View and
+[00:13 - 00:19] handling the user input and providing
+[00:15 - 00:22] data to the view so the first is view
+[00:19 - 00:25] where users see on the screen whatever
+[00:22 - 00:27] we show it is written in the HTML code
+[00:25 - 00:31] and for styling we apply
+[00:27 - 00:34] CSS now second is class class the class
+[00:31 - 00:36] that contains the components Logic the
+[00:34 - 00:38] class where we define the properties and
+[00:36 - 00:40] Method and that provide a data to
+[00:38 - 00:45] template and handle the event trigger by
+[00:40 - 00:49] the template and we write the class in a
+[00:45 - 00:51] typescript third is metadata so metadata
+[00:49 - 00:55] consist of information regarding the
+[00:51 - 00:57] component it consists of decorator which
+[00:55 - 00:59] defines whether the class is a simple
+[00:57 - 01:03] class or it connects to the components
+[00:59 - 01:06] and view so it includes just all the
+[01:03 - 01:09] information regarding the
+[01:06 - 01:12] components so component consist of view
+[01:09 - 01:16] class and metadata
+[01:12 - 01:18] together so let's see in the example how
+[01:16 - 01:22] component is used in web
+[01:18 - 01:24] applications so in this example at the
+[01:22 - 01:26] top in the picture is company's logo and
+[01:24 - 01:29] slogan which we Define as a single
+[01:26 - 01:30] component so that we can use it later if
+[01:29 - 01:32] needed
+[01:30 - 01:36] in the same way we can Define component
+[01:32 - 01:39] for a heer navigation about quick links
+[01:36 - 01:42] accordingly they allow you to reuse UI
+[01:39 - 01:44] and logic across your app they also make
+[01:42 - 01:46] it easier to build and maintain large
+[01:44 - 01:48] applications as they allow you to break
+[01:46 - 01:51] the app down into smaller and more
+[01:48 - 01:51] manageable
+[01:51 - 01:56] spaces so let's see in our angular
+[01:54 - 01:59] project how component is
+[01:56 - 02:01] structurized so in our previous hello
+[01:59 - 02:04] word project we have default component
+[02:01 - 02:07] called app. component.ts okay which is
+[02:04 - 02:09] the default component so for now let's
+[02:07 - 02:12] create new component called
+[02:09 - 02:15] homepage so in the terminal to open a
+[02:12 - 02:18] new terminal right we have this button
+[02:15 - 02:21] plus sign click on that one so it will
+[02:18 - 02:23] create a new terminal for us okay so
+[02:21 - 02:26] before that let's create one folder
+[02:23 - 02:29] called component so that we can add all
+[02:26 - 02:34] our component in that folder this is
+[02:29 - 02:36] just used to structu our project okay so
+[02:34 - 02:40] click this plus sign okay which create
+[02:36 - 02:44] the folder in app folder and give
+[02:40 - 02:48] name components components okay so in
+[02:44 - 02:49] that folder we will create new component
+[02:48 - 02:52] Now to create a new component right
+[02:49 - 02:55] right click on this one and say open in
+[02:52 - 02:58] integrated terminal so what it will do
+[02:55 - 03:01] it will open the terminal with
+[02:58 - 03:03] the uh the given part the components
+[03:01 - 03:05] part okay so when you create a new
+[03:03 - 03:08] component it will create in this folder
+[03:05 - 03:11] okay and now to create a new component
+[03:08 - 03:13] we have command NG
+[03:11 - 03:16] generate
+[03:13 - 03:21] component and component name which is we
+[03:16 - 03:25] will give like home page okay or the
+[03:21 - 03:27] shortcut of this one is NG g c g for
+[03:25 - 03:29] Generate C for component okay NG
+[03:27 - 03:31] generate component homepage and click
+[03:29 - 03:33] enter
+[03:31 - 03:36] so it will take few second to create the
+[03:33 - 03:40] component okay so if you see right this
+[03:36 - 03:43] full file are created and one file is
+[03:40 - 03:45] updated okay if you see in the component
+[03:43 - 03:47] we have folder homepage it will
+[03:45 - 03:49] automatically created once you create
+[03:47 - 03:55] the new component and we have these four
+[03:49 - 03:59] files the one is HTML scss dopc dots and
+[03:55 - 04:02] one is the component.ts so this spec. TS
+[03:59 - 04:05] is usually used for the to write the
+[04:02 - 04:08] unit testing so we don't want it so we
+[04:05 - 04:08] will delete
+[04:10 - 04:18] it now if you see right we have three
+[04:14 - 04:20] file left one is HTM scss and
+[04:18 - 04:23] TS so
+[04:20 - 04:24] now if you open the homepage do
+[04:23 - 04:28] component.ts
+[04:24 - 04:31] file we have this at component decorator
+[04:28 - 04:34] and which consist of selector second is
+[04:31 - 04:37] template URL and style URL I will
+[04:34 - 04:41] explain One By One The selector
+[04:37 - 04:44] use to mention okay this name is used to
+[04:41 - 04:46] add this component in any other parent
+[04:44 - 04:50] component or any other component which
+[04:46 - 04:53] you want to uh show it okay the template
+[04:50 - 04:56] URL is nothing but the HTML file where
+[04:53 - 04:58] it's nothing but a view for the user
+[04:56 - 05:01] okay where we write our all the HTML
+[04:58 - 05:03] code if you see the file F name is home-
+[05:01 - 05:06] page. component. HTML is nothing but
+[05:03 - 05:10] this file home- page. component. HTML
+[05:06 - 05:14] and which we'll write all our uh HTML
+[05:10 - 05:17] code okay and the last is tile URLs
+[05:14 - 05:20] which is the nothing but our scss file
+[05:17 - 05:22] which we will write all our style site
+[05:20 - 05:24] scss code
+[05:22 - 05:26] okay now if you see right this is the
+[05:24 - 05:29] component and this component is
+[05:26 - 05:31] connected uh written in the component.ts
+[05:29 - 05:37] this particular components uh selector
+[05:31 - 05:39] temporate URL and style uh URLs okay so
+[05:37 - 05:41] for now ignore this I will explain what
+[05:39 - 05:43] is this file what is implemented on in
+[05:41 - 05:44] it and everything the Constructor en on
+[05:43 - 05:47] it what's
+[05:44 - 05:50] function uh it use for and everything
+[05:47 - 05:53] okay for now it's just you can ignore it
+[05:50 - 05:57] but if you see this three file consist
+[05:53 - 06:00] of one component okay now let's take one
+[05:57 - 06:03] example how you can can use this
+[06:00 - 06:08] component okay but before that I will
+[06:03 - 06:10] also let me explain what is app. mod.
+[06:08 - 06:14] PS so this is
+[06:10 - 06:16] the uh root module of the application
+[06:14 - 06:20] and also so as a main entry point for
+[06:16 - 06:24] the application okay and it consist of
+[06:20 - 06:24] import statement of any
+[06:24 - 06:30] dependency that root module needs okay
+[06:27 - 06:32] and the Declaration of any component
+[06:30 - 06:34] pipes or
+[06:32 - 06:38] directive that root model uses for
+[06:34 - 06:41] example in this our example we have app
+[06:38 - 06:46] component and the homepage component
+[06:41 - 06:49] right which uh we just created it AO
+[06:46 - 06:52] automatically declared in app. mod. TS
+[06:49 - 06:54] okay so it tells to the our application
+[06:52 - 06:58] okay these are the two components
+[06:54 - 07:00] available in our project simple then we
+[06:58 - 07:02] have two import statements browser
+[07:00 - 07:04] module and app rting module which by
+[07:02 - 07:06] default is created and we have
+[07:04 - 07:08] boostrapping information for the root
+[07:06 - 07:13] component of the applications so it's
+[07:08 - 07:15] nothing but this one okay so as I I told
+[07:13 - 07:18] you before that this is the metadata it
+[07:15 - 07:21] cons consist of all our
+[07:18 - 07:25] information and the all the Declaration
+[07:21 - 07:27] of the D um decorator and everything the
+[07:25 - 07:29] import statement our dependenc and
+[07:27 - 07:32] everything okay
+[07:29 - 07:34] so now let's go to the homepage
+[07:32 - 07:37] component. HTML okay and we will write
+[07:34 - 07:41] one simple uh HTML
+[07:37 - 07:45] uh uh code here it's like U let's take
+[07:41 - 07:48] H2 and write this
+[07:45 - 07:52] is
+[07:48 - 07:52] homepage component
+[07:55 - 08:02] okay okay now if you if you go to the
+[07:59 - 08:04] homepage. TS file we have this selector
+[08:02 - 08:06] okay you can change the name of this
+[08:04 - 08:10] selector so I can write like okay
+[08:06 - 08:11] homepage home Dash page okay and use
+[08:10 - 08:14] this
+[08:11 - 08:16] selector to use this comp this selector
+[08:14 - 08:18] can be used to define your component
+[08:16 - 08:22] okay for example if I go I copy this
+[08:18 - 08:25] home Dash page and I went to the app.
+[08:22 - 08:28] component. HTML where I want to uh show
+[08:25 - 08:31] that component here okay but before that
+[08:28 - 08:34] let me see how our application shows the
+[08:31 - 08:39] data okay on the screen
+[08:34 - 08:39] so let me go Local
+[08:40 - 08:43] Host
+[08:44 - 08:50] 42 so this is what right now it's
+[08:47 - 08:50] showing okay it only
+[08:50 - 08:55] showing app. component. HTML okay which
+[08:54 - 08:57] is a
+[08:55 - 09:00] root
+[08:57 - 09:02] um component
+[09:00 - 09:05] excuse
+[09:02 - 09:08] me now if in order to use my homepage
+[09:05 - 09:12] component right I will write like this
+[09:08 - 09:14] homepage the selector name the opening
+[09:12 - 09:19] uh tag and the closing tag okay so it
+[09:14 - 09:22] will show whatever written in the HTML
+[09:19 - 09:26] file in this app. component. HTML okay
+[09:22 - 09:26] and let's save it and let's see how it
+[09:26 - 09:33] looks so if you see right so whatever we
+[09:29 - 09:37] written in the home uh page component it
+[09:33 - 09:38] show it here because we write this we
+[09:37 - 09:41] decare
+[09:38 - 09:44] homepage component in app. component
+[09:41 - 09:46] HTML using this selector name correct so
+[09:44 - 09:49] whatever we return in the HTML file and
+[09:46 - 09:53] whatever logic we written in the TS file
+[09:49 - 09:56] of the homepage it will apply it and it
+[09:53 - 09:58] will show it in app. compound. HTML okay
+[09:56 - 10:01] as simple as that if you have any
+[09:58 - 10:04] question any doubts and if you don't
+[10:01 - 10:07] understand anything please write in the
+[10:04 - 10:10] comment box or join our telegram Channel
+[10:07 - 10:13] which uh the link in is in description
+[10:10 - 10:16] or you can DM me on Instagram as well
+[10:13 - 10:18] the link uh of the Instagram page again
+[10:16 - 10:22] I mention in the
+[10:18 - 10:24] description and um yeah um so if you
+[10:22 - 10:28] have any question just let me know and
+[10:24 - 10:30] uh in the next chapter we will see uh
+[10:28 - 10:35] about the
+[10:30 - 10:38] life cycle of the angular and the module
+[10:35 - 10:41] okay so these two topics we will see and
+[10:38 - 10:43] until now be happy and keep smiling
+[10:41 - 10:43] thank
+[10:46 - 10:49] you

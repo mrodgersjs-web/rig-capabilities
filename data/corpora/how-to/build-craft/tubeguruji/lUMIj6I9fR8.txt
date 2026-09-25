@@ -1,0 +1,176 @@
+[00:02 - 00:09] so in this section we'll first fure
+[00:05 - 00:13] gener so let's go to this rwg
+[00:09 - 00:16] dock.io website this is the uh open
+[00:13 - 00:19] source API provided by this uh game
+[00:16 - 00:23] listing company so it provide a API for
+[00:19 - 00:25] all the games so here if you do not have
+[00:23 - 00:28] account then create a new account and
+[00:25 - 00:31] then go to API
+[00:28 - 00:33] section so once you are in the API
+[00:31 - 00:36] section right uh just click on get API
+[00:33 - 00:39] key and you will see this API key over
+[00:36 - 00:43] here okay we will use this API key in
+[00:39 - 00:46] order to F this uh game list as well as
+[00:43 - 00:49] the gener for the games from this
+[00:46 - 00:50] website uh if you go to the
+[00:49 - 00:52] documentation of this website you will
+[00:50 - 00:56] see this documentation and the all the
+[00:52 - 00:59] end points to F the game listing gener
+[00:56 - 01:01] for our application so right now we are
+[00:59 - 01:04] dealing with the J so if you go to J
+[01:01 - 01:08] right you have this Gat list. video game
+[01:04 - 01:11] gen and by calling this API endpoint and
+[01:08 - 01:13] by providing the API key we will get the
+[01:11 - 01:16] response so in the response we'll get
+[01:13 - 01:19] the name of J the ID of that one and the
+[01:16 - 01:23] image background okay the games code and
+[01:19 - 01:25] other fields as well so this API key uh
+[01:23 - 01:31] and this uh raw
+[01:25 - 01:36] do IO API we are using in our app ation
+[01:31 - 01:40] so in order to Fage uh data from the API
+[01:36 - 01:43] we need HTTP client to face the data so
+[01:40 - 01:46] here we are using the exos which is the
+[01:43 - 01:49] promise based HTTP client for a nodejs
+[01:46 - 01:51] okay and this is very uh easy and fast
+[01:49 - 01:55] uh in order to face the response from
+[01:51 - 01:57] the any API and you just need to um
+[01:55 - 02:00] execute this particular line of command
+[01:57 - 02:04] in your project to install the exos so
+[02:00 - 02:07] copy it and uh go to your
+[02:04 - 02:07] project and open a
+[02:08 - 02:13] terminal and inside terminal just paste
+[02:11 - 02:17] the command which you copied okay so it
+[02:13 - 02:21] will install this uh exos dependency for
+[02:17 - 02:24] us now um in our project folder
+[02:21 - 02:25] structure create one folder in Source
+[02:24 - 02:29] called
+[02:25 - 02:32] Services okay where we will uh put all
+[02:29 - 02:34] our apis inside that I will create
+[02:32 - 02:34] another uh
+[02:34 - 02:42] file Global uh called Global api.
+[02:39 - 02:46] jsx and inside that we will Define the
+[02:42 - 02:50] exos okay so first uh let's define the
+[02:46 - 02:55] uh key which uh we created from the rawg
+[02:50 - 02:57] uh site right so this is the key which I
+[02:55 - 03:01] have you can create your own account and
+[02:57 - 03:04] then you will get the new uh API ke
+[03:01 - 03:07] for then in order to create the exos
+[03:04 - 03:09] command right so just go type exos uh
+[03:07 - 03:14] here you can type anything okay the
+[03:09 - 03:16] constant uh name and then exist.
+[03:14 - 03:19] create
+[03:16 - 03:21] okay and inside that you have to Define
+[03:19 - 03:24] some uh some of the properties so in
+[03:21 - 03:26] this case we'll Define base URL and the
+[03:24 - 03:30] base URL for our
+[03:26 - 03:32] API uh is uh this one okay okay so this
+[03:30 - 03:35] you will get it from the uh
+[03:32 - 03:37] documentation of the
+[03:35 - 03:40] R so if you go to this site right you
+[03:37 - 03:43] will in the documentation section you
+[03:40 - 03:43] will find this
+[03:47 - 03:52] okay so if you go to the API
+[03:55 - 04:01] section and inside the
+[03:58 - 04:04] documentation uh you will file all the
+[04:01 - 04:08] endpoints and the URL of the API as well
+[04:04 - 04:11] okay so we we are right first we will
+[04:08 - 04:16] face the all the gener for the
+[04:11 - 04:17] games so this is the end point okay so
+[04:16 - 04:20] if you see right this is the end point
+[04:17 - 04:23] for the that one so let's go back to our
+[04:20 - 04:28] application here we'll create a one
+[04:23 - 04:33] constant and we can say G General list
+[04:28 - 04:38] okay and and uh just we need to pass the
+[04:33 - 04:40] gate method so G and then the end point
+[04:38 - 04:45] which we pass
+[04:40 - 04:48] okay and then the API key so we we
+[04:45 - 04:50] already Define so just add key like this
+[04:48 - 04:52] okay you can Define this key in
+[04:50 - 04:54] environment variable you know for the
+[04:52 - 04:57] security purpose but right now for the
+[04:54 - 05:00] Simplicity I keept uh in this uh file
+[04:57 - 05:03] only now in order to use use this
+[05:00 - 05:05] particular uh API right in order to
+[05:03 - 05:07] execute that API in different component
+[05:05 - 05:10] you need to export it so just type
+[05:07 - 05:14] export
+[05:10 - 05:16] default and then get General list okay
+[05:14 - 05:20] once you exported it now you can
+[05:16 - 05:24] anywhere you can access it so now let's
+[05:20 - 05:28] uh go back our heer okay and inside the
+[05:24 - 05:31] here sorry uh just go back to home.js so
+[05:28 - 05:34] here we want want to show General list
+[05:31 - 05:35] cre correct so I will create one file uh
+[05:34 - 05:41] in the
+[05:35 - 05:43] component called General list. jsx Okay
+[05:41 - 05:48] add the default
+[05:43 - 05:50] template okay and for now uh let's add
+[05:48 - 05:54] this General list in a home jxx in this
+[05:50 - 05:55] first section right so add that one make
+[05:54 - 05:58] sure you will import
+[05:55 - 05:59] it so once you are in the application
+[05:58 - 06:02] right you will see the general list here
+[05:59 - 06:05] right which uh is nothing but this
+[06:02 - 06:09] component okay so if you go to General
+[06:05 - 06:12] list do dot do for example D D Dash and
+[06:09 - 06:16] you will see this component is imported
+[06:12 - 06:19] okay perfect now here I just um Define
+[06:16 - 06:23] one method called get genal
+[06:19 - 06:27] list and do the arrow function here we
+[06:23 - 06:30] will uh call the our API okay so just
+[06:27 - 06:34] type Global API okay make sure you
+[06:30 - 06:36] import it and Dot the gate General list
+[06:34 - 06:39] right and
+[06:36 - 06:39] just
+[06:43 - 06:51] thing and just consolid the response
+[06:48 - 06:53] okay also we need to call this method
+[06:51 - 06:57] first time whenever uh this component
+[06:53 - 06:59] get loaded right so we will call in use
+[06:57 - 07:01] effect make sure it will execute only
+[06:59 - 07:04] once
+[07:01 - 07:05] so I pass the Mt array and then call
+[07:04 - 07:09] this
+[07:05 - 07:11] method okay now control save let's go
+[07:09 - 07:14] back to our application open the inspect
+[07:11 - 07:16] panel because we just console the uh
+[07:14 - 07:19] result and in the
+[07:16 - 07:23] console so it's saying EXO is not
+[07:19 - 07:26] defined right so go back uh to our
+[07:23 - 07:29] Global API make sure you'll import this
+[07:26 - 07:34] exos okay so it's imported now
+[07:29 - 07:34] save it go back to our
+[07:35 - 07:41] application so let see ex do create is
+[07:38 - 07:44] not function make sure you
+[07:41 - 07:46] uh instead of EX create just add the
+[07:44 - 07:49] create not that just create and let's
+[07:46 - 07:49] save
+[07:50 - 07:56] it and if you refresh it right you'll
+[07:53 - 07:58] get the data okay so right now uh with
+[07:56 - 08:00] the help of EX right we'll get this a
+[07:58 - 08:03] lot of different
+[08:00 - 08:06] um objects but the actual data is in the
+[08:03 - 08:10] data uh field okay and in the data field
+[08:06 - 08:12] we have the results where all this um
+[08:10 - 08:15] General list is available right so we
+[08:12 - 08:17] just want the results so in order to do
+[08:15 - 08:21] that uh let's go back our general list
+[08:17 - 08:24] here you have to write response. data do
+[08:21 - 08:27] results and it will uh give us only the
+[08:24 - 08:31] results you see only right now there are
+[08:27 - 08:34] a 19 uh General right so 19 um list of
+[08:31 - 08:37] object we are getting
+[08:34 - 08:39] okay so I hope you understand this
+[08:37 - 08:41] particular section okay if you have any
+[08:39 - 08:44] confusion um then let me know in the
+[08:41 - 08:48] comment section in the next section we
+[08:44 - 08:52] will uh design the components so that it
+[08:48 - 08:54] will be display on the UI part okay but
+[08:52 - 08:57] I hope you understand uh how to fing how
+[08:54 - 08:59] to F the respon from the API with the
+[08:57 - 09:03] help of exos okay
+[08:59 - 09:05] make sure uh here that we we did mistake
+[09:03 - 09:08] that in order to use the exhaust right
+[09:05 - 09:10] you have to do just exhaust. create and
+[09:08 - 09:14] make sure you'll import the statement as
+[09:10 - 09:16] well and um yeah so see you in next
+[09:14 - 09:16] section

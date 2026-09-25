@@ -1,0 +1,390 @@
+[00:05 - 00:10] so welcome back to another episode um of
+[00:08 - 00:12] educational app by react native okay so
+[00:10 - 00:16] this is a complete uh react native
+[00:12 - 00:18] course for the beginners and we are uh
+[00:16 - 00:21] in the tutorial where we are be going to
+[00:18 - 00:23] build the Google authentication system
+[00:21 - 00:25] for application right so we are building
+[00:23 - 00:28] the login page with the Google signin
+[00:25 - 00:31] authentication using the Expo so here uh
+[00:28 - 00:36] in the last section right be able to run
+[00:31 - 00:38] the project okay so in this tutorial uh
+[00:36 - 00:41] first of all let's create a new folder
+[00:38 - 00:43] called app and inside that app I created
+[00:41 - 00:45] another folder called assets and uh
+[00:43 - 00:47] inside that I created another folder
+[00:45 - 00:51] called image where I kept the image uh
+[00:47 - 00:53] for our login screen if you go back um
+[00:51 - 00:55] to our prototype right you will see this
+[00:53 - 00:57] prototype like this where we have image
+[00:55 - 01:00] at the top then text and then we have
+[00:57 - 01:02] this button right I will share this uh
+[01:00 - 01:05] prototype with you so link is in the
+[01:02 - 01:06] description so you can check it out and
+[01:05 - 01:10] you can use it for your reference
+[01:06 - 01:12] purpose now here uh in this app folder
+[01:10 - 01:14] right I will create another folder
+[01:12 - 01:16] called Pages where I will put all my
+[01:14 - 01:19] pages like login screen home screen kind
+[01:16 - 01:21] of thing right and inside this page I
+[01:19 - 01:26] will create one page called login.js
+[01:21 - 01:28] right for login screen so now uh if you
+[01:26 - 01:30] remember in the last video I told you to
+[01:28 - 01:33] add the extension okay and and the right
+[01:30 - 01:35] now we are using that extension so right
+[01:33 - 01:37] now we have to Define some template here
+[01:35 - 01:40] right the starting code we can say that
+[01:37 - 01:43] and if I just write RF right and you
+[01:40 - 01:45] will see this bunch of option right and
+[01:43 - 01:47] if you see right we we are working on
+[01:45 - 01:50] the re native so just type
+[01:47 - 01:53] rnf and you will see this default
+[01:50 - 01:54] template get created directly without
+[01:53 - 01:56] writing any code because this extension
+[01:54 - 01:59] will give you the basic template in
+[01:56 - 02:03] order to start writing our code right so
+[01:59 - 02:04] in the uh this default template right we
+[02:03 - 02:07] have this View and inside this view we
+[02:04 - 02:10] are showing the test called login now in
+[02:07 - 02:12] order to display this login on the uh
+[02:10 - 02:15] our devices right you can say
+[02:12 - 02:17] emulator you have to import that in
+[02:15 - 02:20] app.js right so I will right now I will
+[02:17 - 02:22] remove all of this code and here I will
+[02:20 - 02:24] import this login page right so make
+[02:22 - 02:27] sure you'll import this one right if you
+[02:24 - 02:30] see right I imported this and we import
+[02:27 - 02:32] this login as well and just save it and
+[02:30 - 02:34] if you see right login uh text is
+[02:32 - 02:37] getting printed because in the login.js
+[02:34 - 02:41] we just have this particular login text
+[02:37 - 02:42] if I change to login with signin you
+[02:41 - 02:46] will see this text as well right login
+[02:42 - 02:47] with signin kind of thing okay so I hope
+[02:46 - 02:50] you understand this particular thing how
+[02:47 - 02:52] can you import the component in one
+[02:50 - 02:54] another correct so right now I will
+[02:52 - 02:55] remove this styling because right now
+[02:54 - 02:58] it's coming in the center if I remove
+[02:55 - 03:01] the styling and now it this text is
+[02:58 - 03:04] coming in the left side Corner left side
+[03:01 - 03:06] top Corner okay now in the login.js if
+[03:04 - 03:08] you see the Prototype we have image at
+[03:06 - 03:10] the top and then we have this section
+[03:08 - 03:12] and also if you see right we have the
+[03:10 - 03:15] beautiful rounded Corner as well so you
+[03:12 - 03:17] will Implement that one as well so I
+[03:15 - 03:21] will remove this particular text and
+[03:17 - 03:23] let's add the image first so we have uh
+[03:21 - 03:26] in order to add the image in the react
+[03:23 - 03:28] native we have tag called image okay and
+[03:26 - 03:30] when you are using this tag make sure
+[03:28 - 03:33] you input this tag if I I click on image
+[03:30 - 03:35] right you'll see this tag get imported
+[03:33 - 03:39] right and close the tag
+[03:35 - 03:41] now we have to provide the source okay
+[03:39 - 03:44] and the source which is we are fetching
+[03:41 - 03:47] is from the local only so here you have
+[03:44 - 03:50] to write required okay so when you are
+[03:47 - 03:52] fetching The Source from the local if
+[03:50 - 03:54] you are fetching it from the some URL
+[03:52 - 03:56] it's a different one I will tell you how
+[03:54 - 03:59] to do that as well later in this
+[03:56 - 04:02] particular course so let's write require
+[03:59 - 04:06] and inside inside this require you have
+[04:02 - 04:08] to give the path okay so here I can say
+[04:06 - 04:14] uh Slash then
+[04:08 - 04:16] uh then assets oop sorry then
+[04:14 - 04:19] assets then inside that is we have
+[04:16 - 04:23] images and inside this image right we
+[04:19 - 04:26] have image called login.png and save it
+[04:23 - 04:28] as soon as you save it if you see right
+[04:26 - 04:32] hand side the image get display on the
+[04:28 - 04:34] screen okay perfect now next uh you
+[04:32 - 04:36] don't want to give any styling because
+[04:34 - 04:37] the image is already in the correct size
+[04:36 - 04:39] but you can give width height depends on
+[04:37 - 04:43] your
+[04:39 - 04:46] requirement next we have the text uh
+[04:43 - 04:48] called Welcome to education app okay so
+[04:46 - 04:53] let's give the text
+[04:48 - 04:55] here okay and just write welcome to uh
+[04:53 - 04:58] uh so I can I give this uh application
+[04:55 - 05:00] name as a codebox so I will write
+[04:58 - 05:02] welcome to codebox right so if you see
+[05:00 - 05:05] right when I write this will come to
+[05:02 - 05:08] text box in the text uh tag right so it
+[05:05 - 05:10] display on the screen now you can give
+[05:08 - 05:13] some styling to this one right so let's
+[05:10 - 05:15] give styling so when you have to write
+[05:13 - 05:17] style in double curly bracket you have
+[05:15 - 05:18] to write The Styling and all so here I
+[05:17 - 05:21] can
+[05:18 - 05:27] say uh font
+[05:21 - 05:27] size to be like let's say 30 pixel okay
+[05:28 - 05:31] or
+[05:33 - 05:39] you can say 35
+[05:35 - 05:41] pixel 35 only and
+[05:39 - 05:44] then you can write text to be align in
+[05:41 - 05:44] the
+[05:45 - 05:51] center and also I will make the font to
+[05:47 - 05:53] be bold so let's make font to be font
+[05:51 - 05:56] weight to be bold
+[05:53 - 05:58] okay so if You observe one thing right
+[05:56 - 06:00] right now I'm giving the inline styling
+[05:58 - 06:02] right so this is the inine line styling
+[06:00 - 06:04] but you can Define The Styling outside
+[06:02 - 06:06] as well so in order to Define The
+[06:04 - 06:08] Styling outside right add the default
+[06:06 - 06:11] template using the our extension and
+[06:08 - 06:13] just type rnss so it will add the uh
+[06:11 - 06:15] default template to write The Styling
+[06:13 - 06:17] and make sure once you add this you will
+[06:15 - 06:20] import this style sheet from the react
+[06:17 - 06:23] native okay and then you can just copy
+[06:20 - 06:27] this all of this styling REM from here
+[06:23 - 06:27] and here you can add it so I can write
+[06:27 - 06:31] welcome text
+[06:31 - 06:38] okay and inside that you can write your
+[06:34 - 06:40] styling okay perfect so this writing The
+[06:38 - 06:43] Styling externally right will help you
+[06:40 - 06:45] uh to structurize your code beautifully
+[06:43 - 06:47] okay this is very important and if you
+[06:45 - 06:49] are writing styling because for example
+[06:47 - 06:51] if if you are giving styling and which
+[06:49 - 06:52] has a number of properties right then
+[06:51 - 06:55] it's better to Define styling outside
+[06:52 - 06:58] otherwise you can do you can Define the
+[06:55 - 07:01] uh inline styling okay so I Define The
+[06:58 - 07:03] Styling but here now you have to attach
+[07:01 - 07:06] this style right so you can access this
+[07:03 - 07:08] welcome text by defining styles do
+[07:06 - 07:10] welcome text and if I save it you will
+[07:08 - 07:13] you will not see any CH because I
+[07:10 - 07:16] applied the same styling right now let's
+[07:13 - 07:18] give some margin from the top so I will
+[07:16 - 07:20] not give margin I will give padding so
+[07:18 - 07:23] let's say
+[07:20 - 07:25] padding okay so here right uh just gives
+[07:23 - 07:27] comma first and then if I have padding
+[07:25 - 07:29] right you'll get bunch of option so
+[07:27 - 07:34] let's padding and I will say padding
+[07:29 - 07:36] from the top like uh four 40 something
+[07:34 - 07:39] like this right but before that I will
+[07:36 - 07:42] wrap this particular text in one view
+[07:39 - 07:45] okay so Define View and inside that view
+[07:42 - 07:47] I will add this text because we want to
+[07:45 - 07:50] give the this rounded corner right
+[07:47 - 07:53] that's the reason and then I will apply
+[07:50 - 07:55] this uh inline styling here okay or not
+[07:53 - 07:59] in styling let's define external stying
+[07:55 - 08:02] so right say uh let's add one container
+[07:59 - 08:06] here I will remove this padding top from
+[08:02 - 08:09] here and say let's container okay and
+[08:06 - 08:12] inside this one let's give comma here
+[08:09 - 08:15] first and here you can Define padding
+[08:12 - 08:20] from the top so just WR padding
+[08:15 - 08:21] top let's say 40 okay and then you can
+[08:20 - 08:23] apply it here right you got the error
+[08:21 - 08:27] because we did not Define the style So
+[08:23 - 08:29] Def style do container and save it and
+[08:27 - 08:34] if you see right text is coming because
+[08:29 - 08:36] we added the margin also uh in order to
+[08:34 - 08:37] add the corner right first of all what
+[08:36 - 08:42] we will do we will move this particular
+[08:37 - 08:46] view to the top so just margin top and
+[08:42 - 08:49] here I will give the margin minus 20
+[08:46 - 08:51] okay so if you see right uh it mve to
+[08:49 - 08:53] top right but you don't see anything
+[08:51 - 08:54] because we don't have background color
+[08:53 - 08:55] right now background color is
+[08:54 - 08:57] transparent so let's give background
+[08:55 - 09:00] color and here we can give background
+[08:57 - 09:04] color to be white
+[09:00 - 09:06] so let's define background color in uh
+[09:04 - 09:09] code and if you say it's mve to up now
+[09:06 - 09:12] and now if you try to give the
+[09:09 - 09:16] radius um at the top right so if you see
+[09:12 - 09:19] border top right radius let give 20 and
+[09:16 - 09:22] if I save it you'll see here right it
+[09:19 - 09:24] change completely right same you have to
+[09:22 - 09:28] give border top
+[09:24 - 09:30] left so or start radius you can say and
+[09:28 - 09:32] just give
+[09:30 - 09:37] the 20 here
+[09:32 - 09:39] again not start actually so here it's
+[09:37 - 09:41] it's
+[09:39 - 09:45] border
+[09:41 - 09:47] top L radius and save it and you see and
+[09:45 - 09:51] both side we got this radius effect you
+[09:47 - 09:55] can give more 30 for example and save it
+[09:51 - 09:58] right we got this beautiful effect um I
+[09:55 - 10:00] will make it minus 25 okay perfect now
+[09:58 - 10:04] let's let's add this particular text
+[10:00 - 10:06] because if you see uh because let's if
+[10:04 - 10:08] you see right we have this login and
+[10:06 - 10:10] sign up text as well so add that text
+[10:08 - 10:12] particular text
+[10:10 - 10:15] so below
+[10:12 - 10:18] this we'll add the text and just say
+[10:15 - 10:20] login SL sign up right now in this case
+[10:18 - 10:23] I know the styling is little bit so I
+[10:20 - 10:26] can give styling here directly okay the
+[10:23 - 10:30] uh which is inline styling and I can say
+[10:26 - 10:32] the Tex size uh but first of all I will
+[10:30 - 10:35] text align to be in the center if I save
+[10:32 - 10:38] it it's coming in the center correct and
+[10:35 - 10:42] also I will give some margin from the
+[10:38 - 10:42] top so just write
+[10:42 - 10:52] margin top to be
+[10:46 - 10:54] 40 okay and uh text size or font size
+[10:52 - 10:58] not text size but font
+[10:54 - 11:03] size uh to be
+[10:58 - 11:06] 25 25 is more 25 like this perfect okay
+[11:03 - 11:09] and then we have button right now if you
+[11:06 - 11:12] see our button is have icon and rounded
+[11:09 - 11:14] corner with the text correct and the
+[11:12 - 11:17] background is kind of blue so in order
+[11:14 - 11:21] to add the I will Define in a view first
+[11:17 - 11:23] okay and inside view uh I need to Define
+[11:21 - 11:28] uh icon and then text let's define text
+[11:23 - 11:30] first okay and just just write sign in
+[11:28 - 11:30] with
+[11:31 - 11:36] Google okay and save
+[11:34 - 11:38] it you you you are able to see this
+[11:36 - 11:40] particular text right now here we will
+[11:38 - 11:44] apply this uh some styling to this one
+[11:40 - 11:44] so I will Define some styling here
+[11:45 - 11:51] first so here you can Define button and
+[11:48 - 11:54] here I can Define style so first of all
+[11:51 - 11:56] I will give the background color okay
+[11:54 - 11:59] and now I want to give blue so here is
+[11:56 - 12:01] thing right every time when you using
+[11:59 - 12:02] some of the color right you have to
+[12:01 - 12:04] define the color code every time and
+[12:02 - 12:06] it's very hard to remember the color
+[12:04 - 12:09] code or find the color code right so in
+[12:06 - 12:11] order to uh uh solve this issue right
+[12:09 - 12:14] what I will do I will put all the color
+[12:11 - 12:16] code in one file so first of all let's
+[12:14 - 12:19] go to app folder and inside this app
+[12:16 - 12:21] folder I will create one folder called
+[12:19 - 12:24] shared okay so in this shared folder it
+[12:21 - 12:26] contains all the file which on which is
+[12:24 - 12:29] we are sharing across the application
+[12:26 - 12:31] and inside this I will say color do JS
+[12:29 - 12:33] file so let colors.
+[12:31 - 12:35] JS now here we can define the color so
+[12:33 - 12:38] just write
+[12:35 - 12:41] export default because we want to export
+[12:38 - 12:43] uh it because we we can use it anywhere
+[12:41 - 12:45] right and here we can define the color
+[12:43 - 12:47] code so right now our application has a
+[12:45 - 12:50] primary color which is kind of blue so
+[12:47 - 12:52] let's take the
+[12:50 - 12:55] uh color so let's go over here and I
+[12:52 - 12:59] will just copy this color code come back
+[12:55 - 13:02] here and Define in uh code so we have
+[12:59 - 13:04] this primary color just save it and in
+[13:02 - 13:05] order to access this color right you
+[13:04 - 13:08] have to import this colors first so if
+[13:05 - 13:11] you see right the it's importing from
+[13:08 - 13:13] the shared SLC colors import it and then
+[13:11 - 13:16] access this using this particular
+[13:13 - 13:18] colors. primary and if I save it right
+[13:16 - 13:21] you don't see any change because we did
+[13:18 - 13:23] not apply this button to this our um
+[13:21 - 13:27] view so just write
+[13:23 - 13:30] style and then in in a single curly
+[13:27 - 13:33] basis just access this us style
+[13:30 - 13:36] dot button okay and if I save it you
+[13:33 - 13:40] will see this change
+[13:36 - 13:42] right next uh let's give some padding so
+[13:40 - 13:46] I will add
+[13:42 - 13:49] padding to be 10 and also I will add the
+[13:46 - 13:51] margin from the all axis to be 30 and
+[13:49 - 13:53] save it if you see it's working
+[13:51 - 13:56] perfectly fine now we want to add the
+[13:53 - 13:57] icon Google icon right so in order to
+[13:56 - 14:00] add the Google
+[13:57 - 14:02] icon uh we have have uh the offic I
+[14:00 - 14:04] don't know whether this official or what
+[14:02 - 14:06] but we have this icons. export. FYI
+[14:04 - 14:09] right you don't need to inst any
+[14:06 - 14:13] dependency because it's I think it's
+[14:09 - 14:15] already uh defined in our XO application
+[14:13 - 14:18] so here you just need to search the uh
+[14:15 - 14:21] icon which you want I put this link of
+[14:18 - 14:24] this Google icon sorry the link U the
+[14:21 - 14:26] library this particular website URL now
+[14:24 - 14:27] right now I'm using this logo D Google
+[14:26 - 14:30] on this icon and this icon is coming
+[14:27 - 14:32] from the iic Icon right if I click on it
+[14:30 - 14:33] you will see this import statement so
+[14:32 - 14:36] make sure you will import this
+[14:33 - 14:39] particular statement so import it here
+[14:36 - 14:41] like this and then in order to use it
+[14:39 - 14:45] just copy this line of
+[14:41 - 14:49] code and come into the our view and
+[14:45 - 14:52] paste it here and save it right now as
+[14:49 - 14:54] soon as you save it you will see this uh
+[14:52 - 14:56] icon is coming so here you can change
+[14:54 - 14:59] the color so I will change to
+[14:56 - 15:01] White okay and and it's coming to White
+[14:59 - 15:04] right now let's apply some styling to
+[15:01 - 15:05] this text as well so I will apply this
+[15:04 - 15:08] inline
+[15:05 - 15:11] only so here I can Define
+[15:08 - 15:15] the text color not color but just color
+[15:11 - 15:18] right so color to be white right so
+[15:15 - 15:21] let's define the white color in our
+[15:18 - 15:25] color. JS so white the white color code
+[15:21 - 15:29] is a ffff save it and just access this
+[15:25 - 15:30] one colors. white and save it
+[15:29 - 15:33] if you see it's coming to sign with
+[15:30 - 15:36] Google with the white color now in order
+[15:33 - 15:39] to bring this in one line right in our
+[15:36 - 15:43] button view right let me close this
+[15:39 - 15:44] one just Define it uh display make it
+[15:43 - 15:46] display as a
+[15:44 - 15:50] flex
+[15:46 - 15:53] okay oh so you have to Define in a code
+[15:50 - 15:55] Flex right and save it and then you have
+[15:53 - 15:57] to define the flex Direction right now
+[15:55 - 15:59] it's a column by default but you have to
+[15:57 - 16:02] Define as a row so it will come in a one
+[15:59 - 16:04] line you see perfect now let's give some
+[16:02 - 16:07] margin uh some gap between these two
+[16:04 - 16:10] right so I what I will do I will simply
+[16:07 - 16:12] give uh right margin to this icon so
+[16:10 - 16:17] just add the
+[16:12 - 16:20] style and I will this margin right to be
+[16:17 - 16:24] 10 okay perfect and now bring this in
+[16:20 - 16:27] the center so to this button view I will
+[16:24 - 16:31] say justify content to be in the
+[16:27 - 16:32] center perfect right you can do the item
+[16:31 - 16:36] to be aligned so it will come in the
+[16:32 - 16:36] vertically Center
+[16:38 - 16:45] so um item align item to be in the
+[16:43 - 16:48] center if you see it's vertically coming
+[16:45 - 16:51] the center everything and now let's give
+[16:48 - 16:53] some rounded
+[16:51 - 16:59] corner I don't know
+[16:53 - 17:02] why okay so rounded border radius to be
+[16:59 - 17:04] t 10 and save it and if you see
+[17:02 - 17:07] perfect
+[17:04 - 17:09] right now let's give some login sign up
+[17:07 - 17:11] some margin from the top right so what I
+[17:09 - 17:13] will do I will give margin from the top
+[17:11 - 17:17] like 80 it's come a little bit down
+[17:13 - 17:19] perfect and if you see our prototype it
+[17:17 - 17:21] look perfectly fine right it's similar
+[17:19 - 17:24] to the one which we have prototype you
+[17:21 - 17:26] and once we design our UI I hope you
+[17:24 - 17:29] understand this particular thing now
+[17:26 - 17:33] let's add this Google authentic ation as
+[17:29 - 17:35] well uh to our this button right so once
+[17:33 - 17:38] I click on this button right I can able
+[17:35 - 17:39] to uh log in with the Google so with the
+[17:38 - 17:43] help of Expo Google authentication we
+[17:39 - 17:43] will add this functionality

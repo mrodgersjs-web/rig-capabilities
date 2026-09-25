@@ -1,0 +1,568 @@
+[00:05 - 00:10] in the last video we learn how to
+[00:07 - 00:12] implement this slider and also learn how
+[00:10 - 00:15] to use the flat list in order to display
+[00:12 - 00:17] data horizontally and we can scroll it
+[00:15 - 00:19] same Technique we are going to use for
+[00:17 - 00:21] this video course and we are going to
+[00:19 - 00:25] implement uh video course listing in
+[00:21 - 00:26] this particular uh section so I created
+[00:25 - 00:29] this video course collection in the
+[00:26 - 00:31] strappy okay and this this is the
+[00:29 - 00:33] content type builder for this one uh the
+[00:31 - 00:36] video course if you see right I added
+[00:33 - 00:38] this title description video URL image
+[00:36 - 00:40] and then I created this component F okay
+[00:38 - 00:43] and so that I can able to add the
+[00:40 - 00:46] content and uh sorry for the video I can
+[00:43 - 00:48] add the video topics as much as I want
+[00:46 - 00:50] okay let me show you how it looks when
+[00:48 - 00:51] you are going to add a new content for
+[00:50 - 00:55] the video
+[00:51 - 00:57] course so for example if I uh adding
+[00:55 - 01:00] this particular uh course information
+[00:57 - 01:02] right I added this all the details along
+[01:00 - 01:04] with this video topic so in the
+[01:02 - 01:06] introduction we have introduction and a
+[01:04 - 01:10] description along with the video URL
+[01:06 - 01:11] okay and I can add as many as we want
+[01:10 - 01:14] that's the reason this component is very
+[01:11 - 01:16] helpful so you can reuse this component
+[01:14 - 01:19] right if I want to add new one I can add
+[01:16 - 01:22] it here okay and just I can add multiple
+[01:19 - 01:26] one okay no limit so this is how uh it
+[01:22 - 01:29] works okay very simple uh so you can try
+[01:26 - 01:31] it if you want to uh want my strappy
+[01:29 - 01:33] dashboard access so let me know in the
+[01:31 - 01:36] comment section so I can also upload the
+[01:33 - 01:38] source code of this uh stripy dashboard
+[01:36 - 01:39] so so you can directly use it okay for
+[01:38 - 01:42] your
+[01:39 - 01:44] application so let's go back to the our
+[01:42 - 01:45] design and if you understand right when
+[01:44 - 01:48] you scroll it we want to scroll
+[01:45 - 01:49] horizontally so let's go back to our uh
+[01:48 - 01:52] vs
+[01:49 - 01:56] code and here uh we'll create a new
+[01:52 - 01:58] component called video course list
+[01:56 - 02:00] video course
+[01:58 - 02:03] list.js okay
+[02:00 - 02:06] so inside this let's add the default
+[02:03 - 02:08] function okay and let's save it make
+[02:06 - 02:12] sure you will import that in a home page
+[02:08 - 02:15] so let's import it here so in this case
+[02:12 - 02:19] is video course list if I save
+[02:15 - 02:21] it uh why it's not showing yeah if you
+[02:19 - 02:23] see right it's showing the video course
+[02:21 - 02:25] lead over here right I'm using the
+[02:23 - 02:29] emulator that's the reason it's little
+[02:25 - 02:32] bit slow okay now first of all we want
+[02:29 - 02:35] to fade the data okay so we want to add
+[02:32 - 02:37] the endpoint in our Global
+[02:35 - 02:39] API so I will write a new endpoint
+[02:37 - 02:42] called
+[02:39 - 02:42] get
+[02:42 - 02:50] video course is equal
+[02:45 - 02:54] to and we have get API here we want to
+[02:50 - 02:57] add the API so for this one I have this
+[02:54 - 03:00] API video the end point is video Dash
+[02:57 - 03:04] courses okay so we add it here here like
+[03:00 - 03:07] this and make sure once you add it you
+[03:04 - 03:10] will import it so I will import it here
+[03:07 - 03:13] get video course okay and save it now
+[03:10 - 03:15] let's go back to slider. JS oh sorry uh
+[03:13 - 03:16] so you have to go back to the video
+[03:15 - 03:19] course
+[03:16 - 03:23] list.js where we will F this uh video
+[03:19 - 03:27] course okay so I will create new method
+[03:23 - 03:31] so let video
+[03:27 - 03:34] course and it will be a sync fun
+[03:31 - 03:38] function here uh I create one all
+[03:34 - 03:41] response is equal to so let's f it from
+[03:38 - 03:46] Global API then we have a method called
+[03:41 - 03:49] get video course and here we say data
+[03:46 - 03:52] okay so in response we'll get the data
+[03:49 - 03:54] now if you if you learn the slider right
+[03:52 - 03:56] if you see the slider we map the data
+[03:54 - 03:59] according to our use same Technique we
+[03:56 - 04:01] are doing here so I will map this one
+[03:59 - 04:04] and I will save it in the result so
+[04:01 - 04:08] response. data do
+[04:04 - 04:08] map this case the
+[04:09 - 04:15] item so make sure you uh this all this
+[04:13 - 04:20] brackets and everything okay and this
+[04:15 - 04:23] first is ID so item. ID then uh the
+[04:20 - 04:25] field we want is title description okay
+[04:23 - 04:30] so let's
+[04:25 - 04:33] say um in this case title will be
+[04:30 - 04:37] item.
+[04:33 - 04:41] title then description I will get disk
+[04:37 - 04:43] and say item do attributes so here right
+[04:41 - 04:45] we want to mention the attributes
+[04:43 - 04:46] because uh this title contains in know
+[04:45 - 04:49] attributes
+[04:46 - 04:56] so attribute sorry item do attribute.
+[04:49 - 04:56] title and same here do description
+[04:56 - 05:00] right so we want the image so let's say
+[04:59 - 05:01] image
+[05:00 - 05:04] so
+[05:01 - 05:04] item do
+[05:04 - 05:14] attributes do image. data dot
+[05:09 - 05:18] attributes. URL okay so if you
+[05:14 - 05:20] see uh inside this image we have data
+[05:18 - 05:22] inside that we have attributes and
+[05:20 - 05:24] inside that we have URL okay and same
+[05:22 - 05:27] thing uh we will put the video topic
+[05:24 - 05:29] directly in one item okay so let's
+[05:27 - 05:33] say video topic and here we can can say
+[05:29 - 05:35] item dot attributes. video topic so it
+[05:33 - 05:36] contains video topic and everything okay
+[05:35 - 05:39] so we are not mapping this one for now
+[05:36 - 05:43] we'll keep as it is okay if you want to
+[05:39 - 05:45] map you can map it okay so let's say V
+[05:43 - 05:49] everything small perfect now we will
+[05:45 - 05:53] store this one in one state so
+[05:49 - 05:56] constant uh video list
+[05:53 - 05:58] comma
+[05:56 - 06:02] set video
+[05:58 - 06:03] list is equal to your state and I will
+[06:02 - 06:06] pass the empty
+[06:03 - 06:08] one and here I will make sure that I
+[06:06 - 06:10] will set the value for the video list by
+[06:08 - 06:15] setting video
+[06:10 - 06:17] list bracket the result okay so you can
+[06:15 - 06:19] print the response if you want so I will
+[06:17 - 06:19] console the
+[06:21 - 06:27] result okay but uh we have to call this
+[06:25 - 06:32] method in use effect right so you know
+[06:27 - 06:32] how use effect will work so write in use
+[06:34 - 06:40] effect okay I will pass the Mt and I
+[06:37 - 06:42] will just call this once only when this
+[06:40 - 06:46] component get load
+[06:42 - 06:48] okay and uh if you see if you go back to
+[06:46 - 06:51] the console you'll see this name and
+[06:48 - 06:55] video URL everything right coming in
+[06:51 - 06:57] this particular um what you say this
+[06:55 - 07:00] particular uh video list okay now we
+[06:57 - 07:02] have to iterate it correct so in this
+[07:00 - 07:04] case again we are using the flat list
+[07:02 - 07:06] okay the say flat
+[07:04 - 07:11] list inside the flat list I will pass
+[07:06 - 07:14] the data first so data is the video list
+[07:11 - 07:14] after that I will render the item so
+[07:14 - 07:20] render
+[07:14 - 07:20] item uh here I want to render the
+[07:20 - 07:28] item okay and here I will Define The
+[07:24 - 07:31] View inside view I will write my
+[07:28 - 07:31] code
+[07:39 - 07:43] so after that we have to display the
+[07:41 - 07:46] image if you see this mockup we have to
+[07:43 - 07:47] display the image that's it nothing else
+[07:46 - 07:50] right
+[07:47 - 07:52] so just write
+[07:50 - 07:55] image so you'll import the react n and
+[07:52 - 07:57] then we have to pass the source so in
+[07:55 - 08:01] this case source is our URL so I will
+[07:57 - 08:03] pass into the URI then then item Dash we
+[08:01 - 08:07] have called uh Source called image
+[08:03 - 08:09] correct so I pass the image then I will
+[08:07 - 08:12] put the inline styling so style is equal
+[08:09 - 08:14] to equal to I will pass the
+[08:12 - 08:17] width in this case if you learn right we
+[08:14 - 08:20] are passing the width but uh for this
+[08:17 - 08:22] course we can uh give the manual width
+[08:20 - 08:27] size right so I will give the for
+[08:22 - 08:28] example 200 then height will be 100 and
+[08:27 - 08:31] let's see how it looks so if you see
+[08:28 - 08:34] right it looks perfect fine I think the
+[08:31 - 08:37] width and height is okay I will do 180
+[08:34 - 08:39] here okay now we want it horizontally so
+[08:37 - 08:41] just make horizontal to be true for this
+[08:39 - 08:46] flat
+[08:41 - 08:49] list and save it then apply some styling
+[08:46 - 08:51] uh so here you can apply The Styling for
+[08:49 - 08:54] the image or you can apply for this view
+[08:51 - 08:58] as well I will add image only so here I
+[08:54 - 09:02] can give margin right to
+[08:58 - 09:06] be then border radius I will mark it as
+[09:02 - 09:09] a p
+[09:06 - 09:11] okay and it
+[09:09 - 09:13] perfect sorry here we want to say
+[09:11 - 09:16] horizontal we
+[09:13 - 09:18] true and we give some margin from the
+[09:16 - 09:21] top so I will add hit here only
+[09:18 - 09:21] style
+[09:22 - 09:28] margin up to be
+[09:26 - 09:32] 10 I give
+[09:28 - 09:34] 15 so uh one more if you uh see here
+[09:32 - 09:36] right we have the title called video
+[09:34 - 09:40] course right so let's give that title
+[09:36 - 09:42] first so I will add the text here and I
+[09:40 - 09:46] will just write
+[09:42 - 09:50] video course okay and let's give some
+[09:46 - 09:53] styling to this one just TR style
+[09:50 - 09:57] instead that I will give the font size
+[09:53 - 10:00] be 20 then font to be a font weight I
+[09:57 - 10:01] will go bold
+[10:00 - 10:04] and save
+[10:01 - 10:07] it let's give some little margin from
+[10:04 - 10:10] the bottom to be
+[10:07 - 10:13] three and this look good to me and if
+[10:10 - 10:17] you see oh so if you see this one right
+[10:13 - 10:19] it's working perfectly fine okay and now
+[10:17 - 10:21] I can able to scroll it you can remove
+[10:19 - 10:25] this scroll indicator so just write
+[10:21 - 10:28] horizontal scroll indicator to be
+[10:25 - 10:31] false and that's all so you'll not able
+[10:28 - 10:33] to see the hor scroll indicator at all
+[10:31 - 10:35] okay perfect so we successfully
+[10:33 - 10:37] implemented this video courses
+[10:35 - 10:40] particular section we are going to build
+[10:37 - 10:44] this popular course list so if you see
+[10:40 - 10:46] in the UI we have two different uh
+[10:44 - 10:49] course list right one is the basic and
+[10:46 - 10:51] another is Advance here we are not
+[10:49 - 10:53] creating two different components we are
+[10:51 - 10:55] creating only one component for the both
+[10:53 - 10:59] of them only thing that we will pass the
+[10:55 - 11:01] value whether it's a basic uh course or
+[10:59 - 11:03] whether it's Advanced course okay and
+[11:01 - 11:04] depends on the value we are going to f
+[11:03 - 11:07] the
+[11:04 - 11:10] information I already created this
+[11:07 - 11:13] particular uh strappy uh collection for
+[11:10 - 11:17] this course list okay and this is my API
+[11:13 - 11:19] response if you see the API endpoint I'm
+[11:17 - 11:22] filtering the data uh depends on the
+[11:19 - 11:25] type of this particular course okay and
+[11:22 - 11:28] if it's basic then I'm only facing basic
+[11:25 - 11:31] if I change to advance it only face the
+[11:28 - 11:34] advance one okay and if you see the type
+[11:31 - 11:37] is Advanced now okay also if you want to
+[11:34 - 11:40] learn more about the how to filter the
+[11:37 - 11:42] data in your on strapy you can go to the
+[11:40 - 11:45] strapy documentation and here you will
+[11:42 - 11:49] find the all different types of operator
+[11:45 - 11:52] and depends on that your data will get
+[11:49 - 11:55] filtered out okay so let me show you how
+[11:52 - 11:57] I made the uh this particular collection
+[11:55 - 12:00] if you see right I have the name type
+[11:57 - 12:02] then description and and then I I
+[12:00 - 12:05] created this uh components called
+[12:02 - 12:06] introduction B not intr but if I click
+[12:05 - 12:09] on this component you will see this
+[12:06 - 12:11] content and topic and everything right
+[12:09 - 12:13] so if you want to know this trappy back
+[12:11 - 12:15] end code let me know in the comment
+[12:13 - 12:19] section so let's go back to our
+[12:15 - 12:22] application in vs code and this is our
+[12:19 - 12:22] application right now
+[12:22 - 12:30] okay so let's create a new
+[12:26 - 12:34] component called um Force
+[12:30 - 12:37] list.js okay I will add the default
+[12:34 - 12:39] template native function and I'll save
+[12:37 - 12:42] it now go back to our
+[12:39 - 12:45] home.js here we will add that particular
+[12:42 - 12:48] function let's
+[12:45 - 12:52] say um course
+[12:48 - 12:55] list save like this now first of all I
+[12:52 - 12:57] want to pass as a basic uh the type is a
+[12:55 - 12:59] basic course list right so I will pass
+[12:57 - 13:04] the type which is is equal
+[12:59 - 13:05] to basic okay now in order to accept
+[13:04 - 13:08] this
+[13:05 - 13:10] particular prop which we send from the
+[13:08 - 13:14] course lead in the course lead we have
+[13:10 - 13:17] to accept it as a prop so I will
+[13:14 - 13:20] say okay so when you're passing any
+[13:17 - 13:22] value uh through the this component you
+[13:20 - 13:25] have to accept it here so that you can
+[13:22 - 13:27] use it right if want to see let's um add
+[13:25 - 13:29] the use
+[13:27 - 13:33] effect
+[13:29 - 13:33] and inside that I can console this
+[13:36 - 13:40] type type
+[13:41 - 13:47] okay and I will save it now let's go
+[13:45 - 13:50] back here and if you go to the console
+[13:47 - 13:54] right let's bring it down you will see
+[13:50 - 13:56] the type is basic okay in the same way
+[13:54 - 14:00] if I go to the uh
+[13:56 - 14:03] home.js I will add another one
+[14:00 - 14:05] which we can call Advance right and now
+[14:03 - 14:08] you'll print the basic and Advance as
+[14:05 - 14:10] well okay because we using the same
+[14:08 - 14:14] component only difference is passing
+[14:10 - 14:16] different type of course okay now let's
+[14:14 - 14:20] go back to Global
+[14:16 - 14:20] API and here I will add the new
+[14:21 - 14:29] API so let's say get course list and
+[14:26 - 14:33] here I will pass the type so course type
+[14:29 - 14:36] right and the end point is the same
+[14:33 - 14:40] which I created okay so this is the end
+[14:36 - 14:42] point I'm passing directly here okay
+[14:40 - 14:45] only thing that you need to change this
+[14:42 - 14:47] to replace the type with the the type
+[14:45 - 14:49] which you want to pass right so I what I
+[14:47 - 14:49] will
+[14:49 - 14:55] do here inside that I will add as a type
+[14:53 - 14:57] okay and save it make sure you will
+[14:55 - 15:00] export this
+[14:57 - 15:03] one and save it it now you are ready
+[15:00 - 15:07] with the API endpoint right now go to
+[15:03 - 15:09] the uh course list.js component and here
+[15:07 - 15:13] we'll call this component so let's
+[15:09 - 15:15] create a new method called constant gate
+[15:13 - 15:18] course
+[15:15 - 15:22] list which is
+[15:18 - 15:24] async in here you can add the meod so in
+[15:22 - 15:26] this case I will write constant response
+[15:24 - 15:29] which is equal
+[15:26 - 15:32] to um
+[15:29 - 15:35] let's say Global API
+[15:32 - 15:37] dot in this case is our course list
+[15:35 - 15:40] right and we have to pass the type so we
+[15:37 - 15:43] already have a type okay this
+[15:40 - 15:46] one and then
+[15:43 - 15:49] data that's it now in this P we will get
+[15:46 - 15:51] the result right but we will filter
+[15:49 - 15:53] filterate out the result according to
+[15:51 - 15:55] the our requirement right the same way
+[15:53 - 16:00] which we did for our video course so
+[15:55 - 16:02] let's say constant result is equal to to
+[16:00 - 16:05] response.
+[16:02 - 16:08] data do
+[16:05 - 16:08] map
+[16:09 - 16:15] item first of all I will add the ID so
+[16:12 - 16:16] item.
+[16:15 - 16:21] ID
+[16:16 - 16:23] then we have the name description okay
+[16:21 - 16:28] so let's
+[16:23 - 16:30] say um name of the course which is item
+[16:28 - 16:33] do name
+[16:30 - 16:33] then
+[16:34 - 16:40] description
+[16:36 - 16:42] description then so one we we forgot
+[16:40 - 16:44] that we need to add the attributes
+[16:42 - 16:46] because it it the name and descriptions
+[16:44 - 16:50] in the attribut so make sure that don't
+[16:46 - 16:54] forget it otherwise you will not get the
+[16:50 - 16:56] result like this perfect then what else
+[16:54 - 16:59] we have we want the image of the course
+[16:56 - 17:01] so obviously item
+[16:59 - 17:03] attributes.
+[17:01 - 17:07] image
+[17:03 - 17:09] data do attributes. URL okay where we
+[17:07 - 17:12] have the URL of the
+[17:09 - 17:14] image and the last but not the least
+[17:12 - 17:18] that we have
+[17:14 - 17:25] this um topics okay so let's
+[17:18 - 17:26] say topic is item do attributes dot
+[17:25 - 17:30] topic
+[17:26 - 17:32] dot just I will just face the topic here
+[17:30 - 17:34] okay and not anything else so just write
+[17:32 - 17:36] as a topic okay
+[17:34 - 17:39] perfect now we have all the data we can
+[17:36 - 17:43] console that data so write console.
+[17:39 - 17:48] result and just save it okay and if you
+[17:43 - 17:50] go back here okay make sure you will
+[17:48 - 17:53] call this particular get course list
+[17:50 - 17:53] inside this use
+[17:53 - 17:58] effect if you see we get the result we
+[17:56 - 18:02] have all the information which we need
+[17:58 - 18:05] okay everything is ready perfect now we
+[18:02 - 18:07] have to display it on the screen so we
+[18:05 - 18:09] will use the flat list we learn the
+[18:07 - 18:11] flash list in the last section only so
+[18:09 - 18:14] just write flash
+[18:11 - 18:18] list and inside the flash list provide
+[18:14 - 18:20] the data so data is equal to uh we have
+[18:18 - 18:23] to add this data in somewhere in the
+[18:20 - 18:27] state so Define one state called
+[18:23 - 18:30] constant course list comma set course
+[18:27 - 18:30] list
+[18:30 - 18:37] equal to use State pass the empty
+[18:34 - 18:39] initially and then we have to set this
+[18:37 - 18:43] course list over here okay set the
+[18:39 - 18:46] course list and add the result like this
+[18:43 - 18:49] and this course list we will pass here
+[18:46 - 18:52] okay so like just course list if you see
+[18:49 - 18:54] this course list we have to pass it okay
+[18:52 - 18:55] if you think name is different C is
+[18:54 - 18:58] small okay and here C is capital so make
+[18:55 - 18:59] sure that one then we have to render the
+[18:58 - 19:02] the
+[18:59 - 19:02] item
+[19:06 - 19:14] so here we'll write
+[19:10 - 19:16] item and then inside that I will add the
+[19:14 - 19:16] view
+[19:20 - 19:25] initially inside view I will display
+[19:22 - 19:28] this all the course list so if you see
+[19:25 - 19:32] this mockup right the first of all we
+[19:28 - 19:36] have this image and then this uh name of
+[19:32 - 19:40] the course okay so here I will write the
+[19:36 - 19:42] first image I will display the image and
+[19:40 - 19:45] then we have to add the
+[19:42 - 19:48] source make sure you import the image in
+[19:45 - 19:49] order to get this recommendation and
+[19:48 - 19:53] then source so in this case the source
+[19:49 - 19:55] is our image URL so I will add the URI
+[19:53 - 19:59] and inside that I will just provide add.
+[19:55 - 20:00] image item. image okay then we will give
+[19:59 - 20:05] some width and
+[20:00 - 20:09] height let's give in style we'll give
+[20:05 - 20:13] the width of
+[20:09 - 20:18] 100 we want to give more let's give
+[20:13 - 20:23] 180 and then height is 120 let's see how
+[20:18 - 20:25] it looks now if you see we got this um
+[20:23 - 20:27] images and the name as well I added this
+[20:25 - 20:31] text as well and it's showing on the
+[20:27 - 20:32] screen also I added this text as a
+[20:31 - 20:36] heading for our course just I'm
+[20:32 - 20:39] replacing uh with this video course as a
+[20:36 - 20:41] basic course and we want all Advan
+[20:39 - 20:44] course so okay so here I will just
+[20:41 - 20:46] replace the basic word with the type so
+[20:44 - 20:47] whatever type it is it will conver into
+[20:46 - 20:50] that particular one
+[20:47 - 20:54] okay so right in this case it's a basic
+[20:50 - 20:56] course and another is Advan right right
+[20:54 - 20:58] now if if you see right I can't able to
+[20:56 - 21:01] scroll on the screen so I will fix it
+[20:58 - 21:03] after this one right so first of all uh
+[21:01 - 21:05] let's put everything in a horizontal
+[21:03 - 21:08] line and change and give some styling to
+[21:05 - 21:13] this particular um course list okay so
+[21:08 - 21:13] here I will say width as a
+[21:13 - 21:20] 180 and I also make the corner to be
+[21:16 - 21:23] rounded so I have radius border radius
+[21:20 - 21:25] to be rounded as a
+[21:23 - 21:28] 10 and we want the flat list to be
+[21:25 - 21:31] horizontal so just say horizontal is
+[21:28 - 21:33] equal to true and save it right so it
+[21:31 - 21:35] will come as a horizontal and if you see
+[21:33 - 21:36] Advan course list also displaying on the
+[21:35 - 21:41] screen
+[21:36 - 21:44] correct um if you see our um this course
+[21:41 - 21:47] right we have this uh information as
+[21:44 - 21:51] well written below this one right so
+[21:47 - 21:52] let's change this size also I will keep
+[21:51 - 21:54] as it is just I will give some margin
+[21:52 - 21:57] from the right so let's give
+[21:54 - 22:00] margin right to be
+[21:57 - 22:00] 10
+[22:00 - 22:05] and then we want this background to be
+[22:03 - 22:08] white so I will say
+[22:05 - 22:12] style and background
+[22:08 - 22:15] color be color of I will import from the
+[22:12 - 22:20] color and we have the colors do white
+[22:15 - 22:20] and save it so we have white color
+[22:20 - 22:29] now and here instead of giving margin
+[22:25 - 22:33] here right let's try to do margin here
+[22:29 - 22:34] then you will see this change also uh
+[22:33 - 22:40] give
+[22:34 - 22:40] the Border radius to be 10 here as
+[22:41 - 22:47] well you'll see the
+[22:44 - 22:49] difference also we want this text to be
+[22:47 - 22:51] padding so let's add a view here
+[22:49 - 22:54] directly and then we will give the
+[22:51 - 22:56] padding for that view only so I will add
+[22:54 - 23:00] and I will put this text inside this
+[22:56 - 23:03] View and for this view I will give style
+[23:00 - 23:05] and I will give padding of
+[23:03 - 23:09] 10 like this and then it will show like
+[23:05 - 23:11] this right and if I move it it's showing
+[23:09 - 23:14] correct
+[23:11 - 23:18] also we have to make sure that we will
+[23:14 - 23:21] remove this um Side Bar slide bar right
+[23:18 - 23:24] so just add show horizontal scroll bar
+[23:21 - 23:27] indicator which is equal to be false
+[23:24 - 23:29] okay and uh in order to change the
+[23:27 - 23:32] layout right uh because it look like a
+[23:29 - 23:35] squarey so I will add this withd and
+[23:32 - 23:39] let's add more and let's see how it
+[23:35 - 23:44] looks this look good to me also I let
+[23:39 - 23:46] give some margin from the stop so St and
+[23:44 - 23:50] we'll say
+[23:46 - 23:50] margin top
+[23:52 - 23:57] 10 also one more information we want to
+[23:55 - 24:00] display is the lesson number of lesson
+[23:57 - 24:02] uh in that particular course right so we
+[24:00 - 24:04] have this topic information right so
+[24:02 - 24:06] we'll show the length of this particular
+[24:04 - 24:10] topic so for example let's add the text
+[24:06 - 24:13] here and here I will say topic
+[24:10 - 24:15] okay.
+[24:13 - 24:18] length I save it you'll see number of
+[24:15 - 24:20] length of the topic right and let me
+[24:18 - 24:22] show you in the uh response so here
+[24:20 - 24:24] topic we have only two topic
+[24:22 - 24:27] introduction get started right so in
+[24:24 - 24:30] that case we will show the number and
+[24:27 - 24:33] after that we have just need to write
+[24:30 - 24:36] lessons so just write like this after
+[24:33 - 24:36] this just write
+[24:37 - 24:40] lessons you
+[24:52 - 24:57] see
+[24:54 - 25:02] perfect we can give some styling to this
+[24:57 - 25:04] as well so just styling this style and
+[25:02 - 25:07] then
+[25:04 - 25:10] font B to be
+[25:07 - 25:12] bold and I will increase the font size
+[25:10 - 25:12] as
+[25:19 - 25:24] well like this okay and let's compare
+[25:23 - 25:26] with
+[25:24 - 25:29] our
+[25:26 - 25:29] um
+[25:31 - 25:34] and also I will give the font style to
+[25:33 - 25:37] this
+[25:34 - 25:38] one so let's say first of all I will
+[25:37 - 25:41] change the
+[25:38 - 25:45] color
+[25:41 - 25:45] color colors.
+[25:45 - 25:52] gray perfect I will keep as it is okay
+[25:49 - 25:56] or you can change the font we light font
+[25:52 - 25:56] weight we change
+[25:56 - 26:01] to
+[25:58 - 26:01] um
+[26:04 - 26:11] 100 this perfect and if I scroll it you
+[26:08 - 26:13] will see the course as well okay you can
+[26:11 - 26:15] change the height it's up to you how you
+[26:13 - 26:17] want to display okay if I change this
+[26:15 - 26:19] height to like
+[26:17 - 26:23] this it will show like this and I think
+[26:19 - 26:25] this is perfect for me okay now we will
+[26:23 - 26:27] fix this scroll indicator okay if you
+[26:25 - 26:30] see right I can't able to scroll it
+[26:27 - 26:33] correct so let's go back home.js and
+[26:30 - 26:37] here we have to wrap this view inside
+[26:33 - 26:40] the scroll indicator so here we have the
+[26:37 - 26:42] U function called scroll view okay and
+[26:40 - 26:45] what it will do it will allow us to
+[26:42 - 26:49] scroll the um user interface if I see
+[26:45 - 26:51] right now I can able to scroll it so you
+[26:49 - 26:55] can learn more about the scroll view on
+[26:51 - 26:58] the Expo official website okay it has
+[26:55 - 27:00] their own um properties as well okay but
+[26:58 - 27:02] right now we don't want it and just we
+[27:00 - 27:06] are showing like this okay and if you
+[27:02 - 27:09] see everything is look um looking good
+[27:06 - 27:11] so here the last thing if you see right
+[27:09 - 27:13] right now we are getting uh the basic
+[27:11 - 27:16] course title with the B smaller right so
+[27:13 - 27:19] in order to fix that issue in the text
+[27:16 - 27:22] right you can write text transformation
+[27:19 - 27:24] as a CSS property and here you can give
+[27:22 - 27:26] capitalize okay so it what it will do it
+[27:24 - 27:29] will Capital the first letter of the
+[27:26 - 27:32] each uh word if you see now basic course
+[27:29 - 27:34] Advan course right and it will fix for
+[27:32 - 27:36] us I hope you understand this particular
+[27:34 - 27:39] section in the next section we are going
+[27:36 - 27:40] to build on the click event so once I
+[27:39 - 27:43] click on this one right we will learn
+[27:40 - 27:45] how to navigate to the new page so in
+[27:43 - 27:47] the next section is completely about the
+[27:45 - 27:49] react navigation and how to do the
+[27:47 - 27:52] navigation from one page to another page
+[27:49 - 27:53] right so that particular section um
+[27:52 - 27:56] concept we will cover in the next
+[27:53 - 27:56] section

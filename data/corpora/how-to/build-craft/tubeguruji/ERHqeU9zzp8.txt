@@ -1,0 +1,2996 @@
+[00:00 - 00:06] Hey there. Today with the help of React
+[00:02 - 00:08] Native, Expo and Cursor AI, we are going
+[00:06 - 00:10] to build AI trip planner and travel
+[00:08 - 00:12] agent app from scratch. And this is not
+[00:10 - 00:15] just a simple trip planner. We are
+[00:12 - 00:17] building a fullfeatured mobile app where
+[00:15 - 00:19] an AI travel agent can help you plan
+[00:17 - 00:22] your next trip, generate your daily
+[00:19 - 00:25] eternally, suggest places to visit and
+[00:22 - 00:27] organize everything in one place. You
+[00:25 - 00:29] will also able to add and manage your
+[00:27 - 00:32] hotel bookings, flights, car rentals,
+[00:29 - 00:34] packing list and complete trip details.
+[00:32 - 00:36] And one of the most important feature,
+[00:34 - 00:39] you can share your entire trip with the
+[00:36 - 00:42] family members. So they can access their
+[00:39 - 00:45] itenary, booking, packing list and other
+[00:42 - 00:46] trip information directly from their own
+[00:45 - 00:50] app. We are going to build everything
+[00:46 - 00:52] step by step using cursor AI from the UI
+[00:50 - 00:53] to the backend and AI agent
+[00:52 - 00:56] functionality. And if you are a
+[00:53 - 00:58] developer or a designer in India, here
+[00:56 - 01:00] is something interesting. Cursor
+[00:58 - 01:03] recently launched a new plan for just
+[01:00 - 01:06] 649 rupees a month. So this is a great
+[01:03 - 01:08] time to build this application and make
+[01:06 - 01:11] your resume stronger. This is a complete
+[01:08 - 01:14] fullstack SAS mobile app built with
+[01:11 - 01:16] React Native and Expo. While Superbase
+[01:14 - 01:18] handle authentication, database and
+[01:16 - 01:21] backend services. The complete project
+[01:18 - 01:24] is divided into a small easy to follow
+[01:21 - 01:26] chapters. In each chapter, I will first
+[01:24 - 01:29] explain the feature we are building, how
+[01:26 - 01:31] it should work and the overall
+[01:29 - 01:34] implementation approach. Then we'll
+[01:31 - 01:36] build it step by step using cursor AI
+[01:34 - 01:38] with a proper nodes prompt and
+[01:36 - 01:40] explanation throughout the process. So
+[01:38 - 01:43] even if you are a new to the react
+[01:40 - 01:46] native expo superbase or cursor you are
+[01:43 - 01:48] able to follow along and understand not
+[01:46 - 01:51] just what we are building but how and
+[01:48 - 01:53] why we are building uh this application.
+[01:51 - 01:56] So if you want to learn how to build the
+[01:53 - 01:58] real world AI powered mobile app from
+[01:56 - 02:01] scratch using cursor react native expo
+[01:58 - 02:03] and superbase then this video is for
+[02:01 - 02:05] you. So let's get started and let me
+[02:03 - 02:07] show you the demo of this application.
+[02:05 - 02:09] So let me walk through the application
+[02:07 - 02:11] demo first which we are going to build
+[02:09 - 02:14] in this video. So if you see we have
+[02:11 - 02:16] this beautiful uh sign up screen and if
+[02:14 - 02:19] you already have an account then user
+[02:16 - 02:21] have option to simply sign into the
+[02:19 - 02:23] platform. Now with the help of superbase
+[02:21 - 02:26] authentication we added email password
+[02:23 - 02:28] and Google authentication and once users
+[02:26 - 02:31] sign in successfully it will uh jump to
+[02:28 - 02:33] the home screen where we have bottom
+[02:31 - 02:36] three tabs called home my trips and
+[02:33 - 02:39] profile and then at the top we have this
+[02:36 - 02:41] beautiful professional uh UIUX design.
+[02:39 - 02:44] User have option to directly chat with
+[02:41 - 02:47] the AI agent. Below that we have a my
+[02:44 - 02:50] plan and explore option. Whenever user
+[02:47 - 02:52] create any new trip, it will display
+[02:50 - 02:55] simply on this homepage under the my
+[02:52 - 02:59] plan section. Then below that we also
+[02:55 - 03:01] have quick tools uh to plan with AI or
+[02:59 - 03:04] create a new trip. We also have my trip
+[03:01 - 03:08] quick shortcut and option to invite your
+[03:04 - 03:11] family member to join the trip. Now you
+[03:08 - 03:13] also have get quick option like finish
+[03:11 - 03:16] planning the existing trip and some
+[03:13 - 03:19] travel tips as well. Okay. Now under the
+[03:16 - 03:23] explore section, you can explore more
+[03:19 - 03:24] feature uh based on your existing travel
+[03:23 - 03:27] and then it will give you some
+[03:24 - 03:30] suggestion for your the destin next uh
+[03:27 - 03:32] travel destination and you can plan any
+[03:30 - 03:34] destination with the help of AI or you
+[03:32 - 03:37] can create that trip. Pretty cool,
+[03:34 - 03:40] right? Now let me show you uh this trip
+[03:37 - 03:43] and how it actually looks. So overall
+[03:40 - 03:45] once you open any trip you will get and
+[03:43 - 03:49] navigate to the new page where you will
+[03:45 - 03:50] find all the um trip detail like the
+[03:49 - 03:53] trip information the source and
+[03:50 - 03:56] destination and when you are traveling
+[03:53 - 03:59] then your itinary travel option
+[03:56 - 04:02] obviously it is divided into a dayby-day
+[03:59 - 04:05] itinonary. So on each day what you are
+[04:02 - 04:08] planning based on the time your day and
+[04:05 - 04:11] the activity and you will see all the
+[04:08 - 04:13] details say okay now whichever whenever
+[04:11 - 04:16] you want to add anything you have option
+[04:13 - 04:20] to add a stop just click on it it will
+[04:16 - 04:21] open up a popup and you can manually add
+[04:20 - 04:23] the information as well and that
+[04:21 - 04:28] information will get added to that
+[04:23 - 04:31] specific date and then here you will see
+[04:28 - 04:33] all the trip information day by day. We
+[04:31 - 04:37] also have booking section where you can
+[04:33 - 04:39] add a booking like a flight details or
+[04:37 - 04:42] uh car rental details so that it will be
+[04:39 - 04:46] at one place. You don't need to worry
+[04:42 - 04:48] about finding email or finding any
+[04:46 - 04:50] information you can directly find
+[04:48 - 04:52] through this app. Once you enter the
+[04:50 - 04:55] information and same thing we added for
+[04:52 - 04:57] hotel and extra tickets. Then we also
+[04:55 - 05:01] have packing section where you can add
+[04:57 - 05:03] all the to-do list for your backpack.
+[05:01 - 05:04] Whether you want to add a sunscreen, you
+[05:03 - 05:07] want to add swimsuit, you can just
+[05:04 - 05:09] simply add it. Once you add it to your
+[05:07 - 05:12] back, you can mark as a check box and
+[05:09 - 05:16] then it will automatically update it for
+[05:12 - 05:18] you. Anything or any uh item which you
+[05:16 - 05:21] are added, you have option to edit those
+[05:18 - 05:23] item anytime or if you want to delete
+[05:21 - 05:26] you can even delete it. Now the
+[05:23 - 05:28] interesting feature about this is share
+[05:26 - 05:31] this with the family. Just click on this
+[05:28 - 05:33] share option and you can enter the
+[05:31 - 05:35] family code directly over here and
+[05:33 - 05:38] invite to that family member and once
+[05:35 - 05:40] they join they can also see this trip
+[05:38 - 05:42] details.
+[05:40 - 05:45] All the features which you will not find
+[05:42 - 05:48] anywhere inside any application we added
+[05:45 - 05:51] inside this app. And throughout this
+[05:48 - 05:53] video we are showing this each feature
+[05:51 - 05:56] one by one and we are going to implement
+[05:53 - 05:59] it. I will explain each feature before
+[05:56 - 06:02] with a proper handwritten style notes so
+[05:59 - 06:04] that it is easy to understand.
+[06:02 - 06:07] Now let's move to the most interesting
+[06:04 - 06:10] feature which is an AI agent. Now once
+[06:07 - 06:13] you click we added a very powerful AI
+[06:10 - 06:15] agent with a streaming and generative AI
+[06:13 - 06:18] response. You have option to create a
+[06:15 - 06:21] new trip or you can simply select any
+[06:18 - 06:24] trip and then it will uh discuss or give
+[06:21 - 06:26] answer based on that trip. For example,
+[06:24 - 06:30] if I select the California trip, you can
+[06:26 - 06:34] simply add uh let's say find some places
+[06:30 - 06:38] to eat or we'll say let's find some
+[06:34 - 06:41] places to visit at night. Okay. And we
+[06:38 - 06:43] are talking about the California trip.
+[06:41 - 06:46] Once you send this AI agent will
+[06:43 - 06:48] automatically read your all data and
+[06:46 - 06:51] then it will give you the proper
+[06:48 - 06:56] response. Now you can also get this
+[06:51 - 06:58] suggestion as well. Okay. So based on uh
+[06:56 - 07:00] your all the trip plan details and
+[06:58 - 07:01] everything it will give you suggestion
+[07:00 - 07:05] and then you will say let's say night
+[07:01 - 07:08] life for October 6th and then it will
+[07:05 - 07:09] find the some details on the platform
+[07:08 - 07:12] and then you'll get this beautiful
+[07:09 - 07:15] generative style uh UI here you have
+[07:12 - 07:18] option to save this atonary directly
+[07:15 - 07:21] inside your trip once you click on it it
+[07:18 - 07:23] will get saved and now if you go back
+[07:21 - 07:26] you'll find this inside your atonary
+[07:23 - 07:31] Pretty cool, right? That's how easy we
+[07:26 - 07:33] implemented uh this AI agent feature.
+[07:31 - 07:35] So, for example, if I go to the October
+[07:33 - 07:40] 6th, you will see the itenary is now
+[07:35 - 07:42] added along with the night uh time uh
+[07:40 - 07:44] section.
+[07:42 - 07:47] After this, we also have option to
+[07:44 - 07:50] create a brand new trip. So if I go to
+[07:47 - 07:53] the AI agent, just select this create
+[07:50 - 07:58] new trip and then you can ask anything.
+[07:53 - 08:03] Let's create new trip for four or four
+[07:58 - 08:06] days in October
+[08:03 - 08:10] from Charlotte
+[08:06 - 08:12] to Chicago. And then if I send this, it
+[08:10 - 08:15] will automatically create a proper
+[08:12 - 08:18] atonary plan day by day. If you see the
+[08:15 - 08:20] first thing uh it give the option to
+[08:18 - 08:24] create this trip okay so that we can
+[08:20 - 08:27] save this and then we'll tell to an AI
+[08:24 - 08:32] agent to create a dayby-day iternary for
+[08:27 - 08:36] you okay so we'll say create first
+[08:32 - 08:39] day plan and simply hit enter and then
+[08:36 - 08:42] it will give you the proper generative
+[08:39 - 08:45] UI style information and boom if you see
+[08:42 - 08:48] the first day trip plan like arriving at
+[08:45 - 08:50] Chicago, lunch at loop, millennium park
+[08:48 - 08:52] explanation and many more. And once you
+[08:50 - 08:55] are happy with it, you can simply save
+[08:52 - 08:57] that. And then you can simply save this
+[08:55 - 09:00] at itary for that particular day. And if
+[08:57 - 09:02] you see it's saying that five itinary
+[09:00 - 09:04] item saved for the first day and same
+[09:02 - 09:06] thing you can do it for a plan for a day
+[09:04 - 09:08] two. And if you see it automatically
+[09:06 - 09:11] give you the suggestion. So instead of
+[09:08 - 09:13] typing you can simply add that. You can
+[09:11 - 09:16] also say okay suggest a different day
+[09:13 - 09:18] one. Pretty cool right? And then you can
+[09:16 - 09:21] simply go back and check it out. And
+[09:18 - 09:24] here we have this Chicago trip added.
+[09:21 - 09:26] Also it automatically added this uh AI
+[09:24 - 09:28] image generation. So it will
+[09:26 - 09:31] automatically generate the image based
+[09:28 - 09:35] on your destination. And that's why we
+[09:31 - 09:36] are not using any um static images. It's
+[09:35 - 09:39] automatically generate with the help of
+[09:36 - 09:41] AI. Once you open it, you will see the
+[09:39 - 09:45] first day it alter it and it is
+[09:41 - 09:48] automatically ordered by your um day and
+[09:45 - 09:51] the time. Okay, with a location and some
+[09:48 - 09:53] notes, everything is up to date. You can
+[09:51 - 09:57] add a booking, packing, photos, all of
+[09:53 - 09:59] these inside the trip information.
+[09:57 - 10:01] So this complete app we are going to
+[09:59 - 10:03] build it from the scratch. Under the my
+[10:01 - 10:07] trip we are showing all the trip which a
+[10:03 - 10:09] user have created u and the upcoming
+[10:07 - 10:11] trip as well. And in the profile section
+[10:09 - 10:14] you will see the invite code which you
+[10:11 - 10:16] can share it in order to u get access to
+[10:14 - 10:19] your family members trip and then other
+[10:16 - 10:20] details to manage inside the profile.
+[10:19 - 10:22] Now let's talk about the text stack
+[10:20 - 10:25] which we are going to use to build this
+[10:22 - 10:28] complete project. We are using React
+[10:25 - 10:30] Native Expo build tool which is easy to
+[10:28 - 10:33] build the full stack React Native
+[10:30 - 10:35] application and with all the React
+[10:33 - 10:38] Native features available with this Expo
+[10:35 - 10:40] build tool. It's very popular and you
+[10:38 - 10:42] can directly test in your actual device
+[10:40 - 10:45] while you are building this project. For
+[10:42 - 10:47] a database authentication and storage
+[10:45 - 10:49] purpose we are going to use superbase
+[10:47 - 10:52] and whatever the resources we are using
+[10:49 - 10:55] is free. For uh AI, we are going to use
+[10:52 - 10:57] a cursor AI agent with the help of
+[10:55 - 10:59] cursor desktop application. We are going
+[10:57 - 11:02] to build this application in
+[10:59 - 11:05] step-by-step way. And cursor recently
+[11:02 - 11:08] launched a new pricing uh for the all
+[11:05 - 11:11] the Indian developers and users. Now it
+[11:08 - 11:14] just for 649 rupees per month. You get
+[11:11 - 11:17] you will get access to the high
+[11:14 - 11:20] and fast model like Grock 4.5, Composer
+[11:17 - 11:22] 2.5. uh you can build your application
+[11:20 - 11:24] locally as well as on the cloud. You'll
+[11:22 - 11:27] get access and you can build the
+[11:24 - 11:30] application using a cursor mobile app
+[11:27 - 11:31] and many other feature you will find and
+[11:30 - 11:34] you can simply join with the link in the
+[11:31 - 11:38] description to get a access uh for a
+[11:34 - 11:40] cursor for just 649 rupees per month.
+[11:38 - 11:42] Also, if you are new to this channel,
+[11:40 - 11:44] then don't forget to subscribe and press
+[11:42 - 11:47] notification bell icon so that you will
+[11:44 - 11:50] not miss any update and make sure to
+[11:47 - 11:52] like this video and once we got 1,000
+[11:50 - 11:55] like then I will come up with a very
+[11:52 - 11:57] interesting uh video as well. Also, um
+[11:55 - 12:00] you'll get access to all my courses and
+[11:57 - 12:02] the source code on tubeguri.com
+[12:00 - 12:05] platform. You can join it. Here you will
+[12:02 - 12:08] find uh and you can track each course
+[12:05 - 12:11] chapter by chapter. you'll get access to
+[12:08 - 12:13] the source code. You can see the live
+[12:11 - 12:16] demo watch on YouTube and also the
+[12:13 - 12:19] certification of completion. Now I
+[12:16 - 12:22] recently launched a brand new um
+[12:19 - 12:25] platform called AI perks box where you
+[12:22 - 12:27] can unlock AI credits for your startup
+[12:25 - 12:30] and individual and you will get a credit
+[12:27 - 12:33] up to thousands of dollars. You can get
+[12:30 - 12:37] access to the cloud, open air, charg
+[12:33 - 12:39] Microsoft, AWS, Azour. Just you can
+[12:37 - 12:41] click on claim perk and then you'll get
+[12:39 - 12:44] access to that perk. Follow the
+[12:41 - 12:46] step-by-step guide to get those credit
+[12:44 - 12:48] which you can use to build your next
+[12:46 - 12:51] startups. So guys, the link is in the
+[12:48 - 12:54] description and uh I will also add a
+[12:51 - 12:58] code called tube guruji to get 50% off
+[12:54 - 13:00] on all the plans uh on AI perk box and
+[12:58 - 13:03] you will get you can join the monthly
+[13:00 - 13:07] plan just $499 to get access to the all
+[13:03 - 13:12] of these perks at once. So without uh
+[13:07 - 13:12] wasting a time let's get started.
+[13:13 - 13:18] Now in this chapter we are going to uh
+[13:15 - 13:20] create a plan for our application. We'll
+[13:18 - 13:22] note down all the features which we want
+[13:20 - 13:25] to implement. Then we'll see what are
+[13:22 - 13:27] the text tag we are going to use so that
+[13:25 - 13:31] it it will be easy for us to implement
+[13:27 - 13:33] each feature one by one. Now if you see
+[13:31 - 13:34] on this screen I already noted down some
+[13:33 - 13:37] of the features that what are the
+[13:34 - 13:39] different feature we want along with the
+[13:37 - 13:42] sign up and signin screen onboarding
+[13:39 - 13:44] welcomes slider screen. Then we want a
+[13:42 - 13:47] homepage with a three different tab
+[13:44 - 13:50] option like home, my trip and profile.
+[13:47 - 13:54] We want to add and integrate an AI model
+[13:50 - 13:57] for AI agent for a trip planning. Then
+[13:54 - 13:59] we want an option to create a complete
+[13:57 - 14:01] atonary for our trip. Then we want to
+[13:59 - 14:03] add some feature like hotel booking, car
+[14:01 - 14:06] booking, flight booking information. Now
+[14:03 - 14:10] user will add this information so that
+[14:06 - 14:12] it will be handy for him anytime. Then
+[14:10 - 14:15] an option to add packing to-do list,
+[14:12 - 14:18] photosharing option, map integration.
+[14:15 - 14:20] Then we also want to add an option to
+[14:18 - 14:22] share the complete alternative
+[14:20 - 14:25] with a family members. Okay, this is
+[14:22 - 14:27] very interesting feature and that family
+[14:25 - 14:30] member can join a trip using a unique
+[14:27 - 14:34] code. Then user will have option to add
+[14:30 - 14:35] the new trip manually. Also AI agent
+[14:34 - 14:39] will help us to plan the trip, answer
+[14:35 - 14:40] any question using a generative UI.
+[14:39 - 14:43] After that the personalized suggestion
+[14:40 - 14:45] from the application, explore more and
+[14:43 - 14:47] place destination section. Okay. So this
+[14:45 - 14:49] complete feature we are going to add.
+[14:47 - 14:54] Obviously it's uh you can add more
+[14:49 - 14:56] feature uh later on but for a basic of
+[14:54 - 14:58] MVP we are going to add all of this
+[14:56 - 15:01] feature. Now in order to build this
+[14:58 - 15:03] mobile application for Android as well
+[15:01 - 15:06] as for iOS
+[15:03 - 15:07] we are going to use React Native Expo.
+[15:06 - 15:10] Okay. Now in order to build this React
+[15:07 - 15:12] Native app the Expo is a build tool. So
+[15:10 - 15:15] if you go to this expo.dev
+[15:12 - 15:17] uh this is very popular build tool to
+[15:15 - 15:20] develop the React Native application and
+[15:17 - 15:23] many popular application build using
+[15:20 - 15:26] this Expo build tool. It's completely
+[15:23 - 15:29] free to use. This is a HDK which you can
+[15:26 - 15:32] use it to build the application. Now it
+[15:29 - 15:36] is powered by AI native uh MCP tools as
+[15:32 - 15:38] well and here it is very easy to test as
+[15:36 - 15:39] well. You can run directly inside your
+[15:38 - 15:43] app and there are lot of feature you
+[15:39 - 15:46] will find with this export uh dev. After
+[15:43 - 15:48] this for authentication database and the
+[15:46 - 15:51] storage we are going to use superbase so
+[15:48 - 15:54] that we'll get all of this feature under
+[15:51 - 15:57] one uh tech stack which is a superbase.
+[15:54 - 16:00] Now for AI agent we are going to use
+[15:57 - 16:03] cursor. Now recently cursor launched a
+[16:00 - 16:07] new plan for a Indian user. Now you will
+[16:03 - 16:10] get a cursor for just $649 rupees per
+[16:07 - 16:12] month which is less than $10. Okay. And
+[16:10 - 16:15] with this plan, you'll get all access to
+[16:12 - 16:18] the all the latest AI model. You can use
+[16:15 - 16:20] a cursor within a CLI, your ID with a
+[16:18 - 16:24] cursor desktop or in your favorite ID
+[16:20 - 16:27] like VS code. Then you can use a latest
+[16:24 - 16:29] Gro 4.5 and composer 2.5 model along
+[16:27 - 16:32] with the all the model like GPT and many
+[16:29 - 16:34] others. You can build your application
+[16:32 - 16:37] on the cloud as well as locally and you
+[16:34 - 16:40] can use uh the cursor mobile app to
+[16:37 - 16:43] build application directly from your
+[16:40 - 16:47] mobile. Everything you will get with
+[16:43 - 16:49] this start plan which start just for 649
+[16:47 - 16:51] rupees per month. Okay, I will put the
+[16:49 - 16:54] link in the description in order to get
+[16:51 - 16:56] access with this pricing. So make sure
+[16:54 - 16:59] to click the link in the description so
+[16:56 - 17:01] that you will get your cursor for just
+[16:59 - 17:03] 649 rupees per month. Okay, I will put
+[17:01 - 17:06] the link in the description. Make sure
+[17:03 - 17:08] to join it and sign up with that link.
+[17:06 - 17:11] And then after that you have to download
+[17:08 - 17:15] the cursor desktop application so that
+[17:11 - 17:17] we can run our AI agent and build this
+[17:15 - 17:20] complete application. Now once you open
+[17:17 - 17:22] the cursor desktop application, first
+[17:20 - 17:25] thing you need to do is to sign in to
+[17:22 - 17:27] your uh account. Once you sign in, make
+[17:25 - 17:29] sure to open the folder where you want
+[17:27 - 17:32] to create the project. So click on this
+[17:29 - 17:35] folder plus icon. Then click repo or we
+[17:32 - 17:37] can say open folder and just simply
+[17:35 - 17:40] select the folder. So I already have the
+[17:37 - 17:43] AI planner 2.0 folder. Currently it's
+[17:40 - 17:45] empty. And inside that we are going to
+[17:43 - 17:48] create our React Native Expo project.
+[17:45 - 17:51] Now inside this prompt you will see an
+[17:48 - 17:53] option that the folder is selected.
+[17:51 - 17:55] After that you have option whether you
+[17:53 - 17:59] want to go to the plan mode or you want
+[17:55 - 18:02] to select ask multitask. By default uh
+[17:59 - 18:04] it's selected as a agent. Then you can
+[18:02 - 18:07] select a different AI model like cursor
+[18:04 - 18:09] gro which is the highest and fastest AI
+[18:07 - 18:11] model. Then you also have composer which
+[18:09 - 18:14] is a cursor's fastest model. But you can
+[18:11 - 18:17] even select Opus, GPT, Fable and any
+[18:14 - 18:20] other AI model. Now later on in this
+[18:17 - 18:23] video I'm going to show you how you can
+[18:20 - 18:25] connect your own API key with the cursor
+[18:23 - 18:26] and how we can use cursor for a free as
+[18:25 - 18:29] well.
+[18:26 - 18:30] Then you can simply enter the prompt.
+[18:29 - 18:32] Now first thing we need to do is to
+[18:30 - 18:38] create a React Native project. So here
+[18:32 - 18:41] we'll say let's create React Native Expo
+[18:38 - 18:41] project.
+[18:42 - 18:45] in order
+[18:45 - 18:54] we'll say exprop project for
+[18:48 - 18:56] my AI trip planner app. Okay. So we just
+[18:54 - 18:58] want to create the react to expo
+[18:56 - 19:00] project. So we can mention that one as
+[18:58 - 19:05] well.
+[19:00 - 19:08] Now we'll I will say now just create
+[19:05 - 19:11] React Native Expo
+[19:08 - 19:11] basic
+[19:11 - 19:18] project also setup
+[19:16 - 19:25] agents
+[19:18 - 19:27] dot MD file for agentic rules or agent
+[19:25 - 19:31] rule we'll say
+[19:27 - 19:36] and memory
+[19:31 - 19:43] in order to save all context data so
+[19:36 - 19:43] that we can save token when we start
+[19:43 - 19:48] new session.
+[19:46 - 19:49] Okay. So this is very important and we
+[19:48 - 19:52] just inform that okay we just want to
+[19:49 - 19:54] create a react native expo project for
+[19:52 - 19:57] now as simple as that and later on we
+[19:54 - 19:59] are going to run this project. So let's
+[19:57 - 20:02] hit enter
+[19:59 - 20:06] and once you hit enter obviously it will
+[20:02 - 20:08] think uh in the while it generating and
+[20:06 - 20:11] thinking right sometimes it will ask you
+[20:08 - 20:13] some permission to approve some question
+[20:11 - 20:15] to take some decision right and you can
+[20:13 - 20:18] select the appropriate choice based on
+[20:15 - 20:21] it now we'll just wait so that once the
+[20:18 - 20:23] react native expo project is created we
+[20:21 - 20:26] can run that project and then we can
+[20:23 - 20:28] test it inside the emulator actualize I
+[20:26 - 20:32] will show you how you can run your um
+[20:28 - 20:34] Expo project inside your actual device.
+[20:32 - 20:39] And now if you see our project is
+[20:34 - 20:42] created. So it use X uh Expo HDK57
+[20:39 - 20:44] uh with the latest HDK version. Then you
+[20:42 - 20:46] will see uh what are the project
+[20:44 - 20:49] structure. It explained all of this file
+[20:46 - 20:52] as well. It also created agents.m MD
+[20:49 - 20:54] file. So you can update the any
+[20:52 - 20:56] guideline you want to add or anything
+[20:54 - 20:58] like that. And you can simply run your
+[20:56 - 21:01] application. I will show you how to run
+[20:58 - 21:03] it. Now in order to see complete file
+[21:01 - 21:06] right on the right hand side you will
+[21:03 - 21:08] see this option. Okay. So you can open
+[21:06 - 21:10] the right side panel and then you have
+[21:08 - 21:12] option to select the browser different
+[21:10 - 21:16] changes which you made the terminal or
+[21:12 - 21:21] files. If I click files
+[21:16 - 21:23] um let me open just file and on the
+[21:21 - 21:26] right hand side you will see this
+[21:23 - 21:28] complete file. So it created clock okay
+[21:26 - 21:31] folder and dotcursor folder for the
+[21:28 - 21:34] rules and in order to save our memory or
+[21:31 - 21:37] sorry and then it will use a list token
+[21:34 - 21:40] when you create a new session. Then we
+[21:37 - 21:43] also have env file and along with this
+[21:40 - 21:46] you have app.json app.tsx file as well
+[21:43 - 21:48] and agent.md file with the proper
+[21:46 - 21:50] structure what what we are building if
+[21:48 - 21:52] you see the directory layout. So every
+[21:50 - 21:55] time it will not scan your application,
+[21:52 - 21:58] it will just read the agent.m MD file
+[21:55 - 22:01] with all the rule rules, the coding
+[21:58 - 22:04] conventions, everything from this file.
+[22:01 - 22:08] After that uh we have the package.json
+[22:04 - 22:10] which contain all our dependencies, dev
+[22:08 - 22:12] dependency along with their version and
+[22:10 - 22:15] script to run and build you our
+[22:12 - 22:18] application. Now let's do one thing. Now
+[22:15 - 22:20] let's open a terminal inside this same
+[22:18 - 22:23] window. So we I will click on this plus
+[22:20 - 22:25] icon and then we can say terminal. Okay.
+[22:23 - 22:27] Now you can run terminal at the below at
+[22:25 - 22:30] the b right side as well. It's totally
+[22:27 - 22:34] up to you. And simply you can run a
+[22:30 - 22:37] command npm run start. Okay. And then
+[22:34 - 22:41] hit enter. And right now if you see
+[22:37 - 22:42] you'll get a QR code. Now you have two
+[22:41 - 22:46] option either you can run your
+[22:42 - 22:48] application uh in your actual device.
+[22:46 - 22:51] But for that one you need to download
+[22:48 - 22:55] the Expo Go app. So just search on
+[22:51 - 22:58] Google and this Expo Go app is from the
+[22:55 - 23:01] Expo only. It is available for Android
+[22:58 - 23:03] and iOS. But if you are using emulator
+[23:01 - 23:06] like Android emulator, iOS emulator, you
+[23:03 - 23:07] can install in there as well. Now what
+[23:06 - 23:10] you have to do once you install this app
+[23:07 - 23:12] in your actual device, you just need to
+[23:10 - 23:15] scan this square code with your camera
+[23:12 - 23:17] or if you are in a same Wi-Fi network,
+[23:15 - 23:20] it will automatically show your app
+[23:17 - 23:23] under the Expo Go application and then
+[23:20 - 23:26] you can simply run it. So you can
+[23:23 - 23:30] directly uh scan this QR code. Now
+[23:26 - 23:33] sometimes um this will not run in a expo
+[23:30 - 23:36] go because we are using the latest
+[23:33 - 23:40] version of HDK right. So if you are
+[23:36 - 23:43] using Expo HDK 54 then it will easily
+[23:40 - 23:46] run because u I think on the iOS
+[23:43 - 23:48] platform the Expo go application is not
+[23:46 - 23:50] up to date. So what you can do instead
+[23:48 - 23:55] of doing anything you can just tell an
+[23:50 - 23:59] AI agent um downgrade we'll say
+[23:55 - 24:02] downgrade Expo HDK to 54 okay and then
+[23:59 - 24:04] hit enter. So once you downgrade it you
+[24:02 - 24:07] can it will just update our Expo Go app
+[24:04 - 24:09] and in meantime you can stop running
+[24:07 - 24:13] this application.
+[24:09 - 24:13] So just click on this terminal
+[24:14 - 24:19] and then I will say clear.
+[24:17 - 24:22] Now if you see the package is now
+[24:19 - 24:26] updated and our expo HDK version is now
+[24:22 - 24:29] updated 254. Okay. Now you can run npm
+[24:26 - 24:32] run start and then now you can take this
+[24:29 - 24:34] out and you can just simply scan it.
+[24:32 - 24:37] Now, as I say, you can use an actual
+[24:34 - 24:40] device as well uh in order to run it or
+[24:37 - 24:42] you can use Android Studio. Just search
+[24:40 - 24:44] or install the Android Studio if you
+[24:42 - 24:48] don't have and then open the Android
+[24:44 - 24:51] Studio. After this, just click on these
+[24:48 - 24:53] three dots and click on HDK manager. Now
+[24:51 - 24:57] inside the SDK manager, make sure you
+[24:53 - 24:59] have at least one HDK installed like in
+[24:57 - 25:02] the in my case the Android version is
+[24:59 - 25:05] available which is 34. After that make
+[25:02 - 25:08] sure the SDK tool which is HDK build
+[25:05 - 25:11] tool, NDK, the Android emulator and HDK
+[25:08 - 25:12] platform tool is installed. Okay, after
+[25:11 - 25:15] that
+[25:12 - 25:18] I will go back and then click on this
+[25:15 - 25:20] three dot again and click virtual device
+[25:18 - 25:22] manager. Now here you have option to
+[25:20 - 25:24] create a device and you can select the
+[25:22 - 25:27] device. For example, I will select this
+[25:24 - 25:30] 7 Pro and make sure it has a play store
+[25:27 - 25:33] support. So you'll see this icon. After
+[25:30 - 25:36] that click next. Then you can you can
+[25:33 - 25:39] select either one operating system. So I
+[25:36 - 25:43] selected Tamasu and click next. Give the
+[25:39 - 25:45] uh virtual device name and simply click
+[25:43 - 25:48] finish. So what it will do it will
+[25:45 - 25:50] create a emulator for you. You can
+[25:48 - 25:53] simply run that emulator. Now I'm going
+[25:50 - 25:55] to use an actual device to show you.
+[25:53 - 25:58] Okay.
+[25:55 - 25:59] Now here I open the Expo Go app and
+[25:58 - 26:01] inside that if you see now my
+[25:59 - 26:05] application is running. Now this is
+[26:01 - 26:07] simple a blank template and it only have
+[26:05 - 26:10] the home screen called AI trip planner
+[26:07 - 26:11] your intelligent travel companion. Okay.
+[26:10 - 26:16] on the right hand side you have to make
+[26:11 - 26:19] sure you are you are on the Expo HDK 54
+[26:16 - 26:22] version and another important thing that
+[26:19 - 26:24] you are all the files are inside this
+[26:22 - 26:28] app folder okay like route and all
+[26:24 - 26:30] because we want to use export router and
+[26:28 - 26:33] inside the export router uh it uses a
+[26:30 - 26:35] folder based routing structure and if
+[26:33 - 26:38] you see inside the app we have again app
+[26:35 - 26:40] folder o folder the layout index setup
+[26:38 - 26:43] file and all of these these things.
+[26:40 - 26:46] Okay. So, it is very important that you
+[26:43 - 26:49] are using Expo router for this Expo
+[26:46 - 26:51] application. Okay. Now once this is done
+[26:49 - 26:54] and your application is now running then
+[26:51 - 26:57] we are ready to implement each feature
+[26:54 - 27:00] one by one. But before that make sure
+[26:57 - 27:03] your app is now running. Okay. Now this
+[27:00 - 27:06] is actual iPhone mirroring. So that's
+[27:03 - 27:08] why it's look like this. Okay. Uh but if
+[27:06 - 27:11] you're using emulator or any other
+[27:08 - 27:14] things um you can simply run in the same
+[27:11 - 27:17] way. You might need to install the Expo
+[27:14 - 27:20] Go app inside your uh emulator as well
+[27:17 - 27:23] in order to run it. Now if you are on
+[27:20 - 27:25] the terminal and you want to run your
+[27:23 - 27:28] application on Android emulator just
+[27:25 - 27:30] press A. If you are using want to use
+[27:28 - 27:32] iOS emulator just press I and it will
+[27:30 - 27:35] automatically open that emulator and run
+[27:32 - 27:37] your application. As simple as that.
+[27:35 - 27:39] Okay, if you have any question, any
+[27:37 - 27:41] doubt while running or creating this
+[27:39 - 27:45] React Native application, let me know in
+[27:41 - 27:45] the comment section.
+[27:46 - 27:51] Now, let's set up an authentication and
+[27:49 - 27:53] database for our app. And we are going
+[27:51 - 27:55] to use a superbase for it. So, we are
+[27:53 - 27:58] going to set up a superbase. Then, we'll
+[27:55 - 28:00] tell AI agent to create a sign-in and
+[27:58 - 28:02] signup page in order to access and
+[28:00 - 28:05] navigate to the homepage. And then we
+[28:02 - 28:06] want to save user information to our DB.
+[28:05 - 28:08] So over here I already have this
+[28:06 - 28:10] beautiful nodes created just for you
+[28:08 - 28:12] guys. It's completely free and I will
+[28:10 - 28:15] put the link in the description for
+[28:12 - 28:17] these documents. So obviously we are
+[28:15 - 28:20] using a superbase for authentication,
+[28:17 - 28:22] database and storage purpose. Uh for
+[28:20 - 28:25] authentication we are going to use email
+[28:22 - 28:28] password and Gmail o and we are using a
+[28:25 - 28:31] database for a profile tree it right. uh
+[28:28 - 28:33] for storage we are you obviously we are
+[28:31 - 28:37] using storage for the storing images
+[28:33 - 28:40] documents any files and I will show you
+[28:37 - 28:42] the how we can set up this superbase
+[28:40 - 28:46] very quickly okay now let's navigate to
+[28:42 - 28:49] our cursor and here we'll create a new
+[28:46 - 28:52] session so just click on this plus sign
+[28:49 - 28:54] so it will create a new session
+[28:52 - 29:01] and then inside that you can simply
+[28:54 - 29:06] enter that let's set up Superbase and
+[29:01 - 29:11] let's create sign in and sign up page
+[29:06 - 29:17] for our app. Use superbase email
+[29:11 - 29:20] password o and Gmail authentication
+[29:17 - 29:23] for our app. Okay. So these two
+[29:20 - 29:29] information we need it also we'll say
+[29:23 - 29:34] once user sign up very first time
+[29:29 - 29:38] then make sure to save user information
+[29:34 - 29:41] to database. Okay and I think that's all
+[29:38 - 29:44] we needed. Another important thing uh if
+[29:41 - 29:47] you want a professional style UI you can
+[29:44 - 29:50] just mention that one as well.
+[29:47 - 29:55] Here we'll say for sign in and sign up
+[29:50 - 29:58] page make sure to implement
+[29:55 - 29:58] professional
+[29:58 - 30:08] UIUX colorful and
+[30:03 - 30:10] use dribble template style
+[30:08 - 30:14] UIUX.
+[30:10 - 30:18] Okay. and keep
+[30:14 - 30:23] theme color consistent
+[30:18 - 30:23] across the app.
+[30:23 - 30:30] Update agent
+[30:26 - 30:34] MD5. So that one I'll also be mention.
+[30:30 - 30:36] Now if you have any mockup design or any
+[30:34 - 30:40] design idea, you can also attach that
+[30:36 - 30:43] too. Okay. But for now we'll let cursor
+[30:40 - 30:45] decide the design and everything. But we
+[30:43 - 30:49] just mention what we actually want. Now
+[30:45 - 30:51] when you say that you want to set up a
+[30:49 - 30:53] superb basease right automatically
+[30:51 - 30:55] cursor will detect that you want to use
+[30:53 - 30:57] superbase inside this app. And here you
+[30:55 - 30:59] have option to add a superbase. Just
+[30:57 - 31:01] click on it. It will add a superbase
+[30:59 - 31:03] plug-in for you. You will get an option
+[31:01 - 31:05] whether you want to add to your complete
+[31:03 - 31:07] account or just for this project. So
+[31:05 - 31:10] we'll say we want to add just for the
+[31:07 - 31:12] project and then we'll simply say add
+[31:10 - 31:16] plug-in and it will install this plug-in
+[31:12 - 31:19] as well and simply now send this and
+[31:16 - 31:22] then we just need to wait and sit relax
+[31:19 - 31:25] so that AI agent uh will start
+[31:22 - 31:27] implementing the superbase
+[31:25 - 31:29] authentication
+[31:27 - 31:32] as well as creating this sign in and
+[31:29 - 31:34] signup page. Okay. Now as you know that
+[31:32 - 31:36] we can also switch this to a plan mode
+[31:34 - 31:39] before implementing it. It's totally up
+[31:36 - 31:41] to you how you want to implement but
+[31:39 - 31:45] right now we just use agent mode so that
+[31:41 - 31:49] it will automatically start implementing
+[31:45 - 31:51] and if you see how fast it just uh
+[31:49 - 31:53] implemented this feature. Okay. So here
+[31:51 - 31:55] what are the things it implemented?
+[31:53 - 31:57] Let's walk through it. So it added the
+[31:55 - 31:59] ostat it added the superbase
+[31:57 - 32:02] authentication
+[31:59 - 32:05] setup for us. Also it added a dribble
+[32:02 - 32:07] style consistent theme and UI for us. So
+[32:05 - 32:09] that is also implemented and then
+[32:07 - 32:12] database migration script also added
+[32:09 - 32:16] inside this dossql file. I will show you
+[32:12 - 32:19] how to run it. Okay. Then we need to set
+[32:16 - 32:23] up few things. We need to uh get the
+[32:19 - 32:26] superbase URL and anonymous key. uh and
+[32:23 - 32:28] we need to save inside the env file and
+[32:26 - 32:31] then we need need to run this migration
+[32:28 - 32:34] script as well. After that we have to
+[32:31 - 32:36] enable email and Google authentication
+[32:34 - 32:40] and then we have to add this redirect
+[32:36 - 32:42] URL as well. So let's go ahead and uh
+[32:40 - 32:44] set up this first we need to get this
+[32:42 - 32:47] superbase URL. So first we'll go to the
+[32:44 - 32:49] superbase.com and make sure to create a
+[32:47 - 32:51] new account. I will put the link in the
+[32:49 - 32:53] description. Then simply click new
+[32:51 - 32:57] project. Here you have to give the
+[32:53 - 32:57] project name.
+[32:58 - 33:06] I will give AI planner 2.0. And then you
+[33:02 - 33:06] can add a password.
+[33:07 - 33:11] Click create new project. And once the
+[33:09 - 33:14] project is created, you will get these
+[33:11 - 33:17] both the kids. Now here you will get a
+[33:14 - 33:20] URL. You can simply copy that as it is
+[33:17 - 33:22] and paste it inside your env file. Now
+[33:20 - 33:24] in order to open the file explorer I
+[33:22 - 33:27] will again go to this one. Then we'll
+[33:24 - 33:28] say plus icon and then simply click
+[33:27 - 33:32] files.
+[33:28 - 33:35] Then we already have env.
+[33:32 - 33:37] So simply open that
+[33:35 - 33:40] and then
+[33:37 - 33:42] let me copy this both the key first. I
+[33:40 - 33:48] will paste it here and then we'll
+[33:42 - 33:48] replace with the actual URL.
+[33:49 - 33:54] So I will close this so we'll get a
+[33:52 - 33:57] bigger screen and simply paste it here.
+[33:54 - 33:59] Now for the key
+[33:57 - 34:01] I will again go back to our project and
+[33:59 - 34:03] simply navigate to the project setting.
+[34:01 - 34:05] Inside the project setting you will get
+[34:03 - 34:09] an option called API key. Simply
+[34:05 - 34:11] navigate to this legacy key section and
+[34:09 - 34:15] then copy this key as it is. Go back to
+[34:11 - 34:17] the cursor and paste your key. Okay. And
+[34:15 - 34:20] then save it. Now once your key is
+[34:17 - 34:22] ready, you have to run this migration
+[34:20 - 34:24] script.
+[34:22 - 34:26] So if you see this migration script
+[34:24 - 34:29] inside the superbase folder. So go to
+[34:26 - 34:34] the superbase migration and open this.
+[34:29 - 34:37] Copy this all the query as it is. Then
+[34:34 - 34:41] go to the superbase inside this SQL
+[34:37 - 34:45] editor. Simply paste this uh query which
+[34:41 - 34:47] you copied and then click run
+[34:45 - 34:50] or you can simply say run as it is and
+[34:47 - 34:52] then we'll say run query. Here you will
+[34:50 - 34:54] get an option that run successfully. So
+[34:52 - 34:57] if you see it's saying success no row
+[34:54 - 35:00] return and if I go to the table editor
+[34:57 - 35:03] you will see this profile table is now
+[35:00 - 35:05] created with a proper policies and
+[35:03 - 35:08] everything. Perfect. Right now only
+[35:05 - 35:12] authenticate user can access this table.
+[35:08 - 35:15] Now the next step after this is enable O
+[35:12 - 35:18] providers.
+[35:15 - 35:21] So I will go to the authentication.
+[35:18 - 35:24] Inside that you will see sign in and
+[35:21 - 35:27] providers. Scroll down then make sure
+[35:24 - 35:29] the email is enabled. Now whichever
+[35:27 - 35:31] platform you want you can enable it but
+[35:29 - 35:33] we want to enable Google. So I will say
+[35:31 - 35:35] I will click on it. Here we'll say
+[35:33 - 35:38] enable but you have to add a client ID
+[35:35 - 35:41] and the client secret for that one which
+[35:38 - 35:43] you'll get it from the Google cloud.
+[35:41 - 35:45] Okay. So from here you can simply
+[35:43 - 35:48] generate this client ID and the client
+[35:45 - 35:50] secret key for you.
+[35:48 - 35:53] Now obviously you have to generate O
+[35:50 - 35:56] client ID key. Okay. Now if you don't
+[35:53 - 35:59] know how to create it simply search on
+[35:56 - 36:02] Google. It's very easy. Uh you have to
+[35:59 - 36:04] first create the consent screen and then
+[36:02 - 36:08] inside the credential you can simply
+[36:04 - 36:10] click credential or client ID
+[36:08 - 36:13] then select the application type you can
+[36:10 - 36:17] select the web it doesn't matter and
+[36:13 - 36:19] then simply click create okay right now
+[36:17 - 36:21] um let's keep for now because later on I
+[36:19 - 36:25] will show you stepby-step way with a
+[36:21 - 36:28] proper chapter but now if I go back to
+[36:25 - 36:30] the cursor next thing inside the add
+[36:28 - 36:31] redirect URL we have to add the
+[36:30 - 36:36] authentication and then we have to add
+[36:31 - 36:40] this URL. So inside the superbase
+[36:36 - 36:42] if you go to the
+[36:40 - 36:45] authentication
+[36:42 - 36:47] then go to the URL configuration and
+[36:45 - 36:49] then here you will say redirect URL.
+[36:47 - 36:53] Simply add this redirect URL. You have
+[36:49 - 36:53] to add both of them.
+[36:54 - 37:00] We'll say another URL and then save
+[36:56 - 37:03] URLs. Okay. Once it's saved, we'll go
+[37:00 - 37:04] back and then you can restart your
+[37:03 - 37:07] application if you want. Most of the
+[37:04 - 37:12] time it you don't need to restart it. So
+[37:07 - 37:14] if I open it, it still show uh the same
+[37:12 - 37:17] page. Maybe what we can do go to the
+[37:14 - 37:20] terminal and press R button. R means
+[37:17 - 37:22] reload. Okay. So we'll see. And if you
+[37:20 - 37:27] see it's showing this welcome screen.
+[37:22 - 37:29] Obviously uh the it's cuted at the top,
+[37:27 - 37:31] right? because the design is not
+[37:29 - 37:33] properly but if I click on create
+[37:31 - 37:36] account now you have option to enter
+[37:33 - 37:39] email password and the name so obviously
+[37:36 - 37:41] you can tell AI that design wise there
+[37:39 - 37:44] is some issue and that need to be fixed
+[37:41 - 37:48] first so over here
+[37:44 - 37:50] we can simply send it and I will bring
+[37:48 - 37:55] this on the right so it will be easy for
+[37:50 - 37:58] us to check this out so here we'll say
+[37:55 - 38:02] on sign in and
+[37:58 - 38:02] signup screen
+[38:02 - 38:15] design or top header design overlap
+[38:09 - 38:17] on sign in and sign up form section fix
+[38:15 - 38:20] that
+[38:17 - 38:24] I think uh that's all we need and let's
+[38:20 - 38:26] send this so obviously it will verify
+[38:24 - 38:29] the design and then it will fix it
+[38:26 - 38:32] immediately ly and now once it fix you
+[38:29 - 38:35] will see the change. Okay. So this is a
+[38:32 - 38:40] sign in a sign sign up and sign in
+[38:35 - 38:43] screen. Now you can enter email password
+[38:40 - 38:45] and then you can simply sign in to the
+[38:43 - 38:48] platform. Now you also have a Google
+[38:45 - 38:50] account to continue once you set up the
+[38:48 - 38:52] Google as well. So I will enter the
+[38:50 - 38:55] email and password first. We'll create a
+[38:52 - 38:55] new account.
+[38:56 - 39:00] So over here we'll say accounts
+[39:04 - 39:09] and then we'll click create account and
+[39:06 - 39:11] once you sign in if you see I got a
+[39:09 - 39:14] confirmation email address so you can
+[39:11 - 39:17] even confirm it. So once you click it
+[39:14 - 39:19] will uh redirect to a local host somehow
+[39:17 - 39:22] but I think once you are on the local
+[39:19 - 39:24] host uh on the dep production side then
+[39:22 - 39:27] you'll get a proper message and it will
+[39:24 - 39:31] redirect you to the uh actual device but
+[39:27 - 39:35] on my device I am going to verify it and
+[39:31 - 39:38] here now I'm going to sign in and here
+[39:35 - 39:41] if you see our application is now sign
+[39:38 - 39:44] in okay so right now on this u actual
+[39:41 - 39:47] device uh I'm just mirroring so some of
+[39:44 - 39:49] the things not properly working uh but
+[39:47 - 39:52] on actual device and emulator it's
+[39:49 - 39:54] working properly and this is the just
+[39:52 - 39:55] landing screen once you sign in
+[39:54 - 39:58] successfully you'll get option to sign
+[39:55 - 40:00] out as well if you want to sign out but
+[39:58 - 40:02] right now um once you sign in
+[40:00 - 40:04] successfully so you'll jump onto the
+[40:02 - 40:07] homepage and then we are going to
+[40:04 - 40:10] implement uh all the homepage tabs and
+[40:07 - 40:13] many other feature throughout this
+[40:10 - 40:16] particular video now make Make sure you
+[40:13 - 40:19] set up your superbase and authentication
+[40:16 - 40:22] as well. Now if I go back to the
+[40:19 - 40:24] superbase here under the authentication
+[40:22 - 40:27] you will see the user which I sign in
+[40:24 - 40:30] and I sign in with the email. So it show
+[40:27 - 40:33] that one as well when I sign in. Then
+[40:30 - 40:35] inside the table editor
+[40:33 - 40:37] under the profile you will see the user
+[40:35 - 40:39] information which is sign in. Pretty
+[40:37 - 40:42] cool right? and you'll get all the
+[40:39 - 40:44] information and that's what we inform to
+[40:42 - 40:47] the cursor what we want and accordingly
+[40:44 - 40:51] it's implemented pretty cool. So that's
+[40:47 - 40:53] how guys you have to um
+[40:51 - 40:55] implement this superbase and
+[40:53 - 40:59] authentication along with the database
+[40:55 - 41:02] so that um we can use it throughout the
+[40:59 - 41:04] app. Now you have option to update the
+[41:02 - 41:07] UIUX design as well. You can select
+[41:04 - 41:11] different model like GPT which gave a
+[41:07 - 41:16] very good uh UIUIX design or even claude
+[41:11 - 41:16] opus as well. It's totally up to you.
+[41:17 - 41:22] Now it's time to implement the tab
+[41:20 - 41:24] layout along with the homepage layout.
+[41:22 - 41:26] If you see on this note and this mockup
+[41:24 - 41:29] design obviously I generated with the
+[41:26 - 41:32] help of some design idea which I found
+[41:29 - 41:35] on the internet. You can use the uh
+[41:32 - 41:37] Pinterest to find the UIUX mockup idea.
+[41:35 - 41:40] Now on this homepage [snorts]
+[41:37 - 41:43] uh at the top you will see that you are
+[41:40 - 41:46] showing the some header section and
+[41:43 - 41:48] option to search the um any new idea.
+[41:46 - 41:50] Obviously here we are going to add an AI
+[41:48 - 41:53] agent. So you can just enter it and it
+[41:50 - 41:55] will start chatting with an AI model.
+[41:53 - 41:57] Then uh you will see this my plan
+[41:55 - 42:00] section where whenever you add or create
+[41:57 - 42:02] any new trip that trip will display on
+[42:00 - 42:04] this my plan section. We also have the
+[42:02 - 42:07] explore section where you can explore
+[42:04 - 42:09] more um travel options which is
+[42:07 - 42:11] generated by our application
+[42:09 - 42:13] automatically. Then the most important
+[42:11 - 42:16] we want to add up this bottom tab
+[42:13 - 42:18] navigation like home, my tree, profile
+[42:16 - 42:21] right so that you can simply switch
+[42:18 - 42:24] between these different tabs and these
+[42:21 - 42:27] are some three main tab and there why we
+[42:24 - 42:30] are using this tab all the details are
+[42:27 - 42:33] showing inside this note. Okay. So
+[42:30 - 42:35] that's overall uh homepage layout for
+[42:33 - 42:37] our application.
+[42:35 - 42:40] Now when you enter the prompt we are
+[42:37 - 42:42] also going to attach the mockup for it
+[42:40 - 42:44] which I already added inside this
+[42:42 - 42:47] document this top section. So let's go
+[42:44 - 42:49] ahead inside the cursor and very first
+[42:47 - 42:54] thing we are going to do is to create a
+[42:49 - 42:57] new session. So over here I will just
+[42:54 - 43:00] add a new session. We will increase the
+[42:57 - 43:06] size and simply start entering. So we
+[43:00 - 43:06] are going to simply add let's implement
+[43:06 - 43:18] tab layout with three tab options
+[43:12 - 43:20] home. Then we want my trips and profile.
+[43:18 - 43:23] Use lucid
+[43:20 - 43:28] icons
+[43:23 - 43:30] for all icons which we are
+[43:28 - 43:35] or we we'll just say use lucid icon
+[43:30 - 43:35] library. Okay.
+[43:35 - 43:40] then
+[43:37 - 43:40] implement
+[43:41 - 43:46] home
+[43:42 - 43:51] page layout as per
+[43:46 - 43:53] attach mockup design. Okay. So, uh we
+[43:51 - 43:55] are going to attach the mockup design
+[43:53 - 44:00] and as per that we also want to add the
+[43:55 - 44:05] homepage layout. Make sure to implement
+[44:00 - 44:07] proper UIUX as per mockup.
+[44:05 - 44:09] And I think that's all we needed.
+[44:07 - 44:13] Obviously once it implemented we'll test
+[44:09 - 44:16] it and uh based on the generated design
+[44:13 - 44:18] if there is any changes needed we need
+[44:16 - 44:21] to make sure we'll do that. Now make
+[44:18 - 44:23] sure you'll uh select the proper model.
+[44:21 - 44:26] So in this case I will select the GPT
+[44:23 - 44:30] 5.5 which give a better UIUX design.
+[44:26 - 44:32] It's totally up to which model and what
+[44:30 - 44:34] kind of design you needed. Right. But if
+[44:32 - 44:37] you click on this add model, you have
+[44:34 - 44:39] option to add different model as well.
+[44:37 - 44:42] So you can just enable the model and it
+[44:39 - 44:44] will show that model inside this model
+[44:42 - 44:47] picker. Okay. But if you want to use
+[44:44 - 44:49] cursor gro that is also very fast and
+[44:47 - 44:51] very high effort model. So you can use
+[44:49 - 44:53] that one as well. It's totally up to
+[44:51 - 44:55] you. Then I already have this
+[44:53 - 44:57] screenshot. I will copy that and then
+[44:55 - 45:00] make sure to paste it. So it will get
+[44:57 - 45:04] attached. See something like this. Okay.
+[45:00 - 45:06] and then simply send this.
+[45:04 - 45:10] Now you just need to wait uh for the
+[45:06 - 45:12] proper uh implementation as uh we are
+[45:10 - 45:14] using the lucid icon. I just want to
+[45:12 - 45:16] show what is lucid icon library. Now
+[45:14 - 45:18] this lucid icon library is very powerful
+[45:16 - 45:20] very popular library and very
+[45:18 - 45:23] lightweight and easy to use it inside
+[45:20 - 45:25] your react react native and many other
+[45:23 - 45:28] um framework as well. So you can search
+[45:25 - 45:30] whichever icon you want and then you
+[45:28 - 45:33] will see this example how to use it and
+[45:30 - 45:36] everything. But when you tell to the AI
+[45:33 - 45:38] agent then it will take care uh about
+[45:36 - 45:40] this icon and everything automatically.
+[45:38 - 45:43] So you don't need to worry about that.
+[45:40 - 45:45] Now once it run you will see uh the
+[45:43 - 45:48] design right currently it just added
+[45:45 - 45:51] this placeholder. It did not generated
+[45:48 - 45:54] any images also. Uh it just added this
+[45:51 - 45:57] map placeholder and some information.
+[45:54 - 45:59] Now let's update few things one by one.
+[45:57 - 46:00] Let's start with the top section. We
+[45:59 - 46:04] want to replace this with the actual
+[46:00 - 46:06] images. So for that one I already have
+[46:04 - 46:08] the images ready. So I will just copy
+[46:06 - 46:12] all of this image. I will put that
+[46:08 - 46:14] inside the uh assets folder. The link is
+[46:12 - 46:17] in the description so that you can uh
+[46:14 - 46:19] check that out. and inside the file
+[46:17 - 46:21] explorer. So we'll go to the file and
+[46:19 - 46:23] make sure to put that inside the assets
+[46:21 - 46:27] folder. So either you can create a new
+[46:23 - 46:31] folder called scenes. Then click create
+[46:27 - 46:33] and inside this scene folder. So let me
+[46:31 - 46:35] refresh this.
+[46:33 - 46:38] I think it did not get created some
+[46:35 - 46:38] reason.
+[46:38 - 46:43] Now it's showing already have but it's
+[46:41 - 46:45] not updating. Let me close this and
+[46:43 - 46:47] start again. Oh, so it's inside this.
+[46:45 - 46:49] So, let's move this inside the assets
+[46:47 - 46:53] folder. And then we'll paste all of
+[46:49 - 46:55] these images which we copied. Okay. So,
+[46:53 - 46:58] make sure
+[46:55 - 47:01] to copy that. And then simply paste
+[46:58 - 47:05] inside this scenes folder.
+[47:01 - 47:07] I think it's not uh getting copied
+[47:05 - 47:10] directly.
+[47:07 - 47:13] So in that case you can simply uh reveal
+[47:10 - 47:15] inside the finder and then paste it
+[47:13 - 47:18] here. Okay. Now you will see all of
+[47:15 - 47:21] these file are available. Now you can
+[47:18 - 47:24] simply mention that. So over here we'll
+[47:21 - 47:24] say
+[47:24 - 47:30] now
+[47:26 - 47:32] for image placeholder
+[47:30 - 47:38] use
+[47:32 - 47:44] scenes or use images from assets/
+[47:38 - 47:47] a scenes folder to replace
+[47:44 - 47:50] all images
+[47:47 - 47:53] on homepage.
+[47:50 - 47:56] Okay. And then hit enter. Now you can
+[47:53 - 47:59] always compare our mockup design how it
+[47:56 - 48:03] looks and make sure it's similar way it
+[47:59 - 48:05] will also update our uh images as well.
+[48:03 - 48:07] Now once user click on it obviously we
+[48:05 - 48:11] want to open a chart section where user
+[48:07 - 48:13] can start chart start planning
+[48:11 - 48:14] trip and all of this information. Okay.
+[48:13 - 48:17] And that's the reason we added this
+[48:14 - 48:20] particular section. And now if you see
+[48:17 - 48:22] we have the proper result. Pretty cool,
+[48:20 - 48:24] right? So whatever the image we uploaded
+[48:22 - 48:27] now it's showing at the top section. And
+[48:24 - 48:29] then we have my plan section as well
+[48:27 - 48:32] where you will see this list. Now once
+[48:29 - 48:34] you have this top section updated. Now
+[48:32 - 48:37] let's check what things we need to
+[48:34 - 48:39] update under this my plan or under this
+[48:37 - 48:41] particular section. Now if I click on
+[48:39 - 48:44] the explorer, this explorer doesn't work
+[48:41 - 48:46] or even this drop-down does not work.
+[48:44 - 48:49] Okay. But
+[48:46 - 48:51] um make sure you have we also want to
+[48:49 - 48:56] change few things on this inside this
+[48:51 - 48:58] card. So over here I will just make sure
+[48:56 - 48:59] to open so it will be easy for us to
+[48:58 - 49:03] verify.
+[48:59 - 49:06] So we can just say update
+[49:03 - 49:08] my plan
+[49:06 - 49:12] and explore section.
+[49:08 - 49:16] Explore section is not close section is
+[49:12 - 49:16] not clickable.
+[49:16 - 49:20] Then
+[49:18 - 49:24] under
+[49:20 - 49:24] my plan
+[49:24 - 49:32] trip card,
+[49:27 - 49:35] remove amount. Check amount text
+[49:32 - 49:39] then places text
+[49:35 - 49:42] and replace that with
+[49:39 - 49:45] how many days
+[49:42 - 49:47] our trip okay so that is I think good
+[49:45 - 49:49] thing I will say instead of showing the
+[49:47 - 49:52] uh actual amount and all right because
+[49:49 - 49:54] it's hard to calculate the amount okay
+[49:52 - 49:55] and I think category we can keep it or
+[49:54 - 50:00] if you want you can remove the category
+[49:55 - 50:03] section here we'll say uh remove
+[50:00 - 50:09] category section and replace that
+[50:03 - 50:15] replace that with progress bar. Later on
+[50:09 - 50:18] we will connect progress bar with
+[50:15 - 50:23] um planning
+[50:18 - 50:26] to-do list. Okay. So I think that's all
+[50:23 - 50:30] we needed also.
+[50:26 - 50:34] uh drop-down or all plant here we'll say
+[50:30 - 50:40] also all plans
+[50:34 - 50:42] and active drop-down not working remove
+[50:40 - 50:46] active drop-down.
+[50:42 - 50:48] So we also don't want this particular uh
+[50:46 - 50:51] active dropdown. So we'll just use all
+[50:48 - 50:54] plan and inside that uh that dropdown
+[50:51 - 50:56] we'll update it. But other than that I
+[50:54 - 50:58] think everything's look good. You can go
+[50:56 - 51:00] to the my trip because it's al already
+[50:58 - 51:02] added this my trip section. Here we have
+[51:00 - 51:03] plus icon but obviously it's not
+[51:02 - 51:06] workable. And then we have profile
+[51:03 - 51:08] section. Uh later on we are going to
+[51:06 - 51:11] update that too. Okay. But for now let's
+[51:08 - 51:15] focus on the homepage layout and let's
+[51:11 - 51:17] send this. Now whenever you create any
+[51:15 - 51:20] page right make sure that page is
+[51:17 - 51:21] functional uh at least the UI things
+[51:20 - 51:24] because right now we are more focusing
+[51:21 - 51:26] on the UI part in this chapter and later
+[51:24 - 51:29] on we are going to connect with the
+[51:26 - 51:33] actual data. Okay once we fix with the
+[51:29 - 51:36] UIUX and once it is implemented you will
+[51:33 - 51:38] see the result. Now it is changed with
+[51:36 - 51:41] this uh number of days and planning
+[51:38 - 51:44] progress. Now this explore section is
+[51:41 - 51:45] also clickable where you can explore um
+[51:44 - 51:47] different option. We'll implement this
+[51:45 - 51:49] explore section later on. Right now it
+[51:47 - 51:52] just updated with the placeholder and
+[51:49 - 51:54] this all plan is now updated with this
+[51:52 - 51:57] beautiful drop-down. Pretty cool, right?
+[51:54 - 51:59] So that's what we are looking for. I
+[51:57 - 52:03] think this is pretty good. Now next
+[51:59 - 52:05] thing we want to update is uh we want to
+[52:03 - 52:08] replace this with the actual data. So
+[52:05 - 52:10] obviously this is just a placeholder. So
+[52:08 - 52:11] here we'll say
+[52:10 - 52:17] now
+[52:11 - 52:23] replace my plan with actual
+[52:17 - 52:30] data. So add empty state when there is
+[52:23 - 52:32] no um trip added under my plan.
+[52:30 - 52:39] also
+[52:32 - 52:41] add option in empty state to add /create
+[52:39 - 52:44] new
+[52:41 - 52:46] trip plan. Okay, so we just want to
+[52:44 - 52:48] replace this empty state with the actual
+[52:46 - 52:53] information. And here we'll also add
+[52:48 - 52:56] very important things. Make sure to uh
+[52:53 - 53:01] create reusable
+[52:56 - 53:09] components for each smaller um section
+[53:01 - 53:14] of page. So we can use anywhere
+[53:09 - 53:15] and update that inside agents.m MD file.
+[53:14 - 53:18] Now every time when you implement
+[53:15 - 53:22] anything right it always update our
+[53:18 - 53:24] agent.m MD uh file as well. Okay so that
+[53:22 - 53:26] is very important thing if you see it's
+[53:24 - 53:29] updated the agent MD file as well and
+[53:26 - 53:31] let's send this particular thing. Now we
+[53:29 - 53:33] are just making sure uh we don't want
+[53:31 - 53:36] this placeholder and we want to replace
+[53:33 - 53:39] with the actual data that's what we um
+[53:36 - 53:41] inform to the AI agent okay because that
+[53:39 - 53:44] is very important otherwise you will get
+[53:41 - 53:47] lost and we want to uh implement each
+[53:44 - 53:50] thing uh step by step
+[53:47 - 53:52] and once it is implemented you will see
+[53:50 - 53:54] this empty state pretty nice right and
+[53:52 - 53:57] then obviously you have option to create
+[53:54 - 54:00] a new trip plan and then many other
+[53:57 - 54:02] things Perfect. So that's all. Uh
+[54:00 - 54:04] obviously you can also update my trip
+[54:02 - 54:07] section but we'll implement later on.
+[54:04 - 54:08] Now next we are focusing on explore
+[54:07 - 54:11] section as well because we want to
+[54:08 - 54:14] update the explore section and if you
+[54:11 - 54:16] have any uh doubts how and what are the
+[54:14 - 54:19] things we can implement inside the
+[54:16 - 54:22] explore we can ask cursor that what are
+[54:19 - 54:24] the things we can add it. But for now um
+[54:22 - 54:26] make sure your tab layout is
+[54:24 - 54:29] implemented. Homepage is also
+[54:26 - 54:32] implemented. Now I just saw that our tab
+[54:29 - 54:34] layout is not properly set. Okay. So if
+[54:32 - 54:36] you see there are some padding and all
+[54:34 - 54:42] and then we need to fix this. So we can
+[54:36 - 54:49] simply say let fix tab layout.
+[54:42 - 54:55] There are some styling issue. So
+[54:49 - 54:58] let's fix tab layout and make it
+[54:55 - 55:00] floating tab. So it will be like
+[54:58 - 55:03] floating tab layout
+[55:00 - 55:05] and let's hit enter. So it will update
+[55:03 - 55:08] this layout uh with a nice proper
+[55:05 - 55:11] styling. So we'll wait for this
+[55:08 - 55:14] particular fix. So these small things
+[55:11 - 55:16] are really important to fix it before
+[55:14 - 55:19] actually connecting your application
+[55:16 - 55:23] with a real data otherwise it will be
+[55:19 - 55:26] hard to fix later on AI agent also get
+[55:23 - 55:27] confused and that's the reason um I am
+[55:26 - 55:30] implementing the layout first and then
+[55:27 - 55:33] we are connecting with the actual data
+[55:30 - 55:36] and now if you see we have this floating
+[55:33 - 55:39] tab layout as well okay so make sure to
+[55:36 - 55:41] fix tab layout if
+[55:39 - 55:44] are not properly styled and then you can
+[55:41 - 55:47] just inform to the cursor that to update
+[55:44 - 55:51] the design whichever style you want and
+[55:47 - 55:51] then it will fix it for you.
+[55:52 - 55:58] Now in this chapter we are going to add
+[55:55 - 56:02] a feature called add new trip. Now once
+[55:58 - 56:04] user click on add new trip u button then
+[56:02 - 56:07] we are going to navigate to the new page
+[56:04 - 56:10] where user have option to add a title uh
+[56:07 - 56:13] for the trip then source destination and
+[56:10 - 56:15] then how many days our trip is. User
+[56:13 - 56:18] have option to upload the image for that
+[56:15 - 56:21] trip or automatically AI will generate u
+[56:18 - 56:23] the image or banner for that trip and
+[56:21 - 56:27] description if you want and then they
+[56:23 - 56:29] will just save the information. Okay. So
+[56:27 - 56:32] inside this note you will see uh all
+[56:29 - 56:35] these points that we are going to add
+[56:32 - 56:37] inside our app. Now just one important
+[56:35 - 56:40] thing want to tell you that we are also
+[56:37 - 56:44] going to add a feature
+[56:40 - 56:45] uh to generate using an AI but obviously
+[56:44 - 56:48] there are many times you already have
+[56:45 - 56:50] the trip ready you know where to go
+[56:48 - 56:53] right you just need to add that trip
+[56:50 - 56:56] inside your um application so that you
+[56:53 - 56:57] can plan for the alternative you can
+[56:56 - 57:01] plan for the booking you can save the
+[56:57 - 57:03] details and it will u help us to move
+[57:01 - 57:05] faster okay you are all the trip
+[57:03 - 57:07] information will will be inside this
+[57:05 - 57:09] application and that's the reason we are
+[57:07 - 57:12] adding this option called add new trip.
+[57:09 - 57:14] Okay. So user can easily add and if user
+[57:12 - 57:16] don't want to talk with AI that's
+[57:14 - 57:18] completely fine. So uh on the click of
+[57:16 - 57:21] this create new trip plan we want to
+[57:18 - 57:24] open this page. So let's go ahead inside
+[57:21 - 57:27] the cursor and I will create a new uh
+[57:24 - 57:34] session. And here we can just simply say
+[57:27 - 57:39] on click create new trip plan button
+[57:34 - 57:43] navigate to new page where user
+[57:39 - 57:45] will add new trip
+[57:43 - 57:49] by entering
+[57:45 - 57:52] trip name source
+[57:49 - 57:52] destination
+[57:53 - 57:58] and destination.
+[57:55 - 58:02] then start or we'll just say uh we'll
+[57:58 - 58:05] say start date and end date. After that
+[58:02 - 58:12] we also want to add image banner. So
+[58:05 - 58:13] here we say image upload or AI image
+[58:12 - 58:17] generation
+[58:13 - 58:20] let you based on
+[58:17 - 58:22] based on destination
+[58:20 - 58:26] description
+[58:22 - 58:28] which is optional. Okay. So all of this
+[58:26 - 58:30] information we want in the form. Now
+[58:28 - 58:35] actual functionality how we supposed to
+[58:30 - 58:40] work on click save button. Make sure to
+[58:35 - 58:42] save user uploaded or
+[58:40 - 58:45] AI generated
+[58:42 - 58:49] image to superbase storage because we
+[58:45 - 58:54] want to save that image, right? And then
+[58:49 - 58:57] also save all information to
+[58:54 - 59:00] table. Okay. So whichever user is login,
+[58:57 - 59:02] it will save that record to with that
+[59:00 - 59:04] user's information. Right? So all the
+[59:02 - 59:07] trip added by that user it will save
+[59:04 - 59:11] inside the table and that's what we
+[59:07 - 59:14] basically mention over here. Okay.
+[59:11 - 59:19] Also for a a start date and end date
+[59:14 - 59:23] here we say use date picker for start
+[59:19 - 59:25] and end date. Okay because we want that
+[59:23 - 59:32] specifically mentioned. I think that's
+[59:25 - 59:36] pretty much uh we'll also use use cursor
+[59:32 - 59:39] API for image generation
+[59:36 - 59:41] and then simply hit enter. Now I will
+[59:39 - 59:43] keep this. You can switch this to any
+[59:41 - 59:47] model whichever you like. So let's go
+[59:43 - 59:49] with this cursor model. Now remember one
+[59:47 - 59:51] more thing. If you go to this your plan
+[59:49 - 59:54] and setting section you will see how
+[59:51 - 59:57] much percentage you already use. Okay.
+[59:54 - 01:00:02] You can also see how much API you use
+[59:57 - 01:00:04] it, how much um total usage you use,
+[01:00:02 - 01:00:07] right? Everything you'll find inside
+[01:00:04 - 01:00:11] this particular section.
+[01:00:07 - 01:00:14] Now I will just select this cursor and
+[01:00:11 - 01:00:16] cursor will consider as a its own but if
+[01:00:14 - 01:00:18] you are using any other like GPT or
+[01:00:16 - 01:00:21] something else so it will consider under
+[01:00:18 - 01:00:24] the API section. Now let's send this one
+[01:00:21 - 01:00:25] and then we'll wait for the
+[01:00:24 - 01:00:27] implementation.
+[01:00:25 - 01:00:30] Now on the click of this button it will
+[01:00:27 - 01:00:32] navigate to the new screen and then you
+[01:00:30 - 01:00:34] will see the proper form in order to
+[01:00:32 - 01:00:36] fill up that information and that then
+[01:00:34 - 01:00:38] that trip will display under this my
+[01:00:36 - 01:00:41] plan.
+[01:00:38 - 01:00:44] >> A few moments later.
+[01:00:41 - 01:00:46] Now once it is implemented uh there is a
+[01:00:44 - 01:00:50] quick update that the cursor has no
+[01:00:46 - 01:00:52] public image generation API for app. So
+[01:00:50 - 01:00:55] it will use a destination based AI image
+[01:00:52 - 01:00:57] generation and wire that uh to the
+[01:00:55 - 01:00:59] create trip flow with the supervised
+[01:00:57 - 01:01:01] storage and trip table. Okay. So I also
+[01:00:59 - 01:01:03] not sure what is destination based AI
+[01:01:01 - 01:01:07] image generation. But the important
+[01:01:03 - 01:01:08] thing is uh it's saying that okay you
+[01:01:07 - 01:01:12] it's a optional thing but you can add
+[01:01:08 - 01:01:14] the cursor API key inside the env file.
+[01:01:12 - 01:01:16] And here again it say that cursor does
+[01:01:14 - 01:01:18] not expose a public image generation
+[01:01:16 - 01:01:21] rest endpoint for mobile app. Okay, only
+[01:01:18 - 01:01:24] in IDE that so that we need to update it
+[01:01:21 - 01:01:26] and we need to use uh some other AI
+[01:01:24 - 01:01:29] model for the image generation. But
+[01:01:26 - 01:01:32] before that uh
+[01:01:29 - 01:01:35] we need to run this migr SQL migration
+[01:01:32 - 01:01:38] script. Okay, which is this one. So just
+[01:01:35 - 01:01:40] click on it. Let's me click on it and
+[01:01:38 - 01:01:43] we'll copy this script as it is. Then
+[01:01:40 - 01:01:48] we'll go to the superbase
+[01:01:43 - 01:01:51] go to the SQL query editor and simply
+[01:01:48 - 01:01:53] paste the uh query which you copied.
+[01:01:51 - 01:01:55] Okay. And then click run the query. So
+[01:01:53 - 01:01:58] basically it will create a new table. It
+[01:01:55 - 01:02:00] will also create a storage bucket and
+[01:01:58 - 01:02:02] everything for us. So first if you go to
+[01:02:00 - 01:02:04] the table editor you will see a new
+[01:02:02 - 01:02:07] table called trips. Also if you go to
+[01:02:04 - 01:02:10] the storage it will create a trip images
+[01:02:07 - 01:02:13] as a new uh storage where you can store
+[01:02:10 - 01:02:16] all the images. Okay. And it has a
+[01:02:13 - 01:02:19] policy as well added. So any no one can
+[01:02:16 - 01:02:23] easily access it until you authenticate
+[01:02:19 - 01:02:26] to our app. Now uh instead of using the
+[01:02:23 - 01:02:28] cursor API for the image generation we
+[01:02:26 - 01:02:30] will use other AI model which I will
+[01:02:28 - 01:02:32] show you in a moment. But before that
+[01:02:30 - 01:02:34] whatever is implemented let's test this
+[01:02:32 - 01:02:37] out. Now many times if you are running
+[01:02:34 - 01:02:40] your application
+[01:02:37 - 01:02:43] uh through the cursor right uh make sure
+[01:02:40 - 01:02:46] to reload your application okay it's a
+[01:02:43 - 01:02:48] better so that you'll get uh updated
+[01:02:46 - 01:02:52] changes okay otherwise you can directly
+[01:02:48 - 01:02:55] run inside the terminal and then here I
+[01:02:52 - 01:02:57] will open inside my phone
+[01:02:55 - 01:02:59] and then if I click on create new trip
+[01:02:57 - 01:03:03] you will see this form where you will
+[01:02:59 - 01:03:05] can enter the trip name then the source
+[01:03:03 - 01:03:08] destination, the start and end date
+[01:03:05 - 01:03:10] where you can pick the date and end date
+[01:03:08 - 01:03:13] as well. So that's cool. Uh you have
+[01:03:10 - 01:03:16] option to upload the image. Okay. So you
+[01:03:13 - 01:03:18] can click on image upload and then you
+[01:03:16 - 01:03:22] can simply upload the image whichever
+[01:03:18 - 01:03:24] image you want and then once you select
+[01:03:22 - 01:03:28] uh it will get uploaded. You also have
+[01:03:24 - 01:03:30] option to do the AI generate image.
+[01:03:28 - 01:03:34] Okay. So AI will help us to generate the
+[01:03:30 - 01:03:36] image as well. And then you can simply
+[01:03:34 - 01:03:38] scroll down and uh save this particular
+[01:03:36 - 01:03:41] trip.
+[01:03:38 - 01:03:44] But before that let's add a new things.
+[01:03:41 - 01:03:46] So for the image generation we can use
+[01:03:44 - 01:03:49] Google's Gemini AI model. Okay. So
+[01:03:46 - 01:03:52] simply go to the AI studio.google.com.
+[01:03:49 - 01:03:55] Uh Google Gemini will give you a free
+[01:03:52 - 01:03:59] trial with the AI image generation with
+[01:03:55 - 01:04:01] the um Gemini's model. So if I go over
+[01:03:59 - 01:04:03] here and click on images, you will see a
+[01:04:01 - 01:04:05] nano banana. Okay, you can select this
+[01:04:03 - 01:04:08] light model. That's completely fine. And
+[01:04:05 - 01:04:11] once you select it, you can click on
+[01:04:08 - 01:04:13] this get code section. Make sure to
+[01:04:11 - 01:04:16] select TypeScript. And then simply copy
+[01:04:13 - 01:04:20] that. Then go back to the cursor. And
+[01:04:16 - 01:04:26] here we can say uh let's use Gemini's
+[01:04:20 - 01:04:30] nano or Gemini Gemini API for AI image
+[01:04:26 - 01:04:33] generation. And here is
+[01:04:30 - 01:04:36] our code. Okay. And simply paste this
+[01:04:33 - 01:04:39] code. So obviously it will basically use
+[01:04:36 - 01:04:42] a Google gen AI model uh AI SDK. And
+[01:04:39 - 01:04:45] then we need to provide a Gemini API
+[01:04:42 - 01:04:48] key. Right now let's send this
+[01:04:45 - 01:04:49] and then you just need to wait uh for
+[01:04:48 - 01:04:52] this implementation. So you don't need
+[01:04:49 - 01:04:56] to add a cursor API because right now we
+[01:04:52 - 01:04:58] are using a Gemini's nano banana image
+[01:04:56 - 01:05:02] generation model. Okay. Now in meantime
+[01:04:58 - 01:05:05] I will show you how to generate
+[01:05:02 - 01:05:06] the API key. Okay. So once you are on
+[01:05:05 - 01:05:09] the astudio.google.com
+[01:05:06 - 01:05:12] click on this get API key and here you
+[01:05:09 - 01:05:14] have option to create a new API key.
+[01:05:12 - 01:05:17] Okay, give the API key name and then
+[01:05:14 - 01:05:20] once it's generated you can simply copy
+[01:05:17 - 01:05:22] that API key. Now here if you see um
+[01:05:20 - 01:05:26] once it is implemented it asking us to
+[01:05:22 - 01:05:29] add the Gemini API key. So copy this
+[01:05:26 - 01:05:32] then we'll go to the env file. So under
+[01:05:29 - 01:05:35] the files
+[01:05:32 - 01:05:37] just simply navigate to the env.
+[01:05:35 - 01:05:41] Let's expand this little bit. I will
+[01:05:37 - 01:05:46] close this one and then below that we'll
+[01:05:41 - 01:05:48] add this Gemini API key. Okay. So as I
+[01:05:46 - 01:05:51] show you uh you just need to go to this
+[01:05:48 - 01:05:54] section and copy this API key and then
+[01:05:51 - 01:05:56] simply paste it here. Now when you uh
+[01:05:54 - 01:05:58] restart your application you might see
+[01:05:56 - 01:06:00] this error right? So in that case you
+[01:05:58 - 01:06:03] don't need to panic. Simply copy this
+[01:06:00 - 01:06:05] error and then paste it to the AI agent
+[01:06:03 - 01:06:08] and AI agent will take care of this. So
+[01:06:05 - 01:06:11] we'll paste it here and obviously this
+[01:06:08 - 01:06:13] big error. So simply send this. Uh so
+[01:06:11 - 01:06:16] basically this error came because the
+[01:06:13 - 01:06:20] package or HDK which is installed right
+[01:06:16 - 01:06:23] it might not supportable but uh if you
+[01:06:20 - 01:06:25] see it uses this expo file system with
+[01:06:23 - 01:06:29] FS and buffer so maybe because of that
+[01:06:25 - 01:06:32] one but let's wait and let AI fix this
+[01:06:29 - 01:06:35] particular issue and once it fix it you
+[01:06:32 - 01:06:37] just reload and then it good to go.
+[01:06:35 - 01:06:41] Okay. And also make sure whenever you
+[01:06:37 - 01:06:44] update your env file, it should re
+[01:06:41 - 01:06:46] reload your or restart your application.
+[01:06:44 - 01:06:48] It's very important. Now if I click on
+[01:06:46 - 01:06:50] create new trip, add the trip name.
+[01:06:48 - 01:06:54] Let's say you want to go to the New York
+[01:06:50 - 01:06:56] New York trip. Then you can add a
+[01:06:54 - 01:06:58] source,
+[01:06:56 - 01:07:02] the destination.
+[01:06:58 - 01:07:04] Then you can select the date. Okay. So I
+[01:07:02 - 01:07:07] will select this date only. then you can
+[01:07:04 - 01:07:08] either upload the image or generate the
+[01:07:07 - 01:07:12] AI image. So right now it's saying image
+[01:07:08 - 01:07:14] generation fail minimal is not supported
+[01:07:12 - 01:07:17] uh thinking level of this model allow
+[01:07:14 - 01:07:19] value and high blah blah blah. Okay. So
+[01:07:17 - 01:07:21] um make sure inside the terminal if you
+[01:07:19 - 01:07:25] see any error then make sure to copy
+[01:07:21 - 01:07:27] that. But in this case if I click on AI
+[01:07:25 - 01:07:31] image generation this minimal is not
+[01:07:27 - 01:07:33] supported because inside the config uh
+[01:07:31 - 01:07:37] it might have the issue. So we'll say
+[01:07:33 - 01:07:43] just minimal is not supported.
+[01:07:37 - 01:07:48] Thinking level of this model error uh
+[01:07:43 - 01:07:51] when generating image using Gemini
+[01:07:48 - 01:07:54] and let's send it. So basically let me
+[01:07:51 - 01:07:57] show you where this error comes from. So
+[01:07:54 - 01:07:59] when we click on get code right and here
+[01:07:57 - 01:08:00] if you see this thinking level it's
+[01:07:59 - 01:08:03] showing minimal. Okay. But right now
+[01:08:00 - 01:08:05] it's not supported by that particular
+[01:08:03 - 01:08:08] model. So I don't know why it's still
+[01:08:05 - 01:08:10] showing but maybe there is some other
+[01:08:08 - 01:08:13] reason. I don't know why it's not
+[01:08:10 - 01:08:16] supporting and then that's the reason
+[01:08:13 - 01:08:18] it's giving this error.
+[01:08:16 - 01:08:21] So sometimes better you can simply
+[01:08:18 - 01:08:24] remove it. Okay. So let's go ahead and
+[01:08:21 - 01:08:26] test this out. Maybe we need to restart
+[01:08:24 - 01:08:28] our application. Not sure. But I think
+[01:08:26 - 01:08:31] it's look like if you see it generating
+[01:08:28 - 01:08:33] and boom. If you see AI generated image
+[01:08:31 - 01:08:37] within a few seconds. Pretty cool,
+[01:08:33 - 01:08:40] right? And then simply you can save this
+[01:08:37 - 01:08:44] trip. Okay. And it's saying your trip is
+[01:08:40 - 01:08:47] now saved and then you can come back.
+[01:08:44 - 01:08:49] Now over here uh once the trip is saved,
+[01:08:47 - 01:08:51] you can confirm by going to the
+[01:08:49 - 01:08:53] superbase. So I'll go to the superbase
+[01:08:51 - 01:08:55] table editor and go to the trips and you
+[01:08:53 - 01:08:58] will see this trip added. the name of
+[01:08:55 - 01:09:01] the trip, source, destination, start and
+[01:08:58 - 01:09:04] end date, the image URL. Now this image
+[01:09:01 - 01:09:06] URL obviously it's saved to our storage.
+[01:09:04 - 01:09:08] I will show you that where it's actually
+[01:09:06 - 01:09:10] stored. Then you will see the image path
+[01:09:08 - 01:09:14] and all the information. Now if I go to
+[01:09:10 - 01:09:16] the storage and inside the trip images
+[01:09:14 - 01:09:19] over here, you will see this image the
+[01:09:16 - 01:09:21] one which is generated. See perfect
+[01:09:19 - 01:09:23] right? So that's how it generate the
+[01:09:21 - 01:09:26] image and also save it to our uh
+[01:09:23 - 01:09:29] superbase storage. That's good. Now
+[01:09:26 - 01:09:32] question is how uh
+[01:09:29 - 01:09:34] to show it on the screen. Right now
+[01:09:32 - 01:09:36] sometimes if you reload your application
+[01:09:34 - 01:09:38] then it will it might fetch it and but
+[01:09:36 - 01:09:40] in this case if you see it's still not
+[01:09:38 - 01:09:43] fetching it because we did not inform to
+[01:09:40 - 01:09:46] the AI that we want to show that added
+[01:09:43 - 01:09:48] um trip under the my plan. So you can
+[01:09:46 - 01:09:50] simply say
+[01:09:48 - 01:09:53] show all
+[01:09:50 - 01:09:59] trip added
+[01:09:53 - 01:10:01] by user under my plan section on home
+[01:09:59 - 01:10:03] screen
+[01:10:01 - 01:10:06] with
+[01:10:03 - 01:10:09] proper details. Okay, I think that's all
+[01:10:06 - 01:10:13] we needed because we already have the
+[01:10:09 - 01:10:17] component ready for it. We just need uh
+[01:10:13 - 01:10:18] to show the added trip and then simply
+[01:10:17 - 01:10:21] send it.
+[01:10:18 - 01:10:25] And that's how easy it is, right? We
+[01:10:21 - 01:10:28] simply uh inform AI what we need it. We
+[01:10:25 - 01:10:30] make sure to uh that it's working and
+[01:10:28 - 01:10:32] then we are just fixing the thing if
+[01:10:30 - 01:10:35] it's not working and then we are getting
+[01:10:32 - 01:10:38] the result which we want.
+[01:10:35 - 01:10:40] And if you see once it is implemented
+[01:10:38 - 01:10:44] the requested change you will see the
+[01:10:40 - 01:10:45] result. Now currently this is an ongoing
+[01:10:44 - 01:10:47] trip. So that's the reason you might not
+[01:10:45 - 01:10:51] see that progress bar but it show the
+[01:10:47 - 01:10:53] source destination and the trip date.
+[01:10:51 - 01:10:55] Okay. And along with the uh image which
+[01:10:53 - 01:10:58] we generated pretty cool right and you
+[01:10:55 - 01:11:01] will see that ongoing trip under the my
+[01:10:58 - 01:11:03] plan. Now if you add any trip uh which
+[01:11:01 - 01:11:06] is a future trip then you will might see
+[01:11:03 - 01:11:09] the card little bit different way. So
+[01:11:06 - 01:11:14] let me add a new trip. So we have option
+[01:11:09 - 01:11:19] here we'll say Cali foria
+[01:11:14 - 01:11:21] and let's say Charlotte to
+[01:11:19 - 01:11:26] San Jose.
+[01:11:21 - 01:11:30] Now I will add some future date. Okay.
+[01:11:26 - 01:11:32] And here we'll change this date as well.
+[01:11:30 - 01:11:35] So I added for October. Now you can
+[01:11:32 - 01:11:38] upload the image or I will use AI to
+[01:11:35 - 01:11:40] generate the uh image based on the
+[01:11:38 - 01:11:42] destination. And if you see the
+[01:11:40 - 01:11:46] destination is Sanjos and it generated
+[01:11:42 - 01:11:49] that image and now you can simply save
+[01:11:46 - 01:11:52] this trip. Now once the trip is saved
+[01:11:49 - 01:11:56] you can navigate and then here you will
+[01:11:52 - 01:11:59] see u the California and upcoming trip.
+[01:11:56 - 01:12:00] Now it look like it's little bit change
+[01:11:59 - 01:12:03] our card because it's not showing
+[01:12:00 - 01:12:05] progress. So you can just simply say uh
+[01:12:03 - 01:12:09] inside
+[01:12:05 - 01:12:13] trip card under my trip
+[01:12:09 - 01:12:15] show progress bar
+[01:12:13 - 01:12:20] for
+[01:12:15 - 01:12:27] planning to-do list. Okay, which we will
+[01:12:20 - 01:12:28] connect later on. But add that progress
+[01:12:27 - 01:12:32] bar.
+[01:12:28 - 01:12:36] So it give some visualization u about
+[01:12:32 - 01:12:38] how much plan you complete and all the
+[01:12:36 - 01:12:40] details right so that's pretty cool u
+[01:12:38 - 01:12:42] feature but right now if you see the
+[01:12:40 - 01:12:45] planning progress and everything now is
+[01:12:42 - 01:12:47] get added perfect and you will see it's
+[01:12:45 - 01:12:49] immediately refresh uh your application
+[01:12:47 - 01:12:52] you don't need to even reload manually
+[01:12:49 - 01:12:55] or anything like that and now you have
+[01:12:52 - 01:12:57] the upcoming trip the ongoing trip and
+[01:12:55 - 01:12:59] you can on the click you can see the
+[01:12:57 - 01:13:02] detail obviously the detail feature or
+[01:12:59 - 01:13:04] is not yet implemented but for now make
+[01:13:02 - 01:13:07] sure
+[01:13:04 - 01:13:08] you are able to add the trip manually.
+[01:13:07 - 01:13:11] You are able to save it. You're
+[01:13:08 - 01:13:13] generating the images which is very uh
+[01:13:11 - 01:13:15] important feature of this application
+[01:13:13 - 01:13:19] and because later on we are going to add
+[01:13:15 - 01:13:19] lot of different feature.
+[01:13:20 - 01:13:25] Now it's time to implement the trip
+[01:13:22 - 01:13:28] detail layout. Now inside this basically
+[01:13:25 - 01:13:30] when user click on any trip it will
+[01:13:28 - 01:13:32] navigate to that page where we are
+[01:13:30 - 01:13:35] showing the trip detail. If you see
+[01:13:32 - 01:13:38] inside this node and the mockup design
+[01:13:35 - 01:13:41] how it actually organized right. So at
+[01:13:38 - 01:13:43] the top you will see the trip basic
+[01:13:41 - 01:13:46] information when it start with this
+[01:13:43 - 01:13:49] banner and all. After that we have the
+[01:13:46 - 01:13:51] tab for the itonary bookings packing and
+[01:13:49 - 01:13:55] photos. Right. User can switch between
+[01:13:51 - 01:13:59] those section. Now under the at itary um
+[01:13:55 - 01:14:02] it will show the proper timeline wise um
+[01:13:59 - 01:14:04] destination for the day 1, day 2, day
+[01:14:02 - 01:14:06] three and all the details. For a booking
+[01:14:04 - 01:14:08] if you see we have this tab right. So
+[01:14:06 - 01:14:11] for booking obviously we have the flight
+[01:14:08 - 01:14:12] booking, car rental, hotels etc. Right?
+[01:14:11 - 01:14:15] It will show all the details and user
+[01:14:12 - 01:14:17] have option to add the flight details
+[01:14:15 - 01:14:21] information, car rental information and
+[01:14:17 - 01:14:24] many other details. It help user to find
+[01:14:21 - 01:14:26] uh the information quickly right. Then
+[01:14:24 - 01:14:29] we have packing where user want to pack
+[01:14:26 - 01:14:32] the bag right. So they can add a to-do
+[01:14:29 - 01:14:34] uh list and whichever item need to take
+[01:14:32 - 01:14:36] they can just add a um that item in
+[01:14:34 - 01:14:39] their bag and we will show the checkbox
+[01:14:36 - 01:14:41] kind of thing. So user can mark it as a
+[01:14:39 - 01:14:43] uh check or uncheck and then photo
+[01:14:41 - 01:14:46] section in order to share the photo with
+[01:14:43 - 01:14:49] the family members. So that's overall
+[01:14:46 - 01:14:52] the design of this mockup and inside
+[01:14:49 - 01:14:55] this note I already explained each of
+[01:14:52 - 01:14:58] the detail uh with the specific points
+[01:14:55 - 01:15:02] and all right so over here if you see we
+[01:14:58 - 01:15:04] also going to add the inline um option
+[01:15:02 - 01:15:06] to add the flight information or
+[01:15:04 - 01:15:08] activity information so that we will
+[01:15:06 - 01:15:11] implement but first let's implement this
+[01:15:08 - 01:15:15] trip detail layer so on the click we
+[01:15:11 - 01:15:17] want to open that new page so let's
+[01:15:15 - 01:15:20] create a new session
+[01:15:17 - 01:15:22] and then inside that we are going to add
+[01:15:20 - 01:15:28] it.
+[01:15:22 - 01:15:31] So over here we'll simply say on click
+[01:15:28 - 01:15:34] any trip
+[01:15:31 - 01:15:39] navigate to new page
+[01:15:34 - 01:15:42] to view trip detail. Okay. Now it is
+[01:15:39 - 01:15:44] very important to explain each small
+[01:15:42 - 01:15:49] thing. For example, what you want at the
+[01:15:44 - 01:15:51] top, the tab and how you want to show uh
+[01:15:49 - 01:15:54] a specific layout thing, right? So that
+[01:15:51 - 01:15:57] also you can mention or the another way
+[01:15:54 - 01:15:58] to do it, you can just simply uh if you
+[01:15:57 - 01:16:00] have mockup design, right? You can
+[01:15:58 - 01:16:02] attach that mockup design as well. But
+[01:16:00 - 01:16:04] if you don't have any, then it's better
+[01:16:02 - 01:16:07] you can explain everything. So over here
+[01:16:04 - 01:16:09] you'll say uh
+[01:16:07 - 01:16:11] so
+[01:16:09 - 01:16:12] navigate to the new page for to view the
+[01:16:11 - 01:16:20] trip detail.
+[01:16:12 - 01:16:20] on that new trip detail page layout
+[01:16:21 - 01:16:30] on top show um trip banner and on top of
+[01:16:28 - 01:16:33] it
+[01:16:30 - 01:16:37] on image or on banner image we'll say
+[01:16:33 - 01:16:44] banner image show some basic
+[01:16:37 - 01:16:48] trip detail info like trip title,
+[01:16:44 - 01:16:51] source destination
+[01:16:48 - 01:16:53] and travel date.
+[01:16:51 - 01:16:56] Travel date.
+[01:16:53 - 01:17:03] Then below that
+[01:16:56 - 01:17:05] show a tab bar for then we need to give
+[01:17:03 - 01:17:08] the nameary.
+[01:17:05 - 01:17:12] Oh wait just a second. So we need to
+[01:17:08 - 01:17:12] show itary first.
+[01:17:15 - 01:17:21] Then we want to show booking
+[01:17:19 - 01:17:26] uh pack packing
+[01:17:21 - 01:17:29] photos. Okay. under booking or we'll say
+[01:17:26 - 01:17:32] under
+[01:17:29 - 01:17:32] it
+[01:17:32 - 01:17:39] show uh day wise
+[01:17:37 - 01:17:44] and with
+[01:17:39 - 01:17:48] proper timeline style with date
+[01:17:44 - 01:17:51] location and time
+[01:17:48 - 01:17:53] under booking
+[01:17:51 - 01:17:55] show tabs.
+[01:17:53 - 01:18:02] or switch
+[01:17:55 - 01:18:05] for flight, car then hotels, extras. If
+[01:18:02 - 01:18:07] you have any tickets thing, you can add
+[01:18:05 - 01:18:12] that extras or we can say tickets. Okay,
+[01:18:07 - 01:18:19] we don't want to add too much. And under
+[01:18:12 - 01:18:24] packing, we want to add to-do list with
+[01:18:19 - 01:18:26] check box to add uh to-do items for
+[01:18:24 - 01:18:32] packing.
+[01:18:26 - 01:18:35] And for photos, we'll implement
+[01:18:32 - 01:18:39] later on. Okay, so that's what we want.
+[01:18:35 - 01:18:43] Now, I think that's pretty much all. Now
+[01:18:39 - 01:18:49] here we'll say in each section we want
+[01:18:43 - 01:18:54] to give an option to add each detail.
+[01:18:49 - 01:18:57] Okay, with inline
+[01:18:54 - 01:19:01] data
+[01:18:57 - 01:19:03] in or inline data uh form okay I think
+[01:19:01 - 01:19:05] that's what we can mention but I think
+[01:19:03 - 01:19:07] this is all we needed. I know this
+[01:19:05 - 01:19:10] prompt is bigger but it is very
+[01:19:07 - 01:19:12] important to mention each small detail.
+[01:19:10 - 01:19:14] Obviously once you send it later on we
+[01:19:12 - 01:19:17] can also update that. Now another
+[01:19:14 - 01:19:20] interesting fact about this you can
+[01:19:17 - 01:19:22] switch this to a plan mode. Okay. So now
+[01:19:20 - 01:19:24] if I switch this to a plan mode before
+[01:19:22 - 01:19:26] implementation it will give you the
+[01:19:24 - 01:19:28] proper plan and you can edit that plan
+[01:19:26 - 01:19:30] if you are not happy. But once you are
+[01:19:28 - 01:19:33] happy with the plan then we can start
+[01:19:30 - 01:19:36] implementation. Okay. So let's try this
+[01:19:33 - 01:19:39] plan mode uh with this cursor and then
+[01:19:36 - 01:19:41] let's send this. Now if you see we send
+[01:19:39 - 01:19:43] a plan mode and now we'll wait for the
+[01:19:41 - 01:19:46] proper implementation and then we'll
+[01:19:43 - 01:19:48] test this out. So while um generating
+[01:19:46 - 01:19:51] the plan it asks one question should
+[01:19:48 - 01:19:54] itary booking packing item persist in
+[01:19:51 - 01:19:56] superbase or we want on UI obviously we
+[01:19:54 - 01:20:00] want to save in superbase so that user
+[01:19:56 - 01:20:03] can access any time right and so we just
+[01:20:00 - 01:20:07] say or you can simply copy this and
+[01:20:03 - 01:20:09] we'll add pit in superbase okay and now
+[01:20:07 - 01:20:12] we'll wait and now if you see it's
+[01:20:09 - 01:20:14] generating the proper plan currently
+[01:20:12 - 01:20:16] it's still uh updating the plan But at
+[01:20:14 - 01:20:20] the top you will see the trip detail
+[01:20:16 - 01:20:22] page the scope. So on the tab um and my
+[01:20:20 - 01:20:24] plan trip card it will go to the trip
+[01:20:22 - 01:20:27] detail page on the banner with the
+[01:20:24 - 01:20:30] overlay with the title solation travel
+[01:20:27 - 01:20:32] dates. So whatever we show it added in
+[01:20:30 - 01:20:36] that particular scope. Then the proper
+[01:20:32 - 01:20:39] navigation uh the data model. Okay. So
+[01:20:36 - 01:20:42] obviously we need to update the SQL with
+[01:20:39 - 01:20:45] the new changes. So that also it covered
+[01:20:42 - 01:20:47] it. then what things will update on the
+[01:20:45 - 01:20:50] client side and you will see the
+[01:20:47 - 01:20:53] beautiful proper architectural diagram
+[01:20:50 - 01:20:55] for this particular uh implementation.
+[01:20:53 - 01:20:58] Okay. And how it actually navigated and
+[01:20:55 - 01:21:00] if you see uh once we have the trip
+[01:20:58 - 01:21:03] information then it will show banner
+[01:21:00 - 01:21:06] with the overlay the booking information
+[01:21:03 - 01:21:08] then we have the day by day uh timeline
+[01:21:06 - 01:21:10] the flight car booking and other things.
+[01:21:08 - 01:21:13] Pretty cool right? And you will see all
+[01:21:10 - 01:21:16] of these info. Now they are already
+[01:21:13 - 01:21:19] noted this eight to-do task and it will
+[01:21:16 - 01:21:20] implement each one of one by one. Okay.
+[01:21:19 - 01:21:23] So once you are happy with this
+[01:21:20 - 01:21:24] implementation plan then you can say
+[01:21:23 - 01:21:27] either you have option to build in
+[01:21:24 - 01:21:31] cloud. So you can just start building
+[01:21:27 - 01:21:32] cloud turn off your laptop but it still
+[01:21:31 - 01:21:34] build it for you and implement this
+[01:21:32 - 01:21:37] feature or you can say build locally.
+[01:21:34 - 01:21:40] Obviously we we are implementing on your
+[01:21:37 - 01:21:42] local system. So we'll say build locally
+[01:21:40 - 01:21:45] and we'll start this implementation with
+[01:21:42 - 01:21:49] an AI agent. Okay. And here you can keep
+[01:21:45 - 01:21:51] track of the to-do uh list as well. So
+[01:21:49 - 01:21:53] basically it start with the first task
+[01:21:51 - 01:21:56] adding a supervised migration for the
+[01:21:53 - 01:21:58] itinary booking packaging table and RLS
+[01:21:56 - 01:22:02] and then it will go and execute it one
+[01:21:58 - 01:22:05] by one and that's how the cursor AI
+[01:22:02 - 01:22:07] agent works. Okay. And obviously you can
+[01:22:05 - 01:22:10] use whichever favorite model you want.
+[01:22:07 - 01:22:12] Currently I'm using cursor gro 4.5
+[01:22:10 - 01:22:15] because which is highest and with a high
+[01:22:12 - 01:22:19] effort model and which we can use
+[01:22:15 - 01:22:22] composer or any other AI model as well.
+[01:22:19 - 01:22:24] >> A few moments later
+[01:22:22 - 01:22:27] >> and once it is implemented uh you will
+[01:22:24 - 01:22:30] see all the details right now obviously
+[01:22:27 - 01:22:32] u it say it mention that your action we
+[01:22:30 - 01:22:35] need to run the migration in the
+[01:22:32 - 01:22:37] superbase SQL editor before testing uh
+[01:22:35 - 01:22:39] this particular feature. Okay. So here
+[01:22:37 - 01:22:42] is the migration script. Just click on
+[01:22:39 - 01:22:45] it. It will open on the inside the tab.
+[01:22:42 - 01:22:50] Just oh let me click on the correct one
+[01:22:45 - 01:22:53] and then simply copy everything as it
+[01:22:50 - 01:22:58] is. So this is the trip detail. So I
+[01:22:53 - 01:23:00] will copy this script or query and then
+[01:22:58 - 01:23:04] go back to the superbase. inside the
+[01:23:00 - 01:23:07] superbase SQL editor. You can simply
+[01:23:04 - 01:23:10] paste it here and then click run query.
+[01:23:07 - 01:23:13] Once it run, it will uh create a new
+[01:23:10 - 01:23:15] table and we'll verify by going to the
+[01:23:13 - 01:23:18] table editor and then you will see a
+[01:23:15 - 01:23:21] trip booking uh itinary items or packing
+[01:23:18 - 01:23:24] items as well. Okay, so that's how we
+[01:23:21 - 01:23:26] have to make sure to uh run this
+[01:23:24 - 01:23:29] migration script.
+[01:23:26 - 01:23:33] Now next, let's test this out. So we'll
+[01:23:29 - 01:23:36] go over here. Now simply click on any of
+[01:23:33 - 01:23:41] these. So if I click over here then it
+[01:23:36 - 01:23:44] navigate uh to this detail option where
+[01:23:41 - 01:23:46] you will see the banner the trip title
+[01:23:44 - 01:23:49] where it goes from right the date as
+[01:23:46 - 01:23:53] well and then you will see this four
+[01:23:49 - 01:23:55] type itinary booking packing and photos.
+[01:23:53 - 01:23:59] Okay. Now you have option to add a
+[01:23:55 - 01:24:02] daybyday uh itinary or booking as well.
+[01:23:59 - 01:24:04] If you just click on add flight details,
+[01:24:02 - 01:24:07] you will see an option to add a flight
+[01:24:04 - 01:24:09] information, the flight number and other
+[01:24:07 - 01:24:11] detail as well. Now if you want to add
+[01:24:09 - 01:24:13] car information, you will see it
+[01:24:11 - 01:24:15] automatically change the form. It does
+[01:24:13 - 01:24:17] not does not keep the same form
+[01:24:15 - 01:24:19] throughout. And same with the hotel. If
+[01:24:17 - 01:24:21] you want to add a hotel, you will see
+[01:24:19 - 01:24:24] the hotel info. Okay. And then we have
+[01:24:21 - 01:24:27] the ticket or extra section. Then inside
+[01:24:24 - 01:24:29] the itinary you will see an add stop the
+[01:24:27 - 01:24:32] day by day where you want to visit.
+[01:24:29 - 01:24:36] Let's say this is California. We'll say
+[01:24:32 - 01:24:36] uh to visit a big sour
+[01:24:37 - 01:24:44] right then
+[01:24:39 - 01:24:44] again I will I will add the same names
+[01:24:45 - 01:24:50] uh travel to bigsour. Then what is the
+[01:24:47 - 01:24:53] start time? What is the end time? Okay.
+[01:24:50 - 01:24:56] Now inside the end time maybe we need to
+[01:24:53 - 01:24:59] add a date and time picker properly and
+[01:24:56 - 01:25:01] then at the end simply say save stop.
+[01:24:59 - 01:25:04] Okay. And once you save top obviously if
+[01:25:01 - 01:25:06] you see this time and showing something
+[01:25:04 - 01:25:09] not correct maybe we need to test with
+[01:25:06 - 01:25:11] the actual device but over here you will
+[01:25:09 - 01:25:14] see an option on Friday what we are
+[01:25:11 - 01:25:15] doing on s Saturday what we are doing
+[01:25:14 - 01:25:20] something like this and you will see the
+[01:25:15 - 01:25:22] timeline uh time by time u proper
+[01:25:20 - 01:25:25] itenary as well okay now few things we
+[01:25:22 - 01:25:27] need to fix the one which we already saw
+[01:25:25 - 01:25:29] okay right now if you see u it's showing
+[01:25:27 - 01:25:33] this but we want to show a proper for a
+[01:25:29 - 01:25:35] daybyday uh it turnary uh booking I
+[01:25:33 - 01:25:38] think everything will work properly I
+[01:25:35 - 01:25:40] don't think there will be any issue okay
+[01:25:38 - 01:25:43] you can just add that info uh for
+[01:25:40 - 01:25:45] packing as well you can add item over
+[01:25:43 - 01:25:48] here for example you want to take a
+[01:25:45 - 01:25:50] camera right just click on it and then
+[01:25:48 - 01:25:52] it will add that camera if you want to
+[01:25:50 - 01:25:55] get
+[01:25:52 - 01:25:58] a five t-shirts you want to pack it
+[01:25:55 - 01:26:00] right just click on it and whenever you
+[01:25:58 - 01:26:02] pack that just click Click and then it
+[01:26:00 - 01:26:05] means that is completed or you already
+[01:26:02 - 01:26:07] put it in your bag. Obviously photo
+[01:26:05 - 01:26:09] section it's a coming soon future. So we
+[01:26:07 - 01:26:12] are in the phase one will not add but
+[01:26:09 - 01:26:16] right now uh this day by day plan looks
+[01:26:12 - 01:26:19] much better right and again you can add
+[01:26:16 - 01:26:22] more information. So right now the day
+[01:26:19 - 01:26:25] or start end time is not working
+[01:26:22 - 01:26:27] properly right. So it's showing that but
+[01:26:25 - 01:26:30] it's showing behind the this particular
+[01:26:27 - 01:26:32] card. See right so that we need to fix
+[01:26:30 - 01:26:35] it. So over here we'll just simply
+[01:26:32 - 01:26:37] mention uh inside
+[01:26:35 - 01:26:39] daybyday
+[01:26:37 - 01:26:46] plan
+[01:26:39 - 01:26:51] inline form date picker and time picker
+[01:26:46 - 01:26:55] is going behind the card and not uh
+[01:26:51 - 01:27:00] visible and not able to select
+[01:26:55 - 01:27:03] fix it. Okay. uh also uh we can we want
+[01:27:00 - 01:27:07] to show the date wise option. So also
+[01:27:03 - 01:27:10] we'll say also show
+[01:27:07 - 01:27:10] date switch
+[01:27:10 - 01:27:14] slash
+[01:27:12 - 01:27:18] dates
+[01:27:14 - 01:27:19] uh to select
+[01:27:18 - 01:27:24] itary
+[01:27:19 - 01:27:24] for that date under
+[01:27:24 - 01:27:31] itary oh sorry itary
+[01:27:28 - 01:27:33] tab okay so that also we want to update
+[01:27:31 - 01:27:36] it so that's what we mention
+[01:27:33 - 01:27:40] And once it added that uh fixes you will
+[01:27:36 - 01:27:43] see now we have this proper uh date wise
+[01:27:40 - 01:27:46] option right then you also have option
+[01:27:43 - 01:27:49] to add a stop and let's test this out.
+[01:27:46 - 01:27:53] So over here we'll see now you have can
+[01:27:49 - 01:27:56] you can easily pick the time right the
+[01:27:53 - 01:27:58] end time let's select something
+[01:27:56 - 01:28:02] then I will I don't know the location
+[01:27:58 - 01:28:05] but let's say um
+[01:28:02 - 01:28:09] highway one I don't know what is this
+[01:28:05 - 01:28:09] but let's add something
+[01:28:09 - 01:28:15] then if you want to add any note you can
+[01:28:11 - 01:28:17] add and then simply say save stop okay
+[01:28:15 - 01:28:21] and then it will automatically add based
+[01:28:17 - 01:28:23] on the timing because first on October 2
+[01:28:21 - 01:28:24] you need to go to the travel to big sour
+[01:28:23 - 01:28:26] then we have to go to the highway one
+[01:28:24 - 01:28:29] like this and you will see this
+[01:28:26 - 01:28:31] beautiful timeline section as well then
+[01:28:29 - 01:28:33] on Saturday 3rd what you want to add you
+[01:28:31 - 01:28:35] can add that on Saturday the third as
+[01:28:33 - 01:28:38] well obviously from this form you can
+[01:28:35 - 01:28:41] switch the time and all it's totally
+[01:28:38 - 01:28:45] allowable and that's how you have to add
+[01:28:41 - 01:28:46] this form section pretty cool right now
+[01:28:45 - 01:28:49] there might be the case that you don't
+[01:28:46 - 01:28:51] know itary and you want to create one.
+[01:28:49 - 01:28:53] Okay, you don't need to need you don't
+[01:28:51 - 01:28:57] know the location, you don't know
+[01:28:53 - 01:28:59] anything. In that case, our apps AI
+[01:28:57 - 01:29:02] agent will help you to create atonary
+[01:28:59 - 01:29:04] using an AI. Pretty cool, right? That's
+[01:29:02 - 01:29:07] what we are going to implement next. But
+[01:29:04 - 01:29:09] for now, make sure you have all the
+[01:29:07 - 01:29:12] things ready, okay? So that it will be
+[01:29:09 - 01:29:14] easy for you to implement. Now this
+[01:29:12 - 01:29:17] particular UI
+[01:29:14 - 01:29:20] uh we which we have right you can update
+[01:29:17 - 01:29:21] it as per your need. It's look more
+[01:29:20 - 01:29:23] professional way but you can make it
+[01:29:21 - 01:29:27] little bit coziness. You can add some
+[01:29:23 - 01:29:29] cozy effects and lot of other things. So
+[01:29:27 - 01:29:32] I will pause the video and I'm I'm going
+[01:29:29 - 01:29:34] to update this design little bit. Okay.
+[01:29:32 - 01:29:37] Uh if you want I will add the prompt as
+[01:29:34 - 01:29:40] well to update it. But for now it's look
+[01:29:37 - 01:29:42] much uh interesting much better uh with
+[01:29:40 - 01:29:45] the all the features which we want is
+[01:29:42 - 01:29:48] already inside our application. The only
+[01:29:45 - 01:29:50] thing uh I'm really looking to update is
+[01:29:48 - 01:29:52] the application font. Okay. Because
+[01:29:50 - 01:29:55] right now the font is using just one
+[01:29:52 - 01:29:57] font and we can ask AI agent which font
+[01:29:55 - 01:29:59] we need to update it. Right. So what we
+[01:29:57 - 01:30:02] can do, we can just simply start a new
+[01:29:59 - 01:30:08] session and then we can ask
+[01:30:02 - 01:30:10] suggest me some good uh application or a
+[01:30:08 - 01:30:15] good font
+[01:30:10 - 01:30:19] for our app so that we can
+[01:30:15 - 01:30:21] apply. Okay. And then let's hit enter
+[01:30:19 - 01:30:25] because I don't think we need anything
+[01:30:21 - 01:30:26] else but AI will help us uh to get the
+[01:30:25 - 01:30:28] forms and everything. Right now if you
+[01:30:26 - 01:30:31] see it already gave the detail which
+[01:30:28 - 01:30:34] font is best one. Obviously this outfit
+[01:30:31 - 01:30:37] is my one of my favorite font. Okay. So
+[01:30:34 - 01:30:40] here we have outfit mandrop DMs and many
+[01:30:37 - 01:30:43] others. So you can select whichever you
+[01:30:40 - 01:30:43] like.
+[01:30:43 - 01:30:48] So let's go with the
+[01:30:45 - 01:30:55] um I will say output font. So we'll say
+[01:30:48 - 01:30:59] let's update app with outfit font. and
+[01:30:55 - 01:31:01] then hit enter. I think this look much
+[01:30:59 - 01:31:03] uh better now with this particular font.
+[01:31:01 - 01:31:06] Okay, because it's updated with this
+[01:31:03 - 01:31:06] output.
+[01:31:07 - 01:31:13] Now it's time to implement an AI agent
+[01:31:10 - 01:31:16] chart page where you can talk with an AI
+[01:31:13 - 01:31:18] agent. Obviously, this agent has a lot
+[01:31:16 - 01:31:22] of different feature to help us with our
+[01:31:18 - 01:31:25] trip. Now the main feature uh for this
+[01:31:22 - 01:31:28] AI agent chat app is to chat with an AI
+[01:31:25 - 01:31:30] agent. You can ask any question related
+[01:31:28 - 01:31:33] to your trip. It will help us to
+[01:31:30 - 01:31:36] generate AI trip plan. Then you will
+[01:31:33 - 01:31:38] also get a streaming response. Then you
+[01:31:36 - 01:31:41] have UI based answer with the cards. So
+[01:31:38 - 01:31:44] we are going to add a generative UI so
+[01:31:41 - 01:31:45] that whenever uh AI answer it, it will
+[01:31:44 - 01:31:48] answer in the proper way. You have
+[01:31:45 - 01:31:50] option to select instead of writing it.
+[01:31:48 - 01:31:51] a smart follow-up suggestion. So you'll
+[01:31:50 - 01:31:53] get suggestion like this. See the best
+[01:31:51 - 01:31:56] time to visit or you will get suggestion
+[01:31:53 - 01:31:58] based on what AI agent response for you.
+[01:31:56 - 01:32:01] You also have option to create a new
+[01:31:58 - 01:32:04] trip from the chart and then you can
+[01:32:01 - 01:32:06] update the existing trip details as
+[01:32:04 - 01:32:09] well. So all of this feature we are
+[01:32:06 - 01:32:11] going to add. Now the question is what
+[01:32:09 - 01:32:14] user can ask. Okay, user can ask for
+[01:32:11 - 01:32:16] let's plan for a 5day Tokyo trip, find
+[01:32:14 - 01:32:18] places for a day two or something like
+[01:32:16 - 01:32:20] this and then it will give you a proper
+[01:32:18 - 01:32:22] um suggestion for you based on your
+[01:32:20 - 01:32:25] existing data. It will not give you the
+[01:32:22 - 01:32:28] existing places which you already added
+[01:32:25 - 01:32:30] in in your plan, right? Uh the
+[01:32:28 - 01:32:32] generative UI it's very important and
+[01:32:30 - 01:32:35] that's why we want to give this
+[01:32:32 - 01:32:37] generative UI thing. Then smart follow
+[01:32:35 - 01:32:41] question when you you ask something
+[01:32:37 - 01:32:43] right AI ask followup uh suggest give
+[01:32:41 - 01:32:45] you suggestion and you can select that
+[01:32:43 - 01:32:47] from the list something like this. Then
+[01:32:45 - 01:32:49] we have the use cases like new trip
+[01:32:47 - 01:32:52] creation existing trip improvement
+[01:32:49 - 01:32:55] question answer travel assistant and uh
+[01:32:52 - 01:32:59] some UI designing uh notes which also
+[01:32:55 - 01:33:01] added inside this um handwritten notes
+[01:32:59 - 01:33:04] as well. So you can get access to this
+[01:33:01 - 01:33:06] for free. Now let's implement it in
+[01:33:04 - 01:33:08] step-by-step way. Okay. So whatever we
+[01:33:06 - 01:33:09] just discussed along with the main
+[01:33:08 - 01:33:12] feature, we have to make sure we will
+[01:33:09 - 01:33:14] add it inside our prompt. So I will go
+[01:33:12 - 01:33:16] over here and I will create a new
+[01:33:14 - 01:33:21] prompt.
+[01:33:16 - 01:33:27] Inside this we'll simply add let's add
+[01:33:21 - 01:33:32] AI agent chart page. When user click on
+[01:33:27 - 01:33:36] homepage input prompt box
+[01:33:32 - 01:33:42] the top the top section one then
+[01:33:36 - 01:33:42] allow or we'll say then navigate
+[01:33:44 - 01:33:54] user to chart page where
+[01:33:48 - 01:33:56] user can chart with AI agent.
+[01:33:54 - 01:33:58] Now in this case we are going we need an
+[01:33:56 - 01:34:01] API to connect with the agent as we
+[01:33:58 - 01:34:04] already have the cursor subscription
+[01:34:01 - 01:34:06] right so that we are using a cursor API
+[01:34:04 - 01:34:08] for it but you can use any thing okay
+[01:34:06 - 01:34:11] whichever you like it so here we say
+[01:34:08 - 01:34:17] we'll use
+[01:34:11 - 01:34:21] cursor API for our AI agent this AI
+[01:34:17 - 01:34:21] agent help us
+[01:34:22 - 01:34:27] to give
+[01:34:24 - 01:34:30] uh or give
+[01:34:27 - 01:34:33] answer to any
+[01:34:30 - 01:34:36] uh
+[01:34:33 - 01:34:38] users question
+[01:34:36 - 01:34:42] based on
+[01:34:38 - 01:34:43] existing trip information
+[01:34:42 - 01:34:51] or
+[01:34:43 - 01:34:55] um user want to create new AI agent can
+[01:34:51 - 01:34:57] help there as well. Now obviously we'll
+[01:34:55 - 01:34:59] obviously implement some basic thing
+[01:34:57 - 01:35:01] first and then we going to improve it
+[01:34:59 - 01:35:07] step by step. So here we also going to
+[01:35:01 - 01:35:09] add now also I want to implement
+[01:35:07 - 01:35:15] streaming
+[01:35:09 - 01:35:18] response from AI and generative UI
+[01:35:15 - 01:35:23] response as well.
+[01:35:18 - 01:35:29] Okay. Um, make sure to add smart
+[01:35:23 - 01:35:34] suggestion when AI get answer
+[01:35:29 - 01:35:34] and request for user input.
+[01:35:34 - 01:35:40] Okay. So, we'll get the smart suggestion
+[01:35:36 - 01:35:42] that also uh it will display it. I think
+[01:35:40 - 01:35:45] uh the basic thing we already added
+[01:35:42 - 01:35:47] that's pretty much we have. Okay. Now,
+[01:35:45 - 01:35:50] here we also going to add few things.
+[01:35:47 - 01:35:52] Now if you see inside our mocker right
+[01:35:50 - 01:35:54] at the top first you can have option to
+[01:35:52 - 01:35:56] select for which trip you want to talk
+[01:35:54 - 01:35:59] about otherwise you have option to
+[01:35:56 - 01:36:04] create a new trip as well. Okay. So that
+[01:35:59 - 01:36:11] also very important inside chart page
+[01:36:04 - 01:36:16] at top user has option to select
+[01:36:11 - 01:36:16] trip or we'll say select active/upcoming
+[01:36:17 - 01:36:27] trip from drop-down so that
+[01:36:22 - 01:36:30] user can chart about that trip with AI.
+[01:36:27 - 01:36:35] Okay.
+[01:36:30 - 01:36:39] agent but also add an option to create
+[01:36:35 - 01:36:45] new um here we say create new chart
+[01:36:39 - 01:36:46] sorry create new trip from scratch
+[01:36:45 - 01:36:52] and
+[01:36:46 - 01:36:57] based on user response make sure to
+[01:36:52 - 01:37:00] add option to create record
+[01:36:57 - 01:37:02] or we'll say add option
+[01:37:00 - 01:37:06] to save
+[01:37:02 - 01:37:08] information to database as well
+[01:37:06 - 01:37:10] to database. Okay, I think that's pretty
+[01:37:08 - 01:37:12] much let's see what it comes with what
+[01:37:10 - 01:37:14] the uh implementation it comes with
+[01:37:12 - 01:37:17] instead of just adding a lot of things
+[01:37:14 - 01:37:19] inside one prompt. Okay, now you can
+[01:37:17 - 01:37:22] select the whichever model you like. We
+[01:37:19 - 01:37:25] have gro 4.5, composer 2.5 or you can
+[01:37:22 - 01:37:28] select any other model. Now before
+[01:37:25 - 01:37:30] executing it right you can change this
+[01:37:28 - 01:37:32] to a plan mode because this is a big um
+[01:37:30 - 01:37:35] implementation and I will make sure that
+[01:37:32 - 01:37:38] I I selected the plan mode and then send
+[01:37:35 - 01:37:40] it. So I will send this. Now we'll wait
+[01:37:38 - 01:37:43] for the implementation. In meantime I
+[01:37:40 - 01:37:45] want to show you can even track all the
+[01:37:43 - 01:37:46] usage and many other information from
+[01:37:45 - 01:37:48] this setting. So simply click on this
+[01:37:46 - 01:37:50] setting icon and then you'll go you can
+[01:37:48 - 01:37:54] go to the plan and usage. And here you
+[01:37:50 - 01:37:57] if you see now you already have used a
+[01:37:54 - 01:37:59] 6% only right and here we have the API
+[01:37:57 - 01:38:02] thing now API which belong to you can
+[01:37:59 - 01:38:05] use a chat GPD cursor or many others API
+[01:38:02 - 01:38:08] right and in your plan it comes with a
+[01:38:05 - 01:38:11] $20 of credit along with the cursor and
+[01:38:08 - 01:38:15] that's why it's pretty um useful means
+[01:38:11 - 01:38:19] within my budget I'm getting over double
+[01:38:15 - 01:38:22] amount of API uh AI models usage right
+[01:38:19 - 01:38:25] now I'm using a $20 model but in India
+[01:38:22 - 01:38:28] it just 649 rupees per month which I
+[01:38:25 - 01:38:31] already show you right and everything
+[01:38:28 - 01:38:35] you can manage from this setting option
+[01:38:31 - 01:38:37] now over here if you see our plan is uh
+[01:38:35 - 01:38:39] generating but right now we have one
+[01:38:37 - 01:38:41] question so it's saying cursor API
+[01:38:39 - 01:38:43] versus travel chart so it's saying
+[01:38:41 - 01:38:45] cursor agent API is built for coding
+[01:38:43 - 01:38:47] agent against a g report not mobile trip
+[01:38:45 - 01:38:49] question answer there is no open AI
+[01:38:47 - 01:38:51] style that chart endpoint Right. So it's
+[01:38:49 - 01:38:52] saying that you already have a Gemini.
+[01:38:51 - 01:38:54] Do you want to use that? So we'll go
+[01:38:52 - 01:38:57] with a Gemini if you want or you can use
+[01:38:54 - 01:38:59] a cursor API and I can show you how to
+[01:38:57 - 01:39:00] do it. Okay. So just comment down in the
+[01:38:59 - 01:39:02] comment section and so that I can help
+[01:39:00 - 01:39:05] you and give you a proper documentation
+[01:39:02 - 01:39:07] for this one. But right now it suggest
+[01:39:05 - 01:39:10] us let's use a Gemini API. Then for a
+[01:39:07 - 01:39:12] generative UI response which do you want
+[01:39:10 - 01:39:14] reach in a chart card like trip summary
+[01:39:12 - 01:39:16] day itinary something like this or we
+[01:39:14 - 01:39:18] will say full dynamic screen layout
+[01:39:16 - 01:39:20] generated by AI or mostly streaming
+[01:39:18 - 01:39:23] markdown plus suggestion chip. So we'll
+[01:39:20 - 01:39:27] go with the first option. Okay and here
+[01:39:23 - 01:39:30] it will also suggest how you have you
+[01:39:27 - 01:39:32] can answer it. So we'll say for a first
+[01:39:30 - 01:39:34] question we'll go with the A and for a
+[01:39:32 - 01:39:37] second question again we'll go with A
+[01:39:34 - 01:39:39] and then simply hit enter. So make sure
+[01:39:37 - 01:39:42] with this plan right um our AI agent
+[01:39:39 - 01:39:43] will understand it. It will ask any
+[01:39:42 - 01:39:45] question and it will not implement
+[01:39:43 - 01:39:47] anything randomly before your
+[01:39:45 - 01:39:50] confirmation.
+[01:39:47 - 01:39:54] And now if you see uh once the plan is
+[01:39:50 - 01:39:56] ready you can see on the right side.
+[01:39:54 - 01:39:58] Uh so here we have the some decision
+[01:39:56 - 01:40:02] lock the architecture how it actually
+[01:39:58 - 01:40:04] works uh how AI model will connect with
+[01:40:02 - 01:40:07] each other and as well as obviously
+[01:40:04 - 01:40:09] superb will play important role because
+[01:40:07 - 01:40:12] uh we are going to save information
+[01:40:09 - 01:40:14] right. So that is another thing. Then we
+[01:40:12 - 01:40:16] have the navigation home wiring. So how
+[01:40:14 - 01:40:18] it connect with the home screen along
+[01:40:16 - 01:40:20] with the chart UI. Then we have chart
+[01:40:18 - 01:40:23] screen UI. On the top bar if you see we
+[01:40:20 - 01:40:26] have back button, trip dropdown and
+[01:40:23 - 01:40:27] extra option to create a new trip. Then
+[01:40:26 - 01:40:30] inside the body it will show the message
+[01:40:27 - 01:40:32] list, streaming assistant button and
+[01:40:30 - 01:40:35] reach card and suggestion chips as well.
+[01:40:32 - 01:40:38] And then at the bottom we have the text
+[01:40:35 - 01:40:39] input to send and enter the message.
+[01:40:38 - 01:40:42] Then the streaming protocol how the
+[01:40:39 - 01:40:45] streaming works. The edge function okay
+[01:40:42 - 01:40:47] for a superbase to save information. And
+[01:40:45 - 01:40:50] again we have the save to database. what
+[01:40:47 - 01:40:52] are the things can save into a database.
+[01:40:50 - 01:40:54] So that's pretty much and I think this
+[01:40:52 - 01:40:56] particular plan looks good to me.
+[01:40:54 - 01:40:58] Obviously later on we can make the
+[01:40:56 - 01:41:02] change if we need but right now we'll go
+[01:40:58 - 01:41:04] with this plan and then here we simply
+[01:41:02 - 01:41:07] say build locally
+[01:41:04 - 01:41:09] >> a few moments later.
+[01:41:07 - 01:41:11] >> So right now once it is implemented if
+[01:41:09 - 01:41:13] you see what are the things uh it's
+[01:41:11 - 01:41:15] updated right and where we your page is.
+[01:41:13 - 01:41:18] So we have the chart route and inside
+[01:41:15 - 01:41:20] that we added this chart page. Now there
+[01:41:18 - 01:41:21] are few thing that we need to do it.
+[01:41:20 - 01:41:23] Currently it's saying that you still
+[01:41:21 - 01:41:25] need to deploy age function and this
+[01:41:23 - 01:41:27] edge function will be inside the
+[01:41:25 - 01:41:29] superbase uh section. Now you have
+[01:41:27 - 01:41:31] option whether you want to keep it or
+[01:41:29 - 01:41:33] you just want to u put uh some
+[01:41:31 - 01:41:35] alternator to your application. It's
+[01:41:33 - 01:41:37] totally up to you. But we can use the
+[01:41:35 - 01:41:39] age function which help us a lot. So
+[01:41:37 - 01:41:41] it's saying this superbase project isn't
+[01:41:39 - 01:41:44] available to the MCP account here. So
+[01:41:41 - 01:41:46] deploy locally. So you can log into the
+[01:41:44 - 01:41:48] superbase and then you can simply link
+[01:41:46 - 01:41:50] your uh project or you can attach that
+[01:41:48 - 01:41:52] with the project reference and then it
+[01:41:50 - 01:41:56] will set the Gemini API key and it will
+[01:41:52 - 01:41:58] deploy this trip chart age function.
+[01:41:56 - 01:42:01] Okay. So in order to do it simply copy
+[01:41:58 - 01:42:04] this line one by one. Then we'll open a
+[01:42:01 - 01:42:07] new terminal
+[01:42:04 - 01:42:11] and then we'll going to simply paste it
+[01:42:07 - 01:42:11] here. So first
+[01:42:11 - 01:42:17] now for some reason I'm not able to
+[01:42:13 - 01:42:21] paste. So even though if I copy
+[01:42:17 - 01:42:24] and try it it's not uh pasting. So
+[01:42:21 - 01:42:26] another option is simply
+[01:42:24 - 01:42:28] open the project folder you just created
+[01:42:26 - 01:42:31] this project and open terminal at that
+[01:42:28 - 01:42:33] folder. So over here I will open a
+[01:42:31 - 01:42:35] terminal. If you're using Windows then
+[01:42:33 - 01:42:38] make sure to open a command prompt at
+[01:42:35 - 01:42:41] that folder and then
+[01:42:38 - 01:42:43] you can simply paste this or you can
+[01:42:41 - 01:42:45] even deploy uh paste everything all
+[01:42:43 - 01:42:48] together. Right now it's saying okay
+[01:42:45 - 01:42:51] pass error. Let's execute this one by
+[01:42:48 - 01:42:51] one.
+[01:42:52 - 01:42:56] And right now obviously it will ask uh
+[01:42:54 - 01:42:58] to login first. We'll show we'll proceed
+[01:42:56 - 01:43:01] and then it might navigate you to the
+[01:42:58 - 01:43:05] browser to sign in. Okay. If you already
+[01:43:01 - 01:43:06] sign in before then it will not uh ask
+[01:43:05 - 01:43:08] you to sign in again. So it's saying
+[01:43:06 - 01:43:10] hello from superbase. Press enter to
+[01:43:08 - 01:43:14] open a browser. So we'll enter it and
+[01:43:10 - 01:43:17] then it will simply u authorize
+[01:43:14 - 01:43:20] superbase account. So we'll say copy
+[01:43:17 - 01:43:25] this code. I think we need to add this
+[01:43:20 - 01:43:27] code in CLI. So we'll paste it here
+[01:43:25 - 01:43:31] and then hit enter. Okay. And now it's
+[01:43:27 - 01:43:35] saying you are login. Perfect.
+[01:43:31 - 01:43:37] After that we'll go over here again and
+[01:43:35 - 01:43:41] the next thing we need to do is to link
+[01:43:37 - 01:43:44] our project. Okay. So our uh CLI know
+[01:43:41 - 01:43:48] okay which project we are connecting. So
+[01:43:44 - 01:43:52] we'll say yes to proceed again
+[01:43:48 - 01:43:54] and then it's executing and then if you
+[01:43:52 - 01:43:57] see it's saying finish superbase link
+[01:43:54 - 01:43:59] after that you have to set this Gemini
+[01:43:57 - 01:44:01] key.
+[01:43:59 - 01:44:04] So you have to copy the same Gemini key
+[01:44:01 - 01:44:06] from the env. So make sure to copy this
+[01:44:04 - 01:44:08] half and then you have to paste your
+[01:44:06 - 01:44:11] actual Gemini key. Now you can get this
+[01:44:08 - 01:44:13] Gemini key from the file explorer. So if
+[01:44:11 - 01:44:16] I go to the file inside the env we
+[01:44:13 - 01:44:18] already have this Gemini API key. I will
+[01:44:16 - 01:44:21] just copy that. And once you set it last
+[01:44:18 - 01:44:23] thing just need to deploy your function.
+[01:44:21 - 01:44:26] Okay. So it will deploy your age
+[01:44:23 - 01:44:28] function to the superbase.
+[01:44:26 - 01:44:31] And once you say proceed then it will
+[01:44:28 - 01:44:33] just push that changes. So right now if
+[01:44:31 - 01:44:35] you see it look like it deployed that
+[01:44:33 - 01:44:38] particular function and you can verify
+[01:44:35 - 01:44:40] by going to the superbase and then here
+[01:44:38 - 01:44:43] you will see edge function and you will
+[01:44:40 - 01:44:44] see this age function as well. Perfect.
+[01:44:43 - 01:44:47] Right. So your eight function is
+[01:44:44 - 01:44:49] deployed and now you are ready to test.
+[01:44:47 - 01:44:51] So I will suggest with this new changes
+[01:44:49 - 01:44:54] and all right. I will restart my
+[01:44:51 - 01:44:56] application which is already running or
+[01:44:54 - 01:44:59] you can simply reload the application
+[01:44:56 - 01:45:02] instead of uh restart and now it's
+[01:44:59 - 01:45:04] ready. Now if I click on this uh ask me
+[01:45:02 - 01:45:05] here it will navigate to this new page
+[01:45:04 - 01:45:07] if you see and now you have option
+[01:45:05 - 01:45:09] whether you want to create a new trip or
+[01:45:07 - 01:45:12] you can select the existing trip and
+[01:45:09 - 01:45:16] then you can ask the any question which
+[01:45:12 - 01:45:18] you want. Okay. Now you will say over
+[01:45:16 - 01:45:23] here suggest
+[01:45:18 - 01:45:25] uh some places and then simply send it.
+[01:45:23 - 01:45:27] And right now it's saying thinking now
+[01:45:25 - 01:45:29] sometimes if you did not return any
+[01:45:27 - 01:45:32] result uh if you see it's saying no
+[01:45:29 - 01:45:34] response team from chart service right
+[01:45:32 - 01:45:37] then you have to make sure to fix your
+[01:45:34 - 01:45:39] AI model. So in this case uh we don't
+[01:45:37 - 01:45:43] know what is the issue or any error
+[01:45:39 - 01:45:45] right? So you can simply ask AI agent.
+[01:45:43 - 01:45:52] So let me close this and here we will
+[01:45:45 - 01:45:55] say I'm not generating any AI response
+[01:45:52 - 01:45:59] or streaming response
+[01:45:55 - 01:45:59] it fails
+[01:45:59 - 01:46:04] and we'll say fix it. Now another
+[01:46:01 - 01:46:06] interesting thing you can even debug it
+[01:46:04 - 01:46:09] before start implementing. So you can
+[01:46:06 - 01:46:12] have the root cause why it's happening.
+[01:46:09 - 01:46:14] You can ask uh the ask directly through
+[01:46:12 - 01:46:16] this debug or you can directly tell AI
+[01:46:14 - 01:46:19] agent and AI agent will first debug it
+[01:46:16 - 01:46:21] and then uh immediately start
+[01:46:19 - 01:46:22] implementing. Now talking about the MCP
+[01:46:21 - 01:46:26] server if you see we already have the
+[01:46:22 - 01:46:29] superbase enabled and if I open that you
+[01:46:26 - 01:46:32] can even connect your own MCP server and
+[01:46:29 - 01:46:34] you can even sign into the superbase as
+[01:46:32 - 01:46:37] well. Okay. So it's totally up to you
+[01:46:34 - 01:46:39] how you want to handle the MCP server.
+[01:46:37 - 01:46:41] So there is a issue I don't know why and
+[01:46:39 - 01:46:43] it's saying that okay it's trying to
+[01:46:41 - 01:46:46] chat directly with the Gemini and it's
+[01:46:43 - 01:46:48] still not detecting the superbase edge
+[01:46:46 - 01:46:51] function maybe we did not restart our
+[01:46:48 - 01:46:54] application we just reloaded okay but
+[01:46:51 - 01:46:56] let me try it again and we'll say
+[01:46:54 - 01:47:01] whether it's working or not and if you
+[01:46:56 - 01:47:05] see it's working okay uh so let's try
+[01:47:01 - 01:47:08] with a new and I will go to this chart
+[01:47:05 - 01:47:11] section turn over here. Obviously, we'll
+[01:47:08 - 01:47:13] ask let's say suggest or let me see
+[01:47:11 - 01:47:15] whether we yeah we selected this one.
+[01:47:13 - 01:47:20] So, we'll say suggest
+[01:47:15 - 01:47:23] some places to visit. Okay. And let's
+[01:47:20 - 01:47:25] send this one. And obviously it will
+[01:47:23 - 01:47:27] take few seconds because it's a big
+[01:47:25 - 01:47:29] information. And if you see now it's
+[01:47:27 - 01:47:32] saying okay absolutely your trip already
+[01:47:29 - 01:47:34] includes some uh time in big highway one
+[01:47:32 - 01:47:37] which is fantastic. But here are few
+[01:47:34 - 01:47:39] things more. Okay. So now if you see
+[01:47:37 - 01:47:42] it's saying would you like to explore
+[01:47:39 - 01:47:44] any of these in the more right? So you
+[01:47:42 - 01:47:48] can have option let's say add San
+[01:47:44 - 01:47:51] Francisco to myary. If I add that, let's
+[01:47:48 - 01:47:53] say it's really adding that or not.
+[01:47:51 - 01:47:56] Right? So over here if if you see it, we
+[01:47:53 - 01:47:58] we got the response. Great idea. Science
+[01:47:56 - 01:48:01] finance score is a fant a fantastic
+[01:47:58 - 01:48:03] addition since your trip is from October
+[01:48:01 - 01:48:05] 2 to October 8. So how can we set up
+[01:48:03 - 01:48:07] this one? And you have option whether
+[01:48:05 - 01:48:10] you want to save this itinary or not.
+[01:48:07 - 01:48:12] Okay. So here we have a option like
+[01:48:10 - 01:48:17] visit the golden gate, explore
+[01:48:12 - 01:48:20] fisherman, uh warf and pier 39 and write
+[01:48:17 - 01:48:24] a cable car and then if you click on
+[01:48:20 - 01:48:27] save aternary uh it will save to your
+[01:48:24 - 01:48:30] trip information. So if I go back and go
+[01:48:27 - 01:48:34] to this atturnary and if I click on some
+[01:48:30 - 01:48:36] other dates, I don't see it getting
+[01:48:34 - 01:48:40] saved. Oh, it's getting saved. see on
+[01:48:36 - 01:48:43] October 6. So it's added a golden gate,
+[01:48:40 - 01:48:45] the fisherman and many other things.
+[01:48:43 - 01:48:47] Perfect, right? And obviously you have
+[01:48:45 - 01:48:50] option to edit those as well. If you
+[01:48:47 - 01:48:52] don't want you can simply delete it.
+[01:48:50 - 01:48:55] Pretty cool, right? So it means our
+[01:48:52 - 01:48:57] chart is working and also getting saved.
+[01:48:55 - 01:48:59] Now you can ask more question. Okay, you
+[01:48:57 - 01:49:04] can uh if you want you can add a new
+[01:48:59 - 01:49:06] trip as well. Now inside this uh you can
+[01:49:04 - 01:49:08] ask more question. Obviously on this one
+[01:49:06 - 01:49:10] I cannot scroll it. So it's saying add
+[01:49:08 - 01:49:14] another activity to science Francisco.
+[01:49:10 - 01:49:17] And in this case we can uh select the
+[01:49:14 - 01:49:21] date. So here we'll say let's
+[01:49:17 - 01:49:23] we'll say let's add 4th
+[01:49:21 - 01:49:27] October
+[01:49:23 - 01:49:27] and let's send this.
+[01:49:28 - 01:49:33] And now if you see it's updated to
+[01:49:30 - 01:49:35] fourth October. Now you have option uh
+[01:49:33 - 01:49:37] to add to the fourth October or not. And
+[01:49:35 - 01:49:40] then we'll save save eternally and then
+[01:49:37 - 01:49:43] it will save it to the October 4. Okay.
+[01:49:40 - 01:49:45] Now let's try with creating a new trip.
+[01:49:43 - 01:49:47] So if you click on create new trip if
+[01:49:45 - 01:49:50] you see the history is gone. Okay. And
+[01:49:47 - 01:49:54] now you have option to plan a trip. So
+[01:49:50 - 01:49:58] we'll say plan trip for Chicago. We'll
+[01:49:54 - 01:50:00] say for Chicago. Okay. and then let's
+[01:49:58 - 01:50:03] send this one.
+[01:50:00 - 01:50:05] Now it will give you the proper details
+[01:50:03 - 01:50:07] that help to perfect trip for could you
+[01:50:05 - 01:50:09] tell me when you want to go how many
+[01:50:07 - 01:50:11] days and what are the things right now
+[01:50:09 - 01:50:14] if you see it's trying to give us a
+[01:50:11 - 01:50:16] markdown response right but we want a
+[01:50:14 - 01:50:18] little bit in a formatted way and this
+[01:50:16 - 01:50:20] markdown response is not really
+[01:50:18 - 01:50:25] formatted so we can fix it so we can
+[01:50:20 - 01:50:27] just simply say um let's show proper
+[01:50:25 - 01:50:29] markdown
+[01:50:27 - 01:50:34] style formatted
+[01:50:29 - 01:50:37] uh AI I response and make sure
+[01:50:34 - 01:50:40] use generative
+[01:50:37 - 01:50:43] UI whenever
+[01:50:40 - 01:50:45] possible and we can simply say like
+[01:50:43 - 01:50:47] this. Okay, we don't need to add too
+[01:50:45 - 01:50:51] much detail but once you send then we'll
+[01:50:47 - 01:50:53] get a proper markdown formatted response
+[01:50:51 - 01:50:56] for this as well. And now once it is
+[01:50:53 - 01:50:58] implemented now you will see a proper
+[01:50:56 - 01:51:00] formatted data. Pretty cool, right? Now
+[01:50:58 - 01:51:02] you can select the option that I want.
+[01:51:00 - 01:51:04] I'm thinking of three-day trip in a late
+[01:51:02 - 01:51:07] September. And then it will give you the
+[01:51:04 - 01:51:09] response as well. And boom. If you see,
+[01:51:07 - 01:51:13] we have this beautiful generative
+[01:51:09 - 01:51:16] response. Now, it gave a proper turnary
+[01:51:13 - 01:51:19] for each day. Okay. So, for the first
+[01:51:16 - 01:51:22] day, oh, let me go up. So, here's the
+[01:51:19 - 01:51:24] trip first. Okay. Your current location
+[01:51:22 - 01:51:28] to Chicago, Illinois. 3-day trip. We'll
+[01:51:24 - 01:51:30] say save this trip. Okay. After this
+[01:51:28 - 01:51:32] it's still saving it and obviously it
+[01:51:30 - 01:51:34] will create a new record. Save. Okay.
+[01:51:32 - 01:51:36] Now you have option to save eternally
+[01:51:34 - 01:51:38] and in meantime it just uh disabled this
+[01:51:36 - 01:51:41] button because obviously first step is
+[01:51:38 - 01:51:45] to create a proper uh trip for us. Now
+[01:51:41 - 01:51:49] you have option on arrival and accurate
+[01:51:45 - 01:51:51] wonders as well. And now you can save uh
+[01:51:49 - 01:51:54] for each day. Let's say you want to save
+[01:51:51 - 01:51:56] this one. You can save for second day or
+[01:51:54 - 01:51:58] third day. You totally have option. You
+[01:51:56 - 01:52:01] can obviously
+[01:51:58 - 01:52:04] uh update this. Okay. If you don't want,
+[01:52:01 - 01:52:06] you can just tell, okay, for this second
+[01:52:04 - 01:52:08] day, we want to change this or that.
+[01:52:06 - 01:52:11] Something like this. Okay. And then once
+[01:52:08 - 01:52:14] you save everything, it will show you
+[01:52:11 - 01:52:17] under your trip plan. So, if I go back
+[01:52:14 - 01:52:20] and here we have brand new um trip for
+[01:52:17 - 01:52:23] you called Chicago Gateway. If I click
+[01:52:20 - 01:52:26] on it, then you will see a 3-day plan
+[01:52:23 - 01:52:30] and with a complete turnary for Friday,
+[01:52:26 - 01:52:32] for Saturday, for Sunday as well. You
+[01:52:30 - 01:52:34] can use it. Obviously, booking it's not
+[01:52:32 - 01:52:36] yet added. But you can add your booking.
+[01:52:34 - 01:52:38] This is totally up to you because we did
+[01:52:36 - 01:52:40] not connect this uh to any booking site
+[01:52:38 - 01:52:43] or something like that. But that is kind
+[01:52:40 - 01:52:46] of a new enhancement inside your
+[01:52:43 - 01:52:50] application which you can u implement in
+[01:52:46 - 01:52:53] phase two. But right now the main u
+[01:52:50 - 01:52:56] focus was to generate a trip uh plan for
+[01:52:53 - 01:53:00] you right and get a proper detail with
+[01:52:56 - 01:53:02] our AI agent as well. Now if I go back
+[01:53:00 - 01:53:04] to this Chicago gateway and if you want
+[01:53:02 - 01:53:06] to get at daybyday attorneyary suggest
+[01:53:04 - 01:53:09] hotel. So we'll say suggest hotel near
+[01:53:06 - 01:53:12] the center and then it will give you the
+[01:53:09 - 01:53:13] hotel list as well. See, so it will say
+[01:53:12 - 01:53:16] okay, it ask question would you like to
+[01:53:13 - 01:53:21] explore booking one or this or perhaps
+[01:53:16 - 01:53:23] look at some other option. So I think
+[01:53:21 - 01:53:26] look
+[01:53:23 - 01:53:30] uh explore booking one of this explore
+[01:53:26 - 01:53:34] booking one of these. Okay. So let's
+[01:53:30 - 01:53:37] send this. And now it will just give you
+[01:53:34 - 01:53:39] some idea. And if you see it gave us the
+[01:53:37 - 01:53:41] potential hotel booking option. So it's
+[01:53:39 - 01:53:44] saying checking availility for Chicago
+[01:53:41 - 01:53:45] gateway but you can ask for other as
+[01:53:44 - 01:53:48] well. Let's say check availability for
+[01:53:45 - 01:53:50] the Langham hotel and then you will see
+[01:53:48 - 01:53:52] the detail. Perfect. So that's how it
+[01:53:50 - 01:53:55] works. Obviously you can save this
+[01:53:52 - 01:53:58] booking. You can tell uh AI agent to add
+[01:53:55 - 01:54:03] a booking for that particular u. So here
+[01:53:58 - 01:54:05] we'll say uh let's add hotel booking
+[01:54:03 - 01:54:08] for
+[01:54:05 - 01:54:11] JW Marriott
+[01:54:08 - 01:54:11] downtown
+[01:54:11 - 01:54:17] Chicago. Okay. And if I enter it uh it
+[01:54:15 - 01:54:19] will think it and then it will give you
+[01:54:17 - 01:54:21] option to add or save this booking. So
+[01:54:19 - 01:54:23] you don't need to even manually add this
+[01:54:21 - 01:54:26] booking on yourself. And now if I go
+[01:54:23 - 01:54:28] back to the booking uh let's go to the
+[01:54:26 - 01:54:31] hotel. I don't know whether it saved or
+[01:54:28 - 01:54:35] not but it don't I I don't feel it
+[01:54:31 - 01:54:38] really saved that hotel. Let me go back
+[01:54:35 - 01:54:43] to the chart. So it look like it's saved
+[01:54:38 - 01:54:45] but somehow it's not showing.
+[01:54:43 - 01:54:47] So we can verify by going to the
+[01:54:45 - 01:54:51] database as well. So if I go to the
+[01:54:47 - 01:54:53] table editor and trip booking
+[01:54:51 - 01:54:57] and if you see it's showing the hotel is
+[01:54:53 - 01:55:00] book. See, booking type is hotel JW
+[01:54:57 - 01:55:02] Marri at Chicago for the Chicago trip.
+[01:55:00 - 01:55:06] Okay.
+[01:55:02 - 01:55:08] But for some reason, uh the metadata is
+[01:55:06 - 01:55:12] missing, I believe. And because of that
+[01:55:08 - 01:55:15] one, maybe it's not showing inside the
+[01:55:12 - 01:55:18] uh app. So, let's ver uh test this out
+[01:55:15 - 01:55:18] again.
+[01:55:22 - 01:55:28] Okay. So, for some reason, it's not
+[01:55:24 - 01:55:34] showing. So here we can say um when from
+[01:55:28 - 01:55:41] AI chart hotel information saved it's
+[01:55:34 - 01:55:44] not showing under trip detail
+[01:55:41 - 01:55:46] and then we can also say when I check
+[01:55:44 - 01:55:51] database
+[01:55:46 - 01:55:54] then meta JSON so we we can call it as a
+[01:55:51 - 01:55:54] meta
+[01:55:58 - 01:56:07] column value missing for added record.
+[01:56:04 - 01:56:09] Maybe that is might be the reason. Okay,
+[01:56:07 - 01:56:12] because this value is missing because
+[01:56:09 - 01:56:14] all other is working fine and only
+[01:56:12 - 01:56:17] because of that value is missing might
+[01:56:14 - 01:56:19] not displaying it. But right now if you
+[01:56:17 - 01:56:23] see uh this is working we have the
+[01:56:19 - 01:56:26] details but let's wait and fix it. And
+[01:56:23 - 01:56:28] now once it fix it right you can just go
+[01:56:26 - 01:56:31] ahead and check it out. Now if you see
+[01:56:28 - 01:56:34] for a hotel um you you can see this
+[01:56:31 - 01:56:36] hotel is added under this hotel section
+[01:56:34 - 01:56:38] right with all the data. Perfect. And
+[01:56:36 - 01:56:40] that's what we want. So you know that
+[01:56:38 - 01:56:44] how you can book it directly through the
+[01:56:40 - 01:56:46] AI agent. So that's how you have to add
+[01:56:44 - 01:56:50] your AI agent. And if you see from our
+[01:56:46 - 01:56:52] mockup, we pretty much are we actually
+[01:56:50 - 01:56:55] implemented all of these feature like
+[01:56:52 - 01:56:58] main feature, what user can ask, AI
+[01:56:55 - 01:57:00] response UI, a smart flow with a smart
+[01:56:58 - 01:57:03] suggestion, what are the different use
+[01:57:00 - 01:57:06] case and obviously you can add more
+[01:57:03 - 01:57:09] detail into this. Okay, obviously this
+[01:57:06 - 01:57:11] is a very powerful feature to any trip
+[01:57:09 - 01:57:14] planner application and which we already
+[01:57:11 - 01:57:17] added to our app as well. If you have
+[01:57:14 - 01:57:20] any question, any doubt related to uh
+[01:57:17 - 01:57:23] the AI agent which we add, let me know
+[01:57:20 - 01:57:23] in the comment section.
+[01:57:24 - 01:57:28] Now it's time to add one of the
+[01:57:26 - 01:57:32] interesting feature which is a family
+[01:57:28 - 01:57:35] trip share section where the idea is
+[01:57:32 - 01:57:37] user can share the trip with the family
+[01:57:35 - 01:57:40] so that they can edit any new attorney
+[01:57:37 - 01:57:42] or add a packaging to-do list and many
+[01:57:40 - 01:57:44] other details. the same permission which
+[01:57:42 - 01:57:46] the original user have. They can give it
+[01:57:44 - 01:57:49] to the other user and they can see all
+[01:57:46 - 01:57:51] the trip detail. So main idea is share
+[01:57:49 - 01:57:54] the trip with the family from the trip
+[01:57:51 - 01:57:56] detail page. Show member count near the
+[01:57:54 - 01:57:59] share icon and they manage shared member
+[01:57:56 - 01:58:01] easily. Okay. Now here uh this is a
+[01:57:59 - 01:58:02] mockup. Obviously we are going to update
+[01:58:01 - 01:58:05] little bit. This is just want to show
+[01:58:02 - 01:58:08] the concept how it works. Now user can
+[01:58:05 - 01:58:10] add a family member by the unique code
+[01:58:08 - 01:58:13] and this unique code uh it will generate
+[01:58:10 - 01:58:15] automatically to each user and it will
+[01:58:13 - 01:58:17] be available on the profile page. User
+[01:58:15 - 01:58:20] can simply copy and enter that unique
+[01:58:17 - 01:58:22] code and automatically it will get added
+[01:58:20 - 01:58:24] uh under the family section and user can
+[01:58:22 - 01:58:26] share this uh trip detail with that
+[01:58:24 - 01:58:29] family. As simple as that, right? So
+[01:58:26 - 01:58:31] this is the flow. So user will uh the
+[01:58:29 - 01:58:33] trip owner will tap the share button
+[01:58:31 - 01:58:36] then it will show the members if he's
+[01:58:33 - 01:58:38] already added otherwise user have option
+[01:58:36 - 01:58:40] to copy and share unique code then it
+[01:58:38 - 01:58:42] will join the family member and then
+[01:58:40 - 01:58:44] that trip appear in their account as
+[01:58:42 - 01:58:46] well and both user can access the trip
+[01:58:44 - 01:58:49] detail and the permission with the same
+[01:58:46 - 01:58:51] permission which I told you right so
+[01:58:49 - 01:58:54] that's what we are going to implement
+[01:58:51 - 01:58:55] now inside our application and this
+[01:58:54 - 01:58:58] particular feature you will not find in
+[01:58:55 - 01:59:00] any application trust Okay. So this is
+[01:58:58 - 01:59:02] the best feature you will find in our
+[01:59:00 - 01:59:07] app which we are going to implement now.
+[01:59:02 - 01:59:09] So let's go ahead and let's add that.
+[01:59:07 - 01:59:14] So basically inside this prompt we are
+[01:59:09 - 01:59:14] going to simply say let's implement
+[01:59:15 - 01:59:20] family
+[01:59:17 - 01:59:27] trip share feature.
+[01:59:20 - 01:59:32] So inside trip detail page I want to add
+[01:59:27 - 01:59:35] an option to share the trip with family
+[01:59:32 - 01:59:38] members.
+[01:59:35 - 01:59:38] Family members
+[01:59:40 - 01:59:51] can be added using unique.
+[01:59:46 - 01:59:55] Uh maybe we can say 4 to sixdigit
+[01:59:51 - 01:59:55] character and number
+[01:59:56 - 02:00:04] code and
+[01:59:59 - 02:00:08] once it added then trip detail will
+[02:00:04 - 02:00:11] share with family members with all
+[02:00:08 - 02:00:15] permissions.
+[02:00:11 - 02:00:19] Okay. So that's or overall idea is
+[02:00:15 - 02:00:20] um after that if you have any um thing
+[02:00:19 - 02:00:22] you want to mention like where you want
+[02:00:20 - 02:00:24] to add this feature or the location
+[02:00:22 - 02:00:26] everything you can add that too but now
+[02:00:24 - 02:00:30] what we'll do we'll change this to a
+[02:00:26 - 02:00:33] plan mode and then we are going to uh
+[02:00:30 - 02:00:35] let cursor decide uh where we can add
+[02:00:33 - 02:00:37] this particular feature and all. Now we
+[02:00:35 - 02:00:44] also want to mention one more important
+[02:00:37 - 02:00:48] thing. Uh generate unique code to each
+[02:00:44 - 02:00:52] user when user sign up very first very
+[02:00:48 - 02:00:55] first time and it will
+[02:00:52 - 02:00:59] uh available
+[02:00:55 - 02:01:01] in profile tab page. Okay. So that they
+[02:00:59 - 02:01:04] can easily share it. Now one more
+[02:01:01 - 02:01:11] important thing once
+[02:01:04 - 02:01:17] um member added then show that member
+[02:01:11 - 02:01:21] list. So we don't need to add every time
+[02:01:17 - 02:01:23] uh for other trip. Okay. So once it
+[02:01:21 - 02:01:25] added we don't need to add every time by
+[02:01:23 - 02:01:28] that code. Once it added it will display
+[02:01:25 - 02:01:31] in the uh drop-own list. User can check
+[02:01:28 - 02:01:33] it and like that. Right. So let's now
+[02:01:31 - 02:01:36] cursor decide uh with a plan. It will
+[02:01:33 - 02:01:38] come with a plan and then we'll decide
+[02:01:36 - 02:01:41] whether you want to go with that plan or
+[02:01:38 - 02:01:44] you want any changes. So you will just
+[02:01:41 - 02:01:46] wait and then once the plan is ready
+[02:01:44 - 02:01:48] then we'll start implementing it. Now
+[02:01:46 - 02:01:50] once the uh plan is ready you can walk
+[02:01:48 - 02:01:52] through it. So this is the product
+[02:01:50 - 02:01:54] model. We also have the proper um
+[02:01:52 - 02:01:56] architecture diagram how it actually
+[02:01:54 - 02:01:59] works and it basically detect that okay
+[02:01:56 - 02:02:01] we want to share uh these particular
+[02:01:59 - 02:02:02] members across a different trip as well.
+[02:02:01 - 02:02:04] So that's good point. Now there are some
+[02:02:02 - 02:02:06] database changes because it will
+[02:02:04 - 02:02:08] generate a invite code. So it will add a
+[02:02:06 - 02:02:10] new column under the profile section.
+[02:02:08 - 02:02:13] Then it will create a new table called
+[02:02:10 - 02:02:16] family members. The trips share as a new
+[02:02:13 - 02:02:18] table as well. After that if you scroll
+[02:02:16 - 02:02:21] down a little bit then you will see the
+[02:02:18 - 02:02:23] UI changes. Okay. So it will load the
+[02:02:21 - 02:02:25] profile and show my invite code under
+[02:02:23 - 02:02:28] the profile page. Then we have the
+[02:02:25 - 02:02:30] family member list as well and a small
+[02:02:28 - 02:02:32] add by code field on the profile as
+[02:02:30 - 02:02:35] well. Okay. Now inside the trip detail
+[02:02:32 - 02:02:37] we have a share button on a trip detail
+[02:02:35 - 02:02:39] uh banner where trip ID is matches with
+[02:02:37 - 02:02:42] the user ID. Then we'll show that. So it
+[02:02:39 - 02:02:45] will open a new sheet uh to share the
+[02:02:42 - 02:02:47] trip. Okay. uh either user can select
+[02:02:45 - 02:02:50] from the member or we have add member
+[02:02:47 - 02:02:53] input by invite code. So we have that
+[02:02:50 - 02:02:55] option as well. So that's pretty good.
+[02:02:53 - 02:02:58] Uh there is a code generation notes. So
+[02:02:55 - 02:03:02] it will generate a character length of
+[02:02:58 - 02:03:04] four maximum and some out of scope
+[02:03:02 - 02:03:07] question. I think pretty good whatever
+[02:03:04 - 02:03:09] we want. I think it's completely uh note
+[02:03:07 - 02:03:11] down in the plan as well. And once you
+[02:03:09 - 02:03:13] are happy with the plan simply start
+[02:03:11 - 02:03:15] building it. That's pretty cool, right?
+[02:03:13 - 02:03:18] Now the another interesting fact I want
+[02:03:15 - 02:03:20] to tell you u you can run multiple agent
+[02:03:18 - 02:03:23] with the cursor. That's true. So it
+[02:03:20 - 02:03:25] means you can start another uh session
+[02:03:23 - 02:03:28] and you can start entering your own
+[02:03:25 - 02:03:30] prompt in order to implement another
+[02:03:28 - 02:03:33] page, right? But as this is a complete
+[02:03:30 - 02:03:34] tutorial and I want to show it step by
+[02:03:33 - 02:03:36] step, we are going executing and
+[02:03:34 - 02:03:40] implementing one feature at a time
+[02:03:36 - 02:03:41] instead of multiple at once. So that is
+[02:03:40 - 02:03:43] another interesting feature with
+[02:03:41 - 02:03:46] [clears throat] the cursor.
+[02:03:43 - 02:03:47] Now once it is implemented you will see
+[02:03:46 - 02:03:49] the what are the things are implemented.
+[02:03:47 - 02:03:51] So it will get the invite code then the
+[02:03:49 - 02:03:54] family list trip share option and share
+[02:03:51 - 02:03:56] trip section as well. Now the key file
+[02:03:54 - 02:03:59] obviously we need to copy the query from
+[02:03:56 - 02:04:03] this migration script which is from
+[02:03:59 - 02:04:06] inside the SQL file and then we need to
+[02:04:03 - 02:04:08] put it inside superbase. So it will
+[02:04:06 - 02:04:10] create all the tables. Okay. So what
+[02:04:08 - 02:04:14] we'll do now just click on this
+[02:04:10 - 02:04:16] particular query and let me open that.
+[02:04:14 - 02:04:18] So this is a query we'll copy everything
+[02:04:16 - 02:04:20] as it is. Then we'll go to the superbase
+[02:04:18 - 02:04:22] and inside the superbase inside the
+[02:04:20 - 02:04:26] table editor not table editor inside the
+[02:04:22 - 02:04:28] SQL editor simply paste your query and
+[02:04:26 - 02:04:30] then click run. Once you run the query
+[02:04:28 - 02:04:32] it will add few table. Right now it's
+[02:04:30 - 02:04:37] saying the column reference ID is
+[02:04:32 - 02:04:39] ambiguous. Okay. So let's go ahead and
+[02:04:37 - 02:04:42] let me check this is the correct one
+[02:04:39 - 02:04:42] which we copied.
+[02:04:42 - 02:04:49] So in this case what we can do let's try
+[02:04:45 - 02:04:51] it again one more time
+[02:04:49 - 02:04:54] and if you get the same error then you
+[02:04:51 - 02:05:00] can simply notify this error to
+[02:04:54 - 02:05:03] superbase. Okay and here we say uh SQL
+[02:05:00 - 02:05:05] query error and then hit enter. So it
+[02:05:03 - 02:05:10] will update the query. It will fix this
+[02:05:05 - 02:05:12] issue and then it will again uh
+[02:05:10 - 02:05:15] finish it and then we can simply copy
+[02:05:12 - 02:05:17] that and paste it inside the uh
+[02:05:15 - 02:05:19] superbase. Now the interesting fact is
+[02:05:17 - 02:05:22] uh the source code which I'm going to
+[02:05:19 - 02:05:25] share with you uh you can simply copy
+[02:05:22 - 02:05:27] whatever uh SQL script you have or my
+[02:05:25 - 02:05:29] inside this migration folder and then
+[02:05:27 - 02:05:32] you can run all the query at once so
+[02:05:29 - 02:05:35] that uh it will be ready for you. Okay.
+[02:05:32 - 02:05:37] But it is very important when the
+[02:05:35 - 02:05:39] implementation is completed you have to
+[02:05:37 - 02:05:41] verify that is there any migration
+[02:05:39 - 02:05:44] script that you need to run or anything
+[02:05:41 - 02:05:47] like that. And now it's look like it
+[02:05:44 - 02:05:51] fixed that. So let's click on it. Now
+[02:05:47 - 02:05:53] you got the updated query.
+[02:05:51 - 02:05:56] So maybe you can directly open this
+[02:05:53 - 02:05:59] complete query and copy everything as it
+[02:05:56 - 02:06:02] is. Let's paste it here and click run
+[02:05:59 - 02:06:04] selected query. And in this case if you
+[02:06:02 - 02:06:06] see it show success. Okay. And you can
+[02:06:04 - 02:06:09] verify by going to the trip detail and
+[02:06:06 - 02:06:12] you will see a few new table called
+[02:06:09 - 02:06:14] family member trip share. Perfect. And
+[02:06:12 - 02:06:16] obviously inside the profile as well you
+[02:06:14 - 02:06:19] will see a brand new code called invite
+[02:06:16 - 02:06:21] code column. Okay. Now you can test this
+[02:06:19 - 02:06:25] one. So what I will do I will just make
+[02:06:21 - 02:06:26] sure I will reload this app. Okay.
+[02:06:25 - 02:06:28] Because there are few changes or you can
+[02:06:26 - 02:06:32] even uh stop and restart your
+[02:06:28 - 02:06:35] application. So let's restart the
+[02:06:32 - 02:06:35] application
+[02:06:35 - 02:06:42] and then here we go. Now if I go to the
+[02:06:39 - 02:06:44] any trip you will see this share option
+[02:06:42 - 02:06:47] right just click on it and then you have
+[02:06:44 - 02:06:50] option to share with the family code.
+[02:06:47 - 02:06:51] Once you add that plus add and then you
+[02:06:50 - 02:06:55] can save this sharing and this
+[02:06:51 - 02:06:57] particular u op of trip will get shared
+[02:06:55 - 02:07:00] with that particular user. Now inside
+[02:06:57 - 02:07:03] the family profile tab you will see the
+[02:07:00 - 02:07:05] my invite code which you can copy and
+[02:07:03 - 02:07:08] share with the your family members. We
+[02:07:05 - 02:07:10] also have family members uh enter code.
+[02:07:08 - 02:07:13] You can even enter the information
+[02:07:10 - 02:07:15] directly from here and all other option
+[02:07:13 - 02:07:18] are still there inside your profile
+[02:07:15 - 02:07:20] page. Pretty cool, right? So that's how
+[02:07:18 - 02:07:22] uh you have to add this setting option.
+[02:07:20 - 02:07:24] Now obviously once you have a multiple
+[02:07:22 - 02:07:27] user in your family member you can try
+[02:07:24 - 02:07:30] it out and it will work properly. Okay.
+[02:07:27 - 02:07:32] Um if you any question any doubt let me
+[02:07:30 - 02:07:34] know in the comment section because this
+[02:07:32 - 02:07:37] particular feature is very powerful and
+[02:07:34 - 02:07:40] it help a lot. Okay in your family
+[02:07:37 - 02:07:42] members uh if anyone has any suggestion
+[02:07:40 - 02:07:47] any packing item it will they can easily
+[02:07:42 - 02:07:50] add directly inside this trip inform uh
+[02:07:47 - 02:07:52] section. Okay. So guys uh if uh that's
+[02:07:50 - 02:07:53] all uh if you have any question let me
+[02:07:52 - 02:07:57] know in the comment section. You can
+[02:07:53 - 02:07:59] also uh ask any doubts any issue on my
+[02:07:57 - 02:08:02] discord channel. I will put the link in
+[02:07:59 - 02:08:02] the description.
+[02:08:03 - 02:08:07] Now we already have this explore option
+[02:08:05 - 02:08:09] but we don't know what should we add
+[02:08:07 - 02:08:12] under the explore. In that case you can
+[02:08:09 - 02:08:15] use and cursor AI planning mode. So
+[02:08:12 - 02:08:18] we'll go to the plan and we can ask what
+[02:08:15 - 02:08:21] should we uh add under the explore we
+[02:08:18 - 02:08:23] also have option like ask okay so it
+[02:08:21 - 02:08:25] will explore the your codebase and
+[02:08:23 - 02:08:28] answer the question without making any
+[02:08:25 - 02:08:30] edit the plan will give the generate the
+[02:08:28 - 02:08:32] robust implementation plan before
+[02:08:30 - 02:08:34] writing the code it's totally up to you
+[02:08:32 - 02:08:39] what you want to use if I say ask and
+[02:08:34 - 02:08:41] then we can simply add uh I want to
+[02:08:39 - 02:08:42] implement
+[02:08:41 - 02:08:49] explore
+[02:08:42 - 02:08:54] uh tab on home page. What feature
+[02:08:49 - 02:08:56] uh section can we add inside explore?
+[02:08:54 - 02:08:58] Okay.
+[02:08:56 - 02:09:00] And let's send this one. Okay. We don't
+[02:08:58 - 02:09:04] need to add many other things because we
+[02:09:00 - 02:09:06] need to know what thing can we add. And
+[02:09:04 - 02:09:10] now if you see we are getting answers so
+[02:09:06 - 02:09:13] fast because we are already tracking and
+[02:09:10 - 02:09:16] adding and updating the agent MD file
+[02:09:13 - 02:09:20] right and also we are saving the memory
+[02:09:16 - 02:09:23] so that it help us to uh get the fast
+[02:09:20 - 02:09:24] response. Now over here if you see there
+[02:09:23 - 02:09:26] is some recommendation. So it's saying
+[02:09:24 - 02:09:29] best fit section is destination
+[02:09:26 - 02:09:31] inspiration keep and upgrade what you
+[02:09:29 - 02:09:33] have. So it will give you the
+[02:09:31 - 02:09:36] destination upgrade then trip template
+[02:09:33 - 02:09:39] like ready to made uh iteration plan
+[02:09:36 - 02:09:41] with AI prompt. So you have option to
+[02:09:39 - 02:09:43] plan with AI. So the trending
+[02:09:41 - 02:09:46] [clears throat] and seasonal peak browse
+[02:09:43 - 02:09:50] by internet all of these detail we can
+[02:09:46 - 02:09:52] add uh inside the explore. Okay. So here
+[02:09:50 - 02:09:54] nice to have later on the nearby the
+[02:09:52 - 02:09:57] community hotel weather. So that also
+[02:09:54 - 02:09:59] option is available but there is
+[02:09:57 - 02:10:03] suggested one version one. So which is a
+[02:09:59 - 02:10:05] category chips then feature destination
+[02:10:03 - 02:10:08] AI prompt chimps at the top and optional
+[02:10:05 - 02:10:11] one to2 template iteration. So this kind
+[02:10:08 - 02:10:13] of thing we can add it and here is a
+[02:10:11 - 02:10:15] product rule thumb my plan is equal to
+[02:10:13 - 02:10:17] trip I own that are shared and explore
+[02:10:15 - 02:10:21] is nothing but the idea that I'm not
+[02:10:17 - 02:10:23] book yet right so I think this is pretty
+[02:10:21 - 02:10:26] good and we can go with this plan now in
+[02:10:23 - 02:10:28] that case what you can do you can simply
+[02:10:26 - 02:10:30] change it to a plan mode if you want to
+[02:10:28 - 02:10:33] plan before implementation but we have
+[02:10:30 - 02:10:37] basic idea so we'll start implementing
+[02:10:33 - 02:10:40] so here we'll say let's implement ment
+[02:10:37 - 02:10:43] v1. Okay, because this is a version when
+[02:10:40 - 02:10:48] and it will add these four uh main
+[02:10:43 - 02:10:51] section and then based on uh these
+[02:10:48 - 02:10:53] particular sections given by the AI, it
+[02:10:51 - 02:10:55] will start implementing it. Pretty cool,
+[02:10:53 - 02:10:58] right? So you don't need to even think
+[02:10:55 - 02:11:01] or if you have any doubt, you can always
+[02:10:58 - 02:11:04] ask to the cursor AI and then it will
+[02:11:01 - 02:11:07] come up with a proper solution for you.
+[02:11:04 - 02:11:09] A few moments later
+[02:11:07 - 02:11:11] >> and once it finish you will see what are
+[02:11:09 - 02:11:14] the different things it's implemented.
+[02:11:11 - 02:11:16] Now over here we'll go to the explore
+[02:11:14 - 02:11:19] section and then click on it. And here
+[02:11:16 - 02:11:20] we have the uh plan with AI section.
+[02:11:19 - 02:11:22] Once you click on it, it will generate
+[02:11:20 - 02:11:25] the proper
+[02:11:22 - 02:11:27] explore section for you. Then we have
+[02:11:25 - 02:11:30] the feature destination. Here we have
+[02:11:27 - 02:11:33] all it all of them. But if you click on
+[02:11:30 - 02:11:36] beach, city, adventure, it will
+[02:11:33 - 02:11:39] immediately uh filter out filter out for
+[02:11:36 - 02:11:41] you. Also, you can uh plan this
+[02:11:39 - 02:11:45] particular destination with the AI or
+[02:11:41 - 02:11:47] you can create the trip as well. Okay,
+[02:11:45 - 02:11:50] pretty quick. If you click on plan with
+[02:11:47 - 02:11:52] AI, it will navigate you to the chart
+[02:11:50 - 02:11:55] and then it will automatically add a
+[02:11:52 - 02:11:58] proper message and then AI will help you
+[02:11:55 - 02:12:01] uh to draft that particular trip. Pretty
+[02:11:58 - 02:12:04] cool, right? And that you can easily uh
+[02:12:01 - 02:12:07] do it with the help of um explore
+[02:12:04 - 02:12:09] section. Now let's say you want to add a
+[02:12:07 - 02:12:12] romantic 4day city break. So just click
+[02:12:09 - 02:12:14] on it and then inside the chart it will
+[02:12:12 - 02:12:16] automatically add it also. If you see
+[02:12:14 - 02:12:19] it, it make sure it's a new trip because
+[02:12:16 - 02:12:24] you are implementing from there, right?
+[02:12:19 - 02:12:26] And then it will add as a new trip only.
+[02:12:24 - 02:12:29] So that's how this explore section
+[02:12:26 - 02:12:31] works. pretty straightforward and quite
+[02:12:29 - 02:12:34] interesting uh section. Now you have
+[02:12:31 - 02:12:38] option if you want to add more uh things
+[02:12:34 - 02:12:40] into it like some uh grid style cards uh
+[02:12:38 - 02:12:42] to add this beach, city, food instead of
+[02:12:40 - 02:12:45] this uh scroll bar or there are many
+[02:12:42 - 02:12:47] other things which you can always ask to
+[02:12:45 - 02:12:50] the AI and it will give you the proper
+[02:12:47 - 02:12:52] suggestion for you. So that's all for
+[02:12:50 - 02:12:54] this explore section. If you have any
+[02:12:52 - 02:12:57] question, any doubt let me know in the
+[02:12:54 - 02:12:57] comment section.
+[02:12:57 - 02:13:02] Now in this chapter we are going to
+[02:12:59 - 02:13:05] focus on improving the user experience.
+[02:13:02 - 02:13:08] Now in that one there are lot of things
+[02:13:05 - 02:13:10] we which you can target. Now for example
+[02:13:08 - 02:13:13] if you see on this particular trip right
+[02:13:10 - 02:13:16] the planning progress is not working. So
+[02:13:13 - 02:13:19] we have to fix that. After that if I go
+[02:13:16 - 02:13:21] to any of the planned detail uh we want
+[02:13:19 - 02:13:24] to add an option to delete that
+[02:13:21 - 02:13:26] particular trip. Right? Because once it
+[02:13:24 - 02:13:29] add and if you user don't want it so
+[02:13:26 - 02:13:32] user have option to delete that one as
+[02:13:29 - 02:13:34] well. Now make sure if you don't see my
+[02:13:32 - 02:13:36] trip section with the actual data then
+[02:13:34 - 02:13:39] that also you need to fix it. But other
+[02:13:36 - 02:13:41] than that I think everything is correct.
+[02:13:39 - 02:13:44] I don't see any issue right. So let's
+[02:13:41 - 02:13:47] fix these two issue. So what we'll do,
+[02:13:44 - 02:13:49] we'll go to the
+[02:13:47 - 02:13:53] U prompt and then we're going to simply
+[02:13:49 - 02:13:59] add uh let's fix
+[02:13:53 - 02:14:06] trip card um progress bar and attach and
+[02:13:59 - 02:14:08] update progress based on um trip detail
+[02:14:06 - 02:14:12] whether
+[02:14:08 - 02:14:15] we'll say uh
+[02:14:12 - 02:14:22] whether the user uh
+[02:14:15 - 02:14:29] added or check all to-do task or even
+[02:14:22 - 02:14:32] plan for each day and based on that make
+[02:14:29 - 02:14:35] sure to show
+[02:14:32 - 02:14:42] proper progress. Okay, so this help a
+[02:14:35 - 02:14:42] lot. Also in trip detail page
+[02:14:42 - 02:14:50] add option to delete trip okay with
+[02:14:48 - 02:14:54] proper
+[02:14:50 - 02:14:57] confirmation dialogue before deleting
+[02:14:54 - 02:15:00] it. So that also we are going to add so
+[02:14:57 - 02:15:03] that you uh user want to delete any of
+[02:15:00 - 02:15:06] these they can simply delete that one as
+[02:15:03 - 02:15:09] well. I think that's all we needed.
+[02:15:06 - 02:15:12] uh but if you have any other enhancement
+[02:15:09 - 02:15:14] that you think that need to be uh
+[02:15:12 - 02:15:17] implemented or added you can also do
+[02:15:14 - 02:15:19] that okay so right now I'm happy with it
+[02:15:17 - 02:15:22] so let's send this and then let's wait
+[02:15:19 - 02:15:25] for the complete implementation and once
+[02:15:22 - 02:15:29] it is implemented then if you see it
+[02:15:25 - 02:15:31] added two important uh feature one you
+[02:15:29 - 02:15:34] will see the planning progress okay so
+[02:15:31 - 02:15:38] you plan up to 54% obviously there are
+[02:15:34 - 02:15:40] lot of things you can add like packaging
+[02:15:38 - 02:15:42] you did not confirm this right. So if
+[02:15:40 - 02:15:45] you finish it then it will automatically
+[02:15:42 - 02:15:47] update the progress bar also along with
+[02:15:45 - 02:15:49] that you will see the delete option. If
+[02:15:47 - 02:15:52] you want to delete you have option to
+[02:15:49 - 02:15:54] delete that any specific uh trip as
+[02:15:52 - 02:15:57] well. Okay let's say you want to delete
+[02:15:54 - 02:15:59] this trip just click on it and then
+[02:15:57 - 02:16:01] click delete and then it will delete it
+[02:15:59 - 02:16:04] from your list. And now if you see we
+[02:16:01 - 02:16:07] don't have that particular trip anymore.
+[02:16:04 - 02:16:10] So that delete functionality is also
+[02:16:07 - 02:16:12] working. So that's overall enhancement
+[02:16:10 - 02:16:15] we added. Obviously there are lot of
+[02:16:12 - 02:16:18] other things you can you can add it. Now
+[02:16:15 - 02:16:20] along with that on the my plan section
+[02:16:18 - 02:16:23] below this right we can add some other
+[02:16:20 - 02:16:26] uh option as well under the my section
+[02:16:23 - 02:16:30] or maybe on the homepage. So we can ask
+[02:16:26 - 02:16:34] or we can switch this to ask mode and
+[02:16:30 - 02:16:42] then we can simply say suggest something
+[02:16:34 - 02:16:44] on homepage. What else option we can add
+[02:16:42 - 02:16:50] um on home
+[02:16:44 - 02:16:53] under my plan list and then hit enter.
+[02:16:50 - 02:16:57] So this particular uh section also help
+[02:16:53 - 02:17:00] to make our application uh much more
+[02:16:57 - 02:17:03] interesting. So that's the reason we ask
+[02:17:00 - 02:17:05] uh to the cursor what can be added.
+[02:17:03 - 02:17:07] Sometimes it's hard and that's why I
+[02:17:05 - 02:17:10] always inform you or I always suggest
+[02:17:07 - 02:17:13] you to explore on the internet some
+[02:17:10 - 02:17:15] ideas some mockups right and that's give
+[02:17:13 - 02:17:16] a lot of different information. Now
+[02:17:15 - 02:17:19] right now if you see the high value
+[02:17:16 - 02:17:22] which fits what you already have next up
+[02:17:19 - 02:17:25] trip spotlight then gaps and next action
+[02:17:22 - 02:17:31] quick action on the card short option.
+[02:17:25 - 02:17:33] So it give this section. So basically
+[02:17:31 - 02:17:36] basically it give an option which is
+[02:17:33 - 02:17:40] under my plan. So we can just inform I
+[02:17:36 - 02:17:44] don't want to add anything
+[02:17:40 - 02:17:49] in my plan rather
+[02:17:44 - 02:17:52] what can we add on homepage
+[02:17:49 - 02:17:55] at bottom section
+[02:17:52 - 02:17:57] of my plan
+[02:17:55 - 02:18:02] and we can in in bracket we can say not
+[02:17:57 - 02:18:04] in my plan or explore tab.
+[02:18:02 - 02:18:06] So we specifically mention that one
+[02:18:04 - 02:18:08] because otherwise it's just uh give us
+[02:18:06 - 02:18:11] suggestion that you can add inside the
+[02:18:08 - 02:18:13] my plan. So here we say if you see we
+[02:18:11 - 02:18:16] got some tips like travel, packing
+[02:18:13 - 02:18:18] remainders, family sharing, upcoming
+[02:18:16 - 02:18:21] countdown. So something like that we can
+[02:18:18 - 02:18:23] add it or there is a strong product
+[02:18:21 - 02:18:26] add-on like quick tools row. Okay, plan
+[02:18:23 - 02:18:28] with AI. I think this is much better
+[02:18:26 - 02:18:32] quick tools row. Then weather for the
+[02:18:28 - 02:18:33] next destination or checklist or trip
+[02:18:32 - 02:18:35] memories photo teaser. Okay, so that
+[02:18:33 - 02:18:38] also option we have. Then we have low
+[02:18:35 - 02:18:41] priority. The recommendation is I will
+[02:18:38 - 02:18:44] definitely go with the quick tool row.
+[02:18:41 - 02:18:48] So here I will change this to the agent
+[02:18:44 - 02:18:52] mode. And then we'll say uh I like quick
+[02:18:48 - 02:18:59] tools row. Then
+[02:18:52 - 02:18:59] maybe this checks n. So we'll say
+[02:19:01 - 02:19:06] this particular option. Uh right now we
+[02:19:04 - 02:19:10] don't have any photo feature added. So
+[02:19:06 - 02:19:13] we'll just leave it as it is. And
+[02:19:10 - 02:19:17] we can also add this travel tips
+[02:19:13 - 02:19:20] and travel tips and then hit enter.
+[02:19:17 - 02:19:23] Okay. So this option uh help our
+[02:19:20 - 02:19:26] homepage and application to give extra
+[02:19:23 - 02:19:28] um enhancement for inside our app. And
+[02:19:26 - 02:19:30] if you see once it is implemented it add
+[02:19:28 - 02:19:33] three different section. One is a quick
+[02:19:30 - 02:19:35] tool. Now you have quick option to plan
+[02:19:33 - 02:19:38] with the AI create trip my trip invite
+[02:19:35 - 02:19:39] frame and if you click on it it will
+[02:19:38 - 02:19:42] immediately navigate to that particular
+[02:19:39 - 02:19:44] feature. Okay. Then next we also have
+[02:19:42 - 02:19:47] the finish planning section. So for your
+[02:19:44 - 02:19:49] upcoming trip you can plan it either you
+[02:19:47 - 02:19:50] can go to the continue button which will
+[02:19:49 - 02:19:53] navigate to the detail page or you also
+[02:19:50 - 02:19:56] have ask AI button where it will
+[02:19:53 - 02:19:58] navigate to the charge uh or AI agent
+[02:19:56 - 02:20:00] section and then some travel tips as
+[02:19:58 - 02:20:03] well. So obviously these travel tips is
+[02:20:00 - 02:20:05] generated using an AI and you can ask
+[02:20:03 - 02:20:07] the more about that using the AI
+[02:20:05 - 02:20:09] feature. Pretty cool right? So
+[02:20:07 - 02:20:13] everything is updated uh with a new
+[02:20:09 - 02:20:17] feature new section as well. Now I'm
+[02:20:13 - 02:20:20] going to pause the video over here and
+[02:20:17 - 02:20:23] uh I will suggest you also to enhance
+[02:20:20 - 02:20:26] this like some themes, designing, icons,
+[02:20:23 - 02:20:29] colors, everything and then you can let
+[02:20:26 - 02:20:31] me know uh what you build. You can also
+[02:20:29 - 02:20:32] tag me on the Instagram and definitely
+[02:20:31 - 02:20:35] I'm going to feature it. I'm also going
+[02:20:32 - 02:20:38] to feature it on the YouTube post if you
+[02:20:35 - 02:20:40] share this project with me and I will
+[02:20:38 - 02:20:43] definitely add that on the YouTube post
+[02:20:40 - 02:20:47] and with the community. Okay. So, make
+[02:20:43 - 02:20:49] sure to enhance this project and comes
+[02:20:47 - 02:20:53] up with a different design, different
+[02:20:49 - 02:20:53] feature and I would really like to see

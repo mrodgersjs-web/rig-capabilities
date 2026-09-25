@@ -1,0 +1,3181 @@
+[00:00 - 00:07] hey there and welcome back to another
+[00:03 - 00:09] course on nextjs 13 okay so today we are
+[00:07 - 00:12] going to build this beautiful
+[00:09 - 00:18] application with the help of nextjs
+[00:12 - 00:20] react TN CSS Google Map Google Play API
+[00:18 - 00:23] and next authentication as well and so
+[00:20 - 00:25] on okay so uh if you are new on my
+[00:23 - 00:28] Channel please do subscribe and before
+[00:25 - 00:30] going uh forward let's walk through the
+[00:28 - 00:32] application first and then we will talk
+[00:30 - 00:35] about the technology which you are going
+[00:32 - 00:37] to use in this particular course okay so
+[00:35 - 00:39] if you see on this application right
+[00:37 - 00:42] once user login with the uh Google
+[00:39 - 00:44] account you will launch on this page and
+[00:42 - 00:47] we have this beautiful header section
+[00:44 - 00:49] okay and once user login you will see
+[00:47 - 00:50] this user's profile pick and on the
+[00:49 - 00:53] click of that you have log out option as
+[00:50 - 00:55] well okay also on the left hand side you
+[00:53 - 00:57] will see the different type of food
+[00:55 - 00:59] because this is the restaurant finder
+[00:57 - 01:02] application and you can find a different
+[00:59 - 01:05] type typ of restaurant near you okay so
+[01:02 - 01:08] if you see on H the color is getting
+[01:05 - 01:10] changed right initially the color is uh
+[01:08 - 01:12] gray okay black and white color but as
+[01:10 - 01:16] soon as you hover on it the color is
+[01:12 - 01:17] changed it's colorful okay so uh click
+[01:16 - 01:19] any of this restaurant and once you
+[01:17 - 01:21] click it if you see this beautiful
+[01:19 - 01:25] border along with this particular
+[01:21 - 01:27] colored uh icon okay also you have this
+[01:25 - 01:31] option called radius so you can select
+[01:27 - 01:33] your uh how uh the area which you want
+[01:31 - 01:37] to find the restaurant okay along with
+[01:33 - 01:39] this rating option okay so on the right
+[01:37 - 01:40] hand side okay if I select any
+[01:39 - 01:42] restaurant you will see this dot dot
+[01:40 - 01:45] nothing but this markers on the Google
+[01:42 - 01:47] Map okay and if you click on this dot
+[01:45 - 01:49] you will see the information about this
+[01:47 - 01:52] particular restaurant okay so if I uh
+[01:49 - 01:54] this is my current location on the map
+[01:52 - 01:56] and I can search by clicking on this
+[01:54 - 01:59] particular restaurant detail and
+[01:56 - 02:02] everything okay you will see how far it
+[01:59 - 02:04] is from my location in miles or you can
+[02:02 - 02:07] use it with the help of kilometer as
+[02:04 - 02:08] well okay also on the click of get
+[02:07 - 02:11] direction you can directly jump on the
+[02:08 - 02:14] Google Map with this all Direction ready
+[02:11 - 02:16] okay the root and everything also if you
+[02:14 - 02:20] see you have beautiful scroller I can
+[02:16 - 02:21] scroll left I can scroll right okay and
+[02:20 - 02:25] this is completely beginner friendly
+[02:21 - 02:27] course so if you have uh any question
+[02:25 - 02:29] you can ask me anytime in the comment
+[02:27 - 02:31] section now if you click on any of this
+[02:29 - 02:33] restaurant right at the bottom side
+[02:31 - 02:37] still automatically it's updating on the
+[02:33 - 02:39] map see okay if I change this to Italian
+[02:37 - 02:41] food you will see Italian food if I
+[02:39 - 02:44] click on this any of this particular uh
+[02:41 - 02:46] restaurant it autoally show where it is
+[02:44 - 02:49] and all the details on the Google Map
+[02:46 - 02:51] itself okay and guys if you are new you
+[02:49 - 02:53] don't know about the nextjs you don't
+[02:51 - 02:55] know about the react or tailn css don't
+[02:53 - 02:57] worry because this is beginner friendly
+[02:55 - 03:00] course and I'm going to tach everything
+[02:57 - 03:03] from the basic okay so create creating
+[03:00 - 03:05] the Google Map API key or place API key
+[03:03 - 03:09] to integrate in our application so
+[03:05 - 03:09] before doing any further delay let's
+[03:14 - 03:21] begin and we are going to use next
+[03:18 - 03:23] js13 uh which is the react framework for
+[03:21 - 03:24] the web application and we are going to
+[03:23 - 03:27] use that one as well along with the app
+[03:24 - 03:30] router okay next we are going to use
+[03:27 - 03:33] next .js for for the Google
+[03:30 - 03:35] authentication so we are going to learn
+[03:33 - 03:39] how to integrate Gmail authentication in
+[03:35 - 03:42] our application then for styling we are
+[03:39 - 03:44] going to use telin CSS and don't worry
+[03:42 - 03:47] I'm going to teach everything because
+[03:44 - 03:50] telin CSS is one of the highest and most
+[03:47 - 03:53] popular uh UI library in the market
+[03:50 - 03:56] right now and the most important we are
+[03:53 - 03:58] going to use place a API okay if you
+[03:56 - 04:01] don't know about the Google Map or how
+[03:58 - 04:02] to integrate it how to use Place API
+[04:01 - 04:06] don't worry we are going to learn
+[04:02 - 04:07] everything and it's completely free okay
+[04:06 - 04:10] if you go to the pricing you will see
+[04:07 - 04:13] you will get a $200 of credit every
+[04:10 - 04:17] month which is more than sufficient for
+[04:13 - 04:20] any developer or small business okay
+[04:17 - 04:22] also if you go back to our application
+[04:20 - 04:24] you will learn how to style this
+[04:22 - 04:27] particular Google Map according to your
+[04:24 - 04:30] need you can change Google Map GRS color
+[04:27 - 04:33] anything right now in our applic
+[04:30 - 04:35] I use a gray color Google Map okay and
+[04:33 - 04:39] I'm going to tell you how to style it in
+[04:35 - 04:41] the Google Map styling Studio okay and
+[04:39 - 04:43] if you are new on my Channel please guys
+[04:41 - 04:45] do subscribe to my channel and if you
+[04:43 - 04:48] really looking for exclusive video one
+[04:45 - 04:50] to one session then please join the
+[04:48 - 04:52] channel okay and if you go to my channel
+[04:50 - 04:54] here you will see a lot of different
+[04:52 - 04:58] types of project a different courses on
+[04:54 - 05:01] nextjs react react native telling CSS go
+[04:58 - 05:05] ahead and watch all of them so guys
+[05:01 - 05:05] before doing any further delay let's
+[05:08 - 05:14] begin so in order to create react nextjs
+[05:12 - 05:17] project we are going to use next.js
+[05:14 - 05:20] which is one of the best react framework
+[05:17 - 05:21] for the web application okay so in order
+[05:20 - 05:24] to create a project if you see here this
+[05:21 - 05:26] is the command okay just copy this
+[05:24 - 05:28] command go to a project where you want
+[05:26 - 05:32] to create a project open the command
+[05:28 - 05:35] prom by typing CMD and once it
+[05:32 - 05:38] open just uh paste this particular
+[05:35 - 05:41] command which is npx create next app at
+[05:38 - 05:44] the latest okay at the latest will uh
+[05:41 - 05:46] give you the next 13 um next version
+[05:44 - 05:48] okay otherwise you can install the old
+[05:46 - 05:52] version as well but just you have to
+[05:48 - 05:55] remove at latest okay but in this case I
+[05:52 - 05:57] will put the at latest and click enter
+[05:55 - 05:58] then it will ask the project name so in
+[05:57 - 06:00] this case we will
+[05:58 - 06:05] you
+[06:00 - 06:07] Google Map place okay and click enter
+[06:05 - 06:09] now it will ask do you want to use typ
+[06:07 - 06:12] yes or no right now we are not using uh
+[06:09 - 06:16] typescript so I will say no then do you
+[06:12 - 06:19] want to use es link say no so do you
+[06:16 - 06:21] want to TN CSS say yes so here uh itally
+[06:19 - 06:24] install T CSS for you as well you don't
+[06:21 - 06:27] need to install separately say yes now
+[06:24 - 06:30] and do you want Source directory say no
+[06:27 - 06:32] app router say yes so it's saying would
+[06:30 - 06:36] you like to customize default impul say
+[06:32 - 06:37] no and done so now it will install all
+[06:36 - 06:41] the dependency which is required like
+[06:37 - 06:45] react react Dom next T CSS okay and
+[06:41 - 06:45] everything so we'll wait for a few
+[06:47 - 06:52] seconds and if you see our project is
+[06:49 - 06:56] created now in order to go to the
+[06:52 - 06:59] project folder just type CD Google Map
+[06:56 - 07:01] place and enter okay now you can open
+[06:59 - 07:04] project directly from here just type Cod
+[07:01 - 07:07] space Dot and it will open your project
+[07:04 - 07:12] in vs code okay
+[07:07 - 07:12] so here here is our project is open
+[07:16 - 07:22] okay now let's talk about the project
+[07:19 - 07:24] folder structure so at the first you
+[07:22 - 07:26] will see this app folder okay so in this
+[07:24 - 07:29] app folder we will put all our
+[07:26 - 07:30] components file the pages and everything
+[07:29 - 07:32] okay
+[07:30 - 07:35] so by default when you run the
+[07:32 - 07:37] application the page.js will be um
+[07:35 - 07:40] launch okay and this is our starting
+[07:37 - 07:43] point which is the page. JX okay and if
+[07:40 - 07:45] you see we have some uh default code
+[07:43 - 07:48] here okay we will remove it in some time
+[07:45 - 07:49] then we have lay layout. JS where you
+[07:48 - 07:52] can Define the layout you can divide
+[07:49 - 07:53] your um screen into different parts and
+[07:52 - 07:58] then you can Define it here like this
+[07:53 - 08:02] okay so in in old uh nextjs we have _
+[07:58 - 08:05] app.js s okay and index.js as a page but
+[08:02 - 08:07] here we have the layout. JS and page.js
+[08:05 - 08:10] we also learn how to navigate from one
+[08:07 - 08:12] uh or how to route from one page to
+[08:10 - 08:14] another page and everything so don't
+[08:12 - 08:18] worry because this is completely begin
+[08:14 - 08:20] friendly course after that we'll also
+[08:18 - 08:21] have global. CSS which is applicable
+[08:20 - 08:23] throughout the application so whatever
+[08:21 - 08:26] the CSS you want to apply you can apply
+[08:23 - 08:28] it here okay then we have this public
+[08:26 - 08:31] folder where you can put all your images
+[08:28 - 08:35] or assets or everything in this public
+[08:31 - 08:38] folder then we have js. config.js okay
+[08:35 - 08:40] then we have next. config.js which help
+[08:38 - 08:43] you to configure uh some of these things
+[08:40 - 08:46] like um if you are fetching the URL from
+[08:43 - 08:47] the uh sorry fetching image from the URL
+[08:46 - 08:49] then you have to put the domain name
+[08:47 - 08:52] here so I will explain you how to you
+[08:49 - 08:55] configure the next. config.js when it
+[08:52 - 08:58] required then we have packet. Json which
+[08:55 - 09:00] include all this dependency and the
+[08:58 - 09:03] script to run the this
+[09:00 - 09:06] application then we have post. CSS post
+[09:03 - 09:11] CSS and T.C config.js where it includes
+[09:06 - 09:13] this uh T CSS for the uh nextjs okay now
+[09:11 - 09:16] let's run the application so here go to
+[09:13 - 09:18] the terminal and click new terminal it
+[09:16 - 09:21] will open you the in um the inbuild
+[09:18 - 09:25] terminal okay in vs code only and just
+[09:21 - 09:30] type npm Run start okay or you can just
+[09:25 - 09:33] type MP R da and enter so as soon as you
+[09:30 - 09:35] enter it will it will say the URL is
+[09:33 - 09:38] Local Host 3,000 so port number is 3,000
+[09:35 - 09:41] right let's open this port number and
+[09:38 - 09:43] wait for few second to build but it's
+[09:41 - 09:44] building first time because you launch
+[09:43 - 09:47] first time right it will take few
+[09:44 - 09:50] seconds to build the
+[09:47 - 09:52] application so we'll wait and if you see
+[09:50 - 09:57] the page is uh showing on the screen
+[09:52 - 09:59] okay as simple as that now let's uh go
+[09:57 - 10:00] to this app folder and inside inside
+[09:59 - 10:03] this app folder you will see this
+[10:00 - 10:06] page.js okay inside the
+[10:03 - 10:10] page.js let's remove this all of this
+[10:06 - 10:15] code okay so just remove everything like
+[10:10 - 10:17] this and just enter sample de and here
+[10:15 - 10:19] if you I if I save it you will see
+[10:17 - 10:22] nothing on the screen okay now let's
+[10:19 - 10:26] type some text so I will type S2 and
+[10:22 - 10:27] let's type subscribe Tobe guruji okay if
+[10:26 - 10:29] you did not subscribe to my Channel
+[10:27 - 10:31] please do subscribe and if you see
+[10:29 - 10:34] subscribe Tobe guruji is showing on the
+[10:31 - 10:37] screen okay you see this tell uh this
+[10:34 - 10:40] kind of gradient effect is coming right
+[10:37 - 10:42] this is because in global. CSS we have
+[10:40 - 10:45] some uh if you see right background
+[10:42 - 10:47] start and LG or a lot of things right so
+[10:45 - 10:50] you can do uh one thing you can just
+[10:47 - 10:52] remove all of these things okay because
+[10:50 - 10:56] we don't want it and if you see as soon
+[10:52 - 10:59] as soon as I remove this body um CSS
+[10:56 - 11:01] right you'll get a plain screen with the
+[10:59 - 11:04] some text that's what we wanted okay to
+[11:01 - 11:04] start the
+[11:07 - 11:12] application now let's implement the
+[11:10 - 11:15] Google authentication for our
+[11:12 - 11:18] application using the next .js so next
+[11:15 - 11:20] .js is one of the best authentication
+[11:18 - 11:23] for the next JS okay and which is very
+[11:20 - 11:25] easy to use so in order to integrated
+[11:23 - 11:27] let's get uh go to this official website
+[11:25 - 11:29] and just click on get
+[11:27 - 11:33] started once you are on this particular
+[11:29 - 11:35] page here you will see the installation
+[11:33 - 11:39] uh Command right just copy this one go
+[11:35 - 11:41] to your project okay and in the uh
+[11:39 - 11:43] terminal add new terminal and paste this
+[11:41 - 11:45] particular command it will uh install
+[11:43 - 11:49] the next O
+[11:45 - 11:52] Okay uh then if you scroll down we have
+[11:49 - 11:53] to add API route right and if you scroll
+[11:52 - 11:57] down this is how we want to add this
+[11:53 - 11:59] particular code but if you seeing if you
+[11:57 - 12:02] see here right if you're using the next
+[11:59 - 12:04] JS 13.0 or above we have to follow a
+[12:02 - 12:07] different guide right so click on this
+[12:04 - 12:09] guide and then once you on this page
+[12:07 - 12:12] you'll find this particular page okay so
+[12:09 - 12:15] here it's quite easy first of all uh we
+[12:12 - 12:18] have to create this route okay so inside
+[12:15 - 12:21] the app folder we have to create a new
+[12:18 - 12:24] folder called API so just uh create a
+[12:21 - 12:26] new folder called API inside the API we
+[12:24 - 12:29] have to create another folder called Au
+[12:26 - 12:32] okay inside this folder we have to
+[12:29 - 12:36] create this next o folder okay so inside
+[12:32 - 12:40] o create another folder next o and then
+[12:36 - 12:44] we have to create a file called rot.js
+[12:40 - 12:47] like this okay and that's all next we
+[12:44 - 12:50] have to paste all of this
+[12:47 - 12:53] code uh inside this our application
+[12:50 - 12:57] right so next all and everything so just
+[12:53 - 13:00] copy it and so I will just copy this one
+[12:57 - 13:02] okay and paste it here
+[13:00 - 13:06] now here we have to replace with our
+[13:02 - 13:08] Google provider okay so if you scroll
+[13:06 - 13:10] down and if you see the provider option
+[13:08 - 13:13] right here you'll find a different uh
+[13:10 - 13:15] providers okay so let's here okay and
+[13:13 - 13:19] just search for the Google so if you see
+[13:15 - 13:21] Google okay now scroll down uh we have
+[13:19 - 13:24] to add this particular call back URL
+[13:21 - 13:26] inside the Google Cloud okay but before
+[13:24 - 13:29] that let's copy this code and then we
+[13:26 - 13:32] will work it out so I will copy this
+[13:29 - 13:35] line of code okay let's go back to our
+[13:32 - 13:38] application and paste it here like this
+[13:35 - 13:42] okay then you also need to copy this
+[13:38 - 13:46] Google provider URL okay so let me copy
+[13:42 - 13:46] this and let's go back and paste it
+[13:48 - 13:53] here and let's see everything look good
+[13:52 - 13:58] okay so here we have to add this
+[13:53 - 14:01] providers forgot to copy this like this
+[13:58 - 14:04] okay perfect now our Google provider is
+[14:01 - 14:06] uh integrated okay inside or configur
+[14:04 - 14:09] inside this route.
+[14:06 - 14:12] JS now in order to generate this Google
+[14:09 - 14:14] client ID and Google client key you can
+[14:12 - 14:17] watch my previous uh some of the video
+[14:14 - 14:20] which include the next .js okay and uh
+[14:17 - 14:21] let's go to this uh Google Cloud console
+[14:20 - 14:24] and if you don't have account create a
+[14:21 - 14:26] new account and once you created a new
+[14:24 - 14:29] project as well in this Google Cloud you
+[14:26 - 14:32] have to go to this API and service so
+[14:29 - 14:35] click on this API and services okay now
+[14:32 - 14:37] if you are uh creating this project
+[14:35 - 14:39] first time right you have to create
+[14:37 - 14:42] first o consent screen here okay I
+[14:39 - 14:44] already created you have to just enter
+[14:42 - 14:47] this application information that's all
+[14:44 - 14:49] then inside the credential you have to
+[14:47 - 14:51] create a new credential okay and once
+[14:49 - 14:54] you create this new credential you are
+[14:51 - 14:57] done so now once you have created this
+[14:54 - 14:59] particular creden you have this uh URL
+[14:57 - 15:03] section right authorized JavaScript
+[14:59 - 15:06] origin now you are doing this uh if you
+[15:03 - 15:08] go go to this Google right for
+[15:06 - 15:10] development you have to enter this local
+[15:08 - 15:13] 3,000 the port number is the one which
+[15:10 - 15:15] you are running okay then you have to
+[15:13 - 15:18] just enter this port number I already
+[15:15 - 15:20] have and the red URL as well okay and
+[15:18 - 15:23] then save it once you save it we have
+[15:20 - 15:26] this client ID and the client create key
+[15:23 - 15:29] copy this client idea and client create
+[15:26 - 15:32] key and let me open this in the right
+[15:29 - 15:34] side and then go to this our project
+[15:32 - 15:37] here you have to create a new folder
+[15:34 - 15:38] called EnV in a root directory okay so
+[15:37 - 15:40] make sure you are creating this in rout
+[15:38 - 15:43] directory and paste this particular code
+[15:40 - 15:47] so I created client adding client SEC ke
+[15:43 - 15:49] and I pasted my both the keys here okay
+[15:47 - 15:52] now this key you have to access it using
+[15:49 - 15:55] the process. env. Google client security
+[15:52 - 15:59] key which is the code is already there
+[15:55 - 16:00] okay now in order to work it out right
+[15:59 - 16:04] if you go to back to this particular
+[16:00 - 16:07] page inside inside the layout. JS if you
+[16:04 - 16:10] go to the layout. JS right here we
+[16:07 - 16:14] actually going to implement or add the
+[16:10 - 16:16] logic okay uh for the session provider
+[16:14 - 16:18] okay but uh you can also do one thing
+[16:16 - 16:20] you have to create a new folder inside
+[16:18 - 16:24] this particular app folder
+[16:20 - 16:27] called make sure it is in the uh here
+[16:24 - 16:33] you have to call that as a provider okay
+[16:27 - 16:33] just uh we'll create a new provider.
+[16:33 - 16:40] Js and inside that you have to add the
+[16:37 - 16:43] uh some default template so RFC added
+[16:40 - 16:46] this default template and also add this
+[16:43 - 16:49] children like this okay as a
+[16:46 - 16:51] prop and remove this code and replace
+[16:49 - 16:55] this with the
+[16:51 - 16:58] session uh provider okay
+[16:55 - 17:02] s provider like this okay now now here
+[16:58 - 17:02] you have to import this line of
+[17:02 - 17:08] code okay so this is little different uh
+[17:05 - 17:13] we are doing okay because
+[17:08 - 17:16] uh we are using next JS uh 13 right and
+[17:13 - 17:18] uh if you follow this tutorial you'll
+[17:16 - 17:21] understand how to do it okay now pay
+[17:18 - 17:24] this session providers and then you have
+[17:21 - 17:24] to just add the children
+[17:26 - 17:34] here add the children like
+[17:29 - 17:37] this and then save it now uh inside the
+[17:34 - 17:40] layout. JS right here over
+[17:37 - 17:43] here uh we have this particular code
+[17:40 - 17:46] right here I have children here now wrap
+[17:43 - 17:49] this children inside the provider okay
+[17:46 - 17:51] bring this down and then you have to
+[17:49 - 17:53] wrap this in a provider okay and make
+[17:51 - 17:57] sure to import this
+[17:53 - 18:00] one this and then add this children here
+[17:57 - 18:02] okay
+[18:00 - 18:06] and if you see the provider is imported
+[18:02 - 18:09] from this/ provider and then save it
+[18:06 - 18:11] everything okay now all this whatever
+[18:09 - 18:13] this uh in inside the children is
+[18:11 - 18:15] accessible or controll by this our
+[18:13 - 18:18] authentication okay now what you have to
+[18:15 - 18:20] do uh if you go back to application
+[18:18 - 18:23] right it's saying react context unable
+[18:20 - 18:24] server component so the reason is right
+[18:23 - 18:27] you have to
+[18:24 - 18:29] mark provider if you go to the provider
+[18:27 - 18:30] here right you have to mark this as
+[18:29 - 18:33] explicitly as a use client because we
+[18:30 - 18:36] are using at client side so inside next
+[18:33 - 18:39] 13 you have to apply like this you use
+[18:36 - 18:41] client and as soon as you do it right
+[18:39 - 18:46] you'll see right now nothing is on the
+[18:41 - 18:46] screen but you'll see uh the error is
+[18:47 - 18:52] gone so now if I go to the/ login we
+[18:50 - 18:54] want to jump to the login page okay so
+[18:52 - 18:57] let's create a folder in app called
+[18:54 - 18:59] login and inside this folder login we
+[18:57 - 19:03] will create a new page called page.js
+[18:59 - 19:05] Okay add the default template and then
+[19:03 - 19:08] replace this name to login okay so
+[19:05 - 19:12] component name will give it to login and
+[19:08 - 19:15] now if I go to this slash login on the
+[19:12 - 19:17] URL so it will show the login as a text
+[19:15 - 19:20] like this okay
+[19:17 - 19:23] perfect now it is very important right
+[19:20 - 19:24] uh when you create a new folder uh and
+[19:23 - 19:28] inside that you have to create the
+[19:24 - 19:30] page.js okay in order to Route it and
+[19:28 - 19:33] and every time when you create a folder
+[19:30 - 19:36] uh that folder nothing but the name of
+[19:33 - 19:38] your route okay now inside the D let's
+[19:36 - 19:42] add the image okay so we will add the
+[19:38 - 19:45] image from the next SL image and uh uh
+[19:42 - 19:47] in the source right we will provide the
+[19:45 - 19:49] uh URL or link right so in the public
+[19:47 - 19:52] folder in the local I already have
+[19:49 - 19:55] logo.png okay so I'm using that one so
+[19:52 - 19:59] just type slash um
+[19:55 - 20:01] logo.png Okay so you you don't need to
+[19:59 - 20:02] provide a complete path because it's a
+[20:01 - 20:05] public folder and you can directly
+[20:02 - 20:09] access the file from it okay and after
+[20:05 - 20:11] that let's give the alt uh value okay
+[20:09 - 20:13] and the width I will give 100 the height
+[20:11 - 20:16] also I will give the
+[20:13 - 20:20] 100 and U if you see the logo displaying
+[20:16 - 20:23] on the screen okay
+[20:20 - 20:27] perfect now let's add the button for the
+[20:23 - 20:29] Google okay uh I already have the button
+[20:27 - 20:31] okay uh so what I will do I will just
+[20:29 - 20:33] copy it and here I will paste it like
+[20:31 - 20:36] this okay I will remove this on click
+[20:33 - 20:37] for now and if I save it you will see
+[20:36 - 20:40] the button is showing on the screen
+[20:37 - 20:43] along with the logo okay now let's give
+[20:40 - 20:46] some styling uh to this uh parent de
+[20:43 - 20:48] okay so first of all I will make it as a
+[20:46 - 20:53] flex okay and after that I will make it
+[20:48 - 20:56] Flex column okay so once I do it right
+[20:53 - 20:59] uh it will be in uh in one column
+[20:56 - 21:01] instead of in one row right so by
+[20:59 - 21:04] default it will come in the row but you
+[21:01 - 21:05] have to specify Flex column okay so that
+[21:04 - 21:07] is very
+[21:05 - 21:09] important so that's the reason uh it
+[21:07 - 21:12] will be in one line after that I will
+[21:09 - 21:15] make it justify Center and then allign
+[21:12 - 21:17] uh item to be in the center okay so if I
+[21:15 - 21:20] save it now it will be see it will be in
+[21:17 - 21:24] the center now okay perfect now also I
+[21:20 - 21:27] will give margin top to 10% okay and if
+[21:24 - 21:30] you see uh margin top 10% I'm giving
+[21:27 - 21:32] right here uh if you want to give the
+[21:30 - 21:35] custom value right you have to give in a
+[21:32 - 21:36] square bracket okay so this is very
+[21:35 - 21:38] important when when you want to give
+[21:36 - 21:41] your own custom value instead of telin
+[21:38 - 21:43] CSS you have to give or uh in Brackets
+[21:41 - 21:46] and if you see the telin CSS also
+[21:43 - 21:49] provide some value and in background
+[21:46 - 21:52] margin top is 40 pixel which is
+[21:49 - 21:56] equivalent to margin top 10 in delin CSS
+[21:52 - 21:58] okay if for Flex as well if you see uh
+[21:56 - 22:02] behind CSS it's actually showing display
+[21:58 - 22:05] as a flex but T CSS uh give some uh kind
+[22:02 - 22:08] of shortcut you can say and nothing but
+[22:05 - 22:11] the uh simple display Flex right also
+[22:08 - 22:13] give some Gap to 10 okay so we give some
+[22:11 - 22:17] distance between these two items like
+[22:13 - 22:19] this okay perfect now what we have to do
+[22:17 - 22:22] whenever user jump on this particular
+[22:19 - 22:25] login page right we want to make sure
+[22:22 - 22:27] whether us login or not okay and for
+[22:25 - 22:30] that one uh in use effect we will check
+[22:27 - 22:32] it okay in order to use effect you have
+[22:30 - 22:35] to make this uh particular component as
+[22:32 - 22:38] a used client okay so that you can use
+[22:35 - 22:41] react in built hook okay so use effect
+[22:38 - 22:44] we are going to use and uh inside this
+[22:41 - 22:46] one uh obviously whenever the uh
+[22:44 - 22:48] component load this us effect will get
+[22:46 - 22:51] executed so that we are passing empty
+[22:48 - 22:53] array here okay otherwise it will keep
+[22:51 - 22:56] executing for every instance and
+[22:53 - 22:58] infinite time so in order to avoid that
+[22:56 - 23:02] we have uh adding this
+[22:58 - 23:05] uh Mt okay now let's define the uh data
+[23:02 - 23:08] session from the use session okay which
+[23:05 - 23:12] store our whether you login or not that
+[23:08 - 23:15] uh use session will give you okay so we
+[23:12 - 23:18] can obviously check in use effect
+[23:15 - 23:21] whether this session is available or not
+[23:18 - 23:23] means user is login or not right so here
+[23:21 - 23:27] in if condition we can check session.
+[23:23 - 23:31] user okay so make it optional and if us
+[23:27 - 23:35] session us is available then we will
+[23:31 - 23:36] jump to the uh next page okay and we
+[23:35 - 23:39] have to make sure that whenever the
+[23:36 - 23:42] session is get loaded this user will get
+[23:39 - 23:44] called okay so this is very important so
+[23:42 - 23:46] let's print out the session first okay
+[23:44 - 23:49] and let's check whether in the console
+[23:46 - 23:53] we are getting session or not
+[23:49 - 23:56] okay and uh if you see right let me go
+[23:53 - 23:58] to the inspect panel okay let's increase
+[23:56 - 24:01] screen and go to the inspect panel
+[23:58 - 24:03] and in the console okay right now we are
+[24:01 - 24:06] not getting any session okay it's saying
+[24:03 - 24:10] undefined okay
+[24:06 - 24:13] now here okay you have to provide the on
+[24:10 - 24:16] click method right so on click okay you
+[24:13 - 24:19] have to add the sign in okay if you see
+[24:16 - 24:22] the sign in is coming from next all okay
+[24:19 - 24:25] so this is very important this is
+[24:22 - 24:28] inbuild function provided by um next .js
+[24:25 - 24:31] okay now if I click sign in okay
+[24:28 - 24:34] and once I saved click on this button
+[24:31 - 24:35] okay and uh let's clean this one and if
+[24:34 - 24:37] I click sign in see the sign in with
+[24:35 - 24:39] Google button is coming now click on
+[24:37 - 24:43] that one and you'll see option to select
+[24:39 - 24:45] the account to login with the Gmail so I
+[24:43 - 24:47] select the one and now if you see on the
+[24:45 - 24:50] console right we got the session
+[24:47 - 24:52] information and we got this users inside
+[24:50 - 24:56] that one right and here we have email
+[24:52 - 24:58] image and the name of the user perfect
+[24:56 - 25:01] okay it means you user is login and we
+[24:58 - 25:04] got the session information from this
+[25:01 - 25:07] session. user okay I hope you understand
+[25:04 - 25:10] this one now let's add the routing so
+[25:07 - 25:14] that we can jump to the next uh page so
+[25:10 - 25:16] you will add the use router okay and if
+[25:14 - 25:17] you see right right now rout uh user
+[25:16 - 25:21] router is importing from the next SL
+[25:17 - 25:24] router but we have to in next js13 we
+[25:21 - 25:27] have to import the router from the you
+[25:24 - 25:29] um next navigation okay so let's write
+[25:27 - 25:34] Port
+[25:29 - 25:37] router and uh we have to write in a
+[25:34 - 25:42] bracket is it's a hook use router okay
+[25:37 - 25:44] from next SL navigation okay so this us
+[25:42 - 25:47] router Hook is getting from the next SL
+[25:44 - 25:49] navigation which is Us in next 13 it's
+[25:47 - 25:52] very important okay now just write
+[25:49 - 25:55] router. push and we'll give the default
+[25:52 - 25:56] uh uh path which is slash okay so
+[25:55 - 25:58] obviously it will jump to the default
+[25:56 - 26:00] page
+[25:58 - 26:02] and if I save it see it jump to the
+[26:00 - 26:04] default page which is subscribed to
+[26:02 - 26:06] YouTube gji is showing on the page.js
+[26:04 - 26:10] okay and which is nothing but default
+[26:06 - 26:13] page perfect and if I go to the login
+[26:10 - 26:15] okay see it's redirect to this homepage
+[26:13 - 26:17] because obviously user is login and we
+[26:15 - 26:20] are just making sure if user is loging
+[26:17 - 26:24] then redirect to the homepage okay and
+[26:20 - 26:24] that is what right now is
+[26:24 - 26:30] doing now in page.js if you see right we
+[26:27 - 26:32] have this default subscrib to tube
+[26:30 - 26:35] guruji now here what I will do I will
+[26:32 - 26:38] just add the button okay the simple
+[26:35 - 26:41] button called sign out and what we will
+[26:38 - 26:43] do once us click on this sign out button
+[26:41 - 26:45] we want to uh sign out the session user
+[26:43 - 26:47] session okay and automically is supposed
+[26:45 - 26:50] to jump to the login page so I just
+[26:47 - 26:54] added the sign out from the next / react
+[26:50 - 26:56] okay this is the again default uh method
+[26:54 - 27:00] and save it okay right now what is
+[26:56 - 27:02] showing the on click function okay
+[27:00 - 27:05] so we have to make sure that we are
+[27:02 - 27:08] adding as a used client here okay
+[27:05 - 27:10] because we are adding the uh on click
+[27:08 - 27:12] method and if you
+[27:10 - 27:16] see uh after this one right the error is
+[27:12 - 27:19] gone and D sign out button and now if
+[27:16 - 27:21] you see here right in use effect We'll
+[27:19 - 27:24] add the use effect obviously we want to
+[27:21 - 27:27] execute only once okay so let's uh add
+[27:24 - 27:31] the empty array okay so that you effect
+[27:27 - 27:34] we will execute only once and here I
+[27:31 - 27:37] will add the user session okay to make
+[27:34 - 27:39] sure that we are uh in the in this page
+[27:37 - 27:40] folder right page file we have this
+[27:39 - 27:45] session
+[27:40 - 27:48] information so if session is um oh
+[27:45 - 27:50] session. user right means it's not there
+[27:48 - 27:55] then we direct we redirect to the login
+[27:50 - 27:57] page okay obviously I write not okay
+[27:55 - 27:58] this means session is not available and
+[27:57 - 28:01] OB obviously we have to add the router
+[27:58 - 28:03] as well okay and this router is
+[28:01 - 28:07] importing from the next SL navigation
+[28:03 - 28:09] okay and now if session is not a
+[28:07 - 28:14] available then we have to navigate to
+[28:09 - 28:17] router dot uh push okay so if you see
+[28:14 - 28:19] this is how we want to use it right only
+[28:17 - 28:23] thing we it's going to change is the
+[28:19 - 28:26] path now in this case we will give slash
+[28:23 - 28:29] login okay and save it and pass the
+[28:26 - 28:31] session here so that us will execute
+[28:29 - 28:33] whenever the session is get updated okay
+[28:31 - 28:35] so that's the reason we pass the session
+[28:33 - 28:38] in a empty uh in that array and if I
+[28:35 - 28:41] save it click on sign out button if you
+[28:38 - 28:43] see uh Okay click sign out button now
+[28:41 - 28:45] again and if you see it's redirect to
+[28:43 - 28:45] the
+[28:48 - 28:54] login now in order to create the uh
+[28:51 - 28:56] header navigation bar right uh we will
+[28:54 - 28:58] create one folder called components uh
+[28:56 - 29:00] inside Ro directory so create a new
+[28:58 - 29:02] folder called components okay and inside
+[29:00 - 29:09] this component we will create a new file
+[29:02 - 29:12] called heer new bar. Js okay and enter
+[29:09 - 29:13] it now here you have to add the default
+[29:12 - 29:15] template right so every time you need to
+[29:13 - 29:17] import right the function and everything
+[29:15 - 29:20] right in order to avoid that one let's
+[29:17 - 29:22] go to this extension the vs code
+[29:20 - 29:24] extension and just search for the react
+[29:22 - 29:27] okay like this and you'll see this first
+[29:24 - 29:31] uh vs code extension called es7 Plus
+[29:27 - 29:34] plus uh react react native snippet okay
+[29:31 - 29:36] you have to install this extension okay
+[29:34 - 29:38] along with that there is another
+[29:36 - 29:42] extension called tailin CSS okay which
+[29:38 - 29:45] is the official uh extension for vs code
+[29:42 - 29:47] install this one as well okay now let's
+[29:45 - 29:48] see how how it works right in order to
+[29:47 - 29:52] add the default template you just need
+[29:48 - 29:54] to write RFC right which is called react
+[29:52 - 29:57] function export component okay there are
+[29:54 - 29:58] lot of different one if you see of if
+[29:57 - 30:00] you you are developing the react native
+[29:58 - 30:03] application you have react native
+[30:00 - 30:06] function like this and if you just type
+[30:03 - 30:09] like this RFC enter it you'll see you'll
+[30:06 - 30:11] get the default template immediately see
+[30:09 - 30:15] okay how easy it is correct now save
+[30:11 - 30:16] everything once you save it you have
+[30:15 - 30:18] this header navigation bar written in
+[30:16 - 30:20] the heer navigation bar right now we
+[30:18 - 30:23] want to put this H navigation
+[30:20 - 30:27] bar the top of this application right
+[30:23 - 30:29] and every time you want to we want to uh
+[30:27 - 30:31] see throughout the application so
+[30:29 - 30:33] instead of putting into the page.js we
+[30:31 - 30:36] will put in layout. JS okay so it will
+[30:33 - 30:38] be consistent throughout the application
+[30:36 - 30:40] so here if you see right our children
+[30:38 - 30:42] children is nothing but you can call a
+[30:40 - 30:44] page is getting rendered in this
+[30:42 - 30:48] particular children component above this
+[30:44 - 30:50] we will add the heer so just add heer na
+[30:48 - 30:51] bar and if you see it's adding from the
+[30:50 - 30:55] component
+[30:51 - 30:57] okay like this if I save it let's go
+[30:55 - 30:59] back to our application and if you see
+[30:57 - 31:01] header navigation bar is displaying it
+[30:59 - 31:04] on the screen
+[31:01 - 31:07] perfect now in layout. JS use this use
+[31:04 - 31:11] client and heater. navigation bar also
+[31:07 - 31:13] use this use client okay now let's start
+[31:11 - 31:16] implementing this one first of all on
+[31:13 - 31:18] the left hand side we will show logo
+[31:16 - 31:21] then two a menu option called home and
+[31:18 - 31:24] favorite then search bar and the users
+[31:21 - 31:28] um profile uh Peak okay so here we'll
+[31:24 - 31:31] add image from the next SL image
+[31:28 - 31:35] and add the source obviously we will add
+[31:31 - 31:37] the logo from the uh local asset from
+[31:35 - 31:41] public folder and then here we'll give
+[31:37 - 31:44] the alt tag so let's give alt tag call
+[31:41 - 31:48] logo withd you can give 50 pixel height
+[31:44 - 31:51] can give 50 pixel okay and save it and
+[31:48 - 31:55] if you see log displaying on the screen
+[31:51 - 32:00] now let's add another one more H one h2
+[31:55 - 32:00] tag for home and another is
+[32:01 - 32:08] for
+[32:03 - 32:10] for favorite okay and save it if you see
+[32:08 - 32:13] home and already display on the screen
+[32:10 - 32:17] okay now let's bring everything in one
+[32:13 - 32:22] line okay so I will wrap this de because
+[32:17 - 32:24] U they like this okay and for this one
+[32:22 - 32:27] that's Ty sorry class
+[32:24 - 32:30] name all Flex then Flex
+[32:27 - 32:33] column Flex row obviously if you do not
+[32:30 - 32:36] add Flex low it will be in one line okay
+[32:33 - 32:38] then add you gap of five like this and
+[32:36 - 32:40] make item to be in the center so it will
+[32:38 - 32:45] be horizontally vertically to be Center
+[32:40 - 32:48] like this okay now let's add the uh
+[32:45 - 32:51] input uh the search bar okay so
+[32:48 - 32:54] obviously here uh I will use the hero
+[32:51 - 32:56] icons okay so this is one of the best uh
+[32:54 - 32:59] icon Library okay you don't need to
+[32:56 - 33:01] install anything and it's based on T CSS
+[32:59 - 33:04] so just search the icon which you want
+[33:01 - 33:06] and this copy. jsx file or you can copy
+[33:04 - 33:09] the SVG file no
+[33:06 - 33:14] issue and then inside this one I will
+[33:09 - 33:17] paste it here like this and uh also I
+[33:14 - 33:19] will add the input so input of
+[33:17 - 33:23] type
+[33:19 - 33:26] text like this okay and end the
+[33:23 - 33:27] tag now if I save it and let's go back
+[33:26 - 33:30] to our application
+[33:27 - 33:33] okay it's coming here and this text box
+[33:30 - 33:36] is coming under that one okay so let's
+[33:33 - 33:39] bring everything together let me format
+[33:36 - 33:43] this document first okay and then there
+[33:39 - 33:44] a class name to be Flex okay now it will
+[33:43 - 33:46] be in one
+[33:44 - 33:48] line also I will change the background
+[33:46 - 33:52] so I will change background to be gray
+[33:48 - 33:54] 100 like this if you see is uh the
+[33:52 - 33:55] background of this one is White
+[33:54 - 33:58] currently the input field right so what
+[33:55 - 34:00] I will do I will add the class name and
+[33:58 - 34:03] make background to be
+[34:00 - 34:07] transparent so BG transparent if you see
+[34:03 - 34:10] it's working perfectly fine also make um
+[34:07 - 34:13] you padding of one maybe for now or you
+[34:10 - 34:15] can do custom as well okay for example
+[34:13 - 34:17] six pixel like
+[34:15 - 34:20] this and
+[34:17 - 34:23] then uh after that one you can go
+[34:20 - 34:28] rounded corner so I will to be medium
+[34:23 - 34:30] okay then I will add width to be
+[34:28 - 34:33] 40% like this okay
+[34:30 - 34:36] see looking perfectly
+[34:33 - 34:38] fine and uh if you see right this border
+[34:36 - 34:43] is coming when I click on the that this
+[34:38 - 34:47] one right so for this one you can save
+[34:43 - 34:48] um outline to be none okay and make WID
+[34:47 - 34:51] to be
+[34:48 - 34:54] full if you see it's working fine also
+[34:51 - 34:58] you can give gap between this icon and
+[34:54 - 35:00] the input just say here gap of three
+[34:58 - 35:02] maybe and
+[35:00 - 35:06] perfect
+[35:02 - 35:08] okay now for this de let's ask the
+[35:06 - 35:10] parent do right ask class name and make
+[35:08 - 35:12] it Flex so it will be in one line and
+[35:10 - 35:15] also make it item to be in the center
+[35:12 - 35:17] like this okay
+[35:15 - 35:20] perfect now if you see it will be in one
+[35:17 - 35:21] line and the last we will add the user
+[35:20 - 35:25] profile Peak and then we will again
+[35:21 - 35:28] apply some styling so after this du I
+[35:25 - 35:32] will add one more du for the
+[35:28 - 35:34] image and Source okay now in this case
+[35:32 - 35:37] we need to add the source for the
+[35:34 - 35:41] session the users login um profile pick
+[35:37 - 35:43] right then here you have to add constant
+[35:41 - 35:45] data
+[35:43 - 35:48] session is equal to use
+[35:45 - 35:51] session so from this
+[35:48 - 35:54] uh from this use session right which is
+[35:51 - 35:56] obviously from the next authentication
+[35:54 - 36:00] uh we will get the user information okay
+[35:56 - 36:04] and here we will add the condition okay
+[36:00 - 36:08] if data is there okay sorry uh
+[36:04 - 36:10] sessions do user is available then only
+[36:08 - 36:14] show this image otherwise don't show
+[36:10 - 36:19] anything and now on the session. user
+[36:14 - 36:21] Right session. user. image we will get
+[36:19 - 36:25] this URL of this particular user profile
+[36:21 - 36:27] pick okay what I will do
+[36:25 - 36:29] here uh let's some alt tag and
+[36:27 - 36:34] everything so let's say
+[36:29 - 36:37] alt user then width I will give 50 pixel
+[36:34 - 36:40] height I will give 50 okay and I will
+[36:37 - 36:42] add class name and I will make let's
+[36:40 - 36:46] let's first see how it looks if I save
+[36:42 - 36:49] it you'll see uh this canot property of
+[36:46 - 36:52] undefined user let's make this
+[36:49 - 36:54] optional and if you see we got this one
+[36:52 - 36:56] error called host name this particular
+[36:54 - 36:59] host name is not configur under image in
+[36:56 - 37:01] next config.js right as I told you in
+[36:59 - 37:03] the beginning of this particular lecture
+[37:01 - 37:05] right we need to configure this next.
+[37:03 - 37:08] config.js when you are fetching the
+[37:05 - 37:11] image from the URL so let's go back to
+[37:08 - 37:15] this next config.js okay inside this
+[37:11 - 37:18] next config we have to create one uh
+[37:15 - 37:22] field called images inside the
+[37:18 - 37:25] image sorry we have to call domain like
+[37:22 - 37:28] this and then inside the domains array
+[37:25 - 37:29] we have to provide the this particular
+[37:28 - 37:33] host
+[37:29 - 37:34] name so whenever uh you are using the
+[37:33 - 37:36] URL from the different different domain
+[37:34 - 37:38] that domain need to be included here
+[37:36 - 37:40] okay this is for the security purpose
+[37:38 - 37:42] you can say and save it as soon as you
+[37:40 - 37:45] save you have to make sure you stop the
+[37:42 - 37:48] server and rerun it again okay because
+[37:45 - 37:50] you made the change in the config.js
+[37:48 - 37:52] file okay so whenever you make the uh
+[37:50 - 37:55] changes in any config file or packet.
+[37:52 - 37:57] Json you have to make sure you will ret
+[37:55 - 38:00] return the application okay okay and if
+[37:57 - 38:04] you see the users profile is showing on
+[38:00 - 38:07] the screen now let's apply some styling
+[38:04 - 38:10] to this one so here I will say class
+[38:07 - 38:11] name rounded I will do full so it will
+[38:10 - 38:15] be in
+[38:11 - 38:18] circular see perfect if I increase the
+[38:15 - 38:21] size it will look like this I think the
+[38:18 - 38:22] uh user profile pick is too big I make
+[38:21 - 38:27] it
+[38:22 - 38:30] 40 okay and I think that's good now for
+[38:27 - 38:33] this parent du I will make it
+[38:30 - 38:36] justify between okay and if I make this
+[38:33 - 38:38] like this it will look like this see
+[38:36 - 38:42] okay also let's do
+[38:38 - 38:45] padding so I add some padding to be
+[38:42 - 38:48] four perfect and for this input right we
+[38:45 - 38:52] added this input here I will add the
+[38:48 - 38:55] placeholder so placeholder called
+[38:52 - 38:57] search okay perfect we have search bar
+[38:55 - 38:59] we have home favorite and we have this
+[38:57 - 39:04] one okay you can give some gap between
+[38:59 - 39:06] these two um menu so I will give gap of
+[39:04 - 39:07] maybe we already have but I will
+[39:06 - 39:11] increase to
+[39:07 - 39:14] seven and now it looks perfectly fine
+[39:11 - 39:16] okay but the thing is uh when we uh
+[39:14 - 39:18] decrease screen size right see if on if
+[39:16 - 39:20] you are in Mobile The Surge is
+[39:18 - 39:22] overlapping okay so what we will do we
+[39:20 - 39:25] will hide that search bar and it's quite
+[39:22 - 39:27] easy okay so for this du right we have
+[39:25 - 39:31] this du
+[39:27 - 39:33] so here you can Define uh hidden
+[39:31 - 39:36] property initially and this hidden will
+[39:33 - 39:38] affect when you have this a smaller
+[39:36 - 39:41] screen size okay and when the screen
+[39:38 - 39:44] size is medium or larger then you can
+[39:41 - 39:46] add this Flex it like this and if I save
+[39:44 - 39:49] it you see it hiden if I increase size
+[39:46 - 39:50] it will show it on this screen okay if
+[39:49 - 39:53] you have any question until this point
+[39:50 - 39:53] let me know in the comment
+[39:55 - 39:58] section
+[39:58 - 40:02] now let's update the font okay
+[40:00 - 40:05] throughout the application right now if
+[40:02 - 40:06] you see we have this default font let's
+[40:05 - 40:10] go back to application right in the
+[40:06 - 40:13] layout. JS we have this inter font
+[40:10 - 40:15] available okay and if you want to change
+[40:13 - 40:17] this font it's quite easy okay so we
+[40:15 - 40:19] have this import statement called enter
+[40:17 - 40:20] okay if you want to change to some
+[40:19 - 40:22] others for example if I want to change
+[40:20 - 40:25] this Railway font right uh which is
+[40:22 - 40:28] inputting from the Google I will replace
+[40:25 - 40:30] this with the in like this I will put
+[40:28 - 40:33] the subs as a Latin only I will rename
+[40:30 - 40:35] this or you can keep it as this but for
+[40:33 - 40:37] the convention correct convention I will
+[40:35 - 40:39] change to railway and make sure in the
+[40:37 - 40:41] body tag we have this class name and
+[40:39 - 40:43] right now is added inter. class name
+[40:41 - 40:47] change it to the railway okay and save
+[40:43 - 40:49] it as soon as you save see the font
+[40:47 - 40:51] family Chang completely throughout the
+[40:49 - 40:54] application right you don't need to
+[40:51 - 40:58] specify every time for more detail okay
+[40:54 - 41:00] you can just go to this uh uh this font
+[40:58 - 41:02] section okay so how to optimize the font
+[41:00 - 41:04] and how to use it you will find all the
+[41:02 - 41:06] documentation all the necessary
+[41:04 - 41:09] information on this page okay and if you
+[41:06 - 41:10] have any question regarding this um
+[41:09 - 41:14] Google font how to use Google font in
+[41:10 - 41:14] nextjs let me know in the comment
+[41:18 - 41:23] section
+[41:19 - 41:26] now let's uh divide this layout into two
+[41:23 - 41:29] section okay and uh on the first section
+[41:26 - 41:33] it's 1/4 of this complete screen and
+[41:29 - 41:38] then the another section is 3/4 okay so
+[41:33 - 41:40] if you go to this uh page.js right here
+[41:38 - 41:42] we will Define the class name and here
+[41:40 - 41:44] we will Define the grid okay because we
+[41:42 - 41:47] want to show the grid then we will
+[41:44 - 41:50] Define a four columns okay means we will
+[41:47 - 41:53] divide the screen into four sections
+[41:50 - 41:55] okay next here uh let's define one VI
+[41:53 - 41:57] okay and for Simplicity purpose what I
+[41:55 - 42:02] will do I will put the background color
+[41:57 - 42:06] to be uh red for now okay like this and
+[42:02 - 42:10] here I will say first okay if you see
+[42:06 - 42:13] it's showing and uh next I will copy
+[42:10 - 42:15] this paste and here like this okay and
+[42:13 - 42:18] we will be
+[42:15 - 42:22] second okay and I will change to this to
+[42:18 - 42:24] Blue and save it if you see it's showing
+[42:22 - 42:27] but we want the second to be complete
+[42:24 - 42:30] one okay mean full screen
+[42:27 - 42:35] here then you have to just Define column
+[42:30 - 42:37] span and Define three okay so the out of
+[42:35 - 42:39] four column the three column is assigned
+[42:37 - 42:40] to the second one and one remaining
+[42:39 - 42:44] column is assigned to the first one and
+[42:40 - 42:47] if I save it you see the change see okay
+[42:44 - 42:53] so that's what we wanted now if you
+[42:47 - 42:56] define this as a h uh screen okay it
+[42:53 - 42:59] will be at a full screen see okay you
+[42:56 - 43:02] can Define this one over here so it's
+[42:59 - 43:05] also applicable to the both of this okay
+[43:02 - 43:07] how you understand this is uh very
+[43:05 - 43:09] important things okay because on the
+[43:07 - 43:10] left hand side and right hand side we
+[43:09 - 43:13] are going to implement two different
+[43:10 - 43:15] components okay on the second component
+[43:13 - 43:17] we will show the Google Map and on the
+[43:15 - 43:19] left hand side we will show all the
+[43:17 - 43:21] properties the accessing and means the
+[43:19 - 43:24] searching and everything okay so let's
+[43:21 - 43:24] see how we going to do that
+[43:25 - 43:28] now
+[43:28 - 43:34] now let's implement the category list
+[43:30 - 43:37] first here okay so first of all I will
+[43:34 - 43:40] remove this uh class name so I don't
+[43:37 - 43:44] want to show this red and blue okay like
+[43:40 - 43:46] this and save it now inside this uh
+[43:44 - 43:48] component folder we create a new folder
+[43:46 - 43:49] called home so all home related
+[43:48 - 43:52] components we'll keep in this particular
+[43:49 - 43:55] folder inside the home
+[43:52 - 43:59] component sorry inside the home folder
+[43:55 - 44:01] we'll create a new folder called
+[43:59 - 44:06] category
+[44:01 - 44:10] list.js okay and add the default
+[44:06 - 44:11] template so here first of all uh we need
+[44:10 - 44:14] to show the category list in this
+[44:11 - 44:16] particular component okay also I created
+[44:14 - 44:18] another folder called shared here okay
+[44:16 - 44:21] inside the root directory and inside
+[44:18 - 44:24] that I added this data.js okay which
+[44:21 - 44:25] consist of the ID the name okay because
+[44:24 - 44:26] right now we are showing the different
+[44:25 - 44:28] type of foods
+[44:26 - 44:29] okay and their restaurant we are showing
+[44:28 - 44:32] on the
+[44:29 - 44:35] map now uh we are showing value and the
+[44:32 - 44:38] icon so all the icons I added in the
+[44:35 - 44:39] public folder okay so you can get access
+[44:38 - 44:42] to this particular source code and you
+[44:39 - 44:44] can access the all assets so right now I
+[44:42 - 44:47] added this four category you can add
+[44:44 - 44:50] more and I exported this particular um
+[44:47 - 44:53] array list okay the category list data
+[44:50 - 44:56] now what you have to do let's Define
+[44:53 - 44:59] constant and here we'll Define the C
+[44:56 - 45:04] category list okay so inside the
+[44:59 - 45:06] category list say set category list is
+[45:04 - 45:10] equal to use
+[45:06 - 45:13] State okay and inside the state we will
+[45:10 - 45:15] try to face the data okay so you have to
+[45:13 - 45:19] Define data
+[45:15 - 45:21] dot uh category list data okay so
+[45:19 - 45:24] obviously you have to import the uh data
+[45:21 - 45:26] first okay so just import the statement
+[45:24 - 45:29] and then you can access to this category
+[45:26 - 45:32] list data okay now once you have the
+[45:29 - 45:34] category list data we have to iterate it
+[45:32 - 45:36] okay also make sure the component name
+[45:34 - 45:38] is start with capital c and this is the
+[45:36 - 45:41] small okay and make sure whenever you
+[45:38 - 45:43] create a component file the component
+[45:41 - 45:47] name should be a start with the capital
+[45:43 - 45:48] letter now here we need to iterate it
+[45:47 - 45:52] okay so first of all what I will do I
+[45:48 - 45:55] will add one text called um select
+[45:52 - 45:59] category okay so just write select or we
+[45:55 - 46:03] can say food type okay and I will add
+[45:59 - 46:06] the class name here like want to be bold
+[46:03 - 46:08] and save it and make sure now once you
+[46:06 - 46:10] added this category we have to add that
+[46:08 - 46:13] category in page.js okay this is our
+[46:10 - 46:16] homepage so here I will add that
+[46:13 - 46:19] category so category list see okay and
+[46:16 - 46:21] save it so as soon as save you got the
+[46:19 - 46:23] select category types showing on the
+[46:21 - 46:27] screen okay
+[46:23 - 46:27] perfect I will
+[46:28 - 46:34] sorry okay now let's iterate it okay so
+[46:31 - 46:39] I will Define One D inside D I will call
+[46:34 - 46:42] category list do map and we have
+[46:39 - 46:45] item like this and the arrow function
+[46:42 - 46:46] okay now here I will Define One D and
+[46:45 - 46:50] inside this
+[46:46 - 46:53] du we can pass or we can add the uh add
+[46:50 - 46:55] the uh category list code okay so there
+[46:53 - 46:57] are two way we can directly write code
+[46:55 - 47:00] over here or you can create different
+[46:57 - 47:01] component okay so what you can do uh you
+[47:00 - 47:05] can create a different component right
+[47:01 - 47:08] now I will keep here as it is okay so
+[47:05 - 47:10] inside this de you can add this uh let's
+[47:08 - 47:12] make sure that you are getting all the
+[47:10 - 47:14] items so what I will do I will just
+[47:12 - 47:17] print out the name of the category if I
+[47:14 - 47:20] save it see all four category is showing
+[47:17 - 47:25] okay perfect now first I will add the
+[47:20 - 47:28] image okay so add the image from the n/
+[47:25 - 47:33] image The Source okay obviously Source
+[47:28 - 47:35] will be item do icon okay close the tag
+[47:33 - 47:39] here I will add alt tag for the AL tag I
+[47:35 - 47:41] will give the name of the uh category
+[47:39 - 47:44] which is unique okay or you can give ID
+[47:41 - 47:47] whatever you want then the width so I
+[47:44 - 47:49] will put the width of
+[47:47 - 47:53] 40 height I will put as of
+[47:49 - 47:58] 40 and save it if you see our icon is
+[47:53 - 48:02] showing okay next add the item.
+[47:58 - 48:04] name item do name and save it see it's
+[48:02 - 48:07] coming now let's apply some styling to
+[48:04 - 48:11] this one so class name make it flex and
+[48:07 - 48:14] flex column okay and then we have to
+[48:11 - 48:16] make it just sorry
+[48:14 - 48:20] justify this
+[48:16 - 48:21] Center and make item to be Center like
+[48:20 - 48:24] this
+[48:21 - 48:28] okay then me add the background so
+[48:24 - 48:30] background gray 100 I will add okay then
+[48:28 - 48:33] uh add some padding so I will add
+[48:30 - 48:39] padding of two and margin of two as well
+[48:33 - 48:41] okay then rounded to be large okay so
+[48:39 - 48:43] the corner to be rounded to be large
+[48:41 - 48:46] okay and
+[48:43 - 48:49] then I think that's good enough right
+[48:46 - 48:51] another thing right now I want to give
+[48:49 - 48:54] some effect right whenever I did not
+[48:51 - 48:56] select anything right um it need to be
+[48:54 - 48:58] in the gray color and when I hover on
+[48:56 - 49:01] this one it need to be it change the
+[48:58 - 49:04] change to different color okay so we
+[49:01 - 49:07] have property called G gray scale if you
+[49:04 - 49:11] mention the gray scale right see it's
+[49:07 - 49:13] changed to black and white okay but it's
+[49:11 - 49:15] not look good right but on Hover when
+[49:13 - 49:18] you Mouse h on it right you can change
+[49:15 - 49:22] the gr scale to zero and save it now if
+[49:18 - 49:24] I hover and it see per perfectly working
+[49:22 - 49:26] right
+[49:24 - 49:30] also I will make the cursor to be
+[49:26 - 49:33] pointer so it will look like this okay
+[49:30 - 49:37] one more thing I will add when I hover
+[49:33 - 49:38] on this one right I can show The Border
+[49:37 - 49:41] okay it's up to
+[49:38 - 49:44] you but before that let's give some
+[49:41 - 49:47] padding uh to this one right so go to
+[49:44 - 49:51] the page.js and here only I will use
+[49:47 - 49:51] some padding so padding of maybe
+[49:51 - 49:57] four this is fine let do three okay so I
+[49:55 - 49:58] give the padding of three and if I
+[49:57 - 50:02] increase
+[49:58 - 50:05] side it look like this right now okay
+[50:02 - 50:07] but uh when this uh screen size is
+[50:05 - 50:09] bigger right we want to show in the grid
+[50:07 - 50:12] format so what you have to do go to the
+[50:09 - 50:14] category list and for the do let's add
+[50:12 - 50:17] some class name so
+[50:14 - 50:19] initially uh I will show only one column
+[50:17 - 50:22] when the screen size is smaller when
+[50:19 - 50:26] screen size is medium we can show GD
+[50:22 - 50:28] column to be uh two okay and when screen
+[50:26 - 50:30] size is larger you can show Gade column
+[50:28 - 50:33] to be
+[50:30 - 50:36] three me bring this
+[50:33 - 50:39] down like this and save it okay now if I
+[50:36 - 50:43] increase size see it's showing three
+[50:39 - 50:46] right and if I hover on it you'll see
+[50:43 - 50:48] the image is getting colored right and
+[50:46 - 50:51] it look
+[50:48 - 50:54] beautiful now what you have to do once
+[50:51 - 50:57] you us just click on it right we want to
+[50:54 - 51:02] make it active correct so for that
+[50:57 - 51:04] one let's first Define one con uh State
+[51:02 - 51:07] okay
+[51:04 - 51:11] constant selected I will name it
+[51:07 - 51:15] selected category comma set
+[51:11 - 51:18] selected category is equal to use State
+[51:15 - 51:20] okay like this and whenever user click
+[51:18 - 51:23] on it we will save the index so we will
+[51:20 - 51:26] add the index here okay and for this du
+[51:23 - 51:29] I will add on click m
+[51:26 - 51:32] so on the click of this particular de we
+[51:29 - 51:35] will set the set selected category and
+[51:32 - 51:39] we will store this index so just write
+[51:35 - 51:43] index now index contain 0 1 2 3 okay
+[51:39 - 51:45] whatever and save it right now right now
+[51:43 - 51:47] okay we are just storing this set
+[51:45 - 51:49] selected category but now when you
+[51:47 - 51:51] select it we want to change this color
+[51:49 - 51:54] right so that for that one we have to
+[51:51 - 51:56] apply the dynamic uh tell CSS classes
+[51:54 - 51:59] right in in order to do that for this
+[51:56 - 52:03] class name first wrap everything in a
+[51:59 - 52:07] curly Braes and then this uh code right
+[52:03 - 52:12] if you see and remove this single
+[52:07 - 52:14] code okay now here whatever the uh
+[52:12 - 52:16] dynamically uh class name you want to
+[52:14 - 52:18] apply you have to write in dollar and
+[52:16 - 52:19] curly braces okay and then you have to
+[52:18 - 52:23] write the condition so in this case we
+[52:19 - 52:26] can write condition selected
+[52:23 - 52:30] category is equal to equal to index okay
+[52:26 - 52:34] if select and index value is same then
+[52:30 - 52:38] we can say uh just add this great Cel to
+[52:34 - 52:40] be zero okay so just copy this like this
+[52:38 - 52:43] otherwise show
+[52:40 - 52:47] nothing it need to be one
+[52:43 - 52:50] actually okay and uh let's see what's
+[52:47 - 52:54] the issue okay we have to close this tag
+[52:50 - 52:57] okay you can bring this down this one as
+[52:54 - 52:57] well
+[52:57 - 53:03] sorry let put everything in one L okay
+[53:00 - 53:08] and if I save it and I click on it
+[53:03 - 53:10] see still there and it's colored okay
+[53:08 - 53:12] now what I will do I will also add some
+[53:10 - 53:18] bord so if I say
+[53:12 - 53:21] border of one pixel and Border blue 400
+[53:18 - 53:23] and save it you see the border is also
+[53:21 - 53:25] in blue color but I only want to want to
+[53:23 - 53:28] add this border when user select it
+[53:25 - 53:29] right so remove this border one PX from
+[53:28 - 53:34] here and add it in your condition with
+[53:29 - 53:36] the G scale and save it see okay
+[53:34 - 53:39] perfect I hope you understand this one
+[53:36 - 53:41] okay and uh if you have any question let
+[53:39 - 53:44] me know in the comment section I will
+[53:41 - 53:47] change to purple
+[53:44 - 53:49] actually yeah let look good okay and you
+[53:47 - 53:51] can modify on your own whatever the
+[53:49 - 53:53] animation you can put you want to add
+[53:51 - 53:56] you can okay but right now as this is a
+[53:53 - 53:59] beginner friendly uh um course so that's
+[53:56 - 54:01] the reason I will keep everything simple
+[53:59 - 54:03] okay and if you have any question if you
+[54:01 - 54:04] do not understand anything then let me
+[54:03 - 54:08] know in the comment section and you can
+[54:04 - 54:08] access my source code any time guide
+[54:12 - 54:18] okay now we will add the range selection
+[54:16 - 54:21] component okay so inside the home folder
+[54:18 - 54:26] we create a new folder called range
+[54:21 - 54:29] select. JS okay and add the default
+[54:26 - 54:31] template let's import this particular
+[54:29 - 54:35] component into the page.js after
+[54:31 - 54:38] category list so we'll add range
+[54:35 - 54:42] select I save this one okay save this
+[54:38 - 54:46] one and see range select is coming
+[54:42 - 54:48] okay now everything okay now here first
+[54:46 - 54:51] of all I will Define the I will give the
+[54:48 - 54:54] heading so let's type H2 and here I will
+[54:51 - 54:58] say
+[54:54 - 55:03] select select radius okay and it should
+[54:58 - 55:05] be in meter like this okay and save it
+[55:03 - 55:09] see it's showing okay now apply some
+[55:05 - 55:12] styling so I add the class name font
+[55:09 - 55:17] bold I also add add padding X to two
+[55:12 - 55:21] Okay like this now let's add the range
+[55:17 - 55:24] selection okay so we'll add input and we
+[55:21 - 55:28] put the input of type range okay like
+[55:24 - 55:31] this and save it if you see we got this
+[55:28 - 55:33] perfect uh range selection styling okay
+[55:31 - 55:36] with this minimal code but let's add
+[55:33 - 55:38] some uh classes to this one so add a
+[55:36 - 55:42] class name first We'll add width to be
+[55:38 - 55:44] full height to be two okay like this
+[55:42 - 55:46] then we'll change the background color
+[55:44 - 55:52] to
+[55:46 - 55:56] 200 and then we'll make rounded to be
+[55:52 - 55:58] large then appearance to be none okay so
+[55:56 - 56:00] if you see the background color gone and
+[55:58 - 56:05] we just want only this thing
+[56:00 - 56:09] okay then we'll add the cursor
+[56:05 - 56:12] pointer and uh we need to define the
+[56:09 - 56:14] minimum Max right after this class name
+[56:12 - 56:16] once we done with this class name okay
+[56:14 - 56:18] so I think we are done with this name
+[56:16 - 56:20] now here we have to give the minimum and
+[56:18 - 56:24] maximum value so here in this case I
+[56:20 - 56:29] will give minimum to be zero and maximum
+[56:24 - 56:32] be 100 so it will move from0 to 100 okay
+[56:29 - 56:36] you can mention maybe
+[56:32 - 56:40] one for now let's make it uh 0 to 100
+[56:36 - 56:42] okay then you have to give the default
+[56:40 - 56:45] uh let's say St as well so how many step
+[56:42 - 56:48] you want to change 100 200 like this
+[56:45 - 56:52] okay so we'll make the step change to
+[56:48 - 56:54] 100 okay you can just mention in in this
+[56:52 - 56:59] way or in this way that's that's not an
+[56:54 - 57:03] issue okay so by 10 the value will get
+[56:59 - 57:05] changed and uh one more thing is
+[57:03 - 57:07] remaining is to add the default value
+[57:05 - 57:10] okay so what I will do I will put one
+[57:07 - 57:15] constant called
+[57:10 - 57:18] radius set radius is equal to use State
+[57:15 - 57:22] okay and default value I will put be
+[57:18 - 57:25] 50 like this okay or you can put that's
+[57:22 - 57:29] fine okay and then pass this radius to
+[57:25 - 57:31] this default value okay so if you see
+[57:29 - 57:34] it's passing here okay now the another
+[57:31 - 57:36] thing what we have to do okay we have to
+[57:34 - 57:39] set when we move this right we want to
+[57:36 - 57:44] set the default value okay so here you
+[57:39 - 57:46] have to Define uh on change method okay
+[57:44 - 57:49] and it will be event
+[57:46 - 57:51] e so here you have to mention set radius
+[57:49 - 57:54] and here we want to set the radius value
+[57:51 - 57:58] so in order to get value you have to
+[57:54 - 57:58] write e do Target do
+[57:59 - 58:06] value like this and save
+[58:02 - 58:08] it and in order to display which value
+[58:06 - 58:11] selected what I will do I will add one
+[58:08 - 58:12] label here and inside this we'll just
+[58:11 - 58:16] put
+[58:12 - 58:21] the sorry radius okay
+[58:16 - 58:21] in miles or in meter
+[58:21 - 58:27] sorry and save it so right now default
+[58:24 - 58:31] is 10 Let me refresh everything if I
+[58:27 - 58:35] change this one okay if I change see
+[58:31 - 58:37] it's change 6090 100 okay perfect now
+[58:35 - 58:41] only thing we can do we can multiply
+[58:37 - 58:45] this by 10 so for example 10 maybe 100
+[58:41 - 58:48] 6,000 M 5,000 miles M like
+[58:45 - 58:51] this okay I hope you understand this one
+[58:48 - 58:54] and then you can apply some styling it's
+[58:51 - 58:56] up to you how many uh radius you want to
+[58:54 - 58:59] cover okay on user selection the minimum
+[58:56 - 59:01] and the maximum you can give it okay so
+[58:59 - 59:04] let me add some styling to this one
+[59:01 - 59:04] class
+[59:04 - 59:13] name and I will add the text to be gray
+[59:09 - 59:16] 500 and I will take change to 15
+[59:13 - 59:18] pixel if I increase the size see it look
+[59:16 - 59:22] beautiful okay we'll give some padding
+[59:18 - 59:25] from the top so for this
+[59:22 - 59:27] one class name
+[59:25 - 59:31] margin top to
+[59:27 - 59:35] five and if you see perfect it perfectly
+[59:31 - 59:37] look beautiful okay now here if you see
+[59:35 - 59:41] right uh when the screen is screen size
+[59:37 - 59:44] is smaller this our all this uh function
+[59:41 - 59:48] to select right is going down right to
+[59:44 - 59:52] solve this issue what we can do uh first
+[59:48 - 59:55] of all let's go to this page. J uh JS
+[59:52 - 59:59] and here when the screen size is smaller
+[59:55 - 01:00:02] we can change grid column to one okay
+[59:59 - 01:00:05] and when screen size is medium or larger
+[01:00:02 - 01:00:08] then we will show this column four okay
+[01:00:05 - 01:00:10] if I save it it will look like this okay
+[01:00:08 - 01:00:13] now let's go back to the category list
+[01:00:10 - 01:00:15] and inside this category list I will add
+[01:00:13 - 01:00:17] this columns to when screen size is
+[01:00:15 - 01:00:19] smaller and then it will look like this
+[01:00:17 - 01:00:23] if I increase the screen size it will
+[01:00:19 - 01:00:24] look as default as we have already right
+[01:00:23 - 01:00:26] but when the screen size is smaller it
+[01:00:24 - 01:00:27] will look like this and which is pretty
+[01:00:26 - 01:00:30] good right now
+[01:00:27 - 01:00:32] right also if you want to little modify
+[01:00:30 - 01:00:33] it right if you go to the page.js here
+[01:00:32 - 01:00:36] you just
+[01:00:33 - 01:00:42] Define uh just Define
+[01:00:36 - 01:00:44] Center okay like this and maybe I come
+[01:00:42 - 01:00:47] to be in the
+[01:00:44 - 01:00:49] center maybe this I don't know why it's
+[01:00:47 - 01:00:53] not okay but that's fine so this is how
+[01:00:49 - 01:00:56] we can change the layout okay so now
+[01:00:53 - 01:00:59] next implement this rating okay so user
+[01:00:56 - 01:01:02] can select rating from 1 to five uh to
+[01:00:59 - 01:01:05] check the all the nearby restaurants
+[01:01:02 - 01:01:07] okay so what you need to do here we uh
+[01:01:05 - 01:01:13] inside this home folder create a new
+[01:01:07 - 01:01:17] folder called select rating JS
+[01:01:13 - 01:01:19] okay and here add the default
+[01:01:17 - 01:01:21] template okay make sure to add the
+[01:01:19 - 01:01:24] select rating inside here select
+[01:01:21 - 01:01:27] rating okay and if you see select
+[01:01:24 - 01:01:31] getting displayed on the screen okay now
+[01:01:27 - 01:01:36] let's add the title so h2 tag I will say
+[01:01:31 - 01:01:40] select rating okay here let's give some
+[01:01:36 - 01:01:43] styling so class name font to be bold
+[01:01:40 - 01:01:47] okay and here I will give the padding X
+[01:01:43 - 01:01:50] to2 margin top to five okay perfect
+[01:01:47 - 01:01:53] looks good now here I already added this
+[01:01:50 - 01:01:55] data in data.js this rating list okay
+[01:01:53 - 01:01:57] it's contain ID name and this icon so
+[01:01:55 - 01:02:01] icon I copyed directly you can directly
+[01:01:57 - 01:02:06] copy it it's a text only okay and now we
+[01:02:01 - 01:02:08] will iterate this icons list okay so
+[01:02:06 - 01:02:10] after this uh title what we can do we
+[01:02:08 - 01:02:14] can add new
+[01:02:10 - 01:02:18] du inside do we'll add data so which is
+[01:02:14 - 01:02:23] coming from share data dot rating list
+[01:02:18 - 01:02:27] do map okay so this will be
+[01:02:23 - 01:02:31] item like this and add the another
+[01:02:27 - 01:02:36] D this now first we'll iterate this uh
+[01:02:31 - 01:02:38] ratings icon so let's add label we can
+[01:02:36 - 01:02:40] say
+[01:02:38 - 01:02:45] item
+[01:02:40 - 01:02:47] dot icon okay and if I save it see this
+[01:02:45 - 01:02:48] beautifully comes up
+[01:02:47 - 01:02:51] right and
+[01:02:48 - 01:02:55] then after this uh we will add the check
+[01:02:51 - 01:02:59] box so input of type
+[01:02:55 - 01:03:02] take box and in the
+[01:02:59 - 01:03:05] tag okay and save it so see but we want
+[01:03:02 - 01:03:06] this tag at the one end okay so what you
+[01:03:05 - 01:03:11] need to
+[01:03:06 - 01:03:14] do um for this D right so add this due
+[01:03:11 - 01:03:16] to class name make it flex and just say
+[01:03:14 - 01:03:18] justify
+[01:03:16 - 01:03:20] between it's coming on the right hand
+[01:03:18 - 01:03:24] side and when the screen size is bigger
+[01:03:20 - 01:03:26] beautifully looks right perfect now you
+[01:03:24 - 01:03:29] when us select any of these right we
+[01:03:26 - 01:03:32] need to store somewhere right so for
+[01:03:29 - 01:03:36] that one let's define one state called
+[01:03:32 - 01:03:41] selected rating comma set selected
+[01:03:36 - 01:03:44] rating is equal to use
+[01:03:41 - 01:03:47] State okay like
+[01:03:44 - 01:03:49] this and pass the empty
+[01:03:47 - 01:03:52] array then uh we have to write one
+[01:03:49 - 01:03:56] condition on the change of this input so
+[01:03:52 - 01:03:56] what I will do I will write on change
+[01:03:56 - 01:04:04] right and here I will make Define one
+[01:03:58 - 01:04:07] method right for example uh on select on
+[01:04:04 - 01:04:08] select rating okay and for this one we
+[01:04:07 - 01:04:11] will
+[01:04:08 - 01:04:13] pass whether this particular checkbox is
+[01:04:11 - 01:04:17] check or not so that will get from the
+[01:04:13 - 01:04:20] event. target. check okay and then we
+[01:04:17 - 01:04:23] will also get this uh item icon or we
+[01:04:20 - 01:04:25] can pass the ID either of fine right
+[01:04:23 - 01:04:29] also we'll keep this in IND
+[01:04:25 - 01:04:32] here and make sure to pass this
+[01:04:29 - 01:04:36] index here I will pass the item dot
+[01:04:32 - 01:04:38] value you can pass or you can pass
+[01:04:36 - 01:04:43] name we don't want this
+[01:04:38 - 01:04:46] one now Define this method so here
+[01:04:43 - 01:04:48] constant on select
+[01:04:46 - 01:04:54] rating inside this one obviously we have
+[01:04:48 - 01:04:57] to pass is check comma value okay and
+[01:04:54 - 01:05:01] here we have to Define if
+[01:04:57 - 01:05:03] is check if uh the check box is check
+[01:05:01 - 01:05:05] then we have to set the selected rating
+[01:05:03 - 01:05:07] and we have to append the value with the
+[01:05:05 - 01:05:10] existing one if existing has a rating
+[01:05:07 - 01:05:11] two in the array and user selected three
+[01:05:10 - 01:05:14] then we need to make sure that two and
+[01:05:11 - 01:05:17] three also store in the same uh select
+[01:05:14 - 01:05:18] rating state so for that one you have to
+[01:05:17 - 01:05:20] make sure you have add the previous
+[01:05:18 - 01:05:22] value which
+[01:05:20 - 01:05:25] is uh selected
+[01:05:22 - 01:05:28] rating comma the
+[01:05:25 - 01:05:30] value so it will store the existing plus
+[01:05:28 - 01:05:33] new and
+[01:05:30 - 01:05:35] if uh the user is unchecked the
+[01:05:33 - 01:05:38] particular selection right here then you
+[01:05:35 - 01:05:40] can say set selected rating okay and he
+[01:05:38 - 01:05:42] said that you can just filter it out
+[01:05:40 - 01:05:47] selected rating
+[01:05:42 - 01:05:49] filter you can put the n as a value from
+[01:05:47 - 01:05:54] the selected rating and if n is not
+[01:05:49 - 01:05:56] equal to equal to Value like this okay
+[01:05:54 - 01:05:58] and then you can print out obviously
+[01:05:56 - 01:06:02] immediately the s rating will not get
+[01:05:58 - 01:06:05] updated okay so but still we can just
+[01:06:02 - 01:06:07] print it out here selected rating and
+[01:06:05 - 01:06:09] save it now let me increase the size
+[01:06:07 - 01:06:11] clean everything now if I select the
+[01:06:09 - 01:06:12] rating three right right now it's not
+[01:06:11 - 01:06:17] showing but next time when I click it it
+[01:06:12 - 01:06:20] will show the three see see two uh 3 4
+[01:06:17 - 01:06:21] is coming or 3 42 is coming okay this is
+[01:06:20 - 01:06:24] how it
+[01:06:21 - 01:06:27] works I hope you understand this one
+[01:06:24 - 01:06:29] okay so on the basis of this selection
+[01:06:27 - 01:06:31] we will pass this value to our Google
+[01:06:29 - 01:06:34] Play API so that we will get the
+[01:06:31 - 01:06:36] accurate and exact result from the API
+[01:06:34 - 01:06:39] okay and on and depends on that one we
+[01:06:36 - 01:06:42] will show the information on the Google
+[01:06:39 - 01:06:45] Map okay next we will add this Google
+[01:06:42 - 01:06:45] Map on the
+[01:06:48 - 01:06:55] screen now in order to integrate Google
+[01:06:52 - 01:06:57] map in our application we need in need
+[01:06:55 - 01:06:59] to install one dependency okay so just
+[01:06:57 - 01:07:03] type npm
+[01:06:59 - 01:07:05] I I atate
+[01:07:03 - 01:07:09] react
+[01:07:05 - 01:07:12] google-map SL API okay and click enter
+[01:07:09 - 01:07:14] so it will install this react uh Google
+[01:07:12 - 01:07:19] Map for the react okay once it install
+[01:07:14 - 01:07:21] make sure in package.json it install
+[01:07:19 - 01:07:25] correctly okay
+[01:07:21 - 01:07:28] perfect now um the home folder we will
+[01:07:25 - 01:07:34] create a new uh component called Google
+[01:07:28 - 01:07:38] Map Google Map view. JS okay and add the
+[01:07:34 - 01:07:41] default template like this okay now make
+[01:07:38 - 01:07:44] sure that we need to integrate add this
+[01:07:41 - 01:07:47] component in page.js inside this
+[01:07:44 - 01:07:51] particular div Okay Google span so here
+[01:07:47 - 01:07:54] I will add the Google map view like this
+[01:07:51 - 01:07:57] and save it okay now let let's go back
+[01:07:54 - 01:07:59] to our application let me open it
+[01:07:57 - 01:08:03] here and if you see Google map view is
+[01:07:59 - 01:08:05] showing on on the screen okay now go to
+[01:08:03 - 01:08:10] the Google map view and here we will add
+[01:08:05 - 01:08:13] this Google Map okay now uh first of
+[01:08:10 - 01:08:16] all uh we have to load the script okay
+[01:08:13 - 01:08:19] so load script and inside this load
+[01:08:16 - 01:08:24] script okay let me do like this we have
+[01:08:19 - 01:08:26] to provide uh one uh Pro property which
+[01:08:24 - 01:08:28] is the Google Maps API okay so if I type
+[01:08:26 - 01:08:31] like this you will see Google Maps API
+[01:08:28 - 01:08:35] ke is coming okay here you need to add
+[01:08:31 - 01:08:38] this Google Map API key okay so uh
+[01:08:35 - 01:08:43] inment file you make sure you will add
+[01:08:38 - 01:08:46] that one so go Tov file and here I will
+[01:08:43 - 01:08:49] add like this okay perfect so both the
+[01:08:46 - 01:08:51] keid if you don't know how to create
+[01:08:49 - 01:08:55] this key I will tell you in a minute
+[01:08:51 - 01:08:58] okay but before that Let's uh come back
+[01:08:55 - 01:09:01] to our um Google map view and here you
+[01:08:58 - 01:09:04] have to Define this environment key with
+[01:09:01 - 01:09:07] process. EnV
+[01:09:04 - 01:09:11] dot let's copy it's not suggesting let's
+[01:09:07 - 01:09:13] copy this next Google Map API key Okay
+[01:09:11 - 01:09:16] the reason that we use next right
+[01:09:13 - 01:09:18] whenever you are using this uh any API
+[01:09:16 - 01:09:22] on the client side you have to mention
+[01:09:18 - 01:09:24] it as nextore public okay and underscore
+[01:09:22 - 01:09:26] then you can give the name of key okay
+[01:09:24 - 01:09:29] and if you are using on API side or
+[01:09:26 - 01:09:33] anywhere then simply you can Define
+[01:09:29 - 01:09:38] Google API _ key okay now once you save
+[01:09:33 - 01:09:41] it go back here and after this right uh
+[01:09:38 - 01:09:43] here you have to mention Google Map so
+[01:09:41 - 01:09:44] let's Google Map and if you see Google
+[01:09:43 - 01:09:49] Map is importing from this Google Maps
+[01:09:44 - 01:09:52] a/ API okay once add this one open like
+[01:09:49 - 01:09:55] this and inside here you have to provide
+[01:09:52 - 01:09:57] some of the prop property which is map
+[01:09:55 - 01:10:00] container style okay so here we have to
+[01:09:57 - 01:10:03] define a container style okay so at the
+[01:10:00 - 01:10:05] top we will Define it here as a constant
+[01:10:03 - 01:10:09] constant container
+[01:10:05 - 01:10:14] style is equal to and here Define the
+[01:10:09 - 01:10:15] width so we'll Define width uh maybe we
+[01:10:14 - 01:10:19] can Define
+[01:10:15 - 01:10:21] 100% okay and
+[01:10:19 - 01:10:25] height I will Define maybe
+[01:10:21 - 01:10:29] 70 vertical height like this
+[01:10:25 - 01:10:30] okay and make sure you will add this uh
+[01:10:29 - 01:10:33] container style you have you can give
+[01:10:30 - 01:10:38] the name container style and add it here
+[01:10:33 - 01:10:40] like this okay after that uh we have to
+[01:10:38 - 01:10:43] provide the coordinates okay the center
+[01:10:40 - 01:10:47] coordinate so you can Define any Center
+[01:10:43 - 01:10:50] coordinate okay I have one uh for maybe
+[01:10:47 - 01:10:53] testing purpose you can say I will
+[01:10:50 - 01:10:56] location uh constant I will say
+[01:10:53 - 01:10:58] coordinate is equal to this latitude and
+[01:10:56 - 01:11:00] ltitude okay and Define this coordinate
+[01:10:58 - 01:11:04] over here like this
+[01:11:00 - 01:11:08] okay and after that you can mention Zoom
+[01:11:04 - 01:11:11] okay so you can mention Zoom like maybe
+[01:11:08 - 01:11:13] 13 so this is the percentage not
+[01:11:11 - 01:11:17] percentage but you will see how it works
+[01:11:13 - 01:11:20] and then save it okay and if you see the
+[01:11:17 - 01:11:22] map is showing on the screen okay now
+[01:11:20 - 01:11:25] you can zoom it out zoom in in okay now
+[01:11:22 - 01:11:29] if you change the percentage to 10 see
+[01:11:25 - 01:11:32] if I change to five it will zoom out
+[01:11:29 - 01:11:35] okay if I give more it will more go into
+[01:11:32 - 01:11:37] this more zoom it applicable okay so
+[01:11:35 - 01:11:40] that's the reason I will keep P maybe
+[01:11:37 - 01:11:41] like this okay right now it's showing
+[01:11:40 - 01:11:43] this coordinate because we give the
+[01:11:41 - 01:11:45] coordinate to be this the center
+[01:11:43 - 01:11:48] coordinates
+[01:11:45 - 01:11:51] okay so I hope you understand this
+[01:11:48 - 01:11:55] particular scenario okay now let's let's
+[01:11:51 - 01:11:56] see how you can get this API key if for
+[01:11:55 - 01:11:59] that you have to go to the Google Cloud
+[01:11:56 - 01:12:00] console and once you go to the Google
+[01:11:59 - 01:12:02] Cloud
+[01:12:00 - 01:12:05] console uh if you don't have account
+[01:12:02 - 01:12:08] make create account okay and we have to
+[01:12:05 - 01:12:10] use same account which you use for the
+[01:12:08 - 01:12:13] uh authentication right so go to this
+[01:12:10 - 01:12:15] API and services okay here you have to
+[01:12:13 - 01:12:21] search for
+[01:12:15 - 01:12:25] Google to search for Google Map okay and
+[01:12:21 - 01:12:26] uh map hdk you can say not need it but
+[01:12:25 - 01:12:29] you can just SE Google Map and you'll
+[01:12:26 - 01:12:33] find it okay so here
+[01:12:29 - 01:12:35] um you can enable this place API first
+[01:12:33 - 01:12:38] okay because we need this and here you
+[01:12:35 - 01:12:41] will see the button just click enable
+[01:12:38 - 01:12:43] Okay and let me search we do we need
+[01:12:41 - 01:12:46] anything
+[01:12:43 - 01:12:48] else so I don't think so that's the only
+[01:12:46 - 01:12:50] thing uh which we need
+[01:12:48 - 01:12:52] right and you can enable this one as
+[01:12:50 - 01:12:56] well I'm not sure whether I enable or
+[01:12:52 - 01:12:58] not let's see okay I think you don't
+[01:12:56 - 01:13:01] need it okay so once you enable this
+[01:12:58 - 01:13:05] Google Map uh then you have to go to
+[01:13:01 - 01:13:07] this again uh API services and here uh
+[01:13:05 - 01:13:09] you have to create a in credential you
+[01:13:07 - 01:13:11] have to create a new API key okay once
+[01:13:09 - 01:13:14] you create the new API key it will look
+[01:13:11 - 01:13:16] like this okay and you can restrict this
+[01:13:14 - 01:13:19] API key do you want for website or you
+[01:13:16 - 01:13:21] can restrict to some ex some IP address
+[01:13:19 - 01:13:24] or something like that right and you
+[01:13:21 - 01:13:25] have to use this API key okay so I hope
+[01:13:24 - 01:13:27] you understand this if you have any
+[01:13:25 - 01:13:30] question watch my some previous video
+[01:13:27 - 01:13:33] you will understand this one okay and
+[01:13:30 - 01:13:36] this is how we can generate this API ke
+[01:13:33 - 01:13:40] for us okay next we will show the users
+[01:13:36 - 01:13:40] location on the map
+[01:13:45 - 01:13:51] okay uh before uh showing users location
+[01:13:48 - 01:13:53] on the screen first of all we will style
+[01:13:51 - 01:13:55] this particular map okay and and uh we
+[01:13:53 - 01:13:57] can change the color of this particular
+[01:13:55 - 01:14:01] roads or everything you can customize
+[01:13:57 - 01:14:05] this uh complete maap okay so for that
+[01:14:01 - 01:14:06] one uh let's go to the just type Google
+[01:14:05 - 01:14:09] Map
+[01:14:06 - 01:14:12] custom styling Studio something like
+[01:14:09 - 01:14:13] this okay and it will open this styling
+[01:14:12 - 01:14:14] wizard okay the link I will put it in
+[01:14:13 - 01:14:17] the
+[01:14:14 - 01:14:20] description so this is the default map
+[01:14:17 - 01:14:22] right now we have okay we install now if
+[01:14:20 - 01:14:25] you don't want the for example labels
+[01:14:22 - 01:14:28] you can just remove like this see okay
+[01:14:25 - 01:14:30] and just map you can get it okay or you
+[01:14:28 - 01:14:32] can if you want to add the labels you
+[01:14:30 - 01:14:34] can add it how much label you want how
+[01:14:32 - 01:14:38] much detail you want you can totally
+[01:14:34 - 01:14:40] customize it okay the road how much Road
+[01:14:38 - 01:14:41] you want or do you want Road or not
+[01:14:40 - 01:14:44] everything now here you will select the
+[01:14:41 - 01:14:47] themes as well so for example the silver
+[01:14:44 - 01:14:51] theme right or maybe a retro theme you
+[01:14:47 - 01:14:54] have dark mode okay the night mode a lot
+[01:14:51 - 01:14:56] of different things okay and this is
+[01:14:54 - 01:14:59] completely you can completely customize
+[01:14:56 - 01:15:01] it if you go to the more option each
+[01:14:59 - 01:15:03] these things you can customize it okay
+[01:15:01 - 01:15:05] and once you done with the customization
+[01:15:03 - 01:15:08] right for example in this case we will
+[01:15:05 - 01:15:11] selecting silver okay you will select
+[01:15:08 - 01:15:14] some labels like this okay not too much
+[01:15:11 - 01:15:17] and the roads now if you click on finish
+[01:15:14 - 01:15:20] it will give give you this Json file
+[01:15:17 - 01:15:24] copy this Jon okay now you have to go to
+[01:15:20 - 01:15:28] this uh Google Cloud here you have to
+[01:15:24 - 01:15:30] search for map Styles see okay once you
+[01:15:28 - 01:15:34] search this map style here you can
+[01:15:30 - 01:15:36] create a new map style okay so just uh
+[01:15:34 - 01:15:39] click on create style and you can select
+[01:15:36 - 01:15:42] from the existing one okay so gray or
+[01:15:39 - 01:15:45] something like this right uh or you can
+[01:15:42 - 01:15:48] paste whatever you copied like this okay
+[01:15:45 - 01:15:50] so maybe we did not copy correctly wait
+[01:15:48 - 01:15:54] so here we just finish right just click
+[01:15:50 - 01:15:57] on finish and then copy this Json okay
+[01:15:54 - 01:15:59] now make sure to paste it and if you see
+[01:15:57 - 01:16:03] it's showing the gray color okay the one
+[01:15:59 - 01:16:07] which we uh modified and just click on
+[01:16:03 - 01:16:09] save you can give name so gray map okay
+[01:16:07 - 01:16:12] and save
+[01:16:09 - 01:16:15] it once you save this right now we have
+[01:16:12 - 01:16:17] to add the map ID okay so right now if
+[01:16:15 - 01:16:18] you see we don't have any map ID so what
+[01:16:17 - 01:16:19] you have to do you have to search for
+[01:16:18 - 01:16:22] the map
+[01:16:19 - 01:16:24] management okay once you go to this map
+[01:16:22 - 01:16:28] management you you can create a map ID
+[01:16:24 - 01:16:30] and you can create map ID gr map you can
+[01:16:28 - 01:16:33] select for which you want I will say
+[01:16:30 - 01:16:35] JavaScript keep the raster and save it
+[01:16:33 - 01:16:37] okay once you save it you scroll down
+[01:16:35 - 01:16:41] here you can select the map style so you
+[01:16:37 - 01:16:43] can assign this key to the map map style
+[01:16:41 - 01:16:45] which we created before so we can assign
+[01:16:43 - 01:16:47] to the gray map and it will look like
+[01:16:45 - 01:16:51] this and just click
+[01:16:47 - 01:16:53] save okay and that's all it's done right
+[01:16:51 - 01:16:56] now what you have to do if you if you go
+[01:16:53 - 01:16:58] to this map Styles right and open this G
+[01:16:56 - 01:17:02] map if you see this ID is assigned to
+[01:16:58 - 01:17:04] this particular map ID okay sorry this
+[01:17:02 - 01:17:07] Google Map is assigned to this ID copy
+[01:17:04 - 01:17:11] this ID okay and go back to our
+[01:17:07 - 01:17:15] application so let me open this one
+[01:17:11 - 01:17:19] here and inside this load script okay
+[01:17:15 - 01:17:20] you have to add this particular ID okay
+[01:17:19 - 01:17:24] so you just need to
+[01:17:20 - 01:17:28] Define map ID and and paste this ID okay
+[01:17:24 - 01:17:31] like this also you have to add this ID
+[01:17:28 - 01:17:34] over here in the options in the curly B
+[01:17:31 - 01:17:40] you have to proide map
+[01:17:34 - 01:17:40] ID map ID like this and add this ID
+[01:17:41 - 01:17:49] here cly B okay and save
+[01:17:44 - 01:17:51] it refresh it okay so sometimes what
+[01:17:49 - 01:17:54] happen it will take some time to load
+[01:17:51 - 01:17:57] the because we just created and map is
+[01:17:54 - 01:17:59] getting assigned to this particular uh
+[01:17:57 - 01:18:01] particular ID right so that's the reason
+[01:17:59 - 01:18:04] it will take some
+[01:18:01 - 01:18:06] time so maybe I think we need to put
+[01:18:04 - 01:18:09] this in a square
+[01:18:06 - 01:18:11] bracket and then refresh it and if you
+[01:18:09 - 01:18:14] see the map is showing on the screen
+[01:18:11 - 01:18:16] right make sure to put this in a uh
+[01:18:14 - 01:18:18] square bracket now here you can provide
+[01:18:16 - 01:18:20] a multiple value it's up to you okay and
+[01:18:18 - 01:18:23] if you see the map is showing on the
+[01:18:20 - 01:18:25] screen okay if you have any question any
+[01:18:23 - 01:18:28] doubt regarding how to style the map
+[01:18:25 - 01:18:28] right let me know in the comment
+[01:18:32 - 01:18:38] section now next we will get the users
+[01:18:36 - 01:18:40] location okay and and for that one we
+[01:18:38 - 01:18:44] need a latitude longitude of the users
+[01:18:40 - 01:18:46] okay in order to show it on the map so
+[01:18:44 - 01:18:52] in order to get it right uh we will go
+[01:18:46 - 01:18:54] to this uh layout. JS okay and here
+[01:18:52 - 01:18:57] inside this
+[01:18:54 - 01:19:00] return uh we will add we will P it the
+[01:18:57 - 01:19:01] users's location at this particular uh
+[01:19:00 - 01:19:05] section okay so I will Define one
+[01:19:01 - 01:19:09] constant here I will say get user
+[01:19:05 - 01:19:12] location we'll create this method and
+[01:19:09 - 01:19:15] inside this method okay we have we need
+[01:19:12 - 01:19:19] to get it so we have to type Navigator
+[01:19:15 - 01:19:23] do geolocation okay do get current
+[01:19:19 - 01:19:26] position okay and this will give us the
+[01:19:23 - 01:19:26] current location of the
+[01:19:27 - 01:19:35] user this okay and if I console. log the
+[01:19:32 - 01:19:37] position you will see the all this
+[01:19:35 - 01:19:41] information okay and make sure in use
+[01:19:37 - 01:19:43] effect you will call this one okay so
+[01:19:41 - 01:19:47] use effect obviously we want to only ex
+[01:19:43 - 01:19:51] only once and Define like here like this
+[01:19:47 - 01:19:54] okay and save it as soon as you save it
+[01:19:51 - 01:19:57] right
+[01:19:54 - 01:19:59] so let's see and go to the inspect panel
+[01:19:57 - 01:20:02] in the console if you see the GE
+[01:19:59 - 01:20:04] location is coming okay if sometimes if
+[01:20:02 - 01:20:06] you did not enable notification it will
+[01:20:04 - 01:20:08] ask you the notification see location
+[01:20:06 - 01:20:10] permission right enable mean obviously
+[01:20:08 - 01:20:13] it will ask you once you la land on this
+[01:20:10 - 01:20:15] particular page okay and if you go to GE
+[01:20:13 - 01:20:17] location in the coordinates you'll find
+[01:20:15 - 01:20:19] the latitude and longitude okay and now
+[01:20:17 - 01:20:22] this latitude longitude we will use to
+[01:20:19 - 01:20:24] show it on the screen okay but one more
+[01:20:22 - 01:20:27] thing
+[01:20:24 - 01:20:29] we need we need this user location at
+[01:20:27 - 01:20:32] many components right and every time we
+[01:20:29 - 01:20:34] it's very hard to pass it to the
+[01:20:32 - 01:20:36] different different components right so
+[01:20:34 - 01:20:39] that we will use context here okay so
+[01:20:36 - 01:20:42] once we store our um location
+[01:20:39 - 01:20:44] information context we can use that
+[01:20:42 - 01:20:47] context throughout the application okay
+[01:20:44 - 01:20:48] and we can change it anywhere so that's
+[01:20:47 - 01:20:51] the reason we will use the context and
+[01:20:48 - 01:20:53] context is quite powerful okay and if
+[01:20:51 - 01:20:55] you want to learn more about the context
+[01:20:53 - 01:20:57] how to use in everything you can watch
+[01:20:55 - 01:20:59] my previous video but don't worry in
+[01:20:57 - 01:21:01] this course as uh particular video as
+[01:20:59 - 01:21:04] well we will learn how to create the own
+[01:21:01 - 01:21:07] context and how to store our data okay
+[01:21:04 - 01:21:11] so in the root directory create a new
+[01:21:07 - 01:21:13] folder called context okay like this and
+[01:21:11 - 01:21:19] inside the context we'll create a new uh
+[01:21:13 - 01:21:23] file called user location context. JS
+[01:21:19 - 01:21:26] okay here once you are you in this user
+[01:21:23 - 01:21:29] location context page Define
+[01:21:26 - 01:21:32] constant user give the same name the
+[01:21:29 - 01:21:34] with the file name okay user location
+[01:21:32 - 01:21:36] context is equal to you have to write
+[01:21:34 - 01:21:39] create context okay and it is importing
+[01:21:36 - 01:21:41] from the react pass it initially null
+[01:21:39 - 01:21:44] also make sure to export
+[01:21:41 - 01:21:46] this um user location contact so that it
+[01:21:44 - 01:21:48] will be available throughout the
+[01:21:46 - 01:21:52] application and now save it and that's
+[01:21:48 - 01:21:53] all our context is ready okay now until
+[01:21:52 - 01:21:56] this point if you have any question let
+[01:21:53 - 01:21:57] me know and one more thing now obviously
+[01:21:56 - 01:21:59] this context we will use to store the
+[01:21:57 - 01:22:03] data that's what I'm going to tell you
+[01:21:59 - 01:22:05] now now go to the layout. JS here we
+[01:22:03 - 01:22:07] have to wrap these children and these
+[01:22:05 - 01:22:11] particular components inside our context
+[01:22:07 - 01:22:13] okay so that whatever the um components
+[01:22:11 - 01:22:15] you define in between this context the
+[01:22:13 - 01:22:18] all the information is accessible to
+[01:22:15 - 01:22:21] that particular components okay so here
+[01:22:18 - 01:22:25] you can Define the user location context
+[01:22:21 - 01:22:28] like this okay dot I to write provider
+[01:22:25 - 01:22:32] okay and close the tag make sure to wrap
+[01:22:28 - 01:22:36] this uh both the components like
+[01:22:32 - 01:22:38] this and here for this provider you have
+[01:22:36 - 01:22:40] to provide value which value you have to
+[01:22:38 - 01:22:44] share with all the components right so
+[01:22:40 - 01:22:47] obviously we have to store this users
+[01:22:44 - 01:22:51] location okay so for that one you have
+[01:22:47 - 01:22:54] to define the uh one state so here what
+[01:22:51 - 01:22:56] I will do I Define State
+[01:22:54 - 01:23:00] constant user
+[01:22:56 - 01:23:03] location comma set user
+[01:23:00 - 01:23:07] location is equal to use
+[01:23:03 - 01:23:10] State like this okay and it will be
+[01:23:07 - 01:23:14] empty initially and over here we can
+[01:23:10 - 01:23:16] Define set users location okay and
+[01:23:14 - 01:23:19] inside that we need to Define latitude
+[01:23:16 - 01:23:21] and land okay like this so we added this
+[01:23:19 - 01:23:24] latitude and land and for get user
+[01:23:21 - 01:23:27] location and now this user location and
+[01:23:24 - 01:23:31] set user location we have to pass it as
+[01:23:27 - 01:23:33] a value so I will Define value in double
+[01:23:31 - 01:23:35] you have to pass this to Value okay so
+[01:23:33 - 01:23:37] that whenever you want user want user
+[01:23:35 - 01:23:40] can access the user location and they
+[01:23:37 - 01:23:43] can update it from anywhere okay and
+[01:23:40 - 01:23:46] save it now now interesting thing right
+[01:23:43 - 01:23:50] let's go back to our Google map view
+[01:23:46 - 01:23:52] let's go to Google map view okay and
+[01:23:50 - 01:23:54] here we we need to use the location
+[01:23:52 - 01:23:58] correct okay so for that one first
+[01:23:54 - 01:24:00] Define constant okay and now we want to
+[01:23:58 - 01:24:01] use context information right so in the
+[01:24:00 - 01:24:07] curly reses you have to Define user
+[01:24:01 - 01:24:11] location comma set user
+[01:24:07 - 01:24:13] location is equal to use context okay
+[01:24:11 - 01:24:14] and inside this user context you have to
+[01:24:13 - 01:24:19] provide the context name so in this case
+[01:24:14 - 01:24:21] is user location context okay now we
+[01:24:19 - 01:24:23] have this user location information okay
+[01:24:21 - 01:24:27] if you want to print it here let's try
+[01:24:23 - 01:24:27] to print it with
+[01:24:27 - 01:24:33] location and if I save it if you see the
+[01:24:31 - 01:24:37] user location printing on the map view
+[01:24:33 - 01:24:40] see map view 12 okay so we got this user
+[01:24:37 - 01:24:42] location and that we Define in layout.
+[01:24:40 - 01:24:45] JS but we can accessible we can access
+[01:24:42 - 01:24:47] it easy in Google map view that's the
+[01:24:45 - 01:24:51] reason context is quite helpful when you
+[01:24:47 - 01:24:53] are want to share the uh any State uh in
+[01:24:51 - 01:24:56] any nested components
+[01:24:53 - 01:24:57] okay now instead of passing this
+[01:24:56 - 01:25:00] coordinate you can pass this user
+[01:24:57 - 01:25:04] location as a center okay and save it
+[01:25:00 - 01:25:06] now if you see it's showing my location
+[01:25:04 - 01:25:10] on the map okay obviously it did not
+[01:25:06 - 01:25:13] added the marker yet okay but it's
+[01:25:10 - 01:25:15] Center Center um to the my current
+[01:25:13 - 01:25:18] location okay next we will learn how to
+[01:25:15 - 01:25:19] add the marker and for our user location
+[01:25:18 - 01:25:23] we will add the
+[01:25:19 - 01:25:25] marker now let's add the marker
+[01:25:23 - 01:25:28] on the user location okay so let's go
+[01:25:25 - 01:25:31] back to our application and inside this
+[01:25:28 - 01:25:34] Google map right uh we need to add the
+[01:25:31 - 01:25:38] marker okay so here let's define
+[01:25:34 - 01:25:41] marker and if you see this marker F so I
+[01:25:38 - 01:25:44] select that one and in the tag can close
+[01:25:41 - 01:25:46] like this inside this you have to
+[01:25:44 - 01:25:48] provide the position so obviously
+[01:25:46 - 01:25:51] position is the user location which we
+[01:25:48 - 01:25:53] already have then you can provide the
+[01:25:51 - 01:25:55] name which you want
+[01:25:53 - 01:25:57] you can Define your custom icon if you
+[01:25:55 - 01:25:59] put like this and save it right you'll
+[01:25:57 - 01:26:03] see the location and this icon is
+[01:25:59 - 01:26:05] default icon from the uh Google okay but
+[01:26:03 - 01:26:07] you can Define your own custom icon so
+[01:26:05 - 01:26:10] just say
+[01:26:07 - 01:26:13] icon and inside this you have to provide
+[01:26:10 - 01:26:16] the URL of the icon you can put the URL
+[01:26:13 - 01:26:20] U anything or you can access it from the
+[01:26:16 - 01:26:24] your local user location pin so in order
+[01:26:20 - 01:26:27] to access it just write user Das
+[01:26:24 - 01:26:31] location.png okay and then you have to
+[01:26:27 - 01:26:33] provide the scale side so just Ty
+[01:26:31 - 01:26:36] scale uh scale
+[01:26:33 - 01:26:40] size inside this you have to define the
+[01:26:36 - 01:26:44] size so in this we say width of 50 and
+[01:26:40 - 01:26:49] then height maybe I 50 make sure to give
+[01:26:44 - 01:26:51] the comma here and save it okay now you
+[01:26:49 - 01:26:53] have to refresh the screen in order to
+[01:26:51 - 01:26:56] see the effect and if you see user
+[01:26:53 - 01:26:59] location with the custom marker is
+[01:26:56 - 01:27:03] showing on the screen okay so this is my
+[01:26:59 - 01:27:06] custom uh sorry this is my custom marker
+[01:27:03 - 01:27:09] with my current location see here
+[01:27:06 - 01:27:11] okay so you can use any marker you can
+[01:27:09 - 01:27:15] go to the any icon and select it and put
+[01:27:11 - 01:27:15] it here okay it's up to
+[01:27:18 - 01:27:24] you now in this particular section we
+[01:27:21 - 01:27:27] are going to be the API for the Google
+[01:27:24 - 01:27:30] place okay so if you go to this Google
+[01:27:27 - 01:27:33] uh map Place documentation right and
+[01:27:30 - 01:27:36] this Tex search SL Json this particular
+[01:27:33 - 01:27:39] API we are going to use okay we already
+[01:27:36 - 01:27:42] have this API key same API key we are
+[01:27:39 - 01:27:44] going to use and along with this API key
+[01:27:42 - 01:27:47] some more parameter we are going to send
+[01:27:44 - 01:27:50] it to this particular endpoint okay
+[01:27:47 - 01:27:52] so let's go back to our
+[01:27:50 - 01:27:54] application and uh
+[01:27:52 - 01:27:54] oop
+[01:27:55 - 01:28:03] sorry so here it is okay so inside the
+[01:28:00 - 01:28:05] API uh folder we have to create a new
+[01:28:03 - 01:28:10] folder called
+[01:28:05 - 01:28:12] googlepl okay this will be our API
+[01:28:10 - 01:28:16] endpoint inside that we have to create a
+[01:28:12 - 01:28:18] folder called route. JS okay every time
+[01:28:16 - 01:28:20] when we create uh API endpoint the API
+[01:28:18 - 01:28:22] endpoint name should be a folder name
+[01:28:20 - 01:28:26] and inside that we have to Creator
+[01:28:22 - 01:28:30] rot.js okay inside route. JS we are
+[01:28:26 - 01:28:33] going to implement the API key okay so
+[01:28:30 - 01:28:37] first of all uh we will Define the
+[01:28:33 - 01:28:40] constant base URL okay so the base URL
+[01:28:37 - 01:28:42] is the one which I already have okay and
+[01:28:40 - 01:28:45] you can copy paste from the Google place
+[01:28:42 - 01:28:48] documentation okay so this is the base
+[01:28:45 - 01:28:50] URL then we have to add the Google API
+[01:28:48 - 01:28:53] key obviously Google API key from the
+[01:28:50 - 01:28:55] environment variable okay so I will add
+[01:28:53 - 01:28:59] like this and after that we have to
+[01:28:55 - 01:29:02] write export sync function okay so this
+[01:28:59 - 01:29:05] will be our get function okay so it
+[01:29:02 - 01:29:06] means get request so in that we have to
+[01:29:05 - 01:29:09] write
+[01:29:06 - 01:29:12] request and then inside that we have to
+[01:29:09 - 01:29:15] call that particular API okay so
+[01:29:12 - 01:29:19] obviously we have to write constant
+[01:29:15 - 01:29:20] result is equal to await okay then with
+[01:29:19 - 01:29:25] the help of
+[01:29:20 - 01:29:28] f uh we will face the result from this
+[01:29:25 - 01:29:33] base URL okay obviously we have base URL
+[01:29:28 - 01:29:36] then there some uh I will copy paste the
+[01:29:33 - 01:29:39] existing or everything right like this
+[01:29:36 - 01:29:42] so this is the base URL then the end
+[01:29:39 - 01:29:46] point like text se/ Jon the query is
+[01:29:42 - 01:29:47] nothing but the whatever the uh category
+[01:29:46 - 01:29:49] we are passing like Indian food Chinese
+[01:29:47 - 01:29:52] food kind of thing right that we have to
+[01:29:49 - 01:29:55] pass then in the location we have have
+[01:29:52 - 01:29:57] to pass latitude comma longitude then
+[01:29:55 - 01:30:00] after that we have to pass radius okay
+[01:29:57 - 01:30:05] how much meters you want to search and
+[01:30:00 - 01:30:07] then the Google API key okay after that
+[01:30:05 - 01:30:10] uh it's quite simple you just need to
+[01:30:07 - 01:30:12] return this result okay so after this
+[01:30:10 - 01:30:16] one you have to get this result as a
+[01:30:12 - 01:30:18] Json save it in a product and then with
+[01:30:16 - 01:30:21] the help of next response obviously next
+[01:30:18 - 01:30:24] response you have to import okay so from
+[01:30:21 - 01:30:26] the next SL server and then you have to
+[01:30:24 - 01:30:30] return this product okay now very
+[01:30:26 - 01:30:33] important thing this is the next JS 13
+[01:30:30 - 01:30:36] okay and this little bit different than
+[01:30:33 - 01:30:38] the old nextjs okay so in nextjs 13 you
+[01:30:36 - 01:30:41] have to follow the same file
+[01:30:38 - 01:30:44] structure uh and then this is the way we
+[01:30:41 - 01:30:47] can face the data okay let's test it out
+[01:30:44 - 01:30:52] so I saved everything let's go back here
+[01:30:47 - 01:30:55] okay now you can accute theop API slash
+[01:30:52 - 01:30:59] Google place
+[01:30:55 - 01:31:01] so you can call this API okay is equal
+[01:30:59 - 01:31:06] to Indian then we have to provide some
+[01:31:01 - 01:31:09] more um value like radius th000 latitude
+[01:31:06 - 01:31:12] and longitude okay so right now we got
+[01:31:09 - 01:31:17] we are getting error let's see what the
+[01:31:12 - 01:31:20] error so here okay so obviously we are
+[01:31:17 - 01:31:22] passing this uh this all the value right
+[01:31:20 - 01:31:24] this value we have to accept it here
+[01:31:22 - 01:31:25] okay so obviously first of all here we
+[01:31:24 - 01:31:27] have to Define
+[01:31:25 - 01:31:30] constant then
+[01:31:27 - 01:31:35] search uh parameters that which we are
+[01:31:30 - 01:31:41] passing okay is equal to sorry is equal
+[01:31:35 - 01:31:47] to new URL and then request the request
+[01:31:41 - 01:31:49] which is this one okay dot URL okay and
+[01:31:47 - 01:31:52] then simply we have to store each of
+[01:31:49 - 01:31:56] these varable like constant
+[01:31:52 - 01:32:01] category is equal to search
+[01:31:56 - 01:32:02] params and sorry search pam.get and then
+[01:32:01 - 01:32:04] we have to get
+[01:32:02 - 01:32:08] that whatever the value we are sending
+[01:32:04 - 01:32:11] here right if you see oops sorry so this
+[01:32:08 - 01:32:14] one right category radius latitude okay
+[01:32:11 - 01:32:16] so first is category
+[01:32:14 - 01:32:19] okay same thing you have to do for
+[01:32:16 - 01:32:22] radius latitude and longitude okay so I
+[01:32:19 - 01:32:25] will just copy paste like this and paste
+[01:32:22 - 01:32:28] it here and save it now let's save uh
+[01:32:25 - 01:32:32] refresh the screen and if you see right
+[01:32:28 - 01:32:35] now we get the result okay
+[01:32:32 - 01:32:37] so with the help of location the radius
+[01:32:35 - 01:32:42] and the category we are getting all the
+[01:32:37 - 01:32:46] information okay perfect so this is how
+[01:32:42 - 01:32:50] uh we are we can write the API in the
+[01:32:46 - 01:32:52] nextjs okay so now this API we are going
+[01:32:50 - 01:32:54] to use in our applic application okay so
+[01:32:52 - 01:32:57] this in this component we are going to
+[01:32:54 - 01:33:00] use this um result and then we will
+[01:32:57 - 01:33:03] display the business list or place list
+[01:33:00 - 01:33:03] uh on the UI
+[01:33:06 - 01:33:13] side so we successfully build the API
+[01:33:10 - 01:33:15] for our Google place okay now what we
+[01:33:13 - 01:33:18] have to do we have to call this API
+[01:33:15 - 01:33:19] inside our application okay so inside
+[01:33:18 - 01:33:23] this shared folder I will create a new
+[01:33:19 - 01:33:27] folder called global api.js where we
+[01:33:23 - 01:33:32] will keep all our API calls okay so just
+[01:33:27 - 01:33:35] type constant say get Google place is
+[01:33:32 - 01:33:37] equal to right now I will put empty
+[01:33:35 - 01:33:39] because I'm going to hardcode some value
+[01:33:37 - 01:33:43] for testing purpose and then we will
+[01:33:39 - 01:33:45] pass the actual value okay so in this uh
+[01:33:43 - 01:33:48] particular example right I'm using this
+[01:33:45 - 01:33:52] exus uh HTTP client okay which is one of
+[01:33:48 - 01:33:54] the best uh in the market so it's very
+[01:33:52 - 01:33:56] easy to install just execute this lineup
+[01:33:54 - 01:33:58] code and just install it I already
+[01:33:56 - 01:33:59] installed so you can just access like
+[01:33:58 - 01:34:02] this
+[01:33:59 - 01:34:04] exos and uh once you install right it
+[01:34:02 - 01:34:06] will add this one
+[01:34:04 - 01:34:09] so there are different way you can uh
+[01:34:06 - 01:34:11] add this one okay then you have option
+[01:34:09 - 01:34:14] called get and inside this get option
+[01:34:11 - 01:34:16] you have to call your actual URL okay so
+[01:34:14 - 01:34:19] it's very easy you have to just call
+[01:34:16 - 01:34:23] slash then API because our API is in
+[01:34:19 - 01:34:27] this API folder okay slash and the Endo
+[01:34:23 - 01:34:30] so in this case is Google Play okay and
+[01:34:27 - 01:34:33] then uh you have to pass the all this uh
+[01:34:30 - 01:34:35] the category and radius everything right
+[01:34:33 - 01:34:38] I will copy this one for for now but we
+[01:34:35 - 01:34:41] will replace it with actual value okay
+[01:34:38 - 01:34:43] so like this okay and now in order to
+[01:34:41 - 01:34:46] use this right we have to export this
+[01:34:43 - 01:34:50] particular Endo so export default and
+[01:34:46 - 01:34:52] then just say get Google Plus like this
+[01:34:50 - 01:34:54] okay now this get Google Play will be
+[01:34:52 - 01:34:57] accessible throughout the application
+[01:34:54 - 01:35:00] now save everything now go to the
+[01:34:57 - 01:35:03] page.js where we are going to face this
+[01:35:00 - 01:35:06] uh all the business or place list okay
+[01:35:03 - 01:35:08] so constant get Google place okay so
+[01:35:06 - 01:35:11] this is the function which we are going
+[01:35:08 - 01:35:15] to create and inside this one we will
+[01:35:11 - 01:35:17] access Global api. get Google Play okay
+[01:35:15 - 01:35:19] and this is the promise so obviously we
+[01:35:17 - 01:35:22] have to apply then
+[01:35:19 - 01:35:24] response and then inside response we'll
+[01:35:22 - 01:35:27] just console the response for now okay
+[01:35:24 - 01:35:30] so here we'll write response do data
+[01:35:27 - 01:35:33] okay because in this response. data uh
+[01:35:30 - 01:35:35] as this is AOS right and this is promise
+[01:35:33 - 01:35:37] our uh result will be in the response.
+[01:35:35 - 01:35:39] data okay now save this one now
+[01:35:37 - 01:35:41] obviously this we need to call it so
+[01:35:39 - 01:35:44] what I will do I will create a new user
+[01:35:41 - 01:35:45] effect okay because this us user effect
+[01:35:44 - 01:35:48] will execute even though the section got
+[01:35:45 - 01:35:50] changed and I don't want that one and
+[01:35:48 - 01:35:53] obviously we want to ex only once and
+[01:35:50 - 01:35:56] then you can call call it here okay like
+[01:35:53 - 01:35:57] this and save now now let's go back to
+[01:35:56 - 01:36:01] our
+[01:35:57 - 01:36:03] application and let's open this terminal
+[01:36:01 - 01:36:03] refresh the
+[01:36:04 - 01:36:11] screen and if you see okay just wait so
+[01:36:07 - 01:36:13] right now it's saying uh the 404 error
+[01:36:11 - 01:36:15] okay this particular API is not finding
+[01:36:13 - 01:36:17] because if you see right this API in
+[01:36:15 - 01:36:19] point we added is incorrect so obviously
+[01:36:17 - 01:36:21] let's go back to Global API and over
+[01:36:19 - 01:36:24] here we have to add the question Mark
+[01:36:21 - 01:36:27] okay so that's the that's what we miss
+[01:36:24 - 01:36:29] so let's clean everything now let me
+[01:36:27 - 01:36:31] refresh the
+[01:36:29 - 01:36:33] screen and if you see we got the product
+[01:36:31 - 01:36:36] list okay if you see we got two times
+[01:36:33 - 01:36:39] here and uh another one is here okay and
+[01:36:36 - 01:36:44] inside the product we have the results
+[01:36:39 - 01:36:49] see okay so we can access it like uh is
+[01:36:44 - 01:36:52] page.js just result so WR
+[01:36:49 - 01:36:56] product Dot
+[01:36:52 - 01:36:59] results now we'll get only the this 20
+[01:36:56 - 01:37:02] uh items okay so let's save this one let
+[01:36:59 - 01:37:06] me clean and refresh the screen
+[01:37:02 - 01:37:09] again and let's
+[01:37:06 - 01:37:11] wait so something is not correct okay so
+[01:37:09 - 01:37:15] canot read property of undefined so
+[01:37:11 - 01:37:18] let's see maybe it's a only result let's
+[01:37:15 - 01:37:23] see what's the what is called this
+[01:37:18 - 01:37:23] results product result okay product
+[01:37:26 - 01:37:32] results okay make sure the spelling is
+[01:37:30 - 01:37:33] correct everything is correct and save
+[01:37:32 - 01:37:36] it
+[01:37:33 - 01:37:38] now let's go back to application and if
+[01:37:36 - 01:37:42] you see we got this result okay so all
+[01:37:38 - 01:37:46] the 20 now let's pass the actual data
+[01:37:42 - 01:37:47] okay so uh let's get the category list
+[01:37:46 - 01:37:50] so first of all let's go to the category
+[01:37:47 - 01:37:54] list and on the click of this category
+[01:37:50 - 01:37:59] list we will write another uh call like
+[01:37:54 - 01:38:04] uh on category change okay and here we
+[01:37:59 - 01:38:06] will pass the item do value okay and
+[01:38:04 - 01:38:09] make sure we have to pass this on
+[01:38:06 - 01:38:12] category change back to the parent
+[01:38:09 - 01:38:15] component okay so like this in curly
+[01:38:12 - 01:38:16] Braes you have to pass it back and now
+[01:38:15 - 01:38:19] let's go to this
+[01:38:16 - 01:38:23] page.js inside the category link we have
+[01:38:19 - 01:38:28] to accept it here like this okay sorry
+[01:38:23 - 01:38:31] so like this okay and here will be the
+[01:38:28 - 01:38:33] value now we need to store this value
+[01:38:31 - 01:38:34] somewhere right so we will Define a
+[01:38:33 - 01:38:39] state so
+[01:38:34 - 01:38:41] constant say category comma set category
+[01:38:39 - 01:38:44] is equal to youth State okay and
+[01:38:41 - 01:38:48] similarly we will also set it for the
+[01:38:44 - 01:38:53] range so we say or we can call
+[01:38:48 - 01:38:57] Radius set radius okay like this
+[01:38:53 - 01:38:59] obviously we will give this radius value
+[01:38:57 - 01:39:01] by default to
+[01:38:59 - 01:39:03] 250 and for category just write set
+[01:39:01 - 01:39:06] category and then you have to pass the
+[01:39:03 - 01:39:08] category name which is this value okay
+[01:39:06 - 01:39:11] now what you have to do whenever this
+[01:39:08 - 01:39:13] category change okay or get updated we
+[01:39:11 - 01:39:15] have to call this get Google place okay
+[01:39:13 - 01:39:17] so here you have to
+[01:39:15 - 01:39:20] write category okay so whenever the
+[01:39:17 - 01:39:23] category change this will get execute
+[01:39:20 - 01:39:25] okay and same with the radius as well
+[01:39:23 - 01:39:27] when radius get changed this us effect
+[01:39:25 - 01:39:29] will get called and get Google place
+[01:39:27 - 01:39:31] will call a latest information with the
+[01:39:29 - 01:39:33] actual data okay same thing you have to
+[01:39:31 - 01:39:34] do it for the range select so let's go
+[01:39:33 - 01:39:39] to the range
+[01:39:34 - 01:39:40] select here uh let's define on Range or
+[01:39:39 - 01:39:44] on
+[01:39:40 - 01:39:46] radius change have to pass the actual
+[01:39:44 - 01:39:50] value which is this e. targeted value
+[01:39:46 - 01:39:53] okay and pass it back to the parent
+[01:39:50 - 01:39:56] component like this okay now save this
+[01:39:53 - 01:39:59] one and now let's go back to the page.js
+[01:39:56 - 01:40:02] here you have to accept it okay
+[01:39:59 - 01:40:05] similarly like above value is equal to
+[01:40:02 - 01:40:08] set radius and here you have to set the
+[01:40:05 - 01:40:11] value okay perfect
+[01:40:08 - 01:40:13] now we have this category and radius
+[01:40:11 - 01:40:15] value okay and whenever this updated
+[01:40:13 - 01:40:18] this particular get Google Play method
+[01:40:15 - 01:40:21] get call obviously we have to pass this
+[01:40:18 - 01:40:25] category comma radius okay and get
+[01:40:21 - 01:40:29] Google place API here we have to uh
+[01:40:25 - 01:40:31] accept it here category comma radius
+[01:40:29 - 01:40:34] okay and pass this
+[01:40:31 - 01:40:35] category in of this one so I will write
+[01:40:34 - 01:40:39] like
+[01:40:35 - 01:40:39] this and for radius as
+[01:40:39 - 01:40:46] well okay perfect now save
+[01:40:43 - 01:40:48] everything and let's test it out okay so
+[01:40:46 - 01:40:51] clean
+[01:40:48 - 01:40:56] everything and let me go here go to the
+[01:40:51 - 01:40:58] console clean and refresh the screen
+[01:40:56 - 01:41:01] okay so
+[01:40:58 - 01:41:04] now if I click Indian if you see we got
+[01:41:01 - 01:41:07] this 20 result okay and if you go to the
+[01:41:04 - 01:41:10] network tab okay we have this Google
+[01:41:07 - 01:41:12] Play API call method and in uh payload
+[01:41:10 - 01:41:14] we got the Indian restaurant and default
+[01:41:12 - 01:41:17] radius value okay the latitude and
+[01:41:14 - 01:41:19] longitude is again is hardcoded we will
+[01:41:17 - 01:41:22] change it later on okay if I click
+[01:41:19 - 01:41:23] Mexican you'll get new AP get call and
+[01:41:22 - 01:41:26] with the category as a Mexican
+[01:41:23 - 01:41:29] restaurant radius to 5 if I change the
+[01:41:26 - 01:41:33] radius see again new call get call and
+[01:41:29 - 01:41:35] with the radius three 3,000 okay so our
+[01:41:33 - 01:41:37] API call is working and also we are also
+[01:41:35 - 01:41:39] getting this information okay every time
+[01:41:37 - 01:41:42] with the new data which we are providing
+[01:41:39 - 01:41:45] right if I open you will see the Chandra
+[01:41:42 - 01:41:47] Mexican grill right charandas whatever
+[01:41:45 - 01:41:48] if I select Italian right you'll get
+[01:41:47 - 01:41:53] some Italian
+[01:41:48 - 01:41:56] restaurants let's see some piz see okay
+[01:41:53 - 01:42:00] so some piz it rest like this okay and
+[01:41:56 - 01:42:03] depends on this radius as well now let's
+[01:42:00 - 01:42:06] go back to our application right and
+[01:42:03 - 01:42:10] just check uh let
+[01:42:06 - 01:42:12] me where it is in page.js right here
+[01:42:10 - 01:42:16] once get we we got this information we
+[01:42:12 - 01:42:21] store it in some state so here is a
+[01:42:16 - 01:42:25] constant business list comma set
+[01:42:21 - 01:42:28] business list okay is equal to youth
+[01:42:25 - 01:42:29] State and inside here we'll store it
+[01:42:28 - 01:42:33] okay so just
+[01:42:29 - 01:42:37] right set business list and here we will
+[01:42:33 - 01:42:39] store this like this okay perfect and I
+[01:42:37 - 01:42:42] will comment out this one for now now we
+[01:42:39 - 01:42:43] send this category and radius okay but
+[01:42:42 - 01:42:46] we also need to send a latitude and
+[01:42:43 - 01:42:48] longitude of the users location okay and
+[01:42:46 - 01:42:50] right now we are not fing any user
+[01:42:48 - 01:42:53] location here so obviously with the help
+[01:42:50 - 01:42:55] of uh context we'll get the users
+[01:42:53 - 01:43:01] location okay so just type location
+[01:42:55 - 01:43:03] comma set user location is equal to use
+[01:43:01 - 01:43:06] context okay and in use context you have
+[01:43:03 - 01:43:09] to provide user location contact
+[01:43:06 - 01:43:12] okay this now we have user
+[01:43:09 - 01:43:16] location user location.
+[01:43:12 - 01:43:20] latitude and user location do longitude
+[01:43:16 - 01:43:22] we have to pass now in get Google place
+[01:43:20 - 01:43:23] obviously here as well we have to accept
+[01:43:22 - 01:43:29] it here as a
+[01:43:23 - 01:43:29] lat lione okay and I will replace this
+[01:43:33 - 01:43:38] one plus
+[01:43:35 - 01:43:41] attitude and this one as a
+[01:43:38 - 01:43:44] longitude okay perfect and save
+[01:43:41 - 01:43:48] everything now we will taste everything
+[01:43:44 - 01:43:50] together so now if I select Indian okay
+[01:43:48 - 01:43:52] and if you see this is my uh current
+[01:43:50 - 01:43:57] location sorry uh the latitude and
+[01:43:52 - 01:43:59] longitude okay so if you see right some
+[01:43:57 - 01:44:01] the okay so we get the call but we are
+[01:43:59 - 01:44:04] not consoling it so let's go to the
+[01:44:01 - 01:44:06] network Tab and inside here if you see
+[01:44:04 - 01:44:08] with the current latitude and longitude
+[01:44:06 - 01:44:10] okay and if I go to the preview the
+[01:44:08 - 01:44:13] response right in the results we'll get
+[01:44:10 - 01:44:15] this okay this is my current location
+[01:44:13 - 01:44:17] okay M I'm living in m so that's the
+[01:44:15 - 01:44:20] reason the nearby Mexican restaurant is
+[01:44:17 - 01:44:25] showing me okay so all the Mexican even
+[01:44:20 - 01:44:27] though if I um decrease this um area
+[01:44:25 - 01:44:30] right still showing me some of the
+[01:44:27 - 01:44:32] businesses okay perfect so that's what
+[01:44:30 - 01:44:36] we wanted and we also storing these
+[01:44:32 - 01:44:38] businesses in our uh State okay where it
+[01:44:36 - 01:44:41] is okay so this business list now this
+[01:44:38 - 01:44:43] business list we will pass to the our
+[01:44:41 - 01:44:47] new business list component where we are
+[01:44:43 - 01:44:47] going to display the businesses
+[01:44:49 - 01:44:52] okay
+[01:44:52 - 01:44:58] now uh this rating section you can do
+[01:44:55 - 01:45:00] your own okay this is challenge for you
+[01:44:58 - 01:45:03] and uh in Middle if you you face any
+[01:45:00 - 01:45:06] issue you can um access my source code
+[01:45:03 - 01:45:08] anytime okay now let's implement the
+[01:45:06 - 01:45:10] business list and let's display it on
+[01:45:08 - 01:45:13] the screen okay so we already have the
+[01:45:10 - 01:45:17] list of business we store one one state
+[01:45:13 - 01:45:20] right in page. jss and if you see here
+[01:45:17 - 01:45:22] um we have this business list correct so
+[01:45:20 - 01:45:25] what we will do in the home uh in the
+[01:45:22 - 01:45:27] component folder inside a home folder we
+[01:45:25 - 01:45:28] we will create a new file called
+[01:45:27 - 01:45:31] business
+[01:45:28 - 01:45:34] list.js okay and add the default
+[01:45:31 - 01:45:37] template business list like this okay in
+[01:45:34 - 01:45:40] page.js after this Google Map VI okay in
+[01:45:37 - 01:45:42] second column we have to add this uh
+[01:45:40 - 01:45:45] business list component so add it like
+[01:45:42 - 01:45:47] this okay and save it and if you see at
+[01:45:45 - 01:45:50] the bottom you'll see the business list
+[01:45:47 - 01:45:52] text is showing okay now to this
+[01:45:50 - 01:45:55] business list list we will pass the
+[01:45:52 - 01:45:58] business list okay so pass it as a
+[01:45:55 - 01:46:02] business list only okay and business
+[01:45:58 - 01:46:06] list we will accept it as a prop
+[01:46:02 - 01:46:09] so business list so it's small
+[01:46:06 - 01:46:12] B now here we have the business list as
+[01:46:09 - 01:46:14] well okay now let's implement the Lo uh
+[01:46:12 - 01:46:16] or display this business list right here
+[01:46:14 - 01:46:18] we have to iterate the business list in
+[01:46:16 - 01:46:21] order to display all the business list
+[01:46:18 - 01:46:27] so what we will do inside this
+[01:46:21 - 01:46:28] D I will iterate this business list map
+[01:46:27 - 01:46:31] okay in order to iterate
+[01:46:28 - 01:46:37] it
+[01:46:31 - 01:46:37] item and inside this we add one view
+[01:46:37 - 01:46:44] okay like this okay or now you can
+[01:46:42 - 01:46:47] implement or write your code here or you
+[01:46:44 - 01:46:48] can use another component to write the
+[01:46:47 - 01:46:50] business item so what I will do in a
+[01:46:48 - 01:46:54] home component I will create a new
+[01:46:50 - 01:46:57] component called business item. JS okay
+[01:46:54 - 01:46:59] and add the default template here and
+[01:46:57 - 01:47:03] this business item I will call it here
+[01:46:59 - 01:47:05] so just call business item okay and pass
+[01:47:03 - 01:47:08] this
+[01:47:05 - 01:47:13] item so I pass it as a business is equal
+[01:47:08 - 01:47:16] to item okay perfect and IO I will add
+[01:47:13 - 01:47:19] the index and I will pass it as a key
+[01:47:16 - 01:47:22] okay index like this now inside the
+[01:47:19 - 01:47:25] business item we'll implement or we will
+[01:47:22 - 01:47:28] first accept it here as a business okay
+[01:47:25 - 01:47:31] now each business we need to show it on
+[01:47:28 - 01:47:35] the screen okay so let's Implement that
+[01:47:31 - 01:47:38] now so first of all I will add the image
+[01:47:35 - 01:47:41] from the next SL image oop
+[01:47:38 - 01:47:46] sorry it to
+[01:47:41 - 01:47:48] be this source and then for now okay I
+[01:47:46 - 01:47:51] will temporary I will add the uh image
+[01:47:48 - 01:47:54] from my local okay the placeholder only
+[01:47:51 - 01:47:56] then I will let you tell you how to uh
+[01:47:54 - 01:47:59] face the image from the Google uh photo
+[01:47:56 - 01:48:01] API okay that I will do do it later so
+[01:47:59 - 01:48:05] first of all I will add
+[01:48:01 - 01:48:10] placeholder do JP okay so this is the
+[01:48:05 - 01:48:12] image in my local and we go Al as a name
+[01:48:10 - 01:48:15] of the business so name of the business
+[01:48:12 - 01:48:19] is business do
+[01:48:15 - 01:48:25] name then with uh I will give
+[01:48:19 - 01:48:27] 180 we can give uh 0 okay and if I save
+[01:48:25 - 01:48:30] everything okay let's save everything if
+[01:48:27 - 01:48:33] you see we got this D image okay now
+[01:48:30 - 01:48:35] obviously uh we need to bring it in one
+[01:48:33 - 01:48:40] line right so for this class name make
+[01:48:35 - 01:48:43] it Al or not here actually but in order
+[01:48:40 - 01:48:46] to put in horizontal right in a business
+[01:48:43 - 01:48:49] list for this one we make it
+[01:48:46 - 01:48:51] Flex if you see string flex but it's
+[01:48:49 - 01:48:53] string too small all right so what you
+[01:48:51 - 01:48:55] have to do first of all you have to say
+[01:48:53 - 01:48:58] overl overflow
+[01:48:55 - 01:49:02] scroll okay and then you have to also
+[01:48:58 - 01:49:05] say overflow X Auto okay like this but
+[01:49:02 - 01:49:08] still it's not working right because we
+[01:49:05 - 01:49:11] need to specify the width for this uh du
+[01:49:08 - 01:49:13] okay so what I will do right now um I
+[01:49:11 - 01:49:16] will mention the width so let's give
+[01:49:13 - 01:49:18] class name width of 180
+[01:49:16 - 01:49:24] pixel if I save
+[01:49:18 - 01:49:28] it okay is not changing uh so let's say
+[01:49:24 - 01:49:30] Flex shrink zero so it we are telling
+[01:49:28 - 01:49:33] the um this particular do don't shrink
+[01:49:30 - 01:49:36] it and if you see it's working perfectly
+[01:49:33 - 01:49:39] fine okay and if you see it's scrolling
+[01:49:36 - 01:49:41] inside okay only this de is getting
+[01:49:39 - 01:49:44] scroll okay that's what we
+[01:49:41 - 01:49:48] wanted now after this let's add the
+[01:49:44 - 01:49:52] business name so I will add the to tag
+[01:49:48 - 01:49:56] and business name okay business.
+[01:49:52 - 01:49:59] name and in same way uh I will add the
+[01:49:56 - 01:50:01] other components okay if I say the same
+[01:49:59 - 01:50:03] so same way you can add the other all
+[01:50:01 - 01:50:07] the components and I will just copy
+[01:50:03 - 01:50:09] paste it okay so I already added this um
+[01:50:07 - 01:50:11] just I have to replace this business
+[01:50:09 - 01:50:13] name then I will add the address as well
+[01:50:11 - 01:50:17] I added some styling to this one and
+[01:50:13 - 01:50:20] then at the last we have rating
+[01:50:17 - 01:50:22] okay what is this okay so let let's make
+[01:50:20 - 01:50:25] sure everything is
+[01:50:22 - 01:50:26] correct so for this de we have to close
+[01:50:25 - 01:50:29] this
+[01:50:26 - 01:50:31] de like this and save it and if you see
+[01:50:29 - 01:50:34] if we are getting this name of the
+[01:50:31 - 01:50:38] business and the address as well okay
+[01:50:34 - 01:50:40] and the rating okay now for this de we
+[01:50:38 - 01:50:43] have to apply some styling okay so first
+[01:50:40 - 01:50:46] of all let's give padding of two okay
+[01:50:43 - 01:50:50] and I will make rounded corner to be
+[01:50:46 - 01:50:52] large okay look like this and also make
+[01:50:50 - 01:50:55] background to be
+[01:50:52 - 01:50:58] white okay
+[01:50:55 - 01:51:01] perfect so I will make this corner of
+[01:50:58 - 01:51:04] round rounded corner to this image so I
+[01:51:01 - 01:51:07] add the class name I say
+[01:51:04 - 01:51:09] rounded be large okay and then it will
+[01:51:07 - 01:51:13] look like this
+[01:51:09 - 01:51:16] okay and uh I think just make object to
+[01:51:13 - 01:51:19] be cover here like this okay and that's
+[01:51:16 - 01:51:22] all now what we have to do uh we have to
+[01:51:19 - 01:51:24] put this on top of this image okay and
+[01:51:22 - 01:51:26] that is big task so right now we can
+[01:51:24 - 01:51:30] able to put but we have to put it on top
+[01:51:26 - 01:51:34] of of this particular map okay so now
+[01:51:30 - 01:51:38] let's go back to the page.js okay and
+[01:51:34 - 01:51:42] wrap this business list in One D
+[01:51:38 - 01:51:44] okay like this and for this du you can
+[01:51:42 - 01:51:47] mark the position as
+[01:51:44 - 01:51:49] absolute okay once you mark it absolute
+[01:51:47 - 01:51:51] obviously nothing going to change but
+[01:51:49 - 01:51:53] this is is going to change right if you
+[01:51:51 - 01:51:57] see because you mark it as a absolute
+[01:51:53 - 01:52:00] okay so in order to
+[01:51:57 - 01:52:02] uh uh avoid this scrolling right because
+[01:52:00 - 01:52:05] we just want to we don't want to scroll
+[01:52:02 - 01:52:09] complete page right so to avoid it you
+[01:52:05 - 01:52:12] can mention the width to be
+[01:52:09 - 01:52:14] 90% when the screen size is smaller if
+[01:52:12 - 01:52:17] you see the screen size is smaller and
+[01:52:14 - 01:52:21] when the screen size is larger or medium
+[01:52:17 - 01:52:24] or larger we'll mention width of
+[01:52:21 - 01:52:27] 71% okay so that's I calculated so if
+[01:52:24 - 01:52:31] you see like this it will look like this
+[01:52:27 - 01:52:33] okay then also I will give some uh when
+[01:52:31 - 01:52:35] the screen size is smaller I will give
+[01:52:33 - 01:52:40] margin left to six and when screen size
+[01:52:35 - 01:52:44] is medium or larger I margin left to uh
+[01:52:40 - 01:52:47] maybe 10 okay let's see how it looks
+[01:52:44 - 01:52:49] okay look like this but now it's not on
+[01:52:47 - 01:52:50] the top right obviously we have to give
+[01:52:49 - 01:52:54] some
+[01:52:50 - 01:52:56] uh bottom property so in this case we
+[01:52:54 - 01:53:00] can say bottom to be
+[01:52:56 - 01:53:02] three and if it's go up to this point
+[01:53:00 - 01:53:04] right so obviously uh this bottom will
+[01:53:02 - 01:53:08] be applied to this one
+[01:53:04 - 01:53:12] and uh when the screen size is uh
+[01:53:08 - 01:53:15] smaller we can give bottom to be
+[01:53:12 - 01:53:18] 36 like this
+[01:53:15 - 01:53:20] okay and obviously we have to we can
+[01:53:18 - 01:53:23] mark this as a Rel
+[01:53:20 - 01:53:25] when the screen size is uh smaller and
+[01:53:23 - 01:53:27] when the screen size is medium or larger
+[01:53:25 - 01:53:30] we can mark it absolute you see the
+[01:53:27 - 01:53:32] change right if I increase the size it
+[01:53:30 - 01:53:34] will look like this okay now we will
+[01:53:32 - 01:53:38] give some gap between these all the
+[01:53:34 - 01:53:40] items right so in order to give the Gap
+[01:53:38 - 01:53:44] let's go to business list and over here
+[01:53:40 - 01:53:49] we can give the Gap okay and if you see
+[01:53:44 - 01:53:50] we got the Gap as well okay now if you
+[01:53:49 - 01:53:52] have any question until this point let
+[01:53:50 - 01:53:55] me know in the comment section okay now
+[01:53:52 - 01:53:56] another thing now we want to remove this
+[01:53:55 - 01:53:58] scroll bar right we don't want to add
+[01:53:56 - 01:54:04] this scroll bar so for that one you can
+[01:53:58 - 01:54:07] just type telin CSS hide scroll bar okay
+[01:54:04 - 01:54:12] and then you will find them some
+[01:54:07 - 01:54:14] npm this T scrar hide right this uh
+[01:54:12 - 01:54:17] dependence you have to install Okay so
+[01:54:14 - 01:54:20] let's go back here I will open our
+[01:54:17 - 01:54:23] project side by side
+[01:54:20 - 01:54:26] and inside a new terminal just paste
+[01:54:23 - 01:54:28] this particular dependency okay and once
+[01:54:26 - 01:54:30] it install it's very easy to use if you
+[01:54:28 - 01:54:33] scroll down right you just need to add
+[01:54:30 - 01:54:35] this plugin first so let's go to the
+[01:54:33 - 01:54:39] twiin
+[01:54:35 - 01:54:42] CSS config.js okay and inside here
+[01:54:39 - 01:54:44] inside plug-in you have to add this
+[01:54:42 - 01:54:46] required field okay and if you scroll
+[01:54:44 - 01:54:48] down more just you have to write scroll
+[01:54:46 - 01:54:50] bar hide okay so obviously you change
+[01:54:48 - 01:54:53] this you have to run your project again
+[01:54:50 - 01:54:56] because you change the config file and
+[01:54:53 - 01:54:59] inside the business list you can add
+[01:54:56 - 01:55:04] scroll by hide here like this okay and
+[01:54:59 - 01:55:06] save it now rerun our project so let's
+[01:55:04 - 01:55:09] wait for to build this project so that
+[01:55:06 - 01:55:13] we will get a we will see the change on
+[01:55:09 - 01:55:16] the UI and if you scroll down okay let's
+[01:55:13 - 01:55:18] select some uh food type and if you
+[01:55:16 - 01:55:21] scroll down we don't have that
+[01:55:18 - 01:55:23] particular uh scroller right now you
+[01:55:21 - 01:55:25] have to put you have to move that with
+[01:55:23 - 01:55:28] the array sorry the arrow button of the
+[01:55:25 - 01:55:31] keyboard okay but I hope you understand
+[01:55:28 - 01:55:33] this one next we will put some um this
+[01:55:31 - 01:55:35] button on the left and right hand side
+[01:55:33 - 01:55:40] so on the click you can move this
+[01:55:35 - 01:55:40] particular um slider okay
+[01:55:40 - 01:55:46] perfect now let's add the buttons so
+[01:55:44 - 01:55:48] that we can click on it and this slider
+[01:55:46 - 01:55:50] get move okay so on the right and left
+[01:55:48 - 01:55:53] hand side we have to add add the buttons
+[01:55:50 - 01:55:56] okay so let's go back to our application
+[01:55:53 - 01:55:56] first and
+[01:55:57 - 01:56:04] uh sorry so here right so on this one
+[01:56:02 - 01:56:08] right uh go to the business
+[01:56:04 - 01:56:10] list and at uh we will wrap this du
+[01:56:08 - 01:56:12] first inside another du so I will wrap
+[01:56:10 - 01:56:14] it like this
+[01:56:12 - 01:56:16] okay and one button is come after this
+[01:56:14 - 01:56:19] business list and another will come
+[01:56:16 - 01:56:22] before the business list okay so uh I
+[01:56:19 - 01:56:24] already have the SVG okay so I will copy
+[01:56:22 - 01:56:27] paste it here like this and I will also
+[01:56:24 - 01:56:30] add this on click slid R method okay so
+[01:56:27 - 01:56:32] this is simple method uh and this is
+[01:56:30 - 01:56:35] just icon and I also applied some
+[01:56:32 - 01:56:37] styling to this one okay and same thing
+[01:56:35 - 01:56:39] I am adding to the previous Buton so I
+[01:56:37 - 01:56:42] will add it here like this okay and this
+[01:56:39 - 01:56:45] slide left I'm adding okay now
+[01:56:42 - 01:56:48] interesting part is uh for this de we
+[01:56:45 - 01:56:52] have to provide the reference okay so we
+[01:56:48 - 01:56:55] just need to write uh reference is equal
+[01:56:52 - 01:56:57] to element reference like this okay it
+[01:56:55 - 01:57:00] need to be is equal to and this
+[01:56:57 - 01:57:03] reference we have to mention it here
+[01:57:00 - 01:57:06] okay so constant element reference is
+[01:57:03 - 01:57:08] equal to user so this user hook will
+[01:57:06 - 01:57:12] hold the reference of the current uh
+[01:57:08 - 01:57:15] component okay so initially it will be
+[01:57:12 - 01:57:18] null okay and there are two method that
+[01:57:15 - 01:57:20] we need to write so first it constant
+[01:57:18 - 01:57:22] slide right
+[01:57:20 - 01:57:25] okay and here we have to pass the
+[01:57:22 - 01:57:27] element okay which uh you means that on
+[01:57:25 - 01:57:31] button click that element reference is
+[01:57:27 - 01:57:34] sending and for that element we are
+[01:57:31 - 01:57:37] adding some uh properties like
+[01:57:34 - 01:57:39] scroll here we have to write uh element
+[01:57:37 - 01:57:43] dot
+[01:57:39 - 01:57:45] scroll left okay and here we can add
+[01:57:43 - 01:57:48] whatever value you want to add in this
+[01:57:45 - 01:57:50] case I will add 500 okay okay this need
+[01:57:48 - 01:57:54] to be actually Arrow function like this
+[01:57:50 - 01:57:58] okay and same thing we will add for the
+[01:57:54 - 01:58:01] right okay uh the left and the right so
+[01:57:58 - 01:58:04] this need to be actually
+[01:58:01 - 01:58:07] uh both we can put left only thing that
+[01:58:04 - 01:58:10] sorry uh this need to be minus and this
+[01:58:07 - 01:58:13] need to be plus okay and save
+[01:58:10 - 01:58:14] it and now let's test it out so let's go
+[01:58:13 - 01:58:16] back to application if you see right we
+[01:58:14 - 01:58:19] got these two buttons here and if I
+[01:58:16 - 01:58:21] click on this we got the scrolling okay
+[01:58:19 - 01:58:23] but this scrolling is not smooth right
+[01:58:21 - 01:58:26] it's it is getting scroll but not smooth
+[01:58:23 - 01:58:29] so for that one for this du right we
+[01:58:26 - 01:58:32] have this uh scroll property to apply to
+[01:58:29 - 01:58:35] this just write scroll smooth okay and
+[01:58:32 - 01:58:39] once you write scroll smooth you can see
+[01:58:35 - 01:58:40] see the change okay now depends on how
+[01:58:39 - 01:58:43] much scroll do you want on button click
+[01:58:40 - 01:58:46] you can change the value from here okay
+[01:58:43 - 01:58:49] but this is how we can Implement okay I
+[01:58:46 - 01:58:52] hope you understand this now right right
+[01:58:49 - 01:58:54] now if you see right we uh this for this
+[01:58:52 - 01:58:56] image we added the placeholder right now
+[01:58:54 - 01:58:59] let's add the actual business image so
+[01:58:56 - 01:59:01] let's go to business item and over here
+[01:58:59 - 01:59:05] right we need a couple of things first
+[01:59:01 - 01:59:07] need we need the API key okay and the
+[01:59:05 - 01:59:10] photo reference so I just added this
+[01:59:07 - 01:59:12] particular two lines so this Google API
+[01:59:10 - 01:59:14] key will hold the API key from the
+[01:59:12 - 01:59:17] environment uh file and this photo
+[01:59:14 - 01:59:20] reference will hold the business photo
+[01:59:17 - 01:59:22] reference okay because business uh this
+[01:59:20 - 01:59:24] particular result from the API will not
+[01:59:22 - 01:59:27] retaining the photo URL okay for the
+[01:59:24 - 01:59:30] business so they just give the reference
+[01:59:27 - 01:59:33] of the business okay the ID so with that
+[01:59:30 - 01:59:36] help of ID we have to F or display this
+[01:59:33 - 01:59:39] image okay so that is also very easy you
+[01:59:36 - 01:59:42] just need to uh replace this particular
+[01:59:39 - 01:59:45] source with this particular command okay
+[01:59:42 - 01:59:47] so what is saying this is the API
+[01:59:45 - 01:59:51] endpoint for the photo okay if you see
+[01:59:47 - 01:59:53] the map / API SL photo and for that one
+[01:59:51 - 01:59:55] we are providing maximum width the photo
+[01:59:53 - 01:59:57] reference that which we are storing in
+[01:59:55 - 01:59:59] this photo reference this photo
+[01:59:57 - 02:00:02] reference you have to provide along with
+[01:59:59 - 02:00:05] the API key okay and now save
+[02:00:02 - 02:00:08] everything and let's test it out okay so
+[02:00:05 - 02:00:11] if you go back to our application and
+[02:00:08 - 02:00:14] select for example Indian so right now
+[02:00:11 - 02:00:16] we got this error it's saying the host
+[02:00:14 - 02:00:19] name go map. Google API is not
+[02:00:16 - 02:00:22] configured okay so that we need to
+[02:00:19 - 02:00:24] configure in next. config.js file okay
+[02:00:22 - 02:00:26] so here before we configure this
+[02:00:24 - 02:00:30] particular domain for this new domain we
+[02:00:26 - 02:00:32] have to configure like this save it and
+[02:00:30 - 02:00:34] then stop the server and return return
+[02:00:32 - 02:00:37] it again okay so this is very important
+[02:00:34 - 02:00:40] whenever you are using the new URL okay
+[02:00:37 - 02:00:42] uh to display the image we have to make
+[02:00:40 - 02:00:45] sure that this host name or domain name
+[02:00:42 - 02:00:49] need to be configured or added in next.
+[02:00:45 - 02:00:51] config.js okay now I reloaded this uh uh
+[02:00:49 - 02:00:53] screen and let's wait for a few second
+[02:00:51 - 02:00:56] now let's click
+[02:00:53 - 02:00:59] Indian and let's see what we are getting
+[02:00:56 - 02:01:00] so let's click Indian see it's coming up
+[02:00:59 - 02:01:03] if I click
+[02:01:00 - 02:01:06] Mexican see Mexican coming up okay but
+[02:01:03 - 02:01:08] if you see this image is the height is
+[02:01:06 - 02:01:11] getting changed okay up and down so
+[02:01:08 - 02:01:15] let's fix this issue so for business
+[02:01:11 - 02:01:18] height let's go to the business item
+[02:01:15 - 02:01:21] here we can Define the height as well
+[02:01:18 - 02:01:25] okay so here what I will do height to be
+[02:01:21 - 02:01:29] 80 pixel like this okay and if you see
+[02:01:25 - 02:01:32] now height is all are 80 pixel and it's
+[02:01:29 - 02:01:34] already object cover okay now you can do
+[02:01:32 - 02:01:36] some modification according to your need
+[02:01:34 - 02:01:39] it's up to you how you want okay you can
+[02:01:36 - 02:01:41] give the I will increase the WID little
+[02:01:39 - 02:01:45] bit to maybe
+[02:01:41 - 02:01:49] 90 like this and I think this is much
+[02:01:45 - 02:01:51] better okay and see I can able to SC
+[02:01:49 - 02:01:56] scroll this one easily or you can move
+[02:01:51 - 02:01:59] it okay now if I change to Indian okay
+[02:01:56 - 02:02:02] it will change to Indian see s Balaji or
+[02:01:59 - 02:02:05] bani po if I want to change to Chinese
+[02:02:02 - 02:02:07] it will change to Chinese see okay
+[02:02:05 - 02:02:10] perfect now here you can uh show the
+[02:02:07 - 02:02:13] some type of loading or some type of uh
+[02:02:10 - 02:02:15] skeleton effect it's up to you okay this
+[02:02:13 - 02:02:18] is challenge for you you on the click of
+[02:02:15 - 02:02:20] this you have to load some uh loading
+[02:02:18 - 02:02:22] effect okay so that you will get to know
+[02:02:20 - 02:02:24] okay uh this result is getting loaded
+[02:02:22 - 02:02:26] okay perfect so if you have any question
+[02:02:24 - 02:02:30] until this point let me know in the
+[02:02:26 - 02:02:32] comment section so here quick thing so
+[02:02:30 - 02:02:34] if I change this one right if I change
+[02:02:32 - 02:02:36] to Indian and if you see this uh loading
+[02:02:34 - 02:02:39] effect is coming right immediately it's
+[02:02:36 - 02:02:41] going but this loading effect coming up
+[02:02:39 - 02:02:44] right that is nothing but but a skeleton
+[02:02:41 - 02:02:46] effect so if you search for this TN CSS
+[02:02:44 - 02:02:49] animation section right you will find
+[02:02:46 - 02:02:51] this uh beautiful animation okay okay
+[02:02:49 - 02:02:54] and this is nothing but a skeleton but
+[02:02:51 - 02:02:56] in t CS is called as a pulse okay and
+[02:02:54 - 02:02:59] you just need to Define uh the your do
+[02:02:56 - 02:03:00] as animate pulse okay and it will be
+[02:02:59 - 02:03:03] look like this particular beautiful
+[02:03:00 - 02:03:05] skeleton effect okay and let me show you
+[02:03:03 - 02:03:08] how I added so I created new component
+[02:03:05 - 02:03:10] called skeleton loading okay and inside
+[02:03:08 - 02:03:14] this component I structure means I write
+[02:03:10 - 02:03:17] this D tag and everything like the our
+[02:03:14 - 02:03:19] business listing item structure okay and
+[02:03:17 - 02:03:23] inside the page.js where we are loading
+[02:03:19 - 02:03:26] this uh or we are calling this get
+[02:03:23 - 02:03:28] Google Play API right uh I defined this
+[02:03:26 - 02:03:31] loading State initially I will def
+[02:03:28 - 02:03:33] defining as a true but when uh this
+[02:03:31 - 02:03:37] particular Google place is
+[02:03:33 - 02:03:39] loading we are showing it as a true and
+[02:03:37 - 02:03:44] once the we got the result we'll set it
+[02:03:39 - 02:03:46] as a false okay and below this one we
+[02:03:44 - 02:03:48] are just showing if the loading is not
+[02:03:46 - 02:03:50] there means loading is false then we are
+[02:03:48 - 02:03:53] showing business list and if loading
+[02:03:50 - 02:03:55] value is true then we will uh showing
+[02:03:53 - 02:03:57] the skeleton loading five times that's
+[02:03:55 - 02:04:00] the reason I provide this 1 2 3 4 five
+[02:03:57 - 02:04:03] ARR list and obviously five time the
+[02:04:00 - 02:04:05] skeleton loading will be iterate and
+[02:04:03 - 02:04:08] displayed on the screen okay and this is
+[02:04:05 - 02:04:10] how it will show if I change to Mexican
+[02:04:08 - 02:04:13] see the five item is showing on the
+[02:04:10 - 02:04:15] screen okay I hope you understand this
+[02:04:13 - 02:04:16] one and if you have any question let me
+[02:04:15 - 02:04:18] know in the comment section and
+[02:04:16 - 02:04:21] obviously you can access this source
+[02:04:18 - 02:04:23] code any time um for free okay so if you
+[02:04:21 - 02:04:25] face any issue while implementing this
+[02:04:23 - 02:04:28] particular skeleton effect you can
+[02:04:25 - 02:04:28] access my source
+[02:04:32 - 02:04:39] code now in this section we are going to
+[02:04:35 - 02:04:42] show all this business uh on this
+[02:04:39 - 02:04:45] particular map okay using the marker so
+[02:04:42 - 02:04:47] whatever the business you uh we are
+[02:04:45 - 02:04:49] getting from this particular category
+[02:04:47 - 02:04:52] okay from the API we are going to show
+[02:04:49 - 02:04:54] it on the map okay now let's go back to
+[02:04:52 - 02:04:58] our application and uh in this
+[02:04:54 - 02:05:01] particular uh home folder right we are
+[02:04:58 - 02:05:05] going to create a new folder called
+[02:05:01 - 02:05:09] markers. JS okay and add the default
+[02:05:05 - 02:05:11] template like this okay next uh in
+[02:05:09 - 02:05:14] page.js we have this Google map view
+[02:05:11 - 02:05:16] right which we already Define here we
+[02:05:14 - 02:05:18] will send the list of businesses okay so
+[02:05:16 - 02:05:20] by using the business list which we
+[02:05:18 - 02:05:23] already have in the page. jss okay and
+[02:05:20 - 02:05:27] in Google map view let's accept it here
+[02:05:23 - 02:05:30] as a business list okay like this now
+[02:05:27 - 02:05:32] obviously uh we have to show marker in
+[02:05:30 - 02:05:35] between this Google Map tag like we
+[02:05:32 - 02:05:37] defined for the users right here we will
+[02:05:35 - 02:05:39] Define for the business list obviously
+[02:05:37 - 02:05:42] we have to iterate all the business list
+[02:05:39 - 02:05:49] okay so I will do business list do
+[02:05:42 - 02:05:52] map item and here we will call M um
+[02:05:49 - 02:05:55] markers okay so we created markers so
+[02:05:52 - 02:05:56] this is the markers component and we
+[02:05:55 - 02:05:59] will call that one okay and in that
+[02:05:56 - 02:06:03] markers we will add this marker okay so
+[02:05:59 - 02:06:04] if you go to this marker inside this you
+[02:06:03 - 02:06:06] will add this marker obviously we go and
+[02:06:04 - 02:06:08] change this position and the icon
+[02:06:06 - 02:06:12] obviously okay
+[02:06:08 - 02:06:14] but uh in Google map VI inside this
+[02:06:12 - 02:06:17] markers let's say this item item nothing
+[02:06:14 - 02:06:21] but a single business of okay so we'll
+[02:06:17 - 02:06:22] say business is equal to item okay so
+[02:06:21 - 02:06:24] each business we are sending to the
+[02:06:22 - 02:06:28] marker one by one
+[02:06:24 - 02:06:32] okay and what I will also add this index
+[02:06:28 - 02:06:35] over here okay and add key is equal to
+[02:06:32 - 02:06:38] index also I will just show first seven
+[02:06:35 - 02:06:42] elements okay so I will do equal to
+[02:06:38 - 02:06:44] seven and and okay so it means first
+[02:06:42 - 02:06:48] eight business will displayed on the map
+[02:06:44 - 02:06:49] okay now once you go to the marker here
+[02:06:48 - 02:06:53] you have to accept it as a business
+[02:06:49 - 02:06:55] because we send it um business in from
+[02:06:53 - 02:06:59] this particular component to this Markus
+[02:06:55 - 02:07:02] component okay and if you see the field
+[02:06:59 - 02:07:04] right this is our the response and
+[02:07:02 - 02:07:07] inside the result we already have we
+[02:07:04 - 02:07:09] have this geometry and inside Lo inside
+[02:07:07 - 02:07:11] geometry we have location and inside
+[02:07:09 - 02:07:14] that we have latitude and longitude okay
+[02:07:11 - 02:07:17] so what we'll do obviously um we have to
+[02:07:14 - 02:07:21] do replace this position with a business
+[02:07:17 - 02:07:23] location like business do geometry Dot
+[02:07:21 - 02:07:25] and if you see after geometry we have
+[02:07:23 - 02:07:28] the location okay from there we will get
+[02:07:25 - 02:07:30] the latitude and longitude okay and here
+[02:07:28 - 02:07:35] also I will change this URL to Circle
+[02:07:30 - 02:07:37] because circle is the uh this particular
+[02:07:35 - 02:07:39] Circle one okay which we are showing at
+[02:07:37 - 02:07:43] as a marker and obviously I will change
+[02:07:39 - 02:07:45] this to 10 10 okay and save it now now
+[02:07:43 - 02:07:47] let's go back to our application okay
+[02:07:45 - 02:07:49] now nothing will show you on the uh
+[02:07:47 - 02:07:51] screen because uh if you did not select
+[02:07:49 - 02:07:55] the any category you are not able to
+[02:07:51 - 02:07:57] select any um business okay but if you
+[02:07:55 - 02:08:00] select this for example if I select
+[02:07:57 - 02:08:02] Mexican okay okay so if you see we got
+[02:08:00 - 02:08:04] the error that marker is not defined
+[02:08:02 - 02:08:06] because we just copy P but we forgot to
+[02:08:04 - 02:08:10] import it right so make sure to import
+[02:08:06 - 02:08:12] and now save it okay now again let's
+[02:08:10 - 02:08:15] select the some of the any category if I
+[02:08:12 - 02:08:17] select it as soon as soon as I select
+[02:08:15 - 02:08:20] you will see the result along with this
+[02:08:17 - 02:08:22] marker see on on the screen okay so this
+[02:08:20 - 02:08:26] is the actual position or location of
+[02:08:22 - 02:08:28] this business okay and if I scroll it
+[02:08:26 - 02:08:30] right now also I'm showing only eight uh
+[02:08:28 - 02:08:32] business and here also it's showing
+[02:08:30 - 02:08:36] eight business on the screen okay if I
+[02:08:32 - 02:08:39] can zoom it and I can uh I need to want
+[02:08:36 - 02:08:41] I want to see this uh which location it
+[02:08:39 - 02:08:44] is or information right but right now if
+[02:08:41 - 02:08:47] you see we successfully able to add the
+[02:08:44 - 02:08:49] marker on the Google Map okay now next
+[02:08:47 - 02:08:51] obviously
+[02:08:49 - 02:08:54] if us just click on any of this marker
+[02:08:51 - 02:08:58] okay we want to show the information on
+[02:08:54 - 02:09:00] the uh about this one okay uh
+[02:08:58 - 02:09:03] immediately and uh obviously if I select
+[02:09:00 - 02:09:06] any of this one obviously this also want
+[02:09:03 - 02:09:08] want to change okay this marker also uh
+[02:09:06 - 02:09:11] Circle in the center and then we will
+[02:09:08 - 02:09:14] show the information about this marker
+[02:09:11 - 02:09:15] okay but until now this if you have any
+[02:09:14 - 02:09:16] question any doubt let me know in the
+[02:09:15 - 02:09:19] comment
+[02:09:16 - 02:09:21] section now we will show the business
+[02:09:19 - 02:09:22] information for each of this marker
+[02:09:21 - 02:09:24] right now we are just showing this
+[02:09:22 - 02:09:27] marker and right now we don't have any
+[02:09:24 - 02:09:30] onclick event or anything right so let's
+[02:09:27 - 02:09:35] Implement that one so let me move here
+[02:09:30 - 02:09:38] like this or maybe okay so here uh we
+[02:09:35 - 02:09:41] already have this business okay now in
+[02:09:38 - 02:09:44] order to show the the uh information for
+[02:09:41 - 02:09:48] this marker uh let's write in between
+[02:09:44 - 02:09:51] this marker tag okay so I will in in
+[02:09:48 - 02:09:52] between this marker we have to write the
+[02:09:51 - 02:09:54] over
+[02:09:52 - 02:09:59] overlay view okay so here we have to
+[02:09:54 - 02:10:01] write overlay view okay like this and uh
+[02:09:59 - 02:10:03] inside this overlay view we have to
+[02:10:01 - 02:10:04] provide two important property first we
+[02:10:03 - 02:10:07] have to provide the position at what
+[02:10:04 - 02:10:08] position do you want okay so obviously
+[02:10:07 - 02:10:12] the position is the business geometry
+[02:10:08 - 02:10:15] location like this okay and one more
+[02:10:12 - 02:10:18] important thing is map pan name okay so
+[02:10:15 - 02:10:19] we have to write map pan name and which
+[02:10:18 - 02:10:25] is overlay
+[02:10:19 - 02:10:27] view do overlay Mouse uh Target okay now
+[02:10:25 - 02:10:29] and now whatever you display over here
+[02:10:27 - 02:10:33] it will display on on the screen for
+[02:10:29 - 02:10:38] example if I display the business
+[02:10:33 - 02:10:42] name like this right in between S2
+[02:10:38 - 02:10:44] tag and save it let's go back to
+[02:10:42 - 02:10:47] application and if you see the name of
+[02:10:44 - 02:10:50] business string right but we want to
+[02:10:47 - 02:10:56] modify it so what we can do instead of
+[02:10:50 - 02:10:59] this business name right we can write D
+[02:10:56 - 02:11:01] sorry here we will write the DU and
+[02:10:59 - 02:11:04] inside du we already have the business
+[02:11:01 - 02:11:08] item right so let's add the business
+[02:11:04 - 02:11:10] item here and pass the business okay so
+[02:11:08 - 02:11:12] here we have to pass the bus business
+[02:11:10 - 02:11:13] okay so if you see this business item as
+[02:11:12 - 02:11:15] a
+[02:11:13 - 02:11:19] business um prop and that we have to
+[02:11:15 - 02:11:22] pass it okay and if an save it let's go
+[02:11:19 - 02:11:25] back to application see it's showing on
+[02:11:22 - 02:11:29] the screen okay immediately and if I
+[02:11:25 - 02:11:33] zoom out see everything if I zoom in it
+[02:11:29 - 02:11:35] will show okay but the position I'm not
+[02:11:33 - 02:11:38] expect this one okay I want this
+[02:11:35 - 02:11:41] particular um details of the business
+[02:11:38 - 02:11:44] above this particular marker okay so
+[02:11:41 - 02:11:46] let's do that so it's quite easy you
+[02:11:44 - 02:11:51] have to just give the styling to this
+[02:11:46 - 02:11:54] one so we'll say margin left first to
+[02:11:51 - 02:11:55] minus 90 pixel okay and you can use the
+[02:11:54 - 02:11:58] same coordinate you can change little
+[02:11:55 - 02:12:02] bit depends on your requirement and then
+[02:11:58 - 02:12:05] margin top will be 200 pixel okay so
+[02:12:02 - 02:12:07] this particular margin I calculate from
+[02:12:05 - 02:12:11] the business item okay if you see our
+[02:12:07 - 02:12:13] business item has the width around 195
+[02:12:11 - 02:12:17] okay and above that I also took extra
+[02:12:13 - 02:12:19] five and the the height and width okay
+[02:12:17 - 02:12:22] depends on that one I give this um
+[02:12:19 - 02:12:25] margins okay and if I save it and let's
+[02:12:22 - 02:12:27] go back to application if you see now
+[02:12:25 - 02:12:31] above each marker we have this location
+[02:12:27 - 02:12:33] okay if I zoom out zoom in see above the
+[02:12:31 - 02:12:37] marker now we have the information okay
+[02:12:33 - 02:12:40] that's what we wanted but this is quite
+[02:12:37 - 02:12:42] uh I mean a lot of business detail is
+[02:12:40 - 02:12:44] showing on the screen we don't want that
+[02:12:42 - 02:12:46] one okay on the click of the marker then
+[02:12:44 - 02:12:50] only we want to show this information
+[02:12:46 - 02:12:52] Okay so so in order to do that we have
+[02:12:50 - 02:12:57] to write on click method on this marker
+[02:12:52 - 02:13:00] F so write on click okay and for this on
+[02:12:57 - 02:13:04] click we have to set the value okay so
+[02:13:00 - 02:13:07] here we will set the value for example
+[02:13:04 - 02:13:10] console log and here we will say okay
+[02:13:07 - 02:13:13] this is the business user click on okay
+[02:13:10 - 02:13:16] but in order to save this state right we
+[02:13:13 - 02:13:19] are going to use um context for this one
+[02:13:16 - 02:13:21] because we want to know the selected
+[02:13:19 - 02:13:23] business in other component as well
+[02:13:21 - 02:13:26] right so let's create a new component in
+[02:13:23 - 02:13:28] so in the context sorry um so we have to
+[02:13:26 - 02:13:32] create a context actually okay so here
+[02:13:28 - 02:13:37] we'll create a context called um
+[02:13:32 - 02:13:39] selected business context. JS okay
+[02:13:37 - 02:13:43] obviously I write uh
+[02:13:39 - 02:13:46] selected business context is equal to
+[02:13:43 - 02:13:48] create context okay and default is null
+[02:13:46 - 02:13:53] and make sure to export it so that that
+[02:13:48 - 02:13:56] we can use it okay now uh in our layout.
+[02:13:53 - 02:13:57] JS here you have to import it okay and
+[02:13:56 - 02:14:01] by
+[02:13:57 - 02:14:06] default uh I will add selected
+[02:14:01 - 02:14:08] business set selected business okay this
+[02:14:06 - 02:14:09] is default value we are going to pass
+[02:14:08 - 02:14:14] and we will add another
+[02:14:09 - 02:14:17] provider okay so selected business
+[02:14:14 - 02:14:19] context do provider and then I will
+[02:14:17 - 02:14:21] provide the value with we just Define
+[02:14:19 - 02:14:25] like selected business comma set
+[02:14:21 - 02:14:28] selected business okay
+[02:14:25 - 02:14:31] and in the tag and wrap
+[02:14:28 - 02:14:34] this uh for all of these
+[02:14:31 - 02:14:36] particular components and save it okay
+[02:14:34 - 02:14:39] now we have selected business to all the
+[02:14:36 - 02:14:42] components in our application okay now
+[02:14:39 - 02:14:45] let's go back to our markers and here we
+[02:14:42 - 02:14:47] have to accept that one okay so me we
+[02:14:45 - 02:14:48] have to get the selected business so I
+[02:14:47 - 02:14:51] will say
+[02:14:48 - 02:14:55] selected business comma set
+[02:14:51 - 02:14:58] selected business is equal to use
+[02:14:55 - 02:15:01] context and here we'll say selected
+[02:14:58 - 02:15:03] business context okay so here we are we
+[02:15:01 - 02:15:06] are defining because we want to set the
+[02:15:03 - 02:15:09] business selected business okay and from
+[02:15:06 - 02:15:11] this markers we from this on click on
+[02:15:09 - 02:15:14] the marker we are going to set the
+[02:15:11 - 02:15:16] business okay so let's say set selected
+[02:15:14 - 02:15:19] business and we have to pass the
+[02:15:16 - 02:15:23] business information okay interesting
+[02:15:19 - 02:15:26] correct now if I uh select any of this
+[02:15:23 - 02:15:28] uh particular food type if I click on it
+[02:15:26 - 02:15:31] right now obviously it's not affecting
+[02:15:28 - 02:15:34] anything because we did not apply any uh
+[02:15:31 - 02:15:36] any logic but we are going to storing
+[02:15:34 - 02:15:38] this business information in this
+[02:15:36 - 02:15:40] particular selected business okay now
+[02:15:38 - 02:15:42] what we have to check we have this
+[02:15:40 - 02:15:46] selected business information right here
+[02:15:42 - 02:15:49] we going to check so unique property if
+[02:15:46 - 02:15:52] you go here right and and uh we can
+[02:15:49 - 02:15:55] check with the name of the business or
+[02:15:52 - 02:15:57] we have this reference okay so if you
+[02:15:55 - 02:15:58] check the reference with the current
+[02:15:57 - 02:16:01] reference we can do that okay so let's
+[02:15:58 - 02:16:04] take this reference as a key because
+[02:16:01 - 02:16:07] that will be a unique okay so here we
+[02:16:04 - 02:16:09] can write the condition selected
+[02:16:07 - 02:16:12] business
+[02:16:09 - 02:16:14] okay. reference is equal to equal to
+[02:16:12 - 02:16:17] business. reference okay if this
+[02:16:14 - 02:16:19] condition is valid then only show the
+[02:16:17 - 02:16:23] overlay okay otherwise don't show
+[02:16:19 - 02:16:26] it okay as simple as that and let's
+[02:16:23 - 02:16:29] bring this down and let's save it okay
+[02:16:26 - 02:16:30] so initially you will not see anything
+[02:16:29 - 02:16:32] okay because this is we are showing
+[02:16:30 - 02:16:35] because we click on it okay but refresh
+[02:16:32 - 02:16:37] it and let's check newly okay so let's
+[02:16:35 - 02:16:40] select any of this restaurant let's see
+[02:16:37 - 02:16:43] Mexican okay and right now see nothing
+[02:16:40 - 02:16:45] is selected okay if I click on this one
+[02:16:43 - 02:16:47] only this information is showing see if
+[02:16:45 - 02:16:53] I click on this one only this are
+[02:16:47 - 02:16:55] showing see okay so it's up to you which
+[02:16:53 - 02:16:59] you want to see okay and this is how you
+[02:16:55 - 02:17:02] can see it okay now one more
+[02:16:59 - 02:17:03] thing we we showed this everything right
+[02:17:02 - 02:17:05] but on the click of this one as well we
+[02:17:03 - 02:17:07] want to show it on the map okay
+[02:17:05 - 02:17:09] interesting correct so if I click on
+[02:17:07 - 02:17:12] this one I want to show this on the map
+[02:17:09 - 02:17:14] as well okay so in order to do that
+[02:17:12 - 02:17:16] right obviously we have to use this all
+[02:17:14 - 02:17:18] the context similar contact because we
+[02:17:16 - 02:17:21] are going to set the value from the
+[02:17:18 - 02:17:22] business list okay so copy this one go
+[02:17:21 - 02:17:24] to the business
+[02:17:22 - 02:17:26] list and I will paste it here okay make
+[02:17:24 - 02:17:29] sure to import the use context as well
+[02:17:26 - 02:17:30] as selected business
+[02:17:29 - 02:17:33] context
+[02:17:30 - 02:17:35] and on the click of business list we are
+[02:17:33 - 02:17:39] going to say so what I will do I will
+[02:17:35 - 02:17:43] wrap this in one de okay like
+[02:17:39 - 02:17:45] this put this key onto this one so you
+[02:17:43 - 02:17:48] can put on click here as well it's up to
+[02:17:45 - 02:17:50] you okay and on click okay we are going
+[02:17:48 - 02:17:54] to set
+[02:17:50 - 02:17:57] set set business selected business and I
+[02:17:54 - 02:17:59] will pass the item which contain our
+[02:17:57 - 02:18:01] business so it contain only single
+[02:17:59 - 02:18:03] element right and let's save it and
+[02:18:01 - 02:18:05] let's go back to application Let me
+[02:18:03 - 02:18:07] refresh everything let's select anything
+[02:18:05 - 02:18:11] like
+[02:18:07 - 02:18:14] Italian okay now if I select this one
+[02:18:11 - 02:18:18] see this information if I select this
+[02:18:14 - 02:18:19] Pizzaria see see pizar string okay so
+[02:18:18 - 02:18:22] this is how it
+[02:18:19 - 02:18:25] work okay and this one is also working
+[02:18:22 - 02:18:28] for us means if I click any of this one
+[02:18:25 - 02:18:32] see the result is coming okay now one
+[02:18:28 - 02:18:34] more thing uh you can do whenever uh you
+[02:18:32 - 02:18:37] just selected right you can Center it
+[02:18:34 - 02:18:39] this particular map okay it's up to you
+[02:18:37 - 02:18:42] how you want to Center and let's uh
+[02:18:39 - 02:18:44] apply your knowledge because in Google
+[02:18:42 - 02:18:47] map view we center with the users
+[02:18:44 - 02:18:49] location see okay now whenever the
+[02:18:47 - 02:18:52] business is selected you can replace
+[02:18:49 - 02:18:54] this user location with your business
+[02:18:52 - 02:18:57] location and automatically the map will
+[02:18:54 - 02:18:59] get centered okay let's try it let's
+[02:18:57 - 02:19:01] give a try and if you have faced any
+[02:18:59 - 02:19:04] challenge let me know in the comment
+[02:19:01 - 02:19:04] section or you can use my source
+[02:19:08 - 02:19:15] code so now we will show the distance
+[02:19:12 - 02:19:18] and the button uh over here okay so we
+[02:19:15 - 02:19:21] will show we will uh display
+[02:19:18 - 02:19:22] how far it is from your location okay so
+[02:19:21 - 02:19:24] it will be in the miles or kilometer
+[02:19:22 - 02:19:27] it's up to you how you want to display
+[02:19:24 - 02:19:29] and the button so that once you click on
+[02:19:27 - 02:19:31] that button it will open the actual
+[02:19:29 - 02:19:35] Google map with the navigations okay so
+[02:19:31 - 02:19:38] let's Implement that one so first of all
+[02:19:35 - 02:19:39] uh in the marker right uh here we have
+[02:19:38 - 02:19:41] the business item and inside the
+[02:19:39 - 02:19:45] business item we are going to implement
+[02:19:41 - 02:19:49] okay so let's define One D here and
+[02:19:45 - 02:19:53] inside this D we'll Define H2 tag okay
+[02:19:49 - 02:19:55] and uh we will say uh for example for my
+[02:19:53 - 02:19:57] okay we will we will replace this
+[02:19:55 - 02:19:59] particular value with the actual
+[02:19:57 - 02:20:04] distance okay but right now we will just
+[02:19:59 - 02:20:09] implementing the UI and uh also in Span
+[02:20:04 - 02:20:11] I will add Get direction okay now uh
+[02:20:09 - 02:20:12] let's save it and let's see how it looks
+[02:20:11 - 02:20:15] if you see the Four Mile and get
+[02:20:12 - 02:20:17] direction is getting on the screen okay
+[02:20:15 - 02:20:19] but if you see for this business also
+[02:20:17 - 02:20:22] it's uh displaying because we are using
+[02:20:19 - 02:20:24] the same uh component right so in order
+[02:20:22 - 02:20:26] to just display on this one and not on
+[02:20:24 - 02:20:31] this particular item what we can do go
+[02:20:26 - 02:20:34] to the marker and here we will pass show
+[02:20:31 - 02:20:36] direction as a value okay and we can
+[02:20:34 - 02:20:39] pass it as a true okay from this Markus
+[02:20:36 - 02:20:42] business item and here we have to accept
+[02:20:39 - 02:20:44] it here as a mark show directory okay
+[02:20:42 - 02:20:46] and default you can give false okay so
+[02:20:44 - 02:20:50] it's optional obviously because we give
+[02:20:46 - 02:20:53] this value to this show directory okay
+[02:20:50 - 02:20:56] and now you can just write condition if
+[02:20:53 - 02:20:59] show show directory Direction it means
+[02:20:56 - 02:21:02] is true then show this do otherwise
+[02:20:59 - 02:21:04] don't show it okay and if you see now
+[02:21:02 - 02:21:06] it's not showing on this business item
+[02:21:04 - 02:21:08] but it's showing on this one right even
+[02:21:06 - 02:21:12] though the business the component is
+[02:21:08 - 02:21:14] similar but uh with this condition is
+[02:21:12 - 02:21:16] not showing on this one okay that's what
+[02:21:14 - 02:21:17] we wanted now let's add some styling to
+[02:21:16 - 02:21:21] this one
+[02:21:17 - 02:21:25] so for this H2 I will add class name
+[02:21:21 - 02:21:27] text okay and here uh we have some value
+[02:21:25 - 02:21:29] right but you can give the custom value
+[02:21:27 - 02:21:31] as well okay but if you see WEP blue and
+[02:21:29 - 02:21:34] you'll get the value but in order to
+[02:21:31 - 02:21:35] give the custom uh value right you have
+[02:21:34 - 02:21:38] to type
+[02:21:35 - 02:21:41] hex like this
+[02:21:38 - 02:21:45] sorry uh the hex value and if I save it
+[02:21:41 - 02:21:47] and if you see the change okay perfect
+[02:21:45 - 02:21:51] now let's add some more values say let's
+[02:21:47 - 02:21:54] Flex then I will say justify
+[02:21:51 - 02:21:57] between okay and that's all and I will
+[02:21:54 - 02:21:59] also make item to be in the center so
+[02:21:57 - 02:22:03] it's uh vertical and horizontal will be
+[02:21:59 - 02:22:04] Center like this okay to this du what I
+[02:22:03 - 02:22:08] will do I will add the
+[02:22:04 - 02:22:11] border at the top of one
+[02:22:08 - 02:22:16] pixel okay and I will give padding of
+[02:22:11 - 02:22:19] one margin top to one as well okay and
+[02:22:16 - 02:22:21] save it and if you see right now showing
+[02:22:19 - 02:22:23] like this right so let's make sure
+[02:22:21 - 02:22:25] everything is correct so border need to
+[02:22:23 - 02:22:29] be like this and then we'll see the
+[02:22:25 - 02:22:31] Border okay then what I will do I I want
+[02:22:29 - 02:22:35] the button like structure to this gate
+[02:22:31 - 02:22:36] direction okay so to this pan you can
+[02:22:35 - 02:22:40] apply some
+[02:22:36 - 02:22:41] styling class name you can order border
+[02:22:40 - 02:22:48] of one
+[02:22:41 - 02:22:49] pixel p and add the padding to one okay
+[02:22:48 - 02:22:52] and if you
+[02:22:49 - 02:22:55] save will look like this okay so it's
+[02:22:52 - 02:22:58] not really looks good because we added a
+[02:22:55 - 02:23:00] too much border width okay now we can
+[02:22:58 - 02:23:05] make it rounded corner so just write
+[02:23:00 - 02:23:06] rounded to be full okay and then I will
+[02:23:05 - 02:23:11] change
+[02:23:06 - 02:23:13] border color so it will be blue 500 okay
+[02:23:11 - 02:23:17] and save it and see it's showing
+[02:23:13 - 02:23:19] perfectly fine okay now on how I want to
+[02:23:17 - 02:23:23] uh change this color and combination
+[02:23:19 - 02:23:27] okay so what I will do
+[02:23:23 - 02:23:31] onover I will change text to White okay
+[02:23:27 - 02:23:36] again on H will change the background
+[02:23:31 - 02:23:38] okay so you can write um background blue
+[02:23:36 - 02:23:40] 500
+[02:23:38 - 02:23:42] okay and if you see if I overrun it it's
+[02:23:40 - 02:23:45] changing the
+[02:23:42 - 02:23:48] background okay and here you can write
+[02:23:45 - 02:23:49] the distance I want to show distance
+[02:23:48 - 02:23:53] like
+[02:23:49 - 02:23:54] this okay perfect now obviously if I
+[02:23:53 - 02:23:57] click on this one we are getting
+[02:23:54 - 02:23:59] distance okay now what we will do we
+[02:23:57 - 02:24:02] will implement the logic to get the
+[02:23:59 - 02:24:04] direction between the user I means your
+[02:24:02 - 02:24:08] current location and this business
+[02:24:04 - 02:24:11] location okay so we'll uh do that now so
+[02:24:08 - 02:24:13] now on the click of this gate direction
+[02:24:11 - 02:24:15] button we want to open the map okay and
+[02:24:13 - 02:24:17] uh I already have the function WR so
+[02:24:15 - 02:24:20] what I will do I will just copy paste it
+[02:24:17 - 02:24:22] here okay like this so this is on
+[02:24:20 - 02:24:24] Direction click method and here is just
+[02:24:22 - 02:24:28] I'm opening the new window with this
+[02:24:24 - 02:24:32] particular URL okay and for this URL I'm
+[02:24:28 - 02:24:34] passing the origin okay and the um
+[02:24:32 - 02:24:38] destination okay here obviously we need
+[02:24:34 - 02:24:40] to bring constant uh the user location
+[02:24:38 - 02:24:43] right so just add user location comma
+[02:24:40 - 02:24:46] set user location is equal to use
+[02:24:43 - 02:24:49] context because we have in context user
+[02:24:46 - 02:24:52] location context okay and from that one
+[02:24:49 - 02:24:55] we'll get the users location okay so it
+[02:24:52 - 02:24:58] will be latitude and longitude okay and
+[02:24:55 - 02:25:00] save it now just call this method on
+[02:24:58 - 02:25:03] this particular gate direction button
+[02:25:00 - 02:25:07] okay so what I will do I will add on
+[02:25:03 - 02:25:07] click method to this
+[02:25:07 - 02:25:14] one and let's call it here like this
+[02:25:10 - 02:25:17] okay on Direction click and save it
+[02:25:14 - 02:25:20] let's test it out so let's open uh click
+[02:25:17 - 02:25:22] any of this food type so if you see it's
+[02:25:20 - 02:25:25] saying object not iterable the reason is
+[02:25:22 - 02:25:27] right this is very important err if you
+[02:25:25 - 02:25:28] see because many time this error will
+[02:25:27 - 02:25:31] come and you will not find any issue or
+[02:25:28 - 02:25:33] issue or you don't get it how to resolve
+[02:25:31 - 02:25:35] it right so whenever you use the context
+[02:25:33 - 02:25:38] instead of this bracket you have to use
+[02:25:35 - 02:25:43] this curly brackets okay so don't use
+[02:25:38 - 02:25:46] the square bracket and now um we are
+[02:25:43 - 02:25:48] here click Mexican for example anything
+[02:25:46 - 02:25:51] right if if I click on this one you got
+[02:25:48 - 02:25:54] this beautiful popup and if I click on
+[02:25:51 - 02:25:57] get direction right okay so we got this
+[02:25:54 - 02:25:59] error let's see what's the error okay so
+[02:25:57 - 02:26:02] it's saying selected business is not
+[02:25:59 - 02:26:04] defined okay obviously we have business
+[02:26:02 - 02:26:07] not the selected business so replace
+[02:26:04 - 02:26:09] this with the business okay and now save
+[02:26:07 - 02:26:12] it and let's test it
+[02:26:09 - 02:26:15] now okay so if I click on it now if you
+[02:26:12 - 02:26:17] see it's open a new window and it's also
+[02:26:15 - 02:26:19] showing the distance Act okay you just
+[02:26:17 - 02:26:22] need to click get started it's showing
+[02:26:19 - 02:26:23] how much minute is required and
+[02:26:22 - 02:26:26] everything because it's actually we are
+[02:26:23 - 02:26:28] using Google Map okay so this is how we
+[02:26:26 - 02:26:30] can implement this get direction uh and
+[02:26:28 - 02:26:33] open the new map okay now let's
+[02:26:30 - 02:26:36] implement the distance so for distance
+[02:26:33 - 02:26:38] we have a big uh logic actually so I
+[02:26:36 - 02:26:41] will just copy paste it here for us okay
+[02:26:38 - 02:26:43] you can get it anywhere from the
+[02:26:41 - 02:26:47] internet as well or you can use my
+[02:26:43 - 02:26:49] source code okay so it's simple uh it's
+[02:26:47 - 02:26:52] the distance and for that one we have to
+[02:26:49 - 02:26:55] provide latitude and longitude of the uh
+[02:26:52 - 02:26:58] source and destination okay and
+[02:26:55 - 02:27:00] obviously we have the user location so
+[02:26:58 - 02:27:03] set user location sorry in the use
+[02:27:00 - 02:27:06] effect right we will call this method
+[02:27:03 - 02:27:08] because whenever um we have this
+[02:27:06 - 02:27:10] business item we'll call it okay so in
+[02:27:08 - 02:27:14] use
+[02:27:10 - 02:27:16] effect uh here we'll pass empty for now
+[02:27:14 - 02:27:18] and here we have to calculate the
+[02:27:16 - 02:27:20] distance so just write just call this
+[02:27:18 - 02:27:24] calculate distance
+[02:27:20 - 02:27:26] okay and uh inside this one we have to
+[02:27:24 - 02:27:28] provide some value first thing is um
+[02:27:26 - 02:27:31] business latitude and longitude or user
+[02:27:28 - 02:27:33] latitude longitude okay I will write
+[02:27:31 - 02:27:38] business dot
+[02:27:33 - 02:27:39] geometry. location. latitude okay and
+[02:27:38 - 02:27:41] same thing I will copy I will change it
+[02:27:39 - 02:27:47] to landitude
+[02:27:41 - 02:27:49] LNG okay next users location do latitude
+[02:27:47 - 02:27:54] and user location do
+[02:27:49 - 02:27:56] longitude okay like this and save it now
+[02:27:54 - 02:27:58] once we get this user location lud and
+[02:27:56 - 02:28:00] longitude we have to save in one uh
+[02:27:58 - 02:28:03] state so I already but here we can
+[02:28:00 - 02:28:09] Define it here like this
+[02:28:03 - 02:28:11] distance set distance is equal to use
+[02:28:09 - 02:28:14] State
+[02:28:11 - 02:28:16] okay this and what you have to do set
+[02:28:14 - 02:28:22] the distance we already set it here like
+[02:28:16 - 02:28:25] this okay perfect now let's replace this
+[02:28:22 - 02:28:28] hardcoded 4 Mile with this actual
+[02:28:25 - 02:28:30] distance so we'll say distance and save
+[02:28:28 - 02:28:32] it okay let's test it whether it's
+[02:28:30 - 02:28:33] working or not so let's select any of
+[02:28:32 - 02:28:37] this
+[02:28:33 - 02:28:39] one and if I click if you see 2.8 M
+[02:28:37 - 02:28:43] Shing if I select this one it's showing
+[02:28:39 - 02:28:45] 2.5 this is far so it's showing 3.2 okay
+[02:28:43 - 02:28:48] if I select this nearby I don't have any
+[02:28:45 - 02:28:51] nearby but see 2.4 mile if I select
+[02:28:48 - 02:28:54] Indian right I only have one nearby
+[02:28:51 - 02:28:57] Indian okay if I select Masala must is
+[02:28:54 - 02:29:01] little far and it's 8.7 M okay say bani
+[02:28:57 - 02:29:03] Port 255 M okay so this is how uh it
+[02:29:01 - 02:29:05] works right I hope you understand this
+[02:29:03 - 02:29:07] one so how to calculate distance how to
+[02:29:05 - 02:29:10] show it on the screen and everything
+[02:29:07 - 02:29:12] okay and obviously if you face any issue
+[02:29:10 - 02:29:15] because I copy pasted this calculation
+[02:29:12 - 02:29:18] thing and already implemented it okay so
+[02:29:15 - 02:29:20] you can access this uh through my source
+[02:29:18 - 02:29:22] code is completely free and guys uh if
+[02:29:20 - 02:29:24] you did not subscribe to my Channel
+[02:29:22 - 02:29:26] please do subscribe and even you can
+[02:29:24 - 02:29:29] join my channel as well right it's
+[02:29:26 - 02:29:31] nominal free start from to uh
+[02:29:29 - 02:29:34] $99 and you will get a lot of things
+[02:29:31 - 02:29:36] okay the member only videos and
+[02:29:34 - 02:29:40] everything so please do join the video
+[02:29:36 - 02:29:40] and help us to grow this
+[02:29:45 - 02:29:50] channel
+[02:29:48 - 02:29:52] I made some couple of updates in our
+[02:29:50 - 02:29:55] application for example for this header
+[02:29:52 - 02:29:58] I added this Shadow effect also on the
+[02:29:55 - 02:30:01] click of this profile um image I added
+[02:29:58 - 02:30:03] this log out option once you user click
+[02:30:01 - 02:30:06] on this log out button user will get
+[02:30:03 - 02:30:09] loged from the application okay and you
+[02:30:06 - 02:30:11] can also go ahead add some new features
+[02:30:09 - 02:30:13] so whatever you want okay and anytime
+[02:30:11 - 02:30:15] you have any doubt or you are facing
+[02:30:13 - 02:30:17] some challenges you can access my source
+[02:30:15 - 02:30:19] code for free
+[02:30:17 - 02:30:22] free and if you are new on my Channel
+[02:30:19 - 02:30:24] please guys do subscribe to my channel
+[02:30:22 - 02:30:27] and if you really looking for exclusive
+[02:30:24 - 02:30:29] video one to one session then please
+[02:30:27 - 02:30:31] join the channel okay and if you go to
+[02:30:29 - 02:30:33] my channel here you will see a lot of
+[02:30:31 - 02:30:36] different types of project a different
+[02:30:33 - 02:30:40] courses on nextjs react react native
+[02:30:36 - 02:30:42] tell CSS go ahead and watch all of them
+[02:30:40 - 02:30:45] so guys before doing any further delay
+[02:30:42 - 02:30:45] let's begin

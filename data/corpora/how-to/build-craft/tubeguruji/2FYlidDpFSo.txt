@@ -1,0 +1,1235 @@
+[00:00 - 00:07] hey there and welcome back to tube gurji
+[00:03 - 00:10] channel today we are on the second part
+[00:07 - 00:13] of the taxi booking application and if
+[00:10 - 00:16] you did not watch the taxi booking uh
+[00:13 - 00:18] particular tutorial of part one click
+[00:16 - 00:21] here and you will rect to the part one
+[00:18 - 00:23] okay watch that part one first and this
+[00:21 - 00:25] is the second part where we are
+[00:23 - 00:26] implementing a lot of different things
+[00:25 - 00:28] so first of all let's walk through the
+[00:26 - 00:32] application what we are going to build
+[00:28 - 00:34] in this particular section so in the
+[00:32 - 00:38] last section as you know we um we are um
+[00:34 - 00:41] build until this point okay and now if
+[00:38 - 00:45] you just search okay uh any address or
+[00:41 - 00:47] anything like this so if you see it's
+[00:45 - 00:50] immediately move our
+[00:47 - 00:53] uh particular pointer okay and if you
+[00:50 - 00:56] see the our camera mve to the
+[00:53 - 01:00] destination and source and the uh the
+[00:56 - 01:03] beautiful root also design or Draw on
+[01:00 - 01:06] the map okay see everything so also not
+[01:03 - 01:08] only this but it also give the charges
+[01:06 - 01:10] depending on the uh on the cars you
+[01:08 - 01:13] selecting okay so for economy for
+[01:10 - 01:16] example is $26 for electrical is 56
+[01:13 - 01:18] $7.22 kind of thing also if you see on
+[01:16 - 01:21] the right hand side at the bottom it
+[01:18 - 01:24] also mention distance and the duration
+[01:21 - 01:26] depending on the traffic as well okay so
+[01:24 - 01:28] beautiful correct then select any of the
+[01:26 - 01:30] car and if you see the button is
+[01:28 - 01:31] disabled right now but if you see select
+[01:30 - 01:34] any of this car for example if I select
+[01:31 - 01:36] this Comfort the button is enabled
+[01:34 - 01:39] select the payment method and this then
+[01:36 - 01:41] click book once you click on the book it
+[01:39 - 01:44] will redirect to the stripe payment
+[01:41 - 01:47] Gateway uh page okay so right now we
+[01:44 - 01:50] integrated the stripe in our application
+[01:47 - 01:53] instead of D redirecting to the checkout
+[01:50 - 01:56] page okay it's inside our page so now
+[01:53 - 01:59] you can just enter the information not
+[01:56 - 02:00] only this but if you try to uh pay it
+[01:59 - 02:02] right it will give the error and then
+[02:00 - 02:05] you can just enter this information
+[02:02 - 02:09] that's all okay then you can add some
+[02:05 - 02:11] future date some CVV and uh this is just
+[02:09 - 02:14] testing purpose okay and when click pay
+[02:11 - 02:17] it will pay the amount and it will store
+[02:14 - 02:19] in our strappy dashboard if you see
+[02:17 - 02:21] right uh let me go back to the homepage
+[02:19 - 02:23] and if you see we have this all payment
+[02:21 - 02:25] method in the dashboard it will show it
+[02:23 - 02:29] on the screen okay how much you got
+[02:25 - 02:31] everything okay so I hope you understand
+[02:29 - 02:32] this one what are going to build today
+[02:31 - 02:37] and if you have any question throughout
+[02:32 - 02:38] the uh course you can ask me um uh in
+[02:37 - 02:40] the comment section or you can directly
+[02:38 - 02:44] reach out to me on my Instagram Channel
+[02:40 - 02:47] and follow me there as well so uh before
+[02:44 - 02:49] doing any further relay let's begin to
+[02:47 - 02:51] develop this beautiful application and
+[02:49 - 02:51] let's
+[02:54 - 03:00] get so in the last video we implemented
+[02:58 - 03:02] this basic functionality okay okay and
+[03:00 - 03:05] we are able to successfully uh show The
+[03:02 - 03:07] Source address marker and the
+[03:05 - 03:09] destination address marker like this
+[03:07 - 03:12] okay now in this particular video we are
+[03:09 - 03:14] going to implement a lot of things first
+[03:12 - 03:17] we will Implement how to show the roots
+[03:14 - 03:20] between this source and destination once
+[03:17 - 03:23] user enter the destination address next
+[03:20 - 03:25] we will calculate the charges depends on
+[03:23 - 03:28] the type of vehicle us just select and
+[03:25 - 03:30] the distance between uh this particular
+[03:28 - 03:32] uh source and destination address okay
+[03:30 - 03:34] and depends on that we will show the
+[03:32 - 03:36] charges right now we hardcoded this
+[03:34 - 03:37] value but once we have all the
+[03:36 - 03:39] information then we will calculate and
+[03:37 - 03:42] also we will show this information like
+[03:39 - 03:46] here okay uh let me show you the demo so
+[03:42 - 03:50] for example if I go here and select this
+[03:46 - 03:56] address okay so let me select some
+[03:50 - 03:56] address and uh I will select the another
+[03:57 - 04:02] one so I don't know
+[04:00 - 04:05] like this right and if you see the
+[04:02 - 04:07] marker is created right see and also we
+[04:05 - 04:10] are showing the distance depends on that
+[04:07 - 04:13] we also showing this value uh for each
+[04:10 - 04:16] car okay how much it cost and everything
+[04:13 - 04:19] so uh let's start begin how to implement
+[04:16 - 04:22] this one okay it's quite easy let's do
+[04:19 - 04:22] uh it and let's
+[04:26 - 04:32] start so once we select this um Source
+[04:30 - 04:35] address and destination destination
+[04:32 - 04:39] address we have the coordinates for the
+[04:35 - 04:42] board this part address okay and in the
+[04:39 - 04:44] map box we have the one API called uh
+[04:42 - 04:48] this driving uh get the direction API
+[04:44 - 04:51] right so once you pass the uh Source
+[04:48 - 04:53] coordinates latitude and longitude and
+[04:51 - 04:55] the destination latitude longitude okay
+[04:53 - 04:57] we'll get some response and in that
+[04:55 - 04:59] response we'll get a lot of different
+[04:57 - 05:01] coordinates okay so let me show you the
+[04:59 - 05:03] actual example so if you see right this
+[05:01 - 05:06] is the end point and here I'm passing
+[05:03 - 05:10] this source and destination latitude and
+[05:06 - 05:12] longitude okay and once we pass it it
+[05:10 - 05:14] will give me the geometry coordinates
+[05:12 - 05:16] and this coordinates if you see right we
+[05:14 - 05:19] have lot of different coordinates these
+[05:16 - 05:21] coordinates will help you to draw the
+[05:19 - 05:25] lines right means the direction uh which
+[05:21 - 05:27] you saw um previously right and uh
+[05:25 - 05:28] because it consist of a different
+[05:27 - 05:30] different point and all this point we
+[05:28 - 05:33] are going to connect it okay and that's
+[05:30 - 05:36] how uh in map map box we are going to
+[05:33 - 05:39] show the root okay actual root so for
+[05:36 - 05:43] that one first of all let's go to our
+[05:39 - 05:45] application and uh inside the mapbx map
+[05:43 - 05:49] here uh we will call that particular API
+[05:45 - 05:51] first okay so let's go here and just
+[05:49 - 05:54] Define the first end point let's define
+[05:51 - 05:56] the end point right so if you see uh
+[05:54 - 05:58] this is the particular end point which I
+[05:56 - 06:00] defined you can uh access that through
+[05:58 - 06:03] the mabox docum documentation or you can
+[06:00 - 06:04] access through my source code and here
+[06:03 - 06:07] the session code which I generated from
+[06:04 - 06:09] online okay so make sure you have this
+[06:07 - 06:13] particular uh end point and which need
+[06:09 - 06:16] to be exactly like this and then we'll
+[06:13 - 06:19] Define one method called constant
+[06:16 - 06:23] get direction
+[06:19 - 06:25] root and which need to be a sync
+[06:23 - 06:28] okay in this case we are going to call
+[06:25 - 06:30] directly this this end point instead of
+[06:28 - 06:32] creating a nextjs API okay because it's
+[06:30 - 06:34] not
+[06:32 - 06:36] um for that particular API we don't have
+[06:34 - 06:39] any course issue so we can directly call
+[06:36 - 06:44] that particular API here constant result
+[06:39 - 06:47] is equal to await and here I will await
+[06:44 - 06:49] and with the help of Fage I will add
+[06:47 - 06:51] that particular mapbox driving endpoint
+[06:49 - 06:54] okay
+[06:51 - 06:56] plus uh we will going to add the source
+[06:54 - 07:01] coordinate source source coordinate
+[06:56 - 07:01] actually Source coordinates
+[07:02 - 07:08] dot
+[07:04 - 07:10] longitude okay plus here we have to give
+[07:08 - 07:15] the comma so I will add the comma here
+[07:10 - 07:18] like this plus the source
+[07:15 - 07:23] coordinates uh
+[07:18 - 07:26] coordinates dot latitude okay plus we
+[07:23 - 07:29] have to give the colum like this then we
+[07:26 - 07:30] have to add the destination coordinates
+[07:29 - 07:33] dot
+[07:30 - 07:37] latitude sorry it's first
+[07:33 - 07:38] longitude and comma plus we have to add
+[07:37 - 07:42] the destination
+[07:38 - 07:46] coordinate do latitude okay and after
+[07:42 - 07:47] that there are some more parameter which
+[07:46 - 07:50] uh we need to pass it okay so I will
+[07:47 - 07:53] just copy paste and paste it here like
+[07:50 - 07:55] this okay so we uh because we are
+[07:53 - 07:58] telling uh to this particular API we
+[07:55 - 08:00] want geometry of geojson and also we are
+[07:58 - 08:04] passing the access token which we
+[08:00 - 08:08] already have in our EnV file okay and
+[08:04 - 08:11] then after that obviously after this one
+[08:08 - 08:13] we have to add the header
+[08:11 - 08:16] okay
+[08:13 - 08:19] like on 10 type I will just copy paste
+[08:16 - 08:22] it like
+[08:19 - 08:25] this and end it okay now there a
+[08:22 - 08:29] constant result is equal to
+[08:25 - 08:31] AIT respond. Json okay from this we'll
+[08:29 - 08:33] get the response so what we'll do I'll
+[08:31 - 08:35] just consol it and we'll see whether we
+[08:33 - 08:39] are getting the result or not so
+[08:35 - 08:43] constant result okay and now this gate
+[08:39 - 08:46] direction root we will call it inside uh
+[08:43 - 08:48] this particular use effect okay so after
+[08:46 - 08:51] this one once the destination coordinate
+[08:48 - 08:53] changes we can call it okay but we have
+[08:51 - 08:55] to make sure that we have the source
+[08:53 - 08:58] coordinates and and we have the
+[08:55 - 09:01] destination coordinates okay then only
+[08:58 - 09:05] we will cut the gate direction root
+[09:01 - 09:07] method okay perfect and let's save
+[09:05 - 09:11] everything and let's
+[09:07 - 09:11] see go to the inspect
+[09:11 - 09:17] panel okay so here let me clean
+[09:17 - 09:21] everything and from we'll
+[09:22 - 09:28] add5
+[09:25 - 09:32] Loop okay and I will add some another
+[09:28 - 09:32] not M
+[09:32 - 09:38] Street like this and we got this and if
+[09:36 - 09:41] you see on the console right we got the
+[09:38 - 09:42] result inside the roots we have the the
+[09:41 - 09:45] first element and inside that we have
+[09:42 - 09:48] geometry and then we have the
+[09:45 - 09:51] 785 coordinates okay see now this
+[09:48 - 09:56] coordinates we needed so we will store
+[09:51 - 10:00] this coordinates uh in one state okay so
+[09:56 - 10:02] we'll Define one state okay so let's go
+[10:00 - 10:05] back
+[10:02 - 10:08] here and
+[10:05 - 10:11] uh inside here right one more thing Let
+[10:08 - 10:13] me uh tell you I already created this
+[10:11 - 10:15] particular context called Direction data
+[10:13 - 10:17] context okay and this direction data
+[10:15 - 10:19] context I will use to save this
+[10:17 - 10:23] particular coordinates okay so this
+[10:19 - 10:26] direction data context also um obviously
+[10:23 - 10:29] we need to wrap it okay so if I go to
+[10:26 - 10:31] this page. TSX here I added this
+[10:29 - 10:32] Direction data context provider and I'm
+[10:31 - 10:35] passing this direction data say
+[10:32 - 10:40] Direction data like this okay it's as
+[10:35 - 10:42] usual the way we added the context okay
+[10:40 - 10:44] don't don't be confused here okay
+[10:42 - 10:46] because I already added but you can just
+[10:44 - 10:50] take a reference of this that's why I
+[10:46 - 10:53] told you okay before and now the mapbox
+[10:50 - 10:55] map we will add this particular get
+[10:53 - 10:58] direction context like this okay now
+[10:55 - 11:04] this G Direction context uh we use to
+[10:58 - 11:05] save the result okay obviously uh let's
+[11:04 - 11:09] uh go
+[11:05 - 11:13] here and we will just add it s dire data
+[11:09 - 11:16] and we'll pass all the result inside it
+[11:13 - 11:18] okay see roots and everything so you can
+[11:16 - 11:21] just pass the roots as well uh it's up
+[11:18 - 11:23] to you but I'm passing the result
+[11:21 - 11:25] complete result okay
+[11:23 - 11:30] perfect now we have this particular
+[11:25 - 11:32] mapbox map now we will create a new uh
+[11:30 - 11:36] uh component okay inside the map we can
+[11:32 - 11:40] call it as a Mac boox route. TSX okay
+[11:36 - 11:43] this will help you to draw the root okay
+[11:40 - 11:46] so uh in this particular uh API
+[11:43 - 11:49] documentation of the react map GL right
+[11:46 - 11:51] we have this particular uh component
+[11:49 - 11:55] called layer okay and this layer help us
+[11:51 - 11:58] to draw anything on the map okay uh this
+[11:55 - 11:59] documentation I will not say complete
+[11:58 - 12:02] okay but I will tell you you how to do
+[11:59 - 12:06] it so let's go back to our application
+[12:02 - 12:08] and inside this mapbox route right we'll
+[12:06 - 12:11] first of all let me replace this du with
+[12:08 - 12:13] the source okay so here if you see this
+[12:11 - 12:15] source is importing from the react map
+[12:13 - 12:19] GL so add this Source like this and end
+[12:15 - 12:22] the tag okay and inside source We'll add
+[12:19 - 12:25] the layer so inside that we'll add the
+[12:22 - 12:27] layer now interesting thing is here for
+[12:25 - 12:29] this Source right Source whatever the
+[12:27 - 12:31] data we need to provide to draw this
+[12:29 - 12:33] particular rout we have to add that data
+[12:31 - 12:35] in into this source so first of all
+[12:33 - 12:38] obviously we have to inform that okay
+[12:35 - 12:42] this is of type GE
+[12:38 - 12:46] Json J Json then we have to add the type
+[12:42 - 12:48] so we have to add the data okay is equal
+[12:46 - 12:49] to sorry is equal to and in double
+[12:48 - 12:55] bracket we have to
+[12:49 - 12:55] type type of feature
+[12:55 - 13:01] okay feature then
+[12:59 - 13:04] the geometry okay so I will just copy
+[13:01 - 13:04] paste it
+[13:04 - 13:11] here like this okay so maybe bracket I
+[13:09 - 13:15] will remove this one okay and here
+[13:11 - 13:17] obviously we need to pass the props okay
+[13:15 - 13:19] because uh whatever the props we are
+[13:17 - 13:23] passing right this props okay let me
+[13:19 - 13:27] Define this props of type
+[13:23 - 13:29] any okay because it this props contain
+[13:27 - 13:31] this coordinates list of coordinates
+[13:29 - 13:36] okay and obviously we need to Define
+[13:31 - 13:39] this mapbox uh route inside this mapbox
+[13:36 - 13:42] map okay so after this one uh we can
+[13:39 - 13:44] Define it so let me just copy paste it
+[13:42 - 13:47] here okay inside the map we have to
+[13:44 - 13:49] Define it so what I Define if the
+[13:47 - 13:52] direction data has some has a Roots then
+[13:49 - 13:53] we'll Define this mapbox route and then
+[13:52 - 13:55] we are passing this coordinates and if
+[13:53 - 13:58] you see this I'm just passing the
+[13:55 - 14:00] coordinates only okay and I'm not
+[13:58 - 14:03] passing any other information we need
+[14:00 - 14:05] the other information somewhere else but
+[14:03 - 14:07] right now we just need the coordinates
+[14:05 - 14:10] and this coordinates I'm passing to this
+[14:07 - 14:12] mapbox route okay like this and from
+[14:10 - 14:15] this I'm passing this particular
+[14:12 - 14:18] coordinates to this Source now inside
+[14:15 - 14:20] the layer we have to inform what type of
+[14:18 - 14:23] layer we need to Define okay if you go
+[14:20 - 14:25] to this one uh particular right it
+[14:23 - 14:27] Define a different type of layer for
+[14:25 - 14:30] example in park layer if you see right
+[14:27 - 14:32] uh this as a land use or type of feeli
+[14:30 - 14:34] and something else like you can go to
+[14:32 - 14:36] this map layer on the map box and here
+[14:34 - 14:40] you will find a different type of layer
+[14:36 - 14:42] like like field Line Circle hit map kind
+[14:40 - 14:47] of thing in this case we are going to
+[14:42 - 14:51] use type of is equal to line okay and
+[14:47 - 14:54] then there other property like layout
+[14:51 - 14:56] okay whether you want to join and at the
+[14:54 - 14:59] end you want to round or cir ccare kind
+[14:56 - 15:01] of things okay you can just try it this
+[14:59 - 15:03] this all information you will find on
+[15:01 - 15:06] this mapbox documentation okay they
+[15:03 - 15:09] inform you how to do it and
+[15:06 - 15:11] everything now once you define this one
+[15:09 - 15:13] okay let's save
+[15:11 - 15:16] everything and uh we have to make sure
+[15:13 - 15:18] that that particular um Mac boox R we
+[15:16 - 15:20] added here and let's go back to our
+[15:18 - 15:22] application let's see whether we get
+[15:20 - 15:26] anything right now if you see we don't
+[15:22 - 15:28] have anything we have to add the source
+[15:26 - 15:30] and destination address so let's add
+[15:28 - 15:32] that one
+[15:30 - 15:36] and here as well
+[15:32 - 15:39] 55 not try
+[15:36 - 15:42] Street like this and if you see we got
+[15:39 - 15:45] this particular map route okay so what
+[15:42 - 15:47] is happening whatever the coordinates we
+[15:45 - 15:50] are getting this coordinates we are
+[15:47 - 15:52] placing and connecting so that we get a
+[15:50 - 15:54] perfect root okay so every time
+[15:52 - 15:55] obviously uh you added the source and
+[15:54 - 15:57] destination we are passing this
+[15:55 - 15:58] coordinates and then it will return this
+[15:57 - 16:00] coordinates and if you see how
+[15:58 - 16:02] beautifully it's showing now you can
+[16:00 - 16:03] obviously change the color and
+[16:02 - 16:05] everything if you see here right here
+[16:03 - 16:08] you can change the color whatever you
+[16:05 - 16:11] color you want if I select zero which is
+[16:08 - 16:14] the black color and if I save it see the
+[16:11 - 16:16] black color is showing okay I will keep
+[16:14 - 16:18] the blue one and this is how you can
+[16:16 - 16:20] show you can change the WID you can
+[16:18 - 16:22] change the line cap line cap is nothing
+[16:20 - 16:24] but the end point you want the square
+[16:22 - 16:27] around it and everything like this okay
+[16:24 - 16:29] so this is how easily you can add it let
+[16:27 - 16:31] me summarize everything first okay
+[16:29 - 16:35] because if you feel uh confusing let me
+[16:31 - 16:37] summarize again first we have to get the
+[16:35 - 16:41] direction we have to call the direction
+[16:37 - 16:43] API from that we'll get the coordinates
+[16:41 - 16:45] okay list of coordinates that
+[16:43 - 16:48] coordinates we have to pass to this
+[16:45 - 16:50] particular layer okay and which we are
+[16:48 - 16:52] Define this component this coordinates
+[16:50 - 16:55] we pass it to the source and with the
+[16:52 - 16:56] help of layer we draw the line okay I
+[16:55 - 16:58] hope you understand this one if you have
+[16:56 - 17:00] any question let me know in the comment
+[16:58 - 17:03] section and you can access my source
+[17:00 - 17:05] code for free okay and guys if you still
+[17:03 - 17:08] did not subscribe to my Channel please
+[17:05 - 17:12] do subscribe and please join my channel
+[17:08 - 17:12] and help me to grow my channel as
+[17:16 - 17:23] well now uh depends on the uh distance
+[17:20 - 17:26] right uh how far it is we are going to
+[17:23 - 17:28] calculate the amount for each of this
+[17:26 - 17:31] car how much it it charge and everything
+[17:28 - 17:33] right and for that one if you see right
+[17:31 - 17:37] we already saving this particular
+[17:33 - 17:39] direction uh response in our context and
+[17:37 - 17:41] if you see in the this particular
+[17:39 - 17:43] response right here we will see the
+[17:41 - 17:45] distance and the duration right how much
+[17:43 - 17:47] time it will take depends on the traffic
+[17:45 - 17:50] and everything and the distance as well
+[17:47 - 17:53] so right now obviously distance is in
+[17:50 - 17:55] the meters we have to con converted into
+[17:53 - 17:58] kilometer or miles whatever right so
+[17:55 - 18:03] right now we we will con into the miles
+[17:58 - 18:08] uh miles so for that one uh let's uh go
+[18:03 - 18:11] back to this cars. TSX okay and inside
+[18:08 - 18:13] here first of all uh I will Define this
+[18:11 - 18:15] uh get direction data context so I will
+[18:13 - 18:18] add it here like this so we have the
+[18:15 - 18:22] direction data okay and then I will
+[18:18 - 18:24] Define one method called constant G cost
+[18:22 - 18:27] okay so this particular method will
+[18:24 - 18:30] calculate the cost for the each of this
+[18:27 - 18:33] particular car right and this G cost I
+[18:30 - 18:36] will call it uh inside here okay so
+[18:33 - 18:39] instead of this charges okay I will
+[18:36 - 18:42] Define here like this so get cost and
+[18:39 - 18:44] then I will pass the item dot charges
+[18:42 - 18:46] okay so it is in this particular
+[18:44 - 18:49] obviously in this item do charges
+[18:46 - 18:52] contain uh the value right we Define
+[18:49 - 18:54] right 1 2 3 4 let me show you that one
+[18:52 - 18:56] so inside data we have this cars list
+[18:54 - 18:59] and if you see the charges right so
+[18:56 - 19:01] depends on the amount it will multiply
+[18:59 - 19:02] the value and then we'll get the result
+[19:01 - 19:07] this kind of
+[19:02 - 19:09] thing and uh obviously here uh we have
+[19:07 - 19:12] to make sure that we have the uh
+[19:09 - 19:17] Direction root so what I will do once we
+[19:12 - 19:19] have the direction data do roads okay
+[19:17 - 19:24] then only we will we going to show this
+[19:19 - 19:26] pan okay otherwise we'll show null okay
+[19:24 - 19:29] and inside the get cost here I will
+[19:26 - 19:33] accept it as a charges of type any for
+[19:29 - 19:37] now okay so still we have this error
+[19:33 - 19:39] let's see what's the error get cost
+[19:37 - 19:39] atom.
+[19:39 - 19:45] charges
+[19:42 - 19:47] so okay uh let's uh let's write the code
+[19:45 - 19:49] and then we'll see okay so here then we
+[19:47 - 19:51] will written the value okay whatever the
+[19:49 - 19:56] calculation we are doing so what I will
+[19:51 - 20:00] do uh we have the charges okay multiply
+[19:56 - 20:02] by we have the direction data dot inside
+[20:00 - 20:05] that we have roots and obviously we'll
+[20:02 - 20:09] take the first element into distance so
+[20:05 - 20:12] we'll get the distance from it okay
+[20:09 - 20:15] distance multiply by we have some value
+[20:12 - 20:17] it which convert it into miles okay so
+[20:15 - 20:18] like this this is the value for
+[20:17 - 20:21] kilometer you can just search it on the
+[20:18 - 20:22] internet and you find the find it okay
+[20:21 - 20:25] and this will return return the value
+[20:22 - 20:29] and if you see uh this error also gone
+[20:25 - 20:31] because this will replace the uh the Val
+[20:29 - 20:32] value which we are going to calculate
+[20:31 - 20:35] and is returning from this particular
+[20:32 - 20:37] gate cost okay this is how simple it is
+[20:35 - 20:39] we are going to implement so let's save
+[20:37 - 20:42] it let's go back to application and if
+[20:39 - 20:45] you see we got some information right we
+[20:42 - 20:48] are gotting a lot of big number actually
+[20:45 - 20:51] so what we will do uh we will just show
+[20:48 - 20:52] some send value so let
+[20:51 - 20:55] me
+[20:52 - 20:58] here uh after this one right so what I
+[20:55 - 21:01] will do I will put it here like this Dot
+[20:58 - 21:04] two fix okay so we will give the two
+[21:01 - 21:06] value only okay and let's try it now so
+[21:04 - 21:09] once it
+[21:06 - 21:11] refresh we'll add
+[21:09 - 21:16] some
+[21:11 - 21:16] address 55 K
+[21:16 - 21:21] Loop and this is
+[21:18 - 21:24] the 525
+[21:21 - 21:29] not TR
+[21:24 - 21:30] Street yeah here and if you see
+[21:29 - 21:35] we got this information the economy will
+[21:30 - 21:37] charge 25.95 31 like this see okay it
+[21:35 - 21:40] calculating depends on the
+[21:37 - 21:42] distance uh how far from the source and
+[21:40 - 21:44] destination and then you calculate
+[21:42 - 21:46] calculate the value obviously right now
+[21:44 - 21:48] we are just using the distance you can
+[21:46 - 21:50] add the time as well how much time it
+[21:48 - 21:52] will take and you can add the charges
+[21:50 - 21:54] for that one as well okay but for
+[21:52 - 21:57] Simplicity I will just using the
+[21:54 - 21:58] distance to get the charges okay I hope
+[21:57 - 22:01] you understand understand this one it's
+[21:58 - 22:02] quite easy make sure you need to use
+[22:01 - 22:04] this direction data because we which
+[22:02 - 22:08] have all the information which we are
+[22:04 - 22:12] fetching from this particular direction
+[22:08 - 22:15] uh uh API right in the map box because
+[22:12 - 22:17] we already once we already select this
+[22:15 - 22:19] particular uh address destination
+[22:17 - 22:21] address obviously we are fetching that
+[22:19 - 22:24] API and that will also reflect in this
+[22:21 - 22:26] particular cars component okay I hope
+[22:24 - 22:29] you understand this one and if you have
+[22:26 - 22:29] any question let me know in the comments
+[22:34 - 22:41] section now next we will uh show this
+[22:38 - 22:43] particular um uh information about the
+[22:41 - 22:46] distance and the duration it will take
+[22:43 - 22:49] to reach from the source to destination
+[22:46 - 22:53] okay it's quite easy so uh let's go back
+[22:49 - 22:56] to our application and uh inside the map
+[22:53 - 22:59] we'll create a new uh component so here
+[22:56 - 23:02] we can create a new component called
+[22:59 - 23:06] distance time.
+[23:02 - 23:10] PSX okay and add the default template
+[23:06 - 23:13] like this now obviously uh we need to
+[23:10 - 23:17] add this particular template inside the
+[23:13 - 23:20] map box uh map okay here we're going to
+[23:17 - 23:23] add so at the bottom after this one
+[23:20 - 23:28] we'll add this template so inside view I
+[23:23 - 23:31] will add distance time okay like this
+[23:28 - 23:34] and save it we save everything now if
+[23:31 - 23:37] you see here right
+[23:34 - 23:39] uh let me uh okay it's refreshing the so
+[23:37 - 23:41] right now I don't know what's the error
+[23:39 - 23:44] is
+[23:41 - 23:46] coming okay okay so if you see right we
+[23:44 - 23:47] have the dist time is showing here and
+[23:46 - 23:51] we want to show it on the map on the
+[23:47 - 23:56] right hand side correct so uh for this
+[23:51 - 23:58] do we'll add some uh T CSS class name so
+[23:56 - 24:00] here we can say absolute
+[23:58 - 24:04] then
+[24:00 - 24:04] bottom uh 40
+[24:04 - 24:11] pixel and then obviously we'll add the J
+[24:07 - 24:15] index of 20 and from the right we'll uh
+[24:11 - 24:18] give some margin like 20 pixel like this
+[24:15 - 24:22] okay and when the screen size is smaller
+[24:18 - 24:24] we will hide it okay hidden like this
+[24:22 - 24:27] and when screen size is medium or larger
+[24:24 - 24:28] we will show it and if I save it let's
+[24:27 - 24:30] go back to
+[24:28 - 24:32] application and if you see the right now
+[24:30 - 24:35] it's showing here like this distance
+[24:32 - 24:37] time okay we'll change
+[24:35 - 24:40] the we'll change everything but inside
+[24:37 - 24:43] the distance time now inside the
+[24:40 - 24:46] distance time uh first of all we will
+[24:43 - 24:49] need to get the uh Direction data
+[24:46 - 24:51] context okay so I will just copy paste
+[24:49 - 24:56] it here like this so okay uh so from the
+[24:51 - 24:58] use context We'll add this distance uh
+[24:56 - 25:00] sorry distance
+[24:58 - 25:02] uh Direction data okay so obviously in
+[25:00 - 25:05] that we already have this coordinates
+[25:02 - 25:07] and distance and duration as well so
+[25:05 - 25:10] with the help of that we will implement
+[25:07 - 25:12] it okay so I will Define the h2 tag I
+[25:10 - 25:14] already have the code because uh I will
+[25:12 - 25:17] just copy paste it here like this so in
+[25:14 - 25:21] the S2 tag I'm defining this distance
+[25:17 - 25:24] and uh we already have this this uh
+[25:21 - 25:27] distance inside the direction data
+[25:24 - 25:30] routes of zero do distance okay and I'm
+[25:27 - 25:33] converting into this Miles because it it
+[25:30 - 25:36] in the meters and obviously we'll do the
+[25:33 - 25:39] two fix so that we'll get this exact
+[25:36 - 25:41] value and uh we'll say miles okay same
+[25:39 - 25:43] thing we duration we have the duration
+[25:41 - 25:46] and we'll divide by 60 because it is in
+[25:43 - 25:48] the seconds and we'll do the two fix and
+[25:46 - 25:51] the minute okay so we'll convert it into
+[25:48 - 25:53] minutes and save
+[25:51 - 25:55] everything now once you save it
+[25:53 - 25:56] obviously what I will do I will do some
+[25:55 - 25:59] padding and I will also change the
+[25:56 - 26:02] background for this one so add the class
+[25:59 - 26:07] name okay and we'll say background
+[26:02 - 26:09] hello of 400 and padding of three and
+[26:07 - 26:12] then save everything and let's go back
+[26:09 - 26:13] to our application so right now we
+[26:12 - 26:18] getting cannot read property of
+[26:13 - 26:19] undefined okay so here um you can just
+[26:18 - 26:23] do one
+[26:19 - 26:26] thing so let me check because what we
+[26:23 - 26:27] can do we can show this distance
+[26:26 - 26:29] Direction data because right now we
+[26:27 - 26:31] don't have Direction that's why we are
+[26:29 - 26:33] getting error okay you can Define here
+[26:31 - 26:35] like this I'm not sure whether this will
+[26:33 - 26:38] work or not because it will say the
+[26:35 - 26:40] optional field and it will avoid this
+[26:38 - 26:43] error but if you see we still have the
+[26:40 - 26:45] error so what we can do here you can
+[26:43 - 26:47] just Define if you have the direction
+[26:45 - 26:52] data then only show it okay so we'll say
+[26:47 - 26:56] the direction data dot do Roots is
+[26:52 - 27:00] available then only show this particular
+[26:56 - 27:01] uh UI okay and if you see the error is
+[27:00 - 27:04] gone so right now we don't have data
+[27:01 - 27:07] that's why it's not showing but let's
+[27:04 - 27:11] see by uh searching or getting the roots
+[27:07 - 27:16] for the so and
+[27:11 - 27:20] destination and uh oh I different that's
+[27:16 - 27:25] fine F
+[27:20 - 27:27] Street okay and let's add this one so if
+[27:25 - 27:31] you see right we have the distance of
+[27:27 - 27:33] 994 miles and the duration is so coming
+[27:31 - 27:35] okay now obviously you can give some
+[27:33 - 27:37] padding and margin and so it will come
+[27:35 - 27:39] up the top of this particular one okay
+[27:37 - 27:45] and if you see we get this information
+[27:39 - 27:49] as well now uh if I go to this map here
+[27:45 - 27:52] you can Define that margin bottom to be
+[27:49 - 27:54] 90 and it will come like this okay so
+[27:52 - 27:57] you can just adjust it according to your
+[27:54 - 27:58] need okay and then it will work uh
+[27:57 - 28:01] efficient
+[27:58 - 28:03] ly okay so let's test it
+[28:01 - 28:07] again
+[28:03 - 28:10] Loop let select this and then 5 to5 not
+[28:07 - 28:10] try
+[28:12 - 28:18] straet try
+[28:15 - 28:22] on okay and if you see it's coming
+[28:18 - 28:25] beautifully okay you can just we do 100
+[28:22 - 28:26] that's fine okay perfect so I hope you
+[28:25 - 28:29] understand this one this quite easy
+[28:26 - 28:32] right so if this particular one right
+[28:29 - 28:35] with the help of Direction uh data end
+[28:32 - 28:37] point we will we already show this route
+[28:35 - 28:41] as well as we calculate this particular
+[28:37 - 28:44] distance okay uh sorry we also calculate
+[28:41 - 28:45] this amount for the taxi along with we
+[28:44 - 28:48] also showing the distance and the
+[28:45 - 28:50] duration for this particular uh route
+[28:48 - 28:53] which user selected okay this is how
+[28:50 - 28:54] easy you can added I hope you understand
+[28:53 - 28:56] this one and if you have any question
+[28:54 - 28:59] let me know in the comment
+[28:56 - 28:59] section
+[29:02 - 29:06] so in this particular section we are
+[29:04 - 29:08] going to integrate the payment Gateway
+[29:06 - 29:11] for our application and for that one we
+[29:08 - 29:12] are going to use stripe.com okay the
+[29:11 - 29:14] stripe payment Gateway which is one the
+[29:12 - 29:17] best payment gway in the internet right
+[29:14 - 29:20] now and it also acceptable throughout
+[29:17 - 29:22] the world okay so if you don't have any
+[29:20 - 29:24] account create a new account and then go
+[29:22 - 29:26] to the dashboard once you go to the
+[29:24 - 29:28] dashboard here you will find the
+[29:26 - 29:31] developer section okay and right now it
+[29:28 - 29:32] is in the test mode so because we are
+[29:31 - 29:34] developing the application and we are
+[29:32 - 29:36] not in the production okay so once you
+[29:34 - 29:39] go to the developer section here you
+[29:36 - 29:42] will find the publisher key and the
+[29:39 - 29:45] secret key okay copy these both the keys
+[29:42 - 29:48] and then go back to application and
+[29:45 - 29:50] inside the u.l here you have to paste
+[29:48 - 29:54] this API Keys okay so give the name like
+[29:50 - 29:57] nextore public uh for a publisher key
+[29:54 - 30:01] and then the secret key okay next we
+[29:57 - 30:03] need to create a new page or new routing
+[30:01 - 30:04] new route for our payment Gateway okay
+[30:03 - 30:08] where we are going to show the payment
+[30:04 - 30:10] Gateway so for that one uh inside app
+[30:08 - 30:12] folder we will create a new folder
+[30:10 - 30:14] called uh payment okay but before that
+[30:12 - 30:17] let me show you how or what we are going
+[30:14 - 30:20] to implement so once we do the payment
+[30:17 - 30:22] right we need to navigate to on some
+[30:20 - 30:24] page right now the pay payment route is
+[30:22 - 30:26] not available or page is not available
+[30:24 - 30:29] and that's the reason is showing 404
+[30:26 - 30:32] error but let's go back to app folder
+[30:29 - 30:34] and inside that just create a new folder
+[30:32 - 30:37] called payment and this will be our new
+[30:34 - 30:40] road and inside that I will create a
+[30:37 - 30:43] folder called page. TSX add the default
+[30:40 - 30:45] template and I will rename this
+[30:43 - 30:48] component name as a payment Okay and
+[30:45 - 30:50] like this and save everything now let's
+[30:48 - 30:53] go back to application and if I if you
+[30:50 - 30:55] see on the/ payment the payment text is
+[30:53 - 30:58] showing it means our route is set up and
+[30:55 - 30:59] that's how easy uh routing we set up
+[30:58 - 31:01] right we don't need any configuration
+[30:59 - 31:03] just you need to create a folder in that
+[31:01 - 31:06] particular app folder and that's all
+[31:03 - 31:09] that's how in nextjs 13 app router is
+[31:06 - 31:12] work okay next Once We Define this one
+[31:09 - 31:15] right let's try to navigate uh on this
+[31:12 - 31:18] particular page if I go back to local
+[31:15 - 31:19] 3,000 right and once we select this all
+[31:18 - 31:21] we fill the all the information and
+[31:19 - 31:24] click book we want to navigate to this
+[31:21 - 31:27] payment page okay so for that one let's
+[31:24 - 31:30] go back to the booking TSX
+[31:27 - 31:33] and inside here uh couple of things I
+[31:30 - 31:36] modified okay so first thing once we
+[31:33 - 31:38] select the car right uh on the click of
+[31:36 - 31:40] this particular car I sending this
+[31:38 - 31:42] amount if you see right on the click of
+[31:40 - 31:45] this car along with this set selected
+[31:42 - 31:46] car I also select the amount for the car
+[31:45 - 31:49] okay obviously we are getting from this
+[31:46 - 31:51] gate cost and this I'm passing back to a
+[31:49 - 31:55] parent child so like
+[31:51 - 31:59] this okay here and inside the booking
+[31:55 - 32:01] I'm accepting and saving in one state
+[31:59 - 32:04] okay so this stage is already defined
+[32:01 - 32:05] here like this and I'm saving it here
+[32:04 - 32:07] like this okay now obviously we are
+[32:05 - 32:10] going to use context but right now we'll
+[32:07 - 32:14] keep as it is and let's uh we'll update
+[32:10 - 32:16] it afterward okay next on the click of
+[32:14 - 32:18] this one right on
+[32:16 - 32:21] click we want to go to the next page so
+[32:18 - 32:24] for uh Define this use router and once
+[32:21 - 32:26] you define this us router hook make sure
+[32:24 - 32:29] this us router Hook is importing from
+[32:26 - 32:31] the next SL navigation okay because in
+[32:29 - 32:33] if you are using App router and next day
+[32:31 - 32:37] is 13 we have to make sure that you are
+[32:33 - 32:39] using this next SL navigation uh to uh
+[32:37 - 32:41] add this or to import this user router
+[32:39 - 32:44] hook and once you did this you have to
+[32:41 - 32:46] just write router dot
+[32:44 - 32:48] push and the name of the route so in
+[32:46 - 32:51] this case is
+[32:48 - 32:54] payment okay and save it now once you
+[32:51 - 32:58] save and if I click book okay see it
+[32:54 - 33:02] jumping to the payment page perfect
+[32:58 - 33:05] next uh go to the car. TSX okay and here
+[33:02 - 33:08] we want to store the amount which user
+[33:05 - 33:10] selected okay so obviously we want to um
+[33:08 - 33:12] remove this all of these things and in
+[33:10 - 33:14] the context we Define new context so
+[33:12 - 33:18] let's go to the context
+[33:14 - 33:24] folder and inside here I will Define
+[33:18 - 33:25] um user selected car amount selected car
+[33:24 - 33:29] amount
+[33:25 - 33:33] context TSX okay and here I will Define
+[33:29 - 33:39] name like this is equal to create
+[33:33 - 33:41] context of type any and null okay and uh
+[33:39 - 33:44] once you define make sure to export it
+[33:41 - 33:47] so export and save it now obviously you
+[33:44 - 33:49] need to add in page. TSX okay you have
+[33:47 - 33:50] to wrap it so I will wrap it here like
+[33:49 - 33:55] this
+[33:50 - 33:59] so um selected car amount context do
+[33:55 - 34:01] provider I will provide the
+[33:59 - 34:03] value and then in the tag and obviously
+[34:01 - 34:05] we have to wrap everything right I hope
+[34:03 - 34:08] you understand this context because we
+[34:05 - 34:10] use it a lot of times right and
+[34:08 - 34:13] obviously I will
+[34:10 - 34:15] Define the
+[34:13 - 34:18] new I will just copy this one a new
+[34:15 - 34:20] state or we will call the car amount
+[34:18 - 34:23] okay I will say
+[34:20 - 34:26] Select Car
+[34:23 - 34:28] amount used State okay and this set car
+[34:26 - 34:31] amount I will just remove this one I
+[34:28 - 34:32] don't want it and because just a value
+[34:31 - 34:36] right that's the
+[34:32 - 34:39] reason car amount comma set car amount
+[34:36 - 34:41] okay now we are passing this car amount
+[34:39 - 34:43] set amount throughout the all the
+[34:41 - 34:46] components okay and save it
+[34:43 - 34:48] now now what you have to do let's go
+[34:46 - 34:50] back to our car component where we are
+[34:48 - 34:52] going to select the amount of the car
+[34:50 - 34:54] right and here you have to define the
+[34:52 - 34:58] context first so
+[34:54 - 35:01] constant R amount
+[34:58 - 35:05] set car amount is equal to use context
+[35:01 - 35:09] and inside that selected car amount
+[35:05 - 35:11] contact like this okay now this set car
+[35:09 - 35:14] amount here we will replace this with
+[35:11 - 35:16] this particular value so on the click of
+[35:14 - 35:18] this we are just setting this car amount
+[35:16 - 35:21] value so that this context will hold and
+[35:18 - 35:23] it will make available throughout the
+[35:21 - 35:27] application okay so obviously we don't
+[35:23 - 35:28] need this particular prop okay and so
+[35:27 - 35:32] make sure from here as well we will
+[35:28 - 35:36] remove this prop we don't want okay like
+[35:32 - 35:39] this now obviously um use this same
+[35:36 - 35:43] context okay so car amount context
+[35:39 - 35:46] inside the booking TSX okay and uh I'll
+[35:43 - 35:49] remove this one like this make sure you
+[35:46 - 35:49] import this
+[35:51 - 35:57] context okay and this car amount we need
+[35:55 - 35:58] to add it here because here is the
+[35:57 - 36:01] condition right if the car amount is
+[35:58 - 36:02] there only it's showing the gray value
+[36:01 - 36:05] otherwise it will show yellow value
+[36:02 - 36:09] means it it disable enable Okay and also
+[36:05 - 36:11] what I will do I will uh make
+[36:09 - 36:13] disable if the car amount value is not
+[36:11 - 36:16] there okay so button will be disable but
+[36:13 - 36:18] right now uh I will for testing I will
+[36:16 - 36:20] remove this condition and save it and
+[36:18 - 36:24] make sure everything is running as
+[36:20 - 36:26] expected okay see and booking is there
+[36:24 - 36:28] and everything now obviously once you
+[36:26 - 36:30] fill information select the amount then
+[36:28 - 36:33] only book will show let me show you this
+[36:30 - 36:35] uh particular example so if I select the
+[36:33 - 36:38] some
+[36:35 - 36:38] value
+[36:38 - 36:44] Prim okay and if I select the value okay
+[36:42 - 36:47] so right now we got one error let's see
+[36:44 - 36:49] the error okay let make sure everything
+[36:47 - 36:49] is
+[36:51 - 36:56] saved so if you see right we have in a
+[36:53 - 36:59] car. TXS on the select we have get cost
+[36:56 - 37:01] and item. charge right so unselect
+[36:59 - 37:05] amount is not a function so here
+[37:01 - 37:05] obviously in a
+[37:05 - 37:10] car we need to replace this okay so oh
+[37:08 - 37:14] we did not save actually we have to save
+[37:10 - 37:14] this one okay make sure to save
+[37:14 - 37:23] it and then we can try it again and if
+[37:18 - 37:26] you see the changes applied okay
+[37:23 - 37:27] perfect now once we select and this but
+[37:26 - 37:29] button in
+[37:27 - 37:31] is enabled on the click of this
+[37:29 - 37:34] obviously we are uh redirecting to this
+[37:31 - 37:36] payment Gateway okay now let's go back
+[37:34 - 37:39] to our application and inside this
+[37:36 - 37:43] payment page let's go to this
+[37:39 - 37:49] payment so inside the payment we have
+[37:43 - 37:51] this page. TSX okay so here uh we we are
+[37:49 - 37:52] going to implement uh the payment
+[37:51 - 37:57] Gateway okay we start implementing the
+[37:52 - 38:00] payment Gateway uh here so first of all
+[37:57 - 38:02] uh we Define the amounts which we
+[38:00 - 38:05] defined right so what I will do I will
+[38:02 - 38:10] just copy this use context okay
+[38:05 - 38:12] so from the components booking and cars
+[38:10 - 38:16] okay we have
+[38:12 - 38:18] this and just copy this car amount
+[38:16 - 38:21] context and I will paste it here instead
+[38:18 - 38:23] of writing all of this thing okay and
+[38:21 - 38:27] import this use
+[38:23 - 38:28] context and this particular car context
+[38:27 - 38:33] okay like
+[38:28 - 38:35] this then uh we have to define the one
+[38:33 - 38:40] constant we'll call uh
+[38:35 - 38:44] stripe promise okay is equal to load
+[38:40 - 38:45] stripe okay so another thing right uh
+[38:44 - 38:47] let me show you one thing because I
+[38:45 - 38:50] already installed the stripe uh you have
+[38:47 - 38:52] to install the stripe uh for react okay
+[38:50 - 38:55] if you search for stripe react and here
+[38:52 - 38:57] you will find the first link okay and if
+[38:55 - 38:59] I scroll down here you have to install
+[38:57 - 39:02] this particular dependency okay make
+[38:59 - 39:04] sure this is very important so once you
+[39:02 - 39:05] install this dependency then you can
+[39:04 - 39:08] able to use the
+[39:05 - 39:11] stripe so obviously uh once you have
+[39:08 - 39:14] this stripe then you have to use this
+[39:11 - 39:16] environment variable so this particular
+[39:14 - 39:19] uh publisher key okay so I will just
+[39:16 - 39:21] copy this one and just write process.
+[39:19 - 39:24] EnV do
+[39:21 - 39:27] publisher okay so I don't know okay
+[39:24 - 39:31] anable type string
+[39:27 - 39:33] so I will make it of type
+[39:31 - 39:34] any let's try to make it this any as
+[39:33 - 39:37] well I don't
+[39:34 - 39:42] know why this error is
+[39:37 - 39:45] coming okay so or you can do one thing
+[39:42 - 39:49] you can mark it as
+[39:45 - 39:51] ads any okay so this will be a string
+[39:49 - 39:53] once you define this one right you have
+[39:51 - 39:55] to Define some option so I will just
+[39:53 - 39:58] copy paste that
+[39:55 - 40:01] option like this okay so it we don't
+[39:58 - 40:03] want this one I will remove this and it
+[40:01 - 40:05] I'm passing the mode of payment amount
+[40:03 - 40:06] right now I'm passing the random so you
+[40:05 - 40:08] can pass this car
+[40:06 - 40:12] amount and the
+[40:08 - 40:14] currency and inside here uh we have to
+[40:12 - 40:17] you have to Define element okay so this
+[40:14 - 40:18] all of this thing you can find on the
+[40:17 - 40:21] documentation but it's little
+[40:18 - 40:23] complicated so I am just simplifying for
+[40:21 - 40:26] you okay so this element you have to
+[40:23 - 40:29] make sure this importing from the uh
+[40:26 - 40:31] stripe JS okay so make sure to import
+[40:29 - 40:34] this particular statement and here you
+[40:31 - 40:36] have to pass some property the first is
+[40:34 - 40:40] stripe okay and you have to pass this
+[40:36 - 40:42] stripe promise so just type stripe
+[40:40 - 40:46] promise and after that you have to pass
+[40:42 - 40:48] the options the option will be options
+[40:46 - 40:50] which we already defined okay so if you
+[40:48 - 40:53] see getting error because right now we
+[40:50 - 40:54] did not pass anything and inside that we
+[40:53 - 40:56] create a new component called checkout
+[40:54 - 40:59] form okay so let's go to to the
+[40:56 - 41:01] component folder here we'll create a new
+[40:59 - 41:04] folder called
+[41:01 - 41:07] payment and inside that I create a new
+[41:04 - 41:11] file called check
+[41:07 - 41:15] out Che out form.
+[41:11 - 41:15] PSX okay and add the default template
+[41:15 - 41:19] like
+[41:15 - 41:22] this so I will rename this check out
+[41:19 - 41:22] small
+[41:23 - 41:30] o this okay and save it now obviously
+[41:27 - 41:32] you have to add this check out form
+[41:30 - 41:37] here like
+[41:32 - 41:39] this okay and uh that's all so if you
+[41:37 - 41:41] see right we got this error does not
+[41:39 - 41:45] support attribute because it have props
+[41:41 - 41:45] property um let me
+[41:46 - 41:51] see so here it need to be elements and
+[41:49 - 41:53] not the element so make sure this
+[41:51 - 41:55] elements okay and also Mark this
+[41:53 - 41:57] particular page as a use client so that
+[41:55 - 41:59] uh you can use this this context okay
+[41:57 - 42:01] and save everything now let's go back to
+[41:59 - 42:04] our application and if you see we got
+[42:01 - 42:07] the S canot destructure property car
+[42:04 - 42:10] amount as it is okay let's see what's
+[42:07 - 42:13] the issue so here is thing right the
+[42:10 - 42:15] issue is because uh this page is out of
+[42:13 - 42:19] scope okay so it's not in this
+[42:15 - 42:22] particular uh particular page
+[42:19 - 42:24] okay so here you cannot use the context
+[42:22 - 42:26] because it's out of scope uh because you
+[42:24 - 42:28] did it's completely different page right
+[42:26 - 42:31] and it's not included in this particular
+[42:28 - 42:34] context so that's you cannot use this
+[42:31 - 42:36] particular uh context here okay so I
+[42:34 - 42:38] will remove this one so what I will do
+[42:36 - 42:41] for now I will just hardcoded some value
+[42:38 - 42:44] okay so we hardcoded like this and we
+[42:41 - 42:46] impl the further and then we will uh
+[42:44 - 42:48] change this particular amount variable
+[42:46 - 42:51] okay so once you define this checkout
+[42:48 - 42:53] form let's go to the checkout form and
+[42:51 - 42:55] here we are going to actually implement
+[42:53 - 42:59] the form and everything okay with the
+[42:55 - 43:01] help of stripe only so first of all uh
+[42:59 - 43:03] let's define the stripe so here you have
+[43:01 - 43:05] to Define constant
+[43:03 - 43:09] stripe type
+[43:05 - 43:13] any is equal to use stripe okay so this
+[43:09 - 43:13] use stripe is need to
+[43:13 - 43:18] import no okay sorry the Ed tripe we
+[43:16 - 43:20] need to import from the react type GS
+[43:18 - 43:22] okay so I will import it here like this
+[43:20 - 43:25] and there are some few element uh we
+[43:22 - 43:27] also need it okay so second element we
+[43:25 - 43:29] have to Define it as elements okay use
+[43:27 - 43:31] elements again this is importing from
+[43:29 - 43:34] the
+[43:31 - 43:38] uh this is importing from the stripe uh
+[43:34 - 43:40] react stpe JS okay then uh we have to
+[43:38 - 43:43] define the method okay so inside this
+[43:40 - 43:46] return statement right I will replace
+[43:43 - 43:49] this one and here we have to add the
+[43:46 - 43:50] form okay uh for the form we have the
+[43:49 - 43:53] handle subit method we will Implement
+[43:50 - 43:55] soon and then here we have the payment
+[43:53 - 43:58] element okay this payment element we
+[43:55 - 44:00] need to import okay so you already have
+[43:58 - 44:03] in the uh react type JS so I will add it
+[44:00 - 44:06] here like this okay so this will give
+[44:03 - 44:09] you a predefine a form for our payment
+[44:06 - 44:11] Gateway okay we don't need to implement
+[44:09 - 44:14] the form and this is a sample button I
+[44:11 - 44:18] design it okay just this text uh we will
+[44:14 - 44:20] modify it later on and then we have to
+[44:18 - 44:23] um create a new method call handle
+[44:20 - 44:26] submit so what I will do I new method
+[44:23 - 44:29] call handle submit here like this
+[44:26 - 44:33] uh we passing the event so I will do the
+[44:29 - 44:35] event Prem default and if the element is
+[44:33 - 44:39] equal to uh null then we'll return
+[44:35 - 44:42] nothing okay and here we have to do
+[44:39 - 44:45] the constant submit error okay if
+[44:42 - 44:47] there's any error or something like this
+[44:45 - 44:50] if there is any error it will return
+[44:47 - 44:52] return nothing again okay like this so
+[44:50 - 44:54] this all the documentation you'll get
+[44:52 - 44:56] from the stripy documentation I will
+[44:54 - 44:59] just copy pasting because for the
+[44:56 - 45:01] timeing and the
+[44:59 - 45:04] next
+[45:01 - 45:09] uh this is very important okay so make
+[45:04 - 45:11] sure this is a sync okay and what else
+[45:09 - 45:11] we
+[45:14 - 45:20] me so if you see right a wait expression
+[45:17 - 45:22] only allow within a sync function okay
+[45:20 - 45:26] so obviously we need to Define inside
+[45:22 - 45:28] here like this okay so here I find this
+[45:26 - 45:30] F method okay you can access my
+[45:28 - 45:32] documentation as well and the source
+[45:30 - 45:34] code as well here I'm calling new API
+[45:32 - 45:38] and soon we are going to create new uh
+[45:34 - 45:40] API which is the Endo is create intent
+[45:38 - 45:43] and it is of type post and I'm passing
+[45:40 - 45:45] the amount okay so this particular
+[45:43 - 45:48] amount if you see right uh this
+[45:45 - 45:50] particular amount we need to pass and
+[45:48 - 45:53] there we'll get the some response
+[45:50 - 45:55] afterward okay and then this particular
+[45:53 - 45:57] amount is important because we need to
+[45:55 - 45:59] pass it to this particular API and it
+[45:57 - 46:01] will generate a secret key okay each
+[45:59 - 46:03] time it will generate a new secret key
+[46:01 - 46:07] this secret key we have to uh get it
+[46:03 - 46:09] here okay so I call S so you can call
+[46:07 - 46:09] secret
+[46:10 - 46:17] key like this and I will just print it
+[46:14 - 46:20] out and here inside the confirm payment
+[46:17 - 46:22] method you have to pass this secret key
+[46:20 - 46:24] okay along with the element and the
+[46:22 - 46:26] confirm parameter URL okay so this is
+[46:24 - 46:28] the written URL right now we are in
+[46:26 - 46:30] development but afterwards you can
+[46:28 - 46:33] replace it with the your production URL
+[46:30 - 46:36] as well okay and that's all now if I
+[46:33 - 46:39] save everything and let's go back to our
+[46:36 - 46:41] application okay so let's refresh this
+[46:39 - 46:45] one so right now it's just showing the
+[46:41 - 46:45] checkout form let
+[46:46 - 46:53] me so we change the checkout form right
+[46:49 - 46:53] let me go back to page.
+[46:54 - 47:01] TSX oh so we name this one so let
+[46:58 - 47:05] me if you see right this check out o is
+[47:01 - 47:05] capital let me replace this
+[47:06 - 47:11] rename and save everything let's check
+[47:08 - 47:17] it now and if you see the form is
+[47:11 - 47:20] generated okay now this form uh is
+[47:17 - 47:24] autogenerated by the
+[47:20 - 47:26] uh strap you only okay you didn't we did
+[47:24 - 47:28] not make any changes into that or
+[47:26 - 47:31] anything else okay it automatically
+[47:28 - 47:34] generated by the uh stripy obviously we
+[47:31 - 47:36] need bring it everything in uh one line
+[47:34 - 47:41] or in the middle okay so let's go back
+[47:36 - 47:45] to application and inside the page. txx
+[47:41 - 47:47] we have this checkout form right so or
+[47:45 - 47:51] we can directly Define it here as well
+[47:47 - 47:53] okay so for this form we'll Define We'll
+[47:51 - 47:56] add some class name so add the class
+[47:53 - 48:01] name and we'll do
+[47:56 - 48:03] maximum width medium okay and I will
+[48:01 - 48:07] wrap this in One
+[48:03 - 48:11] D this and we'll
+[48:07 - 48:14] Define sorry class name to be Flex We
+[48:11 - 48:14] Make Flex
+[48:14 - 48:22] column and then uh we'll make justify
+[48:18 - 48:26] Center and save it and if I go back
+[48:22 - 48:29] let's see does it have affected try to
+[48:26 - 48:32] make it item to be in the center and
+[48:29 - 48:35] also make WID to be oh we
+[48:32 - 48:37] already have this
+[48:35 - 48:39] one and if you see it's came in the
+[48:37 - 48:41] center okay let give some margin on the
+[48:39 - 48:44] top five six
+[48:41 - 48:46] maybe perfect and we have this button as
+[48:44 - 48:48] well okay so I will update this button
+[48:46 - 48:52] styling as well
+[48:48 - 48:57] here class name with to be full
+[48:52 - 49:00] background to be maybe we'll give hello
+[48:57 - 49:07] 500 and padding to be two see how it
+[49:00 - 49:08] looks okay and rounded to be large and L
+[49:07 - 49:11] in top
+[49:08 - 49:13] two okay so we have but an if I try to
+[49:11 - 49:15] click button you'll get the error okay I
+[49:13 - 49:18] hope you understand this one and now we
+[49:15 - 49:23] have some dummy um uh card number like
+[49:18 - 49:26] 42 42 4242 you can add any future date
+[49:23 - 49:29] some CBB oops sorry
+[49:26 - 49:31] refresh my screen by mistakely and then
+[49:29 - 49:32] you can add the jip code valid Gip code
+[49:31 - 49:35] and Country you can select it and just
+[49:32 - 49:37] click pay okay you have option to cash
+[49:35 - 49:39] app pay or you have more option okay you
+[49:37 - 49:42] can enable some option from the stripe
+[49:39 - 49:44] as well next the last important thing we
+[49:42 - 49:47] need to create API as I told you we need
+[49:44 - 49:49] to create API call create intent and
+[49:47 - 49:51] this API will give you give us the
+[49:49 - 49:53] secret key okay so this is very
+[49:51 - 49:55] important this is what we are going to
+[49:53 - 49:57] implement next and if you face any issue
+[49:55 - 49:58] if you have any doubt or any
+[49:57 - 50:00] complication while implementing or
+[49:58 - 50:03] understanding this particular code you
+[50:00 - 50:05] can refer my code anytime uh the link is
+[50:03 - 50:07] in the description okay and still if you
+[50:05 - 50:10] do not subscribe to my Channel please do
+[50:07 - 50:13] subscribe now let's create the uh
+[50:10 - 50:16] payment API okay so inside the API
+[50:13 - 50:17] folder we'll create a new folder okay
+[50:16 - 50:21] and the name should be this create
+[50:17 - 50:23] intent okay so inside API folder we
+[50:21 - 50:26] create new folder create intent and
+[50:23 - 50:29] inside that we'll create another file
+[50:26 - 50:34] called route. TSX
+[50:29 - 50:37] okay and here now we will add our uh
+[50:34 - 50:39] basic uh API call so first we'll do
+[50:37 - 50:42] export a
+[50:39 - 50:44] sync the function and uh the function
+[50:42 - 50:48] name will be post obviously we want it
+[50:44 - 50:51] post right I will change this parm to
+[50:48 - 50:56] request you can keep par as well as of
+[50:51 - 50:58] type any okay and then inside this we
+[50:56 - 51:01] have to make sure that we will accept
+[50:58 - 51:05] the uh request parameter so constant
+[51:01 - 51:09] data of type any is equal to
+[51:05 - 51:12] await and from the request we will uh
+[51:09 - 51:14] get the Json in data okay so whatever
+[51:12 - 51:18] the amount we pass it to the API uh that
+[51:14 - 51:21] will store in this data okay and then to
+[51:18 - 51:24] retri only the amount we will write data
+[51:21 - 51:25] dot amount like
+[51:24 - 51:28] this
+[51:25 - 51:31] then in the try catch block we'll write
+[51:28 - 51:35] catch block as
+[51:31 - 51:38] well and we'll write error of type any
+[51:35 - 51:42] okay so inside a try block we will
+[51:38 - 51:44] Define constant payment intent is equal
+[51:42 - 51:46] to
+[51:44 - 51:50] await
+[51:46 - 51:53] type. payment intent
+[51:50 - 51:55] okay so this tripe we have to make sure
+[51:53 - 51:58] we have to Define this tripe constant so
+[51:55 - 52:01] at the top I will Define the stripe
+[51:58 - 52:04] payment okay is equal to
+[52:01 - 52:07] new stripe so this need to be a capital
+[52:04 - 52:09] stripe like this and obviously we need
+[52:07 - 52:11] to make sure that we will import this
+[52:09 - 52:14] stripe and load stripe or just we need a
+[52:11 - 52:17] stripe actually we'll just import the
+[52:14 - 52:22] stripe like this okay and here we have
+[52:17 - 52:24] to pass the secret key okay EnV dot uh
+[52:22 - 52:26] stripe secr key which already having the
+[52:24 - 52:30] EnV file
+[52:26 - 52:32] okay and then I have to give this
+[52:30 - 52:36] exclamatory Mark okay very important and
+[52:32 - 52:37] then we have to write typescript to be
+[52:36 - 52:41] true so we have to inform okay this is a
+[52:37 - 52:44] typescript and API version okay so right
+[52:41 - 52:46] now uh if right now this is the API
+[52:44 - 52:48] version I'm using but if you get the
+[52:46 - 52:50] error and just hover on it and it will
+[52:48 - 52:53] give the exact API version okay is
+[52:50 - 52:56] actually date but it mentioned like
+[52:53 - 52:59] this and after this one uh the payment
+[52:56 - 53:03] in you have to create
+[52:59 - 53:07] it and inside that you have to pass the
+[53:03 - 53:11] amount so amount of type number
+[53:07 - 53:13] okay then you have to write the
+[53:11 - 53:15] currency
+[53:13 - 53:18] currency we have to mention the currency
+[53:15 - 53:23] as well okay so currency right now I
+[53:18 - 53:24] will to the USD okay and then uh the
+[53:23 - 53:27] response we'll write the response here
+[53:24 - 53:29] after this we just write the return and
+[53:27 - 53:34] next
+[53:29 - 53:39] response dot Json and the payment
+[53:34 - 53:42] intent why intent actually I want
+[53:39 - 53:47] intent payment
+[53:42 - 53:50] intent do client secret see okay and
+[53:47 - 53:51] then I will pass the status of 2200 if
+[53:50 - 53:53] it's
+[53:51 - 53:56] successful so this need to be small
+[53:53 - 53:57] stripe like this
+[53:56 - 54:01] okay
+[53:57 - 54:03] so this need to be intense okay so s
+[54:01 - 54:06] need to be there and if there is any
+[54:03 - 54:09] error so we'll just pass the status code
+[54:06 - 54:12] 400 like this and save everything now
+[54:09 - 54:15] once you save obviously make sure in
+[54:12 - 54:17] checkout form we have this API endpoint
+[54:15 - 54:19] the method is post and then we are
+[54:17 - 54:21] passing the amount as a 58 right now is
+[54:19 - 54:25] we are passing hardcoded but you can
+[54:21 - 54:27] pass uh once you uh uh we get from this
+[54:25 - 54:29] car selection okay but for testing
+[54:27 - 54:33] purpose we are passing the hardcoded
+[54:29 - 54:35] value and now on the red URL is the home
+[54:33 - 54:37] URL okay because we are deating to the
+[54:35 - 54:39] homepage and make sure everything is
+[54:37 - 54:42] correct save everything and let's go
+[54:39 - 54:45] back to our application now okay so
+[54:42 - 54:45] let's go back
+[54:45 - 54:53] 3,000 and let's try to book the um
+[54:54 - 54:57] Taxi
+[54:56 - 54:59] okay
+[54:57 - 55:02] so like
+[54:59 - 55:05] this and select the unque car okay so if
+[55:02 - 55:08] you see the button is enabled select the
+[55:05 - 55:09] payment method and click book so once
+[55:08 - 55:12] you click book it will redirect to this
+[55:09 - 55:14] particular payment gway page add the
+[55:12 - 55:17] default
+[55:14 - 55:21] page add some
+[55:17 - 55:24] date okay the United State and zip code
+[55:21 - 55:26] I added you can save this okay and just
+[55:24 - 55:29] click pay now once you click pay if you
+[55:26 - 55:31] see it's reloading right and it's it's
+[55:29 - 55:33] done but I don't know whether it's
+[55:31 - 55:38] redirected or not let's see do we have
+[55:33 - 55:40] any error and right now it's done right
+[55:38 - 55:46] the payment is get successful let's try
+[55:40 - 55:46] to find it in the home let's refresh the
+[55:48 - 55:54] screen and if you see the payment is
+[55:51 - 55:57] done okay so the new payment uh if you
+[55:54 - 56:01] want to search I don't know where it is
+[55:57 - 56:06] I can search it but let's search view
+[56:01 - 56:06] okay so total is 113 before it was
+[56:07 - 56:15] 28 but I made I think two payment I
+[56:10 - 56:17] don't know okay so total is $88 58 okay
+[56:15 - 56:22] and this is yesterday's one so we made
+[56:17 - 56:27] actually two payment maybe and uh if you
+[56:22 - 56:30] see the 58 okay is 58 because uh if I go
+[56:27 - 56:34] to this where it is inside this API
+[56:30 - 56:36] right you have to multiply it by 100 so
+[56:34 - 56:38] whatever value you pass it will be there
+[56:36 - 56:41] okay because otherwise it consider as a
+[56:38 - 56:44] scent only okay so see 58 Cent perfect
+[56:41 - 56:47] and this is all all everything is stor
+[56:44 - 56:50] the payment method everything okay
+[56:47 - 56:53] perfect I hope you understand this one
+[56:50 - 56:55] okay the D URL just make sure that it's
+[56:53 - 56:57] redirecting or not okay but if you have
+[56:55 - 57:00] any question any doubt let me know in
+[56:57 - 57:02] the comment section and if you did not
+[57:00 - 57:04] subscribe to my Channel please do
+[57:02 - 57:07] subscribe so I hope you understand this
+[57:04 - 57:09] payment gway method and everything okay
+[57:07 - 57:11] if you have any question uh put it in
+[57:09 - 57:13] the comment and also we get this
+[57:11 - 57:17] direction and we learn a lot of things
+[57:13 - 57:17] in this particular section
