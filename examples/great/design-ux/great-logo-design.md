@@ -1,0 +1,5 @@
+# Great example - logo-design
+
+A specific instance of excellent output for this skill.
+
+Concept checkpoint for **Kiln**, a small-batch coffee roaster: one greyscale overview image with three marks, each carrying one line and an honest risk. **A — Kiln K** (letterform, recommended): the K's leg is the kiln's arched firing mouth and the arch returns as the n of the wordmark; the audit caught a 60.8° diagonal in an earlier N and an off-centre symbol before anything was shown. **B — Fire Stack** (pictorial): three tapering courses read as both a kiln mouth and rising heat; risk, it darkens to a blob below 24 px. **C — Roast Monogram** (monogram): the K and r share a stem inside a rounded tile; risk, close to a known transit mark, so the shelf test flagged it. Recommendation is A with its one risk named, followed by the kit offer — palette with one-colour and reversed versions, horizontal and stacked lockups, a small-size cut, favicon and app-icon set, a presentation board with café and bag mockups, and a one-page usage guide — and then it stops and waits for the pick. No colour before the choice, no kit files, no variants attached early.

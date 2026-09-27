@@ -1,6 +1,40 @@
 ---
 name: logo-design
-description: Professional logo and brand-mark design, from brief to production files. Guides discovery and the design brief, concept generation, choosing a mark type (wordmark, monogram, letterform, pictorial, abstract, emblem, mascot, combination), building clean geometric SVG logos, optical refinement, colour and typography, testing (16 px, one-colour, reversed, shelf test), client presentation, delivery variants and brand guidelines. Includes a searchable library of 1,400+ real-world SVG logos classified by type, technique, geometry and industry, plus scripts that audit SVGs and generate test sheets, presentation boards and export variants. Use this skill whenever the user wants a logo, logotype, wordmark, monogram, brand mark, symbol, app icon or favicon designed, redesigned, refreshed, critiqued or compared; asks for logo ideas or concepts; needs a design brief, logo guidelines, lockups or an identity system; or mentions branding a new company, product, app or project — even if they don't say the word "logo".
+description: "Logo and brand-mark design from brief to production SVG: concepting, geometric construction, optical correction, colour, typography, lockups, testing, delivery, plus a 1,400-logo reference library and scripts that audit SVGs and build test sheets, boards and export variants. Load for any logo, wordmark, monogram, brand mark, app icon, favicon, lockup or identity system."
+activation: "Load when the user wants a logo, wordmark, monogram, brand mark, symbol, app icon, favicon, lockup or identity system designed, redesigned, critiqued or compared; asks for logo ideas or a design brief; or mentions branding a new company or app."
+instruction: "Act as a senior identity designer: find one ownable idea, build it as clean geometry, prove it at 16 px and in one colour, present it at a concept checkpoint before any kit work. Write 8-12 one-line concepts, build the three strongest and most different, audit and refine twice, show them greyscale with a recommendation, then stop and wait for the pick."
+applies_when:
+  env: "any project directory where SVG files can be written and python3 3.8+ runs; no network required"
+  runtime: "python3 3.8+ standard library only; optional cairosvg, rsvg-convert, Inkscape or Chromium for PNG rendering"
+  deps: "skill-local scripts/ and assets/library/ with 1,432 reference SVGs; stdlib only, no third-party packages"
+  params: "brand name spelled exactly, offering, audience, 3-5 brand adjectives, competitors, constraints; fast track permits stated assumptions"
+  budget: "one session to the concept checkpoint; the kit only after an explicit yes, never in the same turn"
+  scale: "one identity at a time — a single mark, refresh or critique; not a multi-brand portfolio rollout"
+permissions:
+  - fs.read
+  - fs.write
+  - bash
+flow:
+  - "Discovery to brief: gather name, offering, audience, adjectives, competitors and constraints; write the brief, state assumptions."
+  - "Research: search the library by industry, list category clichés as off-limits, run the word map, choose two mark types."
+  - "Concepts: write 8-12 one-sentence ideas, score them, build the three strongest and most different."
+  - "Build and test: write each as solid black SVG, then run svg_audit.py and preview_sheet.py and loop twice on scale, optical corrections, readings and craft."
+  - "Checkpoint: render the greyscale concept sheet, show it with a recommendation, offer the kit, wait."
+  - "Kit, only after yes: refine geometry, add colour and lockups, build the board, export variants, hand over guidelines."
+done_when:
+  - "cmd:python3 -m rig_capabilities.skill_contract capabilities/skills/logo-design/SKILL.md"
+  - "cmd:grep -q viewBox capabilities/skills/logo-design/assets/library/svg/patreon.svg && python3 capabilities/skills/logo-design/scripts/svg_audit.py capabilities/skills/logo-design/assets/library/svg/patreon.svg"
+  - "cmd:python3 capabilities/skills/logo-design/scripts/search_library.py --technique negative-space"
+  - "grep:capabilities/skills/logo-design/SKILL.md:## Design work[f]low"
+  - "cmd:test $(find capabilities/skills/logo-design/assets/library/svg -name '*.svg' | wc -l) -ge 1400"
+quality_floor: 0.75
+outcome: "a chosen direction: a greyscale concept sheet with a recommendation, then — only after the user picks — a kit of audited SVG lockups, colour and one-colour versions, favicon and app-icon exports, presentation board and usage guidelines"
+great_example: "examples/great/design-ux/great-logo-design.md"
+out_of_scope:
+  - "tracing or redistributing the library's reference logos; they are trademarks, for study only"
+  - "building the kit, colour, lockups or exports before the user picks a direction at the checkpoint"
+  - "brand strategy, naming, packaging production files or a multi-brand identity-system rollout"
+  - "claiming tests, renders or exports that were not actually run"
 ---
 
 # Logo Design
