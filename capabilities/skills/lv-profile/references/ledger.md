@@ -1,0 +1,18 @@
+# lv-profile ledger
+
+| id | path | action | kept | dropped |
+|---|---|---|---|---|
+| lucy-skills | `~/.aside/u/0/skills/user/lucy-skills/SKILL.md` | runner | named as the job-lane runner (/lucy-skills profile audit, positioning) | meta-skill body; its other sections route to their own stages |
+| lg-profile | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/SKILL.md` | merged:profile-audit-and-probes.md | two-tests framing (stranger vs machine), order of work, write-hazard hard stops, minutes-vs-strategy rule, asset-generator rule | duplicate sub-skill pointers folded into their own rows |
+| profile-optimizer | `~/.hermes/skills/profile-optimizer/SKILL.md` | merged:about-featured-banner.md | About structure, formatting rules, Featured capping, self-contained visual briefs (paraphrased, third-party) | interactive question-batch flow, 50-char headline kept as logged conflict variant, example copy, Gemini instructions, British-English rule |
+| about-and-featured | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/sub/about-and-featured.md` | merged:about-featured-banner.md | photo and banner specs, followers toggle, keyword placement, per-surface write recovery | none material |
+| classifier-sync | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/sub/classifier-sync.md` | merged:classifier-sync.md | three-inputs-one-classification, 60-second audit with denominator, month-scale re-check | none material |
+| company-page | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/sub/company-page.md` | merged:company-page.md | from-zero sequence, employee amplification, page-comment move, dead admin surface | none material |
+| headline-formulas | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/sub/headline-formulas.md` | merged:headline-and-keywords.md | title+who+how formula, two readers, 10-target keyword extraction, claim rules | creator's verbatim examples summarized |
+| profile-audit | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-draft/sub/profile-audit.md` | merged:profile-audit-and-probes.md | the 10-row audit table, headline-claim check on Mike's current headline | superseded 21-line classification check (now classifier-sync) |
+| step-8-profile | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/step-8-profile.md` | merged:profile-audit-and-probes.md | executor/verifier pair, field-by-field change list, blind-write refusal, monthly change set | envelope plumbing detail |
+| profile-probe | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/sub/profile-probe.md` | merged:profile-audit-and-probes.md | identity assertion, unknown-vs-zero rule, post-read route fallbacks, render-quality receipt, hard stops | tool-inventory quirks and guard payload detail |
+| lucy-skills/linkedin-activity | `~/.aside/u/0/skills/user/lucy-skills/sub-skills/linkedin-activity.md` | merged:job-search-profile.md | 20-10-5 routine, posting and commenting doctrine, boss hunting, be-first time filter, hard-requirement check, scam awareness | long checklist scaffolding and per-item DONE-WHEN strings |
+| rig-job-search-campaign | `~/Developer/rig-skills/studios/rig-job-search-campaign/SKILL.md` | merged:job-search-profile.md | human-pace editing protocol, standing gates, truth rules, profile setup for the search | pipeline stages owned by other lv-* stages (resume, packets, feedback app) |
+| jobs-assisted | `~/Developer/rig-gtm-studio-v2/skills/jobs-assisted/SKILL.md` | runner | named as the job-lane runner; human clicks Submit | lane body |
+| jobs-assisted@eden | eden://settings/skills/jobs-assisted | runner | named as the Eden-resident job runner | Eden-resident body |

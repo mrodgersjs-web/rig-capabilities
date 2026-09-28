@@ -18,6 +18,23 @@ Every typed verdict (which hook wins, is this post ready to publish, is this com
 
 This is the Eden copy of the `linkedin-viral` meta-skill that Mike's coding agents also run. Mike's Personalization instructions in Eden already hold the full lane doctrine; this skill adds the viral playbook on top. If the two ever disagree, the Personalization lane rules win.
 
+## 0. The stages, and which Eden skill serves each
+
+Mike's agents run LinkedIn work through 12 stages. Inside Eden, use this skill as the playbook and hand each stage to the Eden skill built for it:
+
+| Stage | In Eden |
+|---|---|
+| Strategy and doctrine | /linkedin-operating-doctrine for the master rules; /personal-brand-strategist for positioning and the topic tree |
+| Plan and ideas | /idea-engine for today's ideas; /weekly-strategist for the weekly sweep; /head-of-content to plan and draft the week; /eden-discover for the daily outlier pull (drafts only); /content-command-center to set up the dashboard |
+| Hooks and draft | sections 4 and 5 of this skill |
+| Visuals | /coach-image-prompter for Lane A Coach images (Wednesday to Saturday) |
+| Gate | /voice-law-checker on every draft before Mike sees it |
+| Launch | section 7 of this skill; scheduling only on Mike's yes |
+| Engage | /comment-machine for the daily comment session; /comment-ambassador for single comments; /personal-brand-lane stages comments and never publishes |
+| Outreach | /linkedin-follower-outreach (dry-run by default; sends need Mike's yes); /gtm-draft-only stages comments and connection drafts and never sends |
+| Measure | /metrics-scorecard for the daily RED/GREEN scorecard; section 9 for the weekly review |
+| Job search | /jobs-assisted (drafts only; Mike clicks Submit) |
+
 ## 1. Lane first
 
 | Lane | Voice | Hard rules |

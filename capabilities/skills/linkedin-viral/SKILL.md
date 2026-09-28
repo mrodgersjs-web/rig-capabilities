@@ -1,7 +1,7 @@
 ---
 name: linkedin-viral
 description: >-
-  LinkedIn Viral: the single front door for every LinkedIn job Mike Rodgers runs - viral reach, strategy, hooks, drafting, visuals, scoring, Eden scheduling, golden hour, comments, DMs and lead gen, profile, measurement, events, the Ideawake client lane and the job-search profile. JEV-FIRST MANDATE, findable at task start: every typed judgment here (hook ranking, post gate, comment gate, lane call, flop cause, boost screen) goes to rig-s1gate (Jev) BEFORE any frontier LLM call, and DEFERRED is the only answer when the classifier is down. Applies the lane guard and hard gates, then routes to exactly one of 161 LinkedIn skills, with the Tommy Clark doctrine (79 videos, 2024-2026) as the playbook. Use for /linkedin-viral, "make this go viral", "write or fix a LinkedIn post", "why did my post flop".
+  LinkedIn Viral: the single front door for every LinkedIn job Mike Rodgers runs. It fixes the lane (RIG B2B, personal brand, Ideawake client, job search), enforces the hard gates, and routes to exactly one of 12 stage skills (strategy, plan, hooks, draft, visuals, gate, launch, engage, outreach, profile, measure, distribute) that merge 257 audited LinkedIn assets, with the Tommy Clark doctrine (79 videos, 2024-2026) as the playbook. JEV-FIRST MANDATE, findable at task start: every typed judgment here (hook ranking, post gate, comment gate, lane call, flop cause, boost screen) goes to rig-s1gate (Jev) BEFORE any frontier LLM call, and DEFERRED is the only answer when the classifier is down. Use for /linkedin-viral, "make this go viral", "write or fix a LinkedIn post", "why did my post flop".
 owner: rig-intelligence
 domain: Communications
 status: Stable
@@ -10,14 +10,16 @@ tags: [linkedin, viral, growth, meta-skill, router, eden, doctrine]
 outcome: "content-publishing: every LinkedIn job enters one router that fixes the lane, loads exactly one right child skill, and applies the current doctrine and gates"
 done_when:
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py
-  - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py capabilities/skills/linkedin-viral/SKILL.md --min 30
+  - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py capabilities/skills/linkedin-viral/SKILL.md --min 20
+  - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_ledger.py --all
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py --self-test
   - grep:capabilities/skills/linkedin-viral/SKILL.md:tommy-clark-doctrine
 quality_floor: 0.6
 metadata:
   purpose: meta-skill
   parent: when-growing-social-accounts
-  routable-entries: "161"
+  stages: "12"
+  audited-assets: "257"
 ---
 
 # LinkedIn Viral (meta-skill)
@@ -58,52 +60,52 @@ If the lane is unclear, ask which lane. Never carry one lane's voice into anothe
 6. **Account safety:** follow `~/.aside/u/0/skills/user/linkedin-site-mechanics/SKILL.md` throttles, assert the signed-in handle before any outward action, and prefer a reasoned refusal over a volume ask that trips limits.
 7. **Every number is a sourced receipt.** No invented metrics, clients or quotes.
 
-## Step 2: Route the job (load exactly one child)
+## Step 2: Route the job to ONE stage
 
-| Job | Load this | Sub-skill if needed |
+Every LinkedIn job belongs to exactly one of 12 stage skills. Each stage merged the best of every legacy skill for its job (125 sources, conflicts resolved and logged in its `references/ledger.md`) and lists the tools, agents and runners it calls. Load the stage, follow its procedure, and load at most one of its sub-skills.
+
+| Job | Stage | Path |
 |---|---|---|
-| The viral playbook itself: what works in 2026 and why | `~/Developer/rig-capabilities/capabilities/skills/tommy-clark-doctrine/SKILL.md` | its references/ by topic |
-| Daily unattended viral run (content, distribution, measurement) | `~/.hermes/skills/rig-linkedin-virality/SKILL.md` | its P1/P2/P3 children; check the routine is actually running first |
-| Whole funnel, post through monetization | `~/.aside/u/0/skills/user/linkedin-optimizer/SKILL.md` | its 13 lg-* skills |
-| Content process end to end (source, plan, draft, critique, publish, amplify, measure) | `~/.aside/u/0/skills/user/linkedin-growth-os/SKILL.md` | lg-* |
-| Hooks, visuals, growth tactics from the creator corpus | `~/.aside/u/0/skills/user/linkedin-influencer-os/SKILL.md` | li-hooks, li-visuals, li-growth |
-| Cross-account growth doctrine and lessons library | `~/.aside/u/0/skills/user/linkedin-growth-engine/SKILL.md` | |
-| Positioning, pillars, which game to play | tommy-clark-doctrine → `references/positioning.md` | `~/.aside/u/0/skills/user/content-pillar-architect/SKILL.md` |
-| Week plan or calendar | Lane A: linkedin-weekly-rhythm; Lane B: rig-daily-linkedin-post; any lane: `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-plan/SKILL.md` | lg-plan/sub/format-mix.md |
-| Post ideas | `~/.aside/u/0/skills/user/content-matrix/SKILL.md` | Lane A pop-culture collisions: `~/.aside/u/0/skills/user/rig-collision-engine/SKILL.md` |
-| Hooks | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/li-hooks/SKILL.md` | hook-families, hook-selection; lever checklist in tommy-clark-doctrine/references/hooks-and-media.md |
-| Draft a post | Lane B: `~/Developer/rig-capabilities/capabilities/skills/rig-write-linkedin/SKILL.md`; Lane A: linkedin-weekly-rhythm into Eden; any lane: `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-draft/SKILL.md` | body-craft, hook-lab |
-| Visuals, carousels, video (briefs for Eden) | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/li-visuals/SKILL.md` | eden-brief-templates, carousel-architecture, image-system, video-shorts |
-| Score or gate a draft | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-critique/SKILL.md` plus Jev | scorecard; `~/Developer/rig-capabilities/capabilities/harnesses/hB-04-linkedin-post-session.yaml` |
-| Voice and de-slop | `~/Developer/rig-capabilities/capabilities/skills/rig-communications-voice/SKILL.md` | `~/.aside/u/0/skills/user/anti-slop/SKILL.md` |
-| Schedule or publish | eden-mcp (drafts; live only on Mike's yes) | lg-publish |
-| Golden hour and post-launch | `~/.aside/u/0/skills/user/linkedin-post-launch/SKILL.md` | lg-amplify/sub/golden-hour.md; Clark's checklist in distribution-and-algorithm.md |
-| Comment on other people's posts | `~/.hermes/commands/comment-engine.md` with linkedin-site-mechanics | lg-amplify/sub/borrowed-attention.md |
-| Profile | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-profile/SKILL.md` (brand lanes); lucy-skills (job lane) | headline-formulas, about-and-featured, company-page |
-| Qualify leads and warm signals | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-qualify/SKILL.md` | hot-signals, icp-fit-card, intent-tracking |
-| DMs and follow-up | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-convert/SKILL.md` | opener-recipes, dm-sequences, followup-cadence, pre-call-nurture; `~/.hermes/skills/linkedin-followup-sequence/SKILL.md` |
-| Offer, monetization, lead magnet | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-monetize/SKILL.md` | offer-construction, owned-audience |
-| Measure, or diagnose a flop | `~/.aside/u/0/skills/user/linkedin-analytics-tracker/SKILL.md` | lg-measure; Clark's diagnosis order in distribution-and-algorithm.md |
-| Scrape posts or creators for evidence | `~/.hermes/skills/rig-linkedin-scrape/SKILL.md` | `~/.aside/u/0/skills/user/scrapers/SKILL.md` |
-| Repurpose off LinkedIn | `~/.aside/u/0/skills/user/linkedin-cross-platform/SKILL.md` | lg-distribute subs |
-| Conference or event surge | `~/.aside/u/0/skills/user/linkedin-event-engagement/SKILL.md` | |
-| Taki marketing rules on RIG posts | `~/.aside/u/0/skills/user/rig-linkedin-taki/SKILL.md` | |
+| Positioning, golden question, content-market fit, pillars, lanes, voice, the 2026 doctrine | lv-strategy | `~/Developer/rig-capabilities/capabilities/skills/lv-strategy/SKILL.md` |
+| Sourcing ideas and facts, idea engines, weekly and monthly calendar, cadence, lane rhythms | lv-plan | `~/Developer/rig-capabilities/capabilities/skills/lv-plan/SKILL.md` |
+| Openings: levers, three variants, cold-reader rule, Jev ranking, A/B pairs | lv-hooks | `~/Developer/rig-capabilities/capabilities/skills/lv-hooks/SKILL.md` |
+| Body, post architecture, format catalog, CTA, threads, the Eden brief | lv-draft | `~/Developer/rig-capabilities/capabilities/skills/lv-draft/SKILL.md` |
+| Media: real photo first, Eden image briefs, carousels, video, Lane A cast rules | lv-visuals | `~/Developer/rig-capabilities/capabilities/skills/lv-visuals/SKILL.md` |
+| Pre-publish gate: Jev rubrics, post gate, scorecard and critic, voice law, anti-slop, claim hygiene | lv-gate | `~/Developer/rig-capabilities/capabilities/skills/lv-gate/SKILL.md` |
+| Eden scheduling, posting slot, golden hour, algorithm model, save assets, boosts, planned peaks | lv-launch | `~/Developer/rig-capabilities/capabilities/skills/lv-launch/SKILL.md` |
+| Comments on other people's posts, replies on Mike's posts, pinned first comment, target lists | lv-engage | `~/Developer/rig-capabilities/capabilities/skills/lv-engage/SKILL.md` |
+| Connections, lead sourcing and qualification, warm signals, DMs, follow-up, campaigns, offers | lv-outreach | `~/Developer/rig-capabilities/capabilities/skills/lv-outreach/SKILL.md` |
+| Profile as landing page, headline, About and Featured, company page, job-search profile | lv-profile | `~/Developer/rig-capabilities/capabilities/skills/lv-profile/SKILL.md` |
+| Daily and weekly tracker, KPI loop, attribution, outlier review, scraping for evidence | lv-measure | `~/Developer/rig-capabilities/capabilities/skills/lv-measure/SKILL.md` |
+| Beyond the feed: LinkedIn Groups, Reddit, Substack, X, trade press, newsletter | lv-distribute | `~/Developer/rig-capabilities/capabilities/skills/lv-distribute/SKILL.md` |
 
-Anything not in this index: `references/routing.md` lists every routable entry by job with its path, plus the retired, broken and adjacent-lane lists.
+A whole post end to end runs: lv-plan → lv-hooks → lv-draft → lv-visuals → lv-gate → lv-launch → lv-engage → lv-measure (lv-strategy first only when positioning is unsettled). Each stage hands the next a named artifact.
 
-## Step 3: Apply the viral core
+## Runners: lanes and schedules that call the stages
 
-For any create, fix or diagnose job, run `references/viral-core.md` (the post recipe, the week, the daily engine, the weekly review) before the child's own checklist. Where Clark's doctrine and a RIG rule conflict, the RIG rule wins and the conflict is named in the output.
+| Runner | Lane or schedule | Path |
+|---|---|---|
+| rig-daily-linkedin-post | Lane B daily post | `~/.aside/u/0/skills/user/rig-daily-linkedin-post/SKILL.md` |
+| linkedin-weekly-rhythm | Lane A themed days (Eden) | `~/.aside/u/0/skills/user/linkedin-weekly-rhythm/SKILL.md` |
+| ideawake-linkedin-weekly | client lane (Coby's account) | `~/.aside/u/0/skills/user/ideawake-linkedin-weekly/SKILL.md` |
+| lucy-skills | job-search lane | `~/.aside/u/0/skills/user/lucy-skills/SKILL.md` |
+| linkedin-event-engagement | conference surges | `~/.aside/u/0/skills/user/linkedin-event-engagement/SKILL.md` |
+| rig-linkedin-virality | daily unattended run (Hermes: P1 content, P2 distribution, P3 measurement) | `~/.hermes/skills/rig-linkedin-virality/SKILL.md` |
 
-## Duplicates: which one wins
+Runners keep working as they are. Each stage's Tools and runners table says which runners should call it; re-pointing a runner is a separate, approved change.
 
-- **Hooks:** li-hooks for LinkedIn. content-hook-generator for cross-platform work. hook-generator (Hermes) produces formula hooks, which Clark's 2026 evidence says now read as AI: raw material only.
-- **Drafting:** rig-write-linkedin (Lane B, engine plus gates) first; lg-draft for the process view. post-writer and post-formatter are generic third-party formats: only when Mike asks for them.
-- **Virality:** this skill is the front door. rig-linkedin-virality is the daily unattended run beneath it. rig-virality-predictor is an empty folder (broken).
-- **Voice:** anti-slop and slopmonster are the same tool; use anti-slop.
-- **Profile:** lg-profile for brand lanes, lucy-skills for the job lane, profile-optimizer only on request.
-- **Scraping:** rig-linkedin-scrape for LinkedIn data, scrapers for everything else.
-- **Studios:** rig-linkedin-agency is the 10-subagent factory; the linkedin-studio and linkedin-agency folders are empty (broken).
+## Doctrine
+
+`~/Developer/rig-capabilities/capabilities/skills/tommy-clark-doctrine/SKILL.md` holds the dated rule ledger behind every stage (current 2026 rules vs superseded ones, each tied to a video ID).
+
+## What happened to the old skills
+
+- **125 legacy skills:** content merged into a stage; superseded for routing; still on disk because agents and crons load some of them by name.
+- **67 tools and 35 runners:** still called, now listed inside their stage.
+- **16 old routers** (linkedin-growth-os, linkedin-optimizer, linkedin-influencer-os and others): superseded by this file.
+- **7 Postiz-era skills:** retired. **6 broken or phantom entries:** reported, never routed.
+- **Nothing was deleted.** The proposed deletions wait for Mike's approval in `~/.rig/prune/linkedin-viral-2026-09-28/condemnation.md`.
+- Full map: `references/routing.md` (every asset with its stage and role) and `references/stage-map.json`.
 
 ## Calling it
 
@@ -114,4 +116,4 @@ For any create, fix or diagnose job, run `references/viral-core.md` (the post re
 
 ## Done-test
 
-`python3 scripts/check_routes.py` is GREEN only when every path in `references/routing.md` resolves and the table carries at least 40 routes. Run it again against this SKILL.md with `--min 30`. `--self-test` plants a dangling route and a truncated table in temp copies and passes only if both go RED while the real table stays GREEN.
+`python3 scripts/check_routes.py` is GREEN only when every path in `references/routing.md` resolves and the table carries at least 40 routes. Run it again against this SKILL.md with `--min 20`. `python3 scripts/check_ledger.py --all` is GREEN only when all 12 stages account for every asset assigned to them. `--self-test` plants a dangling route and a truncated table in temp copies and passes only if both go RED while the real table stays GREEN.
