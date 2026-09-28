@@ -113,6 +113,7 @@ This stage has no runner rows. Runners live in lv-plan and call this stage for p
 | `references/voice-fingerprint.md` | quantified fingerprint, absence signals, register map, drift check |
 | `references/hot-buttons-taki.md` | Taki Hot Button Map for RIG, four-leg anatomy, anti-patterns |
 | `references/doctrine-2026.md` | the 2026 rule set every lv-* stage inherits, tactic tiers, lane law |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

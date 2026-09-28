@@ -19,7 +19,7 @@ Installed copies are distribution targets. Never edit them; edit canonical and r
 | Aside | `~/.aside/u/0/skills/user/linkedin-viral/` | loads as an account skill |
 | Eden | Eden Settings → Skills → `linkedin-viral` (imported from `eden/linkedin-viral-eden.md`) | `/linkedin-viral` in Eden chat |
 
-The child `tommy-clark-doctrine` and the 12 stage skills (`lv-strategy`, `lv-plan`, `lv-hooks`, `lv-draft`, `lv-visuals`, `lv-gate`, `lv-launch`, `lv-engage`, `lv-outreach`, `lv-profile`, `lv-measure`, `lv-distribute`) are installed beside it in the same seven skill folders. The universal command source is `~/.rig/universal-commands/linkedin-viral.md`.
+The child `tommy-clark-doctrine` and the 12 stage skills (`lv-strategy`, `lv-plan`, `lv-hooks`, `lv-draft`, `lv-visuals`, `lv-gate`, `lv-launch`, `lv-engage`, `lv-outreach`, `lv-profile`, `lv-measure`, `lv-distribute`) are installed beside it in the same seven skill folders, plus the 10 creator doctrine skills `lv-creator-*` (added 2026-09-28: lara-acosta, diandra-escobar, will-mctighe, harry-long, kasey-brown, mark-firth, pierre-herubel, raise-your-visibility-online, shanee-moret, michelle-j-raymond). OMP loads them via the `lv-*` glob in includeSkills (`~/.omp/agent/config.yml`, backed up 2026-09-28). The universal command source is `~/.rig/universal-commands/linkedin-viral.md`.
 
 ## Update procedure
 

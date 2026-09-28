@@ -88,6 +88,7 @@ Use for: commenting on other people's posts, handling comments and replies on Mi
 | `references/reply-handling.md` | inbound comments on Mike's posts: SLA, scan windows, comment-type routing, Loop-Back canon, honest null-state |
 | `references/pinned-first-comment.md` | the pinned first comment format: image-first, four-line caption, the five tests |
 | `references/eng-mechanics-and-lanes.md` | executor tool usage, browser mechanics pitfalls, handle assertion, lane fire rules |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

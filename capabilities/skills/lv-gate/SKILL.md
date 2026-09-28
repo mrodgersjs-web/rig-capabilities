@@ -125,6 +125,7 @@ toward publication here because it is never auto-published at all.
 | `references/scorecard-and-critic.md` | the 8-criterion scorecard, critic discipline, data-backed scoring |
 | `references/voice-law-and-slop.md` | anti-slop loop, banned words, day sign-offs, cast map, hook position |
 | `references/claim-hygiene-and-hard-blocks.md` | claim/disclosure/risk rules, measured corrections, hard-block list |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

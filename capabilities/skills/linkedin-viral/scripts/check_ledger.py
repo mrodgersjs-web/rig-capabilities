@@ -110,7 +110,7 @@ if args[:1] == ["--self-test"]:
     print("GREEN" if ok else "RED")
     sys.exit(0 if ok else 2)
 if args[:1] == ["--all"]:
-    dirs = sorted(p for p in SKILLS.glob("lv-*") if p.is_dir())
+    dirs = sorted(p for p in SKILLS.glob("lv-*") if p.is_dir() and not p.name.startswith("lv-creator-"))
     oks = [report(p) for p in dirs]
     print(f"stages={len(dirs)} green={sum(oks)}")
     print("GREEN" if dirs and all(oks) else "RED")

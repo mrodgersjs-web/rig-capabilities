@@ -100,6 +100,7 @@ sections (lv-profile), or anything about a minor (Lane C: stop and hand back to 
 | `references/hook-drafting.md` | three-variant drafting, the cold-reader rule, the ten-type lab, formula-hooke handling |
 | `references/hook-selection.md` | the five gates in order, tie-breakers, the receipts rule, Jev ranking, A/B design |
 | `references/hook-lanes-and-ab.md` | lane hook rules, the hook brief template, A/B pair design and the validation sequence |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

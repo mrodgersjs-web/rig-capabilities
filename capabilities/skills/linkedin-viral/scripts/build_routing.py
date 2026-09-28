@@ -52,7 +52,13 @@ for s in STAGES:
         out.append(f"| {r['id']} | {r['role']} | {cell(r.get('path', ''))} | {status} |")
     out.append("")
 routers = [r for r in rows if r["role"] == "router"]
-out += ["## Superseded routers (linkedin-viral is the front door now)", "", "| id | path |", "|---|---|"]
+docs = [r for r in rows if r.get("role") == "doctrine"]
+out += ["", "## Doctrine index (each is a child skill of linkedin-viral; stages cite their rules)", "",
+        "| id | path | focus |", "|---|---|---|"]
+for r in sorted(docs, key=lambda r: r["id"]):
+    out.append(f"| {r['id']} | `{tilde(r['path'])}` | {r.get('focus','')} |")
+out += ["", "Stage-level rollups: each stage's `references/creator-playbook.md` merges what these teach for that stage (consensus, conflicts, dates).", "",
+        "## Superseded routers (linkedin-viral is the front door now)", "", "| id | path |", "|---|---|"]
 out += [f"| {r['id']} | {cell(r['path'])} |" for r in sorted(routers, key=lambda r: r["id"])]
 out += ["", "## Retired: never route (Postiz retired 2026-09-17; Eden is the only publisher)", "", "| id | path |", "|---|---|"]
 out += [f"| {r['id']} | {cell(r['path'])} |" for r in sorted([r for r in rows if r["role"] == "retired"], key=lambda r: r["id"])]

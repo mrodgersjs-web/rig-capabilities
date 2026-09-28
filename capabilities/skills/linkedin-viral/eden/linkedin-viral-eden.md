@@ -24,9 +24,10 @@ Mike's agents run LinkedIn work through 12 stages. Inside Eden, use this skill a
 
 | Stage | In Eden |
 |---|---|
-| Strategy and doctrine | /linkedin-operating-doctrine for the master rules; /personal-brand-strategist for positioning and the topic tree |
+| Cross-creator doctrine (11 creators, 457 videos, dated) | /linkedin-creator-playbook: hooks, writing, images, carousels, video, commenting, the first 90 minutes, and the algorithm, with who teaches what and what is superseded |
+| Strategy and doctrine | /linkedin-operating-doctrine for the master rules; /personal-brand-strategist for positioning and the topic tree; /linkedin-creator-playbook for creator-specific moves |
 | Plan and ideas | /idea-engine for today's ideas; /weekly-strategist for the weekly sweep; /head-of-content to plan and draft the week; /eden-discover for the daily outlier pull (drafts only); /content-command-center to set up the dashboard |
-| Hooks and draft | sections 4 and 5 of this skill |
+| Hooks and draft | sections 4 and 5 of this skill; /linkedin-creator-playbook for the cross-creator hook and writing rules |
 | Visuals | /coach-image-prompter for Lane A Coach images (Wednesday to Saturday) |
 | Gate | /voice-law-checker on every draft before Mike sees it |
 | Launch | section 7 of this skill; scheduling only on Mike's yes |

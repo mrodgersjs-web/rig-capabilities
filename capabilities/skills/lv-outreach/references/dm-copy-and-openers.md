@@ -61,8 +61,7 @@ is the close, not the opener: a menu on a generic pitch is still a generic pitch
 ## Voice notes and videos
 
 Voice note: hard ceiling about 15 seconds (45 words is the proxy), casual, with a line on why you
-are sending it, and it ends by asking permission to send a video ("is it okay if I send a quick
-video explaining what I mean?"). The opt-in is qualification and it caps the video work at 4-5 a
+are sending it, and it ends on a permission ask before any video. The opt-in is qualification and it caps the video work at 4-5 a
 day instead of 20. For formal or regulated lists, default to text. The permission video opens on
 them (their profile or site in frame), 30-60 seconds for the accept-triggered variant, 10-15
 minutes only for people who opted in. Scripts are generated; audio is recorded by Mike. A

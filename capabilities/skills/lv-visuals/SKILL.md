@@ -113,6 +113,7 @@ never inherits a mascot, a hook or a commercial CTA.
 | `references/image-and-graphics.md` | photos, graphics, GIFs, quote cards, banner, stock licensing |
 | `references/video-shorts.md` | feed video, vertical shorts, captions, copy pairing, cadence |
 | `references/cast-and-generated-imagery.md` | Lane A cast rules, Coach prompts, Lane B portrait harness gates |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

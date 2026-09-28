@@ -4,7 +4,7 @@ The headline is both the stranger's two-second read and a search field. A bare j
 
 ## The formula (RIG default)
 
-`job title` + `a few words about who you help and how you help them` [headline-formulas].
+`job title` + `a short clause naming who you help and the help itself` [headline-formulas].
 
 - "marketing manager" becomes "marketing manager helping B2B SaaS companies close big deals" (the creator's own example).
 - Lane B: the value clause is where the governance positioning goes, e.g. title + helping named buyers install governed AI that produces a measurable outcome. Offer-shaped claim only: "helping X do Y" is a claim about the offer; a results number is a claim about outcomes and belongs in the body with a source [headline-formulas].

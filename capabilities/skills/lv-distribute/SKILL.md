@@ -85,6 +85,7 @@ The stage map assigns no tool or runner rows to lv-distribute; these are the eng
 | `references/reddit-ramp.md` | the karma ramp, per-sub rule reality, kill switch, browser mechanics |
 | `references/substack-x-and-email.md` | Substack as a weekly digest, X via the API carrier, the owned list, newsletter curation |
 | `references/trade-and-podcasts.md` | first-run exclusivity, editorial writing rules, the pitch shape, podcast targeting |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

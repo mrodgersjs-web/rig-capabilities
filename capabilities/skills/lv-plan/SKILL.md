@@ -119,6 +119,7 @@ and its evidence labels; it never produces finished copy and never fires anythin
 | `references/idea-engines.md` | pillar-format matrix, collision engine, Eden idea engine, trend pipeline |
 | `references/calendar-and-cadence.md` | weekly and monthly planning, slots and jobs, funnel mix, cadence rules, conflicts |
 | `references/lane-runners.md` | what each runner does and how it calls this stage |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

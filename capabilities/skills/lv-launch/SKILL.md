@@ -84,6 +84,7 @@ Do not use for writing or fixing the draft (`lv-draft`), for scoring it (`lv-gat
 | `references/algorithm-model.md` | the 2026 feed model: interest graph, spiky and late, shelf life, rewards, diagnosis order |
 | `references/boosts-and-peaks.md` | thought-leader ad boosts as Gate-D spend, manufactured peaks, the launch echo |
 | `references/launch-safety-and-measurement.md` | caps, stop signals, verification, the delta series, the report format |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

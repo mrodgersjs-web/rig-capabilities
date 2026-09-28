@@ -76,6 +76,7 @@ Use for: auditing a profile, rewriting headline or About, Featured and banner de
 | `references/classifier-sync.md` | the machine's half: three inputs one classification, the 60-second audit, re-check cadence |
 | `references/company-page.md` | company page from zero, employee amplification, page commenting |
 | `references/job-search-profile.md` | job lane: 20-10-5 activity, be-first job search, human-pace editing, campaign gates |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

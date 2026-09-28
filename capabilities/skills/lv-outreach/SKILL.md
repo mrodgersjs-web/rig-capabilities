@@ -135,6 +135,7 @@ posts (lv-draft), comments on others' posts (lv-engage), profile edits (lv-profi
 | `references/sequences-and-followup.md` | spacing, value-add follow-ups, reply routing, pre-call nurture |
 | `references/campaigns-and-outreach-ops.md` | Dykema receipts, Darius ops, DM corpus, follower engine |
 | `references/monetize-and-conversion.md` | offers, quiz funnels, owned audience, call prep, terms, client engine |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

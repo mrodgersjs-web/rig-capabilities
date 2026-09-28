@@ -12,6 +12,8 @@ done_when:
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py capabilities/skills/linkedin-viral/SKILL.md --min 20
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_ledger.py --all
+  - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_creator_doctrine.py --all
+  - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_creator_doctrine.py --scan capabilities/skills/lv-hooks
   - cmd:python3 capabilities/skills/linkedin-viral/scripts/check_routes.py --self-test
   - grep:capabilities/skills/linkedin-viral/SKILL.md:tommy-clark-doctrine
 quality_floor: 0.6
@@ -94,9 +96,11 @@ A whole post end to end runs: lv-plan → lv-hooks → lv-draft → lv-visuals �
 
 Runners keep working as they are. Each stage's Tools and runners table says which runners should call it; re-pointing a runner is a separate, approved change.
 
-## Doctrine
+## Doctrine: 11 creator sources
 
-`~/Developer/rig-capabilities/capabilities/skills/tommy-clark-doctrine/SKILL.md` holds the dated rule ledger behind every stage (current 2026 rules vs superseded ones, each tied to a video ID).
+The doctrine index is in `references/routing.md` (section "Doctrine index") with every child skill, its path and its focus. One skill per studied creator: `tommy-clark-doctrine` (the original, 79 videos) plus `lv-creator-*` for the ten channels added 2026-09-28 (Lara Acosta, Diandra Escobar, Will McTighe, Harry Long, Kasey Brown, Mark Firth, Pierre Herubel, Raise Your Visibility Online, Shanee Moret, Michelle J Raymond). Each carries a dated rule ledger and cites video IDs; where creators disagree, believe the dated one and Mike's own analytics over any of them.
+
+Stage-level rollups: each stage's `references/creator-playbook.md` merges what all 11 teach for that stage (consensus, conflicts, dates), so an agent rarely needs to open more than one doctrine skill.
 
 ## What happened to the old skills
 
@@ -116,4 +120,4 @@ Runners keep working as they are. Each stage's Tools and runners table says whic
 
 ## Done-test
 
-`python3 scripts/check_routes.py` is GREEN only when every path in `references/routing.md` resolves and the table carries at least 40 routes. Run it again against this SKILL.md with `--min 20`. `python3 scripts/check_ledger.py --all` is GREEN only when all 12 stages account for every asset assigned to them. `--self-test` plants a dangling route and a truncated table in temp copies and passes only if both go RED while the real table stays GREEN.
+`python3 scripts/check_routes.py` is GREEN only when every path in `references/routing.md` resolves and the table carries at least 40 routes. Run it again against this SKILL.md with `--min 20`. `python3 scripts/check_ledger.py --all` is GREEN only when all 12 stages account for every asset assigned to them. `python3 scripts/check_creator_doctrine.py --all` is GREEN only when all 10 creator doctrine skills pass their gates (frontmatter, topic sub-skills, source-index rows, zero copied transcript runs, resolved paths), and `--self-test` proves each gate still goes RED on a planted copy. `--scan` over a stage proves its creator playbook shares no 12-word run with any of the 11 local transcript corpora. `--self-test` plants a dangling route and a truncated table in temp copies and passes only if both go RED while the real table stays GREEN.

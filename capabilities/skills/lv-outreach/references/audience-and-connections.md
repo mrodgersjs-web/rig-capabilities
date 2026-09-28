@@ -19,8 +19,8 @@ into a first message. Nothing here sends; everything stages for Gate-D.
 
 ## Blank note or note
 
-Default is a blank connection request. "People just qualify you as a sales person if you
-send a connection request note, whereas curiosity if it's empty leads them to accept it"
+Default is a blank connection request. A note gets the sender filed as a seller; an empty
+request leaves curiosity, which is why blank is the default
 [creator, dm-sequences]. Clark agrees: no note unless you have actually met [outbound-and-pipeline].
 A noted request is an override on the record: `connect_note_policy` requires a stated reason
 so the variant is a decision, not a default someone forgot choosing [dm-sequences].

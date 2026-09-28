@@ -127,6 +127,7 @@ or to build visuals (lv-visuals). Scraping here is read-only evidence gathering,
 | `references/surfaces-and-reach-math.md` | where each number lives, window traps, target math and its four levers |
 | `references/kpi-loop-and-attribution.md` | per-post capture, evidence bar, attribution caveats, the Friday loop |
 | `references/outlier-review-and-actions.md` | baseline outlier review, flop diagnosis order, the action map |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

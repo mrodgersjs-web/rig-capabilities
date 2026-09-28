@@ -107,6 +107,7 @@ anything about a minor (Lane C: stop and hand back to Mike).
 | `references/body-craft.md` | dwell and saves, whitespace, readability floor, filler cutting, voice pass and banned words |
 | `references/formats-and-cta.md` | the format catalog, length bands, week shape, CTA design, threads and series |
 | `references/draft-workflow.md` | intake fields, source-material rules, proof tables, candidates, gates, the Eden brief |
+| `references/creator-playbook.md` | cross-creator consensus, conflicts and gaps for this stage (11 doctrines) |
 
 ## Hard rules carried forward
 

@@ -308,6 +308,25 @@ Doctrine source for every stage: `~/Developer/rig-capabilities/capabilities/skil
 | substack-and-x | merge | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-distribute/sub/substack-and-x.md` | superseded by lv-distribute |
 | trade-publications | merge | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/lg-distribute/sub/trade-publications.md` | superseded by lv-distribute |
 
+
+## Doctrine index (each is a child skill of linkedin-viral; stages cite their rules)
+
+| id | path | focus |
+|---|---|---|
+| lv-creator-diandra-escobar | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-diandra-escobar/SKILL.md` | hooks, commenting, AI-search visibility, funnel mix |
+| lv-creator-harry-long | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-harry-long/SKILL.md` | hooks, golden-hour, algorithm, outreach and DMs |
+| lv-creator-kasey-brown | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-kasey-brown/SKILL.md` | authority writing, DM conversion, niche positioning |
+| lv-creator-lara-acosta | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-lara-acosta/SKILL.md` | personal brand, writing, hooks, profile-as-page, comment distribution |
+| lv-creator-mark-firth | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-mark-firth/SKILL.md` | post style, connect requests, distribution model shifts |
+| lv-creator-michelle-j-raymond | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-michelle-j-raymond/SKILL.md` | company pages, B2B growth, algorithm, commenting |
+| lv-creator-pierre-herubel | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-pierre-herubel/SKILL.md` | hooks, AI-for-LinkedIn, visuals, dwell time |
+| lv-creator-raise-your-visibility-online | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-raise-your-visibility-online/SKILL.md` | images, carousels, video, platform features, commenting |
+| lv-creator-shanee-moret | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-shanee-moret/SKILL.md` | short-form video on LinkedIn, growth cadence |
+| lv-creator-will-mctighe | `~/Developer/rig-capabilities/capabilities/skills/lv-creator-will-mctighe/SKILL.md` | hook research, B2B founder brand, post types |
+| tommy-clark-doctrine | `~/Developer/rig-capabilities/capabilities/skills/tommy-clark-doctrine/SKILL.md` | positioning, content system, hooks and media, algorithm, outbound (79 videos, dated rule ledger) |
+
+Stage-level rollups: each stage's `references/creator-playbook.md` merges what these teach for that stage (consensus, conflicts, dates).
+
 ## Superseded routers (linkedin-viral is the front door now)
 
 | id | path |
