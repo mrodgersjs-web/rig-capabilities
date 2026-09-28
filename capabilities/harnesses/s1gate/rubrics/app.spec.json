@@ -1,0 +1,74 @@
+{
+  "name": "app.spec",
+  "stage": "plan",
+  "lane": "build",
+  "description": "App Studio SUB criterion for the intake-spec stage: is this app spec ready to build from? Checks that every feature row carries a source (video timestamp, document section, user quote, reference screen), acceptance tests are executable, what done looks like is shown, and out-of-scope is named. Used together with plan.readiness; both must clear 0.9 before scaffolding. ADVISORY AND UNCALIBRATED until calibrated on labelled specs.",
+  "questions": {
+    "features_cited": {
+      "type": "noul",
+      "instructions": "Each feature row names where it came from - a video timestamp, a document section, a quote from the requester, or a reference screen - rather than being asserted"
+    },
+    "acceptance_executable": {
+      "type": "noul",
+      "instructions": "Acceptance criteria are executable checks: a command with expected output, a route with expected response, or a UI step with the expected screen - not adjectives like fast, clean, or intuitive"
+    },
+    "done_looks_like": {
+      "type": "noul",
+      "instructions": "The spec shows what done looks like: named screens, routes, or reference images of the finished app"
+    },
+    "out_of_scope_named": {
+      "type": "noul",
+      "instructions": "The spec names what is explicitly out of scope for this build"
+    },
+    "invented_features": {
+      "type": "noul",
+      "instructions": "The spec contains features, integrations, or numbers with no stated source that look invented to fill space"
+    },
+    "readiness": {
+      "type": "score",
+      "instructions": "How ready is this spec to hand to a builder agent unattended",
+      "criteria": [
+        "An idea, not a spec",
+        "Features listed, acceptance undefined",
+        "Features sourced and acceptance defined, edges ambiguous",
+        "Sourced, executable acceptance, done-screens and out-of-scope all present"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "acceptance_executable.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "acceptance is not executable: the builder has nothing to be graded against"
+    },
+    {
+      "when": "invented_features.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "unsourced features: drop them or mark them speculative"
+    },
+    {
+      "when": "readiness.score <= 1.20",
+      "verdict": "BLOCK",
+      "reason": "spec not ready for an unattended build"
+    },
+    {
+      "when": "features_cited.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "feature rows lack sources"
+    },
+    {
+      "when": "out_of_scope_named.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "unbounded scope"
+    },
+    {
+      "when": "done_looks_like.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "no picture of done: name the screens or routes"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

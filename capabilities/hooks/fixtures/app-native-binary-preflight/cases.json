@@ -1,0 +1,10 @@
+[
+ {"name": "next build without --webpack in an App Studio project blocks", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npx next build"}}, "expect_rc": 2, "expect_text": "without --webpack"},
+ {"name": "next build --webpack passes", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npx next build --webpack"}}, "expect_rc": 0},
+ {"name": "npm run build whose script lacks --webpack blocks", "files": {".app-studio/spec.md": "x", "package.json": "{\"scripts\": {\"build\": \"next build\"}}"}, "payload": {"tool_input": {"command": "npm run build"}}, "expect_rc": 2, "expect_text": "package.json script"},
+ {"name": "npm run build whose script has --webpack passes", "files": {".app-studio/spec.md": "x", "package.json": "{\"scripts\": {\"build\": \"next build --webpack\"}}"}, "payload": {"tool_input": {"command": "npm run build"}}, "expect_rc": 0},
+ {"name": "Tailwind v4 install blocks", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npm i -D tailwindcss@4 @tailwindcss/postcss"}}, "expect_rc": 2, "expect_text": "native-only"},
+ {"name": "Turbopack flag blocks", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npx next dev --turbopack --webpack"}}, "expect_rc": 2, "expect_text": "Turbopack"},
+ {"name": "outside an App Studio project nothing is checked", "payload": {"tool_input": {"command": "npx next build"}}, "expect_rc": 0},
+ {"name": "allow-native marker opts out", "files": {".app-studio/allow-native": ""}, "payload": {"tool_input": {"command": "npx next build"}}, "expect_rc": 0}
+]

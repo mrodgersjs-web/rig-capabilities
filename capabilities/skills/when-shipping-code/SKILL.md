@@ -32,6 +32,7 @@ Tier-1 meta-skill. Job to be done: When building, debugging, testing, refactorin
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
+- **app-studio** — META: build web and mobile apps end to end (11 stages, 13 sub-skills, agents, harnesses, loops, hooks, JEV criteria, 30 typed lessons)
 - **agentic-best-practices** — Complete best practices from Ray Amjad's 2,800+ hours with Claude Code. Context window man
 - **agentic-coding-school** — Techniques from Ray Amjad's Agentic Coding School (2,800+ hours with Claude Code). Context
 - **ai-regression-testing** — Regression testing strategies for AI-assisted development. Sandbox-mode API testing withou

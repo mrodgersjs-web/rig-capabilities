@@ -1,0 +1,7 @@
+[
+ {"name": "second build while the lock is held blocks", "files": {".app-studio/build.lock": ""}, "payload": {"tool_input": {"command": "npm run build"}}, "expect_rc": 2, "expect_text": "build.lock is held"},
+ {"name": "build with no lock passes", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npm run build"}}, "expect_rc": 0},
+ {"name": "sanctioned lock-taking pattern passes", "files": {".app-studio/build.lock": ""}, "payload": {"tool_input": {"command": "[ -e .app-studio/build.lock ] && exit 1; touch .app-studio/build.lock; nohup sh -c 'npm run build; rm -f .app-studio/build.lock' &"}}, "expect_rc": 0},
+ {"name": "non-build command with lock passes", "files": {".app-studio/build.lock": ""}, "payload": {"tool_input": {"command": "tail -5 .app-studio/build.log"}}, "expect_rc": 0},
+ {"name": "stale lock is ignored", "files": {".app-studio/build.lock": ""}, "env": {"APP_BUILD_LOCK_TTL": "0"}, "payload": {"tool_input": {"command": "flutter build ios"}}, "expect_rc": 0, "expect_text": "stale"}
+]

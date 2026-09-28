@@ -35,6 +35,12 @@ the corpus. The builder:
 5. Returns the slice record: what changed, the command run, its exit code, and
    the corpus evidence line. No adjectives.
 
+## Sub-agents
+
+- `tg-integration-fitter`: proof per third-party integration (env-gated vendors with
+  named fallbacks); dispatched by this builder for the integration slices.
+- Parent: `app-studio-conductor` (App Studio meta agent), which routes web stages here.
+
 ## What it refuses
 
 - Inventing features the spec does not carry (the spec cites the transcript).

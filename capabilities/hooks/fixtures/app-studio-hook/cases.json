@@ -1,0 +1,7 @@
+[
+ {"name": "meta propagates a native-binary block", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "npx next build"}}, "expect_rc": 2, "expect_text": "LA-01"},
+ {"name": "meta propagates a single-builder block", "files": {".app-studio/build.lock": ""}, "payload": {"tool_input": {"command": "npm run build"}}, "expect_rc": 2, "expect_text": "LA-03"},
+ {"name": "meta propagates an env-commit block", "git_init": true, "files": {".env.local": "K=v"}, "payload": {"tool_input": {"command": "git add .env.local"}}, "expect_rc": 2, "expect_text": "env guard"},
+ {"name": "meta passes a harmless command", "files": {".app-studio/spec.md": "x"}, "payload": {"tool_input": {"command": "ls -la"}}, "expect_rc": 0},
+ {"name": "APP_STUDIO_HOOKS=0 turns the tier off", "files": {".app-studio/spec.md": "x"}, "env": {"APP_STUDIO_HOOKS": "0"}, "payload": {"tool_input": {"command": "npx next build"}}, "expect_rc": 0}
+]

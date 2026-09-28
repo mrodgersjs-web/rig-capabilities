@@ -8,6 +8,20 @@
 | ai-slop-cleaner | hermes | Run an anti-slop cleanup/refactor/deslop workflow ---  # AI Slop Cleaner Skill  Reduce AI-generated  | - |
 | ai-user-testing | hermes | Run governed AI user-testing for web, iOS, API, data, AI, vision, accessibility, security, and longi | - |
 | app-store-ship | aside-user | Ship Flutter/native apps to Apple App Store + Google Play. ---  # app-store-ship  Ship a Flutter (or | - |
+| app-studio | canonical | META: App Studio front door for building web and mobile apps - 11 stages, 13 sub-skills, 161 main skills, and agents, harnesses, loops, hooks, and JEV... | app-intake-spec, app-stack-select, app-ui-design, app-sandbox-survival, app-web-scaffold, app-data-layer, app-web-frontend, app-mobile-build, app-ai-features, app-verify-evidence, app-ship-web, app-ship-mobile, app-close-and-learn |
+| app-intake-spec | canonical | App Studio stage 1: request, video, document, or voice note into a spec with sourced rows and executable acceptance; gated by JEV app.spec... | - |
+| app-stack-select | canonical | App Studio stage 2: lane defaults plus the Aside sandbox build-location matrix, named fallbacks for paid vendors; gated by JEV app.stack... | - |
+| app-ui-design | canonical | App Studio stage 3: design the spec screens through the design lane, judge real captures with judge-image and JEV ui.design, cite accessibility... | - |
+| app-sandbox-survival | canonical | App Studio cross-cutting: build and serve inside the Aside sandbox - native binaries blocked, lsof not ps, one builder under a build lock... | - |
+| app-web-scaffold | canonical | App Studio stage 4: Next.js App Router scaffold that builds in the sandbox (webpack, Tailwind v3), env-gated vendors, slice 0 proven... | - |
+| app-data-layer | canonical | App Studio stage 5: schema as source of truth, auth deny paths, limit+1 gates, forced-due job fixtures, consumer sweeps, persistence read-back... | - |
+| app-web-frontend | canonical | App Studio stage 6: one route or component per slice with an executed check, deny and empty states, production-build click-through... | - |
+| app-mobile-build | canonical | App Studio stage 7: Expo or Flutter builds via Orca terminals, bundle flags proven, real simulator screens, test accounts cleaned up... | - |
+| app-ai-features | canonical | App Studio stage 8: deterministic backbone, typed judgments on System One, schema-validated outputs, named fallbacks, durable jobs... | - |
+| app-verify-evidence | canonical | App Studio stage 9: verification that can fail - assertion counts, BLOCKED not FAILED, planted failures with checksums, independent verifier... | - |
+| app-ship-web | canonical | App Studio stage 10 web: complete Gate-D release request (prod build, env audit, hashed assets, app.ship), then byte-identity proof on the target... | - |
+| app-ship-mobile | canonical | App Studio stage 10 mobile: store-policy preflight on the release build, flags and real screenshots, app.ship, submission held at Gate-D... | - |
+| app-close-and-learn | canonical | App Studio stage 11: comparison table, run.jsonl validated against the lesson ledger, lessons promoted into sub-skills, ProofPacket sealed... | - |
 | autopilot | hermes | Run a founder-grade autonomous execution lane from the canonical stack pack. ---  # autopilot  Use t | - |
 | azure-aigateway | hermes | Configure Azure API Management as an AI Gateway for AI models, MCP tools, and agents. WHEN: semantic | - |
 | azure-cloud-migrate | hermes | Assess and migrate cross-cloud workloads to Azure with reports and code conversion. Supports Lambda→ | - |

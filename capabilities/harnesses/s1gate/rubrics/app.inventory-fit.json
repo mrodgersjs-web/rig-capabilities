@@ -1,0 +1,50 @@
+{
+  "name": "app.inventory-fit",
+  "stage": "inventory",
+  "lane": "build",
+  "description": "Decide whether one capability asset (skill, agent, harness, loop, or hook) belongs in the App Studio family, and which application-building stage it serves. Consumed by code: the app-studio inventory builder includes an asset only when primary_app_building is above 0.9, excludes it below 0.4, and lists everything between as a named review item. Never guessed locally when the classifier is down.",
+  "questions": {
+    "primary_app_building": {
+      "type": "noul",
+      "instructions": "The asset's primary job is to help build, test, ship, or operate a web or mobile software application: product code, UI screens, backend and data, auth, payments, deployment, app store release, or application QA. Marketing copy, social media posting, job search, sales outreach, research synthesis, and general agent governance do NOT count even if they mention apps."
+    },
+    "generic_agent_infra": {
+      "type": "noul",
+      "instructions": "The asset is general agent or estate infrastructure (agent governance, memory, prompt craft, skill authoring, model routing, fleet operations) whose use is not specific to building applications."
+    },
+    "stage": {
+      "type": "choice",
+      "instructions": "Which application-building stage does this asset mainly serve",
+      "criteria": {
+        "intake-spec": "Turning a request, video, or product idea into a spec, requirements, user stories, or acceptance criteria",
+        "architecture-stack": "Choosing architecture, tech stack, system design, or project structure",
+        "design-ux": "UI and UX design, design systems, visual polish, accessibility of the interface",
+        "scaffold-setup": "Creating the project, repo, tooling, environment, and first runnable skeleton",
+        "backend-data": "Backend services, APIs, databases, schemas, auth, payments, webhooks, background jobs",
+        "web-frontend": "Building web front ends: React, Next.js, Vue, Svelte, pages, components, client state",
+        "mobile": "Building mobile apps: React Native, Expo, Flutter, Swift, Kotlin, simulators, devices",
+        "ai-features": "LLM, agent, RAG, voice, or media-generation features inside an application",
+        "verify-qa": "Testing, debugging, code review, security, performance, and quality verification of an application",
+        "ship-release": "Deploying web apps, domains, CI/CD, and releasing mobile apps to app stores",
+        "operate-learn": "Monitoring, incidents, maintenance, analytics, and lessons after an app is live",
+        "not-app-building": "None of the above: the asset is not about building applications"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "primary_app_building.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "not an application-building asset: exclude from the App Studio inventory"
+    },
+    {
+      "when": "generic_agent_infra.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "general agent infrastructure: route through when-building-or-fixing-agents, not App Studio"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

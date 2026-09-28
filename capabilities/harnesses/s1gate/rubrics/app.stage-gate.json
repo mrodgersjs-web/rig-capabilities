@@ -1,0 +1,74 @@
+{
+  "name": "app.stage-gate",
+  "stage": "transition",
+  "lane": "build",
+  "description": "App Studio META criterion: gate every stage transition of a web or mobile app build (intake-spec, architecture-stack, design-ux, scaffold-setup, backend-data, web-frontend, mobile, ai-features, verify-qa, ship-release, operate-learn). Input is the stage-close record: what the stage claims done and the evidence for each claim. The harness advances only when every required noul clears 0.9; DEFER when the classifier is unavailable. ADVISORY AND UNCALIBRATED until rig-s1gate calibrate runs on labelled stage records.",
+  "questions": {
+    "stage_named": {
+      "type": "noul",
+      "instructions": "The record names which App Studio stage it closes and what that stage was supposed to deliver"
+    },
+    "evidence_executed": {
+      "type": "noul",
+      "instructions": "Each completion claim cites an executed check - the command or action and the observed output, status code, or screenshot - rather than a statement of intent or a description of the code"
+    },
+    "scaffolding_as_progress": {
+      "type": "noul",
+      "instructions": "The record counts templates, stubs, placeholder screens, empty files, TODO branches, or plans as completed work"
+    },
+    "open_blockers": {
+      "type": "noul",
+      "instructions": "The record names unresolved blockers or BLOCKED checks that stop this stage from being complete"
+    },
+    "outward_without_approval": {
+      "type": "noul",
+      "instructions": "The record reports a deploy, publish, git push, purchase, or app store submission that happened without a recorded Gate-D approval"
+    },
+    "readiness": {
+      "type": "score",
+      "instructions": "How safely can the next stage start from this record",
+      "criteria": [
+        "Nothing verified: the next stage would build on guesses",
+        "Some claims verified, key ones rest on description only",
+        "Verified except named, bounded gaps",
+        "Every claim verified by an executed check; next stage can start unattended"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "evidence_executed.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "completion claimed without executed evidence"
+    },
+    {
+      "when": "scaffolding_as_progress.noul >= 0.70",
+      "verdict": "BLOCK",
+      "reason": "scaffolding or stubs counted as progress"
+    },
+    {
+      "when": "outward_without_approval.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "outward or irreversible action without a recorded Gate-D approval"
+    },
+    {
+      "when": "readiness.score <= 1.20",
+      "verdict": "BLOCK",
+      "reason": "next stage would start on unverified ground"
+    },
+    {
+      "when": "open_blockers.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "named blockers remain: resolve them or close the stage HELD"
+    },
+    {
+      "when": "stage_named.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "the record does not say which stage it closes"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

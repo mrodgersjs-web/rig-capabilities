@@ -45,6 +45,12 @@ this agent exists to prevent.
 - BLOCKED: the check cannot run (missing key, missing service) - named with the
   smallest unblock. BLOCKED is honest; it is not PASS.
 
+## Sub-agents
+
+- `tg-deploy-check-runner`: runs the deploy gotcha catalog row by row (SKIPPED with a
+  reason is allowed, assumed-green never); dispatched by this verifier before any ship.
+- Parent: `app-studio-conductor` (App Studio meta agent), which routes verify-qa here.
+
 ## What it refuses
 
 - Signing off on its own or the builder's prose.

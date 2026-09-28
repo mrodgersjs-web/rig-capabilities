@@ -1,0 +1,75 @@
+---
+outcome: "code-engineering: a web release request that is complete before Mike sees it - production build cited, env audited, assets content-hashed, app.ship cleared - held at Gate-D, and after approval a byte-identity proof that the live target changed"
+activation: "Load when a verified web app is ready to go public or when an env change touches a deployed app."
+instruction: "Pass W1 to W5 before the Gate-D request; W6 runs only after Mike's approval id exists."
+applies_when:
+  env: "Vercel or the host Mike already uses"
+  runtime: "Next.js, Vite, static sites"
+  deps: "verify.md from app-verify-evidence; gate-d-loop"
+  params: "project, domains, env key list"
+  budget: "free-tier hosting until traffic forces spend"
+  scale: "one release"
+permissions:
+  - fs.read
+  - bash
+  - net.api-calls
+  - gate-d-required:deploy
+  - gate-d-required:push
+flow:
+  - Cite a local production build and audit the target env.
+  - Check asset hashing and cache headers.
+  - Gate the release record with app.ship and file the Gate-D request.
+  - After approval prove the live target changed by byte identity.
+done_when:
+  - file:capabilities/harnesses/app-web-release.yaml
+  - grep:capabilities/harnesses/app-web-release.yaml:Gate-D
+  - cmd:python3 capabilities/skills/app-studio/scripts/validate_hierarchy.py
+out_of_scope:
+  - deploying before approval
+  - DNS registrar changes
+quality_floor: 0.75
+---
+
+harness_id: app-web-release
+harness_name: web release sub-process (Gate-D held)
+status: stable
+lane: code-engineering
+session_type: release-stage
+harness_tuple: H_webrel(prod_build, env_audit, asset_hash, ship_gate, gate_d, byte_identity)
+parent: capabilities/harnesses/app-studio-session.yaml
+doctrine:
+  - capabilities/skills/app-ship-web
+  - capabilities/skills/tg-deploy-gotchas
+executors:
+  - capabilities/agents/tg-deploy-check-runner.md
+
+identity_lock:
+  startup_phrase: "A complete request, then a human yes, then proof on the real target."
+  gates:
+    - id: W1
+      requirement: "local production build exit 0 with route count cited"
+      proof: "build log tail"
+      failure_tier: halt
+    - id: W2
+      requirement: "every env key the target needs is listed and set; env changes are followed by a no-cache redeploy"
+      proof: "env table"
+      failure_tier: halt
+    - id: W3
+      requirement: "every changed bundled asset URL is content-hashed; no immutable cache on an unhashed URL"
+      proof: "curl -sI output for changed assets"
+      failure_tier: halt
+    - id: W4
+      requirement: "release.md cleared rig-s1gate app.ship (prod_build_proof and gate_d_recorded above 0.9)"
+      proof: "decision id and signals"
+      failure_tier: halt
+    - id: W5
+      requirement: "the deploy is held at Gate-D with a request naming the exact target"
+      proof: "Gate-D request id"
+      failure_tier: stop
+    - id: W6
+      requirement: "after approval, sha256 of the live page and one asset differ from the previous deployment and key routes return expected content"
+      proof: "before and after hashes plus curl output"
+      failure_tier: halt
+anti_patterns:
+  - "Treating a green preview as functional proof"
+  - "Reading deploy metadata or CDN cache headers as build provenance"

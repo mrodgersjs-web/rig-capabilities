@@ -1,0 +1,2181 @@
+{
+ "family": "app-studio",
+ "version": "1.0.0",
+ "generated_by": "scripts/build_hierarchy.py",
+ "stages": [
+  {
+   "id": "intake-spec",
+   "question": "What are we building, from what source, and how will we know it is done?"
+  },
+  {
+   "id": "architecture-stack",
+   "question": "Which stack fits this lane, and where will it actually build?"
+  },
+  {
+   "id": "design-ux",
+   "question": "What do the screens look like, and do real captures pass the judge?"
+  },
+  {
+   "id": "scaffold-setup",
+   "question": "Does a first slice build, serve, and screenshot in this sandbox?"
+  },
+  {
+   "id": "backend-data",
+   "question": "Are schema, auth, gates, and jobs proven by executed checks?"
+  },
+  {
+   "id": "web-frontend",
+   "question": "Does each route or component pass its check in the production build?"
+  },
+  {
+   "id": "mobile",
+   "question": "Does the real app on a clean simulator or device do what the spec says?"
+  },
+  {
+   "id": "ai-features",
+   "question": "Do AI features run without paid keys, validate outputs, and stay deterministic where they must?"
+  },
+  {
+   "id": "verify-qa",
+   "question": "Can the verification fail, and did someone other than the builder run it?"
+  },
+  {
+   "id": "ship-release",
+   "question": "Is the release request complete and held at Gate-D?"
+  },
+  {
+   "id": "operate-learn",
+   "question": "Did the mission's lessons reach the ledger and the owning skills?"
+  }
+ ],
+ "lessons": "references/lessons.jsonl",
+ "inventory": "references/inventory.json",
+ "tiers": {
+  "skills": {
+   "meta": {
+    "id": "app-studio",
+    "path": "capabilities/skills/app-studio",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "tg-ai-media-pipeline",
+     "stage": "ai-features",
+     "path": "capabilities/skills/tg-ai-media-pipeline",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ai-features"
+    },
+    {
+     "id": "tg-voice-agent-stack",
+     "stage": "ai-features",
+     "path": "capabilities/skills/tg-voice-agent-stack",
+     "source": "canonical",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116576,
+     "why": "inventory include"
+    },
+    {
+     "id": "typesafe-ai",
+     "stage": "ai-features",
+     "path": "capabilities/skills/typesafe-ai",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ai-features"
+    },
+    {
+     "id": "zazen-rag-microservice",
+     "stage": "ai-features",
+     "path": "~/.hermes/skills/zazen-rag-microservice",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116636,
+     "why": "inventory include"
+    },
+    {
+     "id": "advise-project-approach",
+     "stage": "architecture-stack",
+     "path": "~/.aside/u/0/skills/user/advise-project-approach",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-stack-select"
+    },
+    {
+     "id": "tubeguruji-doctrine",
+     "stage": "architecture-stack",
+     "path": "capabilities/skills/tubeguruji-doctrine",
+     "source": "canonical",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116585,
+     "why": "inventory include"
+    },
+    {
+     "id": "auth-implementation-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/auth-implementation-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 115861,
+     "why": "inventory include"
+    },
+    {
+     "id": "backend-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/backend-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 115889,
+     "why": "inventory include"
+    },
+    {
+     "id": "bgp-cursor-workflow",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/bgp-cursor-workflow",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 115909,
+     "why": "inventory include"
+    },
+    {
+     "id": "database-migration",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/database-migration",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115979,
+     "why": "inventory include"
+    },
+    {
+     "id": "database-migrations",
+     "stage": "backend-data",
+     "path": "~/.claude/skills/database-migrations",
+     "source": "claude-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115984,
+     "why": "inventory include"
+    },
+    {
+     "id": "django-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/django-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116005,
+     "why": "inventory include"
+    },
+    {
+     "id": "dotnet-backend-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/dotnet-backend-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116019,
+     "why": "inventory include"
+    },
+    {
+     "id": "fastapi-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/fastapi-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116029,
+     "why": "inventory include"
+    },
+    {
+     "id": "fullstack-developer",
+     "stage": "backend-data",
+     "path": "~/.aside/u/0/skills/user/fullstack-developer",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116055,
+     "why": "inventory include"
+    },
+    {
+     "id": "jsm-fullstack-build-system",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/jsm-fullstack-build-system",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116216,
+     "why": "inventory include"
+    },
+    {
+     "id": "kotlin-exposed-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/kotlin-exposed-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116214,
+     "why": "inventory include"
+    },
+    {
+     "id": "kotlin-ktor-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/kotlin-ktor-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116213,
+     "why": "inventory include"
+    },
+    {
+     "id": "laravel-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/laravel-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116223,
+     "why": "inventory include"
+    },
+    {
+     "id": "mysql-patterns",
+     "stage": "backend-data",
+     "path": "~/.claude/skills/mysql-patterns",
+     "source": "claude-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116274,
+     "why": "inventory include"
+    },
+    {
+     "id": "nestjs-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/nestjs-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116295,
+     "why": "inventory include"
+    },
+    {
+     "id": "nodejs-backend-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/nodejs-backend-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116277,
+     "why": "inventory include"
+    },
+    {
+     "id": "prisma-patterns",
+     "stage": "backend-data",
+     "path": "~/.claude/skills/prisma-patterns",
+     "source": "claude-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116320,
+     "why": "inventory include"
+    },
+    {
+     "id": "quarkus-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/quarkus-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116338,
+     "why": "inventory include"
+    },
+    {
+     "id": "springboot-patterns",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/springboot-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116528,
+     "why": "inventory include"
+    },
+    {
+     "id": "stripe-integration",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/stripe-integration",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116538,
+     "why": "inventory include"
+    },
+    {
+     "id": "supabase-postgres-best-practices",
+     "stage": "backend-data",
+     "path": "~/.hermes/skills/supabase-postgres-best-practices",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116552,
+     "why": "inventory include"
+    },
+    {
+     "id": "tg-auth-wiring",
+     "stage": "backend-data",
+     "path": "capabilities/skills/tg-auth-wiring",
+     "source": "canonical",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116594,
+     "why": "inventory include"
+    },
+    {
+     "id": "tg-durable-ai-pipelines",
+     "stage": "backend-data",
+     "path": "capabilities/skills/tg-durable-ai-pipelines",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-data-layer"
+    },
+    {
+     "id": "tg-quota-gates",
+     "stage": "backend-data",
+     "path": "capabilities/skills/tg-quota-gates",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-data-layer"
+    },
+    {
+     "id": "tg-saas-skeleton",
+     "stage": "backend-data",
+     "path": "capabilities/skills/tg-saas-skeleton",
+     "source": "canonical",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116593,
+     "why": "inventory include"
+    },
+    {
+     "id": "accessibility-compliance",
+     "stage": "design-ux",
+     "path": "~/.hermes/skills/accessibility-compliance",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 115822,
+     "why": "inventory include"
+    },
+    {
+     "id": "adrien-design-top-10",
+     "stage": "design-ux",
+     "path": "~/.aside/u/0/skills/user/adrien-design-top-10",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ui-design"
+    },
+    {
+     "id": "animate",
+     "stage": "design-ux",
+     "path": "capabilities/skills/animate",
+     "source": "canonical",
+     "jev_noul": 0.91,
+     "jev_decision_id": 115840,
+     "why": "inventory include"
+    },
+    {
+     "id": "anti-slop",
+     "stage": "design-ux",
+     "path": "capabilities/skills/anti-slop",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115845,
+     "why": "inventory include"
+    },
+    {
+     "id": "baseline-ui",
+     "stage": "design-ux",
+     "path": "capabilities/skills/baseline-ui",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115887,
+     "why": "inventory include"
+    },
+    {
+     "id": "better-accessibility",
+     "stage": "design-ux",
+     "path": "capabilities/skills/better-accessibility",
+     "source": "canonical",
+     "jev_noul": 0.94,
+     "jev_decision_id": 115895,
+     "why": "inventory include"
+    },
+    {
+     "id": "better-colors",
+     "stage": "design-ux",
+     "path": "capabilities/skills/better-colors",
+     "source": "canonical",
+     "jev_noul": 0.91,
+     "jev_decision_id": 115891,
+     "why": "inventory include"
+    },
+    {
+     "id": "better-layout",
+     "stage": "design-ux",
+     "path": "capabilities/skills/better-layout",
+     "source": "canonical",
+     "jev_noul": 0.92,
+     "jev_decision_id": 115897,
+     "why": "inventory include"
+    },
+    {
+     "id": "fixing-accessibility",
+     "stage": "design-ux",
+     "path": "capabilities/skills/fixing-accessibility",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116047,
+     "why": "inventory include"
+    },
+    {
+     "id": "impeccable",
+     "stage": "design-ux",
+     "path": "capabilities/skills/impeccable",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ui-design"
+    },
+    {
+     "id": "interface-review",
+     "stage": "design-ux",
+     "path": "capabilities/skills/interface-review",
+     "source": "canonical",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116195,
+     "why": "inventory include"
+    },
+    {
+     "id": "make-interfaces-feel-better",
+     "stage": "design-ux",
+     "path": "~/.claude/skills/make-interfaces-feel-better",
+     "source": "claude-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116238,
+     "why": "inventory include"
+    },
+    {
+     "id": "motion-ui",
+     "stage": "design-ux",
+     "path": "~/.hermes/skills/motion-ui",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116271,
+     "why": "inventory include"
+    },
+    {
+     "id": "pick-ui-library",
+     "stage": "design-ux",
+     "path": "capabilities/skills/pick-ui-library",
+     "source": "canonical",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116303,
+     "why": "inventory include"
+    },
+    {
+     "id": "userinterface-wiki",
+     "stage": "design-ux",
+     "path": "~/.claude/skills/userinterface-wiki",
+     "source": "claude-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116601,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-build-ship-responsive",
+     "stage": "design-ux",
+     "path": "capabilities/skills/web-build-ship-responsive",
+     "source": "canonical",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116609,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-color-contrast",
+     "stage": "design-ux",
+     "path": "capabilities/skills/web-color-contrast",
+     "source": "canonical",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116618,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-design-guidelines",
+     "stage": "design-ux",
+     "path": "~/.hermes/skills/web-design-guidelines",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116623,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-motion-budget",
+     "stage": "design-ux",
+     "path": "capabilities/skills/web-motion-budget",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116617,
+     "why": "inventory include"
+    },
+    {
+     "id": "when-designing-interfaces",
+     "stage": "design-ux",
+     "path": "capabilities/skills/when-designing-interfaces",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ui-design"
+    },
+    {
+     "id": "grill-with-ui",
+     "stage": "intake-spec",
+     "path": "~/.aside/u/0/skills/user/grill-with-ui",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-intake-spec"
+    },
+    {
+     "id": "iqrsqpi-v20",
+     "stage": "intake-spec",
+     "path": "capabilities/skills/iqrsqpi-v20",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-intake-spec"
+    },
+    {
+     "id": "ultraplan",
+     "stage": "intake-spec",
+     "path": "~/.aside/u/0/skills/user/ultraplan",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-intake-spec"
+    },
+    {
+     "id": "adrien-iphone-app-nocode",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/adrien-iphone-app-nocode",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115815,
+     "why": "inventory include"
+    },
+    {
+     "id": "android-clean-architecture",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/android-clean-architecture",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 115836,
+     "why": "inventory include"
+    },
+    {
+     "id": "animate-expo",
+     "stage": "mobile",
+     "path": "capabilities/skills/animate-expo",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115839,
+     "why": "inventory include"
+    },
+    {
+     "id": "compose-multiplatform-patterns",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/compose-multiplatform-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115962,
+     "why": "inventory include"
+    },
+    {
+     "id": "dart-flutter-patterns",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/dart-flutter-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 115966,
+     "why": "inventory include"
+    },
+    {
+     "id": "flutter-production-build",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/flutter-production-build",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116045,
+     "why": "inventory include"
+    },
+    {
+     "id": "google-mobile-ads-interstitial",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/google-mobile-ads-interstitial",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116121,
+     "why": "inventory include"
+    },
+    {
+     "id": "google-mobile-ads-rewarded",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/google-mobile-ads-rewarded",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116127,
+     "why": "inventory include"
+    },
+    {
+     "id": "mobile",
+     "stage": "mobile",
+     "path": "capabilities/skills/mobile",
+     "source": "canonical",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116265,
+     "why": "inventory include"
+    },
+    {
+     "id": "mobile-android-design",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/mobile-android-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116268,
+     "why": "inventory include"
+    },
+    {
+     "id": "mobile-ios-design",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/mobile-ios-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116266,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-native-architecture",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/react-native-architecture",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116349,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-native-design",
+     "stage": "mobile",
+     "path": "~/.hermes/skills/react-native-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116345,
+     "why": "inventory include"
+    },
+    {
+     "id": "tg-expo-mobile-ai",
+     "stage": "mobile",
+     "path": "capabilities/skills/tg-expo-mobile-ai",
+     "source": "canonical",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116580,
+     "why": "inventory include"
+    },
+    {
+     "id": "appinsights-instrumentation",
+     "stage": "operate-learn",
+     "path": "~/.claude/skills/appinsights-instrumentation",
+     "source": "claude-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 115847,
+     "why": "inventory include"
+    },
+    {
+     "id": "canary",
+     "stage": "operate-learn",
+     "path": "~/.hermes/skills/canary",
+     "source": "hermes-skills",
+     "jev_noul": 0.98,
+     "jev_decision_id": 115937,
+     "why": "inventory include"
+    },
+    {
+     "id": "experience-lesson-records",
+     "stage": "operate-learn",
+     "path": "capabilities/skills/experience-lesson-records",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-close-and-learn"
+    },
+    {
+     "id": "gstack-canary",
+     "stage": "operate-learn",
+     "path": "~/.hermes/skills/gstack-canary",
+     "source": "hermes-skills",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116146,
+     "why": "inventory include"
+    },
+    {
+     "id": "proof-loop",
+     "stage": "operate-learn",
+     "path": "capabilities/skills/proof-loop",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-close-and-learn"
+    },
+    {
+     "id": "dotenv",
+     "stage": "scaffold-setup",
+     "path": "~/.hermes/skills/dotenv",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116003,
+     "why": "inventory include"
+    },
+    {
+     "id": "fastapi-templates",
+     "stage": "scaffold-setup",
+     "path": "~/.hermes/skills/fastapi-templates",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116037,
+     "why": "inventory include"
+    },
+    {
+     "id": "jake-lessons-ledger",
+     "stage": "scaffold-setup",
+     "path": "~/.aside/u/0/skills/user/jake-lessons-ledger",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-sandbox-survival"
+    },
+    {
+     "id": "turborepo-caching",
+     "stage": "scaffold-setup",
+     "path": "~/.hermes/skills/turborepo-caching",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116588,
+     "why": "inventory include"
+    },
+    {
+     "id": "app-store-ship",
+     "stage": "ship-release",
+     "path": "~/.aside/u/0/skills/user/app-store-ship",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115852,
+     "why": "inventory include"
+    },
+    {
+     "id": "azure-deploy",
+     "stage": "ship-release",
+     "path": "~/.claude/skills/azure-deploy",
+     "source": "claude-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115869,
+     "why": "inventory include"
+    },
+    {
+     "id": "azure-hosted-copilot-sdk",
+     "stage": "ship-release",
+     "path": "~/.claude/skills/azure-hosted-copilot-sdk",
+     "source": "claude-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 115875,
+     "why": "inventory include"
+    },
+    {
+     "id": "azure-validate",
+     "stage": "ship-release",
+     "path": "~/.claude/skills/azure-validate",
+     "source": "claude-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115890,
+     "why": "inventory include"
+    },
+    {
+     "id": "bgp-claude-code-fullstack",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/bgp-claude-code-fullstack",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115896,
+     "why": "inventory include"
+    },
+    {
+     "id": "deployment-pipeline-design",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/deployment-pipeline-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115978,
+     "why": "inventory include"
+    },
+    {
+     "id": "flutter-store-deployment",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/flutter-store-deployment",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116046,
+     "why": "inventory include"
+    },
+    {
+     "id": "gate-d-loop",
+     "stage": "ship-release",
+     "path": "capabilities/skills/gate-d-loop",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ship-web"
+    },
+    {
+     "id": "git-push-safety-loop",
+     "stage": "ship-release",
+     "path": "capabilities/skills/git-push-safety-loop",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-ship-web"
+    },
+    {
+     "id": "github-actions-templates",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/github-actions-templates",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116062,
+     "why": "inventory include"
+    },
+    {
+     "id": "gitlab-ci-patterns",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/gitlab-ci-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116061,
+     "why": "inventory include"
+    },
+    {
+     "id": "golive",
+     "stage": "ship-release",
+     "path": "~/.claude/skills/golive",
+     "source": "claude-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116091,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-setup-deploy",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/gstack-setup-deploy",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116151,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-ship",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/gstack-ship",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116152,
+     "why": "inventory include"
+    },
+    {
+     "id": "jake-ship",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/jake-ship",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116208,
+     "why": "inventory include"
+    },
+    {
+     "id": "production-audit",
+     "stage": "ship-release",
+     "path": "~/.claude/skills/production-audit",
+     "source": "claude-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116333,
+     "why": "inventory include"
+    },
+    {
+     "id": "setup-deploy",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/setup-deploy",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116532,
+     "why": "inventory include"
+    },
+    {
+     "id": "tg-deploy-gotchas",
+     "stage": "ship-release",
+     "path": "capabilities/skills/tg-deploy-gotchas",
+     "source": "canonical",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116573,
+     "why": "inventory include"
+    },
+    {
+     "id": "vercel-deploy-doctrine",
+     "stage": "ship-release",
+     "path": "~/.hermes/skills/vercel-deploy-doctrine",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116599,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-build-ship",
+     "stage": "ship-release",
+     "path": "capabilities/skills/web-build-ship",
+     "source": "canonical",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116611,
+     "why": "inventory include"
+    },
+    {
+     "id": "adversarial-verification-loop",
+     "stage": "verify-qa",
+     "path": "capabilities/skills/adversarial-verification-loop",
+     "source": "estate",
+     "reused": true,
+     "why": "extended by app-verify-evidence"
+    },
+    {
+     "id": "benchmark",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/benchmark",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115901,
+     "why": "inventory include"
+    },
+    {
+     "id": "best-practices",
+     "stage": "verify-qa",
+     "path": "~/.claude/skills/best-practices",
+     "source": "claude-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 115892,
+     "why": "inventory include"
+    },
+    {
+     "id": "break",
+     "stage": "verify-qa",
+     "path": "capabilities/skills/break",
+     "source": "canonical",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115908,
+     "why": "inventory include"
+    },
+    {
+     "id": "browse",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/browse",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115921,
+     "why": "inventory include"
+    },
+    {
+     "id": "code-error-pattern-aggregator",
+     "stage": "verify-qa",
+     "path": "~/.aside/u/0/skills/user/code-error-pattern-aggregator",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 115936,
+     "why": "inventory include"
+    },
+    {
+     "id": "code-test-coverage-analyzer",
+     "stage": "verify-qa",
+     "path": "~/.aside/u/0/skills/user/code-test-coverage-analyzer",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115939,
+     "why": "inventory include"
+    },
+    {
+     "id": "create-verification-skill",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/create-verification-skill",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 115974,
+     "why": "inventory include"
+    },
+    {
+     "id": "design-mobile-responsive-tester",
+     "stage": "verify-qa",
+     "path": "~/.aside/u/0/skills/user/design-mobile-responsive-tester",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 115988,
+     "why": "inventory include"
+    },
+    {
+     "id": "django-tdd",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/django-tdd",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116010,
+     "why": "inventory include"
+    },
+    {
+     "id": "django-verification",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/django-verification",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116001,
+     "why": "inventory include"
+    },
+    {
+     "id": "e2e-testing",
+     "stage": "verify-qa",
+     "path": "~/.claude/skills/e2e-testing",
+     "source": "claude-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116008,
+     "why": "inventory include"
+    },
+    {
+     "id": "e2e-testing-patterns",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/e2e-testing-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116018,
+     "why": "inventory include"
+    },
+    {
+     "id": "fixing-motion-performance",
+     "stage": "verify-qa",
+     "path": "capabilities/skills/fixing-motion-performance",
+     "source": "canonical",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116044,
+     "why": "inventory include"
+    },
+    {
+     "id": "framework-migration-dependency-upgrade",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/framework-migration-dependency-upgrade",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116043,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack",
+     "stage": "verify-qa",
+     "path": "~/.claude/skills/gstack",
+     "source": "claude-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116153,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-benchmark",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/gstack-benchmark",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116135,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-browse",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/gstack-browse",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116138,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-qa",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/gstack-qa",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116159,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-qa-only",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/gstack-qa-only",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116141,
+     "why": "inventory include"
+    },
+    {
+     "id": "gstack-setup-browser-cookies",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/gstack-setup-browser-cookies",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116143,
+     "why": "inventory include"
+    },
+    {
+     "id": "jake-qa",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/jake-qa",
+     "source": "hermes-skills",
+     "jev_noul": 0.98,
+     "jev_decision_id": 116226,
+     "why": "inventory include"
+    },
+    {
+     "id": "javascript-testing-patterns",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/javascript-testing-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116204,
+     "why": "inventory include"
+    },
+    {
+     "id": "kotlin-testing",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/kotlin-testing",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116225,
+     "why": "inventory include"
+    },
+    {
+     "id": "laravel-tdd",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/laravel-tdd",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116234,
+     "why": "inventory include"
+    },
+    {
+     "id": "laravel-verification",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/laravel-verification",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116239,
+     "why": "inventory include"
+    },
+    {
+     "id": "matt-pocock-migrate-to-shoehorn",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/matt-pocock-migrate-to-shoehorn",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116246,
+     "why": "inventory include"
+    },
+    {
+     "id": "matt-pocock-tdd",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/matt-pocock-tdd",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116275,
+     "why": "inventory include"
+    },
+    {
+     "id": "qa-only",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/qa-only",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116342,
+     "why": "inventory include"
+    },
+    {
+     "id": "quarkus-tdd",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/quarkus-tdd",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116339,
+     "why": "inventory include"
+    },
+    {
+     "id": "quarkus-verification",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/quarkus-verification",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116351,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-testing",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/react-testing",
+     "source": "hermes-skills",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116381,
+     "why": "inventory include"
+    },
+    {
+     "id": "rig-top100-testing-automation",
+     "stage": "verify-qa",
+     "path": "~/.aside/u/0/skills/user/rig-top100-testing-automation",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116473,
+     "why": "inventory include"
+    },
+    {
+     "id": "screen-reader-testing",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/screen-reader-testing",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116502,
+     "why": "inventory include"
+    },
+    {
+     "id": "setup-browser-cookies",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/setup-browser-cookies",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116516,
+     "why": "inventory include"
+    },
+    {
+     "id": "springboot-verification",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/springboot-verification",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116531,
+     "why": "inventory include"
+    },
+    {
+     "id": "tdd",
+     "stage": "verify-qa",
+     "path": "~/.hermes/skills/tdd",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 116569,
+     "why": "inventory include"
+    },
+    {
+     "id": "tdd-workflow",
+     "stage": "verify-qa",
+     "path": "~/.claude/skills/tdd-workflow",
+     "source": "claude-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116568,
+     "why": "inventory include"
+    },
+    {
+     "id": "testsprite-engineering",
+     "stage": "verify-qa",
+     "path": "~/.aside/u/0/skills/user/testsprite-engineering",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116566,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-build-ship-performance",
+     "stage": "verify-qa",
+     "path": "capabilities/skills/web-build-ship-performance",
+     "source": "canonical",
+     "jev_noul": 0.97,
+     "jev_decision_id": 116608,
+     "why": "inventory include"
+    },
+    {
+     "id": "adrien-claude-code-websites",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/adrien-claude-code-websites",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 115819,
+     "why": "inventory include"
+    },
+    {
+     "id": "ai-website-design",
+     "stage": "web-frontend",
+     "path": "~/.aside/u/0/skills/user/ai-website-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 115842,
+     "why": "inventory include"
+    },
+    {
+     "id": "angular-developer",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/angular-developer",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115844,
+     "why": "inventory include"
+    },
+    {
+     "id": "ask-sonner",
+     "stage": "web-frontend",
+     "path": "capabilities/skills/ask-sonner",
+     "source": "canonical",
+     "jev_noul": 0.96,
+     "jev_decision_id": 115854,
+     "why": "inventory include"
+    },
+    {
+     "id": "canvas-component-recreation",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/canvas-component-recreation",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 115919,
+     "why": "inventory include"
+    },
+    {
+     "id": "corey-claude-code-websites",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/corey-claude-code-websites",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 115955,
+     "why": "inventory include"
+    },
+    {
+     "id": "dav-genai-end-to-end",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/dav-genai-end-to-end",
+     "source": "hermes-skills",
+     "jev_noul": 0.92,
+     "jev_decision_id": 115986,
+     "why": "inventory include"
+    },
+    {
+     "id": "frontend-design",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/frontend-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116042,
+     "why": "inventory include"
+    },
+    {
+     "id": "frontend-patterns",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/frontend-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116060,
+     "why": "inventory include"
+    },
+    {
+     "id": "jsm-animation-stack",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/jsm-animation-stack",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116209,
+     "why": "inventory include"
+    },
+    {
+     "id": "next-best-practices",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/next-best-practices",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116281,
+     "why": "inventory include"
+    },
+    {
+     "id": "nextjs-app-router-patterns",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/nextjs-app-router-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116283,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-best-practices",
+     "stage": "web-frontend",
+     "path": "~/.claude/skills/react-best-practices",
+     "source": "claude-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116353,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-modernization",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/react-modernization",
+     "source": "hermes-skills",
+     "jev_noul": 0.91,
+     "jev_decision_id": 116371,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-patterns",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/react-patterns",
+     "source": "hermes-skills",
+     "jev_noul": 0.96,
+     "jev_decision_id": 116348,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-performance",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/react-performance",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116346,
+     "why": "inventory include"
+    },
+    {
+     "id": "react-state-management",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/react-state-management",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116379,
+     "why": "inventory include"
+    },
+    {
+     "id": "responsive-design",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/responsive-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116354,
+     "why": "inventory include"
+    },
+    {
+     "id": "shadcn",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/shadcn",
+     "source": "hermes-skills",
+     "jev_noul": 0.94,
+     "jev_decision_id": 116522,
+     "why": "inventory include"
+    },
+    {
+     "id": "shadcn-ui",
+     "stage": "web-frontend",
+     "path": "~/.claude/skills/shadcn-ui",
+     "source": "claude-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116544,
+     "why": "inventory include"
+    },
+    {
+     "id": "stitch-loop",
+     "stage": "web-frontend",
+     "path": "~/.claude/skills/stitch-loop",
+     "source": "claude-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116535,
+     "why": "inventory include"
+    },
+    {
+     "id": "ui-to-vue",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/ui-to-vue",
+     "source": "hermes-skills",
+     "jev_noul": 0.95,
+     "jev_decision_id": 116590,
+     "why": "inventory include"
+    },
+    {
+     "id": "vercel-react-best-practices",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/vercel-react-best-practices",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116624,
+     "why": "inventory include"
+    },
+    {
+     "id": "web-component-design",
+     "stage": "web-frontend",
+     "path": "~/.hermes/skills/web-component-design",
+     "source": "hermes-skills",
+     "jev_noul": 0.93,
+     "jev_decision_id": 116630,
+     "why": "inventory include"
+    }
+   ],
+   "sub": [
+    {
+     "id": "app-intake-spec",
+     "stage": "intake-spec",
+     "path": "capabilities/skills/app-intake-spec",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tubeguruji-doctrine",
+      "iqrsqpi-v20",
+      "ultraplan",
+      "grill-with-ui"
+     ]
+    },
+    {
+     "id": "app-stack-select",
+     "stage": "architecture-stack",
+     "path": "capabilities/skills/app-stack-select",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tubeguruji-doctrine",
+      "advise-project-approach",
+      "fullstack-developer",
+      "tg-expo-mobile-ai",
+      "dart-flutter-patterns"
+     ]
+    },
+    {
+     "id": "app-ui-design",
+     "stage": "design-ux",
+     "path": "capabilities/skills/app-ui-design",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "when-designing-interfaces",
+      "impeccable",
+      "baseline-ui",
+      "fixing-accessibility",
+      "make-interfaces-feel-better",
+      "pick-ui-library",
+      "web-design-guidelines",
+      "adrien-design-top-10",
+      "design-mobile-responsive-tester"
+     ]
+    },
+    {
+     "id": "app-sandbox-survival",
+     "stage": "scaffold-setup",
+     "path": "capabilities/skills/app-sandbox-survival",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "fullstack-developer",
+      "tg-saas-skeleton",
+      "jake-lessons-ledger"
+     ]
+    },
+    {
+     "id": "app-web-scaffold",
+     "stage": "scaffold-setup",
+     "path": "capabilities/skills/app-web-scaffold",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tg-saas-skeleton",
+      "nextjs-app-router-patterns",
+      "next-best-practices",
+      "dotenv",
+      "fullstack-developer"
+     ]
+    },
+    {
+     "id": "app-data-layer",
+     "stage": "backend-data",
+     "path": "capabilities/skills/app-data-layer",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tg-saas-skeleton",
+      "tg-auth-wiring",
+      "auth-implementation-patterns",
+      "database-migrations",
+      "prisma-patterns",
+      "supabase-postgres-best-practices",
+      "stripe-integration",
+      "tg-quota-gates",
+      "tg-durable-ai-pipelines"
+     ]
+    },
+    {
+     "id": "app-web-frontend",
+     "stage": "web-frontend",
+     "path": "capabilities/skills/app-web-frontend",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "nextjs-app-router-patterns",
+      "next-best-practices",
+      "react-best-practices",
+      "vercel-react-best-practices",
+      "react-patterns",
+      "react-state-management",
+      "react-performance",
+      "shadcn-ui",
+      "frontend-patterns",
+      "responsive-design"
+     ]
+    },
+    {
+     "id": "app-mobile-build",
+     "stage": "mobile",
+     "path": "capabilities/skills/app-mobile-build",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tg-expo-mobile-ai",
+      "react-native-architecture",
+      "dart-flutter-patterns",
+      "flutter-production-build",
+      "mobile-ios-design",
+      "mobile-android-design"
+     ]
+    },
+    {
+     "id": "app-ai-features",
+     "stage": "ai-features",
+     "path": "capabilities/skills/app-ai-features",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tg-durable-ai-pipelines",
+      "tg-ai-media-pipeline",
+      "tg-voice-agent-stack",
+      "typesafe-ai",
+      "zazen-rag-microservice"
+     ]
+    },
+    {
+     "id": "app-verify-evidence",
+     "stage": "verify-qa",
+     "path": "capabilities/skills/app-verify-evidence",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "tdd",
+      "matt-pocock-tdd",
+      "e2e-testing",
+      "react-testing",
+      "testsprite-engineering",
+      "gstack-qa",
+      "jake-qa",
+      "design-mobile-responsive-tester",
+      "code-test-coverage-analyzer",
+      "screen-reader-testing",
+      "adversarial-verification-loop"
+     ]
+    },
+    {
+     "id": "app-ship-web",
+     "stage": "ship-release",
+     "path": "capabilities/skills/app-ship-web",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "vercel-deploy-doctrine",
+      "tg-deploy-gotchas",
+      "web-build-ship",
+      "setup-deploy",
+      "gstack-ship",
+      "golive",
+      "production-audit",
+      "github-actions-templates",
+      "gate-d-loop",
+      "git-push-safety-loop"
+     ]
+    },
+    {
+     "id": "app-ship-mobile",
+     "stage": "ship-release",
+     "path": "capabilities/skills/app-ship-mobile",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "app-store-ship",
+      "flutter-store-deployment",
+      "flutter-production-build",
+      "tg-expo-mobile-ai",
+      "gate-d-loop"
+     ]
+    },
+    {
+     "id": "app-close-and-learn",
+     "stage": "operate-learn",
+     "path": "capabilities/skills/app-close-and-learn",
+     "parent": "app-studio",
+     "new": true,
+     "extends": [
+      "experience-lesson-records",
+      "jake-lessons-ledger",
+      "proof-loop",
+      "canary",
+      "code-error-pattern-aggregator"
+     ]
+    }
+   ]
+  },
+  "agents": {
+   "meta": {
+    "id": "app-studio-conductor",
+    "path": "capabilities/agents/app-studio-conductor.md",
+    "generalized": "2026-09-27"
+   },
+   "main": [
+    {
+     "id": "tg-web-builder",
+     "path": "capabilities/agents/tg-web-builder.md",
+     "stage": "web-frontend",
+     "reused": false
+    },
+    {
+     "id": "tg-mobile-builder",
+     "path": "capabilities/agents/tg-mobile-builder.md",
+     "stage": "mobile",
+     "reused": false
+    },
+    {
+     "id": "tg-ship-verifier",
+     "path": "capabilities/agents/tg-ship-verifier.md",
+     "stage": "verify-qa",
+     "reused": false
+    },
+    {
+     "id": "voltagent-nextjs-developer",
+     "path": "~/.claude/agents/voltagent-nextjs-developer.md",
+     "stage": "web-frontend",
+     "reused": true
+    },
+    {
+     "id": "voltagent-frontend-developer",
+     "path": "~/.claude/agents/voltagent-frontend-developer.md",
+     "stage": "web-frontend",
+     "reused": true
+    },
+    {
+     "id": "voltagent-fullstack-developer",
+     "path": "~/.claude/agents/voltagent-fullstack-developer.md",
+     "stage": "backend-data",
+     "reused": true
+    },
+    {
+     "id": "voltagent-mobile-app-developer",
+     "path": "~/.claude/agents/voltagent-mobile-app-developer.md",
+     "stage": "mobile",
+     "reused": true
+    },
+    {
+     "id": "ae-frontend-engineer",
+     "path": "~/.claude/agents/ae-frontend-engineer.md",
+     "stage": "web-frontend",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "tg-corpus-miner",
+     "path": "capabilities/agents/tg-corpus-miner.md",
+     "parent": "app-studio-conductor",
+     "stage": "intake-spec",
+     "new": false
+    },
+    {
+     "id": "tg-integration-fitter",
+     "path": "capabilities/agents/tg-integration-fitter.md",
+     "parent": "tg-web-builder",
+     "stage": "backend-data",
+     "new": false
+    },
+    {
+     "id": "tg-deploy-check-runner",
+     "path": "capabilities/agents/tg-deploy-check-runner.md",
+     "parent": "tg-ship-verifier",
+     "stage": "ship-release",
+     "new": false
+    },
+    {
+     "id": "app-sandbox-preflight",
+     "path": "capabilities/agents/app-sandbox-preflight.md",
+     "parent": "app-studio-conductor",
+     "stage": "scaffold-setup",
+     "new": true
+    },
+    {
+     "id": "app-ui-judge",
+     "path": "capabilities/agents/app-ui-judge.md",
+     "parent": "app-studio-conductor",
+     "stage": "design-ux",
+     "new": true
+    },
+    {
+     "id": "app-lesson-filer",
+     "path": "capabilities/agents/app-lesson-filer.md",
+     "parent": "app-studio-conductor",
+     "stage": "operate-learn",
+     "new": true
+    }
+   ]
+  },
+  "harnesses": {
+   "meta": {
+    "id": "app-studio-session",
+    "path": "capabilities/harnesses/app-studio-session.yaml",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "tg-app-studio-session",
+     "path": "capabilities/harnesses/tg-app-studio-session.yaml",
+     "stage": "intake-spec"
+    },
+    {
+     "id": "hA-09-api-design",
+     "path": "capabilities/harnesses/hA-09-api-design.yaml",
+     "stage": "backend-data"
+    },
+    {
+     "id": "hA-10-schema-design",
+     "path": "capabilities/harnesses/hA-10-schema-design.yaml",
+     "stage": "backend-data"
+    },
+    {
+     "id": "hA-03-code-test-writing",
+     "path": "capabilities/harnesses/hA-03-code-test-writing.yaml",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "hA-04-code-debug",
+     "path": "capabilities/harnesses/hA-04-code-debug.yaml",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "hA-06-code-perf-audit",
+     "path": "capabilities/harnesses/hA-06-code-perf-audit.yaml",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "hA-12-ci-cd-design",
+     "path": "capabilities/harnesses/hA-12-ci-cd-design.yaml",
+     "stage": "ship-release"
+    },
+    {
+     "id": "hA-13-code-security-audit",
+     "path": "capabilities/harnesses/hA-13-code-security-audit.yaml",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "hC-02-ui-design",
+     "path": "capabilities/harnesses/hC-02-ui-design.yaml",
+     "stage": "design-ux"
+    },
+    {
+     "id": "hC-06-accessibility-audit",
+     "path": "capabilities/harnesses/hC-06-accessibility-audit.yaml",
+     "stage": "design-ux"
+    },
+    {
+     "id": "hC-07-mobile-design",
+     "path": "capabilities/harnesses/hC-07-mobile-design.yaml",
+     "stage": "mobile"
+    }
+   ],
+   "sub": [
+    {
+     "id": "app-sandbox-build-verify",
+     "path": "capabilities/harnesses/app-sandbox-build-verify.yaml",
+     "parent": "app-studio-session",
+     "stage": "scaffold-setup",
+     "new": true
+    },
+    {
+     "id": "app-web-release",
+     "path": "capabilities/harnesses/app-web-release.yaml",
+     "parent": "app-studio-session",
+     "stage": "ship-release",
+     "new": true
+    },
+    {
+     "id": "app-mobile-release",
+     "path": "capabilities/harnesses/app-mobile-release.yaml",
+     "parent": "app-studio-session",
+     "stage": "ship-release",
+     "new": true
+    },
+    {
+     "id": "tg-corpus-mining",
+     "path": "capabilities/harnesses/tg-corpus-mining.yaml",
+     "parent": "tg-app-studio-session",
+     "stage": "intake-spec",
+     "new": false
+    },
+    {
+     "id": "tg-skeleton-implementation",
+     "path": "capabilities/harnesses/tg-skeleton-implementation.yaml",
+     "parent": "tg-app-studio-session",
+     "stage": "scaffold-setup",
+     "new": false
+    },
+    {
+     "id": "tg-ship-verify",
+     "path": "capabilities/harnesses/tg-ship-verify.yaml",
+     "parent": "tg-app-studio-session",
+     "stage": "verify-qa",
+     "new": false
+    },
+    {
+     "id": "tg-auth-schema-wiring",
+     "path": "capabilities/harnesses/tg-auth-schema-wiring.yaml",
+     "parent": "tg-skeleton-implementation",
+     "stage": "backend-data",
+     "new": false
+    },
+    {
+     "id": "tg-background-jobs",
+     "path": "capabilities/harnesses/tg-background-jobs.yaml",
+     "parent": "tg-skeleton-implementation",
+     "stage": "backend-data",
+     "new": false
+    },
+    {
+     "id": "tg-deploy-checklist",
+     "path": "capabilities/harnesses/tg-deploy-checklist.yaml",
+     "parent": "tg-ship-verify",
+     "stage": "ship-release",
+     "new": false
+    }
+   ]
+  },
+  "loops": {
+   "meta": {
+    "id": "app-studio-mission-loop",
+    "path": "capabilities/loops/app-studio-mission-loop.md",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "iqrsqpi-v20",
+     "path": "capabilities/skills/iqrsqpi-v20",
+     "stage": "intake-spec"
+    },
+    {
+     "id": "phase-discipline-loop",
+     "path": "capabilities/skills/phase-discipline-loop",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "proof-loop",
+     "path": "capabilities/skills/proof-loop",
+     "stage": "operate-learn"
+    },
+    {
+     "id": "adversarial-verification-loop",
+     "path": "capabilities/skills/adversarial-verification-loop",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "gate-d-loop",
+     "path": "capabilities/skills/gate-d-loop",
+     "stage": "ship-release"
+    },
+    {
+     "id": "git-push-safety-loop",
+     "path": "capabilities/skills/git-push-safety-loop",
+     "stage": "ship-release"
+    },
+    {
+     "id": "coding-harness-loop",
+     "path": "capabilities/loops/coding-harness.md",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "doer-checker-validator",
+     "path": "capabilities/loops/doer-checker-validator.md",
+     "stage": "verify-qa"
+    }
+   ],
+   "sub": [
+    {
+     "id": "app-slice-loop",
+     "path": "capabilities/loops/app-slice-loop.md",
+     "parent": "app-studio-mission-loop",
+     "stage": "scaffold-setup",
+     "new": true
+    },
+    {
+     "id": "app-ui-judge-loop",
+     "path": "capabilities/loops/app-ui-judge-loop.md",
+     "parent": "app-studio-mission-loop",
+     "stage": "design-ux",
+     "new": true
+    },
+    {
+     "id": "app-lesson-promotion-loop",
+     "path": "capabilities/loops/app-lesson-promotion-loop.md",
+     "parent": "app-studio-mission-loop",
+     "stage": "operate-learn",
+     "new": true
+    },
+    {
+     "id": "iqrsqpi-v20-slice",
+     "path": "capabilities/skills/iqrsqpi-v20-slice",
+     "parent": "iqrsqpi-v20",
+     "stage": "scaffold-setup",
+     "new": false
+    }
+   ]
+  },
+  "hooks": {
+   "meta": {
+    "id": "app-studio-hook",
+    "path": "capabilities/hooks/app-studio-hook.sh",
+    "new": true,
+    "wired_live": false
+   },
+   "main": [
+    {
+     "id": "guard-secret-write",
+     "path": "capabilities/hooks/guard-secret-write.sh",
+     "stage": "backend-data"
+    },
+    {
+     "id": "guard-dangerous-commands",
+     "path": "capabilities/hooks/guard-dangerous-commands.sh",
+     "stage": "scaffold-setup"
+    },
+    {
+     "id": "s1gate-stage-gate",
+     "path": "capabilities/hooks/s1gate-stage-gate.sh",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "rig-loop-hook",
+     "path": "capabilities/hooks/rig-loop-hook.sh",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "tac-plan-gate",
+     "path": "capabilities/hooks/tac-plan-gate.sh",
+     "stage": "intake-spec"
+    }
+   ],
+   "sub": [
+    {
+     "id": "app-native-binary-preflight",
+     "path": "capabilities/hooks/app-native-binary-preflight.sh",
+     "parent": "app-studio-hook",
+     "stage": "scaffold-setup",
+     "new": true,
+     "wired_live": false
+    },
+    {
+     "id": "app-single-builder-guard",
+     "path": "capabilities/hooks/app-single-builder-guard.sh",
+     "parent": "app-studio-hook",
+     "stage": "scaffold-setup",
+     "new": true,
+     "wired_live": false
+    },
+    {
+     "id": "app-env-commit-guard",
+     "path": "capabilities/hooks/app-env-commit-guard.sh",
+     "parent": "app-studio-hook",
+     "stage": "ship-release",
+     "new": true,
+     "wired_live": false
+    }
+   ]
+  },
+  "jev": {
+   "meta": {
+    "id": "app.stage-gate",
+    "path": "capabilities/harnesses/s1gate/rubrics/app.stage-gate.json",
+    "kinds": [
+     "app.stage-gate",
+     "app",
+     "app-studio",
+     "app-stage",
+     "web-app",
+     "mobile-app"
+    ],
+    "new": true
+   },
+   "main": [
+    {
+     "id": "plan.readiness",
+     "path": "capabilities/harnesses/s1gate/rubrics/plan.readiness.json",
+     "stage": "intake-spec"
+    },
+    {
+     "id": "code.diff",
+     "path": "capabilities/harnesses/s1gate/rubrics/code.diff.json",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "code.review",
+     "path": "capabilities/harnesses/s1gate/rubrics/code.review.json",
+     "stage": "verify-qa"
+    },
+    {
+     "id": "api.backend",
+     "path": "capabilities/harnesses/s1gate/rubrics/api.backend.json",
+     "stage": "backend-data"
+    },
+    {
+     "id": "ui.design",
+     "path": "capabilities/harnesses/s1gate/rubrics/ui.design.json",
+     "stage": "design-ux"
+    },
+    {
+     "id": "website.buyer",
+     "path": "capabilities/harnesses/s1gate/rubrics/website.buyer.json",
+     "stage": "web-frontend"
+    },
+    {
+     "id": "mission.completion",
+     "path": "capabilities/harnesses/s1gate/rubrics/mission.completion.json",
+     "stage": "operate-learn"
+    },
+    {
+     "id": "atomic.claim",
+     "path": "capabilities/harnesses/s1gate/rubrics/atomic.claim.json",
+     "stage": "operate-learn"
+    },
+    {
+     "id": "doctrine.surface",
+     "path": "capabilities/harnesses/s1gate/rubrics/doctrine.surface.json",
+     "stage": "operate-learn"
+    }
+   ],
+   "sub": [
+    {
+     "id": "app.spec",
+     "path": "capabilities/harnesses/s1gate/rubrics/app.spec.json",
+     "parent": "app.stage-gate",
+     "stage": "intake-spec",
+     "kinds": [
+      "app.spec",
+      "app-spec"
+     ],
+     "new": true
+    },
+    {
+     "id": "app.stack",
+     "path": "capabilities/harnesses/s1gate/rubrics/app.stack.json",
+     "parent": "app.stage-gate",
+     "stage": "architecture-stack",
+     "kinds": [
+      "app.stack",
+      "app-stack"
+     ],
+     "new": true
+    },
+    {
+     "id": "app.ship",
+     "path": "capabilities/harnesses/s1gate/rubrics/app.ship.json",
+     "parent": "app.stage-gate",
+     "stage": "ship-release",
+     "kinds": [
+      "app.ship",
+      "app-ship",
+      "app-release"
+     ],
+     "new": true
+    },
+    {
+     "id": "app.inventory-fit",
+     "path": "capabilities/harnesses/s1gate/rubrics/app.inventory-fit.json",
+     "parent": "app.stage-gate",
+     "stage": "operate-learn",
+     "kinds": [
+      "app.inventory-fit",
+      "app-inventory"
+     ],
+     "new": true
+    }
+   ]
+  }
+ }
+}

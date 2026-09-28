@@ -1,0 +1,71 @@
+---
+outcome: "code-engineering: a mobile release request that survives store review - store-policy preflight proven on the release build, flags proven from the bundle, real screenshots, app.ship cleared - held at Gate-D for Mike to submit"
+activation: "Load when a mobile app approaches TestFlight, internal testing, or store review."
+instruction: "Pass M1 to M5 before the Gate-D request; M6 runs after Mike submits."
+applies_when:
+  env: "Orca terminal for Xcode and simctl; EAS or Gradle builds; stores owned by Mike"
+  runtime: "Flutter or Expo/React Native release builds"
+  deps: "app-store-ship; verify.md from app-verify-evidence"
+  params: "bundle id, version, build number, screenshot set"
+  budget: "store review cycles take days; preflight takes hours"
+  scale: "one release"
+permissions:
+  - fs.read
+  - bash
+  - gate-d-required:publish
+flow:
+  - Prove each store-policy item on the release build.
+  - Prove the release bundle flags and capture real screenshots.
+  - Gate the release record with app.ship and file the Gate-D request.
+  - After submission confirm the build is visible in the store console.
+done_when:
+  - file:capabilities/harnesses/app-mobile-release.yaml
+  - grep:capabilities/harnesses/app-mobile-release.yaml:5.1.1
+  - cmd:python3 capabilities/skills/app-studio/scripts/validate_hierarchy.py
+out_of_scope:
+  - pressing submit (Mike's action)
+  - purchasing developer program memberships
+quality_floor: 0.75
+---
+
+harness_id: app-mobile-release
+harness_name: mobile release sub-process (store policy, Gate-D held)
+status: stable
+lane: code-engineering
+session_type: release-stage
+harness_tuple: H_mobrel(store_policy, bundle_flags, real_screens, ship_gate, gate_d, console_visible)
+parent: capabilities/harnesses/app-studio-session.yaml
+doctrine:
+  - capabilities/skills/app-ship-mobile
+  - capabilities/skills/app-mobile-build
+
+identity_lock:
+  startup_phrase: "Store policy is proven on the build, not argued from the source."
+  gates:
+    - id: M1
+      requirement: "in-app account deletion completes (Apple 5.1.1(v)), purchases transact (3.1.1), metadata is backed by the build (2.3.1), no dead buttons (Play IN_APP_EXPERIENCE), crash reporting live - each with a proof line from the release build"
+      proof: "preflight table"
+      failure_tier: halt
+    - id: M2
+      requirement: "the release bundle's compile-time flags are proven from the bundle (demo mode off)"
+      proof: "flag proof output"
+      failure_tier: halt
+    - id: M3
+      requirement: "store screenshots are real captures from a clean simulator or device"
+      proof: "image paths plus capture script"
+      failure_tier: degrade
+    - id: M4
+      requirement: "release.md cleared rig-s1gate app.ship with store_policy above 0.9"
+      proof: "decision id and signals"
+      failure_tier: halt
+    - id: M5
+      requirement: "submission is held at Gate-D for Mike"
+      proof: "Gate-D request id"
+      failure_tier: stop
+    - id: M6
+      requirement: "after submission the build is visible in App Store Connect or Play Console"
+      proof: "console observation"
+      failure_tier: degrade
+anti_patterns:
+  - "Arguing policy compliance from source instead of the release build"
+  - "Using golden renders or web builds as store screenshots"

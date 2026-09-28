@@ -1,0 +1,68 @@
+{
+  "name": "app.ship",
+  "stage": "release",
+  "lane": "build",
+  "description": "App Studio SUB criterion for the ship-release stage: is this release record ready for Mike's Gate-D decision? Checks a local production build is cited, the target environment was audited, the release is held at Gate-D or carries an approval id, a post-release check on the real target is defined, a rollback exists, and mobile store policy items were checked. A PASS here is never permission to ship; it only means the Gate-D request is complete. ADVISORY AND UNCALIBRATED until calibrated.",
+  "questions": {
+    "prod_build_proof": {
+      "type": "noul",
+      "instructions": "A production build was run locally or in CI and its output (route count, exit code, artifact) is cited"
+    },
+    "env_audit": {
+      "type": "noul",
+      "instructions": "The environment variables the target needs were listed and checked, and any env change is followed by a redeploy without build cache"
+    },
+    "gate_d_recorded": {
+      "type": "noul",
+      "instructions": "The release step is held at Gate-D awaiting Mike, or carries a recorded approval id; nothing public happened silently"
+    },
+    "post_release_verify": {
+      "type": "noul",
+      "instructions": "A post-release check on the real target is defined: served page or asset hash changed, key routes return 200 with expected content, or the store build is visible"
+    },
+    "rollback_named": {
+      "type": "noul",
+      "instructions": "A rollback or previous-version path is named"
+    },
+    "store_policy": {
+      "type": "noul",
+      "instructions": "Either this is not a mobile app store release, or in-app account deletion, purchases that actually transact, metadata the app can back, dead buttons, and crash reporting were each checked against store policy"
+    }
+  },
+  "rules": [
+    {
+      "when": "prod_build_proof.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "no production build evidence"
+    },
+    {
+      "when": "gate_d_recorded.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "release not held at Gate-D and no approval id"
+    },
+    {
+      "when": "post_release_verify.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "no check defined on the real target"
+    },
+    {
+      "when": "store_policy.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "mobile store policy items unchecked"
+    },
+    {
+      "when": "env_audit.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "target environment not audited"
+    },
+    {
+      "when": "rollback_named.noul <= 0.30",
+      "verdict": "ESCALATE",
+      "reason": "no rollback path"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

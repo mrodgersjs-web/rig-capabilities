@@ -1,0 +1,69 @@
+---
+outcome: "code-engineering: a build in the Aside sandbox finishes under a single build lock, serves the current build on a fresh port proven by curl, carries a screenshot, and leaves a receipt for every sandbox lesson that fired"
+activation: "Load for every install, build, serve, or restart inside an App Studio mission."
+instruction: "Pass B1 to B5 in order; any halt-tier failure stops the build step and names the cause."
+applies_when:
+  env: "the Aside bash sandbox or an Orca terminal"
+  runtime: "Node 18+ builds (Next.js, Vite); Flutter and Xcode builds run from Orca"
+  deps: "lsof, curl, nohup, shasum; app-sandbox-preflight"
+  params: "project path, fresh port"
+  budget: "one build at a time"
+  scale: "one project"
+permissions:
+  - fs.read
+  - fs.write
+  - bash
+flow:
+  - Run the preflight and fire the sandbox lessons.
+  - Build detached under the build lock and poll the log.
+  - Serve on a fresh port and curl the route.
+  - Capture a screenshot and record receipts.
+done_when:
+  - file:capabilities/harnesses/app-sandbox-build-verify.yaml
+  - grep:capabilities/harnesses/app-sandbox-build-verify.yaml:build.lock
+  - cmd:python3 capabilities/skills/app-studio/scripts/validate_hierarchy.py
+out_of_scope:
+  - killing processes of another project or agent
+  - changing sandbox policy
+quality_floor: 0.75
+---
+
+harness_id: app-sandbox-build-verify
+harness_name: sandbox build-and-verify sub-process
+status: stable
+lane: code-engineering
+session_type: build-stage
+harness_tuple: H_build(preflight, lock, detached_build, fresh_port, curl, screenshot, receipts)
+parent: capabilities/harnesses/app-studio-session.yaml
+doctrine:
+  - capabilities/skills/app-sandbox-survival
+  - capabilities/skills/app-web-scaffold
+executors:
+  - capabilities/agents/app-sandbox-preflight.md
+
+identity_lock:
+  startup_phrase: "One builder, one lock, one fresh port."
+  gates:
+    - id: B1
+      requirement: "app-sandbox-preflight table shows no FAIL (webpack scripts, Tailwind v3, no native-only deps, port free)"
+      proof: "preflight table"
+      failure_tier: halt
+    - id: B2
+      requirement: "build runs detached under .app-studio/build.lock with no second builder; the log ends in exit=0"
+      proof: "tail of .app-studio/build.log"
+      failure_tier: halt
+    - id: B3
+      requirement: "the fresh build is served on a fresh port and curl returns 200 with expected content; :3000 is never trusted"
+      proof: "curl status and content grep"
+      failure_tier: halt
+    - id: B4
+      requirement: "a screenshot of the served route exists"
+      proof: "image path"
+      failure_tier: degrade
+    - id: B5
+      requirement: "a receipt exists in .app-studio/run.jsonl for each sandbox lesson that fired"
+      proof: "fire_lessons.py output plus receipt rows"
+      failure_tier: halt
+anti_patterns:
+  - "Running npm run build from a watcher routine"
+  - "Restarting on :3000 and trusting what answers"

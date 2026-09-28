@@ -1,0 +1,59 @@
+{
+  "name": "app.stack",
+  "stage": "architecture",
+  "lane": "build",
+  "description": "App Studio SUB criterion for the architecture-stack stage: is this stack decision record sound for the lane and for where the build will actually run? Checks the lane is named, the stack runs inside the Aside sandbox or names where it builds instead, deviations from the default table carry reasons, paid services have named fallbacks, and local or free-tier options come first. ADVISORY AND UNCALIBRATED until calibrated on labelled decisions.",
+  "questions": {
+    "lane_named": {
+      "type": "noul",
+      "instructions": "The record names the application lane (web SaaS, marketing site, mobile app, voice agent, internal tool) and the stack is chosen for that lane"
+    },
+    "sandbox_compatible": {
+      "type": "noul",
+      "instructions": "The stack builds where it will be built: it avoids native binaries the Aside sandbox blocks (Turbopack, Tailwind v4 oxide, lightningcss) or names another build location such as an Orca terminal or CI"
+    },
+    "deviations_reasoned": {
+      "type": "noul",
+      "instructions": "Every choice that departs from the default stack table states its reason"
+    },
+    "paid_without_fallback": {
+      "type": "noul",
+      "instructions": "A paid service or API key is required to run the app, with no named fallback that lets it run without that key"
+    },
+    "local_first": {
+      "type": "noul",
+      "instructions": "Local or free-tier options are preferred until the product forces paid spend"
+    }
+  },
+  "rules": [
+    {
+      "when": "lane_named.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "no lane named: the stack cannot be judged against a job"
+    },
+    {
+      "when": "paid_without_fallback.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "paid dependency without a named fallback"
+    },
+    {
+      "when": "sandbox_compatible.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "stack will not build in the Aside sandbox and names no other build location"
+    },
+    {
+      "when": "deviations_reasoned.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "deviation from the default table without a reason"
+    },
+    {
+      "when": "local_first.noul <= 0.30",
+      "verdict": "ESCALATE",
+      "reason": "paid spend chosen before the product forces it"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

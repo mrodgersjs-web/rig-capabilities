@@ -1,0 +1,7 @@
+[
+ {"name": "git add .env.local blocks", "git_init": true, "files": {".env.local": "OPENAI_API_KEY=placeholder"}, "payload": {"tool_input": {"command": "git add .env.local"}}, "expect_rc": 2, "expect_text": ".env.local"},
+ {"name": "git add .env.example passes", "git_init": true, "files": {".env.example": "OPENAI_API_KEY="}, "payload": {"tool_input": {"command": "git add .env.example"}}, "expect_rc": 0},
+ {"name": "git add -A with an untracked env file blocks", "git_init": true, "files": {".env.production": "DATABASE_URL=placeholder", "app.ts": "x"}, "payload": {"tool_input": {"command": "git add -A && git commit -m wip"}}, "expect_rc": 2, "expect_text": ".env.production"},
+ {"name": "git add -A with env files gitignored passes", "git_init": true, "files": {".gitignore": ".env*\n!.env.example\n", ".env.local": "K=v", "app.ts": "x"}, "payload": {"tool_input": {"command": "git add -A"}}, "expect_rc": 0},
+ {"name": "unrelated git command passes", "git_init": true, "payload": {"tool_input": {"command": "git status"}}, "expect_rc": 0}
+]

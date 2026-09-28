@@ -1,0 +1,118 @@
+---
+outcome: "code-engineering: a web or mobile app mission moves through the eleven App Studio stages with a gated spec, a gated stack record, a clean sandbox preflight, slices that each end in an executed check, a JEV app.stage-gate receipt per transition, judged real screens, an independent verification pass, receipts for every fired lesson, anything public held at Gate-D, and a closed mission - or a named blocker at the exact stage it stopped"
+activation: "Load when app-studio-conductor opens any app-build mission (web SaaS, marketing site, internal tool, Expo or Flutter app, voice agent, video clone) and keep it active until the mission closes."
+instruction: "Advance one stage at a time; a stage closes only when its gate below holds with proof; halt-tier failures stop the mission at that stage, stop-tier gates wait for Mike, degrade-tier gates may close HELD with the gap named."
+applies_when:
+  env: "a project Mike named; the Aside sandbox plus Orca terminals for native builds"
+  runtime: "web (Next.js, Vite) or mobile (Expo, Flutter)"
+  deps: "app-studio skill family, rig-s1gate with app.* rubrics, experience-lesson-records validator"
+  params: "mission name, source, lane, target (web host or store)"
+  budget: "one stage at a time; three fix attempts per slice before escalation"
+  scale: "one app per mission"
+permissions:
+  - fs.read
+  - fs.write
+  - bash
+  - browser.read
+  - gate-d-required:deploy
+  - gate-d-required:push
+  - gate-d-required:publish
+flow:
+  - Gate the spec and the stack record before any scaffold.
+  - Run the sandbox preflight and then build in slices with executed checks.
+  - Score every stage transition with app.stage-gate and judge real screens.
+  - Verify independently and hold anything public at Gate-D.
+  - Close with receipts for every fired lesson and a sealed ProofPacket.
+done_when:
+  - file:capabilities/harnesses/app-studio-session.yaml
+  - grep:capabilities/harnesses/app-studio-session.yaml:app.stage-gate
+  - grep:capabilities/harnesses/app-studio-session.yaml:failure_tier
+  - cmd:python3 capabilities/skills/app-studio/scripts/validate_hierarchy.py
+out_of_scope:
+  - deploys, pushes, domains, purchases, or store submissions without Mike's recorded approval
+  - projects Mike did not name
+  - certifying a stage on the builder's own word
+quality_floor: 0.8
+---
+
+harness_id: app-studio-session
+harness_name: RIG App Studio mission session (meta process for every web and mobile app build)
+harness_name_short: app-studio meta process
+status: stable
+lane: code-engineering
+session_type: app-studio-session
+harness_tuple: H_app(spec, stack, preflight, slices, transitions, screens, verify, lessons, gate_d, close)
+parent_doctrine: capabilities/skills/app-studio
+conductor: capabilities/agents/app-studio-conductor.md
+loop: capabilities/loops/app-studio-mission-loop.md
+main_processes:
+  clone_lane: capabilities/harnesses/tg-app-studio-session.yaml
+  api_design: capabilities/harnesses/hA-09-api-design.yaml
+  schema_design: capabilities/harnesses/hA-10-schema-design.yaml
+  test_writing: capabilities/harnesses/hA-03-code-test-writing.yaml
+  debug: capabilities/harnesses/hA-04-code-debug.yaml
+  perf_audit: capabilities/harnesses/hA-06-code-perf-audit.yaml
+  ci_cd: capabilities/harnesses/hA-12-ci-cd-design.yaml
+  security_audit: capabilities/harnesses/hA-13-code-security-audit.yaml
+  ui_design: capabilities/harnesses/hC-02-ui-design.yaml
+  accessibility: capabilities/harnesses/hC-06-accessibility-audit.yaml
+  mobile_design: capabilities/harnesses/hC-07-mobile-design.yaml
+sub_processes:
+  - capabilities/harnesses/app-sandbox-build-verify.yaml
+  - capabilities/harnesses/app-web-release.yaml
+  - capabilities/harnesses/app-mobile-release.yaml
+stake: |
+  "Build me an app" resolves into evidence, not vibes: every feature traces to a source,
+  every slice ends in an executed check, every stage transition carries a JEV receipt
+  or defers, the lessons the estate already paid for fire as gates, and nothing public
+  leaves the machine without Gate-D.
+
+identity_lock:
+  startup_phrase: "I build from gated specs; I do not certify my own work."
+  gates:
+    - id: A1
+      requirement: "spec.md exists with a source per feature row and executable acceptance checks, and JEV app.spec plus plan.readiness cleared (required signals above 0.9) or the transition is DEFERRED"
+      proof: "spec path plus both decision ids in the mission record"
+      failure_tier: halt
+    - id: A2
+      requirement: "stack.md names the lane, applies the build-location matrix, gives every paid vendor a named fallback, and cleared JEV app.stack"
+      proof: "stack path plus decision id"
+      failure_tier: halt
+    - id: A3
+      requirement: "app-sandbox-preflight returned no FAIL before the first install or build; BLOCKED rows are named for Mike"
+      proof: "preflight table in the mission record"
+      failure_tier: halt
+    - id: A4
+      requirement: "every slice ends in an executed check (command and output, route and status, or screenshot); at most three fix attempts per slice before escalation"
+      proof: "slice records with per-slice check output (app-slice-loop)"
+      failure_tier: halt
+    - id: A5
+      requirement: "every stage transition carries a rig-s1gate app.stage-gate receipt with required signals above 0.9; classifier unavailable means DEFER the transition, never guess"
+      proof: "stage_scores rows with rubric, decision id, and signals"
+      failure_tier: halt
+    - id: A6
+      requirement: "every spec screen was captured from the real app and judged by app-ui-judge; DEFERRED rows are named and never counted as passes"
+      proof: "screen verdict rows with image paths"
+      failure_tier: degrade
+    - id: A7
+      requirement: "an agent other than the builder re-ran the acceptance checks; tests contain assertion verbs; one planted failure went RED then GREEN with checksum proof"
+      proof: "verify.md with verifier identity, assertion counts, and plant checksums"
+      failure_tier: halt
+    - id: A8
+      requirement: "run.jsonl carries a receipt for every App Studio lesson whose trigger fired, and validate_lessons.py exits 0 on it"
+      proof: "validator output for the run"
+      failure_tier: halt
+    - id: A9
+      requirement: "deploy, push, domain, purchase, and store submission are held at Gate-D with an app.ship record; the mission may close HELD"
+      proof: "held_at_gate field or a Gate-D approval id"
+      failure_tier: stop
+    - id: A10
+      requirement: "mission closed: comparison table, new lessons appended and their sub-skills patched, watcher routines deleted, ProofPacket sealed"
+      proof: "close record with proof hash and lesson ids"
+      failure_tier: degrade
+anti_patterns:
+  - "Scaffolding before A1 and A2 hold - that is how invented specs and unbuildable stacks happen"
+  - "Accepting a slice on prose instead of an executed check"
+  - "Counting a DEFERRED judge or an uncalibrated ESCALATE as a pass"
+  - "Letting a watcher routine run builds next to the builder"
+  - "Filing lessons in memory only and closing the mission"

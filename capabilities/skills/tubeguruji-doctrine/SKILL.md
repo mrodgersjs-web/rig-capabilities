@@ -3,12 +3,11 @@ name: tubeguruji-doctrine
 description: "Meta skill and router for the TubeGuruji build doctrine - full-stack AI SaaS applications distilled from the complete @tubeguruji YouTube corpus (221 videos, 2022-2026). The channel's repeatable unit is the AI SaaS skeleton: landing, auth gate, sidebar dashboard, input form with quota, durable generation job with progress, artifact view/share, credits gate. Use when building, reviewing, or teaching a full-stack AI SaaS app, when picking a stack for a ship-fast build, or when deciding whether an app matches the skeleton or needs its own architecture. Fail-closed boundary: deploys, publishes, purchases, and pushes stop at Gate-D; a JEV ESCALATE on a doctrine surface blocks enforcement until calibrated."
 tags: [rig, doctrine, fullstack, ai-saas, nextjs, react-native, tubeguruji]
 metadata:
-  source: "YouTube @tubeguruji (Rahul), full channel 2022-2026; corpus at data/corpora/how-to/build-craft/tubeguruji/ (220 transcripts, manifest in data/corpora/how-to/manifest.jsonl)"
+  source: "YouTube @tubeguruji full channel 2022-2026; corpus data/corpora/how-to/build-craft/tubeguruji/"
   extracted: "2026-09-25"
-  method: "full-channel innertube enumeration (221 videos) → caption-track transcripts (220; 1 no-caption failure logged in errors.jsonl) → 8-batch distillation with per-claim videoId citations"
-  evidence: "every claim in this family cites a YouTube videoId resolvable against the corpus manifest"
+  method: "221 videos enumerated, 220 caption transcripts (1 no-caption failure in errors.jsonl), distilled with per-claim videoId citations"
 outcome: "A full-stack AI SaaS app built on the corpus skeleton with the default stack, quotas wired, and the corpus' known deploy gotchas pre-checked — every architecture claim traceable to a corpus videoId."
-activation: "Load when building, reviewing, or planning a full-stack AI SaaS app (web or React Native), when asked for the fastest credible stack for a shippable AI product, or when a build matches the landing→auth→dashboard→form→generation→artifact→credits shape."
+activation: "Load for a full-stack AI SaaS app build or review (web or React Native), a fastest-credible-stack question, or a build matching the landing-auth-dashboard-form-generation-artifact-credits shape; App Studio routes video clones here."
 instruction: "Treat the skeleton as the default architecture and the default-stack table as the default vendor set. Route to the tg-* pillar skill that matches the situation before improvising. When a decision contradicts a law (e.g. a long AI job inside a request handler, or a public deploy without Gate-D), stop and apply the law, not the habit. Cite videoIds from the corpus for any doctrine claim you carry outward."
 applies_when:
   env: "local repo plus optional Vercel/Expo account; corpus checked out at data/corpora/how-to/build-craft/tubeguruji"
