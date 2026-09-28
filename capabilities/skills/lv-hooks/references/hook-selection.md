@@ -64,7 +64,7 @@ One hook line plus one rehook. Three lines on mobile is too much. Clear beats cl
 
 ## Validation before the hook leaves the stage
 
-Run the hook validator prompts (`~/.hermes/skills/linkedin-studio/prompts/hook-validation-prompts.md`)
+Run the hook validator prompts (`~/.hermes/archived/linkedin-studio/prompts/hook-validation-prompts.md`)
 in these three moments: after the hook and before drafting continues, before generating any image or
 video asset, and before any sports, song or movie reference post. Any BLOCK is logged and the hook is
 fixed or killed; a blocked hook never reaches publish. [hook-validation-prompts]

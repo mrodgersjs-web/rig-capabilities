@@ -63,7 +63,7 @@ anything about a minor (Lane C: stop and hand back to Mike).
 8. **Design the CTA and the first comment now, not after publishing.** One primary ask matched to the reader's intent stage and friction budget; the first comment engineers the one conversation the post wants. No external link in the body and no link-drop workaround in the comment either.
 9. **Mechanical filters:** no link in body, 2-3 hashtags maximum, no engagement bait, no em dashes, no CTA unless this is the week's one ask-bearing post, one post per day maximum per account.
 10. **Generate candidates, then pick.** For consequential posts, draft three complete candidates with different hook styles and proof orderings, score each honestly (credibility, engagement probability, proof density, audience fit), and state which won and why. A single post with no comparison is an unverifiable claim of best.
-11. **Gate through Jev** (command above), then run the hook validator prompts held by lv-hooks (`~/.hermes/skills/linkedin-studio/prompts/hook-validation-prompts.md`). Fix or kill anything that blocks.
+11. **Gate through Jev** (command above), then run the hook validator prompts held by lv-hooks (`~/.hermes/archived/linkedin-studio/prompts/hook-validation-prompts.md`). Fix or kill anything that blocks.
 12. **Hand to Eden as a brief, never as finished brand copy.** The draft goes to critique first; a draft failing the bar returns here with the named failing criteria. Nothing from this stage is published.
 
 ## Quality bar

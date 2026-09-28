@@ -83,7 +83,7 @@ Doctrine source for every stage: `~/Developer/rig-capabilities/capabilities/skil
 | hook-selection | merge | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/li-hooks/sub-skills/hook-selection.md` | superseded by lv-hooks |
 | li-hooks | merge | `~/Developer/rig-linkedin-studio-luca/linkedin-growth-os/skills/li-hooks/SKILL.md` | superseded by lv-hooks |
 | draft-hooks | tool | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/sub/draft-hooks.md` | called by lv-hooks |
-| hook-validation-prompts | tool | `~/.hermes/skills/linkedin-studio/prompts/hook-validation-prompts.md` | called by lv-hooks |
+| hook-validation-prompts | tool | `~/.hermes/archived/linkedin-studio/prompts/hook-validation-prompts.md` | called by lv-hooks |
 
 ## lv-draft: legacy assets
 
@@ -183,7 +183,7 @@ Doctrine source for every stage: `~/Developer/rig-capabilities/capabilities/skil
 | comment-machine | tool | Eden skill (comment-machine) | called by lv-engage |
 | commenter | tool | `~/.claude/agents/commenter.md` | called by lv-engage |
 | linkedin-site-mechanics | tool | `~/.aside/u/0/skills/user/linkedin-site-mechanics/SKILL.md` | called by lv-engage |
-| patchright-linkedin-proofer | tool | `~/.hermes/skills/patchright-linkedin-proofer/SKILL.md` | called by lv-engage |
+| patchright-linkedin-proofer | tool | `~/.hermes/skills/.archive/patchright-linkedin-proofer/SKILL.md` | called by lv-engage |
 | ralph | tool | `~/.hermes/skills/ralph/SKILL.md` | called by lv-engage |
 | rig-linkedin-desktop | tool | `~/Developer/rig-capabilities/capabilities/agents/rig-linkedin-desktop.md` | called by lv-engage |
 
@@ -355,8 +355,8 @@ Stage-level rollups: each stage's `references/creator-playbook.md` merges what t
 | /jake-linkedin | `~/.hermes/commands/jake-linkedin.md` |
 | alfred-linkedin-chaos-pipeline | `~/.hermes/skills/alfred-linkedin-chaos-pipeline/SKILL.md` |
 | alfred-post-publisher | `~/.aside/u/0/skills/user/alfred-post-publisher/SKILL.md` |
-| linkedin-content-automation | `~/.hermes/skills/linkedin-content-automation/SKILL.md` |
-| linkedin-engagement-automation | `~/.hermes/skills/linkedin-engagement-automation/SKILL.md` |
+| linkedin-content-automation | MISSING ~/.hermes/skills/linkedin-content-automation/SKILL.md |
+| linkedin-engagement-automation | MISSING ~/.hermes/skills/linkedin-engagement-automation/SKILL.md |
 | postiz | `~/.hermes/skills/postiz/SKILL.md` |
 | ralph-postiz-pipeline | `~/.hermes/skills/ralph-postiz-pipeline/SKILL.md` |
 
@@ -364,7 +364,7 @@ Stage-level rollups: each stage's `references/creator-playbook.md` merges what t
 
 - /timyakubson-linkedin-sales-navigator: ~/.hermes/commands/timyakubson-linkedin-sales-navigator.md (no readable file)
 - linkedin-agency: ~/.hermes/skills/linkedin-agency/SKILL.md (no readable file)
-- linkedin-studio: ~/.hermes/skills/linkedin-studio/SKILL.md (no readable file)
+- linkedin-studio: ~/.hermes/archived/linkedin-studio/SKILL.md (no readable file)
 - ralph-l8: ~/.hermes/skills/ralph-l8/SKILL.md (no readable file)
 - rig-virality-predictor: ~/.hermes/skills/rig-virality-predictor/SKILL.md (no readable file)
 - rig-voice-engineering: ~/.hermes/skills/rig-voice-engineering/SKILL.md (no readable file)

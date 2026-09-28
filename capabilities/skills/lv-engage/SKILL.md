@@ -67,7 +67,7 @@ Use for: commenting on other people's posts, handling comments and replies on Mi
 | /comment-engine | runner | `~/.hermes/commands/comment-engine.md` | PREP candidates, human approves, then FIRE |
 | /ralph | tool | `~/.hermes/commands/ralph.md` | load the Ralph Prime Agent skill for a task |
 | linkedin-site-mechanics | tool | `~/.aside/u/0/skills/user/linkedin-site-mechanics/SKILL.md` | before any browser action: throttles and comment/reply mechanics |
-| patchright-linkedin-proofer | tool | `~/.hermes/skills/patchright-linkedin-proofer/SKILL.md` | 4-phase safe run with per-line APPROVE before send |
+| patchright-linkedin-proofer | tool | `~/.hermes/skills/.archive/patchright-linkedin-proofer/SKILL.md` | 4-phase safe run with per-line APPROVE before send |
 | ralph | tool | `~/.hermes/skills/ralph/SKILL.md` | self-referential loop with architect verification |
 | li-distribution | runner | `~/.hermes/skills/rig-linkedin-virality/skills/li-distribution/SKILL.md` | daily P2 cycle: target harvest, gated firing, reply sweep |
 | li-distribution-runner | runner | `~/.hermes/agents/li-distribution-runner.json` | scheduled definition loading li-distribution |

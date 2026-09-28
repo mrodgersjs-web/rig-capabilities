@@ -89,7 +89,7 @@ sections (lv-profile), or anything about a minor (Lane C: stop and hand back to 
 
 | name | kind | path | when to call |
 |---|---|---|---|
-| hook-validation-prompts | prompt library (tool) | `~/.hermes/skills/linkedin-studio/prompts/hook-validation-prompts.md` | before the post moves to drafting, before any visual asset, before any pop-culture reference post; any BLOCK stops the pipeline |
+| hook-validation-prompts | prompt library (tool) | `~/.hermes/archived/linkedin-studio/prompts/hook-validation-prompts.md` | before the post moves to drafting, before any visual asset, before any pop-culture reference post; any BLOCK stops the pipeline |
 | draft-hooks | sub-agent (tool) | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/sub/draft-hooks.md` | when a plan slot needs the full ten-variant spread with claim refs for the downstream gates |
 
 ## Sub-skills
