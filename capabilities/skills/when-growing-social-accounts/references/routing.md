@@ -2,6 +2,7 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
+| linkedin-viral | canonical | LinkedIn front door: lane guard, hard gates, routes every LinkedIn job to one of 161 skills; carries the Tommy Clark 2026 doctrine (79 videos). Load first for LinkedIn. | tommy-clark-doctrine, linkedin-optimizer, linkedin-growth-os, linkedin-influencer-os, rig-linkedin-virality |
 | linkedin-analytics-tracker | aside-user | Daily cross-channel measurement for LinkedIn growth across all accounts. Track impressions, reaction | - |
 | linkedin-automation | hermes | Browser automation for LinkedIn via patchright + cookie vault: DM outreach, comment engagement, smar | - |
 | linkedin-content-automation | hermes | Manage the full RIG personal-brand content pipeline across LinkedIn AND Instagram: Postiz scheduling | - |

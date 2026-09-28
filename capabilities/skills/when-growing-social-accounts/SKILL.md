@@ -32,6 +32,7 @@ Tier-1 meta-skill. Job to be done: When drafting, scheduling, engaging, or measu
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
+- **linkedin-viral** — START HERE for any LinkedIn job: lane guard, hard gates, routes to exactly one of 161 LinkedIn skills/sub-skills, carries the Tommy Clark 2026 doctrine. Also callable as /linkedin-viral.
 - **linkedin-analytics-tracker** — Daily cross-channel measurement for LinkedIn growth across all accounts. Track impressions
 - **linkedin-automation** — Browser automation for LinkedIn via patchright + cookie vault: DM outreach, comment engage
 - **linkedin-content-automation** — Manage the full RIG personal-brand content pipeline across LinkedIn AND Instagram: Postiz 
