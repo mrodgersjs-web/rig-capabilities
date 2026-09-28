@@ -2,6 +2,7 @@
 """Offline gates for trace.py. Run: python3 test_trace.py  (TRACE_PY=<path> tests another copy)."""
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -44,13 +45,15 @@ def run(*args):
 
 
 class Trace(unittest.TestCase):
-    def setUp(self):
-        self.d = tempfile.mkdtemp()
-        self.L = os.path.join(self.d, "TRACE.jsonl")
-        self.repo = os.path.join(self.d, "repo")
-        os.makedirs(os.path.join(self.repo, "test"))
-        open(os.path.join(self.repo, "test", "set_types_test.dart"), "w").write("// test\n")
-        g = ["git", "-C", self.repo]
+    @classmethod
+    def setUpClass(cls):
+        """One throwaway repo + one imported base ledger for the whole class (fast done-test)."""
+        cls.base = tempfile.mkdtemp()
+        cls.repo = os.path.join(cls.base, "repo")
+        os.makedirs(os.path.join(cls.repo, "test"))
+        with open(os.path.join(cls.repo, "test", "set_types_test.dart"), "w") as f:
+            f.write("// test\n")
+        g = ["git", "-C", cls.repo]
         subprocess.run(g + ["init", "-q"], check=True)
         subprocess.run(g + ["add", "."], check=True)
         # A fixture commit object via plumbing (write-tree + commit-tree): no branch, no hooks
@@ -58,19 +61,27 @@ class Trace(unittest.TestCase):
         tree = subprocess.run(g + ["write-tree"], capture_output=True, text=True, check=True).stdout.strip()
         full = subprocess.run(g + ["-c", "user.name=t", "-c", "user.email=t@t", "commit-tree", tree, "-m", "S1 set types"],
                               capture_output=True, text=True, check=True).stdout.strip()
-        self.sha = full[:7]
-        open(os.path.join(self.d, "map.md"), "w").write(MAP)
-        open(os.path.join(self.d, "audit.md"), "w").write(AUDIT)
-        rc, out = run("import-map", "--ledger", self.L, "--map", os.path.join(self.d, "map.md"),
+        cls.sha = full[:7]
+        for name, body in (("map.md", MAP), ("audit.md", AUDIT)):
+            with open(os.path.join(cls.base, name), "w") as f:
+                f.write(body)
+        cls.base_ledger = os.path.join(cls.base, "BASE.jsonl")
+        rc, out = run("import-map", "--ledger", cls.base_ledger, "--map", os.path.join(cls.base, "map.md"),
                       "--apps", "Demo Workouts=demo-w,Demo Nutrition=demo-n", "--prefix", "Demo Workouts=DW,Demo Nutrition=DN",
                       "--target", "tf")
-        self.assertEqual(rc, 0, out)
-        rc, out = run("import-audit", "--ledger", self.L, "--audit", os.path.join(self.d, "audit.md"),
+        assert rc == 0, out
+        rc, out = run("import-audit", "--ledger", cls.base_ledger, "--audit", os.path.join(cls.base, "audit.md"),
                       "--app", "demo-audit", "--target", "tf", "--prefix", "TF")
-        self.assertEqual(rc, 0, out)
+        assert rc == 0, out
+
+    def setUp(self):
+        self.d = tempfile.mkdtemp()
+        self.L = os.path.join(self.d, "TRACE.jsonl")
+        shutil.copy(self.base_ledger, self.L)
 
     def rows(self):
-        return {json.loads(x)["id"]: json.loads(x) for x in open(self.L) if x.strip()}
+        with open(self.L) as f:
+            return {json.loads(x)["id"]: json.loads(x) for x in f if x.strip()}
 
     def cov(self):
         return run("coverage", "--ledger", self.L, "--repo", self.repo)
@@ -88,7 +99,7 @@ class Trace(unittest.TestCase):
 
     def test_reimport_never_overwrites_a_decision(self):
         run("set", "--ledger", self.L, "--id", "DN-D2.1-01", "--status", "SKIP", "--reason", "no nutrition in v1")
-        run("import-map", "--ledger", self.L, "--map", os.path.join(self.d, "map.md"),
+        run("import-map", "--ledger", self.L, "--map", os.path.join(self.base, "map.md"),
             "--apps", "Demo Workouts=demo-w,Demo Nutrition=demo-n", "--prefix", "Demo Workouts=DW,Demo Nutrition=DN", "--target", "tf")
         self.assertEqual(self.rows()["DN-D2.1-01"]["status"], "SKIP")
 
