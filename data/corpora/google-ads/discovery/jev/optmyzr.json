@@ -1,0 +1,56 @@
+{
+ "rubric": "corpus.source",
+ "verdict": "ESCALATE",
+ "enforced": false,
+ "reasons": [
+  "ESCALATE: candidate is not clearly in the seed's subject and audience [same_domain.noul=0.35 <= 0.9]",
+  "ESCALATE: candidate is not one practitioner arguing in their own voice [practitioner_voice.noul=0.36 <= 0.9]",
+  "ESCALATE: candidate reads as listicles or hype, not argument [argues_not_lists.noul=0.46 <= 0.9]",
+  "ESCALATE: candidate is not a close peer of the seed [seed_similarity.score=2.55 <= 3.5]",
+  "ESCALATE: similarity answer distribution is not concentrated [seed_similarity.confidence=0.6 <= 0.9]",
+  "ESCALATE: low confidence on 'seed_similarity' (0.60 < floor 0.90) -- distribution too flat to act on"
+ ],
+ "answers": {
+  "same_domain": {
+   "type": "noul",
+   "noul": 0.35
+  },
+  "practitioner_voice": {
+   "type": "noul",
+   "noul": 0.36
+  },
+  "argues_not_lists": {
+   "type": "noul",
+   "noul": 0.46
+  },
+  "seed_similarity": {
+   "type": "score",
+   "score": 2.55,
+   "confidence": 0.6,
+   "legend": {
+    "0": "Unrelated subject",
+    "1": "Adjacent business topic with a different audience or purpose",
+    "2": "Same broad subject but a very different format (news, interviews, textbook summaries)",
+    "3": "Same subject and audience, partly similar style",
+    "4": "Close peer: same subject, audience and argumentative style",
+    "5": "Near twin of the seed"
+   },
+   "probabilities": {
+    "0": 0.0,
+    "1": 0.08,
+    "2": 0.36,
+    "3": 0.49,
+    "4": 0.07,
+    "5": 0.0
+   }
+  }
+ },
+ "model": "jev-1.13.0",
+ "latency_ms": 132,
+ "advisory": true,
+ "state_sha256": "08c4b64185506a342757188a59a7cb650cb1617d31eb70e7b292fe722675b6a7",
+ "state_preview": "SEED (what we are extending and why):\nGoogle Ads campaign doctrine from a practitioner who manages or has managed real\naccounts: account structure, conversion tracking, keywords and negatives, campaign\ntypes (Search, Performance Max, Shopping, Demand Gen, local), bidding, ad copy and\nassets, landing pages, budget discipline, testing and optimization cadence, and\nlocal/B2B service application. Taught to in-house marketers, business owners,\nfreelancers and agency practitioners running Google Ads i",
+ "error": null,
+ "decision_id": 122015,
+ "_exit": 2
+}

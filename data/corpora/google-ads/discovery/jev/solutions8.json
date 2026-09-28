@@ -1,0 +1,55 @@
+{
+ "rubric": "corpus.source",
+ "verdict": "ESCALATE",
+ "enforced": false,
+ "reasons": [
+  "ESCALATE: candidate is not clearly in the seed's subject and audience [same_domain.noul=0.62 <= 0.9]",
+  "ESCALATE: candidate is not one practitioner arguing in their own voice [practitioner_voice.noul=0.58 <= 0.9]",
+  "ESCALATE: candidate reads as listicles or hype, not argument [argues_not_lists.noul=0.47 <= 0.9]",
+  "ESCALATE: similarity answer distribution is not concentrated [seed_similarity.confidence=0.64 <= 0.9]",
+  "ESCALATE: low confidence on 'seed_similarity' (0.64 < floor 0.90) -- distribution too flat to act on"
+ ],
+ "answers": {
+  "same_domain": {
+   "type": "noul",
+   "noul": 0.62
+  },
+  "practitioner_voice": {
+   "type": "noul",
+   "noul": 0.58
+  },
+  "argues_not_lists": {
+   "type": "noul",
+   "noul": 0.47
+  },
+  "seed_similarity": {
+   "type": "score",
+   "score": 3.53,
+   "confidence": 0.64,
+   "legend": {
+    "0": "Unrelated subject",
+    "1": "Adjacent business topic with a different audience or purpose",
+    "2": "Same broad subject but a very different format (news, interviews, textbook summaries)",
+    "3": "Same subject and audience, partly similar style",
+    "4": "Close peer: same subject, audience and argumentative style",
+    "5": "Near twin of the seed"
+   },
+   "probabilities": {
+    "0": 0.0,
+    "1": 0.01,
+    "2": 0.02,
+    "3": 0.44,
+    "4": 0.49,
+    "5": 0.04
+   }
+  }
+ },
+ "model": "jev-1.13.0",
+ "latency_ms": 126,
+ "advisory": true,
+ "state_sha256": "4c6adf31b0169f9330f16173043460ae0b5c1473ca009ce429102e9b6ae5a223",
+ "state_preview": "SEED (what we are extending and why):\nGoogle Ads campaign doctrine from a practitioner who manages or has managed real\naccounts: account structure, conversion tracking, keywords and negatives, campaign\ntypes (Search, Performance Max, Shopping, Demand Gen, local), bidding, ad copy and\nassets, landing pages, budget discipline, testing and optimization cadence, and\nlocal/B2B service application. Taught to in-house marketers, business owners,\nfreelancers and agency practitioners running Google Ads i",
+ "error": null,
+ "decision_id": 122011,
+ "_exit": 2
+}
