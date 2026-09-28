@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updated": "2026-09-24",
+  "updated": "2026-09-28",
   "doctrine": "First-party prompt library. A prompt enters as a draft, earns its place through AutoPrompt calibration (measured score on a saved edge-case dataset), and is versioned immutably. Every promote/pull is logged in the hash-chained ledger.jsonl. Nothing ships uncalibrated; scores are bound to a model name and a dataset, never quoted bare.",
   "prompts": [
     {
@@ -644,6 +644,3891 @@
       "compose": [],
       "added": "2026-09-24",
       "provenance": "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents | paraphrased pattern with attribution, not copied text"
+    },
+    {
+      "id": "app-studio-meta",
+      "path": "prompts/app-studio-meta/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio meta prompt: run an app build mission through 11 JEV-gated stages with one builder, a separate verifier and Gate-D stops",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "app studio mission",
+        "build this app end to end",
+        "app studio meta prompt"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "meta",
+      "parent": "none",
+      "stage": "all",
+      "audience": "all",
+      "lessons": [
+        "LA-03",
+        "LA-21",
+        "LA-28",
+        "LA-29",
+        "LA-31",
+        "LA-34",
+        "LA-35",
+        "TG-06",
+        "TG-24"
+      ],
+      "content_sha256": "33b1fd51677fd7a4b4044b0c8cffae7a6f12d79ef2c2f94bb8e707645f868079",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119516,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-builder",
+      "path": "prompts/app-studio-builder/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio builder prompt: build one app to its contract in the current folder and write the mission record the verifier reads",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "bench builder prompt",
+        "app builder prompt",
+        "builder for this app task"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "all",
+      "audience": "builder",
+      "lessons": [
+        "LA-03",
+        "LA-07",
+        "LA-21",
+        "LA-25",
+        "LA-32",
+        "TG-06",
+        "TG-07",
+        "TG-08",
+        "BENCH-01"
+      ],
+      "content_sha256": "efa4d337ad745dde9ca0f7f51cdcaab4717f4e14c6dbb23c33b280c79123e5fe",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119511,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-verifier",
+      "path": "prompts/app-studio-verifier/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio verifier prompt: grade a finished app build against acceptance checks the builder never saw, from a clean production build",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "verify the app build",
+        "hidden acceptance checks",
+        "app bench verifier"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "verify-qa",
+      "audience": "verifier",
+      "lessons": [
+        "LA-02",
+        "LA-05",
+        "LA-20",
+        "LA-21",
+        "LA-24",
+        "LA-25",
+        "LA-27",
+        "LA-29",
+        "LA-34"
+      ],
+      "content_sha256": "6422f2722f3ec0a7dff4daf6c58a15a28b8db469e3a0e2d96cde58c48877b25d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119523,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-ui-judge",
+      "path": "prompts/app-studio-ui-judge/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio UI judge prompt: judge real captured screens of a built app against its spec and done-screens",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "judge the app screens",
+        "ui judge screenshots",
+        "visual qa of the built app"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "design-ux",
+      "audience": "ui-judge",
+      "lessons": [
+        "LA-15",
+        "LA-16",
+        "LA-17",
+        "LA-23",
+        "TG-10",
+        "TG-30"
+      ],
+      "content_sha256": "27b640456879b035e92001221526f04505bc11cfbcacf818c1e5c08344a859b0",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119521,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-lesson-filer",
+      "path": "prompts/app-studio-lesson-filer/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio lesson filer prompt: turn each new build failure into a typed lesson and patch the owning sub-skill in the same session",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "file the lesson",
+        "typed lesson from this failure",
+        "lessons into skills"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "operate-learn",
+      "audience": "lesson-filer",
+      "lessons": [
+        "LA-28",
+        "LA-30",
+        "LA-34"
+      ],
+      "content_sha256": "cc24323bad402f42a03691f592ed023133048d65c29d0dbe91581271fe10fee8",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119514,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-intake-spec",
+      "path": "prompts/app-studio-intake-spec/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio intake-spec stage prompt: pin what the app is, its source, its done-screens and its contract in spec.md",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "app intake spec",
+        "write the app spec"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "intake-spec",
+      "audience": "builder",
+      "lessons": [
+        "TG-01",
+        "TG-02",
+        "LA-16",
+        "LA-35",
+        "BENCH-01"
+      ],
+      "content_sha256": "1cdd6ac28b2e487fb74eaf14ac0db150ccc311b2b68e0948e58b0d1ef4e197ae",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119513,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-architecture-stack",
+      "path": "prompts/app-studio-architecture-stack/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio architecture-stack stage prompt: record the stack the task names, what builds in the sandbox, and a named fallback per paid vendor",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "app stack decision",
+        "write stack.md"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "architecture-stack",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "LA-07",
+        "LA-32",
+        "TG-03",
+        "TG-29"
+      ],
+      "content_sha256": "a9a7b3316baa4fae6c32c344496defb2e2e1959f6738fc2b3752b73f255ae831",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119512,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-design-ux",
+      "path": "prompts/app-studio-design-ux/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio design-ux stage prompt: map the screens onto the SaaS skeleton with real data and plan real captures for judging",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "app screen map",
+        "design the app screens"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "design-ux",
+      "audience": "builder",
+      "lessons": [
+        "TG-02",
+        "TG-10",
+        "TG-11",
+        "TG-30",
+        "LA-16",
+        "LA-23"
+      ],
+      "content_sha256": "643bafc06d63dcee212aeb6adae4d647ec0583b2f5dad6281e6a88f494322806",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119515,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-scaffold-setup",
+      "path": "prompts/app-studio-scaffold-setup/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio scaffold-setup stage prompt: get a first slice to build, serve and answer curl inside the Aside sandbox",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "scaffold the app",
+        "first slice builds and serves"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "scaffold-setup",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "LA-02",
+        "LA-03",
+        "LA-25",
+        "LA-33",
+        "TG-12"
+      ],
+      "content_sha256": "781c40d5f075e2bc6870dd0558f1323f9d70f785b78c89e7d233fd6dc26d152c",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119518,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-backend-data",
+      "path": "prompts/app-studio-backend-data/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio backend-data stage prompt: implement the API contract, storage, auth, quotas and jobs with executed proof per endpoint",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "api contract endpoints",
+        "backend data layer for the app"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-24",
+        "TG-16",
+        "TG-20"
+      ],
+      "content_sha256": "2663e0336f3c4a25c6f8c2ea41ef8f50d9da826312cb7a14d0c5d0744b8d6e2d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119615,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-web-frontend",
+      "path": "prompts/app-studio-web-frontend/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio web-frontend stage prompt: every contract page returns real server-rendered content from the production build",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "web frontend pages",
+        "server rendered pages for the app"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "web-frontend",
+      "audience": "builder",
+      "lessons": [
+        "LA-09",
+        "LA-10",
+        "LA-11",
+        "LA-23",
+        "LA-25",
+        "TG-14",
+        "TG-27",
+        "BENCH-02"
+      ],
+      "content_sha256": "965858004bf6fea31baca7d4debd85f2883793928da2a33455837dc390c8f523",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119524,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-mobile",
+      "path": "prompts/app-studio-mobile/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio mobile stage prompt: build the Expo or native lane and show it running on a clean simulator driven from Orca",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "expo mobile app",
+        "react native lane"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "mobile",
+      "audience": "builder",
+      "lessons": [
+        "LA-15",
+        "LA-16",
+        "LA-17",
+        "LA-18",
+        "LA-19",
+        "LA-22",
+        "TG-21",
+        "TG-22"
+      ],
+      "content_sha256": "dc01b94a5e4f0dca676c5df7e6c6fb7da06f7161a12ccdebe03737355a29d307",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119519,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-ai-features",
+      "path": "prompts/app-studio-ai-features/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio ai-features stage prompt: ship LLM features that validate model replies and run without paid keys through named fallbacks",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "ai feature in the app",
+        "llm feature with fallback"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "ai-features",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "TG-03",
+        "TG-05",
+        "TG-17",
+        "TG-18",
+        "TG-25",
+        "TG-26"
+      ],
+      "content_sha256": "a0f9266f2453983f405c9e442a9f009356dee3b647a6af184ff3c9cfe0243e7c",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119510,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-verify-qa",
+      "path": "prompts/app-studio-verify-qa/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio verify-qa stage prompt: self-verify every contract line from a fresh production build and write verify.md",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "self verify the app",
+        "write verify.md"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "verify-qa",
+      "audience": "builder",
+      "lessons": [
+        "LA-20",
+        "LA-21",
+        "LA-24",
+        "LA-34",
+        "TG-23",
+        "TG-29"
+      ],
+      "content_sha256": "06485f0ae43f2a69cc6fe6fedb22dc7cf4176a7ac81ea3631aa9aa2569503662",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119522,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-ship-release",
+      "path": "prompts/app-studio-ship-release/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio ship-release stage prompt: prepare a complete release request and hold it at Gate-D",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "ship the app",
+        "release request held at gate-d"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "ship-release",
+      "audience": "builder",
+      "lessons": [
+        "LA-11",
+        "LA-12",
+        "LA-13",
+        "LA-14",
+        "TG-12",
+        "TG-13",
+        "TG-15",
+        "TG-23"
+      ],
+      "content_sha256": "7bafebdde26c8be20fbe6e39c7d06e3c01510fa8ce4b1278d98a4a098008c51b",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119520,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-studio-operate-learn",
+      "path": "prompts/app-studio-operate-learn/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio operate-learn stage prompt: record the failures hit during the build as lesson candidates with exact evidence",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "lessons from this build",
+        "operate and learn stage"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "main",
+      "parent": "app-studio-meta",
+      "stage": "operate-learn",
+      "audience": "builder",
+      "lessons": [
+        "LA-26",
+        "LA-28",
+        "LA-34"
+      ],
+      "content_sha256": "db809a458c14a88ead34911f9c356b756ed523ff1745773c5f4d59e899d89eca",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119517,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-spec-md",
+      "path": "prompts/app-sub-spec-md/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the .app-studio/spec.md format the verifier and the app.spec gate use",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "spec.md format"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-intake-spec",
+      "stage": "intake-spec",
+      "audience": "builder",
+      "lessons": [
+        "TG-01",
+        "BENCH-01"
+      ],
+      "content_sha256": "32ab9c429450d620f093793577849984b2473d01ee0f0ee3bc7d980bb88bc100",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119549,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-acceptance-checks",
+      "path": "prompts/app-sub-acceptance-checks/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: author executable acceptance checks for an App Bench task that the builder never sees",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "author acceptance checks",
+        "bench task acceptance"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-intake-spec",
+      "stage": "intake-spec",
+      "audience": "conductor",
+      "lessons": [
+        "LA-08",
+        "LA-20",
+        "TG-04",
+        "BENCH-02"
+      ],
+      "content_sha256": "983fc1bf23c3057d43c851f2165cac8dc8f43c44d8e2b14167fe29330dd9e26c",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119525,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-stack-md",
+      "path": "prompts/app-sub-stack-md/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the .app-studio/stack.md format the app.stack gate reads",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "stack.md format"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-architecture-stack",
+      "stage": "architecture-stack",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "LA-07",
+        "BENCH-01"
+      ],
+      "content_sha256": "20285711e9e1f6242bb63fdf264eb6dcf1270ff2c0fd444bfcfc6973bb939f9e",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119550,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-named-fallbacks",
+      "path": "prompts/app-sub-named-fallbacks/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: env-gate each paid vendor behind a named fallback so the app runs with no keys",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "named fallback for paid api"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-architecture-stack",
+      "stage": "architecture-stack",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "TG-03"
+      ],
+      "content_sha256": "386c5252c03d41a71ae8b915bfb697332d8baee0dfa7573ed72095127a5f0e8b",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119539,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-saas-skeleton",
+      "path": "prompts/app-sub-saas-skeleton/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: map the app onto the seven-part SaaS skeleton with real data and per-mutation feedback",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "saas skeleton screens"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-design-ux",
+      "stage": "design-ux",
+      "audience": "builder",
+      "lessons": [
+        "TG-02",
+        "TG-10",
+        "TG-30"
+      ],
+      "content_sha256": "1e427397caaf8e6b428a23234c414c9b90e948895d3885713965fbff4ce46d0a",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119546,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-sandbox-rules",
+      "path": "prompts/app-sub-sandbox-rules/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the Aside sandbox rules for native binaries, process control, ports and Python",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "aside sandbox rules"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-scaffold-setup",
+      "stage": "scaffold-setup",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "LA-02",
+        "LA-03",
+        "LA-25",
+        "LA-32",
+        "LA-33"
+      ],
+      "content_sha256": "197d296e81fafe0b71ed20dea9d476c6d930e36ed643ec5fc1e67c962f52093d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119547,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-next-webpack-scaffold",
+      "path": "prompts/app-sub-next-webpack-scaffold/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: scaffold Next.js App Router with webpack builds and Tailwind v3 so it builds in the Aside sandbox",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "next.js webpack scaffold"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-scaffold-setup",
+      "stage": "scaffold-setup",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "TG-12"
+      ],
+      "content_sha256": "d207a4d61bb677f66887ef3da04fca30a139f4bbc76c8ed9d999bbc621ea420f",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119541,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-json-store",
+      "path": "prompts/app-sub-json-store/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: a JSON-file store with atomic writes that boots from an empty folder",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "json file store"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-24",
+        "TG-20"
+      ],
+      "content_sha256": "18fe5bf4d59e4eee5b6284fe9457cd470df8aeb7000558c539c4f6fadc5c729a",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119536,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-demo-user-auth",
+      "path": "prompts/app-sub-demo-user-auth/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: a seeded demo user as a named auth stub with ownership checks on every mutation",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "demo user auth stub"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "TG-16"
+      ],
+      "content_sha256": "812b51e9e9565618fb9f137949a9ad4751acd73f4e0cfba0cc2ec4c5ccfdd442",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119528,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-clerk-auth",
+      "path": "prompts/app-sub-clerk-auth/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: wire Clerk with public routes, ownership checks and a demo-user fallback when keys are absent",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "clerk auth wiring"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "TG-14",
+        "TG-15",
+        "TG-16"
+      ],
+      "content_sha256": "69cf59d2831d31354be706ad880599e31694db4cbaed7a2f0bd8ace09c87216d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119527,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-drizzle-neon",
+      "path": "prompts/app-sub-drizzle-neon/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: Drizzle ORM over Neon or PGlite with the pg-proxy row contract proven before wiring",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "drizzle neon postgres",
+        "pg proxy drizzle"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-01",
+        "LA-06",
+        "TG-19"
+      ],
+      "content_sha256": "1975978177e94bf23f657244c43c81d8b2a6d49d7094c1aee108a179cd4628b5",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119531,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-quota-gate",
+      "path": "prompts/app-sub-quota-gate/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: enforce a free-tier quota in the creation path and show the deny path at limit plus one",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "quota gate limit"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-08",
+        "TG-04"
+      ],
+      "content_sha256": "3bafa2aaef573553d2b3f3f32bf5a5eb690461651b2d9e985923db355211b64c",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119544,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-durable-job",
+      "path": "prompts/app-sub-durable-job/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: run long AI work as durable steps with a status record and per-step progress",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "durable background job",
+        "multi step pipeline progress"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-backend-data",
+      "stage": "backend-data",
+      "audience": "builder",
+      "lessons": [
+        "LA-05",
+        "TG-05",
+        "TG-25"
+      ],
+      "content_sha256": "602f7bcb9011a19cb0909e32ad73987b62cc23a6f03ff818b21a50e279e49f67",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119533,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-ssr-first-paint",
+      "path": "prompts/app-sub-ssr-first-paint/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: server-render each contract page's name and primary content so the server HTML alone shows the page",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "server rendered first paint"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-web-frontend",
+      "stage": "web-frontend",
+      "audience": "builder",
+      "lessons": [
+        "TG-14",
+        "BENCH-02"
+      ],
+      "content_sha256": "a4c896c40bcf8b83dfe7bc031c74b1fa26b49cb2eaddfa3ca161d57f22ec3f5d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119548,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-next-build-time",
+      "path": "prompts/app-sub-next-build-time/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: rebuild and restart after changing public files or NEXT_PUBLIC values, and confirm it by fetch",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "next public build time"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-web-frontend",
+      "stage": "web-frontend",
+      "audience": "builder",
+      "lessons": [
+        "LA-09",
+        "LA-11",
+        "LA-14"
+      ],
+      "content_sha256": "04f309d9c1b24ebc06da73ec65ae2ed2ed4db35cb4dd2485673d0e4f5256e23e",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119540,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-expo-app",
+      "path": "prompts/app-sub-expo-app/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: build the Expo lane with its three preflight checks and simulator captures from Orca",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "expo app build"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-mobile",
+      "stage": "mobile",
+      "audience": "builder",
+      "lessons": [
+        "LA-15",
+        "LA-17",
+        "TG-21",
+        "TG-22"
+      ],
+      "content_sha256": "9d88a4e744e5c328fdcdef39480e3e2f061afd9809415d40c398bbb4e3177039",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119532,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-llm-feature",
+      "path": "prompts/app-sub-llm-feature/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: an LLM feature with a JSON schema contract, one client module and a named fallback",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "gemini feature with fallback",
+        "llm json schema feature"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-ai-features",
+      "stage": "ai-features",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "TG-17",
+        "TG-26",
+        "TG-29"
+      ],
+      "content_sha256": "801379666c040e7ef5fab1053e5ecf72621498027671f752ec76671278d25044",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119538,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-verify-md",
+      "path": "prompts/app-sub-verify-md/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the .app-studio/verify.md self-verification format",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "verify.md format"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-verify-qa",
+      "stage": "verify-qa",
+      "audience": "builder",
+      "lessons": [
+        "LA-21",
+        "LA-24"
+      ],
+      "content_sha256": "d8ca3227800a0a9f4b4a9a2aa10de3e91e1272752f114cfcc5d6c2fa88cb8c3e",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119559,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-gate-d-hold",
+      "path": "prompts/app-sub-gate-d-hold/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: a complete release request that stays HELD until Mike approves",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "gate-d release request"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-ship-release",
+      "stage": "ship-release",
+      "audience": "builder",
+      "lessons": [
+        "LA-12",
+        "TG-23"
+      ],
+      "content_sha256": "4a08f7360cc463c22d869729276941c4a3d6792cfa6a878d811aa93972808ee9",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119535,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-deploy-gotchas",
+      "path": "prompts/app-sub-deploy-gotchas/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the after-approval deploy checklist distilled from shipped-broken deploys",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "deploy gotcha checklist"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-ship-release",
+      "stage": "ship-release",
+      "audience": "builder",
+      "lessons": [
+        "LA-11",
+        "LA-13",
+        "LA-14",
+        "TG-13",
+        "TG-15",
+        "TG-19",
+        "TG-27",
+        "TG-28"
+      ],
+      "content_sha256": "854e66682832f526f578c96ddfdf190d10e04fcab18af683f8d442a9fb9a075e",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119529,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-lesson-candidates",
+      "path": "prompts/app-sub-lesson-candidates/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: record each failure hit during the build as a lesson candidate with exact evidence",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "lesson candidates section"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-operate-learn",
+      "stage": "operate-learn",
+      "audience": "builder",
+      "lessons": [
+        "LA-28"
+      ],
+      "content_sha256": "6c2b02cd4fdbb3e4a24cadbd0de1a3bc44758896fbebb2ad3da54e583299dc28",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119537,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-feature-slice",
+      "path": "prompts/app-sub-feature-slice/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: brief and build one feature per slice with named vendors, files and an observable result",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "one feature per slice"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-builder",
+      "stage": "all",
+      "audience": "builder",
+      "lessons": [
+        "TG-06",
+        "TG-07",
+        "TG-08",
+        "TG-09",
+        "TG-11",
+        "TG-24"
+      ],
+      "content_sha256": "c24fba1bc8045be043e8adbb5d0939906d704ddd5b62216c6442361057ddcd39",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119534,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-stage-record",
+      "path": "prompts/app-sub-stage-record/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the .app-studio/stages/<stage>.md format with Evidence and lesson receipts that app.stage-gate reads",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "stage record evidence block"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-builder",
+      "stage": "all",
+      "audience": "builder",
+      "lessons": [
+        "LA-21",
+        "LA-34",
+        "BENCH-03"
+      ],
+      "content_sha256": "e6572d55abb7a0c4139d0300d0a489c3a8bb57c54eaefb8a072c091b822f2a61",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119551,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-done-md",
+      "path": "prompts/app-sub-done-md/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: the DONE.md close-out the verifier reads first",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "done.md close out"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-builder",
+      "stage": "all",
+      "audience": "builder",
+      "lessons": [
+        "LA-07",
+        "LA-21"
+      ],
+      "content_sha256": "cc4eaa6d2fd41c3c3a20f27e48fea4ade60977e38a39cf3980d899356121e529",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119530,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-planted-failure",
+      "path": "prompts/app-sub-planted-failure/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: show a check can go red by planting a defect with byte-movement proof",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "planted failure proof"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-verifier",
+      "stage": "verify-qa",
+      "audience": "verifier",
+      "lessons": [
+        "LA-27"
+      ],
+      "content_sha256": "c3df446d52b40c9ed3f9c5899f981c0d31b3c63ffcf597ffbdcce6c114f4077d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119543,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-assertion-lint",
+      "path": "prompts/app-sub-assertion-lint/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: lint a test runner for assertion verbs and hardcoded pass literals before quoting its counts",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "assertion verbs lint"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-verifier",
+      "stage": "verify-qa",
+      "audience": "verifier",
+      "lessons": [
+        "LA-20",
+        "LA-34"
+      ],
+      "content_sha256": "8b48982034076bacafc3195c6be1c3ef58de34d32e46a7f3a5630b2b29b1687d",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119526,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-persistence-readback",
+      "path": "prompts/app-sub-persistence-readback/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: check each persisted record through a second path and show background work runs with a forced-due fixture",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "persistence readback check"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-verifier",
+      "stage": "verify-qa",
+      "audience": "verifier",
+      "lessons": [
+        "LA-05",
+        "LA-24"
+      ],
+      "content_sha256": "9c983173004bf3d7a608e9e2b9de1e7b21d7339c3082a09471ae7d1cb8c53df0",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119542,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-real-screen-capture",
+      "path": "prompts/app-sub-real-screen-capture/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: capture real screens from the production build or a cold simulator for the UI judge",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "capture real screens"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-ui-judge",
+      "stage": "design-ux",
+      "audience": "ui-judge",
+      "lessons": [
+        "LA-15",
+        "LA-16",
+        "LA-17",
+        "LA-23"
+      ],
+      "content_sha256": "673e3e4d2d576a4f12098f6838f52dde208c5f762903574cd4f1ac151a60e37f",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119545,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "app-sub-typed-lesson",
+      "path": "prompts/app-sub-typed-lesson/prompt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "App Studio sub-prompt: write one typed lesson line for the App Studio ledger that validates and fires",
+      "category": "app-studio",
+      "domain": "app-studio",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: capabilities/prompts/composition/app-studio.md",
+      "triggers": [
+        "typed lesson format"
+      ],
+      "compose": [
+        "when-shipping-code/app-studio",
+        "capabilities/prompts/composition/app-studio.md"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated",
+      "tier": "sub",
+      "parent": "app-studio-lesson-filer",
+      "stage": "operate-learn",
+      "audience": "lesson-filer",
+      "lessons": [
+        "LA-28",
+        "LA-30"
+      ],
+      "content_sha256": "e8d1665d98a3d31bba9b12ce82a26062acd9d7937a01ace001d1f7538aa9ea6b",
+      "jev": {
+        "rubric": "app.prompt",
+        "decision_id": 119552,
+        "verdict": "PASS"
+      }
+    },
+    {
+      "id": "rig-hq-meta-career",
+      "path": "prompts/rig-hq/meta/career.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Career: J7 pipeline, prep and follow-ups that convert screens into offers",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/career.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "career meta prompt",
+        "job search",
+        "applications",
+        "resume",
+        "interview prep",
+        "recruiters"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Career",
+      "agent": "julie-job-search",
+      "parent": "none",
+      "content_sha256": "049a17d64d57bd67219710724f5c37903e31514fc1c7c297e3b4bd390c387e6a"
+    },
+    {
+      "id": "rig-hq-meta-engineering-tac-os",
+      "path": "prompts/rig-hq/meta/engineering-tac-os.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Engineering (TAC OS): J12 build/code and J2 watch/verify with one builder, an independent verifier and stop-before-ship",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/engineering-tac-os.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "engineering meta prompt",
+        "build this",
+        "fix this repo",
+        "verify the build",
+        "what is left to do",
+        "prove it is done"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-jr-ai-engineering",
+      "parent": "none",
+      "content_sha256": "ee330c697f0211449e966bf39d2707a8f409e5efb31359efe290bd8442dd2e64"
+    },
+    {
+      "id": "rig-hq-meta-growth-content",
+      "path": "prompts/rig-hq/meta/growth-and-content.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Growth & Content: J6 right-lane voice, queue and numbers across LinkedIn, Instagram and film",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/growth-and-content.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "growth content meta prompt",
+        "linkedin lane",
+        "content queue",
+        "post this",
+        "hooks",
+        "video"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Growth & Content",
+      "agent": "steve-content",
+      "parent": "none",
+      "content_sha256": "91fe0aaae8d47b5db5b8ce21cc889540f0ea93623715ca5d46f94f916f12f363"
+    },
+    {
+      "id": "rig-hq-meta-intelligence",
+      "path": "prompts/rig-hq/meta/intelligence.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Intelligence: J4 sourced recall and J5 visible process design",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/intelligence.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "intelligence meta prompt",
+        "recall",
+        "remember this",
+        "push to memory os",
+        "design the process",
+        "research this"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Intelligence",
+      "agent": "iris-strategy",
+      "parent": "none",
+      "content_sha256": "b22b48590228e49f88b86c4fa368e9a3223d63898f93446a45c446f9b23c0861"
+    },
+    {
+      "id": "rig-hq-meta-office-of-the-ceo",
+      "path": "prompts/rig-hq/meta/office-of-the-ceo.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Office of the CEO: J1 day triage, J3 approvals and gates, J10 voice capture, J13 unattended runs, plus the draft-only Jacob lane J9",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/office-of-the-ceo.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "office of the ceo meta prompt",
+        "what needs me today",
+        "triage the day",
+        "gate d approvals",
+        "run unattended"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "none",
+      "content_sha256": "f5c2d170052ca021a7d5f03e29f3ca5b5994057fdb0c2514cf431444097d8a38"
+    },
+    {
+      "id": "rig-hq-meta-ops-fleet-security",
+      "path": "prompts/rig-hq/meta/ops-fleet-and-security.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Ops, Fleet & Security: J11 model and node reliability, routing around failures, secret and dependency hygiene",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/ops-fleet-and-security.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "ops fleet security meta prompt",
+        "model routing",
+        "node down",
+        "fallback lane",
+        "secret sweep",
+        "fleet health"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Ops, Fleet & Security",
+      "agent": "otto-operations",
+      "parent": "none",
+      "content_sha256": "2a145d75b11321c57b8e59dc41662df5785e5a8baa0b5a28fdbfd73ecb27d462"
+    },
+    {
+      "id": "rig-hq-meta-revenue",
+      "path": "prompts/rig-hq/meta/revenue.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Operating meta-prompt for Revenue: J8 offers, pipeline and outreach toward the first paying RIG client, with cold-send safety gates",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/meta/revenue.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "revenue meta prompt",
+        "gtm",
+        "outreach",
+        "pipeline",
+        "offers",
+        "first paying client"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design from OMP chat patterns, Reese JTBD layers, team-plan.json | uncalibrated draft | PROMPT-DESIGN.md field justifications",
+      "tier": "meta",
+      "department": "Revenue",
+      "agent": "darius-gtm",
+      "parent": "none",
+      "content_sha256": "31d8b168138d85ab52ab937978290500c3fbee8b270e4560de58384ce3978c62"
+    },
+    {
+      "id": "rig-hq-prompt-alfred-linkedin-cron",
+      "path": "prompts/rig-hq/prompts/alfred-linkedin-cron.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for alfred-linkedin-cron: scheduled drafting pipeline that produces drafts on a cadence and never publishes",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/alfred-linkedin-cron.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "alfred cron",
+        "scheduled drafts",
+        "daily linkedin draft cycle"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Growth & Content",
+      "agent": "alfred-linkedin-cron",
+      "parent": "rig-hq-meta-growth-content",
+      "content_sha256": "445fae74a06cd2c1ad4aa3a140744bc145a88e34a92447811b5715f49113cc02"
+    },
+    {
+      "id": "rig-hq-prompt-clara-customer-success",
+      "path": "prompts/rig-hq/prompts/clara-customer-success.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for clara-customer-success: onboarding, health and expansion signals once a client exists",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/clara-customer-success.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "clara",
+        "customer success",
+        "onboarding",
+        "churn risk",
+        "expansion signal"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Revenue",
+      "agent": "clara-customer-success",
+      "parent": "rig-hq-meta-revenue",
+      "content_sha256": "ab0f95662064b88ba6e7e439980e9d94ebb8c6a6db524a8e84124620aa1de728"
+    },
+    {
+      "id": "rig-hq-prompt-daphne-avis",
+      "path": "prompts/rig-hq/prompts/daphne-avis.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for daphne-avis: chief-of-staff drafting of decisions, briefs and exact-value approval packets",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/daphne-avis.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "daphne",
+        "draft the decision packet",
+        "approval packet",
+        "morning brief",
+        "chief of staff draft"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Office of the CEO",
+      "agent": "daphne-avis",
+      "parent": "rig-hq-meta-office-of-the-ceo",
+      "content_sha256": "977d45cabb98f37d6859f6ef38f418048e8b245afbf9811f3ff16a621c9f8d20"
+    },
+    {
+      "id": "rig-hq-prompt-darius-gtm",
+      "path": "prompts/rig-hq/prompts/darius-gtm.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for darius-gtm: revenue-motion owner — offers, pipeline and outreach toward the first paying RIG client",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/darius-gtm.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "darius gtm",
+        "revenue motion",
+        "offers and pipeline",
+        "gtm plan"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Revenue",
+      "agent": "darius-gtm",
+      "parent": "rig-hq-meta-revenue",
+      "content_sha256": "15047b08db80101a6cd6567488f42545948b64505cdfc34aedb6a19531fbbf81"
+    },
+    {
+      "id": "rig-hq-prompt-darius-sales",
+      "path": "prompts/rig-hq/prompts/darius-sales.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for darius-sales: outbound prospecting, scoring and reply ops (drafts; sends gated)",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/darius-sales.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "darius sales",
+        "prospect list",
+        "cold email draft",
+        "reply draft",
+        "score these accounts"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Revenue",
+      "agent": "darius-sales",
+      "parent": "rig-hq-meta-revenue",
+      "content_sha256": "59c857704374f27d23b76c634e95b79a6cb6b44b017cb2bedb81e221ab922ece"
+    },
+    {
+      "id": "rig-hq-prompt-eleanor-finance",
+      "path": "prompts/rig-hq/prompts/eleanor-finance.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for eleanor-finance: spend, budgets and cost-per-run with receipts",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/eleanor-finance.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "eleanor finance",
+        "spend report",
+        "budget cap",
+        "cost per run"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Ops, Fleet & Security",
+      "agent": "eleanor-finance",
+      "parent": "rig-hq-meta-ops-fleet-security",
+      "content_sha256": "bc1325f9dc0330c7896ce3dda9e93f7ccf384b85556118fba98d6d3d1293c111"
+    },
+    {
+      "id": "rig-hq-prompt-george-application-engineering",
+      "path": "prompts/rig-hq/prompts/george-application-engineering.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for george-application-engineering: app-layer slices — data, backend, integrations",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/george-application-engineering.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "george",
+        "backend slice",
+        "data layer",
+        "integration",
+        "api endpoint"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Engineering (TAC OS)",
+      "agent": "george-application-engineering",
+      "parent": "rig-hq-meta-engineering-tac-os",
+      "content_sha256": "fbbf21ab980c78d014c9d6f37c4db5864997b3d4fd2bbfa6f2734a581c273b68"
+    },
+    {
+      "id": "rig-hq-prompt-iris-jr-os-intelligence",
+      "path": "prompts/rig-hq/prompts/iris-jr-os-intelligence.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for iris-jr-os-intelligence: estate knowledge — what RIG already knows, built and decided",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/iris-jr-os-intelligence.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "iris jr",
+        "what does rig already have",
+        "estate inventory",
+        "prior art check"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Intelligence",
+      "agent": "iris-jr-os-intelligence",
+      "parent": "rig-hq-meta-intelligence",
+      "content_sha256": "c695de0e0dce6f2ecd0783dc2333b0f0fea664c84ab116bf55713e5ed3bb7471"
+    },
+    {
+      "id": "rig-hq-prompt-iris-sr-research",
+      "path": "prompts/rig-hq/prompts/iris-sr-research.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for iris-sr-research: deep research with a 4-tier source map and per-claim weights",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/iris-sr-research.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "iris research",
+        "deep research",
+        "source this claim",
+        "research dossier"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Intelligence",
+      "agent": "iris-sr-research",
+      "parent": "rig-hq-meta-intelligence",
+      "content_sha256": "5e1b7563fbc1d0893db882dc8dea8894fb636a32a2a3ae66778f32a74d826a1d"
+    },
+    {
+      "id": "rig-hq-prompt-iris-strategy",
+      "path": "prompts/rig-hq/prompts/iris-strategy.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for iris-strategy: evidence discipline owner — recall first, sources always, maps that expose gaps",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/iris-strategy.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "iris strategy",
+        "what do we already know",
+        "decision research",
+        "design the process"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Intelligence",
+      "agent": "iris-strategy",
+      "parent": "rig-hq-meta-intelligence",
+      "content_sha256": "b0aa3aa4227672edec202430500e81aaae624ecf34a73bacaf87bdf98c4867b7"
+    },
+    {
+      "id": "rig-hq-prompt-jacob-lane-draft",
+      "path": "prompts/rig-hq/prompts/jacob-lane-draft.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Draft-only prompt for Jacob's lane (J9): film, Hudl, recruiting and minor-lane content, held for Mike's yes every time",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/jacob-lane-draft.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "jacob lane",
+        "jacob film",
+        "hudl clip",
+        "pewaukee",
+        "jacob content draft"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | team-plan.json lane_c | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Office of the CEO",
+      "agent": "none (draft-only lane)",
+      "parent": "rig-hq-meta-office-of-the-ceo",
+      "content_sha256": "4d6a056fbebd099678c94e16754d2fd5ece823e3f5a17bf228d665d0f5685ffd"
+    },
+    {
+      "id": "rig-hq-prompt-jordan-app",
+      "path": "prompts/rig-hq/prompts/jordan-app.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for jordan-app: the single builder who writes code in the named worktree",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/jordan-app.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "jordan app",
+        "build the slice",
+        "implement the plan",
+        "fix in this repo"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-app",
+      "parent": "rig-hq-meta-engineering-tac-os",
+      "content_sha256": "c38c2fd0a34c6bbab8dd4323006c02054f3cf98d5ec773ea1cd9e9703f171cbe"
+    },
+    {
+      "id": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "path": "prompts/rig-hq/prompts/jordan-jr-ai-engineering.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for jordan-jr-ai-engineering: engineering orchestrator that scouts, plans, dispatches one builder and stops before ship",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/jordan-jr-ai-engineering.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "jordan jr",
+        "engineering orchestrator",
+        "scout and plan the build",
+        "dispatch the builder"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-jr-ai-engineering",
+      "parent": "rig-hq-meta-engineering-tac-os",
+      "content_sha256": "192a4939d04fc54c02dc2a428ed7bdcafe087c2c5daf7da91f207323ca3f2917"
+    },
+    {
+      "id": "rig-hq-prompt-julie-job-search",
+      "path": "prompts/rig-hq/prompts/julie-job-search.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for julie-job-search: application-first search owner — truthful packets, receipts, follow-ups",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/julie-job-search.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "julie",
+        "job search",
+        "applications pipeline",
+        "apply to these roles"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Career",
+      "agent": "julie-job-search",
+      "parent": "rig-hq-meta-career",
+      "content_sha256": "337815a3b1891c0f2c1a0e73601afa332dd6d5afc3f6f05fc6c2a746aad3cceb"
+    },
+    {
+      "id": "rig-hq-prompt-madison-recruiting",
+      "path": "prompts/rig-hq/prompts/madison-recruiting.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for madison-recruiting: recruiter and agency sourcing, outreach drafts and follow-up cadence",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/madison-recruiting.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "madison",
+        "recruiters",
+        "agency outreach",
+        "recruiter message draft"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Career",
+      "agent": "madison-recruiting",
+      "parent": "rig-hq-meta-career",
+      "content_sha256": "0453e1f8a858f73329fce806d1c1ada4deca3142a8b8f775a71a7daeb550c9a2"
+    },
+    {
+      "id": "rig-hq-prompt-marcus-film",
+      "path": "prompts/rig-hq/prompts/marcus-film.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for marcus-film: film and short-video production briefs and cuts (draft side, published only with approval)",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/marcus-film.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "marcus film",
+        "video brief",
+        "short film",
+        "shot list",
+        "video cut"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Growth & Content",
+      "agent": "marcus-film",
+      "parent": "rig-hq-meta-growth-content",
+      "content_sha256": "8c3eaa1a0fcd6665bb8258ac7c3744dcf0780301138436434c673369c43b7f31"
+    },
+    {
+      "id": "rig-hq-prompt-nadia-data",
+      "path": "prompts/rig-hq/prompts/nadia-data.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for nadia-data: data pipelines, measurement and numbers with named sources",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/nadia-data.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "nadia",
+        "data pipeline",
+        "measurement",
+        "the numbers",
+        "dataset check"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Intelligence",
+      "agent": "nadia-data",
+      "parent": "rig-hq-meta-intelligence",
+      "content_sha256": "cf747070c66c2244de89e20ed3656fbd1cf1647c21b61292c3ce925951c0998c"
+    },
+    {
+      "id": "rig-hq-prompt-nico-instagram",
+      "path": "prompts/rig-hq/prompts/nico-instagram.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for nico-instagram: adapting proven assets into the Instagram lane without voice drift",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/nico-instagram.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "nico instagram",
+        "instagram adaptation",
+        "repurpose to instagram"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Growth & Content",
+      "agent": "nico-instagram",
+      "parent": "rig-hq-meta-growth-content",
+      "content_sha256": "94fbb3f6618e4458fe672e1bede5c273ed3ec64872df9e223da36b17a16e9dc8"
+    },
+    {
+      "id": "rig-hq-prompt-opal-product",
+      "path": "prompts/rig-hq/prompts/opal-product.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for opal-product: product scoping — outcome, acceptance, cut lines before a build starts",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/opal-product.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "opal",
+        "scope this",
+        "acceptance criteria",
+        "cut line",
+        "what does done look like"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Engineering (TAC OS)",
+      "agent": "opal-product",
+      "parent": "rig-hq-meta-engineering-tac-os",
+      "content_sha256": "c96a4685a1c484eb379a9897be777e331d869803c92dede5bb10c724c0eadeae"
+    },
+    {
+      "id": "rig-hq-prompt-otto-operations",
+      "path": "prompts/rig-hq/prompts/otto-operations.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for otto-operations: fleet and model reliability — probe first, route around failures, receipt everything",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/otto-operations.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "otto operations",
+        "fleet health",
+        "lane died",
+        "model routing fix"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Ops, Fleet & Security",
+      "agent": "otto-operations",
+      "parent": "rig-hq-meta-ops-fleet-security",
+      "content_sha256": "5e123715d5d7acbfb5b779bdab08d2d91fe461386da2d8c0e2e5753ada88f3d8"
+    },
+    {
+      "id": "rig-hq-prompt-pedro-partnerships",
+      "path": "prompts/rig-hq/prompts/pedro-partnerships.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for pedro-partnerships: partner sourcing and co-sell motions with measurable sourced revenue",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/pedro-partnerships.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "pedro",
+        "partnerships",
+        "co-sell",
+        "partner outreach",
+        "channel partner"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Revenue",
+      "agent": "pedro-partnerships",
+      "parent": "rig-hq-meta-revenue",
+      "content_sha256": "b0fbe58d330f2d4fbf9c89c63f8b3fe8a5aa8adb118427e8e1e7bd37e6132f7f"
+    },
+    {
+      "id": "rig-hq-prompt-prime-jake-pai",
+      "path": "prompts/rig-hq/prompts/prime-jake-pai.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for prime-jake-pai: CEO-office orchestrator that routes, gates and remembers every run",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/prime-jake-pai.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "prime jake",
+        "orchestrate the day",
+        "jake ceo",
+        "what needs mike"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-meta-office-of-the-ceo",
+      "content_sha256": "bedc87920dcc426b9577390c832ec28182c1989ae63b871a1518b17729bfa888"
+    },
+    {
+      "id": "rig-hq-prompt-ralph-linkedin",
+      "path": "prompts/rig-hq/prompts/ralph-linkedin.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for ralph-linkedin: LinkedIn hooks, posts and comment drafts in the right lane voice",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/ralph-linkedin.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "ralph linkedin",
+        "linkedin post draft",
+        "hooks",
+        "linkedin comment draft"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Growth & Content",
+      "agent": "ralph-linkedin",
+      "parent": "rig-hq-meta-growth-content",
+      "content_sha256": "476cd63ef8d1a3156758fcd5aefa945198dfe0a26f3fcbaaa423cde4176f3134"
+    },
+    {
+      "id": "rig-hq-prompt-steve-content",
+      "path": "prompts/rig-hq/prompts/steve-content.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for steve-content: content-engine owner with lane discipline across LinkedIn, Instagram and film",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/steve-content.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "steve content",
+        "content engine",
+        "lane voice",
+        "content plan"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Growth & Content",
+      "agent": "steve-content",
+      "parent": "rig-hq-meta-growth-content",
+      "content_sha256": "680a6549bfce74caaaa02a745f2ed89dc1cbffc54121866a2f8d56ea1f0e9462"
+    },
+    {
+      "id": "rig-hq-prompt-theo-design",
+      "path": "prompts/rig-hq/prompts/theo-design.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for theo-design: design judgment on user-facing surfaces before and after implementation",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/theo-design.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "theo",
+        "design review",
+        "ui surface",
+        "ux flow",
+        "visual check"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Engineering (TAC OS)",
+      "agent": "theo-design",
+      "parent": "rig-hq-meta-engineering-tac-os",
+      "content_sha256": "9d4113bfb2174decb8157fe3d36e6b2742476062a24ca2b84a0cbeae6af518de"
+    },
+    {
+      "id": "rig-hq-prompt-vera-security",
+      "path": "prompts/rig-hq/prompts/vera-security.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Role prompt for vera-security: secret-leak sweeps and dependency vulnerability triage with fail-closed redaction",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/prompts/vera-security.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "vera security",
+        "secret sweep",
+        "vulnerability triage",
+        "credential hygiene"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md A1-A13",
+      "tier": "prompt",
+      "department": "Ops, Fleet & Security",
+      "agent": "vera-security",
+      "parent": "rig-hq-meta-ops-fleet-security",
+      "content_sha256": "25646d8c5f71a4948bcf8c074f307b60fed7ea48e1f3ff8a8eb6b0cdb29de5b8"
+    },
+    {
+      "id": "rig-hq-sub-j7-application-batch",
+      "path": "prompts/rig-hq/sub/career-application-batch.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J7): one application batch — tailor, verify claims, receipt",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/career-application-batch.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J7)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "application batch",
+        "apply to these roles",
+        "tailor the resume"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Career",
+      "agent": "julie-job-search",
+      "parent": "rig-hq-prompt-julie-job-search",
+      "content_sha256": "684fcceb26cc6faf7df1195c9f54c3f7ab78e838a681f5f0a2dc79781a2ac842"
+    },
+    {
+      "id": "rig-hq-sub-j7-1-an-interview-gets-booked",
+      "path": "prompts/rig-hq/sub/career-interview-booked.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J7): an interview gets booked — build the prep pack and run a mock",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/career-interview-booked.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J7 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "interview booked",
+        "interview prep",
+        "interview scheduled"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J7 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Career",
+      "agent": "julie-job-search",
+      "parent": "rig-hq-prompt-julie-job-search",
+      "content_sha256": "73821b223dee157f26bddb9dcb39ab3f30fea5f6e9ca64663897bd5fb0ec20c9"
+    },
+    {
+      "id": "rig-hq-sub-j7-2-screens-stop-converting",
+      "path": "prompts/rig-hq/sub/career-screens-stop-converting.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J7): screens stop converting — find the stage that leaks",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/career-screens-stop-converting.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J7 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "screens not converting",
+        "stalled funnel",
+        "no callbacks"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J7 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Career",
+      "agent": "madison-recruiting",
+      "parent": "rig-hq-prompt-julie-job-search",
+      "content_sha256": "c831e9b93b33f66145c9b3139dca9c183e19a56e4a7ef3c0e3b5e3d6b05890f6"
+    },
+    {
+      "id": "rig-hq-sub-j12-build-slice",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-build-slice.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J12): build one checked plan slice with real check output",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-build-slice.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J12)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "build slice",
+        "implement this plan",
+        "code this"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-app",
+      "parent": "rig-hq-prompt-jordan-app",
+      "content_sha256": "00b46427d9c3cd5eaa5a4f62f1a678470eb96b66a7e3895ec8e6b4c66b5d358e"
+    },
+    {
+      "id": "rig-hq-sub-j2-1-a-builder-goes-silent",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-builder-silent.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J2): a builder goes silent — read its log, name the death cause, relaunch once on a probed lane",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-builder-silent.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J2 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "builder silent",
+        "worker stalled",
+        "no output",
+        "build hung"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J2 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-jr-ai-engineering",
+      "parent": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "content_sha256": "9391744ff309b56b033eeee493ae726b593d304a16a723ac3cad71e3899770b8"
+    },
+    {
+      "id": "rig-hq-sub-j2-2-a-claim-of-done-has-no-receipt",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-done-no-receipt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J2): a claim of done has no receipt — refuse it and file a Windshield card",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-done-no-receipt.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J2 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "done claim no receipt",
+        "unevidenced done",
+        "badge not work"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J2 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "george-application-engineering",
+      "parent": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "content_sha256": "df0645577a97b6c3afdbd612f0cf98063e0935a93c659d42d5125b63c68e0dba"
+    },
+    {
+      "id": "rig-hq-sub-j12-1-a-gate-goes-red",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-gate-red.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J12): a gate goes red — re-prompt the same builder with the evidence, max 3, then Windshield",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-gate-red.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J12 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "gate red",
+        "check failed",
+        "red verify",
+        "failing gate"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J12 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-app",
+      "parent": "rig-hq-prompt-jordan-app",
+      "content_sha256": "1d7da4ab820553623f241065846b5a6896c3fae7c246481b2599e69901689159"
+    },
+    {
+      "id": "rig-hq-sub-j12-2-a-lesson-matches-a-new-task",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-lesson-matches-task.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J12): a lesson matches a new task — make its check required on the run",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-lesson-matches-task.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J12 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "lesson matches task",
+        "apply the lesson",
+        "lessons ledger hit"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J12 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-jr-ai-engineering",
+      "parent": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "content_sha256": "d69d23830c3932aeecb79e0a6e4121d976cca1c9a0dbc46ddd754b163b23952e"
+    },
+    {
+      "id": "rig-hq-sub-j2-3-a-model-drifts-to-flash",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-model-drift-flash.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J2): a model drifts to Flash — pin the session back and log it",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-model-drift-flash.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J2 interrupt 3)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (homophones",
+        "model routing)"
+      ],
+      "triggers": [
+        "model drift",
+        "flash model",
+        "wrong model bound",
+        "route drift"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J2 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "jordan-jr-ai-engineering",
+      "parent": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "content_sha256": "170f5b31dda7e8c50dde3cf66c5df90f07d68185fa61debcc5d41700b8b4a4d7"
+    },
+    {
+      "id": "rig-hq-sub-j2-verify-receipt",
+      "path": "prompts/rig-hq/sub/engineering-tac-os-verify-receipt.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J2): verify a claim of done independently and issue or refuse the receipt",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/engineering-tac-os-verify-receipt.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J2)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "verify done",
+        "prove it",
+        "is it done",
+        "independent verification"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Engineering (TAC OS)",
+      "agent": "george-application-engineering",
+      "parent": "rig-hq-prompt-jordan-jr-ai-engineering",
+      "content_sha256": "e56dc75cc6b522db2be443540381e75725f14e446bc540eb9d9dc9870d88f77a"
+    },
+    {
+      "id": "rig-hq-sub-j6-2-the-calendar-runs-thin",
+      "path": "prompts/rig-hq/sub/growth-content-calendar-thin.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J6): the calendar runs thin — fill next week, schedule only after Mike's yes",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/growth-content-calendar-thin.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J6 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "calendar thin",
+        "queue running out",
+        "fill the content calendar"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J6 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Growth & Content",
+      "agent": "ralph-linkedin",
+      "parent": "rig-hq-prompt-steve-content",
+      "content_sha256": "644b2cdb7e613a84a35b8356a1b1809cc63797f7792665b7bbbad6f83e7b799a"
+    },
+    {
+      "id": "rig-hq-sub-j6-3-comments-flood-in",
+      "path": "prompts/rig-hq/sub/growth-content-comments-flood.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J6): comments flood in — draft replies for Mike's yes",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/growth-content-comments-flood.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J6 interrupt 3)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "comments flooded",
+        "reply backlog",
+        "many comments"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J6 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Growth & Content",
+      "agent": "ralph-linkedin",
+      "parent": "rig-hq-prompt-steve-content",
+      "content_sha256": "b458cb020bee839fbce4d15b31034193d9de7a9e553d3147e63f429a0c0972ae"
+    },
+    {
+      "id": "rig-hq-sub-j6-post-cycle",
+      "path": "prompts/rig-hq/sub/growth-content-post-cycle.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J6): one content cycle — lane call, hooks, draft, gate",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/growth-content-post-cycle.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J6)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "content cycle",
+        "write a post",
+        "draft this content",
+        "hooks for this"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Growth & Content",
+      "agent": "ralph-linkedin",
+      "parent": "rig-hq-prompt-steve-content",
+      "content_sha256": "853105d3b83f9e36efebbb6c1de82b36aa2c81320e1c8277ef4298897d1e9dee"
+    },
+    {
+      "id": "rig-hq-sub-j6-1-a-post-takes-off",
+      "path": "prompts/rig-hq/sub/growth-content-post-takes-off.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J6): a post takes off — repurpose it and ask about a boost",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/growth-content-post-takes-off.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J6 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "post took off",
+        "going viral",
+        "spike in impressions"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J6 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Growth & Content",
+      "agent": "steve-content",
+      "parent": "rig-hq-prompt-steve-content",
+      "content_sha256": "4fbdb5c318f5e330df4bc924e29e383b91fb219026d8df0e04aebc7a8aa03c44"
+    },
+    {
+      "id": "rig-hq-sub-j4-1-an-answer-has-no-source",
+      "path": "prompts/rig-hq/sub/intelligence-answer-no-source.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J4): an answer has no source — send it back for a cited retry",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/intelligence-answer-no-source.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J4 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "unsourced answer",
+        "no citation",
+        "claim without evidence"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J4 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Intelligence",
+      "agent": "iris-sr-research",
+      "parent": "rig-hq-prompt-iris-strategy",
+      "content_sha256": "cf26382570819d34fcf3921e8eea4f013e330a52eb8749f4a8aea76406f44c38"
+    },
+    {
+      "id": "rig-hq-sub-j5-1-a-map-has-red-links",
+      "path": "prompts/rig-hq/sub/intelligence-map-red-links.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J5): a map has red links — file build cards to turn them green",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/intelligence-map-red-links.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J5 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "red links",
+        "map gaps",
+        "unresolved links in the map"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J5 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Intelligence",
+      "agent": "nadia-data",
+      "parent": "rig-hq-prompt-iris-strategy",
+      "content_sha256": "8b430349664c8897f88c0109781ddfe1956bede90693f2c197de2cd9a79ddba0"
+    },
+    {
+      "id": "rig-hq-sub-j5-process-map",
+      "path": "prompts/rig-hq/sub/intelligence-process-map.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J5): lay a fuzzy idea out as a visible, editable process map with its gaps named",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/intelligence-process-map.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J5)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "process map",
+        "design it out visually",
+        "system map",
+        "canvas the process"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Intelligence",
+      "agent": "iris-strategy",
+      "parent": "rig-hq-prompt-iris-strategy",
+      "content_sha256": "5f69483ddc3e578f85cd63c11d8da3df5b69278986234daf1b52fedcdc8044ee"
+    },
+    {
+      "id": "rig-hq-sub-j4-recall-first",
+      "path": "prompts/rig-hq/sub/intelligence-recall-first.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J4): surface what is already saved and decided, with sources, before anything new",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/intelligence-recall-first.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J4)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "recall first",
+        "what do we already know",
+        "prior decision",
+        "saved knowledge"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Intelligence",
+      "agent": "iris-strategy",
+      "parent": "rig-hq-prompt-iris-strategy",
+      "content_sha256": "8f1b7eaba5d8c24173c1a7f337dab33665ebb7cbc629ae42a1dfefbd31c11924"
+    },
+    {
+      "id": "rig-hq-sub-j4-2-recall-api-lags-the-app-853-vs-2",
+      "path": "prompts/rig-hq/sub/intelligence-recall-lags.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J4): recall API lags the app (853 vs 21,987) — flag the gap and route to the app export",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/intelligence-recall-lags.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J4 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "recall lag",
+        "recall api gap",
+        "memory index stale"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J4 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Intelligence",
+      "agent": "iris-jr-os-intelligence",
+      "parent": "rig-hq-prompt-iris-strategy",
+      "content_sha256": "650cccb012fd94da507574a9a43db96c82d88f5ccc348564d9fe8d65c9bfcf29"
+    },
+    {
+      "id": "rig-hq-sub-j3-approval-gate",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-approval-gate.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J3): one-tap approve/deny packets for outward actions with exact values",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-approval-gate.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J3)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "approval packet",
+        "gate d",
+        "approve or deny",
+        "outward action"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "29af3cfaed336219e6fe9dbdc15b0467b0c075512998928732ba628b809d9a55"
+    },
+    {
+      "id": "rig-hq-sub-j1-1-an-approval-sits-over-24h",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-approval-over-24h.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J1): an approval sits over 24h — re-surface it at the top of Today with a recommendation",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-approval-over-24h.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J1 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "approval over 24h",
+        "stale approval",
+        "old gate request"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J1 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "af3fa12a67a07f1144ea05620897dd18c3c33b5b40aad99057003224505fc22c"
+    },
+    {
+      "id": "rig-hq-sub-j3-1-a-card-has-no-exact-values",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-card-no-exact-values.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J3): a card has no exact values — block it before it reaches Mike",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-card-no-exact-values.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J3 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "card no exact values",
+        "vague approval card",
+        "missing values"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J3 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "daphne-avis",
+      "parent": "rig-hq-prompt-daphne-avis",
+      "content_sha256": "ec3212ee36624bd577f475627a9fbb9830f91f2b4ba37ecc21f614f15b27f033"
+    },
+    {
+      "id": "rig-hq-sub-j1-2-a-day-is-overloaded",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-day-overloaded.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J1): a day is overloaded — cut to 3 items and park the rest",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-day-overloaded.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J1 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "day overloaded",
+        "too much work",
+        "collapsing",
+        "cut the day down"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J1 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "d9fca76fadf5fd469a130d51a22cecb538ee436e1eaacd97b8ef0e0f0577cf93"
+    },
+    {
+      "id": "rig-hq-sub-j1-day-triage",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-day-triage.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J1): turn the morning noise into the short list that actually needs Mike",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-day-triage.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J1)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "day triage",
+        "what do we accomplish today",
+        "what needs me",
+        "top 3 today"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "3a245bf47a9ca94f9690278b196aa3702c024e3c15f4c4a60a23352a74fd47ba"
+    },
+    {
+      "id": "rig-hq-sub-j10-1-a-dictated-name-matches-nothing",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-dictated-name-matches-nothing.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J10): a dictated name matches nothing — test homophones before filing",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-dictated-name-matches-nothing.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J10 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (section 5)"
+      ],
+      "triggers": [
+        "unknown name in dictation",
+        "name matches nothing",
+        "homophone"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J10 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "daphne-avis",
+      "parent": "rig-hq-prompt-daphne-avis",
+      "content_sha256": "4982d7e7da6428514be8d837fc304eb02010c903e2947165bc57eb92568dcf49"
+    },
+    {
+      "id": "rig-hq-sub-j9-1-signed-in-handle-does-not-match",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-handle-mismatch.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J9): the signed-in handle does not match — everything halts",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-handle-mismatch.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J9 interrupt 1)",
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json lane_c"
+      ],
+      "triggers": [
+        "handle mismatch",
+        "wrong account signed in",
+        "jacob handle assert failed"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J9 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "none (draft-only lane)",
+      "parent": "rig-hq-prompt-jacob-lane-draft",
+      "content_sha256": "3dcd98982a1edb8d6cada85cb2518e4f5986a0a8e884fee29fe0a3944270e4f2"
+    },
+    {
+      "id": "rig-hq-sub-j9-jacob-draft",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-jacob-draft.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J9): produce one Jacob-lane draft and hold it for Mike",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-jacob-draft.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json (J9)",
+        "~/.rig/jake/aos/maps/aside-links/team-plan.json lane_c"
+      ],
+      "triggers": [
+        "jacob draft",
+        "draft jacob clip",
+        "jacob lane artifact"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "none (draft-only lane)",
+      "parent": "rig-hq-prompt-jacob-lane-draft",
+      "content_sha256": "7f61882e6bd02ea7b37d6d210f043c742bc769c05ae79b8f95ac5f7b26cd0bfc"
+    },
+    {
+      "id": "rig-hq-sub-j13-1-a-loop-spends-past-its-cap",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-loop-past-cap.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J13): a loop spends past its cap — pause it and ask Mike",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-loop-past-cap.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J13 interrupt 1)",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json governance_gap"
+      ],
+      "triggers": [
+        "budget cap exceeded",
+        "loop spending",
+        "runaway spend"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J13 interrupt + governance_gap | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "d0ce714cc7aa5ab8f29cf739f9bed05f88fd8b1723b67c7c275364e9f4fa2a9b"
+    },
+    {
+      "id": "rig-hq-sub-j13-2-a-routine-errors-3-times",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-routine-errors-3-times.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J13): a routine errors 3 times — the breaker pauses it",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-routine-errors-3-times.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J13 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "routine errors",
+        "three failures",
+        "breaker trip"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J13 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "d0e6216504e35a5321d99906a196f6df516be38fb07d114720ebb16de04232cd"
+    },
+    {
+      "id": "rig-hq-sub-j3-2-same-kind-approved-5-times",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-same-kind-approved-5-times.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J3): the same kind of action was approved 5 times — propose a standing yes",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-same-kind-approved-5-times.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J3 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "approved 5 times",
+        "standing approval proposal",
+        "repeated gate"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J3 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "d24b8a231346d616e12ebf0f9637f1decf3cbf2de19dd9bbb5848582ea9c4b4f"
+    },
+    {
+      "id": "rig-hq-sub-j13-unattended-run",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-unattended-run.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J13): arm an unattended run with a deadline, kill switch and budget cap",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-unattended-run.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J13)",
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json"
+      ],
+      "triggers": [
+        "run unattended",
+        "keep going until",
+        "1000x turns",
+        "overnight run"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "prime-jake-pai",
+      "parent": "rig-hq-prompt-prime-jake-pai",
+      "content_sha256": "b13c807f6df2c8e772772465f8c20b91b9e28e73349aeacf1df4b12abaf62f4f"
+    },
+    {
+      "id": "rig-hq-sub-j10-voice-capture",
+      "path": "prompts/rig-hq/sub/office-of-the-ceo-voice-capture.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J10): file and route one dictated thought without losing it",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/office-of-the-ceo-voice-capture.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J10)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "file this",
+        "note this",
+        "capture this thought",
+        "route this note"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Office of the CEO",
+      "agent": "daphne-avis",
+      "parent": "rig-hq-prompt-daphne-avis",
+      "content_sha256": "6893a425f839a91714067639844fc86b73751eaf10f6d856dec8eef20faf1582"
+    },
+    {
+      "id": "rig-hq-sub-j11-1-a-lane-dies",
+      "path": "prompts/rig-hq/sub/ops-fleet-lane-dies.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J11): a lane dies — move work to the next probed lane and file a repair card",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/ops-fleet-lane-dies.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J11 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "lane died",
+        "provider down",
+        "node offline"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J11 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Ops, Fleet & Security",
+      "agent": "otto-operations",
+      "parent": "rig-hq-prompt-otto-operations",
+      "content_sha256": "3597f180ae5ed646b4c7a224de4c3c5154ba07da73f0a3f14f3830e8a6d79d1c"
+    },
+    {
+      "id": "rig-hq-sub-j11-model-route",
+      "path": "prompts/rig-hq/sub/ops-fleet-model-route.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J11): set or repair a model/lane route with probe evidence",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/ops-fleet-model-route.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J11)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "model route",
+        "route around the failure",
+        "fix the lane",
+        "fallback chain"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Ops, Fleet & Security",
+      "agent": "otto-operations",
+      "parent": "rig-hq-prompt-otto-operations",
+      "content_sha256": "ae36a59c3e1c3e421155ee85feb2a4b7ae60416b3558440ecb1e86f73b8ad796"
+    },
+    {
+      "id": "rig-hq-sub-j11-2-a-paid-account-runs-dry",
+      "path": "prompts/rig-hq/sub/ops-fleet-paid-account-dry.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J11): a paid account runs dry — catch it with a one-token probe and stop the spend",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/ops-fleet-paid-account-dry.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J11 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "paid account dry",
+        "credits exhausted",
+        "quota out"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J11 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Ops, Fleet & Security",
+      "agent": "eleanor-finance",
+      "parent": "rig-hq-prompt-otto-operations",
+      "content_sha256": "bb980397841d76615f8ca846ddcccf95005e2b8f4466e7fea61d3473befa7e8e"
+    },
+    {
+      "id": "rig-hq-sub-j8-gtm-motion",
+      "path": "prompts/rig-hq/sub/revenue-gtm-motion.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Recurring sub-prompt (J8): run one revenue motion step — offer, list, sequence or scorecard",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/revenue-gtm-motion.md",
+      "sources": [
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md (J8)",
+        "~/.rig/jake/aos/maps/aside-links/jtbd.json"
+      ],
+      "triggers": [
+        "gtm motion",
+        "revenue step",
+        "work the pipeline",
+        "offers and outreach"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Revenue",
+      "agent": "darius-gtm",
+      "parent": "rig-hq-prompt-darius-gtm",
+      "content_sha256": "c3eccc7a35ac877c55a19cfbd66a79a092f086c1e2d22f4b2898e8bb835ce534"
+    },
+    {
+      "id": "rig-hq-sub-j8-1-a-prospect-replies",
+      "path": "prompts/rig-hq/sub/revenue-prospect-replies.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J8): a prospect replies — draft the answer and book the call only after Mike's yes",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/revenue-prospect-replies.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J8 interrupt 1)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "prospect reply",
+        "inbound reply",
+        "lead responded"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J8 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Revenue",
+      "agent": "darius-sales",
+      "parent": "rig-hq-prompt-darius-gtm",
+      "content_sha256": "f46c1a05fbf7e2929400efbac8956c29a4eee0b60cfddad3f8d5447ce5b1607a"
+    },
+    {
+      "id": "rig-hq-sub-j8-2-a-week-passes-with-no-reply",
+      "path": "prompts/rig-hq/sub/revenue-week-no-reply.md",
+      "version": 1,
+      "status": "draft",
+      "task": "Interrupt sub-prompt (J8): a week passes with no reply — change the offer or the list, not the volume",
+      "category": "rig-hq",
+      "domain": "rig-hq",
+      "model": "unspecified",
+      "score": null,
+      "license": "first-party",
+      "source": "first-party: prompts/rig-hq/sub/revenue-week-no-reply.md",
+      "sources": [
+        "~/.rig/jake/aos/maps/aside-links/reese/reese-jtbd.json (J8 interrupt 2)",
+        "~/.rig/jake/aos/prompt-research/omp-chat-patterns.md"
+      ],
+      "triggers": [
+        "week no reply",
+        "dead sequence",
+        "no responses"
+      ],
+      "added": "2026-09-28",
+      "provenance": "first-party RIG design | Reese J8 interrupt | uncalibrated draft | PROMPT-DESIGN.md S1-S10",
+      "tier": "sub",
+      "department": "Revenue",
+      "agent": "darius-gtm",
+      "parent": "rig-hq-prompt-darius-gtm",
+      "content_sha256": "c58bfa2f51b2d093881b187b3b8071739a4b3819a78d4fc529899ccca18e1bc7"
     }
   ]
 }
