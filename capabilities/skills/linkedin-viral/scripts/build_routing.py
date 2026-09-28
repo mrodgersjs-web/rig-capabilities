@@ -69,4 +69,12 @@ out += ["", "## Adjacent lanes: never route LinkedIn work here", "", "| id | why
         "| rig-instagram-growth | Instagram lane (@rodgemd1) | `~/.aside/u/0/skills/user/rig-instagram-growth/SKILL.md` |",
         "| when-selling-or-running-gtm | cold email and multi-channel GTM skills that merely mention LinkedIn (13 found in the 2026-09-28 audit) | `~/.aside/u/0/skills/user/when-selling-or-running-gtm/SKILL.md` |", ""]
 (LV / "references" / "routing.md").write_text("\n".join(out) + "\n", encoding="utf-8")
-print("routing.md lines:", len(out))
+# machine-readable copy, regenerated here so it can never drift from the stage map
+inv = [{"id": r["id"], "kind": r["kind"], "parent": r.get("parent"), "name": r.get("name", r["id"]),
+        "description": r.get("desc", ""), "canonical_path": tilde(r.get("path", "")), "installed_in": [],
+        "job": r.get("job"), "lane": r.get("lane"), "status": r.get("status"),
+        "role": r.get("role"), "stage": r.get("stage"), "focus": r.get("focus"),
+        "routable": r.get("role") in ("merge", "tool", "runner", "router", "doctrine")}
+       for r in rows]
+(LV / "references" / "inventory.json").write_text(json.dumps(inv, indent=1), encoding="utf-8")
+print("routing.md lines:", len(out), "| inventory.json rows:", len(inv))

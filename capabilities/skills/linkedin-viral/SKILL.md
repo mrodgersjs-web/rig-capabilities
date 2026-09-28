@@ -28,7 +28,7 @@ metadata:
 
 ## JEV-first mandate (read before anything else)
 
-Where this rule lives: it is repeated in this skill's description, which Claude Code, Codex, Hermes, OMP, Prime Agent and Aside load into every session at start, and Mike's always-loaded AGENTS.md sends LinkedIn work through `when-growing-social-accounts`, whose first LinkedIn route is this skill. An agent meets the rule before it touches LinkedIn work.
+Where this rule lives: Mike's always-loaded AGENTS.md states it directly in its Meta-skill first routing section ("LinkedIn work: enter through /linkedin-viral ... JEV-first mandate ... DEFERRED when the classifier is down"), so every session carries this rule from start without loading any skill; the skill description repeats it for Claude Code, Codex, Hermes, OMP, Prime Agent and Aside.
 
 Every typed judgment this skill forces goes to Jev (TypeSafe's System One) through `rig-s1gate` BEFORE any frontier LLM call. The typed judgments here: which hook wins, does a post pass, does a comment pass, which lane an ambiguous request belongs to, the most likely cause of a flop, and whether a post qualifies as a boost candidate.
 
