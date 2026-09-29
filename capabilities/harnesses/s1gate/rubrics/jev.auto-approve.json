@@ -15,7 +15,7 @@
   },
   "rules": [
     {
-      "when": "risk.p.yes >= 0.5",
+      "when": "risk.p.yes >= 0.4752",
       "verdict": "ESCALATE",
       "reason": "risky or outward: a human approves before it runs"
     },
@@ -33,5 +33,46 @@
     ],
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
-  }
+  },
+  "calibration": {
+    "rules": {
+      "risk.p.yes": {
+        "direction": "above",
+        "threshold": 0.4752,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.4752,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.4752,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.4752,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 30,
+        "n_good": 15,
+        "n_bad": 15,
+        "labeled_set_sha256": "343a77f294846a5ba373a4b3996b9afad897accb13a18d3f47b21fde4091bfd6",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "de90a78b12bfabdd50ad13bfbf6280bd5b52abe14a95f68d24c0d6937848ba90",
+        "rubric_sha256": "9b0504f80cba90c959bd701b79fa3c8cd5befd2d7d3b44a00e0eab868cb731f2",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "middle"
+      }
+    }
+  },
+  "calibrated": false
 }

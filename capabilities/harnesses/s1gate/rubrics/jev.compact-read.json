@@ -9,13 +9,13 @@
       "instructions": "Decide yes or no",
       "criteria": {
         "yes": "The new request belongs to a clearly different task domain (scheduling, gym, email, planning, a different system) and names nothing that was just on screen",
-        "no": "The request points at bytes just shown with a demonstrative — 'that line', 'that exact string', 'those exact header names', 'the file we just read', 'quote clause 4.2', 'the error above' — it needs them verbatim — any request that reuses a noun just shown (the error, the stack, the assertion, the headers, that line, that file) is no"
+        "no": "The request points at bytes just shown with a demonstrative \u2014 'that line', 'that exact string', 'those exact header names', 'the file we just read', 'quote clause 4.2', 'the error above' \u2014 it needs them verbatim \u2014 any request that reuses a noun just shown (the error, the stack, the assertion, the headers, that line, that file) is no"
       }
     }
   },
   "rules": [
     {
-      "when": "compact_is_safe.p.no >= 0.5",
+      "when": "compact_is_safe.p.no >= 0.5248",
       "verdict": "BLOCK",
       "reason": "next request needs verbatim context: keep raw, do not compact"
     },
@@ -31,5 +31,46 @@
     "removed_questions": [],
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
-  }
+  },
+  "calibration": {
+    "rules": {
+      "compact_is_safe.p.no": {
+        "direction": "above",
+        "threshold": 0.5248,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.5248,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.5248,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.5248,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 30,
+        "n_good": 15,
+        "n_bad": 15,
+        "labeled_set_sha256": "6f21057f75839e6da24eaee54877fe29c69162139f6926476376c8fc8c8df0c7",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "df2860aad5c60b3d47163ce7c841514a8974595e16cfde32e8ac72bddca0281c",
+        "rubric_sha256": "8f01798ac8d1115e88d84d76e3cea5c0c6e7f3c1d0d7f01d275fdc377a5839d8",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "middle"
+      }
+    }
+  },
+  "calibrated": false
 }

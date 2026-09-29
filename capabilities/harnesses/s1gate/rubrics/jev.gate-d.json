@@ -15,7 +15,7 @@
   },
   "rules": [
     {
-      "when": "outward_or_irreversible.p.yes >= 0.5",
+      "when": "outward_or_irreversible.p.yes >= 0.5000",
       "verdict": "ESCALATE",
       "reason": "outward or irreversible: Gate-D requires Mike's approval"
     },
@@ -33,5 +33,46 @@
     ],
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
-  }
+  },
+  "calibration": {
+    "rules": {
+      "outward_or_irreversible.p.yes": {
+        "direction": "above",
+        "threshold": 0.5,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.5,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 30,
+        "n_good": 15,
+        "n_bad": 15,
+        "labeled_set_sha256": "46908b51db97c42051fb30ed0537c905592af3e085ead88e6b4813ac6337c33e",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "ffcb4ba96b9b89fb08af7911e61a9965121be779112ab33f1c5ce8153cd4bfcd",
+        "rubric_sha256": "5e6b2c779fc8c835f4fa19853a5eee3b5813c8d84aef94989984485cf7689dd0",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "middle"
+      }
+    }
+  },
+  "calibrated": false
 }

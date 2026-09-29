@@ -15,7 +15,7 @@
   },
   "rules": [
     {
-      "when": "needs_reasoning.p.yes >= 0.5",
+      "when": "needs_reasoning.p.yes >= 0.5200",
       "verdict": "ESCALATE",
       "reason": "needs System 2: send to a reasoning model"
     },
@@ -31,5 +31,46 @@
     "removed_questions": [],
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
-  }
+  },
+  "calibration": {
+    "rules": {
+      "needs_reasoning.p.yes": {
+        "direction": "above",
+        "threshold": 0.52,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.52,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.52,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.52,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 30,
+        "n_good": 15,
+        "n_bad": 15,
+        "labeled_set_sha256": "ff3be116ff4f6f2dedfe992e74b703586d84f23118e521c1c3cecabbd29b5cee",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "b1f06829092f0722ea5b4b867afd2347425f5dcb154f6be8481a1739191063b3",
+        "rubric_sha256": "ac6ac8267eccda99f1e69f7225b9bd8d5620cdaa8f636929491fdbec65f06949",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "middle"
+      }
+    }
+  },
+  "calibrated": false
 }
