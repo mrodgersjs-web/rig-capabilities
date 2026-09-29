@@ -41,6 +41,14 @@ Run: `python3 calibrate_waves.py [--write]`: one level per wave, 3 concurrent Je
 
 The second rule on each rubric (safe answer <= 0.90 -> ESCALATE) is deliberately NOT calibrated: a sweep would loosen it to about 0.1 and drop the 0.90 house bar. It can only ESCALATE.
 
-**Enforcement needs the model pinned:** `S1GATE_JEV_MODEL=jev-1.13.0`. Certification binds to the model that answered (`jev-1.13.0`) but the engine compares it to the requested alias (default `jev-latest`), so with no pin nothing in the estate enforces. Verified: pinned, `git push --force` -> enforced BLOCK exit 1; unpinned -> advisory ESCALATE exit 2. Verdict suite with `EXPECT_ENFORCED=1`: 300/300 pinned, L10 15/30 unpinned (planted).
+**Model binding (fixed in the working-tree engine, 2026-09-28):** certification binds to the model that answered (`jev-1.13.0`). The engine used to compare it to the requested alias (`jev-latest`), so no certified rule anywhere enforced. `evaluate()` now uses the answering model; a Jev version change still voids every certification. Verified unpinned: `git push --force` and a prompt injection both return enforced BLOCK (exit 1). This also switched on two other lanes' certified rules: `atomic.claim` (ESCALATE only, exit code unchanged) and `post.instagram` medical_claim BLOCK (exit 1 instead of 2). Until the engine patch is committed, a checkout of HEAD needs `S1GATE_JEV_MODEL=jev-1.13.0`.
 
 Do not edit a calibrated rubric's questions, description, stage, lane, notes or rules: any change voids its certification (rubric/rule sha). Re-run `calibrate_waves.py --write` after an edit.
+
+## Routing rubrics (triage, scrape-classify, skill-router)
+
+`ambiguous02/03/05.json`: 36 agent-written items meant to straddle options. On review, 14 had a dominant answer and were reclassified as single-answer cases; that review happened AFTER seeing Jev's answers, so it is biased toward agreement. The remaining 22 genuinely ambiguous items are the BAD class for the `confidence` rule (tie `declared`: keep the stated 0.90 when the data cannot tell the options apart).
+
+Dry-run result (not written): triage 0.90 (96 good / 6 bad), skill-router 0.90 (63 / 9), scrape-classify 0.9352 (65 / 7, slightly stricter); each holds on train, holdout and combined. **Held for a human label check**: the engine treats agent-made labels as advisory until reviewed. After review: `RUBRICS=jev.triage,jev.scrape-classify,jev.skill-router python3 calibrate_waves.py --write`.
+
+Full verdict suite with the 36 new cases, unpinned, `EXPECT_ENFORCED=1`, 5 waves: 335/336. The miss (a05-003, "check whether this post passes our rubric before I publish it") is a borderline between rig-s1gate and gate-d-loop that escalated; it was one of the post-hoc reclassifications.

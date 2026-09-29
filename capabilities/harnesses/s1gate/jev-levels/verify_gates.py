@@ -41,7 +41,9 @@ def run(rubric, c):
     fails, obs, want_pass = [], {}, True
     if d.get("error"):
         fails.append("ERROR " + str(d["error"])[:200])
-    for q, exp in c["expect"].items():
+    if c.get("expect_escalate"):
+        want_pass = False
+    for q, exp in c.get("expect", {}).items():
         a = d.get("answers", {}).get(q) or {}
         p = (a.get("probabilities") or {}).get(exp["option"], 0.0)
         obs[q] = round(p, 3)
@@ -54,6 +56,7 @@ def run(rubric, c):
     if not want_pass and v == "PASS":
         fails.append("verdict PASS, expected ESCALATE/BLOCK")
     if (os.environ.get("EXPECT_ENFORCED") and rubric in CALIBRATED and not want_pass
+            and not c.get("expect_escalate")
             and not d.get("enforced")):
         fails.append(f"verdict {v} not enforced (calibrated rubric)")
     if any("undecidable" in x for x in d.get("reasons", [])):
@@ -64,7 +67,10 @@ def run(rubric, c):
 
 def main():
     cases = []
-    for f in sorted(HERE.glob("level*.json")):
+    files = sorted(HERE.glob("level*.json"))
+    if os.environ.get("AMBIGUOUS", "1") == "1":
+        files += sorted(HERE.glob("ambiguous*.json"))
+    for f in files:
         doc = json.loads(f.read_text())
         if os.environ.get("LEVELS") and str(doc["level"]) not in os.environ["LEVELS"].split(","):
             continue

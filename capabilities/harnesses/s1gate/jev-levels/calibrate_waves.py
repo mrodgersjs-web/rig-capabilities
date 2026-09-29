@@ -19,10 +19,10 @@ LOAD_MAX = float(os.environ.get("LOAD_MAX", "24"))
 # rubric -> (question, attr, direction, which expected options are BAD)
 PLAN = {
  "jev.escalation":       ("needs_reasoning", "p.yes", "above", {"yes"}),
- "jev.triage":           ("lane", "confidence", "below", {"other"}),
- "jev.scrape-classify":  ("category", "confidence", "below", {"other"}),
+ "jev.triage":           ("lane", "confidence", "below", set()),
+ "jev.scrape-classify":  ("category", "confidence", "below", set()),
  "jev.auto-approve":     ("risk", "p.yes", "above", {"yes"}),
- "jev.skill-router":     ("skill", "confidence", "below", {"other"}),
+ "jev.skill-router":     ("skill", "confidence", "below", set()),
  "jev.bash-gate":        ("destructive_irreversible", "p.yes", "above", {"yes"}),
  "jev.file-triage":      ("credential_bearing", "p.yes", "above", {"cred"}),
  "jev.compact-read":     ("compact_is_safe", "p.no", "above", {"no"}),
@@ -49,6 +49,9 @@ def main(write):
     relabel = os.environ.get("RELABEL", "1") == "1"
     for f in sorted(HERE.glob("level*.json")):
         doc = json.loads(f.read_text()); rb = doc["rubric"]; q, attr, direction, bad = PLAN[rb]
+        amb = HERE / f"ambiguous{doc['level']:02d}.json"
+        if amb.exists():   # routing: ambiguous items are the BAD class for the confidence rule
+            doc["cases"] = doc["cases"] + json.loads(amb.read_text())["cases"]
         if only and rb not in only: continue
         la, fg = breathe()
         print(f"WAVE L{doc['level']:02d} {rb}  (load {la:.1f}, free {fg:.1f}GB)", flush=True)
@@ -59,13 +62,16 @@ def main(write):
         n = 0
         for c, d in got:
             if d.get("error") or not d.get("decision_id"): continue
-            opt = c["expect"].get(q, {}).get("option")
-            if rb == "jev.file-triage":
+            opt = c.get("expect", {}).get(q, {}).get("option")
+            if c.get("expect_escalate"):
+                lab = "bad"
+            elif rb == "jev.file-triage":
                 lab = "bad" if "credential_bearing" in c["expect"] else "good"
             else:
                 lab = "bad" if opt in bad else "good"
-            log.label_signal(d["decision_id"], f"{q}.{attr}", lab, by=BY); n += 1
-        res = calibrate_rubric(rb, (q, attr), direction=direction, tie="middle", write=write)
+            log.label_signal(d["decision_id"], f"{q}.{attr}", lab,
+                             by=BY if c["id"].startswith("l") else "agent-review:ambiguous-v1"); n += 1
+        res = calibrate_rubric(rb, (q, attr), direction=direction, tie=("declared" if attr == "confidence" else "middle"), write=write)
         op = res.get("operating_point") or {}
         row = {"rubric": rb, "signal": f"{q}.{attr}", "labelled_now": n, "n_labelled": res["n_labelled"],
                "good": res["n_good"], "bad": res["n_bad"], "certified": res["certified"],

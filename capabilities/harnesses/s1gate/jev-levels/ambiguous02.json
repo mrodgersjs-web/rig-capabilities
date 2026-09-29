@@ -1,0 +1,104 @@
+{
+ "level": 2,
+ "rubric": "jev.triage",
+ "kind": "ambiguous",
+ "note": "Agent-authored (Jake, 2026-09-28): each item straddles two or more listed options, so auto-routing is unsafe. Expected verdict: not PASS. Used as the 'bad' class when calibrating the confidence rule. 14 of 36 items were first mislabelled as ambiguous and reclassified to single-answer after review; the review happened AFTER seeing Jev's output, so these labels are biased toward agreement and need a human check before certification.",
+ "cases": [
+  {
+   "id": "a02-001",
+   "state": "Book a call with the Stripe rep to renegotiate our card processing fees.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-002",
+   "state": "The API key in the deploy script expired; rotate it and redeploy the cron box.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-003",
+   "state": "Write a LinkedIn post comparing what three competitors charge for AI audits.",
+   "expect": {
+    "lane": {
+     "option": "gtm-content",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a02-004",
+   "state": "Fix the bug in the invoice generator that double-charges clients.",
+   "expect": {
+    "lane": {
+     "option": "coding",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a02-005",
+   "state": "Move my Thursday gym session so it doesn't clash with Jacob's game.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-006",
+   "state": "Figure out why the agent fleet's model bill tripled this week.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-007",
+   "state": "Draft the email telling the team we revoked everyone's GitHub admin access.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-008",
+   "state": "Look into whether the new Hermes hook is leaking tokens into its logs.",
+   "expect": {
+    "lane": {
+     "option": "security",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a02-009",
+   "state": "Refactor the reminder service so reminders fire in each user's time zone.",
+   "expect": {
+    "lane": {
+     "option": "coding",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a02-010",
+   "state": "Summarize the pricing changes OpenRouter announced and what they cost us.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a02-011",
+   "state": "Set up a recurring calendar block for the nightly deploy review.",
+   "expect": {
+    "lane": {
+     "option": "scheduling",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a02-012",
+   "state": "Thanks! Can you also send over the updated invoice?",
+   "expect": {
+    "lane": {
+     "option": "finance",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  }
+ ]
+}

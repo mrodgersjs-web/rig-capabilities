@@ -1,0 +1,98 @@
+{
+ "level": 3,
+ "rubric": "jev.scrape-classify",
+ "kind": "ambiguous",
+ "note": "Agent-authored (Jake, 2026-09-28): each item straddles two or more listed options, so auto-routing is unsafe. Expected verdict: not PASS. Used as the 'bad' class when calibrating the confidence rule. 14 of 36 items were first mislabelled as ambiguous and reclassified to single-answer after review; the review happened AFTER seeing Jev's output, so these labels are biased toward agreement and need a human check before certification.",
+ "cases": [
+  {
+   "id": "a03-001",
+   "state": "Sponsored · Senior ML Engineer at Acme · $180k-$220k · Apply now",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-002",
+   "state": "Jane Doe, Head of Growth at Acme: \"Loved this tool, five stars, would buy again.\"",
+   "expect": {
+    "category": {
+     "option": "forum-comment",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a03-003",
+   "state": "Pro plan $29/mo. Read our 2,000-word guide to choosing the right plan before you buy.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-004",
+   "state": "Posted by u/devops_dan: We're hiring two SREs, DM me if interested, pay is great.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-005",
+   "state": "Meet our team: Priya Shah, CTO. Previously at Stripe. Read her essay on scaling payments.",
+   "expect": {
+    "category": {
+     "option": "person-profile",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a03-006",
+   "state": "Top 10 standing desks of 2026 (affiliate links): #1 FlexiDesk Pro, $499, buy on Amazon.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-007",
+   "state": "Load more reviews · Page 2 of 14 · \"Great product, fast shipping\" - Mark T.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-008",
+   "state": "Webinar: How we cut churn 30% | Register free | Hosted by Acme's VP of Customer Success, Lee Park",
+   "expect": {
+    "category": {
+     "option": "ad",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a03-009",
+   "state": "Contract role: part-time copywriter, $40/hr. Also check out our copywriting course, $199.",
+   "expect_escalate": true
+  },
+  {
+   "id": "a03-010",
+   "state": "Reply from Acme Support: Thanks for the feedback! Our Enterprise plan starts at $2,000/mo.",
+   "expect": {
+    "category": {
+     "option": "forum-comment",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a03-011",
+   "state": "Newsletter signup · Get our weekly AI digest · Privacy policy · Cookie settings · Latest issue: GPT-6 benchmarks",
+   "expect": {
+    "category": {
+     "option": "navigation",
+     "min": 0.9
+    }
+   },
+   "review": "reclassified 2026-09-28: a dominant answer exists (agent label error, found on probe)"
+  },
+  {
+   "id": "a03-012",
+   "state": "Profile: Tom Reyes, freelance designer. Rates from $85/hr. Book a slot.",
+   "expect_escalate": true
+  }
+ ]
+}
