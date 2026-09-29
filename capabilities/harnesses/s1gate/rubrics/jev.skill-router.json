@@ -1,0 +1,47 @@
+{
+  "name": "jev.skill-router",
+  "stage": "routing",
+  "lane": "jev",
+  "description": "Level 5 routing (Laya skill-routing lane): pick the one skill for a task.",
+  "questions": {
+    "skill": {
+      "type": "choice",
+      "instructions": "Which skill should handle this task",
+      "criteria": {
+        "jev-everywhere": "Any typed semantic judgment: triage, routing, classification, screening, gating",
+        "lv-draft": "Writing or rewriting a LinkedIn post body",
+        "lv-hooks": "A post needs an opening line, first line, or hook",
+        "lv-engage": "Comments, replies, or engagement cadence on LinkedIn",
+        "lv-outreach": "Writing the messages: DMs, connection-request notes, or a warm follow-up DM sequence to specific people",
+        "rig-s1gate": "Score an artifact against a rubric with the gate CLI",
+        "darius-linkedin-outreach-agent": "Queueing or sending an already-planned batch campaign: conference or cold outreach DMs at volume, sequence sends",
+        "jake-bridge": "Daily briefing, what is on today, status of the day",
+        "d85-compliance-checklist": "Run the D85 build-certification gates (checklist, verify-cert, ProofPacket seal) before claiming a RIG build is done or certified",
+        "gate-d-loop": "An outward or irreversible action needs typed approval",
+        "tac-plan": "Multi-step coding task needing a plan before edits",
+        "web-search": "Facts beyond cutoff or fresh information lookup",
+        "other": "None of these fits"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "skill.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "skill confidence at or below 0.90: human or meta-router decides"
+    },
+    {
+      "when": "skill.choice == 'other'",
+      "verdict": "ESCALATE",
+      "reason": "no listed skill fits: human or meta-router decides"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = load the chosen skill (confidence above 0.90, not 'other'). ESCALATE = load the when-* meta-skill router instead.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage).",
+    "criteria_edit_2026-09-28": "draft-the-messages (lv-outreach) vs queue/send-the-campaign (darius) disambiguated"
+  }
+}

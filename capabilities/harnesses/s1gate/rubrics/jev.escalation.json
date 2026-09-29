@@ -1,0 +1,35 @@
+{
+  "name": "jev.escalation",
+  "stage": "triage",
+  "lane": "jev",
+  "description": "Level 1 single decision: does this need System-2 or is one typed judgment enough.",
+  "questions": {
+    "needs_reasoning": {
+      "type": "choice",
+      "instructions": "Decide yes or no",
+      "criteria": {
+        "yes": "The request contains: design, plan, architect, diagnose a root cause, explain why, draft new content, synthesize across multiple sources, or decide a tradeoff.",
+        "no": "The request is one of: read a value, list files, a one-command status check, yes/no about a visible fact, parse a format, route one item to a category."
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "needs_reasoning.p.yes >= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "needs System 2: send to a reasoning model"
+    },
+    {
+      "when": "needs_reasoning.p.no <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "not sure one typed judgment is enough: send to System 2"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = one Jev judgment is enough (needs_reasoning=no above 0.90). ESCALATE = send to a System-2 model (yes >= 0.5, or no at/below 0.90). Never BLOCKs.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
+  }
+}

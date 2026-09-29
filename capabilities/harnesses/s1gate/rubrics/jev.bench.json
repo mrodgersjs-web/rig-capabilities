@@ -1,0 +1,899 @@
+{
+  "name": "jev.bench",
+  "stage": "verify",
+  "lane": "model-eval",
+  "description": "Gate a claim that a RIG-trained JEV/OpenJEV cross-encoder beats the published OpenJEV baselines across nine benchmark categories. Scores the evidence packet on a 0-10 ladder. Every category must average >= 9.5 across its five questions.",
+  "never_auto": false,
+  "calibrated": false,
+  "confidence_floor": 0.35,
+  "questions": {
+    "chess__measured_live": {
+      "type": "score",
+      "category": "chess",
+      "instructions": "Was the Chess legal moves (4 candidate SAN moves, exactly one legal) metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No chess metric appears anywhere in the evidence",
+        "The chess metric is only promised, planned, or described as future work",
+        "A chess number is asserted with no command and no output backing it",
+        "A command is shown for chess but produced no output, or the output is an error",
+        "Partial chess output appears but the headline metric is missing or unparseable",
+        "A chess metric with named checkpoint, but the item count n is absent",
+        "A chess metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for chess is shown with the metric, checkpoint and n",
+        "Raw chess output plus the exact invocation that produced it, with exit code",
+        "Raw chess output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "chess__beats_baseline": {
+      "type": "score",
+      "category": "chess",
+      "instructions": "Does the evidence show the RIG-trained head's Chess legal moves (4 candidate SAN moves, exactly one legal) score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for chess",
+        "A baseline is mentioned for chess but no number is given",
+        "A baseline number for chess is given with no source file or citation",
+        "A baseline number and source are given but our chess score is absent",
+        "Both numbers present for chess but ours is clearly lower than the baseline",
+        "Ours exceeds the chess baseline but the baseline source is unverified",
+        "Ours exceeds the chess baseline with the baseline source file named",
+        "Ours exceeds the chess baseline, source named, and the margin is stated",
+        "Ours exceeds the chess baseline with source, margin, and item count n",
+        "Ours exceeds the chess baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "chess__controlled_comparison": {
+      "type": "score",
+      "category": "chess",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL Chess legal moves (4 candidate SAN moves, exactly one legal) item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on chess; no comparison exists",
+        "Two chess numbers are compared but they come from different sources entirely",
+        "Two chess numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on chess but with different item counts",
+        "Both run locally on chess with the same n but different seeds",
+        "Same items and prompts for chess, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for chess, shown in the invocations",
+        "Identical chess item set demonstrated, both checkpoints named in one results file",
+        "Identical chess items, both checkpoints, single harness invocation, seed pinned",
+        "Identical chess items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "chess__no_leakage": {
+      "type": "score",
+      "category": "chess",
+      "instructions": "Is the Chess legal moves (4 candidate SAN moves, exactly one legal) evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and chess evaluation data are not distinguished at all",
+        "The chess eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and chess evaluation with no split discipline",
+        "Splits are claimed for chess but not named or shown",
+        "A split name is given for chess but the training source is vague",
+        "Different named splits for chess, with the training mixture enumerated",
+        "Different splits for chess plus an explicit statement that no eval rows entered training",
+        "Different splits for chess plus a programmatic disjointness check that was run",
+        "Programmatic chess overlap check run and reported as zero overlap with counts",
+        "Zero-overlap chess check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "chess__reproducible": {
+      "type": "score",
+      "category": "chess",
+      "instructions": "Could an independent third party re-run the Chess legal moves (4 candidate SAN moves, exactly one legal) evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run chess",
+        "Only a narrative description of what was done for chess",
+        "A script name is mentioned for chess with no path and no arguments",
+        "A script path for chess but no arguments and no environment",
+        "Script path and arguments for chess, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for chess, but no results artifact",
+        "Full chess invocation plus a persisted results file path",
+        "Full chess invocation, results file, and the exact model revision or local path",
+        "Full chess invocation, results file, model revision, and recorded wall time or device",
+        "Full chess invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "gsm8k_mc10__measured_live": {
+      "type": "score",
+      "category": "gsm8k_mc10",
+      "instructions": "Was the GSM8K as 10-way multiple choice metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No gsm8k_mc10 metric appears anywhere in the evidence",
+        "The gsm8k_mc10 metric is only promised, planned, or described as future work",
+        "A gsm8k_mc10 number is asserted with no command and no output backing it",
+        "A command is shown for gsm8k_mc10 but produced no output, or the output is an error",
+        "Partial gsm8k_mc10 output appears but the headline metric is missing or unparseable",
+        "A gsm8k_mc10 metric with named checkpoint, but the item count n is absent",
+        "A gsm8k_mc10 metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for gsm8k_mc10 is shown with the metric, checkpoint and n",
+        "Raw gsm8k_mc10 output plus the exact invocation that produced it, with exit code",
+        "Raw gsm8k_mc10 output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "gsm8k_mc10__beats_baseline": {
+      "type": "score",
+      "category": "gsm8k_mc10",
+      "instructions": "Does the evidence show the RIG-trained head's GSM8K as 10-way multiple choice score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for gsm8k_mc10",
+        "A baseline is mentioned for gsm8k_mc10 but no number is given",
+        "A baseline number for gsm8k_mc10 is given with no source file or citation",
+        "A baseline number and source are given but our gsm8k_mc10 score is absent",
+        "Both numbers present for gsm8k_mc10 but ours is clearly lower than the baseline",
+        "Ours exceeds the gsm8k_mc10 baseline but the baseline source is unverified",
+        "Ours exceeds the gsm8k_mc10 baseline with the baseline source file named",
+        "Ours exceeds the gsm8k_mc10 baseline, source named, and the margin is stated",
+        "Ours exceeds the gsm8k_mc10 baseline with source, margin, and item count n",
+        "Ours exceeds the gsm8k_mc10 baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "gsm8k_mc10__controlled_comparison": {
+      "type": "score",
+      "category": "gsm8k_mc10",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL GSM8K as 10-way multiple choice item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on gsm8k_mc10; no comparison exists",
+        "Two gsm8k_mc10 numbers are compared but they come from different sources entirely",
+        "Two gsm8k_mc10 numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on gsm8k_mc10 but with different item counts",
+        "Both run locally on gsm8k_mc10 with the same n but different seeds",
+        "Same items and prompts for gsm8k_mc10, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for gsm8k_mc10, shown in the invocations",
+        "Identical gsm8k_mc10 item set demonstrated, both checkpoints named in one results file",
+        "Identical gsm8k_mc10 items, both checkpoints, single harness invocation, seed pinned",
+        "Identical gsm8k_mc10 items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "gsm8k_mc10__no_leakage": {
+      "type": "score",
+      "category": "gsm8k_mc10",
+      "instructions": "Is the GSM8K as 10-way multiple choice evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and gsm8k_mc10 evaluation data are not distinguished at all",
+        "The gsm8k_mc10 eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and gsm8k_mc10 evaluation with no split discipline",
+        "Splits are claimed for gsm8k_mc10 but not named or shown",
+        "A split name is given for gsm8k_mc10 but the training source is vague",
+        "Different named splits for gsm8k_mc10, with the training mixture enumerated",
+        "Different splits for gsm8k_mc10 plus an explicit statement that no eval rows entered training",
+        "Different splits for gsm8k_mc10 plus a programmatic disjointness check that was run",
+        "Programmatic gsm8k_mc10 overlap check run and reported as zero overlap with counts",
+        "Zero-overlap gsm8k_mc10 check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "gsm8k_mc10__reproducible": {
+      "type": "score",
+      "category": "gsm8k_mc10",
+      "instructions": "Could an independent third party re-run the GSM8K as 10-way multiple choice evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run gsm8k_mc10",
+        "Only a narrative description of what was done for gsm8k_mc10",
+        "A script name is mentioned for gsm8k_mc10 with no path and no arguments",
+        "A script path for gsm8k_mc10 but no arguments and no environment",
+        "Script path and arguments for gsm8k_mc10, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for gsm8k_mc10, but no results artifact",
+        "Full gsm8k_mc10 invocation plus a persisted results file path",
+        "Full gsm8k_mc10 invocation, results file, and the exact model revision or local path",
+        "Full gsm8k_mc10 invocation, results file, model revision, and recorded wall time or device",
+        "Full gsm8k_mc10 invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "gsm8k_mc4__measured_live": {
+      "type": "score",
+      "category": "gsm8k_mc4",
+      "instructions": "Was the GSM8K as 4-way multiple choice metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No gsm8k_mc4 metric appears anywhere in the evidence",
+        "The gsm8k_mc4 metric is only promised, planned, or described as future work",
+        "A gsm8k_mc4 number is asserted with no command and no output backing it",
+        "A command is shown for gsm8k_mc4 but produced no output, or the output is an error",
+        "Partial gsm8k_mc4 output appears but the headline metric is missing or unparseable",
+        "A gsm8k_mc4 metric with named checkpoint, but the item count n is absent",
+        "A gsm8k_mc4 metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for gsm8k_mc4 is shown with the metric, checkpoint and n",
+        "Raw gsm8k_mc4 output plus the exact invocation that produced it, with exit code",
+        "Raw gsm8k_mc4 output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "gsm8k_mc4__beats_baseline": {
+      "type": "score",
+      "category": "gsm8k_mc4",
+      "instructions": "Does the evidence show the RIG-trained head's GSM8K as 4-way multiple choice score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for gsm8k_mc4",
+        "A baseline is mentioned for gsm8k_mc4 but no number is given",
+        "A baseline number for gsm8k_mc4 is given with no source file or citation",
+        "A baseline number and source are given but our gsm8k_mc4 score is absent",
+        "Both numbers present for gsm8k_mc4 but ours is clearly lower than the baseline",
+        "Ours exceeds the gsm8k_mc4 baseline but the baseline source is unverified",
+        "Ours exceeds the gsm8k_mc4 baseline with the baseline source file named",
+        "Ours exceeds the gsm8k_mc4 baseline, source named, and the margin is stated",
+        "Ours exceeds the gsm8k_mc4 baseline with source, margin, and item count n",
+        "Ours exceeds the gsm8k_mc4 baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "gsm8k_mc4__controlled_comparison": {
+      "type": "score",
+      "category": "gsm8k_mc4",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL GSM8K as 4-way multiple choice item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on gsm8k_mc4; no comparison exists",
+        "Two gsm8k_mc4 numbers are compared but they come from different sources entirely",
+        "Two gsm8k_mc4 numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on gsm8k_mc4 but with different item counts",
+        "Both run locally on gsm8k_mc4 with the same n but different seeds",
+        "Same items and prompts for gsm8k_mc4, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for gsm8k_mc4, shown in the invocations",
+        "Identical gsm8k_mc4 item set demonstrated, both checkpoints named in one results file",
+        "Identical gsm8k_mc4 items, both checkpoints, single harness invocation, seed pinned",
+        "Identical gsm8k_mc4 items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "gsm8k_mc4__no_leakage": {
+      "type": "score",
+      "category": "gsm8k_mc4",
+      "instructions": "Is the GSM8K as 4-way multiple choice evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and gsm8k_mc4 evaluation data are not distinguished at all",
+        "The gsm8k_mc4 eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and gsm8k_mc4 evaluation with no split discipline",
+        "Splits are claimed for gsm8k_mc4 but not named or shown",
+        "A split name is given for gsm8k_mc4 but the training source is vague",
+        "Different named splits for gsm8k_mc4, with the training mixture enumerated",
+        "Different splits for gsm8k_mc4 plus an explicit statement that no eval rows entered training",
+        "Different splits for gsm8k_mc4 plus a programmatic disjointness check that was run",
+        "Programmatic gsm8k_mc4 overlap check run and reported as zero overlap with counts",
+        "Zero-overlap gsm8k_mc4 check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "gsm8k_mc4__reproducible": {
+      "type": "score",
+      "category": "gsm8k_mc4",
+      "instructions": "Could an independent third party re-run the GSM8K as 4-way multiple choice evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run gsm8k_mc4",
+        "Only a narrative description of what was done for gsm8k_mc4",
+        "A script name is mentioned for gsm8k_mc4 with no path and no arguments",
+        "A script path for gsm8k_mc4 but no arguments and no environment",
+        "Script path and arguments for gsm8k_mc4, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for gsm8k_mc4, but no results artifact",
+        "Full gsm8k_mc4 invocation plus a persisted results file path",
+        "Full gsm8k_mc4 invocation, results file, and the exact model revision or local path",
+        "Full gsm8k_mc4 invocation, results file, model revision, and recorded wall time or device",
+        "Full gsm8k_mc4 invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "hellaswag__measured_live": {
+      "type": "score",
+      "category": "hellaswag",
+      "instructions": "Was the HellaSwag sentence completion metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No hellaswag metric appears anywhere in the evidence",
+        "The hellaswag metric is only promised, planned, or described as future work",
+        "A hellaswag number is asserted with no command and no output backing it",
+        "A command is shown for hellaswag but produced no output, or the output is an error",
+        "Partial hellaswag output appears but the headline metric is missing or unparseable",
+        "A hellaswag metric with named checkpoint, but the item count n is absent",
+        "A hellaswag metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for hellaswag is shown with the metric, checkpoint and n",
+        "Raw hellaswag output plus the exact invocation that produced it, with exit code",
+        "Raw hellaswag output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "hellaswag__beats_baseline": {
+      "type": "score",
+      "category": "hellaswag",
+      "instructions": "Does the evidence show the RIG-trained head's HellaSwag sentence completion score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for hellaswag",
+        "A baseline is mentioned for hellaswag but no number is given",
+        "A baseline number for hellaswag is given with no source file or citation",
+        "A baseline number and source are given but our hellaswag score is absent",
+        "Both numbers present for hellaswag but ours is clearly lower than the baseline",
+        "Ours exceeds the hellaswag baseline but the baseline source is unverified",
+        "Ours exceeds the hellaswag baseline with the baseline source file named",
+        "Ours exceeds the hellaswag baseline, source named, and the margin is stated",
+        "Ours exceeds the hellaswag baseline with source, margin, and item count n",
+        "Ours exceeds the hellaswag baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "hellaswag__controlled_comparison": {
+      "type": "score",
+      "category": "hellaswag",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL HellaSwag sentence completion item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on hellaswag; no comparison exists",
+        "Two hellaswag numbers are compared but they come from different sources entirely",
+        "Two hellaswag numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on hellaswag but with different item counts",
+        "Both run locally on hellaswag with the same n but different seeds",
+        "Same items and prompts for hellaswag, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for hellaswag, shown in the invocations",
+        "Identical hellaswag item set demonstrated, both checkpoints named in one results file",
+        "Identical hellaswag items, both checkpoints, single harness invocation, seed pinned",
+        "Identical hellaswag items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "hellaswag__no_leakage": {
+      "type": "score",
+      "category": "hellaswag",
+      "instructions": "Is the HellaSwag sentence completion evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and hellaswag evaluation data are not distinguished at all",
+        "The hellaswag eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and hellaswag evaluation with no split discipline",
+        "Splits are claimed for hellaswag but not named or shown",
+        "A split name is given for hellaswag but the training source is vague",
+        "Different named splits for hellaswag, with the training mixture enumerated",
+        "Different splits for hellaswag plus an explicit statement that no eval rows entered training",
+        "Different splits for hellaswag plus a programmatic disjointness check that was run",
+        "Programmatic hellaswag overlap check run and reported as zero overlap with counts",
+        "Zero-overlap hellaswag check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "hellaswag__reproducible": {
+      "type": "score",
+      "category": "hellaswag",
+      "instructions": "Could an independent third party re-run the HellaSwag sentence completion evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run hellaswag",
+        "Only a narrative description of what was done for hellaswag",
+        "A script name is mentioned for hellaswag with no path and no arguments",
+        "A script path for hellaswag but no arguments and no environment",
+        "Script path and arguments for hellaswag, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for hellaswag, but no results artifact",
+        "Full hellaswag invocation plus a persisted results file path",
+        "Full hellaswag invocation, results file, and the exact model revision or local path",
+        "Full hellaswag invocation, results file, model revision, and recorded wall time or device",
+        "Full hellaswag invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "winogrande__measured_live": {
+      "type": "score",
+      "category": "winogrande",
+      "instructions": "Was the Winogrande pronoun resolution metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No winogrande metric appears anywhere in the evidence",
+        "The winogrande metric is only promised, planned, or described as future work",
+        "A winogrande number is asserted with no command and no output backing it",
+        "A command is shown for winogrande but produced no output, or the output is an error",
+        "Partial winogrande output appears but the headline metric is missing or unparseable",
+        "A winogrande metric with named checkpoint, but the item count n is absent",
+        "A winogrande metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for winogrande is shown with the metric, checkpoint and n",
+        "Raw winogrande output plus the exact invocation that produced it, with exit code",
+        "Raw winogrande output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "winogrande__beats_baseline": {
+      "type": "score",
+      "category": "winogrande",
+      "instructions": "Does the evidence show the RIG-trained head's Winogrande pronoun resolution score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for winogrande",
+        "A baseline is mentioned for winogrande but no number is given",
+        "A baseline number for winogrande is given with no source file or citation",
+        "A baseline number and source are given but our winogrande score is absent",
+        "Both numbers present for winogrande but ours is clearly lower than the baseline",
+        "Ours exceeds the winogrande baseline but the baseline source is unverified",
+        "Ours exceeds the winogrande baseline with the baseline source file named",
+        "Ours exceeds the winogrande baseline, source named, and the margin is stated",
+        "Ours exceeds the winogrande baseline with source, margin, and item count n",
+        "Ours exceeds the winogrande baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "winogrande__controlled_comparison": {
+      "type": "score",
+      "category": "winogrande",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL Winogrande pronoun resolution item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on winogrande; no comparison exists",
+        "Two winogrande numbers are compared but they come from different sources entirely",
+        "Two winogrande numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on winogrande but with different item counts",
+        "Both run locally on winogrande with the same n but different seeds",
+        "Same items and prompts for winogrande, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for winogrande, shown in the invocations",
+        "Identical winogrande item set demonstrated, both checkpoints named in one results file",
+        "Identical winogrande items, both checkpoints, single harness invocation, seed pinned",
+        "Identical winogrande items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "winogrande__no_leakage": {
+      "type": "score",
+      "category": "winogrande",
+      "instructions": "Is the Winogrande pronoun resolution evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and winogrande evaluation data are not distinguished at all",
+        "The winogrande eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and winogrande evaluation with no split discipline",
+        "Splits are claimed for winogrande but not named or shown",
+        "A split name is given for winogrande but the training source is vague",
+        "Different named splits for winogrande, with the training mixture enumerated",
+        "Different splits for winogrande plus an explicit statement that no eval rows entered training",
+        "Different splits for winogrande plus a programmatic disjointness check that was run",
+        "Programmatic winogrande overlap check run and reported as zero overlap with counts",
+        "Zero-overlap winogrande check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "winogrande__reproducible": {
+      "type": "score",
+      "category": "winogrande",
+      "instructions": "Could an independent third party re-run the Winogrande pronoun resolution evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run winogrande",
+        "Only a narrative description of what was done for winogrande",
+        "A script name is mentioned for winogrande with no path and no arguments",
+        "A script path for winogrande but no arguments and no environment",
+        "Script path and arguments for winogrande, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for winogrande, but no results artifact",
+        "Full winogrande invocation plus a persisted results file path",
+        "Full winogrande invocation, results file, and the exact model revision or local path",
+        "Full winogrande invocation, results file, model revision, and recorded wall time or device",
+        "Full winogrande invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "arc_challenge__measured_live": {
+      "type": "score",
+      "category": "arc_challenge",
+      "instructions": "Was the ARC-Challenge science questions metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No arc_challenge metric appears anywhere in the evidence",
+        "The arc_challenge metric is only promised, planned, or described as future work",
+        "A arc_challenge number is asserted with no command and no output backing it",
+        "A command is shown for arc_challenge but produced no output, or the output is an error",
+        "Partial arc_challenge output appears but the headline metric is missing or unparseable",
+        "A arc_challenge metric with named checkpoint, but the item count n is absent",
+        "A arc_challenge metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for arc_challenge is shown with the metric, checkpoint and n",
+        "Raw arc_challenge output plus the exact invocation that produced it, with exit code",
+        "Raw arc_challenge output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "arc_challenge__beats_baseline": {
+      "type": "score",
+      "category": "arc_challenge",
+      "instructions": "Does the evidence show the RIG-trained head's ARC-Challenge science questions score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for arc_challenge",
+        "A baseline is mentioned for arc_challenge but no number is given",
+        "A baseline number for arc_challenge is given with no source file or citation",
+        "A baseline number and source are given but our arc_challenge score is absent",
+        "Both numbers present for arc_challenge but ours is clearly lower than the baseline",
+        "Ours exceeds the arc_challenge baseline but the baseline source is unverified",
+        "Ours exceeds the arc_challenge baseline with the baseline source file named",
+        "Ours exceeds the arc_challenge baseline, source named, and the margin is stated",
+        "Ours exceeds the arc_challenge baseline with source, margin, and item count n",
+        "Ours exceeds the arc_challenge baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "arc_challenge__controlled_comparison": {
+      "type": "score",
+      "category": "arc_challenge",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL ARC-Challenge science questions item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on arc_challenge; no comparison exists",
+        "Two arc_challenge numbers are compared but they come from different sources entirely",
+        "Two arc_challenge numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on arc_challenge but with different item counts",
+        "Both run locally on arc_challenge with the same n but different seeds",
+        "Same items and prompts for arc_challenge, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for arc_challenge, shown in the invocations",
+        "Identical arc_challenge item set demonstrated, both checkpoints named in one results file",
+        "Identical arc_challenge items, both checkpoints, single harness invocation, seed pinned",
+        "Identical arc_challenge items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "arc_challenge__no_leakage": {
+      "type": "score",
+      "category": "arc_challenge",
+      "instructions": "Is the ARC-Challenge science questions evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and arc_challenge evaluation data are not distinguished at all",
+        "The arc_challenge eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and arc_challenge evaluation with no split discipline",
+        "Splits are claimed for arc_challenge but not named or shown",
+        "A split name is given for arc_challenge but the training source is vague",
+        "Different named splits for arc_challenge, with the training mixture enumerated",
+        "Different splits for arc_challenge plus an explicit statement that no eval rows entered training",
+        "Different splits for arc_challenge plus a programmatic disjointness check that was run",
+        "Programmatic arc_challenge overlap check run and reported as zero overlap with counts",
+        "Zero-overlap arc_challenge check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "arc_challenge__reproducible": {
+      "type": "score",
+      "category": "arc_challenge",
+      "instructions": "Could an independent third party re-run the ARC-Challenge science questions evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run arc_challenge",
+        "Only a narrative description of what was done for arc_challenge",
+        "A script name is mentioned for arc_challenge with no path and no arguments",
+        "A script path for arc_challenge but no arguments and no environment",
+        "Script path and arguments for arc_challenge, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for arc_challenge, but no results artifact",
+        "Full arc_challenge invocation plus a persisted results file path",
+        "Full arc_challenge invocation, results file, and the exact model revision or local path",
+        "Full arc_challenge invocation, results file, model revision, and recorded wall time or device",
+        "Full arc_challenge invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "arc_easy__measured_live": {
+      "type": "score",
+      "category": "arc_easy",
+      "instructions": "Was the ARC-Easy science questions metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No arc_easy metric appears anywhere in the evidence",
+        "The arc_easy metric is only promised, planned, or described as future work",
+        "A arc_easy number is asserted with no command and no output backing it",
+        "A command is shown for arc_easy but produced no output, or the output is an error",
+        "Partial arc_easy output appears but the headline metric is missing or unparseable",
+        "A arc_easy metric with named checkpoint, but the item count n is absent",
+        "A arc_easy metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for arc_easy is shown with the metric, checkpoint and n",
+        "Raw arc_easy output plus the exact invocation that produced it, with exit code",
+        "Raw arc_easy output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "arc_easy__beats_baseline": {
+      "type": "score",
+      "category": "arc_easy",
+      "instructions": "Does the evidence show the RIG-trained head's ARC-Easy science questions score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for arc_easy",
+        "A baseline is mentioned for arc_easy but no number is given",
+        "A baseline number for arc_easy is given with no source file or citation",
+        "A baseline number and source are given but our arc_easy score is absent",
+        "Both numbers present for arc_easy but ours is clearly lower than the baseline",
+        "Ours exceeds the arc_easy baseline but the baseline source is unverified",
+        "Ours exceeds the arc_easy baseline with the baseline source file named",
+        "Ours exceeds the arc_easy baseline, source named, and the margin is stated",
+        "Ours exceeds the arc_easy baseline with source, margin, and item count n",
+        "Ours exceeds the arc_easy baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "arc_easy__controlled_comparison": {
+      "type": "score",
+      "category": "arc_easy",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL ARC-Easy science questions item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on arc_easy; no comparison exists",
+        "Two arc_easy numbers are compared but they come from different sources entirely",
+        "Two arc_easy numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on arc_easy but with different item counts",
+        "Both run locally on arc_easy with the same n but different seeds",
+        "Same items and prompts for arc_easy, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for arc_easy, shown in the invocations",
+        "Identical arc_easy item set demonstrated, both checkpoints named in one results file",
+        "Identical arc_easy items, both checkpoints, single harness invocation, seed pinned",
+        "Identical arc_easy items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "arc_easy__no_leakage": {
+      "type": "score",
+      "category": "arc_easy",
+      "instructions": "Is the ARC-Easy science questions evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and arc_easy evaluation data are not distinguished at all",
+        "The arc_easy eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and arc_easy evaluation with no split discipline",
+        "Splits are claimed for arc_easy but not named or shown",
+        "A split name is given for arc_easy but the training source is vague",
+        "Different named splits for arc_easy, with the training mixture enumerated",
+        "Different splits for arc_easy plus an explicit statement that no eval rows entered training",
+        "Different splits for arc_easy plus a programmatic disjointness check that was run",
+        "Programmatic arc_easy overlap check run and reported as zero overlap with counts",
+        "Zero-overlap arc_easy check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "arc_easy__reproducible": {
+      "type": "score",
+      "category": "arc_easy",
+      "instructions": "Could an independent third party re-run the ARC-Easy science questions evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run arc_easy",
+        "Only a narrative description of what was done for arc_easy",
+        "A script name is mentioned for arc_easy with no path and no arguments",
+        "A script path for arc_easy but no arguments and no environment",
+        "Script path and arguments for arc_easy, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for arc_easy, but no results artifact",
+        "Full arc_easy invocation plus a persisted results file path",
+        "Full arc_easy invocation, results file, and the exact model revision or local path",
+        "Full arc_easy invocation, results file, model revision, and recorded wall time or device",
+        "Full arc_easy invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "gpqa__measured_live": {
+      "type": "score",
+      "category": "gpqa",
+      "instructions": "Was the GPQA Diamond graduate-level science metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No gpqa metric appears anywhere in the evidence",
+        "The gpqa metric is only promised, planned, or described as future work",
+        "A gpqa number is asserted with no command and no output backing it",
+        "A command is shown for gpqa but produced no output, or the output is an error",
+        "Partial gpqa output appears but the headline metric is missing or unparseable",
+        "A gpqa metric with named checkpoint, but the item count n is absent",
+        "A gpqa metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for gpqa is shown with the metric, checkpoint and n",
+        "Raw gpqa output plus the exact invocation that produced it, with exit code",
+        "Raw gpqa output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "gpqa__beats_baseline": {
+      "type": "score",
+      "category": "gpqa",
+      "instructions": "Does the evidence show the RIG-trained head's GPQA Diamond graduate-level science score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for gpqa",
+        "A baseline is mentioned for gpqa but no number is given",
+        "A baseline number for gpqa is given with no source file or citation",
+        "A baseline number and source are given but our gpqa score is absent",
+        "Both numbers present for gpqa but ours is clearly lower than the baseline",
+        "Ours exceeds the gpqa baseline but the baseline source is unverified",
+        "Ours exceeds the gpqa baseline with the baseline source file named",
+        "Ours exceeds the gpqa baseline, source named, and the margin is stated",
+        "Ours exceeds the gpqa baseline with source, margin, and item count n",
+        "Ours exceeds the gpqa baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "gpqa__controlled_comparison": {
+      "type": "score",
+      "category": "gpqa",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL GPQA Diamond graduate-level science item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on gpqa; no comparison exists",
+        "Two gpqa numbers are compared but they come from different sources entirely",
+        "Two gpqa numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on gpqa but with different item counts",
+        "Both run locally on gpqa with the same n but different seeds",
+        "Same items and prompts for gpqa, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for gpqa, shown in the invocations",
+        "Identical gpqa item set demonstrated, both checkpoints named in one results file",
+        "Identical gpqa items, both checkpoints, single harness invocation, seed pinned",
+        "Identical gpqa items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "gpqa__no_leakage": {
+      "type": "score",
+      "category": "gpqa",
+      "instructions": "Is the GPQA Diamond graduate-level science evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and gpqa evaluation data are not distinguished at all",
+        "The gpqa eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and gpqa evaluation with no split discipline",
+        "Splits are claimed for gpqa but not named or shown",
+        "A split name is given for gpqa but the training source is vague",
+        "Different named splits for gpqa, with the training mixture enumerated",
+        "Different splits for gpqa plus an explicit statement that no eval rows entered training",
+        "Different splits for gpqa plus a programmatic disjointness check that was run",
+        "Programmatic gpqa overlap check run and reported as zero overlap with counts",
+        "Zero-overlap gpqa check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "gpqa__reproducible": {
+      "type": "score",
+      "category": "gpqa",
+      "instructions": "Could an independent third party re-run the GPQA Diamond graduate-level science evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run gpqa",
+        "Only a narrative description of what was done for gpqa",
+        "A script name is mentioned for gpqa with no path and no arguments",
+        "A script path for gpqa but no arguments and no environment",
+        "Script path and arguments for gpqa, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for gpqa, but no results artifact",
+        "Full gpqa invocation plus a persisted results file path",
+        "Full gpqa invocation, results file, and the exact model revision or local path",
+        "Full gpqa invocation, results file, model revision, and recorded wall time or device",
+        "Full gpqa invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    },
+    "mmlu__measured_live": {
+      "type": "score",
+      "category": "mmlu",
+      "instructions": "Was the MMLU across all subjects metric produced by actually running the evaluation harness on the RIG-trained checkpoint, with the raw numeric output present in the evidence?",
+      "criteria": [
+        "No mmlu metric appears anywhere in the evidence",
+        "The mmlu metric is only promised, planned, or described as future work",
+        "A mmlu number is asserted with no command and no output backing it",
+        "A command is shown for mmlu but produced no output, or the output is an error",
+        "Partial mmlu output appears but the headline metric is missing or unparseable",
+        "A mmlu metric with named checkpoint, but the item count n is absent",
+        "A mmlu metric with named checkpoint and n, but no raw harness output shown",
+        "Raw harness output for mmlu is shown with the metric, checkpoint and n",
+        "Raw mmlu output plus the exact invocation that produced it, with exit code",
+        "Raw mmlu output, exact invocation, exit code, and a persisted results artifact path"
+      ]
+    },
+    "mmlu__beats_baseline": {
+      "type": "score",
+      "category": "mmlu",
+      "instructions": "Does the evidence show the RIG-trained head's MMLU across all subjects score exceeding its OpenJEV baseline, with the baseline's source named? The baseline is OpenJEV's published 0.8B mlp_per_task for this category where OpenJEV published one; where OpenJEV published no 0.8B number for this category, the baseline is the released 0.8B checkpoint's own scorer re-measured locally on the identical items. Either is a valid baseline provided the evidence says which one is used.",
+      "criteria": [
+        "No comparison to any OpenJEV baseline for mmlu",
+        "A baseline is mentioned for mmlu but no number is given",
+        "A baseline number for mmlu is given with no source file or citation",
+        "A baseline number and source are given but our mmlu score is absent",
+        "Both numbers present for mmlu but ours is clearly lower than the baseline",
+        "Ours exceeds the mmlu baseline but the baseline source is unverified",
+        "Ours exceeds the mmlu baseline with the baseline source file named",
+        "Ours exceeds the mmlu baseline, source named, and the margin is stated",
+        "Ours exceeds the mmlu baseline with source, margin, and item count n",
+        "Ours exceeds the mmlu baseline with source, margin, n, and the released checkpoint re-measured locally on the identical items"
+      ]
+    },
+    "mmlu__controlled_comparison": {
+      "type": "score",
+      "category": "mmlu",
+      "instructions": "Were the released OpenJEV checkpoint and the RIG-trained checkpoint evaluated on the IDENTICAL MMLU across all subjects item set -- same seed, same n, same premise/hypothesis construction?",
+      "criteria": [
+        "Only one checkpoint was evaluated on mmlu; no comparison exists",
+        "Two mmlu numbers are compared but they come from different sources entirely",
+        "Two mmlu numbers compared, but one is a published figure and ours is on a different sample",
+        "Both run locally on mmlu but with different item counts",
+        "Both run locally on mmlu with the same n but different seeds",
+        "Same items and prompts for mmlu, but this is only asserted, not shown",
+        "Same seed, n and prompt construction for mmlu, shown in the invocations",
+        "Identical mmlu item set demonstrated, both checkpoints named in one results file",
+        "Identical mmlu items, both checkpoints, single harness invocation, seed pinned",
+        "Identical mmlu items, both checkpoints, one invocation, seed pinned, plus a hash or checksum of the evaluated item set"
+      ]
+    },
+    "mmlu__no_leakage": {
+      "type": "score",
+      "category": "mmlu",
+      "instructions": "Is the MMLU across all subjects evaluation set provably disjoint from everything the RIG fine-tune was trained on?",
+      "criteria": [
+        "Training data and mmlu evaluation data are not distinguished at all",
+        "The mmlu eval split is unnamed; leakage cannot be ruled out",
+        "Same dataset used for training and mmlu evaluation with no split discipline",
+        "Splits are claimed for mmlu but not named or shown",
+        "A split name is given for mmlu but the training source is vague",
+        "Different named splits for mmlu, with the training mixture enumerated",
+        "Different splits for mmlu plus an explicit statement that no eval rows entered training",
+        "Different splits for mmlu plus a programmatic disjointness check that was run",
+        "Programmatic mmlu overlap check run and reported as zero overlap with counts",
+        "Zero-overlap mmlu check by content hash, with counts on both sides and the check's code path shown"
+      ]
+    },
+    "mmlu__reproducible": {
+      "type": "score",
+      "category": "mmlu",
+      "instructions": "Could an independent third party re-run the MMLU across all subjects evaluation and obtain the same number from the evidence alone?",
+      "criteria": [
+        "Nothing in the evidence would let anyone re-run mmlu",
+        "Only a narrative description of what was done for mmlu",
+        "A script name is mentioned for mmlu with no path and no arguments",
+        "A script path for mmlu but no arguments and no environment",
+        "Script path and arguments for mmlu, but the checkpoint path is missing",
+        "Path, arguments, checkpoint and seed for mmlu, but no results artifact",
+        "Full mmlu invocation plus a persisted results file path",
+        "Full mmlu invocation, results file, and the exact model revision or local path",
+        "Full mmlu invocation, results file, model revision, and recorded wall time or device",
+        "Full mmlu invocation, results artifact, model revision, device, and a content hash of the results file"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "chess__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "chess metric is not backed by a real harness run"
+    },
+    {
+      "when": "gsm8k_mc10__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gsm8k_mc10 metric is not backed by a real harness run"
+    },
+    {
+      "when": "gsm8k_mc4__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gsm8k_mc4 metric is not backed by a real harness run"
+    },
+    {
+      "when": "hellaswag__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "hellaswag metric is not backed by a real harness run"
+    },
+    {
+      "when": "winogrande__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "winogrande metric is not backed by a real harness run"
+    },
+    {
+      "when": "arc_challenge__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "arc_challenge metric is not backed by a real harness run"
+    },
+    {
+      "when": "arc_easy__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "arc_easy metric is not backed by a real harness run"
+    },
+    {
+      "when": "gpqa__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gpqa metric is not backed by a real harness run"
+    },
+    {
+      "when": "mmlu__measured_live.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "mmlu metric is not backed by a real harness run"
+    },
+    {
+      "when": "chess__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "chess does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "gsm8k_mc10__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gsm8k_mc10 does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "gsm8k_mc4__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gsm8k_mc4 does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "hellaswag__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "hellaswag does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "winogrande__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "winogrande does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "arc_challenge__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "arc_challenge does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "arc_easy__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "arc_easy does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "gpqa__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "gpqa does not demonstrably beat the published OpenJEV baseline"
+    },
+    {
+      "when": "mmlu__beats_baseline.score <= 7.2",
+      "verdict": "BLOCK",
+      "reason": "mmlu does not demonstrably beat the published OpenJEV baseline"
+    }
+  ],
+  "notes": {
+    "scale": {
+      "jev_levels": 10,
+      "jev_index_range": [
+        0,
+        9
+      ],
+      "rescale_to_10": "score10 = jev_score * 10/9",
+      "min": 0,
+      "max": 10,
+      "pass_threshold": 9.5,
+      "pass_threshold_in_jev_index": 8.55,
+      "aggregation": "mean per category"
+    },
+    "categories": {
+      "chess": "Chess legal moves (4 candidate SAN moves, exactly one legal)",
+      "gsm8k_mc10": "GSM8K as 10-way multiple choice",
+      "gsm8k_mc4": "GSM8K as 4-way multiple choice",
+      "hellaswag": "HellaSwag sentence completion",
+      "winogrande": "Winogrande pronoun resolution",
+      "arc_challenge": "ARC-Challenge science questions",
+      "arc_easy": "ARC-Easy science questions",
+      "gpqa": "GPQA Diamond graduate-level science",
+      "mmlu": "MMLU across all subjects"
+    },
+    "gate": {
+      "per_category_mean_min": 9.5,
+      "n_questions": 45,
+      "n_categories": 9
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "name": "jev.triage",
+  "stage": "triage",
+  "lane": "jev",
+  "description": "Level 2 multiple choice: route an inbound item to its handling lane.",
+  "questions": {
+    "lane": {
+      "type": "choice",
+      "instructions": "Which handling lane does this item belong to",
+      "criteria": {
+        "coding": "Write, fix, refactor, debug, review, or ship code",
+        "gtm-content": "LinkedIn posts, emails, newsletters or newsletter sections, campaigns, outreach copy: writing or reshaping content for an audience",
+        "scheduling": "Calendar, reminders, meeting logistics, time blocks, appointments: the item is about the time slot itself, not the family or health matter behind it",
+        "research": "Find out, investigate, summarize what changed, compare, verify facts or sources: gathering or checking facts, not writing content for an audience",
+        "finance": "Money, invoices, pricing, budgets, spend approval",
+        "fleet-ops": "Agents, crons, hooks, models, machines, deploys, servers",
+        "personal": "Family, kids and their school, health or sickness, gym, household, errands",
+        "security": "Credentials, permissions, secret exposure, access changes",
+        "chatter": "A short social reply that asks for nothing: thanks, ack, see you tomorrow",
+        "other": "Outside every other lane: sports prediction, translation, trivia, general knowledge question"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "lane.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "lane confidence at or below 0.90: human or meta-router decides"
+    },
+    {
+      "when": "lane.choice == 'other'",
+      "verdict": "ESCALATE",
+      "reason": "no listed lane fits: human or meta-router decides"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = routed to the chosen lane (confidence above 0.90, lane is not 'other'). ESCALATE = human queue (confidence at/below 0.90 or lane 'other'). Never BLOCKs.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage).",
+    "criteria_edit_2026-09-28": "personal vs scheduling disambiguated (kid sick -> notify school scored personal at confidence 0.90)",
+    "criteria_edit_2026-09-28b": "gtm-content (write for an audience) vs research (gather facts) disambiguated"
+  }
+}

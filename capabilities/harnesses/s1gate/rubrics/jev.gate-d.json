@@ -1,0 +1,37 @@
+{
+  "name": "jev.gate-d",
+  "stage": "gate",
+  "lane": "jev",
+  "description": "Level 10 agentic Jev: the agent asks about its own pending action.",
+  "questions": {
+    "outward_or_irreversible": {
+      "type": "choice",
+      "instructions": "Decide yes or no",
+      "criteria": {
+        "yes": "After it runs, something outside this machine differs: a send, publish, post, push or merge to a remote, deploy, release, payment, credential or access change, remote or production data deleted or altered.",
+        "no": "It only touches local state or reads: grep, read a remote thing without writing, local file write, local build, local index, local test run, compute or hash."
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "outward_or_irreversible.p.yes >= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "outward or irreversible: Gate-D requires Mike's approval"
+    },
+    {
+      "when": "outward_or_irreversible.p.no <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "not sure it stays local: request Gate-D approval"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = internal action, proceed (outward=no above 0.90). ESCALATE = open a Gate-D request (yes >= 0.5, or no at/below 0.90). A PASS never authorizes outward work; Gate-D does.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [
+      "internal_action"
+    ],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
+  }
+}

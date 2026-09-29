@@ -1,0 +1,35 @@
+{
+  "name": "jev.compact-read",
+  "stage": "context",
+  "lane": "jev",
+  "description": "Level 8 the cheap read: compact or keep verbatim context.",
+  "questions": {
+    "compact_is_safe": {
+      "type": "choice",
+      "instructions": "Decide yes or no",
+      "criteria": {
+        "yes": "The new request belongs to a clearly different task domain (scheduling, gym, email, planning, a different system) and names nothing that was just on screen",
+        "no": "The request points at bytes just shown with a demonstrative — 'that line', 'that exact string', 'those exact header names', 'the file we just read', 'quote clause 4.2', 'the error above' — it needs them verbatim — any request that reuses a noun just shown (the error, the stack, the assertion, the headers, that line, that file) is no"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "compact_is_safe.p.no >= 0.5",
+      "verdict": "BLOCK",
+      "reason": "next request needs verbatim context: keep raw, do not compact"
+    },
+    {
+      "when": "compact_is_safe.p.yes <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "not sure compaction is safe: keep raw context"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = safe to compact (compact_is_safe=yes above 0.90). ESCALATE = keep raw (yes at/below 0.90). BLOCK = no >= 0.5: next request points at exact bytes on screen.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
+  }
+}

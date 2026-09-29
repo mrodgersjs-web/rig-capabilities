@@ -1,0 +1,45 @@
+{
+  "name": "jev.file-triage",
+  "stage": "triage",
+  "lane": "jev",
+  "description": "Level 7 files at scale: which candidate file to open; flag secret files.",
+  "questions": {
+    "worth_reading": {
+      "type": "choice",
+      "instructions": "Decide yes or no",
+      "criteria": {
+        "yes": "The goal names an artifact and this file's path or name names that same thing (same key words; folder, extension, date, separators and word order do not matter): open it and you have the answer",
+        "no": "This file's path or name names something other than what the goal asks for"
+      }
+    },
+    "credential_bearing": {
+      "type": "choice",
+      "instructions": "Is the candidate file's name a known secret carrier? Decide yes or no",
+      "criteria": {
+        "yes": "The filename itself is a known secret carrier regardless of the goal: .env, .env.local, .env.*, id_rsa, *.pem, *.key, secrets.*, *.secrets, credentials.*, auth.json, token, tokens, apikey, wallet, keystore, .netrc, oauth/",
+        "no": "The filename names code, plain config, logs, notes, or data and carries no secret in its name"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "credential_bearing.p.yes >= 0.5",
+      "verdict": "BLOCK",
+      "reason": "secret carrier: never read into agent context"
+    },
+    {
+      "when": "worth_reading.p.yes <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "skip: not the file that answers this goal"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = open this file (worth_reading=yes above 0.90 and not a secret carrier). ESCALATE = skip it. BLOCK = credential_bearing=yes >= 0.5: never read into context.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage).",
+    "criteria_edit_2026-09-28": "equivalence made explicit (folder/extension/separator differences scored exactly 0.90)",
+    "criteria_edit_2026-09-28b": "credential_bearing instruction names the filename as the thing judged ('ignore the goal' regressed secrets.yaml to 0.85 and was reverted)"
+  }
+}

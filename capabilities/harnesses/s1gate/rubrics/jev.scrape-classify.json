@@ -1,0 +1,44 @@
+{
+  "name": "jev.scrape-classify",
+  "stage": "extract",
+  "lane": "jev",
+  "description": "Level 3 composite at scale: classify one scraped row (ByteGrad Jev+Playwright pattern).",
+  "questions": {
+    "category": {
+      "type": "choice",
+      "instructions": "What kind of content is this scraped item",
+      "criteria": {
+        "product-listing": "A product, price, plan, or marketplace listing",
+        "person-profile": "A person, title, company, or contact block",
+        "job-posting": "A job, role, opening, or listing with duties or pay",
+        "article": "A blog post, news item, essay, or documentation page",
+        "forum-comment": "A comment, review, reply, or user-generated opinion",
+        "navigation": "Menu, footer, cookie banner, pagination, or other chrome",
+        "ad": "Advertisement, sponsored block, or promotional insert",
+        "empty": "No extractable content",
+        "other": "None of these fits"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "category.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "category confidence at or below 0.90: human or meta-router decides"
+    },
+    {
+      "when": "category.choice == 'other'",
+      "verdict": "ESCALATE",
+      "reason": "no listed category fits: human or meta-router decides"
+    }
+  ],
+  "notes": {
+    "verdicts": "PASS = row labelled with the chosen category (confidence above 0.90, not 'other'). ESCALATE = row goes to review. Caller drops navigation/ad/empty rows by category; the gate only judges label trust.",
+    "bar": "Required answer must be ABOVE 0.90; exactly 0.90 does not pass (work-criteria.json).",
+    "removed_questions": [
+      "actionable"
+    ],
+    "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
+    "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
+  }
+}
