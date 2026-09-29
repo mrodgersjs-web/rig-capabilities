@@ -27,6 +27,5 @@ Load when: the task touches this part of ai design workflow, or a ds-ai-workflow
 | 24 | Build composite elements (circular avatar, handle pair, verification badge) in a layout tool, export them flat, and hand that composite to the image model as an input. | grow-with-alex | CLAIM(IIXupZAGvDk@02:42, IIXupZAGvDk@03:28) | single-source | yes |
 | 25 | Copy a proven, high-performing design or post as the style source and swap in your own subject and story. | grow-with-alex, adrien-ai-designer | CLAIM(IIXupZAGvDk@00:46, bOXbC5HwpiM@00:26, 5lDUy7JFNrg@01:00) | consensus | yes |
 | 26 | Strip inherited logos, badges and watermarks from reference-driven generations before use. | grow-with-alex | CLAIM(IIXupZAGvDk@01:38) | single-source | yes |
-| 27 | Expect generated text to misspell; regenerate with prompt variants and pick the strongest result rather than shipping the first. | grow-with-alex | CLAIM(IIXupZAGvDk@03:35) | single-source | yes |
 
 ## Anti-patterns for this sub-topic

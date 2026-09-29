@@ -12,7 +12,7 @@ description: >-
   ds-director meta agent over 7 agents and 8 sub-agents. Backed by ds-doctrine (laws cited
   CLAIM(<videoId>@mm:ss) from the RIG design YouTube corpus: 6,757 captured transcripts across 22 channels
   (Mike's top-10 subscribed design channels weighted 2x), 240 of the densest how-to videos deep-distilled
-  into 826 laws and 384 good-versus-bad pairs, with 1,958 eligible videos queued in docs/BACKLOG.md) and
+  into 822 laws and 383 good-versus-bad pairs, with 1,958 eligible videos queued in docs/BACKLOG.md) and
   ds-exemplars (looks like / does not pair cards). Use for /design-studio, "design a site", "redesign this", "critique this page",
   "brand identity", "make this look better", or any design job.
 tier: meta

@@ -3,7 +3,7 @@ name: ds-ai-workflow
 description: >-
   JEV-FIRST MANDATE, findable at task start and binding before any work: typed judgments go to rig-s1gate
   (Jev) BEFORE any frontier LLM call; DEFERRED when the classifier is down, never a guessed verdict.
-  Main skill of design-studio-os for ai design workflow: Use AI tools inside design and build work with judgment kept human: tool stack selection, prompt-to-site flows, Figma and Framer AI features, and the checks that keep output on-quality. 46 laws, 18
+  Main skill of design-studio-os for ai design workflow: Use AI tools inside design and build work with judgment kept human: tool stack selection, prompt-to-site flows, Figma and Framer AI features, and the checks that keep output on-quality. 45 laws, 18
   looks-like/does-not pairs distilled from the RIG design YouTube corpus (top-10 subscribed channels
   weighted), every law cited CLAIM(<videoId>@mm:ss). Use when AI tools are in the design or build path (prompt-to-site, Figma or Framer AI, Claude Design).
 tier: main
@@ -75,7 +75,7 @@ Output: workflow.md: tool chain with per-tool role and fallback, the prompts or 
 | 11 | Fill the brief by pointing the agent at the empty brief file and asking it to interview you line by line. | adrien-ai-designer | CLAIM(oechHZEX8PM@02:11) | single-source |
 | 17 | On style-first generators, write the opening prompt heavy on content and light on styling: name the mood broadly and tune styling afterwards. | flux-academy | CLAIM(QKUnUrsDzk0@00:53, QKUnUrsDzk0@02:00) | single-source |
 
-The full set of 46 laws lives in the sub-skills.
+The full set of 45 laws lives in the sub-skills.
 
 ## Sub-skills
 
@@ -83,7 +83,7 @@ The full set of 46 laws lives in the sub-skills.
 |---|---|---|
 | agent-ready-figma-prep | references/agent-ready-figma-prep.md | 8 laws |
 | ai-build-prompting | references/ai-build-prompting.md | 9 laws |
-| reference-driven-visuals | references/reference-driven-visuals.md | 10 laws |
+| reference-driven-visuals | references/reference-driven-visuals.md | 9 laws |
 | ai-iteration-verification | references/ai-iteration-verification.md | 12 laws |
 | template-batch-production | references/template-batch-production.md | 7 laws |
 
@@ -121,11 +121,11 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ai_workflow/.
 - Pasting model-written copy straight into a layout without editing it. CLAIM(xmL99KEycU0@03:18)
 - Adding large decorative animation, which hurts performance and distracts from the goal. CLAIM(5lDUy7JFNrg@05:47)
 - Treating the editor preview as proof: layouts squash and device-only features never trigger there. CLAIM(eXQQxaS0CCA@12:00, eXQQxaS0CCA@13:45)
-- plus 3 more in references/<sub-skill>.md files
+- plus 2 more in references/<sub-skill>.md files
 
 ## Creator disagreements (stated, not resolved)
 
-- How specific the first prompt should be. Flux Academy (2026) tells you to be thorough: frame size, exact colors, explicit layout rules, because prompt one sets the foundation. CLAIM(XftHdIqqgNM@02:36) Flux Academy's own earlier Framer video (2023) says the opposite for its site generator: describe content richly, keep styling broad, and adjust style later. CLAIM(QKUnUrsDzk0@00:53) DesignCourse (2025) sits between them: the prompt need not be long if the file is well prepared. CLAIM(yO3Wr7DEWF0@04:04) Resolution: specificity belongs where the tool cannot infer it; a structured file lets the prompt stay short, a blank canvas demands detail.
+- How specific the first prompt should be. Flux Academy (2026) tells you to be thorough: frame size, exact colors, explicit layout rules, because prompt one sets the foundation. CLAIM(XftHdIqqgNM@02:36) Flux Academy's own earlier Framer video (2023) says the opposite for its site generator: describe content richly, keep styling broad, and adjust style later. CLAIM(QKUnUrsDzk0@00:53) DesignCourse (2025) sits between them: the prompt need not be long if the file is well prepared. Resolution: specificity belongs where the tool cannot infer it; a structured file lets the prompt stay short, a blank canvas demands detail.
 - Whether generated work can return to the design file. Flux Academy (2025-09) reports no route back from the prototyping generator to design layers. CLAIM(qeqearWwBpg@16:52) Jesse Showalter (2025-10, 2026-01) demonstrates copying the whole generated design out as editable layers. CLAIM(EUPbdk972JI@05:37, yRBu2jU2d1w@09:07) Treat as a dated capability change, not a contradiction.
 - Attach a design system or not. Jesse Showalter deliberately skips attaching a published design system on the first prototype run to get moving. CLAIM(yRBu2jU2d1w@02:06) Flux Academy instead generates the design system from the finished screens and applies it back. CLAIM(XftHdIqqgNM@05:00) Both agree the system matters; they disagree on when to introduce it.
 - Who holds creative direction. Flux Academy frames the agent as a fast literal junior designer you brief and review. CLAIM(XftHdIqqgNM@07:29) Jesse Showalter frames the designer as a creative director whose thought work lives in the requirements doc. CLAIM(EUPbdk972JI@06:15) Adrien frames it as the end of design effort once research and architecture are done. CLAIM(oechHZEX8PM@07:31) Practically: the more the brief carries, the less the generation step decides.
@@ -135,15 +135,15 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ai_workflow/.
 - A three-clip scroll-animation site with deploy was built in about 30 minutes end to end. CLAIM(h_CPuUpsiEg@00:00)
 - A branded animated dashboard can be built in under 10 minutes on the three-step workflow. CLAIM(a_mZ4Kp3lTM@00:15)
 - Three complete design directions can be produced in about 3 minutes once the brief is filled. CLAIM(oechHZEX8PM@05:24)
-- A three-screen first draft takes about 15 minutes through the design-file connection. CLAIM(XftHdIqqgNM@04:50)
 - A full landing page can be generated from one prompt in roughly 30 seconds. CLAIM(QKUnUrsDzk0@02:26)
 - The referenced image model was described as the best available at the time of recording. CLAIM(h_CPuUpsiEg@01:15)
 - The 2024 image model release was described as far ahead of competitors in the creator's opinion. CLAIM(Rkq_eDeGIMw@00:13)
-- A free-ebook funnel was presented as the creator's plan to make $100,000 in a calendar year. CLAIM(xmL99KEycU0@00:00)
+- Carousel replications were shown against reference posts reported at tens of thousands of likes. CLAIM(IIXupZAGvDk@05:16, IIXupZAGvDk@06:33)
+- Generated mockups were stated to be commercially safe for client work because of the vendor's stock training data. CLAIM(Rkq_eDeGIMw@10:27)
 
 ## Tool-specific (dated)
 
-- 2025-06 (designcourse): the design-file connection was set up in two places: add the server URL in the code editor's MCP settings, and enable the dev-mode server inside the design tool's preferences. CLAIM(yO3Wr7DEWF0@00:22)
+- 2025-06 (designcourse): the design-file connection was set up in two places: add the server URL in the code editor's MCP settings, and enable the dev-mode server inside the design tool's preferences. CLAIM(yO3Wr7DEWF0@01:19)
 - 2026-04 (flux-academy): the same capability is installed from a connectors panel, choosing the listing described as the design-tool MCP server and authorizing the account; two similar listings exist. CLAIM(XftHdIqqgNM@01:11)
 - 2026-03 (adrien-ai-designer): the coding agent runs inside a code editor, and MCP installation is done by a terminal command followed by a check of the MCP panel. CLAIM(oechHZEX8PM@00:27)
 - 2025-09 (flux-academy): the in-tool prototyping generator offered a code-from-design entry on selected layers, split code/preview view, and converted elements into code layers that land in the document grid. CLAIM(qeqearWwBpg@00:58, qeqearWwBpg@04:02)

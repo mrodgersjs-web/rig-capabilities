@@ -17,7 +17,7 @@ Owning main skill: ds-ui-system. Every row paraphrases a good-versus-bad contras
 | 11 | Stroke taken from the background hue and darkened a step | Pure gray stroke beside a colored panel | Hue-derived neutrals read as one system | CLAIM(iLWaIx7tMnU@04:31) |
 | 12 | Inner control radius half the container radius | Rounded button sitting in a square container | Related radii flow | CLAIM(iLWaIx7tMnU@04:58) |
 | 13 | Seat counter with a conditional that stops at the floor | Counter that decrements into negative numbers | Prototypes should refuse impossible states | CLAIM(Tx45NcbU6aA@11:25) |
-| 14 | One gallery whose visibility is driven by boolean variables | A duplicated page per filter with a hand-wired switcher | Variables keep one source of truth | CLAIM(vf1BZ1mG2WE@18:46) |
+| 14 | One gallery whose visibility is driven by boolean variables | A duplicated page per filter with a hand-wired switcher | Variables keep one source of truth | CLAIM(vf1BZ1mG2WE@19:42) |
 | 15 | Highlight layer named the same in every state | Layers renamed per variant so the animation snaps | Smart animate matches by name | CLAIM(1JZcMnecWHI@05:29) |
 | 16 | Images with aspect ratio locked inside an auto layout | Images that squash and stretch with the card | Locked ratio keeps proportions | CLAIM(M8msUKBSBlY@01:23) |
 | 17 | Glass card with frost around 20 over readable text | Heavy frost that reads as plastic, or none at all | Frost is the accessibility lever | CLAIM(3ERrrTcx09c@02:30) |

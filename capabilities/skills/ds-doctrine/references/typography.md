@@ -16,7 +16,7 @@ Coverage: 16 videos read (WTUM2Y11oJo, 9ut7EmnYG7I, Yfd5kW1ZMgQ, aOPGqOOi__4, pb
 | 6 | Cap a layout at two or three typefaces and at most one decorative face, used only for headings or a large graphic element; count styles and weights, not just family names. | Flux Academy | CLAIM(9ut7EmnYG7I@12:29, 9ut7EmnYG7I@13:30, WTUM2Y11oJo@36:00) | single-source | yes |
 | 7 | Work brief keyword to classification: nostalgic or heritage briefs take old-style serifs, mass-market accessibility briefs avoid high-contrast serifs, technical briefs take grotesques or mono; do not assume modern means sans. | Flux Academy | CLAIM(WTUM2Y11oJo@07:01, WTUM2Y11oJo@10:30) | single-source | yes |
 | 8 | Judge a candidate face against a classic of the same class set side by side, and read the deviations (x-height, width, counter openings) to decide whether the deviation serves the job. | Flux Academy | CLAIM(WTUM2Y11oJo@29:30) | single-source | yes |
-| 9 | Before adopting a face, set real paragraphs at three sizes, check it on a phone, and inspect automatic kerning and character clarity; drop faces whose glyphs collide or fall apart when small. | Flux Academy | CLAIM(WTUM2Y11oJo@28:30) | single-source | yes |
+| 9 | Before adopting a face, set real paragraphs at three sizes, check it on a phone, and inspect automatic kerning and character clarity; drop faces whose glyphs collide or fall apart when small. | Flux Academy | CLAIM(WTUM2Y11oJo@29:25) | single-source | yes |
 | 10 | Run the objective checks first: lowercase l, uppercase I and digit 1 must be distinguishable where codes appear; the face must cover every language, accent and italic the job needs; a single-weight family limits the system. | Flux Academy | CLAIM(WTUM2Y11oJo@24:29, WTUM2Y11oJo@25:29, WTUM2Y11oJo@26:30) | single-source | yes |
 | 11 | Verify the license before delivery and tell the client which license applies; choose your search venue by budget (free libraries for zero budget, subscription libraries for broad search, small foundries for distinctive faces). | Flux Academy | CLAIM(WTUM2Y11oJo@16:29, WTUM2Y11oJo@17:00, WTUM2Y11oJo@21:00) | single-source | yes |
 | 12 | Prefer less-used free sources (Fontshare, uncut.wtf) over the handful of free faces everyone ships, so the design does not blend into the same five sites. | Self-Made Web Designer | CLAIM(vbFn0C-pvis@01:01) | single-source | yes |
@@ -100,12 +100,11 @@ Coverage: 16 videos read (WTUM2Y11oJo, 9ut7EmnYG7I, Yfd5kW1ZMgQ, aOPGqOOi__4, pb
 |--------|-----------|----------|
 | Flush left, rag right | Anything a reader must actually read (paragraphs, articles, addresses) | CLAIM(QrNi9FmdlxY@00:00, aOPGqOOi__4@01:29) |
 | Centered | Short blocks: a hero line, a two-line invitation, an occasional stylistic break | CLAIM(aOPGqOOi__4@10:01) |
-| Justified | Avoid; only where the tool and measure can keep rivers under control | CLAIM(QrNi9FmdlxY@01:59) |
 
 ### Mood levers inside one family
 | Target mood | Settings | Citation |
 |-------------|----------|----------|
-| Premium | Uppercase, wide tracking, small size, centered, generous white space, dark ground | CLAIM(Yfd5kW1ZMgQ@01:59) |
+| Premium | Uppercase, wide tracking, small size, centered, generous white space, dark ground | CLAIM(Yfd5kW1ZMgQ@03:09) |
 | Serious | Left aligned on a grid, bold heading weight, equal spacing, thin rules | CLAIM(Yfd5kW1ZMgQ@04:29) |
 | Playful | Lowercase, letters offset and rotated in the heading only | CLAIM(Yfd5kW1ZMgQ@07:31, Yfd5kW1ZMgQ@11:01) |
 | Aggressive | Oversized bold uppercase, negative tracking, black blocks framing the type | CLAIM(Yfd5kW1ZMgQ@11:30, Yfd5kW1ZMgQ@12:29) |
@@ -151,7 +150,7 @@ Coverage: 16 videos read (WTUM2Y11oJo, 9ut7EmnYG7I, Yfd5kW1ZMgQ, aOPGqOOi__4, pb
 ## Tool-specific (dated)
 
 - Illustrator (2017): cut text into a shape over a photo by converting type to outlines and subtracting the shape in Pathfinder. CLAIM(8A3JaGxU9o0@01:02)
-- Illustrator (2017): build a double-stroke text effect through the Appearance panel by stacking a new fill with strokes beneath it. CLAIM(8A3JaGxU9o0@02:25)
+- Illustrator (2017): build a double-stroke text effect through the Appearance panel by stacking a new fill with strokes beneath it. CLAIM(8A3JaGxU9o0@03:18)
 - Illustrator (2017): reflected gradient text by duplicating, reflecting horizontally, and shading the lower copy. CLAIM(8A3JaGxU9o0@04:30)
 - Illustrator (2017): manual highlight and shadow on outlined type using the pencil for filled highlight shapes. CLAIM(8A3JaGxU9o0@05:59)
 - Photoshop (2016): neon type from two duplicated layers, inner glow on the top layer and outer glow with a vivid-light blend on the bottom, over a textured background photo. CLAIM(nH9hECxwpyA@01:30, nH9hECxwpyA@01:56)

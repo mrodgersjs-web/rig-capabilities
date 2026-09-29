@@ -15,8 +15,8 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 | 5 | Give every nav link a hover state that confirms the pointer target. | DesignCourse | CLAIM(D29KL52Srtw@03:07) | single-source | no |
 | 6 | Place logo top-left and nav top-right; treat any other placement as a redesign risk and test it against user expectations before shipping. | DesignCourse, Self-Made Web Designer | CLAIM(D29KL52Srtw@05:40), CLAIM(d-IaU9qcDGg@02:52) | consensus | yes |
 | 7 | Collapse the nav into a hamburger only when the links do not fit the viewport; never hide desktop links behind one. | DesignCourse | CLAIM(D29KL52Srtw@04:33) | single-source | no |
-| 8 | Size nav items and icons so they are easy to hit on touch, with clear space around each (at least 44px for icon-only controls), and keep frequently tapped primary controls apart from destructive or secondary ones so mis-taps do not fire them. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@06:37), CLAIM(EDtgsIn1meM@09:05), CLAIM(TKZl_UlXhYk@05:01) | consensus | yes |
-| 9 | Keep a visible keyboard focus state on every interactive element; if the default outline is removed, design a replacement. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@05:58), CLAIM(EDtgsIn1meM@09:19) | consensus | yes |
+| 8 | Size nav items and icons so they are easy to hit on touch, with clear space around each (at least 44px for icon-only controls), and keep frequently tapped primary controls apart from destructive or secondary ones so mis-taps do not fire them. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@06:37), CLAIM(EDtgsIn1meM@09:05), | consensus | yes |
+| 9 | Keep a visible keyboard focus state on every interactive element; if the default outline is removed, design a replacement. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@05:58), | consensus | yes |
 | 10 | Write link text that names the destination or action; never ship a link whose text is a generic call like click-through wording. | Flux Academy | CLAIM(EDtgsIn1meM@07:45) | single-source | yes |
 | 11 | Use real heading tags (H1, H2, H3) for page structure so screen-reader users and scanners can navigate the outline. | Flux Academy | CLAIM(EDtgsIn1meM@06:57) | single-source | yes |
 | 12 | Never convey an instruction or a state through color or shape alone, and when an icon meaning is unclear, replace the icon with a plain word that matches platform conventions users already know. | Flux Academy | CLAIM(EDtgsIn1meM@08:26), CLAIM(TKZl_UlXhYk@04:43), CLAIM(TKZl_UlXhYk@04:50) | single-source | yes |
@@ -33,14 +33,13 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 | 18 | Size field height to a middle value with generous inner padding; never ship cramped or over-tall inputs. | DesignCourse | CLAIM(5-caRWzSQd4@05:42), CLAIM(EKjCC4PwjFo@04:52) | single-source | no |
 | 19 | Keep one field aesthetic across the whole form: the same fill, stroke, and radius on text fields, text areas, checkboxes, selects, and buttons. | DesignCourse | CLAIM(5-caRWzSQd4@24:05) | single-source | no |
 | 20 | Place error text directly under the failing field, not near the submit button. | DesignCourse | CLAIM(EKjCC4PwjFo@06:15) | single-source | no |
-| 21 | Write error copy that states what happened in plain language and how to fix it, naming the rule that failed (for example a banned character), and color the failing field outline and its message with the error color so label, field, and message read as one problem. | NNgroup, DesignCourse | CLAIM(cCun-ReLTFI@00:41), CLAIM(5-caRWzSQd4@08:36), CLAIM(5-caRWzSQd4@09:32), CLAIM(EKjCC4PwjFo@07:06) | consensus | no |
+| 21 | Write error copy that states what happened in plain language and how to fix it, naming the rule that failed (for example a banned character), and color the failing field outline and its message with the error color so label, field, and message read as one problem. | NNgroup, DesignCourse | CLAIM(cCun-ReLTFI@00:41), CLAIM(5-caRWzSQd4@08:36), CLAIM(5-caRWzSQd4@09:32), | consensus | no |
 | 22 | Put the fix inside the error message: a one-click remedy (removable filters, a corrected value) beats instructions the user must go apply elsewhere. | NNgroup | CLAIM(cCun-ReLTFI@01:06), CLAIM(cCun-ReLTFI@01:14) | single-source | no |
-| 23 | Offer undo after any irreversible submit (sent message, placed order); it is the cheapest recovery path. | NNgroup | CLAIM(cCun-ReLTFI@01:34) | single-source | no |
-| 24 | Set error and helper type no smaller than 14px, and keep label, value, and error text at three distinct hierarchy levels inside one field. | DesignCourse | CLAIM(5-caRWzSQd4@09:05), CLAIM(5-caRWzSQd4@07:20) | single-source | no |
-| 25 | Make the form primary submit button the strongest-colored element in the form, using the theme primary color. | DesignCourse, Satori Graphics | CLAIM(5-caRWzSQd4@21:40), CLAIM(-5jSCHZIHlg@01:08) | consensus | yes |
+| 24 | Set error and helper type no smaller than 14px, and keep label, value, and error text at three distinct hierarchy levels inside one field. | DesignCourse | CLAIM(5-caRWzSQd4@09:05), CLAIM(5-caRWzSQd4@09:05) | single-source | no |
+| 25 | Make the form primary submit button the strongest-colored element in the form, using the theme primary color. | DesignCourse, Satori Graphics | CLAIM(5-caRWzSQd4@21:40), | consensus | yes |
 | 26 | Change button hover by a subtle lightening only; a hover that flips background and text color is too large a jump. | DesignCourse | CLAIM(5-caRWzSQd4@23:13) | single-source | no |
 | 27 | Constrain form fields to a readable column (one column centered, or a two-column split such as 60/40); never stretch inputs across the full screen width. | DesignCourse | CLAIM(EKjCC4PwjFo@21:30) | single-source | no |
-| 28 | Mask password fields on entry, style the terms link as a link beside its checkbox, and give checkbox marks breathing room inside their box. | DesignCourse | CLAIM(EKjCC4PwjFo@19:18), CLAIM(EKjCC4PwjFo@21:10), CLAIM(EKjCC4PwjFo@20:30) | single-source | no |
+| 28 | Mask password fields on entry, style the terms link as a link beside its checkbox, and give checkbox marks breathing room inside their box. | DesignCourse | CLAIM(EKjCC4PwjFo@19:18), CLAIM(EKjCC4PwjFo@19:14), CLAIM(EKjCC4PwjFo@20:30) | single-source | no |
 
 ### Accessibility
 
@@ -50,7 +49,7 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 | 30 | Write alt text that describes the image content; for a linked image, describe its function (home, search) instead of its artwork. | Flux Academy | CLAIM(EDtgsIn1meM@00:43), CLAIM(EDtgsIn1meM@01:12) | single-source | yes |
 | 31 | Keep meaningful copy as real page text; if text must sit inside an image, repeat it in surrounding text and in the alt attribute. | Flux Academy | CLAIM(EDtgsIn1meM@02:35) | single-source | yes |
 | 32 | Caption video, publish a transcript for audio, and warn before fast or flashing motion. | Flux Academy | CLAIM(EDtgsIn1meM@02:59), CLAIM(EDtgsIn1meM@02:40) | single-source | yes |
-| 33 | Choose legible body type, keep it resizable by browser controls, and test the layout at enlarged text sizes. | Flux Academy | CLAIM(EDtgsIn1meM@03:34), CLAIM(EDtgsIn1meM@10:58) | single-source | yes |
+| 33 | Choose legible body type, keep it resizable by browser controls, and test the layout at enlarged text sizes. | Flux Academy | CLAIM(EDtgsIn1meM@03:34), CLAIM(EDtgsIn1meM@04:23) | single-source | yes |
 | 34 | Test the whole site with the keyboard alone (tab, arrows, enter, escape) before calling it done. | Flux Academy, DesignCourse | CLAIM(EDtgsIn1meM@09:19), CLAIM(D29KL52Srtw@05:58) | consensus | yes |
 | 35 | Run the design past multiple testers, including people with disabilities when budget allows; the designer is the worst judge of their own navigation. | Flux Academy | CLAIM(EDtgsIn1meM@12:04) | single-source | yes |
 | 36 | For users with motor or vision impairment: maximize contrast, prefer sans-serif, use very large type and targets, and offer the fewest choices per screen. | DesignCourse | CLAIM(JavCEJ5hodc@03:42), CLAIM(JavCEJ5hodc@03:52), CLAIM(JavCEJ5hodc@03:07) | single-source | no |
@@ -62,8 +61,8 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 |---|-----|----------|-----------|------------------|----------------|
 | 38 | Keep page structure predictable to the visitor mental model (logo top-left, nav nearby, footer at the bottom) and spend novelty inside that structure, on small pleasant surprises such as micro-interactions. | Self-Made Web Designer, DesignCourse | CLAIM(d-IaU9qcDGg@03:25), CLAIM(d-IaU9qcDGg@04:29), CLAIM(D29KL52Srtw@05:40) | consensus | yes |
 | 39 | Make micro-interactions small: a gentle hover reaction or a slight scale on scroll works; motion big enough to startle pushes safety-seeking visitors away. | Self-Made Web Designer | CLAIM(d-IaU9qcDGg@04:47) | single-source | yes |
-| 40 | Group reasons to buy in chunks of three or four; express pricing tiers as deltas (everything in the lower tier plus these items) rather than repeated full feature lists. | Self-Made Web Designer | CLAIM(d-IaU9qcDGg@06:13), CLAIM(d-IaU9qcDGg@07:25) | single-source | yes |
-| 41 | Isolate the one element that must be remembered or clicked (the CTA, the recommended price) so it differs from its siblings in color, size, or outline, and keep that isolation to a single spot, since several strong outliers starve each other of attention. | Satori Graphics | CLAIM(-5jSCHZIHlg@00:36), CLAIM(-5jSCHZIHlg@02:06), CLAIM(-5jSCHZIHlg@05:02) | single-source | yes |
+| 40 | Group reasons to buy in chunks of three or four; express pricing tiers as deltas (everything in the lower tier plus these items) rather than repeated full feature lists. | Self-Made Web Designer | CLAIM(d-IaU9qcDGg@07:25), CLAIM(d-IaU9qcDGg@07:25) | single-source | yes |
+| 41 | Isolate the one element that must be remembered or clicked (the CTA, the recommended price) so it differs from its siblings in color, size, or outline, and keep that isolation to a single spot, since several strong outliers starve each other of attention. | Satori Graphics | CLAIM(-5jSCHZIHlg@00:36), CLAIM(-5jSCHZIHlg@02:06), | single-source | yes |
 | 42 | Place related elements together (title, body, CTA in one block) and separate unrelated blocks with spacing, so grouping does the explaining. | Satori Graphics, DesignCourse | CLAIM(-5jSCHZIHlg@22:27), CLAIM(EKjCC4PwjFo@18:32) | consensus | yes |
 | 43 | Group by similarity too: elements sharing color, shape, or size read as related even when they are spread across the layout. | Satori Graphics | CLAIM(-5jSCHZIHlg@21:08) | single-source | yes |
 | 44 | Plan the eye path with lines and shape direction, and keep compositions balanced and orderly, because visible imbalance sends viewers hunting for the missing piece instead of reading the message. | Satori Graphics | CLAIM(-5jSCHZIHlg@17:51), CLAIM(-5jSCHZIHlg@20:04) | single-source | yes |
@@ -80,10 +79,10 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 | 50 | Wireframe low-fidelity first (structure and flow only, simple shapes) and only then build high-fidelity screens with real color, type, and imagery. | DesignSense | CLAIM(P2W2AnK5aDE@03:48), CLAIM(P2W2AnK5aDE@04:27) | single-source | no |
 | 51 | Define a style guide page (palette, type sizes, spacing, buttons, icons) before hi-fi work, and structure the file as named pages (brief, screens, style guide, components) so the source of any element is findable. | DesignSense | CLAIM(P2W2AnK5aDE@06:01), CLAIM(P2W2AnK5aDE@02:58) | single-source | no |
 | 52 | A storyboard needs a specific scenario, sequenced visuals, and captions, kept to one persona and one path; stick figures are enough, so spend the effort on the story, not the drawing. | NNgroup | CLAIM(bNh54LNUtv8@00:06), CLAIM(bNh54LNUtv8@01:37), CLAIM(bNh54LNUtv8@01:04) | single-source | no |
-| 53 | Run scenario mapping early with four to six people of different roles: write the scenario from five elements (persona, motivator, intent, action, resolution), break it into four to six steps, then brainstorm ideas, questions, and considerations on separate sticky-note colors with about ten minutes of silent work before discussion. | NNgroup | CLAIM(dmlFRCZI9gQ@00:36), CLAIM(dmlFRCZI9gQ@01:05), CLAIM(dmlFRCZI9gQ@01:23), CLAIM(dmlFRCZI9gQ@01:53), CLAIM(dmlFRCZI9gQ@02:18) | single-source | no |
+| 53 | Run scenario mapping early with four to six people of different roles: write the scenario from five elements (persona, motivator, intent, action, resolution), break it into four to six steps, then brainstorm ideas, questions, and considerations on separate sticky-note colors with about ten minutes of silent work before discussion. | NNgroup | CLAIM(dmlFRCZI9gQ@00:36), CLAIM(dmlFRCZI9gQ@01:05), CLAIM(dmlFRCZI9gQ@01:23), CLAIM(dmlFRCZI9gQ@01:53), CLAIM(dmlFRCZI9gQ@01:09) | single-source | no |
 | 54 | Prototype the flows before development and share the clickable file with the client and the developer; refine from what testers do with it. | DesignSense | CLAIM(P2W2AnK5aDE@13:53) | single-source | no |
 | 55 | Keep testing after launch with a small user group plus analytics and reviews, and treat the feedback as a continuing loop rather than a one-time gate. | DesignSense | CLAIM(P2W2AnK5aDE@14:05) | single-source | no |
-| 56 | Run five-minute informal usability sessions on personal projects: give the tester a task with no briefing, have them narrate their choices, log every dead end, fix it, and confirm the flow completes on a retest. | Mike Locke | CLAIM(9viTvO0Okoo@00:24), CLAIM(9viTvO0Okoo@02:24), CLAIM(9viTvO0Okoo@04:07), CLAIM(9viTvO0Okoo@04:47) | single-source | no |
+| 56 | Run five-minute informal usability sessions on personal projects: give the tester a task with no briefing, have them narrate their choices, log every dead end, fix it, and confirm the flow completes on a retest. | Mike Locke | CLAIM(9viTvO0Okoo@02:02), CLAIM(9viTvO0Okoo@02:24), CLAIM(9viTvO0Okoo@04:07), CLAIM(9viTvO0Okoo@04:47) | single-source | no |
 | 57 | For data-heavy tables: order columns by importance left to right, keep headers and the identifier column pinned while scrolling, expand rows in place instead of covering the table with a modal, and replace machine codes with human-readable values. | NNgroup | CLAIM(23AQBZzDUIo@00:27), CLAIM(23AQBZzDUIo@01:13), CLAIM(23AQBZzDUIo@01:31), CLAIM(23AQBZzDUIo@01:52) | single-source | no |
 | 58 | Match exported assets to the target platform (vector or raster per framework) and produce the store graphics (launcher icon at 1024px, listing shots) as part of handoff. | DesignSense | CLAIM(P2W2AnK5aDE@15:14), CLAIM(P2W2AnK5aDE@15:42) | single-source | no |
 | 59 | Practice redesigns of shipped products as a skill drill: collect the public complaints first, then fix the named interaction problems in a mockup. | Flux Academy | CLAIM(TKZl_UlXhYk@00:18), CLAIM(TKZl_UlXhYk@00:36) | single-source | yes |
@@ -148,7 +147,7 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 |----------|----------|-----------|
 | One brand color plus neutrals | Multiple brand colors | Beginners and most projects: one or two. Multi-color only with a designer who can defend every hue (CLAIM(-5jSCHZIHlg@15:33)) |
 | Match the sector's palette | Break the sector palette | Break it only when the new color still fits the industry and the category is a sea of the same hue (CLAIM(-5jSCHZIHlg@04:20)) |
-| One strong isolated CTA | Several equally strong elements | Isolate when a single action matters; several strong spots cancel each other (CLAIM(-5jSCHZIHlg@00:36), CLAIM(-5jSCHZIHlg@05:02)) |
+| One strong isolated CTA | Several equally strong elements | Isolate when a single action matters; several strong spots cancel each other (CLAIM(-5jSCHZIHlg@00:36), ) |
 
 ### Research artifact choice
 
@@ -156,7 +155,7 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 |----------|----------|-----------|
 | Stick-figure storyboard | Polished illustrated storyboard | Low-fi for ideation and feedback; polished only for a client deliverable or a wide audience (CLAIM(bNh54LNUtv8@01:37)) |
 | Scenario mapping workshop | Solo flow sketch | Cross-role uncertainty: workshop with four to six people early in the project (CLAIM(dmlFRCZI9gQ@00:36), CLAIM(dmlFRCZI9gQ@02:36)) |
-| Five-minute family usability pass | Formal recruited test | Personal projects and portfolio work: the five-minute pass; funded client work: recruit testers including people with disabilities (CLAIM(9viTvO0Okoo@00:24), CLAIM(EDtgsIn1meM@12:04)) |
+| Five-minute family usability pass | Formal recruited test | Personal projects and portfolio work: the five-minute pass; funded client work: recruit testers including people with disabilities (CLAIM(9viTvO0Okoo@02:02), CLAIM(EDtgsIn1meM@12:04)) |
 
 ## Anti-patterns (cited)
 
@@ -193,12 +192,11 @@ Coverage: 16 videos read (EDtgsIn1meM, D29KL52Srtw, cCun-ReLTFI, bNh54LNUtv8, dm
 
 ## Tool-specific (dated)
 
-- Sketch 49 (2018) added native prototyping: hotspots, per-object links, transition direction, and a starting-point artboard (CLAIM(470go6su3Ys@00:09), CLAIM(470go6su3Ys@01:52)).
-- Figma component variants (2022 and 2024 workflows) carry form states as variant properties wired with on-tap change-to interactions; instant for state swaps, smart animate around 300ms when something physically moves (CLAIM(5-caRWzSQd4@15:04), CLAIM(5-caRWzSQd4@20:12), CLAIM(EKjCC4PwjFo@08:57)).
-- FigJam (2022) supplies a brainstorming toolkit distinct from Figma: stickers with authorship, sections that move as a group, stamp voting, cursor chat, and in-file audio (CLAIM(HGsMNYq889U@01:09), CLAIM(HGsMNYq889U@04:43), CLAIM(HGsMNYq889U@05:58), CLAIM(HGsMNYq889U@06:58)).
+- Sketch 49 (2018) added native prototyping: hotspots, per-object links, transition direction, and a starting-point artboard (CLAIM(470go6su3Ys@02:33), CLAIM(470go6su3Ys@01:52)).
+- Figma component variants (2022 and 2024 workflows) carry form states as variant properties wired with on-tap change-to interactions; instant for state swaps, smart animate around 300ms when something physically moves (CLAIM(5-caRWzSQd4@20:12), CLAIM(5-caRWzSQd4@20:12), CLAIM(EKjCC4PwjFo@08:57)).
+- FigJam (2022) supplies a brainstorming toolkit distinct from Figma: stickers with authorship, sections that move as a group, stamp voting, cursor chat, and in-file audio (CLAIM(HGsMNYq889U@04:28), CLAIM(HGsMNYq889U@04:43), CLAIM(HGsMNYq889U@05:58), CLAIM(HGsMNYq889U@06:58)).
 - Contrast checking via the Stark plugin for Figma and XD, plus browser devtools accessibility panels (2021) (CLAIM(D29KL52Srtw@03:59)).
 - Iconify plugin (2022, 2024) for pulling icons and checkmarks into Figma designs (CLAIM(5-caRWzSQd4@09:45), CLAIM(EKjCC4PwjFo@20:42)).
-- Coolors contrast checker and the Webflow accessibility checklist as the referenced audit aids (2024) (CLAIM(EDtgsIn1meM@04:35)).
 - Recraft AI (2024) for themed raster and vector imagery that matches the app palette (CLAIM(P2W2AnK5aDE@07:37)).
 - Showit cited (2026) as a drag-and-drop builder where size changes do not break the layout (CLAIM(d-IaU9qcDGg@05:15)).
 

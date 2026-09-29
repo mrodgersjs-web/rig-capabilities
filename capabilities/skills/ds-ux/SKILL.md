@@ -3,7 +3,7 @@ name: ds-ux
 description: >-
   JEV-FIRST MANDATE, findable at task start and binding before any work: typed judgments go to rig-s1gate
   (Jev) BEFORE any frontier LLM call; DEFERRED when the classifier is down, never a guessed verdict.
-  Main skill of design-studio-os for ux: flows, forms and accessibility: Design the task: navigation and wayfinding, forms and inputs, accessibility, the psychology of visual hierarchy, and the research that grounds it. 60 laws, 30
+  Main skill of design-studio-os for ux: flows, forms and accessibility: Design the task: navigation and wayfinding, forms and inputs, accessibility, the psychology of visual hierarchy, and the research that grounds it. 59 laws, 30
   looks-like/does-not pairs distilled from the RIG design YouTube corpus (top-10 subscribed channels
   weighted), every law cited CLAIM(<videoId>@mm:ss). Use when the job is flows, navigation, forms, onboarding, usability or accessibility of a task.
 tier: main
@@ -63,11 +63,11 @@ Output: ux.md: flows and IA, form and input spec with error states, a11y checkli
 | # | law | creators | citations | consensus |
 |---|---|---|---|---|
 | 6 | Place logo top-left and nav top-right; treat any other placement as a redesign risk and test it against user expectations before shipping. | DesignCourse, Self-Made Web Designer | CLAIM(D29KL52Srtw@05:40), CLAIM(d-IaU9qcDGg@02:52) | consensus |
-| 8 | Size nav items and icons so they are easy to hit on touch, with clear space around each (at least 44px for icon-only controls), and keep frequently tapped primary controls apart from destructive or secondary ones so mis-taps do not fire them. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@06:37), CLAIM(EDtgsIn1meM@09:05), CLAIM(TKZl_UlXhYk@05:01) | consensus |
-| 9 | Keep a visible keyboard focus state on every interactive element; if the default outline is removed, design a replacement. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@05:58), CLAIM(EDtgsIn1meM@09:19) | consensus |
+| 8 | Size nav items and icons so they are easy to hit on touch, with clear space around each (at least 44px for icon-only controls), and keep frequently tapped primary controls apart from destructive or secondary ones so mis-taps do not fire them. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@06:37), CLAIM(EDtgsIn1meM@09:05), | consensus |
+| 9 | Keep a visible keyboard focus state on every interactive element; if the default outline is removed, design a replacement. | Flux Academy, DesignCourse | CLAIM(D29KL52Srtw@05:58), | consensus |
 | 13 | Give every input a persistent visible label; a placeholder is never the label. | DesignCourse, Flux Academy | CLAIM(5-caRWzSQd4@04:02), CLAIM(EDtgsIn1meM@09:51) | consensus |
-| 21 | Write error copy that states what happened in plain language and how to fix it, naming the rule that failed (for example a banned character), and color the failing field outline and its message with the error color so label, field, and message read as one problem. | NNgroup, DesignCourse | CLAIM(cCun-ReLTFI@00:41), CLAIM(5-caRWzSQd4@08:36), CLAIM(5-caRWzSQd4@09:32), CLAIM(EKjCC4PwjFo@07:06) | consensus |
-| 25 | Make the form primary submit button the strongest-colored element in the form, using the theme primary color. | DesignCourse, Satori Graphics | CLAIM(5-caRWzSQd4@21:40), CLAIM(-5jSCHZIHlg@01:08) | consensus |
+| 21 | Write error copy that states what happened in plain language and how to fix it, naming the rule that failed (for example a banned character), and color the failing field outline and its message with the error color so label, field, and message read as one problem. | NNgroup, DesignCourse | CLAIM(cCun-ReLTFI@00:41), CLAIM(5-caRWzSQd4@08:36), CLAIM(5-caRWzSQd4@09:32), | consensus |
+| 25 | Make the form primary submit button the strongest-colored element in the form, using the theme primary color. | DesignCourse, Satori Graphics | CLAIM(5-caRWzSQd4@21:40), | consensus |
 | 29 | Hold text contrast at 4.5:1 or better against its background, and verify it with a contrast checker rather than by eye. | Flux Academy, DesignCourse | CLAIM(EDtgsIn1meM@04:23), CLAIM(D29KL52Srtw@03:40) | consensus |
 | 34 | Test the whole site with the keyboard alone (tab, arrows, enter, escape) before calling it done. | Flux Academy, DesignCourse | CLAIM(EDtgsIn1meM@09:19), CLAIM(D29KL52Srtw@05:58) | consensus |
 | 10 | Write link text that names the destination or action; never ship a link whose text is a generic call like click-through wording. | Flux Academy | CLAIM(EDtgsIn1meM@07:45) | single-source |
@@ -75,14 +75,14 @@ Output: ux.md: flows and IA, form and input spec with error states, a11y checkli
 | 12 | Never convey an instruction or a state through color or shape alone, and when an icon meaning is unclear, replace the icon with a plain word that matches platform conventions users already know. | Flux Academy | CLAIM(EDtgsIn1meM@08:26), CLAIM(TKZl_UlXhYk@04:43), CLAIM(TKZl_UlXhYk@04:50) | single-source |
 | 30 | Write alt text that describes the image content; for a linked image, describe its function (home, search) instead of its artwork. | Flux Academy | CLAIM(EDtgsIn1meM@00:43), CLAIM(EDtgsIn1meM@01:12) | single-source |
 
-The full set of 60 laws lives in the sub-skills.
+The full set of 59 laws lives in the sub-skills.
 
 ## Sub-skills
 
 | sub-skill | file | owns |
 |---|---|---|
 | navigation-wayfinding | references/navigation-wayfinding.md | 12 laws |
-| form-input-design | references/form-input-design.md | 16 laws |
+| form-input-design | references/form-input-design.md | 15 laws |
 | accessibility-audit | references/accessibility-audit.md | 9 laws |
 | psychology-visual-hierarchy | references/psychology-visual-hierarchy.md | 11 laws |
 | research-flows-process | references/research-flows-process.md | 12 laws |
@@ -124,7 +124,7 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ux/.
 |----------|----------|-----------|
 | One brand color plus neutrals | Multiple brand colors | Beginners and most projects: one or two. Multi-color only with a designer who can defend every hue (CLAIM(-5jSCHZIHlg@15:33)) |
 | Match the sector's palette | Break the sector palette | Break it only when the new color still fits the industry and the category is a sea of the same hue (CLAIM(-5jSCHZIHlg@04:20)) |
-| One strong isolated CTA | Several equally strong elements | Isolate when a single action matters; several strong spots cancel each other (CLAIM(-5jSCHZIHlg@00:36), CLAIM(-5jSCHZIHlg@05:02)) |
+| One strong isolated CTA | Several equally strong elements | Isolate when a single action matters; several strong spots cancel each other (CLAIM(-5jSCHZIHlg@00:36), ) |
 
 ### Research artifact choice
 
@@ -132,7 +132,7 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ux/.
 |----------|----------|-----------|
 | Stick-figure storyboard | Polished illustrated storyboard | Low-fi for ideation and feedback; polished only for a client deliverable or a wide audience (CLAIM(bNh54LNUtv8@01:37)) |
 | Scenario mapping workshop | Solo flow sketch | Cross-role uncertainty: workshop with four to six people early in the project (CLAIM(dmlFRCZI9gQ@00:36), CLAIM(dmlFRCZI9gQ@02:36)) |
-| Five-minute family usability pass | Formal recruited test | Personal projects and portfolio work: the five-minute pass; funded client work: recruit testers including people with disabilities (CLAIM(9viTvO0Okoo@00:24), CLAIM(EDtgsIn1meM@12:04)) |
+| Five-minute family usability pass | Formal recruited test | Personal projects and portfolio work: the five-minute pass; funded client work: recruit testers including people with disabilities (CLAIM(9viTvO0Okoo@02:02), CLAIM(EDtgsIn1meM@12:04)) |
 
 ## Anti-patterns
 
@@ -166,12 +166,11 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ux/.
 
 ## Tool-specific (dated)
 
-- Sketch 49 (2018) added native prototyping: hotspots, per-object links, transition direction, and a starting-point artboard (CLAIM(470go6su3Ys@00:09), CLAIM(470go6su3Ys@01:52)).
-- Figma component variants (2022 and 2024 workflows) carry form states as variant properties wired with on-tap change-to interactions; instant for state swaps, smart animate around 300ms when something physically moves (CLAIM(5-caRWzSQd4@15:04), CLAIM(5-caRWzSQd4@20:12), CLAIM(EKjCC4PwjFo@08:57)).
-- FigJam (2022) supplies a brainstorming toolkit distinct from Figma: stickers with authorship, sections that move as a group, stamp voting, cursor chat, and in-file audio (CLAIM(HGsMNYq889U@01:09), CLAIM(HGsMNYq889U@04:43), CLAIM(HGsMNYq889U@05:58), CLAIM(HGsMNYq889U@06:58)).
+- Sketch 49 (2018) added native prototyping: hotspots, per-object links, transition direction, and a starting-point artboard (CLAIM(470go6su3Ys@02:33), CLAIM(470go6su3Ys@01:52)).
+- Figma component variants (2022 and 2024 workflows) carry form states as variant properties wired with on-tap change-to interactions; instant for state swaps, smart animate around 300ms when something physically moves (CLAIM(5-caRWzSQd4@20:12), CLAIM(5-caRWzSQd4@20:12), CLAIM(EKjCC4PwjFo@08:57)).
+- FigJam (2022) supplies a brainstorming toolkit distinct from Figma: stickers with authorship, sections that move as a group, stamp voting, cursor chat, and in-file audio (CLAIM(HGsMNYq889U@04:28), CLAIM(HGsMNYq889U@04:43), CLAIM(HGsMNYq889U@05:58), CLAIM(HGsMNYq889U@06:58)).
 - Contrast checking via the Stark plugin for Figma and XD, plus browser devtools accessibility panels (2021) (CLAIM(D29KL52Srtw@03:59)).
 - Iconify plugin (2022, 2024) for pulling icons and checkmarks into Figma designs (CLAIM(5-caRWzSQd4@09:45), CLAIM(EKjCC4PwjFo@20:42)).
-- Coolors contrast checker and the Webflow accessibility checklist as the referenced audit aids (2024) (CLAIM(EDtgsIn1meM@04:35)).
 - Recraft AI (2024) for themed raster and vector imagery that matches the app palette (CLAIM(P2W2AnK5aDE@07:37)).
 - Showit cited (2026) as a drag-and-drop builder where size changes do not break the layout (CLAIM(d-IaU9qcDGg@05:15)).
 

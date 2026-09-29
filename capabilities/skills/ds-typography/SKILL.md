@@ -121,12 +121,11 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/typography/.
 |--------|-----------|----------|
 | Flush left, rag right | Anything a reader must actually read (paragraphs, articles, addresses) | CLAIM(QrNi9FmdlxY@00:00, aOPGqOOi__4@01:29) |
 | Centered | Short blocks: a hero line, a two-line invitation, an occasional stylistic break | CLAIM(aOPGqOOi__4@10:01) |
-| Justified | Avoid; only where the tool and measure can keep rivers under control | CLAIM(QrNi9FmdlxY@01:59) |
 
 ### Mood levers inside one family
 | Target mood | Settings | Citation |
 |-------------|----------|----------|
-| Premium | Uppercase, wide tracking, small size, centered, generous white space, dark ground | CLAIM(Yfd5kW1ZMgQ@01:59) |
+| Premium | Uppercase, wide tracking, small size, centered, generous white space, dark ground | CLAIM(Yfd5kW1ZMgQ@03:09) |
 | Serious | Left aligned on a grid, bold heading weight, equal spacing, thin rules | CLAIM(Yfd5kW1ZMgQ@04:29) |
 | Playful | Lowercase, letters offset and rotated in the heading only | CLAIM(Yfd5kW1ZMgQ@07:31, Yfd5kW1ZMgQ@11:01) |
 | Aggressive | Oversized bold uppercase, negative tracking, black blocks framing the type | CLAIM(Yfd5kW1ZMgQ@11:30, Yfd5kW1ZMgQ@12:29) |
@@ -175,7 +174,7 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/typography/.
 ## Tool-specific (dated)
 
 - Illustrator (2017): cut text into a shape over a photo by converting type to outlines and subtracting the shape in Pathfinder. CLAIM(8A3JaGxU9o0@01:02)
-- Illustrator (2017): build a double-stroke text effect through the Appearance panel by stacking a new fill with strokes beneath it. CLAIM(8A3JaGxU9o0@02:25)
+- Illustrator (2017): build a double-stroke text effect through the Appearance panel by stacking a new fill with strokes beneath it. CLAIM(8A3JaGxU9o0@03:18)
 - Illustrator (2017): reflected gradient text by duplicating, reflecting horizontally, and shading the lower copy. CLAIM(8A3JaGxU9o0@04:30)
 - Illustrator (2017): manual highlight and shadow on outlined type using the pencil for filled highlight shapes. CLAIM(8A3JaGxU9o0@05:59)
 - Photoshop (2016): neon type from two duplicated layers, inner glow on the top layer and outer glow with a vivid-light blend on the bottom, over a textured background photo. CLAIM(nH9hECxwpyA@01:30, nH9hECxwpyA@01:56)

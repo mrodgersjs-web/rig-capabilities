@@ -44,7 +44,6 @@ Coverage: 16 videos read (uStjewbLoA0, h_CPuUpsiEg, qeqearWwBpg, EUPbdk972JI, a_
 | 24 | Build composite elements (circular avatar, handle pair, verification badge) in a layout tool, export them flat, and hand that composite to the image model as an input. | grow-with-alex | CLAIM(IIXupZAGvDk@02:42, IIXupZAGvDk@03:28) | single-source | yes |
 | 25 | Copy a proven, high-performing design or post as the style source and swap in your own subject and story. | grow-with-alex, adrien-ai-designer | CLAIM(IIXupZAGvDk@00:46, bOXbC5HwpiM@00:26, 5lDUy7JFNrg@01:00) | consensus | yes |
 | 26 | Strip inherited logos, badges and watermarks from reference-driven generations before use. | grow-with-alex | CLAIM(IIXupZAGvDk@01:38) | single-source | yes |
-| 27 | Expect generated text to misspell; regenerate with prompt variants and pick the strongest result rather than shipping the first. | grow-with-alex | CLAIM(IIXupZAGvDk@03:35) | single-source | yes |
 
 ### D. Iteration, verification and handoff
 
@@ -120,7 +119,6 @@ Coverage: 16 videos read (uStjewbLoA0, h_CPuUpsiEg, qeqearWwBpg, EUPbdk972JI, a_
 - Adding large decorative animation, which hurts performance and distracts from the goal. CLAIM(5lDUy7JFNrg@05:47)
 - Treating the editor preview as proof: layouts squash and device-only features never trigger there. CLAIM(eXQQxaS0CCA@12:00, eXQQxaS0CCA@13:45)
 - Letting a prototype grow a real database and login stack it never needed. CLAIM(eXQQxaS0CCA@11:12)
-- Accepting the first generation when text inside images comes back misspelled. CLAIM(IIXupZAGvDk@03:35)
 - Assuming an in-tool prototype can be sent back into a design file without checking: one generation of that tool had no round trip at all. CLAIM(qeqearWwBpg@16:52)
 
 ## Creator claims (unverified)
@@ -128,11 +126,9 @@ Coverage: 16 videos read (uStjewbLoA0, h_CPuUpsiEg, qeqearWwBpg, EUPbdk972JI, a_
 - A three-clip scroll-animation site with deploy was built in about 30 minutes end to end. CLAIM(h_CPuUpsiEg@00:00)
 - A branded animated dashboard can be built in under 10 minutes on the three-step workflow. CLAIM(a_mZ4Kp3lTM@00:15)
 - Three complete design directions can be produced in about 3 minutes once the brief is filled. CLAIM(oechHZEX8PM@05:24)
-- A three-screen first draft takes about 15 minutes through the design-file connection. CLAIM(XftHdIqqgNM@04:50)
 - A full landing page can be generated from one prompt in roughly 30 seconds. CLAIM(QKUnUrsDzk0@02:26)
 - The referenced image model was described as the best available at the time of recording. CLAIM(h_CPuUpsiEg@01:15)
 - The 2024 image model release was described as far ahead of competitors in the creator's opinion. CLAIM(Rkq_eDeGIMw@00:13)
-- A free-ebook funnel was presented as the creator's plan to make $100,000 in a calendar year. CLAIM(xmL99KEycU0@00:00)
 - Carousel replications were shown against reference posts reported at tens of thousands of likes. CLAIM(IIXupZAGvDk@05:16, IIXupZAGvDk@06:33)
 - Generated mockups were stated to be commercially safe for client work because of the vendor's stock training data. CLAIM(Rkq_eDeGIMw@10:27)
 - The design-file connection was described as the first tool that translates layouts to code accurately. CLAIM(yO3Wr7DEWF0@00:16)
@@ -142,7 +138,7 @@ Coverage: 16 videos read (uStjewbLoA0, h_CPuUpsiEg, qeqearWwBpg, EUPbdk972JI, a_
 
 All rows describe tool builds as they existed at the video's publish date; verify before relying on them.
 
-- 2025-06 (designcourse): the design-file connection was set up in two places: add the server URL in the code editor's MCP settings, and enable the dev-mode server inside the design tool's preferences. CLAIM(yO3Wr7DEWF0@00:22)
+- 2025-06 (designcourse): the design-file connection was set up in two places: add the server URL in the code editor's MCP settings, and enable the dev-mode server inside the design tool's preferences. CLAIM(yO3Wr7DEWF0@01:19)
 - 2026-04 (flux-academy): the same capability is installed from a connectors panel, choosing the listing described as the design-tool MCP server and authorizing the account; two similar listings exist. CLAIM(XftHdIqqgNM@01:11)
 - 2026-03 (adrien-ai-designer): the coding agent runs inside a code editor, and MCP installation is done by a terminal command followed by a check of the MCP panel. CLAIM(oechHZEX8PM@00:27)
 - 2025-09 (flux-academy): the in-tool prototyping generator offered a code-from-design entry on selected layers, split code/preview view, and converted elements into code layers that land in the document grid. CLAIM(qeqearWwBpg@00:58, qeqearWwBpg@04:02)
@@ -157,7 +153,7 @@ All rows describe tool builds as they existed at the video's publish date; verif
 
 ## Disagreements between creators (who says what, cited)
 
-- How specific the first prompt should be. Flux Academy (2026) tells you to be thorough: frame size, exact colors, explicit layout rules, because prompt one sets the foundation. CLAIM(XftHdIqqgNM@02:36) Flux Academy's own earlier Framer video (2023) says the opposite for its site generator: describe content richly, keep styling broad, and adjust style later. CLAIM(QKUnUrsDzk0@00:53) DesignCourse (2025) sits between them: the prompt need not be long if the file is well prepared. CLAIM(yO3Wr7DEWF0@04:04) Resolution: specificity belongs where the tool cannot infer it; a structured file lets the prompt stay short, a blank canvas demands detail.
+- How specific the first prompt should be. Flux Academy (2026) tells you to be thorough: frame size, exact colors, explicit layout rules, because prompt one sets the foundation. CLAIM(XftHdIqqgNM@02:36) Flux Academy's own earlier Framer video (2023) says the opposite for its site generator: describe content richly, keep styling broad, and adjust style later. CLAIM(QKUnUrsDzk0@00:53) DesignCourse (2025) sits between them: the prompt need not be long if the file is well prepared. Resolution: specificity belongs where the tool cannot infer it; a structured file lets the prompt stay short, a blank canvas demands detail.
 - Whether generated work can return to the design file. Flux Academy (2025-09) reports no route back from the prototyping generator to design layers. CLAIM(qeqearWwBpg@16:52) Jesse Showalter (2025-10, 2026-01) demonstrates copying the whole generated design out as editable layers. CLAIM(EUPbdk972JI@05:37, yRBu2jU2d1w@09:07) Treat as a dated capability change, not a contradiction.
 - Attach a design system or not. Jesse Showalter deliberately skips attaching a published design system on the first prototype run to get moving. CLAIM(yRBu2jU2d1w@02:06) Flux Academy instead generates the design system from the finished screens and applies it back. CLAIM(XftHdIqqgNM@05:00) Both agree the system matters; they disagree on when to introduce it.
 - Who holds creative direction. Flux Academy frames the agent as a fast literal junior designer you brief and review. CLAIM(XftHdIqqgNM@07:29) Jesse Showalter frames the designer as a creative director whose thought work lives in the requirements doc. CLAIM(EUPbdk972JI@06:15) Adrien frames it as the end of design effort once research and architecture are done. CLAIM(oechHZEX8PM@07:31) Practically: the more the brief carries, the less the generation step decides.

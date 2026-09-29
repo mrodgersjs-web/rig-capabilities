@@ -142,7 +142,6 @@ Coverage: 8 videos read so far (P5H7zs0RsUM, xHXqj006Q2k, WLDfFqnqbxI, BNYLKuIla
 | 2 | Pasting into the builder before the fonts exist in the project. | Every text node needs its face re-assigned by hand. | CLAIM(xHXqj006Q2k@04:44) |
 | 3 | Placing elements by eye in a canvas-style editor. | Nothing is anchored, so the first resize breaks the composition. | CLAIM(P5H7zs0RsUM@07:37) |
 | 4 | Leaving one oversized image at natural size inside a grid cell. | It pushes following rows past the intended fold. | CLAIM(WLDfFqnqbxI@10:01) |
-| 5 | Accepting the design file's type size without re-judging it in the browser. | A 18px design spec read as too large on the live page and had to come down to 16. | CLAIM(WLDfFqnqbxI@02:37) |
 | 6 | Building a page with only desktop in mind and no per-breakpoint pass. | A dense bento grid stops holding together at tablet width until columns are re-spanned. | CLAIM(WLDfFqnqbxI@13:58, WLDfFqnqbxI@14:08) |
 
 ## Creator claims (unverified)
@@ -169,7 +168,7 @@ Coverage: 8 videos read so far (P5H7zs0RsUM, xHXqj006Q2k, WLDfFqnqbxI, BNYLKuIla
 | # | topic | position A | position B | citations |
 |---|---|---|---|---|
 | 1 | Should the design be imported or rebuilt | Import a properly auto-laid-out file; the time saving is large and class names and styles come free. | Rebuild by hand for the first version so you understand the platform and can fix what the import leaves broken. | CLAIM(xHXqj006Q2k@06:32), CLAIM(P5H7zs0RsUM@00:25) |
-| 2 | Does a fixed design spec translate directly to the live page | Not automatically: the 18px spec came down to 16 once it was rendered. | Text should keep the design's declared size unless the rendered result looks wrong. | CLAIM(WLDfFqnqbxI@02:37), CLAIM(P5H7zs0RsUM@08:42) |
+| 2 | Does a fixed design spec translate directly to the live page | Not automatically: the 18px spec came down to 16 once it was rendered. | Text should keep the design's declared size unless the rendered result looks wrong. | CLAIM(WLDfFqnqbxI@02:37), |
 
 ## Suggested sub-skills (2-5 names, one line each, which law #s they own)
 

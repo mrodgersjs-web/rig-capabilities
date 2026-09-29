@@ -141,7 +141,6 @@ Top-10 creators present in this stage: flux-academy, satori-graphics, jesse-show
 | Desaturate the competing color | Raise contrast between them | Two hues are fighting for the same attention. | One element genuinely has to win the frame. | CLAIM(Co75kmQtbaA@23:54, XNkV6m4fosw@01:06) |
 | 60/30/10 | Flat equal distribution | Any layout with a clear primary action or reading order. | Never in client work; it removes the hierarchy entirely. | CLAIM(CxXKHiCpKs4@05:08, CxXKHiCpKs4@10:28) |
 | Tinted neutral for surfaces | Pure black or pure white | The palette must feel like one family and needs room for elevation. | The brand explicitly runs a hard black-and-white identity. | CLAIM(2QTHs7QSR9o@17:51, wqTZuEQ2P-s@01:59) |
-| Bold color in small doses | Bold color as a field | The content needs breathing room and the action needs to stand out. | The brand identity is itself a bold color block and the copy is minimal. | CLAIM(HMT_7esBbVA@12:57) |
 | Black or dark gray body text | Colored body text | Always, at reading size. | Headlines and display type only. | CLAIM(HMT_7esBbVA@13:27, Co75kmQtbaA@08:56) |
 
 ### Mode conversion
@@ -149,7 +148,7 @@ Top-10 creators present in this stage: flux-academy, satori-graphics, jesse-show
 | Option A | Option B | Pick A when | Pick B when | citation |
 |----------|----------|-------------|-------------|----------|
 | Tinted off-white page background | Pure white page background | A card must sit above the page and read as a separate layer. | There are no layered surfaces at all. | CLAIM(wqTZuEQ2P-s@01:59) |
-| Push the border darker in light mode | Keep the border value unchanged | The border needs to keep the contrast it had in the dark version. | Never; unchanged values lose their relationship to the ground. | CLAIM(wqTZuEQ2P-s@02:26) |
+| Push the border darker in light mode | Keep the border value unchanged | The border needs to keep the contrast it had in the dark version. | Never; unchanged values lose their relationship to the ground. | CLAIM(wqTZuEQ2P-s@03:24) |
 | Rebuild shadows from the surface | Reuse the shadow value | Always in a mode change. | Never. | CLAIM(Y8g3YtZckco@02:51) |
 | Colors and values only | Layout and embellishment changes too | Always in a mode change; the brief is a color exercise. | A genuine redesign, which is a different job. | CLAIM(wqTZuEQ2P-s@13:00, Y8g3YtZckco@05:15) |
 
@@ -182,7 +181,7 @@ Top-10 creators present in this stage: flux-academy, satori-graphics, jesse-show
 - Studies show women prefer softer pastel colors and men prefer bolder ones, presented as an average only. CLAIM(XNkV6m4fosw@04:07)
 - Seventy-eight percent of people who encountered Cadbury on Facebook were female, used to explain the purple branding. CLAIM(HKtTNOgfhAU@17:58)
 - Nine out of ten designers struggle to choose colors because they lack a defined process. CLAIM(Co75kmQtbaA@00:00)
-- A printed reference color wheel cost about ten dollars and shows complement, split complement, tetrad, analogous and triad relations. CLAIM(HKtTNOgfhAU@22:04)
+- A printed reference color wheel cost about ten dollars and shows complement, split complement, tetrad, analogous and triad relations. CLAIM(HKtTNOgfhAU@22:51)
 - Painted a different color association per culture: red as love in one market and anger in another, white as purity in one and mourning in another. CLAIM(XNkV6m4fosw@03:48, HKtTNOgfhAU@20:47)
 
 ## Tool-specific (dated)

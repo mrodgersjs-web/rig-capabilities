@@ -3,7 +3,7 @@ name: ds-ui-system
 description: >-
   JEV-FIRST MANDATE, findable at task start and binding before any work: typed judgments go to rig-s1gate
   (Jev) BEFORE any frontier LLM call; DEFERRED when the classifier is down, never a guessed verdict.
-  Main skill of design-studio-os for ui systems and components: Design reusable components: token architecture, component anatomy and props, responsive construction, interactive states, pattern recipes. 43 laws, 20
+  Main skill of design-studio-os for ui systems and components: Design reusable components: token architecture, component anatomy and props, responsive construction, interactive states, pattern recipes. 42 laws, 20
   looks-like/does-not pairs distilled from the RIG design YouTube corpus (top-10 subscribed channels
   weighted), every law cited CLAIM(<videoId>@mm:ss). Use when the job is a component library, design system, tokens, app or dashboard UI, or component states.
 tier: main
@@ -64,18 +64,18 @@ Output: system.md: token file (color, type, spacing, radius, shadow), component 
 |---|---|---|---|---|
 | 1 | Store every repeated design value (color, gap, radius, spacing) as a named variable and bind the property to it, so one edit updates all usages instead of re-entering values per element | Flux Academy, Jesse Showalter | CLAIM(GUupJJC5Ac4@00:18), CLAIM(oCVG6DFCTz4@10:15) | consensus |
 | 4 | Group variables into collections by kind (colors, numbers, booleans) and attach a short description to each naming where it applies | DesignCourse, Punit Chawla | CLAIM(Tx45NcbU6aA@02:35), CLAIM(IO30Ta7aqF0@01:06) | consensus |
-| 6 | Implement themes as one extra mode per variable (light, dark), fill each mode with its own values, then flip the frame mode from the layer panel selector | Flux Academy, DesignCourse, Punit Chawla | CLAIM(GUupJJC5Ac4@06:13), CLAIM(Tx45NcbU6aA@24:36), CLAIM(IO30Ta7aqF0@03:40) | consensus |
+| 6 | Implement themes as one extra mode per variable (light, dark), fill each mode with its own values, then flip the frame mode from the layer panel selector | Flux Academy, DesignCourse, Punit Chawla | CLAIM(GUupJJC5Ac4@06:13), CLAIM(Tx45NcbU6aA@25:42), CLAIM(IO30Ta7aqF0@03:40) | consensus |
 | 8 | Bind boolean variables to layer visibility (right-click the visibility icon in the layer controls) so one click can show or hide content per state | DesignCourse, Flux Academy | CLAIM(Tx45NcbU6aA@19:26), CLAIM(vf1BZ1mG2WE@20:46) | consensus |
 | 9 | Convert anything reused more than once into a component and edit only the master, so every instance follows | Flux Academy, Jesse Showalter | CLAIM(aGvWDDPsjUM@00:57), CLAIM(oCVG6DFCTz4@03:30), CLAIM(1JZcMnecWHI@00:57) | consensus |
 | 10 | Put interchangeable items (icon types, button shapes, tab states) in one component set with one variant each, so instances swap from the properties panel | Flux Academy | CLAIM(1JZcMnecWHI@01:23), CLAIM(vf1BZ1mG2WE@03:13) | consensus (same creator, 3 videos) |
 | 11 | Give every variant axis a real option name (State equals default, hovered, active) and rename the property itself; never ship a set labeled with generator defaults | Flux Academy, Jesse Showalter, DesignCourse | CLAIM(1JZcMnecWHI@02:35), CLAIM(aGvWDDPsjUM@05:21), CLAIM(iLWaIx7tMnU@17:08) | consensus |
 | 13 | Reserve variants for state and shape; express content differences with properties (text field, show/hide boolean, instance swap) or the variant count explodes | Flux Academy, Jesse Showalter, DesignCourse | CLAIM(aGvWDDPsjUM@02:57), CLAIM(oCVG6DFCTz4@03:57), CLAIM(KWUlkXZOj4g@11:38) | consensus |
-| 2 | Build tokens in two layers: a primitives collection of raw values, then a semantic collection whose names state the role (button, link, heading, body) and reference the primitives | Flux Academy | CLAIM(GUupJJC5Ac4@03:10), CLAIM(GUupJJC5Ac4@04:07) | single-source |
+| 2 | Build tokens in two layers: a primitives collection of raw values, then a semantic collection whose names state the role (button, link, heading, body) and reference the primitives | Flux Academy | CLAIM(GUupJJC5Ac4@04:07), CLAIM(GUupJJC5Ac4@04:07) | single-source |
 | 3 | Choose variables over shared styles whenever one role must recolor without touching the others: repointing the button token leaves link and logo usages intact | Flux Academy | CLAIM(GUupJJC5Ac4@05:35) | single-source |
 | 5 | Name number variables as scale levels (five for 40px radius, two for a 16px gap) and bind components to the level, never to the raw pixel value | Jesse Showalter | CLAIM(oCVG6DFCTz4@10:15) | single-source |
 | 7 | Keep the default mode first in the collection by dragging rows into order, so the mode picker shows it first | Jesse Showalter | CLAIM(M8msUKBSBlY@03:27) | single-source |
 
-The full set of 43 laws lives in the sub-skills.
+The full set of 42 laws lives in the sub-skills.
 
 ## Sub-skills
 
@@ -84,7 +84,7 @@ The full set of 43 laws lives in the sub-skills.
 | ui-tokens-modes | references/ui-tokens-modes.md | 8 laws |
 | ui-components-variants | references/ui-components-variants.md | 10 laws |
 | ui-responsive-construction | references/ui-responsive-construction.md | 9 laws |
-| ui-prototype-states | references/ui-prototype-states.md | 9 laws |
+| ui-prototype-states | references/ui-prototype-states.md | 8 laws |
 | ui-pattern-recipes | references/ui-pattern-recipes.md | 8 laws |
 
 ## Looks like / does not (strongest pairs)
@@ -127,10 +127,10 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ui_system/.
 
 ## Creator disagreements (stated, not resolved)
 
-- Swapping icons inside a component: DesignCourse (2021) stacks several icons in the master and toggles visibility per instance, calling direct swap unworkable (CLAIM(KWUlkXZOj4g@13:50)); Flux Academy (2023) uses an instance-swap property with preferred values (CLAIM(aGvWDDPsjUM@10:00)). Later method supersedes.
-- Hover feedback mechanism: DesignCourse (2021) grows a masked ripple shape (CLAIM(KWUlkXZOj4g@05:36)); Flux Academy (2023) changes opacity on the hovered variant (CLAIM(1JZcMnecWHI@05:35)); DesignCourse (2022) darkens the fill one step (CLAIM(iLWaIx7tMnU@05:50)). No consensus on the mechanism, only that a hover state must exist.
+- Swapping icons inside a component: DesignCourse (2021) stacks several icons in the master and toggles visibility per instance, calling direct swap unworkable (); Flux Academy (2023) uses an instance-swap property with preferred values (CLAIM(aGvWDDPsjUM@10:00)). Later method supersedes.
+- Hover feedback mechanism: DesignCourse (2021) grows a masked ripple shape (CLAIM(KWUlkXZOj4g@05:36)); Flux Academy (2023) changes opacity on the hovered variant (); DesignCourse (2022) darkens the fill one step (CLAIM(iLWaIx7tMnU@05:50)). No consensus on the mechanism, only that a hover state must exist.
 - One-frame-per-state: Flux Academy (2024) rejects duplicated pages for filter states in favor of variables (CLAIM(vf1BZ1mG2WE@18:46)), while Jesse Showalter (2023) builds one frame per responsive width and switches between them at breakpoints (CLAIM(oXDAmwEWlDc@13:45)). Different problems: content filtering versus breakpoint demonstration; variables are still the wrong tool for showing three layout widths to a stakeholder.
-- Button aesthetic: Mike Locke (2009) builds a skeuomorphic engraved gradient button with layered shadows (CLAIM(_NTvNAaetCM@03:30)); DesignCourse (2022) removes soft shadows and uses flat high-contrast strokes and hard offset shadows (CLAIM(4BEEoYYDmUg@01:35)). Era disagreement, not a factual conflict; both recipes are checkable and the choice is stylistic.
+- Button aesthetic: Mike Locke (2009) builds a skeuomorphic engraved gradient button with layered shadows (CLAIM(_NTvNAaetCM@04:38)); DesignCourse (2022) removes soft shadows and uses flat high-contrast strokes and hard offset shadows (CLAIM(4BEEoYYDmUg@01:35)). Era disagreement, not a factual conflict; both recipes are checkable and the choice is stylistic.
 
 ## Creator claims (unverified)
 
@@ -144,14 +144,14 @@ Full pair set: the ds-exemplars skill and studio-exemplars/pairs/ui_system/.
 
 ## Tool-specific (dated)
 
-- Figma variables, collections, and modes, 2023: variables were in beta on desktop; set-variable prototype actions and extra modes required the file to live in a team (CLAIM(Tx45NcbU6aA@02:23), CLAIM(Tx45NcbU6aA@04:23)).
+- Figma variables, collections, and modes, 2023: variables were in beta on desktop; set-variable prototype actions and extra modes required the file to live in a team (CLAIM(Tx45NcbU6aA@04:26), CLAIM(Tx45NcbU6aA@04:23)).
 - Figma variables, 2023 limitation: modes could not be switched by a prototype interaction, only manually per frame (CLAIM(Tx45NcbU6aA@25:50)).
 - Figma Slots, public beta 2026: a frame inside a component can be converted to a slot; dev mode emits a slot tag in generated code (CLAIM(beUlX6L2NMg@00:30), CLAIM(beUlX6L2NMg@01:21)).
 - Figma glass effect, beta 2025: applies to frames only, not bare shapes or rectangles; lighting and refraction are adjustable per panel (CLAIM(3ERrrTcx09c@00:40), CLAIM(3ERrrTcx09c@01:00)).
-- Figma 2024-2025 updates: aspect-ratio lock replacing constrain proportions (CLAIM(M8msUKBSBlY@00:23)), a collapse-all-layers control in the layers panel (CLAIM(M8msUKBSBlY@02:25)), drag-to-reorder of modes and collections (CLAIM(M8msUKBSBlY@02:56)), contrast readout inside the color picker (CLAIM(M8msUKBSBlY@03:55)), copy and paste of text/color/effect styles between files (CLAIM(M8msUKBSBlY@04:50)).
+- Figma 2024-2025 updates: aspect-ratio lock replacing constrain proportions (CLAIM(M8msUKBSBlY@00:23)), a collapse-all-layers control in the layers panel (CLAIM(M8msUKBSBlY@00:30)), drag-to-reorder of modes and collections (CLAIM(M8msUKBSBlY@02:56)), contrast readout inside the color picker (CLAIM(M8msUKBSBlY@03:55)), copy and paste of text/color/effect styles between files (CLAIM(M8msUKBSBlY@04:50)).
 - Framer components 2024: text, color, and visibility variables attach to main-component layers and appear on every variant; interactions between variants auto-wire a transition you can edit per instance (CLAIM(Sfy5wG5ZB3A@08:33), CLAIM(Sfy5wG5ZB3A@06:25)).
-- Adobe Fireworks 2009 button recipe: pill rectangle with white-to-dark gray linear gradient, larger backing shape at 30 percent opacity as a shadow plate, drop shadow near 3/4/80, dark gray label with a white 2px softness-1 shadow to fake engraving (CLAIM(_NTvNAaetCM@02:14), CLAIM(_NTvNAaetCM@04:43)).
-- Figma community Breakpoints plugin (paid, 2023) drives multi-width responsive preview; without it, breakpoint behavior is documented as separate frames (CLAIM(oXDAmwEWlDc@15:40)).
+- Adobe Fireworks 2009 button recipe: pill rectangle with white-to-dark gray linear gradient, larger backing shape at 30 percent opacity as a shadow plate, drop shadow near 3/4/80, dark gray label with a white 2px softness-1 shadow to fake engraving (CLAIM(_NTvNAaetCM@02:14), CLAIM(_NTvNAaetCM@03:25)).
+- Figma community Breakpoints plugin (paid, 2023) drives multi-width responsive preview; without it, breakpoint behavior is documented as separate frames (CLAIM(oXDAmwEWlDc@17:34)).
 - plus 1 more in the corpus law file studio-corpus/laws/ui_system.md
 
 ## Hand-off
