@@ -1,0 +1,86 @@
+{
+  "name": "spend.continue",
+  "stage": "measure",
+  "lane": "ops",
+  "description": "Keep, cut, pause or renegotiate a tool, ad or subscription at review time. Input is one spend row: item, monthly and annual cost, who uses it, what it was bought for, last real use, and any revenue or client linkage.",
+  "questions": {
+    "usage": {
+      "type": "score",
+      "instructions": "How much evidence this item is actually used, from the row -- not how much it was hoped to be used",
+      "criteria": [
+        "No usage evidence at all -- nobody can name the last real use",
+        "A claim of use with no log, no export, and no named user",
+        "One named user or one logged use in the last 30 days",
+        "Weekly use by a named person against a named workflow",
+        "Daily use tied to a client deliverable, a shipped routine, or a revenue step"
+      ]
+    },
+    "revenue_link": {
+      "type": "noul",
+      "instructions": "There is a named, evidenced link between this spend and revenue, a signed client deliverable, or a compliance requirement -- 'it might help us grow' is not a link."
+    },
+    "cost_material": {
+      "type": "noul",
+      "instructions": "The cost is material enough to review: $50 or more per month, any annual prepay, any ad budget, or any seat count above five."
+    },
+    "covered_elsewhere": {
+      "type": "noul",
+      "instructions": "A cheaper or free local alternative already in the estate does the same job -- for example a local model, an existing tool, or a script that already exists."
+    },
+    "decision": {
+      "type": "choice",
+      "instructions": "What should happen to this spend at this review",
+      "criteria": {
+        "keep": "Keep paying: it is used and it pays for itself",
+        "cut": "Cancel or do not renew: it is not used and it does not pay for itself",
+        "pause_pending_evidence": "Pause or hold the renewal until usage or revenue evidence appears",
+        "renegotiate": "Keep the capability but change the plan, the seat count, or the vendor"
+      }
+    },
+    "needs_review": {
+      "type": "noul",
+      "instructions": "This spend needs a review decision rather than an auto-renew: the cost is material ($50+/month, any annual prepay, any ad budget, or more than five seats) AND it lacks either real usage evidence or a revenue link."
+    }
+  },
+  "rules": [
+    {
+      "when": "decision.choice == cut",
+      "verdict": "ESCALATE",
+      "reason": "cutting spend is a Gate-D action -- Mike approves the cancellation, the gate only recommends it"
+    },
+    {
+      "when": "usage.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "no usage evidence -- do not renew this blind"
+    },
+    {
+      "when": "revenue_link.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "no revenue or client linkage -- the spend is unsupported"
+    },
+    {
+      "when": "covered_elsewhere.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "already covered by something cheaper in the estate -- consolidate candidate"
+    },
+    {
+      "when": "needs_review.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "material spend without usage or revenue evidence -- Mike reviews it instead of it auto-renewing"
+    },
+    {
+      "when": "usage.confidence <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "usage evidence is not readable from the row -- gather it before deciding"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "direction": "The keep/cut recommendation is decision.choice. Nothing here cancels anything: cancellation is a Gate-D action and the gate only recommends it.",
+    "why_composite": "needs_review is deliberately one composite statement (material AND unsupported) because the rule engine takes a single condition per rule -- a bare cost_material rule would escalate every well-evidenced $200/mo tool and a gate that flags good work gets switched off.",
+    "thresholds": "Provisional and uncalibrated; BLOCK rules would report ESCALATE with a downgraded-BLOCK reason until calibrated (law 3)."
+  }
+}

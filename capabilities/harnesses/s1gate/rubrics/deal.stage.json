@@ -1,0 +1,81 @@
+{
+  "name": "deal.stage",
+  "stage": "measure",
+  "lane": "gtm",
+  "description": "Weekly pipeline review: is this deal real, what stage is it in, and what is the next step. Input is one deal row -- buyer, firm, problem, evidence of budget or authority, last activity date, and the recorded next step.",
+  "questions": {
+    "stage": {
+      "type": "choice",
+      "instructions": "The true stage of this deal from the evidence in the row, not from the label someone gave it",
+      "criteria": {
+        "new_lead": "No conversation yet -- a name and a contact route only",
+        "discovery": "First conversation happened, problem discussed, nothing scoped",
+        "scoped": "A specific deliverable or workflow is scoped and the buyer has seen it",
+        "proposal_ready": "Pricing or a proposal is written and ready to go to the buyer",
+        "verbal_commit": "Buyer has said yes in principle and the paperwork is the only step left",
+        "closed_won": "Signed or paid -- the deal is done",
+        "closed_lost": "Dead: the buyer declined, went dark past the agreed date, or chose someone else",
+        "stalled": "Was alive, then stopped moving without a decision in either direction"
+      }
+    },
+    "stale": {
+      "type": "noul",
+      "instructions": "This deal has had no meaningful two-way activity in more than 30 days -- no reply, no meeting, no shared document. One-way chase emails do not count as activity."
+    },
+    "is_real": {
+      "type": "score",
+      "instructions": "How real this deal is from evidence in the row, not from how good it feels",
+      "criteria": [
+        "No named buyer, no named problem, no budget mention -- a name in a spreadsheet",
+        "Named buyer and a general problem, but no evidence of authority or budget",
+        "Named buyer, named problem, and a rough timeline; authority or budget unconfirmed",
+        "Buyer with authority, named problem, and a budget range or a procurement path",
+        "Buyer, problem, budget and a dated mutual next step already agreed"
+      ]
+    },
+    "next_step": {
+      "type": "noul",
+      "instructions": "A concrete next step is recorded with an owner and a date -- 'follow up soon' or 'waiting on them' does not count."
+    }
+  },
+  "rules": [
+    {
+      "when": "stale.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "stale more than 30 days -- decide revive or close, do not let it drift"
+    },
+    {
+      "when": "stage.choice == proposal_ready",
+      "verdict": "ESCALATE",
+      "reason": "proposal-ready -- Mike reviews before anything goes to the buyer"
+    },
+    {
+      "when": "stage.choice == stalled",
+      "verdict": "ESCALATE",
+      "reason": "stalled -- decide revive or close"
+    },
+    {
+      "when": "stage.choice == closed_lost",
+      "verdict": "ESCALATE",
+      "reason": "closed lost -- drop it out of the active pipeline view"
+    },
+    {
+      "when": "is_real.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "not a real deal yet -- qualify it properly or drop it"
+    },
+    {
+      "when": "next_step.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "no dated next step -- a deal without one is already drifting"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "ranking": "is_real.score (0..4) is the pipeline-quality number; the stage choice is the routing decision.",
+    "thresholds": "Provisional and uncalibrated; BLOCK rules would report ESCALATE until calibrated (law 3). This pack carries no BLOCK rule on purpose -- closing or killing a deal is always a human decision."
+  }
+}

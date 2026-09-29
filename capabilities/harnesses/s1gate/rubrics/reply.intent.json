@@ -1,0 +1,94 @@
+{
+  "name": "reply.intent",
+  "stage": "distribute",
+  "lane": "gtm",
+  "description": "Classify a reply to a RIG cold email and route it: positives go to a human, stop-requests suppress the contact. Input is the reply text plus the subject line it answered.",
+  "questions": {
+    "intent": {
+      "type": "choice",
+      "instructions": "What does this reply actually say, choosing the single best match",
+      "criteria": {
+        "interested": "Interested in the offer or asks for more detail, pricing, or a call but not yet a specific time",
+        "meeting_request": "Proposes or asks for a specific meeting time, or accepts a proposed time",
+        "not_now": "Interested in principle but timing is wrong -- 'circle back next quarter', 'swamped until March'",
+        "not_interested": "Declines the offer outright: 'not interested', 'not a fit', 'no thanks', 'we already have this covered'",
+        "referral": "Hands RIG to someone else: names a colleague, forwards it, or says 'talk to X'",
+        "out_of_office": "Automated vacation or absence notice with no human answer in it",
+        "unsubscribe": "Asks to be removed, unsubscribed, or to stop all contact",
+        "bounce": "A delivery failure or mailer-daemon notice -- the message never reached a person"
+      }
+    },
+    "asks_to_stop": {
+      "type": "noul",
+      "instructions": "The reply asks RIG to stop, remove, or unsubscribe the contact in ANY wording -- 'please remove me', 'take me off your list', 'stop emailing', 'not interested, do not contact again', or an unsubscribe instruction."
+    },
+    "unsolicited_pitch": {
+      "type": "noul",
+      "instructions": "This reply is itself a sales pitch, an agency solicitation, or a vendor offer TO RIG rather than an answer to RIG's outreach."
+    },
+    "ambiguous": {
+      "type": "noul",
+      "instructions": "The reply is too short or too unclear to classify with confidence -- for example a one-word answer, a forwarded thread with no comment, or text in a language the classifier cannot place."
+    }
+  },
+  "rules": [
+    {
+      "when": "asks_to_stop.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "the contact asked to stop -- suppress all further sends and log the suppression"
+    },
+    {
+      "when": "intent.choice == unsubscribe",
+      "verdict": "BLOCK",
+      "reason": "unsubscribe -- suppress all further sends"
+    },
+    {
+      "when": "intent.choice == not_interested",
+      "verdict": "BLOCK",
+      "reason": "declined -- no further sends to this contact"
+    },
+    {
+      "when": "intent.choice == bounce",
+      "verdict": "BLOCK",
+      "reason": "hard bounce -- suppress the address and clean the list before any further send"
+    },
+    {
+      "when": "intent.choice == interested",
+      "verdict": "ESCALATE",
+      "reason": "positive reply -- a human writes the answer, not the sequence"
+    },
+    {
+      "when": "intent.choice == meeting_request",
+      "verdict": "ESCALATE",
+      "reason": "meeting request -- a human books it and owns the thread"
+    },
+    {
+      "when": "intent.choice == referral",
+      "verdict": "ESCALATE",
+      "reason": "referral -- a human follows the introduction"
+    },
+    {
+      "when": "unsolicited_pitch.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "inbound vendor pitch -- route it to the vendor rule, never back into a reply sequence"
+    },
+    {
+      "when": "ambiguous.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "reply does not classify cleanly -- a human reads it"
+    },
+    {
+      "when": "intent.confidence <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "classifier is split between intents -- a human reads it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "routing": "ESCALATE is a handoff to Mike, never an auto-reply. BLOCK means the sequence must not send to this contact again. not_now and out_of_office are the only intents that pass clean: both mean 'queue, do not reply now'.",
+    "thresholds": "Provisional and uncalibrated; BLOCK rules report ESCALATE with a downgraded-BLOCK reason until calibrated (law 3)."
+  }
+}

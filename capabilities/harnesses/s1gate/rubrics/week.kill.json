@@ -1,0 +1,82 @@
+{
+  "name": "week.kill",
+  "stage": "measure",
+  "lane": "ops",
+  "description": "Weekly kill review: given one list item -- routine, card or project -- and its evidence, should it be kept, paused, archived or stopped. The gate never kills anything; it separates 'still earning its place' from 'put it on Mike's cut list'.",
+  "questions": {
+    "value_evidence": {
+      "type": "score",
+      "instructions": "Evidence this item produced value in the last 30 days, from the row",
+      "criteria": [
+        "No runs and no output in 30 days",
+        "Defined or scheduled, but never actually run or produced anything",
+        "Ran, but the output was empty, vacuous, or read by nobody",
+        "Produced output that one named consumer uses",
+        "Produced recurring output tied to a workstream or a client deliverable",
+        "Produced output that moved a named number or shipped a named thing in the last 30 days"
+      ]
+    },
+    "recent_run": {
+      "type": "noul",
+      "instructions": "The item has actually run or produced output in the last 14 days -- being defined, scheduled, or 'active' in a list is not running."
+    },
+    "kill_candidate": {
+      "type": "noul",
+      "instructions": "On this evidence the item should be stopped, paused, or archived rather than kept."
+    },
+    "evidence_complete": {
+      "type": "noul",
+      "instructions": "The row names the evidence needed to decide: when it last ran, what it produced, and who reads the output."
+    },
+    "decision": {
+      "type": "choice",
+      "instructions": "What should happen to this item this week",
+      "criteria": {
+        "keep": "Keep running: it earns its place this week",
+        "pause": "Pause it: reversible, and it stops consuming attention now",
+        "archive": "Archive it: it is finished or superseded",
+        "stop": "Stop it permanently: it should not come back"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "decision.choice == stop",
+      "verdict": "ESCALATE",
+      "reason": "stopping work is Mike's call -- recommend it, never delete it"
+    },
+    {
+      "when": "decision.choice == archive",
+      "verdict": "ESCALATE",
+      "reason": "archiving is an estate change -- Mike approves it"
+    },
+    {
+      "when": "kill_candidate.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "kill candidate -- bundle it into the cut list for Mike"
+    },
+    {
+      "when": "recent_run.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "has not actually run -- define-only items are not work"
+    },
+    {
+      "when": "value_evidence.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "no value evidence in 30 days"
+    },
+    {
+      "when": "evidence_complete.noul <= 0.80",
+      "verdict": "ESCALATE",
+      "reason": "evidence incomplete -- last run, output and consumer are all required to decide"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "shape": "A healthy item passes clean (keep). A dead item escalates as a kill candidate. The gate never performs the kill -- week kills are Mike's cut list.",
+    "thresholds": "Provisional and uncalibrated; BLOCK rules would report ESCALATE until calibrated (law 3). This pack carries no BLOCK rule on purpose. evidence_complete fires at <= 0.80, not 0.90: fixture runs on 2026-09-28 showed the classifier emitting 0.87-0.90 for rows that name last run, output and consumer all three, so 0.90 flagged healthy rows on noise."
+  }
+}
