@@ -1,0 +1,54 @@
+---
+id: app-studio-ai-features
+version: 1
+status: draft
+updated: 2026-09-28
+task: App Studio ai-features stage prompt: ship LLM features that validate model replies and run without paid keys through named fallbacks
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: ai feature in the app llm feature with fallback
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated
+tier: main
+parent: app-studio-meta
+stage: ai-features
+audience: builder
+lessons: LA-07 TG-03 TG-05 TG-17 TG-18 TG-25 TG-26
+jev_gate: app.prompt
+jev_decision: 119510
+content_sha256: a0f9266f2453983f405c9e442a9f009356dee3b647a6af184ff3c9cfe0243e7c
+---
+
+# Stage 8: ai-features (App Studio main prompt, v1)
+
+Contract
+- id: app-studio-ai-features | version: 1 | tier: main (stage) | parent: app-studio-meta | stage: ai-features | audience: builder
+- inputs: {{FEATURES}}, {{STACK}}, {{PROVIDER}}, {{FALLBACK}}
+- output: AI features whose fallback path is proven with the key unset, recorded in .app-studio/stages/ai-features.md
+- lessons carried (each one is an instruction to follow):
+  - LA-07: Env-gate each paid vendor with a NAMED fallback so the app runs without the key, and list missing credentials exactly in a BLOCKED list.
+  - TG-03: Choose each vendor by its free tier first and name the paid upgrade; pay only when the product forces it. (TubeGuruji videos: ciXiibK7Gds, cxto0P5DSYU)
+  - TG-05: Never run a long multi-step AI job in the request; run it as durable steps with a status record. (TubeGuruji videos: -h1O73T0jmo, 6niOEjus2Vg, kxM_oEMn3IM, 31-Qfr2Pc5Q)
+  - TG-17: Have the model return JSON for a declared schema, validate it, and render or reject it; never render unvalidated model text as structure. (TubeGuruji videos: UgLN9O930vE, s28yOCBVgGw)
+  - TG-18: Generate the expensive config once and apply themes or variants to it without regenerating. (TubeGuruji videos: c9qA-uhysIY)
+  - TG-25: Render per-step progress for every pipeline from the job's own status record. (TubeGuruji videos: ciXiibK7Gds, kxM_oEMn3IM, 6niOEjus2Vg)
+  - TG-26: Create the LLM client in one util module and import it; route user-chosen models through one gateway. (TubeGuruji videos: sXRDL-EPtrM, fOtjNm3JoAE)
+- gates: library gate app.prompt on this text; output gate app.stage-gate (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: each AI feature has an Evidence row run with its key unset that shows the named fallback's output, and a row showing invalid model output rejected with a named error
+- stop: report BLOCKED: <key name> for a feature that cannot run without a paid key and has no fallback; never call a paid API from the bench; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+- sub-prompts owned: app-sub-llm-feature
+
+Question this stage answers: do AI features run without paid keys, validate outputs, and stay deterministic where they must?
+
+1. Each feature uses app-sub-llm-feature: provider {{PROVIDER}}, fallback {{FALLBACK}} (LA-07, TG-03).
+2. The model returns JSON for a declared schema; invalid output is rejected with a named error (TG-17).
+3. Generate once, then apply variants without regenerating (TG-18).
+4. Multi-step generation runs as durable steps with per-step progress (app-sub-durable-job, TG-05, TG-25).
+5. One client module owns the provider (TG-26).
+6. Typed judgments inside the app (classify, route, score) go to a System One model such as Jev, not a frontier model.
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

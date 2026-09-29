@@ -1,0 +1,51 @@
+[
+ {
+  "id": "bench-trv-ticketing-observed",
+  "source_video": "NKiTlo_dgb8",
+  "app": "Support ticketing slice with live error visibility",
+  "features": [
+   "create-ticket form with named inputs and server-side validation",
+   "ticket list with empty state",
+   "error boundary plus monitoring capture on both API and client",
+   "session context attached to each error"
+  ],
+  "stack": [
+   "nextjs",
+   "postgres",
+   "prisma",
+   "sentry",
+   "tailwind"
+  ],
+  "acceptance_sketch": [
+   "submitting the form with an empty field shows a named validation error and writes no row",
+   "one deliberately failing API call appears in the monitoring dashboard with its request context",
+   "the ticket list with zero records renders without a console error",
+   "a successful submit shows the new ticket on the next list load"
+  ],
+  "est_builder_minutes": 50
+ },
+ {
+  "id": "bench-trv-auth-booking-gate",
+  "source_video": "l9zh0pqEHyc",
+  "app": "Booking app auth gate and validated booking form",
+  "features": [
+   "register/login with server-side required-field checks",
+   "protected /bookings route with signed-out redirect",
+   "booking form with date and guest fields",
+   "branch + merge with the change reviewed"
+  ],
+  "stack": [
+   "nextjs",
+   "appwrite",
+   "tailwind",
+   "react"
+  ],
+  "acceptance_sketch": [
+   "an empty register submit is rejected with a visible error message",
+   "a signed-out visit to /bookings redirects to the login screen",
+   "a logged-in user can create one booking and sees it after reload",
+   "the work lands through a feature branch, not a direct commit to main"
+  ],
+  "est_builder_minutes": 50
+ }
+]

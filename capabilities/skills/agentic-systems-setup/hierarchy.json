@@ -1,0 +1,777 @@
+{
+ "family": "agentic-systems-setup",
+ "version": "1.1.0",
+ "built": "2026-09-28",
+ "generated_by": "fork A6 (hand-built; validate with scripts/validate_hierarchy.py)",
+ "head_bytes": 4096,
+ "stages": [
+  {
+   "id": "probe",
+   "question": "E1: What does this machine have right now, and which model routes answer?"
+  },
+  {
+   "id": "select",
+   "question": "E2: Which framework fits the job (and its when-not), in which route, per today's docs?"
+  },
+  {
+   "id": "install-models",
+   "question": "E3: Is it installed in the route and wired to a proven local model with a named fallback?"
+  },
+  {
+   "id": "secrets",
+   "question": "E4: Is every credential referenced by keychain item name, with no value in files, logs, or receipts?"
+  },
+  {
+   "id": "hello-proof",
+   "question": "E5: Did the hello pass on a deterministic fake and then on a local endpoint?"
+  },
+  {
+   "id": "durable-observe",
+   "question": "E6: Was one durable or observed feature exercised, with a run id read back?"
+  },
+  {
+   "id": "test-eval",
+   "question": "E7: Do tests and evals carry assertions, and did a planted failure go RED then GREEN?"
+  },
+  {
+   "id": "deploy-close",
+   "question": "E8: Is anything outward approved with an id or held, and did the receipt clear agentic.setup?"
+  }
+ ],
+ "lanes": [
+  {
+   "id": "agent-framework",
+   "question": "Agents with tools, memory, multi-agent teams, typed outputs"
+  },
+  {
+   "id": "durable-workflow",
+   "question": "Durable or scheduled execution that survives crashes and retries"
+  },
+  {
+   "id": "data-pipeline",
+   "question": "Asset and DAG pipelines that host AI steps"
+  },
+  {
+   "id": "low-code-platform",
+   "question": "Visual or low-code builders for LLM apps and automations"
+  }
+ ],
+ "lessons": "references/lessons.jsonl",
+ "inventory": "references/inventory.json",
+ "tiers": {
+  "skills": {
+   "meta": {
+    "id": "agentic-systems-setup",
+    "path": "capabilities/skills/agentic-systems-setup",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "agentic-setup-langchain",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-langchain",
+     "owner": "A1",
+     "new": true,
+     "why": "framework main skill written by worker A1",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "L4 checkpointer: ormsgpack .so refused (library validation)",
+     "receipt": "capabilities/skills/agentic-setup-langchain/references/proof.json",
+     "verified": "CONFIRMED by xai-oauth/grok-4.7"
+    },
+    {
+     "id": "agentic-setup-llamaindex",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-llamaindex",
+     "owner": "A1",
+     "new": true,
+     "why": "framework main skill written by worker A1",
+     "landed": "2026-09-28",
+     "proven_here": "L2 narrow",
+     "blocker": "tiktoken .so refused blocks index/query; SQLAlchemy pinned 2.0.41",
+     "receipt": "capabilities/skills/agentic-setup-llamaindex/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-pydantic-ai",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-pydantic-ai",
+     "owner": "A1",
+     "new": true,
+     "why": "framework main skill written by worker A1",
+     "landed": "2026-09-28",
+     "proven_here": "L4",
+     "blocker": "none",
+     "receipt": "capabilities/skills/agentic-setup-pydantic-ai/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-crewai",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-crewai",
+     "owner": "A2",
+     "new": true,
+     "why": "framework main skill written by worker A2",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "L4 not yet exercised; L3 on 127.0.0.1:8657",
+     "receipt": "capabilities/skills/agentic-setup-crewai/references/proof.json",
+     "verified": "planted proof invalid (exit 0); worker fixing"
+    },
+    {
+     "id": "agentic-setup-openai-agents-sdk",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-openai-agents-sdk",
+     "owner": "A2",
+     "new": true,
+     "why": "framework main skill written by worker A2",
+     "landed": "2026-09-28",
+     "proven_here": "L1",
+     "blocker": "import refused: cffi .so via mcp -> cryptography",
+     "receipt": "capabilities/skills/agentic-setup-openai-agents-sdk/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-google-adk",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-google-adk",
+     "owner": "A2",
+     "new": true,
+     "why": "framework main skill written by worker A2",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "LiteLLM 1.82.7/1.82.8 advisory: pin >=1.84; L3 on 8657",
+     "receipt": "capabilities/skills/agentic-setup-google-adk/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-microsoft-agent-framework",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-microsoft-agent-framework",
+     "owner": "A2",
+     "new": true,
+     "why": "framework main skill written by worker A2",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "L4 not yet exercised",
+     "receipt": "capabilities/skills/agentic-setup-microsoft-agent-framework/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-prefect",
+     "lane": "durable-workflow",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-prefect",
+     "owner": "A3",
+     "new": true,
+     "why": "framework main skill written by worker A3",
+     "landed": "2026-09-28",
+     "proven_here": "L4",
+     "blocker": "asyncpg .so stubbed; retry fired; server health 200",
+     "receipt": "capabilities/skills/agentic-setup-prefect/references/proof.json",
+     "verified": "CONFIRMED by xai-oauth/grok-4.7"
+    },
+    {
+     "id": "agentic-setup-temporal",
+     "lane": "durable-workflow",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-temporal",
+     "owner": "A3",
+     "new": true,
+     "why": "framework main skill written by worker A3",
+     "landed": "2026-09-28",
+     "proven_here": "L1 + L2 logic",
+     "blocker": "worker saw no temporal CLI; CLI 1.7.2 is in ~/.homebrew/bin (not on PATH); Mike's dev server on 127.0.0.1:7233 (pid 7353) is off-limits to proofs",
+     "receipt": "capabilities/skills/agentic-setup-temporal/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-dagster",
+     "lane": "data-pipeline",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-dagster",
+     "owner": "A3",
+     "new": true,
+     "why": "framework main skill written by worker A3",
+     "landed": "2026-09-28",
+     "proven_here": "L2 + L4",
+     "blocker": "DISABLE_SQLALCHEMY_CEXT=1; native .so moved aside",
+     "receipt": "capabilities/skills/agentic-setup-dagster/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-airflow",
+     "lane": "data-pipeline",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-airflow",
+     "owner": "A3",
+     "new": true,
+     "why": "framework main skill written by worker A3",
+     "landed": "2026-09-28",
+     "proven_here": "L1 + L2 logic",
+     "blocker": "cffi .so refused",
+     "receipt": "capabilities/skills/agentic-setup-airflow/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-trigger-dev",
+     "lane": "durable-workflow",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-trigger-dev",
+     "owner": "A4",
+     "new": true,
+     "why": "framework main skill written by worker A4",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "esbuild postinstall hangs: npm i --ignore-scripts",
+     "receipt": "capabilities/skills/agentic-setup-trigger-dev/references/proof.json",
+     "verified": "CONFIRMED by xai-oauth/grok-4.7"
+    },
+    {
+     "id": "agentic-setup-inngest",
+     "lane": "durable-workflow",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-inngest",
+     "owner": "A4",
+     "new": true,
+     "why": "framework main skill written by worker A4",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "v4 createFunction signature changed",
+     "receipt": "capabilities/skills/agentic-setup-inngest/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-mastra",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-mastra",
+     "owner": "A4",
+     "new": true,
+     "why": "framework main skill written by worker A4",
+     "landed": "2026-09-28",
+     "proven_here": "L3",
+     "blocker": "in-memory storage warning",
+     "receipt": "capabilities/skills/agentic-setup-mastra/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-n8n",
+     "lane": "low-code-platform",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-n8n",
+     "owner": "A4",
+     "new": true,
+     "why": "framework main skill written by worker A4",
+     "landed": "2026-09-28",
+     "proven_here": "L2 + L4",
+     "blocker": "import:workflow needs a top-level id; DB at $N8N_USER_FOLDER/.n8n; stray on *:4400",
+     "receipt": "capabilities/skills/agentic-setup-n8n/references/proof.json",
+     "verified": "L4 unreproduced while stray pid 23506 holds 127.0.0.1:5679"
+    },
+    {
+     "id": "agentic-setup-dify",
+     "lane": "low-code-platform",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-dify",
+     "owner": "A5",
+     "new": true,
+     "why": "framework main skill written by worker A5",
+     "landed": "2026-09-28",
+     "proven_here": "L0",
+     "blocker": "Docker daemon down (Colima installed, not running)",
+     "receipt": "capabilities/skills/agentic-setup-dify/references/proof.json",
+     "verified": "docs quote confirmed against grounding sha ac3c0061d500"
+    },
+    {
+     "id": "agentic-setup-kestra",
+     "lane": "durable-workflow",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-kestra",
+     "owner": "A5",
+     "new": true,
+     "why": "framework main skill written by worker A5",
+     "landed": "2026-09-28",
+     "proven_here": "L1",
+     "blocker": "needs Java 25, not 21; API 401; stray on *:8080",
+     "receipt": "capabilities/skills/agentic-setup-kestra/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-flowise",
+     "lane": "low-code-platform",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-flowise",
+     "owner": "A5",
+     "new": true,
+     "why": "framework main skill written by worker A5",
+     "landed": "2026-09-28",
+     "proven_here": "L1",
+     "blocker": "server never answered",
+     "receipt": "capabilities/skills/agentic-setup-flowise/references/proof.json"
+    },
+    {
+     "id": "agentic-setup-langflow",
+     "lane": "low-code-platform",
+     "stages": [
+      "install-models",
+      "hello-proof",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-setup-langflow",
+     "owner": "A5",
+     "new": true,
+     "why": "framework main skill written by worker A5",
+     "landed": "2026-09-28",
+     "proven_here": "L1",
+     "blocker": "never bound a port",
+     "receipt": "capabilities/skills/agentic-setup-langflow/references/proof.json"
+    },
+    {
+     "id": "tool-langchain",
+     "lane": "agent-framework",
+     "stages": [
+      "hello-proof"
+     ],
+     "path": "capabilities/skills/tool-langchain",
+     "source": "canonical",
+     "reused": true,
+     "why": "langchain-core primitives inside the Design Harness venv"
+    },
+    {
+     "id": "tool-langgraph",
+     "lane": "agent-framework",
+     "stages": [
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/tool-langgraph",
+     "source": "canonical",
+     "reused": true,
+     "why": "graph-shaped Design Harness slices"
+    },
+    {
+     "id": "tool-mastra",
+     "lane": "agent-framework",
+     "stages": [
+      "install-models"
+     ],
+     "path": "capabilities/skills/tool-mastra",
+     "source": "canonical",
+     "reused": true,
+     "why": "verifies the installed Mastra CLI"
+    },
+    {
+     "id": "tool-temporal",
+     "lane": "durable-workflow",
+     "stages": [
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/tool-temporal",
+     "source": "canonical",
+     "reused": true,
+     "why": "deterministic Temporal Python workflows for Design Harness runtimes"
+    },
+    {
+     "id": "tg-durable-ai-pipelines",
+     "lane": "durable-workflow",
+     "stages": [
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/tg-durable-ai-pipelines",
+     "source": "canonical",
+     "reused": true,
+     "why": "durable AI pipelines inside App Studio builds"
+    },
+    {
+     "id": "autonomous-ai-agents",
+     "lane": "adjacent",
+     "stages": [
+      "select"
+     ],
+     "path": "capabilities/skills/autonomous-ai-agents",
+     "source": "canonical",
+     "reused": true,
+     "why": "router for autonomous coding agents; not a framework"
+    },
+    {
+     "id": "app-sandbox-survival",
+     "lane": "adjacent",
+     "stages": [
+      "probe",
+      "install-models"
+     ],
+     "path": "capabilities/skills/app-sandbox-survival",
+     "source": "canonical",
+     "reused": true,
+     "why": "Aside sandbox build and process rules"
+    }
+   ],
+   "sub": [
+    {
+     "id": "agentic-env-probe",
+     "stage": "probe",
+     "stages": [
+      "probe",
+      "select"
+     ],
+     "path": "capabilities/skills/agentic-env-probe",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-proof-ladder",
+     "stage": "select",
+     "stages": [
+      "select",
+      "hello-proof",
+      "deploy-close"
+     ],
+     "path": "capabilities/skills/agentic-proof-ladder",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-local-models",
+     "stage": "install-models",
+     "stages": [
+      "install-models",
+      "hello-proof"
+     ],
+     "path": "capabilities/skills/agentic-local-models",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-secrets",
+     "stage": "secrets",
+     "stages": [
+      "secrets"
+     ],
+     "path": "capabilities/skills/agentic-secrets",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-durable-execution",
+     "stage": "durable-observe",
+     "stages": [
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-durable-execution",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-observability",
+     "stage": "durable-observe",
+     "stages": [
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-observability",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-mcp-integration",
+     "stage": "durable-observe",
+     "stages": [
+      "durable-observe",
+      "test-eval"
+     ],
+     "path": "capabilities/skills/agentic-mcp-integration",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-testing-evals",
+     "stage": "test-eval",
+     "stages": [
+      "test-eval"
+     ],
+     "path": "capabilities/skills/agentic-testing-evals",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-deploy-gate",
+     "stage": "deploy-close",
+     "stages": [
+      "deploy-close"
+     ],
+     "path": "capabilities/skills/agentic-deploy-gate",
+     "parent": "agentic-systems-setup",
+     "new": true
+    },
+    {
+     "id": "agentic-selfhost-docker",
+     "stage": "install-models",
+     "stages": [
+      "install-models",
+      "durable-observe"
+     ],
+     "path": "capabilities/skills/agentic-selfhost-docker",
+     "parent": "agentic-systems-setup",
+     "owner": "A5",
+     "new": true,
+     "landed": "2026-09-28",
+     "proven_here": "L1",
+     "blocker": "worker: Colima NOT installed; corrected: Colima 0.10.3 and lima 2.1.3 installed in ~/.homebrew/bin, not on PATH; colima not running",
+     "receipt": "capabilities/skills/agentic-selfhost-docker/references/proof.json"
+    }
+   ]
+  },
+  "agents": {
+   "meta": {
+    "id": "agentic-setup-conductor",
+    "path": "capabilities/agents/agentic-setup-conductor.md",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "rig-stackwright",
+     "path": "capabilities/agents/rig-stackwright.md",
+     "stage": "durable-observe",
+     "reused": true
+    },
+    {
+     "id": "app-sandbox-preflight",
+     "path": "capabilities/agents/app-sandbox-preflight.md",
+     "stage": "probe",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "agentic-env-prober",
+     "path": "capabilities/agents/agentic-env-prober.md",
+     "parent": "agentic-setup-conductor",
+     "stage": "probe",
+     "new": true
+    },
+    {
+     "id": "agentic-proof-runner",
+     "path": "capabilities/agents/agentic-proof-runner.md",
+     "parent": "agentic-setup-conductor",
+     "stage": "hello-proof",
+     "new": true
+    },
+    {
+     "id": "agentic-docs-verifier",
+     "path": "capabilities/agents/agentic-docs-verifier.md",
+     "parent": "agentic-setup-conductor",
+     "stage": "select",
+     "new": true
+    }
+   ]
+  },
+  "harnesses": {
+   "meta": {
+    "id": "agentic-setup-session",
+    "path": "capabilities/harnesses/agentic-setup-session.yaml",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "mh-03-agent-composition-session",
+     "path": "capabilities/harnesses/mh-03-agent-composition-session.yaml",
+     "stage": "select"
+    },
+    {
+     "id": "hA-11-infra-iac",
+     "path": "capabilities/harnesses/hA-11-infra-iac.yaml",
+     "stage": "install-models"
+    },
+    {
+     "id": "hA-03-code-test-writing",
+     "path": "capabilities/harnesses/hA-03-code-test-writing.yaml",
+     "stage": "test-eval"
+    },
+    {
+     "id": "hA-12-ci-cd-design",
+     "path": "capabilities/harnesses/hA-12-ci-cd-design.yaml",
+     "stage": "deploy-close"
+    }
+   ],
+   "sub": []
+  },
+  "loops": {
+   "meta": {
+    "id": "agentic-setup-proof-loop",
+    "path": "capabilities/loops/agentic-setup-proof-loop.md",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "proof-loop",
+     "path": "capabilities/skills/proof-loop",
+     "stage": "hello-proof"
+    },
+    {
+     "id": "adversarial-verification-loop",
+     "path": "capabilities/skills/adversarial-verification-loop",
+     "stage": "test-eval"
+    },
+    {
+     "id": "phase-discipline-loop",
+     "path": "capabilities/skills/phase-discipline-loop",
+     "stage": "install-models"
+    },
+    {
+     "id": "gate-d-loop",
+     "path": "capabilities/skills/gate-d-loop",
+     "stage": "deploy-close"
+    },
+    {
+     "id": "git-push-safety-loop",
+     "path": "capabilities/skills/git-push-safety-loop",
+     "stage": "deploy-close"
+    }
+   ],
+   "sub": []
+  },
+  "hooks": {
+   "meta": {
+    "id": "guard-secret-write",
+    "path": "capabilities/hooks/guard-secret-write.sh",
+    "new": false,
+    "reused": true
+   },
+   "main": [
+    {
+     "id": "guard-dangerous-commands",
+     "path": "capabilities/hooks/guard-dangerous-commands.sh",
+     "stage": "install-models"
+    },
+    {
+     "id": "s1gate-stage-gate",
+     "path": "capabilities/hooks/s1gate-stage-gate.sh",
+     "stage": "deploy-close"
+    },
+    {
+     "id": "app-native-binary-preflight",
+     "path": "capabilities/hooks/app-native-binary-preflight.sh",
+     "stage": "probe"
+    }
+   ],
+   "sub": []
+  },
+  "jev": {
+   "meta": {
+    "id": "agentic.setup",
+    "path": "capabilities/harnesses/s1gate/rubrics/agentic.setup.json",
+    "kinds": [
+     "agentic.setup",
+     "agentic-setup",
+     "agent-framework-setup"
+    ],
+    "new": true
+   },
+   "main": [
+    {
+     "id": "doctrine.surface",
+     "path": "capabilities/harnesses/s1gate/rubrics/doctrine.surface.json",
+     "stage": "select"
+    },
+    {
+     "id": "plan.readiness",
+     "path": "capabilities/harnesses/s1gate/rubrics/plan.readiness.json",
+     "stage": "select"
+    },
+    {
+     "id": "code.diff",
+     "path": "capabilities/harnesses/s1gate/rubrics/code.diff.json",
+     "stage": "test-eval"
+    },
+    {
+     "id": "atomic.claim",
+     "path": "capabilities/harnesses/s1gate/rubrics/atomic.claim.json",
+     "stage": "hello-proof"
+    },
+    {
+     "id": "mission.completion",
+     "path": "capabilities/harnesses/s1gate/rubrics/mission.completion.json",
+     "stage": "deploy-close"
+    }
+   ],
+   "sub": []
+  }
+ },
+ "lessons_candidates": "references/lessons-candidates.jsonl",
+ "retired": [
+  {
+   "id": "docker-agentic-stack",
+   "was": "~/.hermes/skills/docker-agentic-stack",
+   "now": "~/.hermes/skills/.archive/docker-agentic-stack",
+   "observed": "2026-09-28 14:35 MDT (resolved at 09:30, archived by then)",
+   "role_now_owned_by": "agentic-selfhost-docker"
+  }
+ ]
+}

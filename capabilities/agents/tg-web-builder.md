@@ -2,6 +2,7 @@
 name: tg-web-builder
 description: "Builds the Next.js/React side of the TubeGuruji skeleton: landing, auth gate, sidebar dashboard, form+quota, generation with progress, artifact view/share, credits gate. Works in slices handed over by app-studio-conductor, loads tubeguruji-doctrine + tg-saas-skeleton first, and ends every slice with an executed check - never a completion claim."
 allowed-tools: Bash Read Write Edit Grep Glob
+tools: Bash, Read, Write, Edit, Grep, Glob
 owner: rig-intelligence
 domain: Agent engineering / fullstack build
 status: Stable

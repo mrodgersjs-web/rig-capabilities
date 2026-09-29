@@ -1,0 +1,30 @@
+[
+ {
+  "id": "bench-gxd-app-shell-paid",
+  "source_video": "aYftPYZJsy8",
+  "app": "Expo Router app shell with auth gate, error monitoring and a paid tier",
+  "features": [
+   "drawer with nested tabs and an explicit index route",
+   "Clerk auth gate on the protected group",
+   "Sentry with dev replay rate 1 and sampled production rate",
+   "RevenueCat paywall with a purchase test"
+  ],
+  "stack": [
+   "expo",
+   "expo-router",
+   "react-native",
+   "clerk",
+   "sentry",
+   "revenuecat",
+   "nativewind"
+  ],
+  "acceptance_sketch": [
+   "a cold start lands on the index route with no navigation error",
+   "a signed-out user is stopped at the auth gate and sent to sign-in",
+   "one induced error appears in the Sentry dashboard for the release",
+   "the paywall purchase is proven on a device or store sandbox, not the simulator",
+   "no button on the auth form is hidden when the keyboard is open"
+  ],
+  "est_builder_minutes": 50
+ }
+]

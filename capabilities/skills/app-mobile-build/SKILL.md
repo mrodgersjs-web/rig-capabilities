@@ -90,3 +90,21 @@ Main agents: `tg-mobile-builder`, `voltagent-mobile-app-developer`.
 
 memory/episodic/2026-09-27.md#L1475, #L1478, #L1467, #L1480;
 memory/projects/transformfit-qa.md#L18, #L20.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-44: no window or document in React Native; use expo-status-bar's StatusBar (CH-JSM-01,
+  CH-NJD-04).
+- LA-45: native modules and config plugins need expo prebuild plus a rebuild; env and bundler
+  config need a cache-cleared restart (CH-NJD-02, SSG-01-env-cache-restart,
+  GXD-04-explicit-polyfills).
+- LA-49: forms in KeyboardAvoidingView with safe-area insets, tested with the keyboard up; guard
+  nested collections before a FlatList (CH-NJD-01, CH-NJD-03, GXD-07-keyboard-overlap).
+- Every navigator has an explicit index route, proven by a cold boot (GXD-08-explicit-index-route);
+  route syntax matches the installed router version (GXD-06-router-version-drift).
+- Purchases are tested on a device or the store sandbox (LA-47, GXD-03-iap-needs-real-device).

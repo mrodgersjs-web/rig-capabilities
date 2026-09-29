@@ -1,0 +1,46 @@
+---
+id: app-sub-saas-skeleton
+version: 2
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: map the app onto the seven-part SaaS skeleton with real data and per-mutation feedback
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: saas skeleton screens
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | lessons TG-02 TG-10 TG-30 LA-49 | uncalibrated
+tier: sub
+parent: app-studio-design-ux
+stage: design-ux
+audience: builder
+lessons: TG-02 TG-10 TG-30 LA-49
+jev_gate: app.prompt
+jev_decision: 121883
+content_sha256: 557b58249a057eeb3aa0a382f6c24b6c55fd3340fdc993857ae71ae0b4619789
+---
+
+# The SaaS skeleton screen map (App Studio sub prompt, v2)
+
+Contract
+- id: app-sub-saas-skeleton | version: 2 | tier: sub | parent: app-studio-design-ux | stage: design-ux | audience: builder
+- inputs: spec.md done-screens, {{FEATURES}}
+- output: the screen map rows in .app-studio/stages/design-ux.md, one per skeleton part that applies
+- lessons carried (each one is an instruction to follow):
+  - TG-02: Build the repeatable skeleton (landing, auth gate, sidebar dashboard, input form with quota, generation with progress, artifact view/share, credits gate); vendors are swaps behind it. (TubeGuruji videos: zcYM_Gqoph4, zjwj21wzs4U)
+  - TG-10: Seed and render coherent real data (names, amounts, dates), never lorem ipsum, on every generated surface. (TubeGuruji videos: tJmN2XduBVk)
+  - TG-30: Every mutation gives visible feedback (toast), every list has an empty state and a skeleton loader, and render guards wait for data. (TubeGuruji videos: zlZ_7VTfxUs, YwcyE1XlUZU)
+  - LA-49: Before calling a screen done, render it with zero records (every element and ref access guarded) and, on mobile, open each form with the keyboard up and prove no field or button is hidden.
+- gates: library gate app.prompt on this text; output gate ui.design on the captures (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: each applicable skeleton part has a route, and the seeded data renders on the production build as shown by a curl of each route
+- stop: report BLOCKED: <part> when a skeleton part needs an out-of-scope vendor; use its named stub instead; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+Mark each part applies or does not apply, with the reason (TG-02):
+1. Landing (public) 2. Auth gate 3. Dashboard shell with sidebar 4. Input form with its quota 5. Generation or work view with progress 6. Artifact view with share 7. Credits or upgrade gate.
+Rules for every screen: coherent seeded data that fits this app (TG-10); a toast on each mutation, an empty state and a loader on each list, and no render before data arrives (TG-30).
+Render every list screen with zero records, and guard every element and ref access against the empty state (LA-49; creators CH-TRV-10).
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

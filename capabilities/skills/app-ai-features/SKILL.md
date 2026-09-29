@@ -82,3 +82,22 @@ Sub-skill of `app-studio`, stage 8 of 11. Main skills it extends: `tg-durable-ai
    TransformFit's `remote_ai_consent` does.
 7. **Cost is a gate.** Quotas and credits cap spend and are proven at limit+1 (LA-08).
 8. **Gate** with `app.stage-gate` on the slice record and `code.diff` on the diff.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-39: when an AI endpoint returns nothing, confirm in the network tab that the request left and
+  the key is set before changing code (PYG-01-empty-response-check-network).
+- Pin a model id the provider still accepts and pass provider options through to the call
+  (SSG-07-model-id-alive, CH-CWA-06).
+- An agent acting on an external service uses its own scoped key, verified in that service's
+  dashboard (PYG-04-agent-uses-scoped-key); record the MCP transport and show the tool result
+  returning to the model (PYG-03-mcp-transport-recorded).
+- Time the answer path and stream or cache past a few seconds (SSG-05-answer-latency-budget); prove
+  session memory in a fresh session (SSG-04-agent-session-memory).
+- When a coding agent cannot see the failing environment, describe page, route, expected and actual
+  (CH-JSM-09).

@@ -1,0 +1,47 @@
+---
+id: app-sub-done-md
+version: 2
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: the DONE.md close-out the verifier reads first
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: done.md close out
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | lessons LA-07 LA-21 | uncalibrated
+tier: sub
+parent: app-studio-builder
+stage: all
+audience: builder
+lessons: LA-07 LA-21
+jev_gate: app.prompt
+jev_decision: 122005
+content_sha256: e1f7a78b20240c9437a959f7d646f1744416114f85f6e48fab057f32d5bb8698
+---
+
+# DONE.md (App Studio sub prompt, v2)
+
+Contract
+- id: app-sub-done-md | version: 2 | tier: sub | parent: app-studio-builder | stage: all | audience: builder
+- inputs: {{CONTRACT}}, the mission record
+- output: DONE.md in the project root
+- lessons carried (each one is an instruction to follow):
+  - LA-07: Env-gate each paid vendor with a NAMED fallback so the app runs without the key, and list missing credentials exactly in a BLOCKED list.
+  - LA-21: Classify a check that could not run (missing tool, dependency or credential) as BLOCKED with the missing piece named, never as FAILED or PASS.
+- gates: library gate app.prompt on this text; output gate mission.completion (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: DONE.md has one row per contract line, the mission record file list with each path, the BLOCKED list (the builder's own unfinished work only), the Pending list and Lessons observed, and the reply's last line is the literal `DONE` when the builder's own checks pass
+- stop: if any contract line fails, keep the row as FAIL and never mark it PASS without its command; `BLOCKED: <reason>` as the last line is only for the builder's own unfinished work; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+Write DONE.md with:
+1. A table: contract line, PASS, FAIL or BLOCKED, the command that proved it.
+2. Mission record: .app-studio/spec.md, stack.md, stages/<stage>.md for each fired stage, verify.md; each path must exist.
+3. BLOCKED: only the builder's own unfinished work, named exactly: a credential with no named fallback, a feature that could not be finished (LA-07, LA-21).
+4. Pending (not the builder's): independent stage and UI gates, the verifier's acceptance run, lesson promotion, and Gate-D items, each named. None of these is a reason for a BLOCKED last line.
+5. Lessons observed (app-sub-lesson-candidates format).
+6. Then end your reply with exactly one last line, the literal `DONE` with nothing else on it (no punctuation, no formatting), when your own checks pass: `DONE` means the builder finished and independent verification decides the mission. Use `BLOCKED: <reason>` only when your own work cannot finish.
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

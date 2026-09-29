@@ -1,0 +1,128 @@
+[
+ {
+  "step": "env: PATH prefix + node version",
+  "command": "export PATH=\"$HOME/.local/bin:/usr/local/bin:$PATH\"; node -v; npm -v",
+  "exit_code": 0,
+  "observed": "v22.22.3 / 10.9.8",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "probe Blackwell 8011",
+  "command": "curl -s -m 5 http://192.168.68.90:8011/v1/models",
+  "exit_code": 7,
+  "observed": "connection refused (HTTP 000)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "probe Blackwell 8111",
+  "command": "curl -s -m 5 http://192.168.68.90:8111/v1/models",
+  "exit_code": 28,
+  "observed": "timeout (HTTP 000)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "probe local endpoint 8771",
+  "command": "curl -s -m 5 http://127.0.0.1:8771/v1/models",
+  "exit_code": 0,
+  "observed": "model qwen3.8-uncensored:27b listed",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "probe local endpoint 8657",
+  "command": "curl -s -m 5 http://127.0.0.1:8657/v1/models",
+  "exit_code": 0,
+  "observed": "model MiMo-V2.6-Flash-RL-MLX-4bit-MTP listed (Flash; not used per model pin)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 version check",
+  "command": "npm view @trigger.dev/sdk version",
+  "exit_code": 0,
+  "observed": "4.6.4",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch",
+  "command": "webfetch https://trigger.dev/docs/introduction",
+  "exit_code": 0,
+  "observed": "tasks/runs/idempotency/schedules/waits/waitpoints/self-hosting confirmed",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install attempt (plain npm i)",
+  "command": "npm i @trigger.dev/sdk@4.6.4 typescript tsx vitest",
+  "exit_code": 1,
+  "observed": "FAILED: esbuild postinstall never finishes (unfinished npm timer build:run:postinstall:node_modules/esbuild); concurrent sibling npm runs also wiped node_modules (npm error, same cache)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install (workaround)",
+  "command": "npm i --ignore-scripts --no-audit --no-fund @trigger.dev/sdk@4.6.4",
+  "exit_code": 0,
+  "observed": "70 pkgs installed; node_modules/@trigger.dev/sdk/package.json version 4.6.4",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 sdk import",
+  "command": "node -e \"import('@trigger.dev/sdk').then(m=>console.log(typeof m.task))\"",
+  "exit_code": 0,
+  "observed": "function (earlier run: sdk import ok, task: function)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 unit test green (fake model)",
+  "command": "node --experimental-strip-types test/run.ts",
+  "exit_code": 0,
+  "observed": "PASS: trigger-dev task SDK + deterministic handler (fake-model)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 planted failure",
+  "command": "node --experimental-strip-types test/run.ts (expected string flipped to fake-model:PLANTED)",
+  "exit_code": 1,
+  "observed": "AssertionError RED; file checksum moved 55d9239a2488 -> db311d9e2f0a (plant verified landed)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 restored green",
+  "command": "node --experimental-strip-types test/run.ts (restored)",
+  "exit_code": 0,
+  "observed": "PASS again; checksum back to 55d9239a2488",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 local model step green",
+  "command": "node test/l3.mjs (POST http://127.0.0.1:8771/v1/chat/completions, chat_template_kwargs.enable_thinking=false)",
+  "exit_code": 0,
+  "observed": "L3 PASS: local model returned \"Hello there, Mike.\" (non-empty asserted)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 planted failure",
+  "command": "node test/l3.mjs (EXPECT flipped /hello/i -> /goodbye/i)",
+  "exit_code": 1,
+  "observed": "Error: ASSERTION FAILED: expected //goodbye/i/ in \"Hello to Mike\"; checksum moved f40ceee2e564 -> 54175de6f253",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 restored green",
+  "command": "node test/l3.mjs (restored)",
+  "exit_code": 0,
+  "observed": "L3 PASS again; checksum back to f40ceee2e564",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "dev CLI (Gate-D boundary)",
+  "command": "npx trigger.dev dev",
+  "exit_code": null,
+  "observed": "NOT RUN: authenticates to cloud/self-hosted first (trigger.dev login is Gate-D). What login would unlock: dev streaming, run dashboard, deploy",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "vitest runner",
+  "command": "npx vitest run --reporter=basic",
+  "exit_code": 1,
+  "observed": "BLOCKED by install churn: ERR_MODULE_NOT_FOUND file:///.../vitest/dist/chunks/utils.CJ0JImL8.js (tree half-written by failed installs); node --experimental-strip-types + node:assert used instead",
+  "at": "2026-09-28"
+ }
+]

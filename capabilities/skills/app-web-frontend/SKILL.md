@@ -82,3 +82,23 @@ Main agents: `tg-web-builder`, `voltagent-nextjs-developer`, `voltagent-frontend
 ## Lessons that fire here
 
 LA-08, LA-09, LA-10, LA-23, LA-25. List them per task with `scripts/fire_lessons.py`.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-36: fix a hydration mismatch at the diverging value (mounted gate, skipHydration, one
+  formatter, client-only import), never by suppressing it (CH-CWA-01, CH-LMA-03,
+  SSG-02-ssr-client-mismatch, JTC-02-hydration-source-fix).
+- LA-37: one failed fetch never blanks the screen; check response.ok and render a section error
+  state (CH-JSM-06, CH-LMA-09).
+- LA-44: client hooks only in 'use client' files; check which surface a component comes from
+  (CH-CWA-08, CH-CWA-09).
+- DOM and React traps: no button inside a button (CH-LMA-01), a Link with several children wraps
+  them in a fragment (CH-LMA-11), hooks return a cleanup function or nothing, never undefined by
+  accident (CH-JSM-07), cart lines keyed by variant, not product id (CH-LMA-10).
+- Shared code has no side effect that fires twice (TRV-01-code-runs-on-both-sides); realtime
+  screens handle join and leave, tested with two clients (TRV-09-realtime-join-and-leave).

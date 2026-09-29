@@ -1,0 +1,53 @@
+[
+ {
+  "id": "BENCH-JSM-01",
+  "source_video": "8vIDZO_w7lY",
+  "app": "Trending movie discovery app",
+  "features": [
+   "TMDB trending + search lists",
+   "custom fetch hook with loading/error states",
+   "detail route with backdrop and cast",
+   "search with debounce"
+  ],
+  "stack": [
+   "nextjs",
+   "react",
+   "typescript",
+   "tailwindcss",
+   "tanstack-query"
+  ],
+  "acceptance_sketch": [
+   "GET /api/movies/trending returns a non-empty list rendered as cards",
+   "search box filters the list and shows an empty state, not a blank screen",
+   "one failed upstream call leaves the rest of the page rendered and logs the error",
+   "detail route renders title, overview and poster from the same record id"
+  ],
+  "est_builder_minutes": 45
+ },
+ {
+  "id": "BENCH-JSM-02",
+  "source_video": "xZ1ba-RLrjo",
+  "app": "Admin dashboard with a live metrics panel",
+  "features": [
+   "summary stat cards",
+   "recharts line and bar charts",
+   "sortable data table with pagination",
+   "real-time refresh of one metric"
+  ],
+  "stack": [
+   "nextjs",
+   "react",
+   "typescript",
+   "tailwindcss",
+   "postgres",
+   "recharts"
+  ],
+  "acceptance_sketch": [
+   "summary cards show the exact totals the table rows sum to",
+   "table sorts on at least two columns and paginates without a full reload",
+   "chart renders a series with a stated time range",
+   "refresh updates one panel without a full page flash"
+  ],
+  "est_builder_minutes": 50
+ }
+]

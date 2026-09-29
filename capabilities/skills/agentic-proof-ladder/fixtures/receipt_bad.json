@@ -1,0 +1,46 @@
+{
+ "framework": "crewai",
+ "skill": "agentic-setup-crewai",
+ "route": "aside-sandbox",
+ "date": "2026-09-28",
+ "note": "FIXTURE: deliberately broken receipt; every rule below should fire.",
+ "levels": {
+  "L0": {
+   "docs": [
+    {
+     "url": "https://docs.crewai.com/en/installation",
+     "fetched": "2026-08-01",
+     "sha256_12": ""
+    }
+   ],
+   "version_pinned": ""
+  },
+  "L2": {
+   "command": "python hello_crew.py",
+   "exit": 0,
+   "model": "gpt-4o",
+   "assertion": "it worked",
+   "observed": "looks fine"
+  },
+  "L3": {
+   "command": "python hello_crew.py",
+   "exit": 0,
+   "endpoint": "https://api.openai.com/v1",
+   "model": "gpt-4o",
+   "observed": "ok"
+  },
+  "L5": {
+   "approval_id": "",
+   "target": "crewai enterprise",
+   "command": "crewai deploy create",
+   "exit": 0
+  }
+ },
+ "blocked": [
+  {
+   "level": "L4",
+   "reason": "",
+   "check": ""
+  }
+ ]
+}

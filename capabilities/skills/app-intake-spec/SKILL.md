@@ -93,6 +93,9 @@ questions first). Agent: `app-studio-conductor` dispatches `tg-corpus-miner` for
 - **LA-07** name each paid vendor's fallback in the spec.
 - **LA-08** a limit+1 deny check for every quota or credits feature.
 - **LA-16** done-screens for a rebuild come from the real app, never from renders.
+- **LA-35** before building a studio, platform, or app, search `~/Desktop/Projects` and
+  the Memory OS studio map, not only the capability index: the index misses project
+  folders, which is how `rig-app-studio` went unseen while its skill family was built.
 
 Run `python3 capabilities/skills/app-studio/scripts/fire_lessons.py "<task text>"` to list
 the checks this run owes.
@@ -102,3 +105,18 @@ the checks this run owes.
 `capabilities/harnesses/s1gate/fixtures/app.spec.md` passes; `app.spec.bad.md` (adjectives,
 invented 99.9% uptime, 50+ integrations) must never pass. Measured 2026-09-27:
 good PASS (acceptance 0.95, invented 0.23), bad ESCALATE (invented 0.91, sources 0.05).
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- Clone sources beyond TubeGuruji: each `youtube-<slug>/references/bench-candidates.json` lists
+  apps with feature lists and acceptance sketches. `app-clone-planner` turns one into a task JSON
+  whose acceptance checks stay hidden from the builder; `app-creator-miner` adds a new channel.
+- LA-48: record the versions the source video used before copying its steps
+  (GXD-05-docs-snippets-drift, JTC-07-dep-version-drift).
+- spec.md carries a "Done looks like" line per feature id: the screen or route, the one action, and
+  the observable result (bench runs held intake-spec when it was missing).

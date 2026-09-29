@@ -1,0 +1,58 @@
+[
+ {
+  "step": "probe local endpoints /models",
+  "command": "curl -s -m 5 http://127.0.0.1:8771/v1/models ; curl -s -m 5 http://127.0.0.1:8657/v1/models",
+  "exit_code": 0,
+  "observed": "8771 -> qwen3.8-uncensored:27b; 8657 -> MiMo-V2.6-Flash-RL-MLX-4bit-MTP",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "venv + install",
+  "command": "env -u PYTHONHOME -u PYTHONPATH uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python google-adk==2.10.0 && uv pip install 'litellm>=1.84'",
+  "exit_code": 0,
+  "observed": "google-adk 2.10.0 + litellm installed in ~/.rig/agentic-lab/google-adk; import google.adk ok",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 hello fake model",
+  "command": "env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python hello_adk.py",
+  "exit_code": 0,
+  "observed": "FAKE_MODEL_OK: hello from the fake ADK model / HELLO_ADK_GREEN (FakeLlm(BaseLlm) via InMemoryRunner)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 local endpoint via LiteLlm",
+  "command": "env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python l3_adk.py",
+  "exit_code": 0,
+  "observed": "L3_OUTPUT: 'The user wants the single word HELLO.' via LiteLlm(model='openai/MiMo-V2.6-Flash-RL-MLX-4bit-MTP', api_base='http://127.0.0.1:8657/v1') / L3_ADK_GREEN (non-empty content asserted)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "planted failure - checksum-guarded plant (RED must fail the exit code)",
+  "command": "sed -i '' 's/FAKE_MODEL_OK/WRONG_PLANTED/' hello_adk.py (sha256 fdee25975ab7.. -> 7b9aed94436e.., plant REFUSED if bytes unchanged); rm -rf __pycache__; env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python test_planted_adk.py",
+  "exit_code": 1,
+  "observed": "RED exit 1 via UNCAUGHT AssertionError: PLANTED/DEGRADED output, marker missing: 'WRONG_PLANTED: hello from the fake ADK model' - the assertion is deliberately not caught so an exit-code gate sees the red; caught-assertion + exit 0 proves nothing",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "restore and re-run (GREEN)",
+  "command": "sed -i '' 's/WRONG_PLANTED/FAKE_MODEL_OK/' hello_adk.py (sha256 restored to fdee25975ab7.., match verified); rm -rf __pycache__; env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python test_planted_adk.py",
+  "exit_code": 0,
+  "observed": "GREEN exit 0, GREEN_OK printed; stale __pycache__ cleared because a same-length plant token plus same-second mtime can fake a green (seen on the microsoft-agent-framework first cycle)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "JEV gate",
+  "command": "./bin/rig-s1gate check doctrine.surface --file capabilities/skills/agentic-setup-google-adk/SKILL.md --subject doctrine:agentic-setup-google-adk --json",
+  "exit_code": 0,
+  "observed": "PASS decision_id 120939; mandates_jev_first 0.96, teaches_fail_closed 0.98, findable_at_start 0.97",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "skill contract",
+  "command": "python3 -m rig_capabilities.skill_contract capabilities/skills/agentic-setup-google-adk/SKILL.md",
+  "exit_code": 0,
+  "observed": "0 findings",
+  "at": "2026-09-28"
+ }
+]

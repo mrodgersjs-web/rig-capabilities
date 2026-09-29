@@ -89,3 +89,23 @@ Sub-skill of `app-studio`, stage 5 of 11. Main skills it extends: `tg-saas-skele
 
 memory/episodic/2026-09-26.md#L11, #L124, #L128; memory/projects/transformfit-qa.md#L16;
 tubeguruji-doctrine laws 4, 5, and 8.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-42: every middleware, server action and route handler ends each path with next(), a
+  response or a rethrow (CH-LMA-05, CH-CDS-04, CH-CWA-04).
+- LA-43: coerce string form values in the schema, read parsed data only after the success check,
+  reject incomplete input server-side (CH-LMA-07, CH-JSM-04, TRV-07-server-side-required-fields).
+- LA-50: name the invalidation for every cached read; prove the next read after a write is fresh and
+  that two users never see each other's cached data (SSG-03-stale-cache-invalidation,
+  SSG-11-cache-leaks-user-data, CH-LMA-06).
+- LA-39: validate required config at start; prove a key loads in the runtime that calls it
+  (CH-CDS-02, JTC-04-provider-key-before-code).
+- Reuse one Prisma client on globalThis in development (CH-CWA-05); push the schema before touching
+  the app after every change (CH-LMA-04); reject wrong file types server-side
+  (SSG-08-upload-type-validation). Payments and sessions: `app-auth-payments`.

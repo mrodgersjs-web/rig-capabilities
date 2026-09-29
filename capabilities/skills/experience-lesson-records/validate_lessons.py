@@ -38,7 +38,7 @@ import sys
 from pathlib import Path
 
 REQUIRED = ("lesson_id", "trigger", "match", "mandated_check", "evidence", "status")
-STATUSES = {"active", "retired"}
+STATUSES = {"active", "retired", "candidate"}  # candidate: recorded with evidence, never fires until promoted
 MATCH_KINDS = {"substring", "regex"}
 
 
@@ -138,7 +138,7 @@ def check_run(lessons, run_rows, origin, violations):
         violations.append((origin, "run_never_closed"))
     for lid, lesson in lessons.items():
         if lesson["status"] != "active":
-            continue                       # retired lessons are intentionally skipped
+            continue                       # retired and candidate lessons are intentionally skipped
         if lesson["match"] not in MATCH_KINDS or not _nonempty_str(lesson["trigger"]):
             continue                       # malformed lesson already reported
         if _matches(lesson, task_text) and lesson["mandated_check"] not in receipts:

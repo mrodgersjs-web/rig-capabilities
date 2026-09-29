@@ -1,0 +1,50 @@
+---
+id: app-sub-spec-md
+version: 2
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: the .app-studio/spec.md format the verifier and the app.spec gate use
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: spec.md format
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | lessons TG-01 BENCH-01 BENCH-04 | uncalibrated
+tier: sub
+parent: app-studio-intake-spec
+stage: intake-spec
+audience: builder
+lessons: TG-01 BENCH-01 BENCH-04
+jev_gate: app.prompt
+jev_decision: 121866
+content_sha256: 74ec62401c382b88f8e9cc70a19f0fa361dc21e404707efb49a90efd88292b60
+---
+
+# spec.md format (App Studio sub prompt, v2)
+
+Contract
+- id: app-sub-spec-md | version: 2 | tier: sub | parent: app-studio-intake-spec | stage: intake-spec | audience: builder
+- inputs: {{OUTCOME}}, {{SOURCE}}, {{FEATURES}}, {{CONTRACT}}, {{OUT_OF_SCOPE}}
+- output: .app-studio/spec.md
+- lessons carried (each one is an instruction to follow):
+  - TG-01: Write the finished app down as a click-through (every screen, its one action, the observable result) before the first file. (TubeGuruji videos: zcYM_Gqoph4, Dsw0pMnblWg, zrdbOx0eGtM)
+  - BENCH-01: Write .app-studio/spec.md and .app-studio/stack.md before the first source file. (evidence: both builders skipped them on 2026-09-28 and intake-spec and architecture-stack did not advance (runs 6415a483, 9cfde8ad))
+  - BENCH-04: Give every feature id in spec.md a Done looks like line: the screen or route, the one action, and the observable result. (evidence: bench stage gates held intake-spec with app.spec done_looks_like at 0.29 when spec.md lacked it (Fork T measurement, 2026-09-28))
+- gates: library gate app.prompt on this text; output gate app.spec (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: `test -s .app-studio/spec.md` exits 0, `grep -c '^## ' .app-studio/spec.md` prints 8, and the Done looks like section has one line for every feature id in the Features table
+- stop: report BLOCKED: spec source missing when the features or contract are absent from the task; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+Write .app-studio/spec.md with exactly these sections:
+## App - the product name you will show in the page title and h1, and the one-line outcome
+## Source - {{SOURCE}}
+## Features - a table: id, feature, source timestamp (from {{FEATURES}})
+## Done looks like - one line per feature id: `F1: <screen or route> -> <the one action> -> <the observable result a person or a curl can check>` (BENCH-04)
+## Done screens - a table: screen, route, the one action, the observable result (TG-01)
+## Contract - {{CONTRACT}} verbatim
+## Out of scope - {{OUT_OF_SCOPE}}, each stub named as a stub
+## Open questions - anything the task leaves undecided, with the assumption you made
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

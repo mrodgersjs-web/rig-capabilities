@@ -1,0 +1,50 @@
+{
+ "framework": "plain-code-baseline",
+ "skill": "agentic-proof-ladder",
+ "route": "aside-sandbox",
+ "date": "2026-09-28",
+ "note": "Real receipt recorded 2026-09-28 ~09:25 MDT by agentic-systems-setup fork A6; the baseline every framework must beat.",
+ "levels": {
+  "L0": {
+   "docs": [
+    {
+     "url": "https://www.anthropic.com/engineering/building-effective-agents",
+     "fetched": "2026-09-28",
+     "sha256_12": "89870adf27e0",
+     "quote": "we recommend finding the simplest solution possible, and only increasing complexity when needed"
+    }
+   ],
+   "version_pinned": "CPython 3.13.12 standard library only (no packages)"
+  },
+  "L1": {
+   "command": "env -u PYTHONHOME -u PYTHONPATH python3 --version",
+   "exit": 0,
+   "version_observed": "Python 3.13.12"
+  },
+  "L2": {
+   "command": "env -u PYTHONHOME -u PYTHONPATH python3 scripts/hello_baseline.py --model fake",
+   "exit": 0,
+   "model": "fake:scripted-add",
+   "assertion": "add(2,3)==5",
+   "observed": "{\"tool\": \"add\", \"args\": {\"a\": 2, \"b\": 3}} -> 5, verdict PASS"
+  },
+  "L3": {
+   "command": "env -u PYTHONHOME -u PYTHONPATH python3 scripts/hello_baseline.py --model local",
+   "exit": 0,
+   "endpoint": "http://127.0.0.1:8771/v1",
+   "model": "qwen3.8-uncensored:27b",
+   "observed": "content '5', finish_reason stop, 2.02s (thinking disabled per AS-07)"
+  }
+ },
+ "not_attempted": [
+  {
+   "level": "L4",
+   "reason": "a framework-free baseline has no durable runtime; L4 belongs to the framework skills"
+  },
+  {
+   "level": "L5",
+   "reason": "nothing to deploy; any deploy is Gate-D"
+  }
+ ],
+ "blocked": []
+}

@@ -81,8 +81,61 @@ Sub-skill of `app-studio`, stage 9 of 11. Main skills it extends: `tdd`, `matt-p
 7. **Independent verifier.** The builder does not certify its own work: `tg-ship-verifier`
    or `app-ui-judge` re-runs the checks and signs the record.
 8. **Gate** the verify record with `app.stage-gate`.
+9. **Seconds mean stub (LA-34).** Compare a run's duration and evidence with the work it
+   claims. The rig-app-studio engine reported 20 phases complete in 7 seconds and recorded
+   "pnpm install succeeds" and "pnpm dev boots" with exit 0 from hashes of placeholder
+   strings; neither command ran. That evidence is now either executed or recorded NOT RUN.
+10. **Run acceptance through rig-testlab.** `pnpm studio:mission verify` calls
+   `rig-testlab app run` (`~/Developer/ai-user-testing-mcp`): the reviewed `app-acceptance`
+   adapter runs the hidden checks in a testlab sandbox, seals receipts and an AppRunProof, and
+   `rig-testlab app verify` re-checks that proof before its hash lands in
+   `.rig/runs/<id>/testlab.json`. A run is `verified` only with that proof verified. Testlab
+   missing or unparseable marks every check BLOCKED with the reason, never a pass.
+11. **Four verdicts, never merged.** `pass`, `fail`, `flaky` (failed, then passed on a retry;
+   only GET/HEAD are retried, at most twice), `blocked` (a check with zero assertion verbs, or
+   a suite with zero checks). Flaky is not pass (Google: about 1.5% of runs flaky, 84% of
+   pass-to-fail transitions involved a flaky test).
+12. **Judge page text on the rendered DOM.** Playwright's Chromium launches in the Aside
+   sandbox (headless Chromium 148, 920 ms, proved 2026-09-28), so page text checks are
+   judged on what a user sees (source casing, captured variables substituted), with the raw
+   result kept beside it; tg-doctor-booking D11 passed raw only because the word sat inside a
+   `<script>` payload. playwright-core is rig-app-studio's own pinned devDependency. No launchable browser means
+   `render BLOCKED: <reason>`. Before filing a page defect, compare raw and rendered text: the
+   first case (expense tracker P1) was an over-specific hidden check (case-sensitive
+   "Expense" against "Add expense"), not an app defect. Use `text_includes_ci` for intent.
+13. **Prove the suite catches defects.** `pnpm studio:mission prove <task> --app <dir>` clones
+   the app, plants one defect per class (API handler, validation, computed value), refuses a
+   plant whose sha256 did not move, requires the original GREEN and each mutant RED, and names
+   survivors. tg-ai-form-builder v0: 2/3 killed (0.667); a disabled JSON-object guard in
+   `lib/http.ts` survived. Bench v0.1 added check G11 (null body -> 400) and the gate killed 3/3.
+   A survivor is a missing check: add it, record why in the task changelog, re-run the gate.
+14. **Intake evidence comes from the builder.** intake-spec and architecture-stack read the
+   builder's `.app-studio/spec.md` and `stack.md`; an absent doc is a named blocker, never
+   re-derived from task.json. Feature traceability is advisory, so an uncalibrated heuristic
+   never holds a stage.
 
 ## Evidence
 
 memory/projects/transformfit-qa.md#L18, #L20, #L22, #L24; memory/MEMORY.md#L11;
-memory/episodic/2026-09-27.md#L1467.
+memory/episodic/2026-09-27.md#L1467; `~/Developer/ai-user-testing-mcp/docs/app-studio-merge.md`
+(sources: playwright.dev/docs/test-agents, stryker-mutator.io/docs, arxiv.org/abs/2501.12862,
+testing.googleblog.com/2016/05/flaky-tests-at-google-and-how-we.html,
+openai.com/index/introducing-swe-bench-verified).
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-41: drive one real request in a browser with the network tab open (a device or the store
+  sandbox for mobile) and record request, response and rendered result; code reading is not
+  evidence (SSG-12-verify-in-real-browser, PYG-02-drive-one-real-request,
+  JTC-06-submit-fires-request).
+- LA-40: a build or console with warnings is not clean (TRV-04-lint-warning-is-not-clean,
+  SSG-09-no-ignored-console-errors).
+- LA-37: no swallowed errors: every catch fixes, rethrows or logs with context
+  (TRV-08-no-suppressed-errors).
+- Failed signups return one identical error shape so the endpoint does not reveal which emails exist
+  (CH-JSM-10).

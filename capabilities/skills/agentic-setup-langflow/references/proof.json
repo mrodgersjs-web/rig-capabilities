@@ -1,0 +1,44 @@
+[
+ {
+  "step": "verify current version",
+  "command": "curl -s https://pypi.org/pypi/langflow/json",
+  "exit_code": 0,
+  "observed": "latest 1.12.3",
+  "at": "2026-09-28T09:21-06:00"
+ },
+ {
+  "step": "fetch official docs",
+  "command": "webfetch https://docs.langflow.org/get-started-installation",
+  "exit_code": 0,
+  "observed": "Python 3.10-3.14; uv route; min dual-core + 2GB RAM (rec 4GB); uv run langflow run; default 127.0.0.1:7860; Docker langflowai/langflow:latest with LANGFLOW_AUTO_LOGIN=false default + LANGFLOW_SUPERUSER_PASSWORD; upgrade uv pip install langflow -U; pinned install uv pip install langflow==X.Y.Z. NOTE: /installation and /getting-started/installation both 404 - live path is /get-started-installation.",
+  "at": "2026-09-28T09:29-06:00"
+ },
+ {
+  "step": "create venv + install pinned",
+  "command": "env -u PYTHONHOME -u PYTHONPATH uv venv .venv && uv pip install --python .venv/bin/python langflow==1.12.3",
+  "exit_code": 0,
+  "observed": "INSTALL_EXIT=0 on CPython 3.14.0 (uv-created); full wheel set installed (log /tmp/lf-install.log, final lines 'zstandard==0.25.0 ... INSTALL_EXIT=0')",
+  "at": "2026-09-28T09:23-06:00"
+ },
+ {
+  "step": "start server on lab port 4500",
+  "command": "env -u PYTHONHOME -u PYTHONPATH .venv/bin/langflow run --host 127.0.0.1 --port 4500",
+  "exit_code": null,
+  "observed": "NOT REACHED L2: process (pid 10715, .venv python3.14) stayed alive for 25+ minutes but produced a 0-byte log and never bound :4500 (curl exit 7 / http 000 throughout). Service readiness unproven in this sandbox; likely Python 3.14 runtime incompatibility or pathological cold import - not distinguished, not claimed either way.",
+  "at": "2026-09-28T09:26-06:00 (start), 09:52-06:00 (last poll)"
+ },
+ {
+  "step": "docker route",
+  "command": "docker run -p 4500:7860 langflowai/langflow:latest",
+  "exit_code": 1,
+  "observed": "BLOCKED (environment): Docker daemon down - Colima 0.10.3 present at ~/.homebrew/bin but VM cannot start: VM not running; fix is PATH=$HOME/.homebrew/bin + host-shell colima start (lima 2.1.3 verified installed) (see agentic-selfhost-docker/references/proof.json)",
+  "at": "2026-09-28T09:50-06:00"
+ },
+ {
+  "step": "L2 retry with self-destructed process (round 2)",
+  "command": "perl -e 'alarm shift; exec @ARGV' 105 env -u PYTHONHOME -u PYTHONPATH .venv/bin/langflow run --host 127.0.0.1 --port 4500",
+  "exit_code": null,
+  "observed": "no bind on 4500 across a 90s poll (http 000), 0-byte log; foreground 25s run also printed nothing. Level stays L1. Live local model endpoints now verified for wiring: 127.0.0.1:8771/v1 (qwen3.8-uncensored:27b, disable thinking) and 127.0.0.1:8657/v1 (MiMo-V2.6-Flash-RL-MLX-4bit-MTP).",
+  "at": "2026-09-28T10:20-06:00"
+ }
+]

@@ -100,6 +100,10 @@ if (args.includes('--selftest')) {
     ['is this agent even alive, just have it echo back', 'probe-connectivity-ack'],
     ['prove this command actually ran, give me raw output', 'probe-exec-raw-stdout'],
     ['review this fix independently, read only', 'independent-read-only-review'],
+    // App Studio prompt family (2026-09-28): meta, role, and one stack-fired sub-prompt.
+    ['run the app studio mission to build a web app from a video', 'app-studio-meta'],
+    ['compose the bench builder prompt for this app task', 'app-studio-builder'],
+    ['set up drizzle neon postgres for the app with the pg proxy', 'app-sub-drizzle-neon'],
     // RIG HQ family (2026-09-28): meta, role and interrupt sub-prompt, plus the minor's lane.
     ['operating meta prompt for the office of the ceo', 'rig-hq-meta-office-of-the-ceo'],
     ['revenue meta prompt: offers and pipeline toward the first paying client', 'rig-hq-meta-revenue'],

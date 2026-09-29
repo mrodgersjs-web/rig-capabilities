@@ -84,3 +84,18 @@ Each row gets a proof line from the real release build, not from source.
 6. **STOP at Gate-D** for TestFlight, internal testing, or store submission; record the id.
 7. After approval and submission, confirm the build is visible in App Store Connect or
    Play Console before calling the release done.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- App Store submission needs version, support URL, privacy policy URL and the age-rating answers
+  filled (CH-NJD-05).
+- LA-47: store purchases are proven on a real device or the store sandbox, never a simulator
+  (GXD-03-iap-needs-real-device).
+- LA-38: error monitoring lands in the first scaffold commit with per-environment sample rates
+  (GXD-01-error-monitoring-first, GXD-02-replay-rate-per-env, CH-CDS-01).
+- LA-45: native changes need prebuild and a rebuild before the release build (CH-NJD-02).

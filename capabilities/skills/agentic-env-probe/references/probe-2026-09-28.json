@@ -1,0 +1,159 @@
+{
+ "probe": "agentic-env-probe",
+ "version": 1,
+ "at": "2026-09-28T09:25:09-06:00",
+ "host": "RIG128GBs-MacBook-Pro.local",
+ "cwd": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills",
+ "sandbox_hints": {
+  "pythonhome_exported": true,
+  "pythonpath_exported": false,
+  "local_bin_on_path": false,
+  "usr_local_bin_on_path": false
+ },
+ "tools": {
+  "python3.12": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/python3.12",
+   "rc": 0,
+   "version": "Python 3.12.13",
+   "on_sandbox_path": false
+  },
+  "python3.13": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/python3.13",
+   "rc": 0,
+   "version": "Python 3.13.12",
+   "on_sandbox_path": true
+  },
+  "uv": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/uv",
+   "rc": 0,
+   "version": "uv 0.12.19 (bea138450 2026-09-24 aarch64-apple-darwin)",
+   "on_sandbox_path": false
+  },
+  "node": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/node",
+   "rc": 0,
+   "version": "v22.22.3",
+   "on_sandbox_path": true
+  },
+  "pnpm": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/pnpm",
+   "rc": 0,
+   "version": "10.34.5",
+   "on_sandbox_path": false
+  },
+  "npx": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/npx",
+   "rc": 0,
+   "version": "10.9.8",
+   "on_sandbox_path": true
+  },
+  "docker": {
+   "present": true,
+   "path": "/usr/local/bin/docker",
+   "rc": 0,
+   "version": "Docker version 29.6.1, build 8900f1d",
+   "on_sandbox_path": false
+  },
+  "colima": {
+   "present": false
+  },
+  "java": {
+   "present": true,
+   "path": "/usr/bin/java",
+   "rc": 1,
+   "version": "The operation couldn\u2019t be completed. Unable to locate a Java Runtime.",
+   "on_sandbox_path": true
+  },
+  "temporal": {
+   "present": false
+  },
+  "n8n": {
+   "present": true,
+   "path": "/Users/rig128gb/.local/bin/n8n",
+   "rc": 0,
+   "version": "2.33.3",
+   "on_sandbox_path": false
+  }
+ },
+ "docker": {
+  "cli": true,
+  "daemon": false,
+  "detail": "Cannot connect to the Docker daemon at unix:///Users/rig128gb/.colima/default/docker.sock. Is the docker daemon running?"
+ },
+ "java_runtime": false,
+ "endpoints": [
+  {
+   "name": "pair-router",
+   "base_url": "http://127.0.0.1:8771/v1",
+   "state": "ANSWERED",
+   "http": 200,
+   "models": [
+    "qwen3.8-uncensored:27b"
+   ],
+   "ms": 9
+  },
+  {
+   "name": "mac-studio-tunnel",
+   "base_url": "http://127.0.0.1:8657/v1",
+   "state": "ANSWERED",
+   "http": 200,
+   "models": [
+    "MiMo-V2.6-Flash-RL-MLX-4bit-MTP"
+   ],
+   "ms": 20
+  },
+  {
+   "name": "personal-ai-router",
+   "base_url": "http://127.0.0.1:11435/v1",
+   "state": "UNREACHABLE",
+   "error": "[Errno 61] Connection refused",
+   "ms": 0
+  },
+  {
+   "name": "omniroute",
+   "base_url": "http://127.0.0.1:20128/v1",
+   "state": "UNREACHABLE",
+   "error": "[Errno 61] Connection refused",
+   "ms": 0
+  },
+  {
+   "name": "blackwell-flash",
+   "base_url": "http://192.168.68.90:8011/v1",
+   "state": "UNREACHABLE",
+   "error": "[Errno 61] Connection refused",
+   "ms": 168
+  },
+  {
+   "name": "blackwell-uncensored",
+   "base_url": "http://192.168.68.90:8111/v1",
+   "state": "TIMEOUT",
+   "error": "timed out",
+   "ms": 4002
+  }
+ ],
+ "routes": {
+  "python": "aside-sandbox via uv venv",
+  "node": "aside-sandbox for pure-JS deps; host-shell for native .node addons",
+  "docker": "BLOCKED",
+  "jvm": "BLOCKED",
+  "local_model": "http://127.0.0.1:8771/v1"
+ },
+ "blocked": [
+  {
+   "route": "docker",
+   "reason": "Cannot connect to the Docker daemon at unix:///Users/rig128gb/.colima/default/docker.sock. Is the docker daemon running?",
+   "check": "docker info"
+  },
+  {
+   "route": "jvm",
+   "reason": "The operation couldn\u2019t be completed. Unable to locate a Java Runtime.",
+   "check": "java -version"
+  }
+ ]
+}

@@ -87,3 +87,16 @@ Runs under `app-sandbox-survival` rules the whole time.
 
 LA-01, LA-03, LA-04, LA-07, LA-09, LA-10, LA-25. List them for the exact task with
 `scripts/fire_lessons.py`.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-40: run the production build after each slice; a warning is a failure to fix or waive by name
+  (CH-CWA-12, TRV-04-lint-warning-is-not-clean, SSG-09-no-ignored-console-errors).
+- LA-44: read env the way the bundler exposes it (`import.meta.env` in Vite, `process.env` in
+  Node) and keep client hooks in files marked 'use client' (CH-CDS-03, CH-CWA-08).
+- LA-51: one package manager, proven by install and build (JTC-01-one-package-manager).

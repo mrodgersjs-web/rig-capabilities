@@ -1,0 +1,56 @@
+[
+ {
+  "id": "BENCH-CWA-01",
+  "source_video": "pRybm9lXW2c",
+  "app": "Kanban board with cards and drag-and-drop",
+  "features": [
+   "organisation and board CRUD",
+   "list and card columns",
+   "drag card between lists",
+   "activity log of moves"
+  ],
+  "stack": [
+   "nextjs",
+   "typescript",
+   "tailwindcss",
+   "prisma",
+   "postgres",
+   "zod",
+   "react-hook-form"
+  ],
+  "acceptance_sketch": [
+   "creating a board persists it and it survives a reload",
+   "dragging a card from list A to list B persists the new position",
+   "activity log records one entry per move with actor and timestamp",
+   "submitting an empty board name shows a field error and does not create a row"
+  ],
+  "est_builder_minutes": 50
+ },
+ {
+  "id": "BENCH-CWA-02",
+  "source_video": "N_uNKAus0II",
+  "app": "Finance SaaS with CSV transaction import",
+  "features": [
+   "CSV upload and parse",
+   "category breakdown chart",
+   "transaction table with filters",
+   "monthly summary endpoint"
+  ],
+  "stack": [
+   "nextjs",
+   "hono",
+   "typescript",
+   "tailwindcss",
+   "prisma",
+   "postgres",
+   "zod"
+  ],
+  "acceptance_sketch": [
+   "uploading a 100-row CSV creates 100 transaction rows readable through the table",
+   "a malformed row is rejected with a named field error and creates no partial rows",
+   "category totals equal the sum of the transaction rows in that category",
+   "filtering by month narrows the table and the summary together"
+  ],
+  "est_builder_minutes": 50
+ }
+]

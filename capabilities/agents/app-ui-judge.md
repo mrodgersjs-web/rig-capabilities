@@ -2,6 +2,7 @@
 name: app-ui-judge
 description: "SUB-AGENT: independent screen judge for App Studio. Captures each spec screen at each target viewport from the real running app (Aside browser for web, simctl via an Orca terminal for mobile), runs the Advisor+ image judge and JEV ui.design on each, and returns per-screen verdicts with image paths. Never judges from source code, mockups, or golden renders; a DEFERRED judge is never a pass; never the agent that built the screen."
 allowed-tools: Bash Read Grep Glob
+tools: Bash, Read, Grep, Glob
 owner: rig-intelligence
 domain: Agent engineering / UI verification
 status: Stable

@@ -84,3 +84,17 @@ Agent: `app-ui-judge`. Loop: `app-ui-judge-loop`.
 
 LA-16 real screens, LA-23 source versus render. List them per task with
 `scripts/fire_lessons.py`.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-49: judge every screen with zero records and, on mobile, with the keyboard up
+  (TRV-10-empty-state-element-guard, GXD-07-keyboard-overlap, CH-NJD-01).
+- Import a design section by section and check each renders; a whole-page import can fail silently
+  (TRV-05-import-design-section-by-section).
+- LA-37: a failed request shows an in-page error state for that section, never a blank screen or a
+  raw popup (CH-JSM-06, CH-JSM-08).

@@ -1,0 +1,51 @@
+---
+id: app-sub-stack-md
+version: 2
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: the .app-studio/stack.md format the app.stack gate reads
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: stack.md format
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | lessons LA-01 LA-07 LA-51 BENCH-01 BENCH-05 | uncalibrated
+tier: sub
+parent: app-studio-architecture-stack
+stage: architecture-stack
+audience: builder
+lessons: LA-01 LA-07 LA-51 BENCH-01 BENCH-05
+jev_gate: app.prompt
+jev_decision: 121867
+content_sha256: 7e9524d1e704c4a52f47731d5c996823fcf78b49588a488664270545b9db0041
+---
+
+# stack.md format (App Studio sub prompt, v2)
+
+Contract
+- id: app-sub-stack-md | version: 2 | tier: sub | parent: app-studio-architecture-stack | stage: architecture-stack | audience: builder
+- inputs: {{STACK}}, {{SERVE}}, {{PORT_LO}}, {{PORT_HI}}
+- output: .app-studio/stack.md
+- lessons carried (each one is an instruction to follow):
+  - LA-01: Confirm the toolchain avoids native .node binaries in the Aside sandbox: next --webpack, Tailwind v3, npm i --ignore-scripts, PGlite as a standalone service.
+  - LA-07: Env-gate each paid vendor with a NAMED fallback so the app runs without the key, and list missing credentials exactly in a BLOCKED list.
+  - LA-51: Use one package manager per project, prove install and build with it, and record any forced resolution (legacy-peer-deps or an override) with the package that forced it instead of hand-editing versions.
+  - BENCH-01: Write .app-studio/spec.md and .app-studio/stack.md before the first source file. (evidence: both builders skipped them on 2026-09-28 and intake-spec and architecture-stack did not advance (runs 6415a483, 9cfde8ad))
+  - BENCH-05: Name the lane on stack.md's first line (Lane: web SaaS, mobile app, ...) and say why the stack fits it. (evidence: bench stage gates held architecture-stack with app.stack lane_named at 0.26-0.28 when the lane was only implied (Fork T measurement, 2026-09-28))
+- gates: library gate app.prompt on this text; output gate app.stack (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: `head -1 .app-studio/stack.md` prints `Lane: <lane>`, `test -s .app-studio/stack.md` exits 0, and the layer table has one row per stack rule in the task
+- stop: report BLOCKED: <layer> when a named layer has no sandbox-safe option; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+Write .app-studio/stack.md with:
+1. First line, exactly: `Lane: <lane>`, the task's stack.lane in words (web SaaS, marketing site, mobile app, voice agent, internal tool), then one sentence on why this stack fits that lane (BENCH-05).
+2. Framework, then a table: layer, choice, why, sandbox constraint (LA-01), paid (yes/no), env var name, named fallback (LA-07).
+3. Commands: install, dev, build, start, each exactly as package.json runs them, all with the one package manager (LA-51).
+4. Ports: {{PORT_LO}}-{{PORT_HI}}.
+5. Env vars by name only, never values.
+6. Stubs: each out-of-scope item that has a stand-in, and what the stand-in does.
+7. In the architecture-stack record, paste `head -1 .app-studio/stack.md` with its output and exit code, and `wc -l .app-studio/stack.md`, as the Evidence block.
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

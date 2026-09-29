@@ -1,0 +1,44 @@
+---
+id: app-sub-planted-failure
+version: 1
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: show a check can go red by planting a defect with byte-movement proof
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: planted failure proof
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated
+tier: sub
+parent: app-studio-verifier
+stage: verify-qa
+audience: verifier
+lessons: LA-27
+jev_gate: app.prompt
+jev_decision: 119543
+content_sha256: c3df446d52b40c9ed3f9c5899f981c0d31b3c63ffcf597ffbdcce6c114f4077d
+---
+
+# Planted failure (App Studio sub prompt, v1)
+
+Contract
+- id: app-sub-planted-failure | version: 1 | tier: sub | parent: app-studio-verifier | stage: verify-qa | audience: verifier
+- inputs: {{TARGET}} (the file or check to plant into), the test command
+- output: a plant row: target, sha256 before and after, planted exit code, restored exit code
+- lessons carried (each one is an instruction to follow):
+  - LA-27: Checksum the target before and after each plant and refuse a plant whose bytes did not move.
+- gates: library gate app.prompt on this text; output gate app.stage-gate on the verify-qa record (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: the planted run exits non-zero, the restored run exits 0, and the two sha256 values differ
+- stop: stop and report BLOCKED: plant did not move bytes when the sha256 before and after are equal, and BLOCKED: <error> when the restored run is not green; never record such a plant (LA-27); deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+1. Copy {{TARGET}} to a scratch path; record its sha256.
+2. Plant one defect in the copy (disable one assertion or corrupt one expected value); record the new sha256. Equal hashes mean no plant: stop (LA-27).
+3. Run the tests against the copy: expect a non-zero exit and the named failing test.
+4. Remove the copy, rerun on the original: expect exit 0.
+5. Keep the plant as a regression fixture.
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

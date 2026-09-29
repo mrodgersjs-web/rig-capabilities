@@ -67,7 +67,7 @@ lighter lesson, it is decoration.
 | `match` | `substring` \| `regex`; a `regex` trigger that will not compile is exit 2 (a trigger that cannot match is dead the day it is written) |
 | `mandated_check` | the check that becomes a gate requirement when the trigger fires |
 | `evidence` | **non-empty** list of run/row-ids that earned the lesson — the load-bearing clause: a lesson with no evidence is a guess, and a guess is exit 2 |
-| `status` | `active` \| `retired`; unknown status is exit 2 |
+| `status` | `active` \| `retired` \| `candidate`; unknown status is exit 2. A `candidate` is a proposed lesson with evidence (for example mined from a corpus) that never fires until a reviewer promotes it to `active` |
 
 ## Firing: the run must carry a receipt
 

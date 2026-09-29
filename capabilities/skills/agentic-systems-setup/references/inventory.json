@@ -1,0 +1,227 @@
+{
+ "family": "agentic-systems-setup",
+ "built": "2026-09-28 (finalized after workers A1-A5 landed)",
+ "existing": [
+  {
+   "id": "tool-langchain",
+   "path": "capabilities/skills/tool-langchain",
+   "lane": "agent-framework",
+   "why": "langchain-core primitives inside the Design Harness venv"
+  },
+  {
+   "id": "tool-langgraph",
+   "path": "capabilities/skills/tool-langgraph",
+   "lane": "agent-framework",
+   "why": "graph-shaped Design Harness slices"
+  },
+  {
+   "id": "tool-mastra",
+   "path": "capabilities/skills/tool-mastra",
+   "lane": "agent-framework",
+   "why": "verifies the installed Mastra CLI"
+  },
+  {
+   "id": "tool-temporal",
+   "path": "capabilities/skills/tool-temporal",
+   "lane": "durable-workflow",
+   "why": "deterministic Temporal Python workflows for Design Harness runtimes"
+  },
+  {
+   "id": "tg-durable-ai-pipelines",
+   "path": "capabilities/skills/tg-durable-ai-pipelines",
+   "lane": "durable-workflow",
+   "why": "durable AI pipelines inside App Studio builds"
+  },
+  {
+   "id": "autonomous-ai-agents",
+   "path": "capabilities/skills/autonomous-ai-agents",
+   "lane": "adjacent",
+   "why": "router for autonomous coding agents; not a framework"
+  },
+  {
+   "id": "app-sandbox-survival",
+   "path": "capabilities/skills/app-sandbox-survival",
+   "lane": "adjacent",
+   "why": "Aside sandbox build and process rules"
+  }
+ ],
+ "sub_skills": [
+  "agentic-env-probe",
+  "agentic-proof-ladder",
+  "agentic-local-models",
+  "agentic-secrets",
+  "agentic-durable-execution",
+  "agentic-observability",
+  "agentic-mcp-integration",
+  "agentic-testing-evals",
+  "agentic-deploy-gate",
+  "agentic-selfhost-docker"
+ ],
+ "retired": [
+  {
+   "id": "docker-agentic-stack",
+   "was": "~/.hermes/skills/docker-agentic-stack",
+   "now": "~/.hermes/skills/.archive/docker-agentic-stack",
+   "observed": "2026-09-28 14:35 MDT (resolved at 09:30, archived by then)",
+   "role_now_owned_by": "agentic-selfhost-docker"
+  }
+ ],
+ "framework_skills": [
+  {
+   "id": "agentic-setup-langchain",
+   "lane": "agent-framework",
+   "proven_here": "L3",
+   "blocker": "L4 checkpointer: ormsgpack .so refused (library validation)",
+   "verified": "CONFIRMED by xai-oauth/grok-4.7",
+   "receipt": "capabilities/skills/agentic-setup-langchain/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-llamaindex",
+   "lane": "agent-framework",
+   "proven_here": "L2 narrow",
+   "blocker": "tiktoken .so refused blocks index/query; SQLAlchemy pinned 2.0.41",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-llamaindex/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-pydantic-ai",
+   "lane": "agent-framework",
+   "proven_here": "L4",
+   "blocker": "none",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-pydantic-ai/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-crewai",
+   "lane": "agent-framework",
+   "proven_here": "L3",
+   "blocker": "L4 not yet exercised; L3 on 127.0.0.1:8657",
+   "verified": "planted proof invalid (exit 0); worker fixing",
+   "receipt": "capabilities/skills/agentic-setup-crewai/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-openai-agents-sdk",
+   "lane": "agent-framework",
+   "proven_here": "L1",
+   "blocker": "import refused: cffi .so via mcp -> cryptography",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-openai-agents-sdk/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-google-adk",
+   "lane": "agent-framework",
+   "proven_here": "L3",
+   "blocker": "LiteLLM 1.82.7/1.82.8 advisory: pin >=1.84; L3 on 8657",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-google-adk/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-microsoft-agent-framework",
+   "lane": "agent-framework",
+   "proven_here": "L3",
+   "blocker": "L4 not yet exercised",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-microsoft-agent-framework/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-prefect",
+   "lane": "durable-workflow",
+   "proven_here": "L4",
+   "blocker": "asyncpg .so stubbed; retry fired; server health 200",
+   "verified": "CONFIRMED by xai-oauth/grok-4.7",
+   "receipt": "capabilities/skills/agentic-setup-prefect/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-temporal",
+   "lane": "durable-workflow",
+   "proven_here": "L1 + L2 logic",
+   "blocker": "worker saw no temporal CLI; CLI 1.7.2 is in ~/.homebrew/bin (not on PATH); Mike's dev server on 127.0.0.1:7233 (pid 7353) is off-limits to proofs",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-temporal/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-dagster",
+   "lane": "data-pipeline",
+   "proven_here": "L2 + L4",
+   "blocker": "DISABLE_SQLALCHEMY_CEXT=1; native .so moved aside",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-dagster/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-airflow",
+   "lane": "data-pipeline",
+   "proven_here": "L1 + L2 logic",
+   "blocker": "cffi .so refused",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-airflow/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-trigger-dev",
+   "lane": "durable-workflow",
+   "proven_here": "L3",
+   "blocker": "esbuild postinstall hangs: npm i --ignore-scripts",
+   "verified": "CONFIRMED by xai-oauth/grok-4.7",
+   "receipt": "capabilities/skills/agentic-setup-trigger-dev/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-inngest",
+   "lane": "durable-workflow",
+   "proven_here": "L3",
+   "blocker": "v4 createFunction signature changed",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-inngest/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-mastra",
+   "lane": "agent-framework",
+   "proven_here": "L3",
+   "blocker": "in-memory storage warning",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-mastra/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-n8n",
+   "lane": "low-code-platform",
+   "proven_here": "L2 + L4",
+   "blocker": "import:workflow needs a top-level id; DB at $N8N_USER_FOLDER/.n8n; stray on *:4400",
+   "verified": "L4 unreproduced while stray pid 23506 holds 127.0.0.1:5679",
+   "receipt": "capabilities/skills/agentic-setup-n8n/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-dify",
+   "lane": "low-code-platform",
+   "proven_here": "L0",
+   "blocker": "Docker daemon down (Colima installed, not running)",
+   "verified": "docs quote confirmed against grounding sha ac3c0061d500",
+   "receipt": "capabilities/skills/agentic-setup-dify/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-kestra",
+   "lane": "durable-workflow",
+   "proven_here": "L1",
+   "blocker": "needs Java 25, not 21; API 401; stray on *:8080",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-kestra/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-flowise",
+   "lane": "low-code-platform",
+   "proven_here": "L1",
+   "blocker": "server never answered",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-flowise/references/proof.json"
+  },
+  {
+   "id": "agentic-setup-langflow",
+   "lane": "low-code-platform",
+   "proven_here": "L1",
+   "blocker": "never bound a port",
+   "verified": "not yet re-verified",
+   "receipt": "capabilities/skills/agentic-setup-langflow/references/proof.json"
+  }
+ ],
+ "lessons": {
+  "active": "references/lessons.jsonl (AS-01..AS-13)",
+  "candidates": "references/lessons-candidates.jsonl (AS-14..AS-18)"
+ }
+}

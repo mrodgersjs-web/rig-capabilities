@@ -1,0 +1,29 @@
+[
+ {
+  "id": "bench-jtc-marketplace-payments",
+  "source_video": "vEQlN17miq8",
+  "app": "Digital marketplace payments slice",
+  "features": [
+   "product page with image served from object storage",
+   "tRPC checkout route with Stripe test key",
+   "idempotent order creation",
+   "loud failure when the key is missing at boot"
+  ],
+  "stack": [
+   "nextjs",
+   "trpc",
+   "prisma",
+   "postgres",
+   "stripe",
+   "tanstack-query",
+   "zod"
+  ],
+  "acceptance_sketch": [
+   "a missing Stripe key fails at startup with a named message instead of a blank page",
+   "two checkout attempts with the same idempotency key create one order",
+   "the product image loads from a storage URL and the page does not pay image-optimization bandwidth",
+   "the checkout mutation's response is typed end to end on the client"
+  ],
+  "est_builder_minutes": 50
+ }
+]

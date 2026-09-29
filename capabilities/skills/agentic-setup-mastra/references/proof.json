@@ -1,0 +1,79 @@
+[
+ {
+  "step": "L0 version check",
+  "command": "npm view @mastra/core version",
+  "exit_code": 0,
+  "observed": "1.71.0",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch",
+  "command": "webfetch https://mastra.ai/docs/agents/overview",
+  "exit_code": 0,
+  "observed": "Agent class, model router vs AI SDK model instance, Mastra instance, generate/stream, Studio, memory, HITL confirmed",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install attempt (plain npm i)",
+  "command": "npm i @mastra/core ai typescript tsx vitest",
+  "exit_code": 1,
+  "observed": "FAILED: shared npm cache race + esbuild postinstall (npm error; node_modules removed)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install (workaround)",
+  "command": "npm i --ignore-scripts --no-audit --no-fund @mastra/core@1.71.0 ai@7.0.118",
+  "exit_code": 0,
+  "observed": "138 pkgs; versions verified in node_modules package.json; ai/test exports MockLanguageModelV4",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 unit test green (mock model)",
+  "command": "node --experimental-strip-types test/run.ts",
+  "exit_code": 0,
+  "observed": "PASS: mastra agent.generate on deterministic mock model; warning captured: No 'storage' configured on Mastra - falling back to an in-memory store (not durable)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 planted failure",
+  "command": "node --experimental-strip-types test/run.ts (expected text flipped to fake-model:PLANTED)",
+  "exit_code": 1,
+  "observed": "AssertionError RED; checksum moved 8a709f54f9e6 -> 8b6474de7e2f",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 restored green",
+  "command": "node --experimental-strip-types test/run.ts (restored)",
+  "exit_code": 0,
+  "observed": "PASS again; checksum back to 8a709f54f9e6",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 local model tool step green",
+  "command": "node test/l3.mjs (POST http://127.0.0.1:8771/v1/chat/completions, enable_thinking=false)",
+  "exit_code": 0,
+  "observed": "L3 PASS: \"Hello there Mike\" non-empty",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 planted failure",
+  "command": "node test/l3.mjs (EXPECT /hello/i -> /goodbye/i)",
+  "exit_code": 1,
+  "observed": "ASSERTION FAILED; checksum moved 53242bd0417f -> 8bb0f4282649",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 restored green",
+  "command": "node test/l3.mjs (restored)",
+  "exit_code": 0,
+  "observed": "L3 PASS again; checksum back to 53242bd0417f",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "dev playground (L4)",
+  "command": "mastra dev",
+  "exit_code": null,
+  "observed": "NOT RUN: the 'mastra' CLI package was not installed in this lab run; storage adapters are native addons blocked in this sandbox - run on a host shell",
+  "at": "2026-09-28"
+ }
+]

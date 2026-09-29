@@ -1,0 +1,79 @@
+[
+ {
+  "step": "probe local endpoints /models",
+  "command": "curl -s -m 5 http://127.0.0.1:8771/v1/models ; curl -s -m 5 http://127.0.0.1:8657/v1/models",
+  "exit_code": 0,
+  "observed": "8771 -> {id: qwen3.8-uncensored:27b}; 8657 -> {id: MiMo-V2.6-Flash-RL-MLX-4bit-MTP}",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "venv + install",
+  "command": "env -u PYTHONHOME -u PYTHONPATH uv venv --python 3.12 .venv && uv pip install --python .venv/bin/python crewai==1.15.22",
+  "exit_code": 0,
+  "observed": "crewai 1.15.22 installed in ~/.rig/agentic-lab/crewai",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "import after sandbox .so block",
+  "command": ".venv/bin/python -c 'import crewai'",
+  "exit_code": 1,
+  "observed": "ImportError dlopen pydantic_core ... library load disallowed by system policy (pydantic-core 2.41.5 wheel)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "rescue xattr+codesign",
+  "command": "xattr -cr .venv ; codesign --force -s - .../pydantic_core...so",
+  "exit_code": 1,
+  "observed": "still library load disallowed by system policy",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "rescue pydantic+core bump",
+  "command": "uv pip install --python .venv/bin/python --reinstall-package pydantic --reinstall-package pydantic-core pydantic",
+  "exit_code": 0,
+  "observed": "pydantic==2.13.5 + pydantic-core==2.46.5; then 'crewai import ok'",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 hello fake model",
+  "command": "env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python hello_crewai.py",
+  "exit_code": 0,
+  "observed": "FAKE_MODEL_OK: greeting from the deterministic fake crew model / HELLO_CREWAI_GREEN (after FakeLLM(model=...) fix: BaseLLM validator 'Model name is required and cannot be empty')",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 local endpoint",
+  "command": "env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python l3_crewai.py",
+  "exit_code": 0,
+  "observed": "L3_OUTPUT: HELLO via LLM(model='openai/MiMo-V2.6-Flash-RL-MLX-4bit-MTP', base_url='http://127.0.0.1:8657/v1') / L3_CREWAI_GREEN (non-empty content asserted)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "planted failure - checksum-guarded plant (RED must fail the exit code)",
+  "command": "sed -i '' 's/FAKE_MODEL_OK/WRONG_PLANTED/' hello_crewai.py (sha256 bc214e71b6ea.. -> 01240f338e37.., plant REFUSED if bytes unchanged); rm -rf __pycache__; env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python test_planted_crewai.py",
+  "exit_code": 1,
+  "observed": "RED exit 1 via UNCAUGHT AssertionError: PLANTED/DEGRADED output, marker missing: 'WRONG_PLANTED: greeting from the deterministic fake crew model' - the assertion is deliberately not caught so an exit-code gate sees the red; caught-assertion + exit 0 proves nothing",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "restore and re-run (GREEN)",
+  "command": "sed -i '' 's/WRONG_PLANTED/FAKE_MODEL_OK/' hello_crewai.py (sha256 restored to bc214e71b6ea.., match verified); rm -rf __pycache__; env -u PYTHONHOME -u PYTHONPATH ../.venv/bin/python test_planted_crewai.py",
+  "exit_code": 0,
+  "observed": "GREEN exit 0, GREEN_OK printed; stale __pycache__ cleared because a same-length plant token plus same-second mtime can fake a green (seen on the microsoft-agent-framework first cycle)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "JEV gate",
+  "command": "./bin/rig-s1gate check doctrine.surface --file capabilities/skills/agentic-setup-crewai/SKILL.md --subject doctrine:agentic-setup-crewai --json",
+  "exit_code": 0,
+  "observed": "PASS decision_id 120937; mandates_jev_first 0.96, teaches_fail_closed 0.98, findable_at_start 0.97",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "skill contract",
+  "command": "python3 -m rig_capabilities.skill_contract capabilities/skills/agentic-setup-crewai/SKILL.md",
+  "exit_code": 0,
+  "observed": "0 findings",
+  "at": "2026-09-28"
+ }
+]

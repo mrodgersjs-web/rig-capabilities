@@ -2,6 +2,7 @@
 name: tg-ship-verifier
 description: "Independent verifier for App Studio builds: runs the tg-deploy-gotchas catalog against the live or built app, exercises the deny paths, reproduces the video-vs-build comparison, and issues PASS/RED per feature. Verifies what the builder built - never verifies its own work, never takes the builder's word."
 allowed-tools: Bash Read Grep Glob
+tools: Bash, Read, Grep, Glob
 owner: rig-intelligence
 domain: Agent engineering / verification
 status: Stable

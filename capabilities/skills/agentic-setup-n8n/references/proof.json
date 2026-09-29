@@ -1,0 +1,100 @@
+[
+ {
+  "step": "L0 version check",
+  "command": "~/.local/bin/n8n --version",
+  "exit_code": 0,
+  "observed": "2.33.3 (symlink ~/.local/bin/n8n -> ../lib/node_modules/n8n/bin/n8n)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch",
+  "command": "webfetch https://docs.n8n.io/hosting/installation/docker/",
+  "exit_code": 0,
+  "observed": "self-hosting via Docker/Compose recommended; stable 2.40.7 (local is older); SQLite default",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch",
+  "command": "webfetch https://docs.n8n.io/integrations/builtin/cluster-nodes/root-nodes/n8n-nodes-langchain.agent/",
+  "exit_code": 0,
+  "observed": "AI Agent node: chat model + >=1 tool sub-node; agent-type deprecated from 1.82.0; v1 removed in 3.0",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L4 health",
+  "command": "curl -s -m 5 http://localhost:4400/healthz",
+  "exit_code": 0,
+  "observed": "{\"status\":\"ok\"} HTTP 200",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 import without id (planted failure)",
+  "command": "n8n import:workflow --input=hello-workflow.json",
+  "exit_code": 1,
+  "observed": "SQLITE_CONSTRAINT: NOT NULL constraint failed: workflow_entity.id",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 import with id",
+  "command": "n8n import:workflow --input=hello-workflow.json",
+  "exit_code": 0,
+  "observed": "Successfully imported 1 workflow.",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 list",
+  "command": "n8n list:workflow",
+  "exit_code": 0,
+  "observed": "a4hello|A4 hello (fake model)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 second-path read-back",
+  "command": "sqlite3 $N8N_USER_FOLDER/.n8n/database.sqlite \"select id,name,active from workflow_entity\"",
+  "exit_code": 0,
+  "observed": "a4hello|A4 hello (fake model)|1 (note: real DB is one level deeper at $N8N_USER_FOLDER/.n8n/database.sqlite)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "webhook trigger (open step)",
+  "command": "curl -X POST http://localhost:4400/webhook/a4-hello -d '{\"name\":\"mike\"}'",
+  "exit_code": 0,
+  "observed": "HTTP 404: The requested webhook \"POST a4-hello\" is not registered (webhook_entity empty; production activation needs editor/API; update:workflow deprecated in favor of publish:workflow)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "server stop status",
+  "command": "lsof -t -i :4400",
+  "exit_code": 0,
+  "observed": "the 4400 instance was started before a session stop; this session cannot kill pre-existing processes (Operation not permitted), and the rule is not to kill a port not bound in the same call - it may still be answering on 4400",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch (broker + listen address)",
+  "command": "webfetch https://docs.n8n.io/hosting/configuration/environment-variables/task-runners/ and https://docs.n8n.io/hosting/configuration/environment-variables/deployment/",
+  "exit_code": 0,
+  "observed": "N8N_RUNNERS_BROKER_PORT default 5679; N8N_RUNNERS_TASK_BROKER_URI default http://127.0.0.1:5679; N8N_LISTEN_ADDRESS default :: (all interfaces); npm latest stable 2.40.7 vs 2.33.3 proven",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L4 reproduced on free ports",
+  "command": "perl -e 'alarm shift; exec @ARGV' 110 env N8N_USER_FOLDER=$HOME/.rig/agentic-lab/n8n/data N8N_PORT=4413 N8N_LISTEN_ADDRESS=127.0.0.1 N8N_RUNNERS_BROKER_PORT=4459 N8N_RUNNERS_TASK_BROKER_URI=http://127.0.0.1:4459 n8n start; curl http://127.0.0.1:4413/healthz",
+  "exit_code": 0,
+  "observed": "status ok HTTP 200; Task Broker ready on 127.0.0.1 port 4459; Version 2.33.3; lsof 127.0.0.1:4413 LISTEN only; alarm self-destructs the server",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "verifier L4 failure on 4412",
+  "command": "fresh n8n start on 4412 (independent verifier)",
+  "exit_code": 1,
+  "observed": "port 5679 already in use - stray pid 23506 on *:4400 holds the default task broker port; Mike must run kill 23506 from a normal terminal",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "original L4 on 4400 (observed once)",
+  "command": "N8N_USER_FOLDER=... N8N_PORT=4400 n8n start + curl /healthz",
+  "exit_code": 0,
+  "observed": "status ok observed once 2026-09-28; that instance is now the stray (pid 23506, owner locked by parent, unauthenticated 401)",
+  "at": "2026-09-28"
+ }
+]

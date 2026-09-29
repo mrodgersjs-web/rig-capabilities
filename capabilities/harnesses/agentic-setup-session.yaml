@@ -1,0 +1,104 @@
+---
+outcome: "agent-engineering: one agentic framework set up on Mike's machine through gates E1-E8 - a dated probe, a selection with its when-not answered, an install in the proven route, keychain-named secrets with a clean leak scan, hello on a fake then a local model, one durable or observed feature, tests that can fail, and anything outward approved or held."
+activation: "Load when agentic-setup-conductor opens a request to install, set up, self-host, compare, or evaluate an agent framework or workflow engine, and keep it active until the session closes."
+instruction: "Advance one gate at a time; a gate closes only when its proof below exists; halt-tier failures stop the session at that gate, stop-tier gates wait for Mike, and a BLOCKED level closes the ladder with its failing check recorded."
+applies_when:
+  env: "Aside sandbox for uv and pure-JS work; Orca terminal for native addons, JVM, daemons; Docker only when docker info answers"
+  runtime: "the framework's own toolchain (uv, pnpm, Docker) plus rig-s1gate"
+  deps: "agentic-systems-setup skill family, rig-s1gate with the agentic.setup rubric, experience-lesson-records validator"
+  params: "job sentence, framework (if named), target proof level (default L4), project folder"
+  budget: "one framework per session; three fix attempts per level"
+  scale: "one local setup plus its reusable skill"
+permissions:
+  - fs.read
+  - fs.write
+  - bash
+  - net.api-calls
+  - gate-d-required:deploy
+  - gate-d-required:signup
+  - gate-d-required:paid-api
+flow:
+  - Probe the machine and prove a local model route.
+  - Select the framework with its when-not answered and fetch today's docs.
+  - Install, wire models and secrets, and run the hello ladder L1 to L3.
+  - Exercise one durable or observed feature and run tests with a planted failure.
+  - Judge the receipt with agentic.setup and hold anything outward at Gate-D.
+done_when:
+  - file:capabilities/harnesses/agentic-setup-session.yaml
+  - grep:capabilities/harnesses/agentic-setup-session.yaml:agentic.setup
+  - grep:capabilities/harnesses/agentic-setup-session.yaml:failure_tier
+  - cmd:python3 capabilities/skills/agentic-systems-setup/scripts/validate_hierarchy.py
+out_of_scope:
+  - deploys, vendor signups, paid calls, pushes, or key creation without Mike's recorded approval id
+  - projects Mike did not name
+  - certifying a level on the runner's own word
+quality_floor: 0.8
+---
+
+harness_id: agentic-setup-session
+harness_name: RIG agentic systems setup session (meta process for every framework install)
+harness_name_short: agentic setup meta process
+status: stable
+lane: agent-engineering
+session_type: agentic-setup-session
+harness_tuple: H_agentic(probe, select, install, secrets, hello, durable, test, gate_d)
+parent_doctrine: capabilities/skills/agentic-systems-setup
+conductor: capabilities/agents/agentic-setup-conductor.md
+loop: capabilities/loops/agentic-setup-proof-loop.md
+main_processes:
+  agent_composition: capabilities/harnesses/mh-03-agent-composition-session.yaml
+  infra_iac: capabilities/harnesses/hA-11-infra-iac.yaml
+  test_writing: capabilities/harnesses/hA-03-code-test-writing.yaml
+  ci_cd: capabilities/harnesses/hA-12-ci-cd-design.yaml
+stake: |
+  "Set up CrewAI" or "get Kestra running" ends in a receipt another agent can reproduce:
+  what the machine had, why this framework, the exact commands and their outputs, the model
+  route that answered, what was blocked and by which check, and no key or deploy that Mike
+  did not approve.
+
+identity_lock:
+  startup_phrase: "I prove each level on this machine today; blocked is not passed."
+  gates:
+    - id: E1
+      requirement: "probe.json written today by env_probe.py; routes chosen from it; one local model route ANSWERED_OK by probe_endpoint.py or the local-model route recorded BLOCKED"
+      proof: "probe.json path and timestamp; probe_endpoint.py JSON line"
+      failure_tier: halt
+    - id: E2
+      requirement: "selection record names the matrix row and answers its when-not; L0 docs fetched today with URL, sha256, and pinned version; JEV plan.readiness on the selection record clears or DEFERS"
+      proof: "selection.md path; L0 entries in receipt.json; decision id"
+      failure_tier: halt
+    - id: E3
+      requirement: "L1 install receipt in the named route (exit 0, observed version); model wiring points at the proven local route with a named, probed fallback"
+      proof: "receipt.json L1 entry; probe_endpoint.py output for the route"
+      failure_tier: halt
+    - id: E4
+      requirement: "every credential referenced by com.rig.env item name; env files ignored by git; leak_scan.py exit 0 over the project and the run folder"
+      proof: "leak_scan.py output line; git check-ignore output"
+      failure_tier: halt
+    - id: E5
+      requirement: "L2 hello passed on a deterministic fake and L3 hello passed on a local endpoint with non-empty content and finish_reason stop"
+      proof: "receipt.json L2 and L3 entries; fake-calls.jsonl shows the framework called the model"
+      failure_tier: halt
+    - id: E6
+      requirement: "L4 feature exercised: kill-and-resume, retry, checkpoint resume, or a run read back by id from a local API; any MCP connection proven by a round trip"
+      proof: "receipt.json L4 entry with run_id and observed state"
+      failure_tier: degrade
+    - id: E7
+      requirement: "tests with a nonzero assertion-verb count pass; a planted defect moved bytes, turned a test RED, and GREEN after restore; blocked and not_evaluated evals reported as such"
+      proof: "test output, assertion count, checksums before and after the plant"
+      failure_tier: halt
+    - id: E8
+      requirement: "proof_ladder.py exit 0 on receipt.json; rig-s1gate agentic.setup required signals above 0.9 or DEFERRED; anything outward carries an approval id or is recorded in held_at_gate"
+      proof: "proof_ladder.py output; agentic.setup decision id; gate_d_request id or approval id"
+      failure_tier: stop
+
+jev:
+  rubric: agentic.setup
+  command: rig-s1gate check agentic.setup --file <run>/receipt.json --subject "agentic:<slug> sha=<12>" --json
+  pass_line: required signals above 0.9
+  classifier_down: DEFER; the gate does not advance and no verdict is guessed
+
+close:
+  - fire lessons with validate_lessons.py against the session's run.jsonl
+  - append a typed lesson for every new failure
+  - record the highest proven level, blocked levels, decision ids, and held Gate-D items

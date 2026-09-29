@@ -80,3 +80,18 @@ Loop: `app-lesson-promotion-loop`.
 6. **Gate and seal.** `rig-s1gate check mission.completion` on the close record, then seal
    a ProofPacket binding the done-claim to commands, exit codes, and the artifact hash.
 7. **Board.** Update the mission's card on the daily kanban (build stream) with the proof.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- Channel lessons arrive as `candidate` (validate_lessons.py never fires them). Promote one to
+  `active` only when the engine performs its check and records a receipt under its id; today the
+  engine receipts exactly LA-01, 02, 03, 06, 07, 09, 11, 12, 13, 14, 20 and 25.
+- LA-38: every error report carries request and session context, proven with one induced error
+  (TRV-03-error-both-ends, TRV-11-error-carries-session-context).
+- New channels: `app-creator-miner`, then `app-gotcha-extractor` for typed lessons; the merge path
+  into prompts is `capabilities/prompts/composition/app-studio-channel-lessons.md`.

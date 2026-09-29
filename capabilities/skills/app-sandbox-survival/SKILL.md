@@ -90,6 +90,17 @@ build) and memory/episodic/2026-09-27.md#L1475, #L1557.
    `unregistered_repository` for a new project repo; registering is his decision.
 7. **Simulators live outside the sandbox (LA-15).** CoreSimulatorService answers
    "connection invalid" here; run `xcrun simctl` work from an Orca terminal.
+8. **Probe the builder before dispatch (LA-31).** On 2026-09-28 `claude -p` died in its
+   meta-harness launcher (launchd and Temporal gates down) before any model was called.
+   Send a one-line real completion and read the launcher startup record; if a blocking
+   gate fails, take the next builder in the pinned chain and record why.
+9. **No nested sandboxes (LA-32).** `codex exec -s workspace-write` cannot start its own
+   sandbox inside Aside (it reported the block and wrote nothing). Run the agent in its
+   configured mode, strip deploy and payment keys from its env, keep it to one folder, and
+   cap its time.
+10. **Unset PYTHONHOME and PYTHONPATH for child Pythons (LA-33).** The Aside runtime exports
+   its own; hooks and launchers that start another Python then die with `No module named
+   encodings`. Every App Studio hook now unsets both before it starts Python.
 
 ## Receipts
 
@@ -98,3 +109,18 @@ After performing each check, append its receipt row to `.app-studio/run.jsonl`; 
 `validate_lessons.py ... --run .app-studio/run.jsonl` must exit 0. The fixtures prove
 the gate bites: the green run exits 0 and the same run without the single-builder
 receipt exits 2.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-51: on ERESOLVE, re-run with the recorded resolution and name the package that forced it;
+  never hand-edit versions (CH-JSM-02, JTC-01-one-package-manager).
+- Strip zero-width characters from pasted code or prompts before running them (CH-JSM-11).
+- Read what a third-party installer or agent skill executes before running it
+  (SSG-13-inspect-before-running).
+- LA-48: run docs snippets as written against the installed versions before adopting them
+  (GXD-05-docs-snippets-drift).

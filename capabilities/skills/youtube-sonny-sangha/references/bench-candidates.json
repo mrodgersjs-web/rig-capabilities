@@ -1,0 +1,53 @@
+[
+ {
+  "id": "bench-ssg-support-agent-memory",
+  "source_video": "PoMEGxNLwFc",
+  "app": "Returning-customer support chat agent for a small shop",
+  "features": [
+   "chat UI with streaming answers",
+   "user-keyed memory across sessions",
+   "FAQ answer store with cache invalidation on edit",
+   "per-answer latency budget"
+  ],
+  "stack": [
+   "nextjs",
+   "vercel-ai-sdk",
+   "anthropic",
+   "upstash-redis",
+   "clerk"
+  ],
+  "acceptance_sketch": [
+   "second session greets the returning customer by name without asking for name/email again",
+   "editing an FAQ answer and asking again returns the edited answer, not the cached one",
+   "the first streamed token appears within 2 seconds on a cold answer",
+   "a signed-out visitor cannot read another customer's stored conversation"
+  ],
+  "est_builder_minutes": 50
+ },
+ {
+  "id": "bench-ssg-upload-and-checkout",
+  "source_video": "cso7-4oAPNQ",
+  "app": "B2B SaaS landing page with PDF upload and a seat-limited checkout",
+  "features": [
+   "landing page with fixed header and mobile menu",
+   "PDF-only upload with server-side deny path",
+   "Stripe checkout with idempotency key",
+   "seat count read back after purchase"
+  ],
+  "stack": [
+   "nextjs",
+   "tailwind",
+   "prisma",
+   "postgres",
+   "stripe",
+   "clerk"
+  ],
+  "acceptance_sketch": [
+   "uploading a non-PDF is rejected with a named error and stores nothing",
+   "submitting the same checkout twice creates exactly one order row",
+   "the seat count shown after purchase matches the row read back from the database",
+   "the fixed header does not cover page content on a 375px viewport"
+  ],
+  "est_builder_minutes": 50
+ }
+]

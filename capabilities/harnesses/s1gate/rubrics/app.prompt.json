@@ -1,0 +1,83 @@
+{
+ "name": "app.prompt",
+ "stage": "author",
+ "lane": "build",
+ "description": "App Studio prompt-library criterion: judge one App Studio prompt (the meta prompt, a stage or role prompt, or a sub-prompt fragment) before it enters capabilities/prompts. Input is the prompt text itself. A library prompt states its contract (id, tier, parent, stage, inputs, output artifact, lessons carried, gates, done_when), binds done to executed evidence, carries lessons as actionable instructions, names its stop rules, and holds outward actions at Gate-D. ADVISORY AND UNCALIBRATED until rig-s1gate calibrate runs on labelled prompts.",
+ "questions": {
+  "contract_stated": {
+   "type": "noul",
+   "instructions": "The prompt states its own contract: an id, its tier and parent, the stage it serves, the input variables it expects, and the output artifact it must produce"
+  },
+  "evidence_done": {
+   "type": "noul",
+   "instructions": "The prompt defines done as executed checks recorded with the command, its exit code or status, and the observed output, rather than as a description of intent or of the code"
+  },
+  "lessons_actionable": {
+   "type": "noul",
+   "instructions": "The lessons the prompt carries are imperative instructions a model can act on, each tied to a named lesson id, rather than vague principles"
+  },
+  "stop_rules": {
+   "type": "noul",
+   "instructions": "The prompt says when to stop and report BLOCKED or escalate, and it keeps deploys, pushes, publishing, purchases and paid API spend behind a human approval"
+  },
+  "leaks_hidden_checks": {
+   "type": "noul",
+   "instructions": "The prompt hands the agent under test the verifier's secret acceptance checks or their expected answers, for example a list introduced as the checks the grader will run. The public API contract, the prompt's own done-test and the commands it tells the agent to run for its own evidence are not secret checks and do not count"
+  },
+  "vague_filler": {
+   "type": "noul",
+   "instructions": "The prompt leans on vague filler such as make it good, follow best practices, or be thorough, without a concrete check behind it"
+  },
+  "readiness": {
+   "type": "score",
+   "instructions": "How safely can an agent run this prompt unattended and produce a verifiable artifact",
+   "criteria": [
+    "Unusable: no contract and no way to verify the output",
+    "Partly usable: some contract, but done rests on description",
+    "Usable with named, bounded gaps",
+    "Ready: contract, evidence-bound done, stop rules and gates all explicit"
+   ]
+  }
+ },
+ "rules": [
+  {
+   "when": "contract_stated.noul <= 0.40",
+   "verdict": "BLOCK",
+   "reason": "the prompt does not state its contract"
+  },
+  {
+   "when": "evidence_done.noul <= 0.40",
+   "verdict": "BLOCK",
+   "reason": "done is not bound to executed evidence"
+  },
+  {
+   "when": "leaks_hidden_checks.noul >= 0.70",
+   "verdict": "BLOCK",
+   "reason": "hidden acceptance checks leak into the prompt"
+  },
+  {
+   "when": "readiness.score <= 1.20",
+   "verdict": "BLOCK",
+   "reason": "not runnable unattended"
+  },
+  {
+   "when": "stop_rules.noul <= 0.50",
+   "verdict": "ESCALATE",
+   "reason": "no stop rule or Gate-D hold"
+  },
+  {
+   "when": "lessons_actionable.noul <= 0.50",
+   "verdict": "ESCALATE",
+   "reason": "lessons are not actionable instructions"
+  },
+  {
+   "when": "vague_filler.noul >= 0.60",
+   "verdict": "ESCALATE",
+   "reason": "vague filler without a concrete check"
+  }
+ ],
+ "confidence_floor": 0.3,
+ "calibrated": false,
+ "calibration": {},
+ "never_auto": false
+}

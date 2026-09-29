@@ -1,0 +1,93 @@
+[
+ {
+  "step": "L0 version checks",
+  "command": "npm view inngest version; npm view @inngest/agent-kit version",
+  "exit_code": 0,
+  "observed": "4.21.0 / 0.13.2",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch",
+  "command": "webfetch https://www.inngest.com/docs",
+  "exit_code": 0,
+  "observed": "durable execution, steps, flow control, AgentKit, LLM docs confirmed",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L0 docs fetch (drift)",
+  "command": "webfetch https://www.inngest.com/docs/getting-started",
+  "exit_code": 0,
+  "observed": "HTTP 404 page (docs URL drift; use /docs)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install attempt (plain npm i)",
+  "command": "npm i inngest express @inngest/agent-kit ai vitest typescript tsx",
+  "exit_code": 1,
+  "observed": "FAILED: shared npm cache race with sibling workers (npm error, node_modules wiped) + esbuild postinstall",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L1 install (workaround)",
+  "command": "npm i --ignore-scripts --no-audit --no-fund inngest@4.21.0 express",
+  "exit_code": 0,
+  "observed": "175 pkgs; node_modules/inngest/package.json version 4.21.0; exports include ./express",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 unit test (first run)",
+  "command": "node --experimental-strip-types test/run.ts",
+  "exit_code": 1,
+  "observed": "v3-shape call failed: \"createFunction\" expected a handler function as the second argument. Triggers belong in the first argument: createFunction({ id, triggers: { event: \"...\" } }, handler)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 unit test green after v4 fix",
+  "command": "node --experimental-strip-types test/run.ts",
+  "exit_code": 0,
+  "observed": "PASS: inngest SDK client + deterministic step body (fake-model)",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 planted failure",
+  "command": "node --experimental-strip-types test/run.ts (expected string flipped)",
+  "exit_code": 1,
+  "observed": "AssertionError RED; checksum moved fe79a7714a3a -> 3d4dad894b5a",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L2 restored green",
+  "command": "node --experimental-strip-types test/run.ts (restored)",
+  "exit_code": 0,
+  "observed": "PASS again; checksum back to fe79a7714a3a",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 local model step green",
+  "command": "node test/l3.mjs (step body POST http://127.0.0.1:8771/v1/chat/completions, enable_thinking=false)",
+  "exit_code": 0,
+  "observed": "L3 PASS: \"Hello there, Mike.\" non-empty",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 planted failure",
+  "command": "node test/l3.mjs (EXPECT /hello/i -> /goodbye/i)",
+  "exit_code": 1,
+  "observed": "ASSERTION FAILED; checksum moved a4ad4bd4d8cc -> 58df8d1a88ef",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "L3 restored green",
+  "command": "node test/l3.mjs (restored)",
+  "exit_code": 0,
+  "observed": "L3 PASS again; checksum back to a4ad4bd4d8cc",
+  "at": "2026-09-28"
+ },
+ {
+  "step": "dev server (L4)",
+  "command": "npx inngest-cli dev -u http://localhost:4402/api/inngest",
+  "exit_code": null,
+  "observed": "NOT RUN / BLOCKED: inngest-cli fetches its binary in a postinstall script, which --ignore-scripts skips and this sandbox's npm postinstall handling breaks; belongs on a host shell",
+  "at": "2026-09-28"
+ }
+]

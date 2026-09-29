@@ -1,0 +1,72 @@
+[
+ {
+  "step": "CORRECTED found state (14:38 probe): Homebrew lives at ~/.homebrew",
+  "command": "~/.homebrew/bin/colima status",
+  "exit_code": 1,
+  "observed": "time=\"2026-09-28T14:38:02-06:00\" level=fatal msg=\"colima is not running\" ; colima version -> 0.10.3 (git 00f6c297); VM cannot start: dependency check failed for VM: lima not found, run 'brew install lima' to install (14:30-14:36 probe). Earlier 3-path probe reported absent only because ~/.homebrew/bin was not on PATH.",
+  "at": "2026-09-28T14:38-06:00"
+ },
+ {
+  "step": "wide search for colima binary",
+  "command": "find / -maxdepth 5 -name colima -type f",
+  "exit_code": 0,
+  "observed": "empty result; brew/limactl also absent; ~/.colima/default/docker.sock exists as stale socket dated Sep 26 23:28",
+  "at": "2026-09-28T09:19-06:00"
+ },
+ {
+  "step": "docker context inventory",
+  "command": "docker context ls",
+  "exit_code": 0,
+  "observed": "context 'colima' active -> unix:///Users/rig128gb/.colima/default/docker.sock; Docker client 29.6.1",
+  "at": "2026-09-28T09:18-06:00"
+ },
+ {
+  "step": "daemon probe",
+  "command": "docker info",
+  "exit_code": 1,
+  "observed": "client-only output; no Server section (daemon unreachable)",
+  "at": "2026-09-28T09:18-06:00"
+ },
+ {
+  "step": "compose plugin version",
+  "command": "docker compose version",
+  "exit_code": 0,
+  "observed": "Docker Compose version v5.3.0",
+  "at": "2026-09-28T09:27-06:00"
+ },
+ {
+  "step": "local model endpoint probe from host",
+  "command": "curl -s -m 5 http://192.168.68.90:8011/v1/models",
+  "exit_code": 7,
+  "observed": "Failed to connect to 192.168.68.90 port 8011 after 168 ms: Couldn't connect to server (8111 identical, http 000)",
+  "at": "2026-09-28T09:19-06:00"
+ },
+ {
+  "step": "colima docs fetch",
+  "command": "webfetch https://colima.dev",
+  "exit_code": 1,
+  "observed": "getaddrinfo ENOTFOUND colima.dev - no Colima version verified this session",
+  "at": "2026-09-28T09:31-06:00"
+ },
+ {
+  "step": "state left",
+  "command": "colima stop / colima status",
+  "exit_code": 127,
+  "observed": "CORRECTED: Colima 0.10.3 is installed at ~/.homebrew/bin but was never started (VM not running (PATH defect, not missing lima)), so the found state (no daemon, stale socket, colima not running) is unchanged; nothing to stop. Agent-owned lab servers self-destructed; stray Kestra pid 54463 on *:8080 awaits Mike's kill 54463.",
+  "at": "2026-09-28T09:50-06:00"
+ },
+ {
+  "step": "CORRECTION receipts: PATH, not install",
+  "command": "PATH=\"$HOME/.homebrew/bin:$PATH\" ~/.homebrew/bin/colima status",
+  "exit_code": 1,
+  "observed": "time=\"2026-09-28T14:45:39-06:00\" level=fatal msg=\"colima is not running\" (with PATH set - NOT the lima error)",
+  "at": "2026-09-28T14:45-06:00"
+ },
+ {
+  "step": "lima really installed",
+  "command": "PATH=\"$HOME/.homebrew/bin:$PATH\" ~/.homebrew/bin/lima --version",
+  "exit_code": 0,
+  "observed": "limactl version 2.1.3 (without PATH the wrapper dies: exec: limactl not found)",
+  "at": "2026-09-28T14:45-06:00"
+ }
+]

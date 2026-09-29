@@ -1,0 +1,9 @@
+[
+  {"step": "install", "command": "env -u PYTHONHOME -u PYTHONPATH uv pip install --python .venv/bin/python apache-airflow==3.3.2", "exit_code": 0, "observed": "apache-airflow 3.3.2", "at": "2026-09-28"},
+  {"step": "version", "command": "env -u PYTHONHOME -u PYTHONPATH .venv/bin/python -c \"import importlib.metadata as m; print(m.version('apache-airflow'))\"", "exit_code": 0, "observed": "3.3.2", "at": "2026-09-28"},
+  {"step": "dag_build", "command": "DISABLE_SQLALCHEMY_CEXT=1 AIRFLOW_HOME=~/.rig/agentic-lab/airflow/home .venv/bin/python hello_airflow.py", "exit_code": 1, "observed": "BLOCKED: ImportError: dlopen(..._cffi_backend.cpython-312-darwin.so): code signature ... not valid for use in process: library load disallowed by system policy (airflow.decorators -> models.connection -> crypto -> cryptography -> cffi)", "at": "2026-09-28"},
+  {"step": "cffi_codesign_attempt", "command": "codesign --force -s - .venv/lib/python3.12/site-packages/_cffi_backend.cpython-312-darwin.so", "exit_code": 0, "observed": "ad-hoc re-sign applied but import still fails with the same library-validation error; cffi/cryptography has NO pure-Python fallback (unlike SQLAlchemy)", "at": "2026-09-28"},
+  {"step": "offline_retry_contract", "command": "env -u PYTHONHOME -u PYTHONPATH .venv/bin/python test_airflow_offline.py", "exit_code": 0, "observed": "apache-airflow 3.3.2; RETRY_CONTRACT_OK attempts=2; PLANTED_FAILURE_RED_OK; HELLO_AIRFLOW_OFFLINE_OK", "at": "2026-09-28"},
+  {"step": "local_model_endpoint_probe", "command": "curl -s http://127.0.0.1:8657/v1/chat/completions -d '{...}'", "exit_code": 0, "observed": "http://127.0.0.1:8657/v1 (MiMo) content='PONG' nonempty=True", "at": "2026-09-28"},
+  {"step": "server_stopped", "command": "(no airflow standalone started)", "exit_code": 0, "observed": "DAG engine BLOCKED at import; no webserver/scheduler started, nothing to stop", "at": "2026-09-28"}
+]

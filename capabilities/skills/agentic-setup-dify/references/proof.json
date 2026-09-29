@@ -1,0 +1,44 @@
+[
+ {
+  "step": "verify current release",
+  "command": "curl -s https://api.github.com/repos/langgenius/dify/releases/latest",
+  "exit_code": 0,
+  "observed": "tag_name 1.17.1, published 2026-09-10T10:04:06Z",
+  "at": "2026-09-28T09:21-06:00"
+ },
+ {
+  "step": "fetch official compose for the pinned release",
+  "command": "curl -o docker-compose.yaml https://raw.githubusercontent.com/langgenius/dify/1.17.1/docker/docker-compose.yaml",
+  "exit_code": 0,
+  "observed": "HTTP 200; images: langgenius/dify-api:1.17.1, dify-web:1.17.1, dify-sandbox:0.2.15, dify-agent-local-sandbox:1.17.1, dify-plugin-daemon:0.6.10-local, dify-agent-backend:1.17.1, postgres:15-alpine, mysql:8.0, redis:6-alpine, nginx:latest; default DIFY_AGENT_SERVER_SECRET_KEY=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY; EXPOSE_NGINX_PORT default 80",
+  "at": "2026-09-28T09:26-06:00"
+ },
+ {
+  "step": "fetch official .env.example",
+  "command": "curl -o references/.env.example https://raw.githubusercontent.com/langgenius/dify/1.17.1/docker/.env.example",
+  "exit_code": 0,
+  "observed": "HTTP 200; saved into references/",
+  "at": "2026-09-28T09:38-06:00"
+ },
+ {
+  "step": "fetch install docs",
+  "command": "webfetch https://docs.dify.ai/getting-started/install-self-hosted/docker-compose",
+  "exit_code": 0,
+  "observed": "CPU>=2, RAM>=4GiB; macOS Docker VM 2 vCPU/8GiB; Docker Compose 2.24.0+; /install admin init; upgrade is release-specific",
+  "at": "2026-09-28T09:22-06:00"
+ },
+ {
+  "step": "fetch API docs",
+  "command": "webfetch https://docs.dify.ai/en/guides/application-publishing/developing-with-apis",
+  "exit_code": 0,
+  "observed": "Bearer $DIFY_API_KEY; curl <base>/v1/info returns {name, mode...}; app modes advanced-chat/workflow/agent/chat/completion",
+  "at": "2026-09-28T09:32-06:00"
+ },
+ {
+  "step": "bring stack up",
+  "command": "docker compose up -d",
+  "exit_code": 1,
+  "observed": "BLOCKED (environment): Docker daemon down - Colima 0.10.3 present at ~/.homebrew/bin but VM not running (PATH defect, not missing lima)",
+  "at": "2026-09-28T09:50-06:00"
+ }
+]

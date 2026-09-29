@@ -1,0 +1,50 @@
+---
+id: app-studio-lesson-filer
+version: 1
+status: draft
+updated: 2026-09-28
+task: App Studio lesson filer prompt: turn each new build failure into a typed lesson and patch the owning sub-skill in the same session
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: file the lesson typed lesson from this failure lessons into skills
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | TubeGuruji doctrine + 11 tg-* skills (video ids inline), App Studio LA ledger, App Bench runs 2026-09-28 | uncalibrated
+tier: main
+parent: app-studio-meta
+stage: operate-learn
+audience: lesson-filer
+lessons: LA-28 LA-30 LA-34
+jev_gate: app.prompt
+jev_decision: 119514
+content_sha256: cc24323bad402f42a03691f592ed023133048d65c29d0dbe91581271fe10fee8
+---
+
+# App Studio lesson filer prompt (App Studio main prompt, v1)
+
+Contract
+- id: app-studio-lesson-filer | version: 1 | tier: main (role) | parent: app-studio-meta | stage: operate-learn | audience: lesson-filer
+- inputs: {{RUN_DIR}}, {{FAILURE_EVIDENCE}} (exact error text or failed check rows), {{LEDGER}} (references/lessons.jsonl)
+- output: new active lines in {{LEDGER}} that validate_lessons.py accepts, a patch to the owning sub-skill naming the lesson id, or NO_NEW_LESSON with the existing lesson id that already covers the failure
+- lessons carried (each one is an instruction to follow):
+  - LA-28: Write each new failure into this ledger as a typed lesson and patch the owning sub-skill in the same session; memory-only lessons do not count.
+  - LA-30: Write single-line quoted scalars, unanchored grep checks and agent ids with .md, reindex before test, and execute done_when directly when the CLI index is stale.
+  - LA-34: Compare each run's duration and evidence with the work it claims; a multi-phase build that completes in seconds, or evidence hashed from placeholder strings, is a stub and not a result.
+- gates: library gate app.prompt on this text; output gate app.stage-gate on the operate-learn record; doctrine.surface on each patched SKILL.md (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: `python3 capabilities/skills/experience-lesson-records/validate_lessons.py <ledger>` exits 0, fire_lessons.py fires the new lesson on a matching task text, and the owning sub-skill names the lesson id
+- stop: report BLOCKED: <path> when the ledger or the owning sub-skill cannot be written; never file a lesson without evidence paths; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+- sub-prompts owned: app-sub-typed-lesson
+
+One failure, one lesson, filed the same session (LA-28). Memory-only lessons do not count.
+
+1. Read the failure evidence. Search the ledger first; if an active lesson already covers it, answer NO_NEW_LESSON <id> and add the run as evidence only if the ledger schema allows it.
+2. Write the lesson (app-sub-typed-lesson): a trigger regex that matches future task text, an imperative mandated check, and evidence paths that exist.
+3. Patch the owning sub-skill: one numbered rule that names the lesson id and the incident date.
+4. Validate: run validate_lessons.py and fire_lessons.py on a task sentence the trigger should match; paste both outputs.
+5. Quote scalars on one line, keep grep checks unanchored, and reindex before testing when the capability index is stale (LA-30).
+6. Channel-derived lessons (creator corpora beyond TubeGuruji) enter here with video ids as evidence, through the same format.
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

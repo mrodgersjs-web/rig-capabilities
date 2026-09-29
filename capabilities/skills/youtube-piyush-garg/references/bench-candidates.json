@@ -1,0 +1,25 @@
+[
+ {
+  "id": "bench-pyg-text-to-image",
+  "source_video": "pb_jYgSqGh0",
+  "app": "Text-to-image generation page backed by a model gateway",
+  "features": [
+   "prompt form",
+   "POST /api/generate using a provider key from env",
+   "network-visible request and response",
+   "named error state when the key is missing"
+  ],
+  "stack": [
+   "nextjs",
+   "typescript",
+   "openai"
+  ],
+  "acceptance_sketch": [
+   "submitting a prompt produces a visible request in the network tab",
+   "a missing API key returns a named error message, not a blank screen",
+   "a successful generation renders the returned image",
+   "the generated image is re-fetchable after a page reload"
+  ],
+  "est_builder_minutes": 50
+ }
+]

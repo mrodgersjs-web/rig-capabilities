@@ -110,3 +110,19 @@ node) in the record. The `app.stack` rubric escalates a stack that builds nowher
 `capabilities/harnesses/s1gate/fixtures/app.stack.md` passes (lane 0.96, local-first 0.97);
 `app.stack.bad.md` (Turbopack, Tailwind v4, required paid APIs, "figure out builds later")
 escalates (paid_without_fallback 0.91, lane 0.14). Measured 2026-09-27.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- stack.md names the lane on its first line (`Lane: web SaaS`, `mobile app`, ...); bench runs held
+  architecture-stack when the lane was only implied.
+- LA-51: one package manager per project, and any forced resolution recorded with the package that
+  forced it (JTC-01-one-package-manager, CH-JSM-02).
+- LA-48: pin the versions the code is written against; extend out-of-date vendor types locally
+  instead of casting (JTC-07-dep-version-drift, SSG-10-vendor-types-out-of-date).
+- LA-39: required config fails loud at start with its name; optional paid keys get a named
+  fallback (CH-CDS-02, CH-JSM-03).

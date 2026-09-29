@@ -1,0 +1,93 @@
+[
+ {
+  "step": "verify current release and assets",
+  "command": "curl -s https://api.github.com/repos/kestra-io/kestra/releases/tags/v2.0.3",
+  "exit_code": 0,
+  "observed": "tag v2.0.3 (published 2026-09-22); assets kestra-2.0.3 (130371660 bytes) + checksums_sha256.txt",
+  "at": "2026-09-28T09:22-06:00"
+ },
+ {
+  "step": "download release binary + checksums",
+  "command": "curl -sL -o kestra-2.0.3 .../releases/download/v2.0.3/kestra-2.0.3",
+  "exit_code": 0,
+  "observed": "DL_EXIT=0; 130371660 bytes; sha256 b4b4518a617f93965dcf98c9673beda3dad2b6d9d1780ad8b9a945e437975ab4",
+  "at": "2026-09-28T09:24-06:00"
+ },
+ {
+  "step": "checksum verification",
+  "command": "shasum -a 256 -c checksums_sha256.txt",
+  "exit_code": 0,
+  "observed": "kestra-2.0.3: OK (matches published checksums_sha256.txt)",
+  "at": "2026-09-28T09:27-06:00"
+ },
+ {
+  "step": "JRE 21 first attempt (per plan)",
+  "command": "curl -sL -o temurin-jre21.tar.gz https://api.adoptium.net/v3/binary/latest/21/ga/mac/aarch64/jre/hotspot/normal/eclipse",
+  "exit_code": 0,
+  "observed": "Temurin jdk-21.0.12.1+1-jre (48144965 bytes, sha256 dec50fc6f9fcd4fe3ae8cabf5a5fa68f6afc48841f7698e468e9aa5d54beed84); java -version -> openjdk 21.0.12.1 LTS",
+  "at": "2026-09-28T09:24-06:00"
+ },
+ {
+  "step": "boot with Java 21",
+  "command": "java -jar kestra-2.0.3 server standalone",
+  "exit_code": 1,
+  "observed": "FAILED (ran and failed): java.lang.UnsupportedClassVersionError: io/kestra/cli/Kestra has been compiled by a more recent version of the Java Runtime (class file version 69.0), this version of the Java Runtime only recognizes class file versions up to 65.0",
+  "at": "2026-09-28T09:28-06:00"
+ },
+ {
+  "step": "JRE 25 download after the class-level failure",
+  "command": "curl -sL -o temurin-jre25.tar.gz https://api.adoptium.net/v3/binary/latest/25/ga/mac/aarch64/jre/hotspot/normal/eclipse",
+  "exit_code": 0,
+  "observed": "Temurin jdk-25.0.4.1+1-jre extracted; sha256 5b02bcc908da092e7e00b9772d4f9bbb87f44a60b7c90f7cf5a91a1d98f37e1b",
+  "at": "2026-09-28T09:33-06:00"
+ },
+ {
+  "step": "boot server standalone with Java 25",
+  "command": "java -jar kestra-2.0.3 server standalone",
+  "exit_code": 1,
+  "observed": "FAILED: i.k.c.v.ServerCommandValidator 'Server configuration requires the kestra.repository.type / kestra.queue.type / kestra.storage.type property to be defined' -> 'Incomplete server configuration - missing required properties'",
+  "at": "2026-09-28T09:34-06:00"
+ },
+ {
+  "step": "boot server local (embedded) with Java 25",
+  "command": "java -jar kestra-2.0.3 server local",
+  "exit_code": 0,
+  "observed": "SERVICE UP: plugin auto-install jobs succeeded (plugin-script-shell, plugin-script-python, plugin-terraform, plugin-docker from Maven Central); HTTP answered on :8080 with 401 problem+json {\"type\":\"https://kestra.io/docs/api-reference/problems/unauthenticated\",\"title\":\"Authentication required\"}",
+  "at": "2026-09-28T09:37-06:00"
+ },
+ {
+  "step": "restart on lab port 4530 with kestra.server.basic-auth set",
+  "command": "java -jar kestra-2.0.3 server local --config application.yaml (micronaut.server.port 4530, basic-auth admin@kestra.io)",
+  "exit_code": 0,
+  "observed": "Server up on 4530 (access log line: GET /api/v1/configs -> 401). Docs default creds admin@kestra.io:kestra and an explicitly configured basic-auth password both still got 401 'Authentication required'; POST /api/v1/flows therefore never executed. Hello-world flow execution: BLOCKED at API auth (environment/config), not claimed.",
+  "at": "2026-09-28T09:44-06:00"
+ },
+ {
+  "step": "auth-barrier check (PASSING, not a planted failure): the API refuses unauthenticated and bad-credential calls",
+  "command": "curl -u wrong:wrong http://127.0.0.1:4530/api/v1/configs",
+  "exit_code": 0,
+  "observed": "401 problem+json identical to the unauthenticated call - the auth gate demonstrably goes red on bad credentials (HTTP status 401, not 200).",
+  "at": "2026-09-28T09:44-06:00"
+ },
+ {
+  "step": "H2 store corruption observed after hard kill",
+  "command": "java -jar kestra-2.0.3 server local (second instance, same data dir)",
+  "exit_code": 1,
+  "observed": "org.h2.mvstore.SingleFileStore.open failure - a SIGKILLed Kestra leaves the embedded H2 store locked/corrupt; use a fresh run dir. Also: two instances on one port -> ServerStartupException 'Unable to start Micronaut server on *:8080'.",
+  "at": "2026-09-28T09:41-06:00"
+ },
+ {
+  "step": "REAL planted failure (flow schema check must go red)",
+  "command": "sed 's/io.kestra.plugin.core.log.Log/io.kestra.plugin.core.log.Logg/' hello_world.yaml then grep -q 'type: io.kestra.plugin.core.log.Log$' hello_world.yaml",
+  "exit_code": 1,
+  "observed": "RED exit=1 as required; sha before plant cf553ddba5f4d7e2 -> while planted c7d8f3c862ed565b (bytes provably changed)",
+  "at": "2026-09-28T15:02-06:00"
+ },
+ {
+  "step": "restore after plant",
+  "command": "sed back to io.kestra.plugin.core.log.Log; same grep check",
+  "exit_code": 0,
+  "observed": "GREEN exit=0; sha restored cf553ddba5f4d7e2 == sha before the plant",
+  "at": "2026-09-28T15:02-06:00"
+ }
+]

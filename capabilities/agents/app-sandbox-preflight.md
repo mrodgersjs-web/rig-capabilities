@@ -2,6 +2,7 @@
 name: app-sandbox-preflight
 description: "SUB-AGENT: runs the App Studio sandbox preflight in an app project before any install, build, dev server, or simulator run - webpack scripts, Tailwind major version, native-only dependencies, build lock state, repo registration, port plan, and which typed lessons fire. Read-only on project source. Returns PASS, FAIL, or BLOCKED per check with the command output; never fixes and never guesses."
 allowed-tools: Bash Read Grep Glob
+tools: Bash, Read, Grep, Glob
 owner: rig-intelligence
 domain: Agent engineering / app build preflight
 status: Stable

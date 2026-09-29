@@ -79,7 +79,7 @@ submission). Full map: `references/jev-decisions.md`.
 
 | Kind | Meta (one) | Main | Sub |
 |---|---|---|---|
-| Skills | `app-studio` (this) | 161 estate skills: 144 JEV-included by `app.inventory-fit` plus 17 reused ones the subs extend (full list: `hierarchy.json`, `references/inventory.md`) | 13 RIG sub-skills, one or more per stage (router below) |
+| Skills | `app-studio` (this) | 161 estate skills: 144 JEV-included by `app.inventory-fit` plus 17 reused ones the subs extend (full list: `hierarchy.json`, `references/inventory.md`) | 15 RIG sub-skills, one or more per stage (router below) |
 | Agents | `app-studio-conductor` | tg-web-builder, tg-mobile-builder, tg-ship-verifier, voltagent-nextjs-developer, voltagent-frontend-developer, voltagent-fullstack-developer, voltagent-mobile-app-developer, ae-frontend-engineer | tg-corpus-miner, tg-integration-fitter, tg-deploy-check-runner, app-sandbox-preflight, app-ui-judge, app-lesson-filer |
 | Harnesses | `app-studio-session` | tg-app-studio-session (video-clone lane), hA-03 test writing, hA-04 debug, hA-06 perf audit, hA-09 API design, hA-10 schema design, hA-12 CI/CD, hA-13 security audit, hC-02 UI design, hC-06 accessibility, hC-07 mobile design | app-sandbox-build-verify, app-web-release, app-mobile-release, tg-corpus-mining, tg-skeleton-implementation, tg-ship-verify, tg-auth-schema-wiring, tg-background-jobs, tg-deploy-checklist |
 | Loops | `app-studio-mission-loop` | iqrsqpi-v20, phase-discipline-loop, proof-loop, adversarial-verification-loop, gate-d-loop, git-push-safety-loop, coding-harness, doer-checker-validator | app-slice-loop, app-ui-judge-loop, app-lesson-promotion-loop, iqrsqpi-v20-slice |
@@ -99,12 +99,12 @@ covered.
 | 2 | architecture-stack | `app-stack-select` | tubeguruji-doctrine, advise-project-approach, fullstack-developer | conductor | app-studio-session A2 | app.stack |
 | 3 | design-ux | `app-ui-design` | when-designing-interfaces, impeccable, baseline-ui, fixing-accessibility | app-ui-judge | hC-02, hC-06 | ui.design |
 | 4 | scaffold-setup | `app-sandbox-survival`, `app-web-scaffold` | tg-saas-skeleton, dotenv, turborepo-caching | app-sandbox-preflight, tg-web-builder | app-sandbox-build-verify, tg-skeleton-implementation | app.stage-gate |
-| 5 | backend-data | `app-data-layer` | tg-auth-wiring, auth-implementation-patterns, database-migrations, prisma-patterns, supabase-postgres-best-practices, stripe-integration | tg-web-builder, tg-integration-fitter | hA-09, hA-10, tg-auth-schema-wiring, tg-background-jobs | api.backend |
+| 5 | backend-data | `app-data-layer`, `app-auth-payments` | tg-auth-wiring, auth-implementation-patterns, database-migrations, prisma-patterns, supabase-postgres-best-practices, stripe-integration | tg-web-builder, tg-integration-fitter | hA-09, hA-10, tg-auth-schema-wiring, tg-background-jobs | api.backend |
 | 6 | web-frontend | `app-web-frontend` | nextjs-app-router-patterns, next-best-practices, react-best-practices, shadcn-ui | tg-web-builder, voltagent-nextjs-developer | app-sandbox-build-verify | code.diff |
 | 7 | mobile | `app-mobile-build` | tg-expo-mobile-ai, react-native-architecture, dart-flutter-patterns, flutter-production-build | tg-mobile-builder, voltagent-mobile-app-developer | hC-07 | app.stage-gate, ui.design |
 | 8 | ai-features | `app-ai-features` | tg-durable-ai-pipelines, tg-ai-media-pipeline, tg-voice-agent-stack, typesafe-ai | tg-integration-fitter | tg-background-jobs | code.diff |
 | 9 | verify-qa | `app-verify-evidence` | tdd, e2e-testing, react-testing, testsprite-engineering, gstack-qa | tg-ship-verifier, app-ui-judge | hA-03, hA-04, hA-13, tg-ship-verify | code.review |
-| 10 | ship-release | `app-ship-web`, `app-ship-mobile` | vercel-deploy-doctrine, tg-deploy-gotchas, web-build-ship, app-store-ship, flutter-store-deployment | tg-deploy-check-runner | app-web-release, app-mobile-release, hA-12 | app.ship + Gate-D |
+| 10 | ship-release | `app-ship-web`, `app-ship-mobile`, `app-observability` | vercel-deploy-doctrine, tg-deploy-gotchas, web-build-ship, app-store-ship, flutter-store-deployment | tg-deploy-check-runner | app-web-release, app-mobile-release, hA-12 | app.ship + Gate-D |
 | 11 | operate-learn | `app-close-and-learn` | experience-lesson-records, jake-lessons-ledger, canary | app-lesson-filer | app-lesson-promotion-loop | mission.completion, atomic.claim |
 
 Routing contract: load exactly one stage sub-skill per task step; load a main skill only
@@ -126,6 +126,53 @@ when that sub-skill names it or the task needs it; if nothing fits, fall back to
    only, sha256 identity, no-cache redeploy after env changes (LA-11 to LA-14).
 8. **Anything public waits at Gate-D**; store policy is proven on the release build (LA-22).
 9. **Lessons land in the ledger and the owning sub-skill in the same session** (LA-28).
+
+## Engine and benchmark (merged 2026-09-28)
+
+This skill family is the rulebook; the engine is `~/Desktop/Projects/rig-app-studio`.
+Builders build; the engine's mission verifier (`pnpm studio:mission verify <task.json> --app <dir>`)
+does a clean build, serves the app with AI and deploy keys removed, runs acceptance checks the
+builder never saw, writes one stage record and one JEV `app.stage-gate` decision per stage
+hand-off in `.rig/runs/<run-id>/`, and records lesson receipts and a score row.
+`pnpm studio:mission scoreboard` is App Bench: verified apps per hour of Mike's time.
+Tasks live in `bench/tasks/`; builders start with `bench/run-builder.sh <task>`.
+
+## Creator channels (added 2026-09-28)
+
+Ten app-building YouTube channels are main-tier references, one skill each: `youtube-javascript-mastery`,
+`youtube-code-with-antonio`, `youtube-lama-dev`, `youtube-codesistency`, `youtube-notjust-dev`,
+`youtube-sonny-sangha`, `youtube-traversy-media`, `youtube-josh-tried-coding`, `youtube-galaxies-dev`,
+`youtube-piyush-garg`. Their 89 lessons stay `candidate` in each channel's ledger. The cross-channel
+rules are LA-36..LA-51 in `references/lessons.jsonl`, also `candidate`, and each stage sub-skill's
+"From the creators" section names the ones it owns. New channels come in through `app-creator-miner`
+(sub-agents `app-gotcha-extractor`, `app-clone-planner`).
+
+## Testing (rig-testlab)
+
+- verify-qa runs through rig-testlab (`~/Developer/ai-user-testing-mcp`, commit faf61aed):
+  `studio:mission verify` calls `rig-testlab app run` (reviewed `app-acceptance` adapter; verdicts
+  pass, fail, flaky and blocked are never merged) and re-checks the sealed AppRunProof with
+  `rig-testlab app verify` before recording its hash.
+- `studio:mission prove` is the mutation gate (`mutation.ts`): the original app GREEN, every planted
+  defect RED, survivors named; a plant whose bytes did not move is refused.
+- `render.ts` judges page text on the rendered DOM through playwright-core and keeps the raw verdict
+  beside it; with no browser the check carries `render BLOCKED`.
+- `lesson-checks.ts` performs the LA-06, LA-09 and LA-20 checks behind their lesson receipts.
+- Org chart: the `engine` kind in `hierarchy.json`, checked by V10; `--plant engine_path_missing`
+  and `--plant engine_commit_missing` must exit 2.
+
+## Prompts (meta, main, sub; added 2026-09-28)
+
+The family's prompts live in the RIG prompt library, not in this skill: meta `app-studio-meta`,
+15 main prompts (one per stage plus `app-studio-builder`, `app-studio-verifier`,
+`app-studio-ui-judge`, `app-studio-lesson-filer`) and 29 `app-sub-*` fragments, each owned by one
+main prompt. Composition order and variables: `capabilities/prompts/composition/app-studio.md`.
+The bench composes a builder's TASK.md from them (`bench/render_prompt.py`, `--legacy` for the A/B
+baseline) and records prompt ids, versions and sha256 in `.app-studio/prompt.json`. Every prompt
+passed the JEV library gate `app.prompt` (required signals above 0.9) before filing; inventory,
+decision ids and the typed TG and BENCH lesson tables are in `references/prompts.md`. The
+hierarchy's `prompts` kind is checked by V9 in `scripts/validate_hierarchy.py`
+(`--plant prompt_orphan` must exit 2).
 
 ## Mission record layout
 

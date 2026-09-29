@@ -1,0 +1,45 @@
+---
+id: app-sub-error-states
+version: 1
+status: draft
+updated: 2026-09-28
+task: App Studio sub-prompt: keep a failed request from blanking a screen with section error states, response.ok checks and no swallowed errors
+category: app-studio
+domain: app-studio
+model_target: unspecified
+score: null
+license: first-party
+source: first-party: capabilities/prompts/composition/app-studio.md
+triggers: section error states
+compose: when-shipping-code/app-studio capabilities/prompts/composition/app-studio.md
+provenance: first-party: capabilities/prompts/composition/app-studio.md | lessons LA-37 LA-21 | uncalibrated
+tier: sub
+parent: app-studio-web-frontend
+stage: web-frontend
+audience: builder
+lessons: LA-37 LA-21
+jev_gate: app.prompt
+jev_decision: 121938
+content_sha256: a91ab0b70d39a6b363169deca61554f4d969eef39ebf6d0a5c7b5d5a5174cbd9
+---
+
+# Error states that never blank the screen (App Studio sub prompt, v1)
+
+Contract
+- id: app-sub-error-states | version: 1 | tier: sub | parent: app-studio-web-frontend | stage: web-frontend | audience: builder
+- inputs: {{CONTRACT}} page lines, the screen map in the design-ux record
+- output: error handling in every data-loading component and route, recorded in .app-studio/stages/web-frontend.md
+- lessons carried (each one is an instruction to follow):
+  - LA-37: One failed request never blanks a screen or replaces the app with a raw error popup: check response.ok on every fetch, render an in-page error state for the failed section only, and make every catch fix, rethrow or log with context; prove it by forcing one request to fail and capturing the rest of the screen still rendered.
+  - LA-21: Classify a check that could not run (missing tool, dependency or credential) as BLOCKED with the missing piece named, never as FAILED or PASS.
+- gates: library gate app.prompt on this text; output gate app.stage-gate on the web-frontend record (a required noul passes only above 0.9; DEFERRED when the classifier is down, never a guessed verdict)
+- done_when: with one data source forced to fail, the page still returns 200, the failed section shows its error state and the other sections render, shown by one curl or capture, and a grep for empty catch blocks prints nothing
+- stop: stop and report BLOCKED: <route> when a failure cannot be induced locally; deploy, git push, publish, purchase, emails to real people and paid API calls stay held for Mike's Gate-D approval
+
+1. Every fetch checks response.ok and throws on failure (CH-LMA-09); every catch fixes, rethrows, or logs with the route and the error (CH-TRV-08).
+2. A failed section renders its own error state with a retry, and the rest of the screen keeps rendering (LA-37; creators CH-JSM-06).
+3. Errors show inside the page UI, never as a raw popup that replaces the app (CH-JSM-08).
+4. Server actions rethrow after recording, so redirects still fire.
+5. Prove it: force one request to fail and capture the page with the other sections intact; a check that cannot run is BLOCKED with the missing piece named (LA-21).
+
+Evidence rule: a step counts as done only when its record shows the exact command, the exit code, and the observed output (status code, body excerpt, file hash or screenshot path). A plan, a stub, a description of the code or a green preview is not evidence.

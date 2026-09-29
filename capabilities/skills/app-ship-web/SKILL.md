@@ -90,3 +90,18 @@ Sub-skill of `app-studio`, stage 10 of 11 (web half). Main skills it extends:
 
 memory/episodic/2026-09-17.md#L1845, #L1853; memory/episodic/2026-09-24.md#L2318;
 memory/projects/rodgers-intelligence.md#L31.
+
+## From the creators (candidate lessons)
+
+Distilled from ten app-building YouTube channels (`youtube-<slug>` skills). LA-36..LA-51 are
+status `candidate`: follow them now; they fire as gated checks only after promotion, which needs
+an engine receipt for the lesson id. Source ids below are greppable in each channel's
+`references/lessons.jsonl`.
+
+- LA-46: before the deploy request, add the single-page-app catch-all rewrite and make the
+  cookie secure flag depend on the environment (CH-JSM-05, CH-CWA-03).
+- LA-38: error monitoring for API and client is wired before the first release (`app-observability`;
+  CH-JSM-12, TRV-03-error-both-ends).
+- LA-40: lint warnings are fixed or waived by name before shipping (TRV-04-lint-warning-is-not-clean).
+- Price image-optimization bandwidth before a metered host (JTC-05-media-bandwidth-cost); release
+  work arrives on a reviewed branch (TRV-06-feature-branch).

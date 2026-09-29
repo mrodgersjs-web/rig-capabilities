@@ -2,6 +2,7 @@
 name: app-lesson-filer
 description: "SUB-AGENT: closes the skill-promotion gap for App Studio. At mission close or after a failed stage it reads the run record and failure evidence, drafts one typed lesson per new failure (trigger, mandated check, evidence rows), checks each with JEV atomic.claim, appends it to the App Studio ledger, patches the owning sub-skill's lesson list in the same session, and re-validates the ledger and the run. Never files a lesson without evidence rows."
 allowed-tools: Bash Read Grep Glob Edit Write
+tools: Bash, Read, Grep, Glob, Edit, Write
 owner: rig-intelligence
 domain: Agent engineering / experience capture
 status: Stable
