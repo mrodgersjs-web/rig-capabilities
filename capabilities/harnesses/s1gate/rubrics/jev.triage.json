@@ -23,7 +23,7 @@
   },
   "rules": [
     {
-      "when": "lane.confidence <= 0.90",
+      "when": "lane.confidence <= 0.9000",
       "verdict": "ESCALATE",
       "reason": "lane confidence at or below 0.90: human or meta-router decides"
     },
@@ -41,5 +41,46 @@
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage).",
     "criteria_edit_2026-09-28": "personal vs scheduling disambiguated (kid sick -> notify school scored personal at confidence 0.90)",
     "criteria_edit_2026-09-28b": "gtm-content (write for an audience) vs research (gather facts) disambiguated"
-  }
+  },
+  "calibration": {
+    "rules": {
+      "lane.confidence": {
+        "direction": "below",
+        "threshold": 0.9,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 102,
+        "n_good": 96,
+        "n_bad": 6,
+        "labeled_set_sha256": "9ed7bfd16cb6982e89df9603ca9e0663427f8302423b99c86f133848b56afd24",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "ad9085e6995a26199f8c1bafa11ab7668f22acd887d9911b34652fe362f0e210",
+        "rubric_sha256": "c1d7646ab0a708f017c29571897edcc4351eef6aea49fb18fc3a13e6740bf9ec",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "declared"
+      }
+    }
+  },
+  "calibrated": false
 }

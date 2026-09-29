@@ -26,7 +26,7 @@
   },
   "rules": [
     {
-      "when": "skill.confidence <= 0.90",
+      "when": "skill.confidence <= 0.9000",
       "verdict": "ESCALATE",
       "reason": "skill confidence at or below 0.90: human or meta-router decides"
     },
@@ -43,5 +43,46 @@
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage).",
     "criteria_edit_2026-09-28": "draft-the-messages (lv-outreach) vs queue/send-the-campaign (darius) disambiguated"
-  }
+  },
+  "calibration": {
+    "rules": {
+      "skill.confidence": {
+        "direction": "below",
+        "threshold": 0.9,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.9,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.9,
+          "precision": 0.8,
+          "recall": 1.0,
+          "false_block_rate": 0.038461538461538464
+        },
+        "combined": {
+          "threshold": 0.9,
+          "precision": 0.9,
+          "recall": 1.0,
+          "false_block_rate": 0.015873015873015872
+        },
+        "n_labelled": 72,
+        "n_good": 63,
+        "n_bad": 9,
+        "labeled_set_sha256": "31d8774823b976fb17e387a1d07148087978d3a7d12f614738a1d8139d1a9ab1",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "85b8c155e4eea1a6222340a31dd93ae78acb3c801ab289138cbe0801ebd8fa06",
+        "rubric_sha256": "a1812c59e2101371de3d657e36799f106407f8c15f6c6739df336f2ecb92e5dd",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "declared"
+      }
+    }
+  },
+  "calibrated": false
 }

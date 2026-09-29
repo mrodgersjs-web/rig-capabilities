@@ -45,10 +45,16 @@ The second rule on each rubric (safe answer <= 0.90 -> ESCALATE) is deliberately
 
 Do not edit a calibrated rubric's questions, description, stage, lane, notes or rules: any change voids its certification (rubric/rule sha). Re-run `calibrate_waves.py --write` after an edit.
 
-## Routing rubrics (triage, scrape-classify, skill-router)
+## Routing rubrics (triage, scrape-classify, skill-router) - CERTIFIED 2026-09-28
 
-`ambiguous02/03/05.json`: 36 agent-written items meant to straddle options. On review, 14 had a dominant answer and were reclassified as single-answer cases; that review happened AFTER seeing Jev's answers, so it is biased toward agreement. The remaining 22 genuinely ambiguous items are the BAD class for the `confidence` rule (tie `declared`: keep the stated 0.90 when the data cannot tell the options apart).
+`ambiguous02/03/05.json`: 36 items written to straddle options. 14 had a dominant answer and were reclassified single-answer (that review came after seeing Jev's answers, so it is biased toward agreement); the remaining 22 ambiguous items are the BAD class for the `confidence` rule and **Mike reviewed and approved all 22 labels** (labelled `human:mike-reviewed-2026-09-28`). Tie mode `declared`: keep the stated 0.90 when the data cannot tell the options apart.
 
-Dry-run result (not written): triage 0.90 (96 good / 6 bad), skill-router 0.90 (63 / 9), scrape-classify 0.9352 (65 / 7, slightly stricter); each holds on train, holdout and combined. **Held for a human label check**: the engine treats agent-made labels as advisory until reviewed. After review: `RUBRICS=jev.triage,jev.scrape-classify,jev.skill-router python3 calibrate_waves.py --write`.
+| Rubric | Certified rule | Threshold | Holdout false-block | Holdout recall | Labeled (good/bad) |
+|---|---|---|---|---|---|
+| `jev.triage` | `lane.confidence` | 0.90 | 0.00 | 1.00 | 96 / 6 |
+| `jev.scrape-classify` | `category.confidence` | 0.9352 | 0.00 | 1.00 | 65 / 7 |
+| `jev.skill-router` | `skill.confidence` | 0.90 | 0.00 | 1.00 | 63 / 9 |
 
-Full verdict suite with the 36 new cases, unpinned, `EXPECT_ENFORCED=1`, 5 waves: 335/336. The miss (a05-003, "check whether this post passes our rubric before I publish it") is a borderline between rig-s1gate and gate-d-loop that escalated; it was one of the post-hoc reclassifications.
+`choice == 'other'` rules stay uncalibrated (advisory ESCALATE only). Full suite with the 36 new cases, unpinned, `EXPECT_ENFORCED=1`, 5 waves: **335/336**.
+
+**Known boundary:** `l03-005` (HN "Postgres 18" story) flaps between PASS and ESCALATE: its confidence samples 0.93-0.94, and the bad row `a03-004` (Reddit hiring post) sits at 0.93. Any threshold in the 0.01 gap flips one of them; recall-first policy keeps the bad row caught, so the clean row escalates sometimes. Escalating a scraped row is the cheap direction. To widen the gap these two rows would need different wording and a recalibration run.

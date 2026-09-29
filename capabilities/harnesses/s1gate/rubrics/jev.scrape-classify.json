@@ -22,7 +22,7 @@
   },
   "rules": [
     {
-      "when": "category.confidence <= 0.90",
+      "when": "category.confidence <= 0.9352",
       "verdict": "ESCALATE",
       "reason": "category confidence at or below 0.90: human or meta-router decides"
     },
@@ -40,5 +40,46 @@
     ],
     "tests": "~/Developer/ten-levels-of-jev/usages/verify_gates.py (verdict + probability, no retry)",
     "changed": "2026-09-28: rules rewritten; prior rules referenced a missing question (compact-read), used unsupported choice<0.90 (triage, skill-router), or were absent (escalation, auto-approve, file-triage)."
-  }
+  },
+  "calibration": {
+    "rules": {
+      "category.confidence": {
+        "direction": "below",
+        "threshold": 0.9352,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.9352,
+          "precision": 0.75,
+          "recall": 1.0,
+          "false_block_rate": 0.02564102564102564
+        },
+        "holdout": {
+          "threshold": 0.9352,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.9352,
+          "precision": 0.875,
+          "recall": 1.0,
+          "false_block_rate": 0.015384615384615385
+        },
+        "n_labelled": 72,
+        "n_good": 65,
+        "n_bad": 7,
+        "labeled_set_sha256": "3b187a2bf0d42192b22e5c9b534e3bc03f022d1e05210fbb545fc43cc01861d0",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "7640bcaea1687189af9bb3763b71c2036d36859a1d558174f4327315bcb89f00",
+        "rubric_sha256": "2b557ff756064fdfc2b3bde0308abafbad6a54dde5022f12073f65bd28f3677c",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "declared"
+      }
+    }
+  },
+  "calibrated": false
 }
