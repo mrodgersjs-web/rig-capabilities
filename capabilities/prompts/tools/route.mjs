@@ -8,7 +8,7 @@
 // registry snapshot; a low top score means NO_STORED_PROMPT, not a forced pick.
 import fs from 'node:fs';
 import path from 'node:path';
-import { ROOT, readRegistry, promptDir } from './lib.mjs';
+import { ROOT, readRegistry, promptDir, PROMPTS_DIR, parseFrontmatter } from './lib.mjs';
 
 const STOP = new Set(['the', 'a', 'an', 'and', 'or', 'to', 'of', 'for', 'in', 'on', 'with',
   'is', 'are', 'be', 'this', 'that', 'it', 'i', 'my', 'me', 'we', 'you', 'your', 'as',
@@ -100,6 +100,21 @@ if (args.includes('--selftest')) {
     ['is this agent even alive, just have it echo back', 'probe-connectivity-ack'],
     ['prove this command actually ran, give me raw output', 'probe-exec-raw-stdout'],
     ['review this fix independently, read only', 'independent-read-only-review'],
+    // RIG HQ family (2026-09-28): meta, role and interrupt sub-prompt, plus the minor's lane.
+    ['operating meta prompt for the office of the ceo', 'rig-hq-meta-office-of-the-ceo'],
+    ['revenue meta prompt: offers and pipeline toward the first paying client', 'rig-hq-meta-revenue'],
+    ['triage dependency vulnerabilities and sweep for leaked secrets', 'rig-hq-prompt-vera-security'],
+    ["draft only content for jacob's recruiting lane", 'rig-hq-prompt-jacob-lane-draft'],
+    ['a week passes with no reply on the outreach list', 'rig-hq-sub-j8-2-a-week-passes-with-no-reply'],
+  ];
+  // RIG HQ body integrity: routing reads registry.json, so a gutted prompt FILE would still
+  // rank. Each file must keep a real body and its load-bearing safety phrase.
+  const HQ_BODIES = [
+    ['rig-hq/meta/office-of-the-ceo.md', /gate-d/i],
+    ['rig-hq/meta/revenue.md', /gate-d/i],
+    ['rig-hq/prompts/vera-security.md', /redact/i],
+    ['rig-hq/prompts/jacob-lane-draft.md', /never auto-run/i],
+    ['rig-hq/sub/revenue-week-no-reply.md', /.{40}/],
   ];
   let failed = 0;
   for (const [query, expected] of FIXTURES) {
@@ -108,7 +123,15 @@ if (args.includes('--selftest')) {
     console.log((ok ? 'PASS' : 'FAIL') + '  "' + query + '" -> ' + (got ? got.id + ' (' + got.points + ')' : 'NOTHING') + (ok ? '' : '  EXPECTED ' + expected));
     if (!ok) failed++;
   }
-  console.log(failed === 0 ? 'SELFTEST PASS: ' + FIXTURES.length + '/' + FIXTURES.length : 'SELFTEST FAIL: ' + failed + ' of ' + FIXTURES.length);
+  for (const [rel, must] of HQ_BODIES) {
+    let body = '';
+    try { body = parseFrontmatter(fs.readFileSync(path.join(PROMPTS_DIR, rel), 'utf8')).body; } catch (e) { body = ''; }
+    const ok = body.trim().length >= 800 && must.test(body);
+    console.log((ok ? 'PASS' : 'FAIL') + '  body ' + rel + ' (' + body.trim().length + ' chars, needs >=800 and ' + must + ')');
+    if (!ok) failed++;
+  }
+  const total = FIXTURES.length + HQ_BODIES.length;
+  console.log(failed === 0 ? 'SELFTEST PASS: ' + total + '/' + total : 'SELFTEST FAIL: ' + failed + ' of ' + total);
   process.exit(failed === 0 ? 0 : 1);
 }
 
