@@ -1,0 +1,52 @@
+---
+tier: sub
+parent: ds-website-build
+outcome: "design-ux: Critique gate run with every gate evidenced by a file or command output"
+done_when:
+  - file:studio-harness/harnesses/ds-gate-critique.yaml
+  - cmd:python3 tools/check_family.py
+quality_floor: 0.6
+---
+
+harness_id: ds-gate-critique
+harness_name: Critique gate
+session_type: gate
+jev_first: 'Typed judgments at every gate go to rig-s1gate (Jev) before any frontier LLM call; classifier down means DEFERRED, never a guessed verdict.'
+identity_lock:
+  startup_phrase: 'Critique gate: evidence or it did not pass.'
+  gates:
+  - id: '0.1'
+    requirement: Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work
+  - id: '0.2'
+    requirement: Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test
+capability_gates:
+- category: Critique
+  gates:
+  - id: '3.1'
+    requirement: 'Real rendered screens captured at 375, 768 and 1440 px'
+    proof: 'three PNGs in artifacts/<slug>/captures/'
+    failure_tier: halt
+  - id: '3.2'
+    requirement: 'Independent critic (ds-critic, not the builder) returns findings with laws cited'
+    proof: 'artifacts/<slug>/critique.md'
+    failure_tier: halt
+  - id: '3.3'
+    requirement: 'Jev ui.design and advisor-plus judge-image run on each capture'
+    proof: 'decision ids per capture; DEFERRED listed as DEFERRED'
+    failure_tier: halt
+  - id: '3.4'
+    requirement: 'Anti-slop lint clean on all copy'
+    proof: 'ds-slop-linter output with 0 blockers'
+    failure_tier: degrade
+definition_of_done:
+- Gate category evidenced
+failure_protocol:
+  halt_gates:
+  - '3.1'
+  - '3.2'
+  - '3.3'
+final_rule:
+- No gate evidence, no progress.
+- A DEFERRED Jev verdict is never a pass.
+- Publish, deploy, push or send needs Gate-D approval from Mike.
+shared_by: [ds-website-build, ds-landing-page, ds-redesign, ds-brand-identity-session, ds-critique-session]

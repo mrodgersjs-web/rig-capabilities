@@ -1,0 +1,220 @@
+# Color laws (Design Studio OS corpus)
+
+Coverage: 16 videos read: Co75kmQtbaA, vo_lUWK_deo, wnkAguggRCQ, RBNu4dzaqK8 (Flux Academy); HKtTNOgfhAU, XNkV6m4fosw, F_XiBUXY8cU, PjreouILiAY (Satori Graphics); wqTZuEQ2P-s, Y8g3YtZckco (DesignCourse); -4lMJ4is2pE (Jesse Showalter); 2QTHs7QSR9o (Envato Tuts+); CxXKHiCpKs4 (Paige Brunton Business); HMT_7esBbVA (Wes McDowell); ZBpMMD4Pyyk (Every Tuesday); zl_7yHh2PSc (CharliMarieTV).
+Channels: 9. Publish dates 2017-03-07 through 2026-03-12.
+Top-10 creators present in this stage: flux-academy, satori-graphics, jesse-showalter.
+
+## Laws
+
+### Sub-topic: brief and hue selection
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|-----------------|----------------|
+| 1 | Answer four questions before opening any software: what limits you (brand rules, print format), what material already exists, what action the viewer must take, what the viewer should feel at the moment of seeing it. | Flux Academy | CLAIM(Co75kmQtbaA@00:41, Co75kmQtbaA@01:20) | single-source | yes |
+| 2 | Choose the primary hue from the message and the audience, not from the swatch that looks best in isolation. | Satori Graphics, Flux Academy | CLAIM(HKtTNOgfhAU@00:25, Co75kmQtbaA@02:11) | consensus | yes |
+| 3 | Write two keyword lists before picking a hue: the feeling the viewer should get, then the personality of the design itself. Map those words to one to three colors through published color association references. | Satori Graphics | CLAIM(HKtTNOgfhAU@08:32, HKtTNOgfhAU@10:43, HKtTNOgfhAU@11:19) | single-source | yes |
+| 4 | Test the hue against local meaning before committing: regional customs, political parties, religions, and sports teams all load colors with meaning that the global palette chart does not show. | Flux Academy, Satori Graphics | CLAIM(RBNu4dzaqK8@03:45, HKtTNOgfhAU@07:35, Co75kmQtbaA@02:46, HKtTNOgfhAU@20:47) | consensus | yes |
+| 5 | Set saturation and brightness for the age and position of the buyer. A youth brand can carry a full-strength bright hue; the same hue for a mature or premium audience needs saturation pulled well down. | Flux Academy, Satori Graphics | CLAIM(Co75kmQtbaA@05:36, Co75kmQtbaA@06:35, XNkV6m4fosw@05:02) | consensus | yes |
+| 6 | Treat hue as the weakest lever. Brightness and saturation decide whether a palette feels soft or hard, calm or active. | Satori Graphics | CLAIM(XNkV6m4fosw@00:54, HKtTNOgfhAU@04:42, XNkV6m4fosw@01:06) | single-source (two videos, one creator) | yes |
+| 7 | Expect the palette to carry only part of the message. Type, imagery and layout have to agree with it or the meaning does not land. | Flux Academy | CLAIM(Co75kmQtbaA@03:23) | single-source | yes |
+| 8 | Treat the standard hue associations as defaults to confirm or override with customer research: blue for trust and seriousness, green for nature and health, purple for luxury and femininity, orange and yellow for energy, red for attention and danger, black for high end. Generate keyword research on the actual customer base before a logo or brand hue is chosen. | Satori Graphics, Envato Tuts+, Flux Academy | CLAIM(RBNu4dzaqK8@02:14, 2QTHs7QSR9o@13:58, HKtTNOgfhAU@15:40, HKtTNOgfhAU@17:37, HKtTNOgfhAU@17:47, Co75kmQtbaA@02:29) | consensus | yes |
+| 9 | Pick the color space at file creation and budget for the medium: RGB for anything that emits light, CMYK for anything printed. Assume printed color returns duller than the screen showed, since very bright screen colors do not survive a four-color press without a spot reference. | Envato Tuts+, Jesse Showalter | CLAIM(2QTHs7QSR9o@10:34, 2QTHs7QSR9o@11:10, 2QTHs7QSR9o@11:44, -4lMJ4is2pE@00:51) | consensus | yes |
+
+### Sub-topic: palette construction
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|-----------------|----------------|
+| 10 | Use the smallest palette the job allows, and treat one hue plus black and white as a complete scheme rather than a compromise. Every extra color is another chance for two of them to fight, and a single hue with neutrals already carries covers, signage and club branding at full strength. | Flux Academy | CLAIM(Co75kmQtbaA@10:06, Co75kmQtbaA@10:32, Co75kmQtbaA@12:36) | single-source | yes |
+| 11 | For a website palette land near five colors: at least two of them neutral enough to sit behind content alongside white, a couple of punchier accents, and one contrasting color reserved for the call to action. | Wes McDowell | CLAIM(HMT_7esBbVA@01:54, HMT_7esBbVA@02:05, HMT_7esBbVA@02:13) | single-source | no |
+| 12 | Always keep one very dark neutral for text. It is used sparingly but it has to exist in the palette. | Paige Brunton Business | CLAIM(CxXKHiCpKs4@09:12) | single-source | no |
+| 13 | Name the three modifiers and use them consistently: a tint adds white, a shade adds black, a tone adds gray. | Envato Tuts+, Jesse Showalter, Satori Graphics, Flux Academy | CLAIM(2QTHs7QSR9o@03:24, -4lMJ4is2pE@04:47, HKtTNOgfhAU@26:45, Co75kmQtbaA@02:19) | consensus | yes |
+| 14 | Build UI palettes from tints and shades of the primary so that a bold value is available for a button while row highlights and secondary text get the lighter rungs instead of more saturated color. | Jesse Showalter | CLAIM(-4lMJ4is2pE@05:27, -4lMJ4is2pE@05:08) | single-source | yes |
+| 15 | Match tones across the whole palette. Colors whose gray content differs will look like they came from different projects no matter how well the hues relate, and a palette of many hues is only safe when every color shares a tone and holds a narrow job. | Flux Academy | CLAIM(wnkAguggRCQ@10:02, wnkAguggRCQ@10:40, wnkAguggRCQ@11:01, Co75kmQtbaA@22:35, Co75kmQtbaA@23:14) | single-source (one channel) | yes |
+| 16 | Desaturate any color that competes with the dominant one. Saturation is the dial that decides which color wins the page. | Flux Academy | CLAIM(Co75kmQtbaA@23:54, Co75kmQtbaA@23:56) | single-source | yes |
+| 17 | Complementary pairs deliver maximum contrast and attention, they jar at full strength, and they read as a naturally balanced pairing that can carry a luxury story when the values are rich. Pair a hue with a tint of its opposite to get four working colors instead of two blunt ones, and make the photography follow the same scheme. | Satori Graphics, Paige Brunton Business, Flux Academy | CLAIM(HKtTNOgfhAU@28:14, HKtTNOgfhAU@28:48, CxXKHiCpKs4@01:02, wnkAguggRCQ@05:18, wnkAguggRCQ@05:59) | consensus | yes |
+| 18 | Analogous schemes (neighbors on the wheel) are the low-risk choice for calm, trustworthy, understated brands. They are easy to make work and they read as one family. | Paige Brunton Business, Flux Academy, Envato Tuts+ | CLAIM(CxXKHiCpKs4@01:38, Co75kmQtbaA@14:20, 2QTHs7QSR9o@05:30) | consensus | yes |
+| 19 | Split-complementary keeps contrast but drops the in-your-face quality of a straight complement. It suits brands that want energy without chaos, and it takes more balancing than analogous. | Paige Brunton Business, Satori Graphics, Flux Academy | CLAIM(CxXKHiCpKs4@02:26, HKtTNOgfhAU@30:58, Co75kmQtbaA@15:58) | consensus | yes |
+| 20 | Monochromatic is one hue with saturation and lightness varied around it. It moves the eye smoothly and never pops, so use it to keep a brand color dominant across UI states and to signal calm or curation, and do not use it where the design must grab attention (signs, alerts, charts). | Satori Graphics, Jesse Showalter, Paige Brunton Business, Flux Academy | CLAIM(HKtTNOgfhAU@27:17, HKtTNOgfhAU@27:51, -4lMJ4is2pE@09:41, CxXKHiCpKs4@03:18, wnkAguggRCQ@02:50, wnkAguggRCQ@03:32, wnkAguggRCQ@04:41) | consensus | yes |
+| 21 | Triadic (three hues evenly spaced) is high contrast and easy to overpower. Take it into charts and infographics and check that no label gets lost in the collision. | Satori Graphics, Envato Tuts+ | CLAIM(HKtTNOgfhAU@30:03, HKtTNOgfhAU@30:33, 2QTHs7QSR9o@07:43) | consensus | yes |
+| 22 | Tetradic (two complementary pairs) only works when one hue dominates and the other three stay in accent roles. Four equals means four competitors. | Envato Tuts+ | CLAIM(2QTHs7QSR9o@08:37, 2QTHs7QSR9o@09:02) | single-source | no |
+| 23 | Deliberately vary the blues in one scheme when the brand wants to feel human rather than formal. Uniform values read as institutional. | Flux Academy | CLAIM(wnkAguggRCQ@07:40, wnkAguggRCQ@08:36) | single-source | yes |
+| 24 | Warm against cool on the same surface creates dynamic tension. Pick that when the subject is meant to feel unsettled or playful, and avoid it when the subject is meant to feel safe. | Flux Academy | CLAIM(wnkAguggRCQ@18:43, wnkAguggRCQ@19:03) | single-source | yes |
+| 25 | Desaturate a vintage or retro read. The same two hues at full digital saturation look like a flag or a cheap product; pulling saturation down makes them look crafted. | Flux Academy | CLAIM(wnkAguggRCQ@20:01, wnkAguggRCQ@21:00, wnkAguggRCQ@14:24) | single-source | yes |
+| 26 | Test palette balance with a value check: flatten the colors under a black or gray overlay and confirm each one shows a distinct value instead of collapsing into the same gray. | Envato Tuts+ | CLAIM(2QTHs7QSR9o@17:12, 2QTHs7QSR9o@17:22) | single-source | no |
+| 27 | Derive neutrals from a palette hue rather than defaulting to pure black and white. A tinted neutral keeps the whole scheme in one family. | Envato Tuts+, DesignCourse, Flux Academy | CLAIM(2QTHs7QSR9o@17:51, 2QTHs7QSR9o@19:52, wqTZuEQ2P-s@01:59, Co75kmQtbaA@07:22) | consensus | yes |
+| 28 | Apply the 60/30/10 proportion: dominant color about sixty percent of the surface, secondary thirty, accent ten. The sixty percent band may be two shades of one color, which keeps a single dominant read while still varying the layout. | Flux Academy, Paige Brunton Business | CLAIM(vo_lUWK_deo@02:13, CxXKHiCpKs4@05:08, CxXKHiCpKs4@10:10, Co75kmQtbaA@32:53) | consensus | yes |
+| 29 | A near-white is a workable neutral for large fields. It gives the content breathing room so the page does not turn into a wall of color. | Wes McDowell, Flux Academy | CLAIM(HMT_7esBbVA@10:10, wnkAguggRCQ@06:10) | consensus | yes |
+
+### Sub-topic: application and usage rules
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|-----------------|----------------|
+| 30 | Reserve one contrasting color for the primary call to action and use it nowhere else on the site. That exclusivity is what makes it read as the single most important element. | Wes McDowell | CLAIM(HMT_7esBbVA@13:44, HMT_7esBbVA@02:13) | single-source | no |
+| 31 | Body copy is black or a very dark gray. Colored type is acceptable in headlines, never at reading size. | Wes McDowell, Flux Academy | CLAIM(HMT_7esBbVA@13:27, Co75kmQtbaA@08:56) | consensus | yes |
+| 32 | Never put bolder colors on large background fields. Keep surfaces white or neutral and spend the bold colors in small doses: icons, rules, headlines, buttons. | Wes McDowell | CLAIM(HMT_7esBbVA@12:57, HMT_7esBbVA@13:14) | single-source | no |
+| 33 | Keep interface backgrounds at the extremes: a very light off-white or a very dark off-black. Mid-value surfaces kill contrast and make every element work harder. | Flux Academy | CLAIM(wnkAguggRCQ@06:10) | single-source | yes |
+| 34 | A gray control reads as disabled. Never let an enabled button or link sit in gray, because users will not attempt to click it. | Flux Academy | CLAIM(RBNu4dzaqK8@05:12, RBNu4dzaqK8@05:33) | single-source | yes |
+| 35 | In interface work, red and green already carry a stop and go reading. That functional meaning outranks whatever the brand book says the color means. | Flux Academy | CLAIM(RBNu4dzaqK8@05:46, RBNu4dzaqK8@06:04) | single-source | yes |
+| 36 | Spend one accent color on orientation: active nav state, current position, the first phrase of a scannable block. Small marks are enough to guide the eye, and one accent is also how a near-monochrome scheme gets a point of difference without adding a second hue family. | Flux Academy | CLAIM(wnkAguggRCQ@00:43, wnkAguggRCQ@00:55, wnkAguggRCQ@02:15, wnkAguggRCQ@00:24, wnkAguggRCQ@18:20) | single-source | yes |
+| 37 | Diagnose in grayscale before blaming color. Convert the layout to black and white: if the hierarchy still works the problem is color application, and if it does not the problem is layout. | Flux Academy | CLAIM(vo_lUWK_deo@01:15, vo_lUWK_deo@01:44) | single-source | yes |
+| 38 | Do not color separate blocks and separate lines of type differently in one layout. It fragments the reading path instead of guiding it. | Flux Academy | CLAIM(vo_lUWK_deo@00:58) | single-source | yes |
+| 39 | Small type needs both saturation and contrast raised to stay legible. Muted values that work at display size disappear at caption size. | Satori Graphics | CLAIM(XNkV6m4fosw@05:51) | single-source | yes |
+| 40 | Raise contrast and saturation to signal activity; lower both to signal calm. A low saturation, weak contrast build is how you say safe and settled. | Satori Graphics | CLAIM(XNkV6m4fosw@01:06, XNkV6m4fosw@01:34, HKtTNOgfhAU@05:21) | single-source (one creator, two videos) | yes |
+| 41 | When the product photography is loud, keep the interface quiet. Let the product carry the color, hold the UI near neutral with one accent, and do not pass every brand color into the interface just because the brand owns them. | Flux Academy | CLAIM(Co75kmQtbaA@29:00, Co75kmQtbaA@30:28, Co75kmQtbaA@27:12, Co75kmQtbaA@28:20, Co75kmQtbaA@36:30) | single-source | yes |
+| 42 | Write usage rules into the brand guidelines: which color is dominant, which is secondary, which is accent, and what each may be applied to. Without that, every deliverable will drift toward the brightest color. | Flux Academy | CLAIM(Co75kmQtbaA@32:28, Co75kmQtbaA@34:21) | single-source | yes |
+| 43 | Review the finished work in two passes. First function: does the color support the information, lead to the intended action, stay legible and consistent, and guide the viewer. Then appeal: does it look like something a person wants to engage with. | Flux Academy | CLAIM(Co75kmQtbaA@35:09, Co75kmQtbaA@38:20) | single-source | yes |
+| 44 | Match the accent palette to the subject matter so the color itself helps the reader choose (flavor codes, product codes). It is navigation disguised as decoration. | Flux Academy | CLAIM(Co75kmQtbaA@35:34, Co75kmQtbaA@36:22) | single-source | yes |
+| 45 | Keep one or two colors on a logo. A multi-hue logo is defensible only when the designer can explain every hue's job. | Satori Graphics | CLAIM(HKtTNOgfhAU@19:04, HKtTNOgfhAU@19:41) | single-source | yes |
+
+### Sub-topic: light and dark mode conversion
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|-----------------|----------------|
+| 46 | Avoid both ends of the value range on page surfaces. A dark surface is never pure black: keep the tint the real fill carries and build the light version one rung brighter from it. A light page background is never pure white, because a card needs headroom to read as elevated. | DesignCourse | CLAIM(wqTZuEQ2P-s@01:33, wqTZuEQ2P-s@01:44, wqTZuEQ2P-s@01:59, wqTZuEQ2P-s@02:23) | single-source | no |
+| 47 | Convert a mode starting with the largest surfaces and working down to the smallest details: page fill, then cards, then type, then strokes and shadows. | DesignCourse | CLAIM(Y8g3YtZckco@00:56, Y8g3YtZckco@01:18) | single-source | no |
+| 48 | Preserve relationships, not values. Card stays one step lighter than the page, icon keeps matching the stroke it sits beside, whatever was high contrast in one mode stays high contrast in the other, and thin borders or rules that read on a dark ground must be pushed darker to survive a light one. | DesignCourse | CLAIM(wqTZuEQ2P-s@02:11, wqTZuEQ2P-s@03:06, wqTZuEQ2P-s@04:27, wqTZuEQ2P-s@02:26, wqTZuEQ2P-s@03:27) | single-source | no |
+| 49 | Re-derive each shadow from the surface it falls on instead of copying the value across modes. A dark-mode shadow carried into light mode looks dirty and wrong. | DesignCourse | CLAIM(Y8g3YtZckco@02:51, Y8g3YtZckco@03:04) | single-source | no |
+| 50 | Remap every instance of one color in a single edit through the selection color panel rather than hunting elements one at a time. Verify the panel shows the color you think you are changing. | DesignCourse | CLAIM(wqTZuEQ2P-s@07:03, Y8g3YtZckco@02:10) | single-source (one creator, two videos) | no |
+| 51 | In a mode conversion change colors and values only. Do not move the layout and do not add shadows, gradients or other embellishments. | DesignCourse | CLAIM(wqTZuEQ2P-s@13:00, Y8g3YtZckco@05:15) | single-source (one creator, two videos) | no |
+| 52 | Label the theme toggle with a text label or a moon icon so its state is readable at a glance. An unlabeled pill is ambiguous. | DesignCourse | CLAIM(wqTZuEQ2P-s@10:43) | single-source | no |
+| 53 | Do the conversion by hand with an eye on contrast. Automated color inversion will not hold the type legibility or the tonal relationships. | DesignCourse | CLAIM(Y8g3YtZckco@00:15, Y8g3YtZckco@06:01) | single-source | no |
+
+### Sub-topic: palette operations and tooling
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|-----------------|----------------|
+| 54 | Never maintain a brand color by sampling it out of an image or an export. Sampling drifts and you end up with twenty near-identical blues. | CharliMarieTV | CLAIM(zl_7yHh2PSc@00:29, zl_7yHh2PSc@00:36) | single-source | no |
+| 55 | Store the palette as named swatches in a folder, name each swatch with its hex value so a developer can read the code off the swatch list, and make anything used across the document a global swatch so one edit recolors every element that uses it. | CharliMarieTV, Satori Graphics | CLAIM(zl_7yHh2PSc@03:41, zl_7yHh2PSc@04:56, F_XiBUXY8cU@04:51, HKtTNOgfhAU@14:26) | consensus | yes |
+| 56 | Export the palette as a swatch exchange file from the design tool first. Converting that format to the platform native one is far easier than the reverse. | CharliMarieTV | CLAIM(zl_7yHh2PSc@03:01, zl_7yHh2PSc@04:46) | single-source | no |
+| 57 | A working brand palette needs ramps, not single values: several shades of the primary for icons over colored ground and for buttons, several shades of the light neutral, several shades of the dark neutral for text. | CharliMarieTV | CLAIM(zl_7yHh2PSc@00:50, zl_7yHh2PSc@01:15, zl_7yHh2PSc@01:21) | single-source | no |
+| 58 | When a color has to survive another person's screen or a press, carry a spot reference rather than a screen value. The reference is what makes the color reproducible. | Satori Graphics | CLAIM(PjreouILiAY@01:12, 2QTHs7QSR9o@12:01) | consensus | yes |
+| 59 | Build the palette on a written base color drawn from research, then cycle harmony rules against it rather than improvising hues. | Satori Graphics, Envato Tuts+ | CLAIM(HKtTNOgfhAU@11:55, HKtTNOgfhAU@12:12, 2QTHs7QSR9o@16:45) | consensus | yes |
+
+## Looks like / does not (good vs bad pairs)
+
+| # | looks like (good) | does not (bad) | why | citation |
+|---|-------------------|----------------|-----|----------|
+| 1 | The same card layout redrawn with a neutral cream ground, dark type and one orange button that carries the action. | The card with brand green behind the mark, orange headline on green, a button that blends in, and three differently colored blocks stacked down the page. | Equal-weight color blocks fragment the reading path; a proportioned palette directs it. | CLAIM(vo_lUWK_deo@06:16, vo_lUWK_deo@00:32) |
+| 2 | A layout that still reads when everything is set to gray. | A layout that falls apart in gray and only appears to work once color is applied. | Grayscale exposes a hierarchy problem that color was hiding. | CLAIM(vo_lUWK_deo@01:15) |
+| 3 | One dominant green running through header, image overlay and sections, dark neutral for text, the boldest hue only on buttons. | The same five colors split into equal thirds, a muted button that does not stand out, footer links nearly invisible on a dark ground. | If nothing dominates, nothing is dominant and the eye has no entry point. | CLAIM(CxXKHiCpKs4@11:55, CxXKHiCpKs4@10:28) |
+| 4 | Red softened to a pink and green desaturated and darkened until the pair sits comfortably. | A vibrant red next to a vibrant green at full strength. | Complements at full saturation vibrate and read as unpleasant. | CLAIM(XNkV6m4fosw@03:26) |
+| 5 | A muted, low saturation palette on an upmarket fashion piece. | The identical layout rebuilt in loud saturated color for a teenage audience. | Saturation and brightness carry the market position more than the hues do. | CLAIM(XNkV6m4fosw@05:02, XNkV6m4fosw@06:07) |
+| 6 | Skincare advertising carried in pale skin tones and pastels. | The same artwork with saturation cranked up. | High saturation reads aggressive and contradicts a calm beauty product. | CLAIM(HKtTNOgfhAU@01:59, HKtTNOgfhAU@02:35) |
+| 7 | A multi-color icon set where every color sits at the same tone. | Dusty brick red beside a fully saturated digital green in the same set. | Differing tone is what makes a palette look unrelated to itself. | CLAIM(wnkAguggRCQ@11:01, wnkAguggRCQ@11:06) |
+| 8 | A children's product interface using worked, slightly desaturated versions of playful colors. | Saturated primary red, green and blue straight from a toy box. | Untreated primaries read cheap and budget at interface scale. | CLAIM(wnkAguggRCQ@14:24, wnkAguggRCQ@13:59) |
+| 9 | Desaturated red and blue that read as vintage and crafted. | Fully digital red and blue at flag saturation. | Same hues, different saturation, completely different brand story. | CLAIM(wnkAguggRCQ@20:01, wnkAguggRCQ@21:00) |
+| 10 | The green pulled down in saturation and brightness until it supports a mature wordmark. | The full-strength bright green applied to the same mature brand. | A youthful value on a mature audience fights the typography. | CLAIM(Co75kmQtbaA@06:35, Co75kmQtbaA@05:36) |
+| 11 | A palette where each color is adjusted until the gray content matches. | Raw hues copied off the wheel and dropped in together. | Tone matching is the step that turns a set of colors into a palette. | CLAIM(Co75kmQtbaA@22:35, Co75kmQtbaA@23:25) |
+| 12 | A quiet interface in white, black and one red accent sitting around colorful product photography. | An interface that reuses every packaging color at once. | Product color belongs to the product; a crowded UI cannot compete with it. | CLAIM(Co75kmQtbaA@29:00, Co75kmQtbaA@27:12) |
+| 13 | A black and white brand where the signup button is the one red thing on the page. | The same page with the button in a value that matches the rest of the interface. | Exclusivity is what makes the action visible. | CLAIM(Co75kmQtbaA@37:22, Co75kmQtbaA@37:36) |
+| 14 | White and neutral surfaces with bold color spent on icons, rules and headlines. | Bold color blocking filling whole background sections. | Large bold fields read chaotic or heavy and leave nowhere for the eye to rest. | CLAIM(HMT_7esBbVA@12:57, HMT_7esBbVA@13:14) |
+| 15 | Body text in black or dark gray, with brand color allowed in headlines. | Body text set in brand color. | Colored reading text looks amateur and reduces legibility. | CLAIM(HMT_7esBbVA@13:27) |
+| 16 | The call to action color used on exactly one control per screen. | The same color sprayed across buttons, links, icons and highlights. | A reserved color keeps its meaning as the single next step. | CLAIM(HMT_7esBbVA@13:44) |
+| 17 | A colored button that reads as clickable. | A gray button for an action that is actually available. | Users read gray as disabled and will not attempt the click. | CLAIM(RBNu4dzaqK8@05:12) |
+| 18 | Blue on a business scheduling product. | Pink on the same product. | Pre-existing association decides what the product appears to be before any copy is read. | CLAIM(RBNu4dzaqK8@01:48, RBNu4dzaqK8@00:56) |
+| 19 | A light-mode page background carrying a faint tint so a card can sit above it. | A pure white page background. | Pure white removes the headroom a card needs to read as elevated. | CLAIM(wqTZuEQ2P-s@01:59) |
+| 20 | A border pushed darker so it holds contrast on the light ground. | The same border left at its dark-mode value, invisible on white. | The relationship to keep is contrast, not the original color. | CLAIM(wqTZuEQ2P-s@02:26, wqTZuEQ2P-s@03:06) |
+| 21 | Shadows rebuilt from the surface color they fall on. | Dark-mode shadow values reused unchanged in the light version. | A shadow is derived from its ground and cannot be copied between modes. | CLAIM(Y8g3YtZckco@02:51, Y8g3YtZckco@03:04) |
+| 22 | Brand colors held as named swatches with hex values, exported as a swatch file. | Brand color sampled repeatedly from images and past exports. | Sampling drifts and produces near-duplicate shades nobody can reconcile. | CLAIM(zl_7yHh2PSc@00:29, zl_7yHh2PSc@03:41) |
+| 23 | A palette where each color shows a different value under a gray overlay. | A palette whose colors all collapse to the same value when desaturated. | Differing values are what let the eye separate elements at a glance. | CLAIM(2QTHs7QSR9o@17:12, 2QTHs7QSR9o@17:22) |
+| 24 | A grayscale poster given a warm energetic scheme because the message is about change. | The same poster left in gray, or given a scheme chosen for looks alone. | Color is selected from the message, then tuned to the audience. | CLAIM(HKtTNOgfhAU@00:19, HKtTNOgfhAU@00:25) |
+| 25 | One accent color doing all the guiding on an otherwise neutral page. | Several colors each marking something different until nothing marks anything. | A single accent keeps its signalling power. | CLAIM(wnkAguggRCQ@00:24, wnkAguggRCQ@00:36) |
+| 26 | A logo in one or two colors with each hue justified. | A logo carrying many colors because the designer liked all of them. | Multi-hue marks need a reason per hue or they read as noise. | CLAIM(HKtTNOgfhAU@19:04, HKtTNOgfhAU@19:41) |
+| 27 | Brand color placed as a background field so it reads at scale. | Brand color used only on a word of type, where it loses strength. | Area decides how much of the brand color actually registers. | CLAIM(vo_lUWK_deo@06:29) |
+
+## Decision tables (option A vs B -> pick when)
+
+### Harmony choice
+
+| Option A | Option B | Pick A when | Pick B when | citation |
+|----------|----------|-------------|-------------|----------|
+| Complementary | Analogous | You need contrast, drama, and a button or headline that separates from the ground. | You need calm, cohesion, and a brand that should whisper rather than shout. | CLAIM(CxXKHiCpKs4@01:02, CxXKHiCpKs4@01:38) |
+| Split-complementary | Straight complementary | You want energy without the harshness of a direct opposite pair. | Maximum contrast matters more than comfort and the content can carry the intensity. | CLAIM(CxXKHiCpKs4@02:26, HKtTNOgfhAU@28:14) |
+| Monochromatic | Triadic | The goal is calm, curation, and one dominant brand hue. | The design needs to grab attention (charts, infographics, signage) and can survive the collision. | CLAIM(HKtTNOgfhAU@27:51, HKtTNOgfhAU@30:03) |
+| One hue plus black and white | Five-color palette | The project is small and the risk of mistakes has to stay near zero. | The interface needs states, sections and a dedicated action color. | CLAIM(Co75kmQtbaA@10:32, HMT_7esBbVA@01:54) |
+| Tetradic with one dominant | Tetradic at equal weight | You can commit to one hue owning the frame and three staying in accent roles. | Never. Four equal hues read as four competitors. | CLAIM(2QTHs7QSR9o@08:37, 2QTHs7QSR9o@09:02) |
+
+### Value and proportion
+
+| Option A | Option B | Pick A when | Pick B when | citation |
+|----------|----------|-------------|-------------|----------|
+| Desaturate the competing color | Raise contrast between them | Two hues are fighting for the same attention. | One element genuinely has to win the frame. | CLAIM(Co75kmQtbaA@23:54, XNkV6m4fosw@01:06) |
+| 60/30/10 | Flat equal distribution | Any layout with a clear primary action or reading order. | Never in client work; it removes the hierarchy entirely. | CLAIM(CxXKHiCpKs4@05:08, CxXKHiCpKs4@10:28) |
+| Tinted neutral for surfaces | Pure black or pure white | The palette must feel like one family and needs room for elevation. | The brand explicitly runs a hard black-and-white identity. | CLAIM(2QTHs7QSR9o@17:51, wqTZuEQ2P-s@01:59) |
+| Bold color in small doses | Bold color as a field | The content needs breathing room and the action needs to stand out. | The brand identity is itself a bold color block and the copy is minimal. | CLAIM(HMT_7esBbVA@12:57) |
+| Black or dark gray body text | Colored body text | Always, at reading size. | Headlines and display type only. | CLAIM(HMT_7esBbVA@13:27, Co75kmQtbaA@08:56) |
+
+### Mode conversion
+
+| Option A | Option B | Pick A when | Pick B when | citation |
+|----------|----------|-------------|-------------|----------|
+| Tinted off-white page background | Pure white page background | A card must sit above the page and read as a separate layer. | There are no layered surfaces at all. | CLAIM(wqTZuEQ2P-s@01:59) |
+| Push the border darker in light mode | Keep the border value unchanged | The border needs to keep the contrast it had in the dark version. | Never; unchanged values lose their relationship to the ground. | CLAIM(wqTZuEQ2P-s@02:26) |
+| Rebuild shadows from the surface | Reuse the shadow value | Always in a mode change. | Never. | CLAIM(Y8g3YtZckco@02:51) |
+| Colors and values only | Layout and embellishment changes too | Always in a mode change; the brief is a color exercise. | A genuine redesign, which is a different job. | CLAIM(wqTZuEQ2P-s@13:00, Y8g3YtZckco@05:15) |
+
+## Anti-patterns (cited)
+
+- Equal thirds of three colors across a layout with no dominant. CLAIM(CxXKHiCpKs4@10:28)
+- A call to action painted in a muted color that blends into the surface. CLAIM(CxXKHiCpKs4@10:46)
+- Footer or secondary links set at almost no contrast against a dark ground. CLAIM(CxXKHiCpKs4@11:32)
+- Bold color blocking filling large background areas. CLAIM(HMT_7esBbVA@12:57)
+- Brand color used for body copy. CLAIM(HMT_7esBbVA@13:27)
+- The reserved action color reused anywhere other than the action. CLAIM(HMT_7esBbVA@13:44)
+- A gray control for an action that is available. CLAIM(RBNu4dzaqK8@05:12)
+- Choosing a hue that contradicts the category the product sits in. CLAIM(RBNu4dzaqK8@00:56)
+- Every brand color pushed into the interface at once. CLAIM(Co75kmQtbaA@28:20)
+- A palette where two colors carry different amounts of gray. CLAIM(Co75kmQtbaA@22:35)
+- Untreated saturated primaries in a product aimed at children, which reads as budget. CLAIM(wnkAguggRCQ@13:59)
+- Flag-saturation red and blue where the brand wants a vintage tone. CLAIM(wnkAguggRCQ@20:01)
+- A border left at its dark-mode value in the light version. CLAIM(wqTZuEQ2P-s@02:26)
+- Dark-mode shadow values copied into light mode. CLAIM(Y8g3YtZckco@02:51)
+- Maintaining a brand color by sampling it out of images. CLAIM(zl_7yHh2PSc@00:29)
+- Saturated colored type at body size. CLAIM(Co75kmQtbaA@08:56)
+- A logo carrying more hues than the designer can justify. CLAIM(HKtTNOgfhAU@19:41)
+
+## Creator claims (unverified)
+
+- Roughly nine in ten consumers judge a brand on color alone, attributed to unspecified studies. CLAIM(XNkV6m4fosw@00:00)
+- A 1974 study by K.W. Jacobs found red more stimulating than green and green more than blue, with measurable heart-rate effects. CLAIM(XNkV6m4fosw@00:18)
+- A 1981 study attributed to Richard Cooler found color affects EEG readings, heart rate and emotional perception of objects. CLAIM(XNkV6m4fosw@00:32)
+- A HubSpot test found a red call-to-action button beating a green one by twenty-one percent click-through. CLAIM(XNkV6m4fosw@03:09, HKtTNOgfhAU@06:56)
+- Studies show women prefer softer pastel colors and men prefer bolder ones, presented as an average only. CLAIM(XNkV6m4fosw@04:07)
+- Seventy-eight percent of people who encountered Cadbury on Facebook were female, used to explain the purple branding. CLAIM(HKtTNOgfhAU@17:58)
+- Nine out of ten designers struggle to choose colors because they lack a defined process. CLAIM(Co75kmQtbaA@00:00)
+- A printed reference color wheel cost about ten dollars and shows complement, split complement, tetrad, analogous and triad relations. CLAIM(HKtTNOgfhAU@22:04)
+- Painted a different color association per culture: red as love in one market and anger in another, white as purity in one and mourning in another. CLAIM(XNkV6m4fosw@03:48, HKtTNOgfhAU@20:47)
+
+## Tool-specific (dated)
+
+- Adobe Illustrator: shift-click the color swatch area to open sliders, then shift-drag to move all channels together for fast tints and highlights (2019, repeated 2023). CLAIM(F_XiBUXY8cU@01:15, HKtTNOgfhAU@13:04)
+- Adobe Illustrator: a complement command inside the color panel returns the opposite on the wheel (2019, repeated 2023). CLAIM(F_XiBUXY8cU@02:34, HKtTNOgfhAU@13:33)
+- Adobe Illustrator: the Edit Colors menu converts a whole selection to grayscale or other presets in one action (2019, repeated 2023). CLAIM(F_XiBUXY8cU@04:06, HKtTNOgfhAU@14:00)
+- Adobe Illustrator: global swatches are created from the swatches panel with the global box checked and recolor every usage when edited (2019, repeated 2023). CLAIM(F_XiBUXY8cU@04:51, HKtTNOgfhAU@14:26)
+- Adobe Illustrator Recolor Artwork with the link icon checked shifts a whole scheme at once (2023). CLAIM(HKtTNOgfhAU@23:19)
+- Photoshop: a hue and saturation adjustment layer with the eyedropper targets a color range with no masking (2023). CLAIM(HKtTNOgfhAU@25:57)
+- Adobe Color explore accepts a keyword and returns themed schemes; a saved theme lands in the Illustrator libraries panel and can be added to swatches (2017, 2022, 2023). CLAIM(ZBpMMD4Pyyk@01:17, ZBpMMD4Pyyk@03:21, Co75kmQtbaA@12:54, HKtTNOgfhAU@21:08)
+- Coolors: pull a palette from a logo image, lock the colors you want to keep, and regenerate the rest on the spacebar (2021). CLAIM(HMT_7esBbVA@03:16, HMT_7esBbVA@04:24)
+- Named browser tools for palette building: a wheel tool with harmony modes, a manual picker whose axes map to hue and value, and a trending-palette gallery with keyword search (2023). CLAIM(-4lMJ4is2pE@08:59, -4lMJ4is2pE@11:29, -4lMJ4is2pE@12:05)
+- Palette file formats: swatch exchange for Adobe apps, a platform-native format for the Apple picker, and a Sketch-specific format; a paid converter bridges the first to the second (2017). CLAIM(zl_7yHh2PSc@02:12, zl_7yHh2PSc@05:56)
+- Sketch: a palette plugin saves and loads document colors, and a separate path loads them globally across documents (2017). CLAIM(zl_7yHh2PSc@08:26, zl_7yHh2PSc@08:55)
+- An Illustrator extension panel exposes spot color books with per-book usage notes, harmony suggestions, and image color extraction to the nearest reference (2020). CLAIM(PjreouILiAY@00:58, PjreouILiAY@01:41, PjreouILiAY@02:08)
+- Browser tools for duotone creation and for previewing a scheme on sample layouts (2023). CLAIM(HKtTNOgfhAU@23:53, HKtTNOgfhAU@25:07)
+- A web image color picker to lift hex values from a client inspiration photo (2025). CLAIM(CxXKHiCpKs4@06:42)
+- Figma selection colors panel for remapping every instance of one color in a frame (2024, 2026). CLAIM(wqTZuEQ2P-s@07:03, Y8g3YtZckco@02:10)
+
+## Disagreements between creators (who says what, cited)
+
+- **Does red help or hurt a call to action.** Satori Graphics cites a test where a red button beat a green one on click-through by twenty-one percent (CLAIM(XNkV6m4fosw@03:09)); Flux Academy (Ran) argues a red buy-now button reads as danger and makes people wary of clicking (CLAIM(RBNu4dzaqK8@06:04)). Flux Academy (Matt) elsewhere points at a red signup button on an otherwise monochrome site as the correct way to draw the eye (CLAIM(Co75kmQtbaA@37:36)). Reading: red reliably attracts attention; whether it converts depends on the functional reading of the context, so test it rather than adopting either rule.
+- **What a tone is.** Envato Tuts+ defines a tone as the hue with gray added (CLAIM(2QTHs7QSR9o@03:36)); Satori Graphics defines it as the hue with both white and black added (CLAIM(HKtTNOgfhAU@26:54)); Flux Academy describes it as tint and shade together, roughly adding gray (CLAIM(Co75kmQtbaA@23:14)). Reading: all three arrive at the same desaturated mid-value; the practical rule is law 16 as stated by Envato, and the disagreements are definitional rather than behavioural.
+- **How many colors.** Wes McDowell wants about five including two neutrals for a website (CLAIM(HMT_7esBbVA@01:54)); Flux Academy wants the fewest that work and shows one hue plus black and white as a complete scheme (CLAIM(Co75kmQtbaA@10:06)); Satori Graphics says one or two colors is the safe bet for a logo (CLAIM(HKtTNOgfhAU@19:04)). Reading: these are scopes rather than contradictions. Logo one to two, small site one plus neutrals, interface five.
+- **How much weight color psychology carries.** Satori Graphics treats color psychology as near-universal and dismisses skeptics (CLAIM(HKtTNOgfhAU@09:41)); Flux Academy says you cannot rely on any one element and that a hue alone does not create the feeling (CLAIM(Co75kmQtbaA@03:23)); Flux Academy (Matt) notes people disagree about color psychology but accepts that meaning exists within a cultural context (CLAIM(wnkAguggRCQ@11:34)). Reading: use association as a starting hypothesis to be checked against the audience, never as a mechanism claim on its own.
+- **Whether monochrome can carry a brand.** Satori Graphics says monochrome never pops and should not be used where attention is needed (CLAIM(HKtTNOgfhAU@27:51)); Flux Academy uses a monochrome scheme precisely to make one brand hue dominate a racing driver's site (CLAIM(wnkAguggRCQ@03:42)). Reading: both hold. Monochrome concentrates a brand color without competing hues and simultaneously removes contrast-based attention-grabbing.
+
+## Suggested sub-skills
+
+- **color-brief-and-hue-selection** (laws 1-9): run the four pre-questions, derive feeling and personality keywords, and pick the hue from audience and cultural evidence rather than preference.
+- **color-palette-construction** (laws 10-29): choose a harmony, match tones, build tints and shades, assign neutrals, and lay the result out at 60/30/10.
+- **color-application-rules** (laws 30-45): the usage contract that makes a palette work in a layout - reserved action color, text values, background extremes, accent discipline, function-first review.
+- **color-mode-conversion** (laws 46-53): move a design between light and dark while preserving relationships, contrast and value ordering instead of copying values.
+- **color-palette-operations** (laws 54-59): keep one authoritative palette with named swatches and exported files so brand color never drifts between tools.

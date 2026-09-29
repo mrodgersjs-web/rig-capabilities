@@ -1,0 +1,202 @@
+# Motion and 3D laws (Design Studio OS corpus)
+
+Coverage: 16 videos read (4YFRYho3vuM, acjm7wBcrMs, vCru1T5ajF8, hHp4FGVcHjY, 20IfkyJigKg, P8hh8K1EuWE, q5UFK4ziDuE, gXOY8Ts44dA, v1hw3VUnUYc, d5ngkWU2TY8, -QuzxYtwkyU, EEj3PYjwyC0, fB7h2RxXpqA, 8D6b3McyhhU, ptQ6Re6JvWM, K0Dh-8rHMLk). Channels: Flux Academy (4), Grow with Alex (2), Jesse Showalter (3), Self-Made Web Designer (1), kwoo studio (1), Punit Chawla (3), Envato Tuts+ (2). Date range 2019-01-22 to 2026-08-06. Top-10 channels present: flux-academy, grow-with-alex, jesse-showalter, self-made-web-designer, kwoo-studio.
+
+## Laws
+
+### States, triggers, and the board
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 1 | Draw every beat as a named state before you connect anything: one frame or segment per rest, hover, press, or destination. A component set, a variant list, or a timeline cut at the moment the action changes all count. Do not invent the path while you are wiring arrows. | Flux Academy, Jesse Showalter, Punit Chawla | CLAIM(20IfkyJigKg@00:49, 20IfkyJigKg@01:54, 4YFRYho3vuM@02:28, d5ngkWU2TY8@00:54, d5ngkWU2TY8@02:38, K0Dh-8rHMLk@04:08, P8hh8K1EuWE@01:14) | consensus | yes |
+| 2 | Give every layer that must morph the same name in every state. A matcher only interpolates layers it can pair. A long chain with default names becomes unreadable, so rename before the chain grows. | Flux Academy | CLAIM(hHp4FGVcHjY@02:26, hHp4FGVcHjY@14:51, vCru1T5ajF8@13:25, 20IfkyJigKg@05:13) | single-source | yes |
+| 3 | Leave the arriving property in the start state even when it is invisible: a fill at 0 percent, a mask parked just outside the shape, or the incoming chips sitting below a clipped frame. If the layer is missing from the previous frame, it pops or fades instead of traveling. | Flux Academy | CLAIM(hHp4FGVcHjY@02:21, hHp4FGVcHjY@02:45, vCru1T5ajF8@03:04, 20IfkyJigKg@16:45, 20IfkyJigKg@16:57) | single-source | yes |
+| 4 | Connect drag or click only between neighboring states. A finger cannot jump from the far-left card to the far-right card in one swipe, so do not draw that arrow. | Flux Academy | CLAIM(4YFRYho3vuM@03:39, 4YFRYho3vuM@03:48, vCru1T5ajF8@11:38, vCru1T5ajF8@12:06) | single-source | yes |
+| 5 | Put the prototype on the component, then drop instances into the screen. One timing fix on the main component updates every copy. | Flux Academy | CLAIM(hHp4FGVcHjY@06:02, hHp4FGVcHjY@09:46, 4YFRYho3vuM@04:17) | single-source | yes |
+| 6 | Match the trigger to the act. Click, drag, hover, or a directional press should be what the person does. Use after-delay or on-load only for a settle or a loop that must start without a second tap. | Flux Academy, Jesse Showalter, Punit Chawla | CLAIM(hHp4FGVcHjY@04:14, hHp4FGVcHjY@04:31, vCru1T5ajF8@03:54, 20IfkyJigKg@07:44, d5ngkWU2TY8@04:36, fB7h2RxXpqA@08:12, K0Dh-8rHMLk@05:06, gXOY8Ts44dA@08:01) | consensus | yes |
+| 7 | Preview in a named flow, name the fault (knob leaving the track, a radius pop, a linear loop), change that one property, and preview again. Do not lock the first easing guess. | Flux Academy, kwoo studio, Envato Tuts+ | CLAIM(hHp4FGVcHjY@10:41, hHp4FGVcHjY@10:49, 20IfkyJigKg@09:34, 20IfkyJigKg@16:26, -QuzxYtwkyU@09:46, 8D6b3McyhhU@03:49, 8D6b3McyhhU@04:00) | consensus | yes |
+| 8 | Write the motion strategy before the timeline: a board of frames for a UI story, or research-backed intent for a brand system. Opening the editor with no path means you animate blind. | Flux Academy, kwoo studio | CLAIM(20IfkyJigKg@00:49, 20IfkyJigKg@02:00, -QuzxYtwkyU@12:06, -QuzxYtwkyU@12:26) | consensus | yes |
+| 9 | When one control needs both hover and active, make those variants of one component. A new screen for every combination tangles the file. | Flux Academy | CLAIM(20IfkyJigKg@02:46, 20IfkyJigKg@03:27, 20IfkyJigKg@04:47) | single-source | yes |
+| 10 | Send a back control to the resting state, not the hover you passed through. The closed card should not stay highlighted after the person leaves. | Flux Academy | CLAIM(20IfkyJigKg@18:29, 20IfkyJigKg@18:32) | single-source | yes |
+| 11 | An interactive file has four parts: a state (a playable segment), a transition between states, an input the transition checks, and an interaction that fires the input. Cut segments where the picture actually changes, and set which state is initial. | Jesse Showalter | CLAIM(d5ngkWU2TY8@00:52, d5ngkWU2TY8@01:12, d5ngkWU2TY8@01:26, d5ngkWU2TY8@01:38, d5ngkWU2TY8@03:58) | single-source | yes |
+| 12 | Loop an idle by playing one direction and reversing it, instead of authoring both ways. A boolean (still on the first side, or not) is enough to flip a toggle. Directional presses (left, right, up, down) each need their own scene. | Jesse Showalter | CLAIM(d5ngkWU2TY8@07:01, d5ngkWU2TY8@07:03, d5ngkWU2TY8@07:23, d5ngkWU2TY8@10:10, d5ngkWU2TY8@10:17) | single-source | yes |
+
+### Timing, easing, and one signal
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 13 | Keep a tap or a card drag near 100 to 300 ms. A hover grow can run near 450 ms, a drag that also shifts a gradient near 500 ms. Stretch past that only when the path is the content: a line draw near 3 seconds, a readable text slider near 800 ms, a liquid fill near 4 to 5 seconds, or a scroll gap tall enough to hold the beat. | Flux Academy, Punit Chawla, Jesse Showalter | CLAIM(hHp4FGVcHjY@04:00, hHp4FGVcHjY@04:42, vCru1T5ajF8@11:07, vCru1T5ajF8@04:08, vCru1T5ajF8@17:10, fB7h2RxXpqA@08:44, fB7h2RxXpqA@12:23, EEj3PYjwyC0@05:15, K0Dh-8rHMLk@05:38, P8hh8K1EuWE@04:34) | consensus | yes |
+| 14 | Hold a cycling headline on each word about 1 to 1.5 seconds, then swap in about 200 ms ease-out. Mix short and long words. A cycle that only grows then shrinks feels mechanical. | Flux Academy | CLAIM(vCru1T5ajF8@24:14, vCru1T5ajF8@24:47, vCru1T5ajF8@25:32, vCru1T5ajF8@25:34) | single-source | yes |
+| 15 | Do not ship linear motion. Use ease-out on a drag or an arrival, ease-in-out on a tap or a loop, and a spring only on a physical knob. If the spring leaves the track, shrink the knob and lower the damping until it kisses the edge and settles inside. | Flux Academy, Jesse Showalter, kwoo studio, Punit Chawla | CLAIM(4YFRYho3vuM@03:04, hHp4FGVcHjY@07:43, hHp4FGVcHjY@09:17, hHp4FGVcHjY@10:08, gXOY8Ts44dA@09:00, gXOY8Ts44dA@09:07, -QuzxYtwkyU@09:46, -QuzxYtwkyU@10:08, K0Dh-8rHMLk@05:25, K0Dh-8rHMLk@05:31, fB7h2RxXpqA@08:36) | consensus | yes |
+| 16 | Change one signal per beat. If an icon already rotates from plus to minus, do not recolor it in the same 300 ms. If a fill is fading, do not also animate stroke radius. | Flux Academy | CLAIM(hHp4FGVcHjY@15:46, hHp4FGVcHjY@17:03, hHp4FGVcHjY@18:10) | single-source | yes |
+| 17 | Shape the curve on purpose. An S-curve eases in and out. A handle pulled past the baseline bounces at that end. A straight path accelerates. Trial it; do not accept the default. | Flux Academy | CLAIM(20IfkyJigKg@08:18, 20IfkyJigKg@08:26, 20IfkyJigKg@08:56) | single-source | yes |
+| 18 | Make the selected card the only full-opacity, stroked, unrotated item. Park neighbors near 70 percent opacity and a small tilt (about 8 degrees) so depth reads without hiding the choice. | Flux Academy | CLAIM(vCru1T5ajF8@06:22, vCru1T5ajF8@06:52, vCru1T5ajF8@07:00, vCru1T5ajF8@09:16) | single-source | yes |
+| 19 | Stagger the start. Offset layer timing so the group does not depart on one frame, and give inner chips of a 3D hover different loop offsets so they do not move as one slab. | kwoo studio, Jesse Showalter | CLAIM(-QuzxYtwkyU@10:47, -QuzxYtwkyU@10:54, -QuzxYtwkyU@11:00, gXOY8Ts44dA@04:10, gXOY8Ts44dA@08:22, gXOY8Ts44dA@08:32) | consensus | yes |
+
+### Layout the interpolation needs
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 20 | Build a carousel as an auto-layout stack inside a centered, clipping frame, then duplicate that frame once per resting position. Do not keyframe one card through every slot. | Flux Academy | CLAIM(4YFRYho3vuM@01:12, 4YFRYho3vuM@01:56, 4YFRYho3vuM@02:01, 4YFRYho3vuM@02:06) | single-source | yes |
+| 21 | For a word that swaps inside a sentence, isolate it in a frame one line tall and as wide as the longest word, right-align the text, clip overflow, and auto-layout it with the static words set to hug and center so the line stays centered as width changes. | Flux Academy | CLAIM(vCru1T5ajF8@18:49, vCru1T5ajF8@19:28, vCru1T5ajF8@19:49, vCru1T5ajF8@20:20, vCru1T5ajF8@23:15, vCru1T5ajF8@23:24) | single-source | yes |
+| 22 | Stack duplicate type or shapes, then step each lower layer by a fixed offset (about 4 px down and 4 px sideways) and a fixed rotation step (about 2 degrees) so a drag between two frames reads as depth. | Flux Academy | CLAIM(vCru1T5ajF8@14:38, vCru1T5ajF8@14:45, vCru1T5ajF8@15:14) | single-source | yes |
+| 23 | Reveal a line by masking a colored rectangle over the vector. Park the rectangle just outside the line at the start and just past the end at the finish. Never pull the mask outside the component frame. | Flux Academy | CLAIM(vCru1T5ajF8@02:29, vCru1T5ajF8@03:04, vCru1T5ajF8@03:17) | single-source | yes |
+| 24 | Put expanding rows in auto layout with a fixed width, vertical hug, and a constant gap (about 20 px). Fix the section height and clip content so opening one row pushes the others by the same amount. | Flux Academy | CLAIM(hHp4FGVcHjY@14:15, hHp4FGVcHjY@19:43, hHp4FGVcHjY@20:43, hHp4FGVcHjY@20:51, hHp4FGVcHjY@21:08) | single-source | yes |
+| 25 | Make the tap target the whole row or control, not only the tiny icon, unless the icon is the only affordance. | Flux Academy | CLAIM(hHp4FGVcHjY@16:21, hHp4FGVcHjY@16:27) | single-source | yes |
+| 26 | Fake a photo swap by stacking images in a vertical auto layout and shifting which image sits at the top, so the change reads as a scroll rather than a crossfade. | Flux Academy | CLAIM(20IfkyJigKg@12:57, 20IfkyJigKg@13:01, 20IfkyJigKg@13:25) | single-source | yes |
+| 27 | Clip content to hide a part that should enter later (an arrow, a label). Move it outside the frame in the default variant and inside the frame in the hover variant. | Flux Academy | CLAIM(20IfkyJigKg@03:52, 20IfkyJigKg@04:08, 20IfkyJigKg@06:14) | single-source | yes |
+
+### Scroll, scrub, and depth that must not reflow
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 28 | Hijack scroll with one sticky block plus invisible gap frames under it, then release back to normal scrolling. Gap height is the duration: shorter passes faster, taller holds longer. | Jesse Showalter | CLAIM(P8hh8K1EuWE@00:22, P8hh8K1EuWE@00:35, P8hh8K1EuWE@03:51, P8hh8K1EuWE@04:34, P8hh8K1EuWE@04:42, P8hh8K1EuWE@07:56) | single-source | yes |
+| 29 | Sticky fails unless every parent overflow is visible. The sticky layer itself may stay overflow hidden. Without empty space below the block, nothing sticks. | Jesse Showalter | CLAIM(P8hh8K1EuWE@02:18, P8hh8K1EuWE@02:30, P8hh8K1EuWE@02:46, P8hh8K1EuWE@03:14) | single-source | yes |
+| 30 | Drive a scroll-variant effect from named scroll sections entering view, and replay it in both directions. Match section names to layer names. The effect only exists on a component that already has variants. | Jesse Showalter | CLAIM(P8hh8K1EuWE@05:01, P8hh8K1EuWE@05:04, P8hh8K1EuWE@05:09, P8hh8K1EuWE@05:30, P8hh8K1EuWE@05:43, P8hh8K1EuWE@06:08, P8hh8K1EuWE@06:22) | single-source | yes |
+| 31 | Before scroll motion, strip the page: one body face, at most one accent face, a near-monochrome palette, and deliberate empty space. A cramped page will not look costly just because something moves. | Self-Made Web Designer | CLAIM(q5UFK4ziDuE@00:53, q5UFK4ziDuE@01:01, q5UFK4ziDuE@01:06, q5UFK4ziDuE@02:13, q5UFK4ziDuE@02:18, q5UFK4ziDuE@02:35) | single-source | yes |
+| 32 | Treat a product scroll shot as a video scrubbed by scroll position, like stop motion, not a model redrawn on every pixel. Generate it from a first frame and a last frame, then lock the closest still as the reference for the rest. | Self-Made Web Designer | CLAIM(q5UFK4ziDuE@02:55, q5UFK4ziDuE@03:00, q5UFK4ziDuE@03:59, q5UFK4ziDuE@04:03, q5UFK4ziDuE@04:05, q5UFK4ziDuE@04:53) | single-source | yes |
+| 33 | The clip must play cleanly forward and backward and stay one object. If the generator keeps a wrong part, mark the still (arrows, what moves where) instead of restating the prompt. | Self-Made Web Designer | CLAIM(q5UFK4ziDuE@05:36, q5UFK4ziDuE@05:45, q5UFK4ziDuE@06:06, q5UFK4ziDuE@06:10) | single-source | yes |
+| 34 | Do not scrub a raw video in the browser; precompute frames or the playhead stutters. Fade the clip edges so a background that misses the page color does not draw a hard rectangle on other monitors. | Self-Made Web Designer | CLAIM(q5UFK4ziDuE@06:48, q5UFK4ziDuE@06:53, q5UFK4ziDuE@07:00, q5UFK4ziDuE@07:02, q5UFK4ziDuE@07:50, q5UFK4ziDuE@08:39) | single-source | yes |
+| 35 | Kill hard edges on soft effects. Feather a smoke mask by hundreds of pixels, fade a scrubbed clip into the page, and build soft shadow with blur rather than a crisp stroke. | Envato Tuts+, Self-Made Web Designer, Punit Chawla | CLAIM(ptQ6Re6JvWM@07:45, ptQ6Re6JvWM@07:51, ptQ6Re6JvWM@08:01, q5UFK4ziDuE@08:39, fB7h2RxXpqA@02:29, fB7h2RxXpqA@02:41) | consensus | yes |
+| 36 | Scale, rotate, skew, and push depth with transforms, not by changing width and height. A layout-size change shoves the neighbors; a transform does not. | Jesse Showalter | CLAIM(gXOY8Ts44dA@00:49, gXOY8Ts44dA@01:00, gXOY8Ts44dA@01:05, gXOY8Ts44dA@02:57) | single-source | yes |
+| 37 | A flat rotate reads as a sticker. Turn on 3D rotation and set perspective so the axes share one vanishing point. Set the origin if the pivot should not be the center. Hide the back face only when the reverse side should vanish. Drop skew if the card looks broken. | Jesse Showalter | CLAIM(gXOY8Ts44dA@01:30, gXOY8Ts44dA@01:39, gXOY8Ts44dA@01:56, gXOY8Ts44dA@02:00, gXOY8Ts44dA@02:33, gXOY8Ts44dA@02:45, gXOY8Ts44dA@03:10, gXOY8Ts44dA@03:45) | single-source | yes |
+| 38 | For a 3D hover, wrap the card in a frame so transform controls exist, absolutely position the inner pieces, set overflow to visible, and round the container (about 30). Put base transforms on the closed variant and the offset on the open variant. Trigger on mouse enter and mouse leave, and preserve 3D on parent and children. | Jesse Showalter | CLAIM(gXOY8Ts44dA@04:36, gXOY8Ts44dA@04:42, gXOY8Ts44dA@04:54, gXOY8Ts44dA@05:18, gXOY8Ts44dA@06:00, gXOY8Ts44dA@06:15, gXOY8Ts44dA@06:42, gXOY8Ts44dA@06:50, gXOY8Ts44dA@07:58) | single-source | yes |
+
+### Social motion graphics
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 39 | Pull a quote and a motion reference before you open the editor, then change the wording and the layout so the piece is your version, not a trace. | Grow with Alex | CLAIM(acjm7wBcrMs@00:40, acjm7wBcrMs@00:56, acjm7wBcrMs@05:24) | single-source | yes |
+| 40 | Build at the delivery size: 1080 by 1350 for a feed post, 1080 by 1920 for a reel. Snap repeated elements to the center guides and scale the group together. | Grow with Alex | CLAIM(acjm7wBcrMs@01:32, acjm7wBcrMs@05:07, acjm7wBcrMs@05:13, acjm7wBcrMs@01:59, acjm7wBcrMs@06:07, acjm7wBcrMs@06:18) | single-source | yes |
+| 41 | Tell the beat in two pages: duplicate, change one word or one object state, hold each page about 3 to 4 seconds, and add a page transition. Do not pile five effects on one still. | Grow with Alex | CLAIM(acjm7wBcrMs@03:19, acjm7wBcrMs@03:30, acjm7wBcrMs@09:36, acjm7wBcrMs@10:14, acjm7wBcrMs@10:19) | single-source | yes |
+| 42 | Set the hook in a heavier face, all caps, with one keyword bold or in a second color. Set the verse smaller and sentence case, with a tighter gap than the default. Put glow, stars, or a soft gradient behind the hero, never in front of the type. Keep a watermark small and in a different face. | Grow with Alex | CLAIM(acjm7wBcrMs@02:14, acjm7wBcrMs@02:19, acjm7wBcrMs@02:29, acjm7wBcrMs@02:35, acjm7wBcrMs@03:09, acjm7wBcrMs@06:52, acjm7wBcrMs@07:15, acjm7wBcrMs@07:32) | single-source | yes |
+| 43 | Match the timeline to the audio you will post with. Drop a sound effect on the same frame as the visual hit, or use a trending track. Export every page as MP4. Write the caption as one summary sentence or a question, then a share prompt, then 3 to 7 matching tags. | Grow with Alex | CLAIM(acjm7wBcrMs@07:49, acjm7wBcrMs@07:55, acjm7wBcrMs@08:00, acjm7wBcrMs@11:55, acjm7wBcrMs@11:14, acjm7wBcrMs@11:24, acjm7wBcrMs@11:35) | single-source | yes |
+| 44 | To reuse a black-field animation, stack it above a plate of the same length, set the blend so the black drops out, lower brightness (about 50 down) and raise contrast, then shift curves so the color is no longer the source clip. Keep the clip's audio unless you replace the whole track. | Grow with Alex | CLAIM(v1hw3VUnUYc@01:27, v1hw3VUnUYc@02:34, v1hw3VUnUYc@02:38, v1hw3VUnUYc@03:04, v1hw3VUnUYc@03:11, v1hw3VUnUYc@03:32, v1hw3VUnUYc@04:00, v1hw3VUnUYc@04:38) | single-source | yes |
+
+### Icons, materials, atmosphere, and the handoff
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 45 | Path-draw only stroke icons, not filled shapes. Pull the icon out of its frame, flatten to one outline, and ungroup a multi-part mark before you flatten each part. Export SVG for a product and a video file when the mock itself must play the icon. | Punit Chawla | CLAIM(EEj3PYjwyC0@00:40, EEj3PYjwyC0@00:48, EEj3PYjwyC0@01:00, EEj3PYjwyC0@01:09, EEj3PYjwyC0@02:26, EEj3PYjwyC0@02:35, EEj3PYjwyC0@03:05, EEj3PYjwyC0@03:22) | single-source | no |
+| 46 | A soft raised control uses the page color as its fill, then two shadows: a dark one about +4, +4, blur 12, near 15 to 20 percent opacity, and a light one about -4, -4, blur 12, near 5 to 10 percent, with corner radius near 24. On hover, grow it, push the radius toward a circle, widen the light shadow, and ease-in-out near 450 ms. A drag level moves the knob and the gradient together in one smart animate near 500 ms. | Punit Chawla | CLAIM(fB7h2RxXpqA@02:00, fB7h2RxXpqA@02:02, fB7h2RxXpqA@02:37, fB7h2RxXpqA@02:41, fB7h2RxXpqA@02:46, fB7h2RxXpqA@03:22, fB7h2RxXpqA@03:42, fB7h2RxXpqA@02:53, fB7h2RxXpqA@07:17, fB7h2RxXpqA@07:25, fB7h2RxXpqA@08:36, fB7h2RxXpqA@12:00) | single-source | no |
+| 47 | Extruded type needs a ground plane in the same scene, thickness set on the depth axis, a thin bevel, and two lights: one casting a soft shadow under the letters, one picking out the counters. Keep diffuse, highlight, and shadow colors in one hue. Render, stop if it is wrong, change the light or the material, and render again. | Envato Tuts+ | CLAIM(8D6b3McyhhU@00:28, 8D6b3McyhhU@00:50, 8D6b3McyhhU@01:16, 8D6b3McyhhU@01:34, 8D6b3McyhhU@01:49, 8D6b3McyhhU@02:15, 8D6b3McyhhU@02:26, 8D6b3McyhhU@02:45, 8D6b3McyhhU@03:06, 8D6b3McyhhU@03:17, 8D6b3McyhhU@03:49) | single-source | no |
+| 48 | Build atmosphere from noise, not a painted puff. Raise contrast (a starting point near 75), scale width and height separately so the mass is not a square, drive a continuous loop from time, and add a second drift so it travels (sideways plus a little up). Sit it near 20 percent opacity. Mask the travel path and feather the mask until the edge disappears. | Envato Tuts+ | CLAIM(ptQ6Re6JvWM@01:47, ptQ6Re6JvWM@02:05, ptQ6Re6JvWM@02:18, ptQ6Re6JvWM@02:30, ptQ6Re6JvWM@02:44, ptQ6Re6JvWM@03:06, ptQ6Re6JvWM@04:06, ptQ6Re6JvWM@05:08, ptQ6Re6JvWM@06:14, ptQ6Re6JvWM@06:51, ptQ6Re6JvWM@07:08) | single-source | no |
+| 49 | A liquid icon is a smoothed mesh (about 3 to 4 subdivisions), colored with a depth gradient, then displaced with a smoother noise at low scale (about 10 to 15) and modest strength (about 10 to 20). Use two states, start on load, cycle, and do not rewind. Ease out over about 4 to 5 seconds. Show it through a glyph by subtracting the icon from a rectangle that matches the page color. | Punit Chawla | CLAIM(K0Dh-8rHMLk@01:28, K0Dh-8rHMLk@01:36, K0Dh-8rHMLk@01:42, K0Dh-8rHMLk@02:00, K0Dh-8rHMLk@02:51, K0Dh-8rHMLk@03:03, K0Dh-8rHMLk@03:10, K0Dh-8rHMLk@03:20, K0Dh-8rHMLk@03:34, K0Dh-8rHMLk@05:23, K0Dh-8rHMLk@05:36, K0Dh-8rHMLk@08:04, K0Dh-8rHMLk@08:11) | single-source | no |
+| 50 | Hand a layout to a motion app from a blank-file copy, not the team file. Ungroup auto layout before send, or accept extra precomps. Rasterize ornaments you will not animate per layer. If the plugin reference image arrives wrong, export the PNG yourself. Frame fills often do not transfer: rebuild the background as a solid sampled from the source. Keyframe the arrival first (about 30 frames), move the start, and pair position with opacity from 0 to 100. | kwoo studio | CLAIM(-QuzxYtwkyU@04:16, -QuzxYtwkyU@04:32, -QuzxYtwkyU@03:35, -QuzxYtwkyU@03:53, -QuzxYtwkyU@03:22, -QuzxYtwkyU@06:18, -QuzxYtwkyU@07:17, -QuzxYtwkyU@08:08, -QuzxYtwkyU@08:29, -QuzxYtwkyU@09:10, -QuzxYtwkyU@09:20) | single-source | yes |
+
+## Looks like / does not (good vs bad pairs)
+
+| # | looks like (good) | does not (bad) | why | citation |
+|---|-------------------|----------------|-----|----------|
+| 1 | A board of named states drawn before any arrow | One screen, with the path invented while prototyping | You cannot animate a story you have not mapped | CLAIM(20IfkyJigKg@00:49, 20IfkyJigKg@02:00) |
+| 2 | Drag arrows only between neighboring carousel states | A single drag from the far-right card straight to the far-left card | A finger cannot skip the middle card | CLAIM(4YFRYho3vuM@03:48, 4YFRYho3vuM@03:56) |
+| 3 | Fill present at 0 percent in the empty state, then rising as the icon grows | Fill added only on the last frame, so the color pops | Interpolation needs the same layer in both states | CLAIM(hHp4FGVcHjY@02:21, hHp4FGVcHjY@02:45) |
+| 4 | One tap grows the icon, then a 1 ms delay settles it | A second click required to finish the bounce | The settle is not a user decision | CLAIM(hHp4FGVcHjY@04:14, hHp4FGVcHjY@04:19) |
+| 5 | Knob shrunk so a spring hits the track edge and returns inside | Default bounce that leaves the pill | Overshoot past the container reads as a bug | CLAIM(hHp4FGVcHjY@10:00, hHp4FGVcHjY@10:34) |
+| 6 | Plus rotates into a minus, color held constant | Plus that changes shape and color in the same beat | Two signals at once feel jarring | CLAIM(hHp4FGVcHjY@15:16, hHp4FGVcHjY@15:46) |
+| 7 | Incoming chips parked below the clip in the previous frame | Chips that exist only on the destination and fade in | Travel needs the layer in both frames | CLAIM(20IfkyJigKg@16:45, 20IfkyJigKg@17:02) |
+| 8 | Back control returns to the resting card | Back control returns to the hovered card | Leaving should clear the hover | CLAIM(20IfkyJigKg@18:32) |
+| 9 | Headline cycle that mixes short and long words | A cycle that always grows then shrinks | Predictable size order feels mechanical | CLAIM(vCru1T5ajF8@25:34, vCru1T5ajF8@25:38) |
+| 10 | Layers eased, then offset so they do not start together | Every layer on a linear keyframe at the same time | Simultaneous starts do not look physical | CLAIM(-QuzxYtwkyU@09:46, -QuzxYtwkyU@10:54) |
+| 11 | Sticky block, parents set to visible overflow, blank gaps underneath | Sticky with a hidden parent overflow and no space below | Sticky is ignored unless parents can overflow | CLAIM(P8hh8K1EuWE@02:30, P8hh8K1EuWE@03:14) |
+| 12 | Scroll variant on a component, both directions | Scroll variant attempted on plain text, or only on the way down | The effect needs variants, and a one-way hijack feels broken on the way up | CLAIM(P8hh8K1EuWE@05:09, P8hh8K1EuWE@05:43) |
+| 13 | One face, near-monochrome, air, then motion | Motion dropped on a cramped, multi-font page | Restraint is what makes the scroll shot look costly | CLAIM(q5UFK4ziDuE@01:01, q5UFK4ziDuE@02:18) |
+| 14 | A clip scrubbed between a first frame and a last frame, edges faded | A prompt that only says to make a cool video, or a hard rectangle where colors miss | Vague prompts fight you, and monitors grade color differently | CLAIM(q5UFK4ziDuE@04:03, q5UFK4ziDuE@07:50) |
+| 15 | Card scaled with a transform, neighbors unmoved | Card resized in the layout, neighbors shoved aside | Transform scale does not reflow | CLAIM(gXOY8Ts44dA@00:49, gXOY8Ts44dA@01:05) |
+| 16 | 3D rotate plus perspective, one vanishing point | Flat 2D rotate, or 3D rotate with no perspective | Without perspective the flip has no depth | CLAIM(gXOY8Ts44dA@01:56, gXOY8Ts44dA@02:33) |
+| 17 | Inner chips flying off on their own offsets, ease-in-out | The whole card tilting as one slab on a linear loop | Separate pieces are the point of the hover | CLAIM(gXOY8Ts44dA@04:10, gXOY8Ts44dA@09:00) |
+| 18 | Two pages, one word changed, about 3 seconds each | One still with every effect turned on | The story is the change between states | CLAIM(acjm7wBcrMs@03:24, acjm7wBcrMs@10:14) |
+| 19 | Elements snapped to the center guide, scaled as one group | Copies scattered off-axis at mismatched sizes | Alignment is what makes a stack look intentional | CLAIM(acjm7wBcrMs@06:07, acjm7wBcrMs@06:18) |
+| 20 | Black-field clip above a matched-length plate, blend dropping the black, curves shifted | The source clip dropped on a light plate with its original color | Screen-style blend needs black, and an unrecolored reuse is a copy | CLAIM(v1hw3VUnUYc@01:27, v1hw3VUnUYc@03:11, v1hw3VUnUYc@04:00) |
+| 21 | Stroke icon pulled from its frame and flattened to one outline | A filled icon, or a multi-part group, sent straight to a path animator | Path draw needs one continuous stroke | CLAIM(EEj3PYjwyC0@00:45, EEj3PYjwyC0@01:09) |
+| 22 | Soft raised tile the same color as the page, two opposing shadows | A tile with a different fill and a single hard drop shadow | The soft look depends on matched color and a light-dark pair | CLAIM(fB7h2RxXpqA@02:02, fB7h2RxXpqA@02:07) |
+| 23 | Smoke at low opacity, mask feathered until the edge is gone | Noise at full opacity with a sharp mask edge | Atmosphere should sit in the scene, not cut a hole in it | CLAIM(ptQ6Re6JvWM@06:51, ptQ6Re6JvWM@07:45) |
+| 24 | Liquid cycling forward, ease-out, shown through a subtracted glyph | A rewind on the loop, or the mesh sitting beside the icon | Rewind reads as a glitch, and the glyph is the mask | CLAIM(K0Dh-8rHMLk@05:25, K0Dh-8rHMLk@08:11) |
+
+## Decision tables (option A vs B -> pick when)
+
+| decision | option A | option B | pick when |
+|----------|----------|----------|-----------|
+| Trigger | click, drag, hover, or a directional press | after-delay or on-load | A when a person acts; B when the next beat should fire alone |
+| Easing | ease-out or ease-in-out, under about 500 ms | spring, or a curve handle past the baseline | Spring or overshoot only for a physical knob or a playful entrance |
+| Duration | under 500 ms | 800 ms to 5 s, or a tall scroll gap | Short for taps and drags; long only when the path itself is the content |
+| In-between | place the object in the previous state so it travels | let the tool tween the gap | Author the path when travel must be seen; tween only when a blend is enough |
+| Scroll effect | sticky block plus gap frames and variants | a scrubbed clip between two frames | Sticky variants when the content is layout states; a scrubbed clip when a product transforms |
+| Depth | transform scale, rotate, perspective | changing width, height, or position in the layout | Transforms when neighbors must stay put |
+| 3D meaning | CSS-style transforms on flat cards | a mesh (extrude, displace) or a scrubbed film | Transforms for hover depth; a mesh or a film when the object itself must change volume |
+| Social canvas | 1080 by 1350 feed | 1080 by 1920 reel | Match the slot you will post to |
+| Reuse vs build | screen-blend a black-field clip and recolor it | build named states yourself | Reuse only for a feed graphic you will recolor; build states for a product control |
+| Page before motion | strip type, color, and space first | animate a busy layout | Always strip first if the goal is a costly-looking marketing site |
+
+## Anti-patterns (cited)
+
+- Connecting non-adjacent carousel states with one drag. CLAIM(4YFRYho3vuM@03:48)
+- Deleting a layer in the start state and expecting a fade or a travel. CLAIM(hHp4FGVcHjY@02:45, 20IfkyJigKg@16:45)
+- Leaving a spring so strong the knob exits the track. CLAIM(hHp4FGVcHjY@10:00)
+- Recoloring an icon in the same moment it changes shape. CLAIM(hHp4FGVcHjY@15:46)
+- Animating stroke radius and opacity together on an expanding panel. CLAIM(hHp4FGVcHjY@17:03)
+- Cycling headline words in strict size order. CLAIM(vCru1T5ajF8@25:38)
+- Returning a back control to the hover state. CLAIM(20IfkyJigKg@18:32)
+- Building a frame per hover-and-active combination. CLAIM(20IfkyJigKg@03:27)
+- Shipping linear keyframes, or a linear loop on every inner piece. CLAIM(-QuzxYtwkyU@10:08, gXOY8Ts44dA@09:00)
+- Starting every layer on the same frame. CLAIM(-QuzxYtwkyU@10:54)
+- Setting sticky while a parent overflow stays hidden, or with no gap below. CLAIM(P8hh8K1EuWE@02:30, P8hh8K1EuWE@03:14)
+- Putting a scroll-variant effect on text that has no variants. CLAIM(P8hh8K1EuWE@05:09)
+- Asking a generator for a cool video with no first frame, last frame, or reference still. CLAIM(q5UFK4ziDuE@04:03)
+- Scrubbing a raw video in the browser. CLAIM(q5UFK4ziDuE@06:53)
+- Leaving a hard edge where the clip background misses the page. CLAIM(q5UFK4ziDuE@07:50)
+- Resizing a card in the layout when you only wanted it bigger on hover. CLAIM(gXOY8Ts44dA@00:54)
+- 3D rotation with no perspective. CLAIM(gXOY8Ts44dA@02:33)
+- Scattering repeated graphics off the alignment guides. CLAIM(acjm7wBcrMs@06:18)
+- Tracing a reference post without changing the words. CLAIM(acjm7wBcrMs@05:24)
+- Shipping a graphic whose length does not match the audio. CLAIM(acjm7wBcrMs@07:55)
+- Sending a filled icon, still inside a frame, to a path animator. CLAIM(EEj3PYjwyC0@00:48, EEj3PYjwyC0@01:00)
+- Rewinding a liquid loop. CLAIM(K0Dh-8rHMLk@05:25)
+- A sharp mask on atmospheric noise. CLAIM(ptQ6Re6JvWM@07:45)
+
+## Creator claims (unverified)
+
+- A reference motivational clip was said to have passed 500,000 likes, and another account was said to have about 130,000 followers from about 130 posts. Not checked. CLAIM(acjm7wBcrMs@00:00, v1hw3VUnUYc@00:55)
+- Share is called one of the strongest signals for this format. Platform ranking is not verified here. CLAIM(acjm7wBcrMs@11:31)
+- Spending 15 to 30 minutes on research and assembly is said to lift the content. No measured lift is shown. CLAIM(acjm7wBcrMs@10:30)
+- Agencies are said to charge thousands, and the look is compared to a 50,000 dollar site. No invoice is shown. CLAIM(q5UFK4ziDuE@00:14, q5UFK4ziDuE@00:46)
+- The product-scroll look is dated by the creator to an earbuds page in 2019. Treat as the creator's history, not a sourced case study. CLAIM(q5UFK4ziDuE@00:06)
+- Freelance animation help is quoted from 10 to 100 dollars, then a markup on top. No invoice is shown. CLAIM(v1hw3VUnUYc@06:16)
+- A lifetime icon-plugin unlock is quoted at 14 dollars. Price not checked. CLAIM(EEj3PYjwyC0@02:10)
+- Digital brand guidelines with motion are said to support higher rates. No rate card is shown. CLAIM(-QuzxYtwkyU@00:42)
+- Posting once and missing a spike is not a verdict; consistency is prescribed. No account data is shown. CLAIM(v1hw3VUnUYc@05:22)
+
+## Tool-specific (dated)
+
+- Figma, 2020-2024: component sets, smart animate, on-drag, while hovering, after-delay, ease-out, ease-in-out, custom spring, custom bezier, auto layout hug versus fixed, clip content, and mask. A later motion model may rename these. CLAIM(4YFRYho3vuM@02:37, 20IfkyJigKg@08:01, hHp4FGVcHjY@08:37, fB7h2RxXpqA@08:24)
+- Figma custom spring values tried on a toggle in 2023: stiffness 600, damping 20, with a smaller 22 px knob. A starting point for that build, not a universal constant. CLAIM(hHp4FGVcHjY@09:17, hHp4FGVcHjY@10:14)
+- Figma, 2020: the soft raised style was taught as a trend. The shadow recipe can still be checked; the "next look" claim should not be treated as current. CLAIM(fB7h2RxXpqA@02:05)
+- Canva, 2023-2024: animated graphics filter, page duration, page transitions, effects glow, curves are not in Canva (recolor of reused clips is in CapCut in the 2023 video), and MP4 export of all pages. UI labels move. CLAIM(acjm7wBcrMs@01:43, acjm7wBcrMs@07:49, v1hw3VUnUYc@03:11, v1hw3VUnUYc@04:12)
+- Framer, 2025: sticky position, parent overflow visible, scroll sections, and scroll-variant effects on components. Panel names will drift. CLAIM(P8hh8K1EuWE@02:18, P8hh8K1EuWE@05:04, P8hh8K1EuWE@06:08)
+- Framer, 2024: 3D transforms (scale, skew, rotate, perspective, depth, origin, backface, preserve 3D), mouse enter and leave, loop mirror. Feature is dated to that release. CLAIM(gXOY8Ts44dA@00:08, gXOY8Ts44dA@02:33, gXOY8Ts44dA@08:01)
+- LottieFiles state machines, 2025: segments, event and boolean inputs, click interactions, reverse or bounce playback, and a prompt assistant that builds the graph. Export is a single dotLottie. The assistant is optional; the four-part model is the check. CLAIM(d5ngkWU2TY8@03:32, d5ngkWU2TY8@04:16, d5ngkWU2TY8@09:02)
+- Figma to After Effects via AEUX, 2025 video: send selection, rasterize flag, parametric shapes, 30 or 60 fps, comp duration. The same creator's description says AEUX is no longer supported and names Overlord 2 as the 2026 path. Treat the plugin steps as dated. The handoff checks in law 50 do not depend on the plugin name. CLAIM(-QuzxYtwkyU@01:11, -QuzxYtwkyU@05:38, -QuzxYtwkyU@11:33)
+- After Effects, 2019: fractal noise contrast near 75, non-uniform scale near 400 by 250, evolution driven by time times 150, offset turbulence for drift, complexity near 20, opacity near 20 percent, feather near 500. Those numbers are for that effect, not a house style. CLAIM(ptQ6Re6JvWM@01:47, ptQ6Re6JvWM@02:30, ptQ6Re6JvWM@03:19, ptQ6Re6JvWM@06:20, ptQ6Re6JvWM@08:01)
+- Photoshop CC or CS6 Extended, 2019: 3D extrusion from a type layer, merge with a depth-map plane, infinite lights, render. That 3D menu is not a current Photoshop path. Keep the lighting checks; do not follow the menu names. CLAIM(8D6b3McyhhU@00:22, 8D6b3McyhhU@00:31)
+- Spline plus an embed plugin, 2022: smooth subdivisions, depth material, displace set to a smoother noise, states with cycle and no rewind, export with background chrome off, paste into a rectangle. Plugin and embed UI will move. CLAIM(K0Dh-8rHMLk@01:08, K0Dh-8rHMLk@05:57, K0Dh-8rHMLk@06:02, K0Dh-8rHMLk@06:29)
+- Figma icon plugins, 2022: a community path animator for stroke icons, and a timeline tool for per-shape keyframes, with SVG or video export. Plugin names and the paid tier will change. CLAIM(EEj3PYjwyC0@01:23, EEj3PYjwyC0@04:11, EEj3PYjwyC0@06:40)
+- Higgsfield, Kling 3.0, GSAP, and a frame-prep library, 2026: first-and-last-frame generation, then scroll-scrub code because raw video scrubbing stutters. Model names and sponsor tools change. CLAIM(q5UFK4ziDuE@03:12, q5UFK4ziDuE@06:18, q5UFK4ziDuE@06:34, q5UFK4ziDuE@06:48)
+
+## Disagreements between creators (who says what, cited)
+
+- Flux Academy treats motion as a prototype of a control: short, one property at a time, and the object must already exist in the previous frame or it will not travel. CLAIM(hHp4FGVcHjY@00:00, hHp4FGVcHjY@05:30, 20IfkyJigKg@16:45)
+- Jesse Showalter, on a 2025 interactive file, will let the tool fill the gap between two wiggles when the in-between path does not matter. That conflicts with the Flux rule when travel is the point. Author the path for travel; tween only for a blend. CLAIM(d5ngkWU2TY8@08:37, d5ngkWU2TY8@08:41, 20IfkyJigKg@16:57)
+- Jesse Showalter will hijack the scrollbar for several tall gaps so variants can play. Self-Made Web Designer says the costly look is restraint, and that a product transformation should be a scrubbed clip, not more interface chrome. CLAIM(P8hh8K1EuWE@00:22, q5UFK4ziDuE@01:01, q5UFK4ziDuE@02:55)
+- Grow with Alex, March 2024, says change the words so a reference is not a trace. The same creator, December 2023, says download a black-field animation and only swap the plate, the blend, and the curves. Use the 2024 rule when the words are the content. Use the 2023 rule only for a black-field graphic you will recolor, and do not present it as original animation. CLAIM(acjm7wBcrMs@05:24, v1hw3VUnUYc@01:04, v1hw3VUnUYc@04:34)
+- Grow with Alex treats motion as a feed asset: black field, bold caps, a 3-second before and after, audio matched to length. Weight that only for a reel. Weight Flux when the artifact is a product control. CLAIM(acjm7wBcrMs@01:36, acjm7wBcrMs@03:30)
+- Three different things are called 3D. Jesse Showalter, 2024, means transforms on flat cards that must not reflow. Envato Tuts+, 2019, means an extruded type scene with lights. Punit Chawla, 2022, means a displaced mesh masked by a glyph. Do not mix the recipes. CLAIM(gXOY8Ts44dA@00:08, 8D6b3McyhhU@00:31, K0Dh-8rHMLk@03:03)
+- kwoo studio's December 2025 video walks through a free Figma-to-After-Effects plugin. The description on that same video says the plugin is no longer supported and names a paid replacement for 2026. Follow law 50, not the plugin clicks. CLAIM(-QuzxYtwkyU@01:11, -QuzxYtwkyU@11:33)
+- Punit Chawla, 2020, taught the soft raised style as the coming look and borrowed hover lift from an older material system. Later videos in this set do not use that style. Keep the shadow checks if you choose the style; do not treat it as the default. CLAIM(fB7h2RxXpqA@02:05, fB7h2RxXpqA@07:42)
+
+## Suggested sub-skills (2-5 names, one line each, which law #s they own)
+
+1. prototype-state-machine: board the beats, name the layers, build variants, and wire only the gesture that should fire. Owns laws 1-12 and 20-27.
+2. micro-interaction-timing: pick duration, easing, and one signal per beat, then preview until the overshoot and the simultaneous start are gone. Owns laws 13-19.
+3. scroll-scrub-and-3d: sticky gaps, a scrubbed product clip, and transforms or meshes that do not reflow the page. Owns laws 28-38.
+4. social-motion-graphic: size the canvas, stage a two-beat story, style type, and lock audio length, including a recolor of a black-field clip. Owns laws 39-44.
+5. material-motion-handoff: stroke-icon paths, soft materials, extruded light, atmospheric noise, and a clean send into a timeline app. Owns laws 45-50.

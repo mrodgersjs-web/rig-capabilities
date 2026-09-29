@@ -8,6 +8,19 @@ metadata:
   skill-count: "400"
 ---
 
+## Front door moved (2026-09-28)
+
+Design work now enters through **`design-studio-os`** (`/design-studio`), the RIG Design Studio OS meta
+skill in `~/Developer/rig-design-studio-os`. It carries 15 stage mains with 103 sub-skills, 16 agents,
+10 harnesses, 8 loops and 7 dormant hooks, all backed by 826 laws cited CLAIM(videoId@mm:ss) to the
+design YouTube corpus. This router still resolves its own table below; where a row names a `web-*`
+skill, the matching `ds-*` stage is now the canonical owner (see
+`~/Developer/rig-design-studio-os/docs/DISPOSITIONS.md`): web-design-discovery -> ds-discovery,
+web-typography -> ds-typography, web-color -> ds-color, web-layout -> ds-layout, web-motion ->
+ds-motion-3d, web-imagery -> ds-imagery, web-conversion-copy -> ds-conversion-copy, web-build-ship ->
+ds-build-ship, web-design-critique -> ds-critique, web-design-business -> ds-business. Read this
+router for the estate map; load `design-studio-os` to run the work.
+
 # when-designing-interfaces
 
 Tier-1 meta-skill. Job to be done: When designing, auditing, or polishing UI, design systems, tokens, or accessibility, use this to route to the right design skill so output clears the quality bar.

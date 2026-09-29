@@ -1,0 +1,249 @@
+# Conversion copy laws (Design Studio OS corpus)
+
+Coverage: 16 videos read (GTNgiTK-ic8, 75xzeXRZrHQ, OX0fnUrNVPo, Yz3pOF7D-bw, DuowDNn3TNc, YkxGTwbRQ9w, mEWs_68-yL8, 3hlrCSQSsWs, Zxz-0r8G7KQ, X1dIZ53O-8s, mGbLhEY7nPE, b0KQaZkDBKU, bYZkDOwQxfg, SI9Q7O8ZTpk, 7m8fdKIErPY, 0m1TeQyNqW4). Channels: Flux Academy, Sam Crawford, Jesse Showalter, Wes McDowell, Mike Locke, Paige Brunton. Publish dates 2010-05 to 2026-06. Top-10 sources in this set: flux-academy (4), sam-crawford (4), jesse-showalter (2).
+
+## Laws
+
+### Hero, headline, and the one job
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 1 | Write the hero headline as the value or outcome, not a generic category label such as the product type or the service name. | Flux Academy | CLAIM(GTNgiTK-ic8@01:05) | single-source | yes |
+| 2 | Put a subtitle under the headline that explains how the value is produced and who it is for. | Flux Academy | CLAIM(GTNgiTK-ic8@01:42) | single-source | yes |
+| 3 | Show a hero visual of the product in use, or of the person being hired, so the buyer can picture the purchase. | Flux Academy | CLAIM(GTNgiTK-ic8@02:09) | single-source | yes |
+| 4 | Place a credibility cue beside the hero claim: buyer count, client logos, or years in business. Do not leave the claim unsupported. | Flux Academy, Sam Crawford | CLAIM(GTNgiTK-ic8@02:37), CLAIM(OX0fnUrNVPo@00:34) | consensus | yes |
+| 5 | Name the next step on the button (schedule the consultation, see the plans, buy). Do not label it Contact us. If they are not ready to buy, the named step can be a look at plans rather than a hard start. | Flux Academy, Wes McDowell, Mike Locke, Jesse Showalter | CLAIM(GTNgiTK-ic8@03:03), CLAIM(Zxz-0r8G7KQ@02:02), CLAIM(7m8fdKIErPY@07:17), CLAIM(SI9Q7O8ZTpk@02:23) | consensus | yes |
+| 6 | Give the page one job. When contact, book, and learn-more are equally loud, the visitor does nothing. | Sam Crawford, Flux Academy, Jesse Showalter | CLAIM(75xzeXRZrHQ@00:44), CLAIM(YkxGTwbRQ9w@00:29), CLAIM(mEWs_68-yL8@00:53), CLAIM(3hlrCSQSsWs@01:42) | consensus | yes |
+| 7 | Make the first screen answer, before the scroll: what this is, who it is for, how life gets better, and what to do next. If that is not clear in the opening seconds, they hit back. | Sam Crawford, Jesse Showalter, Wes McDowell, Paige Brunton | CLAIM(75xzeXRZrHQ@02:15), CLAIM(SI9Q7O8ZTpk@00:32), CLAIM(b0KQaZkDBKU@02:45), CLAIM(0m1TeQyNqW4@01:09) | consensus | yes |
+| 8 | Pack the value proposition, the clearest call to action, and the strongest message above the fold. Do not save the best line for later. | Sam Crawford | CLAIM(OX0fnUrNVPo@00:19) | single-source | yes |
+| 9 | Write the headline, subhead, and proof before you lay out the page. The headline states the promise, the subhead earns the click, and proof turns interest into trust. Design only has to give that headline room and make the button impossible to miss. | Sam Crawford | CLAIM(75xzeXRZrHQ@02:48), CLAIM(75xzeXRZrHQ@03:01), CLAIM(75xzeXRZrHQ@03:06) | single-source | yes |
+| 10 | Rewrite a feature headline into a line that names the offer and calls out who it is for. That one line outranks the rest of the visual decisions on the page. | Sam Crawford | CLAIM(75xzeXRZrHQ@01:49) | single-source | yes |
+
+### Body, objections, and proof
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 11 | After the hero promise, lead each block with the buyer outcome, not the technical spec. Use three benefits, each with a visual, a result title, and one line that names the feature and what it means in the buyer's life. | Flux Academy, Wes McDowell | CLAIM(GTNgiTK-ic8@04:28), CLAIM(Zxz-0r8G7KQ@07:27), CLAIM(b0KQaZkDBKU@03:29), CLAIM(mGbLhEY7nPE@11:08) | consensus | yes |
+| 12 | Make each section headline a benefit the visitor can understand without reading the paragraph under it. | Sam Crawford | CLAIM(OX0fnUrNVPo@02:04) | single-source | yes |
+| 13 | Treat the FAQ as the objection list. On a homepage, about six items is enough; turn known hesitations into questions (why not the cheaper option) and answer with the rebuttal. | Flux Academy, Sam Crawford, Wes McDowell | CLAIM(GTNgiTK-ic8@05:54), CLAIM(OX0fnUrNVPo@02:50), CLAIM(Zxz-0r8G7KQ@15:05) | consensus | yes |
+| 14 | Repeat a final call to action before the footer. Do not end the page without restating the action. | Flux Academy | CLAIM(GTNgiTK-ic8@06:48) | single-source | yes |
+| 15 | Repeat the same primary action below the fold, not only in the hero. A hero button plus a footer button is not enough. Two entry methods are allowed only when both serve that one outcome and you have evidence both get used. Rank any extra buttons as secondary. | Sam Crawford, Jesse Showalter | CLAIM(OX0fnUrNVPo@04:36), CLAIM(3hlrCSQSsWs@02:47), CLAIM(SI9Q7O8ZTpk@02:12), CLAIM(SI9Q7O8ZTpk@04:00) | consensus | yes |
+| 16 | Put case studies ahead of bare quotes. Each project page walks the before, the work, the after, and a quote that matches the claim. A single homepage screenshot is not a portfolio. On the homepage, tease a few projects and link out. | Sam Crawford, Paige Brunton | CLAIM(OX0fnUrNVPo@01:14), CLAIM(0m1TeQyNqW4@06:43), CLAIM(0m1TeQyNqW4@07:25) | consensus | no |
+| 17 | Do not hide testimonials in a carousel. Give them a full homepage section. Almost nobody clicks past the first slide. | Flux Academy | CLAIM(Yz3pOF7D-bw@01:09) | single-source | yes |
+| 18 | Shorten testimonials to a few sentences. Make the header the result, show a face and a star mark, and put a pull-quote beside any video so a non-watcher still gets the point. Place that proof next to the claim it supports, matched to the visitor's situation. | Flux Academy, Wes McDowell | CLAIM(Yz3pOF7D-bw@02:00), CLAIM(Zxz-0r8G7KQ@10:58), CLAIM(mGbLhEY7nPE@06:05), CLAIM(mGbLhEY7nPE@07:22), CLAIM(b0KQaZkDBKU@06:06) | consensus | yes |
+| 19 | If you edit a testimonial's wording or structure, get the client's approval before you publish it. | Flux Academy | CLAIM(Yz3pOF7D-bw@03:06) | single-source | yes |
+| 20 | Put the short quote on the homepage and the full quote at the bottom of the matching case study, then a call to action. | Flux Academy | CLAIM(Yz3pOF7D-bw@03:34) | single-source | yes |
+| 21 | Match proof to the prospect: in a proposal, show case studies from the same kind of business, not a random win. | Flux Academy | CLAIM(Yz3pOF7D-bw@05:15) | single-source | yes |
+
+### Clarity, choices, and who the page is for
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 22 | Say what you do, who it is for, and what to do next in the opening seconds, before aesthetics. Do not be clever. A cute line that does not name the need fails the opening. A distracted stranger will not decode jargon. | Sam Crawford, Jesse Showalter, Paige Brunton | CLAIM(OX0fnUrNVPo@00:56), CLAIM(75xzeXRZrHQ@01:17), CLAIM(DuowDNn3TNc@01:56), CLAIM(3hlrCSQSsWs@00:32), CLAIM(mEWs_68-yL8@04:21), CLAIM(SI9Q7O8ZTpk@07:02), CLAIM(0m1TeQyNqW4@01:09) | consensus | yes |
+| 23 | Cut pages that say too much. Write for scanners: short paragraphs, bold the point, and delete any sentence whose removal does not make the page worse. | Sam Crawford, Jesse Showalter | CLAIM(OX0fnUrNVPo@02:34), CLAIM(DuowDNn3TNc@00:16), CLAIM(DuowDNn3TNc@02:29), CLAIM(mEWs_68-yL8@02:51) | consensus | yes |
+| 24 | Strip jargon, acronyms, and insider language. Read the draft to someone outside the industry. If they do not get it, the customer will not. | Sam Crawford | CLAIM(OX0fnUrNVPo@03:26), CLAIM(OX0fnUrNVPo@04:56) | single-source | yes |
+| 25 | Choose clarity over decoration. A pretty page that hides the value proposition and the one action has failed. | Sam Crawford | CLAIM(OX0fnUrNVPo@03:50), CLAIM(75xzeXRZrHQ@01:17) | single-source | yes |
+| 26 | Write the story from problem to solution so the visitor cannot invent a worse one. | Sam Crawford | CLAIM(OX0fnUrNVPo@04:06) | single-source | yes |
+| 27 | Offer one decision, not a dozen calls to action. Fewer links in the section convert better. Extra choices produce no choice. | Sam Crawford, Flux Academy, Jesse Showalter | CLAIM(OX0fnUrNVPo@04:22), CLAIM(75xzeXRZrHQ@00:44), CLAIM(YkxGTwbRQ9w@01:09), CLAIM(mEWs_68-yL8@01:11), CLAIM(3hlrCSQSsWs@02:28) | consensus | yes |
+| 28 | Name who you serve, show a price or a starting-from number, and say it if you are expensive. Hiding price fills the calendar with people who cannot pay. | Sam Crawford | CLAIM(OX0fnUrNVPo@05:29), CLAIM(DuowDNn3TNc@02:52), CLAIM(DuowDNn3TNc@07:08) | single-source | yes |
+| 29 | Sell the outcome (leads, sales, authority), not the website and not the feature list. | Sam Crawford | CLAIM(OX0fnUrNVPo@07:51), CLAIM(75xzeXRZrHQ@15:05) | single-source | yes |
+| 30 | Leave empty space around the headline and between sections. Restraint is what reads as premium, not extra blocks or motion. | Sam Crawford | CLAIM(OX0fnUrNVPo@01:46), CLAIM(75xzeXRZrHQ@03:40) | single-source | yes |
+| 31 | Keep motion to a hover response and a natural fade-in. If visitors notice the animation instead of the offer, the priority is backwards. When the category is loud with motion, use quiet space and let the product sit. | Sam Crawford | CLAIM(OX0fnUrNVPo@03:04), CLAIM(DuowDNn3TNc@04:28), CLAIM(3hlrCSQSsWs@04:44) | single-source | yes |
+| 32 | Use real photography, including slightly imperfect shots. Stock is only a placeholder. The headset smile and the boardroom high-five make the rest of the page feel fake. | Sam Crawford | CLAIM(OX0fnUrNVPo@05:50), CLAIM(75xzeXRZrHQ@04:23), CLAIM(DuowDNn3TNc@01:09) | single-source | yes |
+| 33 | Design the mobile layout as the site, not as a cut-down desktop. | Sam Crawford | CLAIM(OX0fnUrNVPo@06:15) | single-source | yes |
+| 34 | Fix load speed before visual polish, and test it on a phone with a weak signal, not office wifi. Design lighter assets on purpose: fewer or smaller images, or vectors, instead of heavy photography. | Sam Crawford, Flux Academy | CLAIM(75xzeXRZrHQ@05:12), CLAIM(DuowDNn3TNc@03:54), CLAIM(YkxGTwbRQ9w@09:11) | consensus | yes |
+| 35 | Treat launch as the start: update offers, refresh proof, and keep the page current. A site left alone for a year loses ground. | Sam Crawford | CLAIM(OX0fnUrNVPo@07:13), CLAIM(75xzeXRZrHQ@05:57) | single-source | yes |
+| 36 | When a client asks to copy a competitor layout, ask why, what the site must do, and who it is for before you match colors. | Sam Crawford | CLAIM(75xzeXRZrHQ@08:04) | single-source | yes |
+| 37 | Study a reference site for the action it causes: first eye stop, headline promise, where proof sits relative to the ask, and the one job. A screenshot of the hero is not the study. | Sam Crawford | CLAIM(75xzeXRZrHQ@09:21) | single-source | yes |
+| 38 | Do not expect a paid offer to convert on the first button. Build a flow: hero action, product in motion, benefits, who it is for, then proof. Each section keeps one focus. | Flux Academy, Jesse Showalter | CLAIM(YkxGTwbRQ9w@02:10), CLAIM(mEWs_68-yL8@05:13) | consensus | yes |
+| 39 | Hold one visual system down the page. Random colors, a new look per section, and misaligned blocks read as a brand you should not trust. | Flux Academy, Sam Crawford | CLAIM(YkxGTwbRQ9w@04:52), CLAIM(OX0fnUrNVPo@05:13) | consensus | yes |
+| 40 | Color the primary button so it contrasts with the background and with the hero image, and reserve that color for the action. Faces in a photo will steal the eye from a quiet button. | Flux Academy, Jesse Showalter | CLAIM(YkxGTwbRQ9w@05:31), CLAIM(mEWs_68-yL8@03:40), CLAIM(SI9Q7O8ZTpk@03:28) | consensus | yes |
+| 41 | Cut the first step to the smallest ask: one email field and one button. A 10-field form, or a button that opens a second account page, is friction that kills the buy. | Flux Academy | CLAIM(YkxGTwbRQ9w@06:36) | single-source | yes |
+| 42 | After the hero, name the pain if they do nothing, and answer the objections you already know, before you stack benefits. | Jesse Showalter | CLAIM(mEWs_68-yL8@05:16) | single-source | yes |
+| 43 | Write the value block so it scans: a short title and one outcome line, in the buyer's job language, not a feature dump. | Jesse Showalter | CLAIM(mEWs_68-yL8@07:32) | single-source | yes |
+| 44 | Show exactly three steps. Step 1 repeats the button label. Step 2 collapses the real work into one line. Step 3 is the result they get to enjoy. Do not list the twenty internal steps. | Jesse Showalter, Wes McDowell | CLAIM(mEWs_68-yL8@09:36), CLAIM(Zxz-0r8G7KQ@09:25) | consensus | yes |
+| 45 | Put one long block lower on the page for people doing due diligence and for search: desired change, external problem, how it feels, your belief, empathy, process, the action, and what failure versus success looks like. Do not make that block the hero. Structure and plain language help search; they are not opposed to the design. | Jesse Showalter, Sam Crawford | CLAIM(mEWs_68-yL8@10:17), CLAIM(OX0fnUrNVPo@07:35) | consensus | yes |
+| 46 | For visitors not ready to buy, offer one useful free item (a short guide, a kit, or a training) in exchange for an email. Do not let that second ask outrank the primary action. | Jesse Showalter | CLAIM(mEWs_68-yL8@12:34) | single-source | yes |
+| 47 | Park secondary links, maps, and policies in the footer so they stay available without competing with the page's one job. | Jesse Showalter, Flux Academy | CLAIM(mEWs_68-yL8@13:44), CLAIM(GTNgiTK-ic8@07:04) | consensus | yes |
+| 48 | Rewrite the about page as reassurance, not a resume and not a hobby roster. Headline is the why or the stand you take, not the label About us. One short paragraph on how you got qualified. A few short paragraphs on what the client gets. Proof that backs those claims, not a vague compliment. One real face. Credentials and press at the end, never as the lead. No team bios with hobbies or social links. On the homepage, tease this and link to the full page. | Sam Crawford, Wes McDowell, Paige Brunton | CLAIM(DuowDNn3TNc@06:21), CLAIM(bYZkDOwQxfg@00:52), CLAIM(bYZkDOwQxfg@01:52), CLAIM(bYZkDOwQxfg@03:46), CLAIM(bYZkDOwQxfg@05:25), CLAIM(bYZkDOwQxfg@07:13), CLAIM(0m1TeQyNqW4@04:40) | consensus | yes |
+| 49 | Put a point of view, a process, and a personality on the page. A site that looks like every other firm in the category gets priced like one. | Sam Crawford | CLAIM(OX0fnUrNVPo@02:20), CLAIM(DuowDNn3TNc@03:20) | single-source | yes |
+| 50 | If proof is thin, add proof before you fund a redesign. Stacked quotes, video, screenshots, and logos can out-earn a prettier page because they answer whether this worked for someone like the visitor. | Sam Crawford | CLAIM(3hlrCSQSsWs@03:12), CLAIM(OX0fnUrNVPo@00:34) | single-source | yes |
+| 51 | Replace default form chrome and default badge icons with a small custom label that states what the user is doing. The care signal is in that detail, not in a full-screen video background. | Sam Crawford | CLAIM(3hlrCSQSsWs@05:59) | single-source | yes |
+| 52 | The first glance must look finished. A cheap first impression makes visitors discount the copy and the proof that follow, even when both are good. | Sam Crawford | CLAIM(DuowDNn3TNc@00:40) | single-source | yes |
+| 53 | Decide what stays from visitor data: what they click, where they drop, and which pages they read. Owner taste and a founder story they care about are not the brief. | Sam Crawford | CLAIM(DuowDNn3TNc@05:09) | single-source | yes |
+| 54 | Judge the site by whether it helps the business sell. Likes on a design gallery are not the score. A beautiful photo with no price, no availability, and no action fails even for a visual business. | Jesse Showalter | CLAIM(mEWs_68-yL8@00:12), CLAIM(mEWs_68-yL8@01:31) | single-source | yes |
+| 55 | Build one page per offer. On the homepage, tease each offer with an image, a clear title, one line, and a link. Do not put the full catalog, the company history, or a side cause on that page. | Wes McDowell, Paige Brunton | CLAIM(b0KQaZkDBKU@00:29), CLAIM(b0KQaZkDBKU@01:32), CLAIM(0m1TeQyNqW4@02:55) | consensus | no |
+| 56 | In the hero, show the buyer in the after state (the calm client, not a skyline and not the team). Bring the founder photo in at the mentor block, where understanding and authority sit together. | Wes McDowell | CLAIM(Zxz-0r8G7KQ@03:31), CLAIM(Zxz-0r8G7KQ@06:12) | single-source | no |
+| 57 | Open the problem block with a recognizable symptom list ("does this sound familiar"), in bullets. The client is the hero of that story. You enter as the guide only after the problem is painted. | Wes McDowell, Jesse Showalter | CLAIM(Zxz-0r8G7KQ@04:24), CLAIM(mEWs_68-yL8@05:16) | consensus | yes |
+| 58 | If you list services on the homepage, show the three to five that carry most of the revenue, and link each to its own page. Do not dump a catalog of twenty. | Wes McDowell | CLAIM(Zxz-0r8G7KQ@06:46) | single-source | no |
+| 59 | Put the feature checklist near the decision, after the emotional case, using checks rather than dots. A comparison is allowed if your column has more checks, you leave some rival cells as wins, and you include "do nothing" when that is the real alternative. | Wes McDowell | CLAIM(Zxz-0r8G7KQ@13:11), CLAIM(mGbLhEY7nPE@08:48), CLAIM(b0KQaZkDBKU@06:46) | single-source | no |
+| 60 | End with a short recap for people who jumped to the bottom: the offer, the main benefit, the same button. Under the button, one fear-reducer (how fast it starts, or that no card is required). | Wes McDowell, Flux Academy | CLAIM(mGbLhEY7nPE@13:20), CLAIM(mGbLhEY7nPE@14:42), CLAIM(Zxz-0r8G7KQ@16:18), CLAIM(GTNgiTK-ic8@06:48) | consensus | yes |
+| 61 | Put an eyebrow line above the headline that names who the page is for. Write the body in spoken language: short sentences, contractions, direct questions. Not a corporate pitch. | Wes McDowell | CLAIM(mGbLhEY7nPE@04:00), CLAIM(mGbLhEY7nPE@04:53) | single-source | no |
+| 62 | Name the page goal before you design. Rewrite the headline so the prize and the required action are both obvious. On a photo hero, darken the area under the type until it reads, and on mobile keep the hero stack near 48 / 20 / 16. | Flux Academy | CLAIM(X1dIZ53O-8s@00:40), CLAIM(X1dIZ53O-8s@01:28), CLAIM(X1dIZ53O-8s@05:18), CLAIM(X1dIZ53O-8s@06:02) | single-source | yes |
+| 63 | Show how-it-works as three visuals of the real objects (the thing they scan, the real app icon), and put the store buttons on this page instead of sending them to a second page. | Flux Academy | CLAIM(X1dIZ53O-8s@06:43), CLAIM(X1dIZ53O-8s@13:15) | single-source | yes |
+| 64 | Use the layout people already know: logo top-left, nav in the header, value line high, primary button above the fold, social icons in the footer. Do not invent a new header pattern, and do not put email signup or social icons in the header. | Jesse Showalter | CLAIM(SI9Q7O8ZTpk@08:41), CLAIM(SI9Q7O8ZTpk@09:54) | single-source | yes |
+
+## Looks like / does not (good vs bad pairs)
+
+| # | looks like (good) | does not (bad) | why | citation |
+|---|---|---|---|---|
+| 1 | Headline states the outcome or the uniqueness ("more traffic for your business"). | Headline names the category ("we build websites", "we sell coffee"). | Category labels do not give a reason to stay. | CLAIM(GTNgiTK-ic8@01:05) |
+| 2 | Benefit line: what changes for the buyer (stay connected, immersive sound). | Spec line: speed or horsepower with no outcome. | Buyers act on the result, not the technical sheet. | CLAIM(GTNgiTK-ic8@04:43) |
+| 3 | One obvious action, everything else quieter. | Five equal buttons: contact, book, learn more. | Equal volume produces no action. | CLAIM(75xzeXRZrHQ@00:44) |
+| 4 | Headline names the thing and who it is for. | Headline only describes a product feature. | The visitor must see themselves in the first line. | CLAIM(75xzeXRZrHQ@01:49) |
+| 5 | Hero answers where, what, why, and next step at once. | Hero answers one or two of those and hopes they scroll. | Most visits die in the opening seconds. | CLAIM(75xzeXRZrHQ@02:26) |
+| 6 | Copy written first; layout serves the words. | Layout copied from a competitor while the words stay weaker. | You copied the part that does not sell. | CLAIM(75xzeXRZrHQ@03:23) |
+| 7 | Empty space around the headline; sections that have room. | More sections and fancy motion added to look premium. | Premium is what you remove. | CLAIM(75xzeXRZrHQ@03:40) |
+| 8 | Original photography, texture, or illustration made for this brand. | Generic gradients and icon sets seen on a hundred other sites. | Familiar assets make a custom layout feel like a template. | CLAIM(75xzeXRZrHQ@04:30) |
+| 9 | Case study: problem, how it was solved, result. | A nice quote with no journey. | A story sells; a compliment does not. | CLAIM(OX0fnUrNVPo@01:14) |
+| 10 | Plain language a stranger understands in seconds. | Clever jargon and animation the team admires. | The visitor is distracted and will not decode it. | CLAIM(OX0fnUrNVPo@00:56) |
+| 11 | Same primary button repeated down the page. | One button in the hero and one in the footer only. | Conviction can happen mid-page; the action has to be there. | CLAIM(OX0fnUrNVPo@04:36) |
+| 12 | Messaging that names price level and client type. | A page that tries to welcome everyone. | Filtering bad-fit buyers saves both sides. | CLAIM(OX0fnUrNVPo@05:29) |
+| 13 | Authentic, on-message photography. | Headset salesperson or boardroom high-five stock. | Those frames read as fake on sight. | CLAIM(OX0fnUrNVPo@05:50) |
+| 14 | Testimonials in their own homepage section, scannable, with a header. | Testimonials trapped in a carousel, or a wall of uncut praise. | People do not click slides, and they skip long quotes. | CLAIM(Yz3pOF7D-bw@01:09), CLAIM(Yz3pOF7D-bw@02:07) |
+| 15 | Edited quote approved by the client before it goes live. | Rewritten testimonial published without a check. | Structure changes still need the speaker's yes. | CLAIM(Yz3pOF7D-bw@03:06) |
+| 16 | One path repeated, or two doors into the same outcome. | Book, brochure, newsletter, and chat all shouting. | The visitor cannot tell which action matters. | CLAIM(3hlrCSQSsWs@02:17), CLAIM(YkxGTwbRQ9w@00:58) |
+| 17 | Button in a color the photo does not use. | Quiet button next to a face that wins the eye. | Attention goes to the strongest contrast, not the intended action. | CLAIM(YkxGTwbRQ9w@05:44) |
+| 18 | Email field plus one start button. | Ten fields, then another page to open an account. | Each extra step is a chance to quit. | CLAIM(YkxGTwbRQ9w@07:07) |
+| 19 | Price or a starting-from number on the page. | Pricing hidden so everyone books a call. | You spend the calls on people who cannot pay. | CLAIM(DuowDNn3TNc@02:52) |
+| 20 | About page: numbers, faces, and the change you create. | About page written like a resume (founded year, beliefs). | Visitors came for reassurance, not a biography. | CLAIM(DuowDNn3TNc@06:21) |
+| 21 | Real, slightly messy photo of the actual team. | Boardroom high-five that everyone recognizes as stock. | One fake image makes the rest of the claims suspect. | CLAIM(DuowDNn3TNc@01:09) |
+| 22 | Hero with few words, one button, and the work in view. | Huge logo, reviews, many nav items, and several actions crammed above the fold. | Overload is not a stronger pitch. | CLAIM(mEWs_68-yL8@00:58) |
+| 23 | Negative-stakes block, then benefits, then logos. | Proof dumped at the top before the offer is clear. | Jesse's order: understand the pain and the value, then see that it worked. Placement is still debated. | CLAIM(mEWs_68-yL8@05:16), CLAIM(mEWs_68-yL8@09:15) |
+| 24 | Proof stacked down an ordinary page. | Award-looking page with almost no proof. | Visitors ask whether this worked for someone like them, not whether it won an award. | CLAIM(3hlrCSQSsWs@03:12) |
+| 25 | Quiet page, product given room, small custom form label. | Text flying in from several directions the moment the page loads. | Volume tries to prove value and washes the idea out. | CLAIM(3hlrCSQSsWs@04:49), CLAIM(3hlrCSQSsWs@06:27) |
+| 26 | Button says "schedule your consultation." | Button says "contact us." | The label has to say what happens next. | CLAIM(Zxz-0r8G7KQ@02:07) |
+| 27 | Hero photo of the buyer already in the after state. | Skyline, or the team photo, in the hero. | The picture has to reinforce the headline's outcome. The team appears later, as the guide. | CLAIM(Zxz-0r8G7KQ@03:31) |
+| 28 | Three benefits, each with a result title. | A spec sheet (megabytes, materials) or a list of twenty. | Three is the cap he uses; more dilutes the set. | CLAIM(Zxz-0r8G7KQ@07:27), CLAIM(Zxz-0r8G7KQ@08:09) |
+| 29 | Video plus a result headline beside the player, and a face on the quote. | Anonymous quote, or a video with no text for people who will not press play. | Most people will not watch. The face and the line still have to land. | CLAIM(Zxz-0r8G7KQ@11:26), CLAIM(mGbLhEY7nPE@07:45) |
+| 30 | Comparison that leaves some rival cells as wins, and includes doing nothing. | A table of red marks on every other option. | A stacked table reads as a pitch, not a decision aid. | CLAIM(mGbLhEY7nPE@09:24), CLAIM(Zxz-0r8G7KQ@15:42) |
+| 31 | Prize as the headline, and the required scan named in the line under it. | A looping prize line that never says what the visitor must do. | The prize and the action both have to be obvious. | CLAIM(X1dIZ53O-8s@01:28) |
+| 32 | Store buttons on this page. | Download button that opens a second page of store buttons. | Two steps where one would do. | CLAIM(X1dIZ53O-8s@13:15) |
+| 33 | Line under the button: set up in minutes, or no card needed. | A bare button with the fear still unspoken. | The booster removes the last hesitation. | CLAIM(mGbLhEY7nPE@14:42) |
+| 34 | About headline states the why, or a should / should-not. | The page titled only "About us," then a resume. | The second-most-visited page still has to sell the fix. | CLAIM(bYZkDOwQxfg@00:52), CLAIM(DuowDNn3TNc@06:29) |
+| 35 | One real face. Credentials and press at the end. | Team bios with hobbies, favorite quotes, and profile links. | Those links pull attention off the hire. | CLAIM(bYZkDOwQxfg@05:39), CLAIM(bYZkDOwQxfg@07:13) |
+| 36 | "Powerful banking. Apply in 10 minutes." One button. | A hero with a red card, a second button, and an image all competing. | The opening seconds cannot support several targets. | CLAIM(SI9Q7O8ZTpk@00:51), CLAIM(SI9Q7O8ZTpk@01:17) |
+| 37 | "Deliver the work. Hit the deadline." | A cute line like "your way" that does not name the need. | Clever fails the opening test. | CLAIM(SI9Q7O8ZTpk@07:39), CLAIM(SI9Q7O8ZTpk@08:11) |
+| 38 | Logo left, nav in the header, search where people expect it. | Centered nav, proof jammed in the hero, email signup in the header. | Familiar structure converts; a new wheel makes them relearn. | CLAIM(SI9Q7O8ZTpk@09:54) |
+| 39 | Button says "see pricing" when they are not ready to start. | Button says "get started" as a hard sell, or "contact us" as a fog. | Name a real next step at the commitment they can make. | CLAIM(7m8fdKIErPY@07:17), CLAIM(Zxz-0r8G7KQ@02:07) |
+| 40 | Homepage tease: image, title, one line, link to the offer page. | Every service fully explained on the homepage. | The homepage points. The offer page explains. | CLAIM(0m1TeQyNqW4@02:55) |
+| 41 | Project page: many photos, before and after, the client's aim, a matching quote, a link to the package. | One homepage screenshot called a portfolio. | Proof of the work is the story, not a thumbnail. | CLAIM(0m1TeQyNqW4@07:05) |
+
+## Decision tables (option A vs B -> pick when)
+
+| decision | option A | option B | pick when |
+|---|---|---|---|
+| How many actions | One primary action, repeated | Several different actions at equal weight | Always pick A on a conversion page. B only if the page truly has two audiences with two jobs, and even then separate the pages. CLAIM(75xzeXRZrHQ@00:44), CLAIM(OX0fnUrNVPo@04:22) |
+| Where to repeat the button | Hero plus a close | Same button in nearly every section | Pick the repeated button once the page is longer than a hero. Hero-only fails mid-scroll conviction. CLAIM(OX0fnUrNVPo@04:36), CLAIM(GTNgiTK-ic8@06:48) |
+| Proof format | Case study (problem, method, result) | Short quote | Use the case study when you need the sale. Use the short quote for scan points, with the long version on the case study page. CLAIM(OX0fnUrNVPo@01:14), CLAIM(Yz3pOF7D-bw@03:34) |
+| Headline type | Outcome plus who it is for | Feature or category | Pick outcome unless the category is already the search term and the subtitle carries the outcome. CLAIM(GTNgiTK-ic8@01:05), CLAIM(75xzeXRZrHQ@01:49) |
+
+## Anti-patterns (cited)
+
+- Generic category headline with no value. CLAIM(GTNgiTK-ic8@01:10)
+- Hero with no visual of the thing being bought. CLAIM(GTNgiTK-ic8@02:09)
+- Unsupported claims with no logos, counts, or years. CLAIM(GTNgiTK-ic8@02:37)
+- Specs without benefits. CLAIM(GTNgiTK-ic8@04:43)
+- Page that ends without a last ask. CLAIM(GTNgiTK-ic8@06:48)
+- Five competing calls to action. CLAIM(75xzeXRZrHQ@00:49)
+- Designing before the words exist. CLAIM(75xzeXRZrHQ@03:01)
+- Adding sections and motion to fake premium. CLAIM(75xzeXRZrHQ@03:52)
+- Generic icon sets and gradients. CLAIM(75xzeXRZrHQ@04:36)
+- Saving the best message for below the fold. CLAIM(OX0fnUrNVPo@00:32)
+- Sprinkling proof as an afterthought. CLAIM(OX0fnUrNVPo@00:48)
+- Walls of text and extra pages. CLAIM(OX0fnUrNVPo@02:38)
+- Over-animation. CLAIM(OX0fnUrNVPo@03:04)
+- Corporate buzzwords. CLAIM(OX0fnUrNVPo@04:56)
+- A dozen choices. CLAIM(OX0fnUrNVPo@04:24)
+- Cheesy stock. CLAIM(OX0fnUrNVPo@05:56)
+- Mobile treated as a lesser version. CLAIM(OX0fnUrNVPo@06:17)
+- Testimonial carousel. CLAIM(Yz3pOF7D-bw@01:13)
+- Uncut paragraph testimonials. CLAIM(Yz3pOF7D-bw@02:07)
+- Publishing an edited quote without client sign-off. CLAIM(Yz3pOF7D-bw@03:06)
+
+## Creator claims (unverified)
+
+- Most people are not scrolling past the hero. CLAIM(OX0fnUrNVPo@00:19)
+- You have less than 3 seconds to earn attention. CLAIM(OX0fnUrNVPo@01:27)
+- Most sites lose people in the first 5 seconds. CLAIM(75xzeXRZrHQ@02:26)
+- Headlines do about 80% of the selling. CLAIM(OX0fnUrNVPo@02:04)
+- Case studies outperform testimonials "by a mile." CLAIM(OX0fnUrNVPo@01:14)
+- Nine times out of 10, copying the competitor is the wrong move. CLAIM(75xzeXRZrHQ@08:37)
+- Moving a quote from $500 to $5,000 is mostly belief, and cheap prices attract cheap clients. CLAIM(75xzeXRZrHQ@12:04), CLAIM(75xzeXRZrHQ@12:43)
+- AI can assemble a generic page faster and cheaper, and cannot make the strategic call. CLAIM(75xzeXRZrHQ@13:53)
+- People judge the whole business in about half a second from how the site looks (halo). CLAIM(DuowDNn3TNc@00:40)
+- A site that takes more than 3 seconds to load has already lost nearly half its visitors. CLAIM(DuowDNn3TNc@03:54)
+- Average section has 4.39 links; fewer links convert more. Source named as Unbounce, not rechecked. CLAIM(YkxGTwbRQ9w@01:31)
+- Faster load means more conversions; Google has data that slow pages get abandoned. CLAIM(YkxGTwbRQ9w@09:36)
+- Scarcity example: five editions left. Urgency example: 15 off, timer at 19 hours. CLAIM(YkxGTwbRQ9w@07:58), CLAIM(YkxGTwbRQ9w@08:28)
+- About page is probably the second most visited page. CLAIM(DuowDNn3TNc@06:21)
+- Numbers build trust faster than paragraphs. CLAIM(DuowDNn3TNc@06:49)
+- Clarity window of about two seconds, or the visit is over. CLAIM(3hlrCSQSsWs@00:52)
+- Fewer options, higher conversion, "not even close." CLAIM(3hlrCSQSsWs@02:28)
+- ClickFunnels-style pages made creators hundreds of millions, if not billions, without design awards. CLAIM(3hlrCSQSsWs@03:45)
+- Custom laurel badges took about 10 minutes and changed how the same facts felt. CLAIM(3hlrCSQSsWs@07:05)
+- Even split between new bookings and new contact-form submissions on one agency site, used to justify two doors. CLAIM(3hlrCSQSsWs@03:01)
+- A homepage sequence "prints $30K/month." The figure is the video title's promise, not a measured result in the transcript. CLAIM(Zxz-0r8G7KQ@00:00)
+- Services that make up about 80% of revenue are the ones to list. CLAIM(Zxz-0r8G7KQ@07:02)
+- Brains "work in threes"; more than three benefits dilute impact. CLAIM(Zxz-0r8G7KQ@08:26)
+- 95% of people buy on emotion, then do homework. CLAIM(Zxz-0r8G7KQ@13:24)
+- Paid press distribution (he names a vendor) can boost conversions by up to 48%. Not verified. Do not treat bought logos as earned proof. CLAIM(mGbLhEY7nPE@02:36)
+- Real-time signup popups typically add 10 to 15% conversions. CLAIM(mGbLhEY7nPE@03:48)
+- Editorial-style landers tripled traffic and doubled leads for businesses he has seen. CLAIM(mGbLhEY7nPE@15:16)
+- Visitors decide in less than 5 seconds, above the fold. CLAIM(b0KQaZkDBKU@02:45)
+- A problem video only needs to be around 60 seconds. CLAIM(b0KQaZkDBKU@05:43)
+- Of 120 landing-page tweaks, only nine made a real difference. CLAIM(mGbLhEY7nPE@00:00)
+- Fresh whole-food diet "proven" to help dogs live up to 2.5 years longer, used as a benefit-framing example, not checked here. CLAIM(mGbLhEY7nPE@12:41)
+- The browser back control is still the most used function, and you have 5 seconds after load before they hit it. CLAIM(SI9Q7O8ZTpk@00:21), CLAIM(SI9Q7O8ZTpk@00:32)
+- Chartbeat, cited in 2025, looked at 25 million visits and found more engagement lower on the page by about 18 seconds. Not rechecked. CLAIM(SI9Q7O8ZTpk@04:01)
+- A 2012 Google study, cited in 2025: perceived beauty falls as visual complexity rises, and familiar patterns (logo top-left, nav in the header, value line high, button above the fold) scored as fully successful in that study. CLAIM(SI9Q7O8ZTpk@06:24), CLAIM(SI9Q7O8ZTpk@09:09)
+- About page is generally the second most visited page, after home. Said by Wes (2022) and Sam (2026). Not measured here. CLAIM(bYZkDOwQxfg@00:23), CLAIM(DuowDNn3TNc@06:21)
+- An arrow aimed at the button "has been proven" to raise the conversion percent. Locke, 2010. Not rechecked. CLAIM(7m8fdKIErPY@02:41), CLAIM(7m8fdKIErPY@03:01)
+- A softer button (see pricing) converts at a higher rate than a hard "get started." Locke, 2010. Not rechecked. CLAIM(7m8fdKIErPY@07:17)
+- A founder video of about two minutes lets them skip reading the site. CLAIM(7m8fdKIErPY@06:11)
+- Paige: lack of blog content is probably why a site does not rank, and she blogged a business to a million. Not verified. CLAIM(0m1TeQyNqW4@10:42), CLAIM(0m1TeQyNqW4@10:55)
+
+## Tool-specific (dated)
+
+- Figma landing-page template used as the demo canvas (Flux, 2022). The section order is the law; the file is not. CLAIM(GTNgiTK-ic8@00:38)
+- Stripe homepage and a copywriter site used as 2022 hero examples: value line, who it is for, start button, product-in-use visual. CLAIM(GTNgiTK-ic8@03:22)
+- Social Juice link for collecting written or video reviews at project end (Flux, 2023). The durable rule is: send prompts, accept video or text, then cut the video. CLAIM(Yz3pOF7D-bw@09:27)
+- Unbounce link-count chart and the 4.39 average (Flux, 2022). The durable rule is fewer links in the section, not that average. CLAIM(YkxGTwbRQ9w@01:31)
+- Google PageSpeed Insights as the 2022 check Flux names. Re-test on a current speed tool; the rule is still to design lighter assets. CLAIM(YkxGTwbRQ9w@09:26)
+- Gobi countdown bar and PandaDoc / Campaign Monitor / Egghead / Netflix / Zola as 2022 screen examples. Section logic survives; those UIs may not. CLAIM(YkxGTwbRQ9w@02:41), CLAIM(YkxGTwbRQ9w@08:26)
+- Spline and Rive named in 2026 as the reason every designer can add 3D and parallax. The law is still: do not let motion outrank the offer. CLAIM(DuowDNn3TNc@04:40)
+- Squarespace default form and default circle-member badges replaced with a custom corner label and custom laurels (Sam Crawford, 2026). The law is: do not ship the platform default when a  small custom label can state the action. CLAIM(3hlrCSQSsWs@06:28)
+- Mailchimp, Flodesk, and HubSpot named in 2024 as ways to deliver a lead magnet. The law is the magnet plus an email field, not those vendors. CLAIM(mEWs_68-yL8@13:31)
+- UseProof-style live popups (Wes, 2024) and a named press-distribution vendor. The durable question is whether a live activity cue helps; the vendor and the 48% figure are unverified. CLAIM(mGbLhEY7nPE@03:13), CLAIM(mGbLhEY7nPE@02:36)
+- Figma overlay, 40px rounded hero bottom, and bubble scroll cue on a 2024 Coke promo redesign. The durable rules are readable type on the photo and store buttons on the same page. CLAIM(X1dIZ53O-8s@03:27), CLAIM(X1dIZ53O-8s@10:40)
+- iPod "a thousand songs in your pocket" is Wes's teaching example in both 2018 and 2025. The pattern (feature, then what you can do, then what it means) is the law. CLAIM(b0KQaZkDBKU@03:47), CLAIM(Zxz-0r8G7KQ@07:40)
+- Arrow-to-button and a founder webcam pitch are Locke's 2010 tactics, shown on Campaign Monitor, FreshBooks, Thesis, and Basecamp screens of that year. Keep authentic customer video. Drop the arrow unless a current test says it still helps. CLAIM(7m8fdKIErPY@02:41), CLAIM(7m8fdKIErPY@03:24)
+- Squarespace summary blocks and named templates (Mantro, Hunter, Penny, Quinn, Method) are Paige's 2024 examples. The law is the tease-and-link structure, not those templates. CLAIM(0m1TeQyNqW4@01:49), CLAIM(0m1TeQyNqW4@08:02)
+- Jam is a sponsor read inside the 2025 Jesse video. Not a conversion law. CLAIM(SI9Q7O8ZTpk@05:15)
+- Bank of America small-business page versus Mercury, and WordPress.com versus Wix Studio, are 2025 screen examples. The contrast (one message and one button versus several competing targets; plain benefit versus a cute line) is the lesson. CLAIM(SI9Q7O8ZTpk@00:51), CLAIM(SI9Q7O8ZTpk@07:39)
+- Mobbin sponsor block in the 2024 Jesse video is an ad, not a conversion law. Ignored as doctrine.
+- Instagram highlights, Dribbble case-study captions, and LinkedIn featured pins as 2023 places to make proof outlast a 24-hour feed. CLAIM(Yz3pOF7D-bw@07:52), CLAIM(Yz3pOF7D-bw@08:20), CLAIM(Yz3pOF7D-bw@08:32)
+
+## Disagreements between creators (who says what, cited)
+
+- How often to show the button. Flux (2022) specifies a hero button and a last-call button before the footer. CLAIM(GTNgiTK-ic8@03:03), CLAIM(GTNgiTK-ic8@06:48). Sam Crawford (2026) says a hero button plus a footer button is not enough, and the same primary action should appear in almost every section. CLAIM(OX0fnUrNVPo@04:36). Same creator also says one job and one obvious action, with other buttons getting out of the way. CLAIM(75xzeXRZrHQ@00:44). Reconciliation used in the laws: one action, repeated, never several different actions at equal weight.
+- What the hero headline must say. Flux allows either the problem solved or the uniqueness of the offer, and notes it need not name the activity. CLAIM(GTNgiTK-ic8@01:05). Sam Crawford wants the line to say exactly what it is and who it is for, and treats a pure feature line as the failure. CLAIM(75xzeXRZrHQ@01:49). Jesse wants very few words that name the offer and how life gets better. CLAIM(mEWs_68-yL8@02:51), CLAIM(mEWs_68-yL8@04:21). Prefer the short line that names both outcome and audience; do not ship a category label.
+- Where proof sits. Flux puts a credibility cue in the hero and more proof later. CLAIM(GTNgiTK-ic8@02:37). Jesse calls placement debatable and prefers logos and reviews after the hero, the negative-stakes block, and the value block. CLAIM(mEWs_68-yL8@09:15). Sam Crawford (2026) will stack proof all the way down a plain page and would pick proof over a redesign if forced. CLAIM(3hlrCSQSsWs@03:35). Working rule: one proof cue near the claim, a full proof section after the value is clear, never a carousel.
+- How long the copy may be. Sam Crawford says cut the draft in half, then in half again, and that walls of text lose the visit. CLAIM(DuowDNn3TNc@02:29), CLAIM(OX0fnUrNVPo@02:34). Jesse still wants one long, keyword-rich paragraph lower on the page so a careful reader can finish due diligence. CLAIM(mEWs_68-yL8@10:17). Working rule: scan layer up top, one long block below, not essays in every section.
+- Two doors or one. Flux's Netflix example allows get-started or sign-in and calls that focus. CLAIM(YkxGTwbRQ9w@01:01). Sam Crawford's 2026 study allows a call and a contact form when both feed the same outcome and the split is real. CLAIM(3hlrCSQSsWs@02:47). Both reject a brochure, a newsletter, and a chat widget as extra jobs.
+- Scarcity and timers. Only Flux (2022) teaches limited quantity and expiring offers as conversion tools. CLAIM(YkxGTwbRQ9w@07:42). Wes uses fear-of-missing-out via live signup popups, not a countdown. CLAIM(mGbLhEY7nPE@03:39). Treat timers as single-source. Do not invent a limit the offer does not have.
+- Who is in the hero photo. Flux (2022) wants the product in use, or a photo of the freelancer so the buyer can picture who they are hiring. CLAIM(GTNgiTK-ic8@02:09). Wes (2025) wants the customer in the after state in the hero, and holds the founder photo for the solution block. CLAIM(Zxz-0r8G7KQ@03:31), CLAIM(Zxz-0r8G7KQ@06:37). For a product, show the product in use. For a service, Wes's split (buyer in the hero, guide photo later) is the more specific rule in this set; Flux's freelancer portrait is the older single example.
+- How many benefits. Wes caps the set at three in both 2018 and 2025. CLAIM(Zxz-0r8G7KQ@08:26), CLAIM(b0KQaZkDBKU@04:58). Jesse shows icon stacks without a count cap. CLAIM(mEWs_68-yL8@07:49). Use three unless the offer truly has a fourth that would be a lie to omit.
+- Comparison tables. Wes in 2025 allows a table where the rival still wins some rows, as long as you have more checks. CLAIM(Zxz-0r8G7KQ@15:42). The same creator in 2024 says a wall of red marks looks biased. CLAIM(mGbLhEY7nPE@09:24). Follow the 2024 caution: educate, do not stack failures.
+- How hard the button may be. Wes (2025) rejects "contact us" and wants the label to name the next step, such as scheduling a consultation. CLAIM(Zxz-0r8G7KQ@02:07). Locke (2010) says "get started" is a hard sell and "see pricing" converts better for people who are not ready. CLAIM(7m8fdKIErPY@06:51). Working rule: name a real step at the commitment they can make. Vague contact is still wrong. A hard buy is wrong only when the offer needs a look first.
+- Who appears, and how much biography. Locke (2010) wants a face, a name, and a story on the site so the guard drops. CLAIM(7m8fdKIErPY@01:28). Wes (2022) wants one real face and bans team bios, hobbies, and social links. CLAIM(bYZkDOwQxfg@05:25), CLAIM(bYZkDOwQxfg@07:13). Paige (2024) wants a founder photo on a personal brand, or a team or office photo on a traditional brand, as a homepage tease. CLAIM(0m1TeQyNqW4@05:09). Working rule: one real face, a short why, no hobby roster.
+- How long the explainer video is. Wes (2018) says about 60 seconds, problem through the cost of doing nothing, ending on the same button. CLAIM(b0KQaZkDBKU@05:43). Locke (2010) wants about two minutes so they can skip reading. CLAIM(7m8fdKIErPY@06:11). Prefer the shorter cut unless the product cannot be grasped in a minute. Put a result line beside the player either way. CLAIM(mGbLhEY7nPE@07:45)
+- Clever versus quiet luxury. Jesse (2025) says do not be cute; name the benefit in a few words. CLAIM(SI9Q7O8ZTpk@08:32). Sam Crawford (2026) says a luxury page can stay quiet and let the visitor lean in, after clarity is already established. CLAIM(3hlrCSQSsWs@05:20), CLAIM(3hlrCSQSsWs@01:21). Quiet is allowed. Cute that hides the offer is not.
+
+## Suggested sub-skills (2-5 names, one line each, which law #s they own)
+
+- hero-offer: first screen value, audience, visual, proof, and one button. Laws 1-10, 22, 25.
+- proof-system: testimonials, case studies, and off-site reuse without carousels or unapproved edits. Laws 4, 16-21.
+- objection-close: benefits, FAQ, repeated single action, and the last ask. Laws 11-15, 26-27.
+- page-edit: cut jargon, cut pages, restraint, real imagery, mobile-as-default, known header patterns. Laws 23-24, 28-35, 39, 52, 62, 64.
+- offer-page: one offer per page, three benefits, three-step plan, feature check near the decision, about-page formula, homepage teases. Laws 11, 44, 48, 55-61.
