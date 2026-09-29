@@ -133,6 +133,26 @@ Imports never overwrite a decision already recorded on a row.
    decisions. List each app's access terms in the registry before capture day. Some reference
    apps also run on the web (RP Hypertrophy): those can be captured in the browser, no phone.
 
+12. **iPhone Mirroring has three states, and only one is usable.** The window says
+   `Connection Paused` (idle: press its button through accessibility, no mouse), `iPhone in Use`
+   (the owner unlocked the phone: hands off entirely), or `iPhone Changed` (the target phone
+   changed in System Settings: the owner must confirm which phone before connecting - with
+   several phones on one Apple Account, pressing Connect blind can mirror a family member's
+   device). Never treat `iPhone Changed` as connected.
+13. **While Mirroring is up, the phone counts as locked:** app launch requests are refused
+   (FBS "device was not, or could not be, unlocked") and home-screen taps land on the physical
+   lock screen. Open apps with iPhone Mirroring's own Spotlight: activate the window, Command-3,
+   type the app name, Return (scripts/mirror-keys.js). In-app taps and trees DO work through the
+   phone-side driver (WDA) at 0.3-0.7 s per tap. Keyboard shortcuts reach the window; synthetic
+   mouse drags never register on its content. The session's own "Swipe up to unlock" screen is
+   not clearable from code today: it needs a real gesture.
+14. **Sign in with Apple cannot complete inside Mirroring** (no Face ID there; Apple documents it).
+   The driver may tap "Sign up with Apple" and choose Hide My Email, but the owner must be at the
+   phone for the confirmation. Google/email sign-up is never automated (credentials).
+15. **WDA tree = the device, screenshots = the physical display.** With Mirroring active they
+   diverge: the tree shows the session UI while the screenshot shows the lock screen with its
+   "iPhone in Use" banner. Judge screen identity from the tree, not the frame.
+
 ## Many apps, one target
 
 One ledger per source->target pair in the target repo; the registry lists every pair. Several
