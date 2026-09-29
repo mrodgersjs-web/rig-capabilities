@@ -59,7 +59,7 @@ capture (docs + phone) -> import -> route (Jev) -> build (App Studio 3-9) -> rec
 
 | Step | Command | Output |
 |---|---|---|
-| 0 register | edit `~/Desktop/Projects/app-teardowns/registry.json` | source app, platform, framework, target repo, builder, slice grep |
+| 0 register | edit `~/Desktop/Projects/app-teardowns/registry.json`; ids from `curl 'https://itunes.apple.com/search?term=<name>&entity=software&country=us&limit=3'` | source app, App Store id, bundle id (for `crawl --bundle`), access terms, target repo, builder, slice grep |
 | 1 docs | WebFetch `<help>/en/collections/<id>` (one fetch lists every article) | capability map, one sourced row per behaviour |
 | 2 device | `jev-phone doctor` -> `watch` (you tap) or `crawl --dry-run` -> `crawl` | run folder: PNG + exact text tree per screen, clickable viewer |
 | 3 import | `trace.py import-map / import-audit / import-run` | `<target repo>/docs/parity/trace/TRACE.jsonl` |
@@ -121,6 +121,17 @@ Imports never overwrite a decision already recorded on a row.
 8. **Test builds can auto-run sign-up.** A Flutter build compiled from an integration test
    (`IntegrationTestWidgetsFlutterBinding` in `kernel_blob.bin`) runs its test on launch; grep
    the build before launching it anywhere near production.
+9. **First-run screens happen once.** Onboarding quiz, paywall and permission asks show only on
+   first launch. Install apps ahead of time but tell Mike not to open them; record the first run
+   with `jev-phone watch` while he does sign-up and answers (his account, his answers).
+10. **Installs need Mike's Apple Account confirmation.** There is no remote install; iPhone
+   Mirroring cannot use Face ID. Send the App Store links (`https://apps.apple.com/us/app/id<N>`,
+   checked for HTTP 200 and the right title) to his own iMessage thread with the imessage skill;
+   he taps Get. Confirm the send by re-reading the thread, not by the send status alone.
+11. **Money, accounts and health data are Gate-D.** Starting a trial (even a $0 one that
+   auto-renews), subscribing, and granting Apple Health access to a third-party app are Mike's
+   decisions. List each app's access terms in the registry before capture day. Some reference
+   apps also run on the web (RP Hypertrophy): those can be captured in the browser, no phone.
 
 ## Many apps, one target
 
