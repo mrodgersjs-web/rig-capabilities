@@ -16,6 +16,7 @@
 | app-web-scaffold | canonical | App Studio stage 4: Next.js App Router scaffold that builds in the sandbox (webpack, Tailwind v3), env-gated vendors, slice 0 proven... | - |
 | app-data-layer | canonical | App Studio stage 5: schema as source of truth, auth deny paths, limit+1 gates, forced-due job fixtures, consumer sweeps, persistence read-back... | - |
 | app-web-frontend | canonical | App Studio stage 6: one route or component per slice with an executed check, deny and empty states, production-build click-through... | - |
+| fe-system-design-os | canonical | META: front-end system design front door (INTERVIEW / BUILD-DESIGN / REVIEW / DRILL) - 10 stage skills, fesd-conductor + 6 agents + 4 sub-agents, 483 laws cited to the Front-End Engineer channel; Jev first... | fesd-interview-framework, fesd-requirements, fesd-architecture, fesd-component-api, fesd-state-data, fesd-api-network, fesd-realtime-sync, fesd-performance, fesd-a11y-i18n, fesd-career-prep, fe-system-design-doctrine |
 | app-mobile-build | canonical | App Studio stage 7: Expo or Flutter builds via Orca terminals, bundle flags proven, real simulator screens, test accounts cleaned up... | - |
 | app-ai-features | canonical | App Studio stage 8: deterministic backbone, typed judgments on System One, schema-validated outputs, named fallbacks, durable jobs... | - |
 | app-verify-evidence | canonical | App Studio stage 9: verification that can fail - assertion counts, BLOCKED not FAILED, planted failures with checksums, independent verifier... | - |
