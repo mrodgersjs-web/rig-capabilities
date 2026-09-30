@@ -70,6 +70,16 @@ JEV_ENDPOINT = os.environ.get("S1GATE_JEV_ENDPOINT", "https://api.typesafe.ai/v1
 JEV_MODEL = os.environ.get("S1GATE_JEV_MODEL", "jev-latest")
 KEYCHAIN_ITEM = os.environ.get("S1GATE_KEYCHAIN_ITEM", "com.rig.env.TYPESAFE_API_KEY")
 
+# Deterministic answer cache. The provider answer for (rubric, state, questions,
+# model) is treated as reusable for CACHE_TTL_DAYS; the VERDICT is never cached --
+# it is recomputed from the cached answers against the CURRENT rubric on every
+# call, so rule edits, calibration changes and never_auto always apply fresh.
+# Measured motivation (2026-09-30, decisions.db): the top-volume sites re-ask an
+# identical state 36-96% of the time and pay 200-1900 ms each time.
+# Disable entirely with S1GATE_CACHE=0.
+CACHE_ENABLED = os.environ.get("S1GATE_CACHE", "1") != "0"
+CACHE_TTL_DAYS = float(os.environ.get("S1GATE_CACHE_TTL_DAYS", "7"))
+
 # Verdicts, most severe first. Precedence is resolved by this ordering.
 BLOCK = "BLOCK"
 ESCALATE = "ESCALATE"
@@ -247,12 +257,20 @@ def eval_condition(answers: Dict[str, Any], expr: str) -> Tuple[Optional[bool], 
 
 def _rule_signal(rule: Dict[str, Any]) -> Optional[str]:
     """'claim_atomic.noul <= 0.50' -> 'claim_atomic.noul'."""
-    m = re.match(r"^\s*(\w+\.\w+)", str(rule.get("when", "")))
+    # 'risk.p.yes >= 0.5' -> 'risk.p.yes': a per-option probability is its own signal.
+    m = re.match(r"^\s*(\w+\.(?:p\.[\w\-]+|\w+))", str(rule.get("when", "")))
     return m.group(1) if m else None
 
 
 def rule_canonical_sha(rule: Dict[str, Any]) -> str:
     return hashlib.sha256(json.dumps(rule, sort_keys=True, ensure_ascii=False)
+                          .encode("utf-8")).hexdigest()
+
+
+def questions_sha(questions: Dict[str, Any]) -> str:
+    """Canonical hash of the question set. The answers a provider returns are a
+    function of the state AND the questions, so both belong in the cache key."""
+    return hashlib.sha256(json.dumps(questions, sort_keys=True, ensure_ascii=False, default=str)
                           .encode("utf-8")).hexdigest()
 
 
@@ -289,23 +307,29 @@ class Rubric:
 
     @property
     def enforcing(self) -> bool:
-        """Only a calibrated rubric may BLOCK. Others annotate."""
-        return bool(self.calibrated)
+        """Report effective enforcement, not a legacy configuration flag."""
+        return bool(self.rules) and all(self.rule_enforces(rule) for rule in self.rules)
 
     def rule_enforces(self, rule: Dict[str, Any], model: Optional[str] = None) -> bool:
         """A rule enforces only on its OWN certification whose hashes still match.
 
         Editing the rule, any part of the rubric, or switching the judging model
         voids the certification -- the rule drops back to advisory rather than
-        enforcing on stale evidence. No entry: fall back to the whole-rubric flag,
-        so pre-per-rule packs keep their prior behaviour.
+        enforcing on stale evidence. Multi-question and multi-rule rubrics also
+        require signal-scoped ground truth; a whole-decision label cannot
+        certify an individual question. Single-rule legacy packs retain the
+        whole-rubric fallback.
         """
         sig = _rule_signal(rule)
         entries = (self.calibration or {}).get("rules") or {}
         entry = entries.get(sig) if sig else None
+        needs_signal_labels = (len(self.questions) > 1
+                               or len({_rule_signal(r) for r in self.rules}) > 1)
         if not entry:
-            return self.enforcing
-        if entry.get("model") not in (None, "*", model or JEV_MODEL):
+            return bool(self.calibrated) and not needs_signal_labels
+        if needs_signal_labels and entry.get("label_scope") != "signal":
+            return False
+        if entry.get("model") != (model or JEV_MODEL):
             return False
         return (entry.get("rule_sha256") == rule_canonical_sha(rule)
                 and entry.get("rubric_sha256") == rubric_canonical_sha(self))
@@ -350,6 +374,7 @@ class GateResult:
     state_preview: str = ""
     error: Optional[str] = None
     decision_id: Optional[int] = None
+    cache_hit: bool = False
 
     @property
     def ok(self) -> bool:
@@ -385,6 +410,8 @@ CREATE TABLE IF NOT EXISTS decisions (
     model        TEXT,
     latency_ms   INTEGER,
     error        TEXT,
+    excluded     INTEGER NOT NULL DEFAULT 0,
+    exclusion_reason TEXT,
     label        TEXT,
     labelled_at  REAL,
     labelled_by  TEXT,
@@ -392,40 +419,87 @@ CREATE TABLE IF NOT EXISTS decisions (
 );
 CREATE INDEX IF NOT EXISTS idx_decisions_rubric ON decisions(rubric);
 CREATE INDEX IF NOT EXISTS idx_decisions_label ON decisions(rubric, label);
+CREATE TABLE IF NOT EXISTS decision_signal_labels (
+    decision_id INTEGER NOT NULL REFERENCES decisions(id),
+    signal TEXT NOT NULL,
+    label TEXT NOT NULL CHECK (label IN ('good', 'bad')),
+    labelled_at REAL NOT NULL,
+    labelled_by TEXT NOT NULL,
+    PRIMARY KEY (decision_id, signal)
+);
+CREATE INDEX IF NOT EXISTS idx_signal_labels_signal ON decision_signal_labels(signal, label);
+CREATE TABLE IF NOT EXISTS answer_cache (
+    rubric        TEXT NOT NULL,
+    state_sha256  TEXT NOT NULL,
+    questions_sha TEXT NOT NULL,
+    model_alias   TEXT NOT NULL,
+    answers_json  TEXT NOT NULL,
+    response_model TEXT,
+    created_ts    REAL NOT NULL,
+    last_hit_ts   REAL,
+    hits          INTEGER NOT NULL DEFAULT 0,
+    PRIMARY KEY (rubric, state_sha256, questions_sha, model_alias)
+);
 """
 
 
 class DecisionLog:
     """Append-only record of every gate decision.
 
-    This is the ProofPacket *and* the calibration corpus: once a human (or a
-    System 2 reviewer) fills in ``label``, the rows become the labelled set that
-    ``s1gate_calibrate`` measures thresholds against.
+    This is the decision receipt and calibration corpus. Multi-question
+    rubrics require a separate ground-truth label for each signal. A global
+    decision label cannot certify those rules.
     """
 
     def __init__(self, db_path: Optional[Path] = None) -> None:
         self.db_path = Path(db_path or DB_PATH)
         self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        self._conn = sqlite3.connect(str(self.db_path))
+        self._conn = sqlite3.connect(str(self.db_path), timeout=30)
+        # Multiple lanes (advisor-plus, routines, hooks) write to this one file
+        # from separate processes. sqlite's default is to fail immediately on a
+        # lock; busy_timeout makes a writer WAIT instead of erroring. Reported
+        # live 2026-09-30: database-is-locked errors across two LinkedIn lanes.
+        self._conn.execute("PRAGMA busy_timeout = 30000")
         self._conn.row_factory = sqlite3.Row
         self._conn.executescript(_SCHEMA)
         # Migration for databases created before state previews existed. A busy
         # error means another writer just did the same ALTER; verify either way.
-        try:
-            self._conn.execute("ALTER TABLE decisions ADD COLUMN state_preview TEXT")
-        except sqlite3.OperationalError:
-            pass
+        for ddl in ("ALTER TABLE decisions ADD COLUMN state_preview TEXT",
+                    "ALTER TABLE decisions ADD COLUMN excluded INTEGER NOT NULL DEFAULT 0",
+                    "ALTER TABLE decisions ADD COLUMN exclusion_reason TEXT",
+                    "ALTER TABLE decisions ADD COLUMN cache_hit INTEGER NOT NULL DEFAULT 0"):
+            try:
+                self._conn.execute(ddl)
+            except sqlite3.OperationalError:
+                pass
         cols = {r[1] for r in self._conn.execute("PRAGMA table_info(decisions)")}
         self.has_preview = "state_preview" in cols
+        self.has_cache_hit = "cache_hit" in cols
         self._conn.commit()
 
     def record(self, result: GateResult, subject: Optional[str] = None) -> int:
+        # A decision with no subject cannot be attributed to a caller or
+        # artifact, so it can never be calibrated. Refuse loudly; never
+        # silently default. Callers pass 'kind:id@sha12', e.g.
+        # 'code.diff:pr-42@a1b2c3d4e5f6'.
+        if subject is None or not str(subject).strip():
+            raise ValueError(
+                "refusing to log a decision without a subject: pass "
+                "subject='kind:id@sha12' (e.g. 'code.diff:pr-42@a1b2c3d4e5f6'); "
+                "an unattributable row poisons every aggregate on the table")
         preview = getattr(result, "state_preview", "") or None
-        if self.has_preview:
+        cache_hit = 1 if getattr(result, "cache_hit", False) else 0
+        # A row that carries an error is a provider failure, not a judgment:
+        # quarantine it out of the scoring path at birth (reversible flag,
+        # nothing deleted).
+        excluded = 1 if result.error else 0
+        exclusion_reason = ("provider-error: %s" % result.error)[:200] if result.error else None
+        if self.has_preview and self.has_cache_hit:
             cur = self._conn.execute(
                 "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
-                " answers_json, reasons_json, model, latency_ms, error, state_preview)"
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?)",
+                " answers_json, reasons_json, model, latency_ms, error, state_preview,"
+                " excluded, exclusion_reason, cache_hit)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     time.time(),
                     result.rubric,
@@ -439,13 +513,17 @@ class DecisionLog:
                     result.latency_ms,
                     result.error,
                     preview,
+                    excluded,
+                    exclusion_reason,
+                    cache_hit,
                 ),
             )
-        else:
+        elif self.has_preview:
             cur = self._conn.execute(
                 "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
-                " answers_json, reasons_json, model, latency_ms, error)"
-                " VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                " answers_json, reasons_json, model, latency_ms, error, state_preview,"
+                " excluded, exclusion_reason)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     time.time(),
                     result.rubric,
@@ -458,6 +536,31 @@ class DecisionLog:
                     result.model,
                     result.latency_ms,
                     result.error,
+                    preview,
+                    excluded,
+                    exclusion_reason,
+                ),
+            )
+        else:
+            cur = self._conn.execute(
+                "INSERT INTO decisions (ts, rubric, subject, state_sha256, verdict, advisory,"
+                " answers_json, reasons_json, model, latency_ms, error,"
+                " excluded, exclusion_reason)"
+                " VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+                (
+                    time.time(),
+                    result.rubric,
+                    subject,
+                    result.state_sha256,
+                    result.verdict,
+                    1 if result.advisory else 0,
+                    json.dumps(result.answers),
+                    json.dumps(result.reasons),
+                    result.model,
+                    result.latency_ms,
+                    result.error,
+                    excluded,
+                    exclusion_reason,
                 ),
             )
         self._conn.commit()
@@ -481,31 +584,178 @@ class DecisionLog:
         return self._conn.execute("SELECT * FROM decisions WHERE id=?", (decision_id,)).fetchone()
 
     def label(self, decision_id: int, label: str, by: str = "human") -> None:
+        if label not in ("good", "bad"):
+            raise ValueError("label must be good or bad")
         self._conn.execute(
             "UPDATE decisions SET label=?, labelled_at=?, labelled_by=? WHERE id=?",
             (label, time.time(), by, decision_id),
         )
         self._conn.commit()
 
+    def label_signal(self, decision_id: int, signal: str, label: str,
+                     by: str = "human") -> None:
+        """Label the defect represented by one question, not the whole artifact."""
+        if label not in ("good", "bad"):
+            raise ValueError("label must be good or bad")
+        parts = signal.split(".", 1)
+        if (len(parts) != 2 or not re.fullmatch(r"\w+", parts[0])
+                or not re.fullmatch(r"\w+|p\.[\w\-]+", parts[1])):
+            raise ValueError("signal must look like question.attr or question.p.option")
+        decision = self.get(decision_id)
+        if decision is None:
+            raise ValueError("decision not found")
+        answers = json.loads(decision["answers_json"])
+        if resolve(answers, parts[0], parts[1]) is None:
+            raise ValueError("decision has no answer for signal")
+        self._conn.execute(
+            "INSERT INTO decision_signal_labels"
+            " (decision_id, signal, label, labelled_at, labelled_by)"
+            " VALUES (?,?,?,?,?)"
+            " ON CONFLICT(decision_id, signal) DO UPDATE SET"
+            " label=excluded.label, labelled_at=excluded.labelled_at,"
+            " labelled_by=excluded.labelled_by",
+            (decision_id, signal, label, time.time(), by),
+        )
+        self._conn.commit()
+
+    def labelled_signal(self, rubric: str, signal: str) -> List[sqlite3.Row]:
+        return list(self._conn.execute(
+            "SELECT d.*, l.label AS signal_label,"
+            " l.labelled_by AS signal_labelled_by,"
+            " l.labelled_at AS signal_labelled_at FROM decisions AS d"
+            " JOIN decision_signal_labels AS l ON l.decision_id=d.id"
+            " WHERE d.rubric=? AND l.signal=? AND l.labelled_by!='mcp-agent'"
+            " AND COALESCE(d.excluded,0)=0"
+            " ORDER BY d.id",
+            (rubric, signal),
+        ))
+
     def labelled(self, rubric: str) -> List[sqlite3.Row]:
         return list(
             self._conn.execute(
-                "SELECT * FROM decisions WHERE rubric=? AND label IS NOT NULL ORDER BY id",
+                "SELECT * FROM decisions WHERE rubric=? AND label IS NOT NULL"
+                " AND COALESCE(excluded,0)=0"
+                " AND COALESCE(labelled_by, '')!='mcp-agent' ORDER BY id",
                 (rubric,),
             )
         )
 
     def counts(self, rubric: Optional[str] = None) -> Dict[str, int]:
-        q = "SELECT verdict, COUNT(*) c FROM decisions"
+        q = "SELECT verdict, COUNT(*) c FROM decisions WHERE COALESCE(excluded,0)=0"
         args: Tuple[Any, ...] = ()
         if rubric:
-            q += " WHERE rubric=?"
+            q += " AND rubric=?"
             args = (rubric,)
         q += " GROUP BY verdict"
         return {r["verdict"]: r["c"] for r in self._conn.execute(q, args)}
 
+    def hygiene(self, rubric: Optional[str] = None) -> Dict[str, int]:
+        """Honest corpus totals: what is attributable, what is quarantined,
+        and the pass rate over clean rows only (non-blank subject, no error)."""
+        where, args = "1=1", ()
+        if rubric:
+            where, args = "rubric=?", (rubric,)
+        row = self._conn.execute(
+            "SELECT COUNT(*) total,"
+            " SUM(subject IS NULL OR TRIM(subject)='') blank,"
+            " SUM(COALESCE(excluded,0)!=0) excluded,"
+            " SUM(COALESCE(excluded,0)=0 AND subject IS NOT NULL"
+            "     AND TRIM(subject)!='') clean,"
+            " SUM(COALESCE(excluded,0)=0 AND subject IS NOT NULL"
+            "     AND TRIM(subject)!='' AND verdict='PASS') clean_pass"
+            " FROM decisions WHERE " + where, args).fetchone()
+        return {k: int(row[k] or 0) for k in ("total", "blank", "excluded", "clean", "clean_pass")}
+
     def close(self) -> None:
         self._conn.close()
+
+    # ------------------------------------------------------------------
+    # Deterministic answer cache. Caches the provider's ANSWERS only; the
+    # verdict is always recomputed from current rubric logic in evaluate().
+    # A cache hit therefore cannot launder a stale enforcement decision.
+    # ------------------------------------------------------------------
+
+    def cache_lookup(self, rubric: str, state_sha256: str, qsha: str,
+                     model_alias: str) -> Optional[Dict[str, Any]]:
+        """Return the cached body {'answers': ..., 'model': ...} or None.
+
+        A row past CACHE_TTL_DAYS is a miss (and is pruned lazily). A hit bumps
+        its own counters so `cache-stats` can prove the cache is earning.
+        """
+        if not CACHE_ENABLED:
+            return None
+        row = self._conn.execute(
+            "SELECT answers_json, response_model, created_ts FROM answer_cache"
+            " WHERE rubric=? AND state_sha256=? AND questions_sha=? AND model_alias=?",
+            (rubric, state_sha256, qsha, model_alias),
+        ).fetchone()
+        if row is None:
+            return None
+        age = time.time() - float(row["created_ts"])
+        if age > CACHE_TTL_DAYS * 86400:
+            self._conn.execute(
+                "DELETE FROM answer_cache WHERE rubric=? AND state_sha256=?"
+                " AND questions_sha=? AND model_alias=?",
+                (rubric, state_sha256, qsha, model_alias))
+            self._conn.commit()
+            return None
+        self._conn.execute(
+            "UPDATE answer_cache SET hits=hits+1, last_hit_ts=?"
+            " WHERE rubric=? AND state_sha256=? AND questions_sha=? AND model_alias=?",
+            (time.time(), rubric, state_sha256, qsha, model_alias))
+        self._conn.commit()
+        return {"answers": json.loads(row["answers_json"]),
+                "model": row["response_model"] or "",
+                "_cache_age_s": int(age)}
+
+    def cache_store(self, rubric: str, state_sha256: str, qsha: str,
+                    model_alias: str, answers: Dict[str, Any],
+                    response_model: str) -> None:
+        if not CACHE_ENABLED:
+            return
+        self._conn.execute(
+            "INSERT INTO answer_cache (rubric, state_sha256, questions_sha, model_alias,"
+            " answers_json, response_model, created_ts, hits) VALUES (?,?,?,?,?,?,?,0)"
+            " ON CONFLICT(rubric, state_sha256, questions_sha, model_alias) DO UPDATE SET"
+            " answers_json=excluded.answers_json, response_model=excluded.response_model,"
+            " created_ts=excluded.created_ts, hits=0",
+            (rubric, state_sha256, qsha, model_alias,
+             json.dumps(answers), response_model, time.time()))
+        self._conn.commit()
+
+    def cache_stats(self, rubric: Optional[str] = None) -> Dict[str, Any]:
+        where, args = ("WHERE rubric=?", (rubric,)) if rubric else ("", ())
+        rows = list(self._conn.execute(
+            "SELECT rubric, COUNT(*) entries, SUM(hits) hits,"
+            " SUM(LENGTH(answers_json)) bytes FROM answer_cache " + where +
+            " GROUP BY rubric ORDER BY hits DESC", args))
+        out = {"enabled": CACHE_ENABLED, "ttl_days": CACHE_TTL_DAYS, "rubrics": []}
+        total_hits = 0
+        for r in rows:
+            out["rubrics"].append({"rubric": r["rubric"], "entries": r["entries"],
+                                   "hits": int(r["hits"] or 0), "bytes": int(r["bytes"] or 0)})
+            total_hits += int(r["hits"] or 0)
+        out["total_hits"] = total_hits
+        out["total_hits"] = total_hits
+        out["logged_cache_hits"] = int(self._conn.execute(
+            "SELECT COUNT(*) FROM decisions WHERE cache_hit=1" +
+            (" AND rubric=?" if rubric else ""), args).fetchone()[0] or 0)
+        # Estimated avoided latency: cache-hit rows have ~0ms themselves, so the
+        # honest estimate is hits x the average MISS latency for the same rubric.
+        avg = self._conn.execute(
+            "SELECT AVG(latency_ms) FROM decisions WHERE COALESCE(cache_hit,0)=0"
+            " AND error IS NULL" + (" AND rubric=?" if rubric else ""), args).fetchone()[0]
+        out["avg_miss_latency_ms"] = int(avg or 0)
+        out["est_ms_saved"] = int((avg or 0) * out["logged_cache_hits"])
+        return out
+
+    def cache_clear(self, rubric: Optional[str] = None) -> int:
+        if rubric:
+            cur = self._conn.execute("DELETE FROM answer_cache WHERE rubric=?", (rubric,))
+        else:
+            cur = self._conn.execute("DELETE FROM answer_cache")
+        self._conn.commit()
+        return int(cur.rowcount or 0)
 
 
 # --------------------------------------------------------------------------
@@ -559,28 +809,49 @@ def evaluate(
     preview = "" if os.environ.get("S1GATE_STATE_PREVIEW") == "0" else state[:500]
     t0 = time.time()
 
-    try:
-        body = ask(state, rb.questions, model=model, timeout=timeout)
-    except (ProviderError, S1GateError) as exc:
-        # Rule 1: fail closed.
-        res = GateResult(
-            rubric=rb.name,
-            verdict=BLOCK,
-            enforced=True,
-            advisory=False,
-            reasons=["System One unavailable, failing closed: %s" % exc],
-            answers={},
-            model="",
-            latency_ms=int((time.time() - t0) * 1000),
-            state_sha256=sha,
-            state_preview=preview,
-            error=str(exc),
-        )
+    # Deterministic answer cache: same rubric + same state + same questions +
+    # same model alias within TTL skips the network call. The verdict below is
+    # still computed from live rubric logic, so a cached answer under a rubric
+    # that has since been hardened will freshly BLOCK. A provider failure is
+    # never cached.
+    qsha = questions_sha(rb.questions)
+    model_alias = model or JEV_MODEL
+    cached = log.cache_lookup(rb.name, sha, qsha, model_alias) if log else None
+    cache_hit = cached is not None
+
+    if cache_hit:
+        body = {"answers": cached["answers"], "model": cached["model"]}
+    else:
+        try:
+            body = ask(state, rb.questions, model=model, timeout=timeout)
+        except (ProviderError, S1GateError) as exc:
+            # Rule 1: fail closed.
+            res = GateResult(
+                rubric=rb.name,
+                verdict=BLOCK,
+                enforced=True,
+                advisory=False,
+                reasons=["System One unavailable, failing closed: %s" % exc],
+                answers={},
+                model="",
+                latency_ms=int((time.time() - t0) * 1000),
+                state_sha256=sha,
+                state_preview=preview,
+                error=str(exc),
+            )
+            if log:
+                res.decision_id = log.record(res, subject)
+            return res
         if log:
-            res.decision_id = log.record(res, subject)
-        return res
+            log.cache_store(rb.name, sha, qsha, model_alias,
+                            body.get("answers") or {},
+                            str(body.get("model") or ""))
 
     latency = int((time.time() - t0) * 1000)
+    # Certification binds to the model that ANSWERED (e.g. jev-1.13.0), not the
+    # requested alias (jev-latest): comparing to the alias meant no certified rule
+    # ever enforced. A version change still voids the certification.
+    judged = str(body.get("model") or "") or model or JEV_MODEL
     answers = body.get("answers") or {}
     verdict = PASS
     reasons: List[str] = []
@@ -598,7 +869,7 @@ def evaluate(
             reasons.append("rule %r undecidable (%s)" % (cond, note))
             continue
         if outcome:
-            enforce = rb.rule_enforces(rule, model or JEV_MODEL)
+            enforce = rb.rule_enforces(rule, judged)
             fired_enforce.append(enforce)
             if want == BLOCK and not enforce:
                 # Rule 3, per rule: a signal nobody measured may annotate, not block.
@@ -622,7 +893,8 @@ def evaluate(
     # The pack enforces when at least one FIRED rule carries its own certification.
     # An enforceable BLOCK is not diluted by uncalibrated neighbours; a BLOCK from an
     # uncalibrated rule was already downgraded in the loop above.
-    advisory = (not any(fired_enforce)) if fired_enforce else (not rb.enforcing)
+    advisory = ((not any(fired_enforce)) if fired_enforce else
+                not (bool(rb.rules) and all(rb.rule_enforces(r, judged) for r in rb.rules)))
     if rb.never_auto and verdict == PASS:
         verdict = ESCALATE
         reasons.append(
@@ -644,6 +916,7 @@ def evaluate(
         latency_ms=latency,
         state_sha256=sha,
         state_preview=preview,
+        cache_hit=cache_hit,
     )
     if log:
         res.decision_id = log.record(res, subject)

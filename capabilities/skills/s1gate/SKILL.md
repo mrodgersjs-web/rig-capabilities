@@ -95,6 +95,62 @@ Exit codes are the contract — hooks and CI read these, not stdout:
 `0` PASS · `1` BLOCK (enforced) · `2` ESCALATE · `3` usage/config error.
 An advisory rubric never returns 1.
 
+## The deterministic answer cache (shipped 2026-09-30)
+
+Measured on the live decision log (141k rows over 12 days): the high-volume
+sites re-ask an IDENTICAL state 36–96% of the time, paying the full provider
+round trip each time. 62,360 of 117,608 clean decisions (53%) were repeats
+inside a 7-day window — ~4.7 hours of provider latency and ~53% of provider
+spend re-buying answers already computed.
+
+The cache sits inside `evaluate()`: provider ANSWERS are stored in the
+`answer_cache` table keyed on `(rubric, state_sha256, questions_sha,
+model_alias)` with a 7-day TTL (`S1GATE_CACHE_TTL_DAYS`). The VERDICT is never
+cached — it is recomputed from the cached answers against the CURRENT rubric on
+every call, so editing a rule, certifying a signal, or `never_auto` takes
+effect immediately on cached states (asserted in
+`test_verdict_is_recomputed_against_current_rules_not_cached`). A provider
+failure is never cached. Every hit is still logged as a decision row with
+`cache_hit=1`, so the corpus keeps growing and cache behaviour is itself
+measurable. Disable with `S1GATE_CACHE=0`.
+
+```bash
+rig-s1gate cache-stats            # entries, hits, est. ms saved per rubric
+rig-s1gate cache-clear code.diff  # or --all; rebuilds from live calls
+```
+
+Concurrency: `DecisionLog` opens with `busy_timeout=30s`. Two lanes hit
+`database is locked` on this DB on 2026-09-30; a failure-plant (lock held 2s)
+shows the old connect failing in 5.2s where the timed writer waits and lands
+the row. Journal mode was deliberately NOT changed; WAL is the follow-up if
+read contention appears.
+
+## The auto-retrain / shadow loop (spec — NOT built)
+
+Stolen from stuntd (bladedevoff/stuntd, v0.1.2), which is the same
+System-One-in-front-of-a-big-model pattern as this gate plus a learning loop.
+Its four-stage site lifecycle maps onto our laws without changing enforcement:
+
+1. collect — the decision log already does this (rule 4).
+2. train — fit a local head per rubric-site on logged (state, answers) pairs.
+3. shadow — the head answers alongside the provider; `stuntd status`-style
+   agreement per site, recorded into decisions.db. Shadow answers never touch
+   the verdict.
+4. live — only after measured agreement, and (per law 3) never enforcing until
+   calibration certifies it; a live head under law 6 is still never an
+   authorisation. Self-demote to shadow when a check sample falls below the
+   target agreement; retrain in the background after N new captures.
+
+Honest constraints from stuntd's own README: agreement with the teacher is not
+correctness (their gold-rows requirement is our law 5); a frozen encoder cannot
+do arithmetic over fields, so score rules with numeric thresholds are poor
+candidates; a site needs ~300+ repeated decisions before training pays. Our
+candidates by volume: advisor.drift (17k rows, 47% repeats, 1.9s avg),
+foundry-item (16k, 53%, 253ms), contact.pick (11k, 36%, 254ms). The
+deterministic cache above is the prerequisite: it already absorbs the exact
+repeats, so a head is only worth training on the non-repeating half of the
+traffic.
+
 ## Rubric packs
 
 | Rubric | Stage | Lane |
@@ -186,3 +242,35 @@ token (`pm.cause_is_testable` → `cause_is_testable`) or were renamed (`q.class
 `dq.information` is **computed in code** (`ultra_gates.information()`: the weakest of the
 14 angle classes, `None` when a class is unanswered) and is deliberately not a question —
 a mean would hide the one class that is unresolved.
+
+## One verdict is a sample, not a verdict (added 2026-09-27)
+
+System One output is noisy at the margin. Two measured shapes, both from 2026-09-27:
+
+- **Same artifact, different verdicts.** Three `rig-s1gate check ui.design` runs minutes apart on
+  the same landing page - the last on the **exact shipped bytes** - returned decision 109441
+  (exit 0), 109452 (PASS) and 109464 (ESCALATE, advisory, exit 2) while the per-axis scores
+  barely moved (clarity 2.13 -> 2.16, primary_action_obvious 0.77 -> 0.78, states_handled ~0.33).
+- **Same subject and tick, contradictory drift type.** Four `advisor.drift` judgments of
+  `omp-01a0e11a-ad48:tick51` landed within three seconds reading `rabbit_hole` (0.36), `none`
+  (0.43), `none` (0.30), `none` (0.72) - same state, four answers.
+
+Rules that fall out:
+
+- **Do not read one PASS as a clean bill**, and do not read one ESCALATE as a defect. Record the
+  decision run **and the per-axis scores** on the shipped bytes, so a flip is visible against a
+  stable score vector rather than looking like the artifact changed.
+- When a verdict flips while the scores hold, the verdict threshold is the suspect, not the
+  artifact. Chase the axis that moved, or the rule that fired - never re-run until you get the
+  answer you wanted.
+- A repeated re-judge of the same subject is a **stability measurement**. Take the spread, not
+  the last answer.
+- Of the three verbs only two need no calibration: **rank** and **improve** are safe on an
+  uncalibrated rubric. **check** blocks only once calibrated. Until then a gate that false-blocks
+  good work gets switched off, which is worse than no gate.
+
+## A score that only informs is a dashboard
+
+Every rubric axis must be wired to a verb that acts on it: **rank** the queue, **rewrite** until
+clean, or **escalate**. An axis nobody acts on is rent paid for nothing. If a score cannot name
+what it changes in the next action, drop it from the gate and leave it in the log.

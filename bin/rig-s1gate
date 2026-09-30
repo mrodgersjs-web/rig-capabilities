@@ -12,10 +12,12 @@ Usage
     rig-s1gate list
     rig-s1gate show <rubric>
     rig-s1gate check <rubric> [--file PATH | --text STR | -]   [--subject S] [--json]
-    rig-s1gate label <decision-id> <good|bad>
+    rig-s1gate label <decision-id> <good|bad> [--signal question.attr]
     rig-s1gate calibrate <rubric> --signal Q.ATTR [--direction above|below]
                                   [--max-false-block 0.05] [--min-recall 0.50] [--write]
     rig-s1gate stats [rubric]
+    rig-s1gate cache-stats [rubric]     deterministic answer cache: entries, hits, ms saved
+    rig-s1gate cache-clear [rubric|--all]  drop cached provider answers (rebuilds from live calls)
     rig-s1gate recent [rubric] [-n N] [--unlabelled]   list logged decisions for labelling
     rig-s1gate review <decision-id>                    show one decision: state preview, answers, reasons
     rig-s1gate selftest
@@ -72,7 +74,7 @@ def cmd_list(args) -> int:
         except S1GateError as exc:
             print("%-22s %s" % (n, exc))
             continue
-        mode = "ENFORCING" if rb.calibrated else "advisory"
+        mode = "ENFORCING" if rb.enforcing else "advisory"
         if rb.never_auto:
             mode += "+never_auto"
         print("%-22s %-10s %-10s %-11s %s" % (n, rb.stage, rb.lane, mode, rb.description[:58]))
@@ -83,7 +85,9 @@ def cmd_show(args) -> int:
     rb = load_rubric(args.rubric)
     print(json.dumps({
         "name": rb.name, "stage": rb.stage, "lane": rb.lane,
-        "calibrated": rb.calibrated, "never_auto": rb.never_auto,
+        "calibrated": rb.calibrated, "enforcing": rb.enforcing,
+        "mode": "ENFORCING" if rb.enforcing else "advisory",
+        "never_auto": rb.never_auto,
         "confidence_floor": rb.confidence_floor,
         "questions": list(rb.questions), "rules": rb.rules,
         "calibration": rb.calibration,
@@ -91,7 +95,20 @@ def cmd_show(args) -> int:
     return 0
 
 
+def _need_subject(args) -> int | None:
+    """Exit-code contract: 3 = usage/config error. The decision log refuses
+    unattributable rows, so refuse here before spending a live Jev call."""
+    if args.subject is None or not str(args.subject).strip():
+        print("rig-s1gate: --subject is required (kind:id@sha12, e.g. "
+              "--subject code.diff:pr-42@a1b2c3d4e5f6)", file=sys.stderr)
+        return 3
+    return None
+
+
 def cmd_check(args) -> int:
+    bad = _need_subject(args)
+    if bad is not None:
+        return bad
     state = _read_state(args)
     log = DecisionLog()
     try:
@@ -117,10 +134,14 @@ def cmd_label(args) -> int:
         raise SystemExit("label must be 'good' or 'bad'")
     log = DecisionLog()
     try:
-        log.label(args.decision_id, args.label)
+        if args.signal:
+            log.label_signal(args.decision_id, args.signal, args.label)
+        else:
+            log.label(args.decision_id, args.label)
     finally:
         log.close()
-    print("decision %d labelled %s" % (args.decision_id, args.label))
+    print("decision %d labelled %s%s" % (
+        args.decision_id, args.label, " for " + args.signal if args.signal else ""))
     return 0
 
 
@@ -143,6 +164,7 @@ def cmd_stats(args) -> int:
     log = DecisionLog()
     try:
         counts = log.counts(args.rubric)
+        hyg = log.hygiene(args.rubric)
     finally:
         log.close()
     if not counts:
@@ -150,14 +172,56 @@ def cmd_stats(args) -> int:
         return 0
     total = sum(counts.values())
     scope = args.rubric or "ALL"
-    print("s1gate decisions (%s): %d" % (scope, total))
+    print("s1gate decisions (%s, excluding quarantined rows): %d" % (scope, total))
     for v in (BLOCK, ESCALATE, PASS):
         if v in counts:
             print("  %-9s %5d  (%4.1f%%)" % (v, counts[v], 100.0 * counts[v] / total))
+    print("corpus hygiene (%s): total %d  blank-subject %d  quarantined %d  clean %d"
+          % (scope, hyg["total"], hyg["blank"], hyg["excluded"], hyg["clean"]))
+    if hyg["clean"]:
+        print("pass rate over clean rows: %d/%d (%.1f%%)"
+              % (hyg["clean_pass"], hyg["clean"], 100.0 * hyg["clean_pass"] / hyg["clean"]))
+    return 0
+
+
+def cmd_cache_stats(args) -> int:
+    log = DecisionLog()
+    try:
+        st = log.cache_stats(args.rubric)
+    finally:
+        log.close()
+    if args.json:
+        print(json.dumps(st, indent=2))
+        return 0
+    print("answer cache: %s  (ttl %.1f days)" % ("ENABLED" if st["enabled"] else "DISABLED", st["ttl_days"]))
+    if not st["rubrics"]:
+        print("  empty -- no provider answers cached yet")
+        return 0
+    print("  %-22s %8s %8s %10s" % ("RUBRIC", "ENTRIES", "HITS", "KB"))
+    for r in st["rubrics"]:
+        print("  %-22s %8d %8d %10.1f" % (r["rubric"], r["entries"], r["hits"], r["bytes"] / 1024.0))
+    print("  logged cache hits: %d   est. provider latency avoided: %.1fs"
+          % (st["logged_cache_hits"], st["est_ms_saved"] / 1000.0))
+    return 0
+
+
+def cmd_cache_clear(args) -> int:
+    if not args.all and not args.rubric:
+        raise SystemExit("cache-clear needs a rubric name or --all")
+    log = DecisionLog()
+    try:
+        n = log.cache_clear(None if args.all else args.rubric)
+    finally:
+        log.close()
+    print("dropped %d cached answer%s%s" % (n, "" if n == 1 else "s",
+          " for " + args.rubric if args.rubric and not args.all else ""))
     return 0
 
 
 def cmd_improve(args) -> int:
+    bad = _need_subject(args)
+    if bad is not None:
+        return bad
     draft = _read_state(args)
     log = DecisionLog()
     try:
@@ -175,6 +239,9 @@ def cmd_improve(args) -> int:
 
 
 def cmd_rank(args) -> int:
+    bad = _need_subject(args)
+    if bad is not None:
+        return bad
     raw = Path(args.file).read_text(encoding="utf-8") if args.file != "-" else sys.stdin.read()
     cands = [c.strip() for c in raw.split("\n---\n") if c.strip()]
     if len(cands) < 2:
@@ -300,6 +367,7 @@ def main(argv=None) -> int:
 
     l = sub.add_parser("label")
     l.add_argument("decision_id", type=int); l.add_argument("label")
+    l.add_argument("--signal", help="question.attr for multi-question rubric calibration")
     l.set_defaults(fn=cmd_label)
 
     cal = sub.add_parser("calibrate")
@@ -312,6 +380,14 @@ def main(argv=None) -> int:
     cal.set_defaults(fn=cmd_calibrate)
 
     st = sub.add_parser("stats"); st.add_argument("rubric", nargs="?"); st.set_defaults(fn=cmd_stats)
+    cs = sub.add_parser("cache-stats")
+    cs.add_argument("rubric", nargs="?")
+    cs.add_argument("--json", action="store_true")
+    cs.set_defaults(fn=cmd_cache_stats)
+    cc = sub.add_parser("cache-clear")
+    cc.add_argument("rubric", nargs="?")
+    cc.add_argument("--all", action="store_true")
+    cc.set_defaults(fn=cmd_cache_clear)
     rc = sub.add_parser("recent")
     rc.add_argument("rubric", nargs="?")
     rc.add_argument("-n", type=int, default=20)

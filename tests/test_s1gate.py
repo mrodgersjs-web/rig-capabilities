@@ -200,6 +200,50 @@ class TestRubricPacks(unittest.TestCase):
                     self.assertIn(val, q["criteria"],
                                   "%s: rule names option %r not in criteria" % (name, val))
 
+    def test_work_criteria_map_covers_every_rubric_and_rejects_unknown(self):
+        root = Path(s1gate.RUBRIC_DIR).parent
+        raw = json.loads((root / "work-criteria.json").read_text(encoding="utf-8"))
+        self.assertIs(raw["fail_closed"], True)
+        self.assertIs(raw["advisory_until_calibrated"], True)
+        self.assertEqual(raw["min_noul"], 0.9)
+        self.assertEqual(raw["min_confidence"], 0.9)
+        self.assertIn("rig-s1gate check", raw["command"])
+        kinds = raw["kinds"]
+        self.assertNotIn("not-a-kind", kinds)
+        names = s1gate.list_rubrics()
+        self.assertGreaterEqual(len(names), 71)
+        for name in names:
+            self.assertEqual(kinds.get(name), name,
+                             "shipped rubric %s is not an identity key" % name)
+        for kind, target in kinds.items():
+            rb = s1gate.load_rubric(target)
+            self.assertEqual(rb.name, target, "kind %s points at %s" % (kind, target))
+        # The five gap packs are new and unmeasured. They must not enforce.
+        for name in ("routine.run", "youtube.scrape", "board.card", "fusion.check", "form.field"):
+            self.assertIn(name, names)
+            self.assertFalse(s1gate.load_rubric(name).calibrated, "%s must stay advisory" % name)
+
+    def test_owned_packs_reject_noul_at_or_below_090(self):
+        # Above 0.9 means 0.90 fails and 0.91 passes.
+        owned = (
+            "doctrine.surface", "routine.run", "youtube.scrape",
+            "board.card", "fusion.check", "form.field",
+        )
+        for name in owned:
+            rb = s1gate.load_rubric(name)
+            self.assertGreaterEqual(rb.confidence_floor, 0.90, name)
+            noul_rules = [r for r in rb.rules if ".noul <=" in r["when"]]
+            self.assertTrue(noul_rules, "%s has no 0.90 noul rule" % name)
+            for rule in noul_rules:
+                self.assertIn("<= 0.90", rule["when"], rule["when"])
+                qname = rule["when"].split(".noul")[0].strip()
+                under = {qname: {"type": "noul", "noul": 0.90}}
+                above = {qname: {"type": "noul", "noul": 0.91}}
+                fail, _ = s1gate.eval_condition(under, rule["when"])
+                clear, _ = s1gate.eval_condition(above, rule["when"])
+                self.assertIs(fail, True, "%s let 0.90 pass: %s" % (name, rule["when"]))
+                self.assertIs(clear, False, "%s blocked 0.91: %s" % (name, rule["when"]))
+
 
 class TestCalibration(unittest.TestCase):
     def test_sweep_counts_confusion_matrix(self):
@@ -231,8 +275,8 @@ class TestCalibration(unittest.TestCase):
             res = s1gate.GateResult(rubric="code.diff", verdict="PASS", enforced=False,
                                     reasons=[], answers={"weakened_test": {"type": "noul", "noul": 0.1}},
                                     model="t", latency_ms=1, advisory=True, state_sha256="x")
-            for _ in range(3):
-                log.label(log.record(res), "good")
+            for i in range(3):
+                log.label(log.record(res, subject="code.diff:thin%d@x" % i), "good")
             log.close()
             out = calibrate_rubric("code.diff", ("weakened_test", "noul"), db_path=db)
         self.assertFalse(out["certified"])
@@ -253,6 +297,43 @@ class TestDecisionLog(unittest.TestCase):
             self.assertEqual(rows[0]["label"], "bad")
             self.assertEqual(json.loads(rows[0]["answers_json"])["q"]["noul"], 0.9)
             self.assertEqual(log.counts("r"), {"BLOCK": 1})
+            log.close()
+
+    def test_record_refuses_an_empty_subject(self):
+        # An unattributable row poisons every aggregate on the table: the
+        # logger must refuse it loudly, never default it to NULL or "".
+        with tempfile.TemporaryDirectory() as td:
+            log = s1gate.DecisionLog(Path(td) / "d.db")
+            res = s1gate.GateResult(rubric="r", verdict="PASS", enforced=False,
+                                    reasons=["x"], answers={}, model="m",
+                                    latency_ms=5, state_sha256="abc")
+            for bad in (None, "", "   "):
+                with self.assertRaises(ValueError, msg=repr(bad)):
+                    log.record(res, subject=bad)
+            self.assertEqual(log.counts(), {}, "refused rows must not be written")
+            log.close()
+
+    def test_errored_rows_are_quarantined_out_of_the_scoring_path(self):
+        with tempfile.TemporaryDirectory() as td:
+            log = s1gate.DecisionLog(Path(td) / "d.db")
+            base = dict(rubric="r", enforced=True, reasons=["x"],
+                        answers={"q": {"type": "noul", "noul": 0.9}}, model="m",
+                        latency_ms=5, state_sha256="abc")
+            ok = log.record(s1gate.GateResult(verdict="BLOCK", **base), subject="s")
+            err = log.record(s1gate.GateResult(verdict="BLOCK", error="TimeoutError: timed out",
+                                               **base), subject="e")
+            log.label(ok, "good")
+            log.label(err, "good")
+            self.assertEqual(log.counts("r"), {"BLOCK": 1},
+                             "an errored row is a provider failure, not a judgment")
+            self.assertEqual([r["id"] for r in log.labelled("r")], [ok])
+            row = log.get(err)
+            self.assertEqual(row["excluded"], 1)
+            self.assertIn("TimeoutError", row["exclusion_reason"])
+            # reversible: the flag can be cleared without deleting the row
+            log._conn.execute("UPDATE decisions SET excluded=0 WHERE id=?", (err,))
+            log._conn.commit()
+            self.assertEqual(log.counts("r"), {"BLOCK": 2})
             log.close()
 
 
@@ -331,3 +412,112 @@ class TestImproveAndRank(unittest.TestCase):
             rows = rank(rb, ["worst", "best", "middle"])
         self.assertEqual([r["text"] for r in rows], ["best", "middle", "worst"])
         self.assertEqual([r["tripped"] for r in rows], [0, 1, 2])
+
+
+class TestAnswerCache(unittest.TestCase):
+    """The deterministic answer cache: answers may be reused, verdicts never are."""
+
+    def _log(self, td):
+        return s1gate.DecisionLog(Path(td) / "d.db")
+
+    def test_second_identical_call_is_served_from_cache(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask", return_value=body) as ask_mock:
+                r1 = s1gate.evaluate(_rubric(), "same state", subject="t:1", log=log)
+                r2 = s1gate.evaluate(_rubric(), "same state", subject="t:2", log=log)
+            self.assertEqual(ask_mock.call_count, 1, "second identical call must not hit the provider")
+            self.assertFalse(r1.cache_hit)
+            self.assertTrue(r2.cache_hit)
+            self.assertEqual(r1.answers, r2.answers)
+            self.assertEqual(r2.verdict, s1gate.PASS)
+            log.close()
+
+    def test_verdict_is_recomputed_against_current_rules_not_cached(self):
+        """Cache the answers noul=0.70 under a 0.60 threshold (BLOCK, calibrated),
+        then re-judge the SAME state under a rubric whose threshold rose to 0.99:
+        the verdict must flip to PASS without a provider call. If the verdict had
+        been cached, hardening a rule could never take effect on cached states."""
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.70}}}
+        strict = _rubric(rules=[{"when": "bad.noul >= 0.99", "verdict": "BLOCK", "reason": "bad"}])
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask", return_value=body) as ask_mock:
+                r1 = s1gate.evaluate(_rubric(), "state", subject="t:1", log=log)
+                r2 = s1gate.evaluate(strict, "state", subject="t:2", log=log)
+            self.assertEqual(r1.verdict, s1gate.BLOCK)
+            self.assertEqual(r2.verdict, s1gate.PASS)
+            self.assertTrue(r2.cache_hit)
+            self.assertEqual(ask_mock.call_count, 1)
+            log.close()
+
+    def test_changed_questions_are_a_cache_miss(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        other_q = _rubric(questions={"bad": {"type": "noul", "instructions": "DIFFERENT"}})
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask", return_value=body) as ask_mock:
+                s1gate.evaluate(_rubric(), "state", subject="t:1", log=log)
+                r2 = s1gate.evaluate(other_q, "state", subject="t:2", log=log)
+            self.assertEqual(ask_mock.call_count, 2,
+                             "an edited question set must not reuse old answers")
+            self.assertFalse(r2.cache_hit)
+            log.close()
+
+    def test_expired_entry_is_a_miss_and_is_pruned(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask", return_value=body):
+                s1gate.evaluate(_rubric(), "state", subject="t:1", log=log)
+            import time as _t
+            stale = _t.time() - (s1gate.CACHE_TTL_DAYS + 1) * 86400
+            log._conn.execute("UPDATE answer_cache SET created_ts=?", (stale,))
+            log._conn.commit()
+            with mock.patch.object(s1gate, "ask", return_value=body) as ask_mock:
+                r2 = s1gate.evaluate(_rubric(), "state", subject="t:2", log=log)
+            self.assertFalse(r2.cache_hit)
+            self.assertEqual(ask_mock.call_count, 1)
+            log.close()
+
+    def test_provider_failure_is_never_cached(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask",
+                                   side_effect=[s1gate.ProviderError("down"), body]) as ask_mock:
+                r1 = s1gate.evaluate(_rubric(), "state", subject="t:1", log=log)
+                self.assertEqual(log.cache_stats()["rubrics"], [],
+                                 "a failed call must not seed the cache")
+                r2 = s1gate.evaluate(_rubric(), "state", subject="t:2", log=log)
+            self.assertEqual(r1.verdict, s1gate.BLOCK)
+            self.assertEqual(ask_mock.call_count, 2)
+            self.assertFalse(r2.cache_hit)
+            log.close()
+
+    def test_cache_disabled_by_env_flag(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "CACHE_ENABLED", False), \
+                    mock.patch.object(s1gate, "ask", return_value=body) as ask_mock:
+                s1gate.evaluate(_rubric(), "state", subject="t:1", log=log)
+                r2 = s1gate.evaluate(_rubric(), "state", subject="t:2", log=log)
+            self.assertEqual(ask_mock.call_count, 2)
+            self.assertFalse(r2.cache_hit)
+            self.assertEqual(log.cache_stats()["rubrics"], [])
+            log.close()
+
+    def test_cache_stats_counts_hits(self):
+        body = {"model": "jev-test", "answers": {"bad": {"type": "noul", "noul": 0.01}}}
+        with tempfile.TemporaryDirectory() as td:
+            log = self._log(td)
+            with mock.patch.object(s1gate, "ask", return_value=body):
+                for i in range(3):
+                    s1gate.evaluate(_rubric(), "state", subject="t:%d" % i, log=log)
+            st = log.cache_stats("t")
+            self.assertEqual(st["rubrics"][0]["entries"], 1)
+            self.assertEqual(st["rubrics"][0]["hits"], 2)
+            self.assertEqual(st["logged_cache_hits"], 2)
+            log.close()
