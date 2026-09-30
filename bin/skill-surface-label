@@ -12,6 +12,7 @@ Every label row names its labeler. Hosted-Jev decisions also get the label writt
 
   skill-surface-label build [--limit 200]    real chats -> _label-set.jsonl (stays on this machine)
   skill-surface-label run [--workers 3]      route + label every unlabeled item (resumable)
+  skill-surface-label run --relabel          redo every row without an independent label (needs OpenJev up)
   skill-surface-label report [--write]       agreement, per-level calibration, _route-evals-real.json;
                                              --write stores calibrated thresholds in the manifest
 """
@@ -127,6 +128,9 @@ def route(text):
 
 
 def laya_noul(instructions, text):
+    d = ss.laya_resident(text, {"fit": {"type": "noul", "instructions": instructions}})
+    if d is not None:  # resident Laya on 127.0.0.1: same model and head as the CLI, no 17 s cold start
+        return (d.get("answers") or {}).get("fit", {}).get("noul"), d.get("model")
     env = {k: v for k, v in os.environ.items() if k not in ("PYTHONHOME", "PYTHONPATH", "PYTHONEXECUTABLE")}
     env["HOME"] = HOME
     p = subprocess.run([LAYA, "--state", text, "--type", "noul", "--question-id", "fit", "--instructions",
@@ -138,11 +142,14 @@ def laya_noul(instructions, text):
 STOP = f"{LIB}/_label-stop"
 
 
-def label_one(item, t):
+def label_one(item, t, prev=None):
     if os.path.exists(STOP):
         raise RuntimeError("stopped: remove skill-library/_label-stop to resume")
     text = item["text"] or item["title"]
-    r = route(text)
+    reuse = prev and prev.get("levels") and not any(str(L.get("lane") or "").startswith("laya") for L in prev["levels"])
+    # a relabel keeps the original route (and its logged decision ids) unless Laya routed it, which Laya cannot grade
+    r = ({"levels": prev["levels"], "sensitive": prev.get("sensitive"), "status": prev.get("route_status"),
+          "load": prev.get("load")} if reuse else route(text))
     lv = {L["level"]: L for L in r.get("levels", []) if "choice" in L}
     meta = lv.get(1, {}).get("choice")
     skill = lv.get(2, {}).get("choice")
@@ -185,6 +192,8 @@ def label_one(item, t):
                         "meta_choice_conf": (a.get("meta_choice") or {}).get("confidence")})
         elif local and not os.environ.get("SS_WITH_LAYA"):
             row.update({"labeler": None, "deferred": "private task: waits for an independent local labeler (OpenJev or Laya)"})
+        elif local and any(str(L.get("lane") or "").startswith("laya") for L in row["levels"]):
+            row.update({"labeler": None, "deferred": "router fell back to Laya, so a Laya label would grade itself"})
         elif not local:
             qs = {"meta_choice": {"type": "choice", "instructions": "Which area of Mike's skills should handle this request",
                                   "criteria": {**{mm: t.info(mm)[1] for mm in t.metas}, "other": "None of these areas fits"}}}
@@ -214,15 +223,29 @@ def label_one(item, t):
     return row
 
 
-def run(workers):
-    items = [json.loads(line) for line in open(SET)]
-    done = set()
+def latest_rows():
+    """Last row per task id wins, so a relabel pass supersedes earlier rows without rewriting the file."""
+    rows = {}
     if os.path.exists(OUT):
         for line in open(OUT):
             try:
-                done.add(json.loads(line)["id"])
+                r = json.loads(line)
+                rows[r["id"]] = r
             except Exception:
                 pass
+    return rows
+
+
+def run(workers, relabel=False):
+    items = [json.loads(line) for line in open(SET)]
+    last = latest_rows()
+    if relabel:  # only independent labels count as done; verifier-only, deferred and failed rows are redone
+        if not ss.openjev_up():
+            print(f"{now()} relabel skipped: OpenJev unreachable (verifier-only rows would just repeat)", flush=True)
+            return 0
+        done = {k for k, r in last.items() if r.get("independent") and r.get("labeler")}
+    else:
+        done = set(last)
     todo = [i for i in items if i["id"] not in done]
     t = ss.Tree(ss.load())
     print(f"{now()} labeling {len(todo)} of {len(items)} (already done {len(done)}), workers={workers}", flush=True)
@@ -231,7 +254,7 @@ def run(workers):
     log = DecisionLog()
     t0 = time.time()
     with cf.ThreadPoolExecutor(max_workers=workers) as ex, open(OUT, "a") as fh:
-        futs = {ex.submit(label_one, i, t): i for i in todo}
+        futs = {ex.submit(label_one, i, t, last.get(i["id"]) if relabel else None): i for i in todo}
         for n, fu in enumerate(cf.as_completed(futs), 1):
             try:
                 row = fu.result()
@@ -274,7 +297,7 @@ def calib(pairs, floor=0.95, min_pass=20):
 
 
 def report(write):
-    rows = [json.loads(line) for line in open(OUT)] if os.path.exists(OUT) else []
+    rows = list(latest_rows().values())
     t = ss.Tree(ss.load())
     ok = [r for r in rows if r.get("labeler")]
     print(f"rows {len(rows)} | labeled {len(ok)} | label errors {sum(1 for r in rows if r.get('label_error') or r.get('error'))}")
@@ -342,7 +365,7 @@ def main():
     if a[0] == "build":
         return build(int(a[a.index("--limit") + 1]) if "--limit" in a else 200)
     if a[0] == "run":
-        return run(int(a[a.index("--workers") + 1]) if "--workers" in a else 3)
+        return run(int(a[a.index("--workers") + 1]) if "--workers" in a else 3, relabel="--relabel" in a)
     if a[0] == "report":
         return report("--write" in a)
     print(__doc__)
