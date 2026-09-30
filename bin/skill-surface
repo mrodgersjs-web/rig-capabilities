@@ -808,13 +808,27 @@ def cmd_find(words, limit=8):
     return 0
 
 
-def jev_choice(q, instructions, criteria, task, subject):
+def route_bar(m, router, level, default=0.9):
+    """PASS bar for one routing level. Uses the calibrated threshold from independent Jev-family labels
+    (skill-surface-label report --write) only when it rests on 100+ labels and 50+ passes; else 0.90."""
+    try:
+        c = (((m.get("route_calibration") or {}).get("by_router") or {}).get(router) or {}).get(str(level)) or {}
+        t = c.get("threshold")
+        if t is not None and c.get("n_labeled", 0) >= 100 and c.get("n_pass", 0) >= 50:
+            return round(float(t), 4)
+    except Exception:
+        pass
+    return default
+
+
+def jev_choice(q, instructions, criteria, task, subject, bar=0.9):
     sys.path.insert(0, RIGCAP)
     from rig_capabilities.s1gate import DecisionLog, Rubric, evaluate
     rb = Rubric(name=f"skill-surface.{q}", stage="routing", lane="skill-surface", description=instructions,
                 questions={q: {"type": "choice", "instructions": instructions, "criteria": criteria}},
-                rules=[{"when": f"{q}.confidence <= 0.9000", "verdict": "ESCALATE",
-                        "reason": "confidence at or below 0.90: judgment or Mike decides"}])
+                rules=[{"when": f"{q}.confidence <= {bar:.4f}", "verdict": "ESCALATE",
+                        "reason": f"confidence at or below {bar:.2f}"
+                                  + (" (calibrated bar)" if bar != 0.9 else "") + ": judgment or Mike decides"}])
     r = evaluate(rb, task, subject=subject, log=DecisionLog())
     if r.error:
         return {"ok": False, "error": r.error, "decision_id": r.decision_id}
@@ -835,38 +849,55 @@ def openjev_endpoint():
     return "http://100.76.209.22:8080/v1/systemone", "openjev-latest"
 
 
+OPENJEV_LOCAL = os.environ.get("RIG_OPENJEV_LOCAL", "http://127.0.0.1:8932/v1/systemone")
+
+
+def openjev_candidates():
+    """This machine first (launchd com.rig.openjev-local: private text never leaves the Mac), then the
+    endpoint Advisor+ is configured with (Mike's tailnet OpenJev host)."""
+    ep, model = openjev_endpoint()
+    out = [(OPENJEV_LOCAL, "openjev-latest")]
+    if ep != OPENJEV_LOCAL:
+        out.append((ep, model))
+    return out
+
+
 def openjev_up(ttl=120, ttl_down=300):
-    """0.6 s TCP probe (tailnet round trips are tens of ms), cached ttl seconds when up and ttl_down when
-    down, so a sleeping OpenJev host costs one short probe per 5 minutes instead of 1.5 s on every route."""
+    """Returns the first reachable OpenJev (url, model), or None. 0.6 s TCP probe per candidate, cached
+    ttl seconds when one is up and ttl_down when none is, so a sleeping host costs one probe per 5 minutes."""
     import socket
     from urllib.parse import urlsplit
     cache = os.path.join(LIB, "_openjev-state.json")
     try:
         c = json.load(open(cache))
-        if time.time() - c["t"] < (ttl if c["up"] else ttl_down):
-            return c["up"]
+        if time.time() - c["t"] < (ttl if c["up"] else ttl_down) and (not c["up"] or c.get("ep")):
+            return (c["ep"], c["model"]) if c["up"] else None
     except Exception:
         pass
-    u = urlsplit(openjev_endpoint()[0])
-    try:
-        with socket.create_connection((u.hostname, u.port or 80), timeout=0.6):
-            up = True
-    except OSError:
-        up = False
+    live = None
+    for ep, model in openjev_candidates():
+        u = urlsplit(ep)
+        try:
+            with socket.create_connection((u.hostname, u.port or 80), timeout=0.6):
+                live = (ep, model)
+                break
+        except OSError:
+            continue
     try:
         with open(cache, "w") as fh:
-            json.dump({"t": time.time(), "up": up}, fh)
+            json.dump({"t": time.time(), "up": bool(live), "ep": live and live[0], "model": live and live[1]}, fh)
     except OSError:
         pass
-    return up
+    return live
 
 
 def openjev_ask(state, questions, timeout=60):
-    """Local Jev-compatible System One (runs on Mike's own tailnet machine: private text stays home)."""
+    """Local Jev-compatible System One (this Mac or Mike's own tailnet machine: private text stays home)."""
     import urllib.request
-    if not openjev_up():
-        raise ConnectionError("OpenJev host unreachable (0.6 s probe, rechecked every 5 min)")
-    ep, model = openjev_endpoint()
+    live = openjev_up()
+    if not live:
+        raise ConnectionError("no OpenJev reachable (this Mac, then the tailnet host; 0.6 s probes, rechecked every 5 min)")
+    ep, model = live
     body = json.dumps({"state": state, "model": model, "questions": questions}).encode()
     req = urllib.request.Request(ep, data=body, method="POST", headers={"Content-Type": "application/json"})
     with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -948,7 +979,9 @@ def cmd_route(task, local=False, as_json=False):
         res = None
         if lane == "jev":
             try:
-                res = jev_choice(q, instructions, criteria, task, subject)
+                res = jev_choice(q, instructions, criteria, task, subject, bar=route_bar(m, "hosted-jev", level))
+                if res.get("ok"):
+                    res["bar"] = route_bar(m, "hosted-jev", level)
             except Exception as ex:
                 res = {"ok": False, "error": f"{type(ex).__name__}: {ex}"}
             if not res.get("ok"):
@@ -1011,7 +1044,7 @@ def cmd_route(task, local=False, as_json=False):
     if not r1:
         status = "DEFERRED"
     else:
-        levels.append({"level": 1, "kind": "meta", **{k: r1[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")},
+        levels.append({"level": 1, "kind": "meta", **{k: r1[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")}, "bar": r1.get("bar", 0.9),
                        "alternatives": top(r1)})
         meta = r1["choice"]
         if r1["verdict"] != "PASS" or meta not in t.metas:
@@ -1026,7 +1059,7 @@ def cmd_route(task, local=False, as_json=False):
                 if not r2:
                     status = "DEFERRED"
                 else:
-                    levels.append({"level": 2, "kind": "skill", **{k: r2[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")},
+                    levels.append({"level": 2, "kind": "skill", **{k: r2[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")}, "bar": r2.get("bar", 0.9),
                                    "alternatives": top(r2)})
                     sk = r2["choice"]
                     if r2["verdict"] != "PASS":
@@ -1041,7 +1074,7 @@ def cmd_route(task, local=False, as_json=False):
                             if not r3:
                                 status = "DEFERRED"
                             else:
-                                levels.append({"level": 3, "kind": "sub", **{k: r3[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")},
+                                levels.append({"level": 3, "kind": "sub", **{k: r3[k] for k in ("choice", "confidence", "verdict", "decision_id", "lane")}, "bar": r3.get("bar", 0.9),
                                                "alternatives": top(r3)})
                                 if r3["verdict"] != "PASS":
                                     status = "ESCALATE"
@@ -1069,7 +1102,8 @@ def cmd_route(task, local=False, as_json=False):
         did = f"decision {L['decision_id']}" if L.get("decision_id") else L.get("lane")
         conf = L.get("confidence")
         print(f"  L{L['level']} {L['kind']:<5} {L['choice']:<38} {conf if conf is None else f'{conf:.2f}':>5}  "
-              f"{L['verdict']:<8} {did}" + (f"   (also: {alts})" if alts and L["verdict"] != "PASS" else ""))
+              f"{L['verdict']:<8} {did}" + (f"  bar {L['bar']:.2f} calibrated" if L.get("bar", 0.9) != 0.9 else "")
+              + (f"   (also: {alts})" if alts and L["verdict"] != "PASS" else ""))
     if load_n:
         e = t.E[load_n]
         print(f"LOAD   {e.get('load')}")
