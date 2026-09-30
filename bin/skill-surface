@@ -835,20 +835,21 @@ def openjev_endpoint():
     return "http://100.76.209.22:8080/v1/systemone", "openjev-latest"
 
 
-def openjev_up(ttl=120):
-    """1.5 s TCP probe, cached for ttl seconds, so a sleeping OpenJev host never stalls a route."""
+def openjev_up(ttl=120, ttl_down=300):
+    """0.6 s TCP probe (tailnet round trips are tens of ms), cached ttl seconds when up and ttl_down when
+    down, so a sleeping OpenJev host costs one short probe per 5 minutes instead of 1.5 s on every route."""
     import socket
     from urllib.parse import urlsplit
     cache = os.path.join(LIB, "_openjev-state.json")
     try:
         c = json.load(open(cache))
-        if time.time() - c["t"] < ttl:
+        if time.time() - c["t"] < (ttl if c["up"] else ttl_down):
             return c["up"]
     except Exception:
         pass
     u = urlsplit(openjev_endpoint()[0])
     try:
-        with socket.create_connection((u.hostname, u.port or 80), timeout=1.5):
+        with socket.create_connection((u.hostname, u.port or 80), timeout=0.6):
             up = True
     except OSError:
         up = False
@@ -864,7 +865,7 @@ def openjev_ask(state, questions, timeout=60):
     """Local Jev-compatible System One (runs on Mike's own tailnet machine: private text stays home)."""
     import urllib.request
     if not openjev_up():
-        raise ConnectionError("OpenJev host unreachable (1.5 s probe)")
+        raise ConnectionError("OpenJev host unreachable (0.6 s probe, rechecked every 5 min)")
     ep, model = openjev_endpoint()
     body = json.dumps({"state": state, "model": model, "questions": questions}).encode()
     req = urllib.request.Request(ep, data=body, method="POST", headers={"Content-Type": "application/json"})
