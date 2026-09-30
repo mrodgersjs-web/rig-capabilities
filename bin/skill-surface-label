@@ -11,6 +11,7 @@ Every label row names its labeler. Hosted-Jev decisions also get the label writt
 ~/.rig/s1gate/decisions.db with labelled_by=<labeler>, never "human".
 
   skill-surface-label build [--limit 200]    real chats -> _label-set.jsonl (stays on this machine)
+  skill-surface-label build --append [--limit 50]  keep the set, add up to N newer real chats
   skill-surface-label run [--workers 3]      route + label every unlabeled item (resumable)
   skill-surface-label run --relabel          redo every row without an independent label (needs OpenJev up)
   skill-surface-label report [--write]       agreement, per-level calibration, _route-evals-real.json;
@@ -81,12 +82,18 @@ def skills_used(f, names):
     return sorted(n for n in used if n in names)
 
 
-def build(limit):
+def build(limit, append=False):
     c = sqlite3.connect(f"file:{ASIDE}/state.db?mode=ro", uri=True)
     rows = c.execute("select id, title, trigger, created_at from sessions where parent_id is null "
                      "order by created_at desc").fetchall()
     E = ss.load()["entries"]
     out, seen, skipped = [], set(), {"routine": 0, "probe": 0, "empty": 0, "duplicate": 0}
+    kept = []
+    if append and os.path.exists(SET):  # grow the set: keep every task already labeled, add up to `limit` new ones
+        kept = [json.loads(line) for line in open(SET)]
+        have = {r["id"] for r in kept}
+        seen = {hashlib.sha256(r["text"][:300].lower().encode()).hexdigest() for r in kept}
+        rows = [r for r in rows if r[0] not in have]
     for sid, title, trig, ts in rows:
         try:
             tj = json.loads(trig or "{}")
@@ -110,11 +117,14 @@ def build(limit):
         out.append({"id": sid, "title": title, "text": text[:600], "created": ts, "skills_used": skills_used(f, set(E))})
         if len(out) >= limit:
             break
-    with open(SET, "w") as fh:
+    new_n = len(out)
+    out = kept + out
+    with open(SET + ".tmp", "w") as fh:
         for r in out:
             fh.write(json.dumps(r) + "\n")
+    os.replace(SET + ".tmp", SET)
     sens = sum(1 for r in out if ss.SENSITIVE.search(r["text"]))
-    print(f"label set: {len(out)} real tasks ({sens} private -> local lanes) | skipped {skipped} -> {SET}")
+    print(f"label set: {len(out)} real tasks ({new_n} new, {sens} private -> local lanes) | skipped {skipped} -> {SET}")
     return 0
 
 
@@ -363,7 +373,7 @@ def main():
         print(__doc__)
         return 0
     if a[0] == "build":
-        return build(int(a[a.index("--limit") + 1]) if "--limit" in a else 200)
+        return build(int(a[a.index("--limit") + 1]) if "--limit" in a else 200, append="--append" in a)
     if a[0] == "run":
         return run(int(a[a.index("--workers") + 1]) if "--workers" in a else 3, relabel="--relabel" in a)
     if a[0] == "report":
