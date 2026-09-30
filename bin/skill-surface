@@ -30,7 +30,7 @@ Keep it right
   skill-surface file <name> --meta M [--parent P|none] [--apply]   re-home one skill
   skill-surface restore [--apply]       undo: blocks out, skills back to skills/user, files restored
   skill-surface export [path]           portable tree JSON for the canonical repo (no machine paths)
-  skill-surface harness <claude|codex|agents> [--apply] [--restore]
+  skill-surface harness <claude|codex|agents|omp> [--apply] [--restore]
                                         same 30-meta menu in another harness via its native switch
                                         (Claude skillOverrides user-invocable-only; Codex agents/openai.yaml
                                         allow_implicit_invocation false); nothing moves; --restore undoes it
@@ -1405,6 +1405,7 @@ HARNESS = {
                "settings": f"{HOME}/.claude/settings.json", "mode": "claude", "pointer": f"{HOME}/.claude/CLAUDE.md"},
     "codex": {"root": f"{HOME}/.codex/skills", "mode": "codex", "pointer": f"{HOME}/.codex/AGENTS.md"},
     "agents": {"root": f"{HOME}/.agents/skills", "mode": "codex", "pointer": None},
+    "omp": {"root": None, "config": f"{HOME}/.omp/agent/config.yml", "mode": "omp", "pointer": f"{HOME}/.omp/agent/AGENTS.md"},
 }
 HB, HE = "<!-- SKILL_SURFACE:BEGIN -->", "<!-- SKILL_SURFACE:END -->"
 CODEX_POLICY = "policy:\n  allow_implicit_invocation: false\n"
@@ -1420,10 +1421,137 @@ def harness_pointer(name):
             f"Resolve a name with `{SELF} where <name>`. Obey the meta's gates before any outward step.\n{HE}\n")
 
 
+def pointer_add(cur, blk):
+    """Append our block after the file's own bytes (kept verbatim), or refresh it in place."""
+    if HB in cur:
+        return re.sub(re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", lambda _m: blk, cur, flags=re.S)
+    if not cur:
+        return blk
+    return cur + ("" if cur.endswith("\n") else "\n") + "\n" + blk
+
+
+def pointer_remove(cur, backup=None):
+    """Drop our block; when the rest equals the pre-change backup, return the backup's exact bytes."""
+    out = re.sub(r"\n?" + re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", "", cur, flags=re.S)
+    if backup and os.path.exists(backup):
+        orig = read(backup)
+        if out.rstrip("\n") == orig.rstrip("\n"):
+            return orig
+    return out
+
+
+def omp_pointer(t):
+    rows = "\n".join(f"- `{mm}`: {t.info(mm)[0]}" for mm in t.ranked)
+    return (f"{HB}\n## Skill menu: 30 meta-skills (skill surface, 2026-09-29)\n"
+            f"OMP's skill listing is off (`skillful: false`); this is the menu. Every loaded skill is still addressable as "
+            f"`skill://<name>`, so a named skill loads exactly as before. For a described task, pick the meta below "
+            f"that owns it and read `skill://<meta>`; it names its skills and sub-skills. Picking a skill for a task is "
+            f"a typed judgment: run `{SELF} route \"<task>\"` (one Jev choice per layer, logged decision ids) before a "
+            f"frontier model reads any catalog; if no classifier answers, the verdict is DEFERRED, so use "
+            f"`{SELF} find \"<words>\"`. A skill OMP does not load: `{SELF} where <name>` prints its SKILL.md path; read "
+            f"that file. `/skillful` turns the full listing back on for one session.\n{rows}\n{HE}\n")
+
+
+def harness_omp(apply=False, restore=False):
+    """OMP 18: no per-skill hide in settings, but `skillful: false` drops the listing while every loaded skill
+    stays addressable as skill://<name>. Also makes sure all 30 metas are in its includeSkills allowlist.
+    Surgical text edits so concurrent writers to config.yml keep their changes; restore undoes only ours."""
+    import fnmatch
+    h, m = HARNESS["omp"], load()
+    t = refresh(m)
+    cfg, ptr = h["config"], h["pointer"]
+    sp = os.path.join(LIB, "_harness", "omp.json")
+    st = json.load(open(sp)) if os.path.exists(sp) else {"added": [], "skillful_prev": "absent", "applied": False}
+    if not os.path.exists(cfg):
+        print(f"no OMP config at {cfg}")
+        return 3
+    txt = read(cfg)
+    blk = re.search(r"^  includeSkills:\n((?:  - .*\n)*)", txt, re.M)
+    sk = re.search(r"^skillful:[ \t]*(\S+)[ \t]*$", txt, re.M)
+    if restore:
+        new = txt
+        if blk and st["added"]:
+            keep = [l for l in blk.group(1).splitlines(True)
+                    if l.strip()[2:].strip().strip("'\"") not in set(st["added"])]
+            new = new[:blk.start(1)] + "".join(keep) + new[blk.end(1):]
+        for d in st.get("added_dirs", []):
+            cdb = re.search(r"^  customDirectories:\n((?:  - .*\n)*)", new, re.M)
+            if cdb:
+                keep = [l for l in cdb.group(1).splitlines(True) if l.strip()[2:].strip().strip("'\"") != d]
+                new = new[:cdb.start(1)] + "".join(keep) + new[cdb.end(1):]
+        if st.get("applied"):
+            if st["skillful_prev"] == "absent":
+                new = re.sub(r"^skillful:[ \t]*false[ \t]*\n?", "", new, count=1, flags=re.M)
+            else:
+                new = re.sub(r"^skillful:[ \t]*\S+", f"skillful: {st['skillful_prev']}", new, count=1, flags=re.M)
+        if apply:
+            if new != txt:
+                write_if_changed(cfg, new)
+            if os.path.exists(ptr):
+                write_if_changed(ptr, pointer_remove(read(ptr), os.path.join(LIB, "_harness", "backup", "omp", os.path.basename(ptr))))
+            if os.path.exists(sp):
+                os.remove(sp)
+        print(f"{'restored' if apply else 'would restore'} omp: remove {len(st['added'])} allowlist lines, "
+              f"skillful back to {st['skillful_prev']}, pointer removed")
+        return 0
+    add = []
+    if blk:
+        pats = [l.strip()[2:].strip().strip("'\"") for l in blk.group(1).splitlines() if l.strip()]
+        add = [mm for mm in t.ranked if not any(fnmatch.fnmatchcase(mm, g) for g in pats)]
+    new = txt
+    if add and blk:
+        new = new[:blk.end(1)] + "".join(f"  - {mm}\n" for mm in add) + new[blk.end(1):]
+    # the 30 metas live as real folders in the Aside menu dir; OMP skips the ~/.agents symlinks to them
+    cdb = re.search(r"^  customDirectories:\n((?:  - .*\n)*)", new, re.M)
+    add_dirs = []
+    if cdb and USER not in [l.strip()[2:].strip().strip("'\"") for l in cdb.group(1).splitlines()]:
+        add_dirs = [USER]
+        new = new[:cdb.end(1)] + f"  - {USER}\n" + new[cdb.end(1):]
+    prev = sk.group(1) if sk else "absent"
+    if sk:
+        if sk.group(1) == "true" and st.get("applied"):
+            print("note: skillful was set back to true after our change; left alone (someone chose the full listing)")
+        elif sk.group(1) != "false":
+            new = re.sub(r"^skillful:[ \t]*\S+", "skillful: false", new, count=1, flags=re.M)
+    else:
+        new = new.rstrip("\n") + "\nskillful: false\n"
+    cur = read(ptr) if os.path.exists(ptr) else ""
+    blk_txt = omp_pointer(t)
+    pnew = pointer_add(cur, blk_txt)
+    if apply:
+        bdir = os.path.join(LIB, "_harness", "backup", "omp")
+        os.makedirs(bdir, exist_ok=True)
+        for f in (cfg, ptr):
+            b = os.path.join(bdir, os.path.basename(f))
+            if os.path.exists(f) and not os.path.exists(b):
+                shutil.copy2(f, b)
+        if read(cfg) != txt:  # another writer changed it between our read and now: redo from the fresh text
+            print("omp config changed underneath us; rerun")
+            return 4
+        if new != txt:
+            write_if_changed(cfg, new)
+        if pnew != cur:
+            write_if_changed(ptr, pnew)
+        if not st.get("applied"):
+            st["skillful_prev"] = prev
+        st["added"] = sorted(set(st["added"]) | set(add))
+        st["added_dirs"] = sorted(set(st.get("added_dirs", [])) | set(add_dirs))
+        st["applied"] = True
+        os.makedirs(os.path.dirname(sp), exist_ok=True)
+        with open(sp, "w") as fh:
+            json.dump(st, fh, indent=1)
+    print(f"{'applied' if apply else 'would apply'} omp: add {len(add_dirs)} skill folder(s) to customDirectories, "
+          f"add {len(add)} metas to includeSkills "
+          f"({', '.join(add) or 'none'}), skillful {prev} -> false, pointer {'updated' if pnew != cur else 'unchanged'}")
+    return 0
+
+
 def cmd_harness(name, apply=False, restore=False):
     if name not in HARNESS:
         print(f"unknown harness {name}; one of {', '.join(HARNESS)}")
         return 3
+    if name == "omp":
+        return harness_omp(apply=apply, restore=restore)
     h, m = HARNESS[name], load()
     metas, root = m["metas"], h["root"]
     sp = os.path.join(LIB, "_harness", f"{name}.json")
@@ -1455,7 +1583,7 @@ def cmd_harness(name, apply=False, restore=False):
                 s["skillOverrides"] = ov
                 write_if_changed(h["settings"], json.dumps(s, indent=2) + "\n")
         if h["pointer"] and os.path.exists(h["pointer"]) and apply:
-            write_if_changed(h["pointer"], re.sub(re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", "", read(h["pointer"]), flags=re.S))
+            write_if_changed(h["pointer"], pointer_remove(read(h["pointer"]), os.path.join(bdir, os.path.basename(h["pointer"]))))
         print(f"{'restored' if apply else 'would restore'} {name}: {n} files removed, {len(st['modified'])} files put back, "
               f"{len(st['links'])} meta links removed, {len(st['overrides'])} overrides cleared")
         if apply:
@@ -1527,7 +1655,7 @@ def cmd_harness(name, apply=False, restore=False):
     if h["pointer"]:
         cur = read(h["pointer"]) if os.path.exists(h["pointer"]) else ""
         blk = harness_pointer(name)
-        new = re.sub(re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", blk, cur, flags=re.S) if HB in cur else (cur.rstrip("\n") + "\n\n" + blk if cur else blk)
+        new = pointer_add(cur, blk)
         ptr_changed = new != cur
         if apply and ptr_changed:
             b = os.path.join(bdir, os.path.basename(h["pointer"]))
