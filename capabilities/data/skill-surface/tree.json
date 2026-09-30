@@ -1,0 +1,3547 @@
+{
+ "metas": [
+  {
+   "name": "linkedin-viral",
+   "rank": 1,
+   "blurb": "All LinkedIn content for your lanes: plan, hooks, draft, gate, launch, engage, measure",
+   "route": "LinkedIn content for Mike's own lanes: post ideas, hooks, drafting a post, gating, scheduling a post, golden hour, comments and replies, connection notes, profile, LinkedIn analytics",
+   "gate": "Read linkedin-viral's lane guard and hard gates before any outward step: RIG B2B, personal brand, Ideawake and job-search voices never mix; Eden is the publisher of record; comments on others' posts stay positive.",
+   "owner": "ralph-linkedin"
+  },
+  {
+   "name": "when-selling-or-running-gtm",
+   "rank": 2,
+   "blurb": "Selling RIG: offers, pricing, outbound, campaigns, Traject GTM, customer success",
+   "route": "Selling RIG services and Traject: offers, pricing, prospect lists, cold email, outbound sequences, campaigns, pipeline and forecasts, customer success and renewals",
+   "gate": "Every cold send passes gtm-cold-send-safety-gate; sends, campaigns and paid spend need Mike's approval.",
+   "owner": "darius-gtm"
+  },
+  {
+   "name": "traject-os",
+   "rank": 3,
+   "blurb": "Job search end to end: qualify, tailor, apply, outreach, interview, follow up",
+   "route": "Job search: qualifying roles, tailoring resumes, applying, referrals and recruiter outreach for jobs, interview rooms, follow-ups, offers, weekly unemployment certification",
+   "gate": "Resume claims trace to Mike's source claims; submitting an application or sending a message stops at Gate-D for Mike.",
+   "owner": "julie-job-search"
+  },
+  {
+   "name": "aside-codemode",
+   "rank": 4,
+   "blurb": "Batch browsing, scraping, multi-file search, logged-in reads",
+   "route": "Batch browser and file work: read many pages or tabs, scrape sites, search across files or a repository, capture pages, logged-in reads",
+   "gate": "Writes need approveWrites; sign-in, MFA, CAPTCHA and approvals stay native steps.",
+   "owner": "prime-jake-pai"
+  },
+  {
+   "name": "jev-everywhere",
+   "rank": 5,
+   "blurb": "When and how to wire Jev (ten levels, routing policy)",
+   "route": "Designing where Jev fits in code or agents: the ten levels of Jev, TypeSafe integration, routing policy, confidence gating, guardrail hooks",
+   "gate": "Typed judgments go to Jev before any frontier LLM call; hosted Jev never receives secrets, health or financial detail, or anything private about Jacob.",
+   "owner": "jordan-jr-ai-engineering"
+  },
+  {
+   "name": "when-governing-rig-work",
+   "rank": 6,
+   "blurb": "Proof, Gate-D, done-claims, D85, lattice and deviation engines",
+   "route": "RIG governance: proof packets, verifying done-claims, Gate-D approvals, git push safety, D85 compliance, lattice and deviation engines, doctrine drift",
+   "gate": "ProofPacket or it didn't happen; outward or irreversible actions go through Gate-D.",
+   "owner": "george-application-engineering"
+  },
+  {
+   "name": "when-shipping-code",
+   "rank": 7,
+   "blurb": "Engineering: build, debug, test, review, FE system design",
+   "route": "Software engineering: building a feature, debugging, testing, refactoring, code review, PR descriptions, dependencies, performance, front-end system design",
+   "gate": "No git push, deploy or destructive cleanup without Mike's approval (Gate-P / Gate-D).",
+   "owner": "jordan-jr-ai-engineering"
+  },
+  {
+   "name": "when-building-or-fixing-agents",
+   "rank": 8,
+   "blurb": "Building skills, agents, harnesses, loops, and agent frameworks",
+   "route": "Building or fixing agent infrastructure: skills, agents, harnesses, hooks, loops, MCP servers, prompt quality, and setting up agent frameworks such as LangChain, LangGraph, CrewAI, Temporal, n8n or Dify",
+   "gate": "New skills are filed under a meta (`~/.rig/bin/skill-surface file`), never dropped at the top level; an install is verified, not assumed.",
+   "owner": "jordan-jr-ai-engineering"
+  },
+  {
+   "name": "first-mate-handoff",
+   "rank": 9,
+   "blurb": "Hand work to First Mate / coding agents, handoffs, context save",
+   "route": "Delegating work to First Mate or coding agents such as Codex, Claude or OMP, writing handoffs, saving or restoring context, choosing a coding agent",
+   "gate": "Read-only status checks are safe; effect-capable dispatches need Mike's explicit approval.",
+   "owner": "prime-jake-pai"
+  },
+  {
+   "name": "jake-ceo",
+   "rank": 10,
+   "blurb": "Jake as CEO: Bridge, conductor, board, scout, self-improve",
+   "route": "Jake as CEO: the morning Bridge brief, the conductor, nightly self-improvement, the board review, the scout for missing capabilities, Jake's lessons, and estate housekeeping: archiving chats, cleaning up unpinned chats, organizing chats and routines into project folders, closing stale agent tabs",
+   "gate": "Only reversible conductor moves run on the standing yes; everything else goes on Mike's list with a recommendation.",
+   "owner": "prime-jake-pai"
+  },
+  {
+   "name": "design-studio-os",
+   "rank": 11,
+   "blurb": "Design: sites, brand, UI systems, critique",
+   "route": "Visual and UX design: websites, landing page design, redesigns, brand identity, typography, color, layout, UI components, design critique",
+   "gate": "Critique from real captures; anything that ships publicly stops at Gate-D.",
+   "owner": "theo-design"
+  },
+  {
+   "name": "skill-factory",
+   "rank": 12,
+   "blurb": "Turn creator corpora and repeated work into governed skill families",
+   "route": "Turning a creator's YouTube channel, course or documents, or a repeated workflow, into skills: scraping transcripts into skills, building a meta-skill with stage skills, distilling cited doctrine, upgrading or refuting an existing skill",
+   "gate": "Curated beats self-generated: every new skill passes a gate and is filed under a meta with skill-surface file; laws cite their source; raw third-party corpora stay local.",
+   "owner": "iris-sr-research"
+  },
+  {
+   "name": "eden-mcp",
+   "rank": 13,
+   "blurb": "Eden: generate and schedule posts, boards, store (your #1 most-used skill)",
+   "route": "The Eden app: generate LinkedIn copy or images in Eden, Eden boards and notes, schedule or edit posts in Eden's scheduler, Eden store",
+   "gate": "Eden is the publisher of record; scheduling or publishing follows the owning lane's gates.",
+   "owner": "steve-content"
+  },
+  {
+   "name": "jacob-x-growth",
+   "rank": 14,
+   "blurb": "Jacob's X account + Hudl film (minor lane, never auto-post)",
+   "route": "Jacob Rodgers' athletic lane: his X account, recruiting content, Hudl or YouTube game film",
+   "gate": "Minor's lane: never auto-post or auto-schedule, no DMs from Jacob's account, assert the signed-in handle, Mike approves every post.",
+   "owner": "prime-jake-pai"
+  },
+  {
+   "name": "lucy-skills",
+   "rank": 15,
+   "blurb": "Lucy method: profile, resume, interview practice, salary",
+   "route": "Lucy Gilmour's career method: LinkedIn profile optimization for a job search, resume and cover letter the Lucy way, interview practice and drills, salary negotiation scripts",
+   "gate": "Profile edits are shown as exact before/after values and applied only after Mike approves.",
+   "owner": "julie-job-search"
+  },
+  {
+   "name": "when-writing-content",
+   "rank": 16,
+   "blurb": "Long-form writing and anti-slop",
+   "route": "Long-form writing not tied to one platform lane: articles, blog posts, newsletters, case studies, email sequences, video scripts, de-slopping AI copy",
+   "gate": "Run the anti-slop pass before calling copy done; platform content follows its lane's meta.",
+   "owner": "steve-content"
+  },
+  {
+   "name": "ultraplan",
+   "rank": 17,
+   "blurb": "Planning: grill, IQRSQPI, specs, tickets",
+   "route": "Planning a mission before building: grilling the plan, IQRSQPI stages, writing specs and tickets, goals, finding unknowns",
+   "gate": "Plans end in executable done-tests; nothing outward happens from a plan.",
+   "owner": "opal-product"
+  },
+  {
+   "name": "app-studio",
+   "rank": 18,
+   "blurb": "Web and mobile apps (incl. TransformFit / James coach)",
+   "route": "Building web or mobile apps end to end: app spec, stack, scaffold, auth and payments, mobile builds, app store release, TransformFit and its James coach",
+   "gate": "Anything public (deploy, store submission) stops at Gate-D.",
+   "owner": "jordan-app"
+  },
+  {
+   "name": "when-researching-or-deciding",
+   "rank": 19,
+   "blurb": "Research: last30days, deep research, doctrine extraction",
+   "route": "Research: what people said recently (last 30 days), deep research reports, evidence synthesis, extracting doctrine from YouTube channels or papers",
+   "gate": "No source, no number: cite every claim and label observed versus inferred.",
+   "owner": "iris-sr-research"
+  },
+  {
+   "name": "council-of-high-intelligence",
+   "rank": 20,
+   "blurb": "Hard decisions: council, advisory board, systems thinking",
+   "route": "Hard decisions and deliberation: an advisory council or board, systems thinking, scenario planning, idea generation, weighing options",
+   "gate": "Deliberation informs Mike's decision; it never replaces his approval on outward steps.",
+   "owner": "iris-strategy"
+  },
+  {
+   "name": "ideawake-linkedin-weekly",
+   "rank": 21,
+   "blurb": "Coby's Ideawake LinkedIn (client lane, his account)",
+   "route": "Ideawake and Coby Skonord's LinkedIn client account: his posts, comments, follows and amplification",
+   "gate": "Client lane: the browser may be signed in as Coby, not Mike; assert the account before any write and never use RIG's voice.",
+   "owner": "ralph-linkedin"
+  },
+  {
+   "name": "rig-ops",
+   "rank": 22,
+   "blurb": "Run and secure the machine: models, fleet, NAS, installs, config, security",
+   "route": "Running and securing Mike's machines: local and fleet model servers, Ollama, OpenJev, Laya, the NAS and Docker, installing a tool or repo, Aside or OMP or Orca configuration, launchd jobs, tunnels, drives, routine health, leaked secrets and security incidents",
+   "gate": "Probe with one real call before diagnosing; a fix counts only when a second path confirms it; never print secrets; paid, public or destructive steps stop at Gate-D.",
+   "owner": "otto-operations"
+  },
+  {
+   "name": "rig-website-taki",
+   "rank": 23,
+   "blurb": "rodgersintelligence.com pages and landing pages",
+   "route": "The rodgersintelligence.com website: pages, landing pages, copy, offers, conversion",
+   "gate": "Deploying or publishing site changes is Gate-D.",
+   "owner": "theo-design"
+  },
+  {
+   "name": "when-working-with-data",
+   "rank": 24,
+   "blurb": "Pipelines, data contracts, knowledge stores",
+   "route": "Data work: pipelines, data contracts, freshness, query latency, knowledge graphs, vector search, the Obsidian vault",
+   "gate": "Never print or store raw secrets; destructive data operations need Mike's approval.",
+   "owner": "nadia-data"
+  },
+  {
+   "name": "google-ads-os",
+   "rank": 25,
+   "blurb": "Google Ads for RIG and local clients",
+   "route": "Google Ads: campaigns, keywords, bidding, ad copy, conversion tracking, budgets, reports",
+   "gate": "Spend and live-account changes need Mike's approval with the exact values shown first.",
+   "owner": "darius-gtm"
+  },
+  {
+   "name": "rig-instagram-growth",
+   "rank": 26,
+   "blurb": "Instagram @rodgemd1 growth",
+   "route": "Mike's Instagram @rodgemd1: content, engagement, followers, collaborations",
+   "gate": "Prepare-and-approve by default; respect the skill's hard platform limits before any follow, comment or DM.",
+   "owner": "nico-instagram"
+  },
+  {
+   "name": "when-producing-media",
+   "rank": 27,
+   "blurb": "Images, music, audio, video editing",
+   "route": "Generating or editing images, illustrations, music, audio or video files",
+   "gate": "Media about Jacob follows jacob-x-growth's minor-lane rules; publishing follows the owning lane.",
+   "owner": "marcus-film"
+  },
+  {
+   "name": "client-delivery",
+   "rank": 28,
+   "blurb": "Deliver for a paying client: kickoff, starter pack, build, handoff, proof, renewal",
+   "route": "Delivering for a paying RIG client after the sale: client kickoff and access, a starter pack, a build or CRM or website for a client, handoff and training, results proof, client health and renewal",
+   "gate": "Scope is written first; client data stays in the client's lane; results carry a ProofPacket; anything sent, deployed or billed stops at Gate-D.",
+   "owner": "clara-customer-success"
+  },
+  {
+   "name": "personal-life",
+   "rank": 29,
+   "blurb": "Personal life: family, gifts, purchases, insurance, legal, scams, forms",
+   "route": "Mike's personal life, not RIG work: family and gifts, buying something, health insurance and benefits paperwork, finding a lawyer, checking whether an email is a scam, filling documents and forms, personal email and calendar",
+   "gate": "Committing actions (orders, signatures, payments) get a one-line confirmation with exact values first; never print passwords or card numbers; family and health details stay local.",
+   "owner": "prime-jake-pai"
+  },
+  {
+   "name": "ss-growth-os",
+   "rank": 30,
+   "blurb": "Substack growth and the Bestseller track",
+   "route": "Substack publication: issues, Substack Notes, subscribers, the paid tier, the Bestseller track, recommendations",
+   "gate": "Never publishes from here: publish, schedule or send goes through ss-gate and Mike's approval.",
+   "owner": "steve-content"
+  }
+ ],
+ "librarian": "jordan-jr-ai-engineering",
+ "skills": {
+  "5-persona-advisory-board": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "adrien-ai-design-stack-2026": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "rig-adrien-doctrines"
+  },
+  "adrien-claude-design-workflows": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "rig-adrien-doctrines"
+  },
+  "adrien-design-top-10": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "rig-adrien-doctrines"
+  },
+  "adversarial-verification-loop": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "proof-loop",
+   "tested": true
+  },
+  "advise-project-approach": {
+   "layer": 2,
+   "meta": "ultraplan"
+  },
+  "agency-agents": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer"
+  },
+  "agent-bms-band-assigner": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer",
+   "tested": true
+  },
+  "agent-browser": {
+   "layer": 2,
+   "meta": "aside-codemode",
+   "tested": true
+  },
+  "agent-chief-claude-code": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-conductor"
+  },
+  "agent-chief-openclaw": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-conductor"
+  },
+  "agent-harness": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "agent-harness-tuplet": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "agent-message-protocol-enforcer": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer",
+   "tested": true
+  },
+  "agent-roster-builder": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer",
+   "tested": true
+  },
+  "agent-skill-installer": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "agent-task-router": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer",
+   "tested": true
+  },
+  "agentic-deploy-gate": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-durable-execution": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-env-probe": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "agentic-local-models": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "agentic-mcp-integration": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-observability": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-proof-ladder": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-secrets": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-selfhost-docker": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "agentic-setup-airflow": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-crewai": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-dagster": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-dify": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-flowise": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-google-adk": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-inngest": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-kestra": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-langchain": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-langflow": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-llamaindex": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-mastra": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-microsoft-agent-framework": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-n8n": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-openai-agents-sdk": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-prefect": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-pydantic-ai": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-temporal": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-setup-trigger-dev": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "agentic-systems-setup": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents",
+   "tested": true
+  },
+  "agentic-testing-evals": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "agentic-systems-setup",
+   "tested": true
+  },
+  "ai-user-testing": {
+   "layer": 2,
+   "meta": "app-studio"
+  },
+  "ai-website-design": {
+   "layer": 2,
+   "meta": "rig-website-taki"
+  },
+  "alfred-content-planning-cron": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-plan"
+  },
+  "alfred-post-publisher": {
+   "layer": 2,
+   "meta": "eden-mcp",
+   "retired": true
+  },
+  "anti-slop": {
+   "layer": 2,
+   "meta": "when-writing-content"
+  },
+  "app-ai-features": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-auth-payments": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-close-and-learn": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-data-layer": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-intake-spec": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-mobile-build": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-observability": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-sandbox-survival": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "app-ship-mobile": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-ship-web": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-stack-select": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-store-ship": {
+   "layer": 2,
+   "meta": "app-studio",
+   "dead": true
+  },
+  "app-studio": {
+   "layer": 1,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-teardown": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-ui-design": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-verify-evidence": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-web-frontend": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "app-web-scaffold": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "application-packet-builder": {
+   "layer": 2,
+   "meta": "traject-os"
+  },
+  "archify": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "art": {
+   "layer": 2,
+   "meta": "when-producing-media"
+  },
+  "article-writing": {
+   "layer": 2,
+   "meta": "when-writing-content"
+  },
+  "aside-browser": {
+   "layer": 2,
+   "meta": "aside-codemode"
+  },
+  "aside-codemode": {
+   "layer": 1,
+   "meta": "aside-codemode"
+  },
+  "aside-job-browser": {
+   "layer": 3,
+   "meta": "traject-os",
+   "parent": "aside-job-operator"
+  },
+  "aside-job-learning": {
+   "layer": 3,
+   "meta": "traject-os",
+   "parent": "aside-job-operator"
+  },
+  "aside-job-operator": {
+   "layer": 2,
+   "meta": "traject-os"
+  },
+  "aside-job-recovery": {
+   "layer": 3,
+   "meta": "traject-os",
+   "parent": "aside-job-operator"
+  },
+  "aside-job-resume": {
+   "layer": 3,
+   "meta": "traject-os",
+   "parent": "aside-job-operator"
+  },
+  "aside-job-source": {
+   "layer": 3,
+   "meta": "traject-os",
+   "parent": "aside-job-operator"
+  },
+  "atomic-artifact-write": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "d85-compliance-checklist"
+  },
+  "audiocraft": {
+   "layer": 2,
+   "meta": "when-producing-media"
+  },
+  "authenticated-web-scrape": {
+   "layer": 2,
+   "meta": "aside-codemode",
+   "dead": true
+  },
+  "baseline-ui": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "blog-post-template": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "blueprintgtm-30k-jobs-prospects": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-ai-lead-enrichment": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-cannonball-method": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm"
+  },
+  "blueprintgtm-company-people-targeting": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-g2-reviews-analysis": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-gtm-strategy-ocean": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-icp-to-inbox": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-last-sdr": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-multi-persona-targeting": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "blueprintgtm-vibe-engineering": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "bp-custom-gpt-builder": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "blueprintgtm-cannonball-method"
+  },
+  "bp-deep-research": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "browser-lane-recovery": {
+   "layer": 2,
+   "meta": "aside-codemode"
+  },
+  "client-delivery": {
+   "layer": 1,
+   "meta": "client-delivery",
+   "tested": true
+  },
+  "client-delivery-playbook": {
+   "layer": 2,
+   "meta": "client-delivery",
+   "tested": true
+  },
+  "co-unemployment-certification": {
+   "layer": 2,
+   "meta": "traject-os"
+  },
+  "code-changelog-generator": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-deps-audit": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-error-pattern-aggregator": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-lint-suppression-justifier": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-llm-cost-optimizer": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-perf-bottleneck-finder": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-pr-description-writer": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "code-test-coverage-analyzer": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review",
+   "tested": true
+  },
+  "content-cross-platform-repurposer": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-distribute",
+   "tested": true
+  },
+  "content-cta-optimizer": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-draft",
+   "tested": true
+  },
+  "content-headline-a-b-generator": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-hooks",
+   "tested": true
+  },
+  "content-hook-generator": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-hooks",
+   "tested": true
+  },
+  "content-matrix": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-plan"
+  },
+  "content-newsletter-curator": {
+   "layer": 2,
+   "meta": "when-writing-content",
+   "tested": true
+  },
+  "content-pillar-architect": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-plan",
+   "tested": true
+  },
+  "content-thread-structurer": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-draft",
+   "tested": true
+  },
+  "content-voice-fingerprint-extractor": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-strategy",
+   "tested": true
+  },
+  "context-engineering": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "context-restore": {
+   "layer": 3,
+   "meta": "first-mate-handoff",
+   "parent": "context-save"
+  },
+  "context-save": {
+   "layer": 2,
+   "meta": "first-mate-handoff"
+  },
+  "continue-cn-check": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-code-review"
+  },
+  "continue-docs-style": {
+   "layer": 2,
+   "meta": "when-writing-content"
+  },
+  "corpus-to-skill-family": {
+   "layer": 2,
+   "meta": "skill-factory",
+   "tested": true
+  },
+  "council-of-high-intelligence": {
+   "layer": 1,
+   "meta": "council-of-high-intelligence"
+  },
+  "create-design-md": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "cs-churn-risk-triage": {
+   "layer": 3,
+   "meta": "client-delivery",
+   "parent": "cs-health-score-audit"
+  },
+  "cs-health-score-audit": {
+   "layer": 2,
+   "meta": "client-delivery"
+  },
+  "cs-renewal-readiness-check": {
+   "layer": 3,
+   "meta": "client-delivery",
+   "parent": "cs-health-score-audit"
+  },
+  "d85-compliance-checklist": {
+   "layer": 2,
+   "meta": "when-governing-rig-work"
+  },
+  "daily-lesson-ledger": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-self-improve",
+   "tested": true
+  },
+  "data-contract-validator": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "data-freshness-monitor": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "data-query-latency-audit": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "design-archetype-classifier": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-color-palette-generator": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-component-variants-auditor": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-dark-mode-converter": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-mobile-responsive-tester": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-spacing-auditor": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-studio-os": {
+   "layer": 1,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "design-token-extractor": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "design-typography-pair-suggester": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces",
+   "tested": true
+  },
+  "done-claim-verification": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "proof-loop",
+   "tested": true
+  },
+  "ds-ai-workflow": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-brand-identity": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-build-ship": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-business": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-career": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-color": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-conversion-copy": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-critique": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-discovery": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-doctrine": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-exemplars": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-imagery": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-layout": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-motion-3d": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-typography": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-ui-system": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ds-ux": {
+   "layer": 2,
+   "meta": "design-studio-os",
+   "tested": true
+  },
+  "ebbelaar-doctrine": {
+   "layer": 2,
+   "meta": "when-shipping-code"
+  },
+  "eden-mcp": {
+   "layer": 1,
+   "meta": "eden-mcp"
+  },
+  "estate-housekeeping": {
+   "layer": 2,
+   "meta": "jake-ceo",
+   "tested": true
+  },
+  "evaluator-forge-from-exemplars": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "evidence-retrieval-citations-gate": {
+   "layer": 2,
+   "meta": "when-researching-or-deciding",
+   "tested": true
+  },
+  "experience-lesson-records": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "extract-design-system": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "fe-system-design-doctrine": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fe-system-design-os": {
+   "layer": 2,
+   "meta": "when-shipping-code",
+   "tested": true
+  },
+  "fesd-a11y-i18n": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-api-network": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-architecture": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-career-prep": {
+   "layer": 2,
+   "meta": "lucy-skills",
+   "tested": true
+  },
+  "fesd-component-api": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-interview-framework": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-performance": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-realtime-sync": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-requirements": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "fesd-state-data": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "fe-system-design-os",
+   "tested": true
+  },
+  "finding-unknowns-blindspot-pass": {
+   "layer": 2,
+   "meta": "ultraplan"
+  },
+  "finding-unknowns-brainstorm-prototypes": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-change-quiz": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-implementation-notes": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-implementation-plan": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-interview-me": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-pitch-packager": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "finding-unknowns-reference-hunt": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "finding-unknowns-blindspot-pass"
+  },
+  "first-mate-handoff": {
+   "layer": 1,
+   "meta": "first-mate-handoff"
+  },
+  "fixing-accessibility": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "fixing-metadata": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "fixing-motion-performance": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "frontier-agent": {
+   "layer": 2,
+   "meta": "first-mate-handoff"
+  },
+  "frontier-personal-intelligence": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "fullstack-developer": {
+   "layer": 2,
+   "meta": "app-studio"
+  },
+  "ga-ads": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-bidding": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-budget": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-campaigns": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-keywords": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-landing": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-local-b2b": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-reporting": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-strategy": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-structure": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "ga-tracking": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "gamma-trace-record-and-failure-attribution": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "gate-d-loop": {
+   "layer": 2,
+   "meta": "when-governing-rig-work",
+   "tested": true
+  },
+  "gate-subject-required": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "s1gate",
+   "tested": true
+  },
+  "git-push-safety-loop": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "gate-d-loop",
+   "tested": true
+  },
+  "golive": {
+   "layer": 2,
+   "meta": "client-delivery"
+  },
+  "google-ads-doctrine": {
+   "layer": 2,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "google-ads-os": {
+   "layer": 1,
+   "meta": "google-ads-os",
+   "tested": true
+  },
+  "grill-with-ui": {
+   "layer": 2,
+   "meta": "ultraplan"
+  },
+  "gstack-context-restore": {
+   "layer": 3,
+   "meta": "first-mate-handoff",
+   "parent": "context-save"
+  },
+  "gtm-attribution-model-selector": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-batch-capsule-builder": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-campaign-roi-calculator": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-cold-send-safety-gate": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-content-marketing-case-studies": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "gtm-icp-fit-evaluator": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-launch-readiness-checklist": {
+   "layer": 2,
+   "meta": "client-delivery",
+   "tested": true
+  },
+  "gtm-outreach-sequence-architect": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-pricing-page-auditor": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-revenue-forecaster": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "gtm-warm-lead-scorer": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "harness-engineering": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "harness-ha-01-code-review": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-02-code-refactor": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-03-code-test-writing": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-04-code-debug": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-05-code-migration": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-06-code-perf-audit": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-07-code-deps-upgrade": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-08-code-pr-prep": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-09-api-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-10-schema-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-11-infra-iac": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-12-ci-cd-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-ha-13-code-security-audit": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "harness-hb-01-blog-post": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-02-newsletter-issue": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-03-landing-page": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-04-linkedin-post": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-draft"
+  },
+  "harness-hb-05-seo-content": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-06-twitter-thread": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-07-video-script": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-08-podcast-prep": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-09-content-audit": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-10-lead-magnet": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-11-webinar-design": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-12-case-study": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hb-13-email-sequence": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "harness-hc-01-design-system-audit-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-02-ui-design-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-03-ux-research-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-04-design-critique-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-05-design-token-build-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-06-accessibility-audit-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-07-mobile-design-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-08-dashboard-design-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-09-onboarding-flow-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-10-brand-identity-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-11-motion-design-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hc-12-design-handoff-session": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "harness-hd-01-outbound-sequence": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-02-icp-research": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-03-crm-hygiene": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-04-pricing-test": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-05-launch-prep": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-06-nps-analysis": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-07-churn-prevention": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-08-expansion-play": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-09-market-research": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-10-competitive-intel": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-11-partner-discovery": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-hd-12-growth-experiment": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "harness-mh-01-skill-genesis-session": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "harness-mh-02-harness-forge-session": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "harness-mh-03-agent-composition-session": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer"
+  },
+  "harness-mh-04-deviation-expedition-session": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner"
+  },
+  "harness-mh-05-asset-pruning-session": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "harness-mh-06-install-verification-session": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "heartmula": {
+   "layer": 2,
+   "meta": "when-producing-media"
+  },
+  "hudl-film-pipeline": {
+   "layer": 2,
+   "meta": "jacob-x-growth"
+  },
+  "hyper-jev": {
+   "layer": 2,
+   "meta": "jev-everywhere"
+  },
+  "hyperresearch": {
+   "layer": 2,
+   "meta": "when-researching-or-deciding"
+  },
+  "ideawake-linkedin-weekly": {
+   "layer": 1,
+   "meta": "ideawake-linkedin-weekly"
+  },
+  "impeccable": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "improve-ui": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "iqrsqpi-v11": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "iqrsqpi-v20",
+   "tested": true
+  },
+  "iqrsqpi-v20": {
+   "layer": 2,
+   "meta": "ultraplan",
+   "tested": true
+  },
+  "iqrsqpi-v20-slice": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "iqrsqpi-v20",
+   "tested": true
+  },
+  "j-space": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "jacob-recruiting": {
+   "layer": 2,
+   "meta": "jacob-x-growth",
+   "tested": true
+  },
+  "jacob-x-growth": {
+   "layer": 1,
+   "meta": "jacob-x-growth"
+  },
+  "jake-board": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "jake-bridge": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "jake-ceo": {
+   "layer": 1,
+   "meta": "jake-ceo"
+  },
+  "jake-conductor": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "jake-lessons-ledger": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-self-improve"
+  },
+  "jake-pai-doctrine": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "jake-pai-doctrine-loader": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-pai-doctrine"
+  },
+  "jake-scout": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "jake-self-improve": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "james-ai-studio": {
+   "layer": 2,
+   "meta": "app-studio",
+   "tested": true
+  },
+  "james-deploy": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "james-ai-studio",
+   "tested": true
+  },
+  "james-evals": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "james-ai-studio",
+   "tested": true
+  },
+  "james-s1-decisions": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "james-ai-studio",
+   "tested": true
+  },
+  "james-s2-reasoning": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "james-ai-studio",
+   "tested": true
+  },
+  "james-safety": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "james-ai-studio",
+   "tested": true
+  },
+  "jev-everywhere": {
+   "layer": 1,
+   "meta": "jev-everywhere"
+  },
+  "jev-lane": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "s1gate"
+  },
+  "jev-level-01-single-decisions": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-02-multiple-choice": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-03-composite-scoring": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-04-confidence-gating": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-05-routing": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-06-guardrail-hooks": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-07-should-i-compact": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-08-cheap-reads": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-09-files-at-scale": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-level-10-agentic-jev": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "jev-ten-levels"
+  },
+  "jev-ten-levels": {
+   "layer": 2,
+   "meta": "jev-everywhere"
+  },
+  "jev-ultrafast": {
+   "layer": 2,
+   "meta": "jev-everywhere"
+  },
+  "job-requirement-mirror": {
+   "layer": 2,
+   "meta": "traject-os",
+   "tested": true
+  },
+  "julie-w2-applypilot": {
+   "layer": 2,
+   "meta": "traject-os",
+   "tested": true
+  },
+  "last30days": {
+   "layer": 2,
+   "meta": "when-researching-or-deciding"
+  },
+  "linkedin-acceptance-followup": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-outreach",
+   "tested": true
+  },
+  "linkedin-analytics-tracker": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-measure"
+  },
+  "linkedin-cross-platform": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-distribute"
+  },
+  "linkedin-event-engagement": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-launch"
+  },
+  "linkedin-growth-engine": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "merged_into": "linkedin-viral"
+  },
+  "linkedin-growth-os": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "merged_into": "linkedin-viral"
+  },
+  "linkedin-influencer-os": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "merged_into": "linkedin-viral"
+  },
+  "linkedin-optimizer": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "merged_into": "linkedin-viral"
+  },
+  "linkedin-post-launch": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "linkedin-site-mechanics": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "linkedin-viral": {
+   "layer": 1,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "linkedin-weekly-rhythm": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "loop-engineering": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "lucy-skills": {
+   "layer": 1,
+   "meta": "lucy-skills"
+  },
+  "lv-creator-diandra-escobar": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-harry-long": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-kasey-brown": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-lara-acosta": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-mark-firth": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-michelle-j-raymond": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-pierre-herubel": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-raise-your-visibility-online": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-shanee-moret": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-creator-will-mctighe": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "tommy-clark-doctrine",
+   "tested": true
+  },
+  "lv-distribute": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-draft": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-engage": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-gate": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-hooks": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-launch": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-measure": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-outreach": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-plan": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-profile": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-strategy": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "lv-visuals": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "matt-pocock-ask-matt": {
+   "layer": 2,
+   "meta": "when-shipping-code"
+  },
+  "matt-pocock-claude-handoff": {
+   "layer": 3,
+   "meta": "first-mate-handoff",
+   "parent": "matt-pocock-handoff"
+  },
+  "matt-pocock-code-review": {
+   "layer": 2,
+   "meta": "when-shipping-code"
+  },
+  "matt-pocock-codebase-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-diagnosing-bugs": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-domain-modeling": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-edit-article": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "matt-pocock-writing-shape"
+  },
+  "matt-pocock-git-guardrails-claude-code": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-grill-me": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "grill-with-ui"
+  },
+  "matt-pocock-grill-with-docs": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "grill-with-ui"
+  },
+  "matt-pocock-grilling": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "grill-with-ui"
+  },
+  "matt-pocock-handoff": {
+   "layer": 2,
+   "meta": "first-mate-handoff"
+  },
+  "matt-pocock-implement": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-improve-codebase-architecture": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-loop-me": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "grill-with-ui"
+  },
+  "matt-pocock-migrate-to-shoehorn": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-obsidian-vault": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "matt-pocock-prototype": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-research": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "matt-pocock-resolving-merge-conflicts": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-scaffold-exercises": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-setup-matt-pocock-skills": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-setup-pre-commit": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-setup-ts-deep-modules": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-tdd": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-teach": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-to-spec": {
+   "layer": 2,
+   "meta": "ultraplan"
+  },
+  "matt-pocock-to-tickets": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "matt-pocock-to-spec"
+  },
+  "matt-pocock-triage": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-wayfinder": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "matt-pocock-to-spec"
+  },
+  "matt-pocock-wizard": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-writing-beats": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "matt-pocock-writing-shape"
+  },
+  "matt-pocock-writing-fragments": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "matt-pocock-writing-shape"
+  },
+  "matt-pocock-writing-great-skills": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "matt-pocock-ask-matt"
+  },
+  "matt-pocock-writing-shape": {
+   "layer": 2,
+   "meta": "when-writing-content"
+  },
+  "meta-agent-composer": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents",
+   "tested": true
+  },
+  "meta-agent-memory-binder": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-agent-composer",
+   "tested": true
+  },
+  "meta-catalog-pruner": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-contradiction-repairer": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-deviation-scorer": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-doctrine-drift-detector": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-expedition-runner": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents",
+   "tested": true
+  },
+  "meta-genome-writer": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-harness-forge": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "meta-harness-refuter": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering",
+   "tested": true
+  },
+  "meta-install-verifier": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-memory-os-bridge": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-proof-sealer": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-round-amplifier": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-sigma-band-router": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "meta-expedition-runner",
+   "tested": true
+  },
+  "meta-skill-genesis": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-skill-refuter": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-skill-surgeon": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-usage-telemetry": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades",
+   "tested": true
+  },
+  "meta-website-publisher": {
+   "layer": 2,
+   "meta": "rig-website-taki",
+   "tested": true
+  },
+  "minto-pyramid": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "model-capability-scout": {
+   "layer": 2,
+   "meta": "rig-ops"
+  },
+  "north-star-lock-loop": {
+   "layer": 2,
+   "meta": "when-governing-rig-work",
+   "tested": true
+  },
+  "npcpy-create-jinx": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "npcpy-knowledge-index-skill"
+  },
+  "npcpy-knowledge-graph-skill": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "npcpy-knowledge-index-skill"
+  },
+  "npcpy-knowledge-index-skill": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "npcpy-knowledge-sememolution-skill": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "npcpy-knowledge-index-skill"
+  },
+  "npcpy-knowledge-store-skill": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "npcpy-knowledge-index-skill"
+  },
+  "npcpy-run-jinx": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "npcpy-knowledge-index-skill"
+  },
+  "owb": {
+   "layer": 2,
+   "meta": "aside-codemode"
+  },
+  "personal-admin": {
+   "layer": 2,
+   "meta": "personal-life",
+   "tested": true
+  },
+  "personal-life": {
+   "layer": 1,
+   "meta": "personal-life",
+   "tested": true
+  },
+  "phase-discipline-loop": {
+   "layer": 2,
+   "meta": "when-governing-rig-work",
+   "tested": true
+  },
+  "pmm-cold-email-deliverability": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "pmm-discovery-closing-calls": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "pmm-google-ads-local-b2b": {
+   "layer": 3,
+   "meta": "google-ads-os",
+   "parent": "ga-local-b2b"
+  },
+  "pmm-productized-service-offers": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "pmm-referral-partner-programs": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "pmm-service-landing-pages-cro": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "pre-interview-meta": {
+   "layer": 2,
+   "meta": "lucy-skills"
+  },
+  "prime-jake-coding-fleet": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "prime-jake-pai"
+  },
+  "prime-jake-pai": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "prompt-router": {
+   "layer": 2,
+   "meta": "first-mate-handoff",
+   "tested": true
+  },
+  "proof-loop": {
+   "layer": 2,
+   "meta": "when-governing-rig-work",
+   "tested": true
+  },
+  "provider-probe-first": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "referral-first-playbook": {
+   "layer": 2,
+   "meta": "traject-os",
+   "tested": true
+  },
+  "resume-jev-aina-balancer": {
+   "layer": 2,
+   "meta": "traject-os",
+   "tested": true
+  },
+  "resume-screening-stack": {
+   "layer": 2,
+   "meta": "traject-os"
+  },
+  "rig-adrien-doctrines": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "rig-ai-design-mastery": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "rig-ai-engineering": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "rig-anti-fabrication-dispatch": {
+   "layer": 2,
+   "meta": "first-mate-handoff",
+   "tested": true
+  },
+  "rig-bms-band-calculator": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system",
+   "tested": true
+  },
+  "rig-coding-agent-router": {
+   "layer": 2,
+   "meta": "first-mate-handoff"
+  },
+  "rig-collision-engine": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "rig-coord-space-mapper": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system",
+   "tested": true
+  },
+  "rig-daily-linkedin-post": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "rig-deviate-engines": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-deviation-engine-selector": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system",
+   "tested": true
+  },
+  "rig-deviation-engines": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system",
+   "tested": true
+  },
+  "rig-doctrine-drift-detector": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "north-star-lock-loop",
+   "tested": true
+  },
+  "rig-doctrine-forge": {
+   "layer": 2,
+   "meta": "skill-factory"
+  },
+  "rig-doctrine-repo": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "north-star-lock-loop"
+  },
+  "rig-doctrine-scoring-rubric": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-doctrine-versioner": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "north-star-lock-loop",
+   "tested": true
+  },
+  "rig-engines": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-hash-chain-verifier": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "proof-loop",
+   "tested": true
+  },
+  "rig-idea-generator": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence",
+   "tested": true
+  },
+  "rig-instagram-growth": {
+   "layer": 1,
+   "meta": "rig-instagram-growth"
+  },
+  "rig-iqrsqpi-runner": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "iqrsqpi-v20",
+   "tested": true
+  },
+  "rig-jacob-game-cut": {
+   "layer": 3,
+   "meta": "jacob-x-growth",
+   "parent": "hudl-film-pipeline"
+  },
+  "rig-known-expert-os": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "north-star-lock-loop",
+   "tested": true
+  },
+  "rig-lattice-system": {
+   "layer": 2,
+   "meta": "when-governing-rig-work",
+   "tested": true
+  },
+  "rig-leverage-finder": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence",
+   "tested": true
+  },
+  "rig-linkedin-taki": {
+   "layer": 2,
+   "meta": "linkedin-viral"
+  },
+  "rig-memory-os": {
+   "layer": 2,
+   "meta": "jake-ceo"
+  },
+  "rig-operator": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-pai-doctrine"
+  },
+  "rig-operator-doctrine": {
+   "layer": 3,
+   "meta": "jake-ceo",
+   "parent": "jake-pai-doctrine"
+  },
+  "rig-ops": {
+   "layer": 1,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "rig-proof-packet-builder": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "proof-loop",
+   "tested": true
+  },
+  "rig-revenue-cycle": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm"
+  },
+  "rig-system-archetype-detector": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence",
+   "tested": true
+  },
+  "rig-tac-doctrine": {
+   "layer": 2,
+   "meta": "when-shipping-code"
+  },
+  "rig-top100-accessibility": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-agent-collaboration": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-communication": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-context": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-cost": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-evaluation": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-memory": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-observability": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-orchestration": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-persona": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-planning": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "ultra-goal"
+  },
+  "rig-top100-agent-retry": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-safety": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-self-improve": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-skills": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-agent-testing": {
+   "layer": 3,
+   "meta": "when-building-or-fixing-agents",
+   "parent": "harness-engineering"
+  },
+  "rig-top100-analytics-content": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-measure"
+  },
+  "rig-top100-anti-generic-force": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-api-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-blend-value": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-board-reporting": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-brand-voice": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-strategy"
+  },
+  "rig-top100-brier-calibration": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-citation-tracking": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-code-generation": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-cold-email-ai": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-competitive-moat": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-competitor-intel": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-composite-sigma": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-consensus-mcp": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-content-calendar": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-plan"
+  },
+  "rig-top100-content-repurposing": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-distribute"
+  },
+  "rig-top100-content-summarization": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-data-pipeline": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "rig-top100-database-design": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-deal-desk": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-decision-framework": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "rig-top100-deduplication": {
+   "layer": 3,
+   "meta": "when-working-with-data",
+   "parent": "rig-top100-knowledge-graph"
+  },
+  "rig-top100-deployment-automation": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-design-system": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-design-taste": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-discovery-questions": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-e-total-formula": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-email-marketing": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "rig-top100-entity-extraction": {
+   "layer": 3,
+   "meta": "when-working-with-data",
+   "parent": "rig-top100-knowledge-graph"
+  },
+  "rig-top100-evidence-synthesis": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-exit-planning": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-expected-free-energy": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-finops": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-followup-automation": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-image-generation": {
+   "layer": 2,
+   "meta": "when-producing-media"
+  },
+  "rig-top100-incident-response": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-interaction-design": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-knowledge-base": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-knowledge-graph": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "rig-top100-lead-scoring": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-linkedin-content": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "lv-draft"
+  },
+  "rig-top100-market-positioning": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-market-research": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-monitoring-alerting": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-objection-handling": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-obsidian-vault": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "rig-top100-okrs": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "ultra-goal"
+  },
+  "rig-top100-ops-cadence": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-paper-classification": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-partnership-strategy": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-performance-optimization": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-pipeline-hygiene": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-poisson-merge": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-pricing-strategy": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-proposal-generation": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-rag-pipeline": {
+   "layer": 3,
+   "meta": "when-working-with-data",
+   "parent": "rig-top100-knowledge-graph"
+  },
+  "rig-top100-rapid-prototyping": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-research-monitoring": {
+   "layer": 3,
+   "meta": "when-researching-or-deciding",
+   "parent": "hyperresearch"
+  },
+  "rig-top100-rig-l-formula": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-robust-madz": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-sales-forecasting": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-scenario-planning": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "rig-top100-security-hardening": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-seo-content": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "rig-top100-social-listening": {
+   "layer": 3,
+   "meta": "linkedin-viral",
+   "parent": "linkedin-site-mechanics"
+  },
+  "rig-top100-supabase-intel": {
+   "layer": 2,
+   "meta": "when-working-with-data"
+  },
+  "rig-top100-surprisal": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "rig-lattice-system"
+  },
+  "rig-top100-talent-pipeline": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-tech-debt-management": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-testing-automation": {
+   "layer": 3,
+   "meta": "when-shipping-code",
+   "parent": "rig-tac-doctrine"
+  },
+  "rig-top100-ui-prototyping": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-unit-economics": {
+   "layer": 3,
+   "meta": "when-selling-or-running-gtm",
+   "parent": "rig-revenue-cycle"
+  },
+  "rig-top100-ux-analytics": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-ux-research": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-ux-testing": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-ux-writing": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "article-writing"
+  },
+  "rig-top100-vector-embeddings": {
+   "layer": 3,
+   "meta": "when-working-with-data",
+   "parent": "rig-top100-knowledge-graph"
+  },
+  "rig-top100-video-content": {
+   "layer": 2,
+   "meta": "when-producing-media"
+  },
+  "rig-top100-visual-design": {
+   "layer": 3,
+   "meta": "design-studio-os",
+   "parent": "when-designing-interfaces"
+  },
+  "rig-top100-yt-adjacent-discovery": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-top100-yt-channel-discovery": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-top100-yt-content-classification": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-top100-yt-subscription-sync": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-top100-yt-transcript-extraction": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "rig-doctrine-forge"
+  },
+  "rig-website-taki": {
+   "layer": 1,
+   "meta": "rig-website-taki"
+  },
+  "rsi-patterns": {
+   "layer": 2,
+   "meta": "when-shipping-code"
+  },
+  "s1gate": {
+   "layer": 2,
+   "meta": "jev-everywhere"
+  },
+  "scrapers": {
+   "layer": 2,
+   "meta": "aside-codemode"
+  },
+  "script-exec-blocked": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "d85-compliance-checklist"
+  },
+  "search-miss-binary": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "d85-compliance-checklist"
+  },
+  "sec-auth-failure-investigation": {
+   "layer": 3,
+   "meta": "rig-ops",
+   "parent": "when-securing-the-estate"
+  },
+  "sec-dependency-vuln-triage": {
+   "layer": 3,
+   "meta": "rig-ops",
+   "parent": "when-securing-the-estate"
+  },
+  "sec-secret-leak-sweep": {
+   "layer": 3,
+   "meta": "rig-ops",
+   "parent": "when-securing-the-estate"
+  },
+  "skill-factory": {
+   "layer": 1,
+   "meta": "skill-factory",
+   "tested": true
+  },
+  "skill-index": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "skill-upgrades": {
+   "layer": 2,
+   "meta": "skill-factory",
+   "tested": true
+  },
+  "slopmonster": {
+   "layer": 3,
+   "meta": "when-writing-content",
+   "parent": "anti-slop"
+  },
+  "spec-literal-execution": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "d85-compliance-checklist"
+  },
+  "ss-bestseller": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-convert": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-distribute": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-gate": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-growth-os": {
+   "layer": 1,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-measure": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-network": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-notes": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-package": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-plan": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-publish": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-strategy": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "ss-write": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "subagent-model-pinning": {
+   "layer": 2,
+   "meta": "first-mate-handoff",
+   "tested": true
+  },
+  "substack-doctrine": {
+   "layer": 2,
+   "meta": "ss-growth-os",
+   "tested": true
+  },
+  "systems-thinking-studio": {
+   "layer": 2,
+   "meta": "council-of-high-intelligence"
+  },
+  "taki-doctrine": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm"
+  },
+  "testsprite-engineering": {
+   "layer": 2,
+   "meta": "app-studio"
+  },
+  "tommy-clark-doctrine": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "tested": true
+  },
+  "tool-intake": {
+   "layer": 2,
+   "meta": "rig-ops",
+   "tested": true
+  },
+  "trace-harness-launch-failure": {
+   "layer": 2,
+   "meta": "rig-ops"
+  },
+  "traject-gtm": {
+   "layer": 2,
+   "meta": "when-selling-or-running-gtm",
+   "tested": true
+  },
+  "traject-os": {
+   "layer": 1,
+   "meta": "traject-os",
+   "tested": true
+  },
+  "typesafe-ai": {
+   "layer": 2,
+   "meta": "jev-everywhere"
+  },
+  "typesafe-jev": {
+   "layer": 3,
+   "meta": "jev-everywhere",
+   "parent": "s1gate"
+  },
+  "ui-skills-root": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "ultra-goal": {
+   "layer": 2,
+   "meta": "ultraplan"
+  },
+  "ultraloop": {
+   "layer": 3,
+   "meta": "ultraplan",
+   "parent": "ultra-goal"
+  },
+  "ultraplan": {
+   "layer": 1,
+   "meta": "ultraplan",
+   "tested": true
+  },
+  "verify-output-readback": {
+   "layer": 3,
+   "meta": "when-governing-rig-work",
+   "parent": "proof-loop"
+  },
+  "video-editing": {
+   "layer": 2,
+   "meta": "when-producing-media",
+   "tested": true
+  },
+  "when-building-or-fixing-agents": {
+   "layer": 1,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "when-designing-interfaces": {
+   "layer": 2,
+   "meta": "design-studio-os"
+  },
+  "when-governing-rig-work": {
+   "layer": 1,
+   "meta": "when-governing-rig-work"
+  },
+  "when-growing-social-accounts": {
+   "layer": 2,
+   "meta": "linkedin-viral",
+   "merged_into": "linkedin-viral"
+  },
+  "when-nothing-else-fits": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents",
+   "retired": true
+  },
+  "when-producing-media": {
+   "layer": 1,
+   "meta": "when-producing-media"
+  },
+  "when-researching-or-deciding": {
+   "layer": 1,
+   "meta": "when-researching-or-deciding"
+  },
+  "when-running-the-job-search": {
+   "layer": 2,
+   "meta": "traject-os"
+  },
+  "when-securing-the-estate": {
+   "layer": 2,
+   "meta": "rig-ops"
+  },
+  "when-selling-or-running-gtm": {
+   "layer": 1,
+   "meta": "when-selling-or-running-gtm"
+  },
+  "when-shipping-code": {
+   "layer": 1,
+   "meta": "when-shipping-code"
+  },
+  "when-using-personal-tools": {
+   "layer": 2,
+   "meta": "personal-life"
+  },
+  "when-using-vendored-packs": {
+   "layer": 2,
+   "meta": "when-building-or-fixing-agents"
+  },
+  "when-working-with-data": {
+   "layer": 1,
+   "meta": "when-working-with-data"
+  },
+  "when-writing-content": {
+   "layer": 1,
+   "meta": "when-writing-content"
+  },
+  "wikiskill-evolve": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "wikiskill-maintainer": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "wikiskill-proposer": {
+   "layer": 3,
+   "meta": "skill-factory",
+   "parent": "skill-upgrades"
+  },
+  "youtube-code-with-antonio": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-codesistency": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-galaxies-dev": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-javascript-mastery": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-josh-tried-coding": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-lama-dev": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-notjust-dev": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-piyush-garg": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-sonny-sangha": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  },
+  "youtube-traversy-media": {
+   "layer": 3,
+   "meta": "app-studio",
+   "parent": "app-intake-spec",
+   "tested": true
+  }
+ },
+ "lane_rules": [
+  [
+   "\\bjacob\\b|#79\\b|\\bhudl\\b|\\bncsa\\b|jakerodgers2029|pewaukee|red ?zone|\\bnil\\b",
+   "jacob-x-growth"
+  ],
+  [
+   "\\bcoby\\b|\\bkobe\\b|skonord|ideawake|ideaweek",
+   "ideawake-linkedin-weekly"
+  ]
+ ]
+}
