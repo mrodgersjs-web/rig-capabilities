@@ -1,0 +1,25 @@
+{
+  "name": "page.truth",
+  "stage": "verify",
+  "lane": "build",
+  "description": "single-field judgment over the RENDERED TEXT of one dashboard page: does it present a business number as a real current fact with no source and no honest label? State = the page's visible text only. Built 2026-09-25 after measuring that code.diff passed 5/5 builds that independent verifiers rejected for fake figures (decisions 82863 83608 83582 83627 83259): the defects live in what a page displays, which a diff-level rubric cannot see. One question, one field (lesson from atomic.claim: 0.48 inside a blob vs 0.88 alone).",
+  "questions": {
+    "unsourced_figure": {
+      "instructions": "This page presents at least one business number (revenue, MRR, ARR, clients, deals, pipeline value, campaigns, ad spend, clicks, conversions, reply or open rates, followers, impressions) as a real current measurement, without naming where it comes from and without labelling it as a target, goal, plan, assumption, estimate, sample, demo, or not wired",
+      "type": "noul"
+    }
+  },
+  "rules": [
+    {
+      "when": "unsourced_figure.noul >= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "page shows a business number with no source and no honest label: trace it to a real source or label it"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "notes": {
+    "unsourced_figure": "Truth direction: LOW is good. Owner bar (Mike, 2026-09-25): a page counts as confirmed truthful only when unsourced_figure.noul < 0.10 (i.e. > 0.90 confidence it shows no unsourced figure). Calibrate with rendered page text: known-fabricated historical renderings + planted fabrications as bad, verifier-accepted live pages as good."
+  },
+  "never_auto": false
+}
