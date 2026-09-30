@@ -1,0 +1,99 @@
+#!/usr/bin/env python3
+"""Resident RIG Laya: keeps the local Laya decision model loaded so a private route answers in
+about 0.1 s instead of paying a 17 s cold start on every call.
+
+Same model, head and answer shape as the `rig-laya` CLI (it loads that file and calls the same
+Router.predict). Binds 127.0.0.1 only: private text never leaves this machine.
+
+  POST /predict  {"state": str, "questions": {...}}  -> Router.predict result (answers, model, ...)
+  GET  /health                                       -> {"ok", "loaded", "model", "rss_gb", "calls"}
+
+Run with the Python that has `laya` installed (on this machine the Hermes agent venv), under launchd
+(com.rig.laya-resident). Callers fall back to the CLI when this is down.
+"""
+import json
+import os
+import resource
+import sys
+import time
+from http.server import BaseHTTPRequestHandler, HTTPServer
+from importlib.machinery import SourceFileLoader
+
+HOST, PORT = "127.0.0.1", int(os.environ.get("RIG_LAYA_PORT", "8931"))
+RIG_LAYA = os.path.expanduser("~/.rig/bin/rig-laya")
+MAX_BODY = 256 * 1024
+
+for k in ("HF_TOKEN", "HUGGING_FACE_HUB_TOKEN"):
+    os.environ.pop(k, None)
+
+_mod = SourceFileLoader("rig_laya_cli", RIG_LAYA).load_module()
+_mod._install_rig_head(want=True)  # must run before Router() so Router builds the patched Agent
+from laya import Router  # noqa: E402
+
+ROUTER = Router(token="")
+STATE = {"loaded": False, "model": None, "calls": 0, "started": time.time()}
+
+
+def rss_gb():
+    return round(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss / 1e9, 2)  # bytes on macOS
+
+
+def predict(state, questions):
+    r = ROUTER.predict(state=state, questions=questions)
+    r.setdefault("active_head", "finetuned")
+    STATE["calls"] += 1
+    STATE["model"] = r.get("model") or STATE["model"]
+    return r
+
+
+def warm():
+    t = time.time()
+    predict("warm-up", {"w": {"type": "choice", "instructions": "Pick one.",
+                              "criteria": {"a": "first option", "b": "second option"}}})
+    STATE["loaded"] = True
+    STATE["calls"] = 0
+    print(f"laya resident: model loaded in {time.time() - t:.1f}s, rss {rss_gb()} GB, "
+          f"listening on {HOST}:{PORT}", flush=True)
+
+
+class H(BaseHTTPRequestHandler):
+    def _send(self, code, obj):
+        body = json.dumps(obj).encode()
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        if self.path.rstrip("/") == "/health":
+            return self._send(200, {"ok": True, "loaded": STATE["loaded"], "model": STATE["model"],
+                                    "rss_gb": rss_gb(), "calls": STATE["calls"],
+                                    "uptime_s": round(time.time() - STATE["started"])})
+        self._send(404, {"error": "not found"})
+
+    def do_POST(self):
+        if self.path.rstrip("/") != "/predict":
+            return self._send(404, {"error": "not found"})
+        n = int(self.headers.get("Content-Length") or 0)
+        if n <= 0 or n > MAX_BODY:
+            return self._send(400, {"error": "body required, at most 256 KB"})
+        try:
+            d = json.loads(self.rfile.read(n))
+            state, questions = d.get("state"), d.get("questions")
+            if not isinstance(state, str) or not isinstance(questions, dict) or not questions:
+                return self._send(400, {"error": "need state (string) and questions (object)"})
+            t = time.time()
+            r = predict(state, questions)
+            r["server_ms"] = round((time.time() - t) * 1000, 1)
+            self._send(200, r)
+        except Exception as ex:  # a bad request must not kill the resident model
+            self._send(500, {"error": f"{type(ex).__name__}: {ex}"[:300]})
+
+    def log_message(self, fmt, *args):  # no request text in logs (private lane)
+        return
+
+
+if __name__ == "__main__":
+    warm()
+    HTTPServer((HOST, PORT), H).serve_forever()  # one request at a time: Router is not assumed thread-safe

@@ -30,6 +30,10 @@ Keep it right
   skill-surface file <name> --meta M [--parent P|none] [--apply]   re-home one skill
   skill-surface restore [--apply]       undo: blocks out, skills back to skills/user, files restored
   skill-surface export [path]           portable tree JSON for the canonical repo (no machine paths)
+  skill-surface harness <claude|codex|agents> [--apply] [--restore]
+                                        same 30-meta menu in another harness via its native switch
+                                        (Claude skillOverrides user-invocable-only; Codex agents/openai.yaml
+                                        allow_implicit_invocation false); nothing moves; --restore undoes it
 """
 import datetime
 import difflib
@@ -173,7 +177,7 @@ META_INFO = {
         "Delivering for a paying RIG client after the sale: client kickoff and access, a starter pack, a build or CRM or website for a client, handoff and training, results proof, client health and renewal",
         "Scope is written first; client data stays in the client's lane; results carry a ProofPacket; anything sent, deployed or billed stops at Gate-D."),
     "personal-life": ("Personal life: family, gifts, purchases, insurance, legal, scams, forms",
-        "Mike's personal life, not RIG work: family and gifts, buying something, health insurance and benefits paperwork, finding a lawyer, checking whether an email is a scam, filling documents and forms, personal email and calendar",
+        "Mike's personal life, not RIG work: family, kids, school and birthdays, gifts, trips and appointments, reminders and messages to family, buying something, health insurance and benefits paperwork, finding a lawyer, checking whether an email is a scam, filling documents and forms, personal email and calendar",
         "Committing actions (orders, signatures, payments) get a one-line confirmation with exact values first; never print passwords or card numbers; family and health details stay local."),
 }
 
@@ -721,6 +725,34 @@ def rank_local(t, query, pool=None, limit=5):
     return [n for _, n in sorted(scores, reverse=True)[:limit]]
 
 
+def rank_metas(t, task, opts, criteria):
+    """Deterministic meta ranking for the local fallback shortlist (no model)."""
+    docs = {}
+    for mm in opts:
+        d = toks(mm.replace("-", " ")) * 3 + toks(criteria.get(mm, "")) * 2 + toks(t.info(mm)[0]) * 2
+        for n, e in t.E.items():
+            if e["meta"] == mm and n != mm and not e.get("dead") and not e.get("retired"):
+                d += toks(n.replace("-", " ")) + toks(e.get("purpose", ""))
+        docs[mm] = d
+    N = len(docs) or 1
+    df = {}
+    for d in docs.values():
+        for w in set(d):
+            df[w] = df.get(w, 0) + 1
+    avg = sum(len(d) for d in docs.values()) / N or 1
+    qt = toks(task)
+    sc = {}
+    for mm, d in docs.items():
+        s = 0.0
+        for w in qt:
+            tf = d.count(w)
+            if tf:
+                idf = math.log(1 + (N - df[w] + 0.5) / (df[w] + 0.5))
+                s += idf * tf * 2.2 / (tf + 1.2 * (0.25 + 0.75 * len(d) / avg))
+        sc[mm] = s
+    return sorted(opts, key=lambda mm: (-sc[mm], -t.E.get(mm, {}).get("uses", 0)))
+
+
 def resolve(t, q):
     names = set(t.E)
     raw = q.strip().lstrip("/")
@@ -853,21 +885,48 @@ def openjev_choice(q, instructions, criteria, task):
             "decision_id": None, "model": d.get("model"), "error": None if ok else "no choice in OpenJev response"}
 
 
+LAYA_RESIDENT = os.environ.get("RIG_LAYA_URL", "http://127.0.0.1:8931")
+
+
+def laya_resident(task, questions, timeout=30):
+    """Resident Laya (launchd com.rig.laya-resident, 127.0.0.1 only): ~0.1 s instead of a 17 s cold start."""
+    import urllib.request
+    from urllib.parse import urlsplit
+    import socket
+    u = urlsplit(LAYA_RESIDENT)
+    try:
+        socket.create_connection((u.hostname, u.port or 80), timeout=0.3).close()
+    except OSError:
+        return None
+    body = json.dumps({"state": task, "questions": questions}).encode()
+    req = urllib.request.Request(LAYA_RESIDENT.rstrip("/") + "/predict", data=body, method="POST",
+                                 headers={"Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            return json.loads(r.read())
+    except Exception:
+        return None
+
+
 def laya_choice(q, instructions, criteria, task):
-    cmd = [LAYA, "--state", task, "--type", "choice", "--question-id", q, "--instructions", instructions,
-           "--criteria", json.dumps(criteria), "--json"]
-    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONHOME", "PYTHONPATH", "PYTHONEXECUTABLE")}
-    env["HOME"] = HOME
-    p = subprocess.run(cmd, capture_output=True, text=True, timeout=150, env=env)
-    if p.returncode != 0 or "{" not in p.stdout:
-        return {"ok": False, "error": "Laya exit %s: %s" % (p.returncode, (p.stderr.strip().splitlines() or ["no output"])[-1][:160])}
-    out = p.stdout[p.stdout.find("{"):]
-    d = json.loads(out)
+    d = laya_resident(task, {q: {"type": "choice", "instructions": instructions, "criteria": criteria}})
+    if d is None:  # resident server down: pay the cold start through the CLI
+        cmd = [LAYA, "--state", task, "--type", "choice", "--question-id", q, "--instructions", instructions,
+               "--criteria", json.dumps(criteria), "--json"]
+        env = {k: v for k, v in os.environ.items() if k not in ("PYTHONHOME", "PYTHONPATH", "PYTHONEXECUTABLE")}
+        env["HOME"] = HOME
+        p = subprocess.run(cmd, capture_output=True, text=True, timeout=150, env=env)
+        if p.returncode != 0 or "{" not in p.stdout:
+            return {"ok": False, "error": "Laya exit %s: %s" % (p.returncode, (p.stderr.strip().splitlines() or ["no output"])[-1][:160])}
+        d = json.loads(p.stdout[p.stdout.find("{"):])
+        d["_via"] = "cli"
+    else:
+        d["_via"] = "resident"
     a = (d.get("answers") or {}).get(q) or {}
     conf = a.get("confidence")
     ok = a.get("choice") is not None
     verdict = "PASS" if ok and conf is not None and conf > 0.9 else "ESCALATE"
-    return {"ok": ok, "lane": "laya-local", "choice": a.get("choice"), "confidence": conf,
+    return {"ok": ok, "lane": "laya-local" if d.get("_via") == "resident" else "laya-cli", "choice": a.get("choice"), "confidence": conf,
             "probs": a.get("probabilities") or {}, "verdict": verdict, "decision_id": None,
             "model": d.get("model"), "error": None if ok else "no choice in Laya response"}
 
@@ -925,18 +984,8 @@ def cmd_route(task, local=False, as_json=False):
 
     def shortlist(q, criteria, k=6):
         opts = [o for o in criteria if o in t.E]
-        if q == "meta":  # score a meta by its own routing text plus its best-matching children
-            hits = rank_local(t, task, limit=25)
-            order = []
-            for h in hits:
-                mm = t.E[h]["meta"]
-                if mm in opts and mm not in order:
-                    order.append(mm)
-            qt = set(toks(task))
-            by_text = sorted(opts, key=lambda mm: -len(qt & set(toks(criteria[mm]))))
-            for mm in by_text:
-                if mm not in order:
-                    order.append(mm)
+        if q == "meta":  # BM25 over each meta's routing text plus its children's names and purposes
+            order = rank_metas(t, task, opts, criteria)  # recall@6 0.98 on 53 labeled tasks (was 0.87)
         else:
             order = rank_local(t, task, pool=opts, limit=len(opts)) + [o for o in opts]
         keep = []
@@ -1314,6 +1363,156 @@ def cmd_export(out):
     return 0
 
 
+# Other harnesses get the same 30-meta menu through their own native switches; no skill folder moves.
+HARNESS = {
+    "claude": {"root": f"{HOME}/.claude/skills", "commands": f"{HOME}/.claude/commands",
+               "settings": f"{HOME}/.claude/settings.json", "mode": "claude", "pointer": f"{HOME}/.claude/CLAUDE.md"},
+    "codex": {"root": f"{HOME}/.codex/skills", "mode": "codex", "pointer": f"{HOME}/.codex/AGENTS.md"},
+    "agents": {"root": f"{HOME}/.agents/skills", "mode": "codex", "pointer": None},
+}
+HB, HE = "<!-- SKILL_SURFACE:BEGIN -->", "<!-- SKILL_SURFACE:END -->"
+CODEX_POLICY = "policy:\n  allow_implicit_invocation: false\n"
+
+
+def harness_pointer(name):
+    return (f"{HB}\n## Skill routing: 30 meta-skills (skill surface, 2026-09-29)\n"
+            f"Only Mike's 30 meta-skills are listed to you; every other skill in this harness stays callable by name "
+            f"({'`/name`' if name == 'claude' else '`$name`'}) and every hidden skill has a nav card at "
+            f"`{NAV}/<name>.md`. Picking a skill for a described task is a typed judgment: run "
+            f"`{SELF} route \"<task>\"` (one Jev choice per layer, logged decision ids) before reading the catalog; "
+            f"if no classifier answers the verdict is DEFERRED, so use `{SELF} find \"<words>\"`. "
+            f"Resolve a name with `{SELF} where <name>`. Obey the meta's gates before any outward step.\n{HE}\n")
+
+
+def cmd_harness(name, apply=False, restore=False):
+    if name not in HARNESS:
+        print(f"unknown harness {name}; one of {', '.join(HARNESS)}")
+        return 3
+    h, m = HARNESS[name], load()
+    metas, root = m["metas"], h["root"]
+    sp = os.path.join(LIB, "_harness", f"{name}.json")
+    st = json.load(open(sp)) if os.path.exists(sp) else {"links": [], "created": [], "modified": {}, "overrides": []}
+    bdir = os.path.join(LIB, "_harness", "backup", name)
+    if restore:
+        n = 0
+        for f in st["created"]:
+            if os.path.exists(f):
+                n += 1
+                if apply:
+                    os.remove(f)
+                    d = os.path.dirname(f)
+                    if os.path.isdir(d) and not os.listdir(d):
+                        os.rmdir(d)
+        for f, b in st["modified"].items():
+            if apply and os.path.exists(b):
+                shutil.copy2(b, f)
+        for l in st["links"]:
+            if apply and os.path.islink(l):
+                os.remove(l)
+        if h["mode"] == "claude" and st["overrides"] and h["settings"] not in st["modified"]:
+            s = json.load(open(h["settings"]))
+            ov = s.get("skillOverrides", {})
+            for k in st["overrides"]:
+                if ov.get(k) == "user-invocable-only":
+                    ov.pop(k)
+            if apply:
+                s["skillOverrides"] = ov
+                write_if_changed(h["settings"], json.dumps(s, indent=2) + "\n")
+        if h["pointer"] and os.path.exists(h["pointer"]) and apply:
+            write_if_changed(h["pointer"], re.sub(re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", "", read(h["pointer"]), flags=re.S))
+        print(f"{'restored' if apply else 'would restore'} {name}: {n} files removed, {len(st['modified'])} files put back, "
+              f"{len(st['links'])} meta links removed, {len(st['overrides'])} overrides cleared")
+        if apply:
+            os.remove(sp)
+        return 0
+    links, created, modified, hidden = [], [], {}, []
+    for mm in metas:
+        p = os.path.join(root, mm)
+        if not os.path.lexists(p):
+            links.append(p)
+            if apply:
+                os.symlink(os.path.join(USER, mm), p)
+    if h["mode"] == "claude":
+        names = [d for d in os.listdir(root) if not d.startswith(".") and d not in metas]
+        cmds = [f[:-3] for f in os.listdir(h["commands"]) if f.endswith(".md")] if os.path.isdir(h["commands"]) else []
+        s = json.load(open(h["settings"]))
+        ov = s.get("skillOverrides", {})
+        for n in sorted(set(names + cmds) - set(metas)):
+            if n not in ov:
+                ov[n] = "user-invocable-only"
+                hidden.append(n)
+        blocked = [mm for mm in metas if ov.get(mm) in ("off", "user-invocable-only")]
+        if apply and hidden:
+            b = os.path.join(bdir, "settings.json")
+            if not os.path.exists(b):
+                os.makedirs(bdir, exist_ok=True)
+                shutil.copy2(h["settings"], b)
+            modified.setdefault(h["settings"], b)
+            s["skillOverrides"] = ov
+            write_if_changed(h["settings"], json.dumps(s, indent=2) + "\n")
+        if blocked:
+            print(f"note: these metas are hidden by an existing override and were left alone: {', '.join(blocked)}")
+    else:
+        for d in sorted(os.listdir(root)):
+            dp = os.path.join(root, d)
+            if d.startswith(".") or d in metas or not os.path.isdir(dp):
+                continue
+            if os.path.islink(dp):
+                continue
+            y = os.path.join(dp, "agents", "openai.yaml")
+            if not os.path.exists(y):
+                created.append(y)
+                hidden.append(d)
+                if apply:
+                    os.makedirs(os.path.dirname(y), exist_ok=True)
+                    with open(y, "w") as fh:
+                        fh.write(CODEX_POLICY)
+                continue
+            if os.path.islink(y):
+                continue
+            txt = read(y)
+            if re.search(r"allow_implicit_invocation:\s*false", txt):
+                continue
+            if re.search(r"allow_implicit_invocation:", txt):
+                new = re.sub(r"allow_implicit_invocation:\s*\S+", "allow_implicit_invocation: false", txt)
+            elif re.search(r"^policy:\s*$", txt, re.M):
+                new = re.sub(r"^policy:\s*$", "policy:\n  allow_implicit_invocation: false", txt, count=1, flags=re.M)
+            else:
+                new = txt.rstrip("\n") + "\n" + CODEX_POLICY
+            hidden.append(d)
+            if apply:
+                b = os.path.join(bdir, d, "openai.yaml")
+                os.makedirs(os.path.dirname(b), exist_ok=True)
+                if not os.path.exists(b):
+                    shutil.copy2(y, b)
+                modified[y] = b
+                write_if_changed(y, new)
+    ptr_changed = False
+    if h["pointer"]:
+        cur = read(h["pointer"]) if os.path.exists(h["pointer"]) else ""
+        blk = harness_pointer(name)
+        new = re.sub(re.escape(HB) + r".*?" + re.escape(HE) + r"\n?", blk, cur, flags=re.S) if HB in cur else (cur.rstrip("\n") + "\n\n" + blk if cur else blk)
+        ptr_changed = new != cur
+        if apply and ptr_changed:
+            b = os.path.join(bdir, os.path.basename(h["pointer"]))
+            if cur and not os.path.exists(b):
+                os.makedirs(bdir, exist_ok=True)
+                shutil.copy2(h["pointer"], b)
+            write_if_changed(h["pointer"], new)
+    print(f"{'applied' if apply else 'would apply'} {name}: link {len(links)} missing metas, hide {len(hidden)} skills from the "
+          f"model (still callable by name), pointer {'updated' if ptr_changed else 'unchanged'}")
+    if apply:
+        st["links"] = sorted(set(st["links"]) | set(links))
+        st["created"] = sorted(set(st["created"]) | set(created))
+        st["modified"].update(modified)
+        if h["mode"] == "claude":
+            st["overrides"] = sorted(set(st["overrides"]) | set(hidden))
+        os.makedirs(os.path.dirname(sp), exist_ok=True)
+        with open(sp, "w") as fh:
+            json.dump(st, fh, indent=1)
+    return 0
+
+
 def main():
     a = sys.argv[1:]
     if not a or a[0] in ("-h", "--help", "help"):
@@ -1345,6 +1544,11 @@ def main():
     if cmd == "misses":
         d = int(rest[rest.index("--days") + 1]) if "--days" in rest else 7
         return cmd_misses(d, flag("--write"))
+    if cmd == "harness":
+        if not args:
+            print("usage: skill-surface harness <claude|codex|agents> [--apply] [--restore]")
+            return 3
+        return cmd_harness(args[0], apply=flag("--apply"), restore=flag("--restore"))
     if cmd == "export":
         return cmd_export(args[0] if args else os.path.join(LIB, "_tree-export.json"))
     if cmd == "tree":
