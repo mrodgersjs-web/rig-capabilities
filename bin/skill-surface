@@ -535,7 +535,7 @@ def index_md(t):
 def tree_md(t):
     total = sum(e.get("uses", 0) for e in t.E.values())
     L = ["# Mike's skill surface: 30 meta-skills", "", JEV_LINE, "",
-         f"Ranked by chats that used the lane ({total} skill uses across 2,996 Aside chats, counted 2026-09-29). "
+         f"Ranked by chats that used the lane ({total} skill uses across {t.m.get('usage_chats', 2996):,} Aside chats, counted {str(t.m.get('usage_counted', '2026-09-29'))[:10]}). "
          f"Layer 1 = 30 visible metas; layer 2 = {sum(len(v) for v in t.kids.values())} skills; layer 3 = "
          f"{sum(len(v) for v in t.subs.values())} sub-skills, hidden in {LIB}. Call any by name (`/<name>`); "
          f"find names in INDEX.md. Tool: `{SELF} where|find|route|tree|verify`.", "",
@@ -1252,6 +1252,7 @@ def cmd_usage(refresh):
         for n, _, new in diffs:
             E[n]["uses"] = new
         m["usage_counted"] = now()
+        m["usage_chats"] = len(os.listdir(sess))
         m["usage_method"] = "chats where an assistant turn opened or named the skill's SKILL.md"
         save(m)
         build(quiet=True)
