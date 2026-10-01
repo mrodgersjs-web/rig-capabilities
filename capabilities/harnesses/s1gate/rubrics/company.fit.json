@@ -19,8 +19,12 @@
       ]
     },
     "risk_signals": {
-      "type": "noul",
-      "instructions": "Public signals of layoffs, hiring freeze, leadership turnover or financial distress in the last 12 months"
+      "type": "choice",
+      "instructions": "Does the input ASSERT that layoffs, a hiring freeze, executive or leadership exits, missed numbers, or financial distress have happened or are happening in the last 12 months? Quote the asserting sentence first. A negated mention ('no layoffs'), a category discussed in analysis, a watch item, speculation about the future, and a planned, announced leadership succession with a named successor do NOT count. If the input only denies or analyses these categories, pick none_asserted.",
+      "criteria": {
+        "none_asserted": "The input does not assert that layoffs, hiring freeze, leadership turnover or financial distress occurred (denials and analysis do not count)",
+        "distress_asserted": "The input asserts, cites or reports at least one of: layoffs, a hiring freeze, leadership turnover or executive exit, or financial distress"
+      }
     },
     "operator_fit": {
       "type": "noul",
@@ -34,9 +38,9 @@
       "reason": "company unlikely to pay at band"
     },
     {
-      "when": "risk_signals.noul >= 0.70",
+      "when": "risk_signals.p.distress_asserted >= 0.50",
       "verdict": "ESCALATE",
-      "reason": "distress signals; check before investing"
+      "reason": "distress signals asserted in the input; check before investing"
     },
     {
       "when": "ai_mandate.score < 1.00",
@@ -48,5 +52,5 @@
   "calibrated": false,
   "calibration": {},
   "never_auto": false,
-  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled. REPAIR 2026-09-30 (gate-hygiene): risk_signals converted from noul to a fixed-answer choice (distress_asserted/none_asserted) because the noul version scored a company dossier with fabricated distress claims LOWER than the clean one (plant 0.14 vs clean 0.29, 09-29 decisions 138581/138524) and passed the plant outright. Wording counts only ASSERTED signals (denials and analysis excluded) after the first draft false-fired on the clean file's negated risk-signal section. RED/GREEN proven in RECEIPT-CALIBRATE.md (plant 146076 RED, clean 146077 GREEN). Rules stay advisory until s1gate calibrate certifies each signal; calibration refused tonight (0 labelled rows, need >= 30)."
 }

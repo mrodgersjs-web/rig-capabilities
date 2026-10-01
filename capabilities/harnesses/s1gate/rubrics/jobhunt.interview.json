@@ -1,0 +1,110 @@
+{
+  "name": "jobhunt.interview",
+  "stage": "plan",
+  "lane": "job",
+  "description": "Jobhunt 0-10 bar for interview readiness and conversion to offer. state = the interview debrief or the prepared answer set plus the target posting. Scores real recorded interviews and the prep behind them; never invents speech and never scores an answer he did not give.",
+  "questions": {
+    "j1_story_bank_maintained": {
+      "type": "score",
+      "instructions": "Whether real interviews have a five-line debrief recorded",
+      "criteria": [
+        "0: no debriefs exist for any interview",
+        "2: one debrief, unstructured",
+        "3: debriefs for half the interviews, partial fields",
+        "4: debriefs complete but the next question is missing",
+        "5: a five-line debrief (question, actual answer, rambling or ownership gap, number stated, next question) for every real interview",
+        "6: 5's level plus each debrief is dated and role-bound",
+        "7: 6's level plus the gap line names a fix",
+        "8: 7's level plus the fixes have been rehearsed once",
+        "9: 8's level plus a repeated question across interviews is identified",
+        "10: 9's level plus the story bank is what he practises from, not a record he rereads"
+      ]
+    },
+    "j2_quantified_ownership": {
+      "type": "score",
+      "instructions": "Whether answers state his own ownership with one number",
+      "criteria": [
+        "0: answers say 'we' with no ownership",
+        "2: one number in the whole interview",
+        "3: numbers without scope",
+        "4: numbers in some answers",
+        "5: every substantive answer carries 'I' plus one number or named outcome",
+        "6: 5's level plus the number has scope (team, budget, region)",
+        "7: 6's level plus the number is a business result, not activity",
+        "8: 7's level plus the result is tied to a decision he made",
+        "9: 8's level plus he states what he would do differently",
+        "10: 9's level plus the ownership is verifiable and he says how it could be checked"
+      ]
+    },
+    "j3_anticipation": {
+      "type": "score",
+      "instructions": "Whether the top duties of the posting each have a prepared story",
+      "criteria": [
+        "0: no preparation against the posting",
+        "2: two prepared stories, both general",
+        "3: three stories, none tied to the posting",
+        "4: three stories tied to the posting",
+        "5: the top five duties each have one prepared story",
+        "6: 5's level plus each story is two minutes or less",
+        "7: 6's level plus each story names a number and a decision",
+        "8: 7's level plus the hardest duty has two stories",
+        "9: 8's level plus the stories survive a follow-up probe",
+        "10: 9's level plus he can answer the failure question for each without spinning"
+      ]
+    },
+    "j4_followup": {
+      "type": "score",
+      "instructions": "Whether the follow-up is tied to a specific moment and carries a real next step",
+      "criteria": [
+        "0: no follow-up sent",
+        "2: generic thanks, named interviewer",
+        "3: thanks plus a restated interest",
+        "4: thanks plus one detail from the conversation",
+        "5: ties back to one specific moment and states the next step",
+        "6: 5's level plus it adds one useful thing he did not say live",
+        "7: 6's level plus it goes within one business day",
+        "8: 7's level plus it is under 120 words",
+        "9: 8's level plus it names the follow-up question he wishes he had asked",
+        "10: 9's level plus the interviewer would forward it to the hiring manager"
+      ]
+    },
+    "j5_comp_readiness": {
+      "type": "score",
+      "instructions": "Whether he can hold the $250K base target and the $200K floor under pressure",
+      "criteria": [
+        "0: no stated target",
+        "2: target stated but never aloud",
+        "3: target stated, floor unstated",
+        "4: floor known but he would fold under a low opening",
+        "5: $250K base target and $200K base floor held, all-in treated as separate",
+        "6: 5's level plus he can say the number in one sentence without apology",
+        "7: 6's level plus he has a reason ready (market, scope, comparable roles)",
+        "8: 7's level plus he knows the band for this exact role",
+        "9: 8's level plus he can handle the counter without conceding the floor",
+        "10: 9's level plus he has an answer for the gap between $250K base and $325K all-in"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "j1_story_bank_maintained.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "no structured debrief exists for real interviews; record one before the next loop"
+    },
+    {
+      "when": "j5_comp_readiness.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "the base target and floor are not held; rehearse the number before the next call"
+    },
+    {
+      "when": "j2_quantified_ownership.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "answers do not carry his own quantified ownership"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Never score an answer that was not actually given. A synthetic rehearsal is labelled rehearsal and never counted as a screen. Base 250K, floor 200K, 325K all-in is aspiration and must not be quoted as base. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently. DOWNGRADE 2026-09-30: this rubric is NON-ENFORCING / ADVISORY for verdict evidence -- do not read its verdict as a defect finding. Evidence: j4_followup is unmeetable on a pre-call artifact (09-29 binding run, decision 138606: j4 confidence 0.00 -> permanent flat-confidence ESCALATE; plant 138579 vs restore 138580 both ESCALATE, only j5 score moved). Calibration attempted 2026-09-30 on j1/j2/j5 signals, refused: 0 labelled rows, need >= 30 per signal. Lift condition: label >= 30 decisions per rule signal and run s1gate calibrate --write; a j4_followup wording fix ('score 0 if no follow-up exists yet') is a candidate but was NOT applied tonight (brief class-b lane = calibrate or downgrade, not redesign)."
+}

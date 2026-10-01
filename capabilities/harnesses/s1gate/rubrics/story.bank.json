@@ -19,8 +19,13 @@
       "instructions": "The action is clearly the candidate's own decision, not the team's"
     },
     "number_present": {
-      "type": "noul",
-      "instructions": "The result carries a specific number with scope"
+      "type": "choice",
+      "instructions": "Does the story's RESULT carry a specific number with scope? Count first: list every quantity that appears in the result or outcome part of the story. A placeholder token such as N, X or # where a number should be is NOT a number, and a metric named with no quantity ('opex impact', 'revenue') is NOT a number. Story scaffolding, table headers, dates, role names and template words are not results. Then pick exactly one option.",
+      "criteria": {
+        "no_number": "No actual number appears in the result (placeholders and named metrics without quantities do not count)",
+        "number_no_scope": "A number appears in the result but has no scope (no team, budget, region, timeframe or denominator)",
+        "number_with_scope": "A specific number with scope appears in the result"
+      }
     },
     "competency": {
       "type": "choice",
@@ -46,14 +51,19 @@
       "reason": "rewrite in first person with the decision named"
     },
     {
-      "when": "number_present.noul < 0.50",
+      "when": "number_present.p.no_number >= 0.50",
       "verdict": "ESCALATE",
       "reason": "find the number"
+    },
+    {
+      "when": "number_present.p.number_no_scope >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "give the number a scope: team, budget, region or timeframe"
     }
   ],
   "confidence_floor": 0.35,
   "calibrated": false,
   "calibration": {},
   "never_auto": false,
-  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled."
+  "notes": "Created 2026-09-18 for Project Get a Job. Advisory until labelled. REPAIR 2026-09-30 (gate-hygiene): number_present converted from noul to a fixed-answer choice (no_number/number_no_scope/number_with_scope) because the noul version passed a story bank with every number stripped at 0.90 (09-29 plant, decision 138583). RED/GREEN proven in RECEIPT-CALIBRATE.md (plant 146078 RED, clean 146079 GREEN). Rules stay advisory until s1gate calibrate certifies each signal; calibration refused tonight (0 labelled rows, need >= 30)."
 }

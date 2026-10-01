@@ -1,0 +1,772 @@
+{
+  "name": "website.buyer",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "RIG homepage buyer-decision gate. 45 categories across 8 families: buyer trust, offer clarity, commercial/money, conversion architecture, vertical fit, offering-type fit, design craft, technical integrity. Scores a homepage variant against what a paying prospect actually needs to see. Input is an evidence dossier of observable page facts, never a self-description. Weights are carried inside each question's instructions as \"(family X, weight N)\" and sum to 111. Known key set only: the loader rejects extras.",
+  "questions": {
+    "trust_five_second": {
+      "type": "score",
+      "instructions": "Within five seconds, can a stranger say what this company does and who it is for? (family A, weight 3)",
+      "criteria": [
+        "Nothing legible above the fold / Only a slogan, no business",
+        "Slogan plus vague category",
+        "Category readable, audience unclear",
+        "Category and audience both readable",
+        "Clear what/for-whom, no why-now",
+        "Clear plus one differentiating claim",
+        "What/for-whom/differentiator in one glance",
+        "Same, and the promise is falsifiable",
+        "Falsifiable promise plus visible proof",
+        "Instantly: what, for whom, why you, and evidence"
+      ]
+    },
+    "trust_evidence_receipts": {
+      "type": "score",
+      "instructions": "Are claims backed by checkable receipts rather than adjectives? (family A, weight 3)",
+      "criteria": [
+        "Zero evidence of any kind / Adjectives only",
+        "One vague number",
+        "Generic stats, unattributed",
+        "Illustrative example present",
+        "Illustrative example clearly labelled",
+        "Worked artifact shown",
+        "Worked artifact plus named method",
+        "Worked artifact plus reproducible check",
+        "Multiple artifacts with provenance and dates",
+        "Client-verifiable receipts, dated, contactable"
+      ]
+    },
+    "trust_operator_visibility": {
+      "type": "score",
+      "instructions": "Is it clear a named, accountable human does this work? (family A, weight 3)",
+      "criteria": [
+        "Anonymous, no person / Company voice only",
+        "A name appears once",
+        "Name plus location",
+        "Name plus role",
+        "Named person plus their accountability",
+        "Named person plus face/photo",
+        "Named person, face, and role in the promise",
+        "Named person commits personally to outcomes",
+        "Named person plus direct contact route",
+        "Face, name, personal commitment, direct line"
+      ]
+    },
+    "trust_local_accountability": {
+      "type": "score",
+      "instructions": "Can a local buyer picture meeting and holding this person accountable? (family A, weight 2)",
+      "criteria": [
+        "No geography at all / Vague region",
+        "City named in footer only",
+        "City named prominently",
+        "City plus \"works directly with\"",
+        "City plus local service claim",
+        "City plus local proof (address, phone, events)",
+        "Named local person plus reachable phone",
+        "Local identity is a core positioning element",
+        "Local plus verifiable business registration",
+        "Hyper-local trust: name, place, phone, track record"
+      ]
+    },
+    "trust_operating_company": {
+      "type": "score",
+      "instructions": "Does it read like a company open for business today? (family A, weight 2)",
+      "criteria": [
+        "Looks abandoned/broken / Looks like a mockup",
+        "Undated, no signals",
+        "Current copy but no signals",
+        "Current copy plus dated content",
+        "Dated content plus real routes",
+        "Real routes plus working contact path",
+        "Working contact path plus response expectation",
+        "Adds operating detail (hours, systems, process)",
+        "Adds live operational proof",
+        "Unmistakably live: dated, responsive, staffed"
+      ]
+    },
+    "trust_claim_hygiene": {
+      "type": "score",
+      "instructions": "Does the page avoid claims it cannot defend? (family A, weight 3)",
+      "criteria": [
+        "Invented clients or numbers / Unverifiable superlatives",
+        "Vague implied scale",
+        "Mostly safe, one risk",
+        "Safe with hedged risk",
+        "Safe plus explicit disclaimers",
+        "Disclaimers plus labelled illustrations",
+        "Labelled illustrations plus no outcome promise",
+        "Every claim sourced or explicitly bounded",
+        "Bounded claims plus what-the-page-will-not-promise section",
+        "Model of honest claiming: bounded, sourced, negative-space stated"
+      ]
+    },
+    "offer_problem_recognition": {
+      "type": "score",
+      "instructions": "Does a buyer see their own broken workflow named in their words? (family B, weight 3)",
+      "criteria": [
+        "Abstract only / Category-level pain",
+        "Generic pain (\"inefficiency\")",
+        "Named domain of pain",
+        "Named workflow, generic industry",
+        "Named workflow plus failure mode",
+        "Named workflow plus failure mode plus consequence",
+        "Adds the moment the failure is noticed",
+        "Adds who gets blamed when it fails",
+        "Buyer recognises their exact incident",
+        "Buyer could paste their own case into it"
+      ]
+    },
+    "offer_deliverable_tangibility": {
+      "type": "score",
+      "instructions": "Can the buyer state what physically lands in their inbox? (family B, weight 3)",
+      "criteria": [
+        "Cannot tell at all / \"Solutions\"",
+        "Services named, no output",
+        "Outputs named abstractly",
+        "One concrete deliverable named",
+        "Deliverables named with contents",
+        "Deliverables with contents and format",
+        "Plus what is required from the buyer",
+        "Plus acceptance criteria per deliverable",
+        "Plus a sample of the deliverable",
+        "Buyer could restate the deliverable verbatim unprompted"
+      ]
+    },
+    "offer_differentiation": {
+      "type": "score",
+      "instructions": "Is the reason to choose RIG over an AI agency or freelancer stated? (family B, weight 3)",
+      "criteria": [
+        "No differentiator / Clich\u00e9 (\"bespoke solutions\")",
+        "Implied by tone",
+        "One structural difference",
+        "One structural difference explained",
+        "Two or three differences",
+        "Differences mapped to buyer outcomes",
+        "Differences plus why competitors cannot do it",
+        "Adds the trade-off being asked",
+        "Differences are testable against a competitor page",
+        "Category-defining: \"no one else offers this combination\""
+      ]
+    },
+    "offer_boundary_honesty": {
+      "type": "score",
+      "instructions": "Are out-of-scope items and non-promises explicit? (family B, weight 3)",
+      "criteria": [
+        "Nothing bounded / No exclusions",
+        "Implicit limits",
+        "One exclusion stated",
+        "Exclusions stated",
+        "Exclusions plus what is separate",
+        "Separates diagnosis from implementation",
+        "Separates diagnosis/implementation/care",
+        "Explicitly names what the page does not promise",
+        "Named non-promises plus why they are excluded",
+        "Full scope contract visible pre-engagement"
+      ]
+    },
+    "offer_route_completeness": {
+      "type": "score",
+      "instructions": "Can a buyer navigate from this page to each of the four offerings? (family B, weight 2)",
+      "criteria": [
+        "No routes exist / One route",
+        "Two routes",
+        "Three routes",
+        "Four routes, unlabeled",
+        "Four routes labeled",
+        "Labeled routes plus tier names",
+        "Tier names plus prices where published",
+        "Tiers, prices, and what each is for",
+        "Plus a recommendation of which fits whom",
+        "Self-selecting: every buyer knows their entry point"
+      ]
+    },
+    "offer_jargon_free": {
+      "type": "score",
+      "instructions": "Is the copy in the buyer's language rather than the vendor's? (family B, weight 2)",
+      "criteria": [
+        "Deep internal jargon / Heavy technical terms",
+        "Some unexplained terms",
+        "Mostly plain, a few terms",
+        "Plain with terms explained",
+        "Plain plus buyer vocabulary",
+        "Buyer vocabulary dominant",
+        "Buyer vocabulary plus their failure phrases",
+        "Reads like the buyer wrote it",
+        "Mirrors a specific buyer role's speech",
+        "Zero jargon, maximum precision"
+      ]
+    },
+    "money_price_visible": {
+      "type": "score",
+      "instructions": "Is a price or price anchor visible on the page? (family C, weight 3)",
+      "criteria": [
+        "No number anywhere / Number buried off-page",
+        "Price hinted",
+        "One price, unclear scope",
+        "One price with scope",
+        "Two prices with scope",
+        "Prices mapped to offerings",
+        "Prices plus what changes the price",
+        "Prices plus what is always extra",
+        "Full pricing logic visible",
+        "Buyer can compute their own likely spend"
+      ]
+    },
+    "money_price_justified": {
+      "type": "score",
+      "instructions": "Does the price look earned by the described scope? (family C, weight 2)",
+      "criteria": [
+        "Price appears arbitrary / No scope attached",
+        "Thin scope attached",
+        "Scope stated",
+        "Scope stated with inputs",
+        "Scope plus deliverable",
+        "Scope plus deliverable plus timebox",
+        "Adds what the price excludes",
+        "Adds the alternative cost of not doing it",
+        "Adds quantified buyer-side cost of the problem",
+        "Price reads obviously cheap against named loss"
+      ]
+    },
+    "money_entry_ladder": {
+      "type": "score",
+      "instructions": "Is there a zero-risk first step that captures intent? (family C, weight 3)",
+      "criteria": [
+        "No free step / Free step mentioned only",
+        "Free step exists",
+        "Free step described",
+        "Free step described with contents",
+        "Contents plus immediate usefulness",
+        "Immediate usefulness plus no signup required",
+        "No signup plus clear route to paid",
+        "Route to paid is the same page",
+        "Free step demonstrably works standalone",
+        "Free step is the sales pitch: trying it creates the buy"
+      ]
+    },
+    "money_ladder_coherence": {
+      "type": "score",
+      "instructions": "Is free kit \u2192 review \u2192 build \u2192 care legible as an ordered path? (family C, weight 2)",
+      "criteria": [
+        "No ordering visible / Offerings listed flat",
+        "Flat list with tiers",
+        "Tiers imply order",
+        "Order implied",
+        "Order stated",
+        "Order plus when to use each",
+        "Plus the answer to \"do I need the earlier one\"",
+        "Sequencing question explicitly answered",
+        "Sequencing answered plus upgrade triggers",
+        "A first-time buyer can pick their step unaided"
+      ]
+    },
+    "money_risk_reversal": {
+      "type": "score",
+      "instructions": "Does the buyer know what happens if it goes wrong? (family C, weight 3)",
+      "criteria": [
+        "Nothing said / Implied confidence only",
+        "Vague reassurance",
+        "Process reduces risk",
+        "Named acceptance criteria",
+        "Acceptance criteria plus failure path",
+        "Failure path plus exception handling",
+        "Plus handover/ownership if RIG leaves",
+        "Plus \"what if you stop\" continuity answer",
+        "Explicit guarantee or exit terms",
+        "Risk sits visibly with the seller, not the buyer"
+      ]
+    },
+    "money_reason_to_act": {
+      "type": "score",
+      "instructions": "Is there an honest reason to act now rather than later? (family C, weight 1)",
+      "criteria": [
+        "No timing signal / Urgency is fake",
+        "Generic \"get started\"",
+        "Availability implied",
+        "Capacity implied",
+        "Capacity stated honestly",
+        "Honest capacity plus what delay costs",
+        "Delay cost quantified",
+        "Delay cost plus dependency on acting",
+        "Seasonal/operational trigger named",
+        "Timing argument is the page's core logic"
+      ]
+    },
+    "conv_primary_action": {
+      "type": "score",
+      "instructions": "Is the single primary action unmistakable above the fold? (family D, weight 3)",
+      "criteria": [
+        "No action visible / Action ambiguous",
+        "Multiple equal actions",
+        "One action, low emphasis",
+        "One action, clear",
+        "One action, clear and labelled",
+        "Labelled with the outcome it produces",
+        "Outcome-labelled plus friction stated",
+        "Plus the secondary action is clearly subordinate",
+        "Action, outcome, and next-step expectation all clear",
+        "Impossible to miss; competing actions removed"
+      ]
+    },
+    "conv_action_availability": {
+      "type": "score",
+      "instructions": "Is the action reachable at every scroll decision point? (family D, weight 2)",
+      "criteria": [
+        "One action total / Action only at top",
+        "Top and bottom",
+        "Two mid-page repeats",
+        "Three repeats",
+        "Repeat at each section end",
+        "Repeats plus persistent nav affordance",
+        "Persistent plus sticky element",
+        "Sticky plus mobile-reachable",
+        "Sticky, mobile-safe, and never competes with content",
+        "Action present exactly when intent is highest"
+      ]
+    },
+    "conv_action_cost_low": {
+      "type": "score",
+      "instructions": "Is what is asked of the buyer small, specific, and honest? (family D, weight 3)",
+      "criteria": [
+        "Asks for a sale / Asks a long form",
+        "Asks a call cold",
+        "Asks a call, purpose unclear",
+        "Asks a call, purpose clear",
+        "Asks a short brief",
+        "Short brief plus what happens next",
+        "Plus expected response time",
+        "Plus what to prepare",
+        "Preparation, timing, and outcome all stated",
+        "Lowest possible commitment with highest possible information"
+      ]
+    },
+    "conv_objection_resolution": {
+      "type": "score",
+      "instructions": "Are the real hesitations answered near the ask? (family D, weight 3)",
+      "criteria": [
+        "No objections addressed / One generic reassurance",
+        "Two answers",
+        "Three answers",
+        "Three plus the price objection",
+        "Price objection answered",
+        "Price plus \"is this mandatory\" answered",
+        "Plus \"what do I actually receive\"",
+        "Plus \"is implementation included\"",
+        "Plus \"what does this page not promise\"",
+        "Answers the buyer's private doubts in their order"
+      ]
+    },
+    "conv_lead_capture_path": {
+      "type": "score",
+      "instructions": "Is there a capture route that does not require a sales conversation? (family D, weight 2)",
+      "criteria": [
+        "None / Sales call only",
+        "Call plus email",
+        "Email route exists",
+        "Email plus a low-commitment asset",
+        "Asset ungated and useful",
+        "Ungated asset plus optional gate",
+        "Plus a no-email-needed path",
+        "Multiple capture depths by commitment level",
+        "Plus measurement wired to each capture",
+        "A capture path matched to every intent level"
+      ]
+    },
+    "conv_scan_efficiency": {
+      "type": "score",
+      "instructions": "Can a skimmer extract offer, price, proof and action in 30 seconds? (family D, weight 3)",
+      "criteria": [
+        "Requires full read / Skimmable but incomplete",
+        "Offer and action only",
+        "Offer, price, action",
+        "Offer, price, proof, action",
+        "Those four in one viewport",
+        "One-screen summary plus supporting depth",
+        "Plus progressive disclosure",
+        "Progressive disclosure with anchors",
+        "Anchored, and a skimmer cannot miss a pillar",
+        "Faster to skim than to read: designed for it"
+      ]
+    },
+    "vert_professional_services": {
+      "type": "score",
+      "instructions": "Would a CPA, law firm, or consultancy partner see their business here? (family E, weight 3)",
+      "criteria": [
+        "No vertical language / One generic B2B phrase",
+        "B2B plus size hint",
+        "Named profession",
+        "Named profession plus their workflow",
+        "Profession, workflow, and their system stack",
+        "Plus their compliance/discretion concern",
+        "Concern addressed without overclaiming",
+        "Names their tools and handoff partners",
+        "Plus a worked scenario in that vertical",
+        "This vertical would book from this page alone"
+      ]
+    },
+    "vert_healthcare_regulated": {
+      "type": "score",
+      "instructions": "Would a healthcare or med-spa operator see themselves without a compliance scare? (family E, weight 3)",
+      "criteria": [
+        "Nothing healthcare-adjacent / Mentions healthcare as a claim",
+        "Mentions healthcare as background",
+        "Healthcare named neutrally",
+        "Patient-intake workflow named",
+        "Workflow plus privacy awareness",
+        "Privacy-aware plus explicit no-clinical-claim statement",
+        "Plus regulated-data handling posture",
+        "Posture plus boundary statement (what RIG will not touch)",
+        "Plus a worked regulated-intake example",
+        "A regulated buyer feels understood and safe"
+      ]
+    },
+    "vert_field_industrial": {
+      "type": "score",
+      "instructions": "Would a construction or manufacturing owner find this relevant? (family E, weight 2)",
+      "criteria": [
+        "Pure software language / One operations word",
+        "Operations named",
+        "Ops plus shop-floor relevance",
+        "Shop-floor plus crew/shift context",
+        "Crew context plus offline/exception handling",
+        "Plus no-jargon delivery",
+        "Plus scheduling/throughput framing",
+        "Framing matches their real bottleneck",
+        "Plus an example in that setting",
+        "A plant or site manager would shortlist from this page"
+      ]
+    },
+    "vert_practice_volume": {
+      "type": "score",
+      "instructions": "Would a dental or high-volume front-desk practice see their problem? (family E, weight 2)",
+      "criteria": [
+        "No volume/front-desk framing / Generic \"intake\"",
+        "Intake plus volume hint",
+        "Volume named as the problem",
+        "Volume plus missed-contact consequence",
+        "Consequence plus revenue framing",
+        "Revenue framing without promising revenue",
+        "Plus staff/role impact (who chases)",
+        "Names the specific daily failure",
+        "Plus a worked high-volume scenario",
+        "A practice manager recognises their Monday morning"
+      ]
+    },
+    "vert_portability": {
+      "type": "score",
+      "instructions": "Does the page work for a vertical it never names? (family E, weight 2)",
+      "criteria": [
+        "Locked to one niche / Locked with jargon",
+        "Mostly generic",
+        "Generic enough to fit anyone",
+        "Generic but specific in method",
+        "Method transfers, examples localise",
+        "Explicit \"does this apply to me\" answer",
+        "Applies-to-me plus per-vertical entry routes",
+        "Per-vertical routes plus tailored proof",
+        "Plus a self-qualification device",
+        "Any serious operator can map it onto their own workflow"
+      ]
+    },
+    "typ_free_kit": {
+      "type": "score",
+      "instructions": "Does the failure-test kit read as genuinely useful on its own? (family F, weight 2)",
+      "criteria": [
+        "Not present / Named only",
+        "Named plus one line",
+        "Contents summarised",
+        "Contents itemised",
+        "Itemised plus how to use it",
+        "How-to-use plus no-signup needed",
+        "Plus it produces an output the buyer keeps",
+        "Output plus it creates a reason to buy",
+        "Creates the buy for the right buyer only (honest filter)",
+        "The kit alone would justify the visit"
+      ]
+    },
+    "typ_fixed_build": {
+      "type": "score",
+      "instructions": "Does the intake build read as a productised, buyable thing? (family F, weight 3)",
+      "criteria": [
+        "Not present / Vague \"we build things\"",
+        "Service described",
+        "Named build with scope",
+        "Named build, fixed scope",
+        "Fixed scope plus what is included",
+        "Included items plus what is separate",
+        "Plus how it is quoted",
+        "Quoting path plus typical boundary count",
+        "Boundary count plus acceptance criteria",
+        "A buyer could commission this without a call"
+      ]
+    },
+    "typ_paid_review": {
+      "type": "score",
+      "instructions": "Does the paid diagnostic read as worth its fixed fee? (family F, weight 3)",
+      "criteria": [
+        "Not present / Present, no price",
+        "Priced, no scope",
+        "Priced with thin scope",
+        "Priced with scope",
+        "Scope plus deliverable named",
+        "Deliverable plus who can use it independently",
+        "Independently usable plus timeboxed",
+        "Timeboxed plus optional (not mandatory)",
+        "Optional-and-why plus what it prevents",
+        "The fee looks like the cheap option"
+      ]
+    },
+    "typ_care_retainer": {
+      "type": "score",
+      "instructions": "Does ongoing support read as a clear recurring option? (family F, weight 1)",
+      "criteria": [
+        "Absent / Mentioned once",
+        "Named as a tier",
+        "Named plus what it covers",
+        "Covers monitoring/maintenance",
+        "Plus explicitly separate agreement",
+        "Separate plus what triggers needing it",
+        "Plus honest product-maturity status",
+        "Maturity stated plus boundaries",
+        "Boundaries plus scaling logic",
+        "A buyer can plan multi-year cost from this page"
+      ]
+    },
+    "design_hierarchy": {
+      "type": "score",
+      "instructions": "Does the eye land first on the revenue-relevant element? (family G, weight 3)",
+      "criteria": [
+        "Eye lands on decoration / No hierarchy",
+        "Flat hierarchy",
+        "Headline only",
+        "Headline plus one action",
+        "Action clearly subordinate to headline",
+        "Correct order: problem, then proof, then action",
+        "Plus supporting detail recedes",
+        "Recedes but stays findable",
+        "Scannable path in reading order",
+        "Hierarchy does the selling in the right sequence"
+      ]
+    },
+    "design_visual_evidence": {
+      "type": "score",
+      "instructions": "Is there real visual evidence \u2014 person, product, place? (family G, weight 3)",
+      "criteria": [
+        "Zero imagery / Abstract decoration only",
+        "Icons only",
+        "Icons plus shapes",
+        "One non-photographic anchor",
+        "A real portrait",
+        "Portrait plus one artifact image",
+        "Portrait plus artifact plus place",
+        "All three, and images carry meaning",
+        "Meaningful images plus captions/dates",
+        "Visual evidence alone would persuade a skeptic"
+      ]
+    },
+    "design_premium_craft": {
+      "type": "score",
+      "instructions": "Does the execution read bespoke rather than template? (family G, weight 2)",
+      "criteria": [
+        "Off-the-shelf obvious / Template with swapped copy",
+        "Near-standard layout",
+        "Layout adjusted to content",
+        "Layout shaped to content",
+        "Consistent system visible",
+        "System plus considered typography",
+        "Typography carries meaning (not decoration)",
+        "Meaningful type plus restrained palette",
+        "Restrained palette with deliberate accents",
+        "A buyer infers the same care would reach their work"
+      ]
+    },
+    "design_brand_fidelity": {
+      "type": "score",
+      "instructions": "Is RIG's black/ivory/gold identity held consistently? (family G, weight 1)",
+      "criteria": [
+        "No identity / Colors clash",
+        "Partly applied",
+        "Applied to hero only",
+        "Hero plus sections",
+        "Whole page consistent",
+        "Consistent plus type system matches brand",
+        "Type and colour and spacing unified",
+        "Unified and distinct from the template source",
+        "Distinctive and ownable",
+        "The identity is itself a credibility asset"
+      ]
+    },
+    "design_mobile_integrity": {
+      "type": "score",
+      "instructions": "Does the layout survive narrow viewports without locking? (family G, weight 3)",
+      "criteria": [
+        "Scroll is broken / Fixed artboard clips content",
+        "Horizontal overflow",
+        "Fits but unreadable",
+        "Fits and readable",
+        "Reflows with minor loss",
+        "Clean reflow",
+        "Clean reflow, touch targets adequate",
+        "Plus reduced-motion respected",
+        "Reduced motion plus no-JS legible",
+        "Mobile is the better experience"
+      ]
+    },
+    "design_density_balance": {
+      "type": "score",
+      "instructions": "Is the information complete without becoming a wall of text? (family G, weight 2)",
+      "criteria": [
+        "Almost nothing on the page / Sparse to the point of suspicion",
+        "Thin",
+        "Adequate but dry",
+        "Balanced",
+        "Balanced with grouping",
+        "Grouped with visual relief",
+        "Relief plus progressive disclosure",
+        "Disclosure plus scannable summaries",
+        "Every density level serves a different reader",
+        "Long enough to convince, short enough to finish"
+      ]
+    },
+    "tech_seo_ready": {
+      "type": "score",
+      "instructions": "Will search engines and link previews understand this page? (family H, weight 2)",
+      "criteria": [
+        "No semantic structure / Divs only",
+        "Some headings",
+        "Heading hierarchy correct",
+        "Correct plus title",
+        "Title plus meta description",
+        "Plus Open Graph",
+        "Plus canonical",
+        "Plus structured data",
+        "Structured data plus alt/anchor semantics",
+        "Fully describable by a crawler and a share preview"
+      ]
+    },
+    "tech_accessibility": {
+      "type": "score",
+      "instructions": "Can a keyboard user and a screen reader complete the page? (family H, weight 2)",
+      "criteria": [
+        "Semantically empty / Non-semantic divs",
+        "Landmarks absent",
+        "Some landmarks",
+        "Landmarks present",
+        "Plus heading structure",
+        "Heading structure plus labelled controls",
+        "Plus contrast checked",
+        "Contrast plus reduced-motion and focus order",
+        "All of the above plus images described",
+        "Audited: keyboard, reader, contrast, motion, text-spacing"
+      ]
+    },
+    "tech_performance": {
+      "type": "score",
+      "instructions": "Will this load fast on a phone on bad service? (family H, weight 2)",
+      "criteria": [
+        "Heavy third-party stack / External fonts plus video",
+        "External fonts",
+        "External requests present",
+        "Self-hosted, heavy",
+        "Self-hosted, moderate",
+        "Self-hosted and lean",
+        "Lean plus image budget controlled",
+        "Controlled plus LCP independent of animation",
+        "All of the above plus no layout shift",
+        "Sub-second mobile LCP with nothing third-party"
+      ]
+    },
+    "tech_content_integrity": {
+      "type": "score",
+      "instructions": "Is the full agreed content contract actually on the page? (family H, weight 3)",
+      "criteria": [
+        "Most content missing / Hero only",
+        "Hero plus one section",
+        "Half the offering present",
+        "Offerings present, proof missing",
+        "Proof present, FAQ missing",
+        "FAQ present, disclosures missing",
+        "All sections present",
+        "Present and correctly labelled (illustrative vs real)",
+        "Labelled with no clipped or hidden content",
+        "Complete, correct, and verifiable against the contract"
+      ]
+    },
+    "anti_slop_genericity": {
+      "type": "score",
+      "instructions": "Does this avoid the generic AI-agency look? (family H, weight 3)",
+      "criteria": [
+        "Full AI-slop clich\u00e9 set / Clich\u00e9 plus stock phrase",
+        "Two clich\u00e9s",
+        "One clich\u00e9",
+        "Near-clich\u00e9",
+        "Clich\u00e9-free but generic",
+        "Generic but specific copy",
+        "Specific copy plus distinctive layout",
+        "Distinctive layout plus proprietary framing",
+        "Proprietary framing throughout",
+        "Could not be anyone else's page"
+      ]
+    },
+    "authority_posture": {
+      "type": "score",
+      "instructions": "Does the page read as expert-to-expert rather than vendor-to-prospect? (family H, weight 2)",
+      "criteria": [
+        "Begging for the sale / Eager",
+        "Neutral vendor voice",
+        "Confident vendor",
+        "Neutral-expert",
+        "Expert posture with named standards",
+        "Standards plus boundaries on who it suits",
+        "Suits/does-not-suit stated",
+        "Declines unfit work explicitly",
+        "Explicitly selective",
+        "Peer-to-peer: the buyer qualifies themselves"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "conv_primary_action.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "no usable primary action above the fold"
+    },
+    {
+      "when": "money_price_visible.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "no price anchor on the page"
+    },
+    {
+      "when": "trust_claim_hygiene.score <= 3.00",
+      "verdict": "BLOCK",
+      "reason": "indefensible claim present"
+    },
+    {
+      "when": "design_mobile_integrity.score <= 2.00",
+      "verdict": "BLOCK",
+      "reason": "layout clips or locks content"
+    },
+    {
+      "when": "tech_content_integrity.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "content contract materially incomplete"
+    },
+    {
+      "when": "trust_evidence_receipts.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "no checkable evidence of any kind"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {
+    "status": "REFUSED",
+    "attempted": "2026-09-30",
+    "signals_tried": ["trust_claim_hygiene.score", "design_mobile_integrity.score"],
+    "reason": "0 labelled signal rows; s1gate calibrate needs >= 30 per signal. Nothing written."
+  },
+  "never_auto": false,
+  "notes": {
+    "downgrade_2026_09_30": "DOWNGRADED, non-enforcing / advisory only -- do not use as a DONE-gate. Evidence: 20/20 ESCALATE on 17 previews + 3 identical-input repeats (09-29 WEB95 lane, decisions 138256-138323 + 138128-138130); which of the 45 questions trips the 0.20 confidence floor rotates between runs; the trust_claim_hygiene BLOCK rule auto-downgrades to ESCALATE as uncalibrated (09-29 plant 138358 detected the indefensible claim but could not block). Calibration attempted 2026-09-30, refused: 0 labelled rows, need >= 30 per signal (530 existing signal labels cover other rubrics). Lift condition: >= 30 labelled decisions per enforcing signal via rig-s1gate label <did> <good|bad> --signal <q>.<attr>, then s1gate calibrate --write."
+  }
+}

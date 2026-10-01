@@ -5,14 +5,14 @@
   "description": "Project Get a Job: qualify one posting for Mike Rodgers (Head of AI / AI strategy & enablement / senior customer-facing AI deployment). Comp floor $250K all-in, reach $325K. Routes to skip / apply / warm-intro-first.",
   "questions": {
     "comp_band": {
-      "type": "score",
-      "instructions": "Total compensation this posting most plausibly pays, using the posted range and any bonus/equity language. If no number is posted, infer from title, company size and seniority.",
-      "criteria": [
-        "All-in clearly below $200K",
-        "All-in $200K-$250K, or unposted with a director-level title",
-        "All-in $250K-$325K, or unposted with a VP/Head-of title at a company that pays at that level",
-        "All-in $325K or more, stated or strongly implied"
-      ]
+      "type": "choice",
+      "instructions": "What all-in compensation does this posting most plausibly pay? Read the posted range first and quote it; add bonus or equity language if stated. A posted BASE range sets the band unless bonus is stated. If NO pay band is posted, apply the title default instead of guessing between bands: a director-level title defaults to band_200_250k; a VP/Head-of title at a company that pays at that level defaults to band_250_325k. Pick exactly one.",
+      "criteria": {
+        "below_200k": "All-in clearly below $200K (a posted range whose top is under $200K)",
+        "band_200_250k": "All-in $200K-$250K, or unposted with a director-level title",
+        "band_250_325k": "All-in $250K-$325K, or unposted with a VP/Head-of title at a company that pays at that level",
+        "band_325k_plus": "All-in $325K or more, stated or strongly implied"
+      }
     },
     "role_shape": {
       "type": "choice",
@@ -27,8 +27,12 @@
       }
     },
     "hard_disqualifier": {
-      "type": "noul",
-      "instructions": "The posting requires something the candidate does not have: a PhD, an active security clearance, a specific professional license, 10+ years managing software engineering teams, or a named vendor certification as a must-have"
+      "type": "choice",
+      "instructions": "Does the posting state a hard must-have (mandatory, 'required', 'will not be considered without') that the candidate does not have? Candidate profile this rubric is bound to: enterprise AI adoption and strategy leadership, healthcare and telehealth rollout across hospital systems, Oracle/Cerner health technology, governed hands-on AI builds, senior technical product leadership. The candidate has NONE of: a PhD, an active security clearance, a professional license (law, CPA, clinical), 10+ years managing software engineering teams, hands-on SAP/ERP implementation delivery (SAP S/4HANA, Workday, NetSuite), or a named vendor certification. Preferences and nice-to-haves do not count. Quote the mandatory requirement before answering.",
+      "criteria": {
+        "no_hard_must_have": "No mandatory requirement matches the candidate gap list",
+        "must_have_missing": "At least one mandatory requirement names something on the candidate gap list (degree, clearance, license, ERP/platform delivery, vendor certification, or N+ years in a role he has not held)"
+      }
     },
     "seniority_match": {
       "type": "noul",
@@ -42,14 +46,15 @@
   "rules": [
     { "when": "role_shape.choice == not_a_fit", "verdict": "BLOCK", "reason": "wrong function" },
     { "when": "role_shape.choice == sales_quota", "verdict": "BLOCK", "reason": "quota seat, not the target lane" },
-    { "when": "hard_disqualifier.noul >= 0.70", "verdict": "BLOCK", "reason": "must-have the candidate lacks" },
-    { "when": "comp_band.score < 1.00", "verdict": "BLOCK", "reason": "below $200K, no path to $250K all-in" },
-    { "when": "seniority_match.noul < 0.40", "verdict": "ESCALATE", "reason": "seniority unclear; human reads the JD" },
-    { "when": "comp_band.score >= 2.00", "verdict": "ESCALATE", "reason": "in band -- warm-intro lane, do not cold-apply first" }
+    { "when": "hard_disqualifier.p.must_have_missing >= 0.50", "verdict": "BLOCK", "reason": "must-have the candidate lacks" },
+    { "when": "comp_band.p.below_200k >= 0.50", "verdict": "BLOCK", "reason": "below $200K, no path to $250K all-in" },
+    { "when": "comp_band.p.band_250_325k >= 0.50", "verdict": "ESCALATE", "reason": "in band -- warm-intro lane, do not cold-apply first" },
+    { "when": "comp_band.p.band_325k_plus >= 0.50", "verdict": "ESCALATE", "reason": "in band -- warm-intro lane, do not cold-apply first" },
+    { "when": "seniority_match.noul < 0.40", "verdict": "ESCALATE", "reason": "seniority unclear; human reads the JD" }
   ],
   "confidence_floor": 0.35,
   "calibrated": false,
   "calibration": {},
   "never_auto": false,
-  "notes": "Created 2026-09-18 from the audit: 98 of 639 salaried discoveries clear a $200K floor, 25 clear $250K. Rank verb is the first use; check stays advisory until labelled against Mike's own skip/apply decisions."
+  "notes": "Created 2026-09-18 from the audit: 98 of 639 salaried discoveries clear a $200K floor, 25 clear $250K. Rank verb is the first use; check stays advisory until labelled against Mike's own skip/apply decisions. REPAIR 2026-09-30 (gate-hygiene): comp_band and hard_disqualifier converted from score/noul to fixed-answer choices (below_200k..band_325k_plus; must_have_missing/no_hard_must_have) because both failed their 09-29 red-tests (P3 planted $120-140K band passed at comp_band score 1.91, decision 138533; P3b planted mandatory SAP S/4HANA requirement passed at hard_disqualifier 0.34, decisions 138538/138544). comp_band now applies an explicit title default for unposted bands instead of guessing. hard_disqualifier binds an explicit candidate gap list (degree, clearance, license, ERP/platform delivery, vendor certification, N+ years in an unheld role) -- verify the gap list with Mike; a wrong entry over-escalates to a human, never auto-passes. RED/GREEN proven in RECEIPT-CALIBRATE.md (146082/146084, 146085/146086). Rules stay advisory until s1gate calibrate certifies each signal; calibration refused tonight (0 labelled rows, need >= 30)."
 }

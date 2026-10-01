@@ -9,11 +9,18 @@
     "evidence": { "type": "score", "instructions": "Claims carry specifics: names, numbers, dates, mechanisms", "criteria": ["No specifics", "One vague specific", "Some specifics", "Specific and bounded", "Specific, bounded, and the mechanism is explained"] },
     "outcome": { "type": "score", "instructions": "The answer lands on a measurable business result", "criteria": ["No outcome", "Activity described as outcome", "Outcome implied", "Outcome stated", "Outcome stated with a number and what it changed"] },
     "clarity": { "type": "score", "instructions": "Structure and length: outcome first, own action, then stop", "criteria": ["Rambling", "Long with buried point", "Structured but long", "Structured and concise", "Outcome-first, concise, stops cleanly"] },
-    "consulting_pitch": { "type": "noul", "instructions": "The answer drifts into selling Rodgers Intelligence Group, a polymath self-description, or a services offer instead of answering as a prospective employee" },
+    "consulting_pitch": {
+      "type": "choice",
+      "instructions": "Is any part of the answer a pitch for Rodgers Intelligence Group, a services or consulting offer, a statement of work or fee, a polymath self-description, or a solicitation for the interviewer's business, instead of answering as a prospective employee? Count first: quote any sentence that offers to sell work, names RIG as a vendor, proposes a SOW/pilot/fee, or asks for their business. If at least one such sentence exists, pick present.",
+      "criteria": {
+        "absent": "No sentence sells work or services, offers a SOW or fee, or asks for their business",
+        "present": "At least one sentence sells work or services, offers a SOW/pilot/fee, self-describes as a polymath or consultant, or solicits their business"
+      }
+    },
     "stops_cleanly": { "type": "noul", "instructions": "The answer ends after the outcome and hands the turn back to the interviewer rather than continuing with unrelated material" }
   },
   "rules": [
-    { "when": "consulting_pitch.noul >= 0.60", "verdict": "BLOCK", "reason": "consulting pitch -- the pattern that lost the last screens; redo as a W2 answer" },
+    { "when": "consulting_pitch.p.present >= 0.50", "verdict": "BLOCK", "reason": "consulting pitch -- the pattern that lost the last screens; redo as a W2 answer" },
     { "when": "ownership.score < 2.00", "verdict": "ESCALATE", "reason": "drill: say what YOU decided" },
     { "when": "outcome.score < 2.00", "verdict": "ESCALATE", "reason": "drill: land the number" },
     { "when": "clarity.score < 2.00", "verdict": "ESCALATE", "reason": "drill: outcome first, then stop" },
@@ -23,5 +30,5 @@
   "calibrated": false,
   "calibration": {},
   "never_auto": false,
-  "notes": "BLOCK here means 'redo this answer', never an authorisation. In live mode only the ESCALATE reasons are surfaced as one-line cues. Calibrate against the 2026-09-17 Salesforce drill transcripts once scores/ has labelled rows."
+  "notes": "BLOCK here means 'redo this answer', never an authorisation. In live mode only the ESCALATE reasons are surfaced as one-line cues. Calibrate against the 2026-09-17 Salesforce drill transcripts once scores/ has labelled rows. REPAIR 2026-09-30 (gate-hygiene): consulting_pitch converted from noul to a fixed-answer choice (present/absent) because the noul version passed an answer with an inserted consulting-pitch SOW line at 0.25 (09-29 plant, decision 138585; rule fires at 0.60). RED/GREEN proven in RECEIPT-CALIBRATE.md (plant 146006 RED, clean 146007 GREEN). Rules stay advisory until s1gate calibrate certifies each signal; calibration refused tonight (0 labelled rows, need >= 30)."
 }

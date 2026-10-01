@@ -1,0 +1,152 @@
+{
+  "name": "opportunity.money",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Opportunity-screening gate for Project Make Money. Scores ONE opportunity candidate against Mike's doctrine (CHARTER 2026-09-24): find where money is ALREADY being spent, then decide whether AI + RIG can deliver the same outcome cheaper or better. Input is an evidence dossier of sourced observations (Keyword Planner rows, incumbent pricing pages, marketplace budgets, job-post counts) plus author-declared 0-9 delivery-shape anchors -- never a self-description of RIG and never a client result (no client results exist). Advisory: calibrated=false, so this rubric can PASS or ESCALATE but can never BLOCK. A PASS is not permission to send, publish or spend; Gate-D is unchanged.",
+  "questions": {
+    "spend_evidence": {
+      "type": "score",
+      "instructions": "Is there hard evidence that money is ALREADY being spent on this service before RIG walks in? Judge only what the dossier cites: Google Keyword Planner top-of-page bids and volumes, published incumbent pricing pages, marketplace job-post budgets, Indeed/ZipRecruiter job counts. A number with no source is zero credit.",
+      "criteria": [
+        "No evidence at all; the market is asserted",
+        "One unsourced price mention or a single low-bid keyword with no volume",
+        "One sourced keyword row OR one sourced incumbent price, but thin",
+        "Sourced keyword bid below $20 high-end AND a vague incumbent price band",
+        "Sourced keyword bid $20-$50 high-end OR a named incumbent at $100+/mo",
+        "Sourced keyword bid $50-$100 high-end AND a named incumbent at $200+/mo",
+        "Sourced bid $100-$200 high-end at real volume, or two independent incumbent price pages",
+        "Sourced bid $200-$400 high-end at 1K+/mo volume, plus marketplace budgets or job-post counts",
+        "Sourced bid $400+ high-end at real volume plus two independent incumbent price points and a job-post count",
+        "Multiple sourced bids above $400 high-end, published incumbent tiers, marketplace budgets and a counted job-post signal: money is provably moving in this category right now"
+      ]
+    },
+    "ai_substitutable": {
+      "type": "score",
+      "instructions": "How much of the incumbent's delivered outcome can an AI + workflow stack actually replace today, without a human in the loop for every unit of work? Score the DELIVERABLE, not the marketing. Physical presence, licensed judgement, court appearance or clinical hands-on work scores near zero; text/voice/scheduling/document work scores high.",
+      "criteria": [
+        "No part of the outcome is software-replaceable",
+        "Only a small admin corner is automatable",
+        "About a quarter of the work is automatable; the rest needs a person per unit",
+        "About a third; a human still reviews every output",
+        "Half; AI drafts and a human approves",
+        "Half-plus; the human is exception handling only",
+        "Most of it; deterministic checks cover the accuracy surface",
+        "Nearly all of it; only edge cases route to a human",
+        "The whole routine workflow is automated end to end with a measurable output",
+        "The whole outcome is delivered by a system that also proves it (logs, timestamps, counted events) with no per-unit human labour"
+      ]
+    },
+    "rig_can_deliver_in_14_days": {
+      "type": "score",
+      "instructions": "Can RIG (Mike + local AI hardware + the rig skill/MCP estate) actually ship a working, demonstrable version of this in 14 days? Judge against what RIG has on disk today: local GPU models, the skills repo, the MotionSites prompt corpus, existing live routes. A build that needs a new licence, a new hire or a regulated approval is a low score.",
+      "criteria": [
+        "Not deliverable by RIG at all",
+        "Needs a capability RIG does not have and cannot acquire in 14 days",
+        "Needs a new integration plus compliance review; months",
+        "Needs one new integration; 4-6 weeks",
+        "Deliverable in about a month with unknowns",
+        "Deliverable in 2-3 weeks with one named unknown",
+        "Deliverable in about 2 weeks using existing skills and models",
+        "Deliverable in about 10 days; the demo is a working artifact, not a slide",
+        "Deliverable in about a week from existing parts; the demo proves the outcome live",
+        "Days, not weeks; the whole thing assembles from parts already on disk and the demo is a phone call or a batch run"
+      ]
+    },
+    "days_to_first_dollar": {
+      "type": "score",
+      "instructions": "How fast can RIG see a real dollar from this opportunity, counting only a paid transaction (not a call, not a free batch, not a signed LOI)? Price the test on the cheap path: Apollo credits and outbound, not paid ads.",
+      "criteria": [
+        "No path to revenue identified",
+        "More than 180 days; enterprise procurement",
+        "90-180 days; multiple decision-makers and a formal process",
+        "60-90 days; a budget cycle has to turn over",
+        "45-60 days; a pilot has to complete first",
+        "30-45 days; scoped project, one signer",
+        "21-30 days; productised install with a published fee",
+        "14-21 days; a small paid pilot is the first ask",
+        "7-14 days; the first ask is a paid install at a published price",
+        "Under 7 days; the buyer can pay on the first call for a productised deliverable"
+      ]
+    },
+    "recurring_revenue": {
+      "type": "score",
+      "instructions": "Does this become a monthly budget line, or is it one-and-done project work? Score the shape of the contract RIG would actually sign, not the aspiration. Attach modules and retainers count only if the dossier names them as part of the same buy.",
+      "criteria": [
+        "One-time sale with no follow-on",
+        "One-time sale, follow-on possible but not named",
+        "Project work with an optional maintenance",
+        "Project work with a named maintenance add-on",
+        "Project plus a small retainer",
+        "Retainer is half the value",
+        "Retainer is the main value; project fee is small",
+        "Monthly recurring from day one with a small setup fee",
+        "Monthly recurring with no setup fee; pure subscription shape",
+        "Monthly recurring plus named attach modules the same buyer already budgets for"
+      ]
+    },
+    "buyer_reachable_by_outreach_or_ads": {
+      "type": "score",
+      "instructions": "Can RIG reach this buyer with the channels it actually has (Apollo credits, Gmail, LinkedIn, the $300 total Google Ads cap)? Score the reachability of the BUYER, not the appeal of the offer. A named, listable buyer at a known address scores high; an anonymous mass market scores low.",
+      "criteria": [
+        "No reachable buyer identified",
+        "Buyer is anonymous and unreachable with RIG's channels",
+        "Buyer exists but no listable source; only paid ads would find them",
+        "Buyer is listable but the paid channel cost exceeds RIG's $300 cap to test",
+        "Buyer is listable via Apollo; one channel works but response is unknown",
+        "Buyer is listable AND has an inbound search term RIG can bid on cheaply",
+        "Buyer is listable AND the cheapest measured CPC entry is under $20",
+        "Buyer is listable, CPC entry is under $20, and there is a named local cohort RIG can call",
+        "Listable, cheap CPC, named local cohort, and a demonstrable trigger (a posted job, a published price, a visible missed call) that makes the first line specific",
+        "All of the above plus a marketplace channel where the buyer posts budgeted work RIG can answer today"
+      ]
+    },
+    "competition_saturation": {
+      "type": "noul",
+      "instructions": "The category is already crowded with well-funded incumbents or commodity freelancers, so a new entrant is fighting for scraps rather than for an underserved buyer. Signals: Keyword Planner competition column reads High, incumbent count is large and the head terms have many advertisers, or marketplace rates are race-to-the-bottom."
+    },
+    "compliance_or_liability_risk": {
+      "type": "noul",
+      "instructions": "Delivering this exposes RIG to regulatory, licensing or malpractice liability: HIPAA/PHI handling, legal practice (UPL and bar-advertising rules), financial services licensing, TCPA consent for SMS, payroll tax accuracy, FCRA for background checks, or clinical decision-making. A wrong output here is not a refund, it is a legal problem."
+    },
+    "unverifiable_claims": {
+      "type": "choice",
+      "instructions": "Does the dossier ASSERT a claim RIG cannot verify or prove before selling? Ignore completely, do not count: forbidden-word lists, claim-hygiene rules, scope boundaries, explicit non-promises ('we do not promise X', 'no guarantee'), and anything quoted as a rule. Count ONLY a sentence that asserts FOR the offer or the market a guaranteed or promised result, an invented outcome or client result, an unsourced 'industry' number, a testimonial-style assertion, or a comparative advantage with no checkable mechanism. Quote each counted sentence before answering. Even one counted sentence makes the answer claim_present. CHARTER rule 1 forbids these.",
+      "criteria": {
+        "no_unverifiable_claim": "Every load-bearing claim is sourced or has a checkable mechanism",
+        "claim_present": "At least one load-bearing claim is guaranteed, invented, unsourced, or asserted without a checkable mechanism"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "spend_evidence.score <= 2.00",
+      "verdict": "BLOCK",
+      "reason": "no evidence money is already being spent; doctrine says keep/kill by measured demand"
+    },
+    {
+      "when": "unverifiable_claims.p.claim_present >= 0.75",
+      "verdict": "BLOCK",
+      "reason": "dossier rests on unverifiable claims; CHARTER rule 1"
+    },
+    {
+      "when": "ai_substitutable.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "AI cannot meaningfully replace the incumbent outcome here"
+    },
+    {
+      "when": "compliance_or_liability_risk.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "regulated surface; needs Mike's explicit review before any offer is built"
+    },
+    {
+      "when": "competition_saturation.noul >= 0.75",
+      "verdict": "ESCALATE",
+      "reason": "category is crowded; price and wedge must be argued before any spend"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Created 2026-09-24 by sub-agent OPP-ENGINE for Project Make Money. Replaces an earlier opportunity.money.json of the same name (backed up as opportunity.money.json.bak-20260924-prior) whose question slugs differed (deliverable_14_days, speed_to_first_dollar, recurring, saturated_market) from the slugs the parent brief specified. Advisory only: calibrated=false, so it can never BLOCK a real decision, and a machine PASS is not an authorisation (Gate-D unchanged). Jev scores the DOSSIER, not the market -- the dossier is a fixed template rendered from CANDIDATES.csv, so what is being scored is the quality and sourcing of the recorded evidence plus the author-declared delivery-shape anchors. The author-declared anchors (ai_substitutable, rig_can_deliver_in_14_days, days_to_first_dollar, recurring_revenue, buyer_reachable_by_outreach_or_ads, and the three risk flags) are typed in CANDIDATES.csv by the author, not observed; they are hypotheses to be replaced by measured reads. Mike's bar for a PASSER is in 09-jev-criteria/CRITERIA.md as revised 2026-09-24: good scores >= 0.80 x max, bad-flag nouls <= 0.20, verdict not BLOCK. REPAIR 2026-09-30 (gate-hygiene): unverifiable_claims converted from noul to a fixed-answer choice (claim_present/no_unverifiable_claim) because the noul version was insensitive to blatant planted fabrications (max 0.21 on the 09-29 plant, decisions 138333-138367); rule threshold 0.75 set between the observed classes (plant p=0.97-0.98, honest dossiers p<=0.51). RED/GREEN proven in RECEIPT-CALIBRATE.md (146124/146125). DOWNGRADE 2026-09-30: verdicts remain advisory and non-enforcing -- identical restored bytes scored PASS (138170/138333/138349) and ESCALATE (138365) across runs (run-to-run wobble), and every calibration attempt was refused tonight (0 labelled rows, need >= 30 per signal). A PASS is never permission to send, publish or spend."
+}

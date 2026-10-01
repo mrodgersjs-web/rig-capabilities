@@ -5,13 +5,17 @@
   "description": "single-field judgment over the RENDERED TEXT of one dashboard page: does it present a business number as a real current fact with no source and no honest label? State = the page's visible text only. Built 2026-09-25 after measuring that code.diff passed 5/5 builds that independent verifiers rejected for fake figures (decisions 82863 83608 83582 83627 83259): the defects live in what a page displays, which a diff-level rubric cannot see. One question, one field (lesson from atomic.claim: 0.48 inside a blob vs 0.88 alone).",
   "questions": {
     "unsourced_figure": {
-      "instructions": "This page presents at least one business number (revenue, MRR, ARR, clients, deals, pipeline value, campaigns, ad spend, clicks, conversions, reply or open rates, followers, impressions) as a real current measurement, without naming where it comes from and without labelling it as a target, goal, plan, assumption, estimate, sample, demo, or not wired",
-      "type": "noul"
+      "type": "choice",
+      "instructions": "Does this page present at least one business number (revenue, MRR, ARR, clients, deals, pipeline value, campaigns, ad spend, clicks, conversions, reply or open rates, followers, impressions, renewal or retention rates) as a real current measurement, without naming where it comes from and without labelling it as a target, goal, plan, assumption, estimate, sample, demo or not wired? Work figure by figure, including inside tables: a number that carries a source line (URL, report name, date, 'per X') or an explicit honest label is fine. One such unsourced figure anywhere is enough. Quote the offending figure before answering.",
+      "criteria": {
+        "clean": "Every business number on the page is sourced or honestly labelled",
+        "unsourced_present": "At least one business number is presented as a real current fact with no source and no honest label"
+      }
     }
   },
   "rules": [
     {
-      "when": "unsourced_figure.noul >= 0.5",
+      "when": "unsourced_figure.p.unsourced_present >= 0.50",
       "verdict": "ESCALATE",
       "reason": "page shows a business number with no source and no honest label: trace it to a real source or label it"
     }
@@ -19,7 +23,8 @@
   "confidence_floor": 0.3,
   "calibrated": false,
   "notes": {
-    "unsourced_figure": "Truth direction: LOW is good. Owner bar (Mike, 2026-09-25): a page counts as confirmed truthful only when unsourced_figure.noul < 0.10 (i.e. > 0.90 confidence it shows no unsourced figure). Calibrate with rendered page text: known-fabricated historical renderings + planted fabrications as bad, verifier-accepted live pages as good."
+    "unsourced_figure": "Truth direction: CLEAN is good. Owner bar (Mike, 2026-09-25): a page counts as confirmed truthful only when no unsourced figure is found and the figure-level trace is done by a human. Calibrate with rendered page text: known-fabricated historical renderings + planted fabrications as bad, verifier-accepted live pages as good.",
+    "repair_2026_09_30": "REPAIR (gate-hygiene): unsourced_figure converted from noul to a fixed-answer choice (unsourced_present/clean) because the noul version never reached its 0.5 rule on three planted fabrications in the dense RECHECK-SUBSCRIPTION-SPEC.md (D-G4: 0.44 EOF figure, 0.32 'renewal rate 92%', 0.19 mid-body figure, 09-29 decisions 138330-138367). RED/GREEN proven in RECEIPT-CALIBRATE.md: all three same plants now RED (146008/146009/146010), clean spec GREEN (146011). Rule stays advisory until s1gate calibrate certifies the signal; calibration refused tonight (0 labelled rows, need >= 30)."
   },
   "never_auto": false
 }
