@@ -368,6 +368,17 @@ TOOLS = [
                                        "apply": {"type": "boolean"}}},
     },
     {
+        "name": "capabilities_atlas",
+        "description": ("Capability Atlas (B1): resolve one requested transformation "
+                        "into existing register primitives, missing primitives, and "
+                        "named state owners. Read-only. A state with zero or >=2 "
+                        "authoritative owners returns conflict:true with packets "
+                        "(DOC 3 §6/§10), never a silent pick."),
+        "inputSchema": {"type": "object",
+                        "properties": {"request": {"type": "string"}},
+                        "required": ["request"]},
+    },
+    {
         "name": "capabilities_overlay_status",
         "description": "LLM overlay coverage (tagged/target/ollama). Never claims complete on a short file.",
         "inputSchema": {"type": "object",
@@ -1121,6 +1132,15 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         return write_gap_harnesses(repo, n=int(args.get("n") or 8),
                                    apply=bool(args.get("apply")))
 
+    def atlas_tool(args: dict):
+        from .atlas import AtlasConflict, resolve as _resolve
+        try:
+            out = _resolve(repo, str(args["request"]))
+        except AtlasConflict as exc:
+            return {"read_only": True, "conflict": True, "packets": exc.packets}
+        out["read_only"] = True
+        return out
+
     def overlay_status(args: dict):
         from .concepts_llm import overlay_status as _st
         return _st(repo, target=int(args.get("target") or 300))
@@ -1712,6 +1732,7 @@ def build_server(repo: Repo | None = None) -> McpStdioServer:
         "capabilities_issue_token": issue_token,
         "capabilities_quality_report": quality_report,
         "capabilities_gaps": gaps,
+        "capabilities_atlas": atlas_tool,
         "capabilities_overlay_status": overlay_status,
         "capabilities_proofchain": proofchain,
         "capabilities_release": release_zip,

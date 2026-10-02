@@ -35,6 +35,7 @@ Commands:
   observe                                 Langfuse/local trace status
   corpus scan|classify|truncation         card-corpus scan, classification, truncation seam
   register validate|diff|flags            capability register: row errors, diff, flagged owners
+  atlas resolve "<request>"               Capability Atlas: existing/missing primitives + state owners
   converge [--week W] [--root DIR]        C_t + A_t; --week scores one week through the gate
   realign [--week W] [--apply]            weekly Realign driver; dry unless --apply
   expert-os phases|advance [--phase N]    Known Expert OS: 1-10 gated, 11 truncated, 12 absent
@@ -117,6 +118,11 @@ def main() -> int:
     p = sub.add_parser("gaps")
     p.add_argument("--n", type=int, default=8)
     p.add_argument("--dry", action="store_true")
+
+    p = sub.add_parser("atlas")
+    p.add_argument("atlas_cmd", choices=["resolve"])
+    p.add_argument("request")
+    p.add_argument("--owners", help="owners CSV (default data/control_plane_owners.csv)")
 
     p = sub.add_parser("release")
     p.add_argument("--dry", action="store_true")
@@ -436,6 +442,14 @@ def main() -> int:
     elif args.cmd == "gaps":
         from rig_capabilities.gaps import write_gap_harnesses
         print(json.dumps(write_gap_harnesses(repo, n=args.n, apply=not args.dry), indent=1))
+    elif args.cmd == "atlas":
+        from rig_capabilities import atlas
+        try:
+            _out = atlas.resolve(repo, args.request, owners_csv=args.owners)
+        except atlas.AtlasConflict as exc:
+            print(json.dumps({"conflict": True, "packets": exc.packets}, indent=1))
+            return 3
+        print(json.dumps(_out, indent=1))
     elif args.cmd == "release":
         from rig_capabilities.release import build_public_zip
         print(json.dumps(build_public_zip(repo, apply=not args.dry), indent=1))

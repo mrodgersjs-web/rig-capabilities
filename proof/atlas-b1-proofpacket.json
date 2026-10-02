@@ -1,0 +1,101 @@
+{
+ "schema_version": 1,
+ "run_id": "74e94f24-3432-4ef5-a3cd-ffb2aac47885",
+ "agent": "omp",
+ "intent": "B1 Capability Atlas: resolve one requested transformation into existing primitives, missing primitives and named state owners — all six done-when criteria evidenced, evidence_path rows repointed at real plane artifacts. D85: stateless A1 fast path, no certification claimed (proof/atlas-b1-d85-classification.json).",
+ "artifact": {
+  "path": "data/control_plane_owners.csv",
+  "hash": "sha256:ab7976648bf0f32be9dfb0d9e2970a9bfc55db4428e407bf189d806857904838",
+  "bytes": 1037
+ },
+ "sources": [
+  {
+   "uri": "rig_capabilities/atlas.py",
+   "hash": "5e5248a6fa984262c9739c6620c507d5fd0a6ee1917a5357a88917bdf4bfab51"
+  },
+  {
+   "uri": "tests/test_atlas.py",
+   "hash": "9efa671ed66eea7770d1bbd1721562b6a7e97a52724cbc5a67f04e8fa8664cf9"
+  }
+ ],
+ "gates": [
+  {
+   "name": "first_proof",
+   "command": "./bin/rig-capabilities atlas resolve \"one approved candidate becomes a verified artifact inside declared boundaries\"",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "eight_planes",
+   "command": "grep -c -E 'Node Factory|Fleet CP|Pantheon|Paperclip|Paddock|CellFoundry|GTM CP|Agent CP Retrofit' data/control_plane_owners.csv",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "planted_dual_owner",
+   "command": "./bin/rig-capabilities atlas resolve \"a verified artifact\" --owners /tmp/atlas-dual.csv",
+   "exit_code": 3,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "planted_zero_owner",
+   "command": "./bin/rig-capabilities atlas resolve \"a verified artifact\" --owners /tmp/atlas-zero.csv",
+   "exit_code": 3,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "atlas_tests",
+   "command": "python3 -m unittest tests.test_atlas",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "register_regression",
+   "command": "python3 -m unittest tests.fable2031_register",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "register_help",
+   "command": "python3 -m rig_capabilities.register --help",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "mcp_surface",
+   "command": "MCP stdio tools/list + tools/call capabilities_atlas against server.py",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  },
+  {
+   "name": "evidence_paths_exist",
+   "command": "per-row existence check of all 8 evidence_path values",
+   "exit_code": 0,
+   "status": "PASS",
+   "lane": "code",
+   "model": ""
+  }
+ ],
+ "approval": {
+  "required": true
+ },
+ "verdict": "done = all(gates_pass) = TRUE",
+ "timestamp": "2026-10-02T03:15:21Z",
+ "proof_hash": "sha256:5ecd5ab7ae3e3c06537a75ef8008a421df1259223fb98c760fca9e81cdf2bb74"
+}

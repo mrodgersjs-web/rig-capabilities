@@ -1,0 +1,17 @@
+{
+  "schema": "rig.d85.build-classification.v1",
+  "mission": "B1 Capability Atlas + architecture ownership map",
+  "classified_at": "2026-10-01",
+  "durability": "stateless",
+  "mode": "A1",
+  "rationale": "atlas.resolve is a pure stdlib CSV-to-JSON resolver: runs on demand, never schedules itself, persists no state, produces no effects (read-only; MCP handler marks read_only:true). No model in the decision path — every judgment is deterministic token matching and counting. Per d85-compliance-checklist Phase 0 this takes the stateless fast path, not durable-build certification.",
+  "fast_path_obligations": {
+    "owner": "jake-b1-lane (omp runtime, worktree rig-car-b1)",
+    "input_schema": "request: string (CLI positional; MCP inputSchema {request: string, required})",
+    "acceptance_test": "tests/test_atlas.py — 6 tests, happy path + planted dual-owner + planted zero-owner + CLI exit codes",
+    "error_surface": "AtlasConflict -> conflict packet JSON on stdout + exit 3; argparse misuse -> exit 2; missing owners CSV -> empty table (zero-owner conflict on any touched state, never a fabricated owner)",
+    "no_silent_effects": "reads capability_register.csv + data/control_plane_owners.csv only; writes nothing"
+  },
+  "certification_claim": "NONE — no d85_certified claim is made. Durable-build certification (registered process, checklist, verify-cert) is out of B1 scope per the brief, which names only rig_capabilities/d85_admission.py + ProofPacket.",
+  "admission": "rig_capabilities/d85_admission.py: no admission request needed for the read-only default path; Gate-D required only before outward/irreversible steps (none taken)."
+}
