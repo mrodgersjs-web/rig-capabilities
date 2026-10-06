@@ -1,5 +1,53 @@
 # Image system: photos, graphics, GIFs, quote cards, banner
 
+## THE HOOK GOES ON THE IMAGE (Mike, 2026-10-05, after the Hotel California post)
+
+**Rule: when a post has a hook or a catchphrase, the image carries that hook or catchphrase. An image that
+shares no signifiers with the post text is a second, unrelated post and it fails the brief.**
+
+This supersedes any standing "no text overlay" instruction for the hook line only. Text on the image is
+now required for a hooked post, and forbidden for everything else on the canvas.
+
+What went wrong on Mon 2026-10-05, so it is not repeated:
+- The post opened on the Eagles lyric "we are programmed to receive... you can never leave" and the
+  conceit of a place you can check out of but never leave.
+- The generated image was a Pixar French bulldog asleep on a stack of dog food bags at sunset. It was a
+  good picture of the post's *last paragraph*. It carried none of the hook: no hotel, no night man, no
+  "relax," no departure sign, no highway, no Beverly Hills.
+- A reader who saw only the image, and a reader who saw only the text, got two different posts.
+
+### The three-part image brief every hooked post now carries
+
+1. **Hook line.** The exact words of the hook or catchphrase, 3 to 9 words, on the image. Never
+   paraphrased. If the hook is a lyric or a quoted line, use the quoted words and credit the source in
+   the post text.
+2. **Hook signifiers.** At least two visual objects that only that hook would produce. For Hotel
+   California: hotel corridor at night, a lit EXIT sign seen from inside, a valet stand, an
+   open-air lobby palm, the amber dusk on a coastal highway, a key rack, luggage nobody collects.
+   For The Karate Kid: the balance-post on the water, a gi sleeve, wax and a rag. If you cannot name two,
+   the hook is too vague to illustrate and the post needs a stronger hook first.
+3. **Cast reference.** Any recurring character is passed as an input image, never described in words
+   alone. Birch is the Pixar French bulldog in the Higgsfield asset library, asset
+   `6378fca3-ff3a-4c5a-8233-f14403e88c7c` in the "RIG" folder. Text-only "a merle French bulldog in a
+   red cape" produces a different dog every time and is the failure this replaces.
+
+### The rest of the canvas stays clean
+
+One message per image. The hook line is the message. No second slogan, no hashtag block, no watermark,
+no handles, no fake UI, no AI-infographic chrome. Type is a single line, set like a film poster title
+card or a sign in the scene, not a caption bar. Legible at feed size on a phone: if the hook line does
+not read cleanly at roughly 400px wide, shorten it rather than shrinking the type.
+
+### Honest status of this rule
+
+This is a correction from a failed post, not a measured win. There is no data yet showing a hook line on
+a LinkedIn image beats a clean image. It is in force because Mike decided it, and it carries the same
+day-30 kill rule as the rest of the lane: at day 30, compare median reach of hooked-image posts against
+clean-image posts. If hooked images do not win, the text comes off and this section is deleted rather
+than softened.
+
+# Image system: photos, graphics, GIFs, quote cards, banner
+
 ## The default image is a real photo of Mike
 
 The post-engine corpus is unanimous: the default LinkedIn post image is a real photo of Mike, not stock
