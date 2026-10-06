@@ -1,0 +1,85 @@
+{
+  "name": "routine.run",
+  "stage": "verify",
+  "lane": "ops",
+  "description": "Advisory check before a scheduled routine or weekly automation is called done. The schedule must be named, a dry run must not write, a Flash model must not carry the job, and a new or changed routine must have been rehearsed on a case with a known-good answer before anything was scheduled.",
+  "questions": {
+    "named_schedule": {
+      "type": "noul",
+      "instructions": "The artifact names the schedule: a cadence, a next run time, or a routine id. Words like regularly or soon do not count."
+    },
+    "writes_only_when_applied": {
+      "type": "noul",
+      "instructions": "The refresh script writes catalogs only when the command includes --apply."
+    },
+    "carrier_is_not_flash": {
+      "type": "noul",
+      "instructions": "The routine carrier is not a Flash model. Blackwell Flash, MiMo Flash, Gemini Flash, and any model id containing flash fail this."
+    },
+    "evidence": {
+      "type": "score",
+      "instructions": "How much proof is attached that the last run did what it claims.",
+      "criteria": [
+        "No run record",
+        "A claim with no command output",
+        "A log line that names the mode but not the result",
+        "A log that shows dry-run or apply and the exit code",
+        "Log plus the files the run was allowed to touch",
+        "Log, touched files, and a stated next run time"
+      ]
+    },
+    "owner": {
+      "type": "noul",
+      "instructions": "The artifact does not propose spend, a send, a push, or a model-id change."
+    },
+    "rehearsed_on_known_case": {
+      "type": "noul",
+      "instructions": "For a NEW or CHANGED routine, skill, or automation, the artifact shows it was run at least once against a case whose correct answer was already known (the owner's walkthrough case, a prior hand-run, or a fixture with a verified result), and the output was compared to that known answer. 'Should work', 'looks right', a config read-back, or a dry run with no expected-output comparison does not count. An UNCHANGED routine already in service does not need this."
+    }
+  },
+  "rules": [
+    {
+      "when": "named_schedule.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "schedule is not named"
+    },
+    {
+      "when": "writes_only_when_applied.noul <= 0.90",
+      "verdict": "BLOCK",
+      "reason": "a dry run must not write catalogs"
+    },
+    {
+      "when": "carrier_is_not_flash.noul <= 0.90",
+      "verdict": "BLOCK",
+      "reason": "Flash must not carry the routine"
+    },
+    {
+      "when": "evidence.score <= 4.50",
+      "verdict": "ESCALATE",
+      "reason": "no run evidence"
+    },
+    {
+      "when": "owner.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "owner has to approve a new outward action"
+    },
+    {
+      "when": "evidence.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "answer distribution is not above 0.95"
+    },
+    {
+      "when": "rehearsed_on_known_case.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "a new or changed automation was scheduled without reproducing a known-good result first"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Pass line is above 0.9. A noul of 0.90 fails the rule `noul <= 0.90`; 0.91 or higher passes. Score and choice confidence use `confidence <= 0.90`. A score is a mean on levels 0..5, so above 0.9 of that scale is a mean above 4.50.",
+    "rehearsal": "Added 2026-10-06 from Anthropic's small-business build-agent (Apache 2.0, anthropics/knowledge-work-plugins): 'Run the new skill against a case the owner already knows the answer to... An owner who has seen it reproduce a known-good result will schedule it. One who hasn't will run it manually and check it every time.' ESCALATE rather than BLOCK on purpose: a missed rehearsal is unverifiable trust, not a forbidden action. Companion doctrine: skill-library/skill-release-gate."
+  }
+}
