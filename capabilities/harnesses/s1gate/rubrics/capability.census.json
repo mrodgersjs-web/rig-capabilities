@@ -1,0 +1,44 @@
+{
+  "name": "capability.census",
+  "stage": "verify",
+  "lane": "ops",
+  "description": "Advisory. Judge a capability census: are counts read from the machine today, are drops explained, and is every gap given an owner.",
+  "questions": {
+    "counts_measured": {
+      "type": "noul",
+      "instructions": "Every count comes from a command or a file read on this run, not from a prior report"
+    },
+    "deltas_explained": {
+      "type": "noul",
+      "instructions": "Any drop against the previous census is named and explained"
+    },
+    "gaps_have_owner": {
+      "type": "noul",
+      "instructions": "Each capability gap is assigned to a person, a lane, or an explicit no-owner"
+    },
+    "no_symlink_double_count": {
+      "type": "noul",
+      "instructions": "Counts state whether symlinked or nested stores are included, so numbers stay comparable"
+    }
+  },
+  "rules": [
+    {
+      "when": "counts_measured.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "a census built from notes is a hypothesis, not a status"
+    },
+    {
+      "when": "no_symlink_double_count.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "unbounded counts are not comparable between runs"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "status": "uncalibrated",
+    "note": "Authored 2026-10-05 by session GqYCYA10TAeQlT5l from the OpenDots expert rubric-gap census (both judges abstained on every existing rubric). Calibrate on labelled runs before enforcement. Advisory by construction: rules emit PASS or ESCALATE only, no BLOCK."
+  },
+  "never_auto": true,
+  "notes": "Hub-approved (SP4ikIin7S6GmLBw, 2026-10-05): advisory rubrics with calibrated:false and never_auto so nothing can hard-BLOCK work."
+}

@@ -1,0 +1,44 @@
+{
+  "name": "sms.draft",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Advisory. Judge drafted SMS first-touches before they enter the approval queue. SMS is not approved to send, so this rubric gates the draft, never the send.",
+  "questions": {
+    "under_160": {
+      "type": "noul",
+      "instructions": "Every draft is 160 characters or fewer"
+    },
+    "one_recipient": {
+      "type": "noul",
+      "instructions": "Each draft names one specific recipient and one specific reason for contacting them"
+    },
+    "no_shared_opener": {
+      "type": "noul",
+      "instructions": "Openers are not reused across the day's batch"
+    },
+    "guard_respected": {
+      "type": "noul",
+      "instructions": "Nothing was sent; each draft is queued behind a single-writer claim"
+    }
+  },
+  "rules": [
+    {
+      "when": "guard_respected.noul <= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "send-guard discipline unclear; treat as a double-send risk and stop"
+    },
+    {
+      "when": "one_recipient.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "broadcast-shaped SMS, not a first touch"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "status": "uncalibrated",
+    "note": "Authored 2026-10-05 by session GqYCYA10TAeQlT5l from the OpenDots expert rubric-gap census (both judges abstained on every existing rubric). Calibrate on labelled runs before enforcement. Advisory by construction: rules emit PASS or ESCALATE only, no BLOCK."
+  },
+  "never_auto": true,
+  "notes": "Hub-approved (SP4ikIin7S6GmLBw, 2026-10-05): advisory rubrics with calibrated:false and never_auto so nothing can hard-BLOCK work."
+}

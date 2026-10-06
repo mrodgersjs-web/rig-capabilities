@@ -1,0 +1,44 @@
+{
+  "name": "event.scout",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Advisory. Judge a conference or meetup scouting run: are the CFPs real, dated, and matched to work RIG has actually delivered.",
+  "questions": {
+    "deadline_dated": {
+      "type": "noul",
+      "instructions": "Every candidate lists a submission deadline date, not a season or a guess"
+    },
+    "fit_evidenced": {
+      "type": "noul",
+      "instructions": "Fit is argued from a specific RIG deliverable or result, not from the event marketing copy"
+    },
+    "abstract_drafted": {
+      "type": "noul",
+      "instructions": "A draft abstract exists for at least one candidate"
+    },
+    "nothing_submitted": {
+      "type": "noul",
+      "instructions": "The run submitted nothing; submission stays a human action"
+    }
+  },
+  "rules": [
+    {
+      "when": "deadline_dated.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "an undated CFP list is unusable for planning"
+    },
+    {
+      "when": "fit_evidenced.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "fit claim has no delivered work behind it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "status": "uncalibrated",
+    "note": "Authored 2026-10-05 by session GqYCYA10TAeQlT5l from the OpenDots expert rubric-gap census (both judges abstained on every existing rubric). Calibrate on labelled runs before enforcement. Advisory by construction: rules emit PASS or ESCALATE only, no BLOCK."
+  },
+  "never_auto": true,
+  "notes": "Hub-approved (SP4ikIin7S6GmLBw, 2026-10-05): advisory rubrics with calibrated:false and never_auto so nothing can hard-BLOCK work."
+}

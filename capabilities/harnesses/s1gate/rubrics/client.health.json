@@ -1,0 +1,55 @@
+{
+  "name": "client.health",
+  "stage": "verify",
+  "lane": "client",
+  "description": "Advisory. Judge ONE client-health read for a RIG client: is there named evidence of contact and a real signal about whether the client is fine, drifting, or at risk. Never grants an outward action.",
+  "questions": {
+    "risk_call": {
+      "type": "choice",
+      "instructions": "What is the actual health verdict for this client",
+      "criteria": {
+        "stable": "Contact plus a delivered outcome inside the window",
+        "drifting": "Delivered work but contact has thinned or a request has aged",
+        "at_risk": "No contact in the window, or an unresolved complaint or missed deliverable",
+        "unknown": "Not enough evidence to call it"
+      }
+    },
+    "evidence_named": {
+      "type": "noul",
+      "instructions": "The read names the artifact it measured: a file path, a ledger key, a dated message, or a ticket"
+    },
+    "no_invented_number": {
+      "type": "noul",
+      "instructions": "No figure in the read is invented; every count traces to a source or is marked UNKNOWN"
+    },
+    "action_proposed": {
+      "type": "noul",
+      "instructions": "A next action is proposed for anything not called stable"
+    }
+  },
+  "rules": [
+    {
+      "when": "risk_call.choice == unknown",
+      "verdict": "ESCALATE",
+      "reason": "no evidence to call health; report as unknown, not as fine"
+    },
+    {
+      "when": "evidence_named.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "health read without named evidence is a vibe"
+    },
+    {
+      "when": "risk_call.choice == at_risk",
+      "verdict": "ESCALATE",
+      "reason": "at-risk client: a human decides the outreach, the agent drafts"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "status": "uncalibrated",
+    "note": "Authored 2026-10-05 by session GqYCYA10TAeQlT5l from the OpenDots expert rubric-gap census (both judges abstained on every existing rubric). Calibrate on labelled runs before enforcement. Advisory by construction: rules emit PASS or ESCALATE only, no BLOCK."
+  },
+  "never_auto": true,
+  "notes": "Hub-approved (SP4ikIin7S6GmLBw, 2026-10-05): advisory rubrics with calibrated:false and never_auto so nothing can hard-BLOCK work."
+}

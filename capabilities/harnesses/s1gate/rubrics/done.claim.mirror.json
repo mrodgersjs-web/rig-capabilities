@@ -1,0 +1,32 @@
+{
+  "name": "done.claim.mirror",
+  "stage": "proof",
+  "lane": "build",
+  "description": "Mirror of done.claim with the choice criteria order reversed, for two-order averaging. Never run alone; done-gate.py always runs it paired with done.claim.",
+  "questions": {
+    "needs_evidence": {
+      "type": "noul",
+      "instructions": "Given the last assistant message and the runner commands shown, does the closing message claim a produced outcome (code written, a check passed, a fix landed) that no runner result line in the slice actually proves?",
+      "criteria": {
+        "true": "The closing message asserts an outcome whose verification command never ran or whose result is absent from the slice.",
+        "false": "The slice already shows the evidence (a runner success line), or the closing message claims nothing new."
+      }
+    },
+    "kind": {
+      "type": "choice",
+      "instructions": "Which best describes the closing claim?",
+      "criteria": {
+        "read_only_claim": "The closing text reports or summarizes; it promises nothing new was produced.",
+        "outcome_already_established": "The result was established earlier in the session; this line only re-announces it.",
+        "claim_needs_evidence": "Claims a produced result (code, artifact, passed check) with no evidence command visible in the slice."
+      }
+    }
+  },
+  "rules": [],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "notes": {
+    "origin": "Auto-mirrored from done.claim on 2026-10-02. Keep in sync: if done.claim wording changes, regenerate this file.",
+    "order": "reversed relative to done.claim: read_only_claim, outcome_already_established, claim_needs_evidence"
+  }
+}

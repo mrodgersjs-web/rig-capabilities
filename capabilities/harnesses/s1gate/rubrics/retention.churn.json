@@ -1,0 +1,44 @@
+{
+  "name": "retention.churn",
+  "stage": "verify",
+  "lane": "client",
+  "description": "Advisory. Judge a churn-watch output: are stale clients identified with a last-contact date and an owner, and is the stale count derived rather than assumed.",
+  "questions": {
+    "stale_derived": {
+      "type": "noul",
+      "instructions": "The stale list is computed from a ledger or run files, not typed in by hand"
+    },
+    "owner_named": {
+      "type": "noul",
+      "instructions": "Every stale client has a named owner or a stated reason it has none"
+    },
+    "touch_drafted": {
+      "type": "noul",
+      "instructions": "A re-activation touch is drafted for each stale client, drafts only"
+    },
+    "zero_is_real": {
+      "type": "noul",
+      "instructions": "If the stale count is zero, the run shows why zero is a real result and not an empty read"
+    }
+  },
+  "rules": [
+    {
+      "when": "zero_is_real.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "a zero churn number with no proof is the classic silent-lie read"
+    },
+    {
+      "when": "stale_derived.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "stale clients not derived from data"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "status": "uncalibrated",
+    "note": "Authored 2026-10-05 by session GqYCYA10TAeQlT5l from the OpenDots expert rubric-gap census (both judges abstained on every existing rubric). Calibrate on labelled runs before enforcement. Advisory by construction: rules emit PASS or ESCALATE only, no BLOCK."
+  },
+  "never_auto": true,
+  "notes": "Hub-approved (SP4ikIin7S6GmLBw, 2026-10-05): advisory rubrics with calibrated:false and never_auto so nothing can hard-BLOCK work."
+}
