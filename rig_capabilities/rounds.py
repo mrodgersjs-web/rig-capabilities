@@ -16,7 +16,7 @@ import re
 import time
 from pathlib import Path
 
-from .quality import FIELDS, check_asset, migrate_frontmatter
+from .quality import check_asset, migrate_frontmatter
 
 
 def pick_candidates(repo, lane: str, n: int = 5) -> list:
@@ -70,7 +70,7 @@ def _append_done_when(p: Path, entries: list) -> bool:
         return False
     j = idx + 1
     prefix = "#" if lines[idx].lstrip().startswith("#") else ""
-    while j < len(lines) and re.match(r"^(" + ("#\s*" if prefix else r"\s*") + r")-\s+", lines[j]):
+    while j < len(lines) and re.match(r"^(" + (r"#\s*" if prefix else r"\s*") + r")-\s+", lines[j]):
         j += 1
     have = "".join(lines[idx:j])
     adds = [f"{prefix}  - {e}" for e in entries if e not in have]

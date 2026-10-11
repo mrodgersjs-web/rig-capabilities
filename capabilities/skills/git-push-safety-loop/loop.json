@@ -1,0 +1,168 @@
+{
+  "closing_loop": {
+    "from": [
+      "X"
+    ],
+    "max_iterations": 2,
+    "on_exhaust": "escalate",
+    "to": "V"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 2,
+    "step": "I2"
+  },
+  "doctrine_source": [
+    "~/.claude/rules/git-push-safety.md",
+    "~/RIG-Doctrine-Repo/doctrines/GIT-PUSH-SAFETY.md"
+  ],
+  "family": "governance",
+  "id": "git-push-safety-loop",
+  "kill_switch": {
+    "max_iterations": 2,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 120
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Git push safety loop (Gate-P)",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "PushPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "visibility.md",
+      "gate": [
+        {
+          "path": "visibility.md",
+          "patterns": [
+            "^## Repo",
+            "^## Visibility",
+            "^## Remote",
+            "^## Branch"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "gh repo view <owner>/<repo> --json visibility \u2014 say PUBLIC or PRIVATE",
+          "path": "visibility.md",
+          "pattern": "(?i)^## Visibility[^\\n]*\\n[^\\n]*\\b(public|private)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "V",
+      "name": "Visibility"
+    },
+    {
+      "artifact": "divergence.md",
+      "gate": [
+        {
+          "path": "divergence.md",
+          "patterns": [
+            "^## Overwrite",
+            "^## Deliberate-teaser"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "git log --oneline HEAD..<remote>/<branch>: is what you'd overwrite a deliberate teaser/paywall state? yes|no",
+          "path": "divergence.md",
+          "pattern": "(?i)^## Deliberate-teaser[^\\n]*\\n[^\\n]*\\b(yes|no)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "D",
+      "name": "Divergence"
+    },
+    {
+      "artifact": "leak.md",
+      "gate": [
+        {
+          "path": "leak.md",
+          "patterns": [
+            "^## Private-source-to-public",
+            "^## Verdict"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "Verdict PROCEED only when (public AND (teaser OR leak)) is false; otherwise STOP and park for Mike",
+          "path": "leak.md",
+          "pattern": "^## Verdict[^\\n]*\\n[^\\n]*\\bPROCEED\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "L",
+      "name": "Leak-test"
+    },
+    {
+      "artifact": "approval.md",
+      "gate": [
+        {
+          "type": "gate_d_approved"
+        }
+      ],
+      "id": "A",
+      "name": "Approve"
+    },
+    {
+      "artifact": "push.md",
+      "gate": [
+        {
+          "path": "push.md",
+          "patterns": [
+            "^## Command",
+            "^## Remote-equals-HEAD"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "command": "git fetch -q && test \"$(git rev-parse HEAD)\" = \"$(git rev-parse @{u})\"",
+          "timeout": 60,
+          "type": "cmd"
+        }
+      ],
+      "id": "X",
+      "name": "Push"
+    },
+    {
+      "artifact": "sweep.md",
+      "gate": [
+        {
+          "path": "sweep.md",
+          "patterns": [
+            "^## Secret-sweep",
+            "^## Result"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "clean, or rotated:<which credential, masked>",
+          "path": "sweep.md",
+          "pattern": "^## Result[^\\n]*\\n[^\\n]*\\b(clean|rotated)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "S",
+      "name": "Sweep"
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

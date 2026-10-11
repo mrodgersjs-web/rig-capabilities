@@ -20,7 +20,7 @@ from docx.shared import Pt
 def _add_toc(doc):
     """Insert a real Word TOC field (updates when Word opens/refreshes fields)."""
     para = doc.add_paragraph()
-    run = para.add_run()
+    para.add_run()
     fld = OxmlElement("w:fldSimple")
     fld.set(qn("w:instr"), r'TOC \o "1-3" \h \z \u')
     inner = OxmlElement("w:r")

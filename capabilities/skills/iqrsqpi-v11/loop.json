@@ -1,0 +1,245 @@
+{
+  "closing_loop": {
+    "from": [
+      "Q2",
+      "P"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "S"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D2",
+    "level": 3,
+    "step": "I1"
+  },
+  "doctrine_source": [
+    "~/.claude/rules/rig-unified-doctrine.md",
+    "~/RIG-Doctrine-Repo/doctrines/IQRSQPI-ENGINEERING.md",
+    "~/.claude/skills/iqrsqpi-v10/SKILL.md",
+    "~/.rig/missions/4day-2026-08-26/bin/iqrsqpi_v11.py"
+  ],
+  "family": "governance",
+  "id": "iqrsqpi-v11",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 480
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "IQRSQPI v11",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "IQRSQPIRunPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "intent.md",
+      "gate": [
+        {
+          "path": "intent.md",
+          "patterns": [
+            "^## GOAL",
+            "^## METRIC",
+            "^## DONE-TEST",
+            "^## OUT-OF-SCOPE",
+            "^## COORDINATE"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "DONE-TEST needs at least one executable line: `- cmd:<shell>` / `- file:<path>` / `- grep:<path>:<regex>` / `- mcp:<tool>`",
+          "path": "intent.md",
+          "pattern": "^\\s*[-*]\\s*(cmd|file|grep|mcp):\\S",
+          "type": "regex"
+        },
+        {
+          "path": "intent.md",
+          "pattern": "\\b(TBD|TODO|\\?\\?\\?)\\b",
+          "type": "regex_absent"
+        }
+      ],
+      "id": "I1",
+      "name": "Intent",
+      "write_policy": {
+        "deny_message": "No code before the goal card. Write intent.md with ## GOAL, ## METRIC, ## DONE-TEST (executable lines), ## OUT-OF-SCOPE, ## COORDINATE.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "questions.md",
+      "gate": [
+        {
+          "path": "questions.md",
+          "patterns": [
+            "^## Questions",
+            "^\\s*[-*]\\s*\\[(BLOCKING|ASSUMED)\\]"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "path": "questions.md",
+          "type": "no_unanswered_blocking"
+        }
+      ],
+      "id": "Q1",
+      "name": "Question",
+      "write_policy": {
+        "deny_message": "Questions before code. Write questions.md: every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)`.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "research.md",
+      "gate": [
+        {
+          "path": "research.md",
+          "patterns": [
+            "^## Findings",
+            "^## Sources",
+            "^## Gaps"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "list at least one source under ## Sources",
+          "path": "research.md",
+          "pattern": "^## Sources[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+\\S",
+          "type": "regex"
+        },
+        {
+          "counter": "qr_passes",
+          "min": 2,
+          "type": "min_counter"
+        }
+      ],
+      "id": "R",
+      "name": "Research",
+      "write_policy": {
+        "deny_message": "Research before code. Write research.md with ## Findings, ## Sources (no source, no number), ## Gaps; record each Q<->R pass with `rig-loop counter qr_passes --inc`.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "spec.md",
+      "gate": [
+        {
+          "path": "spec.md",
+          "patterns": [
+            "^## Approach",
+            "^## Files",
+            "^## Det-vs-Prob",
+            "^## Test-plan",
+            "^## Rollback"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "## Files must list at least one path or glob",
+          "path": "spec.md",
+          "pattern": "^## Files[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+\\S",
+          "type": "regex"
+        },
+        {
+          "hint": "tag the deterministic/probabilistic boundary: AUTO / DRAFT / FLAG",
+          "path": "spec.md",
+          "pattern": "\\b(AUTO|DRAFT|FLAG)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "S",
+      "name": "Solution",
+      "write_policy": {
+        "deny_message": "Spec before code. Write spec.md with ## Approach, ## Files (paths/globs you will touch), ## Det-vs-Prob (AUTO/DRAFT/FLAG per line), ## Test-plan, ## Rollback.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "quality.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "files_written_min"
+        },
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "failure_tier": "degrade",
+          "max": 10,
+          "type": "drift_within"
+        },
+        {
+          "path": "quality.md",
+          "patterns": [
+            "^## Checks",
+            "^## Planted-failure",
+            "^## Verifier"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "name the independent verifier (a different model family than the builder)",
+          "path": "quality.md",
+          "pattern": "^## Verifier[^\\n]*\\n(?:[^\\n]*\\n)*?[^\\n]*\\b(family|model|agent)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "Q2",
+      "name": "Quality",
+      "write_policy": {
+        "mode": "declared"
+      }
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "stage": "Q2",
+          "type": "stage_passed"
+        },
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof",
+      "write_policy": {
+        "mode": "declared"
+      }
+    },
+    {
+      "artifact": "integrate.md",
+      "gate": [
+        {
+          "path": "integrate.md",
+          "patterns": [
+            "^## Shipped",
+            "^## Not-shipped",
+            "^## Hand-offs",
+            "^## Next-slice"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "I2",
+      "name": "Integrate",
+      "write_policy": {
+        "mode": "declared"
+      }
+    }
+  ],
+  "version": "11.0.0"
+}
