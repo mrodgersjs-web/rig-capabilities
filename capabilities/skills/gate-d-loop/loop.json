@@ -1,0 +1,149 @@
+{
+  "closing_loop": {
+    "from": [
+      "X",
+      "P"
+    ],
+    "max_iterations": 2,
+    "on_exhaust": "escalate",
+    "to": "D"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D1",
+    "level": 3,
+    "step": "I2"
+  },
+  "doctrine_source": [
+    "~/.claude/rules/rig-unified-doctrine.md",
+    "~/RIG-Doctrine-Repo/doctrines/GATE-D.md",
+    "~/.claude/CLAUDE.md"
+  ],
+  "family": "governance",
+  "id": "gate-d-loop",
+  "kill_switch": {
+    "max_iterations": 2,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 240
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Gate-D loop",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "GateDPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "classify.md",
+      "gate": [
+        {
+          "path": "classify.md",
+          "patterns": [
+            "^## Action",
+            "^## Class",
+            "^## Blast-radius",
+            "^## Rollback"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "## Class must name one of: send publish deploy push merge spend credential destructive export dns",
+          "path": "classify.md",
+          "pattern": "^## Class[^\\n]*\\n[^\\n]*\\b(send|publish|deploy|push|merge|spend|credential|destructive|export|dns)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "C",
+      "name": "Classify"
+    },
+    {
+      "artifact": "dormant.md",
+      "gate": [
+        {
+          "path": "dormant.md",
+          "patterns": [
+            "^## Staged",
+            "^## Zero-outbound-proof"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "paste the command + output that proves nothing has gone out yet (sent=0, dry-run, staged only)",
+          "path": "dormant.md",
+          "pattern": "^## Zero-outbound-proof[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+\\S",
+          "type": "regex"
+        }
+      ],
+      "id": "D",
+      "name": "Dormant"
+    },
+    {
+      "artifact": "request.md",
+      "gate": [
+        {
+          "path": "request.md",
+          "patterns": [
+            "^## Request",
+            "^## Exact-target",
+            "^## Reversible"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "type": "gate_d_requested"
+        }
+      ],
+      "id": "R",
+      "name": "Request"
+    },
+    {
+      "artifact": "approval.md",
+      "gate": [
+        {
+          "type": "gate_d_approved"
+        }
+      ],
+      "id": "A",
+      "name": "Approve"
+    },
+    {
+      "artifact": "execute.md",
+      "gate": [
+        {
+          "path": "execute.md",
+          "patterns": [
+            "^## Command",
+            "^## Output",
+            "^## Verified-as-seen"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "how the result was verified the way Mike would see it (browser screenshot, provider UI, remote == HEAD)",
+          "path": "execute.md",
+          "pattern": "^## Verified-as-seen[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+\\S",
+          "type": "regex"
+        }
+      ],
+      "id": "X",
+      "name": "Execute"
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}

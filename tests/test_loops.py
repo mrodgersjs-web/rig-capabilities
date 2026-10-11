@@ -53,6 +53,23 @@ class SpecTests(TempState):
             self.assertTrue((Path(spec["_dir"]) / "SKILL.md").exists(), sid)
             self.assertTrue((Path(spec["_dir"]) / "tests" / "cases.json").exists(), sid)
 
+    def test_every_loop_yaml_has_a_compiled_loop_json(self):
+        """Stdlib-only installs (no PyYAML) load loop.json; it must ship."""
+        for y in sorted(L.SKILL_ROOTS["canonical"].glob("*/loop.yaml")):
+            self.assertTrue(y.with_suffix(".json").exists(),
+                            f"{y.parent.name}: run `rig-loop compile {y.parent.name}`")
+
+    def test_compiled_loop_json_matches_loop_yaml(self):
+        try:
+            import yaml
+        except ImportError:
+            self.skipTest("PyYAML not installed; the CI 'yaml' job runs this check")
+        for y in sorted(L.SKILL_ROOTS["canonical"].glob("*/loop.yaml")):
+            want = yaml.safe_load(y.read_text())
+            got = json.loads(y.with_suffix(".json").read_text())
+            self.assertEqual(want, got, f"{y.parent.name}: loop.json is stale; "
+                             f"run `rig-loop compile {y.parent.name}`")
+
     def test_validate_rejects_missing_kill_switch_and_unknown_gate(self):
         bad = {"schema": L.SCHEMA, "id": "x", "stages": [{"id": "A", "gate": [{"type": "nope"}]}]}
         errs = L.validate_spec(bad)
@@ -385,6 +402,9 @@ class WiringTests(TempState):
             "prime-agent": self.root / "prime" / "extensions" / "rig-loop-hooks.ts",
         })
         L.OMP_CONFIG = self.root / "omp-config.yml"
+        # wire(apply=True) also links the CLI; keep it out of the real $HOME.
+        self._link = L.RIG_LOOP_LINK
+        L.RIG_LOOP_LINK = self.root / "bin" / "rig-loop"
         L.OMP_CONFIG.write_text("skills:\n  includeSkills:\n    - alfred*\n    - iqrsqpi-v11\n")
         L.HOOK_CONFIG["claude"].write_text(json.dumps({"hooks": {"Stop": [{"matcher": "*", "hooks": [{"type": "command", "command": "echo keep"}]}]}}))
 
@@ -392,6 +412,7 @@ class WiringTests(TempState):
         L.HOOK_CONFIG.clear()
         L.HOOK_CONFIG.update(self._cfg)
         L.OMP_CONFIG = self._omp
+        L.RIG_LOOP_LINK = self._link
         super().tearDown()
 
     def test_wire_is_idempotent_and_preserves_existing_hooks(self):
@@ -412,6 +433,8 @@ class WiringTests(TempState):
         self.assertEqual(omp.count("    - iqrsqpi-v11\n"), 1)
         ver = L.verify_wiring()
         self.assertTrue(all(v["wired"] for v in ver.values()), ver)
+        self.assertTrue(L.RIG_LOOP_LINK.is_symlink())
+        self.assertEqual(Path(os.readlink(L.RIG_LOOP_LINK)), L.CLI)
 
     def test_wire_remove_strips_only_managed_entries(self):
         L.wire(apply=True)

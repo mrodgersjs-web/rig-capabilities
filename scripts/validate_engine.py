@@ -17,7 +17,6 @@ Phases:
 """
 
 import importlib.util
-import json
 import sys
 from pathlib import Path
 
@@ -124,8 +123,8 @@ print("    engine.py — the only LLM surface (get_loop_agent, engine.py:43-68) 
 print("  - no subprocess/execute call anywhere in this script")
 print("  - engine.execute() additionally writes memory layers + Obsidian sync and resolves")
 print("    specs only from the default ~/.hermes dir — intentionally not invoked")
-print(f"note: GoalSpec.failure_states reads empty post-load because the engine loader itself")
-print(f"      does not forward the failure_states key (yaml_loader.py:56-78); the compiled")
-print(f"      files retain it for any consumer that does.")
+print("note: GoalSpec.failure_states reads empty post-load because the engine loader itself")
+print("      does not forward the failure_states key (yaml_loader.py:56-78); the compiled")
+print("      files retain it for any consumer that does.")
 print("\nRESULT:", "ALL PHASES GREEN" if rc == 0 else "FAILURES PRESENT")
 sys.exit(rc)

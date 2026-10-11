@@ -1,0 +1,297 @@
+{
+  "closing_loop": {
+    "from": [
+      "B",
+      "Q2",
+      "P"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "escalate",
+    "to": "S"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D2",
+    "level": 3,
+    "step": "I1"
+  },
+  "doctrine_source": [
+    "~/Developer/rig-capabilities/docs/IQRSQPI-V20-DESIGN.md",
+    "~/Developer/rig-capabilities/capabilities/skills/iqrsqpi-v11/loop.yaml",
+    "~/.claude/rules/rig-unified-doctrine.md"
+  ],
+  "family": "governance",
+  "id": "iqrsqpi-v20",
+  "kill_switch": {
+    "max_children": 12,
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_tool_calls": 800,
+    "max_wall_minutes": 720
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "IQRSQPI v20",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "IQRSQPIRunPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "intent.md",
+      "gate": [
+        {
+          "path": "intent.md",
+          "patterns": [
+            "^## GOAL",
+            "^## METRIC",
+            "^## DONE-TEST",
+            "^## OUT-OF-SCOPE",
+            "^## COORDINATE",
+            "^## CONFIDENCE"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "DONE-TEST needs at least one executable line: `- cmd:<shell>` / `- file:<path>` / `- grep:<path>:<regex>`",
+          "path": "intent.md",
+          "pattern": "^\\s*[-*]\\s*(cmd|file|grep|mcp):\\S",
+          "type": "regex"
+        },
+        {
+          "path": "intent.md",
+          "pattern": "\\b(TBD|TODO|\\?\\?\\?)\\b",
+          "type": "regex_absent"
+        },
+        {
+          "path": "intent.md",
+          "type": "confidence_declared"
+        }
+      ],
+      "id": "I1",
+      "name": "Intent",
+      "register_done_tests": true,
+      "write_policy": {
+        "deny_message": "No code before the goal card. Write intent.md: ## GOAL, ## METRIC, ## DONE-TEST (executable lines \u2014 they WILL be run at Quality/Proof), ## OUT-OF-SCOPE, ## COORDINATE, ## CONFIDENCE (0-1).",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "questions.md",
+      "gate": [
+        {
+          "path": "questions.md",
+          "patterns": [
+            "^## Panel",
+            "^## Questions",
+            "^\\s*[-*]\\s*\\[(BLOCKING|ASSUMED)\\]"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "at least three persona lenses under ## Panel, e.g. `- [lens:security-engineer]`",
+          "path": "questions.md",
+          "pattern": "(?s)^## Panel.*?\\[lens:[^\\]]+\\].*?\\[lens:[^\\]]+\\].*?\\[lens:[^\\]]+\\]",
+          "type": "regex"
+        },
+        {
+          "path": "questions.md",
+          "type": "no_unanswered_blocking"
+        }
+      ],
+      "id": "Q1",
+      "name": "Question",
+      "write_policy": {
+        "deny_message": "Questions before code. questions.md: ## Panel (>=3 `- [lens:<persona>]` lines), ## Questions with every line `- [BLOCKING] ... -> ANSWER: ...` or `- [ASSUMED] ... (assumption: ...)`.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "research.md",
+      "gate": [
+        {
+          "path": "research.md",
+          "patterns": [
+            "^## Findings",
+            "^## Sources",
+            "^## Gaps"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "every source line under ## Sources carries a grade: `- <source> (HIGH|MED|LOW)`",
+          "path": "research.md",
+          "pattern": "^## Sources[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+[^\\n]*\\((HIGH|MED|LOW)\\)",
+          "type": "regex"
+        },
+        {
+          "min": 2,
+          "type": "qr_dry"
+        }
+      ],
+      "id": "R",
+      "name": "Research",
+      "write_policy": {
+        "deny_message": "Research until dry. research.md: ## Findings, ## Sources (each graded (HIGH|MED|LOW)), ## Gaps. Record every Q<->R pass: `rig-loop qr pass --new-unknowns N`; the gate needs >=2 passes and a last pass with 0.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "spec.md",
+      "gate": [
+        {
+          "path": "spec.md",
+          "patterns": [
+            "^## Approach",
+            "^## Acceptance",
+            "^## Files",
+            "^## Slices",
+            "^## Det-vs-Prob",
+            "^## Test-plan",
+            "^## Rollback"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "hint": "## Acceptance needs at least one Given / When / Then criterion",
+          "path": "spec.md",
+          "pattern": "(?i)\\bGiven\\b[\\s\\S]*?\\bWhen\\b[\\s\\S]*?\\bThen\\b",
+          "type": "regex"
+        },
+        {
+          "hint": "## Files must list at least one path or glob",
+          "path": "spec.md",
+          "pattern": "^## Files[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+\\S",
+          "type": "regex"
+        },
+        {
+          "hint": "## Slices needs at least one `- <name> \u2014 done: <cmd>` line (a slice fits one context window)",
+          "path": "spec.md",
+          "pattern": "^## Slices[^\\n]*\\n(?:[^\\n]*\\n)*?\\s*[-*]\\s+[^\\n]*done:\\s*\\S",
+          "type": "regex"
+        },
+        {
+          "hint": "tag the deterministic/probabilistic boundary: AUTO / DRAFT / FLAG",
+          "path": "spec.md",
+          "pattern": "\\b(AUTO|DRAFT|FLAG)\\b",
+          "type": "regex"
+        }
+      ],
+      "id": "S",
+      "name": "Solution",
+      "write_policy": {
+        "deny_message": "Spec before code. spec.md: ## Approach, ## Acceptance (Given/When/Then), ## Files (globs = scope fence), ## Slices (ordered, each `- <name> \u2014 done: <cmd>`), ## Det-vs-Prob (AUTO/DRAFT/FLAG), ## Test-plan, ## Rollback.",
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "build.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "children_done"
+        },
+        {
+          "path": "build.md",
+          "patterns": [
+            "^## Slices-done",
+            "^## Changed"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "B",
+      "name": "Build",
+      "write_policy": {
+        "mode": "declared"
+      }
+    },
+    {
+      "artifact": "quality.md",
+      "gate": [
+        {
+          "min": 1,
+          "type": "files_written_min"
+        },
+        {
+          "min": 1,
+          "type": "checks_green"
+        },
+        {
+          "min": 1,
+          "type": "planted_failure"
+        },
+        {
+          "min": 1,
+          "type": "independent_verdict"
+        },
+        {
+          "failure_tier": "degrade",
+          "max": 10,
+          "type": "drift_within"
+        },
+        {
+          "path": "quality.md",
+          "patterns": [
+            "^## Checks",
+            "^## Planted-failure",
+            "^## Verifier"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "Q2",
+      "name": "Quality",
+      "write_policy": {
+        "mode": "declared"
+      }
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "stage": "Q2",
+          "type": "stage_passed"
+        },
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof",
+      "write_policy": {
+        "mode": "declared"
+      }
+    },
+    {
+      "artifact": "integrate.md",
+      "gate": [
+        {
+          "path": "integrate.md",
+          "patterns": [
+            "^## Shipped",
+            "^## Not-shipped",
+            "^## Hand-offs",
+            "^## Next-slice"
+          ],
+          "type": "file_contains"
+        },
+        {
+          "path": "handoff.md",
+          "type": "file_exists"
+        }
+      ],
+      "id": "I2",
+      "name": "Integrate",
+      "write_policy": {
+        "mode": "declared"
+      }
+    }
+  ],
+  "version": "20.0.0"
+}

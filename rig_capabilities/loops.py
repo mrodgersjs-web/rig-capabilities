@@ -59,6 +59,8 @@ HOOK_CONFIG = {
 }
 OMP_CONFIG = HOME / ".omp" / "agent" / "config.yml"
 PROOF_DIR = HOME / ".rig" / "proof"
+# `rig-loop wire --apply` links the CLI here. Module-level so tests can redirect it.
+RIG_LOOP_LINK = HOME / ".rig" / "bin" / "rig-loop"
 
 WRITE_TOOLS = {"write", "edit", "multiedit", "notebookedit", "apply_patch", "multi_edit",
                "str_replace_editor", "create_file"}
@@ -1553,7 +1555,7 @@ def _wire_omp_include(skill_ids: list[str], apply: bool) -> dict:
 
 
 def _wire_symlink(apply: bool) -> dict:
-    link = HOME / ".rig" / "bin" / "rig-loop"
+    link = RIG_LOOP_LINK
     ok = link.is_symlink() and Path(os.readlink(link)) == CLI
     if not ok and apply:
         link.parent.mkdir(parents=True, exist_ok=True)

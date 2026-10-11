@@ -14,6 +14,16 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from rig_capabilities.catalog import Repo  # noqa: E402
 
+try:  # pytest is optional: plain `python -m unittest` still runs every test
+    import pytest
+
+    # Needs the operator's live estate (external corpus roots, local Postgres).
+    # CI deselects these with `-m "not live_estate"`; they run on the RIG host.
+    live_estate = pytest.mark.live_estate
+except ImportError:  # pragma: no cover
+    def live_estate(fn):
+        return fn
+
 
 def make_fixture(tmp: Path) -> Repo:
     repo = Repo(tmp / "repo")
@@ -1039,6 +1049,7 @@ class SyncTests(unittest.TestCase):
             else:
                 os.environ["RIG_CAP_DSN"] = old
 
+    @live_estate
     def test_live_roundtrip(self):
         import socket
         try:
@@ -1163,7 +1174,7 @@ class RoundTests(unittest.TestCase):
         repo = Repo(REPO_ROOT)
         cands = pick_candidates(repo, "agent-engineering", 3)
         self.assertTrue(cands)
-        rep = run_round(repo, "misc", n=2, dry=True)
+        run_round(repo, "misc", n=2, dry=True)
         self.assertTrue((repo.root / ".context" / "rounds").exists())
 
 
@@ -1187,6 +1198,7 @@ class CorpusRootTests(unittest.TestCase):
         want = time.strftime("%Y-%m-%d", time.localtime(f.stat().st_mtime))
         self.assertEqual(want, (a.get("quality") or {}).get("verified_on"))
 
+    @live_estate
     def test_live_corpus_root_indexed(self):
         rows = [a for a in Repo(REPO_ROOT).load_index()["assets"]
                 if a["source"] == "intel-corpus"]
@@ -1289,7 +1301,6 @@ class VerifiedRequesterTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             context_pack(self.repo, "x", token="v1.bogus.999.deadbeef")
         iss = self._token(ttl=60)
-        import time as _t
         with self.assertRaises(ValueError):
             context_pack(self.repo, "x", token=iss["token"].replace(
                 f".{iss['exp']}.", f".{iss['exp'] - 120}."))  # tampered exp
@@ -1491,7 +1502,7 @@ class CommandCanonicalTests(unittest.TestCase):
                 self.assertNotIn(b, text, f"{f.name} invokes mutating {b}")
 
     def test_quality_run_skips_mutating_mcp(self):
-        from rig_capabilities.done_tests import MCP_MUTATING, parse_form, run_asset
+        from rig_capabilities.done_tests import MCP_MUTATING, parse_form
         self.assertIn("capabilities_certify", MCP_MUTATING)
         form, arg = parse_form("mcp:capabilities_certify")
         self.assertEqual((form, arg), ("mcp", "capabilities_certify"))
@@ -1543,7 +1554,8 @@ class HookGapTests(unittest.TestCase):
         self.assertFalse(st["summary"]["claude_registered"])
 
     def test_sync_hooks_dry_then_apply(self):
-        import importlib.util, shutil
+        import importlib.util
+        import shutil
         spec = importlib.util.spec_from_file_location(
             "capwire_hooks", REPO_ROOT / "wire" / "wire.py")
         wire = importlib.util.module_from_spec(spec)
@@ -1778,6 +1790,22 @@ class ProofchainTests(unittest.TestCase):
         self.assertIn("cafebabe", rep["found"])
         self.assertFalse(rep["ok"])
 
+
+
+class McpStdioSmokeTests(unittest.TestCase):
+    """The shipped MCP entrypoint answers a real catalog query over stdio."""
+
+    def test_smoke_script_finds_bundled_skill(self):
+        r = subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "smoke_mcp.py")],
+                           capture_output=True, text=True, timeout=120)
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertIn("SMOKE OK", r.stdout)
+        self.assertIn("capabilities_get proof-loop: skill canonical", r.stdout)
+
+    def test_server_version_matches_package(self):
+        from rig_capabilities import __version__
+        from rig_capabilities.server import VERSION
+        self.assertEqual(VERSION, __version__)
 
 if __name__ == "__main__":
     unittest.main()

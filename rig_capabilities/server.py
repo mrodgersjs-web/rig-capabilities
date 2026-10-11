@@ -4,12 +4,13 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
+from . import __version__
 from .catalog import KINDS, Repo
 from .live import live_status
 from .mcp_stdio import McpStdioServer, ToolError
 
 NAME = "rig-capabilities"
-VERSION = "40.0.0"
+VERSION = __version__  # single source: rig_capabilities/__init__.py
 
 
 def default_repo() -> Repo:
