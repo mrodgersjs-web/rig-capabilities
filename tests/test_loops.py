@@ -389,6 +389,16 @@ class HookRenderTests(TempState):
         self.assertEqual(r.returncode, 0)
 
 
+class ScratchGlobTests(unittest.TestCase):
+    def test_tmp_is_scratch_only_outside_the_project(self):
+        run = {"cwd": "/tmp/proj"}
+        globs = list(L.DEFAULT_PLAN_GLOBS)
+        self.assertFalse(L._write_allowed(run, "/tmp/proj/src/x.py", globs))
+        self.assertTrue(L._write_allowed(run, "/tmp/elsewhere/notes.md", globs))
+        self.assertTrue(L._write_allowed(run, "/tmp/proj/docs/plans/p.md", globs))
+        self.assertTrue(L._write_allowed({"cwd": "/"}, "/tmp/x.txt", globs))
+
+
 class WiringTests(TempState):
     def setUp(self):
         super().setUp()

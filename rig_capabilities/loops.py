@@ -1223,6 +1223,30 @@ def normalize_payload(payload: dict) -> dict:
     }
 
 
+# System temp dirs are scratch space only *outside* the run's project. On Linux
+# tempfile.gettempdir() is /tmp, so a project living under /tmp (CI runners,
+# `rig-loop test` sandboxes) must still be write-gated like any other project.
+SCRATCH_GLOBS = ("/tmp/*", "/private/tmp/*")
+
+
+def _is_under(path: str, root: str | None) -> bool:
+    if not root:
+        return False
+    for a, b in ((os.path.abspath(path), os.path.abspath(root)),
+                 (os.path.realpath(path), os.path.realpath(root))):
+        if b in (os.sep, os.path.expanduser("~")):
+            return False  # a run rooted at / or $HOME keeps the scratch allowance
+        if a == b or a.startswith(b.rstrip(os.sep) + os.sep):
+            return True
+    return False
+
+
+def _write_allowed(run: dict, path: str, globs: list[str]) -> bool:
+    if _is_under(path, run.get("cwd")):
+        globs = [g for g in globs if g not in SCRATCH_GLOBS]
+    return _glob_any(path, globs)
+
+
 def _glob_any(path: str, globs: list[str]) -> bool:
     p = str(path)
     for g in globs:
@@ -1324,8 +1348,7 @@ def hook_pre_tool(run: dict | None, spec: dict | None, p: dict, skill: str | Non
             targets = re.findall(r"(?<![0-9&<])>>?\s*([^\s;&|<>]+)", p["command"])
             targets += re.findall(r"\b(?:tee|sed\s+-i(?:\s+'')?)\s+(?:-a\s+)?([^\s;&|<>]+)", p["command"])
             bad = [t for t in targets if t not in ("/dev/null",) and not t.startswith("&")
-                   and not _glob_any(str(Path(os.path.expanduser(t.strip("'\"")))), allow_globs)
-                   and not _glob_any(str(Path(p["cwd"]) / t.strip("'\"")), allow_globs)]
+                   and not _write_allowed(run, str(Path(p["cwd"]) / os.path.expanduser(t.strip("'\""))), allow_globs)]
             if bad:
                 log_event(run, "deny", tool=tool, reason="shell-write-before-stage", stage=st["id"], targets=bad[:5])
                 save_run(run)
@@ -1354,7 +1377,7 @@ def hook_pre_tool(run: dict | None, spec: dict | None, p: dict, skill: str | Non
             path = str(Path(os.path.expanduser(raw)))
             if not Path(path).is_absolute():
                 path = str(Path(p["cwd"]) / path)
-            if mode == "artifacts_only" and not _glob_any(path, allow_globs):
+            if mode == "artifacts_only" and not _write_allowed(run, path, allow_globs):
                 log_event(run, "deny", tool=tool, reason="write-before-stage", stage=st["id"], path=path)
                 save_run(run)
                 return {"action": "deny", "reason": (
@@ -1363,7 +1386,7 @@ def hook_pre_tool(run: dict | None, spec: dict | None, p: dict, skill: str | Non
                     f"Write the stage artifact ({_resolve_artifact(run, st, None)}) then run `rig-loop stage {st['id']} pass`.")}
             if mode == "declared":
                 globs = _declared_globs(run, spec)
-                if globs and not _glob_any(path, globs + allow_globs):
+                if globs and not _write_allowed(run, path, globs + allow_globs):
                     if path not in run["drift"]:
                         run["drift"].append(path)
                         log_event(run, "drift", path=path, stage=st["id"])
