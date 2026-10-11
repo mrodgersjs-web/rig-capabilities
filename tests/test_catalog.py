@@ -25,6 +25,34 @@ except ImportError:  # pragma: no cover
         return fn
 
 
+# Gitignored caches and local state that must never leak into a test: an index
+# or graph built under another $HOME (or by an older checkout) is not evidence.
+_LOCAL_STATE = (".git", ".venv*", ".venvs", "*.egg-info", "__pycache__", ".pytest_cache",
+                ".ruff_cache", ".apodex", ".context", ".index.json", ".graph.json",
+                ".concepts.json", ".embeddings.json", ".last_seen.json", ".lanes.json",
+                ".signing.key", ".serve.token", ".public-catalog.json", "tree", "tree.new",
+                "tree.old", "*.tmp", ".env", "*.env", ".codex-tmp")
+
+
+def hermetic_repo(test: unittest.TestCase) -> Path:
+    """Copy of this checkout in a temp dir: no cached index/state, and no
+    external roots (nothing under $HOME is scanned). Every index the test sees
+    is built fresh from the copied `capabilities/` tree."""
+    import shutil
+    tmp = Path(tempfile.mkdtemp(prefix="cap-hermetic-"))
+    test.addCleanup(shutil.rmtree, tmp, True)
+    root = tmp / "repo"
+    shutil.copytree(REPO_ROOT, root, symlinks=True,
+                    ignore=shutil.ignore_patterns(*_LOCAL_STATE))
+    cfg_path = root / "config.json"
+    cfg = json.loads(cfg_path.read_text()) if cfg_path.exists() else {}
+    cfg["defaults"] = False
+    cfg["external_roots"] = []
+    cfg_path.write_text(json.dumps(cfg, indent=2))
+    assert not (root / ".index.json").exists()
+    return root
+
+
 def make_fixture(tmp: Path) -> Repo:
     repo = Repo(tmp / "repo")
     hook = repo.cap_root / "hooks" / "guard.sh"
@@ -1123,7 +1151,7 @@ class DoneTests(unittest.TestCase):
 
     def test_canonical_skills_pass(self):
         from rig_capabilities.done_tests import run_asset
-        repo = Repo(REPO_ROOT)
+        repo = Repo(hermetic_repo(self))
         for sid in ("semgrep", "codeql", "sarif-parsing", "skill-upgrades"):
             self.assertTrue(run_asset(repo, sid, "canonical")["pass"], sid)
 
@@ -1171,7 +1199,7 @@ class RoundTests(unittest.TestCase):
 
     def test_live_round_is_clean(self):
         from rig_capabilities.rounds import pick_candidates, run_round
-        repo = Repo(REPO_ROOT)
+        repo = Repo(hermetic_repo(self))
         cands = pick_candidates(repo, "agent-engineering", 3)
         self.assertTrue(cands)
         run_round(repo, "misc", n=2, dry=True)
@@ -1353,13 +1381,7 @@ class CertifyTests(unittest.TestCase):
     """V22: gates that cannot go RED are theater — prove they fire on a copy."""
 
     def _tmp_repo(self):
-        import shutil
-        tmp = Path(tempfile.mkdtemp(prefix="cap-cert-"))
-        self.addCleanup(shutil.rmtree, tmp, True)
-        shutil.copytree(REPO_ROOT, tmp / "repo",
-                        ignore=shutil.ignore_patterns(".git", ".venvs",
-                                                      ".apodex", "__pycache__"))
-        return tmp / "repo"
+        return hermetic_repo(self)
 
     def test_acl_gate_green_then_planted_red(self):
         from rig_capabilities.certify import _plant, run_gates
@@ -1512,7 +1534,7 @@ class CommandCanonicalTests(unittest.TestCase):
         dt._IN_QUALITY_RUN = True
         try:
             from rig_capabilities.catalog import Repo
-            rep = dt.quality_run(Repo(REPO_ROOT))
+            rep = dt.quality_run(Repo(hermetic_repo(self)))
             self.assertTrue(rep.get("reentrant"))
             self.assertIsNone(rep["pass_rate"])
         finally:
@@ -1678,7 +1700,13 @@ class WholeRepoCertifyTests(unittest.TestCase):
         only = [k for k in GATES if k != "suite"]
         self.assertEqual(sorted(only),
                          ["acl_jake", "done_tests", "idp_integrity", "index_fresh"])
-        res = run_gates(Repo(REPO_ROOT), only=only)
+        # Fresh copy, fresh index, throwaway signing key: no cached file from the
+        # working tree or $HOME can turn a gate green or red.
+        old_key = os.environ.get("RIG_CAPABILITIES_SIGNING_KEY")
+        os.environ["RIG_CAPABILITIES_SIGNING_KEY"] = os.urandom(32).hex()
+        self.addCleanup(lambda: os.environ.__setitem__("RIG_CAPABILITIES_SIGNING_KEY", old_key)
+                        if old_key is not None else os.environ.pop("RIG_CAPABILITIES_SIGNING_KEY", None))
+        res = run_gates(Repo(hermetic_repo(self)), only=only)
         for name, row in res.items():
             self.assertTrue(row["ok"], f"{name} red: {row.get('detail')}")
 
@@ -1796,7 +1824,8 @@ class McpStdioSmokeTests(unittest.TestCase):
     """The shipped MCP entrypoint answers a real catalog query over stdio."""
 
     def test_smoke_script_finds_bundled_skill(self):
-        r = subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "smoke_mcp.py")],
+        r = subprocess.run([sys.executable, str(REPO_ROOT / "scripts" / "smoke_mcp.py"),
+                            "--repo", str(hermetic_repo(self))],
                            capture_output=True, text=True, timeout=120)
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertIn("SMOKE OK", r.stdout)
