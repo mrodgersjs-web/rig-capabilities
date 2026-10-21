@@ -1,0 +1,87 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620" role="img" aria-labelledby="title desc"><title id="title">rig-capabilities architecture</title><desc id="desc">Canonical capabilities and read-only external sources are scanned into a JSON index. Agent packs resolve against that index. MCP and CLI surfaces expose the catalog. Loop CLI reads specs directly. Wiring registers five harnesses and syncs commands and hooks. Canonical installs are logged separately.</desc><defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10Z" fill="#6E7781"/></marker><marker id="cyan" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0 L10 5 L0 10Z" fill="#087C93"/></marker></defs><rect width="1200" height="620" fill="#FFFFFF"/><g font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif">
+<text x="32" y="43" fill="#1F2328" font-size="30" font-weight="700">One catalog. Five harnesses.</text>
+<text x="32" y="74" fill="#59636E" font-size="17" font-weight="500">Source-backed discovery, separate install records, shared MCP access.</text>
+<text x="32" y="116" fill="#59636E" font-size="15" font-weight="700">SOURCES</text>
+<path d="M32 127H278" stroke="#D0D7DE"/>
+<text x="324" y="116" fill="#59636E" font-size="15" font-weight="700">CORE</text>
+<path d="M324 127H602" stroke="#D0D7DE"/>
+<text x="635" y="116" fill="#59636E" font-size="15" font-weight="700">SURFACES</text>
+<path d="M635 127H905" stroke="#D0D7DE"/>
+<text x="951" y="116" fill="#59636E" font-size="15" font-weight="700">HARNESSES</text>
+<path d="M951 127H1168" stroke="#D0D7DE"/>
+<rect x="32" y="145" width="246" height="95" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="32" y="161" width="3" height="63" rx="1.5" fill="#7C5CFF"/>
+<text x="48" y="173" fill="#1F2328" font-size="18" font-weight="650">capabilities/</text>
+<text x="48" y="198" fill="#59636E" font-size="15" font-weight="500">Skills, hooks, harnesses,</text>
+<text x="48" y="220" fill="#59636E" font-size="15" font-weight="500">loops and commands</text>
+<rect x="32" y="277" width="246" height="100" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="32" y="293" width="3" height="68" rx="1.5" fill="#087C93"/>
+<text x="48" y="305" fill="#1F2328" font-size="18" font-weight="650">External roots</text>
+<text x="48" y="330" fill="#59636E" font-size="15" font-weight="500">config.json + built-in defaults</text>
+<text x="48" y="352" fill="#59636E" font-size="15" font-weight="500">Read-only scan; canonical wins</text>
+<rect x="32" y="410" width="246" height="78" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="32" y="426" width="3" height="46" rx="1.5" fill="#7C5CFF"/>
+<text x="48" y="438" fill="#1F2328" font-size="18" font-weight="650">agents/&lt;id&gt;/pack.json</text>
+<text x="48" y="463" fill="#59636E" font-size="15" font-weight="500">Named capability references</text>
+<rect x="324" y="145" width="278" height="95" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="324" y="161" width="3" height="63" rx="1.5" fill="#7C5CFF"/>
+<text x="340" y="173" fill="#1F2328" font-size="18" font-weight="650">Indexer · catalog.py</text>
+<text x="340" y="198" fill="#59636E" font-size="15" font-weight="500">scan() → build_index()</text>
+<text x="340" y="220" fill="#59636E" font-size="15" font-weight="500">Metadata, hashes, deduplication</text>
+<rect x="324" y="277" width="278" height="100" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="324" y="293" width="3" height="68" rx="1.5" fill="#7C5CFF"/>
+<text x="340" y="305" fill="#1F2328" font-size="18" font-weight="650">.index.json</text>
+<text x="340" y="330" fill="#59636E" font-size="15" font-weight="500">Generated search cache</text>
+<text x="340" y="352" fill="#59636E" font-size="15" font-weight="500">load_index() refreshes if stale</text>
+<rect x="324" y="410" width="278" height="78" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="324" y="426" width="3" height="46" rx="1.5" fill="#7C5CFF"/>
+<text x="340" y="438" fill="#1F2328" font-size="18" font-weight="650">Pack resolver · packs.py</text>
+<text x="340" y="463" fill="#59636E" font-size="15" font-weight="500">Resolve IDs against the index</text>
+<rect x="324" y="516" width="278" height="48" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="324" y="532" width="3" height="16" rx="1.5" fill="#3FB950"/>
+<text x="340" y="544" fill="#1F2328" font-size="18" font-weight="650">.install.json</text>
+<rect x="635" y="145" width="270" height="95" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="635" y="161" width="3" height="63" rx="1.5" fill="#7C5CFF"/>
+<text x="651" y="173" fill="#1F2328" font-size="18" font-weight="650">MCP server · 29 tools</text>
+<text x="651" y="198" fill="#59636E" font-size="15" font-weight="500">server.py + mcp_stdio.py</text>
+<text x="651" y="220" fill="#59636E" font-size="15" font-weight="500">stdio · JSON-RPC 2.0</text>
+<rect x="635" y="277" width="270" height="100" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="635" y="293" width="3" height="68" rx="1.5" fill="#7C5CFF"/>
+<text x="651" y="305" fill="#1F2328" font-size="18" font-weight="650">bin/rig-capabilities</text>
+<text x="651" y="330" fill="#59636E" font-size="15" font-weight="500">Search, get, reindex, install,</text>
+<text x="651" y="352" fill="#59636E" font-size="15" font-weight="500">agent-pack and other commands</text>
+<rect x="635" y="410" width="270" height="78" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="635" y="426" width="3" height="46" rx="1.5" fill="#7C5CFF"/>
+<text x="651" y="438" fill="#1F2328" font-size="18" font-weight="650">bin/rig-loop</text>
+<text x="651" y="463" fill="#59636E" font-size="15" font-weight="500">Specs → stages → gates → seal</text>
+<rect x="635" y="516" width="270" height="48" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="635" y="532" width="3" height="16" rx="1.5" fill="#7C5CFF"/>
+<text x="651" y="544" fill="#1F2328" font-size="18" font-weight="650">wire/wire.py</text>
+<rect x="951" y="145" width="217" height="419" rx="14" fill="#F6F8FA" stroke="#D0D7DE"/><rect x="951" y="161" width="3" height="387" rx="1.5" fill="#087C93"/>
+<text x="967" y="173" fill="#1F2328" font-size="18" font-weight="650">Five consumers</text>
+<text x="969" y="218" fill="#1F2328" font-size="18" font-weight="600">Claude Code</text>
+<text x="969" y="250" fill="#1F2328" font-size="18" font-weight="600">Codex</text>
+<text x="969" y="282" fill="#1F2328" font-size="18" font-weight="600">OMP (Oh My Pi)</text>
+<text x="969" y="314" fill="#1F2328" font-size="18" font-weight="600">Hermes</text>
+<text x="969" y="346" fill="#1F2328" font-size="18" font-weight="600">Prime Agent</text>
+<path d="M968 379H1151" stroke="#D0D7DE"/>
+<text x="969" y="406" fill="#1F2328" font-size="16" font-weight="650">MCP configuration</text>
+<text x="969" y="431" fill="#59636E" font-size="15" font-weight="500">JSON / TOML / YAML</text>
+<text x="969" y="463" fill="#1F2328" font-size="16" font-weight="650">Installed asset roots</text>
+<text x="969" y="488" fill="#59636E" font-size="15" font-weight="500">Canonical copies only</text>
+<text x="969" y="536" fill="#59636E" font-size="14" font-weight="500">Commands + hooks synced</text>
+<path d="M278 177H324" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M278 308H301V209H324" fill="none" stroke="#087C93" stroke-width="1.7"  marker-end="url(#cyan)"/>
+<path d="M461 240V277" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<text x="474" y="261" fill="#59636E" font-size="13" font-weight="500">write</text>
+<path d="M602 307H618V177H635" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M602 343H635" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M278 449H324" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M461 377V410" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M602 431H611V224H635" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M602 467H623V365H635" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M278 221H287V396H769V410" fill="none" stroke="#087C93" stroke-width="1.7" stroke-dasharray="5 4" marker-end="url(#cyan)"/>
+<text x="196" y="391" fill="#087C93" font-size="13" font-weight="500">loop specs read directly from skill roots</text>
+<path d="M905 188H951" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<path d="M905 322H928V474H951" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<text x="913" y="308" fill="#59636E" font-size="12" font-weight="500">install</text>
+<path d="M905 364H939V500H461V516" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<text x="477" y="514" fill="#59636E" font-size="13" font-weight="500">install() records copy</text>
+<path d="M905 449H951" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<text x="913" y="444" fill="#59636E" font-size="12" font-weight="500">hooks</text>
+<path d="M32 221H17V588H769V564" fill="none" stroke="#087C93" stroke-width="1.7" stroke-dasharray="5 4" marker-end="url(#cyan)"/>
+<text x="325" y="579" fill="#087C93" font-size="13" font-weight="500">wire.py reads canonical commands + hooks</text>
+<path d="M905 540H951" fill="none" stroke="#6E7781" stroke-width="1.7"  marker-end="url(#arr)"/>
+<text x="32" y="550" fill="#59636E" font-size="14" font-weight="500">External assets are not installable.</text>
+<text x="32" y="573" fill="#59636E" font-size="14" font-weight="500">config.json also selects install roots.</text>
+<text x="32" y="606" fill="#59636E" font-size="14" font-weight="500">Solid: catalog / transport / install    ·    Dashed cyan: direct source reads    ·    MCP configuration uses managed registrations</text>
+</g></svg>
