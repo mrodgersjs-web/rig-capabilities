@@ -1,0 +1,62 @@
+{
+ "name": "grokbot.card-done",
+ "stage": "verify",
+ "lane": "fleet",
+ "description": "grokbot-lane card-close gate (prime nightshift 2026-10-26). Controls pinned in-diff, jev-1.14.0: PASS decision 246412 p_yes=0.96 (done-test exit 0 + artifact sha block); BLOCK decision 246411 p_yes=0.04 (missing artifact, 401 junk). State = the card's verbatim DONE-TEST, the verification command that was actually run (with exit code and stdout) and an excerpt of the named artifact. One typed answer: does the shown slice satisfy the done-test AS WRITTEN. PASS bar P>=0.90 mirrors dispatcher GATE_PASS_SCORE; the dispatcher's own lesson: fix the shape, do not move the bar.",
+ "questions": {
+  "meets_done_test": {
+   "type": "choice",
+   "instructions": "Decide whether the VERIFICATION slice satisfies the DONE-TEST exactly as written: the command ran, its exit code and stdout are consistent with the done-test, and the artifact excerpt is the kind of content the done-test demands (the named marker, non-empty required output). Judge only what the slice shows.",
+   "criteria": {
+    "yes": "The verification output evidences every clause of the done-test as written (command present, exit code matches, named file/marker/number shown in the slice).",
+    "no": "Any done-test clause is unevidenced, the run errored (401, timeout, missing file), or the artifact excerpt does not carry what the done-test names."
+   }
+  }
+ },
+ "rules": [
+  {
+   "when": "meets_done_test.p.no >= 0.40",
+   "verdict": "BLOCK",
+   "reason": "evidence does not satisfy the done-test"
+  },
+  {
+   "when": "meets_done_test.p.yes < 0.90",
+   "verdict": "ESCALATE",
+   "reason": "P(done-test met) below the 0.90 dispatcher bar"
+  }
+ ],
+ "confidence_floor": 0.3,
+ "calibrated": false,
+ "notes": {
+  "origin": "Built 2026-10-26 by the grokbot nightshift lane for the 1,865-card drain; controls: PASS on test -s + named marker with matching stdout, BLOCK on 401/empty-run evidence (60 stale PASS receipts on 401s measured in the same store).",
+  "threshold": "strict '<' on p.yes: a probability that floats to exactly 0.90 is AT the bar and passes (0.9 float representation must not deny a bar-clearing answer)",
+  "controls": {
+   "run_at": "2026-10-25T22:06-22:08-06:00 on jev-1.14.0 (rig-s1gate check grokbot.card-done --json)",
+   "good": {
+    "decision_id": 246412,
+    "verdict": "PASS",
+    "p_yes": 0.96,
+    "state": "test -s on an existing artifact: exit 0 + artifact block with sha256 and head"
+   },
+   "good2": {
+    "decision_id": 246347,
+    "verdict": "PASS",
+    "p_yes": 0.91,
+    "state": "real card act_8925ba0c-517 closure: done-test exit 0, 13,756-byte artifact named, sha + first 400 bytes"
+   },
+   "bad": {
+    "decision_id": 246411,
+    "verdict": "BLOCK",
+    "p_yes": 0.04,
+    "state": "same done-test, artifact missing: exit 1, evidence 'model error 401 unauthorized; nothing written'"
+   },
+   "bad2": {
+    "decision_id": 246344,
+    "verdict": "BLOCK",
+    "p_yes": 0.11,
+    "state": "exit 1 run over a missing named path with no evidence"
+   },
+   "bar": "PASS only at P(yes) > 0.90; rule: p.yes < 0.90 -> ESCALATE, p.no >= 0.40 -> BLOCK"
+  }
+ }
+}
