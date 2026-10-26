@@ -1,0 +1,63 @@
+{
+ "name": "grokbot.outcome",
+ "stage": "measure",
+ "lane": "fleet",
+ "description": "ADVISORY, UNCALIBRATED (outcome-audit 2026-10-26, Mike: 'a lot of grokbots messaging but no outcomes... verify with jev'). State = one grokbot card's evidence file (task, done-test, reply, artifact excerpt). Separates BUSINESS OUTCOMES from activity. PASS = the evidence shows a named business result moved or a deliverable that directly produces one; ESCALATE = partial (outcome-shaped but unexecuted, or mixed); BLOCK = activity only (status, heartbeat, plan, audit, digest, research memo, meta-work about the fleet/models/bots). Audit instrument, not a card-close gate: wire to no hook until hand-labelled agreement is measured on >=50 cards and calibrated with rig-s1gate calibrate.",
+ "questions": {
+  "kpi_moved": {
+   "type": "choice",
+   "instructions": "Judge what the work PRODUCED, not how the task was worded: a card phrased 'Move the X KPI' or 'write a log' still counts when the reply shows a business deliverable. Business deliverables: verified leads or contacts (enriched, verified, staged in the CRM); outreach staged ready to send or sent (emails, LinkedIn connection notes, posts) with recipients named; proposals, bids or RFI responses drafted to submission-ready or submitted; meetings booked; product bugs fixed or features or web pages built, with passing tests or checks; revenue or invoices; content published or ready to publish. Does the evidence show at least one such deliverable, or a before/after number on one?",
+   "criteria": {
+    "yes": "The slice shows the business deliverable itself (named leads, staged notes or emails, proposal or RFI text, fixed issues with passing tests, a built page with checks, an invoice, a post) or a measured change in one.",
+    "no": "The slice only reports status, measures the bots, fleet, models or infra, writes a goal, plan, scorecard, KPI row, audit, digest or memo, describes intent, or reports a blocker; no business deliverable is shown."
+   }
+  },
+  "activity_only": {
+   "type": "choice",
+   "instructions": "Is the work ONLY activity: a status report, heartbeat, standup line, daily goal, plan, scorecard or KPI row, audit, digest, research memo, or meta-work about the fleet, models, hosts, bots, gates or the board itself, with no business deliverable attached?",
+   "criteria": {
+    "yes": "The only product is a report about work, a plan, a measurement of the bots, fleet or infra, or an internal memo.",
+    "no": "A business deliverable that a prospect, client, buyer, reader or app user would receive or use is produced, even if a log or KPI row is also written."
+   }
+  },
+  "evidence_executed": {
+   "type": "choice",
+   "instructions": "Does the evidence show commands that actually ran with their observed output (exit codes, stdout, file heads, test results, counts read from a source), rather than prose claims of what was done?",
+   "criteria": {
+    "yes": "Command lines with their real output, test runs with results, or artifact excerpts read back from disk are shown.",
+    "no": "Only narrative claims, intentions or summaries; no executed command output is shown."
+   }
+  }
+ },
+ "rules": [
+  {
+   "when": "kpi_moved.p.yes < 0.30",
+   "verdict": "BLOCK",
+   "reason": "activity only: no business result evidenced"
+  },
+  {
+   "when": "kpi_moved.p.yes < 0.80",
+   "verdict": "ESCALATE",
+   "reason": "partial: business result not clearly evidenced"
+  },
+  {
+   "when": "activity_only.p.yes >= 0.70",
+   "verdict": "ESCALATE",
+   "reason": "work reads as activity/meta-work"
+  },
+  {
+   "when": "evidence_executed.p.yes < 0.50",
+   "verdict": "ESCALATE",
+   "reason": "outcome claimed in prose, not shown executed"
+  }
+ ],
+ "confidence_floor": 0.3,
+ "calibrated": false,
+ "never_auto": false,
+ "notes": {
+  "origin": "Built 2026-10-26 by the Prime outcome-audit worker (RIG Company OS build). Questions fixed by the parent brief: kpi_moved, activity_only, evidence_executed.",
+  "mode": "Intended advisory. rig-s1gate list may still print ENFORCING because work-criteria.json sets advisory_until_calibrated=false globally; this rubric is called only by the outcome audit and is not wired to any hook or dispatcher close.",
+  "bar": "PASS needs kpi_moved.p.yes >= 0.80, activity_only.p.yes < 0.70 and evidence_executed.p.yes >= 0.50. BLOCK when kpi_moved.p.yes < 0.30.",
+  "labels": "12 hand-labelled controls (6 outcome, 6 activity): see ~/Developer/rig-company/reports/outcome-audit-REPORT.md"
+ }
+}
