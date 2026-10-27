@@ -1,0 +1,32 @@
+{
+  "name": "jobplays.plan90",
+  "lane": "traject",
+  "stage": "gate",
+  "questions": {
+    "specific": {
+      "type": "score",
+      "instructions": "Score 0.0 to 1.0: how specific is this document to the exact role, company, and problems named in it, versus a template that could be sent to any employer, and are all claims about the author concrete and sourced rather than self-praise?",
+      "criteria": [
+        "generic template usable for any employer",
+        "role-specific throughout with every claim traceable to the profile"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "specific.score < 0.90",
+      "verdict": "BLOCK",
+      "reason": "artifact is not specific enough to this role"
+    },
+    {
+      "when": "specific.score >= 0.90",
+      "verdict": "PASS",
+      "reason": "role-specific with sourced claims"
+    }
+  ],
+  "notes": {
+    "bar": "PASS requires score >= 0.90. Planted-bad control (generic boilerplate) must score below the bar on this same rubric or the gate is theater.",
+    "origin": "job-plays round-2, Mike task card 2026-10-27: round-1 static sections scored 0.67/0.79; round-2 model-written sections must clear 0.90."
+  },
+  "description": "Score-gate for a job-plays artifact (90-day plan): is it written for THIS role at THIS company, with every claim about Mike Rodgers traceable to his profile? When: verify.py in rig-builds/job-plays scores regenerated plan90 drafts before a DONE PASS claim."
+}
