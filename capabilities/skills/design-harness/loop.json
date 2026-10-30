@@ -1,0 +1,69 @@
+{
+  "closing_loop": {
+    "from": [
+      "P"
+    ],
+    "max_iterations": 3,
+    "on_exhaust": "park",
+    "to": "I1"
+  },
+  "coordinate": {
+    "bms_mode": "A1",
+    "diamond": "D2",
+    "level": 3,
+    "step": "I1"
+  },
+  "doctrine_source": [
+    "/Users/rig128gb/Developer/rig-intelligence/packages/rig-design-harness/harness/"
+  ],
+  "family": "governance",
+  "id": "design-harness",
+  "kill_switch": {
+    "max_iterations": 3,
+    "max_stop_blocks": 2,
+    "max_wall_minutes": 240
+  },
+  "modes": {
+    "auto": {},
+    "walk": {
+      "stop_after_stage": true
+    }
+  },
+  "name": "Design Harness",
+  "outward_policy": {
+    "require_gate_d": true
+  },
+  "packet": "LoopRunPacket",
+  "schema": "rig.loop-skill.v11",
+  "stages": [
+    {
+      "artifact": "intent.md",
+      "gate": [
+        {
+          "path": "intent.md",
+          "patterns": [
+            "^## GOAL",
+            "^## DONE-TEST"
+          ],
+          "type": "file_contains"
+        }
+      ],
+      "id": "I1",
+      "name": "Intent",
+      "write_policy": {
+        "mode": "artifacts_only"
+      }
+    },
+    {
+      "artifact": "proof.json",
+      "gate": [
+        {
+          "type": "sealed"
+        }
+      ],
+      "id": "P",
+      "name": "Proof"
+    }
+  ],
+  "version": "11.0.0"
+}
