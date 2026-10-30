@@ -1,0 +1,69 @@
+{
+  "goals": [
+    {
+      "id": "GL-DAILY-SCORECARD-LOOP",
+      "name": "Daily Scorecard Loop",
+      "description": "Every weekday morning, assemble yesterday's scorecard for Mike: lane metrics for LinkedIn, the GTM funnel, and site health, each measured against its target, with misses flagged and one recommended focus for the day. Read-only: it reports, it never posts, sends, or changes anything. [ daily-scorecard-loop ] \u2014 compiled from registry/daily-scorecard-loop.yaml by workflow-design-studio",
+      "anchor": "L4-D3-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "E1",
+          "category": "Done Gate",
+          "name": "Every metric row shows value, target, and delta, or names the missing input.",
+          "description": "Every metric row shows value, target, and delta, or names the missing input.",
+          "command": "see out/daily-scorecard-loop/EMBED.md gate E1",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "E2",
+          "category": "Done Gate",
+          "name": "Every miss is flagged with its size; untargeted metrics are labeled UNTARGETED.",
+          "description": "Every miss is flagged with its size; untargeted metrics are labeled UNTARGETED.",
+          "command": "see out/daily-scorecard-loop/EMBED.md gate E2",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "E3",
+          "category": "Done Gate",
+          "name": "The scorecard file exists at the outputs path and contains exactly one recommend",
+          "description": "The scorecard file exists at the outputs path and contains exactly one recommended focus.",
+          "command": "see out/daily-scorecard-loop/EMBED.md gate E3",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "E4",
+          "category": "Done Gate",
+          "name": "No outbound action was taken; the run log shows read-only tool use.",
+          "description": "No outbound action was taken; the run log shows read-only tool use.",
+          "command": "see out/daily-scorecard-loop/EMBED.md gate E4",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "E5",
+          "category": "Compile Integrity",
+          "name": "compiler --check passes and MANIFEST hashes match",
+          "description": "python3 compiler/compile_workflow.py registry/daily-scorecard-loop.yaml --check exits 0; MANIFEST.json artifact hashes re-verify",
+          "command": "compile_workflow.py --check; sha256sum -c MANIFEST.json",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "id": "wdsaa72725d531ff",
+  "id_note": "DRAFT placeholder id; the embed step mints the real routine id",
+  "type": "child",
+  "environment": "device",
+  "name": "Daily Scorecard Loop",
+  "prompt": "# Daily Scorecard Loop\n\nIntent: Every weekday morning, assemble yesterday's scorecard for Mike: lane metrics for LinkedIn, the GTM funnel, and site health, each measured against its target, with misses flagged and one recommended focus for the day. Read-only: it reports, it never posts, sends, or changes anything.\n\nSteps:\n1. Pull yesterday's lane metrics from the read-only sources on disk (LinkedIn lane logs, GTM funnel records, site health checks).\n2. Compare each metric to its recorded target; compute the delta, do not restate the raw number without the target.\n3. Flag every miss with the largest miss first; a miss with no recorded target is listed as UNTARGETED, not guessed.\n4. Pick one recommended focus for the day from the top miss, with the reason in one sentence.\n5. Write the scorecard to the outputs path and stop. Nothing is sent anywhere.\n\nStop and report when:\n- Every metric row shows value, target, and delta, or names the missing input.\n- Every miss is flagged with its size; untargeted metrics are labeled UNTARGETED.\n- The scorecard file exists at the outputs path and contains exactly one recommended focus.\n- No outbound action was taken; the run log shows read-only tool use.\n\nProduce:\n- scorecard markdown at ~/.rig/live/prime-aside-driver/jake/conductor/workflow-design-studio/runs/scorecard-<date>.md\n- run log line with per-metric sources and any missing inputs\n\nBoundary: read-only run. Nothing outward. Any outward action waits for a human Gate-D approval.\n",
+  "rrule": "DTSTART;TZID=America/Denver:20261027T070300\nRRULE:FREQ=WEEKLY;BYDAY=MO,TU,WE,TH,FR;BYHOUR=7;BYMINUTE=3",
+  "parent_session_id": null,
+  "project_id": null,
+  "channel_id": null,
+  "status": "draft",
+  "next_run_at": null,
+  "metadata": {
+    "origin": {
+      "type": "workflow-design-studio-compile",
+      "registry_id": "daily-scorecard-loop"
+    },
+    "memoryPath": "/Users/rig128gb/.aside/u/0/memory/routines/wdsaa72725d531ff/MEMORY.md"
+  },
+  "session_config": {
+    "model": {
+      "provider": "mimo-plan",
+      "modelId": "mimo-v2.6-pro",
+      "thinkingLevel": "medium",
+      "fastMode": false
+    },
+    "harnessId": "v1",
+    "permissionMode": "read-only",
+    "strictModelSelection": true
+  },
+  "gate_d_required": true
+}

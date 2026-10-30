@@ -1,0 +1,11 @@
+# DRAFT fragment from workflow-design-studio (append-only; lanes.yaml is gen.py input)
+# Merge under `lanes:` / `pools:`, then run gen.py to build a candidate litellm.yaml.
+lanes:
+- name: rig-scorecard-daily
+  model: rig-local-first
+  via: cliproxy
+  tier: local
+  aside: mimo-plan/mimo-v2.6-pro
+pools:
+  rig-local-first:
+  - rig-scorecard-daily

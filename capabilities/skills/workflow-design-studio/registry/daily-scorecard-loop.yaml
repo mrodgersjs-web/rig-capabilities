@@ -1,0 +1,51 @@
+# Workflow Design Studio registry entry — plain-language design card (A1 compile input)
+# Author: Mike (or an agent acting for him) in plain language. The compiler is deterministic;
+# unknown values are refused, never guessed.
+
+id: daily-scorecard-loop
+name: Daily Scorecard Loop
+owner: jake
+intent: >-
+  Every weekday morning, assemble yesterday's scorecard for Mike: lane metrics for LinkedIn,
+  the GTM funnel, and site health, each measured against its target, with misses flagged and
+  one recommended focus for the day. Read-only: it reports, it never posts, sends, or changes
+  anything.
+
+schedule:
+  freq: WEEKLY
+  days: [MO, TU, WE, TH, FR]
+  time: "07:03"
+  timezone: America/Denver
+  start_date: "2026-10-27"
+
+model:
+  aside_provider: mimo-plan
+  aside_model: mimo-v2.6-pro
+  thinking: medium
+  grokbot_lane: rig-scorecard-daily
+  grokbot_route_model: rig-local-first
+  grokbot_via: cliproxy
+  grokbot_tier: local
+  grokbot_pool: rig-local-first
+
+permissions: read-only
+
+steps:
+  - Pull yesterday's lane metrics from the read-only sources on disk (LinkedIn lane logs, GTM funnel records, site health checks).
+  - Compare each metric to its recorded target; compute the delta, do not restate the raw number without the target.
+  - Flag every miss with the largest miss first; a miss with no recorded target is listed as UNTARGETED, not guessed.
+  - Pick one recommended focus for the day from the top miss, with the reason in one sentence.
+  - Write the scorecard to the outputs path and stop. Nothing is sent anywhere.
+
+gates:
+  - Every metric row shows value, target, and delta, or names the missing input.
+  - Every miss is flagged with its size; untargeted metrics are labeled UNTARGETED.
+  - The scorecard file exists at the outputs path and contains exactly one recommended focus.
+  - No outbound action was taken; the run log shows read-only tool use.
+
+outputs:
+  - scorecard markdown at ~/.rig/live/prime-aside-driver/jake/conductor/workflow-design-studio/runs/scorecard-<date>.md
+  - run log line with per-metric sources and any missing inputs
+
+outward: false
+gate_d_required: true

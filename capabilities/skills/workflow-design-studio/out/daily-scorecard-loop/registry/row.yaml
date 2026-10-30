@@ -1,0 +1,10 @@
+# design row (SSOT: registry/registry.yaml)
+id: daily-scorecard-loop
+name: Daily Scorecard Loop
+surface: [aside-routine, grokbot-behavior, jake-loop, temporal-schedule, goalspec, jake-brain-loop, aside-chat-brief]
+schedule: "3 7 * * 1,2,3,4,5 America/Denver"
+owner: jake
+done-test: python3 compiler/compile_workflow.py registry/daily-scorecard-loop.yaml --check (and recompile MANIFEST diff must be empty)
+last-drift-check: never — run compiler/drift_doctor.py
+embed_state: draft (7 surfaces compiled, nothing installed)
+routes: {aside: mimo-plan/mimo-v2.6-pro, grokbot_lane: rig-scorecard-daily}
