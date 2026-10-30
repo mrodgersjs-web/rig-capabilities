@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-authority-outreach"
 description: "Run a clean authority sprint for a professional-service firm: linkable assets, guest-byline and expert-quote placement, digital PR, local/industry citations, and competitor link-source emulation. Use when the trigger is 'need backlinks', 'build authority', 'digital PR', or 'off-site proof'. Refuses bought links, link swaps, donor-page paid links, and press-link bursts."
+done_when:
+  - grep:capabilities/skills/rig-revenue-authority-outreach/SKILL.md:A paid placement is never
+  - grep:capabilities/skills/rig-revenue-authority-outreach/SKILL.md:never keyword-stuffed
 ---
 
 # Authority outreach sprint (clean lanes only)

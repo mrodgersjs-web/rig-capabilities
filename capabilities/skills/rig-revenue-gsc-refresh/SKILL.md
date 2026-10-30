@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-gsc-refresh"
 description: "Mine Google Search Console for cheap wins: query-gap H2 injection on top pages and average-position 3-20 near-winner sweeps. Use when the trigger is 'GSC has data', 'query gaps', 'low-hanging fruit', or 'we rank but underperform'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-gsc-refresh/SKILL.md:^## Step 3. Near-winner sweep'
+  - 'grep:capabilities/skills/rig-revenue-gsc-refresh/SKILL.md:^## Step 2. Query-gap H2 injection'
 ---
 
 # GSC refresh (one mechanism)

@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-buyer-intent-screen"
 description: "Score keyword/prompt candidates on buyer intent — 'where/how much/hire/book' beats 'how' — so content targets money, not vanity traffic. Use when the trigger is 'which keywords', 'is this keyword worth it', 'prioritize these queries', or 'buyer intent check'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-buyer-intent-screen/SKILL.md:## Step 1. Classify each candidate
+  - grep:capabilities/skills/rig-revenue-buyer-intent-screen/SKILL.md:## Step 2. Score and rank
 ---
 
 # Buyer-intent screen (one mechanism)

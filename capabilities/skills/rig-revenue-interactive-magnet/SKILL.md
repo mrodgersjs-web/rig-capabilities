@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-interactive-magnet"
 description: "Design an embedded interactive lead magnet: one input, a genuinely useful personalized output delivered before any email ask. Use when the trigger is 'interactive lead magnet', 'embed a tool in the article', 'calculator for leads', or 'value-first opt-in'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-interactive-magnet/SKILL.md:[E]mail ask AFTER the output'
+  - 'grep:capabilities/skills/rig-revenue-interactive-magnet/SKILL.md:[T]he output must be worth having with no email'
 ---
 
 # Interactive lead magnet (one mechanism)

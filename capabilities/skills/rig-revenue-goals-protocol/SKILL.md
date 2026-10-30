@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-goals-protocol"
 description: "Write a goal spec an independent evaluator can audit — Goal, Output, Acceptance, Limits, Stop-and-verify — and run the worker/evaluator loop until it passes. Use when the trigger is 'spec this task', 'done criteria', 'goal protocol', or 'how do we verify this deliverable'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-goals-protocol/SKILL.md:[S]elf-approval is not an evaluation'
+  - 'grep:capabilities/skills/rig-revenue-goals-protocol/SKILL.md:^## Step 3. Worker'
 ---
 
 # GOALS protocol (one mechanism)

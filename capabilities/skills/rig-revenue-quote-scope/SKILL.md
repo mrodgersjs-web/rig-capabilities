@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-quote-scope"
 description: "Scope, price, and quote a RIG revenue engagement for a professional-service firm: diagnostic entry offer, build pack, retainer ladder, exclusions, and an evidence-based proposal. Use when the trigger is 'quote this', 'price this', 'scope an engagement', or 'proposal for this firm'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-quote-scope/SKILL.md:[Q]ualify .say no when it fails.'
+  - 'grep:capabilities/skills/rig-revenue-quote-scope/SKILL.md:[t]he gate is the product'
 ---
 
 # Quote and scope an engagement

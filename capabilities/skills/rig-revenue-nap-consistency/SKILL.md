@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-nap-consistency"
 description: "Audit and repair name/address/phone/hours consistency across every listing surface character-by-character, because discrepancies make machines uncertain. Use when the trigger is 'NAP audit', 'citations inconsistent', 'listing cleanup', or 'name/address mismatch'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-nap-consistency/SKILL.md:^## Step 2. Character-level diff'
+  - 'grep:capabilities/skills/rig-revenue-nap-consistency/SKILL.md:[n]ever silently skip'
 ---
 
 # NAP consistency audit (one mechanism)

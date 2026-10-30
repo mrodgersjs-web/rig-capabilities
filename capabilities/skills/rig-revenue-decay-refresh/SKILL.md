@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-decay-refresh"
 description: "Repair content decay and lift near-winners: GSC query-gap injection, rank 8-20 rewrite sweep, answer-first retrofit, title differentiation, and dated refreshes. Use when the trigger is 'page stuck on page 2', 'traffic decaying', 'refresh old content', or 'lift these rankings'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-decay-refresh/SKILL.md:link or consolidate, never orphan
+  - grep:capabilities/skills/rig-revenue-decay-refresh/SKILL.md:## Step 3. Rewrite .rank 8-20 stallers.
 ---
 
 # Decay refresh and near-winner lift

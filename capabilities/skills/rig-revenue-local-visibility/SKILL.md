@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-local-visibility"
 description: "Install local search visibility for a service firm: Google Business Profile protocol, NAP consistency audit, review engine with compliance rules, and service-by-city landing pages with real differentiation. Use when the trigger is 'invisible in the local pack', 'not showing on Maps', 'GBP audit', or 'local SEO install' for a law/CPA/clinic/consulting firm."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-local-visibility/SKILL.md:[n]ever stuffed, never fake'
+  - 'grep:capabilities/skills/rig-revenue-local-visibility/SKILL.md:^## Step 2. NAP consistency'
 ---
 
 # Local visibility install

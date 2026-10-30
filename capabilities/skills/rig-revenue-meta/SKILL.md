@@ -1,6 +1,11 @@
 ---
 name: "rig-revenue-meta"
 description: "Meta-skill and router for the RIG revenue engine, distilled from a 387-video SEO/AI-content corpus. Use whenever a revenue goal touches local visibility, AI-citation and answer systems, content engines, authority building, offer/pricing design, lead capture, content refresh, competitor teardown, client onboarding, or results reporting — it routes to the right rig-revenue-* skill and agent and enforces the claim-hygiene, affiliate-disclosure, and risk contracts. Refuses link schemes, SERP flooding, and AI-detection evasion."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-meta/SKILL.md:[H]uman approval before publish, always'
+  - 'grep:capabilities/skills/rig-revenue-meta/SKILL.md:[N]on-commodity or nothing'
+  - 'grep:capabilities/skills/rig-revenue-meta/SKILL.md:[E]vidence or invisibility'
+  - 'grep:capabilities/skills/rig-revenue-meta/references/great-agent-runs.md:^## rig-revenue-director'
 ---
 
 # rig-revenue-meta — worldview, contracts, router

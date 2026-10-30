@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-competitor-teardown"
 description: "Reverse-engineer a niche or a named competitor's search strategy from public data — ranking pages, content clusters, keyword gaps, link sources — and produce a counter-strategy plan. Use when the trigger is 'entering this niche', 'losing to competitor X', 'why do they outrank us', or 'steal their strategy' (public data only)."
+done_when:
+  - grep:capabilities/skills/rig-revenue-competitor-teardown/SKILL.md:never copy link schemes
+  - grep:capabilities/skills/rig-revenue-competitor-teardown/SKILL.md:## Step 1. Gather \(public only\)
 ---
 
 # Competitor teardown

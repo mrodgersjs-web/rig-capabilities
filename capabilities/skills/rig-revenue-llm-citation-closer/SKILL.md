@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-llm-citation-closer"
 description: "Measure where a brand is absent from AI answers per model for its buyer prompts, then close each gap with one targeted governed page and re-measure. Use when the trigger is 'cited nowhere in ChatGPT', 'per-model visibility', 'citation share', or 'LLM brand monitor'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-llm-citation-closer/SKILL.md:^## Step 3. Close the weakest gaps first'
+  - 'grep:capabilities/skills/rig-revenue-llm-citation-closer/SKILL.md:[R]oute through rig-revenue-seo-council and rig-revenue-publish-gate'
 ---
 
 # LLM Citation Closer (one mechanism)

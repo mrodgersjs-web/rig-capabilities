@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-gbp-protocol"
 description: "Run the Google Business Profile protocol for a service firm: truthful name/categories/services, every field completed, real photos, weekly posts, and staged edits — with the compliance rules that keep the profile out of suspension. Use when the trigger is 'GBP setup', 'optimize the Business Profile', or 'Google Business Profile audit'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-gbp-protocol/SKILL.md:real hours \(never inflated
+  - grep:capabilities/skills/rig-revenue-gbp-protocol/SKILL.md:Name = legal/registered name exactly
 ---
 
 # GBP protocol (one mechanism)

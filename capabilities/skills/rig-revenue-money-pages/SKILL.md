@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-money-pages"
 description: "Build one dedicated money page per service/feature/use case with the conversion framework: problem+location headline, who-it's-for, proof, FAQ, CTA x3 — plus comparison and decision pages. Use when the trigger is 'build the service pages', 'money pages', 'this traffic isn't converting', or 'decision pages for AI answers'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-money-pages/SKILL.md:[N]othing ships through rig-revenue-publish-gate without it'
+  - 'grep:capabilities/skills/rig-revenue-money-pages/SKILL.md:^## Step 4. Compliance pass'
 ---
 
 # Money pages (one mechanism)

@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-new-client-sprint"
 description: "Run the first 30 days for a new professional-service client: index/discovery fixes, local trust install, first governed content batch, review engine, and measurement setup — with publish-ramp discipline. Use when the trigger is 'first 30 days', 'new client onboarding', or 'kick off this firm'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-new-client-sprint/SKILL.md:^## Step 4. Days 25-30'
+  - 'grep:capabilities/skills/rig-revenue-new-client-sprint/SKILL.md:^## Step 5. Day 30 report'
 ---
 
 # New-client 30-day sprint

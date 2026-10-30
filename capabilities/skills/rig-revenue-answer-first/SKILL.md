@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-answer-first"
 description: "Restructure any page or draft so an AI answer can quote it and a human instantly gets the point: question headings, 1-2 sentence standalone link-free answers, detail below, and the pulled-out-of-context self-test. Use when the trigger is 'make this citable', 'answer-first', 'structure for AI answers', or 'why isn't this page getting cited'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-answer-first/SKILL.md:every important heading is followed
+  - grep:capabilities/skills/rig-revenue-answer-first/SKILL.md:CLAIM.{1,2}Hc2Q4BH4G6k
 ---
 
 # Answer-first structure (one mechanism)

@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-forced-variables"
 description: "Make templated content non-commodity by injecting the firm's own proprietary variables — their data, tests, first-hand cases, specific mistakes, what-they-tell-every-client. Use when the trigger is 'make this non-commodity', 'forced variables', 'this reads like everything else', or before any templated content batch."
+done_when:
+  - grep:capabilities/skills/rig-revenue-forced-variables/SKILL.md:variable must change the ANSWER, not decorate it
+  - grep:capabilities/skills/rig-revenue-forced-variables/SKILL.md:## Step 4. Vary honestly, never deceptively
 ---
 
 # Forced-variables injection (one mechanism)

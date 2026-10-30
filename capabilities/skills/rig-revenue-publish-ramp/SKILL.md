@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-publish-ramp"
 description: "Set and hold the publishing ramp: 1 to 5 to 10 items per week over time, never a velocity spike, with drafts-first human approval at every step. Use when the trigger is 'how much should we publish', 'publishing cadence', 'ramp up content', or before any batch publish."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-publish-ramp/SKILL.md:[n]ever blind auto-publish'
+  - 'grep:capabilities/skills/rig-revenue-publish-ramp/SKILL.md:^## Step 2. Consistency over volume'
 ---
 
 # Publish ramp (one mechanism)

@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-monthly-report"
 description: "Produce the governed monthly results report: measured visibility, AI-citation share, local pack and review deltas, content shipped with gate records, leads and funnel math, plus next-month plan. Use when the trigger is 'monthly report', 'reporting', 'what moved', or 'client results review'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-monthly-report/SKILL.md:[M]easure .never estimate.'
+  - 'grep:capabilities/skills/rig-revenue-monthly-report/SKILL.md:[C]orpus figures never appear as client results'
 ---
 
 # Monthly results report

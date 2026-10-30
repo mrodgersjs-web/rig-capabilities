@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-lead-capture"
 description: "Convert existing traffic into leads with value-first capture: an embedded interactive lead magnet or approved download delivered before any email ask, inside governed content. Use when the trigger is 'traffic but no leads', 'lead capture', 'opt-in funnel', or 'convert visitors'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-lead-capture/SKILL.md:[d]on.t gate people who are ready'
+  - 'grep:capabilities/skills/rig-revenue-lead-capture/SKILL.md:[n]ever dressed as measured results'
 ---
 
 # Value-first lead capture
