@@ -1,0 +1,44 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T17:10:03Z",
+  "signer": "codex",
+  "scope": "Machine-verifiable three-tier skill hierarchy audit and fail-closed generator gate; no route regeneration or installed-harness promotion",
+  "source_sha256": {
+    "scripts/repair_skill_hierarchy.py": "2ae9f82776a3137281653776d5cceb42fc1804cf4bc4d180a12f2f3ed8d63485",
+    "tests/test_skill_hierarchy.py": "b860fad24d071a913b7ce65bd2767a8e71b2c60a23555a6f17c41d9742cdfb56"
+  },
+  "audit": {
+    "command": "python3 scripts/repair_skill_hierarchy.py --audit",
+    "exit_code": 1,
+    "status": "RED",
+    "canonical_skills": 231,
+    "covered": 169,
+    "orphans": 62,
+    "normalized_levels": {"meta": 15, "skill": 2122, "subskill": 240},
+    "route_depth_max": 3,
+    "normalized_nodes": 2377,
+    "normalized_edges": 2362,
+    "physical_aliases": 26,
+    "shadowed_top_level_assignments": 71,
+    "multiple_owners": 0,
+    "bad_level_edges": 0,
+    "orphan_families": ["jev-everywhere", "prompt-router", "rig-revenue-*", "web-*", "when-designing-websites"]
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_skill_hierarchy tests.test_mission_composition tests.test_skill_agent_quality_audit", "exit_code": 0, "result": "48 tests passed"},
+    {"command": "python3 -m py_compile scripts/repair_skill_hierarchy.py tests/test_skill_hierarchy.py", "exit_code": 0, "result": "Passed"},
+    {"command": "python3 scripts/repair_skill_hierarchy.py --check", "exit_code": 1, "result": "RED on 62 canonical orphans before applying writes"},
+    {"command": "graft check", "exit_code": 0, "result": "Wiring graph in sync after local rebuild; deep meaning layer not built"},
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary", "exit_code": 0, "result": "255 assets; 20 spec-ready; zero outcome-verified and promotable"}
+  ],
+  "residuals": [
+    "Sixty-two canonical skills are not routed from the current when-* table set; new website-design and revenue families need explicit owner reconciliation",
+    "The normalized graph is audited but the generator has not yet been converted to emit normalized routing surfaces and a normalized manifest",
+    "Existing routing tables contain domain misclassifications, including security-review, react-patterns, and sql-optimization-patterns under when-shipping-code",
+    "The live asset inventory grew during this work; counts are a timestamped snapshot, not stable estate certification",
+    "No skill or agent has an independently verified held-out outcome score above 0.90"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

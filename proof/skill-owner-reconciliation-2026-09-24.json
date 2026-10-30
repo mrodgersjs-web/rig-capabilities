@@ -1,0 +1,49 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T17:24:17Z",
+  "signer": "codex",
+  "scope": "Canonical skill owner reconciliation for Jev, prompt routing, revenue, and web-design families; no generated-route apply, install, or asset outcome promotion",
+  "source_sha256": {
+    "scripts/repair_skill_hierarchy.py": "e7f1eb932941e20e2116268a36e3e266eab180cbb0ad62718e97fdf458ca0a53",
+    "tests/test_skill_hierarchy.py": "8226c3dadf52caf1336b213d13bf37ab69811f5bc64f310e19f98621220df124",
+    "capabilities/skills/when-building-or-fixing-agents/references/routing.md": "a14b01e00701f8219966580167eed30bb1c3303347d64aec2e51b02d2d2b6f03",
+    "capabilities/skills/when-selling-or-running-gtm/references/routing.md": "d4f0cab8d287012cb612662591891ff4cb2e8168146a50d19a582f0c6adda36d",
+    "capabilities/skills/when-designing-websites/references/routing.md": "dcfc4e30b0ec41615b4b248a411ee97d616add1c42c413a3cdf539963991eaf9",
+    "capabilities/skills/rig-revenue-meta/SKILL.md": "9e7e25efad2fa260ac52cd0f880e96740a88101650401c6b23df0d5be49137fd",
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "62a258cdb4829e225a7b76c9eb67af6c125532748db8508441fdcae8c8a1badb"
+  },
+  "hierarchy_audit": {
+    "command": "python3 scripts/repair_skill_hierarchy.py --audit",
+    "exit_code": 1,
+    "overall_status": "RED",
+    "structural_status": "PASS",
+    "materialized_status": "DRIFT",
+    "canonical_skills": 231,
+    "covered": 231,
+    "orphans": 0,
+    "semantic_levels": {"meta": 16, "skill": 2135, "subskill": 288},
+    "route_depth_max": 3,
+    "physical_aliases": 26,
+    "shadowed_assignments": 71,
+    "multiple_owners": 0,
+    "generated_paths_drifted": 34,
+    "authored_meta_skill_rewrites_protected": 15
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_skill_hierarchy tests.test_skill_agent_quality_audit tests.test_mission_composition", "exit_code": 0, "result": "52 tests passed"},
+    {"command": "/Users/rig128gb/.hermes/node/bin/node /Users/rig128gb/.aside/u/0/skills/builtin/skill-creator/scripts/validate-frontmatter.mjs capabilities/skills/rig-revenue-meta/SKILL.md", "exit_code": 0, "result": "Frontmatter valid"},
+    {"command": "python3 -m py_compile scripts/repair_skill_hierarchy.py tests/test_skill_hierarchy.py", "exit_code": 0, "result": "Passed"},
+    {"command": "git diff --check -- <scoped files>", "exit_code": 0, "result": "Passed on tracked changes; untracked files checked by other validators"},
+    {"command": "bin/rig-capabilities test rig-revenue-meta", "exit_code": 1, "result": "No registered runnable done-tests: ran 0; this asset is not outcome verified"}
+  ],
+  "residuals": [
+    "The 34 generated routing and manifest paths still differ; no broad apply was run because it would replace 15 authored meta-skill instructions",
+    "Source owner coverage does not prove that OMP, Prime, Aside, and Codex installed copies are current or that they execute the selected route",
+    "The legacy hierarchy generator still emits a raw graph in hierarchy.json; normalized three-tier output is only audited, not materialized",
+    "The strict mission-router development matrix was 24/30 on the earlier version, below the above-0.90 bar, and lacks a current-version holdout",
+    "The canonical quality audit has 255 assets, 20 spec-ready, zero outcome-verified, and zero promotable"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}
