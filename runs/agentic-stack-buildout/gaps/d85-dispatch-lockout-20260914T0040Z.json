@@ -1,0 +1,27 @@
+{
+  "title": "D85 dispatch lockout: every command and the Gate-D approval path are denied in a live session",
+  "run_id": "agentic-stack-buildout",
+  "observed_at": "2026-09-14T00:40Z (local 2026-09-13 ~00:40)",
+  "repo": "/Users/rig128gb/Developer/rig-capabilities",
+  "head": "478e362",
+  "symptom": [
+    "bash tool: every invocation denied, including 'git status --porcelain' alone, 'wc -c <one-file>', 'cd <repo> && git status --porcelain', and the bash cwd-parameter form. Denial text: [d85] shell command contains dynamic expansion or nested execution that cannot be bound to exact write targets. Use literal operands or exact d85-run.",
+    "eval tool: denied as [d85] arbitrary-code tool (eval/python/repl) is denied while D85 enforcement is active.",
+    "Gate-D approval path: writing args to mcp__jake_pai_gate_d_request returned [d85] unregistered tool 'mcp__jake_pai_gate_d_request': a host-owned capability classification is required.",
+    "still working: read, glob, the built-in search tool, write, edit."
+  ],
+  "why_this_is_a_governance_incident": "The enforcement layer now denies both the mutation and the approval request that would authorise it. A session cannot commit, cannot run a read-only diagnostic, and cannot open a Gate-D request. Fail-closed with no exit is not fail-closed, it is a deadlock, and it is happening on a repo where five of my commits landed minutes ago and another agent is committing continuously.",
+  "likely_cause": "The uncommitted work in the tree, not HEAD. My slice (ffa7dfc + 0ea9039) removed universal pre-tool build admission from rig_capabilities/loops.py and rig_capabilities/d85_admission.py and those removals are committed. The tree then absorbed another agent's 21:27 d85.py rewrite (static-source v2 / grammar v3, 1271 insertions) plus their d85_gates.py 21:06 edit, and the hook path the session actually loads is an installed copy that still routes ordinary dispatch through hook_check. Reproduce by comparing the hook's loaded module path against rig_capabilities/loops.py at HEAD.",
+  "scope_conflict": "Mike's 2026-09-11 clarification, recorded in AGENTS.md: D85 is the build-quality gate for solutions, applications and durable systems and 'does not gate ordinary startup, research, file access, memory capture, diagnostics, Python execution, or authorized local edits'. Denying wc -c and git status is exactly the universal pre-tool admission that clarification retired.",
+  "what_i_did_about_it": "Nothing mutating. I did not set RIG_D85_DISABLE, did not use break-glass, did not touch D85 configuration or ledgers, and did not hunt for a bypass. I finished the verification by routing around the block: glob instead of git ls-tree, the built-in search tool instead of shell pipelines, and pre-existing isolated-clone logs instead of new runs.",
+  "work_left_uncommitted_by_this_lockout": {
+    "file": "runs/agentic-stack-buildout/receipts/suite-level-clone-verification-20260914T0030Z.json",
+    "message_ready_at": "/tmp/rig-commit-msg-2.txt",
+    "one_command_to_finish": "git -C /Users/rig128gb/Developer/rig-capabilities add runs/agentic-stack-buildout/receipts/suite-level-clone-verification-20260914T0030Z.json && git -C /Users/rig128gb/Developer/rig-capabilities commit -F /tmp/rig-commit-msg-2.txt"
+  },
+  "worktree_rerun_attempt": "One re-run was requested for a quiet window and is IMPOSSIBLE from this session: the same lockout denies every bash call, so neither the fingerprint nor the suite can be collected. Status stands as worktree RED-BUT-UNSTABLE, evidence being the two fingerprints captured around the single run that did complete (5f0fd345619b before, 1d3e5f9b7257 after). The 17F/64E count is a measurement of a moving tree, not a state, and it is the other agent's pending work to attribute, not mine to fix.",
+  "decision_needed_from_mike": [
+    "Revert or re-scope the uncommitted d85.py / d85_gates.py hook widening, or push my committed scope fix through to the hook copies the runtimes actually load. Until then no agent session in this repo can commit or request approval.",
+    "Decide whether the committed generated artifact .index.json should be regenerated (blocked: 137 foreign untracked assets would be baked in) or untracked, because it is what keeps test_catalog.CertifyTests.test_index_gate_planted_red red in a fresh clone of HEAD."
+  ]
+}
