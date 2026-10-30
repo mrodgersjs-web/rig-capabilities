@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIG Design Studio — Double Diamond Stage View</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Hanken+Grotesk:ital,wght@0,300..700;1,300..700&amp;family=JetBrains+Mono:wght@300;400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-fixed-dim": "#f6be39",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#efe7df",
+            "primary": "#785600",
+            "inverse-on-surface": "#f8efe8",
+            "on-error-container": "#93000a",
+            "surface-variant": "#e9e1da",
+            "primary-container": "#986d00",
+            "on-secondary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "primary-fixed": "#ffdea6",
+            "surface": "#fff8f3",
+            "secondary": "#795900",
+            "tertiary-fixed": "#d2e4ff",
+            "inverse-primary": "#f7bd48",
+            "background": "#fff8f3",
+            "primary-fixed-dim": "#f7bd48",
+            "on-primary-fixed-variant": "#5d4200",
+            "inverse-surface": "#34302b",
+            "secondary-container": "#ffc641",
+            "surface-container-lowest": "#ffffff",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#001c37",
+            "error": "#ba1a1a",
+            "surface-container": "#f5ece5",
+            "on-tertiary-fixed-variant": "#004880",
+            "on-secondary-fixed-variant": "#5c4300",
+            "on-tertiary-container": "#fdfcff",
+            "on-background": "#1e1b17",
+            "tertiary-container": "#3477bc",
+            "outline-variant": "#d3c4af",
+            "surface-container-highest": "#e9e1da",
+            "on-primary-fixed": "#271900",
+            "tertiary": "#085ea2",
+            "surface-container-low": "#fbf2eb",
+            "on-surface-variant": "#4f4535",
+            "on-primary-container": "#fffbff",
+            "on-secondary-container": "#715300",
+            "tertiary-fixed-dim": "#a1c9ff",
+            "surface-dim": "#e1d9d1",
+            "surface-bright": "#fff8f3",
+            "secondary-fixed": "#ffdfa0",
+            "surface-tint": "#7b5800",
+            "on-error": "#ffffff",
+            "on-surface": "#1e1b17",
+            "outline": "#817563",
+            "on-secondary-fixed": "#261a00"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-lg": "1.5rem",
+            "space-md": "1rem",
+            "margin": "1.5rem",
+            "space-xs": "0.25rem",
+            "space-sm": "0.5rem",
+            "space-xl": "2rem",
+            "gutter": "1rem"
+          },
+          "fontFamily": {
+            "label-sm": ["JetBrains Mono"],
+            "headline-sm": ["EB Garamond"],
+            "body-sm": ["Hanken Grotesk"],
+            "body-md": ["Hanken Grotesk"],
+            "headline-md": ["EB Garamond"],
+            "label-md": ["JetBrains Mono"],
+            "label-lg": ["JetBrains Mono"],
+            "display-lg": ["EB Garamond"],
+            "body-lg": ["Hanken Grotesk"],
+            "headline-lg": ["EB Garamond"],
+            "display-sm": ["EB Garamond"]
+          },
+          "fontSize": {
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "500" }],
+            "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "display-sm": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 350, 'GRAD' 0, 'opsz' 20;
+      font-size: 18px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .dot-matrix-bg {
+      background-size: 24px 24px;
+      background-image: radial-gradient(circle, rgba(138, 126, 110, 0.16) 1px, transparent 1px);
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(184, 134, 11, 0.2);
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(184, 134, 11, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface antialiased h-screen w-screen overflow-hidden flex flex-col font-body-md select-none">
+<!-- ========================================================================= -->
+<!-- 1. TOP NAV BAR (Desktop Studio Header)                                   -->
+<!-- ========================================================================= -->
+<header class="flex justify-between items-center h-14 w-full px-space-lg border-b border-outline-variant/25 bg-surface-container-low dark:bg-inverse-surface z-40 shrink-0">
+<!-- Left Section: Studio Brand and Project Context -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-semibold text-primary tracking-[0.25em]">RIG DESIGN STUDIO</span>
+<span class="h-4 w-[1px] bg-outline-variant/60 ml-1"></span>
+</div>
+<div class="flex items-center gap-2 pl-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-normal italic">
+          Design a launch page for a Denver HR leaders group
+        </span>
+<span class="px-2 py-0.5 rounded text-label-sm font-label-sm bg-secondary-fixed/50 text-on-secondary-fixed border border-primary/20">Active Workspace</span>
+</div>
+</div>
+<!-- Center Section: Primary Navigation Tabs (Board, Double Diamond, Mockups) -->
+<nav class="flex items-center bg-surface-container-high/60 p-1 rounded-full border border-outline-variant/30">
+<a class="px-4 py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#board">
+        Board
+      </a>
+<a class="px-4 py-1 rounded-full font-label-md text-label-md bg-on-surface text-surface shadow-sm font-medium transition-all" href="#doublediamond">
+        Double Diamond
+      </a>
+<a class="px-4 py-1 rounded-full font-label-md text-label-md text-on-surface-variant hover:text-on-surface transition-colors" href="#mockups">
+        Mockups
+      </a>
+</nav>
+<!-- Right Section: Trailing Actions and Architect Avatar -->
+<div class="flex items-center gap-space-sm">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary text-primary hover:bg-primary/10 transition-colors font-label-md text-label-md font-medium active:scale-[0.98]">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>+ Artifact</span>
+</button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md hover:bg-surface-variant/40 transition-colors">
+        Reset board
+      </button>
+<div class="h-4 w-[1px] bg-outline-variant/50 mx-1"></div>
+<!-- Trailing Icon Actions -->
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Tune Environment">
+<span class="material-symbols-outlined" data-icon="tune">tune</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Version History">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Share Project">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+</button>
+</div>
+<!-- Avatar Badge -->
+<div class="ml-2 pl-2 border-l border-outline-variant/40 flex items-center">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-label-md text-label-md font-semibold tracking-normal ring-1 ring-primary/30" title="Lead Systems Architect profile avatar">
+          SA
+        </div>
+</div>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE: CANVAS (4 RAILS) + FIXED SYSTEM INSPECTOR (340px)          -->
+<!-- ========================================================================= -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- CANVAS WRAPPER (Left + Center Rails) -->
+<main class="flex-1 flex flex-col min-w-0 mr-[340px] bg-surface dot-matrix-bg overflow-hidden relative">
+<!-- 2. DOUBLE DIAMOND BANNER STRIP -->
+<section class="w-full bg-surface-container/70 border-b border-outline-variant/30 px-space-lg py-2.5 backdrop-blur-sm z-20 shrink-0">
+<div class="max-w-[1300px] mx-auto flex flex-col gap-1.5">
+<!-- Diamond Geometry SVG Visualization Strip -->
+<div class="relative h-11 w-full flex items-center justify-between">
+<svg class="absolute inset-0 w-full h-full pointer-events-none" preserveaspectratio="none" viewbox="0 0 1000 48">
+<!-- Grid lines / axes -->
+<line stroke="rgba(184, 134, 11, 0.15)" stroke-dasharray="2 4" stroke-width="1" x1="0" x2="1000" y1="24" y2="24"></line>
+<!-- First Diamond: DISCOVER (Diverge) & DEFINE (Converge) -->
+<!-- Diverge (0 to 250) -->
+<polyline fill="rgba(184, 134, 11, 0.03)" points="20,24 250,3 250,45 20,24" stroke="#B8860B" stroke-dasharray="3 3" stroke-width="1.25"></polyline>
+<!-- Converge (250 to 480) -->
+<polyline fill="rgba(184, 134, 11, 0.05)" points="250,3 480,24 250,45" stroke="#B8860B" stroke-width="1.5"></polyline>
+<!-- Bridge point -->
+<circle cx="480" cy="24" fill="#B8860B" r="3"></circle>
+<line stroke="#B8860B" stroke-width="1.5" x1="480" x2="520" y1="24" y2="24"></line>
+<circle cx="520" cy="24" fill="#B8860B" r="3"></circle>
+<!-- Second Diamond: DEVELOP (Diverge) & DELIVER (Converge) -->
+<!-- Diverge (520 to 750) -->
+<polyline fill="rgba(184, 134, 11, 0.04)" points="520,24 750,3 750,45 520,24" stroke="#B8860B" stroke-width="1.25"></polyline>
+<!-- Converge (750 to 980) -->
+<polyline fill="rgba(184, 134, 11, 0.02)" points="750,3 980,24 750,45" stroke="#B8860B" stroke-dasharray="3 3" stroke-width="1.25"></polyline>
+</svg>
+<!-- Stage Labels positioned over the 4 diamond quadrants -->
+<div class="relative z-10 w-full grid grid-cols-4 px-4 text-center">
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-[0.2em] text-on-surface">1. DISCOVER</span>
+<span class="font-label-sm text-[9px] text-outline px-1 rounded border border-outline-variant/30">DIVERGE</span>
+</div>
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-[0.2em] text-on-surface">2. DEFINE</span>
+<span class="font-label-sm text-[9px] text-outline px-1 rounded border border-outline-variant/30">CONVERGE</span>
+</div>
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-[0.2em] text-primary font-bold">3. DEVELOP</span>
+<span class="font-label-sm text-[9px] text-primary px-1 rounded bg-secondary-fixed/40 border border-primary/30">CURRENT</span>
+</div>
+<div class="flex items-center justify-center gap-2">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm font-semibold tracking-[0.2em] text-outline">4. DELIVER</span>
+<span class="font-label-sm text-[9px] text-outline px-1 rounded border border-outline-variant/30">CONVERGE</span>
+</div>
+</div>
+</div>
+<!-- Bottom Banner Subnote -->
+<div class="flex items-center justify-between pt-1 border-t border-outline-variant/20 px-2 text-on-surface-variant font-label-sm text-[10px]">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[14px] text-primary">drag_indicator</span>
+<span>Board: Drag cards between phases to re-stage them. Deviation index tracks drift from canonical design tokens.</span>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-primary font-medium">Phase Delta: +6 Total Deviations</span>
+<span class="h-2.5 w-[1px] bg-outline-variant"></span>
+<span>Stage Target: 100% Fidelity</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. FOUR EQUAL RAILS CONTAINER -->
+<div class="flex-1 p-space-md overflow-x-auto overflow-y-hidden">
+<div class="grid grid-cols-4 gap-3.5 h-full min-w-[1040px]">
+<!-- ------------------------------------------------------------- -->
+<!-- RAIL 1: DISCOVER (4 Artifacts)                                -->
+<!-- ------------------------------------------------------------- -->
+<div class="flex flex-col h-full bg-surface-container/50 border border-outline-variant/30 rounded-xl overflow-hidden backdrop-blur-xs">
+<!-- Rail Header -->
+<div class="p-3 border-b border-outline-variant/25 bg-surface-container-high/40">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-semibold text-primary tracking-widest">DISCOVER · 4 ARTIFACTS</span>
+<span class="w-2 h-2 rounded-full bg-primary/70"></span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface italic font-normal">
+                "What is the real human problem?"
+              </p>
+</div>
+<!-- Cards Scroll Area -->
+<div class="flex-1 p-2.5 overflow-y-auto space-y-2.5 custom-scroll">
+<!-- Card 1.1 (Selected / Inspected) -->
+<div class="bg-surface-container-lowest border-2 border-primary rounded-xl p-3 shadow-sm hover:shadow-md transition-all cursor-pointer relative ring-2 ring-primary/10">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Synthesis</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Approved</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded font-semibold">dev +2</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Leadership Persona Archetypes &amp; Value Drivers
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Mapped across 24 executive director interviews in the Mountain West territory.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-014 · 4 archetypes</span>
+<span class="font-mono text-primary font-medium">Inspected →</span>
+</div>
+</div>
+<!-- Card 1.2 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Problem Framing</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In-Review</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Can we name the specific human we intend to help?
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Clarifying covenant requirements between solo HR heads and multi-state CHROs.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-002 · Inquiry node</span>
+<span>Updated 2h ago</span>
+</div>
+</div>
+<!-- Card 1.3 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">User Persona</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Approved</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded">dev +1</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Maya — VP People, 180-person SaaS, Denver
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Primary anchor archetype: needs peer-vetted compensation comps, not vendor pitches.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-008 · Core Avatar</span>
+<span>Canonical</span>
+</div>
+</div>
+<!-- Card 1.4 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Discovery</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Approved</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded font-semibold">dev +2</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Field Note: 14 Cohort Stakeholder Interviews
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Key takeaway: high fatigue with large national conferences; craving intimate dinners.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-011 · Qualitative</span>
+<span>Field log</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ------------------------------------------------------------- -->
+<!-- RAIL 2: DEFINE (3 Artifacts)                                  -->
+<!-- ------------------------------------------------------------- -->
+<div class="flex flex-col h-full bg-surface-container/50 border border-outline-variant/30 rounded-xl overflow-hidden backdrop-blur-xs">
+<div class="p-3 border-b border-outline-variant/25 bg-surface-container-high/40">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-semibold text-secondary tracking-widest">DEFINE · 3 ARTIFACTS</span>
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface italic font-normal">
+                "What exact standard must we meet?"
+              </p>
+</div>
+<div class="flex-1 p-2.5 overflow-y-auto space-y-2.5 custom-scroll">
+<!-- Card 2.1 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Framing</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In-Review</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded">dev +1</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  HMW make a launch page that feels like Denver HR peers, not a vendor?
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Eliminating generic B2B SaaS tropes: no stock illustration, no countdown timers.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-019 · Strategic HMW</span>
+<span>Review pending</span>
+</div>
+</div>
+<!-- Card 2.2 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">IA &amp; Flow</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In-Review</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Registration Onboarding &amp; Cohort Screening Funnel
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Two-tier friction model: quick credential intake followed by vetting question prompt.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-022 · 3-step sequence</span>
+<span>Flowchart</span>
+</div>
+</div>
+<!-- Card 2.3 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Strategy</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-outline">Draft</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded">dev +1</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Denver Executive Salon Positioning Statement
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  "The confidential back-channel for frontline human leaders steering 100+ headcounts."
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-026 · Manifesto</span>
+<span>V1 Draft</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ------------------------------------------------------------- -->
+<!-- RAIL 3: DEVELOP (4 Artifacts) - CURRENT FOCUS                  -->
+<!-- ------------------------------------------------------------- -->
+<div class="flex flex-col h-full bg-surface-container/50 border-2 border-primary/40 rounded-xl overflow-hidden backdrop-blur-xs relative shadow-xs">
+<div class="p-3 border-b border-outline-variant/30 bg-secondary-fixed/20">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-semibold text-primary tracking-widest">DEVELOP · 4 ARTIFACTS</span>
+<span class="px-1.5 py-0.2 rounded text-[9px] font-label-sm bg-primary text-on-primary font-medium">IN FOCUS</span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface italic font-normal">
+                "How do we express the covenant?"
+              </p>
+</div>
+<div class="flex-1 p-2.5 overflow-y-auto space-y-2.5 custom-scroll">
+<!-- Card 3.1 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Visual System</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">Active</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded font-bold">dev +3</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Variant B — Light lead-magnet theme
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Paper-weight editorial canvas (#FAF7F2), goldenrod rules, and EB Garamond headline scales.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-031 · Style Candidate</span>
+<span class="text-primary font-medium">Dominant</span>
+</div>
+</div>
+<!-- Card 3.2 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">System Assets</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-outline">Draft</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded font-bold">dev +3</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Hero Visual System &amp; Editorial Monograms
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Custom ligature pairings for "DHR" (Denver Human Resources) stamped in gilded hairlines.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-033 · Typography Kit</span>
+<span>Asset Bundle</span>
+</div>
+</div>
+<!-- Card 3.3 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Content Strategy</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In-Review</span>
+<span class="ml-1 font-label-sm text-label-sm text-primary px-1 bg-secondary-fixed/50 rounded">dev +1</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Keynote &amp; Executive Roundtable Curriculum
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Four core salon topics: remote equity audits, executive retention, and 2025 AI work policies.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-038 · Syllabus spec</span>
+<span>Editorial Copy</span>
+</div>
+</div>
+<!-- Card 3.4 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">UI Spec</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-outline">Draft</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Cohort Testimonial &amp; Peer Vouch Grid Component
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Asymmetric layout showing quotes from anonymous local series-B founders and CHROs.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-042 · Component Node</span>
+<span>Spec v0.4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- ------------------------------------------------------------- -->
+<!-- RAIL 4: DELIVER (3 Artifacts)                                 -->
+<!-- ------------------------------------------------------------- -->
+<div class="flex flex-col h-full bg-surface-container/50 border border-outline-variant/30 rounded-xl overflow-hidden backdrop-blur-xs">
+<div class="p-3 border-b border-outline-variant/25 bg-surface-container-high/40">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-label-sm font-semibold text-outline tracking-widest">DELIVER · 3 ARTIFACTS</span>
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+</div>
+<p class="font-headline-sm text-headline-sm text-on-surface italic font-normal">
+                "Is it production-ready and true?"
+              </p>
+</div>
+<div class="flex-1 p-2.5 overflow-y-auto space-y-2.5 custom-scroll">
+<!-- Card 4.1 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Handoff</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary-container"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">In-Progress</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Dev handoff — launch page build spec (Variant B)
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Complete Next.js/Tailwind module breakdown with exact 4px grid interval enforcement.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-049 · Engineering Repo</span>
+<span>Synchronized</span>
+</div>
+</div>
+<!-- Card 4.2 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">Tokens</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">Verified</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Production Typography &amp; Goldenrod Token Export
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Webfont fallbacks configured; token JSON validated against CSS variables tree.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-051 · Token Export</span>
+<span class="text-primary font-medium">Canonical</span>
+</div>
+</div>
+<!-- Card 4.3 -->
+<div class="bg-surface border border-outline-variant/35 rounded-xl p-3 shadow-xs hover:border-primary/50 transition-all cursor-pointer">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline px-1.5 py-0.5 bg-surface-container-high rounded border border-outline-variant/30">QA Audit</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+<span class="font-label-sm text-label-sm text-outline">Pending</span>
+<span class="ml-1 font-label-sm text-label-sm text-outline px-1 bg-surface-variant rounded">dev 0</span>
+</div>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface mb-1 leading-snug">
+                  Accessible Contrast &amp; Screen-Reader Verification
+                </h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+                  Confirming WCAG AAA ratios for gold on cream and near-black text legibility.
+                </p>
+<div class="mt-2.5 pt-2 border-t border-outline-variant/20 flex items-center justify-between text-on-surface-variant font-label-sm text-[10px]">
+<span>ART-055 · Compliance</span>
+<span>Scheduled</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Floating Bottom Tool Shelf (Dock) -->
+<aside aria-label="Canvas Tool Shelf" class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-surface-container border border-outline-variant/40 rounded-2xl shadow-lg px-3 py-1.5 flex items-center gap-1.5 backdrop-blur-md z-30">
+<button class="w-9 h-9 flex items-center justify-center rounded-xl bg-surface text-primary shadow-xs border border-outline-variant/40" title="Select Tool (V)">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Hand Pan Tool (H)">
+<span class="material-symbols-outlined text-[18px]">pan_tool</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Add Artifact Card (N)">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+</button>
+<button class="w-9 h-9 flex items-center justify-center rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors" title="Connect Phases (C)">
+<span class="material-symbols-outlined" data-icon="polyline">polyline</span>
+</button>
+<div class="h-5 w-[1px] bg-outline-variant/40 mx-1"></div>
+<span class="font-label-sm text-[10px] text-outline px-1">ZOOM 100%</span>
+</aside>
+</main>
+<!-- ========================================================================= -->
+<!-- 4. RIGHT SIDE PANEL: SYSTEM INSPECTOR (Fixed 340px)                       -->
+<!-- ========================================================================= -->
+<aside class="fixed right-0 top-14 bottom-0 w-[340px] flex flex-col justify-between p-space-md border-l border-outline-variant/25 bg-surface-container dark:bg-inverse-surface z-30">
+<!-- Top Inspector Header & Tab Rail -->
+<div class="space-y-4">
+<!-- Inspector Header -->
+<div class="border-b border-outline-variant/25 pb-3">
+<div class="flex items-center justify-between mb-1">
+<span class="font-label-sm text-[10px] font-semibold text-primary tracking-widest">RIG TOKEN MANIFEST · v2.4</span>
+<span class="font-label-sm text-[10px] px-2 py-0.5 bg-surface text-on-surface-variant rounded border border-outline-variant/40">64px Grid Active</span>
+</div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-semibold">
+            System Inspector
+          </h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+            Stage view v2.4 · 4 Stages Active
+          </p>
+</div>
+<!-- 4-Tab Rail -->
+<div class="grid grid-cols-4 gap-1 p-1 bg-surface-container-high rounded-lg border border-outline-variant/25">
+<button class="bg-secondary-fixed/30 dark:bg-secondary-container/20 text-primary dark:text-primary-fixed border-l-2 border-primary rounded-DEFAULT px-space-sm py-1.5 font-label-md text-center flex flex-col items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="account_tree">account_tree</span>
+<span class="text-[10px]">Artifacts</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:bg-surface-variant/30 px-space-sm py-1.5 rounded-DEFAULT font-label-md transition-colors text-center flex flex-col items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="palette">palette</span>
+<span class="text-[10px]">Tokens</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:bg-surface-variant/30 px-space-sm py-1.5 rounded-DEFAULT font-label-md transition-colors text-center flex flex-col items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="polyline">polyline</span>
+<span class="text-[10px]">Connect</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:text-on-surface hover:bg-surface-variant/30 px-space-sm py-1.5 rounded-DEFAULT font-label-md transition-colors text-center flex flex-col items-center gap-0.5">
+<span class="material-symbols-outlined text-[16px]" data-icon="schedule">schedule</span>
+<span class="text-[10px]">History</span>
+</button>
+</div>
+<!-- System Palette: 5 Registered Tokens -->
+<div class="bg-surface rounded-xl p-3 border border-outline-variant/30 space-y-2">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-outline font-medium">Canonical Palette</span>
+<span class="font-label-sm text-[10px] text-primary">5 Tokens</span>
+</div>
+<div class="grid grid-cols-5 gap-1.5 pt-1">
+<div class="flex flex-col items-center gap-1" title="Warm Ivory #FAF7F2">
+<div class="w-full h-7 rounded border border-outline-variant/40 bg-[#FAF7F2]"></div>
+<span class="font-label-sm text-[8px] text-outline">#FAF7F2</span>
+</div>
+<div class="flex flex-col items-center gap-1" title="Editorial Cream #F5F0E8">
+<div class="w-full h-7 rounded border border-outline-variant/40 bg-[#F5F0E8]"></div>
+<span class="font-label-sm text-[8px] text-outline">#F5F0E8</span>
+</div>
+<div class="flex flex-col items-center gap-1" title="Dark Goldenrod #B8860B">
+<div class="w-full h-7 rounded border border-outline-variant/40 bg-[#B8860B]"></div>
+<span class="font-label-sm text-[8px] text-outline">#B8860B</span>
+</div>
+<div class="flex flex-col items-center gap-1" title="Near Black #14110D">
+<div class="w-full h-7 rounded border border-outline-variant/40 bg-[#14110D]"></div>
+<span class="font-label-sm text-[8px] text-outline">#14110D</span>
+</div>
+<div class="flex flex-col items-center gap-1" title="Warm Umber #3A332B">
+<div class="w-full h-7 rounded border border-outline-variant/40 bg-[#3A332B]"></div>
+<span class="font-label-sm text-[8px] text-outline">#3A332B</span>
+</div>
+</div>
+<!-- Quick Action CTA -->
+<div class="pt-2">
+<button class="w-full py-1.5 px-3 rounded-lg bg-on-surface hover:bg-black text-surface font-label-md text-label-md font-medium transition-colors text-center shadow-xs">
+              Apply tokens: light (lead magnets)
+            </button>
+</div>
+</div>
+<!-- Selected Artifact Summary Inspection Card -->
+<div class="bg-surface rounded-xl p-3.5 border border-outline-variant/35 space-y-3 shadow-xs">
+<div class="flex items-center justify-between border-b border-outline-variant/20 pb-2">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm font-semibold text-primary">INSPECTION TARGET</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline font-mono">ID: ART-014</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface leading-tight font-medium">
+              Leadership Persona Archetypes &amp; Value Drivers
+            </h3>
+<span class="font-body-sm text-[11px] text-on-surface-variant block mt-0.5">Dual Diamond Phase 1 · Discovery Synthesis</span>
+</div>
+<!-- Field: Workstream -->
+<div class="space-y-1">
+<label class="block font-label-sm text-[10px] uppercase tracking-wider text-outline font-medium">Workstream</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-2.5 py-1 text-on-surface font-body-sm text-body-sm appearance-none focus:outline-none focus:border-primary pr-7">
+<option selected="">Discovery</option>
+<option>Design Systems</option>
+<option>Strategy</option>
+<option>Engineering</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-outline absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Field: Status -->
+<div class="space-y-1">
+<label class="block font-label-sm text-[10px] uppercase tracking-wider text-outline font-medium">Stage Status</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-2.5 py-1 text-on-surface font-body-sm text-body-sm appearance-none focus:outline-none focus:border-primary pr-7">
+<option selected="">Approved</option>
+<option>In-Review</option>
+<option>Active Draft</option>
+<option>Archived</option>
+</select>
+<span class="material-symbols-outlined text-[16px] text-outline absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Field: Token Deviation Index Slider -->
+<div class="space-y-1.5 pt-1">
+<div class="flex items-center justify-between">
+<label class="font-label-sm text-[10px] uppercase tracking-wider text-outline font-medium">Token Deviation Index</label>
+<span class="font-label-sm text-label-sm text-primary font-bold bg-secondary-fixed/50 px-1.5 rounded">+2 Spec</span>
+</div>
+<input class="w-full accent-primary h-1 bg-surface-variant rounded-lg cursor-pointer" max="5" min="0" type="range" value="2"/>
+<div class="flex justify-between font-label-sm text-[9px] text-outline pt-0.5">
+<span>0 (Canon)</span>
+<span>+3 (Exploratory)</span>
+<span>+5 (Fork)</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Bottom Inspector Actions & Footer Rail -->
+<div class="pt-4 border-t border-outline-variant/25 space-y-3">
+<!-- CTA Sync Tokens Button from shared component blueprint -->
+<button class="w-full py-2 px-3 rounded-lg border border-primary text-primary hover:bg-primary/10 font-label-md text-label-md font-semibold transition-colors flex items-center justify-center gap-2 active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Sync System Tokens</span>
+</button>
+<!-- Footer Tab Links from JSON blueprint -->
+<div class="flex items-center justify-between text-on-surface-variant font-label-sm text-[11px] pt-1">
+<a class="flex items-center gap-1.5 hover:text-on-surface transition-colors" href="#shortcuts">
+<span class="material-symbols-outlined text-[15px]" data-icon="keyboard">keyboard</span>
+<span>Shortcuts</span>
+</a>
+<a class="flex items-center gap-1.5 hover:text-on-surface transition-colors" href="#documentation">
+<span class="material-symbols-outlined text-[15px]" data-icon="menu_book">menu_book</span>
+<span>Documentation</span>
+</a>
+</div>
+</div>
+</aside>
+</div>
+</body></html>

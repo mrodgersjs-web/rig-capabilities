@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIG Design Studio — Canvas Board</title>
+<!-- Typography Links -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&amp;family=Hanken+Grotesk:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Script -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-dim": "#e1d9d1",
+            "surface-container-lowest": "#ffffff",
+            "tertiary-container": "#3477bc",
+            "primary-container": "#986d00",
+            "on-tertiary-container": "#fdfcff",
+            "surface": "#fff8f3",
+            "error-container": "#ffdad6",
+            "on-background": "#1e1b17",
+            "primary-fixed-dim": "#f7bd48",
+            "inverse-surface": "#34302b",
+            "outline": "#817563",
+            "on-primary-fixed-variant": "#5d4200",
+            "on-tertiary-fixed": "#001c37",
+            "surface-tint": "#7b5800",
+            "secondary": "#795900",
+            "surface-container-high": "#efe7df",
+            "tertiary-fixed-dim": "#a1c9ff",
+            "on-tertiary-fixed-variant": "#004880",
+            "error": "#ba1a1a",
+            "surface-variant": "#e9e1da",
+            "on-secondary-fixed-variant": "#5c4300",
+            "surface-container": "#f5ece5",
+            "secondary-fixed": "#ffdfa0",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "on-primary-container": "#fffbff",
+            "on-secondary-container": "#715300",
+            "background": "#fff8f3",
+            "on-error": "#ffffff",
+            "primary": "#785600",
+            "surface-bright": "#fff8f3",
+            "tertiary": "#085ea2",
+            "on-secondary-fixed": "#261a00",
+            "primary-fixed": "#ffdea6",
+            "on-primary": "#ffffff",
+            "surface-container-low": "#fbf2eb",
+            "surface-container-highest": "#e9e1da",
+            "on-surface-variant": "#4f4535",
+            "inverse-primary": "#f7bd48",
+            "outline-variant": "#d3c4af",
+            "on-surface": "#1e1b17",
+            "secondary-container": "#ffc641",
+            "tertiary-fixed": "#d2e4ff",
+            "inverse-on-surface": "#f8efe8",
+            "on-primary-fixed": "#271900",
+            "on-error-container": "#93000a",
+            "secondary-fixed-dim": "#f6be39"
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          spacing: {
+            "gutter": "1rem",
+            "space-sm": "0.5rem",
+            "space-xs": "0.25rem",
+            "space-xl": "2rem",
+            "margin": "1.5rem",
+            "space-lg": "1.5rem",
+            "space-md": "1rem"
+          },
+          fontFamily: {
+            "headline-sm": ["EB Garamond", "Cormorant Garamond", "serif"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "headline-lg": ["EB Garamond", "Cormorant Garamond", "serif"],
+            "headline-md": ["EB Garamond", "Cormorant Garamond", "serif"],
+            "body-md": ["Hanken Grotesk", "sans-serif"],
+            "body-lg": ["Hanken Grotesk", "sans-serif"],
+            "display-sm": ["EB Garamond", "Cormorant Garamond", "serif"],
+            "body-sm": ["Hanken Grotesk", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "label-lg": ["JetBrains Mono", "monospace"],
+            "display-lg": ["EB Garamond", "Cormorant Garamond", "serif"]
+          },
+          fontSize: {
+            "headline-sm": ["18px", { lineHeight: "24px", fontWeight: "600" }],
+            "label-md": ["11px", { lineHeight: "16px", letterSpacing: "0.04em", fontWeight: "500" }],
+            "headline-lg": ["28px", { lineHeight: "36px", letterSpacing: "-0.01em", fontWeight: "500" }],
+            "headline-md": ["22px", { lineHeight: "28px", fontWeight: "500" }],
+            "body-md": ["14px", { lineHeight: "20px", fontWeight: "400" }],
+            "body-lg": ["16px", { lineHeight: "24px", fontWeight: "400" }],
+            "display-sm": ["36px", { lineHeight: "44px", letterSpacing: "-0.015em", fontWeight: "400" }],
+            "body-sm": ["12px", { lineHeight: "16px", fontWeight: "400" }],
+            "label-sm": ["10px", { lineHeight: "14px", letterSpacing: "0.06em", fontWeight: "400" }],
+            "label-lg": ["13px", { lineHeight: "18px", letterSpacing: "0.02em", fontWeight: "500" }],
+            "display-lg": ["48px", { lineHeight: "56px", letterSpacing: "-0.02em", fontWeight: "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 20;
+      font-size: 16px;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .material-symbols-outlined.filled {
+      font-variation-settings: 'FILL' 1;
+    }
+
+    /* Infinite Canvas Micro-Grid */
+    .atelier-canvas-grid {
+      background-color: #FAF7F2;
+      background-image: radial-gradient(rgba(184, 134, 11, 0.16) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+
+    /* Custom Scrollbar for side panel */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: rgba(184, 134, 11, 0.2);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(184, 134, 11, 0.4);
+    }
+  </style>
+</head>
+<body class="bg-[#FAF7F2] text-[#14110D] font-body-md antialiased overflow-hidden select-none h-screen w-screen flex flex-col">
+<!-- 1. TOP BAR (Height: 52px / h-13) -->
+<header class="flex justify-between items-center h-[52px] w-full px-space-lg border-b border-[rgba(184,134,11,0.25)] bg-[#F5F0E8] z-40 shrink-0">
+<!-- Left Identity & Title -->
+<div class="flex items-center gap-space-md">
+<span class="text-[10px] tracking-[0.14em] font-label-md text-[#B8860B] font-semibold">RIG DESIGN STUDIO</span>
+<span class="h-3 w-[1px] bg-[rgba(184,134,11,0.3)]"></span>
+<h1 class="text-headline-sm font-headline-sm text-[#14110D] font-medium tracking-tight">Design a launch page for a Denver HR leaders group</h1>
+</div>
+<!-- Center/Right Switcher & Actions -->
+<div class="flex items-center gap-space-lg">
+<!-- View Switcher Pill Tabs -->
+<nav class="flex items-center bg-[#FAF7F2] p-1 rounded-full border border-[rgba(184,134,11,0.25)]">
+<button class="bg-[#14110D] text-[#FAF7F2] px-3 py-1 rounded-full text-xs font-label-md font-medium tracking-wide transition-all shadow-sm">
+          Board
+        </button>
+<button class="text-[#3A332B] hover:text-[#14110D] px-3 py-1 text-xs font-label-md transition-colors rounded-full">
+          Double Diamond
+        </button>
+<button class="text-[#3A332B] hover:text-[#14110D] px-3 py-1 text-xs font-label-md transition-colors rounded-full">
+          Mockups
+        </button>
+</nav>
+<!-- Action Cluster -->
+<div class="flex items-center gap-2">
+<button class="flex items-center gap-1.5 px-3 py-1.5 rounded-[12px] border border-[rgba(184,134,11,0.3)] text-xs font-label-md text-[#14110D] bg-[#FAF7F2] hover:bg-[#F5F0E8] transition-colors shadow-sm active:scale-[0.98]">
+<span class="material-symbols-outlined text-[14px] text-[#B8860B]">add</span>
+<span>+ Artifact</span>
+</button>
+<button class="px-3 py-1.5 rounded-[12px] border border-transparent hover:border-[rgba(184,134,11,0.25)] text-xs font-label-md text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors active:scale-[0.98]">
+          Reset board
+        </button>
+<div class="h-4 w-[1px] bg-[rgba(184,134,11,0.25)] mx-1"></div>
+<div class="flex items-center gap-1">
+<button class="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="System Tune">
+<span class="material-symbols-outlined">tune</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Audit History">
+<span class="material-symbols-outlined">history</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center rounded-[8px] text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Share Workspace">
+<span class="material-symbols-outlined">share</span>
+</button>
+</div>
+<div class="ml-2 pl-2 border-l border-[rgba(184,134,11,0.25)]">
+<div class="w-7 h-7 rounded-full bg-[#B8860B]/20 border border-[#B8860B]/40 flex items-center justify-center text-xs font-label-md text-[#785600] font-semibold" title="Lead Systems Architect">
+            SA
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- WORKSPACE BODY (CANVAS + INSPECTOR RAIL) -->
+<div class="flex-1 flex overflow-hidden relative">
+<!-- 2. INFINITE CANVAS WORKSPACE -->
+<main class="flex-1 atelier-canvas-grid relative overflow-hidden cursor-grab active:cursor-grabbing" id="canvas-plane">
+<!-- SVG CONNECTOR WIRES & MARQUEE LAYER -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="gold-grad" x1="0%" x2="100%" y1="0%" y2="0%">
+<stop offset="0%" stop-color="#B8860B" stop-opacity="0.7"></stop>
+<stop offset="100%" stop-color="#D4A017" stop-opacity="0.9"></stop>
+</lineargradient>
+<filter height="140%" id="glow-gold" width="140%" x="-20%" y="-20%">
+<fedropshadow dx="0" dy="1" flood-color="#B8860B" flood-opacity="0.25" stddeviation="2"></fedropshadow>
+</filter>
+</defs>
+<!-- Wire 1: Card 1 (x:64, y:72, w:240, h:172 -> Right Port: x:304, y:158) to Card 2 (x:380, y:120 -> Left: x:380, y:206) -->
+<path d="M 304 158 C 342 158, 342 206, 380 206" fill="none" filter="url(#glow-gold)" stroke="rgba(184,134,11,0.55)" stroke-width="2"></path>
+<!-- Wire 2: Card 2 (Right Port: x:620, y:206) to Card 3 (Left: x:700, y:166) -->
+<path d="M 620 206 C 660 206, 660 166, 700 166" fill="none" filter="url(#glow-gold)" stroke="rgba(184,134,11,0.55)" stroke-width="2"></path>
+<!-- Wire 3 (Dashed Rubber-Band In-Progress): Card 3 (Right Port: x:940, y:166) curving down to Card 4 Target (x:520, y:466) -->
+<path class="animate-pulse" d="M 940 166 C 1000 166, 760 466, 520 466" fill="none" stroke="#B8860B" stroke-dasharray="6 4" stroke-width="2"></path>
+<!-- Active Marquee Selection Box (x: 260px, y: 140px, w: 320px, h: 260px) -->
+<rect fill="rgba(184,134,11,0.08)" height="260" rx="6" stroke="rgba(184,134,11,0.6)" stroke-dasharray="4 3" stroke-width="1" width="320" x="260" y="140"></rect>
+</svg>
+<!-- CANVAS NODES / ARTIFACT CARDS -->
+<!-- CARD 1 (Selected Artifact) -->
+<article class="absolute z-20 bg-[#F5F0E8] rounded-[16px] border border-[rgba(184,134,11,0.35)] ring-1 ring-[#B8860B] shadow-[0_4px_16px_-4px_rgba(20,17,13,0.08)] flex flex-col justify-between overflow-visible transition-shadow hover:shadow-md cursor-pointer" style="left: 64px; top: 72px; width: 240px; height: 172px;">
+<!-- Status indicator bar (Left 4px) -->
+<div class="absolute left-0 top-3 bottom-3 w-1 bg-[#2E6F40] rounded-r-full"></div>
+<!-- Card Header -->
+<div class="pt-3.5 px-4 pl-5 flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">DISCOVERY / SYNTHESIS</span>
+<span class="text-[10px] font-label-md bg-[#B8860B]/15 text-[#B8860B] px-1.5 py-0.5 rounded-[4px] font-medium border border-[#B8860B]/20">dev +2</span>
+</div>
+<!-- Title -->
+<div class="px-4 pl-5 my-auto">
+<h2 class="font-headline-sm text-[15px] leading-snug text-[#14110D] font-medium line-clamp-2">
+            Leadership Persona Archetypes &amp; Value Drivers
+          </h2>
+<p class="font-body-sm text-[11px] leading-relaxed text-[#3A332B] line-clamp-3 mt-1.5">
+            Synthesized from 14 in-depth interviews with VP/CHRO cohorts across Colorado tech companies.
+          </p>
+</div>
+<!-- Card Footer -->
+<div class="pb-2.5 px-4 pl-5 flex items-center justify-between border-t border-[rgba(184,134,11,0.12)] pt-1.5">
+<span class="text-[9px] font-label-md text-[#8A7E6E]">PHASE: 01</span>
+<span class="text-[9px] font-label-md text-[#2E6F40] font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#2E6F40]"></span> Approved
+          </span>
+</div>
+<!-- Connect Port (Right side) -->
+<div class="absolute -right-[7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-2 border-[#FAF7F2] shadow-sm hover:scale-125 transition-transform cursor-crosshair z-30" title="Connect node"></div>
+</article>
+<!-- CARD 2 -->
+<article class="absolute z-20 bg-[#F5F0E8] rounded-[16px] border border-[rgba(184,134,11,0.25)] shadow-[0_2px_8px_-2px_rgba(20,17,13,0.04)] flex flex-col justify-between overflow-visible transition-all hover:border-[rgba(184,134,11,0.45)] cursor-pointer" style="left: 380px; top: 120px; width: 240px; height: 172px;">
+<!-- Status indicator bar (In-review Goldenrod) -->
+<div class="absolute left-0 top-3 bottom-3 w-1 bg-[#B8860B] rounded-r-full"></div>
+<!-- Card Header -->
+<div class="pt-3.5 px-4 pl-5 flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">IA &amp; FLOW / SPEC</span>
+<span class="text-[10px] font-label-md bg-[rgba(184,134,11,0.08)] text-[#8A7E6E] px-1.5 py-0.5 rounded-[4px] font-medium border border-[rgba(184,134,11,0.15)]">dev 0</span>
+</div>
+<!-- Title -->
+<div class="px-4 pl-5 my-auto">
+<h2 class="font-headline-sm text-[15px] leading-snug text-[#14110D] font-medium line-clamp-2">
+            Registration Onboarding &amp; Cohort Screening Funnel
+          </h2>
+<p class="font-body-sm text-[11px] leading-relaxed text-[#3A332B] line-clamp-3 mt-1.5">
+            Three-stage qualification intake ensuring curated peer matching before ticket confirmation.
+          </p>
+</div>
+<!-- Card Footer -->
+<div class="pb-2.5 px-4 pl-5 flex items-center justify-between border-t border-[rgba(184,134,11,0.12)] pt-1.5">
+<span class="text-[9px] font-label-md text-[#8A7E6E]">PHASE: 02</span>
+<span class="text-[9px] font-label-md text-[#B8860B] font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#B8860B]"></span> In-Review
+          </span>
+</div>
+<!-- Connect Port (Right side) -->
+<div class="absolute -right-[7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-2 border-[#FAF7F2] shadow-sm hover:scale-125 transition-transform cursor-crosshair z-30" title="Connect node"></div>
+</article>
+<!-- CARD 3 -->
+<article class="absolute z-20 bg-[#F5F0E8] rounded-[16px] border border-[rgba(184,134,11,0.25)] shadow-[0_2px_8px_-2px_rgba(20,17,13,0.04)] flex flex-col justify-between overflow-visible transition-all hover:border-[rgba(184,134,11,0.45)] cursor-pointer" style="left: 700px; top: 80px; width: 240px; height: 172px;">
+<!-- Status indicator bar (In-review Goldenrod) -->
+<div class="absolute left-0 top-3 bottom-3 w-1 bg-[#B8860B] rounded-r-full"></div>
+<!-- Card Header -->
+<div class="pt-3.5 px-4 pl-5 flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">CONTENT STRATEGY</span>
+<span class="text-[10px] font-label-md bg-[#B8860B]/15 text-[#B8860B] px-1.5 py-0.5 rounded-[4px] font-medium border border-[#B8860B]/20">dev +1</span>
+</div>
+<!-- Title -->
+<div class="px-4 pl-5 my-auto">
+<h2 class="font-headline-sm text-[15px] leading-snug text-[#14110D] font-medium line-clamp-2">
+            Keynote &amp; Executive Roundtable Curriculum
+          </h2>
+<p class="font-body-sm text-[11px] leading-relaxed text-[#3A332B] line-clamp-3 mt-1.5">
+            Drafting agenda blocks around retention metrics, executive compensation, and hybrid culture.
+          </p>
+</div>
+<!-- Card Footer -->
+<div class="pb-2.5 px-4 pl-5 flex items-center justify-between border-t border-[rgba(184,134,11,0.12)] pt-1.5">
+<span class="text-[9px] font-label-md text-[#8A7E6E]">PHASE: 03</span>
+<span class="text-[9px] font-label-md text-[#B8860B] font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#B8860B]"></span> In-Review
+          </span>
+</div>
+<!-- Connect Port (Right side) -->
+<div class="absolute -right-[7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-2 border-[#FAF7F2] shadow-sm hover:scale-125 transition-transform cursor-crosshair z-30" title="Connect node"></div>
+</article>
+<!-- CARD 4 -->
+<article class="absolute z-20 bg-[#F5F0E8] rounded-[16px] border border-[rgba(184,134,11,0.25)] shadow-[0_2px_8px_-2px_rgba(20,17,13,0.04)] flex flex-col justify-between overflow-visible transition-all hover:border-[rgba(184,134,11,0.45)] cursor-pointer" style="left: 520px; top: 380px; width: 240px; height: 172px;">
+<!-- Status indicator bar (Draft Slate) -->
+<div class="absolute left-0 top-3 bottom-3 w-1 bg-[#70685E] rounded-r-full"></div>
+<!-- Card Header -->
+<div class="pt-3.5 px-4 pl-5 flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">SYSTEM ASSETS</span>
+<span class="text-[10px] font-label-md bg-[#B8860B]/15 text-[#B8860B] px-1.5 py-0.5 rounded-[4px] font-medium border border-[#B8860B]/20">dev +3</span>
+</div>
+<!-- Title -->
+<div class="px-4 pl-5 my-auto">
+<h2 class="font-headline-sm text-[15px] leading-snug text-[#14110D] font-medium line-clamp-2">
+            Hero Visual System &amp; Editorial Monograms
+          </h2>
+<p class="font-body-sm text-[11px] leading-relaxed text-[#3A332B] line-clamp-3 mt-1.5">
+            High-contrast typography paired with restrained warm gold filigree lines.
+          </p>
+</div>
+<!-- Card Footer -->
+<div class="pb-2.5 px-4 pl-5 flex items-center justify-between border-t border-[rgba(184,134,11,0.12)] pt-1.5">
+<span class="text-[9px] font-label-md text-[#8A7E6E]">PHASE: 04</span>
+<span class="text-[9px] font-label-md text-[#70685E] font-medium flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#70685E]"></span> Draft
+          </span>
+</div>
+<!-- Connect Port (Left side input target) -->
+<div class="absolute -left-[7px] top-1/2 -translate-y-1/2 w-3.5 h-3.5 rounded-full bg-[#B8860B] border-2 border-[#FAF7F2] shadow-sm ring-4 ring-[#B8860B]/20 z-30 animate-pulse" title="Target connection port"></div>
+</article>
+<!-- 3. FLOATING ZOOM CONTROL (Bottom-Left) -->
+<aside class="absolute bottom-6 left-6 z-30 flex flex-col items-start pointer-events-auto">
+<div class="flex items-center bg-[#F5F0E8] rounded-[12px] border border-[rgba(184,134,11,0.25)] shadow-[0_4px_12px_-2px_rgba(20,17,13,0.06)] overflow-hidden">
+<button class="px-3 py-1.5 text-xs font-label-md text-[#14110D] hover:bg-[#FAF7F2] border-r border-[rgba(184,134,11,0.25)] transition-colors active:scale-95">
+            −
+          </button>
+<span class="px-3 py-1.5 text-xs font-label-md text-[#14110D] font-medium min-w-[48px] text-center bg-[#FAF7F2]">
+            85%
+          </span>
+<button class="px-3 py-1.5 text-xs font-label-md text-[#14110D] hover:bg-[#FAF7F2] border-l border-[rgba(184,134,11,0.25)] transition-colors active:scale-95">
+            +
+          </button>
+</div>
+<p class="text-[10px] text-[#8A7E6E] tracking-wider font-label-md mt-2 select-none">
+          CTRL+WHEEL ZOOM · DRAG EMPTY = MARQUEE · DRAG ○ = LINK
+        </p>
+</aside>
+<!-- FLOATING TOOL SHELF (Dock) -->
+<nav class="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 bg-[#F5F0E8] p-1.5 rounded-[16px] border border-[rgba(184,134,11,0.35)] shadow-[0_8px_24px_-4px_rgba(20,17,13,0.08),0_2px_6px_-1px_rgba(20,17,13,0.04)]">
+<button class="w-9 h-9 rounded-[12px] flex items-center justify-center bg-[#B8860B] text-[#FAF7F2] shadow-sm transition-transform active:scale-95" title="Pointer (V)">
+<span class="material-symbols-outlined text-[18px]">near_me</span>
+</button>
+<button class="w-9 h-9 rounded-[12px] flex items-center justify-center text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Hand Canvas (H)">
+<span class="material-symbols-outlined text-[18px]">pan_tool</span>
+</button>
+<button class="w-9 h-9 rounded-[12px] flex items-center justify-center text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Add Card (C)">
+<span class="material-symbols-outlined text-[18px]">add_box</span>
+</button>
+<button class="w-9 h-9 rounded-[12px] flex items-center justify-center text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Connect Wire (W)">
+<span class="material-symbols-outlined text-[18px]">polyline</span>
+</button>
+<div class="h-5 w-[1px] bg-[rgba(184,134,11,0.25)] mx-1"></div>
+<button class="w-9 h-9 rounded-[12px] flex items-center justify-center text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] transition-colors" title="Comment (M)">
+<span class="material-symbols-outlined text-[18px]">chat_bubble_outline</span>
+</button>
+</nav>
+</main>
+<!-- 4. DESIGN SYSTEM SIDE PANEL (Right 340px) -->
+<aside class="w-[340px] h-[calc(100vh-52px)] bg-[#F5F0E8] border-l border-[rgba(184,134,11,0.25)] flex flex-col justify-between shrink-0 z-30 shadow-sm overflow-y-auto">
+<!-- Top Inspector Header & Sections -->
+<div class="p-space-md flex flex-col gap-space-lg">
+<!-- Inspector Title Header -->
+<header class="border-b border-[rgba(184,134,11,0.2)] pb-space-sm">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-label-md text-[#B8860B] font-semibold tracking-wider">RIG TOKEN MANIFEST · v2.4</span>
+<span class="text-[9px] font-label-md bg-[rgba(184,134,11,0.12)] text-[#785600] px-1.5 py-0.5 rounded-[4px] border border-[rgba(184,134,11,0.2)]">64px Grid Active</span>
+</div>
+<h2 class="text-headline-sm font-headline-sm text-[#14110D] font-semibold">System Inspector</h2>
+<p class="text-body-sm text-[#8A7E6E] text-xs">Canvas v2.4 · 64px Grid Active</p>
+</header>
+<!-- Inspector Tabs Rail -->
+<div class="grid grid-cols-4 gap-1 p-1 bg-[#FAF7F2] rounded-[12px] border border-[rgba(184,134,11,0.2)]">
+<button class="flex flex-col items-center py-1.5 rounded-[8px] bg-[#F5F0E8] text-[#785600] border border-[rgba(184,134,11,0.3)] shadow-xs">
+<span class="material-symbols-outlined text-[16px]">account_tree</span>
+<span class="text-[9px] font-label-md mt-0.5">Artifacts</span>
+</button>
+<button class="flex flex-col items-center py-1.5 rounded-[8px] text-[#3A332B] hover:text-[#14110D] transition-colors">
+<span class="material-symbols-outlined text-[16px]">palette</span>
+<span class="text-[9px] font-label-md mt-0.5">Tokens</span>
+</button>
+<button class="flex flex-col items-center py-1.5 rounded-[8px] text-[#3A332B] hover:text-[#14110D] transition-colors">
+<span class="material-symbols-outlined text-[16px]">polyline</span>
+<span class="text-[9px] font-label-md mt-0.5">Connect</span>
+</button>
+<button class="flex flex-col items-center py-1.5 rounded-[8px] text-[#3A332B] hover:text-[#14110D] transition-colors">
+<span class="material-symbols-outlined text-[16px]">schedule</span>
+<span class="text-[9px] font-label-md mt-0.5">History</span>
+</button>
+</div>
+<!-- Section: Design System Token Table -->
+<section class="space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">SYSTEM PALETTE</span>
+<span class="text-[10px] font-label-md text-[#B8860B] hover:underline cursor-pointer">5 Registered</span>
+</div>
+<div class="space-y-1.5 bg-[#FAF7F2] p-2.5 rounded-[12px] border border-[rgba(184,134,11,0.2)]">
+<!-- Swatch 1 -->
+<div class="flex items-center justify-between text-xs font-label-md py-1 px-1.5 rounded-[6px] hover:bg-[#F5F0E8] transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded-full border border-[rgba(184,134,11,0.3)] bg-[#FAF7F2]"></span>
+<span class="text-[#14110D] font-medium">Warm Ivory</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[#8A7E6E] text-[10px]">#FAF7F2</span>
+<span class="text-[9px] text-[#8A7E6E] uppercase">Canvas</span>
+</div>
+</div>
+<!-- Swatch 2 -->
+<div class="flex items-center justify-between text-xs font-label-md py-1 px-1.5 rounded-[6px] hover:bg-[#F5F0E8] transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded-full border border-[rgba(184,134,11,0.3)] bg-[#F5F0E8]"></span>
+<span class="text-[#14110D] font-medium">Editorial Cream</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[#8A7E6E] text-[10px]">#F5F0E8</span>
+<span class="text-[9px] text-[#8A7E6E] uppercase">Surface</span>
+</div>
+</div>
+<!-- Swatch 3 -->
+<div class="flex items-center justify-between text-xs font-label-md py-1 px-1.5 rounded-[6px] hover:bg-[#F5F0E8] transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded-full border border-[rgba(184,134,11,0.3)] bg-[#B8860B]"></span>
+<span class="text-[#14110D] font-medium">Dark Goldenrod</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[#8A7E6E] text-[10px]">#B8860B</span>
+<span class="text-[9px] text-[#B8860B] font-medium uppercase">Accent</span>
+</div>
+</div>
+<!-- Swatch 4 -->
+<div class="flex items-center justify-between text-xs font-label-md py-1 px-1.5 rounded-[6px] hover:bg-[#F5F0E8] transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded-full border border-[rgba(184,134,11,0.3)] bg-[#14110D]"></span>
+<span class="text-[#14110D] font-medium">Near Black</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[#8A7E6E] text-[10px]">#14110D</span>
+<span class="text-[9px] text-[#8A7E6E] uppercase">Ink</span>
+</div>
+</div>
+<!-- Swatch 5 -->
+<div class="flex items-center justify-between text-xs font-label-md py-1 px-1.5 rounded-[6px] hover:bg-[#F5F0E8] transition-colors">
+<div class="flex items-center gap-2">
+<span class="w-3.5 h-3.5 rounded-full border border-[rgba(184,134,11,0.3)] bg-[#3A332B]"></span>
+<span class="text-[#14110D] font-medium">Warm Umber</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-[#8A7E6E] text-[10px]">#3A332B</span>
+<span class="text-[9px] text-[#8A7E6E] uppercase">Secondary</span>
+</div>
+</div>
+</div>
+<!-- Token Application Button -->
+<button class="w-full bg-[#14110D] text-[#FAF7F2] rounded-[12px] py-2 px-3 text-xs font-label-md tracking-wider hover:bg-black/90 transition-colors shadow-sm flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[14px]">auto_fix_high</span>
+<span>Apply tokens: light (lead magnets)</span>
+</button>
+</section>
+<!-- Section: Selected Artifact Editor (Card 1) -->
+<section class="space-y-space-sm pt-space-xs border-t border-[rgba(184,134,11,0.2)]">
+<div class="flex items-center justify-between">
+<span class="text-[10px] font-label-md text-[#8A7E6E] tracking-wider uppercase font-semibold">SELECTED ARTIFACT</span>
+<span class="text-[10px] font-label-md bg-[rgba(184,134,11,0.15)] text-[#B8860B] px-1.5 py-0.5 rounded-[4px] font-medium">ID: ART-014</span>
+</div>
+<div class="space-y-3">
+<!-- Title Field -->
+<div class="space-y-1">
+<label class="text-[10px] font-label-md text-[#3A332B]">ARTIFACT TITLE</label>
+<input class="w-full bg-[#FAF7F2] border border-[rgba(184,134,11,0.25)] rounded-[12px] px-3 py-1.5 text-xs font-headline-sm text-[#14110D] focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none" type="text" value="Leadership Persona Archetypes &amp; Value Drivers"/>
+</div>
+<!-- Body Description Field (Textarea) -->
+<div class="space-y-1">
+<label class="text-[10px] font-label-md text-[#3A332B]">SYNTHESIS ABSTRACT</label>
+<textarea class="w-full bg-[#FAF7F2] border border-[rgba(184,134,11,0.25)] rounded-[12px] px-3 py-1.5 text-xs font-body-sm text-[#3A332B] focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none resize-none leading-relaxed" rows="3">Synthesized from 14 in-depth interviews with VP/CHRO cohorts across Colorado tech companies.</textarea>
+</div>
+<!-- Phase & Status Two-Column Dropdowns -->
+<div class="grid grid-cols-2 gap-2">
+<div class="space-y-1">
+<label class="text-[10px] font-label-md text-[#3A332B]">WORKSTREAM</label>
+<div class="relative">
+<select class="w-full bg-[#FAF7F2] border border-[rgba(184,134,11,0.25)] rounded-[12px] px-2.5 py-1.5 text-xs font-label-md text-[#14110D] focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none appearance-none">
+<option>Discovery</option>
+<option>IA &amp; Spec</option>
+<option>Content</option>
+<option>Assets</option>
+</select>
+<span class="material-symbols-outlined text-[14px] text-[#8A7E6E] absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-label-md text-[#3A332B]">STATUS</label>
+<div class="relative">
+<select class="w-full bg-[#FAF7F2] border border-[rgba(184,134,11,0.25)] rounded-[12px] pl-5 pr-2 py-1.5 text-xs font-label-md text-[#14110D] focus:border-[#B8860B] focus:ring-1 focus:ring-[#B8860B] outline-none appearance-none">
+<option>Approved</option>
+<option>In-Review</option>
+<option>Draft</option>
+</select>
+<span class="w-2 h-2 rounded-full bg-[#2E6F40] absolute left-2 top-2.5 pointer-events-none"></span>
+<span class="material-symbols-outlined text-[14px] text-[#8A7E6E] absolute right-2 top-2 pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Deviation Range Slider -->
+<div class="space-y-1 pt-1">
+<div class="flex items-center justify-between text-[10px] font-label-md">
+<span class="text-[#3A332B]">Token Deviation Index</span>
+<span class="text-[#B8860B] font-semibold">(+2)</span>
+</div>
+<input class="w-full h-1 bg-[#FAF7F2] border border-[rgba(184,134,11,0.25)] rounded-lg appearance-none cursor-pointer accent-[#B8860B]" max="5" min="0" type="range" value="2"/>
+<div class="flex justify-between text-[8px] font-label-md text-[#8A7E6E] px-0.5">
+<span>0 Strict</span>
+<span>+1</span>
+<span>+2 Spec</span>
+<span>+3</span>
+<span>+5 Free</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Inspector Footer -->
+<footer class="p-space-md border-t border-[rgba(184,134,11,0.2)] bg-[#FAF7F2]/50 flex items-center justify-between">
+<button class="flex items-center gap-1.5 text-xs font-label-md text-[#8A7E6E] hover:text-[#14110D] transition-colors">
+<span class="material-symbols-outlined text-[16px]">keyboard</span>
+<span>Shortcuts</span>
+</button>
+<button class="flex items-center gap-1.5 text-xs font-label-md text-[#8A7E6E] hover:text-[#14110D] transition-colors">
+<span class="material-symbols-outlined text-[16px]">menu_book</span>
+<span>Documentation</span>
+</button>
+</footer>
+</aside>
+</div>
+</body></html>

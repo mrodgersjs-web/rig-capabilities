@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RIG Design Studio - Design System Panel &amp; Inspector Focus View</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: EB Garamond, Hanken Grotesk, JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Hanken+Grotesk:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with configuration -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "on-background": "#1e1b17",
+            "outline-variant": "#d3c4af",
+            "surface": "#fff8f3",
+            "surface-container-highest": "#e9e1da",
+            "error": "#ba1a1a",
+            "surface-variant": "#e9e1da",
+            "surface-container": "#f5ece5",
+            "background": "#fff8f3",
+            "surface-dim": "#e1d9d1",
+            "on-secondary-fixed": "#261a00",
+            "secondary-container": "#ffc641",
+            "on-surface-variant": "#4f4535",
+            "on-secondary": "#ffffff",
+            "on-error": "#ffffff",
+            "on-primary-fixed": "#271900",
+            "inverse-primary": "#f7bd48",
+            "surface-container-lowest": "#ffffff",
+            "on-secondary-fixed-variant": "#5c4300",
+            "tertiary-container": "#3477bc",
+            "secondary-fixed": "#ffdfa0",
+            "primary-fixed-dim": "#f7bd48",
+            "surface-container-low": "#fbf2eb",
+            "secondary-fixed-dim": "#f6be39",
+            "on-surface": "#1e1b17",
+            "on-tertiary": "#ffffff",
+            "on-primary-fixed-variant": "#5d4200",
+            "on-tertiary-fixed": "#001c37",
+            "tertiary-fixed-dim": "#a1c9ff",
+            "tertiary": "#085ea2",
+            "on-secondary-container": "#715300",
+            "inverse-on-surface": "#f8efe8",
+            "outline": "#817563",
+            "on-tertiary-fixed-variant": "#004880",
+            "secondary": "#795900",
+            "on-primary-container": "#fffbff",
+            "error-container": "#ffdad6",
+            "primary-container": "#986d00",
+            "on-tertiary-container": "#fdfcff",
+            "inverse-surface": "#34302b",
+            "surface-tint": "#7b5800",
+            "surface-bright": "#fff8f3",
+            "tertiary-fixed": "#d2e4ff",
+            "primary-fixed": "#ffdea6",
+            "on-error-container": "#93000a",
+            "surface-container-high": "#efe7df",
+            "primary": "#785600",
+            "on-primary": "#ffffff"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          "spacing": {
+            "space-md": "1rem",
+            "space-sm": "0.5rem",
+            "gutter": "1rem",
+            "space-xl": "2rem",
+            "space-lg": "1.5rem",
+            "space-xs": "0.25rem",
+            "margin": "1.5rem"
+          },
+          "fontFamily": {
+            "headline-md": ["EB Garamond", "serif"],
+            "display-sm": ["EB Garamond", "serif"],
+            "body-sm": ["Hanken Grotesk", "sans-serif"],
+            "label-sm": ["JetBrains Mono", "monospace"],
+            "label-md": ["JetBrains Mono", "monospace"],
+            "body-lg": ["Hanken Grotesk", "sans-serif"],
+            "label-lg": ["JetBrains Mono", "monospace"],
+            "body-md": ["Hanken Grotesk", "sans-serif"],
+            "headline-sm": ["EB Garamond", "serif"],
+            "headline-lg": ["EB Garamond", "serif"],
+            "display-lg": ["EB Garamond", "serif"]
+          },
+          "fontSize": {
+            "headline-md": ["22px", { "lineHeight": "28px", "fontWeight": "500" }],
+            "display-sm": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.015em", "fontWeight": "400" }],
+            "body-sm": ["12px", { "lineHeight": "16px", "fontWeight": "400" }],
+            "label-sm": ["10px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "400" }],
+            "label-md": ["11px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+            "label-lg": ["13px", { "lineHeight": "18px", "letterSpacing": "0.02em", "fontWeight": "500" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "headline-sm": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+            "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .canvas-dot-grid {
+      background-color: #FAF7F2;
+      background-image: radial-gradient(rgba(138, 126, 110, 0.22) 1px, transparent 1px),
+                        radial-gradient(rgba(138, 126, 110, 0.12) 1.5px, transparent 1.5px);
+      background-size: 16px 16px, 64px 64px;
+      background-position: 0 0, 0 0;
+    }
+    .custom-scroll::-webkit-scrollbar {
+      width: 5px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: rgba(211, 196, 175, 0.15);
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: rgba(184, 134, 11, 0.3);
+      border-radius: 4px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb:hover {
+      background: rgba(184, 134, 11, 0.6);
+    }
+  </style>
+</head>
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-hidden h-screen w-screen selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+<!-- ========================================================================= -->
+<!-- TOP APP BAR (Shared Component: TopNavBar from Brand Anchors JSON)         -->
+<!-- ========================================================================= -->
+<header class="flex justify-between items-center h-14 w-full px-space-lg bg-surface-container-low dark:bg-inverse-surface shadow-sm dark:shadow-none docked full-width top-0 z-40 fixed">
+<!-- Left: Brand Title & Active Context -->
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">architecture</span>
+<span class="font-headline-md text-headline-sm text-on-surface tracking-tight font-semibold">RIG Design Studio</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/40"></div>
+<span class="font-label-md text-label-md text-on-surface-variant flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+        Design a launch page for a Denver HR leaders group
+      </span>
+</div>
+<!-- Center: Navigation Links -->
+<nav class="hidden md:flex items-center gap-space-lg h-full">
+<a class="h-full flex items-center px-space-xs text-on-surface-variant dark:text-outline-variant font-label-md hover:text-on-surface transition-colors duration-150" href="#">Board</a>
+<a class="h-full flex items-center px-space-xs text-on-surface-variant dark:text-outline-variant font-label-md hover:text-on-surface transition-colors duration-150" href="#">Double Diamond</a>
+<a class="h-full flex items-center px-space-xs text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed font-headline-sm text-label-md" href="#">Mockups</a>
+</nav>
+<!-- Right: Trailing Primary / Secondary / Icon Actions -->
+<div class="flex items-center gap-space-sm">
+<button class="text-on-surface-variant hover:text-on-surface hover:bg-surface-variant/40 transition-colors duration-150 rounded-lg px-2.5 py-1 text-label-md font-label-md flex items-center gap-1 active:scale-[0.98]" type="button">
+        Reset board
+      </button>
+<button class="bg-primary text-on-primary hover:bg-surface-tint transition-colors duration-150 rounded-xl px-3.5 py-1.5 text-label-md font-label-md font-medium flex items-center gap-1.5 shadow-sm active:scale-[0.98]" type="button">
+<span>+ Artifact</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant/40 mx-1"></div>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 transition-colors active:scale-[0.98]" title="Tune" type="button">
+<span class="material-symbols-outlined text-[19px]">tune</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 transition-colors active:scale-[0.98]" title="History" type="button">
+<span class="material-symbols-outlined text-[19px]">history</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 transition-colors active:scale-[0.98]" title="Share" type="button">
+<span class="material-symbols-outlined text-[19px]">share</span>
+</button>
+</div>
+<img alt="Lead Systems Architect profile avatar" class="w-7 h-7 rounded-full ml-1 border border-outline-variant/50 object-cover" data-alt="A portrait photograph of a lead systems architect in an editorial design studio setting. The lighting is soft and natural with high-key neutral cream tones, capturing an intelligent expression and wearing a charcoal minimal collar jacket. Cohesive editorial warmth and dignified restrained modernism." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfoyhivJIm-HeoUKgn0JP6VhX6asMwp9dSJg_dSr4kZSZODmOsNgt9vcKVTLUaFSeAW3UnRUtE9Wo5FxbbxPRa4G22zqioMl7Z70sJnUnBMmyItZ9v2iZJrnxgd2N4vlZYo6Oq_x6InVPkPDx8tASMAgFFpd7feTSGgXpDvzHiNaFagqcseZXqIO3FNNYhpX_XuHBHKn-e6CwSY_Ei3Hw1QR80dJobq-4ahUp0_kvCiNXhndKhk6GuupFBLRlT-z2iu7WDKM9X8gM"/>
+</div>
+</header>
+<!-- ========================================================================= -->
+<!-- MAIN WORKSPACE: CANVAS (DIMMED BACKGROUND) + HIGH-FOCUS INSPECTOR RAIL    -->
+<!-- ========================================================================= -->
+<main class="w-full h-full pt-14 flex overflow-hidden relative">
+<!-- --------------------------------------------------------------------- -->
+<!-- LEFT ~40% CANVAS SUBSTRATE (Blurred, Dimmed with Ghosted Cards)        -->
+<!-- --------------------------------------------------------------------- -->
+<section aria-label="Infinite Canvas Overview" class="w-full lg:w-[42%] h-full canvas-dot-grid relative overflow-hidden select-none p-space-lg flex flex-col justify-between">
+<!-- Dim / Blur overlay -->
+<div class="absolute inset-0 bg-[#FAF7F2]/65 backdrop-blur-[2px] z-10 pointer-events-none"></div>
+<!-- Ghosted Interactive Mockups & Connectors on Canvas -->
+<div class="relative z-0 space-y-space-lg opacity-45 pointer-events-none mt-4">
+<!-- Ghost Card 1: Variant B Active Focus Target -->
+<div class="w-[380px] bg-surface-container rounded-xl p-space-md border border-primary/40 shadow-sm relative">
+<div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface">Variant B — Light lead-magnet theme</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-semibold">SELECTED</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2">
+            Paper-weight editorial canvas (#FAF7F2), goldenrod rules, and EB Garamond headings tailored for Mountain West VP/CHRO cohorts.
+          </p>
+<div class="mt- space-sm flex items-center justify-between pt-2">
+<span class="font-label-sm text-label-sm text-outline">DEV: 0 · CANONICAL</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">Phase: Develop</span>
+</div>
+</div>
+<!-- SVG Connector Line -->
+<div class="w-[340px] h-14 pl-12 -my-2">
+<svg class="w-full h-full stroke-primary/30" fill="none">
+<path d="M 20 0 V 25 C 20 40, 90 20, 90 55" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<circle class="fill-primary/60" cx="90" cy="52" r="3"></circle>
+</svg>
+</div>
+<!-- Ghost Card 2: Secondary Node -->
+<div class="w-[360px] ml-16 bg-surface-container-low rounded-xl p-space-md border border-outline-variant/30 shadow-sm">
+<div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20 mb-space-sm">
+<span class="font-headline-sm text-headline-sm text-on-surface-variant">Keynote &amp; Executive Roundtable</span>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-variant text-on-surface-variant">NODE 04</span>
+</div>
+<p class="font-body-sm text-body-sm text-outline line-clamp-2">
+            Regional summit panel alignment featuring legal-brief typography standards and structured registration gates.
+          </p>
+</div>
+<!-- Ghost Card 3: Additional structural node -->
+<div class="w-[320px] ml-6 bg-surface-container-low/70 rounded-xl p-space-sm border border-outline-variant/20">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-outline">account_tree</span>
+<span class="font-label-md text-label-md text-on-surface-variant">Design System Sync Gate v2.4</span>
+</div>
+</div>
+</div>
+<!-- Left Bottom Floating Canvas Shelf (Tool Dock) -->
+<div class="relative z-20 flex items-center gap-1 bg-surface-container border border-primary/25 rounded-2xl p-1.5 shadow-md w-fit backdrop-blur-sm self-start mb-2">
+<button class="w-9 h-9 rounded-xl flex items-center justify-center text-primary bg-secondary-fixed/40 transition-colors" title="Select Pointer (V)">
+<span class="material-symbols-outlined text-[19px]">near_me</span>
+</button>
+<button class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/40 transition-colors" title="Hand Tool (H)">
+<span class="material-symbols-outlined text-[19px]">pan_tool</span>
+</button>
+<button class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/40 transition-colors" title="Add Canvas Node (N)">
+<span class="material-symbols-outlined text-[19px]">add_box</span>
+</button>
+<button class="w-9 h-9 rounded-xl flex items-center justify-center text-on-surface-variant hover:bg-surface-variant/40 transition-colors" title="Connectors (C)">
+<span class="material-symbols-outlined text-[19px]">polyline</span>
+</button>
+<div class="w-[1px] h-5 bg-outline-variant/40 mx-0.5"></div>
+<span class="font-label-sm text-label-sm text-outline px-1.5 select-none">64px GRID</span>
+</div>
+</section>
+<!-- --------------------------------------------------------------------- -->
+<!-- RIGHT ~58-60% PROMINENT DESIGN SYSTEM PANEL & INSPECTOR FOCUS VIEW      -->
+<!-- --------------------------------------------------------------------- -->
+<section aria-label="System Inspector and Tokens Panel" class="w-full lg:w-[58%] h-full bg-surface-container border-l border-primary/25 shadow-xl flex flex-col z-30 overflow-hidden">
+<!-- Panel Header Bar -->
+<div class="h-14 px-space-lg border-b border-outline-variant/30 bg-surface-container flex items-center justify-between flex-shrink-0">
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-label-lg text-label-lg tracking-[0.12em] font-semibold text-on-surface">SYSTEM INSPECTOR &amp; TOKENS</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary bg-secondary-fixed/50 px-2 py-0.5 rounded-full">v3.0 LIVE</span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 transition-colors" title="Toggle Split Orientation" type="button">
+<span class="material-symbols-outlined text-[18px]">vertical_split</span>
+</button>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-variant/40 transition-colors" title="Docked Expand" type="button">
+<span class="material-symbols-outlined text-[18px]">open_in_full</span>
+</button>
+<div class="h-4 w-[1px] bg-outline-variant/40 mx-1"></div>
+<button class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" title="Close Panel" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<!-- Panel Scrollable Workspace -->
+<div class="flex-1 overflow-y-auto custom-scroll p-space-lg space-y-space-xl">
+<!-- ================================================================= -->
+<!-- 1. SECTION: DESIGN SYSTEM & TOKENS                                -->
+<!-- ================================================================= -->
+<article class="bg-surface-container-low rounded-xl p-space-lg border border-outline-variant/30 space-y-space-md shadow-sm">
+<!-- Section Title & Meta -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm pb-space-sm border-b border-outline-variant/20">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-serif">Design System &amp; Tokens</h2>
+<p class="font-label-sm text-label-sm text-outline mt-0.5">MASTER-CREATIVE-PROMPT v3.0 · 'Apply tokens' themes this entire studio live.</p>
+</div>
+<!-- Primary Action: Apply tokens -->
+<button class="self-start sm:self-auto bg-on-surface hover:bg-inverse-surface text-surface px-space-md py-2 rounded-xl text-label-md font-label-md flex items-center gap-2 border border-primary/40 shadow-sm active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[16px] text-secondary-fixed">auto_fix_high</span>
+<span>Apply tokens: light (lead magnets)</span>
+</button>
+</div>
+<!-- Token Table / Specs Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Left Column: Color Swatches -->
+<div class="space-y-space-sm bg-surface-container p-space-md rounded-xl border border-outline-variant/25">
+<span class="font-label-sm text-label-sm text-primary tracking-[0.12em] block font-semibold">COLOR PALETTE MANIFEST</span>
+<!-- Core Tokens -->
+<div class="space-y-1.5">
+<!-- Void / Page Base -->
+<div class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-lg border border-outline-variant/50 shadow-inner bg-[#FAF7F2]"></div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">--void</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">#FAF7F2 (page base)</span>
+</div>
+<!-- Cream / Panel -->
+<div class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-lg border border-outline-variant/50 shadow-inner bg-[#F5F0E8]"></div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">--cream</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">#F5F0E8 (panel)</span>
+</div>
+<!-- Gold / Accent -->
+<div class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-lg border border-primary/50 shadow-inner bg-[#B8860B]"></div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">--gold</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-medium">#B8860B (accent)</span>
+</div>
+<!-- Ink / Primary Text -->
+<div class="flex items-center justify-between p-1.5 rounded-lg hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<div class="w-6 h-6 rounded-lg shadow-inner bg-[#14110D]"></div>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">--ink</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline">#14110D (primary text)</span>
+</div>
+</div>
+<!-- Dark & Functional Subsets -->
+<div class="pt-2 border-t border-outline-variant/20 flex flex-col gap-1.5">
+<span class="font-label-sm text-label-sm text-outline">Dark Mode Fallbacks:</span>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#050810] text-[#FAF7F2]">--void #050810</span>
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#111827] text-[#FAF7F2]">--mid #111827</span>
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#F5E6C8] text-[#14110D]">--t1 #F5E6C8</span>
+</div>
+<span class="font-label-sm text-label-sm text-outline mt-1">Functional Signals:</span>
+<div class="flex items-center gap-2">
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#2D7A2D] text-white">--success #2D7A2D</span>
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#E65C00] text-white">--energy #E65C00</span>
+<span class="font-label-sm text-[9px] px-2 py-0.5 rounded bg-[#C62828] text-white">--loss #C62828</span>
+</div>
+</div>
+</div>
+<!-- Right Column: Typography & Metrics -->
+<div class="space-y-space-sm bg-surface-container p-space-md rounded-xl border border-outline-variant/25 flex flex-col justify-between">
+<div>
+<span class="font-label-sm text-label-sm text-primary tracking-[0.12em] block font-semibold mb-2">TYPOGRAPHY &amp; METRICS SPEC</span>
+<div class="space-y-2">
+<div class="flex items-baseline justify-between border-b border-outline-variant/15 pb-1">
+<span class="font-headline-md text-headline-sm text-on-surface">Display Headline</span>
+<span class="font-label-sm text-label-sm text-outline">Cormorant Garamond 300</span>
+</div>
+<div class="flex items-baseline justify-between border-b border-outline-variant/15 pb-1">
+<span class="font-body-md text-body-md text-on-surface font-medium">Body / Operative</span>
+<span class="font-label-sm text-label-sm text-outline">Hanken Grotesk 400/500</span>
+</div>
+<div class="flex items-baseline justify-between border-b border-outline-variant/15 pb-1">
+<span class="font-label-md text-label-md text-on-surface">Data / System Metadata</span>
+<span class="font-label-sm text-label-sm text-outline">JetBrains Mono 400</span>
+</div>
+<div class="flex items-baseline justify-between border-b border-outline-variant/15 pb-1">
+<span class="font-body-sm text-body-sm text-on-surface">Surface Radii</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">12px / 16px</span>
+</div>
+<div class="flex items-baseline justify-between">
+<span class="font-body-sm text-body-sm text-on-surface">Elevation Rules</span>
+<span class="font-label-sm text-label-sm text-outline">sh-sm · sh-card · sh-gold</span>
+</div>
+</div>
+</div>
+<!-- Anti-patterns callout -->
+<div class="p-space-xs px-2.5 rounded-lg bg-surface-variant/40 border border-outline-variant/20 mt-3">
+<p class="font-label-sm text-label-sm text-outline leading-tight">
+<span class="text-error font-medium">Anti-patterns:</span> No purple gradients · No unbonded hexes · No 0px sharp corners without token override.
+                </p>
+</div>
+</div>
+</div>
+</article>
+<!-- ================================================================= -->
+<!-- 2. SECTION: SELECTED ARTIFACT (Active Inspector Form)             -->
+<!-- ================================================================= -->
+<article class="bg-surface-container-low rounded-xl p-space-lg border border-outline-variant/30 space-y-space-md shadow-sm">
+<div class="flex items-center justify-between pb-space-xs border-b border-outline-variant/20">
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-serif">Selected Artifact</h2>
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">ACTIVE NODE: #ART-9921</span>
+</div>
+</div>
+<!-- Field Stack -->
+<div class="space-y-space-md">
+<!-- TITLE INPUT -->
+<div>
+<label class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E] block mb-1.5" for="artifact-title">
+                TITLE
+              </label>
+<input class="w-full bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl px-space-md py-2 font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all" id="artifact-title" type="text" value="Variant B — Light lead-magnet theme"/>
+</div>
+<!-- BODY TEXTAREA -->
+<div>
+<label class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E] block mb-1.5" for="artifact-body">
+                BODY
+              </label>
+<textarea class="w-full bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl p-space-md font-body-md text-body-md text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none leading-relaxed" id="artifact-body" rows="3">Paper-weight editorial canvas (#FAF7F2), goldenrod rules, and EB Garamond headings tailored for Mountain West VP/CHRO cohorts. Eliminates generic B2B SaaS tropes in favor of restrained legal-brief authority.</textarea>
+</div>
+<!-- THREE COLUMNS SELECT ROW -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-space-md">
+<!-- Select: Phase -->
+<div>
+<label class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E] block mb-1.5" for="select-phase">
+                  PHASE
+                </label>
+<div class="relative">
+<select class="w-full bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl px-3 py-2 font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" id="select-phase">
+<option selected="">Develop</option>
+<option>Discover</option>
+<option>Define</option>
+<option>Deliver</option>
+</select>
+<span class="material-symbols-outlined text-[18px] text-outline absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Select: Artifact Kind -->
+<div>
+<label class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E] block mb-1.5" for="select-kind">
+                  ARTIFACT KIND
+                </label>
+<div class="relative">
+<select class="w-full bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl px-3 py-2 font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" id="select-kind">
+<option selected="">variant sketch note</option>
+<option>operational component</option>
+<option>editorial blueprint</option>
+</select>
+<span class="material-symbols-outlined text-[18px] text-outline absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Select: Status -->
+<div>
+<label class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E] block mb-1.5" for="select-status">
+                  STATUS
+                </label>
+<div class="relative">
+<select class="w-full bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl px-3 py-2 font-body-md text-body-md text-on-surface appearance-none focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary cursor-pointer" id="select-status">
+<option selected="">in-review</option>
+<option>draft</option>
+<option>approved</option>
+<option>deprecated</option>
+</select>
+<span class="material-symbols-outlined text-[18px] text-outline absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Deviation Budget Slider -->
+<div class="pt-2">
+<div class="flex items-center justify-between mb-1.5">
+<span class="font-label-md text-label-md tracking-[0.12em] text-[#8A7E6E]">
+                  DEVIATION: 0 — within budget
+                </span>
+<span class="font-label-sm text-label-sm text-primary font-semibold">100% CANONICAL ADHERENCE</span>
+</div>
+<input class="w-full h-1.5 bg-outline-variant/40 rounded-lg appearance-none cursor-pointer accent-[#B8860B]" max="5" min="0" type="range" value="0"/>
+<div class="flex justify-between font-label-sm text-[10px] text-outline mt-1">
+<span>0 (Pure System)</span>
+<span>2 (Allowed Micro-variant)</span>
+<span>5 (System Breach Alert)</span>
+</div>
+</div>
+</div>
+</article>
+<!-- ================================================================= -->
+<!-- 3. ACTION & CODE EXPORT                                           -->
+<!-- ================================================================= -->
+<article class="bg-surface-container-low rounded-xl p-space-lg border border-outline-variant/30 space-y-space-md shadow-sm">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-serif">Export &amp; AI Compilation</h2>
+<p class="font-label-sm text-label-sm text-outline">Synthesize token graph into structured prompt prompt injections.</p>
+</div>
+<!-- Primary Generate Button -->
+<button class="px-6 py-3 rounded-xl bg-[#14110D] text-[#FAF7F2] hover:bg-[#2A241E] flex items-center gap-2 font-label-md text-label-md shadow-md active:scale-[0.98] transition-all" type="button">
+<span class="material-symbols-outlined text-[18px] text-secondary-fixed">bolt</span>
+<span>Generate AI-coding prompt</span>
+</button>
+</div>
+<!-- Code Box with Light Editorial Styling -->
+<div class="bg-[#FAF7F2] border border-[#D8CFBE] rounded-xl overflow-hidden shadow-inner">
+<!-- Code Block Header -->
+<div class="flex items-center justify-between px-space-md py-2 border-b border-[#D8CFBE] bg-surface-container-lowest/60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">terminal</span>
+<span class="font-label-sm text-label-sm text-on-surface font-medium">RIG_AI_COMPILER_OUTPUT.prompt</span>
+</div>
+<!-- Ghost Button: Copy prompt -->
+<button class="border border-[#B8860B]/40 hover:bg-[#B8860B]/10 text-primary font-label-sm text-[11px] px-2.5 py-1 rounded-md flex items-center gap-1.5 transition-colors" id="copy-btn" type="button">
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+<span>Copy prompt</span>
+</button>
+</div>
+<!-- Code Output Body -->
+<div class="p-space-md overflow-x-auto">
+<pre class="font-label-sm text-[11px] leading-relaxed text-[#14110D] select-all"># RIG AI-CODING PROMPT — Variant B — Light lead-magnet theme
+TARGET: Desktop Next.js / Tailwind CSS / Editorial Canvas
+PALETTE: bg-[#FAF7F2] surface-[#F5F0E8] accent-[#B8860B] ink-[#14110D]
+TYPOGRAPHY: serif['EB Garamond'] sans['Hanken Grotesk'] mono['JetBrains Mono']
+LAYOUT: 64px modular canvas grid, 12px card radius, 1px goldenrod borders.
+RULES: No pure black (#000) or pure white (#fff). Respect token deviation budget.</pre>
+</div>
+</div>
+</article>
+</div>
+<!-- Panel Footer Status & Quick Rail -->
+<footer class="h-12 px-space-lg border-t border-outline-variant/30 bg-surface-container flex items-center justify-between flex-shrink-0 text-label-sm font-label-sm text-outline">
+<div class="flex items-center gap-space-md">
+<span class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            Sync Engine: Active
+          </span>
+<span class="hidden sm:inline">·</span>
+<span class="hidden sm:inline">Latency: 18ms</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[15px]">keyboard</span>
+            Shortcuts
+          </a>
+<span>·</span>
+<a class="hover:text-primary transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-[15px]">menu_book</span>
+            Documentation
+          </a>
+</div>
+</footer>
+</section>
+</main>
+<!-- Inline vanilla JavaScript for micro-interactions -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const copyBtn = document.getElementById('copy-btn');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          const originalText = copyBtn.innerHTML;
+          copyBtn.innerHTML = '<span class="material-symbols-outlined text-[14px]">check</span><span>Copied!</span>';
+          setTimeout(() => {
+            copyBtn.innerHTML = originalText;
+          }, 2000);
+        });
+      }
+    });
+  </script>
+</body></html>

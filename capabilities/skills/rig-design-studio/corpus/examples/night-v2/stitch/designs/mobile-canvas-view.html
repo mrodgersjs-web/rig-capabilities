@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>RIG Studio Canvas - Mobile Viewport</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Fonts: Cormorant Garamond / EB Garamond, Hanken Grotesk, JetBrains Mono -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..700;1,400..700&amp;family=Hanken+Grotesk:ital,wght@0,300..700;1,300..700&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-dim": "#dcdad5",
+            "on-tertiary-fixed": "#221a0f",
+            "on-secondary-container": "#6a6158",
+            "inverse-surface": "#31302d",
+            "on-tertiary": "#ffffff",
+            "inverse-primary": "#f7bd48",
+            "surface-tint": "#7b5800",
+            "secondary-container": "#eaded2",
+            "surface-variant": "#e5e2dd",
+            "outline": "#817563",
+            "error": "#ba1a1a",
+            "on-surface": "#1c1c19",
+            "on-primary-fixed": "#271900",
+            "secondary-fixed": "#ede0d5",
+            "surface-container": "#f0ede9",
+            "primary": "#785600",
+            "surface": "#fcf9f4",
+            "on-error-container": "#93000a",
+            "surface-container-highest": "#e5e2dd",
+            "outline-variant": "#d3c4af",
+            "on-background": "#1c1c19",
+            "on-primary-container": "#fffbff",
+            "surface-container-high": "#ebe8e3",
+            "background": "#fcf9f4",
+            "secondary": "#665d54",
+            "tertiary": "#655a4c",
+            "on-error": "#ffffff",
+            "primary-container": "#986d00",
+            "tertiary-fixed": "#f0e0cd",
+            "tertiary-fixed-dim": "#d3c4b2",
+            "primary-fixed-dim": "#f7bd48",
+            "secondary-fixed-dim": "#d0c5b9",
+            "on-primary-fixed-variant": "#5d4200",
+            "on-secondary-fixed": "#201b13",
+            "error-container": "#ffdad6",
+            "on-secondary": "#ffffff",
+            "on-secondary-fixed-variant": "#4d453d",
+            "surface-container-low": "#f6f3ee",
+            "primary-fixed": "#ffdea6",
+            "on-tertiary-fixed-variant": "#4f4538",
+            "inverse-on-surface": "#f3f0eb",
+            "on-tertiary-container": "#fffbff",
+            "on-surface-variant": "#4f4535",
+            "tertiary-container": "#7e7363",
+            "surface-container-lowest": "#ffffff",
+            "on-primary": "#ffffff",
+            "surface-bright": "#fcf9f4"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "label-md": ["JetBrains Mono"],
+            "label-sm": ["JetBrains Mono"],
+            "headline-md": ["EB Garamond"],
+            "label-lg": ["JetBrains Mono"],
+            "display-lg-mobile": ["EB Garamond"],
+            "headline-sm": ["EB Garamond"],
+            "body-md": ["Hanken Grotesk"],
+            "body-sm": ["Hanken Grotesk"],
+            "body-lg": ["Hanken Grotesk"],
+            "headline-lg": ["EB Garamond"],
+            "display-lg": ["EB Garamond"],
+            "mono": ["JetBrains Mono"],
+            "serif": ["EB Garamond", "Cormorant Garamond", "serif"]
+          },
+          "fontSize": {
+            "label-md": ["11px", { "lineHeight": "14px", "letterSpacing": "0.06em", "fontWeight": "500" }],
+            "label-sm": ["10px", { "lineHeight": "12px", "letterSpacing": "0.08em", "fontWeight": "400" }],
+            "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "500" }],
+            "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.04em", "fontWeight": "500" }],
+            "display-lg-mobile": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "400" }],
+            "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+            "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+            "body-sm": ["13px", { "lineHeight": "18px", "fontWeight": "400" }],
+            "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "-0.005em", "fontWeight": "400" }],
+            "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "500" }],
+            "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "400" }]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Drafting Grid Pattern (24px precision architectural grid) */
+    .drafting-canvas-grid {
+      background-color: #FAF7F2;
+      background-image: 
+        radial-gradient(circle, rgba(184, 134, 11, 0.16) 1px, transparent 1px);
+      background-size: 24px 24px;
+      background-position: 12px 12px;
+    }
+    
+    /* Architectural Hairline Shadows */
+    .architectural-plate {
+      background: #F5F0E8;
+      border: 1px solid rgba(184, 134, 11, 0.25);
+    }
+    
+    .selected-canvas-node {
+      border: 1.5px solid #B8860B;
+      box-shadow: 0 8px 24px -4px rgba(20, 17, 13, 0.06), 0 0 0 2px rgba(184, 134, 11, 0.22);
+    }
+
+    /* Prevent text selection during panning/dragging */
+    .no-select {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-[#FAF7F2] text-[#14110D] antialiased flex justify-center items-center min-h-screen p-0 m-0">
+<!-- Mobile Screen Container: 390px x 844px fixed viewport frame -->
+<main class="w-[390px] h-[844px] max-w-[390px] max-h-[844px] relative bg-[#FAF7F2] overflow-hidden flex flex-col shadow-2xl border border-[rgba(184,134,11,0.2)]">
+<!-- 1. Top Bar (48px tall) -->
+<header class="h-12 w-full bg-[#F5F0E8] border-b border-[rgba(184,134,11,0.25)] flex items-center justify-between px-3 z-30 shrink-0">
+<div class="flex flex-col justify-center min-w-0 pr-2">
+<span class="text-[9px] tracking-[0.2em] font-mono text-[#B8860B] uppercase font-medium leading-none mb-1">
+          RIG DESIGN STUDIO
+        </span>
+<h1 class="font-serif text-[15px] font-semibold text-[#14110D] tracking-tight truncate leading-tight">
+          Iterate the Loehr HR-group landing…
+        </h1>
+</div>
+<!-- Ghost Studio Control Trigger (min 44x44px tap target) -->
+<button aria-label="Design System &amp; Calipers Panel" class="w-11 h-11 flex items-center justify-center rounded-lg text-[#3A332B] hover:text-[#14110D] hover:bg-[#FAF7F2] active:scale-[0.985] transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]" data-icon="tune">tune</span>
+</button>
+</header>
+<!-- 2. Segmented Tab Strip (44px tall) -->
+<nav class="h-11 w-full bg-[#F5F0E8] border-b border-[rgba(184,134,11,0.25)] flex items-center px-3 gap-2 z-20 shrink-0 overflow-x-auto no-scrollbar">
+<!-- Active Tab: BOARD -->
+<button class="bg-[#14110D] text-[#FAF7F2] rounded-full px-4 py-1.5 font-mono text-[10px] tracking-wider uppercase font-medium shadow-sm transition-transform active:scale-[0.985]" type="button">
+        BOARD
+      </button>
+<!-- Inactive Tab: DOUBLE DIAMOND -->
+<button class="bg-transparent text-[#8A7E6E] border border-[rgba(184,134,11,0.2)] hover:border-[#B8860B] hover:text-[#3A332B] rounded-full px-4 py-1.5 font-mono text-[10px] tracking-wider uppercase transition-colors" type="button">
+        DOUBLE DIAMOND
+      </button>
+<!-- Inactive Tab: MOCKUPS -->
+<button class="bg-transparent text-[#8A7E6E] border border-[rgba(184,134,11,0.2)] hover:border-[#B8860B] hover:text-[#3A332B] rounded-full px-4 py-1.5 font-mono text-[10px] tracking-wider uppercase transition-colors" type="button">
+        MOCKUPS
+      </button>
+</nav>
+<!-- 3. Canvas Workspace Area (Fills remaining space, with absolute coordinates & connection lines) -->
+<section class="relative flex-1 w-full drafting-canvas-grid overflow-y-auto overflow-x-hidden no-scrollbar px-3 pt-4 pb-24">
+<!-- SVG Connectors Layer -->
+<svg class="absolute inset-0 w-full h-full pointer-events-none z-10" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<lineargradient id="goldBeam" x1="0%" x2="100%" y1="0%" y2="100%">
+<stop offset="0%" stop-color="#B8860B" stop-opacity="0.75"></stop>
+<stop offset="100%" stop-color="#D4A017" stop-opacity="0.35"></stop>
+</lineargradient>
+</defs>
+<!-- Curved architectural guide edge 1: Card 1 to Card 2 -->
+<!-- Port 1: x: 366 (right 24), y: ~88px; Port 2: x: 366, y: ~278px -->
+<path d="M 364 88 C 402 120, 402 245, 364 278" fill="none" stroke="url(#goldBeam)" stroke-dasharray="3 3" stroke-width="1.5"></path>
+<!-- Curved architectural guide edge 2: Card 2 to Card 3 -->
+<!-- Port 2: x: 364, y: 278px; Port 3: x: 364, y: 468px -->
+<path d="M 364 278 C 398 330, 398 420, 364 468" fill="none" stroke="#B8860B" stroke-opacity="0.6" stroke-width="1.5"></path>
+</svg>
+<!-- Artifact Stack -->
+<div class="flex flex-col space-y-4 relative z-20">
+<!-- Card 1: Intake Schema (Validated) -->
+<article class="relative w-full rounded-2xl architectural-plate p-3.5 transition-all">
+<!-- Left Status Edge -->
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#2E6F40] rounded-l-2xl"></div>
+<!-- Connecting Right Anchor Port -->
+<div class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#F5F0E8] border-[1.5px] border-[#B8860B] flex items-center justify-center shadow-xs z-30">
+<div class="w-1.5 h-1.5 rounded-full bg-[#B8860B]"></div>
+</div>
+<!-- Card Header Cluster -->
+<div class="flex items-center justify-between pl-1 mb-2">
+<span class="font-mono text-[10px] font-medium tracking-[0.14em] text-[#8A7E6E] uppercase">
+              INTAKE SCHEMA
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-[#8A7E6E]/10 border border-[#8A7E6E]/20 font-mono text-[9px] text-[#2E6F40] font-medium tracking-wide">
+              dev +0
+            </span>
+</div>
+<!-- Card Title -->
+<h2 class="font-serif text-[18px] leading-[22px] font-bold text-[#14110D] tracking-tight pl-1 mb-1.5 line-clamp-2">
+            Executive Persona &amp; Behavioral Anchors
+          </h2>
+<!-- Summary Body -->
+<p class="font-sans text-[12px] leading-[17px] text-[#3A332B] pl-1 line-clamp-2">
+            Synthesized interview vectors from Loehr talent leads into structured routing constraints.
+          </p>
+<!-- Subtle Blueprint Footer Footprint -->
+<div class="mt-2.5 pt-2 border-t border-[rgba(184,134,11,0.12)] flex items-center justify-between pl-1">
+<div class="flex items-center gap-1.5 text-[#8A7E6E]">
+<span class="material-symbols-outlined text-[14px]" data-icon="layers">layers</span>
+<span class="font-mono text-[9px] uppercase">Node 01 // Seed</span>
+</div>
+<span class="font-mono text-[9px] text-[#2E6F40]">VALIDATED</span>
+</div>
+</article>
+<!-- Card 2: Canvas Route (SELECTED CARD - In Progress) -->
+<article class="relative w-full rounded-2xl architectural-plate selected-canvas-node p-3.5 bg-[#FAF7F2] transition-all">
+<!-- Active Caliper Highlight Marker (Top Tag) -->
+<div class="absolute -top-2.5 right-6 bg-[#B8860B] text-[#FAF7F2] font-mono text-[8px] uppercase tracking-widest px-2 py-0.5 rounded-full shadow-xs">
+            ACTIVE TARGET
+          </div>
+<!-- Left Status Edge -->
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#B8860B] rounded-l-2xl"></div>
+<!-- Connecting Right Anchor Port (Glow state) -->
+<div class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#FAF7F2] border-[1.5px] border-[#B8860B] flex items-center justify-center shadow-xs ring-2 ring-[#B8860B]/30 z-30">
+<div class="w-1.5 h-1.5 rounded-full bg-[#B8860B] animate-pulse"></div>
+</div>
+<!-- Card Header Cluster -->
+<div class="flex items-center justify-between pl-1 mb-2">
+<span class="font-mono text-[10px] font-semibold tracking-[0.14em] text-[#B8860B] uppercase flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-[#B8860B]"></span>
+              CANVAS ROUTE
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-[#B8860B]/15 border border-[#B8860B]/35 font-mono text-[9px] text-[#B8860B] font-medium tracking-wide">
+              dev +2
+            </span>
+</div>
+<!-- Card Title -->
+<h2 class="font-serif text-[18px] leading-[22px] font-bold text-[#14110D] tracking-tight pl-1 mb-1.5 line-clamp-2">
+            Autonomous Booking Intent Intake
+          </h2>
+<!-- Summary Body -->
+<p class="font-sans text-[12px] leading-[17px] text-[#3A332B] pl-1 line-clamp-2">
+            Natural language parser for trip itinerary constraints, budget caps &amp; team authority.
+          </p>
+<!-- Studio Caliper Measure Row -->
+<div class="mt-2.5 pt-2 border-t border-[rgba(184,134,11,0.2)] flex items-center justify-between pl-1">
+<div class="flex items-center gap-1.5 text-[#3A332B]">
+<span class="material-symbols-outlined text-[14px]" data-icon="draw">draw</span>
+<span class="font-mono text-[9px] uppercase">Node 02 // Core Flow</span>
+</div>
+<div class="flex items-center gap-1">
+<span class="font-mono text-[9px] text-[#B8860B] font-medium">IN REVIEW</span>
+<span class="w-1 h-1 rounded-full bg-[#B8860B]"></span>
+</div>
+</div>
+</article>
+<!-- Card 3: Codegen Spec (Pending/Draft) -->
+<article class="relative w-full rounded-2xl architectural-plate p-3.5 opacity-90 transition-all">
+<!-- Left Status Edge -->
+<div class="absolute left-0 top-0 bottom-0 w-[3px] bg-[#8A7E6E] rounded-l-2xl"></div>
+<!-- Connecting Right Anchor Port -->
+<div class="absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-[#F5F0E8] border-[1.5px] border-[#8A7E6E] flex items-center justify-center shadow-xs z-30">
+<div class="w-1.5 h-1.5 rounded-full bg-[#8A7E6E]"></div>
+</div>
+<!-- Card Header Cluster -->
+<div class="flex items-center justify-between pl-1 mb-2">
+<span class="font-mono text-[10px] font-medium tracking-[0.14em] text-[#8A7E6E] uppercase">
+              CODEGEN SPEC
+            </span>
+<span class="px-2 py-0.5 rounded-full bg-[#8A7E6E]/10 border border-[#8A7E6E]/20 font-mono text-[9px] text-[#8A7E6E] font-medium tracking-wide">
+              dev +0
+            </span>
+</div>
+<!-- Card Title -->
+<h2 class="font-serif text-[18px] leading-[22px] font-bold text-[#14110D] tracking-tight pl-1 mb-1.5 line-clamp-2">
+            Dev Handoff Schema Serializer
+          </h2>
+<!-- Summary Body -->
+<p class="font-sans text-[12px] leading-[17px] text-[#3A332B] pl-1 line-clamp-2">
+            Serializes canvas nodes, deviation thresholds, and edge links into coding agent payload.
+          </p>
+<!-- Footer Footprint -->
+<div class="mt-2.5 pt-2 border-t border-[rgba(184,134,11,0.12)] flex items-center justify-between pl-1">
+<div class="flex items-center gap-1.5 text-[#8A7E6E]">
+<span class="material-symbols-outlined text-[14px]" data-icon="terminal">terminal</span>
+<span class="font-mono text-[9px] uppercase">Node 03 // Output</span>
+</div>
+<span class="font-mono text-[9px] text-[#8A7E6E]">STAGED</span>
+</div>
+</article>
+</div>
+<!-- 4. Floating Zoom Pill (Positioned dynamically on right drafting boundary) -->
+<aside aria-label="Canvas Zoom" class="sticky bottom-3 ml-auto w-fit z-40 flex items-center bg-[#F5F0E8] border border-[rgba(184,134,11,0.3)] rounded-full shadow-md px-1 py-0.5 backdrop-blur-sm">
+<button aria-label="Zoom Out" class="w-8 h-8 flex items-center justify-center font-mono text-[14px] text-[#3A332B] hover:text-[#B8860B] active:scale-90 transition-transform" type="button">
+          −
+        </button>
+<span class="font-mono text-[11px] font-medium text-[#14110D] px-2 select-none tracking-tight">
+          85%
+        </span>
+<button aria-label="Zoom In" class="w-8 h-8 flex items-center justify-center font-mono text-[14px] text-[#3A332B] hover:text-[#B8860B] active:scale-90 transition-transform" type="button">
+          +
+        </button>
+</aside>
+</section>
+<!-- 5. Bottom Action Bar (64px tall) -->
+<footer class="h-16 w-full bg-[#F5F0E8] border-t border-[rgba(184,134,11,0.25)] px-3 flex items-center gap-2.5 z-40 shrink-0">
+<!-- Primary Dark CTA Button: + Artifact -->
+<button class="h-12 flex-1 bg-[#14110D] hover:bg-[#25201A] text-[#FAF7F2] rounded-xl font-mono text-xs uppercase tracking-wider font-medium flex items-center justify-center gap-2 shadow-sm active:scale-[0.985] transition-all" type="button">
+<span class="text-base font-light leading-none">+</span>
+<span>Artifact</span>
+</button>
+<!-- Secondary Ghost Button: Export -->
+<button class="h-12 px-5 bg-transparent border border-[rgba(184,134,11,0.35)] hover:border-[#B8860B] text-[#14110D] hover:bg-[#FAF7F2] rounded-xl font-mono text-xs uppercase tracking-wider font-medium flex items-center justify-center gap-1.5 active:scale-[0.985] transition-all" type="button">
+<span class="material-symbols-outlined text-[16px] text-[#B8860B]" data-icon="ios_share">ios_share</span>
+<span>Export</span>
+</button>
+</footer>
+<!-- 6. Safe-Area Micro Guidance Strip -->
+<div class="w-full bg-[#F5F0E8] pb-1.5 pt-0.5 text-center shrink-0 border-t border-[rgba(184,134,11,0.1)]">
+<p class="font-mono text-[8.5px] uppercase tracking-[0.18em] text-[#8A7E6E] font-medium select-none">
+        DRAG CARDS · PINCH ZOOM · TAP ○ TO LINK
+      </p>
+</div>
+</main>
+<!-- Interactive State Engine Script -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Zoom micro-interaction
+      const zoomText = document.querySelector('aside span');
+      const zoomMinus = document.querySelectorAll('aside button')[0];
+      const zoomPlus = document.querySelectorAll('aside button')[1];
+      let currentZoom = 85;
+
+      zoomMinus.addEventListener('click', () => {
+        if (currentZoom > 50) {
+          currentZoom -= 5;
+          zoomText.textContent = `${currentZoom}%`;
+        }
+      });
+
+      zoomPlus.addEventListener('click', () => {
+        if (currentZoom < 150) {
+          currentZoom += 5;
+          zoomText.textContent = `${currentZoom}%`;
+        }
+      });
+
+      // Card Selection Toggle
+      const cards = document.querySelectorAll('article');
+      cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          // If clicked inside, toggle active focus styling
+          cards.forEach(c => {
+            c.classList.remove('selected-canvas-node', 'bg-[#FAF7F2]');
+            c.classList.add('architectural-plate');
+          });
+          card.classList.add('selected-canvas-node', 'bg-[#FAF7F2]');
+        });
+      });
+    });
+  </script>
+</body></html>
