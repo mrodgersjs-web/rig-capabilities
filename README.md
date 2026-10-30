@@ -1,5 +1,7 @@
 <div align="center">
 
+![CI status](https://img.shields.io/github/actions/workflow/status/mrodgersjs-web/rig-capabilities/rig-lattice.yml?label=CI&logo=github-actions)
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/assets/hero-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="docs/assets/hero-light.svg">
