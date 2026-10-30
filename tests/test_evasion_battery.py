@@ -20,14 +20,15 @@ from tool_selection import (  # noqa: E402
     check_build_checklist,
     select_framework,
 )
-from test_tool_selection import _live_inventory_sha256  # noqa: E402
+from test_tool_selection import SCHEDULE, _live_inventory_sha256  # noqa: E402
 
 CLOCK = {
     "clock_critical": {
-        "named_consumer": "live pricing dashboard",
-        "failure_mode": "stale prices",
-        "sla_start_latency_seconds": 30,
-        "recovery_policy": "catch_up",
+        "consumer": "live pricing dashboard",
+        "start_latency_ms": 30000,
+        "catch_up_policy": "catch_up",
+        "mechanism": "Temporal workflow with durable timer",
+        "deployment_evidence": "authority/evidence/temporal-pricing.json",
     }
 }
 
@@ -39,16 +40,17 @@ def _green_build(testcase, tmp, **overrides):
         encoding="utf-8",
     )
     build = {
-        "properties": {},
+        "properties": {"ordinary_schedule": SCHEDULE},
         "process_id": "julie_synthetic",
         "inventory_sha256": _live_inventory_sha256(),
-        "framework": "kestra_pydantic",
+        "framework": "kestra",
         "durable_system": True,
         "pydantic_models": ["In", "Out"],
         "model_necessity_claims": ["classify: deterministic sort failed"],
         "archify_diagram_path": "diagram.json",
         "d85_realized_pass": True,
         "orchestration_is_code": True,
+        "lattice": {'cell_id': 'L3-D2-A1-I1', 'bms': {'failure_cost': 0.5, 'reversibility': 0.95, 'mechanism_clarity': 0.95, 'past_failure_rate': 0.0, 'data_volume': 0.5, 'level': 'L3'}, 'a1_failure': None},
     }
     build.update(overrides)
     return build
@@ -68,7 +70,7 @@ class EvasionBattery(unittest.TestCase):
     # 1. Lying properties: a well-formed record whose evidence contradicts the
     #    claim (SLA too loose) must BLOCK, never read as absent/FALSE.
     def test_attack_lying_properties_blocks(self) -> None:
-        lying = {"clock_critical": dict(CLOCK["clock_critical"], sla_start_latency_seconds=3600)}
+        lying = {"clock_critical": dict(CLOCK["clock_critical"], start_latency_ms=60001)}
         with self.assertRaises(ToolSelectionBlock) as caught:
             select_framework(lying)
         self.assertIn("contradicted", caught.exception.detail)
@@ -76,7 +78,7 @@ class EvasionBattery(unittest.TestCase):
     # 2. Framework swap: declare the cheaper framework the decision table
     #    does not require for these properties.
     def test_attack_framework_swap_blocks(self) -> None:
-        build = _green_build(self, self.tmp, properties=CLOCK, framework="kestra_pydantic")
+        build = _green_build(self, self.tmp, properties=CLOCK, framework="kestra")
         result = check_build_checklist(build, root=Path(self.tmp))
         self.checks = result["checks"]
         self.assertEqual(result["verdict"], "CHECKLIST_BLOCK")

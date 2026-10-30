@@ -98,6 +98,33 @@ class CatalogTests(unittest.TestCase):
         # never a sibling backup: a `<name>.bak-*` inside a skills/hooks root is loaded as a duplicate
         self.assertEqual([], list((self.tmp / "claude" / "hooks").glob("guard.sh.bak-*")))
 
+    def test_broken_symlink_is_backed_up_before_install(self):
+        target = self.tmp / "claude" / "skills" / "demo-skill"
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.symlink_to(self.tmp / "missing-skill")
+        with self.assertRaisesRegex(ValueError, "target exists and differs"):
+            self.repo.install("demo-skill", "claude")
+        result = self.repo.install("demo-skill", "claude", force=True)
+        self.assertEqual("replaced", result["status"])
+        self.assertTrue((target / "SKILL.md").is_file())
+        backups = list((target.parent / ".rig-backups").glob("demo-skill.bak-*"))
+        self.assertEqual(1, len(backups))
+        self.assertTrue(backups[0].is_symlink())
+
+    def test_aside_skill_target_is_explicit(self):
+        from rig_capabilities.catalog import DEFAULT_INSTALL_ROOTS
+        self.assertEqual("~/.aside/u/0/skills/user", DEFAULT_INSTALL_ROOTS["skill"]["aside"])
+
+    def test_aside_install_uses_configured_root(self):
+        cfg = json.loads(self.repo.config_path.read_text())
+        cfg["install_roots"]["skill"]["aside"] = str(self.tmp / "aside" / "skills" / "user")
+        self.repo.config_path.write_text(json.dumps(cfg))
+        result = self.repo.install("demo-skill", "aside")
+        self.assertEqual("installed", result["status"])
+        self.assertEqual(self.tmp / "aside" / "skills" / "user" / "demo-skill",
+                         Path(result["target"]))
+        self.assertTrue((Path(result["target"]) / "SKILL.md").is_file())
+
     def test_external_requires_canonicalize(self):
         with self.assertRaises(ValueError) as cm:
             self.repo.install("ext-thing", "claude")
@@ -1094,7 +1121,7 @@ class DoneTests(unittest.TestCase):
             "grep:capabilities/skills/ok-skill/SKILL.md:needle",
             "not-a-form"])
         r = run_asset(repo, "ok-skill")
-        self.assertTrue(r["pass"])
+        self.assertFalse(r["pass"], "unrunnable criteria must block a done-test pass")
         self.assertEqual(1, sum(1 for x in r["results"] if x["ok"] is None))
         bad = self._repo_with(tmp.name, "bad-skill", ["cmd:false", "file:nope"])
         r2 = run_asset(bad, "bad-skill")
@@ -1107,8 +1134,21 @@ class DoneTests(unittest.TestCase):
         repo = self._repo_with(tmp.name, "q-skill", ["cmd:true"])
         rep = quality_run(repo)
         self.assertEqual(1, rep["ran"])
+        self.assertEqual(1, rep["checks_ran"])
+        self.assertEqual(0, rep["checks_unrunnable"])
+        self.assertEqual([], rep["incomplete_assets"])
         out = list((repo.root / ".context" / "quality-runs").glob("*.json"))
         self.assertEqual(1, len(out))
+
+    def test_quality_run_surfaces_skipped_criteria(self):
+        from rig_capabilities.done_tests import quality_run
+        tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(tmp.cleanup)
+        repo = self._repo_with(tmp.name, "prose-skill", ["not-a-form"])
+        rep = quality_run(repo)
+        self.assertEqual(0, rep["passed"])
+        self.assertEqual(1, rep["checks_unrunnable"])
+        self.assertEqual(["prose-skill"], rep["incomplete_assets"])
 
     def test_canonical_skills_pass(self):
         from rig_capabilities.done_tests import run_asset
