@@ -1,0 +1,136 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-SKELETON-IMPLEMENTATION",
+      "name": "skeleton implementation process (TubeGuruji seven stages)",
+      "description": "skeleton implementation process (TubeGuruji seven stages) [skeleton-implementation-stage] \u2014 compiled from capabilities/harnesses/tg-skeleton-implementation.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "S1",
+          "category": "Identity Lock",
+          "name": "S1 stack picked from the tubeguruji-doctrine default-stack tabl",
+          "description": "stack picked from the tubeguruji-doctrine default-stack table; every deviation recorded with its reason",
+          "command": "stack table in mission record with deviation notes",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "S2",
+          "category": "Identity Lock",
+          "name": "S2 the seven stages land in skeleton order; no stage starts bef",
+          "description": "the seven stages land in skeleton order; no stage starts before its predecessor's check ran green",
+          "command": "slice records in order with per-slice check output",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "S3",
+          "category": "Identity Lock",
+          "name": "S3 code slices end with `npm run build` (or the project's build",
+          "description": "code slices end with `npm run build` (or the project's build cmd) executed and exit 0; UI slices additionally render their route",
+          "command": "per-slice command + exit code",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "S4",
+          "category": "Identity Lock",
+          "name": "S4 integrations follow tg-integration-fitter: env-gated vendors",
+          "description": "integrations follow tg-integration-fitter: env-gated vendors with named fallbacks, migration applied, deny path exercised",
+          "command": "integration verdicts array",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "One slice, one executed check.",
+        "harness_tuple": "H_impl(stage_slices, executed_checks, stack_table)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-skeleton-implementation",
+          "session_type": "skeleton-implementation-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "stack picked from the tubeguruji-doctrine default-stack table; every deviation recorded with its reason",
+        "the seven stages land in skeleton order; no stage starts before its predecessor's check ran green",
+        "code slices end with `npm run build` (or the project's build cmd) executed and exit 0; UI slices additionally render their route",
+        "integrations follow tg-integration-fitter: env-gated vendors with named fallbacks, migration applied, deny path exercised"
+      ],
+      "anti_patterns": [
+        "Building artifact/credits screens before the form+quota stage exists",
+        "A slice closed on the builder's say-so without the command output",
+        "Hard-coded vendor keys to make an integration 'work' (corpus anti-pattern lUMIj6I9fR8)"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-skeleton-implementation.yaml",
+        "source_sha256": "476feceae9095cda00b22b2391a6163e12b7e4757040ab01ab2444cd74d891d6",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

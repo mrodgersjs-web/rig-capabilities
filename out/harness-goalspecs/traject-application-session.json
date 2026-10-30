@@ -1,0 +1,113 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-APPLICATION-SESSION",
+      "name": "Traject application session (main process for one tailored application)",
+      "description": "Traject application session (main process for one tailored application) [traject-application-session] \u2014 compiled from capabilities/harnesses/traject-application-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "A1",
+          "category": "Identity Lock",
+          "name": "A1 the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint w",
+          "description": "the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint with the current $180K floor, clearing resume.ats + resume.recruiter",
+          "command": "sha256, packet_lint output, decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A2",
+          "category": "Identity Lock",
+          "name": "A2 the form is filled from confirmed work history, clearing job",
+          "description": "the form is filled from confirmed work history, clearing job.formfill/form.field, and the run HARD-STOPs before final Submit",
+          "command": "form_filled and held_at: final_submit",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I tailor and fill; I do not submit.",
+        "harness_tuple": "H_application(tailor, lint, fill, stop)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-application-session",
+          "session_type": "traject-application-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint with the current $180K floor, clearing resume.ats + resume.recruiter",
+        "the form is filled from confirmed work history, clearing job.formfill/form.field, and the run HARD-STOPs before final Submit"
+      ],
+      "anti_patterns": [
+        "Submitting the form; the first-five pilot reserves the click for Mike",
+        "A stale $200K floor in packet_lint gating the r\u00e9sum\u00e9"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-application-session.yaml",
+        "source_sha256": "d0afd91863725b6a99321af6d21efbdd7215c0a5cb1a5d2637b6ec52682bcd1c",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}
