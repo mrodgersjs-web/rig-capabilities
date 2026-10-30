@@ -144,10 +144,20 @@ def _load_yaml_or_json(text: str) -> dict:
     return json.loads(text)
 
 
+# Clean-interpreter preamble (daily-review 2026-10-01 section 6). A registered
+# gate runs under `/usr/bin/env -u PYTHONHOME -u PYTHONPATH ...` — fresh state,
+# no inherited env contamination — so a relocated Python cannot leak in and turn
+# a green gate red. Applied here rather than per check: this is the one place
+# every check and every plant command is executed. The preamble strips those two
+# variables from the gate's environment; it does not pin the interpreter binary.
+CLEAN_INTERPRETER_PREAMBLE = ("/usr/bin/env", "-u", "PYTHONHOME", "-u", "PYTHONPATH")
+
+
 def _run_cmd(cmd: str, cwd: str | None, timeout: int = 60) -> dict:
     t0 = time.time()
     try:
-        r = subprocess.run(cmd, shell=True, cwd=cwd or None, capture_output=True, text=True,
+        r = subprocess.run([*CLEAN_INTERPRETER_PREAMBLE, "/bin/sh", "-c", cmd],
+                           cwd=cwd or None, capture_output=True, text=True,
                            timeout=timeout)
         return {"cmd": cmd, "exit": r.returncode, "stdout": r.stdout[-2000:],
                 "stderr": r.stderr[-2000:], "secs": round(time.time() - t0, 2)}
@@ -1423,6 +1433,17 @@ def verify(run: dict, spec: dict, family: str, cmd_override: str | None = None, 
     ms = _VERDICT_RX.findall(output)
     m = ms[-1] if ms else None
     verdict = (m if isinstance(m, str) else m.group(1)).upper() if m else "NO_VERDICT"
+    # Thin-verdict guard: a real independent review leaves reasoning in its
+    # transcript. A bare `VERDICT: X` echo (e.g. `--cmd 'echo "VERDICT: VERIFIED"'`)
+    # is not a review — downgrade accept-grade verdicts fail-closed.
+    # ponytail: colluding cmd can pad body text; the signed-dispatch binding
+    # below is the deeper lane for adversarial hardening.
+    if verdict in ("PERFECT", "VERIFIED", "PARTIAL"):
+        body = re.sub(r"VERDICT:\s*\S+", "", output)
+        if len(re.sub(r"\s+", "", body)) < 100:
+            verdict = "NO_VERDICT"
+            output += "\n[thin-verdict: transcript body <100 non-whitespace chars — accept-grade verdict downgraded fail-closed]"
+            _atomic_write(out_path, output)
     gaps = []
     gm = re.search(r"GAPS:\s*\n((?:[ \t]*[-*].*\n?)+)", output)
     if gm:
@@ -2368,7 +2389,7 @@ def _run_case(spec: dict, case: dict, tmp: Path) -> dict:
             elif "verify" in step:
                 v = step["verify"]
                 mock = v.get("mock")
-                override = f"printf 'VERDICT: {mock}\\nGAPS:\\n- none\\n'" if mock else v.get("cmd")
+                override = (f"printf 'Review transcript (selftest mock): read the claim, re-ran the registered checks, inspected the planted failure and the stage artifacts; findings follow.\\nVERDICT: {mock}\\nGAPS:\\n- none\\n'" if mock else v.get("cmd"))  # real-length mock body so the thin-verdict guard in verify() judges it like a review
                 try:
                     cur_run = load_run(run["run_id"])
                     rec = verify(cur_run, load_spec(cur_run["loop_id"]), v.get("family", "codex"), cmd_override=override, timeout=60)

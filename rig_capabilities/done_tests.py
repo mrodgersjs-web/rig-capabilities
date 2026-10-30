@@ -4,8 +4,9 @@
   cmd:<shell>            exit 0 in repo.root (15 s timeout)
   file:<relative/path>   exists under repo.root
   grep:<path>:<regex>    regex found in file
-  mcp:<tool>             MCP handler returns without raising
-Anything else is `unrunnable` (not a failure) — honest, not green-on-noise.
+  mcp:<tool>             MCP handler returns an affirmative typed verdict
+Anything else is `unrunnable` and blocks a pass. Only canonical assets may
+execute checks. Cached source drift also blocks execution.
 """
 from __future__ import annotations
 
@@ -29,6 +30,15 @@ def parse_form(entry: str) -> tuple:
     return "unknown", entry
 
 
+def _repo_path(repo, name: str) -> Path | None:
+    relative = Path(name)
+    if relative.is_absolute():
+        return None
+    root = Path(repo.root).resolve()
+    candidate = (root / relative).resolve()
+    return candidate if candidate.is_relative_to(root) else None
+
+
 def _run_form(repo, form: str, arg, mcp_call=None) -> dict:
     ok, detail = False, ""
     try:
@@ -37,13 +47,18 @@ def _run_form(repo, form: str, arg, mcp_call=None) -> dict:
                                capture_output=True, text=True, timeout=15)
             ok, detail = r.returncode == 0, (r.stderr or r.stdout)[:200]
         elif form == "file":
-            p = Path(repo.root) / arg
-            ok = p.exists()
-            detail = str(p) if ok else f"missing: {p}"
+            p = _repo_path(repo, arg)
+            if p is None:
+                detail = "path must remain relative to repo root"
+            else:
+                ok = p.exists()
+                detail = str(p) if ok else f"missing: {p}"
         elif form == "grep":
             path, rx = arg
-            p = Path(repo.root) / path
-            if p.exists():
+            p = _repo_path(repo, path)
+            if p is None:
+                detail = "path must remain relative to repo root"
+            elif p.exists():
                 ok = re.search(rx, p.read_text(errors="ignore")) is not None
                 detail = f"pattern {'found' if ok else 'not found'} in {path}"
             else:
@@ -52,8 +67,15 @@ def _run_form(repo, form: str, arg, mcp_call=None) -> dict:
             if mcp_call is None:
                 return {"form": "mcp:" + str(arg), "ok": None,
                         "detail": "mcp executor not wired"}
-            mcp_call(arg, {})
-            ok, detail = True, "handler ok"
+            receipt = mcp_call(arg, {})
+            if isinstance(receipt, dict):
+                status = str(receipt.get("status", "")).upper()
+                negative = (receipt.get("pass") is False or receipt.get("ok") is False
+                            or status in {"FAIL", "FAILED", "BLOCKED", "ERROR", "RED"})
+                ok = not negative and (receipt.get("pass") is True
+                                       or receipt.get("ok") is True
+                                       or status in {"PASS", "OK"})
+            detail = "affirmative handler verdict" if ok else "no affirmative handler verdict"
     except Exception as e:  # noqa: BLE001 — failure detail is the product
         detail = f"{type(e).__name__}: {e}"
     return {"form": f"{form}:{arg if isinstance(arg, str) else ':'.join(arg)}",
@@ -70,15 +92,39 @@ MCP_MUTATING = frozenset({
 _IN_QUALITY_RUN = False
 
 
-def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
+def run_asset(repo, asset_id: str, source: str = "canonical") -> dict:
+    if source != "canonical":
+        return {"id": asset_id, "pass": False, "ran": 0, "unrunnable": 0,
+                "unrunnable_forms": [],
+                "results": [{"form": "source", "ok": False,
+                             "detail": "noncanonical done-tests cannot execute"}]}
     a = None
     for x in repo.load_index()["assets"]:
-        if x["id"] == asset_id and (source is None or x["source"] == source):
+        if x["id"] == asset_id and x["source"] == source:
             a = x
             break
     if a is None:
-        return {"id": asset_id, "pass": False,
+        return {"id": asset_id, "pass": False, "ran": 0, "unrunnable": 0,
+                "unrunnable_forms": [],
                 "results": [{"form": "lookup", "ok": False, "detail": "asset not found"}]}
+    if not a.get("sha") or not a.get("abs_path"):
+        return {"id": asset_id, "pass": False, "ran": 0, "unrunnable": 0,
+                "unrunnable_forms": [],
+                "results": [{"form": "source", "ok": False,
+                             "detail": "indexed source hash or path is missing"}]}
+    source_path = Path(a["abs_path"])
+    if not source_path.exists():
+        return {"id": asset_id, "pass": False, "ran": 0, "unrunnable": 0,
+                "unrunnable_forms": [],
+                "results": [{"form": "source", "ok": False,
+                             "detail": "indexed source is missing"}]}
+    current_sha = (repo._sha_dir(source_path) if source_path.is_dir()
+                   else repo._sha_file(source_path))
+    if current_sha != a["sha"]:
+        return {"id": asset_id, "pass": False, "ran": 0, "unrunnable": 0,
+                "unrunnable_forms": [],
+                "results": [{"form": "source", "ok": False,
+                             "detail": "source changed since index; reindex before testing"}]}
     entries = (a.get("quality") or {}).get("done_when") or []
     mcp_call = None
     needs_mcp = any(str(e).startswith("mcp:") and
@@ -87,7 +133,7 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
         from .server import build_server
         srv = build_server(repo)
         def mcp_call(tool, args):  # noqa: E301
-            srv.handlers[tool](args)
+            return srv.handlers[tool](args)
     results = []
     for e in entries:
         form, arg = parse_form(str(e))
@@ -106,7 +152,8 @@ def run_asset(repo, asset_id: str, source: str | None = None) -> dict:
     # green verdict silently hides the checks that never ran.
     unrunnable = [{"form": r.get("form"), "detail": r.get("detail")}
                   for r in results if r["ok"] is None]
-    return {"id": asset_id, "pass": bool(runnable) and all(r["ok"] for r in runnable),
+    return {"id": asset_id, "pass": bool(runnable) and not unrunnable
+            and all(r["ok"] for r in runnable),
             "ran": len(runnable), "unrunnable": len(unrunnable),
             "unrunnable_forms": unrunnable, "results": results}
 
@@ -143,6 +190,9 @@ def _quality_run(repo, lane: str | None = None) -> dict:
     passed = sum(1 for r in rows if r["pass"])
     rep = {"ts": time.strftime("%Y-%m-%dT%H:%M:%S"), "lane": lane,
            "ran": len(rows), "passed": passed,
+           "checks_ran": sum(r.get("ran", 0) for r in rows),
+           "checks_unrunnable": sum(r.get("unrunnable", 0) for r in rows),
+           "incomplete_assets": [r["id"] for r in rows if r.get("unrunnable", 0)],
            "pass_rate": round(passed / len(rows), 3) if rows else None,
            "failures": [r["id"] for r in rows if not r["pass"]]}
     out = Path(repo.root) / ".context" / "quality-runs"

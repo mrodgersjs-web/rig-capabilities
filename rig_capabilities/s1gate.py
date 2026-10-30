@@ -70,6 +70,25 @@ JEV_ENDPOINT = os.environ.get("S1GATE_JEV_ENDPOINT", "https://api.typesafe.ai/v1
 JEV_MODEL = os.environ.get("S1GATE_JEV_MODEL", "jev-latest")
 KEYCHAIN_ITEM = os.environ.get("S1GATE_KEYCHAIN_ITEM", "com.rig.env.TYPESAFE_API_KEY")
 
+
+def _advisory_until_calibrated() -> bool:
+    """True keeps uncalibrated BLOCKs as warnings. False means Mike turned enforcement on.
+
+    S1GATE_ENFORCE=1 forces on. S1GATE_ENFORCE=0 forces advisory. Otherwise the
+    flag in work-criteria.json is the switch. Missing file stays advisory.
+    """
+    flag = os.environ.get("S1GATE_ENFORCE")
+    if flag == "1":
+        return False
+    if flag == "0":
+        return True
+    path = REPO_ROOT / "capabilities" / "harnesses" / "s1gate" / "work-criteria.json"
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return True
+    return bool(data.get("advisory_until_calibrated", True))
+
 # Deterministic answer cache. The provider answer for (rubric, state, questions,
 # model) is treated as reusable for CACHE_TTL_DAYS; the VERDICT is never cached --
 # it is recomputed from the cached answers against the CURRENT rubric on every
@@ -100,24 +119,104 @@ class ProviderError(S1GateError):
 # --------------------------------------------------------------------------
 
 
-def _api_key() -> str:
-    key = os.environ.get("TYPESAFE_API_KEY", "").strip()
-    if key:
-        return key
+_API_KEY_CACHE: dict[str, str] = {}
+
+
+def _keychain_key(item: str, attempts: int = 2) -> tuple[str, int, str]:
+    """Read the secret from the login keychain, retrying once.
+
+    Why a retry: `security` resolves against the caller's keychain search list, and
+    under concurrent load (memory.admission alone issued ~1,883 lookups on 2026-09-30,
+    one subprocess each) a transient rc=36/rc=44 'could not be found' is indistinguishable
+    from a genuinely missing item. One retry on an unchanged command separates the two
+    without inventing a second credential.
+    """
+    rc, err = -1, ""
+    for _ in range(max(1, attempts)):
+        try:
+            out = subprocess.run(
+                ["security", "find-generic-password", "-s", item, "-w"],
+                capture_output=True, text=True, timeout=10,
+            )
+        except (OSError, subprocess.SubprocessError) as exc:
+            rc, err = -1, "%s: %s" % (type(exc).__name__, exc)
+            continue
+        key = (out.stdout or "").strip()
+        if key:
+            return key, 0, ""
+        rc, err = out.returncode, (out.stderr or "").strip().replace("\n", " ")[:160]
+    return "", rc, err or "no stdout, no stderr"
+
+
+ENV_FILE = os.environ.get("S1GATE_ENV_FILE", str(Path.home() / ".rig" / "s1gate" / "env"))
+
+
+def _env_file_key() -> tuple[str, str]:
+    """Read TYPESAFE_API_KEY from a mode-600 env file (SP4). Returns (key, diagnosis);
+    the diagnosis never contains the value."""
+    env_file = os.environ.get("S1GATE_ENV_FILE", ENV_FILE)
+    if os.environ.get("S1GATE_ENV_FILE_DISABLE") == "1" or not env_file:
+        return "", "disabled"
     try:
-        out = subprocess.run(
-            ["security", "find-generic-password", "-s", KEYCHAIN_ITEM, "-w"],
-            capture_output=True,
-            text=True,
-            timeout=10,
-        )
-    except (OSError, subprocess.SubprocessError) as exc:  # pragma: no cover
-        raise ProviderError("keychain lookup failed: %s" % type(exc).__name__) from exc
-    key = (out.stdout or "").strip()
+        st = os.stat(env_file)
+    except OSError:
+        return "", "absent (%s)" % env_file
+    if st.st_uid != os.getuid() or (st.st_mode & 0o077):
+        return "", "refused: %s must be owned by this user and mode 600" % env_file
+    try:
+        with open(env_file, encoding="utf-8") as fh:
+            for line in fh:
+                line = line.strip()
+                if line.startswith("export "):
+                    line = line[7:].strip()
+                if line.startswith("TYPESAFE_API_KEY="):
+                    val = line.split("=", 1)[1].strip().strip('"').strip("'")
+                    if val:
+                        return val, "ok"
+    except OSError as exc:
+        return "", "unreadable: %s" % type(exc).__name__
+    return "", "no TYPESAFE_API_KEY line in %s" % env_file
+
+
+def _api_key() -> str:
+    """Resolve the System One credential from the two sources that exist on this box,
+    in order: the environment, then the login keychain item. The value is returned to
+    the caller and never logged; it is cached for the life of the process so a
+    high-volume caller does not spawn a `security` subprocess per decision."""
+    # The environment always wins and is never cached: it is free to read, and a
+    # cached credential would break the contract three tests in tests/test_s1gate.py
+    # assert (env wins with no subprocess at all, and a failing `security` call must
+    # raise rather than return a stale key). The keychain result is cached ONLY when
+    # S1GATE_KEY_CACHE=1 is set explicitly, which is the knob a high-volume lane
+    # (memory.admission issued ~1,883 lookups on 2026-09-30, one subprocess each)
+    # turns on after accepting that a rotated key needs a process restart.
+    key = os.environ.get("TYPESAFE_API_KEY", "").strip()
+    if not key and os.environ.get("S1GATE_KEY_CACHE", "0") == "1":
+        cached = _API_KEY_CACHE.get(KEYCHAIN_ITEM)
+        if cached:
+            return cached
     if not key:
-        raise ProviderError(
-            "no System One API key: set TYPESAFE_API_KEY or store keychain item %s" % KEYCHAIN_ITEM
-        )
+        key, rc, detail = _keychain_key(KEYCHAIN_ITEM)
+        if not key:
+            # SP4 2026-10-10: ssh/launchd (non-GUI) sessions get security rc=36, so fall back
+            # to a mode-600 env file owned by this user (default ~/.rig/s1gate/env). The value
+            # is never logged. A file readable by group/other is refused, not used.
+            fkey, fdetail = _env_file_key()
+            if fkey:
+                key = fkey
+            else:
+                detail = (detail + "; env file: " + fdetail)[:300]
+        if not key:
+            # Honest diagnosis, never a value: `security` writes the secret to stdout
+            # only, so stderr and the exit code are safe to surface. A bare "no key"
+            # here masked session-scoped keychain failures (rc=36 outside the console
+            # session) as a missing credential for months - and 20,196 ledger rows.
+            raise ProviderError(
+                "no System One API key: set TYPESAFE_API_KEY or store keychain item %s"
+                " (security find-generic-password rc=%d: %s)" % (KEYCHAIN_ITEM, rc, detail)
+            )
+    if os.environ.get("S1GATE_KEY_CACHE", "0") == "1":
+        _API_KEY_CACHE[KEYCHAIN_ITEM] = key
     return key
 
 
@@ -319,7 +418,13 @@ class Rubric:
         require signal-scoped ground truth; a whole-decision label cannot
         certify an individual question. Single-rule legacy packs retain the
         whole-rubric fallback.
+
+        Mike, 2026-10-03 17:55 Denver: if work-criteria.json sets
+        advisory_until_calibrated to false, or S1GATE_ENFORCE=1, a fired BLOCK
+        is a stop. S1GATE_ENFORCE=0 keeps the old advisory downgrade.
         """
+        if not _advisory_until_calibrated():
+            return True
         sig = _rule_signal(rule)
         entries = (self.calibration or {}).get("rules") or {}
         entry = entries.get(sig) if sig else None
@@ -329,7 +434,9 @@ class Rubric:
             return bool(self.calibrated) and not needs_signal_labels
         if needs_signal_labels and entry.get("label_scope") != "signal":
             return False
-        if entry.get("model") != (model or JEV_MODEL):
+        cert_model = entry.get("model")
+        asked = model or JEV_MODEL
+        if cert_model not in (asked, "*"):
             return False
         return (entry.get("rule_sha256") == rule_canonical_sha(rule)
                 and entry.get("rubric_sha256") == rubric_canonical_sha(self))

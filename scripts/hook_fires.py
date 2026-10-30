@@ -31,6 +31,9 @@ def run(cmd, input_text="", expect_rc=None, expect_text=None, expect_empty=False
 def isolated_loop_env(root: Path) -> dict[str, str]:
     home = root / "home"
     home.mkdir()
+    d85 = home / ".rig" / "d85"
+    d85.mkdir(parents=True)
+    (d85 / "enforcement.json").write_text(json.dumps({"roots": [], "ttl_hours": 24}))
     env = os.environ.copy()
     env.update({
         "HOME": str(home),

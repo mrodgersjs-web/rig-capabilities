@@ -73,6 +73,35 @@ DEFAULT_EXTERNAL_ROOTS = [
     {"label": "claude-hooks", "kind": "hook", "path": "~/.claude/hooks", "pattern": "*.sh;*.py"},
     {"label": "claude-commands", "kind": "command", "path": "~/.claude/commands", "pattern": "*.md"},
     {"label": "codex-commands", "kind": "command", "path": "~/.codex/commands", "pattern": "*.md"},
+    # 2026-10-26 prime-parity: the 9 OMP-side skill dirs Jake spec'd for Prime reachability
+    {"label": "usr-skills", "kind": "skill", "path": "~/.rig/universal-skills-registry/skills",
+     "pattern": "*/SKILL.md"},
+    {"label": "pi-skills", "kind": "skill", "path": "~/.pi/skills", "pattern": "*/SKILL.md"},
+    {"label": "omp-skills", "kind": "skill", "path": "~/.omp/skills", "pattern": "*/SKILL.md"},
+    {"label": "omp-agent-skills", "kind": "skill", "path": "~/.omp/agent/skills", "pattern": "*/SKILL.md"},
+    {"label": "prime-skills", "kind": "skill", "path": "~/.prime/agent/skills", "pattern": "*/SKILL.md"},
+    # 2026-10-26 kujD (Jake ruling): Prime's real user skill dir is ~/.prime/skills
+    {"label": "prime-user-skills", "kind": "skill", "path": "~/.prime/skills", "pattern": "*/SKILL.md"},
+    # 2026-10-26 kujD (Jake ruling): cursor, grok, orca and OMP plugin-cache skill roots
+    {"label": "cursor-skills", "kind": "skill", "path": "~/.cursor/skills", "pattern": "*/SKILL.md"},
+    {"label": "cursor-builtin-skills", "kind": "skill", "path": "~/.cursor/skills-cursor", "pattern": "*/SKILL.md"},
+    {"label": "cursor-plugins-nested", "kind": "skill", "path": "~/.cursor/plugins", "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "grok-skills", "kind": "skill", "path": "~/.grok/skills", "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "orca-skills", "kind": "skill", "path": "~/.orca/skills", "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "omp-plugin-egm", "kind": "skill", "path": "~/.omp/plugins/cache/plugins/egm___egm___0.1.0/skills", "pattern": "*/SKILL.md"},
+    {"label": "omp-plugin-design-council", "kind": "skill", "path": "~/.omp/plugins/cache/plugins/sjsyrek___design-council___0.4.1/skills", "pattern": "*/SKILL.md"},
+    {"label": "aside-user-skills", "kind": "skill", "path": "~/.aside/u/0/skills/user", "pattern": "*/SKILL.md"},
+    # 2026-10-26 nested pass: one-level patterns missed pack-nested skills
+    {"label": "hermes-skills-nested", "kind": "skill", "path": "~/.hermes/skills",
+     "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "omp-agent-skills-nested", "kind": "skill", "path": "~/.omp/agent/skills",
+     "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "pi-skills-nested", "kind": "skill", "path": "~/.pi/skills",
+     "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "omp-skills-nested", "kind": "skill", "path": "~/.omp/skills",
+     "pattern": "**/SKILL.md", "nested_ids": True},
+    {"label": "aside-user-skills-nested", "kind": "skill", "path": "~/.aside/u/0/skills/user",
+     "pattern": "**/SKILL.md", "nested_ids": True},
 ]
 
 DEFAULT_INSTALL_ROOTS = {
@@ -86,7 +115,8 @@ DEFAULT_INSTALL_ROOTS = {
     "skill": {"claude": "~/.claude/skills", "codex": "~/.codex/skills",
               "hermes": "~/.hermes/skills", "agents": "~/.agents/skills",
               "omp": "~/.rig/universal-skills-registry/skills",
-              "prime-agent": "~/.prime/agent/skills"},
+              "prime-agent": "~/.prime/agent/skills",
+              "aside": "~/.aside/u/0/skills/user"},
     "agent": {"claude": "~/.claude/agents", "codex": "~/.codex/agents",
               "hermes": "~/.hermes/agents", "omp": "~/.omp/agent/agents",
               "prime-agent": "~/.prime/agent/agents"},
@@ -522,8 +552,10 @@ class Repo:
         dst = target_dir / src.name
         target_dir.mkdir(parents=True, exist_ok=True)
         action = "installed"
-        if dst.exists():
-            cur_sha = self._sha_dir(dst) if dst.is_dir() else self._sha_file(dst)
+        if dst.exists() or dst.is_symlink():
+            broken_link = dst.is_symlink() and not dst.exists()
+            cur_sha = None if broken_link else (
+                self._sha_dir(dst) if dst.is_dir() else self._sha_file(dst))
             if cur_sha == asset["sha"] and not force:
                 return {"status": "already-installed", "id": asset_id, "harness": harness,
                         "target": str(dst), "sha": cur_sha}

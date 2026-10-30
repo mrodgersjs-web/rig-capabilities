@@ -87,7 +87,7 @@ def _list(_args: Dict[str, Any]) -> Dict[str, Any]:
             rows.append({"rubric": name, "error": str(exc)})
             continue
         rows.append({"rubric": rb.name, "stage": rb.stage, "lane": rb.lane,
-                     "mode": "ENFORCING" if rb.calibrated else "advisory",
+                     "mode": "ENFORCING" if rb.enforcing else "advisory",
                      "never_auto": rb.never_auto,
                      "questions": len(rb.questions),
                      "description": rb.description})
@@ -100,7 +100,9 @@ def _show(args: Dict[str, Any]) -> Dict[str, Any]:
     from .s1gate import load_rubric
     rb = load_rubric(args["rubric"])
     return {"name": rb.name, "stage": rb.stage, "lane": rb.lane,
-            "calibrated": rb.calibrated, "never_auto": rb.never_auto,
+            "calibrated": rb.calibrated, "enforcing": rb.enforcing,
+            "mode": "ENFORCING" if rb.enforcing else "advisory",
+            "never_auto": rb.never_auto,
             "confidence_floor": rb.confidence_floor,
             "questions": list(rb.questions), "rules": rb.rules,
             "calibration": rb.calibration,
@@ -170,8 +172,16 @@ def _label(args: Dict[str, Any]) -> Dict[str, Any]:
         did = int(args["decision_id"])
         if not log.get(did):
             raise ToolError(f"no decision with id {did}")
-        log.label(did, lab, by="mcp-agent")
-        return {"decision_id": did, "label": lab, "labelled_by": "mcp-agent",
+        signal = str(args.get("signal") or "")
+        if signal:
+            try:
+                log.label_signal(did, signal, lab, by="mcp-agent")
+            except ValueError as exc:
+                raise ToolError(str(exc)) from exc
+        else:
+            log.label(did, lab, by="mcp-agent")
+        return {"decision_id": did, "signal": signal or None,
+                "label": lab, "labelled_by": "mcp-agent",
                 "note": "labelled for calibration, and stamped as an agent label "
                         "rather than a human one -- law 5 puts the calibration set "
                         "on the human side, so a human review of this label is "
@@ -324,6 +334,11 @@ def s1gate(args: Dict[str, Any]) -> Dict[str, Any]:
     if extra:
         raise ToolError(f"s1gate: unknown keys {sorted(extra)} refused "
                         "(closed schema)")
+    if action in BILLABLE and not str(args.get("subject") or "").strip():
+        raise ToolError(f"`subject` is required for action={action}: an "
+                        "attributable label like 'kind:id@sha12' (e.g. "
+                        "'code.diff:pr-42@a1b2c3d4e5f6'). The decision log "
+                        "refuses unattributable rows.")
 
     so, se = io.StringIO(), io.StringIO()
     try:

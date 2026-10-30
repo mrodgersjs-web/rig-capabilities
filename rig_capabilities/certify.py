@@ -162,6 +162,38 @@ def _g_evidence_ledger(repo) -> tuple[bool, str]:
     return gate_evidence_ledger(repo)
 
 
+def _g_cell_shape(repo) -> tuple[bool, str]:
+    """Lattice coordinates: SHAPE is enforced, JEV'S JUDGMENT is not (grill Q6=B).
+
+    Reads the published index and validates any `cell` coordinate it finds, in
+    `cell` or `okf.cell`, against the strict lattice id
+    (L1-7, D1-3, A1-4, IQRSQPI step code). A made-up or malformed coordinate is
+    deterministic and fails the build; whether a skill is *really* A3 vs A2 is a
+    0.649-confidence model opinion and stays advisory, so an absent coordinate
+    reports coverage instead of failing. An unparseable index fails closed.
+    """
+    import os
+    import re as _re
+    strict = _re.compile(r"^L[1-7]-D[1-3]-A[1-4]-(I1|Q1|R|S|Q2|P|I2)$")
+    path = os.environ.get("RIG_CELL_SHAPE_INDEX") or None
+    if path:
+        with open(path) as fh:
+            assets = json.load(fh).get("assets", [])
+    else:
+        assets = repo.load_index().get("assets", []) if isinstance(repo.load_index(), dict) else repo.load_index()["assets"]
+    total = len(assets)
+    keyed, bad = 0, []
+    for a in assets:
+        raw = a.get("cell") or (a.get("okf") or {}).get("cell")
+        if not raw:
+            continue
+        keyed += 1
+        if not strict.match(str(raw).strip()):
+            bad.append(f"{a.get('id')}={raw!r}")
+    detail = (f"{keyed}/{total} indexed assets carry a cell coordinate; "
+              f"{len(bad)} malformed{': ' + ', '.join(bad[:5]) if bad else ''}")
+    return (not bad), detail
+
 GATES = {"suite": _g_suite, "index_fresh": _g_index_fresh,
          "done_tests": _g_done_tests, "idp_integrity": _g_idp,
          "acl_jake": _g_acl,
@@ -170,7 +202,8 @@ GATES = {"suite": _g_suite, "index_fresh": _g_index_fresh,
          "lease_exclusivity": _g_lease_exclusivity,
          "fable_dormant": _g_fable_dormant,
          "stage_order": _g_stage_order,
-         "evidence_ledger": _g_evidence_ledger}
+         "evidence_ledger": _g_evidence_ledger,
+         "cell_shape": _g_cell_shape}
 
 
 def run_gates(repo, only: list | None = None) -> dict:

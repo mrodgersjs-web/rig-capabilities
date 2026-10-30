@@ -1,7 +1,8 @@
 """rig-capabilities — versioned capability store with MCP surface.
 
-v52: the 2031 capability increment set, realigned onto main's published ladder.
-VERSION_LADDER 1–52.
+v53: the capability MCP server grows the rest of the protocol — resources,
+prompts, session instructions — and Communications OS rides it.
+VERSION_LADDER 1–53.
 
 The 2031 rungs were authored as 41–50 while main independently published
 Loop-Skill Contract v11 and IQRSQPI v20 as 41/42. Realignment keeps main's
@@ -9,7 +10,7 @@ published numbers and shifts the 2031 rungs to 43–51; docs/ROADMAP.md, the
 ladder below and `tests.test_version_coherence` are pinned in a cycle.
 Stdlib only.
 """
-__version__ = "52.0.0"
+__version__ = "53.0.0"
 VERSION_LADDER = {
     "2": "catalog + MCP + 4-tier context fabric",
     "3": "drift auto-refresh + observation-decay + ACL policy",
@@ -68,4 +69,7 @@ VERSION_LADDER = {
           "directory assets need SKILL.md, round exit_code -> CLI rc + MCP isError, "
           "done_when ran/unrunnable accounting, exemplar-resolution ratchet, "
           "paired-run/skill-contract/acceptance-identity/lifecycle/topology surfaces",
+    "53": "MCP protocol completion (resources/read, prompts/get, instructions) + "
+          "Communications OS on the capability server: 7 comms tools, write/review "
+          "prompts, 5 resources, PRIVACY_LOCK over the wire",
 }
