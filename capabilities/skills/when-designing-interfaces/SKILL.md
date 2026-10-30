@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: design-ux
   skill-count: "400"
+done_when:
+  - 'grep:capabilities/skills/when-designing-interfaces/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-designing-interfaces/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-designing-interfaces/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 ## Front door moved (2026-09-28)
