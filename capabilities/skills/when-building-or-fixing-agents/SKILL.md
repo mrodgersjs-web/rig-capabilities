@@ -6,6 +6,11 @@ metadata:
   generated-by: skillshilp-upgrade
   category: agent-infrastructure
   skill-count: "275"
+done_when:
+  - 'grep:capabilities/skills/when-building-or-fixing-agents/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-building-or-fixing-agents/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-building-or-fixing-agents/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
+  - 'cmd:python3 -m json.tool capabilities/skills/when-building-or-fixing-agents/references/hierarchy.json >/dev/null'
 ---
 
 # when-building-or-fixing-agents

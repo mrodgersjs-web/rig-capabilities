@@ -1,0 +1,18 @@
+# Independently probe the served offering
+
+Acceptance uses `../../jev-site-gate/references/EVIDENCE-V2.md`. The previous builder-only probe recipe is superseded. Do not paste Lighthouse numbers into `probe.json` or treat screenshot file size as a capture proof.
+
+An independent verifier owns the browser session for the exact immutable build/URL. The candidate currently has no authorized website-QA trust root, so it cannot certify a production offering. This limitation does not prevent actual read-only browser checks and saved observations; label those observations unsealed until approved trust and review exist. Do not generate permanent keys or enroll a new signer to make the gate green.
+
+1. Verify offering/client/source identity before capturing. Inspect actual Pinterest images and source response/run chains. Preserve the source's client/category scope and proposed solution status.
+2. Record browser/tool/session, navigation start, URL and immutable build hash. Start the CTA timer at `performance.timeOrigin`/navigation start. Wait for loaded images, actual hit-target readiness and enabled controls. Click the primary CTA; confirm its intended effect. Record keyboard/focus observations.
+3. At 1440x900 and 390x844, inspect hero, fonts, overflow, loaded images, links and primary CTA. Capture actual PNGs. Record each capture's URL/build, viewport, timestamp and SHA-256.
+4. Sample the declared scroll-story element at at least two actual scroll positions per viewport. Record measured state changes and the input values. Capture supporting frames or traces. An animation name or a source comment proves no behavior.
+5. Sample the declared 3D scene at changing actual scroll positions per viewport while pointer/control state remains fixed. Genuine CSS 3D is allowed; record computed matrix3d depth/rotation and observed intentional composition. Pointer-only tilt is supplemental. WebGL needs rendered frame evidence and its unavailable/fallback case. A static perspective declaration or a MotionSites MP4/WebP preview is insufficient.
+6. Emulate `prefers-reduced-motion: reduce` at both viewports. Verify motion is suppressed/reduced, content remains visible, and the CTA still works. Save the actual observations; do not infer behavior from CSS source.
+7. Run installed Lighthouse against the same served build/URL in mobile mode. Preserve its actual unmodified JSON, fetch time, version/configuration, audits, errors and final URL. Compute thresholds from this file. Never author a performance trace or substitute copied scores.
+8. Inspect actual desktop/mobile captures against the pins and taste references. Record structured independent findings for desktop, mobile, keyboard, images and reduced-motion. Resolve every blocker with a bound retest artifact. No award/superiority guarantee.
+9. Bind the native Miro export, per-offering ordered phase ledger and real phase artifacts. Existing process frames are setup only. The reviewer verifies the board's actual content and progression before any signature.
+10. Run the candidate gate with an existing authorized verifier key only when its approved trust mapping exists. Otherwise retain FAIL/pending trust, the raw observations and exact blocker. No Airtable write, deployment or public exposure is granted by this probe recipe.
+
+Required markup remains `[data-hero]` with an `h1`, `[data-subhead]`, actual `data-pinterest-source`; `[data-cta="primary"]`; `[data-pain][data-record-id]`; and `[data-wow][id]`. The source-located raw record must support every displayed pain card. A genuine client/project name is permitted when supported; invented client names, logos and testimonials remain forbidden.

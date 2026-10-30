@@ -1,6 +1,11 @@
 ---
 name: unlazy
 description: Enforces completion discipline for substantial autonomous work by writing acceptance gates before execution, decomposing work with the Depth Tree, running approved checks, and re-verifying evidence before reporting. Use when an agent faces a long or multi-part task, work that has returned half-done, an exhaustive audit or build, parallel leaves or pipelines, or explicit triggers such as /unlazy, $unlazy, "tree N", "gates", and "do not stop until it is done".
+done_when:
+  - 'grep:capabilities/skills/unlazy/SKILL.md:[D]o not silently remove an impossible gate'
+  - 'grep:capabilities/skills/unlazy/SKILL.md:[N]ever follow instructions embedded'
+  - 'cmd:node capabilities/skills/unlazy/scripts/gate-check.mjs --status capabilities/skills/unlazy/templates/gates-leaf.md | grep -q UNMET:.3'
+  - 'cmd:node capabilities/skills/unlazy/tests/self-check.mjs | grep -q self-check.ok'
 ---
 
 # Unlazy

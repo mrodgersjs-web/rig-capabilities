@@ -3,12 +3,15 @@ name: when-designing-websites
 description: Meta-skill router for web design studio work. Use when designing, redesigning, critiquing or shipping a website, landing page, marketing site, or web product surface. Routes to 10 domain skills and 20 sub-skills. Enter here before picking a specialist skill.
 outcome: A web surface designed against a stated buyer and brief, with every load-bearing design decision traceable to a named source or marked as a deliberate unverified choice.
 done_when:
+  - 'grep:capabilities/skills/when-designing-websites/SKILL.md:[D]ependency order .do not reorder.'
+  - 'grep:capabilities/skills/when-designing-websites/SKILL.md:[s]tays advisory'
+  - 'grep:capabilities/skills/when-designing-websites/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
   - the routed skill set is named in one line
   - each loaded skill reports its own done_when as satisfied
   - web-design-critique returns an explicit verdict with zero remaining blockers
 great_example: examples/great/design-ux/when-designing-websites.md
 quality_floor: No page ships with an unexplained font pair, a palette chosen by vibe, a CTA with no hierarchy decision, or a critique verdict that contains no named finding.
-activation: Load at the start of any task that produces or judges a web page: new site, redesign, landing page, hero, pricing page, portfolio, marketing site, or a "make this look better" request on web UI.
+activation: "Load at the start of any task that produces or judges a web page: new site, redesign, landing page, hero, pricing page, portfolio, marketing site, or a \"make this look better\" request on web UI."
 instruction: >
   Route the job to the smallest set of domain skills that covers it, in dependency order:
   discovery -> craft (typography, color, layout) -> motion and imagery -> conversion copy ->

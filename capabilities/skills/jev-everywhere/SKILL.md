@@ -4,6 +4,10 @@ description: "JEV FIRST, and it is a mandate: every typed judgment (semantic tri
 tags: [rig, jev, typesafe, system-one, s1gate, doctrine, routing, embedding, session-protocol]
 metadata:
   verified: "2026-09-23: rig-s1gate selftest 6/6 rule-engine checks, 71 rubrics loadable; this surface scored by the doctrine.surface rubric, bar: every required noul strictly above 0.9"
+done_when:
+  - grep:capabilities/skills/jev-everywhere/SKILL.md:JEV FIRST, BEFORE ANY FRONTIER CALL
+  - grep:capabilities/skills/jev-everywhere/SKILL.md:Rule 2.{1,3}FAIL CLOSED
+  - grep:capabilities/skills/jev-everywhere/references/decision-criteria.md:(?i)jev
 ---
 
 # Jev Everywhere: session protocol + embedding kit
@@ -28,7 +32,7 @@ logged). A frontier model is the escalation tier, never the default tier.
 Self-test for a typed judgment: if you are about to write a paragraph deciding between
 named options, scoring a bounded artifact, or sorting items into fixed buckets, STOP.
 That is a Jev question. The route is live now:
-`echo STATE | ~/Developer/rig-capabilities/bin/rig-s1gate check <rubric> --stdin --json`
+`python3 capabilities/hooks/redact_state.py < state.txt | bin/rig-s1gate check <rubric> --stdin --subject <kind:id> --json`
 (exit 0 PASS / 1 BLOCK / 2 ESCALATE / 3 config), or MCP `capabilities_s1gate`, or
 `rig_capabilities.s1gate.ask` from Python. Use it before you reason around it.
 
@@ -98,14 +102,15 @@ Full matrix per situation: `references/decision-criteria.md`.
 
 ## Expectations (measured, not vendor claims)
 
-**Route ladder (local-first).** Local OpenJev first: a self-hosted System One server with the same
-wire API as Jev (`S1GATE_JEV_ENDPOINT=http://127.0.0.1:8080/v1/systemone`,
-`S1GATE_JEV_MODEL=openjev-latest`; the official SDK takes `TYPESAFE_BASE_URL`). Use it for state
-that must not leave the machine and for high-volume judgment. Hosted TypeSafe Jev
-(`api.typesafe.ai`) is the fallback route; both down means fail closed. Switching providers is a
-config line because the contracts match, and a judgment on sensitive data now has a home that is
-not "don't judge it": it goes local. Deployment, parity results and ops notes:
-`references/embedding.md` section 4.
+**Hosted JEV only, effective 2026-09-30.** Use
+`https://api.typesafe.ai/v1/systemone` with `jev-latest`. Redact secrets through
+`capabilities/hooks/redact_state.py` before sending state. That helper removes known secret
+patterns; it does not sanitize health, financial, contact, family, or client details.
+If private details remain, or safe redaction is unavailable, defer the item.
+Provider failure also defers. Do not install, start, restart, or fall back to OpenJev or Laya.
+The retired local experiments in `references/embedding.md` section 4 are historical evidence,
+not operating instructions. Hosted verifier agreement with a hosted router is not an
+independent calibration label.
 
 - Round trip 202-910 ms from Denver on `jev-1.13.0`; a 3-primitive call measured 292 ms.
 - Fraction of a cent per call. External measurements: 253 questions in one call for

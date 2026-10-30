@@ -2,6 +2,7 @@
 
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
+| ss-growth-os | canonical | Substack front door: publication/lane guard, hard gates, routes every Substack job to one of 12 ss-* stages incl. ss-bestseller (100 paid subscribers / Bestseller badge track); carries substack-doctrine (914 transcripts, 27 channels). Load first for Substack. | substack-doctrine, ss-strategy, ss-plan, ss-package, ss-write, ss-publish, ss-gate, ss-notes, ss-network, ss-distribute, ss-convert, ss-bestseller, ss-measure |
 | linkedin-viral | canonical | LinkedIn front door: lane guard, hard gates, routes every LinkedIn job to one of 161 skills; carries the Tommy Clark 2026 doctrine (79 videos). Load first for LinkedIn. | tommy-clark-doctrine, linkedin-optimizer, linkedin-growth-os, linkedin-influencer-os, rig-linkedin-virality |
 | linkedin-analytics-tracker | aside-user | Daily cross-channel measurement for LinkedIn growth across all accounts. Track impressions, reaction | - |
 | linkedin-automation | hermes | Browser automation for LinkedIn via patchright + cookie vault: DM outreach, comment engagement, smar | - |

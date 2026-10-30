@@ -1,6 +1,9 @@
 ---
 name: jev-system1-cascade
 description: "Use Jev (TypeSafe System-1) for every semantic triage/routing/classification decision before any frontier LLM. Use when bulk-classifying notes or files, building a judgment/routing pipeline, triaging the Obsidian Inbox, or when a decision could be a typed choice/probability instead of generated prose. Full doctrine: ~/.rig/agent-doctrine/JEV_SYSTEM1_CASCADE_DOCTRINE.md"
+done_when:
+  - grep:capabilities/skills/jev-system1-cascade/SKILL.md:never launder it through an A1 wrapper
+  - grep:capabilities/skills/jev-system1-cascade/SKILL.md:Fail closed when the provider is down
 ---
 
 # Jev System-1 Cascade
