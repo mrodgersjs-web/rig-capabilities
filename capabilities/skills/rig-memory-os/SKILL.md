@@ -5,6 +5,9 @@ metadata:
   owner: rig-intelligence
   domain: agent-memory
   status: active
+done_when:
+  - grep:capabilities/skills/rig-memory-os/SKILL.md:Do not query the underlying vault or
+  - grep:capabilities/skills/rig-memory-os/SKILL.md:Never put credentials, raw transcripts
 ---
 
 # RIG Memory OS

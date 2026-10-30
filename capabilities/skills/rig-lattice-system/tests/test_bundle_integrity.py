@@ -347,9 +347,8 @@ class TestStdlibOnly(unittest.TestCase):
         code = (
             "import sys\n"
             "class B:\n"
-            "    def find_module(self, name, path=None):\n"
-            "        if name == 'pydantic' or name.startswith('pydantic.'): return self\n"
-            "    def load_module(self, name): raise ImportError('blocked')\n"
+            "    def find_spec(self, name, path=None, target=None):\n"
+            "        if name == 'pydantic' or name.startswith('pydantic.'): raise ImportError('blocked')\n"
             "sys.meta_path.insert(0, B())\n"
             "import rig_lattice.archetypes.a1_python_only._types as t\n"
             "assert t.PYDANTIC_AVAILABLE is False\n"

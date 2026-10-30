@@ -1,6 +1,9 @@
 ---
 name: rig-ops
 description: "Run and secure Mike's machines: local and fleet model servers (Ollama, OpenJev, Laya, Blackwell, 96GB, 256GB), the NAS and Docker, installing a tool or repo, Aside/OMP/Orca configuration, launchd jobs, tunnels, drives, routine health, secrets and security incidents. Use when a model, server, install, config, tunnel, drive or routine is down, slow or being set up."
+done_when:
+  - grep:capabilities/skills/rig-ops/SKILL.md:A claimed fix counts only when a second path confirms it
+  - grep:capabilities/skills/rig-ops/SKILL.md:Never print a secret value
 ---
 
 # rig-ops: run and secure the machine

@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-ai-citation-gaps"
 description: "Close AI-citation gaps: inventory the buyer prompts a firm should be cited for, measure per-model visibility, publish one governed answer-page per gap with answer-first structure and FAQ silos, then re-measure. Use when the trigger is 'not showing up in ChatGPT/AI overviews', 'AI visibility', 'GEO/AEO', or 'get cited by AI answers' for a professional-service firm."
+done_when:
+  - grep:capabilities/skills/rig-revenue-ai-citation-gaps/SKILL.md:never promise it as a citation driver
+  - grep:capabilities/skills/rig-revenue-ai-citation-gaps/SKILL.md:Every gap page must be crawlable and indexed
 ---
 
 # AI-citation gap closer

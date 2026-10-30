@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-ai-faq-silo"
 description: "Build a local-service FAQ silo: 60 buyer questions in 6 categories, flag the 10 gap questions, wire FAQ hub to category pages to money pages, and feed the question set to content and monitoring. Use when the trigger is 'FAQ strategy', 'question topics', 'build the FAQ silo', or 'what should we answer'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-ai-faq-silo/SKILL.md:## Step 1. Generate the 60
+  - grep:capabilities/skills/rig-revenue-ai-faq-silo/SKILL.md:## Step 2. Flag the 10 gaps
 ---
 
 # AI FAQ silo (one mechanism)
