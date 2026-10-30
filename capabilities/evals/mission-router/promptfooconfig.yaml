@@ -1,0 +1,10 @@
+description: RIG mission router v1 offline routing and authority regression (not task-outcome quality)
+prompts:
+  - '{{intent}}'
+providers:
+  - file://provider.mjs
+defaultTest:
+  assert:
+    - type: javascript
+      value: file://assert-route.cjs
+tests: file://cases.csv
