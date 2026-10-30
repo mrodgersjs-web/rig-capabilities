@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: rig-core-doctrine
   skill-count: "32"
+done_when:
+  - 'grep:capabilities/skills/when-governing-rig-work/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-governing-rig-work/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-governing-rig-work/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-governing-rig-work

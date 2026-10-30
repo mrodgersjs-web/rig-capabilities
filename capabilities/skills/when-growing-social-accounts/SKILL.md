@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: social-growth
   skill-count: "71"
+done_when:
+  - 'grep:capabilities/skills/when-growing-social-accounts/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-growing-social-accounts/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-growing-social-accounts/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-growing-social-accounts
@@ -32,6 +36,7 @@ Tier-1 meta-skill. Job to be done: When drafting, scheduling, engaging, or measu
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
+- **ss-growth-os** — START HERE for any Substack job (rigoperator.substack.com): publication/lane guard, hard gates, routes to one of 12 ss-* stages incl. ss-bestseller (100-paid Bestseller track); carries substack-doctrine (914 transcripts, 27 channels). Also callable as /ss-growth-os.
 - **linkedin-viral** — START HERE for any LinkedIn job: lane guard, hard gates, routes to exactly one of 161 LinkedIn skills/sub-skills, carries the Tommy Clark 2026 doctrine. Also callable as /linkedin-viral.
 - **linkedin-analytics-tracker** — Daily cross-channel measurement for LinkedIn growth across all accounts. Track impressions
 - **linkedin-automation** — Browser automation for LinkedIn via patchright + cookie vault: DM outreach, comment engage
