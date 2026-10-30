@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: personal-ops
   skill-count: "65"
+done_when:
+  - 'grep:capabilities/skills/when-using-personal-tools/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-using-personal-tools/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-using-personal-tools/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-using-personal-tools

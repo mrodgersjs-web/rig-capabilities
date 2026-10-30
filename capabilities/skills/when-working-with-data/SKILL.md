@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: data-analytics
   skill-count: "72"
+done_when:
+  - 'grep:capabilities/skills/when-working-with-data/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-working-with-data/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-working-with-data/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-working-with-data

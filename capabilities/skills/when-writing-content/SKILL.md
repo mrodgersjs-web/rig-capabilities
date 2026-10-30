@@ -1,11 +1,15 @@
 ---
 name: when-writing-content
-description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 69 skills; read references/routing.md for the full table."
+description: "When writing articles, newsletters, copy, hooks, or any long-form deliverable, use this to route to the right writing skill so output sounds like Mike and earns its place. Routes to 80 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: content-writing
-  skill-count: "69"
+  skill-count: "80"
+done_when:
+  - 'grep:capabilities/skills/when-writing-content/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-writing-content/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-writing-content/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-writing-content
@@ -27,7 +31,7 @@ Tier-1 meta-skill. Job to be done: When writing articles, newsletters, copy, hoo
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 69-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 80-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
@@ -44,5 +48,6 @@ Tier-1 meta-skill. Job to be done: When writing articles, newsletters, copy, hoo
 - **coding-agent-failure-modes** — 11 coding-agent failure modes (write-for-agent, instruction rot, compact-is-not-memory, ho
 - **content-automation** — Route content-automation tasks to an existing child skill; this router adds no capabilitie
 - **content-automation/linkedin-content-planning** — Use for the Alfred LinkedIn content-planner cron job. ---  # LinkedIn Content Planning (Al
+- **ms-\* family (marketingskills, MIT, 11 writing skills)** — copywriting, copy-editing, content-strategy, social, emails, sms, ad-creative, image, video, lead-magnets, sales-enablement; read the ms-product-marketing `.agents/product-marketing.md` context first. Full one-liners in references/routing.md.
 
 Full table: `references/routing.md`

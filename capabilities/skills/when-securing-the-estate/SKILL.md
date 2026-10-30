@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: security-ops
   skill-count: "7"
+done_when:
+  - 'grep:capabilities/skills/when-securing-the-estate/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-securing-the-estate/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-securing-the-estate/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-securing-the-estate

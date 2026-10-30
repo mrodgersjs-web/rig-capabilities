@@ -1,11 +1,15 @@
 ---
 name: when-selling-or-running-gtm
-description: "When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route to the right GTM skill so revenue work follows doctrine. Routes to 362 skills; read references/routing.md for the full table."
+description: "When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route to the right GTM skill so revenue work follows doctrine. Routes to 409 skills; read references/routing.md for the full table."
 metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: gtm-sales-revenue
-  skill-count: "362"
+  skill-count: "409"
+done_when:
+  - 'grep:capabilities/skills/when-selling-or-running-gtm/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-selling-or-running-gtm/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-selling-or-running-gtm/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-selling-or-running-gtm
@@ -27,7 +31,7 @@ Tier-1 meta-skill. Job to be done: When prospecting, pricing, campaigning, forec
 - If a child skill fails to load or is missing, report the broken route and stop; do not improvise its content.
 
 ## How to route
-1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 362-skill table with one-line descriptions.
+1. Scan the quick index below. If nothing obviously matches, read `references/routing.md` for the full 409-skill table with one-line descriptions.
 2. Load exactly one child skill. If it names sub-skills, load the one relevant sub-skill.
 3. Never load more than one skill plus one sub-skill for a single task step.
 
@@ -44,5 +48,7 @@ Tier-1 meta-skill. Job to be done: When prospecting, pricing, campaigning, forec
 - **blueprintgtm-vibe-engineering** — Use when identifying GTM strategy for a new company. Vibe Engineering   Jordan Crawford's 
 - **bp-company-search** — Use when applying the BlueprintGTM AI-Powered Company & People Search method. Drops into d
 - **bp-custom-gpt-builder** — Use when applying the BlueprintGTM Custom GPT Builder for GTM Operations method. Drops int
+- **ms-product-marketing** — Use first on any marketing task: builds `.agents/product-marketing.md`, the product/ICP/positioning context every other marketing skill reads (marketingskills import, MIT).
+- **ms-\* family (marketingskills, MIT, 39 GTM skills)** — product-marketing, pricing, offers, cold-email, ads, cro, prospecting, launch, analytics, attribution, seo family, revops, churn, onboarding; full one-liners in references/routing.md.
 
 Full table: `references/routing.md`

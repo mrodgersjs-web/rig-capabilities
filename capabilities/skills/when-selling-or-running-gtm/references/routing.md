@@ -1,5 +1,6 @@
 # when-selling-or-running-gtm routing table
 
+| business-strategy-os | canonical | Meta-skill for business strategy from a 1,679-transcript corpus: diagnosis, new value, the only-statement, the five-section document, marketability, forced verdict | - |
 | Skill | Source | One-liner | Sub-skills |
 |---|---|---|---|
 | rig-revenue-meta | [rig-revenue-meta](/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-revenue-meta/SKILL.md) | Route governed revenue, SEO, AI-citation, and content work to the revenue family. | - |
@@ -371,3 +372,42 @@
 | ten-signature-closer | hermes | Run the RIG Ten-Signature Engine — cold target to signed contract across 10 parallel GTM closer lane | - |
 | vertical-gtm-playbook-compiler | hermes | Compile a profession-specific (law, CPA, healthcare) GTM playbook — funnel templates, pricing packag | - |
 | when-selling-or-running-gtm | aside-user | When prospecting, pricing, campaigning, forecasting, or running customer success, use this to route  | - |
+| ms-ab-testing | marketingskills | When the user wants to plan, design, or implement an A/B test or experiment, or build a growth exper | - |
+| ms-ads | marketingskills | When the user wants help with paid advertising campaigns on Google Ads, Meta (Facebook/Instagram), L | - |
+| ms-ai-seo | marketingskills | When the user wants to optimize content for AI search engines, get cited by LLMs, or appear in AI-ge | - |
+| ms-analytics | marketingskills | When the user wants to set up, improve, or audit analytics tracking and measurement. Also use when t | - |
+| ms-aso | marketingskills | When the user wants to audit or optimize an App Store or Google Play listing. Also use when the user | - |
+| ms-attribution | marketingskills | When the user wants to figure out which marketing actually drives conversions and revenue, choose or | - |
+| ms-churn-prevention | marketingskills | When the user wants to reduce churn, build cancellation flows, set up save offers, recover failed pa | - |
+| ms-co-marketing | marketingskills | When the user wants to find co-marketing partners, plan joint campaigns, or brainstorm partnership o | - |
+| ms-cold-email | marketingskills | Write and run B2B cold outbound that gets replies, from cold emails and follow-ups to sending setup, | - |
+| ms-community-marketing | marketingskills | Build and leverage online communities to drive product growth and brand loyalty. Use when the user w | - |
+| ms-competitor-profiling | marketingskills | When the user wants to research, profile, or analyze competitors from their URLs. Also use when the  | - |
+| ms-competitors | marketingskills | When the user wants to create competitor comparison or alternative pages for SEO and buyer-facing us | - |
+| ms-cro | marketingskills | When the user wants to optimize, improve, or increase conversions on any marketing page or form — in | - |
+| ms-customer-research | marketingskills | When the user wants to conduct, analyze, or synthesize customer research. Use when the user mentions | - |
+| ms-directory-submissions | marketingskills | When the user wants to submit their product to startup, SaaS, AI, agent, MCP, no-code, or review dir | - |
+| ms-events | marketingskills | When the user wants to plan, run, sponsor, speak at, or get pipeline from events — webinars, confere | - |
+| ms-free-tools | marketingskills | When the user wants to plan, evaluate, or build a free tool for marketing purposes — lead generation | - |
+| ms-influencer-marketing | marketingskills | When the user wants to run influencer, creator, or ambassador partnerships to promote their product  | - |
+| ms-launch | marketingskills | When the user wants to plan a product launch, feature announcement, or release strategy. Also use wh | - |
+| ms-marketing-council | marketingskills | When the user wants multiple expert perspectives on a marketing question — a simulated board of advi | - |
+| ms-marketing-ideas | marketingskills | When the user needs marketing ideas, inspiration, or strategies for their SaaS or software product.  | - |
+| ms-marketing-loops | marketingskills | When the user wants to set up a recurring, self-running marketing workflow — a repeatable loop an AI | - |
+| ms-marketing-plan | marketingskills | When the user needs a comprehensive marketing plan for a client, a company they advise, or their own | - |
+| ms-marketing-psychology | marketingskills | When the user wants to apply psychological principles, mental models, or behavioral science to marke | - |
+| ms-offers | marketingskills | When the user wants to design, construct, or improve an offer — the thing they actually sell — inclu | - |
+| ms-onboarding | marketingskills | When the user wants to optimize post-signup onboarding, user activation, first-run experience, or ti | - |
+| ms-paywalls | marketingskills | When the user wants to create or optimize in-app paywalls, upgrade screens, upsell modals, or featur | - |
+| ms-popups | marketingskills | When the user wants to create or optimize popups, modals, overlays, slide-ins, or banners for conver | - |
+| ms-pricing | marketingskills | When the user wants help with pricing decisions, packaging, or monetization strategy. Also use when  | - |
+| ms-product-marketing | marketingskills | When the user wants to create or update their product marketing context document. Also use when the  | - |
+| ms-programmatic-seo | marketingskills | When the user wants to create SEO-driven pages at scale using templates and data. Also use when the  | - |
+| ms-prospecting | marketingskills | When the user wants to find, qualify, and build a list of prospects to reach out to, across B2B SaaS | - |
+| ms-public-relations | marketingskills | When the user wants help with public relations, earned media, press coverage, journalist outreach, o | - |
+| ms-referrals | marketingskills | When the user wants to create, optimize, or analyze a referral program, affiliate program, or word-o | - |
+| ms-revops | marketingskills | When the user wants help with revenue operations, lead lifecycle management, or marketing-to-sales h | - |
+| ms-schema | marketingskills | When the user wants to add, fix, or optimize schema markup and structured data on their site. Also u | - |
+| ms-seo-audit | marketingskills | When the user wants to audit, review, or diagnose SEO issues on their site. Also use when the user m | - |
+| ms-signup | marketingskills | When the user wants to optimize signup, registration, account creation, or trial activation flows. A | - |
+| ms-site-architecture | marketingskills | When the user wants to plan, map, or restructure their website's page hierarchy, navigation, URL str | - |

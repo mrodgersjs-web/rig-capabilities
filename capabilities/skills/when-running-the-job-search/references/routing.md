@@ -14,3 +14,4 @@
 | julie-w2-applypilot | aside-user | Run Mike Rodgers's application-first job search in Hermes using ApplyPilot state, Ego browser, truth | - |
 | pre-interview-meta | aside-user | Load this skill when Mike asks for any of: pre-interview, mock interview, intake for an interview, r | - |
 | resume-screening-stack | aside-user | Grade and repair Mike's resume against the real hiring stack - parse, knockout, literal search, sema | - |
+| traject-os | canonical | META skill for Mike Rodgers' job search (the Traject OS): qualify, tailor, apply, reach out, build a | traject-target-qualify, traject-apply-bridge, traject-reach, traject-room-build, traject-drill, traject-debrief, traject-follow-up, traject-proof, traject-learn |
