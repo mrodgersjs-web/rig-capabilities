@@ -3,6 +3,8 @@ name: web-build-ship-responsive
 description: Make one design hold its intent across phone, tablet, laptop and wide desktop. Reflow order, fluid type and space, touch targets, and overflow assertion. Use when a page breaks, crowds or wastes space at some width.
 outcome: One layout that reads as the same design at 390px and 1536px, with an assertion that nothing overflows.
 done_when:
+  - 'grep:capabilities/skills/web-build-ship-responsive/SKILL.md:[R]eflow order first'
+  - 'grep:capabilities/skills/web-build-ship-responsive/SKILL.md:[O]verflow is asserted'
   - scrollWidth <= clientWidth holds at 390, 768, 1280 and 1536 (asserted by a check, not by eye)
   - the rendered reflow order equals the written reflow order
   - every interactive target measures at least 44x44px with at least 8px separation

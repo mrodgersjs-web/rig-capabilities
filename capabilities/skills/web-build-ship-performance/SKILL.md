@@ -3,6 +3,8 @@ name: web-build-ship-performance
 description: Hit Core Web Vitals without gutting the design. Fonts, media, JS weight and layout stability as measured budgets. Use when a page is slow, janks, or a metric needs to move.
 outcome: A page that meets its performance budgets with a recorded before/after receipt and no unacknowledged design change.
 done_when:
+  - 'grep:capabilities/skills/web-build-ship-performance/SKILL.md:[N]ame the LCP element first'
+  - 'grep:capabilities/skills/web-build-ship-performance/SKILL.md:[E]very .img. and .video. carries'
   - LCP <= 2.5s measured on throttled hardware
   - CLS <= 0.1 measured over a real load
   - INP <= 200ms with no main-thread task over 50ms during interaction

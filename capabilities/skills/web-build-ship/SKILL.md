@@ -3,6 +3,8 @@ name: web-build-ship
 description: Take a designed web surface from local to live without losing the design. Performance, responsiveness, accessibility, SEO and deploy gates in one pass. Use before anything leaves the machine.
 outcome: A shipped or ship-ready web surface with a recorded audit receipt containing real measured numbers and named failures fixed at source.
 done_when:
+  - 'grep:capabilities/skills/web-build-ship/SKILL.md:[E]very fix lands at the component or token level'
+  - 'grep:capabilities/skills/web-build-ship/SKILL.md:[T]he design-preserving rule'
   - LCP <= 2.5s, CLS <= 0.1 and INP <= 200ms recorded on throttled hardware
   - zero axe critical and zero axe serious violations
   - all four viewports render with no horizontal overflow

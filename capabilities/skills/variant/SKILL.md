@@ -2,6 +2,10 @@
 name: variant
 description: Builds multiple variants of a component you're working on and helps you iterate and pick one.
 disable-model-invocation: true
+done_when:
+  - 'grep:capabilities/skills/variant/SKILL.md:[U]ntil promotion, the harness never imports from production'
+  - 'grep:capabilities/skills/variant/SKILL.md:[n]ever .Option A.'
+  - 'grep:capabilities/skills/variant/picker.md:[N]ever style the picker with the project'
 ---
 
 # Variants

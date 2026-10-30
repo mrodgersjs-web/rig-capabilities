@@ -3,6 +3,8 @@ name: web-color-contrast
 description: Verify and fix colour contrast to WCAG floors with the ratios recorded. Use when text is hard to read, when auditing accessibility, or before any ship.
 outcome: A contrast audit with a measured ratio for every used pair, and all failures fixed at the token.
 done_when:
+  - 'grep:capabilities/skills/web-color-contrast/SKILL.md:[F]ix at the role'
+  - 'grep:capabilities/skills/web-color-contrast/SKILL.md:[w]ithout a table of ratios is an adjective'
   - every used pair has a recorded ratio
   - every pair meets 4.5:1 for body, 3:1 for large text and UI, 3:1 for non-text
   - every fix is recorded with its before and after ratio
