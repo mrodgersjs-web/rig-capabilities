@@ -1,5 +1,5 @@
 {
- "generated_at": "20260913T031022Z",
+ "generated_at": "20261030T111140Z",
  "receipt": "rig.build.mcp.b45",
  "scenario_total": 10,
  "scenarios": [
@@ -9,12 +9,12 @@
      "result": {
       "isError": false,
       "state": "configured=false",
-      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"No module named 'psycopg2'\"\n }\n}"
      },
      "tool": "capabilities_build_store"
     }
    ],
-   "expectation": "both planes configured=false: [{'tool': 'capabilities_build_store', 'result': {'isError': False, 'text': '{\\n \"record\": {\\n  \"plane\": \"record\",\\n  \"configured\": false,\\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\\n },\\n \"measure\": {\\n  \"plane\": \"measure\",\\n  \"configured\": false,\\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\\n }\\n}', 'state': 'configured=false'}}]",
+   "expectation": "both planes configured=false: [{'tool': 'capabilities_build_store', 'result': {'isError': False, 'text': '{\\n \"record\": {\\n  \"plane\": \"record\",\\n  \"configured\": false,\\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\\n },\\n \"measure\": {\\n  \"plane\": \"measure\",\\n  \"configured\": false,\\n  \"detail\": \"No module named \\'psycopg2\\'\"\\n }\\n}', 'state': 'configured=false'}}]",
    "lane": "diagnosis",
    "scenario": 1,
    "server": "no_store",
@@ -27,7 +27,7 @@
      "result": {
       "isError": false,
       "state": "configured=false",
-      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"No module named 'psycopg2'\"\n }\n}"
      },
      "tool": "capabilities_build_store"
     },
@@ -81,7 +81,7 @@
      "result": {
       "isError": false,
       "state": "configured=false",
-      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"no dsn: pass one or set RIG_BUILD_DATABASE_URL\"\n }\n}"
+      "text": "{\n \"record\": {\n  \"plane\": \"record\",\n  \"configured\": false,\n  \"detail\": \"no rig_build dsn: pass --dsn or set RIG_CAP_DSN (fail closed \u2014 no default target is invented)\"\n },\n \"measure\": {\n  \"plane\": \"measure\",\n  \"configured\": false,\n  \"detail\": \"No module named 'psycopg2'\"\n }\n}"
      },
      "tool": "capabilities_build_store"
     },
@@ -110,22 +110,10 @@
    "title": "S4 run start blocked honestly with no store target"
   },
   {
-   "calls": [
-    {
-     "args_note": "valid packet, no process_key/process_version",
-     "result": {
-      "isError": false,
-      "state": "blocked",
-      "text": "{\n \"state\": \"blocked\",\n \"reason\": \"no owner binding supplied for this cell \u2014 run bind_cell first; the store never invents a default owner\",\n \"idempotency_key\": \"mcp:bb7248a81633a5bca405b967\"\n}"
-     },
-     "tool": "capabilities_build_run_start"
-    }
-   ],
-   "expectation": "store live but no owner binding -> blocked naming bind_cell, no default owner invented",
    "lane": "missing-dependency",
+   "reason": "live backend UNAVAILABLE: initdb failed:  create shared memory segment: Operation not permitted\n2026-10-30 06:11:44.177 CDT [35948] DETAIL:  Failed system call was shmget(key=718369110, size=56, 03600).\nchild process exited with exit code 1\ninitdb: removing data directory \"/Users/rig128gb/.aside/run",
    "scenario": 5,
-   "server": "live",
-   "status": "PASS",
+   "status": "UNVERIFIED",
    "title": "S5 run start blocked on missing owner binding (store live)"
   },
   {
@@ -134,7 +122,7 @@
      "result": {
       "isError": false,
       "state": "staged_dormant",
-      "text": "{\n \"state\": \"staged_dormant\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-b4e9426fe525be90.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\",\n \"next_action\": \"human/Gate-D review; pending stays open\"\n}"
+      "text": "{\n \"state\": \"staged_dormant\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-34b4508c1f1704c1.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\",\n \"next_action\": \"human/Gate-D review; pending stays open\"\n}"
      },
      "tool": "capabilities_build_omission_request"
     },
@@ -142,7 +130,7 @@
      "result": {
       "isError": false,
       "state": "already_staged",
-      "text": "{\n \"state\": \"already_staged\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-b4e9426fe525be90.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\"\n}"
+      "text": "{\n \"state\": \"already_staged\",\n \"path\": \"/Users/rig128gb/Developer/rig-capabilities/runs/agentic-stack-buildout/omissions/omission-34b4508c1f1704c1.json\",\n \"requested_by\": \"mcp-protocol-probe-nostore\"\n}"
      },
      "tool": "capabilities_build_omission_request"
     },
@@ -159,84 +147,24 @@
    "title": "S6 omission staged dormant; replay idempotent; never approved"
   },
   {
-   "calls": [
-    {
-     "result": {
-      "note": "seeded",
-      "run_id": "a9241b4fb35c4652bf473859d78ca951"
-     },
-     "tool": "capabilities_build_run_start"
-    },
-    {
-     "args": {
-      "fencing_token": 999
-     },
-     "result": {
-      "isError": false,
-      "state": "refused",
-      "text": "{\n \"state\": \"refused\",\n \"reason\": \"stale fencing token rejected for run a9241b4fb35c4652bf473859d78ca951: caller 999 != current 1\",\n \"note\": \"hash mismatch, stale fencing token, or sequence violation \u2014 nothing was stored\"\n}"
-     },
-     "tool": "capabilities_build_evidence_add"
-    },
-    {
-     "args": {
-      "fencing_token": 1
-     },
-     "result": {
-      "isError": false,
-      "state": "recorded",
-      "text": "{\n \"state\": \"recorded\",\n \"artifact\": \"replay_confirmed\",\n \"event\": \"appended\",\n \"recorded_by\": \"mcp-protocol-probe-live\"\n}"
-     },
-     "tool": "capabilities_build_evidence_add"
-    }
-   ],
-   "expectation": "stale token refused (B47); current token records through the same protocol path",
    "lane": "failure-recovery",
+   "reason": "live backend UNAVAILABLE: initdb failed:  create shared memory segment: Operation not permitted\n2026-10-30 06:11:44.177 CDT [35948] DETAIL:  Failed system call was shmget(key=718369110, size=56, 03600).\nchild process exited with exit code 1\ninitdb: removing data directory \"/Users/rig128gb/.aside/run",
    "scenario": 7,
-   "server": "live",
-   "status": "PASS",
+   "status": "UNVERIFIED",
    "title": "S7 stale fencing token refused; current token records"
   },
   {
-   "calls": [
-    {
-     "result": {
-      "isError": false,
-      "state": "unknown",
-      "text": "{\n \"read_only\": true,\n \"state\": \"unknown\",\n \"run_id\": \"run-does-not-exist-000\"\n}"
-     },
-     "tool": "capabilities_build_run_get"
-    }
-   ],
-   "expectation": "unknown run -> state=unknown, no fabricated empty success",
    "lane": "failure-recovery",
+   "reason": "live backend UNAVAILABLE: initdb failed:  create shared memory segment: Operation not permitted\n2026-10-30 06:11:44.177 CDT [35948] DETAIL:  Failed system call was shmget(key=718369110, size=56, 03600).\nchild process exited with exit code 1\ninitdb: removing data directory \"/Users/rig128gb/.aside/run",
    "scenario": 8,
-   "server": "live",
-   "status": "PASS",
+   "status": "UNVERIFIED",
    "title": "S8 unknown run answers state=unknown, never empty success"
   },
   {
-   "calls": [
-    {
-     "args": {
-      "limit": 1
-     },
-     "returned": 1,
-     "tool": "capabilities_build_run_get"
-    },
-    {
-     "args": {
-      "limit": 5
-     },
-     "returned": 3,
-     "tool": "capabilities_build_run_get"
-    }
-   ],
-   "expectation": "pages respect limit, newest-first ordering",
    "lane": "failure-recovery",
+   "reason": "live backend UNAVAILABLE: initdb failed:  create shared memory segment: Operation not permitted\n2026-10-30 06:11:44.177 CDT [35948] DETAIL:  Failed system call was shmget(key=718369110, size=56, 03600).\nchild process exited with exit code 1\ninitdb: removing data directory \"/Users/rig128gb/.aside/run",
    "scenario": 9,
-   "server": "live",
-   "status": "PASS",
+   "status": "UNVERIFIED",
    "title": "S9 run_get pages bounded, newest-first, clamp proven"
   },
   {
