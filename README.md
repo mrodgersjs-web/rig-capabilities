@@ -73,6 +73,20 @@ tree`; see docs/OUTCOMES.md). Intent routing: `route` / `capabilities_route`.
 | `capabilities_connectors` | SQL/API connector status + last error |
 | `capabilities_observe` | local traces + Langfuse reachability (honest false if unkeyed) |
 | `capabilities_s1gate` | **System-1 gate (Jev)**: check/rank/improve an artifact against a rubric, read the decision log, dry-run calibrate, selftest -- same library as `bin/rig-s1gate` |
+| `capabilities_comms_surfaces` | Communications OS registry: lanes, engines, budgets |
+| `capabilities_comms_route` | writing intent → ranked surface |
+| `capabilities_comms_packet` | drafting packet; private lane refuses without `human:true` |
+| `capabilities_comms_score` | deterministic gate stack; `can_ship` or named blocks |
+| `capabilities_comms_voice_check` | voice fingerprint score + corpus drift |
+| `capabilities_comms_ledger_report` | loop funnel + calibration (Brier) report |
+| `capabilities_comms_doctor` | harness skill-hash drift check (exit 2 = drift) |
+
+Protocol (v53): `initialize` advertises tools **and** resources **and** prompts
+plus session `instructions`; `resources/read` serves `comms://surfaces`,
+`comms://fingerprint`, `comms://doctrine`, `comms://rejected-patterns`,
+`capabilities://stats` from an exact-match URI map (no path join, 512 KiB cap);
+`prompts/get` exposes the `write` (packet+brief) and `review` (verifier) loops.
+`PRIVACY_LOCK` is a tool error over the wire, never a draft.
 
 CLI twins: `pack --requester`, `refresh`, `serve`, `connectors`, `observe`,
 `publish`, `sign`, `verify`. See [docs/CONTEXT-FABRIC.md](docs/CONTEXT-FABRIC.md).
