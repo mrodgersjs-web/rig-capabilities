@@ -1,3 +1,6 @@
+/*
+# done_when: cmd:bun test capabilities/hooks/rig-loop-hooks.test.ts
+*/
 import { afterAll, expect, test } from "bun:test";
 import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";

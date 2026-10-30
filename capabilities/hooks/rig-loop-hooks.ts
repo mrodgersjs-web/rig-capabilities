@@ -1,3 +1,6 @@
+/*
+# done_when: cmd:python3 scripts/hook_fires.py rig-loop-hooks.ts
+*/
 // rig-loop hooks — pi extension for OMP and Prime Agent.        RIG_LOOP_MANAGED
 // outcome: agent-engineering:
 // done_when: cmd:python3 scripts/hook_fires.py rig-loop-hooks.ts
