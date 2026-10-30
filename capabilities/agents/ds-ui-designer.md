@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns layout, components and UX flows: grid, hierarchy, component states, forms and onboarding, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-ui-designer.md
-  - grep:studio-agents/agents/ds-ui-designer.md:rig-s1gate
+  - file:capabilities/agents/ds-ui-designer.md
+  - grep:capabilities/agents/ds-ui-designer.md:rig-s1gate
 quality_floor: 0.8
 ---
 

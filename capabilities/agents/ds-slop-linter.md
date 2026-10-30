@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Deterministic anti-slop lint over page copy (banned tells, em dashes, vague claims), with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-slop-linter.md
-  - grep:studio-agents/agents/ds-slop-linter.md:rig-s1gate
+  - file:capabilities/agents/ds-slop-linter.md
+  - grep:capabilities/agents/ds-slop-linter.md:rig-s1gate
 quality_floor: 0.8
 ---
 

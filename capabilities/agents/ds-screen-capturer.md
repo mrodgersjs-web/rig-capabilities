@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Captures real rendered screens at 375, 768 and 1440 px from the served build, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-screen-capturer.md
-  - grep:studio-agents/agents/ds-screen-capturer.md:rig-s1gate
+  - file:capabilities/agents/ds-screen-capturer.md
+  - grep:capabilities/agents/ds-screen-capturer.md:rig-s1gate
 quality_floor: 0.8
 ---
 

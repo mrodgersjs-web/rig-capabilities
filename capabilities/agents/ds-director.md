@@ -9,8 +9,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Routes every design mission: fixes the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN), picks the main harness, dispatches stage agents one stage at a time, assembles artifacts, and sends the result to ds-critic, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-director.md
-  - grep:studio-agents/agents/ds-director.md:rig-s1gate
+  - file:capabilities/agents/ds-director.md
+  - grep:capabilities/agents/ds-director.md:rig-s1gate
 quality_floor: 0.8
 ---
 

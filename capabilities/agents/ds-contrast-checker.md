@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Computes WCAG contrast for every text/background pair; code decides, no model, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-contrast-checker.md
-  - grep:studio-agents/agents/ds-contrast-checker.md:rig-s1gate
+  - file:capabilities/agents/ds-contrast-checker.md
+  - grep:capabilities/agents/ds-contrast-checker.md:rig-s1gate
 quality_floor: 0.8
 ---
 

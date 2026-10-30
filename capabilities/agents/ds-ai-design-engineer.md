@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns AI design tooling and the build: tool stack, prompt-to-site, Figma MCP, Webflow/Framer or code handoff, responsive QA and performance, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-ai-design-engineer.md
-  - grep:studio-agents/agents/ds-ai-design-engineer.md:rig-s1gate
+  - file:capabilities/agents/ds-ai-design-engineer.md
+  - grep:capabilities/agents/ds-ai-design-engineer.md:rig-s1gate
 quality_floor: 0.8
 ---
 

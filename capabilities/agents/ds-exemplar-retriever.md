@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Returns the closest looks-like / does-not cards for the job from studio-exemplars, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-exemplar-retriever.md
-  - grep:studio-agents/agents/ds-exemplar-retriever.md:rig-s1gate
+  - file:capabilities/agents/ds-exemplar-retriever.md
+  - grep:capabilities/agents/ds-exemplar-retriever.md:rig-s1gate
 quality_floor: 0.8
 ---
 

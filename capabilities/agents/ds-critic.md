@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Independent critic, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-critic.md
-  - grep:studio-agents/agents/ds-critic.md:rig-s1gate
+  - file:capabilities/agents/ds-critic.md
+  - grep:capabilities/agents/ds-critic.md:rig-s1gate
 quality_floor: 0.8
 ---
 

@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns discovery and business: brief, buyer, sitemap, industry adapter, pricing and client process, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-strategist.md
-  - grep:studio-agents/agents/ds-strategist.md:rig-s1gate
+  - file:capabilities/agents/ds-strategist.md
+  - grep:capabilities/agents/ds-strategist.md:rig-s1gate
 quality_floor: 0.8
 ---
 

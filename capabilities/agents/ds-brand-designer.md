@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns identity, type, color and imagery decisions, each citing a law from the matching skill, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-brand-designer.md
-  - grep:studio-agents/agents/ds-brand-designer.md:rig-s1gate
+  - file:capabilities/agents/ds-brand-designer.md
+  - grep:capabilities/agents/ds-brand-designer.md:rig-s1gate
 quality_floor: 0.8
 ---
 

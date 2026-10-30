@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Finds 3-5 reference sites for a brief and extracts the pattern, never the assets, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-reference-hunter.md
-  - grep:studio-agents/agents/ds-reference-hunter.md:rig-s1gate
+  - file:capabilities/agents/ds-reference-hunter.md
+  - grep:capabilities/agents/ds-reference-hunter.md:rig-s1gate
 quality_floor: 0.8
 ---
 

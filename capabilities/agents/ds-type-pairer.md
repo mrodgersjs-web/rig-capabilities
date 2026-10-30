@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Proposes 2-3 type pairings with scale and rationale citing ds-typography laws, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-type-pairer.md
-  - grep:studio-agents/agents/ds-type-pairer.md:rig-s1gate
+  - file:capabilities/agents/ds-type-pairer.md
+  - grep:capabilities/agents/ds-type-pairer.md:rig-s1gate
 quality_floor: 0.8
 ---
 

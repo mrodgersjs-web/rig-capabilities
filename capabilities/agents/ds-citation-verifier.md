@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Runs tools/claims_check, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-citation-verifier.md
-  - grep:studio-agents/agents/ds-citation-verifier.md:rig-s1gate
+  - file:capabilities/agents/ds-citation-verifier.md
+  - grep:capabilities/agents/ds-citation-verifier.md:rig-s1gate
 quality_floor: 0.8
 ---
 

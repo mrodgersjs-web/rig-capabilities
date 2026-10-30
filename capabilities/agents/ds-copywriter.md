@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns hero, proof and CTA copy; every line passes ds-slop-linter, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-copywriter.md
-  - grep:studio-agents/agents/ds-copywriter.md:rig-s1gate
+  - file:capabilities/agents/ds-copywriter.md
+  - grep:capabilities/agents/ds-copywriter.md:rig-s1gate
 quality_floor: 0.8
 ---
 

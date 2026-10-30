@@ -10,8 +10,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: Owns motion and 3D: micro-interactions, scroll narrative, WebGL, with a motion budget, with Jev decision ids for its typed judgments"
 done_when:
-  - file:studio-agents/agents/ds-motion-designer.md
-  - grep:studio-agents/agents/ds-motion-designer.md:rig-s1gate
+  - file:capabilities/agents/ds-motion-designer.md
+  - grep:capabilities/agents/ds-motion-designer.md:rig-s1gate
 quality_floor: 0.8
 ---
 
