@@ -1,0 +1,157 @@
+{
+  "goals": [
+    {
+      "id": "GL-DS-GATE-SHIP",
+      "name": "Ship gate",
+      "description": "Ship gate [gate] \u2014 compiled from capabilities/harnesses/ds-gate-ship.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "Gate category evidenced",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Load design-studio-os and state the mode (BUILD, REDESIGN, C",
+          "description": "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Goal card written to artifacts/<slug>/goal-card.yaml with bu",
+          "description": "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.1",
+          "category": "Ship",
+          "name": "4.1 Production build served locally and clicked through",
+          "description": "Production build served locally and clicked through",
+          "command": "command output plus capture of the served URL",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Ship",
+          "name": "4.2 Performance and accessibility checks recorded",
+          "description": "Performance and accessibility checks recorded",
+          "command": "lighthouse or equivalent JSON in artifacts/<slug>/",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.3",
+          "category": "Ship",
+          "name": "4.3 Gate-D request filed for any publish or deploy",
+          "description": "Gate-D request filed for any publish or deploy",
+          "command": "gate_d request id in artifacts/<slug>/gates.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Ship gate: evidence or it did not pass.",
+        "harness_tuple": "",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "ds-gate-ship",
+          "session_type": "gate",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D4"
+            ],
+            "bms_modes": [
+              "A1"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "Gate category evidenced"
+      ],
+      "failure_states": [
+        "halt gate(s) 4.1, 4.3: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+        "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+        "Production build served locally and clicked through",
+        "Performance and accessibility checks recorded",
+        "Gate-D request filed for any publish or deploy"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/ds-gate-ship.yaml",
+        "source_sha256": "11beead23f3bc3ee911239177e81d72c122468011e80ee532fa3db26696abfb6",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "A DEFERRED Jev verdict is never a pass.",
+          "Publish, deploy, push or send needs Gate-D approval from Mike."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "4.1",
+            "4.3"
+          ],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2"
+        ],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

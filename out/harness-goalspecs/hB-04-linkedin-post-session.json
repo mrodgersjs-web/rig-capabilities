@@ -44,7 +44,18 @@
         {
           "id": "IG-04",
           "category": "Identity Lock",
-          "name": "IG-04 Confirm whether the post pairs with a visual; decide before",
+          "name": "IG-04 Close on a claim or a concrete number. Do NOT close on a que",
+          "description": "Close on a claim or a concrete number. Do NOT close on a question: n=417,550 shows 2.57% ER with a question ending vs 2.55% without. The 'always ask a question' rule is folklore.",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "IG-05",
+          "category": "Identity Lock",
+          "name": "IG-05 Confirm whether the post pairs with a visual; decide before",
           "description": "Confirm whether the post pairs with a visual; decide before writing, not after.",
           "command": null,
           "failure_tier": "halt",
@@ -68,7 +79,7 @@
           "category": "Capability",
           "name": "CG-02 Hook strength",
           "description": "First two lines <=210 chars total, contain a number, a proper noun, or a tension statement; no question-hook two posts in a row (check log).",
-          "command": "`python3 scripts/hook_check.py $SESS/post.md --log ~/.rig/logs/linkedin_hooks.jsonl` exits 0",
+          "command": "`python3 /Users/rig128gb/Developer/rig-capabilities/capabilities/harnesses/linkedin-post-gates/li_post_gate.py $SESS/post.md` exits 0 (CG-02 hook strength)",
           "failure_tier": "halt",
           "required": true,
           "required_verdict": "GO",
@@ -79,7 +90,7 @@
           "category": "Capability",
           "name": "CG-03 Length & format band",
           "description": "Post 900-1,300 chars for text-only or 400-700 when paired with visual; line breaks every 1-2 sentences.",
-          "command": "`python3 scripts/li_format.py $SESS/post.md --mode $(grep mode $SESS/angle.yaml|cut -d' ' -f2)` exits 0",
+          "command": "`python3 /Users/rig128gb/Developer/rig-capabilities/capabilities/harnesses/linkedin-post-gates/li_post_gate.py $SESS/post.md` exits 0 (CG-03 length band)",
           "failure_tier": "degrade",
           "required": false,
           "required_verdict": "SOFT",
@@ -101,7 +112,7 @@
           "category": "Capability",
           "name": "CG-05 Voice fingerprint",
           "description": "Banned-token scan clean; signature-vocab density within profile band.",
-          "command": "`grep -ciE 'delve|thrilled to announce|humbled|game changer' $SESS/post.md` == 0 AND `python3 scripts/voice_fp.py $SESS/post.md` exits 0",
+          "command": "PROOF UNAVAILABLE 2026-09-27: scripts/voice_fp.py was never written (verified 0 files across ~/Developer, ~/Desktop, ~/.rig, ~/.aside). The grep half runs and passes; the fingerprint half cannot run. TREAT AS SKIPPED, NEVER AS PASS. Substitute for now: human voice read against the author profile. Same for CG-08 img_size.py.",
           "failure_tier": "halt",
           "required": true,
           "required_verdict": "GO",
@@ -111,12 +122,12 @@
           "id": "CG-06",
           "category": "Capability",
           "name": "CG-06 Close integrity",
-          "description": "Final line is a single conversation prompt <=80 chars; zero external links in body (links go to first comment if required).",
-          "command": "`tail -1 $SESS/post.md | wc -c` <= 80; `grep -cE 'https?://' $SESS/post.md` == 0 OR links documented in $SESS/first_comment.txt",
-          "failure_tier": "degrade",
-          "required": false,
-          "required_verdict": "SOFT",
-          "weight": 0.5
+          "description": "Final line is a claim or a concrete number, <=80 chars. No promotional CTA anywhere in body ('contact me', 'learn more', 'book a call'). REVISED 2026-09-27 against measurement: the old rule was 'zero external links in body', which is stricter than the evidence supports. A bare body URL measured 858 median impressions vs 786 link-free (no penalty). What costs reach is the LINK PREVIEW CARD: 414 median impressions, i.e. -48%. So the rule is 'no preview card and no CTA', not 'no URL'. See linkedin-post-gates/CITATIONS.md.",
+          "command": "`python3 /Users/rig128gb/Developer/rig-capabilities/capabilities/harnesses/linkedin-post-gates/li_post_gate.py $SESS/post.md` exits 0 (checks CG-10 promo CTA, CG-11 preview card, CG-12 close form)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
         },
         {
           "id": "CG-07",
@@ -150,12 +161,67 @@
           "required": true,
           "required_verdict": "GO",
           "weight": 1.0
+        },
+        {
+          "id": "CG-10",
+          "category": "Capability",
+          "name": "CG-10 No promotional CTA",
+          "description": "Body contains no 'contact me', 'learn more', 'book a call', 'DM me', 'link in bio', or 'sign up'. Platform-official basis: LinkedIn Help a1499047 selects out-of-network content that is 'not overly promotional in nature' and where 'all aspects of the post relate to one another'. This is what actually gates distribution past followers.",
+          "command": "`li_post_gate.py $SESS/post.md` (CG-10) exits 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "CG-11",
+          "category": "Capability",
+          "name": "CG-11 Preview card discipline",
+          "description": "If a URL is present it must be bare. A rich link preview card costs -48% reach (414 vs 795 median impressions, n=566,957) while a bare URL measures 858, better than link-free. Note the evidence does NOT support deleting URLs on the belief LinkedIn bans links: it publishes no such rule (Help a1339724).",
+          "command": "`li_post_gate.py $SESS/post.md` (CG-11) exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-12",
+          "category": "Capability",
+          "name": "CG-12 Close form",
+          "description": "Post closes on a claim, not a question. REVISED 2026-09-27: 'always end with a question' is folklore. n=417,550 gives 2.57% ER with a question ending vs 2.55% without, i.e. no effect. A confident close is the measured-neutral option.",
+          "command": "`li_post_gate.py $SESS/post.md` (CG-12) exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-13",
+          "category": "Capability",
+          "name": "CG-13 ICP vocabulary match",
+          "description": "The first three lines must not be dominated by non-buyer framing while the body carries zero buyer vocabulary. Basis: LinkedIn retrieval matches posts to members by topic and vocabulary (arXiv:2510.14223, LinkedIn-authored), so the words of a post select its audience. Edelman- LinkedIn (n=1,300+): 30% of decision-makers REMOVED a vendor from consideration after thought leadership they judged not relevant. Measured failure: the Nintendo post reached 22% London and 0 Denver decision-makers.",
+          "command": "`li_post_gate.py $SESS/post.md` (CG-13) exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "CG-14",
+          "category": "Capability",
+          "name": "CG-14 Topic saturation pre-check",
+          "description": "If the post sits in the AI / AI-pilot lane, the pre-flight crowding count (near-identical takes in the last 24h) MUST be recorded and passed as --crowding. Unmeasured crowding returns RANK, never a pass. Basis: AI is the 2nd-worst engagement topic of 44 at 0.24% median ER vs followers (n=41,127), and 40%+ of longform LinkedIn posts are fully AI-generated (n=1,002,627). Measured advice is to SHARPEN THE ANGLE, not change the subject.",
+          "command": "`li_post_gate.py $SESS/post.md --crowding N` exits 0",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
         }
       ],
       "packet_type": "ProofPacket",
       "depends_on": [],
       "preconditions": {
-        "startup_phrase": "I am the LinkedIn operator. Hook in two lines, value in the body, one conversation starter at the end \u2014 no broetry, no engagement bait.",
+        "startup_phrase": "I am the LinkedIn operator. Hook in two lines, value in the body, close on a claim. No broetry, no engagement bait, no question-ending (measured: no effect).",
         "harness_tuple": "L2-D2-A2-I4",
         "bms_bias": "A2",
         "meta": {
@@ -222,16 +288,22 @@
         "Confirm the post pillar (build-in-public / lesson / contrarian take / receipt) before drafting.",
         "Load the author voice fingerprint; if the post could be attributed to any generic creator, rewrite.",
         "Refuse engagement-bait mechanics ('comment YES', 'repost if') outright \u2014 session degrades if requested.",
+        "Close on a claim or a concrete number. Do NOT close on a question: n=417,550 shows 2.57% ER with a question ending vs 2.55% without. The 'always ask a question' rule is folklore.",
         "Confirm whether the post pairs with a visual; decide before writing, not after.",
         "Post pillar and one-sentence angle recorded in angle.yaml.",
         "First two lines <=210 chars total, contain a number, a proper noun, or a tension statement; no question-hook two posts in a row (check log).",
         "Post 900-1,300 chars for text-only or 400-700 when paired with visual; line breaks every 1-2 sentences.",
         "Posts in receipt/lesson pillars contain at least one concrete artifact reference (metric, screenshot reference, date, or named tool version).",
         "Banned-token scan clean; signature-vocab density within profile band.",
-        "Final line is a single conversation prompt <=80 chars; zero external links in body (links go to first comment if required).",
+        "Final line is a claim or a concrete number, <=80 chars. No promotional CTA anywhere in body ('contact me', 'learn more', 'book a call'). REVISED 2026-09-27 against measurement: the old rule was 'zero external links in body', which is stricter than the evidence supports. A bare body URL measured 858 median impressions vs 786 link-free (no penalty). What costs reach is the LINK PREVIEW CARD: 414 median impressions, i.e. -48%. So the rule is 'no preview card and no CTA', not 'no URL'. See linkedin-post-gates/CITATIONS.md.",
         "0-3 hashtags, all lowercase, none invented-for-this-post (must exist in profile hashtag registry).",
         "If mode=visual, the asset exists at spec (1080x1350 or 1200x627) and its sha256 is recorded.",
-        "Post, angle, and asset hashes sealed; hook appended to hook log for anti-repetition."
+        "Post, angle, and asset hashes sealed; hook appended to hook log for anti-repetition.",
+        "Body contains no 'contact me', 'learn more', 'book a call', 'DM me', 'link in bio', or 'sign up'. Platform-official basis: LinkedIn Help a1499047 selects out-of-network content that is 'not overly promotional in nature' and where 'all aspects of the post relate to one another'. This is what actually gates distribution past followers.",
+        "If a URL is present it must be bare. A rich link preview card costs -48% reach (414 vs 795 median impressions, n=566,957) while a bare URL measures 858, better than link-free. Note the evidence does NOT support deleting URLs on the belief LinkedIn bans links: it publishes no such rule (Help a1339724).",
+        "Post closes on a claim, not a question. REVISED 2026-09-27: 'always end with a question' is folklore. n=417,550 gives 2.57% ER with a question ending vs 2.55% without, i.e. no effect. A confident close is the measured-neutral option.",
+        "The first three lines must not be dominated by non-buyer framing while the body carries zero buyer vocabulary. Basis: LinkedIn retrieval matches posts to members by topic and vocabulary (arXiv:2510.14223, LinkedIn-authored), so the words of a post select its audience. Edelman- LinkedIn (n=1,300+): 30% of decision-makers REMOVED a vendor from consideration after thought leadership they judged not relevant. Measured failure: the Nintendo post reached 22% London and 0 Denver decision-makers.",
+        "If the post sits in the AI / AI-pilot lane, the pre-flight crowding count (near-identical takes in the last 24h) MUST be recorded and passed as --crowding. Unmeasured crowding returns RANK, never a pass. Basis: AI is the 2nd-worst engagement topic of 44 at 0.24% median ER vs followers (n=41,127), and 40%+ of longform LinkedIn posts are fully AI-generated (n=1,002,627). Measured advice is to SHARPEN THE ANGLE, not change the subject."
       ],
       "anti_patterns": [],
       "anti_generic_threshold": 80.0,
@@ -247,7 +319,7 @@
       ],
       "_meta": {
         "source": "capabilities/harnesses/hB-04-linkedin-post-session.yaml",
-        "source_sha256": "2f77d84b2a7b70049c0aebe3e019cfbaa0131278c2e0ab360ded62661b143d6a",
+        "source_sha256": "55d7b2c82588b31c717360ab1cac238b26fb2ad64400f15049a3a4e46727fb99",
         "final_rule": [
           "Ship only what the gates can prove. No artifact leaves this session on adjectives \u2014 every claim is bound to a command, a file, or a hash. A blocked gate is information, not failure; log it, learn from it, and make the next session's proof stronger. The operator who follows this harness leaves the system stronger than it found it."
         ],
@@ -261,10 +333,15 @@
             "CG-03": "degrade",
             "CG-04": "halt",
             "CG-05": "halt",
-            "CG-06": "degrade",
+            "CG-06": "halt",
             "CG-07": "degrade",
             "CG-08": "degrade",
-            "CG-09": "halt"
+            "CG-09": "halt",
+            "CG-10": "halt",
+            "CG-11": "degrade",
+            "CG-12": "degrade",
+            "CG-13": "degrade",
+            "CG-14": "degrade"
           },
           "prose": [
             "halt: Stop the session immediately. Record the failing gate id, the proof command output, and the missing prerequisite in $SESS/proof/halt_log.yaml. Do not draft past a halt gate; resume only after the gate's proof exits 0.",
@@ -276,7 +353,8 @@
           "IG-01",
           "IG-02",
           "IG-03",
-          "IG-04"
+          "IG-04",
+          "IG-05"
         ],
         "phase_gates": [],
         "phases_beyond_source": []

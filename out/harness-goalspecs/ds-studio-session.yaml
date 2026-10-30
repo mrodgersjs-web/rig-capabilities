@@ -1,0 +1,289 @@
+{
+  "goals": [
+    {
+      "id": "GL-DS-STUDIO-SESSION",
+      "name": "Design Studio session (all stages)",
+      "description": "Design Studio session (all stages) [design-studio-session] \u2014 compiled from capabilities/harnesses/ds-studio-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "Every capability gate evidenced",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Load design-studio-os and state the mode (BUILD, REDESIGN, C",
+          "description": "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Goal card written to artifacts/<slug>/goal-card.yaml with bu",
+          "description": "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.1",
+          "category": "Brief",
+          "name": "1.1 Brief names buyer, job to be done, success metric and constr",
+          "description": "Brief names buyer, job to be done, success metric and constraints",
+          "command": "artifacts/<slug>/brief.md with all four fields non-empty",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "1.2",
+          "category": "Brief",
+          "name": "1.2 At least 3 reference sites studied with the pattern extracte",
+          "description": "At least 3 reference sites studied with the pattern extracted, not copied",
+          "command": "artifacts/<slug>/references.md with URL and pattern per row",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "1.3",
+          "category": "Brief",
+          "name": "1.3 Brief judged ready by Jev plan.readiness",
+          "description": "Brief judged ready by Jev plan.readiness",
+          "command": "decision id recorded in artifacts/<slug>/gates.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Craft",
+          "name": "2.1 Type scale and pairing chosen from ds-typography laws, each",
+          "description": "Type scale and pairing chosen from ds-typography laws, each choice citing a law",
+          "command": "artifacts/<slug>/type.md with CLAIM citations",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Craft",
+          "name": "2.2 Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+          "description": "Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+          "command": "contrast table from ds-contrast-checker, exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Craft",
+          "name": "2.3 Layout on a stated grid with spacing on the scale",
+          "description": "Layout on a stated grid with spacing on the scale",
+          "command": "artifacts/<slug>/layout.md lists grid, scale and exceptions",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "3.1",
+          "category": "Critique",
+          "name": "3.1 Real rendered screens captured at 375, 768 and 1440 px",
+          "description": "Real rendered screens captured at 375, 768 and 1440 px",
+          "command": "three PNGs in artifacts/<slug>/captures/",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.2",
+          "category": "Critique",
+          "name": "3.2 Independent critic (ds-critic, not the builder) returns find",
+          "description": "Independent critic (ds-critic, not the builder) returns findings with laws cited",
+          "command": "artifacts/<slug>/critique.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.3",
+          "category": "Critique",
+          "name": "3.3 Jev ui.design and advisor-plus judge-image run on each captu",
+          "description": "Jev ui.design and advisor-plus judge-image run on each capture",
+          "command": "decision ids per capture; DEFERRED listed as DEFERRED",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "3.4",
+          "category": "Critique",
+          "name": "3.4 Anti-slop lint clean on all copy",
+          "description": "Anti-slop lint clean on all copy",
+          "command": "ds-slop-linter output with 0 blockers",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.1",
+          "category": "Ship",
+          "name": "4.1 Production build served locally and clicked through",
+          "description": "Production build served locally and clicked through",
+          "command": "command output plus capture of the served URL",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "4.2",
+          "category": "Ship",
+          "name": "4.2 Performance and accessibility checks recorded",
+          "description": "Performance and accessibility checks recorded",
+          "command": "lighthouse or equivalent JSON in artifacts/<slug>/",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "4.3",
+          "category": "Ship",
+          "name": "4.3 Gate-D request filed for any publish or deploy",
+          "description": "Gate-D request filed for any publish or deploy",
+          "command": "gate_d request id in artifacts/<slug>/gates.md",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Design studio mode: brief first, craft by law, judged by someone else, nothing ships without Gate-D.",
+        "harness_tuple": "",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "ds-studio-session",
+          "session_type": "design-studio-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "Every capability gate evidenced",
+        "Critique verdict from an agent that did not build the work",
+        "Lessons appended by ds-exemplar-learning-loop"
+      ],
+      "failure_states": [
+        "halt gate(s) 1.1, 1.3, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.3: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+        "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+        "Brief names buyer, job to be done, success metric and constraints",
+        "At least 3 reference sites studied with the pattern extracted, not copied",
+        "Brief judged ready by Jev plan.readiness",
+        "Type scale and pairing chosen from ds-typography laws, each choice citing a law",
+        "Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+        "Layout on a stated grid with spacing on the scale",
+        "Real rendered screens captured at 375, 768 and 1440 px",
+        "Independent critic (ds-critic, not the builder) returns findings with laws cited",
+        "Jev ui.design and advisor-plus judge-image run on each capture",
+        "Anti-slop lint clean on all copy",
+        "Production build served locally and clicked through",
+        "Performance and accessibility checks recorded",
+        "Gate-D request filed for any publish or deploy"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/ds-studio-session.yaml",
+        "source_sha256": "bde555dd7a38cbdff75a97b248c2b5cebb349bcd793b5f01fd89b8e3acd4d02c",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "A DEFERRED Jev verdict is never a pass.",
+          "Publish, deploy, push or send needs Gate-D approval from Mike."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "1.1",
+            "1.3",
+            "2.1",
+            "2.2",
+            "3.1",
+            "3.2",
+            "3.3",
+            "4.1",
+            "4.3"
+          ],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2"
+        ],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

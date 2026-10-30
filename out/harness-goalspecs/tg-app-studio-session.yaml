@@ -1,0 +1,163 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-APP-STUDIO-SESSION",
+      "name": "RIG App Studio session (TubeGuruji doctrine mission harness)",
+      "description": "RIG App Studio session (TubeGuruji doctrine mission harness) [app-studio-session] \u2014 compiled from capabilities/harnesses/tg-app-studio-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "G1",
+          "category": "Identity Lock",
+          "name": "G1 mission intake names the corpus match (videoId + transcript",
+          "description": "mission intake names the corpus match (videoId + transcript path) before any scaffold; no match = explicit no-match, conductor decides partial or stop",
+          "command": "mission record contains registry.jsonl row id and transcript path",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G2",
+          "category": "Identity Lock",
+          "name": "G2 spec derived from the transcript carries videoId@timestamp p",
+          "description": "spec derived from the transcript carries videoId@timestamp per feature; features without evidence are dropped or marked speculative",
+          "command": "spec table in mission record; zero uncited rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G3",
+          "category": "Identity Lock",
+          "name": "G3 every BUILD->VERIFY transition scored via rig-s1gate (requir",
+          "description": "every BUILD->VERIFY transition scored via rig-s1gate (required noul > 0.9); classifier unavailable = DEFER the transition, never guess",
+          "command": "stage_scores entries with rubric + noul in mission record",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G4",
+          "category": "Identity Lock",
+          "name": "G4 independent verification pass (tg-ship-verifier) completed:",
+          "description": "independent verification pass (tg-ship-verifier) completed: build proof, route proof, deny paths, gotcha catalog; BLOCKED is a legal verdict, assumed-PASS is not",
+          "command": "verdicts array with per-feature proof lines",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G5",
+          "category": "Identity Lock",
+          "name": "G5 video-vs-build comparison produced feature-by-feature before",
+          "description": "video-vs-build comparison produced feature-by-feature before mission close",
+          "command": "comparison array with in_video/in_build/proof per row",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "G6",
+          "category": "Identity Lock",
+          "name": "G6 any public action (deploy, domain, purchase, push) stops at",
+          "description": "any public action (deploy, domain, purchase, push) stops at Gate-D with the stop recorded; the mission may close HELD",
+          "command": "held_at_gate field set or Gate-D approval id recorded",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I build from cited evidence; I do not certify my own work.",
+        "harness_tuple": "H_appstudio(intake, corpus_spec, skeleton_build, integration_fit, verify, compare, gate_d)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-app-studio-session",
+          "session_type": "app-studio-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "mission intake names the corpus match (videoId + transcript path) before any scaffold; no match = explicit no-match, conductor decides partial or stop",
+        "spec derived from the transcript carries videoId@timestamp per feature; features without evidence are dropped or marked speculative",
+        "every BUILD->VERIFY transition scored via rig-s1gate (required noul > 0.9); classifier unavailable = DEFER the transition, never guess",
+        "independent verification pass (tg-ship-verifier) completed: build proof, route proof, deny paths, gotcha catalog; BLOCKED is a legal verdict, assumed-PASS is not",
+        "video-vs-build comparison produced feature-by-feature before mission close",
+        "any public action (deploy, domain, purchase, push) stops at Gate-D with the stop recorded; the mission may close HELD"
+      ],
+      "anti_patterns": [
+        "Scaffolding before the corpus match is named (G1) - that is how invented specs happen",
+        "Accepting a builder slice on prose instead of an executed check",
+        "Marking BLOCKED integrations PASS to close the mission",
+        "Treating a JEV ESCALATE as advisory decoration instead of a held transition"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-app-studio-session.yaml",
+        "source_sha256": "7a248be78ef3f648d5a585fcfc2b7a40a74a7f03c43214f5008ef09bd820214c",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}
