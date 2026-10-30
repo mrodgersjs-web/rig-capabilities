@@ -419,3 +419,5 @@ MCP stdio transport and the wiring installer are adapted from `jake-pai-mcp` (sa
 <br>
 <sub>MIT licensed · built by <a href="https://github.com/mrodgersjs-web">@mrodgersjs-web</a> · if this saves you a skill rewrite, a ⭐ helps others find it</sub>
 </div>
+
+Part of the [mrodgersjs-web](https://github.com/mrodgersjs-web) FDE studio fleet. [rodgersintelligence.com](https://rodgersintelligence.com)
