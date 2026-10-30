@@ -1,6 +1,10 @@
 ---
 name: better-colors
 description: Helps you build a color system and answer anything about color in your project. You can generate palettes, use semantic tokens, convert between formats, check contrast and more.
+done_when:
+  - grep:capabilities/skills/better-colors/SKILL.md:Never report a contrast value you did not measure
+  - grep:capabilities/skills/better-colors/SKILL.md:Never .Approve. coverage you did not inspect
+  - grep:capabilities/skills/better-colors/contrast.md:(?i)4\.5
 ---
 
 # Colors

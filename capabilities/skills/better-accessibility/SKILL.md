@@ -1,6 +1,10 @@
 ---
 name: better-accessibility
 description: Helps your project comply with accessibility standards and best practices.
+done_when:
+  - grep:capabilities/skills/better-accessibility/SKILL.md:The first rule of ARIA
+  - grep:capabilities/skills/better-accessibility/SKILL.md:Never .Approve. coverage you did not inspect
+  - grep:capabilities/skills/better-accessibility/hit-areas.md:(?i)44
 ---
 
 # Accessibility

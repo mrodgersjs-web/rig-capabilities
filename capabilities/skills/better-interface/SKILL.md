@@ -1,6 +1,10 @@
 ---
 name: better-interface
 description: Combines all of the `better-*` skills into a single review across accessibility, layout, writing, typography, color and UI polish.
+done_when:
+  - grep:capabilities/skills/better-interface/SKILL.md:Orchestration is all it owns
+  - grep:capabilities/skills/better-interface/SKILL.md:Never resolve a change scope here
+  - grep:capabilities/skills/better-interface/review-format.md:(?i)HIGH
 ---
 
 # Interface review

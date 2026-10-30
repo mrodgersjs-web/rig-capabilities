@@ -11,6 +11,10 @@ metadata:
   agentskills_spec: "1.0"
   openclaw:
     emoji: "✍️"
+done_when:
+  - grep:capabilities/skills/avoid-ai-writing/SKILL.md:Manufactured stakes
+  - grep:capabilities/skills/avoid-ai-writing/SKILL.md:Invented specifics
+  - grep:capabilities/skills/avoid-ai-writing/references/patterns.md:(?i)P0|rule of three
 ---
 
 # Avoid AI Writing — Audit & Rewrite

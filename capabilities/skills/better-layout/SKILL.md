@@ -1,6 +1,10 @@
 ---
 name: better-layout
 description: Helps with grouping, alignment, reading order, progressive disclosure and other details that make a good layout.
+done_when:
+  - grep:capabilities/skills/better-layout/SKILL.md:Space groups first
+  - grep:capabilities/skills/better-layout/SKILL.md:Never park a critical action
+  - grep:capabilities/skills/better-layout/grouping-and-alignment.md:(?i)group
 ---
 
 # Layout

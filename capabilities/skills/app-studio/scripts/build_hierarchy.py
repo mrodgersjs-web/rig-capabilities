@@ -283,7 +283,7 @@ def build_resolver():
 
     def resolve(kind: str, name: str):
         if kind == "skill":
-            for cand in (REPO / S / name, HOME / ".aside/u/0/skills/user" / name):
+            for cand in (REPO / S / name, HOME / ".hermes/skills" / name, HOME / ".aside/u/0/skills/user" / name):
                 if (cand / "SKILL.md").is_file():
                     return rel(cand)
         p = by_name.get((kind, name.lower()))

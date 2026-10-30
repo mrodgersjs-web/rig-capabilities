@@ -1,6 +1,9 @@
 ---
 name: baseline-ui
 description: Quickly deslop UI code by fixing spacing, hierarchy, typography, and small layout issues. Use when the interface needs a fast cleanup or polish pass.
+done_when:
+  - grep:capabilities/skills/baseline-ui/SKILL.md:NEVER use .h-screen., use .h-dvh.
+  - grep:capabilities/skills/baseline-ui/SKILL.md:NEVER exceed .200ms. for interaction feedback
 ---
 
 # Baseline UI

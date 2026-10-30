@@ -1,6 +1,10 @@
 ---
 name: better-typography
 description: Focuses on type scale, spacing, sizing, variable fonts, OpenType features, wrapping, truncation and other details that make typography feel great across your product.
+done_when:
+  - grep:capabilities/skills/better-typography/SKILL.md:Heading sizes descend with level
+  - grep:capabilities/skills/better-typography/SKILL.md:font-smoothing.{1,3}antialiased
+  - grep:capabilities/skills/better-typography/css-cheat-sheet.md:(?i)font
 ---
 
 # Typography
