@@ -90,7 +90,7 @@ sections (lv-profile), or anything about a minor (Lane C: stop and hand back to 
 | name | kind | path | when to call |
 |---|---|---|---|
 | hook-validation-prompts | prompt library (tool) | `~/.hermes/archived/linkedin-studio/prompts/hook-validation-prompts.md` | before the post moves to drafting, before any visual asset, before any pop-culture reference post; any BLOCK stops the pipeline |
-| draft-hooks | sub-agent (tool) | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/sub/draft-hooks.md` | when a plan slot needs the full ten-variant spread with claim refs for the downstream gates |
+| draft-hooks | sub-agent (tool) | `~/.aside/u/0/skill-library/linkedin-growth-os/agents/sub/draft-hooks.md` | when a plan slot needs the full ten-variant spread with claim refs for the downstream gates |
 
 ## Sub-skills
 
@@ -116,6 +116,35 @@ sections (lv-profile), or anything about a minor (Lane C: stop and hand back to 
 - Hook ranking is DEFERRED when the classifier is down. Never guess a verdict, never substitute a model's opinion. [hook-selection, clark:hooks-and-media]
 - Eden generates the final copy and the brand assets. This stage writes briefs and never hand-authors post copy or visuals. [li-hooks]
 - Never publish, schedule, boost or send from this stage. Live posts need Mike's explicit yes per item. [li-hooks, viral-core]
+
+## Lessons from measured outcomes (added 2026-10-01)
+
+Provenance tag `[measured:eden-analytics-2026-10-01]` marks an observation on Mike's accounts;
+`[ext:...]` marks an outside finding.
+
+- **Rank the vehicle before the idea. This is the single most important lesson the account has
+  produced.** On 2026-09-17 a Ted Lasso post drew 10,000 views / 6,400 reach / 96 likes / 58
+  comments / 5 shares. Between 2026-09-25 and 09-30, five posts carrying the *same thesis* ("the
+  scarce skill is judgment") drew 44, 81 and 116 impressions. The idea was identical. What differed
+  was the vehicle: a named receipt ("I've audited 400+", the FastAPI creator), an arrow listicle
+  that reads on mobile, and a four-option poll close. When a post is under consideration, ask which
+  vehicle it is in before asking whether the idea is good. [measured:eden-analytics-2026-10-01]
+- **The poll family is untested and is the highest-value gap in this stage.** No hook or format rule
+  anywhere in this family covers polls, and the only post to clear 10K in three weeks was one. Until
+  there are 10 posts of data, generate a poll vehicle as one of the three variants whenever the
+  topic is a genuine either/or the audience has an opinion on. [measured:eden-analytics-2026-10-01]
+- **Curiosity-gap and contrarian openings outperform personal-story openings**, measured at 6.8% and
+  6.2% engagement versus 5.4%, roughly 2.3x the field over a 1,000+ post sample. Contrarian shape:
+  "Most [audience] think [belief] is the key to [result]. They're wrong." Single-vendor dataset,
+  treat the direction as solid and the exact multiplier as unproven on this account.
+  [ext:connectsafely.ai/articles/linkedin-hooks-engagement-guide-2026]
+- **Non-round numbers read as documented; round numbers read as invented.** "10,737 reviews" lands
+  where "about 10K reviews" does not. This account's own best-written copy (the TransformFit post)
+  already does this and it is the clearest voice in the queue.
+  [ext:github.com/jakeolschewski/viral-hook-formulas]
+- **The hook must fit the ~140-character mobile cutoff and own its own line above the fold.** 22
+  shipped posts currently bury it. A hook that is not visible before "see more" is not a hook.
+  [ext:postory.io/blog/hook-formulas-social-media]
 
 ## Done-test
 

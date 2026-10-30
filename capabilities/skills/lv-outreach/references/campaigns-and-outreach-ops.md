@@ -71,8 +71,8 @@ a sealed proof packet or it is not done [linkedin-follower-outreach].
 ## Safety numbers to hold exactly when operating any campaign
 
 60-120s between sends; never a browser session for more than 5 consecutive DMs; never the compose
-page for batches over 5; profile loads cap about 60 per session; comments cap 30/day; cookie
-refresh before the ~24h li_at expiry; DMs under 70 words; connect notes that send measured at 180
+page for batches over 5; profile loads cap about 60 per session; comments cap 30/day; never
+copy, refresh or replay LinkedIn cookies (li_at, JSESSIONID), browser pages only; DMs under 70 words; connect notes that send measured at 180
 characters. Re-probe any LinkedIn platform limit before quoting it: published caps move
 [dykema-dm-campaign-learnings, dm-sequences, lg-client-engine].
 

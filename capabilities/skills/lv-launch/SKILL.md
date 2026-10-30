@@ -43,7 +43,7 @@ Do not use for writing or fixing the draft (`lv-draft`), for scoring it (`lv-gat
 5. **Stage in Eden as a draft.** Drafts are free. Live scheduling or publishing needs Mike's explicit yes for that post. Never auto-schedule: Eden's scheduler is not trusted for delivery, and publishing stays by hand until a test post demonstrably lands.
 6. **Read the draft back out of Eden and diff it** against the approved text. A write call is not persistence evidence. Publish only after the diff is clean and Mike says yes for this post.
 7. **Golden hour, 60-90 minutes, as a scheduled block** (`references/golden-hour.md`): the save asset first, then in-depth replies to every comment ending in a question, highest-status in-topic comment first. A human holds this hour; an agent stages replies.
-8. **First 24 hours.** Do not delete a slow post. Distribution is spiky and late [s6KMjhznXqs]. Read the numbers once at +90 minutes and stop. At 24 hours log one to three learnings in `~/.aside/u/0/skills/user/linkedin-analytics-tracker/SKILL.md`.
+8. **First 24 hours.** Do not delete a slow post. Distribution is spiky and late [s6KMjhznXqs]. Read the numbers once at +90 minutes and stop. At 24 hours log one to three learnings in `~/.aside/u/0/skill-library/linkedin-analytics-tracker/SKILL.md`.
 9. **Second-wave writes.** One second save asset (a graded answer key) is allowed and is the only write that raises the strongest signal again after publish. An "Add your thoughts" repost is the only action that creates a new distribution event on a live post, and it is a public act: explicit yes first.
 10. **Boost screen.** After one to two weeks organic, list ICP-relevant under-delivered posts as boost candidates with a dollar amount; every boost is a Gate-D spend item Mike approves (`references/boosts-and-peaks.md`).
 11. **Plan the next peak.** One manufactured peak per month on top of the cadence: a launch, an event, a stunt, or a big data post.
@@ -70,8 +70,8 @@ Do not use for writing or fixing the draft (`lv-draft`), for scoring it (`lv-gat
 |---|---|---|---|
 | eden-mcp | tool | `~/.aside/u/0/skills/user/eden-mcp/SKILL.md` | the Eden Canvas MCP server for staging, scheduling state, auto-DM rules and analytics; the only publisher surface |
 | eden-linkedin-platform | tool | `~/.hermes/skills/social-media/eden-linkedin-platform/SKILL.md` | Eden LinkedIn ops by name: `eden_list_scheduled_posts`, `eden_draft_post`, `eden_list_analytics_posts`; hard API facts (no comment tools, no scheduled-post delete) |
-| step-5-publish | tool | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/step-5-publish.md` | the executor/verifier pair for the publish step when running the linkedin-growth-os process harness |
-| step-6-amplify | tool | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/step-6-amplify.md` | the executor/verifier pair for the amplify step; owns its own sub-agent list and the comment-verification rule |
+| step-5-publish | tool | `~/.aside/u/0/skill-library/linkedin-growth-os/agents/step-5-publish.md` | the executor/verifier pair for the publish step when running the linkedin-growth-os process harness |
+| step-6-amplify | tool | `~/.aside/u/0/skill-library/linkedin-growth-os/agents/step-6-amplify.md` | the executor/verifier pair for the amplify step; owns its own sub-agent list and the comment-verification rule |
 | rig-revenue-publish-ramp | runner | `~/Developer/rig-capabilities/capabilities/skills/rig-revenue-publish-ramp/SKILL.md` | every launch sets its cadence ceiling here: 1 to 5 to 10 items per week, one level up only after 3-4 clean weeks; a runner consuming this stage must ask it for the ceiling before it schedules |
 
 ## Sub-skills
@@ -107,6 +107,32 @@ Do not use for writing or fixing the draft (`lv-draft`), for scoring it (`lv-gat
 - Assert the signed-in handle before any outward action; this browser holds Mike's and a client's session at once. [step-6-amplify, lg-publish]
 - A repost of a live post is a public act and gets an explicit yes first. [linkedin-post-launch]
 - One before-and-after number is a story, not a rate; report the delta series and say when a rise is correlation. [linkedin-post-launch]
+
+## Lessons from measured outcomes (added 2026-10-01)
+
+Provenance tag `[measured:eden-analytics-2026-10-01]` marks an observation on Mike's accounts.
+
+- **The golden-hour responder must cover the publish time plus 90 minutes, and its window must be
+  checked against the actual slot before the routine is trusted.** Eden publishes at 08:30 Denver;
+  the responder polled 07:40-08:05. It was structurally unable to catch the first 90 minutes of its
+  own lane's best post, which is the window that decides reach. A window that ends before the post
+  ships is a defect, not a tuning detail. Re-read the live slot at run time and compute the window
+  from it; never assume the window from the routine definition. [measured:eden-analytics-2026-10-01]
+- **Near-identical content on any platform within 48 hours is a failure, including cross-post
+  copies.** Four TransformFit posts shipped in 24 hours, three of them inside 16 minutes
+  (18:09 / 18:15 / 18:25 on 2026-09-26). The two historical scheduler failures on this account were
+  Ayrshare rejections reading "Duplicate or similar content posted within the same two day period",
+  and manual retries landed shadow-suppressed. A cross-post is still a duplicate for this check:
+  vary the copy materially or hold it. [measured:eden-analytics-2026-10-01]
+- **An empty item must fail loud at the scheduler, never ship.** Two blank posts fired on this
+  account: one published empty on 2026-09-30 at 08:30, one failed. A third sits queued. The guard is
+  simple and non-negotiable: if the body is empty or still titled "Untitled post", emit one explicit
+  `BLOCKED:` line naming the slot and stop. A clean run that publishes nothing is otherwise
+  indistinguishable from a clean run that publishes well. [measured:eden-analytics-2026-10-01]
+- **Do not add volume to fix low numbers.** Instagram views fell 21% on 29% more posting volume over
+  the same window. Volume was already the variable that was wrong; adding more of it is how the
+  decline was produced. When a post flops, change the vehicle or the test, never the frequency.
+  [measured:eden-analytics-2026-10-01]
 
 ## Done-test
 
