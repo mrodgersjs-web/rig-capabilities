@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""Compose or validate a read-only RIG agent/skill/prompt mission packet."""
+import argparse
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from rig_capabilities.mission import (compose, live_assets, hosted_jev_loader,
+                                      memory_os_loader, validate_packet)
+from rig_capabilities.completion import check_completion
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    make = sub.add_parser("compose")
+    make.add_argument("intent")
+    make.add_argument("--runtime", choices=["codex", "claude"],
+                      default="codex")
+    make.add_argument("--repo", type=Path, default=ROOT)
+    make.add_argument("--offline", action="store_true", help="omit Memory OS only for offline eval")
+    check = sub.add_parser("validate")
+    check.add_argument("packet", type=Path)
+    check.add_argument("--repo", type=Path, default=ROOT)
+    gate = sub.add_parser("gate", help="read-only completion precheck; cannot certify DONE")
+    gate.add_argument("evidence", type=Path, help="untrusted JSON claim; no agent-supplied test executes")
+    gate.add_argument("--repo", type=Path, default=ROOT)
+    args = parser.parse_args()
+    if args.command == "gate":
+        try:
+            evidence = json.loads(args.evidence.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(json.dumps({"status": "BLOCK", "errors": [type(exc).__name__]}, sort_keys=True))
+            return 2
+        result = check_completion(evidence, args.repo.resolve())
+        print(json.dumps(result, sort_keys=True, indent=2))
+        return 2
+    if args.command == "validate":
+        try:
+            packet = json.loads(args.packet.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError) as exc:
+            print(json.dumps({"ok": False, "errors": [type(exc).__name__]}))
+            return 2
+        root = args.repo.resolve()
+        assets, _ = live_assets(root)
+        try:
+            registry = json.loads((root / "capabilities/prompts/registry.json").read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            registry = {"prompts": []}
+        errors = validate_packet(packet, root, assets, registry)
+        print(json.dumps({"ok": not errors, "errors": errors}, sort_keys=True))
+        return 0 if not errors else 1
+    root = args.repo.resolve()
+    assets, inventory = live_assets(root)
+    try:
+        registry = json.loads((root / "capabilities/prompts/registry.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        registry = {"prompts": []}
+    packet = compose(args.intent, args.runtime, root, assets, registry,
+                     None if args.offline else memory_os_loader, inventory,
+                     None if args.offline else hosted_jev_loader)
+    print(json.dumps(packet, sort_keys=True, indent=2))
+    return 0 if packet["status"] == "candidate" else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
