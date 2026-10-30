@@ -1,0 +1,134 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-DEPLOY-CHECKLIST",
+      "name": "deploy checklist sub-process (gotcha catalog walk)",
+      "description": "deploy checklist sub-process (gotcha catalog walk) [deploy-stage] \u2014 compiled from capabilities/harnesses/tg-deploy-checklist.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "D1",
+          "category": "Identity Lock",
+          "name": "D1 build executed locally before any deploy attempt (-AVtkiG0la",
+          "description": "build executed locally before any deploy attempt (-AVtkiG0laE habit)",
+          "command": "build cmd + exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "D2",
+          "category": "Identity Lock",
+          "name": "D2 catalog walked in order: env redeploy, OAuth origins, Clerk",
+          "description": "catalog walked in order: env redeploy, OAuth origins, Clerk production, Inngest sync, webhooks/ngrok, SPA rewrites, image domains, middleware public routes, StrictMode, dev-vs-prod data - each row PASS/RED/SKIPPED-with-reason",
+          "command": "row list with observed outputs",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "D3",
+          "category": "Identity Lock",
+          "name": "D3 end-to-end production-path run: one sign-in, one generation,",
+          "description": "end-to-end production-path run: one sign-in, one generation, one webhook, one background job on the deployed URL",
+          "command": "four run records",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "D4",
+          "category": "Identity Lock",
+          "name": "D4 the deploy/publish itself is executed only under a Gate-D ap",
+          "description": "the deploy/publish itself is executed only under a Gate-D approval id; the checklist may run read-only without it",
+          "command": "gate_d id in mission record or held_at_gate set",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Rendered page is not a working deploy.",
+        "harness_tuple": "H_deploy(local_build, ritual, catalog_walk, gate_d)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-deploy-checklist",
+          "session_type": "deploy-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D4"
+            ],
+            "bms_modes": [
+              "A1"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "build executed locally before any deploy attempt (-AVtkiG0laE habit)",
+        "catalog walked in order: env redeploy, OAuth origins, Clerk production, Inngest sync, webhooks/ngrok, SPA rewrites, image domains, middleware public routes, StrictMode, dev-vs-prod data - each row PASS/RED/SKIPPED-with-reason",
+        "end-to-end production-path run: one sign-in, one generation, one webhook, one background job on the deployed URL",
+        "the deploy/publish itself is executed only under a Gate-D approval id; the checklist may run read-only without it"
+      ],
+      "anti_patterns": [
+        "Deploying to 'see if it works' - the build happens locally first",
+        "Treating a rendered landing page as proof the app deployed"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-deploy-checklist.yaml",
+        "source_sha256": "f6d6ac262324b3b942bd5261fc5a90db6f8aa83915ec2f4d0342518f48432bea",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

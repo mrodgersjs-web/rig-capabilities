@@ -1,0 +1,148 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-SHIP-VERIFY",
+      "name": "ship verification process (independent verifier + comparison)",
+      "description": "ship verification process (independent verifier + comparison) [ship-verify-stage] \u2014 compiled from capabilities/harnesses/tg-ship-verify.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "V1",
+          "category": "Identity Lock",
+          "name": "V1 verifier is not the builder; slice records are treated as cl",
+          "description": "verifier is not the builder; slice records are treated as claims and re-executed",
+          "command": "verifier agent id differs from builder agent ids in the mission record",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "V2",
+          "category": "Identity Lock",
+          "name": "V2 every feature carries PASS (proof observed) / RED (check fai",
+          "description": "every feature carries PASS (proof observed) / RED (check failed, output line named) / BLOCKED (cannot run, smallest unblock named) - assumed PASS is illegal",
+          "command": "verdicts array",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "V3",
+          "category": "Identity Lock",
+          "name": "V3 gotcha catalog walked row by row against the target (via tg-",
+          "description": "gotcha catalog walked row by row against the target (via tg-deploy-check-runner); SKIPPED rows carry reasons",
+          "command": "gotcha rows list",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "V4",
+          "category": "Identity Lock",
+          "name": "V4 comparison table produced: in_video (cited) vs in_build (ver",
+          "description": "comparison table produced: in_video (cited) vs in_build (verdict) per feature",
+          "command": "comparison array",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "V5",
+          "category": "Identity Lock",
+          "name": "V5 ship_ready true only when zero RED and zero BLOCKED; public",
+          "description": "ship_ready true only when zero RED and zero BLOCKED; public actions still stop at Gate-D regardless",
+          "command": "ship_ready flag + held_at_gate",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Claims are inputs; outputs are checks.",
+        "harness_tuple": "H_verify(build_proof, route_proof, deny_paths, gotcha_walk, comparison, gate_d_hold)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-ship-verify",
+          "session_type": "ship-verify-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D4"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "verifier is not the builder; slice records are treated as claims and re-executed",
+        "every feature carries PASS (proof observed) / RED (check failed, output line named) / BLOCKED (cannot run, smallest unblock named) - assumed PASS is illegal",
+        "gotcha catalog walked row by row against the target (via tg-deploy-check-runner); SKIPPED rows carry reasons",
+        "comparison table produced: in_video (cited) vs in_build (verdict) per feature",
+        "ship_ready true only when zero RED and zero BLOCKED; public actions still stop at Gate-D regardless"
+      ],
+      "anti_patterns": [
+        "Aggregating rows into 'looks fine' - the row list is the deliverable",
+        "Closing a mission with silent BLOCKED items",
+        "Reading ship_ready as deploy permission"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-ship-verify.yaml",
+        "source_sha256": "9a58daab61c9f24e188da3b8e2d61dac50368242c7108b56241e64b710feb349",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

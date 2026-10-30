@@ -1,0 +1,123 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-CORPUS-MINING",
+      "name": "corpus mining process (TubeGuruji build-craft)",
+      "description": "corpus mining process (TubeGuruji build-craft) [corpus-mining-stage] \u2014 compiled from capabilities/harnesses/tg-corpus-mining.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "M1",
+          "category": "Identity Lock",
+          "name": "M1 lookup runs against registry.jsonl + manifest.jsonl first; a",
+          "description": "lookup runs against registry.jsonl + manifest.jsonl first; a hit names videoId, transcript path, thumbnail path",
+          "command": "match block with the three paths",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M2",
+          "category": "Identity Lock",
+          "name": "M2 feature extraction reads the transcript with timestamps; eve",
+          "description": "feature extraction reads the transcript with timestamps; every spec row carries videoId@mm:ss",
+          "command": "features array, zero uncited rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M3",
+          "category": "Identity Lock",
+          "name": "M3 ASR-garbled vendor names are verified against the vendor's d",
+          "description": "ASR-garbled vendor names are verified against the vendor's docs before entering the spec (Inngest/'an ingest', E2B/'A2B desktop', Vercel/'versel')",
+          "command": "vendor list with resolved names",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "No citation, no feature.",
+        "harness_tuple": "H_mine(registry_lookup, transcript_mine, asr_verify, spec_rows)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-corpus-mining",
+          "session_type": "corpus-mining-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "lookup runs against registry.jsonl + manifest.jsonl first; a hit names videoId, transcript path, thumbnail path",
+        "feature extraction reads the transcript with timestamps; every spec row carries videoId@mm:ss",
+        "ASR-garbled vendor names are verified against the vendor's docs before entering the spec (Inngest/'an ingest', E2B/'A2B desktop', Vercel/'versel')"
+      ],
+      "anti_patterns": [
+        "Spec from the video TITLE alone - titles name the stack, not the features",
+        "Quoting a garbled ASR name as the vendor name"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-corpus-mining.yaml",
+        "source_sha256": "21440fd387155381e5b94b3a25e58cce15674c0e46291a75ae220712f2a4d20d",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

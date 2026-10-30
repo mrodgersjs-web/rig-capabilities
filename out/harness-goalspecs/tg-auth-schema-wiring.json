@@ -1,0 +1,123 @@
+{
+  "goals": [
+    {
+      "id": "GL-TG-AUTH-SCHEMA-WIRING",
+      "name": "auth + schema sub-process",
+      "description": "auth + schema sub-process [integration-stage] \u2014 compiled from capabilities/harnesses/tg-auth-schema-wiring.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "A1",
+          "category": "Identity Lock",
+          "name": "A1 provider chosen per the tg-auth-wiring table; wiring copied",
+          "description": "provider chosen per the tg-auth-wiring table; wiring copied from the provider's documented recipe, not invented",
+          "command": "provider choice + recipe source noted",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A2",
+          "category": "Identity Lock",
+          "name": "A2 schema migrations apply against the target DB (Neon/local Po",
+          "description": "schema migrations apply against the target DB (Neon/local Postgres) and a seed row round-trips",
+          "command": "migration cmd + exit 0, round-trip note",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A3",
+          "category": "Identity Lock",
+          "name": "A3 production pass prepared: OAuth origins, Clerk production in",
+          "description": "production pass prepared: OAuth origins, Clerk production instance, Kinde redirect URLs, Expo SHA-1 - each checked on the deployed URL before ship",
+          "command": "production-pass checklist rows",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Localhost auth is not auth.",
+        "harness_tuple": "H_authschema(provider_recipe, schema_migration, production_pass)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "tg-auth-schema-wiring",
+          "session_type": "integration-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "provider chosen per the tg-auth-wiring table; wiring copied from the provider's documented recipe, not invented",
+        "schema migrations apply against the target DB (Neon/local Postgres) and a seed row round-trips",
+        "production pass prepared: OAuth origins, Clerk production instance, Kinde redirect URLs, Expo SHA-1 - each checked on the deployed URL before ship"
+      ],
+      "anti_patterns": [
+        "Calling auth done on a localhost-only demo",
+        "Owning data without an ownership gate on mutations (corpus P6dha4Sq8gQ)"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/tg-auth-schema-wiring.yaml",
+        "source_sha256": "af5c1b0e5b55870d3f1f70751b60cbb79ceb0671b4db764b7e46f35a6049a7ac",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}
