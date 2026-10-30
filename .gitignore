@@ -43,3 +43,70 @@ capabilities/skills/rig-lattice-system/runs/approvals/
 capabilities/skills/rig-lattice-system/runs/packets/
 capabilities/skills/rig-lattice-system/runs/proof_packets/
 capabilities/skills/rig-lattice-system/runs/log/
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+
+# RIG corpora stay local: raw transcripts and harvest notes never ship to the public remote.
+/data/corpora/
+
+# --- tree cleanup 2026-10-30 (Aside): bulk, backups and drop-zones kept local ---
+# Rotation/backup copies of tracked sources written by several agents (bin/,
+# capabilities/hooks|loops/, rig_capabilities/, tests/). Regenerable from the
+# live file plus its git history; not capability content.
+*.bak-*
+
+# macOS folder metadata.
+.localized
+
+# Vendored / built / scratch roots, none of them branch content (external/ alone
+# is 880 MB of cloned upstreams, dist/ and cells/ are build output).
+/external/
+/dist/
+/cells/
+/staging/
+/.staging/
+/.quarantine/
+/QUARANTINE/
+/.repair-backups/
+/.unlazy/
+/.artifacts/
+/.local-runs/
+
+# capabilities/commands/ holds flat `<id>.md` command assets. Everything below is
+# an agent drop-zone that landed there (chat screenshots, resume handoffs, whole
+# vendored project trees - Projects/ alone is 83 GB). Left on disk, not branch content.
+/capabilities/commands/*.png
+/capabilities/commands/*.jpg
+/capabilities/commands/*.jpeg
+/capabilities/commands/*.mov
+/capabilities/commands/*.zip
+/capabilities/commands/_Inbox/
+/capabilities/commands/_Screenshots/
+/capabilities/commands/_Web-Artifacts/
+/capabilities/commands/AppStore/
+/capabilities/commands/Huntington-AI-Research/
+/capabilities/commands/Ideawake AI Infrastructure Strategy/
+/capabilities/commands/James Final Resume/
+/capabilities/commands/James Loehr Resume/
+/capabilities/commands/Lowlice/
+/capabilities/commands/NEMATRIX/
+/capabilities/commands/NeoMatrix/
+/capabilities/commands/Operation Get a Job/
+/capabilities/commands/Projects/
+/capabilities/commands/RIG Website - Mockups and Process - 2026-09-08/
+/capabilities/commands/Recall-Foundry-2026-09-21/
+/capabilities/commands/Slideworks Full Access/
+/capabilities/commands/Slideworks-Working/
+/capabilities/commands/TransformFit-v20-Handoff-2026-09-08/
+/capabilities/commands/graft/
+/capabilities/commands/missions/
+/capabilities/commands/reproduce/
+/capabilities/commands/reviver/
+/capabilities/commands/testsprite_tests/
+/capabilities/commands/outward-gate-data/
+/capabilities/commands/Lean(pass)/
+
+# Generated corpus pages over the 1 MB per-file limit for run output.
+/runs/agentic-stack-buildout/corpus/raw/docs.langchain.com_oss_python_langgraph_interrupts.raw.html
+/runs/agentic-stack-buildout/corpus/raw/docs.langchain.com_oss_python_langgraph_quickstart.raw.html
