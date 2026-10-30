@@ -1,0 +1,40 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "scope": "Local mission-composition and Jev precheck slice; not an all-agent deployment",
+  "signer": "codex",
+  "timestamp_utc": "2026-09-24T04:06:15Z",
+  "route_note": "Meta-skill first: when-building-or-fixing-agents; Jev shadow route is advisory and logged. Local canonical repo only.",
+  "artifacts_sha256": {
+    "rig_capabilities/mission.py": "7e7e0466095bfeb8feb8475ac3b1e6aa72fcd42ceebd3a802f6525de181dfac2",
+    "rig_capabilities/completion.py": "d9492e0ae39b1a3a4625e613f1c9086402931fa33543e70bf40974ad5cb6e155",
+    "bin/rig-mission": "8a5e10bd8c874069095fab4c334f1d389ab91311d778645bd713a575e5a8ef00",
+    "scripts/weekly_mission_practices.py": "d3ebbd78a0d67963c4e85d5a5e9dc792a84ac1721b66b08b877d880f6bde2e98",
+    "capabilities/harnesses/s1gate/rubrics/mission.route.json": "7a0b2c1182012ea33ea077d7672e327df5b60e150ddd5263422970045f80325f",
+    "capabilities/harnesses/s1gate/rubrics/mission.completion.json": "46baf7a09fdba33c4d3a2e5658c785a80ee4fa1e59e6e72bef18233fdb7e95c3",
+    "capabilities/evals/mission-router/promptfooconfig.yaml": "901924c98b10b8f24ef70bd2b03e6d9659446b469f86583a2b7b3972322b5053"
+  },
+  "sources": [
+    "https://github.com/TypeSafeAI/typesafe-playground/blob/main/docs/tool-router.md",
+    "https://github.com/TypeSafeAI/typesafe-router",
+    "https://github.com/razorback16/openjev/blob/main/README.md",
+    "https://www.promptfoo.dev/docs/providers/custom-api/"
+  ],
+  "gate_results": {
+    "unit_tests": "python3 -m unittest -q tests.test_completion_gate tests.test_mission_composition tests.test_weekly_mission_practices: 27 passed",
+    "promptfoo": "offline mission-router suite: 4 passed, 0 failed",
+    "live_jev_route": "decision 55075; observed; packet validation errors []",
+    "weekly_stage": ".context/mission-practices/2026-W39-20260924T040609244175Z.json: 8 public primary sources staged; local evaluations pass; no promotion",
+    "graft": "graft build and graft check: wiring graph OK; deep meaning layer not built",
+    "adversarial": "rehashed agent swap, forged Jev receipt, zero tests, stdout-spoofed count, outside test path, no controller contract, and unexpected callback failure covered by unit tests",
+    "build_certification": "not attempted; no certified production completion or promotion claim"
+  },
+  "residuals": [
+    "No trusted controller adapter or independent done-contract receipt; completion CLI is precheck only and never returns DONE.",
+    "Codex and Claude composition are not live execution adapters; other agent runtimes only inventoried.",
+    "No labeled held-out Jev calibration or reliable vision model promotion; LAYA image input not exposed.",
+    "Promptfoo suite tests four route fixtures, not actual coding outcomes.",
+    "Broad repository suite was interrupted and is not claimed green."
+  ],
+  "verdict": "PASS_LOCAL_SLICE_WITH_RESIDUALS",
+  "promotion_authorized": false
+}

@@ -1,0 +1,62 @@
+{
+  "artifact_hashes": {
+    "capabilities/skills/resume-grounded-job-apply/PROMPT.md": "f492d703c17f28e9ac5794cd236a4fe84d4f41e3db2330c0b7789ea8ef72b408",
+    "capabilities/skills/resume-grounded-job-apply/SKILL.md": "e17df2cd01b251268691cf7ee8fedf1ddb5436dc67af53044af7d8a867b6c2eb",
+    "capabilities/skills/resume-grounded-job-apply/references/CAPABILITIES.md": "7a5c066a9ee9ba09859a5c38862be82ab36105311b8110d32dada49fa22752fd",
+    "capabilities/skills/resume-grounded-job-apply/references/baseline-facts.json": "223314771c011522053314d77ef43922cb1f06adb3ba78b2b213918f3f60673c",
+    "capabilities/skills/resume-grounded-job-apply/scripts/check_answers.py": "574ea3e0361a1992a31621de96fc0f6594bc272748111a5ca21247c42330cb60",
+    "capabilities/skills/resume-grounded-job-apply/templates/answers.json": "1706d0e2757574444de4f41422e4d3c59301f1aecc67a06a62d241fc42420a9a",
+    "capabilities/skills/resume-grounded-job-apply/templates/applications.csv": "12b1ce0b6a84283edaf97ae7f7c027a8fa68e548bc5cb5578f3b81c22d344ba6",
+    "capabilities/skills/resume-grounded-job-apply/tests/test_answers.py": "bd49847655eec03bd8deeb35ab2ad46c23e5a81653e69ca665d735e0c497734d"
+  },
+  "files_written": [
+    "proof/resume-grounded-job-apply/independent-rereview.json"
+  ],
+  "gate_matrix": {
+    "canonical_facts_binding": {
+      "evidence": "The canonicalized current facts digest equals the independently embedded pin. Adding fictitious HCA employer data while leaving r\u00e9sum\u00e9 bytes/hash unchanged now returns employer_baseline_hash_mismatch.",
+      "status": "PASS",
+      "trusted_canonical_json_sha256": "2604c909d03ae9e9721b2518a564088bc68fa56b73b7f84015cc4235c1f163c7"
+    },
+    "destination_and_resume_reference": {
+      "evidence": "The prior combined attack now returns missing_exact_job_url and row_0:unverified_resume_reference_requires_semantic_review. HTTPS parsing requires a hostname, dotted host, non-root path, and excludes credentials/fragments; arbitrary resume:* references are rejected unless indexed.",
+      "status": "PASS"
+    },
+    "policy_scope": {
+      "evidence": "The canonical SKILL describes non-employment fields outside the indexed baseline as requiring baseline extension/review or remaining blocked. It states user-confirmed/application-record references are procedural and need separate existence/truth review; checker output retains semantic_review_required=true and submission_authorized=false.",
+      "status": "PASS_WITH_MANUAL_REVIEW"
+    },
+    "regression_suite": {
+      "command": "python3 -m unittest discover -s capabilities/skills/resume-grounded-job-apply/tests -p 'test_*.py' -v",
+      "failures": 0,
+      "status": "PASS",
+      "tests": 16
+    }
+  },
+  "limitations": [
+    "The checker intentionally does not classify natural-language questions, verify user-confirmed/application-record truth, authorize submission, or enforce atomic cross-session deduplication. The workflow requires separate form/claim review, scoped authorization, and receipt/tracker checks.",
+    "The 16 tests and probes are synthetic/local; no real ATS portal, browser flow, upload, form, CAPTCHA, account, confirmation receipt, or application submission was exercised.",
+    "A legitimate r\u00e9sum\u00e9 replacement or fact-baseline extension requires explicit review and a new trusted facts pin before the checker can pass.",
+    "Different-model-family GEV separation was not established."
+  ],
+  "open_blockers": [],
+  "outward_actions": 0,
+  "resolved_findings": [
+    {
+      "id": "RGA-001",
+      "proof": "Exact facts-mutation probe changed from zero errors to employer_baseline_hash_mismatch.",
+      "status": "FIXED"
+    },
+    {
+      "id": "RGA-002",
+      "proof": "Exact malformed URL/arbitrary r\u00e9sum\u00e9-source probe changed from zero errors to two blocking errors.",
+      "status": "FIXED"
+    }
+  ],
+  "reviewed_at": "2026-09-07T06:35:38.867209+00:00",
+  "reviewer": "codex-verification-lab / independent_site_review",
+  "schema": "rig.resume-grounded-job-apply-independent-rereview.v1",
+  "scope": "Canonical capability only. Read-only code, documentation, regression suite, and exact adversarial-probe rerun; no staging review, browser, portal, provider, or submission calls.",
+  "status": "PASS_WITH_LIMITS",
+  "supersedes_findings_from": "proof/resume-grounded-job-apply/independent-review.json"
+}

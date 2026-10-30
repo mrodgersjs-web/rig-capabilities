@@ -1,0 +1,73 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T17:01:16Z",
+  "signer": "codex",
+  "scope": "Strict offline agent/meta-skill/child-skill routing pilot; no runtime dispatch, asset-outcome certification, or estate-wide promotion",
+  "source_sha256": {
+    "rig_capabilities/mission.py": "e11306e96280a2360aeadf3e3d78e4ae3f2e6a8458f0345a70414dce54bf4e37",
+    "scripts/audit_skill_agent_quality.py": "633538f2ce331493fa638aeb81e334fb615e2d8b325e21d085ecb25a05005528",
+    "capabilities/evals/mission-router/promptfooconfig.yaml": "3a68e4b41ce25f0de3fcb36373e35877dafa5e0e323773fb8f41263a42de88d3",
+    "capabilities/evals/mission-router/cases.csv": "98f651487847c9caeb792259749b931d55dccb3895850785b70b028e3782b1b5",
+    "capabilities/evals/mission-router/holdout.csv": "55ea394c853c8c25000aaede5478e8ec7f9f10947534784a28e29304622cb908",
+    "capabilities/evals/mission-router/assert-route.cjs": "d31489435791d92850854a40c24dd47e0d7173a12c62d2afa6475fe0cc974974",
+    "capabilities/evals/mission-router/provider.mjs": "b4968891bfbcfc52c022b2031601590aa2b40f3e984c96f7020586863def4d2a",
+    "capabilities/harnesses/s1gate/work-criteria.json": "69d6c3d28eab6e83f4880168678c8d50b65da662b0565feceea86729c9c637f7"
+  },
+  "development_eval": {
+    "id": "eval-dOh-2026-09-24T17:00:06",
+    "passed": 24,
+    "total": 30,
+    "rate": 0.8,
+    "exit_code": 100,
+    "raw_output": "/tmp/rig-mission-router-30-20260924-r11.json",
+    "raw_output_sha256": "65d561336552e1ea991f5d9c080a153eb7fd03847575fb97d4272957c50efa52",
+    "raw_output_durable": false
+  },
+  "holdout_eval": {
+    "id": "eval-VFF-2026-09-24T16:50:43",
+    "passed": 26,
+    "total": 30,
+    "rate": 0.8666666667,
+    "source_sha256": "93eb565f7b6abe91350ca01da5e69596690a50dc6385349b794d1a7d1d68cd74",
+    "current_source": false,
+    "raw_output": "/tmp/rig-mission-router-holdout-20260924.json",
+    "raw_output_sha256": "69ae800e254aed38cc88b9319ea4d57f9636a380e0529fb58f0342e043dd04fc",
+    "raw_output_durable": false
+  },
+  "canonical_audit": {
+    "assets": 249,
+    "skills": 225,
+    "agents": 23,
+    "subskills": 1,
+    "spec_ready": 20,
+    "outcome_verified": 0,
+    "promotable": 0,
+    "declared_floor_below_0_91_or_invalid": 248,
+    "inventory_changed_during_work": true
+  },
+  "jev": {
+    "rubric": "ultra.proof",
+    "decision_id": 56754,
+    "verdict": "ESCALATE",
+    "enforced": false,
+    "advisory": true,
+    "model": "jev-1.13.0",
+    "calibration": "No eligible signal-scoped labels; cannot certify estate-wide quality"
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_mission_composition tests.test_mission_router_cases tests.test_skill_agent_quality_audit tests.test_promptfoo_outcome_screen", "exit_code": 0, "result": "34 tests passed"},
+    {"command": "/Users/rig128gb/.local/bin/python3.11 -m unittest -q tests.test_tool_selection tests.test_mission_composition tests.test_mission_router_cases", "exit_code": 0, "result": "87 tests passed"},
+    {"command": "python3 -m unittest discover -s tests -p 'test_s1gate*.py' -q", "exit_code": 0, "result": "49 tests passed"},
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary", "exit_code": 0, "result": "249 assets; 20 spec-ready; zero outcome-verified and promotable"}
+  ],
+  "residuals": [
+    "Six strict development routes fail: Python migration, SQL query optimization, authentication middleware, React keyboard navigation, PostgreSQL migration specialist, and API-contract testing",
+    "The held-out result is for an earlier source version, not the current router",
+    "Routing tests do not measure completed work or skill and agent outcome quality",
+    "No canonical asset has an independent held-out outcome score above 0.90",
+    "Jev is advisory and uncalibrated for this proof claim"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

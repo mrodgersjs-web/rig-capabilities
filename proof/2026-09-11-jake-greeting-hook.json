@@ -1,0 +1,36 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "timestamp": "2026-09-11T17:15:13Z",
+  "signer": "codex:/root/jake_hook_fix",
+  "scope": "Repair D85 rejection of the reviewed local Jake greeting command",
+  "status": "PASS",
+  "route_note": "Direct scoped user request. Ordinary apply_patch accepted by active hook, including greeter interpreter hardening. No enforcement disable, credential change, commit, or push.",
+  "artifacts": [
+    {"path": "rig_capabilities/d85_admission.py", "sha256": "95d84fd8a263ae0c87830a29c1c9cd7e0c4252bee6a82611ae1734a24670c499"},
+    {"path": "tests/test_d85_admission.py", "sha256": "103fbfe75e184acb3c8821ac5ab259b26f41f23644afecb4a8b98092bf5db92b"},
+    {"path": "/Users/rig128gb/.rig/bin/jake-greet", "sha256": "01b9dbdd3edc6554fbe0e1db6b6bff68482ea198ac7ff94ba1aedaaa3934df46"}
+  ],
+  "sources": [
+    {"path": "/Users/rig128gb/.rig/bin/jake-greet", "sha256": "fd1db3136fb0e97690318332b157ad9d6c8c7d7e5028d8c330e449b6c2a02b77", "review": "Full script inspected; reads local state and prints greeting."},
+    {"path": "/Users/rig128gb/.rig/d85/enforcement.json", "finding": "Protects ~/.rig/bin; classifier rejects unrecognized executable verbs."},
+    {"path": "/Users/rig128gb/Developer/rig-intelligence/registry/workstation-repositories.json", "finding": "Exact canonical rig-capabilities root is write_enabled true, write_mode code."}
+  ],
+  "placement": {
+    "guard_command": "/Users/rig128gb/.rig/bin/rig-repo-guard check /Users/rig128gb/Developer/rig-capabilities/rig_capabilities/d85_admission.py",
+    "guard_result": "BLOCKED_BY_D85_UNKNOWN_PRODUCTION_EXECUTABLE",
+    "recovery": "Read registry and guard implementation; git rev-parse --show-toplevel and realpath confirmed exact registered root with no nested worktree. Blocked executable was not invoked through an alternate path."
+  },
+  "gates": [
+    {"command": "python3 -B -m unittest tests.test_d85_admission.TestGateRed.test_reviewed_jake_greeting_allows_only_exact_read_command -v", "before_exit": 1, "before": "Original D85 production-surface unknown-verb denial", "after_exit": 0},
+    {"command": "python3 -B -m unittest tests.test_d85_admission -q", "exit": 0, "tests": 40, "seconds": 4.110},
+    {"command": "git diff --check", "exit": 0},
+    {"command": "/Users/rig128gb/.rig/bin/jake-greet --agent codex", "surface": "Actual exec_command through active PreToolUse hook", "exit": 0, "result": "Greeting printed; load 10 open loops"},
+    {"check": "In-memory candidate adversarial simulation", "result": "PASS", "allowed_forms": 4, "blocked_shell_variants": 9, "digest_drift": "DENIED", "unreadable_executable": "DENIED", "cat_read": "ALLOWED"}
+  ],
+  "safety_boundary": "Only the full standalone absolute command with bounded agent identifier and optional --json receives a digest-bound read-only classification. Other shell forms retain the existing classifier. Greeter now invokes root-owned /usr/bin/python3 -I - to exclude cwd, PYTHONPATH, user site packages, and PATH interpreter shadowing. Inherited parent shell environment remains trusted; this is not an OS sandbox or a general classifier security overhaul.",
+  "review_remediation": "Independent reviewer identified cwd/json.py execution in original bare python3 invocation. Normal apply_patch hardened interpreter and updated digest. New live regression plants cwd/json.py, PATH/python3, and PYTHONPATH together; structured greeter output still succeeds.",
+  "omp_prime_status": "Parent reports both TUIs launch from Codex in the same workspace. User-terminal uv_cwd failure is diagnosed but not repaired or confirmed resolved there. No credentials changed.",
+  "memory": "Parent reports memory bridge capture denied by the active hook; no broader allowlist added.",
+  "independent_review": {"status": "PASS", "owner": "codex:/root/hook_verify", "result": "No remaining findings; 40 tests passed independently; runtime isolation and live greeter hash verified."},
+  "graft_tokens_saved": 85188
+}
