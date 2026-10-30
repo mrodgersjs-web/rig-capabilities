@@ -3,7 +3,7 @@
 # tier: meta
 # event: SessionStart
 # outcome: design-ux: prints the design-studio-os load instruction and the Jev-first mandate at session start
-# done_when: cmd:python3 tools/hook_cases.py ds-session-start
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-session-start
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u
