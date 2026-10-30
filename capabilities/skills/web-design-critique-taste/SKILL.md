@@ -3,6 +3,8 @@ name: web-design-critique-taste
 description: The taste pass. Judge distinctiveness, restraint, coherence and craft detail, and name exactly where taste is being faked. Use inside web-design-critique or when a page is technically fine but forgettable.
 outcome: A taste verdict that says which decisions carry the design and which defaults leaked in.
 done_when:
+  - 'grep:capabilities/skills/web-design-critique-taste/SKILL.md:[T]aste is evidence of decisions, not decoration'
+  - 'grep:capabilities/skills/web-design-critique-taste/SKILL.md:[N]ame three decisions a default would not make'
   - all four axes return a named verdict with a located example or a located absence
   - at least one small craft detail was actually inspected and reported on by name
   - no verdict rests on an adjective without a location

@@ -1,8 +1,9 @@
 ---
 name: web-design-discovery-sitemap
 description: Turn a signed brief into a page inventory, sitemap, content-first page plan, and lo-fi wireframes before any visual design starts.
-outcome: A signed structure pack: page inventory with kill list, sitemap, per-page content direction, and lo-fi wireframes.
+outcome: "A signed structure pack: page inventory with kill list, sitemap, per-page content direction, and lo-fi wireframes."
 done_when:
+  - 'grep:capabilities/skills/web-design-discovery-sitemap/SKILL.md:[E]very page must justify its existence against the brief'
   - A page inventory file shows every candidate with a survive-or-kill verdict and reason, a sitemap file shows nav items and click depth, a content plan
 great_example: examples/great/design-ux/web-design-discovery-sitemap.md
 quality_floor: Any surviving page without a named single job fails the job. A sitemap with more than seven nav items or a page more than two clicks from home fails. A wireframe showing a real font, real color, real photo, or polished spacing fails the floor.
@@ -12,7 +13,7 @@ applies_when:
   env: Structure phase of any marketing website
   runtime: web page or site rendered in a browser
   deps: the project brief and its design system
-  params: Structure phase of any marketing website: brochure and service sites, lead-gen sites, portfolios, ecommerce, SaaS marketing sites, course or membership sites. Not for app interface
+  params: "Structure phase of any marketing website: brochure and service sites, lead-gen sites, portfolios, ecommerce, SaaS marketing sites, course or membership sites. Not for app interface"
   budget: one pass per artifact
   scale: single page up to a full marketing site
 permissions:
@@ -33,7 +34,7 @@ flow:
   - List every page candidate on cards, one page per card;
   - Kill every card without a single job and a reason to exist;
   - Order survivors into a sitemap with nav of five to seven items and depth of at most two from home;
-  - Write per-page content direction: the job, the argument, the section stack, the one action;
+  - "Write per-page content direction: the job, the argument, the section stack, the one action;"
   - Get dated written sitemap sign-off;
   - Draw lo-fi wireframes per page with written section-intent notes;
   - Get dated written wireframe sign-off;

@@ -3,6 +3,8 @@ name: web-design-critique-antislop
 description: Detect and strip AI-generated design tells. Fonts, palettes, layout cliches, empty superlatives and uncanny imagery. Use whenever a page, mock or copy is suspected of being generic AI output.
 outcome: A surface that reads as deliberately designed rather than assembled, with each removed tell recorded.
 done_when:
+  - 'grep:capabilities/skills/web-design-critique-antislop/SKILL.md:[R]un the tell list before forming any quality opinion'
+  - 'grep:capabilities/skills/web-design-critique-antislop/SKILL.md:[C]opy tells'
   - all five tell categories are either explicitly clear or reported as a located finding
   - every finding carries a concrete replacement, not just a rejection
   - the copy contains zero empty superlatives

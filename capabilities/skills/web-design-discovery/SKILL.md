@@ -1,18 +1,20 @@
 ---
 name: web-design-discovery
 description: Run web design discovery so the brief, the buyer, and the site structure are settled and signed off before any pixels, on any paid website project.
-outcome: A signed-off discovery pack: one-page brief, buyer wound and objection map, page inventory, sitemap, and lo-fi wireframes.
+outcome: "A signed-off discovery pack: one-page brief, buyer wound and objection map, page inventory, sitemap, and lo-fi wireframes."
 done_when:
+  - 'grep:capabilities/skills/web-design-discovery/SKILL.md:[T]hree artifacts gate the design'
+  - 'grep:capabilities/skills/web-design-discovery/SKILL.md:[T]he one-page brief. Exactly one business goal'
   - A brief, an objection map, a page inventory, a sitemap, and wireframes exist as files, each carries a dated written client sign-off, and no visual
 great_example: examples/great/design-ux/web-design-discovery.md
 quality_floor: If any of the three artifacts is missing, unreviewed, or signed off only verbally, the job fails regardless of how good the pixels look. A wireframe that communicates a font, color, or style decision also fails the floor.
 activation: Load when scoping a client website, before a design kickoff, when someone asks "how much and how long" with no brief in hand, or when a design is about to start from a mood board or a reference screenshot.
-instruction: Refuse to open a design tool until three artifacts exist with dated written sign-off: a one-page brief naming one business goal and one site action, a buyer wound written in the customer's own words with objections mapped to rebuttal evidence, and a page inventory plus sitemap plus lo-fi wireframes. Sequence the work as setup, questionnaire, research, kickoff call, then structure. Put a deadline with a consequence on every client feedback round so the project cannot stall on their side.
+instruction: "Refuse to open a design tool until three artifacts exist with dated written sign-off: a one-page brief naming one business goal and one site action, a buyer wound written in the customer's own words with objections mapped to rebuttal evidence, and a page inventory plus sitemap plus lo-fi wireframes. Sequence the work as setup, questionnaire, research, kickoff call, then structure. Put a deadline with a consequence on every client feedback round so the project cannot stall on their side."
 applies_when:
   env: Someone is paying for a website
   runtime: web page or site rendered in a browser
   deps: the project brief and its design system
-  params: Someone is paying for a website: service and brochure sites, lead-gen sites, portfolios, ecommerce, SaaS marketing sites, and redesign or migration work. Applies to the discovery a
+  params: "Someone is paying for a website: service and brochure sites, lead-gen sites, portfolios, ecommerce, SaaS marketing sites, and redesign or migration work. Applies to the discovery a"
   budget: one pass per artifact
   scale: single page up to a full marketing site
 permissions:

@@ -3,6 +3,8 @@ name: web-design-critique
 description: The final gate. Judge a web surface against its brief and buyer, and return named findings, not adjectives. Use at the end of every design job and whenever something "feels off".
 outcome: A critique record that a different person could act on without asking what was meant.
 done_when:
+  - 'grep:capabilities/skills/web-design-critique/SKILL.md:[F]indings are triples'
+  - 'grep:capabilities/skills/web-design-critique/SKILL.md:[S]everity, then verdict'
   - every finding is a triple of issue, location and failed check
   - every finding carries a severity from the fixed ladder
   - the verdict is stated explicitly as PASS or FAIL

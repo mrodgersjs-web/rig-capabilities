@@ -1,18 +1,20 @@
 ---
 name: web-design-discovery-brief
-description: Write the client brief before pixels: the buyer's wound in customer words, objection mapping with proof, and language mining from real buyer language.
+description: "Write the client brief before pixels: the buyer's wound in customer words, objection mapping with proof, and language mining from real buyer language."
 outcome: A signed one-page brief with a customer-worded wound, a mapped objection table, and a language swipe file.
 done_when:
+  - 'grep:capabilities/skills/web-design-discovery-brief/SKILL.md:[T]he buyer.s wound comes from mining, never from brainstorming'
+  - 'grep:capabilities/skills/web-design-discovery-brief/SKILL.md:[O]ne site action'
   - The one-page brief file contains all seven fields with no empty field, the wound sentence is quoted from mined buyer language with its source noted,
 great_example: examples/great/design-ux/web-design-discovery-brief.md
 quality_floor: A brief whose wound sentence could describe any business in any industry fails the job. An objection with a rebuttal but no named proof is a gap and must be labeled as one. Any phrase in the brief that does not appear in the swipe file or the client's own words is agency filler and fails the floor.
 activation: Load when writing or reviewing a web design brief, when a client says "we want a new site" with no written brief, when copy feels like agency filler, or when preparing discovery questions for a kickoff call.
-instruction: Produce one page with seven fields: one business goal, one site action, one audience written as a person with a wound, three envy sites with a reason, top objections mapped to rebuttal plus proof plus page section, the proof inventory the client actually owns, and the constraints. Mine at least thirty real buyer phrases from reviews, calls, and forums before writing a single headline, and write the wound in the customer's own words. Ask the budget question out loud on the call: how much are you wanting to invest in this project.
+instruction: "Produce one page with seven fields: one business goal, one site action, one audience written as a person with a wound, three envy sites with a reason, top objections mapped to rebuttal plus proof plus page section, the proof inventory the client actually owns, and the constraints. Mine at least thirty real buyer phrases from reviews, calls, and forums before writing a single headline, and write the wound in the customer's own words. Ask the budget question out loud on the call: how much are you wanting to invest in this project."
 applies_when:
   env: Any paid web design project with a real buyer on the other end
   runtime: web page or site rendered in a browser
   deps: the project brief and its design system
-  params: Any paid web design project with a real buyer on the other end: service businesses, lead-gen sites, ecommerce, SaaS marketing sites. Does not apply to internal tools, portfolio sit
+  params: "Any paid web design project with a real buyer on the other end: service businesses, lead-gen sites, ecommerce, SaaS marketing sites. Does not apply to internal tools, portfolio sit"
   budget: one pass per artifact
   scale: single page up to a full marketing site
 permissions:

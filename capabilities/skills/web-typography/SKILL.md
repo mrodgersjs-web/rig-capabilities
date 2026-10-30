@@ -3,6 +3,8 @@ name: web-typography
 description: Type craft for web. Choose and structure type so the page reads as decided rather than defaulted. Use on any page with text.
 outcome: A type system with a stated reason, a derived scale, and a measured font budget.
 done_when:
+  - 'grep:capabilities/skills/web-typography/SKILL.md:[R]eason before face'
+  - 'grep:capabilities/skills/web-typography/SKILL.md:[T]wo families, two weights'
   - the reason sentence exists and names a material, period or voice
   - no default stack ships without that sentence
   - body measure sits between 45ch and 75ch at every breakpoint

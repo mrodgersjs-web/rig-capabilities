@@ -3,6 +3,8 @@ name: web-typography-pairing
 description: Pair typefaces by contrast of voice, pick variable or static, and load them without hurting performance. Use when choosing two fonts or when font loading is slowing the page.
 outcome: A two-face pairing with a stated contrast of voice and a measured font budget.
 done_when:
+  - 'grep:capabilities/skills/web-typography-pairing/SKILL.md:[P]air by voice contrast'
+  - 'grep:capabilities/skills/web-typography-pairing/SKILL.md:[L]oad like performance depends on it'
   - the pairing rests on a stated contrast of voice
   - total font payload is under 180KB and measured
   - at most two weights per family are loaded

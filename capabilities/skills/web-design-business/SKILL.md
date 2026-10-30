@@ -1,18 +1,20 @@
 ---
 name: web-design-business
-description: Run the business side of selling web design: pick the right business model, position for buyers who pay for outcomes, and put the money mechanics in place before work starts.
-outcome: A working business stack: chosen model, positioning line, packaged offer, money-mechanics documents, and a named prospect pipeline.
+description: "Run the business side of selling web design: pick the right business model, position for buyers who pay for outcomes, and put the money mechanics in place before work starts."
+outcome: "A working business stack: chosen model, positioning line, packaged offer, money-mechanics documents, and a named prospect pipeline."
 done_when:
+  - 'grep:capabilities/skills/web-design-business/SKILL.md:[M]ilestone payments tied to sign-offs'
+  - 'grep:capabilities/skills/web-design-business/SKILL.md:[A] deposit before any work begins'
   - A written business model statement, a one-line positioning statement naming buyer and outcome, one packaged offer with a written deliverable list and
 great_example: examples/great/design-ux/web-design-business.md
 quality_floor: If the offer does not name a buyer and an outcome, it fails. If any work can start without a signed contract and a paid deposit, the process fails. If the positioning line would still be true of a generalist agency, it fails the floor.
 activation: Load when pricing or packaging design work, when the pipeline is empty, when a designer is stuck at low project fees, when choosing between hourly, project, productized, or retainer work, or when a client relationship needs rules instead of goodwill.
-instruction: Choose one business model out loud before quoting anything: low price and high volume, high price and low volume bespoke, productized fixed-scope offers, or subscription and retainer work. Position around a named buyer and a named outcome rather than "we do websites", and run every deal through the same money mechanics: written contract, deposit before work, milestone payments, capped revisions, and a written fee for anything out of scope. Sell where premium buyers actually are, not where designers follow each other.
+instruction: "Choose one business model out loud before quoting anything: low price and high volume, high price and low volume bespoke, productized fixed-scope offers, or subscription and retainer work. Position around a named buyer and a named outcome rather than \"we do websites\", and run every deal through the same money mechanics: written contract, deposit before work, milestone payments, capped revisions, and a written fee for anything out of scope. Sell where premium buyers actually are, not where designers follow each other."
 applies_when:
   env: Selling web design and brand-for-web services for money
   runtime: web page or site rendered in a browser
   deps: the project brief and its design system
-  params: Selling web design and brand-for-web services for money: solo freelancers, small studios, and anyone packaging design work for clients. Applies to positioning, packaging, pipeline,
+  params: "Selling web design and brand-for-web services for money: solo freelancers, small studios, and anyone packaging design work for clients. Applies to positioning, packaging, pipeline,"
   budget: one pass per artifact
   scale: single page up to a full marketing site
 permissions:
@@ -34,7 +36,7 @@ flow:
   - Pick and write down the business model and why it fits this stage;
   - Name the buyer and the outcome you sell to them;
   - Package the offer with a fixed deliverable list and a price (see web-design-business-pricing);
-  - Install the money mechanics: contract, deposit, milestone payments, revision cap, out-of-scope fee;
+  - "Install the money mechanics: contract, deposit, milestone payments, revision cap, out-of-scope fee;"
   - Build pipeline in the places that buyer actually inhabits;
   - Run every deal through the same client process (see web-design-business-client);
   - Review won and lost deals monthly and adjust the offer, not the effort

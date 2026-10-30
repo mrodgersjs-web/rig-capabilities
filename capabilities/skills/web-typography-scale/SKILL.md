@@ -3,6 +3,8 @@ name: web-typography-scale
 description: Build a type scale, a fluid ramp and a readable measure. Use when setting type sizes, fixing hierarchy, or when a page's text feels flat or crowded.
 outcome: A fluid type scale with a stated ratio and base, and a measure that holds across widths.
 done_when:
+  - 'grep:capabilities/skills/web-typography-scale/SKILL.md:[D]erive, do not pick'
+  - 'grep:capabilities/skills/web-typography-scale/SKILL.md:[M]easure before size'
   - every text size on the surface is a step of the declared scale
   - body measure stays between 45ch and 75ch at all four widths
   - the scale renders fluidly with no per-breakpoint size override
