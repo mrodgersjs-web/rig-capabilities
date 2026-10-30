@@ -14,7 +14,7 @@ done_when:
   - grep:capabilities/skills/rig-lattice-system/rig_lattice/core/registry.py:CollisionCollider
   - cmd:capabilities/skills/rig-lattice-system/bin/rig-lattice engines --json | python3 -c "import json,sys; e=json.load(sys.stdin); assert len(e)==40, len(e); assert sum(1 for x in e if x['layer']=='cognitive')==20; assert sum(1 for x in e if x['layer']=='nature')==10; assert sum(1 for x in e if x['layer']=='physics')==10; assert all(x['is_gate'] for x in e if x['layer']=='physics')"
   - cmd:python3 -c "import sys; sys.path.insert(0,'capabilities/skills/rig-lattice-system'); from rig_lattice.engine_aliases import resolve_codename as r; assert r('GRAVITON')=='e01' and r('COLLIDER')=='e06' and r('ZEROPOINT')=='e40'"
-  - cmd:python3 capabilities/skills/rig-lattice-system/ --check
+  - cmd:python3 capabilities/skills/rig-lattice-system/scripts/gen_engine_aliases.py --check
 great_example: examples/great/agent-engineering/rig-deviation-engines.md
 quality_floor: 0.7
 ---
