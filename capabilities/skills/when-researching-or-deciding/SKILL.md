@@ -5,7 +5,11 @@ metadata:
   purpose: meta-skill
   generated-by: skillshilp-upgrade
   category: research-knowledge
-  skill-count: "94"
+  skill-count: "95"
+done_when:
+  - 'grep:capabilities/skills/when-researching-or-deciding/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-researching-or-deciding/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-researching-or-deciding/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-researching-or-deciding
@@ -32,6 +36,7 @@ Tier-1 meta-skill. Job to be done: When researching a topic, extracting doctrine
 3. Never load more than one skill plus one sub-skill for a single task step.
 
 ## Quick index (top skills)
+- **business-strategy-os** — Meta-skill for business strategy from a 1,679-transcript corpus: is this a strategy at all, which disease, the 3 Ds, the nine innovations, the only-statement, the five-section document, marketability, and the forced verdict (Proceed / Narrow / Test manually / Park / Kill)
 - **hyperresearch** — Deep research via the HYPERRESEARCH V8 architecture   a tier-adaptive 16-step pipeline (li
 - **advise-project-approach** — Research and advise on the best way to approach a software project, including architecture
 - **azure-ai** — Use for Azure AI: Search, Speech, OpenAI, Document Intelligence. Helps with search, vector

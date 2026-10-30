@@ -6,6 +6,10 @@ metadata:
   generated-by: skillshilp-upgrade
   category: misc
   skill-count: "216"
+done_when:
+  - 'grep:capabilities/skills/when-nothing-else-fits/SKILL.md:[M]UST NOT load a second child to'
+  - 'grep:capabilities/skills/when-nothing-else-fits/SKILL.md:[M]UST load exactly ONE child skill per task step'
+  - 'grep:capabilities/skills/when-nothing-else-fits/references/routing.md:^\| Skill \| Source \| One-liner \| Sub-skills \|'
 ---
 
 # when-nothing-else-fits

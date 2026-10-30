@@ -71,3 +71,14 @@
 | write-milestone-brief | hermes | Synthesize the current conversation into a milestone brief (PRD). Writes to `M###-CONTEXT.md` by def | - |
 | write-story | hermes | Constructs fiction across seven simultaneous narrative layers (Meaning, Character Change, Plot, Myst | - |
 | write-swift | canonical | How to write modern Swift well — modeling with value types, Swift 6 data-race safety and approachabl | - |
+| ms-ad-creative | marketingskills | When the user wants to generate, iterate, or scale ad creative — headlines, descriptions, primary te | - |
+| ms-content-strategy | marketingskills | When the user wants to plan a content strategy, decide what content to create, or figure out what to | - |
+| ms-copy-editing | marketingskills | When the user wants to edit, review, or improve existing marketing copy, or refresh outdated content | - |
+| ms-copywriting | marketingskills | When the user wants to write, rewrite, or improve marketing copy for any page, including homepage, l | - |
+| ms-emails | marketingskills | When the user wants to create or optimize an email sequence, drip campaign, automated email flow, or | - |
+| ms-image | marketingskills | When the user wants to create, generate, edit, or optimize images for marketing — blog heroes, socia | - |
+| ms-lead-magnets | marketingskills | When the user wants to create, plan, or optimize a lead magnet for email capture or lead generation. | - |
+| ms-sales-enablement | marketingskills | When the user wants to create sales collateral, pitch decks, one-pagers, objection handling docs, or | - |
+| ms-sms | marketingskills | When the user wants to plan, build, or optimize SMS, MMS, or WhatsApp marketing — including welcome  | - |
+| ms-social | marketingskills | When the user wants help creating, scheduling, or optimizing social media content for LinkedIn, Twit | - |
+| ms-video | marketingskills | When the user wants to create, generate, or produce video content using AI tools or programmatic fra | - |

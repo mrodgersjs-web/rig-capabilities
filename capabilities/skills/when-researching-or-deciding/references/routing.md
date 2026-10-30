@@ -67,6 +67,7 @@
 | rig-youtube-intel-pipeline | hermes | Scrape YouTube channels at scale, extract transcripts, ingest into GBrain + Obsidian per RIG departm | - |
 | scrapers | aside-user | Global multi-engine scraper OS (RIG open-scraper-stack, 18 engines) plus the canonical-session Linke | - |
 | screenpipe-cli | hermes | Set up and operate screenpipe from the terminal, including always-on recording, service modes, captu | - |
+| business-strategy-os | canonical | Meta-skill and router for business strategy from a 1,679-transcript corpus: is this a strategy at all, which disease, the 3 Ds, nine innovations, the only-statement, the five-section document, marketability, and the forced verdict | - |
 | systems-thinking | hermes | Structural analysis of complex systems grounded in Donella Meadows, Peter Senge, Jay Forrester, Russ | - |
 | systems-thinking-studio | aside-user | Map a problem as a system — stocks, flows, loops, archetypes, Meadows leverage, polymath import — th | - |
 | vector-index-tuning | hermes | Optimize vector index performance for latency, recall, and memory. Use when tuning HNSW parameters,  | - |
