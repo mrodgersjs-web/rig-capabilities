@@ -1,6 +1,10 @@
 ---
 name: resume-grounded-job-apply
 description: Prepare and complete Mike Rodgers job applications in Hermes using his pinned résumé, truthful employer answers, exact application review, and submission receipts. Use for job search, application forms, tailored materials and application tracking.
+done_when:
+  - grep:capabilities/skills/resume-grounded-job-apply/SKILL.md:Source contract
+  - cmd:python3 -m unittest capabilities/skills/resume-grounded-job-apply/tests/test_answers.py
+  - cmd:python3 capabilities/skills/resume-grounded-job-apply/scripts/check_answers.py --help | grep -q "Local structured-answer gate"
 ---
 
 # Résumé-grounded job applications

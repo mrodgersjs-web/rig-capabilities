@@ -76,3 +76,20 @@ rig-loop activate proof-loop --intent "prove: <the claim>"
 
 - The verifier's independence is recorded, not proven; name the real agent/model you used.
 - Use this loop standalone to seal existing work; inside IQRSQPI v11 the same checks run at Q2/P.
+
+
+## Additive immutable receipt guard
+
+Owner: proof-loop under when-governing-rig-work. Local source extension; production receipt acceptance is separate.
+The receipt-guard.mjs is a read-only check, not a tracker or publisher.
+Register the guard via the existing E checks_green mechanism:
+
+`rig-loop check add "node <proof-loop-asset-path>/receipt-guard.mjs <immutable-run-receipt.json> <artifact-root> <policy.json>"`
+
+Register the command before E; never replace N/V/P or the independent verifier.
+The immutable producer calls saveOriginal(path, receipt), which uses exclusive creation.
+Each filtered run gets its own receipt filename; full-suite policy requires test_filter=full.
+Original observed_at is preserved; rechecks emit only checked_at to stdout.
+Guard exit 0 means the supplied evidence passes these bounded checks, not installed,
+runtime loaded, external outcome, human identity authenticated, or Gate-D approved.
+Website receipts always require a SHA-bound human jury record; no jury = blocked.

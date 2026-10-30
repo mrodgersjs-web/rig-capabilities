@@ -2,6 +2,10 @@
 name: review-animations
 description: Reviews animation and motion code against a high craft bar derived from Emil Kowalski's design engineering philosophy. Default to flagging; approval is earned.
 disable-model-invocation: true
+done_when:
+  - grep:capabilities/skills/review-animations/SKILL.md:The Ten Non-Negotiable Standards
+  - grep:capabilities/skills/review-animations/SKILL.md:Never a .Before:/After:. list
+  - grep:capabilities/skills/review-animations/STANDARDS.md:(?i)cubic-bezier
 ---
 
 # Reviewing Animations
