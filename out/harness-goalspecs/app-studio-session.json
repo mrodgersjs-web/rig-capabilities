@@ -1,0 +1,212 @@
+{
+  "goals": [
+    {
+      "id": "GL-APP-STUDIO-SESSION",
+      "name": "RIG App Studio mission session (meta process for every web and mobile app build)",
+      "description": "RIG App Studio mission session (meta process for every web and mobile app build) [app-studio-session] \u2014 compiled from capabilities/harnesses/app-studio-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "A1",
+          "category": "Identity Lock",
+          "name": "A1 spec.md exists with a source per feature row and executable",
+          "description": "spec.md exists with a source per feature row and executable acceptance checks, and JEV app.spec plus plan.readiness cleared (required signals above 0.9) or the transition is DEFERRED",
+          "command": "spec path plus both decision ids in the mission record",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A2",
+          "category": "Identity Lock",
+          "name": "A2 stack.md names the lane, applies the build-location matrix,",
+          "description": "stack.md names the lane, applies the build-location matrix, gives every paid vendor a named fallback, and cleared JEV app.stack",
+          "command": "stack path plus decision id",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A3",
+          "category": "Identity Lock",
+          "name": "A3 app-sandbox-preflight returned no FAIL before the first inst",
+          "description": "app-sandbox-preflight returned no FAIL before the first install or build; BLOCKED rows are named for Mike",
+          "command": "preflight table in the mission record",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A4",
+          "category": "Identity Lock",
+          "name": "A4 every slice ends in an executed check (command and output, r",
+          "description": "every slice ends in an executed check (command and output, route and status, or screenshot); at most three fix attempts per slice before escalation",
+          "command": "slice records with per-slice check output (app-slice-loop)",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A5",
+          "category": "Identity Lock",
+          "name": "A5 every stage transition carries a rig-s1gate app.stage-gate r",
+          "description": "every stage transition carries a rig-s1gate app.stage-gate receipt with required signals above 0.9; classifier unavailable means DEFER the transition, never guess",
+          "command": "stage_scores rows with rubric, decision id, and signals",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A6",
+          "category": "Identity Lock",
+          "name": "A6 every spec screen was captured from the real app and judged",
+          "description": "every spec screen was captured from the real app and judged by app-ui-judge; DEFERRED rows are named and never counted as passes",
+          "command": "screen verdict rows with image paths",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "A7",
+          "category": "Identity Lock",
+          "name": "A7 an agent other than the builder re-ran the acceptance checks",
+          "description": "an agent other than the builder re-ran the acceptance checks; tests contain assertion verbs; one planted failure went RED then GREEN with checksum proof",
+          "command": "verify.md with verifier identity, assertion counts, and plant checksums",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A8",
+          "category": "Identity Lock",
+          "name": "A8 run.jsonl carries a receipt for every App Studio lesson whos",
+          "description": "run.jsonl carries a receipt for every App Studio lesson whose trigger fired, and validate_lessons.py exits 0 on it",
+          "command": "validator output for the run",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A9",
+          "category": "Identity Lock",
+          "name": "A9 deploy, push, domain, purchase, and store submission are hel",
+          "description": "deploy, push, domain, purchase, and store submission are held at Gate-D with an app.ship record; the mission may close HELD",
+          "command": "held_at_gate field or a Gate-D approval id",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "A10",
+          "category": "Identity Lock",
+          "name": "A10 mission closed: comparison table, new lessons appended and t",
+          "description": "mission closed: comparison table, new lessons appended and their sub-skills patched, watcher routines deleted, ProofPacket sealed",
+          "command": "close record with proof hash and lesson ids",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I build from gated specs; I do not certify my own work.",
+        "harness_tuple": "H_app(spec, stack, preflight, slices, transitions, screens, verify, lessons, gate_d, close)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "app-studio-session",
+          "session_type": "app-studio-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "spec.md exists with a source per feature row and executable acceptance checks, and JEV app.spec plus plan.readiness cleared (required signals above 0.9) or the transition is DEFERRED",
+        "stack.md names the lane, applies the build-location matrix, gives every paid vendor a named fallback, and cleared JEV app.stack",
+        "app-sandbox-preflight returned no FAIL before the first install or build; BLOCKED rows are named for Mike",
+        "every slice ends in an executed check (command and output, route and status, or screenshot); at most three fix attempts per slice before escalation",
+        "every stage transition carries a rig-s1gate app.stage-gate receipt with required signals above 0.9; classifier unavailable means DEFER the transition, never guess",
+        "every spec screen was captured from the real app and judged by app-ui-judge; DEFERRED rows are named and never counted as passes",
+        "an agent other than the builder re-ran the acceptance checks; tests contain assertion verbs; one planted failure went RED then GREEN with checksum proof",
+        "run.jsonl carries a receipt for every App Studio lesson whose trigger fired, and validate_lessons.py exits 0 on it",
+        "deploy, push, domain, purchase, and store submission are held at Gate-D with an app.ship record; the mission may close HELD",
+        "mission closed: comparison table, new lessons appended and their sub-skills patched, watcher routines deleted, ProofPacket sealed"
+      ],
+      "anti_patterns": [
+        "Scaffolding before A1 and A2 hold - that is how invented specs and unbuildable stacks happen",
+        "Accepting a slice on prose instead of an executed check",
+        "Counting a DEFERRED judge or an uncalibrated ESCALATE as a pass",
+        "Letting a watcher routine run builds next to the builder",
+        "Filing lessons in memory only and closing the mission"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/app-studio-session.yaml",
+        "source_sha256": "55e58fd88162f1862ce5361109f971d95eb10015df5478ff9983852b8127b562",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

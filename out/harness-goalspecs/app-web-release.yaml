@@ -1,0 +1,159 @@
+{
+  "goals": [
+    {
+      "id": "GL-APP-WEB-RELEASE",
+      "name": "web release sub-process (Gate-D held)",
+      "description": "web release sub-process (Gate-D held) [release-stage] \u2014 compiled from capabilities/harnesses/app-web-release.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "W1",
+          "category": "Identity Lock",
+          "name": "W1 local production build exit 0 with route count cited",
+          "description": "local production build exit 0 with route count cited",
+          "command": "build log tail",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "W2",
+          "category": "Identity Lock",
+          "name": "W2 every env key the target needs is listed and set; env change",
+          "description": "every env key the target needs is listed and set; env changes are followed by a no-cache redeploy",
+          "command": "env table",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "W3",
+          "category": "Identity Lock",
+          "name": "W3 every changed bundled asset URL is content-hashed; no immuta",
+          "description": "every changed bundled asset URL is content-hashed; no immutable cache on an unhashed URL",
+          "command": "curl -sI output for changed assets",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "W4",
+          "category": "Identity Lock",
+          "name": "W4 release.md cleared rig-s1gate app.ship (prod_build_proof and",
+          "description": "release.md cleared rig-s1gate app.ship (prod_build_proof and gate_d_recorded above 0.9)",
+          "command": "decision id and signals",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "W5",
+          "category": "Identity Lock",
+          "name": "W5 the deploy is held at Gate-D with a request naming the exact",
+          "description": "the deploy is held at Gate-D with a request naming the exact target",
+          "command": "Gate-D request id",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "W6",
+          "category": "Identity Lock",
+          "name": "W6 after approval, sha256 of the live page and one asset differ",
+          "description": "after approval, sha256 of the live page and one asset differ from the previous deployment and key routes return expected content",
+          "command": "before and after hashes plus curl output",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "A complete request, then a human yes, then proof on the real target.",
+        "harness_tuple": "H_webrel(prod_build, env_audit, asset_hash, ship_gate, gate_d, byte_identity)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "app-web-release",
+          "session_type": "release-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D4"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "local production build exit 0 with route count cited",
+        "every env key the target needs is listed and set; env changes are followed by a no-cache redeploy",
+        "every changed bundled asset URL is content-hashed; no immutable cache on an unhashed URL",
+        "release.md cleared rig-s1gate app.ship (prod_build_proof and gate_d_recorded above 0.9)",
+        "the deploy is held at Gate-D with a request naming the exact target",
+        "after approval, sha256 of the live page and one asset differ from the previous deployment and key routes return expected content"
+      ],
+      "anti_patterns": [
+        "Treating a green preview as functional proof",
+        "Reading deploy metadata or CDN cache headers as build provenance"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/app-web-release.yaml",
+        "source_sha256": "7accc44d90f57c884d781b115cf7cc4b14f79abfa3b1bc73e8bdfcf88caf3d95",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

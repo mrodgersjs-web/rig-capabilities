@@ -1,0 +1,159 @@
+{
+  "goals": [
+    {
+      "id": "GL-APP-MOBILE-RELEASE",
+      "name": "mobile release sub-process (store policy, Gate-D held)",
+      "description": "mobile release sub-process (store policy, Gate-D held) [release-stage] \u2014 compiled from capabilities/harnesses/app-mobile-release.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "M1",
+          "category": "Identity Lock",
+          "name": "M1 in-app account deletion completes (Apple 5.1.1(v)), purchase",
+          "description": "in-app account deletion completes (Apple 5.1.1(v)), purchases transact (3.1.1), metadata is backed by the build (2.3.1), no dead buttons (Play IN_APP_EXPERIENCE), crash reporting live - each with a proof line from the release build",
+          "command": "preflight table",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M2",
+          "category": "Identity Lock",
+          "name": "M2 the release bundle's compile-time flags are proven from the",
+          "description": "the release bundle's compile-time flags are proven from the bundle (demo mode off)",
+          "command": "flag proof output",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M3",
+          "category": "Identity Lock",
+          "name": "M3 store screenshots are real captures from a clean simulator o",
+          "description": "store screenshots are real captures from a clean simulator or device",
+          "command": "image paths plus capture script",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "M4",
+          "category": "Identity Lock",
+          "name": "M4 release.md cleared rig-s1gate app.ship with store_policy abo",
+          "description": "release.md cleared rig-s1gate app.ship with store_policy above 0.9",
+          "command": "decision id and signals",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M5",
+          "category": "Identity Lock",
+          "name": "M5 submission is held at Gate-D for Mike",
+          "description": "submission is held at Gate-D for Mike",
+          "command": "Gate-D request id",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "M6",
+          "category": "Identity Lock",
+          "name": "M6 after submission the build is visible in App Store Connect o",
+          "description": "after submission the build is visible in App Store Connect or Play Console",
+          "command": "console observation",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Store policy is proven on the build, not argued from the source.",
+        "harness_tuple": "H_mobrel(store_policy, bundle_flags, real_screens, ship_gate, gate_d, console_visible)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "app-mobile-release",
+          "session_type": "release-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D4"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "in-app account deletion completes (Apple 5.1.1(v)), purchases transact (3.1.1), metadata is backed by the build (2.3.1), no dead buttons (Play IN_APP_EXPERIENCE), crash reporting live - each with a proof line from the release build",
+        "the release bundle's compile-time flags are proven from the bundle (demo mode off)",
+        "store screenshots are real captures from a clean simulator or device",
+        "release.md cleared rig-s1gate app.ship with store_policy above 0.9",
+        "submission is held at Gate-D for Mike",
+        "after submission the build is visible in App Store Connect or Play Console"
+      ],
+      "anti_patterns": [
+        "Arguing policy compliance from source instead of the release build",
+        "Using golden renders or web builds as store screenshots"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/app-mobile-release.yaml",
+        "source_sha256": "460b47d4182200ac6b1493f6e82a4db7aae4aa4a16ecd09eee3008ed2ab0eaa5",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

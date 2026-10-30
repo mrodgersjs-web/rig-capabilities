@@ -1,0 +1,157 @@
+{
+  "goals": [
+    {
+      "id": "GL-DS-GATE-CRAFT",
+      "name": "Craft gate",
+      "description": "Craft gate [gate] \u2014 compiled from capabilities/harnesses/ds-gate-craft.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "Gate category evidenced",
+      "gates": [
+        {
+          "id": "0.1",
+          "category": "Identity Lock",
+          "name": "0.1 Load design-studio-os and state the mode (BUILD, REDESIGN, C",
+          "description": "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "0.2",
+          "category": "Identity Lock",
+          "name": "0.2 Goal card written to artifacts/<slug>/goal-card.yaml with bu",
+          "description": "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+          "command": null,
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.1",
+          "category": "Craft",
+          "name": "2.1 Type scale and pairing chosen from ds-typography laws, each",
+          "description": "Type scale and pairing chosen from ds-typography laws, each choice citing a law",
+          "command": "artifacts/<slug>/type.md with CLAIM citations",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.2",
+          "category": "Craft",
+          "name": "2.2 Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+          "description": "Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+          "command": "contrast table from ds-contrast-checker, exit 0",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "2.3",
+          "category": "Craft",
+          "name": "2.3 Layout on a stated grid with spacing on the scale",
+          "description": "Layout on a stated grid with spacing on the scale",
+          "command": "artifacts/<slug>/layout.md lists grid, scale and exceptions",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "Craft gate: evidence or it did not pass.",
+        "harness_tuple": "",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "ds-gate-craft",
+          "session_type": "gate",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [
+        "Gate category evidenced"
+      ],
+      "failure_states": [
+        "halt gate(s) 2.1, 2.2: no progress without gate evidence"
+      ],
+      "quality_criteria": [
+        "Load design-studio-os and state the mode (BUILD, REDESIGN, CRITIQUE, FIX, LEARN) before any work",
+        "Goal card written to artifacts/<slug>/goal-card.yaml with buyer, success metric and an executable done_test",
+        "Type scale and pairing chosen from ds-typography laws, each choice citing a law",
+        "Palette tokens pass contrast 4.5:1 body and 3:1 large/UI",
+        "Layout on a stated grid with spacing on the scale"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/ds-gate-craft.yaml",
+        "source_sha256": "1f9cbbe7cc7360782dc16b6840335c8c17fa1f0212661865137f042b519fc2cb",
+        "final_rule": [
+          "No gate evidence, no progress.",
+          "A DEFERRED Jev verdict is never a pass.",
+          "Publish, deploy, push or send needs Gate-D approval from Mike."
+        ],
+        "failure_protocol": {
+          "halt": [
+            "2.1",
+            "2.2"
+          ],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [
+          "0.1",
+          "0.2"
+        ],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "goals": [
+    {
+      "id": "GL-COMMS-TRANSFORMATION-HARNESS",
+      "name": "communications transformation (Build Card v1.0 sealed harness)",
+      "description": "communications transformation (Build Card v1.0 sealed harness) [comms-transformation-session] \u2014 compiled from capabilities/harnesses/comms-transformation-harness.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "G1",
+          "category": "Identity Lock",
+          "name": "G1 comms.intent_check.valid == true before any drafting (C1 sta",
+          "description": "comms.intent_check.valid == true before any drafting (C1 state-delta proof obligation)",
+          "command": "run log contains the intent_check result JSON with valid:true",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G2",
+          "category": "Identity Lock",
+          "name": "G2 C2 clean (c2_errors == []) and claim lint claim_support == 1",
+          "description": "C2 clean (c2_errors == []) and claim lint claim_support == 1.0 before drafting",
+          "command": "audience + claims tool outputs recorded in the run log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G3",
+          "category": "Identity Lock",
+          "name": "G3 vehicle chosen via comms.vehicle; a no-send advisory ends th",
+          "description": "vehicle chosen via comms.vehicle; a no-send advisory ends the run as a success",
+          "command": "vehicle JSON (or no_send_reasons) in run log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G4",
+          "category": "Identity Lock",
+          "name": "G4 all evaluator transcripts present (5 sim modes + 2 critics +",
+          "description": "all evaluator transcripts present (5 sim modes + 2 critics + redteam) before VERIFY",
+          "command": "eight typed evaluator reports attached; missing dimension -> not ship-eligible",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G5",
+          "category": "Identity Lock",
+          "name": "G5 comms.verdict admitted with role='verifier' (GEV_LOCK refuse",
+          "description": "comms.verdict admitted with role='verifier' (GEV_LOCK refuses every drafting role)",
+          "command": "verdict JSON with admitted:true and role:verifier; GEV_LOCK appears in the log for any drafting-role attempt",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G6",
+          "category": "Identity Lock",
+          "name": "G6 external sends require the human approval token (Gate-D); no",
+          "description": "external sends require the human approval token (Gate-D); no token, no delivery",
+          "command": "approval event id recorded in the packet's delivery part",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G7",
+          "category": "Identity Lock",
+          "name": "G7 sealed packet: seal.build_v20_packet complete:true after del",
+          "description": "sealed packet: seal.build_v20_packet complete:true after delivery + outcome; lineage.verify_chain intact:true",
+          "command": "packet_hash + verify_chain JSON in proof directory",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "G8",
+          "category": "Identity Lock",
+          "name": "G8 private lane (love-notes / PRIVATE-james) never enters this",
+          "description": "private lane (love-notes / PRIVATE-james) never enters this harness; PRIVACY_LOCK is terminal",
+          "command": "any private-surface attempt logs PRIVACY_LOCK with code -32001 and stops",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I move the recipient's state; I do not certify my own work.",
+        "harness_tuple": "H_comms(intent_packet, audience_model, vehicle, energy_floors, gev_verdict, proof_packet)",
+        "bms_bias": "A2 for drafting and critique; A1 for golden replay, claims lint and sealing verification; A4 forbidden (no autonomous send, no private-lane scoring)",
+        "meta": {
+          "harness_id": "comms-transformation-harness",
+          "session_type": "comms-transformation-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4",
+              "L5"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "comms.intent_check.valid == true before any drafting (C1 state-delta proof obligation)",
+        "C2 clean (c2_errors == []) and claim lint claim_support == 1.0 before drafting",
+        "vehicle chosen via comms.vehicle; a no-send advisory ends the run as a success",
+        "all evaluator transcripts present (5 sim modes + 2 critics + redteam) before VERIFY",
+        "comms.verdict admitted with role='verifier' (GEV_LOCK refuses every drafting role)",
+        "external sends require the human approval token (Gate-D); no token, no delivery",
+        "sealed packet: seal.build_v20_packet complete:true after delivery + outcome; lineage.verify_chain intact:true",
+        "private lane (love-notes / PRIVATE-james) never enters this harness; PRIVACY_LOCK is terminal"
+      ],
+      "anti_patterns": [],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/comms-transformation-harness.yaml",
+        "source_sha256": "05174223d4e6e7abbfd389d54ccff52d6b1729a3ddce8b5fceb114bf62c619a0",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

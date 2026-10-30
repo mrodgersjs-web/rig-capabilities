@@ -1,0 +1,147 @@
+{
+  "goals": [
+    {
+      "id": "GL-APP-SANDBOX-BUILD-VERIFY",
+      "name": "sandbox build-and-verify sub-process",
+      "description": "sandbox build-and-verify sub-process [build-stage] \u2014 compiled from capabilities/harnesses/app-sandbox-build-verify.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "B1",
+          "category": "Identity Lock",
+          "name": "B1 app-sandbox-preflight table shows no FAIL (webpack scripts,",
+          "description": "app-sandbox-preflight table shows no FAIL (webpack scripts, Tailwind v3, no native-only deps, port free)",
+          "command": "preflight table",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "B2",
+          "category": "Identity Lock",
+          "name": "B2 build runs detached under .app-studio/build.lock with no sec",
+          "description": "build runs detached under .app-studio/build.lock with no second builder; the log ends in exit=0",
+          "command": "tail of .app-studio/build.log",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "B3",
+          "category": "Identity Lock",
+          "name": "B3 the fresh build is served on a fresh port and curl returns 2",
+          "description": "the fresh build is served on a fresh port and curl returns 200 with expected content; :3000 is never trusted",
+          "command": "curl status and content grep",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "B4",
+          "category": "Identity Lock",
+          "name": "B4 a screenshot of the served route exists",
+          "description": "a screenshot of the served route exists",
+          "command": "image path",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "B5",
+          "category": "Identity Lock",
+          "name": "B5 a receipt exists in .app-studio/run.jsonl for each sandbox l",
+          "description": "a receipt exists in .app-studio/run.jsonl for each sandbox lesson that fired",
+          "command": "fire_lessons.py output plus receipt rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "One builder, one lock, one fresh port.",
+        "harness_tuple": "H_build(preflight, lock, detached_build, fresh_port, curl, screenshot, receipts)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "app-sandbox-build-verify",
+          "session_type": "build-stage",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "app-sandbox-preflight table shows no FAIL (webpack scripts, Tailwind v3, no native-only deps, port free)",
+        "build runs detached under .app-studio/build.lock with no second builder; the log ends in exit=0",
+        "the fresh build is served on a fresh port and curl returns 200 with expected content; :3000 is never trusted",
+        "a screenshot of the served route exists",
+        "a receipt exists in .app-studio/run.jsonl for each sandbox lesson that fired"
+      ],
+      "anti_patterns": [
+        "Running npm run build from a watcher routine",
+        "Restarting on :3000 and trusting what answers"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/app-sandbox-build-verify.yaml",
+        "source_sha256": "2038fb1eda852810e50c1be25a0597abdffc1ab01680b4448d84745284902f09",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}
