@@ -1,0 +1,16 @@
+[project]
+name = "prime-agent-skill-model-probe"
+version = "0.1.0"
+description = "Pre-spawn model credential probe for Prime Agent: prove a model can answer before a child or paid run depends on it."
+requires-python = ">=3.10"
+dependencies = ["httpx>=0.27,<1"]
+
+[project.scripts]
+model_probe = "rlm.skill:cli"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/model_probe"]
