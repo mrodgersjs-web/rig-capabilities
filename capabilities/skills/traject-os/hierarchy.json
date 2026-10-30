@@ -1,0 +1,700 @@
+{
+ "family": "traject-os",
+ "version": "1.0.0",
+ "generated_by": "scripts/build_hierarchy.py",
+ "stages": [
+  {
+   "id": "target-qualify",
+   "question": "Is this role in Mike's band and shape, and is it worth a slot?"
+  },
+  {
+   "id": "source-dedupe",
+   "question": "Has this employer+role+req already been applied to or receipted?"
+  },
+  {
+   "id": "tailor",
+   "question": "Does the lane resume say only source-bound, verified things about this role?"
+  },
+  {
+   "id": "apply",
+   "question": "Is the form filled from confirmed facts and held before the one click Mike owns?"
+  },
+  {
+   "id": "reach",
+   "question": "Is this note linted, gated, one-ask one-nudge, and held at Gate-D?"
+  },
+  {
+   "id": "room-build",
+   "question": "Is the room Lucy-ordered and built only from resume-verified claims?"
+  },
+  {
+   "id": "drill",
+   "question": "Does every drilled answer carry a number or NONE?"
+  },
+  {
+   "id": "interview-day",
+   "question": "Does every live answer carry a number or NONE, with no floor or banned claim?"
+  },
+  {
+   "id": "debrief",
+   "question": "Is the 5-line debrief captured within 2h and saved to both stores?"
+  },
+  {
+   "id": "follow-up-negotiate",
+   "question": "Is the thank-you/nudge/negotiation drafted, one ask one nudge, held at Gate-D?"
+  },
+  {
+   "id": "learn",
+   "question": "Did every new failure become a typed lesson that reached its owning sub-skill?"
+  }
+ ],
+ "lessons": "references/lessons.jsonl",
+ "tiers": {
+  "skills": {
+   "meta": {
+    "id": "traject-os",
+    "path": "capabilities/skills/traject-os",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "lucy-skills",
+     "stage": "tailor",
+     "covers": [
+      "tailor",
+      "room-build",
+      "drill",
+      "interview-day",
+      "follow-up-negotiate"
+     ],
+     "path": "~/.aside/u/0/skills/user/lucy-skills",
+     "reused": true
+    },
+    {
+     "id": "aside-job-operator",
+     "stage": "apply",
+     "covers": [
+      "target-qualify",
+      "source-dedupe",
+      "tailor",
+      "apply",
+      "reach",
+      "debrief",
+      "learn"
+     ],
+     "path": "~/.aside/u/0/skill-library/aside-job-operator",
+     "reused": true
+    },
+    {
+     "id": "lv-outreach",
+     "stage": "reach",
+     "covers": [
+      "reach",
+      "follow-up-negotiate"
+     ],
+     "path": "capabilities/skills/lv-outreach",
+     "reused": true
+    },
+    {
+     "id": "lv-engage",
+     "stage": "reach",
+     "covers": [
+      "reach"
+     ],
+     "path": "capabilities/skills/lv-engage",
+     "reused": true
+    },
+    {
+     "id": "lv-profile",
+     "stage": "cross-cutting",
+     "covers": [
+      "cross-cutting"
+     ],
+     "path": "capabilities/skills/lv-profile",
+     "reused": true
+    },
+    {
+     "id": "linkedin-viral",
+     "stage": "cross-cutting",
+     "covers": [
+      "cross-cutting"
+     ],
+     "path": "~/.aside/u/0/skills/user/linkedin-viral",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "traject-target-qualify",
+     "stage": "target-qualify",
+     "covers": [
+      "target-qualify",
+      "source-dedupe"
+     ],
+     "path": "capabilities/skills/traject-target-qualify",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-apply-bridge",
+     "stage": "apply",
+     "covers": [
+      "tailor",
+      "apply"
+     ],
+     "path": "capabilities/skills/traject-apply-bridge",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-reach",
+     "stage": "reach",
+     "covers": [
+      "reach"
+     ],
+     "path": "capabilities/skills/traject-reach",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-room-build",
+     "stage": "room-build",
+     "covers": [
+      "room-build"
+     ],
+     "path": "capabilities/skills/traject-room-build",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-drill",
+     "stage": "drill",
+     "covers": [
+      "drill",
+      "interview-day"
+     ],
+     "path": "capabilities/skills/traject-drill",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-debrief",
+     "stage": "debrief",
+     "covers": [
+      "debrief"
+     ],
+     "path": "capabilities/skills/traject-debrief",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-follow-up",
+     "stage": "follow-up-negotiate",
+     "covers": [
+      "follow-up-negotiate"
+     ],
+     "path": "capabilities/skills/traject-follow-up",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-proof",
+     "stage": "cross-cutting",
+     "covers": [],
+     "path": "capabilities/skills/traject-proof",
+     "parent": "traject-os",
+     "new": true
+    },
+    {
+     "id": "traject-learn",
+     "stage": "learn",
+     "covers": [
+      "learn"
+     ],
+     "path": "capabilities/skills/traject-learn",
+     "parent": "traject-os",
+     "new": true
+    }
+   ]
+  },
+  "agents": {
+   "meta": {
+    "id": "traject-conductor",
+    "path": "capabilities/agents/traject-conductor.md",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "traject-room-builder",
+     "path": "capabilities/agents/traject-room-builder.md",
+     "stage": "room-build",
+     "reused": true
+    },
+    {
+     "id": "traject-apply-operator",
+     "path": "capabilities/agents/traject-apply-operator.md",
+     "stage": "apply",
+     "reused": true
+    },
+    {
+     "id": "traject-outreach-drafter",
+     "path": "capabilities/agents/traject-outreach-drafter.md",
+     "stage": "reach",
+     "reused": true
+    },
+    {
+     "id": "traject-coach-grader",
+     "path": "capabilities/agents/traject-coach-grader.md",
+     "stage": "drill",
+     "reused": true
+    },
+    {
+     "id": "traject-proof-curator",
+     "path": "capabilities/agents/traject-proof-curator.md",
+     "stage": "cross-cutting",
+     "reused": true
+    },
+    {
+     "id": "traject-debrief-clerk",
+     "path": "capabilities/agents/traject-debrief-clerk.md",
+     "stage": "debrief",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "traject-company-researcher",
+     "path": "capabilities/agents/traject-company-researcher.md",
+     "parent": "traject-room-builder",
+     "stage": "room-build",
+     "new": true
+    },
+    {
+     "id": "traject-jd-decoder",
+     "path": "capabilities/agents/traject-jd-decoder.md",
+     "parent": "traject-room-builder",
+     "stage": "room-build",
+     "new": true
+    },
+    {
+     "id": "traject-claim-verifier",
+     "path": "capabilities/agents/traject-claim-verifier.md",
+     "parent": "traject-proof-curator",
+     "stage": "cross-cutting",
+     "new": true
+    },
+    {
+     "id": "traject-dedupe-checker",
+     "path": "capabilities/agents/traject-dedupe-checker.md",
+     "parent": "traject-apply-operator",
+     "stage": "source-dedupe",
+     "new": true
+    },
+    {
+     "id": "traject-recency-checker",
+     "path": "capabilities/agents/traject-recency-checker.md",
+     "parent": "traject-outreach-drafter",
+     "stage": "reach",
+     "new": true
+    }
+   ]
+  },
+  "harnesses": {
+   "meta": {
+    "id": "traject-session",
+    "path": "capabilities/harnesses/traject-session.yaml",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "traject-interview-prep-session",
+     "path": "capabilities/harnesses/traject-interview-prep-session.yaml",
+     "stage": "interview-day",
+     "reused": true
+    },
+    {
+     "id": "traject-application-session",
+     "path": "capabilities/harnesses/traject-application-session.yaml",
+     "stage": "apply",
+     "reused": true
+    },
+    {
+     "id": "traject-outreach-session",
+     "path": "capabilities/harnesses/traject-outreach-session.yaml",
+     "stage": "reach",
+     "reused": true
+    },
+    {
+     "id": "traject-proof-publish-session",
+     "path": "capabilities/harnesses/traject-proof-publish-session.yaml",
+     "stage": "cross-cutting",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "traject-room-build",
+     "path": "capabilities/harnesses/traject-room-build.yaml",
+     "parent": "traject-interview-prep-session",
+     "stage": "room-build",
+     "new": true
+    },
+    {
+     "id": "traject-drill-rep",
+     "path": "capabilities/harnesses/traject-drill-rep.yaml",
+     "parent": "traject-interview-prep-session",
+     "stage": "drill",
+     "new": true
+    },
+    {
+     "id": "traject-debrief-capture",
+     "path": "capabilities/harnesses/traject-debrief-capture.yaml",
+     "parent": "traject-interview-prep-session",
+     "stage": "debrief",
+     "new": true
+    },
+    {
+     "id": "traject-apply-one-role",
+     "path": "capabilities/harnesses/traject-apply-one-role.yaml",
+     "parent": "traject-application-session",
+     "stage": "apply",
+     "new": true
+    }
+   ]
+  },
+  "loops": {
+   "meta": {
+    "id": "traject-daily-loop",
+    "path": "capabilities/loops/traject-daily-loop.md",
+    "new": true
+   },
+   "main": [
+    {
+     "id": "iqrsqpi-v20",
+     "path": "capabilities/skills/iqrsqpi-v20",
+     "stage": "learn",
+     "reused": true
+    },
+    {
+     "id": "gate-d-loop",
+     "path": "capabilities/skills/gate-d-loop",
+     "stage": "apply",
+     "reused": true
+    },
+    {
+     "id": "proof-loop",
+     "path": "capabilities/skills/proof-loop",
+     "stage": "cross-cutting",
+     "reused": true
+    },
+    {
+     "id": "done-claim-verification",
+     "path": "capabilities/skills/done-claim-verification",
+     "stage": "learn",
+     "reused": true
+    },
+    {
+     "id": "rig-realign-weekly",
+     "path": "capabilities/loops/rig-realign-weekly.md",
+     "stage": "learn",
+     "reused": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "traject-interview-loop",
+     "path": "capabilities/loops/traject-interview-loop.md",
+     "parent": "traject-daily-loop",
+     "stage": "interview-day",
+     "new": true
+    },
+    {
+     "id": "traject-weekly-learn-loop",
+     "path": "capabilities/loops/traject-weekly-learn-loop.md",
+     "parent": "traject-daily-loop",
+     "stage": "learn",
+     "new": true
+    }
+   ]
+  },
+  "hooks": {
+   "meta": {
+    "id": "guard-secret-write",
+    "path": "capabilities/hooks/guard-secret-write.sh",
+    "new": false,
+    "wired_live": false
+   },
+   "main": [
+    {
+     "id": "guard-dangerous-commands",
+     "path": "capabilities/hooks/guard-dangerous-commands.sh",
+     "stage": "apply",
+     "reused": true
+    },
+    {
+     "id": "immutable-surface-guard",
+     "path": "capabilities/hooks/immutable-surface-guard.sh",
+     "stage": "cross-cutting",
+     "reused": true
+    }
+   ],
+   "sub": []
+  },
+  "jev": {
+   "meta": {
+    "id": "job.fit",
+    "path": "capabilities/harnesses/s1gate/rubrics/job.fit.json",
+    "kinds": [
+     "job.fit"
+    ],
+    "new": true
+   },
+   "main": [
+    {
+     "id": "resume.ats",
+     "path": "capabilities/harnesses/s1gate/rubrics/resume.ats.json",
+     "stage": "tailor",
+     "kinds": [
+      "resume.ats"
+     ],
+     "new": true
+    },
+    {
+     "id": "resume.recruiter",
+     "path": "capabilities/harnesses/s1gate/rubrics/resume.recruiter.json",
+     "stage": "tailor",
+     "kinds": [
+      "resume.recruiter"
+     ],
+     "new": true
+    },
+    {
+     "id": "resume.screen",
+     "path": "capabilities/harnesses/s1gate/rubrics/resume.screen.json",
+     "stage": "tailor",
+     "kinds": [
+      "resume.screen"
+     ],
+     "new": true
+    },
+    {
+     "id": "jobhunt.select",
+     "path": "capabilities/harnesses/s1gate/rubrics/jobhunt.select.json",
+     "stage": "target-qualify",
+     "kinds": [
+      "jobhunt.select"
+     ],
+     "new": true
+    },
+    {
+     "id": "jobhunt.resume",
+     "path": "capabilities/harnesses/s1gate/rubrics/jobhunt.resume.json",
+     "stage": "tailor",
+     "kinds": [
+      "jobhunt.resume"
+     ],
+     "new": true
+    },
+    {
+     "id": "job.navigate",
+     "path": "capabilities/harnesses/s1gate/rubrics/job.navigate.json",
+     "stage": "apply",
+     "kinds": [
+      "job.navigate"
+     ],
+     "new": true
+    },
+    {
+     "id": "interview.answer",
+     "path": "capabilities/harnesses/s1gate/rubrics/interview.answer.json",
+     "stage": "drill",
+     "kinds": [
+      "interview.answer"
+     ],
+     "new": true
+    },
+    {
+     "id": "outreach.first",
+     "path": "capabilities/harnesses/s1gate/rubrics/outreach.first.json",
+     "stage": "reach",
+     "kinds": [
+      "outreach.first"
+     ],
+     "new": true
+    },
+    {
+     "id": "email.outreach",
+     "path": "capabilities/harnesses/s1gate/rubrics/email.outreach.json",
+     "stage": "reach",
+     "kinds": [
+      "email.outreach"
+     ],
+     "new": true
+    },
+    {
+     "id": "offer.eval",
+     "path": "capabilities/harnesses/s1gate/rubrics/offer.eval.json",
+     "stage": "follow-up-negotiate",
+     "kinds": [
+      "offer.eval"
+     ],
+     "new": true
+    },
+    {
+     "id": "story.bank",
+     "path": "capabilities/harnesses/s1gate/rubrics/story.bank.json",
+     "stage": "room-build",
+     "kinds": [
+      "story.bank"
+     ],
+     "new": true
+    },
+    {
+     "id": "company.fit",
+     "path": "capabilities/harnesses/s1gate/rubrics/company.fit.json",
+     "stage": "target-qualify",
+     "kinds": [
+      "company.fit"
+     ],
+     "new": true
+    },
+    {
+     "id": "contact.pick",
+     "path": "capabilities/harnesses/s1gate/rubrics/contact.pick.json",
+     "stage": "reach",
+     "kinds": [
+      "contact.pick"
+     ],
+     "new": true
+    },
+    {
+     "id": "jd.decode",
+     "path": "capabilities/harnesses/s1gate/rubrics/jd.decode.json",
+     "stage": "room-build",
+     "kinds": [
+      "jd.decode"
+     ],
+     "new": true
+    },
+    {
+     "id": "hm.technical",
+     "path": "capabilities/harnesses/s1gate/rubrics/hm.technical.json",
+     "stage": "interview-day",
+     "kinds": [
+      "hm.technical"
+     ],
+     "new": true
+    },
+    {
+     "id": "screen.pitch",
+     "path": "capabilities/harnesses/s1gate/rubrics/screen.pitch.json",
+     "stage": "interview-day",
+     "kinds": [
+      "screen.pitch"
+     ],
+     "new": true
+    },
+    {
+     "id": "mission.completion",
+     "path": "capabilities/harnesses/s1gate/rubrics/mission.completion.json",
+     "stage": "learn",
+     "kinds": [
+      "mission.completion"
+     ],
+     "new": true
+    },
+    {
+     "id": "atomic.claim",
+     "path": "capabilities/harnesses/s1gate/rubrics/atomic.claim.json",
+     "stage": "cross-cutting",
+     "kinds": [
+      "atomic.claim"
+     ],
+     "new": true
+    }
+   ],
+   "sub": [
+    {
+     "id": "job.formfill",
+     "path": "capabilities/harnesses/s1gate/rubrics/job.formfill.json",
+     "stage": "apply",
+     "kinds": [
+      "job.formfill"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "form.field",
+     "path": "capabilities/harnesses/s1gate/rubrics/form.field.json",
+     "stage": "apply",
+     "kinds": [
+      "form.field"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "outreach.intro",
+     "path": "capabilities/harnesses/s1gate/rubrics/outreach.intro.json",
+     "stage": "reach",
+     "kinds": [
+      "outreach.intro"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "reply.intent",
+     "path": "capabilities/harnesses/s1gate/rubrics/reply.intent.json",
+     "stage": "reach",
+     "kinds": [
+      "reply.intent"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "jobhunt.warm",
+     "path": "capabilities/harnesses/s1gate/rubrics/jobhunt.warm.json",
+     "stage": "reach",
+     "kinds": [
+      "jobhunt.warm"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "followup.note",
+     "path": "capabilities/harnesses/s1gate/rubrics/followup.note.json",
+     "stage": "follow-up-negotiate",
+     "kinds": [
+      "followup.note"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "rejection.cause",
+     "path": "capabilities/harnesses/s1gate/rubrics/rejection.cause.json",
+     "stage": "debrief",
+     "kinds": [
+      "rejection.cause"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    },
+    {
+     "id": "training.readiness",
+     "path": "capabilities/harnesses/s1gate/rubrics/training.readiness.json",
+     "stage": "drill",
+     "kinds": [
+      "training.readiness"
+     ],
+     "new": true,
+     "parent": "job.fit"
+    }
+   ]
+  }
+ }
+}

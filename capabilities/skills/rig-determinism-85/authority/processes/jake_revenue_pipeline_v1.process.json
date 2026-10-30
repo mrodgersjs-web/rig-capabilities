@@ -1,0 +1,28 @@
+{
+  "schema": "rig.d85.process-authority.v1",
+  "process_id": "jake_revenue_pipeline_v1",
+  "source_root": "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/rig-determinism-85/authority/sources/jake_revenue_pipeline_v1",
+  "file_hashes": {
+    "jake_revenue_worker.py": "c6342d1474ff9b71a5f8bd9062da0a4e51d57990e781e7bb02dc25ed0b2a1f12",
+    "jake_revenue_adapter.py": "82d438506e0e644140bb6437618d88ab3be18715e574c9dff61125369d8611ad"
+  },
+  "entrypoints": [
+    {
+      "source_path": "jake_revenue_worker.py",
+      "symbol": "run_stage",
+      "adapter_path": "jake_revenue_adapter.py",
+      "adapter_operation": "execute"
+    }
+  ],
+  "external_modules": [
+    {
+      "module": "subprocess",
+      "artifact_path": "/Users/rig128gb/.local/share/uv/python/cpython-3.11-macos-aarch64-none/lib/python3.11/subprocess.py",
+      "artifact_sha256": "baa9f9138d8d20df6284f67e7d2e790f847f65e2c5370de322d54cccd737f2d9",
+      "allowed_calls": [
+        "subprocess.call"
+      ]
+    }
+  ],
+  "classification_path": "processes/jake_revenue_pipeline_v1.classification.json"
+}
