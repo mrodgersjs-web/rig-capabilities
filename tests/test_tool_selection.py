@@ -7,6 +7,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+import unittest.mock
 from pathlib import Path
 
 SKILL_ROOT = Path(__file__).resolve().parent.parent / "capabilities/skills/rig-determinism-85"
@@ -272,7 +273,8 @@ class ChecklistTests(unittest.TestCase):
         result = check_build_checklist(build)
         self.assertTrue(all(check["pass"] for check in result["checks"]))
         self.assertEqual(result["verdict"], "CHECKLIST_PASS")
-        self.assertEqual(len(result["checks"]), 7)
+        # 8 since model_evidence_matches_classification joined the list.
+        self.assertEqual(len(result["checks"]), 8)
         self.assertEqual(result["inventory_binding"], "unbound")
         self.assertIsNone(result["inventory_sha256"])
 
@@ -303,6 +305,215 @@ class ChecklistTests(unittest.TestCase):
         self.assertEqual(result["verdict"], "CHECKLIST_PASS")
         self.assertEqual(result["inventory_binding"], "bound")
         self.assertRegex(result["inventory_sha256"], r"^[0-9a-f]{64}$")
+
+    def _certify_with_kinds(self, kind_counts, **overrides):
+        """certify_build() against a stubbed authority: inventory bound, kinds dictated.
+
+        Hermetic on purpose — the live registry's MODEL mix is not this test's subject, and
+        processes that lock an external module hash differently per environment.
+        """
+        import d85
+        import d85_gates
+        import tool_selection
+
+        build, _ = _build(self, **overrides)
+        self.enterContext(
+            unittest.mock.patch.object(
+                d85, "build_inventory", lambda pid: {"inventory_sha256": build["inventory_sha256"]}
+            )
+        )
+        self.enterContext(
+            unittest.mock.patch.object(
+                d85_gates, "classify_process", lambda pid: {"kind_counts": dict(kind_counts)}
+            )
+        )
+        # The score is a separate gate with its own tests below; pin it green so these cases
+        # measure only the model-evidence authority rule.
+        self.enterContext(
+            unittest.mock.patch.object(
+                d85_gates, "score_process",
+                lambda pid: {
+                    "verdict": "REALIZED_PASS",
+                    "process_id": pid,
+                    "inventory_sha256": build["inventory_sha256"],
+                    "ratios": {
+                        "aggregate_unweighted": 1.0,
+                        "aggregate_weighted": 1.0,
+                        "min_path_unweighted": 1.0,
+                        "min_path_weighted": 1.0,
+                    },
+                    "scored_operation_count": 1,
+                },
+            )
+        )
+        self.assertIs(tool_selection.certify_build, certify_build)
+        return certify_build(build, build["process_id"])
+
+    def test_zero_model_process_needs_no_model_evidence(self) -> None:
+        # The cockpit_v2_vercel_deploy_v2 shape: one deterministic side effect, CODE:1 MODEL:0.
+        # The default framework is kestra_pydantic, and the framework-name proxy used to demand
+        # pydantic schemas plus a necessity record it can never honestly produce.
+        result = self._certify_with_kinds(
+            {"CODE": 1, "MODEL": 0, "MODEL_AGENT": 0, "MIXED": 0},
+            pydantic_models=[],
+            model_necessity_claims=[],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_PASS")
+        self.assertEqual(result["inventory_binding"], "bound")
+
+    def test_zero_model_process_may_not_fabricate_model_evidence(self) -> None:
+        result = self._certify_with_kinds(
+            {"CODE": 1, "MODEL": 0, "MODEL_AGENT": 0, "MIXED": 0},
+            pydantic_models=["Result"],
+            model_necessity_claims=["a claim about work the authority says does not exist"],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_BLOCK")
+        failed = [c["check"] for c in result["checks"] if not c["pass"]]
+        self.assertEqual(failed, ["model_evidence_matches_classification"])
+
+    def test_hidden_model_ops_still_demand_evidence(self) -> None:
+        # Empty `properties` cannot hide a MODEL op: the classification decides.
+        result = self._certify_with_kinds(
+            {"CODE": 3, "MODEL": 1, "MODEL_AGENT": 0, "MIXED": 0},
+            properties={},
+            pydantic_models=[],
+            model_necessity_claims=[],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_BLOCK")
+        failed = [c["check"] for c in result["checks"] if not c["pass"]]
+        self.assertEqual(
+            failed,
+            ["pydantic_models_present", "model_necessity_claims_present",
+             "model_evidence_matches_classification"],
+        )
+
+    def test_one_claim_does_not_cover_many_model_ops(self) -> None:
+        result = self._certify_with_kinds(
+            {"CODE": 2, "MODEL": 2, "MODEL_AGENT": 1, "MIXED": 0},
+            pydantic_models=["Result"],
+            model_necessity_claims=["only one record for three model operations"],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_BLOCK")
+        failed = [c["check"] for c in result["checks"] if not c["pass"]]
+        self.assertEqual(
+            failed,
+            ["model_necessity_claims_present", "model_evidence_matches_classification"],
+        )
+
+    def test_malformed_model_ops_argument_blocks(self) -> None:
+        build, _ = _build(self)
+        for bad in (True, False, -1, "1", 1.0):
+            with self.subTest(model_ops=bad):
+                with self.assertRaises(ToolSelectionBlock) as caught:
+                    check_build_checklist(build, model_ops=bad)
+                self.assertIn("model_ops must be None or an exact nonnegative int",
+                              str(caught.exception))
+
+    def test_claim_per_model_op_passes(self) -> None:
+        result = self._certify_with_kinds(
+            {"CODE": 2, "MODEL": 2, "MODEL_AGENT": 0, "MIXED": 0},
+            pydantic_models=["Input", "Result"],
+            model_necessity_claims=["record for op one", "record for op two"],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_PASS")
+
+    def test_model_properties_contradicting_zero_model_classification_blocks(self) -> None:
+        result = self._certify_with_kinds(
+            {"CODE": 4, "MODEL": 0, "MODEL_AGENT": 0, "MIXED": 0},
+            properties={"agent_reasoning": REASONING},
+            framework="orca_pydantic",
+            pydantic_models=[],
+            model_necessity_claims=[],
+        )
+        self.assertEqual(result["verdict"], "CHECKLIST_BLOCK")
+        failed = [c["check"] for c in result["checks"] if not c["pass"]]
+        self.assertEqual(failed, ["model_evidence_matches_classification"])
+
+    def _certify_with_score(self, score, **overrides):
+        """certify_build() with the classification stubbed CODE-only and the score dictated."""
+        import d85
+        import d85_gates
+
+        build, _ = _build(self, pydantic_models=[], model_necessity_claims=[], **overrides)
+        self.enterContext(
+            unittest.mock.patch.object(
+                d85, "build_inventory", lambda pid: {"inventory_sha256": build["inventory_sha256"]}
+            )
+        )
+        self.enterContext(
+            unittest.mock.patch.object(
+                d85_gates, "classify_process",
+                lambda pid: {"kind_counts": {"CODE": 1, "MODEL": 0, "MODEL_AGENT": 0, "MIXED": 0}},
+            )
+        )
+        self.enterContext(
+            unittest.mock.patch.object(d85_gates, "score_process", lambda pid: dict(score))
+        )
+        return build, certify_build(build, build["process_id"])
+
+    def _passing_score(self, build, **overrides):
+        score = {
+            "verdict": "REALIZED_PASS",
+            "process_id": build["process_id"],
+            "inventory_sha256": build["inventory_sha256"],
+            "ratios": {
+                "aggregate_unweighted": 1.0,
+                "aggregate_weighted": 1.0,
+                "min_path_unweighted": 1.0,
+                "min_path_weighted": 1.0,
+            },
+            "scored_operation_count": 1,
+        }
+        score.update(overrides)
+        return score
+
+    def test_declared_d85_pass_without_live_score_blocks(self) -> None:
+        # The build says d85_realized_pass: true; the recomputed score says otherwise.
+        build, _ = _build(self)
+        blocked = self._certify_with_score(
+            {"verdict": "REALIZED_BLOCK", "process_id": build["process_id"],
+             "inventory_sha256": build["inventory_sha256"],
+             "ratios": {"aggregate_unweighted": 0.4, "aggregate_weighted": 0.4,
+                        "min_path_unweighted": 0.4, "min_path_weighted": 0.4},
+             "scored_operation_count": 1},
+        )[1]
+        self.assertEqual(blocked["verdict"], "CHECKLIST_BLOCK")
+        self.assertEqual(
+            [c["check"] for c in blocked["checks"] if not c["pass"]], ["source_derived_d85"]
+        )
+
+    def test_sub_threshold_ratio_blocks(self) -> None:
+        build, _ = _build(self)
+        score = self._passing_score(build)
+        score["ratios"]["min_path_weighted"] = 0.84
+        blocked = self._certify_with_score(score)[1]
+        self.assertEqual(blocked["verdict"], "CHECKLIST_BLOCK")
+        self.assertIn(
+            "source_derived_d85", [c["check"] for c in blocked["checks"] if not c["pass"]]
+        )
+
+    def test_score_bound_to_another_inventory_blocks(self) -> None:
+        build, _ = _build(self)
+        blocked = self._certify_with_score(
+            self._passing_score(build, inventory_sha256="0" * 64)
+        )[1]
+        self.assertEqual(blocked["verdict"], "CHECKLIST_BLOCK")
+        self.assertIn(
+            "source_derived_d85", [c["check"] for c in blocked["checks"] if not c["pass"]]
+        )
+
+    def test_zero_scored_operations_blocks(self) -> None:
+        build, _ = _build(self)
+        blocked = self._certify_with_score(
+            self._passing_score(build, scored_operation_count=0)
+        )[1]
+        self.assertEqual(blocked["verdict"], "CHECKLIST_BLOCK")
+
+    def test_recomputed_score_passes(self) -> None:
+        build, _ = _build(self)
+        certified = self._certify_with_score(self._passing_score(build))[1]
+        self.assertEqual(certified["verdict"], "CHECKLIST_PASS")
+        self.assertEqual(certified["inventory_binding"], "bound")
 
     def test_wrong_framework_blocks(self) -> None:
         build, _ = _build(

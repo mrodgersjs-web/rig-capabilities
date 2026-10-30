@@ -117,11 +117,20 @@ class S1GateToolTests(unittest.TestCase):
         with mock.patch("rig_capabilities.s1gate.evaluate",
                         side_effect=RuntimeError("URLError: refused")):
             out = self.call({"action": "check", "rubric": "post.linkedin",
-                             "text": "a draft"})
+                             "text": "a draft", "subject": "t"})
         self.assertFalse(out["ran"])
         self.assertTrue(out["fail_closed"])
         self.assertNotEqual(out.get("verdict"), "PASS")
         self.assertIn("URLError", out["reason"])
+
+    def test_billable_verbs_refuse_a_missing_subject(self):
+        for action, args in (("check", {"text": "a draft"}),
+                             ("rank", {"candidates": ["a", "b"]}),
+                             ("improve", {"text": "a draft"})):
+            with self.assertRaises(ToolError, msg=action) as cm:
+                self.call({"action": action, "rubric": "post.linkedin",
+                           "subject": "  ", **args})
+            self.assertIn("subject", str(cm.exception))
 
     def test_unknown_action_is_data_not_an_exception(self):
         out = self.call({"action": "nope"})
@@ -180,25 +189,25 @@ class S1GateToolTests(unittest.TestCase):
     def test_rank_caps_candidates_and_requires_two(self):
         with self.assertRaises(ToolError):
             self.call({"action": "rank", "rubric": "post.linkedin",
-                       "candidates": ["only one"]})
+                       "subject": "t", "candidates": ["only one"]})
         with self.assertRaises(ToolError):
             self.call({"action": "rank", "rubric": "post.linkedin",
-                       "candidates": ["c%d" % i for i in range(26)]})
+                       "subject": "t", "candidates": ["c%d" % i for i in range(26)]})
 
     def test_improve_caps_iterations(self):
         with self.assertRaises(ToolError):
             self.call({"action": "improve", "rubric": "post.linkedin",
-                       "text": "draft", "max_iterations": 99})
+                       "subject": "t", "text": "draft", "max_iterations": 99})
 
     def test_check_needs_non_empty_text_under_the_size_cap(self):
         for bad in ("", "   ", None):
             with self.assertRaises(ToolError):
                 self.call({"action": "check", "rubric": "post.linkedin",
-                           "text": bad})
+                           "subject": "t", "text": bad})
         over = "z" * (s1gate_bridge.MAX_ARTIFACT_CHARS + 1)
         with self.assertRaises(ToolError):
             self.call({"action": "check", "rubric": "post.linkedin",
-                       "text": over})
+                       "subject": "t", "text": over})
 
     def test_check_passes_through_a_gate_verdict(self):
         with mock.patch("rig_capabilities.s1gate.evaluate",

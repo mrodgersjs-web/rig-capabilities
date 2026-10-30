@@ -521,3 +521,65 @@ class TestAnswerCache(unittest.TestCase):
             self.assertEqual(st["rubrics"][0]["hits"], 2)
             self.assertEqual(st["logged_cache_hits"], 2)
             log.close()
+
+
+class TestApiKeyEnvFileFallback(unittest.TestCase):
+    """SP4 2026-10-10: non-GUI sessions (ssh, launchd) get security rc=36; fall back to a
+    mode-600 env file, and refuse one that is group/other readable."""
+
+    def _run(self, mode, body="TYPESAFE_API_KEY=file-fixture\n"):
+        done = mock.Mock(stdout="", stderr="", returncode=36)
+        with tempfile.TemporaryDirectory() as d:
+            f = Path(d) / "env"; f.write_text(body); f.chmod(mode)
+            with mock.patch.dict("os.environ", {"TYPESAFE_API_KEY": "", "S1GATE_ENV_FILE": str(f)}, clear=False), \
+                    mock.patch.dict("os.environ", {}, clear=False) as e, \
+                    mock.patch.object(s1gate.subprocess, "run", return_value=done):
+                e.pop("S1GATE_ENV_FILE_DISABLE", None)
+                return s1gate._api_key()
+
+    def test_mode_600_env_file_used_when_keychain_rc36(self):
+        self.assertEqual(self._run(0o600), "file-fixture")
+
+    def test_export_and_quotes_parsed(self):
+        self.assertEqual(self._run(0o600, 'export TYPESAFE_API_KEY="file-fixture"\n'), "file-fixture")
+
+    def test_world_readable_env_file_refused(self):
+        with self.assertRaises(s1gate.ProviderError) as cm:
+            self._run(0o644)
+        self.assertIn("mode 600", str(cm.exception))
+        self.assertNotIn("file-fixture", str(cm.exception))
+
+
+class TestApiKeyReadPath(unittest.TestCase):
+    """Credential resolution: the keychain item is referenced BY NAME, its value
+    never leaves the resolver, and a `security` failure is diagnosed honestly
+    (a bare "no key" masked session-scoped rc=36 failures as missing creds)."""
+
+    def test_env_var_wins_and_no_subprocess_runs(self):
+        with mock.patch.dict("os.environ", {"TYPESAFE_API_KEY": "env-fixture"}, clear=False), \
+                mock.patch.object(s1gate.subprocess, "run") as run:
+            self.assertEqual(s1gate._api_key(), "env-fixture")
+        run.assert_not_called()
+
+    def test_keychain_item_resolves_when_env_is_empty(self):
+        done = mock.Mock(stdout="keychain-fixture\n", stderr="", returncode=0)
+        with mock.patch.dict("os.environ", {"TYPESAFE_API_KEY": ""}, clear=False), \
+                mock.patch.object(s1gate.subprocess, "run", return_value=done) as run:
+            self.assertEqual(s1gate._api_key(), "keychain-fixture")
+        argv = run.call_args[0][0]
+        self.assertEqual(argv[:2], ["security", "find-generic-password"])
+        self.assertIn(s1gate.KEYCHAIN_ITEM, argv)
+        self.assertIn("-w", argv)
+
+    def test_security_failure_reports_rc_and_stderr(self):
+        done = mock.Mock(stdout="",
+                         stderr="security: SecKeychainCopyContent: User interaction is not allowed.\n",
+                         returncode=36)
+        with mock.patch.dict("os.environ", {"TYPESAFE_API_KEY": "", "S1GATE_ENV_FILE_DISABLE": "1"}, clear=False), \
+                mock.patch.object(s1gate.subprocess, "run", return_value=done):
+            with self.assertRaises(s1gate.ProviderError) as cm:
+                s1gate._api_key()
+        msg = str(cm.exception)
+        self.assertIn("rc=36", msg)
+        self.assertIn("User interaction is not allowed", msg)
+        self.assertIn(s1gate.KEYCHAIN_ITEM, msg)

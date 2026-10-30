@@ -16,7 +16,7 @@ import unittest
 from pathlib import Path
 from unittest import mock
 
-from rig_capabilities import s1gate, s1gate_calibrate as cal
+from rig_capabilities import s1gate, s1gate_bridge, s1gate_calibrate as cal
 from rig_capabilities.s1gate import DecisionLog, GateResult
 
 RUBRIC = {
@@ -62,7 +62,8 @@ class CalibrateBase(unittest.TestCase):
             ans = {"alpha": {"type": "noul", "noul": v},
                    "beta": {"type": "noul", "noul": 1 - v}}
             self.log.record(_result("t.calib", ans, "BLOCK"), subject="s%d" % i)
-            self.log.label(i + 1, lab)
+            self.log.label_signal(i + 1, "alpha.noul", lab)
+            self.log.label_signal(i + 1, "beta.noul", lab)
 
 
 def separable(n=50):
@@ -76,6 +77,90 @@ def separable(n=50):
 
 
 class TestPerRuleCalibration(CalibrateBase):
+    def test_calibration_hash_binds_signal_value_model_and_provenance(self):
+        row = {"id": 1, "rubric": "t.calib", "state_sha256": "state",
+               "answers_json": json.dumps({"alpha": {"noul": 0.1}}),
+               "signal_label": "good", "model": "jev-one",
+               "signal_labelled_by": "construction", "signal_labelled_at": 1.0}
+        base = cal._labeled_hash([row], "alpha.noul")
+        for change in (
+            {"answers_json": json.dumps({"alpha": {"noul": 0.9}})},
+            {"model": "jev-two"},
+            {"signal_labelled_by": "mcp-agent"},
+            {"signal_label": "bad"},
+        ):
+            self.assertNotEqual(base, cal._labeled_hash([{**row, **change}], "alpha.noul"))
+
+    def test_signal_label_requires_a_real_answer(self):
+        did = self.log.record(_result("t.calib", {"alpha": {"noul": 0.8}}, "BLOCK"), subject="s1")
+        with self.assertRaisesRegex(ValueError, "no answer"):
+            self.log.label_signal(did, "beta.noul", "bad")
+        with self.assertRaisesRegex(ValueError, "question.attr"):
+            self.log.label_signal(did, "beta", "bad")
+        with self.assertRaisesRegex(ValueError, "decision not found"):
+            self.log.label_signal(did + 1, "alpha.noul", "bad")
+
+    def test_mcp_agent_labels_are_not_calibration_ground_truth(self):
+        for i, (v, lab) in enumerate(separable()):
+            ans = {"alpha": {"type": "noul", "noul": v},
+                   "beta": {"type": "noul", "noul": 1 - v}}
+            did = self.log.record(_result("t.calib", ans, "BLOCK"), subject="m%d" % i)
+            self.log.label_signal(did, "alpha.noul", lab, by="mcp-agent")
+        res = cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                                   db_path=self.db, rubric_dir=self.rdir, write=True)
+        self.assertEqual(res["n_labelled"], 0)
+        self.assertFalse(res["certified"])
+
+    def test_multi_question_calibration_rejects_global_labels(self):
+        for i, (v, lab) in enumerate(separable()):
+            ans = {"alpha": {"type": "noul", "noul": v},
+                   "beta": {"type": "noul", "noul": 1 - v}}
+            did = self.log.record(_result("t.calib", ans, "BLOCK"), subject="g%d" % i)
+            self.log.label(did, lab)
+        res = cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                                   db_path=self.db, rubric_dir=self.rdir, write=True)
+        self.assertFalse(res["certified"])
+        self.assertEqual(res["n_labelled"], 0)
+        self.assertEqual(res["label_scope"], "signal")
+
+    def test_signal_labels_do_not_contaminate_another_question(self):
+        self.seed(separable())
+        for did in range(1, 51):
+            self.log.label_signal(did, "beta.noul", "bad" if did % 2 else "good")
+        alpha = cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                                     db_path=self.db, rubric_dir=self.rdir)
+        self.assertFalse(alpha["certified"])  # dry run never certifies
+        self.assertGreaterEqual(alpha["holdout"]["recall"], 0.5)
+        self.assertEqual(self.log.labelled_signal("t.calib", "alpha.noul")[0]["signal_label"], "good")
+        self.assertEqual(self.log.labelled_signal("t.calib", "beta.noul")[0]["signal_label"], "bad")
+
+    def test_prefix_collision_cannot_certify_or_rewrite_another_signal(self):
+        path = self.rdir / "t.calib.json"
+        raw = json.loads(path.read_text())
+        raw["rules"] = [{"when": "alpha.noulty >= 0.60", "verdict": "BLOCK", "reason": "other"}]
+        path.write_text(json.dumps(raw))
+        before = path.read_bytes()
+        self.seed(separable())
+        with self.assertRaisesRegex(ValueError, "0 rules match"):
+            cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                                 db_path=self.db, rubric_dir=self.rdir, write=True)
+        self.assertEqual(path.read_bytes(), before)
+
+    def test_mixed_models_cannot_certify_unseen_model(self):
+        for i, (v, lab) in enumerate(separable()):
+            ans = {"alpha": {"type": "noul", "noul": v},
+                   "beta": {"type": "noul", "noul": 1 - v}}
+            result = _result("t.calib", ans, "BLOCK")
+            result.model = "jev-one" if i % 2 else "jev-two"
+            did = self.log.record(result, subject="m%d" % i)
+            self.log.label_signal(did, "alpha.noul", lab)
+        res = cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                                   db_path=self.db, rubric_dir=self.rdir, write=True)
+        self.assertFalse(res["certified"])
+        self.assertIn("mixed", res["reason"])
+        self.assertFalse(s1gate.load_rubric("t.calib", self.rdir).rule_enforces(
+            RUBRIC["rules"][0], model="unseen-model"))
+
     def test_certifies_one_rule_only(self):
         self.seed(separable())
         res = cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
@@ -169,6 +254,28 @@ class TestPerRuleEnforcement(CalibrateBase):
         res = self._evaluate(0.99)
         self.assertEqual(res.verdict, s1gate.BLOCK)
         self.assertTrue(res.enforced)
+
+    def test_legacy_multi_question_certificate_is_advisory(self):
+        self.seed(separable())
+        cal.calibrate_rubric("t.calib", ("alpha", "noul"), direction="above",
+                             db_path=self.db, rubric_dir=self.rdir, write=True)
+        path = self.rdir / "t.calib.json"
+        raw = json.loads(path.read_text())
+        raw["calibration"]["rules"]["alpha.noul"].pop("label_scope")
+        path.write_text(json.dumps(raw))
+        rb = s1gate.load_rubric("t.calib", self.rdir)
+        self.assertFalse(rb.enforcing)
+        with mock.patch.object(s1gate, "list_rubrics", return_value=["t.calib"]), \
+             mock.patch.object(s1gate, "load_rubric", return_value=rb):
+            listing = s1gate_bridge._list({})
+            detail = s1gate_bridge._show({"rubric": "t.calib"})
+        self.assertEqual(listing["rubrics"][0]["mode"], "advisory")
+        self.assertEqual(listing["enforcing"], [])
+        self.assertFalse(detail["enforcing"])
+        self.assertEqual(detail["mode"], "advisory")
+        res = self._evaluate(0.99)
+        self.assertEqual(res.verdict, s1gate.ESCALATE)
+        self.assertTrue(res.advisory)
 
     def test_certified_alpha_does_notlaunder_beta(self):
         self.seed(separable())

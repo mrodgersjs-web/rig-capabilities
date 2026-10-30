@@ -421,6 +421,26 @@ class RunTests(TempState):
         self.assertEqual(run["status"], "done")
 
 
+    def test_gate_runs_under_clean_interpreter_preamble(self):
+        """A registered gate must not inherit PYTHONHOME/PYTHONPATH.
+
+        A relocated Python leaks in through them and turns a green gate red
+        (daily-review 2026-10-01 section 6)."""
+        run = L.activate("proof-loop", cwd=str(self.cwd), harness="ut")
+        clean = 'test -z "${PYTHONHOME-}" -a -z "${PYTHONPATH-}"'
+        L.add_check(run, clean, str(self.cwd))
+        contaminated = {"PYTHONHOME": "/relocated", "PYTHONPATH": "/relocated/lib"}
+        with patch.dict(os.environ, contaminated):
+            results = L.run_checks(L.load_run(run["run_id"]))
+        self.assertEqual(results[0]["cmd"], clean)
+        self.assertEqual(results[0]["exit"], 0, results[0]["stderr"])
+        # the assertion is not vacuous: the same command, run without the
+        # preamble, must fail on the contaminated parent env
+        direct = subprocess.run(["/bin/sh", "-c", clean], capture_output=True, text=True,
+                                env={**os.environ, **contaminated})
+        self.assertNotEqual(direct.returncode, 0)
+
+
 class VerifierFindingsTests(TempState):
     """Regressions for the independent (Codex) verification findings on 3a87acc."""
 

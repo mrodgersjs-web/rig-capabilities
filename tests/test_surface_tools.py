@@ -149,9 +149,15 @@ class AssetHygieneTests(unittest.TestCase):
         self.assertEqual(c["frontmatter_truncation_hidden"], int(v["truncation_hidden"]))
 
     def test_resolved_exemplar_estate_stays_complete(self):
+        # 145: 143 (+2 rig-comms-agent-craft / rig-comms-conversation-craft, each SKILL.md points
+        # at itself, 2026-09-08) ← 141 (+1 `write.md`, exemplar gate-green 2026-09-07)
+        # +1 rig-comms-narrative-craft (SKILL.md points at itself) +1 julie-w2-applypilot (prose
+        # great_example materialized as examples/great/docs-knowledge/julie-w2-applypilot.md; prose
+        # values are not path-form and were never counted). declared == resolved, dangling 0,
+        # detector plant-green 2026-09-07; 143→145 proven via asset_hygiene 2026-09-08.
         counts = self.out["surfaces"]["counts"]
-        self.assertEqual(counts["declared_great_example"], 140)
-        self.assertEqual(counts["resolved_great_example"], 140)
+        self.assertEqual(counts["declared_great_example"], 145)
+        self.assertEqual(counts["resolved_great_example"], 145)
         self.assertEqual(counts["dangling_great_example"], 0)
         self.assertIs(self.out["surfaces"]["exemplars"]["clean"], True)
         self.assertNotIn("dangling_great_example", self.out["debt"])
