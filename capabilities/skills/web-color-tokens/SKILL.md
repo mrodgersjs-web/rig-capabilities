@@ -3,6 +3,8 @@ name: web-color-tokens
 description: Turn a palette into a token system with roles, themes and dark mode. Use when a design system needs colour tokens or when the same colour is re-decided page by page.
 outcome: A semantic colour token system resolved for light and dark with zero raw hex in components.
 done_when:
+  - 'grep:capabilities/skills/web-color-tokens/SKILL.md:[S]weep for raw hex'
+  - 'grep:capabilities/skills/web-color-tokens/SKILL.md:[A]dd roles, not literals'
   - every component colour references a role token and zero raw hex remains
   - light and dark resolve from the same token names
   - both themes pass web-color-contrast with ratios recorded

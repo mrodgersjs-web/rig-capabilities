@@ -3,6 +3,8 @@ name: web-color
 description: Colour craft for web. Build palettes with roles, hold contrast, and keep hue discipline. Use on any page with colour or when a page feels off in colour.
 outcome: A role-based palette resolved for light and dark, with every contrast ratio measured.
 done_when:
+  - 'grep:capabilities/skills/web-color/SKILL.md:[R]oles first'
+  - 'grep:capabilities/skills/web-color/SKILL.md:[H]onour the brand.s banned hues'
   - every colour on the surface resolves to a named role
   - the brand's banned hues appear nowhere
   - light and dark both resolve from the same role names
