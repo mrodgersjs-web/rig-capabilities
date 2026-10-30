@@ -1,13 +1,15 @@
 ---
 name: web-design-business-pricing
-description: Price web design work with a defensible model: fixed project fees, day rates for open-ended work, and retainers only after a shipped first project, with scope control and value framing.
-outcome: A defensible quote and proposal: named model, written deliverable list, anchor price with reason, value framing tied to the client's problem, and scope-control clauses.
+description: "Price web design work with a defensible model: fixed project fees, day rates for open-ended work, and retainers only after a shipped first project, with scope control and value framing."
+outcome: "A defensible quote and proposal: named model, written deliverable list, anchor price with reason, value framing tied to the client's problem, and scope-control clauses."
 done_when:
+  - 'grep:capabilities/skills/web-design-business-pricing/SKILL.md:[R]etainer only after a shipped first project'
+  - 'grep:capabilities/skills/web-design-business-pricing/SKILL.md:[F]ixed project fee scoped to a written deliverable list'
   - A written quote exists that names the pricing model, lists every deliverable the fee buys, states the out-of-scope change fee, shows the anchor price
 great_example: examples/great/design-ux/web-design-business-pricing.md
 quality_floor: Any price without a written deliverable list fails the job. Any quote that explains the number in hours to the client fails. Any deal that can grow scope without a written change and its own fee fails the floor.
 activation: Load when quoting a project, when a client asks "what do you charge", when a proposal needs a number, when a deal stalls on price, when scope starts creeping, or when converting a project client into recurring work.
-instruction: Use three pricing models and no others: a fixed project fee scoped to a written deliverable list, a day rate for open-ended work, and a retainer only after a shipped first project. Never price on hours to the client: hours are your internal cost check only. Ask the budget question directly in discovery, quote a range first, then anchor on the top of that range with the specific reason, and price against the cost of the client's problem rather than your cost of delivery. Control scope with a written deliverable list and a written fee for every change.
+instruction: "Use three pricing models and no others: a fixed project fee scoped to a written deliverable list, a day rate for open-ended work, and a retainer only after a shipped first project. Never price on hours to the client: hours are your internal cost check only. Ask the budget question directly in discovery, quote a range first, then anchor on the top of that range with the specific reason, and price against the cost of the client's problem rather than your cost of delivery. Control scope with a written deliverable list and a written fee for every change."
 applies_when:
   env: Putting a price on web design, brand-for-web, or ongoing web work for an external client
   runtime: web page or site rendered in a browser

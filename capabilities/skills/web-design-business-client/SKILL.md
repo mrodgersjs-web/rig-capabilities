@@ -1,13 +1,15 @@
 ---
 name: web-design-business-client
-description: Run the client relationship end to end: discovery calls, a phased delivery process, revision control with closed rounds, handoff and training, and retainers after launch.
+description: "Run the client relationship end to end: discovery calls, a phased delivery process, revision control with closed rounds, handoff and training, and retainers after launch."
 outcome: A repeatable client process with a written revision policy, a dated revision log, a recorded walkthrough, a training and launch call, and a post-launch retainer decision.
 done_when:
+  - 'grep:capabilities/skills/web-design-business-client/SKILL.md:[R]evision control is the highest-value habit'
+  - 'grep:capabilities/skills/web-design-business-client/SKILL.md:[R]etainers come after launch, never before'
   - A project file contains the signed contract, the revision policy the client received before work started, a revision log showing each round with its
 great_example: examples/great/design-ux/web-design-business-client.md
 quality_floor: Any work that started before the revision policy was sent fails the job. Any revision round without an open date and a close date fails. Any handoff without a recorded walkthrough plus a live call fails the floor.
 activation: Load when onboarding a new client, running a discovery or kickoff call, drafting a process document, when revisions are going past the agreed rounds, at handoff and launch, or when a client asks for ongoing support after the site ships.
-instruction: Run every client through the same phases: setup, questionnaire, research, kickoff call, structure, design, revision rounds, and launch. Put the revision policy in writing before work starts with a round cap, a feedback deadline, and automatic approval when the deadline passes, and close each round explicitly so reopening it is a paid change. Deliver handoff as a recorded walkthrough plus a live training and launch call, and offer a retainer only after the project has shipped.
+instruction: "Run every client through the same phases: setup, questionnaire, research, kickoff call, structure, design, revision rounds, and launch. Put the revision policy in writing before work starts with a round cap, a feedback deadline, and automatic approval when the deadline passes, and close each round explicitly so reopening it is a paid change. Deliver handoff as a recorded walkthrough plus a live training and launch call, and offer a retainer only after the project has shipped."
 applies_when:
   env: Paid client web design engagements from signed contract through launch and optional ongoing support
   runtime: web page or site rendered in a browser
