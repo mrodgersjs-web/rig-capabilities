@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-ai-overview-mirror"
 description: "Mirror the live AI Overview's own structure in an article's headings so the page competes with (and can replace) the summarized answer: read the overview's sub-answers and PAA phrasings, build H1=question, H2s=their words. Use when the trigger is 'there's an AI Overview on this query', 'mirror the overview', or 'beat the AI box'."
+done_when:
+  - grep:capabilities/skills/rig-revenue-ai-overview-mirror/SKILL.md:## Step 3. Out-answer each section
+  - grep:capabilities/skills/rig-revenue-ai-overview-mirror/SKILL.md:Run rig-revenue-answer-first on every section
 ---
 
 # AI-Overview mirror (one mechanism)
