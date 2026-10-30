@@ -1,0 +1,55 @@
+{
+ "schema": "rig.d85.build-checklist.v1",
+ "checklist_sha256": "ef184f72a57598bb9a7dabf55efcc30fa9990f4985212b7388d69b07f5482eec",
+ "checks": [
+  {
+   "check": "framework_matches_standard",
+   "detail": "declared 'kestra_pydantic', standard requires 'kestra_pydantic'",
+   "pass": true
+  },
+  {
+   "check": "flowise_not_durable",
+   "detail": "flowise verdicts are prototypes; a durable system must not declare flowise",
+   "pass": true
+  },
+  {
+   "check": "pydantic_models_present",
+   "detail": "every MODEL op needs typed pydantic input/output schemas",
+   "pass": true
+  },
+  {
+   "check": "model_necessity_claims_present",
+   "detail": "every MODEL op needs a D85 necessity record",
+   "pass": true
+  },
+  {
+   "check": "model_evidence_matches_classification",
+   "detail": "0 MODEL-family operation(s), 0 necessity claim(s), 0 pydantic model(s)",
+   "pass": true
+  },
+  {
+   "check": "archify_diagram_present",
+   "detail": "web19-github-storefront-v1.diagram.json: d85-execution-graph sha256:0193e900279f61db0683ceb294831268f0a4bbfa824843643aa3388062f57ec0",
+   "pass": true
+  },
+  {
+   "check": "d85_realized_pass",
+   "detail": "four-ratio D85 score must be REALIZED_PASS before the build goes forward",
+   "pass": true
+  },
+  {
+   "check": "orchestration_is_code",
+   "detail": "schedule, retry, timeout, cancellation, and dispatch must be deterministic code, never model-decided",
+   "pass": true
+  },
+  {
+   "check": "source_derived_d85",
+   "detail": "{\"classification_sha256\":\"b5657c6908f3a5c96a35959aaa2b1738eef48bef002c7e358b1d96bf94666f4f\",\"credit_operation_count\":5,\"d85_admission\":true,\"gate\":\"d85_realized\",\"inventory_sha256\":\"0cdd1c59bd9ce790c6fa5cefcd0c243547ba3ea83bd2cfa9004f3e1fc701dc0e\",\"process_id\":\"web19-github-storefront-v1\",\"ratios\":{\"aggregate_unweighted\":1.0,\"aggregate_weighted\":1.0,\"min_path_unweighted\":1.0,\"min_path_weighted\":1.0},\"schema\":\"rig.d85.realized-verdict.v1\",\"scored_operation_count\":5,\"threshold\":0.85,\"verdict\":\"REALIZED_PASS\"}",
+   "pass": true
+  }
+ ],
+ "expected_framework": "kestra_pydantic",
+ "inventory_binding": "bound",
+ "inventory_sha256": "0cdd1c59bd9ce790c6fa5cefcd0c243547ba3ea83bd2cfa9004f3e1fc701dc0e",
+ "verdict": "CHECKLIST_PASS"
+}

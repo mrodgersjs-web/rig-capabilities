@@ -1,0 +1,41 @@
+{
+ "diagram_type": "pipeline",
+ "process_id": "r300_det_lane_v1",
+ "inventory_sha256": "dc81481bf4d5e2cb459a8e0625a3800a4c3f6a1d20b4dcaf270e63837277ff55",
+ "nodes": [
+  {
+   "id": "spec",
+   "kind": "input",
+   "label": "specs/N<ID>.json"
+  },
+  {
+   "id": "run",
+   "kind": "process",
+   "label": "runner.run (A1 deterministic checks)"
+  },
+  {
+   "id": "artifact",
+   "kind": "output",
+   "label": "~/.rig/live/routines-300-out/<ID>/"
+  },
+  {
+   "id": "schedule",
+   "kind": "control",
+   "label": "launchd com.rig.r300.<ID> (loaded)"
+  }
+ ],
+ "edges": [
+  {
+   "from": "spec",
+   "to": "run"
+  },
+  {
+   "from": "run",
+   "to": "artifact"
+  },
+  {
+   "from": "schedule",
+   "to": "run"
+  }
+ ]
+}
