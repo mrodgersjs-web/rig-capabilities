@@ -7,7 +7,7 @@ low). Each wave: fresh live decisions (subject calib:<id>) -> signal labels
 from the case's expected option (labelled_by suite:ten-levels-v1) ->
 s1gate_calibrate on the rubric's RISK rule. Dry run unless --write.
 """
-import json, os, pathlib, subprocess, sys, time, concurrent.futures as cf
+import json, os, pathlib, subprocess, sys, time, concurrent.futures as cf, hashlib
 REPO = pathlib.Path(__file__).resolve().parents[4]
 sys.path.insert(0, str(REPO))
 from rig_capabilities.s1gate import DecisionLog
@@ -40,7 +40,8 @@ def breathe():
         print(f"   waiting: load {la:.1f} free {fg:.1f}GB", flush=True); time.sleep(10)
     return os.getloadavg()[0], free_gb()
 def call(rubric, c):
-    r = subprocess.run([S1, "check", rubric, "--stdin", "--json", "--subject", f"calib:{c['id']}"],
+    r = subprocess.run([S1, "check", rubric, "--stdin", "--json", "--subject",
+                        f"calib:{c['id']}@{hashlib.sha256(c['state'].encode('utf-8')).hexdigest()[:12]}"],
                        input=c["state"], capture_output=True, text=True, timeout=45)
     return c, json.loads(r.stdout)
 def main(write):

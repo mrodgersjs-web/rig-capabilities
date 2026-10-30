@@ -1,0 +1,75 @@
+{
+  "name": "deere.social-demand",
+  "stage": "research",
+  "lane": "strategy",
+  "description": "Classify supplied public social content for buyer-pain evidence; advisory and uncalibrated. No demand prevalence or identity verification.",
+  "questions": {
+    "content_class": {
+      "type": "choice",
+      "instructions": "Classify actual supplied public text; user asks to exclude sellers/jobs. Buyer pain must be first-person equipment use/purchase/service friction or explicit request; vague general industry assertions are not buyer evidence. Public ads and sales pitches are competitor context only.",
+      "criteria": {
+        "buyer_pain": "Concrete first-person construction-equipment issue or active buying/evaluation request",
+        "seller_promotion": "Offer, sales CTA, dealer marketing, affiliate/personal promotion or vendor pitch",
+        "job_ad": "Recruitment, job seeking or hiring",
+        "industry_context": "Third-party commentary or news without first-person buying friction",
+        "off_topic": "Outside construction equipment",
+        "insufficient": "Text too sparse, missing or contradictory to classify"
+      }
+    },
+    "intent": {
+      "type": "choice",
+      "instructions": "Rate only text-backed commercial intent, not predicted conversion. High=explicit seeking quote/purchase/rental/supplier for named need;Med=actively comparing/evaluating solution to concrete friction;Low=general frustration,information,news or seller content.",
+      "criteria": {
+        "High": "Explicit current purchase/rental/quote/supplier request",
+        "Med": "Specific current evaluation or comparison",
+        "Low": "No explicit active commercial action"
+      }
+    },
+    "construction_relevance": {
+      "type": "noul",
+      "instructions": "Text contains construction/heavy/compact-equipment use, purchase, maintenance or rental. Agricultural-only, cars, unrelated technology and general construction news do not establish equipment-buyer relevance."
+    },
+    "quote_fit": {
+      "type": "noul",
+      "instructions": "Submitted quote occurs exactly within supplied public text, <=12words, retains source meaning without implying verified personal identity, quantified frequency, causal outcome or current commercial terms."
+    },
+    "theme": {
+      "type": "choice",
+      "instructions": "Select primary explicit equipment job/friction supported by text; useotherifnone dominates. This is a theme classification, not market prevalence.",
+      "criteria": {
+        "attachments": "Attachment selection,compatibility,setup,operation or unused attachment value",
+        "rental_economics": "Rent versusbuy,utilization,availability or financing comparison",
+        "service_repair": "Partsfit,repairmethod,service responsiveness ormaintenance friction",
+        "job_productivity": "Machinejobperformance,gradequality,passes,hours orcompletedwork",
+        "other": "Nooneoftheabove clearlydominates"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "content_class.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "content class uncertain"
+    },
+    {
+      "when": "intent.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "intent uncertain"
+    },
+    {
+      "when": "quote_fit.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "quote not sufficiently grounded"
+    },
+    {
+      "when": "theme.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "Themeuncertain;retainprovisionalnotverifiedtheme count"
+    }
+  ],
+  "calibrated": false,
+  "notes": {
+    "retain_rule": "Only rows withcontent_class=buyer_pain,construction_relevance>=.9,quote_fit>=.9 andbothchoiceconfidence>=.9 may count asJEVverified buyerpain. Others staycandidate/rejected andneverinflate counts."
+  },
+  "confidence_floor": 0.9
+}

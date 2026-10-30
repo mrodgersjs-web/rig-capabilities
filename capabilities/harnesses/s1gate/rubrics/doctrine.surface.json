@@ -19,18 +19,26 @@
   },
   "rules": [
     {
-      "when": "mandates_jev_first.noul < 0.60",
+      "when": "mandates_jev_first.noul <= 0.90",
       "verdict": "ESCALATE",
       "reason": "surface does not actually change agent routing"
     },
     {
-      "when": "findable_at_start.noul < 0.50",
+      "when": "findable_at_start.noul <= 0.90",
       "verdict": "ESCALATE",
       "reason": "buried pointer -- the agent will never load it"
+    },
+    {
+      "when": "teaches_fail_closed.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "surface does not say to defer when the classifier is down"
     }
   ],
-  "confidence_floor": 0.35,
+  "confidence_floor": 0.9,
   "calibrated": false,
   "calibration": {},
-  "never_auto": false
+  "never_auto": false,
+  "notes": {
+    "bar": "Pass line is above 0.9. A noul of 0.90 fails the rule `noul <= 0.90`; 0.91 or higher passes. Score and choice confidence use `confidence <= 0.90`. A score is a mean on levels 0..5, so above 0.9 of that scale is a mean above 4.50."
+  }
 }

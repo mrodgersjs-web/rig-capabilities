@@ -1,0 +1,216 @@
+{
+  "name": "ad.search",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Google responsive search ad quality for a local B2B service. Input: the ad's headlines, descriptions, sitelinks, target query and the landing page's first-screen facts (H1, offer, CTA) so message match can be judged.",
+  "questions": {
+    "ad_query_match": {
+      "type": "score",
+      "instructions": "Do the headlines echo the likely search query (service plus location) the ad targets? (family I, weight 3)",
+      "criteria": [
+        "No relation to the query",
+        "Brand name only",
+        "Category word only",
+        "Category, no location",
+        "Query words in one headline",
+        "Query words in headline one",
+        "Query plus location",
+        "Query, location and buyer type",
+        "Several query variants covered",
+        "Exact query language first, with location and buyer type across variants"
+      ]
+    },
+    "ad_named_pain": {
+      "type": "score",
+      "instructions": "Does the ad name a specific pain or failure the searcher has right now? (family I, weight 3)",
+      "criteria": [
+        "No pain",
+        "Generic 'grow your business'",
+        "Generic efficiency",
+        "Problem category",
+        "Specific failure named",
+        "Specific failure in the buyer's words",
+        "Failure plus its consequence",
+        "Failure and consequence for this buyer type",
+        "Sharp, vivid and specific",
+        "The searcher feels named in one line"
+      ]
+    },
+    "ad_finished_outcome": {
+      "type": "score",
+      "instructions": "Does the ad promise a finished, checkable outcome rather than a tool or feature? (family I, weight 3)",
+      "criteria": [
+        "Tool or AI feature only",
+        "Vague benefit",
+        "Service category",
+        "Process described",
+        "Outcome in general terms",
+        "Specific outcome",
+        "Specific outcome with an owner",
+        "Outcome with a check or acceptance",
+        "Outcome, acceptance and a timing shape",
+        "Concrete, checkable finished result stated plainly"
+      ]
+    },
+    "ad_specificity": {
+      "type": "score",
+      "instructions": "How specific is the copy (numbers, named deliverables, scope) versus generic? (family I, weight 2)",
+      "criteria": [
+        "Pure fluff",
+        "Buzzwords",
+        "Mostly generic",
+        "One specific word",
+        "One specific detail",
+        "Two specific details",
+        "Specific deliverable and scope",
+        "Plus a number",
+        "Several specifics, all verifiable",
+        "Every line carries a specific, verifiable detail"
+      ]
+    },
+    "ad_price_or_entry": {
+      "type": "score",
+      "instructions": "Does the ad signal price, a free first step, or the entry route so clicks are pre-qualified? (family I, weight 2)",
+      "criteria": [
+        "No signal",
+        "'Contact us'",
+        "'Free consultation'",
+        "Free resource mentioned",
+        "Free resource named",
+        "Price range",
+        "Specific price",
+        "Free step plus a priced next step",
+        "Clear ladder: free check, then a priced review",
+        "Transparent entry and price that pre-qualify the click"
+      ]
+    },
+    "ad_trust_signal": {
+      "type": "score",
+      "instructions": "Does the ad carry a credible trust signal (named person, local presence, method, proof) without unsupported claims? (family I, weight 2)",
+      "criteria": [
+        "None",
+        "Generic 'trusted'",
+        "Unsupported superlative",
+        "Years-of-experience claim",
+        "Local presence",
+        "Named person",
+        "Named person plus local",
+        "Plus a method or guarantee",
+        "Plus verifiable proof",
+        "Named, local, verifiable, no inflation"
+      ]
+    },
+    "ad_differentiation": {
+      "type": "score",
+      "instructions": "Would this ad stand out among typical competitor ads for the same query? (family I, weight 2)",
+      "criteria": [
+        "Identical to generic competitor copy",
+        "Near-identical",
+        "Slight wording change",
+        "One distinct angle",
+        "Distinct angle, weakly made",
+        "Clearly distinct angle",
+        "Distinct and relevant",
+        "Distinct, relevant and confident",
+        "Memorable",
+        "Unmistakably different and more useful than its neighbours"
+      ]
+    },
+    "ad_cta_prequalify": {
+      "type": "score",
+      "instructions": "Does the call to action say exactly what happens next and filter out poor fits? (family I, weight 2)",
+      "criteria": [
+        "No call to action",
+        "'Learn more'",
+        "'Contact us'",
+        "'Get started'",
+        "Specific action",
+        "Specific action with its cost",
+        "Action plus who it is for",
+        "Action, cost and fit",
+        "Action that filters out the wrong buyers",
+        "Precise next step, cost and fit in one line"
+      ]
+    },
+    "ad_message_match": {
+      "type": "score",
+      "instructions": "Does the landing page restate the ad's promise in its first screen (message match)? (family I, weight 3)",
+      "criteria": [
+        "Landing page unrelated",
+        "Generic homepage",
+        "Same topic, different promise",
+        "Same topic",
+        "Same promise, buried",
+        "Same promise, visible",
+        "Same promise in the H1",
+        "H1 and first call to action match",
+        "Same words, same offer, same price",
+        "Seamless: ad headline, H1, offer and call to action identical in substance"
+      ]
+    },
+    "ad_policy_safety": {
+      "type": "score",
+      "instructions": "Is the ad free of claims that risk disapproval or mislead (guarantees, unsupported superlatives, invented statistics)? (family I, weight 2)",
+      "criteria": [
+        "Clear policy violation",
+        "Several risky claims",
+        "Unsupported superlative",
+        "Unverified statistic",
+        "Implied guarantee",
+        "Mild puffery",
+        "Clean but vague",
+        "Clean and specific",
+        "Clean, specific, every claim supportable",
+        "Every claim verifiable on the landing page"
+      ]
+    },
+    "ad_asset_coverage": {
+      "type": "score",
+      "instructions": "How complete and varied is the asset set (headline variety, descriptions, sitelinks, callouts)? (family I, weight 1)",
+      "criteria": [
+        "A single headline",
+        "Few headlines",
+        "Repetitive headlines",
+        "Some variety",
+        "Varied headlines, two descriptions",
+        "Plus sitelinks",
+        "Plus callouts",
+        "Near-full headline set, varied",
+        "Full set, pinned where needed",
+        "Full, varied, non-redundant assets"
+      ]
+    },
+    "ad_local_relevance": {
+      "type": "score",
+      "instructions": "Does the ad make local relevance (Denver, Colorado) concrete for a local buyer? (family I, weight 1)",
+      "criteria": [
+        "No locality",
+        "National framing",
+        "Vague region",
+        "City once",
+        "City in a headline",
+        "City plus local presence",
+        "Local person",
+        "Local person with an in-person option",
+        "Local proof",
+        "Concrete local identity and access"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "ad_policy_safety.score <= 3.00",
+      "verdict": "BLOCK",
+      "reason": "risky or unsupported claim in ad copy"
+    },
+    {
+      "when": "ad_message_match.score <= 3.00",
+      "verdict": "ESCALATE",
+      "reason": "landing page does not restate the ad promise"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

@@ -1,0 +1,163 @@
+{
+  "name": "film.coach-fit",
+  "stage": "route",
+  "lane": "C",
+  "description": "Screen one candidate resource, service or coach for Jacob Rodgers (class of 2029, 6'5\" 290 OL/DL, Pewaukee HS, Wisconsin, age 15) whose stated need is to read Hudl game film better and understand the game, plus have a person to talk with weekly about it. Input is one candidate: what it is, who teaches, what it costs, how it is delivered. This gate screens and ranks; it never books, never pays, and never contacts anyone -- a minor's lane and any spend are Gate-D.",
+  "questions": {
+    "teaches_film_reading": {
+      "type": "score",
+      "instructions": "How much of this product teaches the ATHLETE to read and grade live game film and understand schemes, opponents and tendencies -- as opposed to physical technique only, or software/storage only.",
+      "criteria": [
+        "Nothing about film: strength, drills, camps, storage or stats only",
+        "Mentions film in passing; the deliverable is technique or software",
+        "Some film content, generic, not tied to the athlete's own game tape",
+        "Teaches a weekly film-preparation method applied to the athlete's own game film",
+        "Film reading is the core product, position-specific, with a named person grading his own plays"
+      ]
+    },
+    "weekly_human": {
+      "type": "choice",
+      "instructions": "What kind of recurring HUMAN contact the candidate actually offers, since the ask is a person to talk with every week, not a library.",
+      "criteria": {
+        "weekly_1x1": "A named individual coach, recurring weekly, 1-on-1 with the athlete (scheduled cadence, e.g. a weekly Zoom or standing in-person session)",
+        "on_demand_1x1": "A named individual coach, 1-on-1, bookable per session with no standing weekly cadence",
+        "group_sessions": "Recurring human coaching but in a group/class or team setting, not 1-on-1",
+        "self_paced_only": "Courses, videos, books, forums or software; no live human",
+        "none": "No human instruction offered at all",
+        "unclear": "The page does not say whether a human is included"
+      }
+    },
+    "trench_specific": {
+      "type": "noul",
+      "instructions": "The offering is specific to offensive line / defensive line play (footwork, hands, run game, pass protection, front identification, line-side film reads) rather than all-positions or a skill-position specialty."
+    },
+    "athlete_facing": {
+      "type": "noul",
+      "instructions": "Can a family buy this and have the athlete be the learner? TRUE for an independent coach hired privately by a family for one athlete, and for programmes sold to athletes. FALSE for things a team, school or coaching staff must buy (program software licences, team subscriptions), for education whose learner is the COACH (clinic videos, coaching certifications, scouting-credential courses), and for camp or combine formats where the athlete attends a group event rather than being taught."
+    },
+    "access_mode": {
+      "type": "choice",
+      "instructions": "How a Pewaukee, Wisconsin athlete would actually consume it, judged from the stated service area.",
+      "criteria": {
+        "in_person_wisconsin": "In-person sessions available in Wisconsin, realistically reachable from Pewaukee / the Milwaukee metro (includes southeastern Wisconsin sites)",
+        "remote_serves_anywhere": "Delivered online (Zoom/video) so geography does not bind it",
+        "in_person_other_state": "In-person only, and the facility is outside Wisconsin",
+        "unknown": "Delivery location is not stated"
+      }
+    },
+    "price_published": {
+      "type": "noul",
+      "instructions": "A concrete price or price band is published and readable, so the family can decide without first getting on a sales call."
+    },
+    "monthly_cost_band": {
+      "type": "choice",
+      "instructions": "Estimated recurring cost to run this weekly for one month, from the published figures. A weekly 1-hour session at a per-session rate multiplies by 4.",
+      "criteria": {
+        "free": "No cost",
+        "under_50": "Roughly under $50 per month",
+        "band_50_to_150": "Roughly $50-150 per month",
+        "band_150_to_400": "Roughly $150-400 per month",
+        "over_400": "More than roughly $400 per month",
+        "unknown": "No figure published to derive it from"
+      }
+    },
+    "minor_supervision": {
+      "type": "noul",
+      "instructions": "An adult can put a 15-year-old into this 1-on-1 safely and auditably: a named coach with a public identity, a guardian-visible or recorded session, a known facility or organisation, and no requirement to chat privately with an anonymous stranger. An anonymous marketplace profile with no channel a parent can read scores low."
+    },
+    "coach_credibility": {
+      "type": "score",
+      "instructions": "Evidence, on the candidate's own page, that the people teaching have actually developed linemen at a level above high school -- college or pro playing/coaching record, named staff, verifiable results.",
+      "criteria": [
+        "No named instructor at all",
+        "A name and a claim, nothing checkable",
+        "Named instructor with a plausible college or competitive background",
+        "Named instructor with a verified college/pro playing or coaching record",
+        "Established programme with multiple verifiable staff and a track record of athletes advancing"
+      ]
+    },
+    "duplicating_existing": {
+      "type": "noul",
+      "instructions": "This duplicates something the family already runs or owns: Hudl access to the full Pewaukee tagged play library with per-play cut-ups and end-zone angles, an automated nightly AI film-review routine that already drafts coaching notes four nights a week, and existing position trainers the athlete already sees in person. A candidate that only repeats that coverage scores high."
+    },
+    "recruiting_value": {
+      "type": "noul",
+      "instructions": "Beyond film IQ, this plausibly improves how he looks to college coaches: it raises the quality of his film and how he talks about it, or the provider's identity and network are themselves coach-facing credibility."
+    }
+  },
+  "rules": [
+    {
+      "when": "teaches_film_reading.score <= 0.50",
+      "verdict": "BLOCK",
+      "reason": "teaches no film reading -- technique, camp, software or stats only; does not answer the ask"
+    },
+    {
+      "when": "athlete_facing.noul <= 0.35",
+      "verdict": "BLOCK",
+      "reason": "coach-facing or program-facing product; a 15-year-old is neither the buyer nor the learner"
+    },
+    {
+      "when": "duplicating_existing.noul >= 0.75",
+      "verdict": "BLOCK",
+      "reason": "already covered in-house by Hudl library access plus the nightly film-review routine -- a second system doing the same job"
+    },
+    {
+      "when": "trench_specific.noul <= 0.35",
+      "verdict": "ESCALATE",
+      "reason": "position mismatch -- a defensive back, quarterback or all-skills specialist teaching an offensive/defensive lineman; the film reads he needs are front-seven reads"
+    },
+    {
+      "when": "minor_supervision.noul <= 0.45",
+      "verdict": "ESCALATE",
+      "reason": "1-on-1 with an adult and no auditable or guardian-visible channel -- verify before anyone is booked"
+    },
+    {
+      "when": "weekly_human.choice == none",
+      "verdict": "ESCALATE",
+      "reason": "no human at all: this is a library, keep it as a resource, it does not satisfy the weekly person"
+    },
+    {
+      "when": "weekly_human.choice == self_paced_only",
+      "verdict": "ESCALATE",
+      "reason": "self-paced only -- useful as supporting material, not the weekly conversation"
+    },
+    {
+      "when": "weekly_human.choice == unclear",
+      "verdict": "ESCALATE",
+      "reason": "the page does not say a person is included -- confirm before shortlisting"
+    },
+    {
+      "when": "coach_credibility.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "no checkable coaching record behind it"
+    },
+    {
+      "when": "price_published.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "no published price -- get a number before proposing it to the family"
+    },
+    {
+      "when": "monthly_cost_band.choice == over_400",
+      "verdict": "ESCALATE",
+      "reason": "over roughly $400 a month -- that is Gate-D spend, Mike approves"
+    },
+    {
+      "when": "access_mode.choice == unknown",
+      "verdict": "ESCALATE",
+      "reason": "delivery location not stated -- confirm he can actually get to it"
+    }
+  ],
+  "confidence_floor": 0.4,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true,
+  "notes": {
+    "direction": "PASS means 'shortlist this and put it in front of the family'. It is not permission to book, pay, or message a coach: this is Lane C (a minor) and every outward or paid step stays at Gate-D. Ranking is the primary verb -- it needs no calibration.",
+    "why_no_block_on_cost": "Price alone never blocks: a weekly human coach is worth money and the family decides value. Cost only escalates so the number reaches Mike rather than being discovered after a booking.",
+    "why_minor_supervision_escalates": "The bar for this lane is child safety, not a platform rule, so it is not Mike's to relax: an anonymous marketplace 1-on-1 with a stranger is exactly the shape this rule exists to catch.",
+    "why_location_is_a_choice_not_a_score": "Pewaukee is the constraint that kills most national programmes, but remote delivery dissolves it, so geography is scored as reachability rather than distance. in_person_other_state escalates on nothing here by design -- it should read as a camp or a season commitment, not a weekly session.",
+    "thresholds": "Provisional and uncalibrated, same standing as every advisory rubric in this directory: verdicts are reported, enforced=False, and BLOCK rules report downgraded-BLOCK reasons until labelled. Calibrate against already-decided candidates before it is allowed to enforce.",
+    "ranking_gotcha": "Because this rubric is never_auto, the engine appends one constant 'rubric is marked never_auto' ESCALATE line to EVERY candidate, so the raw tripped count carries +1 on all rows and is not comparable across rubrics. When ranking, drop any reason containing 'never_auto' and sort on the remaining findings -- a candidate whose only tripped line is never_auto is a clean PASS on merit. Measured 2026-09-30 on a 15-candidate rank: all 15 reported ESCALATE, which was this constant plus uncalibrated floors, not 15 rejections.",
+    "created": "2026-09-30 by Jake/Aside for the Jacob film-study and weekly-coach search, at Mike's instruction to build the JEV screening criteria"
+  }
+}

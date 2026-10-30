@@ -1,0 +1,52 @@
+{
+  "name": "film.splash",
+  "stage": "verify",
+  "lane": "media-production",
+  "description": "Film Studio: judge whether a splash plate or title card for the Jacob Rodgers coach cut meets the Pirates red/black brand system and coach-grade restraint before it renders into an export. Jev scores the typed design record (palette measurements, typography, layout, claims); it never sees pixels. ADVISORY AND UNCALIBRATED until calibrate runs against settled guardian reviews.",
+  "questions": {
+    "brand_alignment": {
+      "type": "score",
+      "instructions": "Given the typed design record (colors, measured palette shares, fonts, layout), how well does this card match the confirmed Pirates identity: black ground, red single accent, bone text, Archivo Black display, Inter body, JetBrains Mono source lines, flat fills, no gradients, one accent per frame?",
+      "criteria": [
+        "off-brand: wrong palette or template-stock look",
+        "loose: right idea, wrong details (gradients, multiple accents, off-palette)",
+        "aligned: palette and typography correct, minor spacing issues",
+        "locked: indistinguishable from the brand file's reference grammar"
+      ]
+    },
+    "coach_grade_restraint": {
+      "type": "noul",
+      "instructions": "The card reads as a serious recruiting artifact: no effects, no music references, no motivational slogans, no stock-sport clichés. High values mean strong restraint."
+    },
+    "claim_accuracy": {
+      "type": "noul",
+      "instructions": "Every word on the card is true and checkable: name, jersey number, positions, class year, school, and link. Any unverifiable or inflated claim drives this down."
+    },
+    "template_stock_risk": {
+      "type": "noul",
+      "instructions": "This could be mistaken for a Canva/template sport graphic: gradients, glow effects, drop shadows, clipart flames, centered everything-default look. High values mean high risk."
+    }
+  },
+  "rules": [
+    {
+      "when": "claim_accuracy.noul <= 0.60",
+      "verdict": "BLOCK",
+      "reason": "claims on the card lack evidence pointers; actual truth is enforced by the ledger layer (every number maps 1:1 to a ledger row) -- this gate only catches unsourced text"
+    },
+    {
+      "when": "template_stock_risk.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "template-stock look is the exact thing this studio exists to avoid"
+    },
+    {
+      "when": "coach_grade_restraint.noul <= 0.85",
+      "verdict": "ESCALATE",
+      "reason": "card reads as hype rather than evaluation material -- pull effects before rendering"
+    },
+    {
+      "when": "brand_alignment.score >= 0.90",
+      "verdict": "PASS",
+      "reason": "meets the confirmed Pirates red/black system and coach-grade restraint (provisional threshold pending calibration)"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "name": "foundry-item",
+  "description": "Foundry work-item completion gate. Enforced leg: deliverable is a real evidence-bound artifact (certified threshold). The done-test leg and outward-effect leg are verified deterministically by jev_gate (exit code + outward scan), so this rubric carries the one judgment question a model is needed for. Remaining questions collect signal for later certification.",
+  "stage": "verify",
+  "lane": "build",
+  "never_auto": false,
+  "calibrated": true,
+  "confidence_floor": 0.35,
+  "questions": {
+    "artifact_evidence_bound": {
+      "type": "score",
+      "instructions": "The deliverable is a real artifact on disk (file, receipt, JSON, log) whose content is bound to concrete evidence (hashes, command output, source inputs), not a description of work or scaffold.",
+      "criteria": [
+        "No artifact, empty file, or prose claiming work without a file",
+        "Artifact exists but is generic boilerplate, scaffold, or unbound to evidence",
+        "Artifact exists with partial evidence binding but incomplete provenance",
+        "Artifact fully bound: hashes, inputs, and command receipts verifiable"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "artifact_evidence_bound.score <= 0.6226",
+      "verdict": "BLOCK",
+      "reason": "deliverable is not a real artifact bound to evidence"
+    }
+  ],
+  "calibration": {
+    "rules": {
+      "artifact_evidence_bound.score": {
+        "direction": "below",
+        "threshold": 0.6226,
+        "train": {
+          "threshold": 0.6226,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.6226,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.6226,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 32,
+        "n_good": 17,
+        "n_bad": 15,
+        "labeled_set_sha256": "cd6f5077699cf54a5c0fe9f54a13ea8f20e57c750e5b7f9a385d6bbbe20f4424",
+        "model": "*",
+        "models_seen": [
+          "",
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "c0a91ee4f4d47d3a62b12bdcb216d107f1c8e17a46f9b928d3e58636fe23cd65",
+        "rubric_sha256": "6d936fa91252d384c0d87ac6ee22da27ba39f6fb1c578dac8631ffdaffeea7d5",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5
+      }
+    }
+  }
+}

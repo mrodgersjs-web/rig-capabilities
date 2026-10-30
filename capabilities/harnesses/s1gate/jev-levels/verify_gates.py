@@ -8,7 +8,7 @@ Per case: one live Jev call through rig-s1gate (NO retry), then assert
   3. no rule was undecidable (a broken rule escalates everything silently).
 Exit 0 only when every case clears all three. Evidence: verify-gates-<ts>.json.
 """
-import json, subprocess, sys, time, collections, concurrent.futures as cf, pathlib, os
+import json, subprocess, sys, time, collections, concurrent.futures as cf, pathlib, os, hashlib
 HERE = pathlib.Path(__file__).parent
 S1 = os.path.expanduser("~/.rig/bin/rig-s1gate")
 ALL_BUT_OTHER = "__all_but_other__"
@@ -32,7 +32,8 @@ def is_pass_opt(rubric, q, opt):
     return opt != "other" if s == ALL_BUT_OTHER else opt in s
 
 def run(rubric, c):
-    r = subprocess.run([S1, "check", rubric, "--stdin", "--json", "--subject", f"verify_gates:{c['id']}"],
+    r = subprocess.run([S1, "check", rubric, "--stdin", "--json", "--subject",
+                        f"verify_gates:{c['id']}@{hashlib.sha256(c['state'].encode('utf-8')).hexdigest()[:12]}"],
                        input=c["state"], capture_output=True, text=True, timeout=45)
     try:
         d = json.loads(r.stdout)

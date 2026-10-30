@@ -1,0 +1,55 @@
+{
+  "name": "idea.solid",
+  "stage": "verify",
+  "lane": "engagement",
+  "description": "Audience Desk: verify one assembled post-idea card before it reaches a human queue. Judges whether the angle is original rather than a restatement, whether the hook-to-payoff promise holds, and how generic it reads. Advisory until calibrated.",
+  "questions": {
+    "archetype": {
+      "type": "choice",
+      "instructions": "Given the title, topic, hooks, and the evidence quotes it was built from, which archetype is this post idea?",
+      "criteria": {
+        "original_take": "Names a specific mechanism, tension, or number the obvious version of this post would miss",
+        "competent": "Solid and useful, but the angle is the expected one for this topic",
+        "repeat": "Restates the generic advice already saturating this topic",
+        "rehash": "Vague -- the title does not say what the reader leaves with"
+      }
+    },
+    "promise_holds": {
+      "type": "noul",
+      "instructions": "The hooks, the topic, and the evidence quotes form one continuous promise: a reader pulled in by the hook would find the evidence delivers on it"
+    },
+    "generic_risk": {
+      "type": "noul",
+      "instructions": "This idea reads like generic AI-written content marketing that any competitor could publish unchanged"
+    }
+  },
+  "rules": [
+    {
+      "when": "archetype.choice == rehash",
+      "verdict": "BLOCK",
+      "reason": "title does not name a payoff -- rewrite before queueing (threshold provisional, pending calibration)"
+    },
+    {
+      "when": "archetype.choice == repeat",
+      "verdict": "BLOCK",
+      "reason": "saturated generic take -- the deterministic heat score found a topic, not an angle"
+    },
+    {
+      "when": "generic_risk.noul >= 0.65",
+      "verdict": "ESCALATE",
+      "reason": "reads as generic marketing -- needs a human or frontier pass for a real angle"
+    },
+    {
+      "when": "promise_holds.noul <= 0.40",
+      "verdict": "ESCALATE",
+      "reason": "hook and evidence do not line up -- the card needs regrouping"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "archetype": "created 2026-09-20 for audience-desk idea cards; deterministic ranking stays in ideas.mjs, this only judges quality."
+  }
+}

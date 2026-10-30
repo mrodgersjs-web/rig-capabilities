@@ -1,0 +1,34 @@
+{
+  "name": "deere.strategy-quality",
+  "stage": "verify",
+  "lane": "strategy",
+  "description": "Task-specific advisory review for the Deere Construction public-research Business Case. Evaluate supplied evidence, not elegance. Code separately enforces all critical probabilities >=0.90 and deterministic artifact checks. No strategy selection, execution approval or calibrated business-outcome guarantee.",
+  "questions": {
+    "decision_clarity": {"type":"noul","instructions":"The submitted proposal clearly names its review audience, decision, horizon, recommended validation choice, alternatives including status quo, and conditions for changing course; it does not pretend Deere has approved execution."},
+    "evidence_fit": {"type":"noul","instructions":"The supplied extracted claims and source evidence support the proposal at its stated certainty: exact primary facts have attributable citations and period/units; load-bearing strategic inferences use independent evidence roots; inaccessible content is flagged; no imagined facts or duplicated-source corroboration is presented as proof."},
+    "construction_scope": {"type":"noul","instructions":"The proposal is specific to Deere Construction customer jobs and existing dealer/technology capabilities, distinguishes combined Construction & Forestry results, and does not transfer Agriculture economics, allegations or outcomes into Construction as fact."},
+    "option_fairness": {"type":"noul","instructions":"The proposal fairly compares at least three genuinely different choices including current product/dealer execution, targeted civil-job productivity/uptime packages and broader platform/autonomy expansion; each has a credible mechanism, benefits, risks and conditions under which it wins."},
+    "economics_honesty": {"type":"noul","instructions":"Any submitted economic figures have explicit units, formulas, input provenance, timing and sensitivities. Analyst scenarios are labelled assumptions, not Deere forecasts or observed returns; no invented internal baseline, TAM conversion or ROI guarantee is implied."},
+    "falsifiability": {"type":"noul","instructions":"The proposal connects plausible competitor, customer and dealer responses to mechanisms, observable falsifiers and a specific revise/stop decision; it includes important contrary public evidence rather than merely naming competitors."},
+    "operating_loop": {"type":"noul","instructions":"The proposal supplies proposed accountable roles, a baseline-establishment phase, defined measures, review cadence, dependencies and stop/continue criteria; internal access and authority are explicit preconditions, not claims of current approval."},
+    "uncertainty_integrity": {"type":"noul","instructions":"The proposal visibly separates public facts, survey expectation measures, unverified anecdotes, analyst inferences and proposed actions. Complaint samples are not treated as prevalence; logical-agent simulation is not represented as hundreds of real LLM workers or calibrated prediction."},
+    "audience_usability": {"type":"noul","instructions":"The submitted deck evidence lets a senior audience find the recommendation, why it differs, option comparison, economic logic, limitations and next decision without narration; all slide content is populated and no template how-to/sample/placeholder material remains."},
+    "visual_quality": {"type":"noul","instructions":"The supplied actual render evidence shows readable action headlines and body text, clean charts/tables/diagrams, sufficient contrast, consistent supplied-template style and no clipped/overlapping/off-canvas content. A claimed render pass without images or measured artifact evidence is insufficient."}
+  },
+  "rules": [
+    {"when":"decision_clarity.noul < 0.90","verdict":"ESCALATE","reason":"decision framing below user quality floor"},
+    {"when":"evidence_fit.noul < 0.90","verdict":"ESCALATE","reason":"claim-source fit below user quality floor"},
+    {"when":"construction_scope.noul < 0.90","verdict":"ESCALATE","reason":"construction specificity below user quality floor"},
+    {"when":"option_fairness.noul < 0.90","verdict":"ESCALATE","reason":"option fairness below user quality floor"},
+    {"when":"economics_honesty.noul < 0.90","verdict":"ESCALATE","reason":"economics below user quality floor"},
+    {"when":"falsifiability.noul < 0.90","verdict":"ESCALATE","reason":"falsification below user quality floor"},
+    {"when":"operating_loop.noul < 0.90","verdict":"ESCALATE","reason":"operating loop below user quality floor"},
+    {"when":"uncertainty_integrity.noul < 0.90","verdict":"ESCALATE","reason":"uncertainty discipline below user quality floor"},
+    {"when":"audience_usability.noul < 0.90","verdict":"ESCALATE","reason":"audience usability below user quality floor"},
+    {"when":"visual_quality.noul < 0.90","verdict":"ESCALATE","reason":"actual visual evidence below user quality floor"}
+  ],
+  "confidence_floor":0.90,
+  "calibrated":false,
+  "never_auto":false,
+  "notes":{"scope":"Local public-research deliverable only, requested 2026-10-02. JEV scores are advisory probabilities of criterion satisfaction; deterministic checks and independent review remain required.","negative_controls":"Polished but unsupported claims, anecdote prevalence, duplicated roots, ROI without formula, cosmetic alternatives, competitor name-dropping, ownerless roadmap, unreadable layout, hidden template debris, Agriculture-to-Construction leap must fail."}
+}

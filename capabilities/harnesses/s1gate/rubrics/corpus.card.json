@@ -1,0 +1,117 @@
+{
+  "name": "corpus.card",
+  "stage": "research",
+  "lane": "ingest",
+  "description": "DRAFT \u2014 per-card classification for the 853 Recall cards (Mike's full Recall corpus). The state carries CARD_TITLE (recall card top line) and CARD_SOURCE (domain, channel, or publisher). Routes the card into a RIG lane and assigns an action. Counting, ordering, dedupe and final disposition stay in code; only the typed judgment is asked here. The pilot phase scores 10 cards; the full pass runs only after Mike signs off the rubric and the pilot verdicts agree with ground truth.",
+  "questions": {
+    "lane_fit": {
+      "type": "choice",
+      "instructions": "Which RIG lane does this card primarily serve? Pick the one lane where the card's claim would be acted on this quarter. If it cuts across lanes equally, pick general.",
+      "criteria": {
+        "rig_build": "RIG OS, agents, harnesses, deviation engines, Memory OS, ProofPackets, model routing",
+        "gtm_buyer": "RIG B2B marketing, sales, cold outreach, lead gen, pipeline",
+        "personal_brand": "LinkedIn, content, top-1% personal influence",
+        "client": "work that lands on a client's account/reputation (Ideawake/Coby or similar)",
+        "jacob": "athletic, recruiting, NIL, content about Mike's 15-year-old son \u2014 CHILD LANE, treat as sensitive",
+        "general": "cross-cutting, frameworks, philosophy, or none of the above"
+      }
+    },
+    "rig_overlap": {
+      "type": "choice",
+      "instructions": "How much does this card overlap with a RIG capability, skill, doctrine, or routine that already exists? Novel means: at least one named claim in the card is not covered by any current RIG asset. Partial: the card extends an existing capability with new evidence. Duplicate: the card's core claim is already stated somewhere in RIG (skill, doctrine, kanban card, Memory OS note).",
+      "criteria": {
+        "novel": "at least one named claim is new to RIG",
+        "partial": "extends an existing RIG capability with new evidence",
+        "duplicate": "core claim already stated in a RIG asset"
+      }
+    },
+    "evidence_density": {
+      "type": "choice",
+      "instructions": "How concrete is the card's evidence? Specific_code means a real repo, file path, CLI command, or named API. Specific_pattern means a named framework, formula, gate, score, or rubric. Practitioner_argument means a named person advancing a thesis with reasons. Opinion_listicle means tips, hacks, motivational advice, or generic frameworks without specifics. News_summary means recent events, releases, or product news.",
+      "criteria": {
+        "specific_code": "real code/repo/file/CLI",
+        "specific_pattern": "named framework/formula/gate/rubric",
+        "practitioner_argument": "named person, named thesis, with reasons",
+        "opinion_listicle": "tips, hacks, generic frameworks",
+        "news_summary": "events, releases, product news"
+      }
+    },
+    "actionability": {
+      "type": "choice",
+      "instructions": "If this card is real and worth RIG's time, what is the cheapest action that captures its value tonight? Extract_skill means a SKILL.md file can be authored from this card in one sitting. Doctrine_update means an existing skill/doctrine should be patched with the card's claim (point at which file). Watch_only means it informs thinking but does not produce a RIG artifact. Skip means below threshold (wrong, redundant, low-quality, or off-brand).",
+      "criteria": {
+        "extract_skill": "a new SKILL.md can be authored tonight",
+        "doctrine_update": "an existing file should be patched",
+        "watch_only": "informs, no RIG artifact",
+        "skip": "below threshold \u2014 wrong, redundant, low-quality, off-brand"
+      }
+    },
+    "anti_generic_force": {
+      "type": "score",
+      "instructions": "How far does this card deviate from 'median AI / median business advice' output? 0 = pure median, says what every other channel says. 1 = slight angle, not distinctive. 2 = has a unique angle worth a paragraph. 3 = has a named mechanism, formula, or pattern not seen elsewhere. 4 = exceptional \u2014 near-twin of the seed doctrine, would shift a published position. 5 = category-defining \u2014 should re-pin the seed.",
+      "criteria": [
+        "0: pure median",
+        "1: slight angle, not distinctive",
+        "2: unique angle, worth a paragraph",
+        "3: named mechanism/formula/pattern not seen elsewhere",
+        "4: exceptional \u2014 would shift a published RIG position",
+        "5: category-defining \u2014 should re-pin the seed"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "actionability.choice == \"skip\"",
+      "verdict": "BLOCK",
+      "reason": "below threshold; do not import, do not act on"
+    },
+    {
+      "when": "rig_overlap.choice == \"duplicate\"",
+      "verdict": "BLOCK",
+      "reason": "duplicate of an existing RIG asset; differentiation routes via anti_generic_force.score per bar"
+    },
+    {
+      "when": "lane_fit.choice == \"jacob\"",
+      "verdict": "ESCALATE",
+      "reason": "Lane C \u2014 content about Mike's 15-year-old son; child-safety rules apply, requires per-card Mike approval before any action"
+    },
+    {
+      "when": "lane_fit.choice == \"client\"",
+      "verdict": "ESCALATE",
+      "reason": "Client lane \u2014 work lands on another person's account/reputation; requires Mike's per-card approval"
+    },
+    {
+      "when": "actionability.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "actionability answer distribution is not concentrated"
+    },
+    {
+      "when": "rig_overlap.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "overlap answer distribution is not concentrated"
+    },
+    {
+      "when": "anti_generic_force.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "deviation score answer distribution is not concentrated"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Nouls/choices pass only when confidence above 0.9. anti_generic_force.score is consumed by code: score >= 3 with actionability in (extract_skill, doctrine_update) routes to import; score < 2 routes to watch_only.",
+    "downstream_actions": {
+      "extract_skill_with_score_ge_3": "candidate for SKILL.md authoring tonight; surface in nightly build-card digest",
+      "doctrine_update_with_score_ge_3": "candidate to patch an existing skill/doctrine; surface as a queue item with the target file",
+      "watch_only_with_score_ge_2": "candidate for Memory OS as a reference note; tagged anti-generic but not actionable",
+      "watch_only_with_score_lt_2": "do not import",
+      "skip": "do not import; record the skip reason for the audit",
+      "jacob_or_client": "do not auto-route; queue for Mike's per-card approval"
+    },
+    "provenance": "Drafted 2026-09-29 in Aside session pf6UdlRHjrvG8aFG by Jake from JEV-L01 + corpus.source shape. Advisory until calibrated: pilot will run 10 cards, ground truth will be Mike's verdict on each, and the calibration data feeds `rig-s1gate label <decision_id> good|bad`.",
+    "planted_failure_required": "Must BLOCK a card whose actionability is 'skip' AND must ESCALATE a card whose lane_fit is 'jacob' even when other answers look clean. Pilot will include one of each planted to prove the gate fires.",
+    "open_question_for_signoff": "Should 'anchored to a RIG project' artifact in the actionability.choice be a separate 'project' lane in lane_fit, or stay folded into rig_build? Mike's call."
+  }
+}

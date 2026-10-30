@@ -1,0 +1,95 @@
+{
+  "name": "gtm.cold_buyer",
+  "stage": "distribute",
+  "lane": "gtm",
+  "description": "Cold outbound contact fit for RIG's $3,500 One-Workflow Review. Input is ONE prospect row: name, title, firm, headcount, industry, email source, and any observed workflow pain. Routes by buyer fit, not by volume.",
+  "questions": {
+    "fit": {
+      "type": "score",
+      "instructions": "Buyer fit of this row for RIG's $3,500 One-Workflow Review -- a scoped diagnostic of one operational workflow for one accountable owner",
+      "criteria": [
+        "Excluded row: a vendor selling to RIG, a competitor, a recruiter, or a job seeker. Never a buyer.",
+        "Solo freelancer, micro shop, or enterprise-scale firm: outside the 11-200 staff band this offer is priced for.",
+        "Right-size firm, but the contact neither owns nor runs operations and no workflow pain is named.",
+        "Right-size firm and the contact owns or runs operations, but no specific workflow pain is named.",
+        "Professional-services firm of roughly 11-200 staff, the contact owns or runs operations, and a specific manual or duplicated workflow is named."
+      ]
+    },
+    "seniority": {
+      "type": "noul",
+      "instructions": "The contact owns or runs operations at their firm -- owner, partner, managing partner, COO, operations or practice manager, director, or founder -- rather than an individual contributor, an intern, a student, or a purely technical staff role with no budget authority."
+    },
+    "firm_band": {
+      "type": "choice",
+      "instructions": "Which size and type band does this firm fall in for the One-Workflow Review offer",
+      "criteria": {
+        "right_size_professional_services": "Professional services -- accounting, law, consulting, agency, engineering, clinic administration, or similar -- of roughly 11-200 staff",
+        "micro_or_solo": "Solo freelancer, hobbyist, or a micro shop too small to own a workflow worth $3,500",
+        "enterprise": "Large enterprise, government, or a business unit inside a big company -- outside the 11-200 band",
+        "vendor_or_competitor": "A vendor, agency, recruiter, or competitor selling to RIG rather than buying from it"
+      }
+    },
+    "workflow_pain": {
+      "type": "noul",
+      "instructions": "The row names a specific operational workflow that is manual, duplicated, or error-prone -- onboarding, document handling, reporting, intake, scheduling, billing handoffs, or similar -- rather than a general interest in AI."
+    },
+    "reachable": {
+      "type": "noul",
+      "instructions": "The row includes a verified work email address for this specific person: not a generic info@ or support@ address, not a guessed pattern, and not a LinkedIn-only contact."
+    },
+    "excluded": {
+      "type": "noul",
+      "instructions": "This row is one RIG must not cold-outreach at all: a vendor pitching RIG, a competitor, an enterprise account, a recruiter, or a job seeker."
+    }
+  },
+  "rules": [
+    {
+      "when": "excluded.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "excluded row -- vendor, competitor, enterprise, recruiter, or job seeker must never receive cold outbound"
+    },
+    {
+      "when": "firm_band.choice == vendor_or_competitor",
+      "verdict": "BLOCK",
+      "reason": "vendor or competitor, not a buyer for the One-Workflow Review"
+    },
+    {
+      "when": "firm_band.choice == enterprise",
+      "verdict": "BLOCK",
+      "reason": "enterprise is outside the 11-200 staff band this $3,500 offer is priced for"
+    },
+    {
+      "when": "firm_band.choice == micro_or_solo",
+      "verdict": "BLOCK",
+      "reason": "solo freelancer or micro shop is outside the 11-200 staff band"
+    },
+    {
+      "when": "fit.score <= 1.50",
+      "verdict": "BLOCK",
+      "reason": "fit score is below the floor for cold outbound -- do not spend a send on this row"
+    },
+    {
+      "when": "seniority.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "contact does not own or run operations -- find the accountable owner before sending"
+    },
+    {
+      "when": "workflow_pain.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "no named workflow pain -- the $3,500 review sells one workflow, not 'AI'"
+    },
+    {
+      "when": "reachable.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no verified email for this person -- enrich before any send"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "purpose": "Ranking number is fit.score (0..4). Code ranks by it; the rules only stop rows that must not be sent to.",
+    "thresholds": "Provisional and uncalibrated. Required-positive noul signals use the house bar (must read above 0.90); hazard signals split at 0.50-0.60. Law 3: this pack is advisory, so a BLOCK rule reports ESCALATE with a downgraded-BLOCK reason until s1gate calibrate certifies it."
+  }
+}

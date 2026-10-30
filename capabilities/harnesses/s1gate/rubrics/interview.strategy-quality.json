@@ -1,0 +1,107 @@
+{
+  "name": "interview.strategy-quality",
+  "stage": "verify",
+  "lane": "strategy",
+  "description": "Advisory review of a populated 30-slide interview strategy and companion public-research dossier. Judge the supplied evidence, not unobserved files. All ten probabilities must independently reach 0.90 under host policy; no mean. No authorization, validated business outcome, or complete-source claim.",
+  "questions": {
+    "decision_clarity": {
+      "type": "noul",
+      "instructions": "The submitted proposal clearly names its review audience, decision, horizon, recommended validation choice, alternatives including status quo, and conditions for changing course; it does not pretend Deere has approved execution."
+    },
+    "evidence_fit": {
+      "type": "noul",
+      "instructions": "The supplied extracted claims and source evidence support the proposal at its stated certainty: exact primary facts have attributable citations and period/units; load-bearing strategic inferences use independent evidence roots; inaccessible content is flagged; no imagined facts or duplicated-source corroboration is presented as proof."
+    },
+    "option_fairness": {
+      "type": "noul",
+      "instructions": "The proposal fairly compares current execution, a narrow supported intervention and broader integration or orchestration. Each has a concrete mechanism, economic downside, rights or delivery prerequisites and conditions in which it wins. No preferred option is presented as externally validated."
+    },
+    "economics_honesty": {
+      "type": "noul",
+      "instructions": "Any submitted economic figures have explicit units, formulas, input provenance, timing and sensitivities. Analyst scenarios are labelled assumptions, not Deere forecasts or observed returns; no invented internal baseline, TAM conversion or ROI guarantee is implied."
+    },
+    "falsifiability": {
+      "type": "noul",
+      "instructions": "The proposal connects plausible competitor, customer and dealer responses to mechanisms, observable falsifiers and a specific revise/stop decision; it includes important contrary public evidence rather than merely naming competitors."
+    },
+    "operating_loop": {
+      "type": "noul",
+      "instructions": "The proposal supplies proposed accountable roles, a baseline-establishment phase, defined measures, review cadence, dependencies and stop/continue criteria; internal access and authority are explicit preconditions, not claims of current approval."
+    },
+    "uncertainty_integrity": {
+      "type": "noul",
+      "instructions": "The proposal visibly separates public facts, survey expectation measures, unverified anecdotes, analyst inferences and proposed actions. Complaint samples are not treated as prevalence; logical-agent simulation is not represented as hundreds of real LLM workers or calibrated prediction."
+    },
+    "audience_usability": {
+      "type": "noul",
+      "instructions": "The submitted deck evidence lets a senior audience find the recommendation, why it differs, option comparison, economic logic, limitations and next decision without narration; all slide content is populated and no template how-to/sample/placeholder material remains."
+    },
+    "visual_quality": {
+      "type": "noul",
+      "instructions": "The supplied actual rendered-image inspection and native PowerPoint receipts, if present, show readable headlines, body, charts and tables, sufficient contrast, current observed company branding, original logos and imagery, and no material clipping or overlap. A file hash or claimed render pass alone cannot establish pixel quality. Disclosed proprietary-font fallbacks must not be called exact website typography."
+    },
+    "company_scope": {
+      "type": "noul",
+      "instructions": "The proposal uses the named company, role and current service scope accurately. Combined segments, overlapping service labels, existing capabilities, group transfers and portfolio assets are not called separate service profit or revenue. Proposed capabilities are clearly proposals."
+    }
+  },
+  "rules": [
+    {
+      "when": "decision_clarity.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "decision framing below user quality floor"
+    },
+    {
+      "when": "evidence_fit.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "claim-source fit below user quality floor"
+    },
+    {
+      "when": "company_scope.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "construction specificity below user quality floor"
+    },
+    {
+      "when": "option_fairness.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "option fairness below user quality floor"
+    },
+    {
+      "when": "economics_honesty.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "economics below user quality floor"
+    },
+    {
+      "when": "falsifiability.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "falsification below user quality floor"
+    },
+    {
+      "when": "operating_loop.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "operating loop below user quality floor"
+    },
+    {
+      "when": "uncertainty_integrity.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "uncertainty discipline below user quality floor"
+    },
+    {
+      "when": "audience_usability.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "audience usability below user quality floor"
+    },
+    {
+      "when": "visual_quality.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "actual visual evidence below user quality floor"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "never_auto": false,
+  "notes": {
+    "scope": "Two locally drafted interview strategy packages; all facts sourced, scenarios explicit; Studio evidence failures retained. Ten 0.90 floors are advisory task quality checks, not calibrated outcome probabilities.",
+    "negative_controls": "A polished claim of undisclosed service profit, unsupported observed TAM, fake customer outcomes, passing all Studio workflows despite HOLD, nonexistent acquisition availability, asset totals called revenue, or unviewed layout approval must fail."
+  }
+}

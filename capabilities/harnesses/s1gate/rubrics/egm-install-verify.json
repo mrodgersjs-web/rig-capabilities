@@ -1,0 +1,59 @@
+{
+  "name": "egm-install-verify",
+  "stage": "verify",
+  "lane": "build",
+  "description": "Verify an EGM (Elephant-Goldfish Model) installation receipt: does the document prove all files exist, paths resolve, doctrine mandates the flow, and three harnesses are wired? ADVISORY AND UNCALIBRATED.",
+  "questions": {
+    "all_files_present": {
+      "type": "noul",
+      "instructions": "Every named installed file, upstream skill (7), and persona (9) appears in the receipt with a sha256 hash proving it was read and exists on disk"
+    },
+    "paths_correct": {
+      "type": "noul",
+      "instructions": "The skill paths use hyphenated names (egm-brainstorm not egm_brainstorm) matching the actual repository directory structure"
+    },
+    "doctrine_mandates": {
+      "type": "noul",
+      "instructions": "The doctrine excerpt explicitly says EGM is the default or mandatory coding flow for non-trivial work, not merely an optional gate"
+    },
+    "three_harnesses": {
+      "type": "noul",
+      "instructions": "All three harness installations (Aside user skill, OMP command, Prime Agent skill) are listed with their absolute paths and confirmed present"
+    },
+    "single_source": {
+      "type": "noul",
+      "instructions": "All three harnesses reference the same canonical plugin root, not separate copies that could drift"
+    }
+  },
+  "rules": [
+    {
+      "when": "all_files_present.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "critical files missing from the receipt"
+    },
+    {
+      "when": "doctrine_mandates.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "doctrine does not mandate EGM as the coding spine"
+    },
+    {
+      "when": "three_harnesses.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "fewer than three harnesses confirmed"
+    },
+    {
+      "when": "paths_correct.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "path naming may be stale (underscores vs hyphens)"
+    },
+    {
+      "when": "single_source.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "harnesses may reference different plugin roots"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

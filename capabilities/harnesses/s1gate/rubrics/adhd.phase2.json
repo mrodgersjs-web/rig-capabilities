@@ -1,0 +1,116 @@
+{
+  "name": "adhd.phase2",
+  "stage": "research",
+  "lane": "strategy",
+  "description": "Exact ADHD Phase2 axes and angle classification. Advisory and uncalibrated; not execution authorization.",
+  "questions": {
+    "novelty": {
+      "type": "choice",
+      "instructions": "Difference from existing market mechanisms described in supplied evidence, rather than unusual wording. 0 identical/commodity; 2 cosmetic variant; 5 meaningful recombination; 8 rare concrete mechanism; 10 demonstrated unique mechanism. Missing competitor evidence limits certainty. Return one integer score. Supplied evidence only. These are uncalibrated advisory judgments, not measured business results.",
+      "criteria": {
+        "0": "novelty advisory score 0 on anchored0\u201310scale; uncertainty remains explicit.",
+        "1": "novelty advisory score 1 on anchored0\u201310scale; uncertainty remains explicit.",
+        "2": "novelty advisory score 2 on anchored0\u201310scale; uncertainty remains explicit.",
+        "3": "novelty advisory score 3 on anchored0\u201310scale; uncertainty remains explicit.",
+        "4": "novelty advisory score 4 on anchored0\u201310scale; uncertainty remains explicit.",
+        "5": "novelty advisory score 5 on anchored0\u201310scale; uncertainty remains explicit.",
+        "6": "novelty advisory score 6 on anchored0\u201310scale; uncertainty remains explicit.",
+        "7": "novelty advisory score 7 on anchored0\u201310scale; uncertainty remains explicit.",
+        "8": "novelty advisory score 8 on anchored0\u201310scale; uncertainty remains explicit.",
+        "9": "novelty advisory score 9 on anchored0\u201310scale; uncertainty remains explicit.",
+        "10": "novelty advisory score 10 on anchored0\u201310scale; uncertainty remains explicit."
+      }
+    },
+    "viability": {
+      "type": "choice",
+      "instructions": "Practical, financially coherent and lawful path to a bounded test with known owners, rights and cost mechanics. 0 impossible; 2 major unresolved dependencies; 5 plausible experiment with significant gaps; 8 executable low-risk test; 10 replicated measurable commercial viability. Proposed tests cannot be treated as proven outcomes. Return one integer score. Supplied evidence only. These are uncalibrated advisory judgments, not measured business results.",
+      "criteria": {
+        "0": "viability advisory score 0 on anchored0\u201310scale; uncertainty remains explicit.",
+        "1": "viability advisory score 1 on anchored0\u201310scale; uncertainty remains explicit.",
+        "2": "viability advisory score 2 on anchored0\u201310scale; uncertainty remains explicit.",
+        "3": "viability advisory score 3 on anchored0\u201310scale; uncertainty remains explicit.",
+        "4": "viability advisory score 4 on anchored0\u201310scale; uncertainty remains explicit.",
+        "5": "viability advisory score 5 on anchored0\u201310scale; uncertainty remains explicit.",
+        "6": "viability advisory score 6 on anchored0\u201310scale; uncertainty remains explicit.",
+        "7": "viability advisory score 7 on anchored0\u201310scale; uncertainty remains explicit.",
+        "8": "viability advisory score 8 on anchored0\u201310scale; uncertainty remains explicit.",
+        "9": "viability advisory score 9 on anchored0\u201310scale; uncertainty remains explicit.",
+        "10": "viability advisory score 10 on anchored0\u201310scale; uncertainty remains explicit."
+      }
+    },
+    "fit": {
+      "type": "choice",
+      "instructions": "Direct relevance to the company current named service, buyer pain, existing capabilities and explicit mandate. 0 outside mandate; 2 tangential; 5 plausible adjacent opportunity; 8 strong existing-service fit; 10 demonstrated fit with verified customer/outcome evidence. Public evidence does not establish private priorities. Return one integer score. Supplied evidence only. These are uncalibrated advisory judgments, not measured business results.",
+      "criteria": {
+        "0": "fit advisory score 0 on anchored0\u201310scale; uncertainty remains explicit.",
+        "1": "fit advisory score 1 on anchored0\u201310scale; uncertainty remains explicit.",
+        "2": "fit advisory score 2 on anchored0\u201310scale; uncertainty remains explicit.",
+        "3": "fit advisory score 3 on anchored0\u201310scale; uncertainty remains explicit.",
+        "4": "fit advisory score 4 on anchored0\u201310scale; uncertainty remains explicit.",
+        "5": "fit advisory score 5 on anchored0\u201310scale; uncertainty remains explicit.",
+        "6": "fit advisory score 6 on anchored0\u201310scale; uncertainty remains explicit.",
+        "7": "fit advisory score 7 on anchored0\u201310scale; uncertainty remains explicit.",
+        "8": "fit advisory score 8 on anchored0\u201310scale; uncertainty remains explicit.",
+        "9": "fit advisory score 9 on anchored0\u201310scale; uncertainty remains explicit.",
+        "10": "fit advisory score 10 on anchored0\u201310scale; uncertainty remains explicit."
+      }
+    },
+    "trap": {
+      "type": "choice",
+      "instructions": "Choose the most material currently explicit constraint; no_clear_trap is not certification. Missing evidence remains a constraint.",
+      "criteria": {
+        "no_clear_trap": "No explicit fatal constraint in supplied bounded test; uncertainty still disclosed.",
+        "rights_or_owner": "Necessary data rights, accountable owner or authority unavailable.",
+        "unit_economics": "Mechanism has no plausible cost/value path or dominant economic contradiction.",
+        "commodity": "Claimed novelty is materially covered by an existing offering.",
+        "insufficient_evidence": "Evidence too weak to select a viable opportunity or reject alternatives."
+      }
+    },
+    "angle": {
+      "type": "choice",
+      "instructions": "Classify the primary causal mechanism, not marketing language.",
+      "criteria": {
+        "resource_coordination": "Allocates timing/capacity/assets across parties.",
+        "evidence_decision": "Improves provenance, verification or decision context.",
+        "continuity_recovery": "Reduces downtime, handoff failure or recovery effort.",
+        "risk_pricing": "Prices/reserves downside or contingent capacity.",
+        "delivery_simplification": "Simplifies task package, setup, service or execution.",
+        "manual_review": "Mechanism is mixed or unclear."
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "novelty.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "novelty judgment uncertain"
+    },
+    {
+      "when": "viability.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "viability judgment uncertain"
+    },
+    {
+      "when": "fit.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "fit judgment uncertain"
+    },
+    {
+      "when": "trap.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "trap judgment uncertain"
+    },
+    {
+      "when": "angle.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "angle judgment uncertain"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "notes": {
+    "weighting": "Eligible score weights .35 novelty +.40 viability +.25 fit; arithmetic only, not outcome prediction. Non-admitted rows remain held; no local pass substitution.",
+    "trap_exclusion": "Exclude explicit fatal constraints from automatic selection; insufficient_evidence remains held.",
+    "independence": "Generator and verifier remain separate."
+  }
+}

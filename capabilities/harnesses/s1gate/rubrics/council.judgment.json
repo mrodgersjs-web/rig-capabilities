@@ -1,0 +1,116 @@
+{
+  "name": "council.judgment",
+  "stage": "decide",
+  "lane": "council",
+  "description": "Judge one council decision before Aside or OMP acts on it. Uncalibrated. Escalate only. Never a permission to send, post, or spend.",
+  "questions": {
+    "named_speakers": {
+      "type": "noul",
+      "instructions": "At least three named speakers appear in this council decision"
+    },
+    "has_attack": {
+      "type": "noul",
+      "instructions": "One speaker attacks the plan and names a failure"
+    },
+    "single_verdict": {
+      "type": "noul",
+      "instructions": "The decision ends in one APPROVE or one REJECT, not a menu of options"
+    },
+    "no_outward": {
+      "type": "noul",
+      "instructions": "This decision does not send, post, spend, or submit unless that class was already approved"
+    },
+    "names_step": {
+      "type": "noul",
+      "instructions": "The decision names one next internal step that moves the work forward"
+    },
+    "bare_no": {
+      "type": "noul",
+      "instructions": "This is a bare refusal with no replacement move"
+    },
+    "critic_hits_strongest": {
+      "type": "noul",
+      "instructions": "The critic attacks the strongest argument on the table, not a weak or side point, and names a concrete way it fails"
+    },
+    "survives_dissent": {
+      "type": "noul",
+      "instructions": "The final verdict explicitly answers or adopts the strongest dissent or minority position instead of ignoring it"
+    },
+    "executable_owner": {
+      "type": "noul",
+      "instructions": "The approved move names the specific agent who executes it and a first step concrete enough to run"
+    },
+    "kill_criteria": {
+      "type": "noul",
+      "instructions": "The decision states an observable condition that would show the verdict was wrong"
+    },
+    "menu": {
+      "type": "noul",
+      "instructions": "The decision lays out a menu of options for someone else to choose instead of committing to one move"
+    }
+  },
+  "rules": [
+    {
+      "when": "named_speakers.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "fewer than three named speakers"
+    },
+    {
+      "when": "has_attack.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "no attack on the plan"
+    },
+    {
+      "when": "single_verdict.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "no single APPROVE or REJECT"
+    },
+    {
+      "when": "no_outward.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "decision would send, post, spend, or submit"
+    },
+    {
+      "when": "names_step.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "no next internal step"
+    },
+    {
+      "when": "bare_no.noul >= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "bare no with no replacement move"
+    },
+    {
+      "when": "critic_hits_strongest.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "the attack missed the strongest argument"
+    },
+    {
+      "when": "survives_dissent.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "verdict ignores the strongest dissent"
+    },
+    {
+      "when": "executable_owner.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "move has no named executor or runnable first step"
+    },
+    {
+      "when": "kill_criteria.noul < 0.5",
+      "verdict": "ESCALATE",
+      "reason": "no kill criteria"
+    },
+    {
+      "when": "menu.noul >= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "a menu instead of a recommendation"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "never_auto": true,
+  "notes": {
+    "named_speakers": "Written 2026-10-03 from council-judgment-criteria.md. Not calibrated. Escalate only so an uncalibrated score cannot hard-stop work.",
+    "quality_2026_10_04": "Added critic_hits_strongest, survives_dissent, executable_owner, kill_criteria, menu from the council-of-high-intelligence and llm-council research (coh SKILL.md L441-447 anti-conformity, L463-483 dissent, L753-763 kill criteria and concrete next step; Mike's 'recommendation, not the minutes'). ESCALATE only. Not calibrated. never_auto unchanged."
+  }
+}

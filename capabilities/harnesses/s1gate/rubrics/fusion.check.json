@@ -1,0 +1,75 @@
+{
+  "name": "fusion.check",
+  "stage": "verify",
+  "lane": "build",
+  "description": "Advisory check for a Fusion stack. Slot count is 2 to 5. Exactly one architect and exactly one primary. The verifier is a different model family from the primary.",
+  "questions": {
+    "one_architect": {
+      "type": "noul",
+      "instructions": "The stack names exactly one model as the architect."
+    },
+    "one_primary": {
+      "type": "noul",
+      "instructions": "The stack names exactly one slot as the primary builder."
+    },
+    "verifier_different_family": {
+      "type": "noul",
+      "instructions": "The architect model provider is different from the primary model provider. The builder does not grade its own output."
+    },
+    "stack_size": {
+      "type": "score",
+      "instructions": "Does the declared stack have between 2 and 5 slots, with the required roles unshared.",
+      "criteria": [
+        "No stack, or a slot count outside 2 to 5",
+        "More than one architect, more than one primary, or a role shared by two models",
+        "Slot count is 2 to 5 and both required roles are named, verifier family not checked",
+        "Slot count is 2 to 5 with one architect and one primary; verifier family is unstated",
+        "Slot count is 2 to 5 with one architect and one primary; verifier family matches the primary",
+        "Slot count is 2 to 5, exactly one architect, exactly one primary, verifier from another family"
+      ]
+    },
+    "role_gap": {
+      "type": "noul",
+      "instructions": "The stack has exactly one architect, exactly one primary, a verifier from a different model family than the primary, and between 2 and 5 slots."
+    }
+  },
+  "rules": [
+    {
+      "when": "one_architect.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "stack needs exactly one architect"
+    },
+    {
+      "when": "one_primary.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "stack needs exactly one primary"
+    },
+    {
+      "when": "verifier_different_family.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "verifier must be a different family from the primary"
+    },
+    {
+      "when": "stack_size.score <= 4.50",
+      "verdict": "ESCALATE",
+      "reason": "stack slot count or role split is illegal"
+    },
+    {
+      "when": "stack_size.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "answer distribution is not above 0.95"
+    },
+    {
+      "when": "role_gap.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "a required Fusion role is missing"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Pass line is above 0.9. A noul of 0.90 fails the rule `noul <= 0.90`; 0.91 or higher passes. Score and choice confidence use `confidence <= 0.90`. A score is a mean on levels 0..5, so above 0.9 of that scale is a mean above 4.50."
+  }
+}

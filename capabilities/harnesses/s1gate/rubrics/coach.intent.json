@@ -1,0 +1,73 @@
+{
+  "name": "coach.intent",
+  "stage": "route",
+  "lane": "app",
+  "description": "TransformFit coach routing. Classify one user coach message from James's athlete and route it to the right handler. Anything medical, painful, or out of scope goes to a human -- the coach never programs through a symptom.",
+  "questions": {
+    "intent": {
+      "type": "choice",
+      "instructions": "What does this athlete message need from the coach, choosing the single best match",
+      "criteria": {
+        "log_workout": "Reporting a session or asking to record one -- sets, reps, load, distance, or 'did my workout today'",
+        "program_question": "A question about the plan or program -- what to do today, how the block is structured, substitutions, progression",
+        "nutrition_question": "Food, hydration, calories, macros, supplements, or meal timing",
+        "injury_or_pain": "Pain, an injury, a symptom, a diagnosis, or a rehab question",
+        "motivation": "Encouragement, accountability, confidence, or 'I don't feel like training'",
+        "app_help": "How to use the app -- login, screens, tracking, settings, a bug report",
+        "off_topic": "Nothing to do with training, nutrition, motivation, or the app"
+      }
+    },
+    "medical_risk": {
+      "type": "noul",
+      "instructions": "The message describes pain, an injury, symptoms, or a health condition that could need medical attention -- rather than ordinary training soreness or fatigue."
+    },
+    "in_scope": {
+      "type": "noul",
+      "instructions": "This message is something a training coach should answer: training, nutrition, motivation, or using the app."
+    },
+    "urgent": {
+      "type": "noul",
+      "instructions": "The message describes something urgent: severe or sudden pain, a head impact, chest pain, dizziness, or an event that just happened during training."
+    }
+  },
+  "rules": [
+    {
+      "when": "medical_risk.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "safety referral -- the coach never programs through a medical question"
+    },
+    {
+      "when": "intent.choice == injury_or_pain",
+      "verdict": "ESCALATE",
+      "reason": "injury or pain route is always a safety referral"
+    },
+    {
+      "when": "urgent.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "urgent symptom -- do not generate a coaching reply at all, surface the safety referral"
+    },
+    {
+      "when": "intent.choice == off_topic",
+      "verdict": "ESCALATE",
+      "reason": "off-topic -- route to app help or a human, not to the coach"
+    },
+    {
+      "when": "in_scope.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "not a coaching question"
+    },
+    {
+      "when": "intent.confidence <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "route is split -- a human reads it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "safety": "medical_risk >= 0.50 is the spec'd safety referral threshold. urgent adds the head-impact / chest-pain class as a hard BLOCK on generating a coaching reply; it still surfaces to a human.",
+    "thresholds": "Provisional and uncalibrated (law 3), so the urgent BLOCK currently reports ESCALATE with a downgraded-BLOCK reason."
+  }
+}

@@ -1,0 +1,155 @@
+{
+  "name": "corpus.build20",
+  "stage": "research",
+  "lane": "ingest",
+  "description": "DRAFT — 20-question build-priority rating for Recall BUILD_OUT cards. Extends corpus.card with build economics: determinism ceiling, runner fit, time-to-value, reuse, revenue proximity, proof-ability, maintenance, risk. State carries CARD_TITLE and CARD_SOURCE. Scores are consumed by code for ranking; only typed judgments are asked here.",
+  "questions": {
+    "lane_fit": {
+      "type": "choice",
+      "instructions": "Which RIG lane does this card primarily serve? Pick the one lane where the card's claim would be acted on this quarter.",
+      "criteria": {
+        "rig_build": "RIG OS, agents, harnesses, Memory OS, model routing",
+        "gtm_buyer": "RIG B2B marketing, sales, outreach, pipeline",
+        "personal_brand": "LinkedIn, content, personal influence",
+        "client": "work landing on a client's account/reputation",
+        "jacob": "content about Mike's 15-year-old son — CHILD LANE, sensitive",
+        "general": "cross-cutting or none of the above"
+      }
+    },
+    "rig_overlap": {
+      "type": "choice",
+      "instructions": "How much does this card overlap with a RIG capability, skill, doctrine, or routine that already exists?",
+      "criteria": {
+        "novel": "at least one named claim is new to RIG",
+        "partial": "extends an existing capability with new evidence",
+        "duplicate": "core claim already stated in a RIG asset"
+      }
+    },
+    "evidence_density": {
+      "type": "choice",
+      "instructions": "How concrete is the card's evidence?",
+      "criteria": {
+        "specific_code": "real code/repo/file/CLI/API",
+        "specific_pattern": "named framework/formula/gate/rubric",
+        "practitioner_argument": "named person, named thesis, with reasons",
+        "opinion_listicle": "tips, hacks, generic frameworks",
+        "news_summary": "events, releases, product news"
+      }
+    },
+    "actionability": {
+      "type": "choice",
+      "instructions": "What is the cheapest action that captures this card's value tonight?",
+      "criteria": {
+        "extract_skill": "a new SKILL.md can be authored tonight",
+        "doctrine_update": "an existing file should be patched",
+        "watch_only": "informs, no RIG artifact",
+        "skip": "below threshold"
+      }
+    },
+    "anti_generic_force": {
+      "type": "score",
+      "instructions": "How far does this card deviate from median AI/business advice? 0 = pure median, 3 = named mechanism not seen elsewhere, 5 = category-defining.",
+      "criteria": ["0: pure median", "1: slight angle", "2: unique angle", "3: named mechanism/formula/pattern", "4: exceptional", "5: category-defining"]
+    },
+    "determinism_ceiling": {
+      "type": "choice",
+      "instructions": "On the L0-L5 determinism ladder, what is the MOST deterministic level this build could run at without quality loss? A task left at L4 that could be L1 is a bug.",
+      "criteria": {
+        "script": "L0-L1: deterministic script or orchestrated flow, no model judgment at runtime",
+        "typed_call": "L2: one bounded typed model call consumed by code",
+        "bounded_agent": "L3: bounded agent with fixed tools and stop conditions",
+        "open_agent": "L4: open-ended agent required",
+        "human": "L5: must stay human (Gate-D judgment)"
+      }
+    },
+    "runner_fit": {
+      "type": "choice",
+      "instructions": "Where should this build live if shipped? Browser-bound work (needs signed-in session) stays on Aside; cloud runners cannot hold a browser session.",
+      "criteria": {
+        "aside_browser": "Aside browser routine (needs signed-in web session)",
+        "local_script": "local script/launchd on Mike's Mac, no browser",
+        "n8n_cloud": "n8n/cloud runner, no browser dependency",
+        "manual_playbook": "human-run playbook, no automation"
+      }
+    },
+    "browser_dependency": {
+      "type": "choice",
+      "instructions": "Does executing this build require a signed-in browser session (LinkedIn, Airtable UI, web apps)?",
+      "criteria": {"yes": "needs signed-in browser", "no": "no browser needed"}
+    },
+    "time_to_first_value": {
+      "type": "choice",
+      "instructions": "How long from starting the build to first usable output?",
+      "criteria": {"hours": "usable tonight", "days": "this week", "weeks": "multi-week"}
+    },
+    "reuse_frequency": {
+      "type": "choice",
+      "instructions": "Once built, how often would it actually run or be used?",
+      "criteria": {"daily": "daily or more", "weekly": "weekly", "monthly": "monthly", "once": "one-shot"}
+    },
+    "revenue_proximity": {
+      "type": "choice",
+      "instructions": "How close is this build to money: a paying client, a sale, a job offer, or billable RIG output?",
+      "criteria": {"direct": "directly produces revenue or a deliverable a buyer pays for", "indirect": "feeds a revenue lane within one hop", "none": "infrastructure or learning only"}
+    },
+    "proof_ability": {
+      "type": "choice",
+      "instructions": "Can a done-claim for this build bind to command output, a file path, or a read-back (not an adjective)?",
+      "criteria": {"high": "deterministic proof artifact exists", "medium": "proof possible but needs setup", "low": "success is subjective"}
+    },
+    "maintenance_cost": {
+      "type": "choice",
+      "instructions": "Ongoing cost to keep this build working (site changes, API drift, retraining)?",
+      "criteria": {"low": "set and forget", "medium": "occasional fixes", "high": "constant tending"}
+    },
+    "credential_need": {
+      "type": "choice",
+      "instructions": "What access does this build need?",
+      "criteria": {"none": "no credentials", "keychain": "existing keychain item", "new_account": "needs a new external account or paid API"}
+    },
+    "gate_d_risk": {
+      "type": "choice",
+      "instructions": "Does this build's OUTPUT touch the outside world: posts, messages, client accounts, money, or a minor?",
+      "criteria": {"none": "internal artifact only", "outward": "publishes or messages externally", "sensitive": "paid, destructive, client, or minor-adjacent"}
+    },
+    "jev_route_fit": {
+      "type": "choice",
+      "instructions": "Does this build create typed judgments (classification/routing/triage with a fixed answer set) that Jev can own instead of a frontier model?",
+      "criteria": {"yes": "core loop is typed judgments", "partial": "some typed judgments", "no": "generation or long-horizon work"}
+    },
+    "doctrine_alignment": {
+      "type": "choice",
+      "instructions": "How does this card sit against existing RIG doctrine (skills, AGENTS.md, operating plans)?",
+      "criteria": {"fits": "directly supports existing doctrine", "extends": "adds a new but compatible capability", "contradicts": "conflicts with a standing rule or duplicates a frozen lane"}
+    },
+    "content_sufficiency": {
+      "type": "choice",
+      "instructions": "Is the card's content (title + source + what a builder would find at that source) enough to author the skill/build tonight, or does it need more research?",
+      "criteria": {"sufficient": "card + source is enough", "needs_research": "one more pass needed", "insufficient": "too thin to build from"}
+    },
+    "output_durability": {
+      "type": "choice",
+      "instructions": "Does the build produce a durable asset (skill, corpus, tool) or an ephemeral result?",
+      "criteria": {"durable": "compounds: reusable asset", "mixed": "some reuse", "ephemeral": "one-time answer"}
+    },
+    "build_confidence": {
+      "type": "score",
+      "instructions": "Overall: how confident are you this card deserves one of 20 build slots this week? 0 = no, 3 = probably, 5 = certain.",
+      "criteria": ["0: no", "1: weak", "2: maybe", "3: probably", "4: strong", "5: certain"]
+    }
+  },
+  "rules": [
+    {"when": "lane_fit.choice == \"jacob\"", "verdict": "ESCALATE", "reason": "child lane — Mike per-card approval"},
+    {"when": "lane_fit.choice == \"client\"", "verdict": "ESCALATE", "reason": "client lane — Mike per-card approval"},
+    {"when": "actionability.choice == \"skip\"", "verdict": "ESCALATE", "reason": "below threshold at rating time"},
+    {"when": "doctrine_alignment.choice == \"contradicts\"", "verdict": "ESCALATE", "reason": "conflicts with standing doctrine; human decides"}
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Ranking stays in code: composite = 2*build_confidence + anti_generic_force + bonuses (novel, specific_code/pattern, extract_skill, daily reuse, direct revenue, high proof, low maintenance, durable) minus penalties (duplicate, weeks, high maintenance, new_account, sensitive, contradicts). Verdicts are advisory until calibrated.",
+    "provenance": "Drafted 2026-10-02 in Aside session hVEWSCC2We8MRSPx for the Recall build-out top-20 ranking, extending corpus.card with build economics from Mike's runner-selection + determinism doctrine."
+  }
+}

@@ -1,0 +1,54 @@
+{
+  "name": "comment.intents",
+  "stage": "measure",
+  "lane": "engagement",
+  "description": "Audience Desk: triage one captured audience comment into a typed intent plus a post-signal heat, so the deterministic idea engine can group by intent without a frontier model in the per-comment loop. Advisory until calibrated.",
+  "questions": {
+    "intent": {
+      "type": "choice",
+      "instructions": "Read the comment. What intent does it carry toward whatever it is replying to?",
+      "criteria": {
+        "question": "Asks for an answer, a missing fact, or a decision",
+        "pain": "Reports frustration, an unmet need, or a problem the writer is living with",
+        "praise": "Positive acknowledgement that something worked or landed",
+        "objection": "Disagrees, doubts the claim, the price, or the method",
+        "buying_signal": "Ready to pay, compare, or take a step (asks how to start, requests a DM, names a budget)",
+        "hype": "Excitement with no specifics; buying the energy, not the argument",
+        "other": "One-liner, filler, spam, or off-topic with no usable intent"
+      }
+    },
+    "heat": {
+      "type": "score",
+      "instructions": "How strong is this comment as a signal that a post on its topic would land?",
+      "criteria": ["quiet aside", "mild interest", "worth writing about", "strong demand", "breakout demand"]
+    },
+    "is_noise": {
+      "type": "noul",
+      "instructions": "The comment is bot-grade filler, spam, an emoji-only reply, or otherwise carries no topical content"
+    }
+  },
+  "rules": [
+    {
+      "when": "is_noise.noul >= 0.75",
+      "verdict": "BLOCK",
+      "reason": "filler comment -- carries no post signal, keep it out of the idea corpus (threshold provisional, pending calibration)"
+    },
+    {
+      "when": "intent.choice == buying_signal",
+      "verdict": "ESCALATE",
+      "reason": "hand-raise in the comments -- route to GTM follow-up, not only to a content idea"
+    },
+    {
+      "when": "heat.score >= 3.00",
+      "verdict": "ESCALATE",
+      "reason": "breakout-level demand -- worth a frontier drafting pass this cycle"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "intent": "created 2026-09-20 for audience-desk; per-comment loop must never call a frontier model (Jev cascade doctrine)."
+  }
+}

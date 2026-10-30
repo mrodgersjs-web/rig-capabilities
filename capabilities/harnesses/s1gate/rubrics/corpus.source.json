@@ -1,0 +1,68 @@
+{
+ "name": "corpus.source",
+ "stage": "research",
+ "lane": "ingest",
+ "description": "Advisory screen for a candidate doctrine-corpus source (YouTube channel, newsletter or site) against a named SEED. The state carries SEED (who we are extending and why) and CANDIDATE (name, size, recent titles). Decides whether the candidate is a real peer worth a full-transcript scrape. Counting, sizes, dedupe and final ordering stay in code; only the judgment is asked here.",
+ "questions": {
+  "same_domain": {
+   "type": "noul",
+   "instructions": "The CANDIDATE mainly teaches the same subject as the SEED to the same kind of audience. For a business-strategy seed that means strategy, positioning, differentiation, category, competitive advantage, pricing, go-to-market or marketing effectiveness, taught to business owners, founders or leaders."
+  },
+  "practitioner_voice": {
+   "type": "noul",
+   "instructions": "The CANDIDATE is one named practitioner or strategist arguing in their own voice. It is not a news show, a pure interview feed, a textbook-summary channel or an AI-voiced compilation."
+  },
+  "argues_not_lists": {
+   "type": "noul",
+   "instructions": "The CANDIDATE's titles signal reasoned or contrarian argument (why a common belief is wrong, what actually drives results) rather than listicles, hacks, hype or motivation."
+  },
+  "seed_similarity": {
+   "type": "score",
+   "instructions": "How close is the CANDIDATE to the SEED in subject, audience and argumentative style",
+   "criteria": [
+    "Unrelated subject",
+    "Adjacent business topic with a different audience or purpose",
+    "Same broad subject but a very different format (news, interviews, textbook summaries)",
+    "Same subject and audience, partly similar style",
+    "Close peer: same subject, audience and argumentative style",
+    "Near twin of the seed"
+   ]
+  }
+ },
+ "rules": [
+  {
+   "when": "same_domain.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "candidate is not clearly in the seed's subject and audience"
+  },
+  {
+   "when": "practitioner_voice.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "candidate is not one practitioner arguing in their own voice"
+  },
+  {
+   "when": "argues_not_lists.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "candidate reads as listicles or hype, not argument"
+  },
+  {
+   "when": "seed_similarity.score <= 3.50",
+   "verdict": "ESCALATE",
+   "reason": "candidate is not a close peer of the seed"
+  },
+  {
+   "when": "seed_similarity.confidence <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "similarity answer distribution is not concentrated"
+  }
+ ],
+ "confidence_floor": 0.9,
+ "calibrated": false,
+ "calibration": {},
+ "never_auto": false,
+ "notes": {
+  "bar": "Nouls pass only above 0.9 (0.90 fails `noul <= 0.90`). seed_similarity deliberately passes at a mean above 3.50 (level 4, close peer) rather than the default 4.50: level 5 means a near-duplicate of the seed, which adds no new doctrine to a corpus.",
+  "provenance": "Added 2026-09-26 by Jake (Aside session FZ5G1NeEd86P2RZw) to select peer channels for the business-strategy corpus seeded by Alex M H Smith. Advisory until calibrated; the ordering of candidates is computed in code from these typed answers.",
+  "planted_failure": "Must ESCALATE a channel that is off-subject (e.g. a news or tax channel) and must not ESCALATE the seed itself on same_domain; see the corpus build log for the red/green pair."
+ }
+}

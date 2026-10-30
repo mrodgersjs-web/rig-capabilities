@@ -1,0 +1,45 @@
+{
+  "name": "call.script",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "v1.0.0. Human-read cold call script or human-voice outreach (read aloud or typed by a person, not auto-sent). Judges truthfulness, specificity, one low-cost ask, no price or hype, speakable voice and a clear exit. Score the spoken body only, without DRAFT or metadata headers.",
+  "questions": {
+    "evidence_backed": {
+      "type": "noul",
+      "instructions": "Every statement about the prospect is a specific, checkable observation (what was checked, roughly when), and the script invents no statistics, losses, results, customers or outcomes it could not have observed"
+    },
+    "one_business": {
+      "type": "noul",
+      "instructions": "The script names one specific business or its website and an observation about it; it would not survive a find-and-replace to a different business"
+    },
+    "single_low_cost_ask": {
+      "type": "noul",
+      "instructions": "There is exactly one ask and it is low commitment for the listener (permission to send something free, or a yes/no), not a booked meeting, a purchase, or several asks"
+    },
+    "no_price_or_hype": {
+      "type": "noul",
+      "instructions": "The script contains no price, fee, discount or dollar figure, and no hype: no guarantees, superlatives, fake urgency or pressure"
+    },
+    "speakable_voice": {
+      "type": "noul",
+      "instructions": "Read aloud by a person, this sounds like natural conversation: short sentences, plain words, no marketing jargon or written-only phrasing"
+    },
+    "clear_exit": {
+      "type": "noul",
+      "instructions": "The listener is given an easy, explicit and polite way to say no and end the call, and the script accepts the no without pushing"
+    }
+  },
+  "rules": [
+    {"when": "evidence_backed.noul <= 0.50", "verdict": "BLOCK", "reason": "unsupported or invented claim about the prospect"},
+    {"when": "no_price_or_hype.noul <= 0.50", "verdict": "BLOCK", "reason": "price or hype in a human-read script"},
+    {"when": "single_low_cost_ask.noul <= 0.50", "verdict": "BLOCK", "reason": "high-commitment, multiple or pushy ask"},
+    {"when": "clear_exit.noul <= 0.50", "verdict": "BLOCK", "reason": "no easy exit for the listener"},
+    {"when": "one_business.noul <= 0.50", "verdict": "ESCALATE", "reason": "generic script, not prepared for one business"},
+    {"when": "speakable_voice.noul <= 0.50", "verdict": "ESCALATE", "reason": "does not read as natural speech"}
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {"status": "pending", "note": "v1.0.0 authored 2026-10-22 by GTM Lead (Jake ruling q_3532f1d2dcb2). Thresholds 0.50 are initial; see fixtures/call.script-controls and CHANGELOG.md for the control run."},
+  "never_auto": false,
+  "notes": "Composite score for reporting = min of the six noul values (0-1). Global Jev >= 0.9 bar unchanged; this rubric's verdict is reported alongside it."
+}

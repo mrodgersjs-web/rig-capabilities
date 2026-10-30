@@ -1,0 +1,66 @@
+{
+  "name": "board.card",
+  "stage": "plan",
+  "lane": "ops",
+  "description": "Advisory check for one Kanban card. One outcome, one next action, and the existing board at http://127.0.0.1:8913. A second board fails.",
+  "questions": {
+    "one_outcome": {
+      "type": "noul",
+      "instructions": "The card names exactly one done state."
+    },
+    "board_is_canonical": {
+      "type": "noul",
+      "instructions": "The card is on the existing board at http://127.0.0.1:8913. It does not open a second board, list, or tracker."
+    },
+    "next_action": {
+      "type": "score",
+      "instructions": "How doable is the single next action on this card.",
+      "criteria": [
+        "No card",
+        "A title with no outcome",
+        "An outcome with no next action",
+        "A next action that is still vague",
+        "One next action, but no owner is named",
+        "One next action Jake can do today, and the owner is Mike"
+      ]
+    },
+    "status": {
+      "type": "noul",
+      "instructions": "The next action can be done on the one canonical board. It does not open a second board, spend, or send."
+    }
+  },
+  "rules": [
+    {
+      "when": "one_outcome.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "card has no single outcome"
+    },
+    {
+      "when": "board_is_canonical.noul <= 0.90",
+      "verdict": "BLOCK",
+      "reason": "card would open a second board"
+    },
+    {
+      "when": "next_action.score <= 4.50",
+      "verdict": "ESCALATE",
+      "reason": "card has no next action"
+    },
+    {
+      "when": "next_action.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "answer distribution is not above 0.95"
+    },
+    {
+      "when": "status.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "card is blocked or needs the owner"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Pass line is above 0.9. A noul of 0.90 fails the rule `noul <= 0.90`; 0.91 or higher passes. Score and choice confidence use `confidence <= 0.90`. A score is a mean on levels 0..5, so above 0.9 of that scale is a mean above 4.50."
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "name": "deere.customer-voice",
+  "stage": "research",
+  "lane": "strategy",
+  "description": "Public construction equipment thread classification; advisory, no prevalence or causal verdict.",
+  "questions": {
+    "theme": {
+      "type": "choice",
+      "instructions": "Select the primary operational issue in the supplied public thread; use unclear when no issue predominates. Do not infer missing facts.",
+      "criteria": {
+        "dealer_service": "Dealer responsiveness, parts delivery, service diagnosis or uptime",
+        "repair_diagnostics": "Access to diagnostic tools, manuals or independent repair",
+        "emissions": "DEF, emissions-system faults or related maintenance",
+        "productivity": "Grade, payload, machine control, ergonomics or job productivity",
+        "purchase_economics": "Price, finance, used machine or ownership cost decisions",
+        "rental_capacity": "Rental availability, temporary fleet capacity or rental economics",
+        "attachments": "Attachments, machine fit and specific applications",
+        "switching": "Switching brands or comparing experience without one operational cause",
+        "counterexample": "Positive experience or contradictory observations without a primary complaint",
+        "unclear": "Insufficient text or no clear relevant construction equipment issue"
+      }
+    },
+    "construction_relevance": {
+      "type": "noul",
+      "instructions": "The supplied body contains a concrete construction-equipment, heavy-equipment or compact-equipment use/purchase/service discussion; agricultural-only discussion does not qualify."
+    },
+    "summary_fit": {
+      "type": "noul",
+      "instructions": "The paraphrase and limitations accurately represent the supplied excerpts, preserving uncertainty and contrary evidence; anecdotes are not verified brand performance."
+    },
+    "complaint_present": {
+      "type": "noul",
+      "instructions": "At least one supplied excerpt expresses a concrete dissatisfaction or operational friction. Neutral requests and positive observations alone do not qualify."
+    }
+  },
+  "rules": [
+    {
+      "when": "theme.confidence < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "Uncertain primary theme; retain for manual review."
+    },
+    {
+      "when": "summary_fit.noul < 0.90",
+      "verdict": "ESCALATE",
+      "reason": "Summary must preserve source scope."
+    }
+  ],
+  "calibrated": false,
+  "notes": {
+    "use": "Retain positive/counterexample rows and uncertain rows with labels. No frequency, failure rate, market demand or execution authorization is inferred."
+  }
+}

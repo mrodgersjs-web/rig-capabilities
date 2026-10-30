@@ -1,0 +1,39 @@
+{
+  "name": "construction.public-story",
+  "stage": "research",
+  "lane": "strategy",
+  "description": "Advisory screening of authentic public construction problem stories. Separates corpus relevance from purchase intent; uncalibrated, not authorization or demand prevalence.",
+  "questions": {
+    "content_class": {
+      "type": "choice",
+      "instructions": "Classify supplied actual public title and full body. Select first_person_problem_or_request only for an author describing concrete construction execution, equipment use, maintenance, rental, project planning friction or a specific question/request about it. Sellers, jobs and third-party generic news cannot count as problem stories. Identity is unverified and commercial intent is a separate question.",
+      "criteria": {
+        "first_person_problem_or_request": "Concrete construction-use problem, lived experience or specific request/question",
+        "seller_promotion": "Vendor/dealer offer, sales CTA, affiliate pitch or self-promotion",
+        "job_ad_or_career": "Recruitment, job seeking or generic career advice",
+        "general_context": "News, general assertion or third-party industry commentary without a concrete author's problem",
+        "off_topic": "Outside construction execution and associated machine tasks",
+        "insufficient": "Actual source text missing, too sparse or contradictory"
+      }
+    },
+    "construction_pain_relevance": {
+      "type": "noul",
+      "instructions": "The supplied text states a concrete heavy/compact construction equipment use, service, repair, attachment, rental or acquisition friction, OR a concrete water/road/utility/power/data-center civil execution constraint that connects to machine work, scheduling, mobilization, earthworks or inspection. A specific feature/function or planning-to-machine-task problem qualifies. Agricultural-only, general AI news, office work, houses without relevant execution detail, generic market commentary and assumed inferred machine needs fail. Judge supplied words only; do not infer verified identity, representativeness or purchase intent."
+    },
+    "quote_fit": {
+      "type": "noul",
+      "instructions": "The submitted quote is an exact contiguous substring of the supplied title or full body, with at most 12 words; quote_field identifies its provenance. Full actual body and a canonical source link are supplied. The excerpt expresses the stated problem without inventing personal identity, demand frequency, outcome or current commercial terms. Missing/normalized/paraphrased quotes fail."
+    }
+  },
+  "rules": [
+    {"when":"content_class.confidence < 0.90","verdict":"ESCALATE","reason":"Story class uncertain"},
+    {"when":"construction_pain_relevance.noul < 0.90","verdict":"ESCALATE","reason":"Construction execution problem not sufficiently explicit"},
+    {"when":"quote_fit.noul < 0.90","verdict":"ESCALATE","reason":"Source excerpt not sufficiently grounded"}
+  ],
+  "confidence_floor": 0.90,
+  "calibrated": false,
+  "notes": {
+    "count_rule": "Count only first_person_problem_or_request with choice confidence >=0.90, both noul scores >=0.90 AND deterministic full-body, canonical-link, exact quote and unique-root gates. All other rows remain held/rejected candidates. Purchase intent and author business identity remain separately unknown unless supported.",
+    "separation": "Do not replace deere.social-demand. Relevant-story count and strict commercial-demand PASS count are separate. No prevalence inference from a nonrepresentative convenience sample."
+  }
+}
