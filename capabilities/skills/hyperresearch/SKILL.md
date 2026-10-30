@@ -1,6 +1,10 @@
 ---
 name: hyperresearch
 description: "Deep research via the HYPERRESEARCH V8 architecture — a tier-adaptive 16-step pipeline (light / full / dissertation) that scales from a ~30-minute light-tier answer to an adversarially-audited report at the installed scale gear (~1.5–2.5 hours). This entry skill is a ROUTER. It does not contain step procedures — it tells you which Skill to invoke for each step, in order. Each step's instructions live in its own skill file (`hyperresearch-1-decompose` through `hyperresearch-16-readability-audit`) and are loaded fresh into context when you invoke them."
+done_when:
+  - grep:capabilities/skills/hyperresearch/SKILL.md:PATCH, NEVER REGENERATE
+  - grep:capabilities/skills/hyperresearch/SKILL.md:Step 10 triple-draft ensemble is MANDATORY
+  - grep:capabilities/skills/hyperresearch/SKILL.md:A run is complete ONLY when
 ---
 <!-- rendered from profile "full" (hyperresearch 0.11.1) — edit the profile or the package template, not this file -->
 

@@ -2,6 +2,10 @@
 name: interface-review
 disable-model-invocation: true
 description: Reviews your work across multiple categories like UI, typography, layout, color, writing and accessibility and gives you a detailed analysis of the findings.
+done_when:
+  - grep:capabilities/skills/interface-review/SKILL.md:Never mutate the working tree
+  - grep:capabilities/skills/interface-review/SKILL.md:Never report a review of nothing as
+  - grep:capabilities/skills/interface-review/scope-resolution.md:(?i)consumer
 ---
 
 # Change review
