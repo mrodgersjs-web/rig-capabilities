@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# done_when: cmd:python3 scripts/hook_fires_misc.py s1gate-stage-gate.sh
 # s1gate-stage-gate.sh -- stop a coding agent finishing a stage that is not good enough.
 #
 # Wire as a Claude Code / OMP Stop or PostToolUse hook:
