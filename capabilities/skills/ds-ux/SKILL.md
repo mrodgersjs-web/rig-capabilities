@@ -14,8 +14,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: ux.md: flows and IA, form and input spec with error states, a11y checklist results (keyboard, focus, contrast, screen reader), hierarchy rationale, with citations or labeled own reasoning on every judgment"
 done_when:
-  - cmd:python3 tools/claims_check.py studio-skills/skills/ds-ux/SKILL.md
-  - cmd:python3 tools/check_family.py
+  - cmd:python3 ../rig-design-studio-os/tools/claims_check.py capabilities/skills/ds-ux/SKILL.md
+  - cmd:python3 ../rig-design-studio-os/tools/check_family.py
 quality_floor: 0.6
 ---
 

@@ -14,8 +14,8 @@ status: Stable
 acl: internal
 outcome: "design-ux: layout.md: grid (12/8/4 by breakpoint), spacing scale, section order with hierarchy reasoning, wireframe or layout notes per breakpoint, with citations or labeled own reasoning on every judgment"
 done_when:
-  - cmd:python3 tools/claims_check.py studio-skills/skills/ds-layout/SKILL.md
-  - cmd:python3 tools/check_family.py
+  - cmd:python3 ../rig-design-studio-os/tools/claims_check.py capabilities/skills/ds-layout/SKILL.md
+  - cmd:python3 ../rig-design-studio-os/tools/check_family.py
 quality_floor: 0.6
 ---
 

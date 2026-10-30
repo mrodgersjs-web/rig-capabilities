@@ -24,3 +24,17 @@ Owning main skill: ds-ui-system. Every row paraphrases a good-versus-bad contras
 | 18 | Neobrutalist card with hard 4/4 zero-blur shadow and thick stroke | The same card with a soft blurred drop shadow | The recipe is defined by hard edges | CLAIM(4BEEoYYDmUg@02:37) |
 | 19 | Button animated on the component so every instance inherits it | Re-animating the tab bar per instance | Component-level prototype links scale | CLAIM(1JZcMnecWHI@07:03) |
 | 20 | Property panel ordered show-toggle first, editable value below | Toggles and fields in creation order | Editors find controls predictably | CLAIM(aGvWDDPsjUM@11:25) |
+| 21 | Glass card with shapes behind it and a thin gradient rim, also tested on a saturated field | Pale rounded rectangle on an empty canvas | Frost and rim only read when something shows through | CLAIM(AdNOcgK_6Bs@02:15) |
+| 22 | One Button asset whose instance swaps fill, outline, or shadow | A separate component for every button style | Variants keep the assets panel to one control | CLAIM(6XcDHOlBARc@04:27) |
+| 23 | Horizontal overflow with the frame smaller than the card row, and trailing padding on the last item | A card row set to no scrolling, last card flush to the clip | The viewport is the frame; content must exceed it, and the end needs air | CLAIM(z7amr9d5ORA@07:56) |
+| 24 | Whole heading row as the accordion click target, chevron direction matching open versus closed | Only the tiny chevron is clickable | The live control accepts a click on the heading, not just the icon | CLAIM(z7amr9d5ORA@20:46) |
+| 25 | Stroke gradient sampled stop by stop from the reference | A two-stop gradient that only approximates the rainbow | Sampling each stop keeps the hue order | CLAIM(z7amr9d5ORA@13:32) |
+| 26 | 1px rectangle divider on whole pixels, with a fill | A line on decimal coordinates and a 1px hit target | A rectangle matches a web divider and stays selectable inside auto layout | CLAIM(z3B1pUzyarM@01:14) |
+| 27 | Avatar built as a square at radius 9999 inside a component | A true ellipse used everywhere, then a request to round the corners | An ellipse cannot become a rounded rectangle | CLAIM(z3B1pUzyarM@08:10) |
+| 28 | Closed pen shape, or a scanned drawing traced with the pen | Pencil squiggle used as an icon, fill doing nothing | Open paths cannot take a fill | CLAIM(z3B1pUzyarM@03:23) |
+| 29 | Label whose plate grows when the word changes | Fixed button you retype into until the text clips | The container is a function of the label | CLAIM(VMQasbs3Xkk@00:55) |
+| 30 | Each repeated mark rotated on its own center | The whole selection rotated as one group | In-place rotation keeps the layout | CLAIM(VMQasbs3Xkk@02:56) |
+| 31 | Swatch ramp expanded into individual squares and added to the library | A two-color guess with no steps between | The steps are the ramp; the library is the system | CLAIM(VMQasbs3Xkk@04:08) |
+| 32 | Lighter card than the page, gap tested by duplication, title grouped with the description | Darker card, text flush to the edge, hero-scale button inside | Emphasis, padding, and hierarchy are the card | CLAIM(jXEn5IFxmAc@03:21) |
+| 33 | Status chip at about 14px reusing an existing color | A second title-size label in a new color | The chip is a label, not another heading | CLAIM(jXEn5IFxmAc@06:01) |
+| 34 | Borderless stack whose button has a solid fill | Borderless stack whose stroked button disappears on the page | The control still has to read | CLAIM(jXEn5IFxmAc@13:28) |

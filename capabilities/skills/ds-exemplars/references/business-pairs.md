@@ -34,3 +34,14 @@ Owning main skill: ds-business. Every row paraphrases a good-versus-bad contrast
 | 28 | Client talks most of the first call | Designer monologue about their own process | The call exists to learn the business | CLAIM(T5JglDcd54A@00:53) |
 | 29 | Wireframe with section topics only, no type choices | Gray boxes that already imply a font the client then demands | Early approval of a placeholder becomes a constraint | CLAIM(T5JglDcd54A@05:17) |
 | 30 | One revision per stage, closed when done | Reopening the sitemap after later stages have started | Forward motion is the service | CLAIM(T5JglDcd54A@07:54) |
+| 31 | One visual story: goals, construction, palette, then mockups in the brand colors | Loose comps plus a note that only asks for thoughts | The send has to carry the reasoning or the client judges taste alone | CLAIM(q6_LZhs4t6M@00:13) |
+| 32 | Presentation built once, reused on the next client | A new deck invented for every send | The structure is the system; the client fields change | CLAIM(q6_LZhs4t6M@00:50) |
+| 33 | Spell-checked artwork before send | A typo the client finds in the comp | Typos burn a round and the trust | CLAIM(j9Esan5T3Y8@01:02) |
+| 34 | Fonts embedded or outlined, plus an editable copy kept back | Font files emailed, or outlined type with no editable file left | A printer without the font breaks the job; outlined-only blocks later edits | CLAIM(j9Esan5T3Y8@01:39) |
+| 35 | Delivery file named with project, designer, and date | A file titled file one or design one | Unnamed files get lost on both sides | CLAIM(j9Esan5T3Y8@02:40) |
+| 36 | Test print in hand before the print send | Screen-only sign-off on print work | Paper shows color and spacing the monitor hides | CLAIM(j9Esan5T3Y8@03:45) |
+| 37 | One course, several prices by buyer type | Three cloned members areas for the same lessons | Extra areas are extra work when only the price changes | CLAIM(iyNezw9D7k8@01:46) |
+| 38 | Sales page with one block per plan the buyer is allowed to buy | One checkout that lets any buyer pick any price | Eligibility is the point of the tiers | CLAIM(iyNezw9D7k8@06:36) |
+| 39 | Use-case videos years after publish | Publish, then immediately start the next product | Later videos are what kept this set selling | CLAIM(Q9vLsNNfPtI@04:24) |
+| 40 | Net after fees, with the years named | A gross total with no window and no fee cut | The number people repeat is not what you kept | CLAIM(Q9vLsNNfPtI@03:43) |
+| 41 | Mockup previews on the product page | A file dump with no picture of use | Buyers need to see an application before they pay | CLAIM(Q9vLsNNfPtI@02:23) |

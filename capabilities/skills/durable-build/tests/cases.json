@@ -1,494 +1,599 @@
 [
-  {
-    "name": "Proof refuses without a certificate, and force cannot buy the gate",
-    "steps": [
-      {
-        "activate": {
-          "intent": "ship the durable-build loop"
-        }
-      },
-      {
-        "write": {
-          "path": "intent.md",
-          "content": "## Goal\nShip the durable-build loop\n## Done-test\n- cmd:test -f <cwd>/src/app.py\n## Out of scope\n- outward publishing\n## Budget\n- cpu_minutes 30, usd 5, wallclock 1800\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "I",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "write": {
-          "path": "diagnosis.md",
-          "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL3 rejected (no durable state to protect), L4 accepted, L5 rejected (no fleet)\n## Mode necessity\nA2/A3/A4 rejected: no model in the decision path; A1 accepted\n## Owner\nT6 pure computation, stdlib argparse; no scheduler installed\n## Rejected fits\nL5-D3-A3-S rejected: needs nothing resident and no human coordination\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "D",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
-      },
-      {
-        "write": {
-          "path": "build.md",
-          "content": "## Change\nAdd the durable-build loop spec and its case fixtures\n## Determinism\nrig-determinism-85 inventory \u2192 classify \u2192 score, four ratios recomputed\n## Artifacts\n- capabilities/skills/durable-build/loop.yaml\n"
-        }
-      },
-      {
-        "hook": {
-          "event": "pre-tool",
-          "tool_name": "Write",
-          "tool_input": {
-            "file_path": "<cwd>/src/app.py"
-          }
-        },
-        "expect": {
-          "action": "allow"
-        }
-      },
-      {
-        "stage": {
-          "id": "B",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "write": {
-          "path": "verify.md",
-          "content": "## Checks\ntest -f src/app.py \u2014 green\n## Planted failure\nmissing-app proven RED then GREEN\n## Independent verdict\nawaiting cross-family verifier\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "V",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": false
-        }
-      },
-      {
-        "check_add": "test -f <cwd>/src/app.py"
-      },
-      {
-        "plant": {
-          "name": "missing-app",
-          "red": "test -f <cwd>/src/zz.py",
-          "green": "test -f <cwd>/src/app.py"
-        }
-      },
-      {
-        "verify": {
-          "family": "codex",
-          "mock": "VERIFIED"
-        },
-        "expect": {
-          "ok": true,
-          "verdict": "VERIFIED"
-        }
-      },
-      {
-        "stage": {
-          "id": "V",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "write": {
-          "path": "proof.md",
-          "content": "## Claim\ndurable-build ships\n## Receipts\nmissing: D85 certificate\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "P",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": false
-        }
-      },
-      {
-        "stage": {
-          "id": "P",
-          "status": "pass",
-          "force": true,
-          "note": "trying to push through"
-        },
-        "expect": {
-          "ok": false
-        }
-      },
-      {
-        "assert": {
-          "field": "stage_status"
-        }
-      }
-    ]
-  },
-  {
-    "name": "A freshly minted certificate clears Proof and seals; the packet binds it",
-    "steps": [
-      {
-        "activate": {
-          "intent": "certify a real build"
-        }
-      },
-      {
-        "write": {
-          "path": "intent.md",
-          "content": "## Goal\nCertify a real build\n## Done-test\n- cmd:test -f <cwd>/certificate.json\n## Out of scope\n- deployment\n## Budget\n- cpu_minutes 20, usd 3, wallclock 900\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "I",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "write": {
-          "path": "diagnosis.md",
-          "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL3 rejected, L4 accepted, L5 rejected\n## Mode necessity\nA2 rejected: A1 baseline already satisfies the done-test\n## Owner\nT1 clock-free; plain computation carried by CPython\n## Rejected fits\nA3 rejected: no model call survives the baseline comparison\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "D",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
-      },
-      {
-        "write": {
-          "path": "build.md",
-          "content": "## Change\nMint the reference build record\n## Determinism\nrig-determinism-85 checklist recomputes the registered score\n## Artifacts\n- build.json\n"
-        }
-      },
-      {
-        "hook": {
-          "event": "pre-tool",
-          "tool_name": "Write",
-          "tool_input": {
-            "file_path": "<cwd>/src/app.py"
-          }
-        },
-        "expect": {
-          "action": "allow"
-        }
-      },
-      {
-        "stage": {
-          "id": "B",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "check_add": "test -f <cwd>/src/app.py"
-      },
-      {
-        "plant": {
-          "name": "app-present",
-          "red": "test -f <cwd>/src/zz.py",
-          "green": "test -f <cwd>/src/app.py"
-        }
-      },
-      {
-        "verify": {
-          "family": "codex",
-          "mock": "VERIFIED"
-        },
-        "expect": {
-          "ok": true,
-          "verdict": "VERIFIED"
-        }
-      },
-      {
-        "write": {
-          "path": "verify.md",
-          "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ngpt GO\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "V",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "sh": "cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json <cwd>/build.json && cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/root/diagram.json <cwd>/diagram.json && python3 <repo>/capabilities/skills/rig-determinism-85/bin/rig-determinism-85 checklist <cwd>/build.json --root <cwd> --process-id julie_synthetic > <cwd>/certificate.json"
-      },
-      {
-        "write": {
-          "path": "proof.md",
-          "content": "## Claim\nbuild.json is certified\n## Receipts\nD85 certificate minted and verified this run\n"
-        }
-      },
-      {
-        "sh": "python3 -c \"import sys,json,pathlib; sys.path.insert(0,'<repo>'); from rig_capabilities import build_diagnose, build_index; p={'goal':'certify a real build','cell_id':'L4-D2-A1-P','done_test':['cmd:test -f certificate.json'],'out_of_scope':['deployment'],'effort_budget':{'cpu_minutes':20,'usd':3,'wallclock_seconds':900},'evidence_refs':['file:build.json']}; build_diagnose.diagnose(p); open('<cwd>/diagnosis.json','w').write(json.dumps(p)); build_index.open_live(pathlib.Path('<repo>'),'<cwd>/diagnosis_index.jsonl').insert('L4-D2-A1-P','build.json')\""
-      },
-      {
-        "seal": {}
-      },
-      {
-        "stage": {
-          "id": "P",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      }
-    ]
-  },
-  {
-    "name": "Altering the build after certification blocks Proof",
-    "steps": [
-      {
-        "activate": {
-          "intent": "tamper with a certified build"
-        }
-      },
-      {
-        "write": {
-          "path": "intent.md",
-          "content": "## Goal\nTamper test\n## Done-test\n- cmd:test -f <cwd>/certificate.json\n## Out of scope\n- none\n## Budget\n- cpu_minutes 10, usd 1, wallclock 600\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "I",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "write": {
-          "path": "diagnosis.md",
-          "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL4 accepted\n## Mode necessity\nA1 accepted\n## Owner\nT6 plain computation\n## Rejected fits\nA4 rejected: no autonomy needed\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "D",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
-      },
-      {
-        "write": {
-          "path": "build.md",
-          "content": "## Change\nmint then alter the build record\n## Determinism\nrig-determinism-85 inventory -> classify -> score\n## Artifacts\n- build.json\n"
-        }
-      },
-      {
-        "hook": {
-          "event": "pre-tool",
-          "tool_name": "Write",
-          "tool_input": {
-            "file_path": "<cwd>/src/app.py"
-          }
-        },
-        "expect": {
-          "action": "allow"
-        }
-      },
-      {
-        "stage": {
-          "id": "B",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "check_add": "test -f <cwd>/src/app.py"
-      },
-      {
-        "plant": {
-          "name": "app-present",
-          "red": "test -f <cwd>/src/zz.py",
-          "green": "test -f <cwd>/src/app.py"
-        }
-      },
-      {
-        "verify": {
-          "family": "codex",
-          "mock": "VERIFIED"
-        },
-        "expect": {
-          "ok": true,
-          "verdict": "VERIFIED"
-        }
-      },
-      {
-        "write": {
-          "path": "verify.md",
-          "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ncodex GO\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "V",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "sh": "cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json <cwd>/build.json && cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/root/diagram.json <cwd>/diagram.json && python3 <repo>/capabilities/skills/rig-determinism-85/bin/rig-determinism-85 checklist <cwd>/build.json --root <cwd> --process-id julie_synthetic > <cwd>/certificate.json"
-      },
-      {
-        "sh": "printf '{\"operations\": []}\\n' > <cwd>/build.json"
-      },
-      {
-        "write": {
-          "path": "proof.md",
-          "content": "## Claim\nthe altered build is still certified\n## Receipts\nstale certificate\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "P",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": false
-        }
-      },
-      {
-        "stage": {
-          "id": "P",
-          "status": "pass",
-          "force": true,
-          "note": "shipping anyway"
-        },
-        "expect": {
-          "ok": false
-        }
-      }
-    ]
-  },
-  {
-    "name": "the builder cannot certify itself",
-    "steps": [
-      {
-        "activate": {
-          "intent": "self-certify a build"
-        }
-      },
-      {
-        "verify": {
-          "family": "test",
-          "mock": "VERIFIED"
-        },
-        "expect": {
-          "ok": false,
-          "reason_contains": "GEV"
-        }
-      },
-      {
-        "write": {
-          "path": "intent.md",
-          "content": "## Goal\nSelf-certify\n## Done-test\n- cmd:true\n## Out of scope\n- none\n## Budget\n- cpu_minutes 5, usd 1, wallclock 300\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "I",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": true
-        }
-      },
-      {
-        "stage": {
-          "id": "D",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": false
-        }
-      },
-      {
-        "write": {
-          "path": "diagnosis.md",
-          "content": "## Cell\nno coordinate recorded\n## Level fits\nnone\n## Mode necessity\nnone\n## Owner\nby feel\n## Rejected fits\nnone\n"
-        }
-      },
-      {
-        "stage": {
-          "id": "D",
-          "status": "pass"
-        },
-        "expect": {
-          "ok": false
-        }
-      }
-    ]
-  },
-  {
-    "name": "a certificate with no cell-bound outcome row still blocks Proof",
-    "steps": [
-      { "activate": { "intent": "certify without an outcome row" } },
-      { "write": { "path": "intent.md", "content": "## Goal\nCertify, no row\n## Done-test\n- cmd:test -f certificate.json\n## Out of scope\n- deployment\n## Budget\n- cpu_minutes 20, usd 3, wallclock 900\n" } },
-      { "stage": { "id": "I", "status": "pass" }, "expect": { "ok": true } },
-      { "write": { "path": "diagnosis.md", "content": "## Cell\nL4-D2-A1-P\n## Level fits\nL4 accepted\n## Mode necessity\nA1\n## Owner\nT1 clock-free; plain computation carried by CPython\n## Rejected fits\nA3 rejected: no model call\n" } },
-      { "stage": { "id": "D", "status": "pass" }, "expect": { "ok": true } },
-      { "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py" },
-      { "write": { "path": "build.md", "content": "## Change\nCertify a build with no index row\n## Determinism\nrig-determinism-85 checklist recomputes the score\n## Artifacts\n- build.json\n" } },
-      { "hook": { "event": "pre-tool", "tool_name": "Write", "tool_input": { "file_path": "<cwd>/src/app.py" } }, "expect": { "action": "allow" } },
-      { "stage": { "id": "B", "status": "pass" }, "expect": { "ok": true } },
-      { "check_add": "test -f <cwd>/src/app.py" },
-      { "plant": { "name": "app-present", "red": "test -f <cwd>/zz.py", "green": "test -f <cwd>/src/app.py" } },
-      { "verify": { "family": "codex", "mock": "VERIFIED" }, "expect": { "ok": true, "verdict": "VERIFIED" } },
-      { "write": { "path": "verify.md", "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ncodex VERIFIED\n" } },
-      { "stage": { "id": "V", "status": "pass" }, "expect": { "ok": true } },
-      { "write": { "path": "proof.md", "content": "## Claim\nbuild.json is certified\n## Receipts\ncertificate minted; no outcome-index row written\n" } },
-      { "sh": "python3 -c \"import sys,json; sys.path.insert(0,'<repo>'); from rig_capabilities import build_diagnose; p={'goal':'certify without an outcome row','cell_id':'L4-D1-A1-P','done_test':['cmd:test -f certificate.json'],'out_of_scope':['deployment'],'effort_budget':{'cpu_minutes':20,'usd':3,'wallclock_seconds':900},'evidence_refs':['file:build.json']}; build_diagnose.diagnose(p); open('<cwd>/diagnosis.json','w').write(json.dumps(p))\"" },
-      { "stage": { "id": "P", "status": "pass" }, "expect": { "ok": false, "reason_contains": "outcome index has no row for L4-D1-A1-P" } }
-    ]
-  }
+ {
+  "name": "Proof refuses without a certificate, and force cannot buy the gate",
+  "steps": [
+   {
+    "activate": {
+     "intent": "ship the durable-build loop"
+    }
+   },
+   {
+    "write": {
+     "path": "intent.md",
+     "content": "## Goal\nShip the durable-build loop\n## Done-test\n- cmd:test -f <cwd>/src/app.py\n## Out of scope\n- outward publishing\n## Budget\n- cpu_minutes 30, usd 5, wallclock 1800\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "I",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "diagnosis.md",
+     "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL3 rejected (no durable state to protect), L4 accepted, L5 rejected (no fleet)\n## Mode necessity\nA2/A3/A4 rejected: no model in the decision path; A1 accepted\n## Owner\nT6 pure computation, stdlib argparse; no scheduler installed\n## Rejected fits\nL5-D3-A3-S rejected: needs nothing resident and no human coordination\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
+   },
+   {
+    "write": {
+     "path": "build.md",
+     "content": "## Change\nAdd the durable-build loop spec and its case fixtures\n## Determinism\nrig-determinism-85 inventory → classify → score, four ratios recomputed\n## Artifacts\n- capabilities/skills/durable-build/loop.yaml\n"
+    }
+   },
+   {
+    "hook": {
+     "event": "pre-tool",
+     "tool_name": "Write",
+     "tool_input": {
+      "file_path": "<cwd>/src/app.py"
+     }
+    },
+    "expect": {
+     "action": "allow"
+    }
+   },
+   {
+    "stage": {
+     "id": "B",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "verify.md",
+     "content": "## Checks\ntest -f src/app.py — green\n## Planted failure\nmissing-app proven RED then GREEN\n## Independent verdict\nawaiting cross-family verifier\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "V",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false
+    }
+   },
+   {
+    "check_add": "test -f <cwd>/src/app.py"
+   },
+   {
+    "plant": {
+     "name": "missing-app",
+     "red": "test -f <cwd>/src/zz.py",
+     "green": "test -f <cwd>/src/app.py"
+    }
+   },
+   {
+    "verify": {
+     "family": "codex",
+     "mock": "VERIFIED"
+    },
+    "expect": {
+     "ok": true,
+     "verdict": "VERIFIED"
+    }
+   },
+   {
+    "stage": {
+     "id": "V",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "proof.md",
+     "content": "## Claim\ndurable-build ships\n## Receipts\nmissing: D85 certificate\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false
+    }
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass",
+     "force": true,
+     "note": "trying to push through"
+    },
+    "expect": {
+     "ok": false
+    }
+   },
+   {
+    "assert": {
+     "field": "stage_status"
+    }
+   }
+  ]
+ },
+ {
+  "name": "A freshly minted certificate clears Proof and seals; the packet binds it",
+  "steps": [
+   {
+    "activate": {
+     "intent": "certify a real build"
+    }
+   },
+   {
+    "write": {
+     "path": "intent.md",
+     "content": "## Goal\nCertify a real build\n## Done-test\n- cmd:test -f <cwd>/certificate.json\n## Out of scope\n- deployment\n## Budget\n- cpu_minutes 20, usd 3, wallclock 900\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "I",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "diagnosis.md",
+     "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL3 rejected, L4 accepted, L5 rejected\n## Mode necessity\nA2 rejected: A1 baseline already satisfies the done-test\n## Owner\nT1 clock-free; plain computation carried by CPython\n## Rejected fits\nA3 rejected: no model call survives the baseline comparison\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
+   },
+   {
+    "write": {
+     "path": "build.md",
+     "content": "## Change\nMint the reference build record\n## Determinism\nrig-determinism-85 checklist recomputes the registered score\n## Artifacts\n- build.json\n"
+    }
+   },
+   {
+    "hook": {
+     "event": "pre-tool",
+     "tool_name": "Write",
+     "tool_input": {
+      "file_path": "<cwd>/src/app.py"
+     }
+    },
+    "expect": {
+     "action": "allow"
+    }
+   },
+   {
+    "stage": {
+     "id": "B",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "check_add": "test -f <cwd>/src/app.py"
+   },
+   {
+    "plant": {
+     "name": "app-present",
+     "red": "test -f <cwd>/src/zz.py",
+     "green": "test -f <cwd>/src/app.py"
+    }
+   },
+   {
+    "verify": {
+     "family": "codex",
+     "mock": "VERIFIED"
+    },
+    "expect": {
+     "ok": true,
+     "verdict": "VERIFIED"
+    }
+   },
+   {
+    "write": {
+     "path": "verify.md",
+     "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ngpt GO\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "V",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json <cwd>/build.json && cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/root/diagram.json <cwd>/diagram.json && python3 <repo>/capabilities/skills/rig-determinism-85/bin/rig-determinism-85 checklist <cwd>/build.json --root <cwd> --process-id julie_synthetic > <cwd>/certificate.json"
+   },
+   {
+    "write": {
+     "path": "proof.md",
+     "content": "## Claim\nbuild.json is certified\n## Receipts\nD85 certificate minted and verified this run\n"
+    }
+   },
+   {
+    "sh": "python3 -c \"import sys,json,pathlib; sys.path.insert(0,'<repo>'); from rig_capabilities import build_diagnose, build_index; p={'goal':'certify a real build','cell_id':'L4-D2-A1-P','done_test':['cmd:test -f certificate.json'],'out_of_scope':['deployment'],'effort_budget':{'cpu_minutes':20,'usd':3,'wallclock_seconds':900},'evidence_refs':['file:build.json']}; build_diagnose.diagnose(p); open('<cwd>/diagnosis.json','w').write(json.dumps(p)); build_index.open_live(pathlib.Path('<repo>'),'<cwd>/diagnosis_index.jsonl').insert('L4-D2-A1-P','build.json')\""
+   },
+   {
+    "seal": {}
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   }
+  ]
+ },
+ {
+  "name": "Altering the build after certification blocks Proof",
+  "steps": [
+   {
+    "activate": {
+     "intent": "tamper with a certified build"
+    }
+   },
+   {
+    "write": {
+     "path": "intent.md",
+     "content": "## Goal\nTamper test\n## Done-test\n- cmd:test -f <cwd>/certificate.json\n## Out of scope\n- none\n## Budget\n- cpu_minutes 10, usd 1, wallclock 600\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "I",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "diagnosis.md",
+     "content": "## Cell\nL4-D2-A1-B\n## Level fits\nL4 accepted\n## Mode necessity\nA1 accepted\n## Owner\nT6 plain computation\n## Rejected fits\nA4 rejected: no autonomy needed\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
+   },
+   {
+    "write": {
+     "path": "build.md",
+     "content": "## Change\nmint then alter the build record\n## Determinism\nrig-determinism-85 inventory -> classify -> score\n## Artifacts\n- build.json\n"
+    }
+   },
+   {
+    "hook": {
+     "event": "pre-tool",
+     "tool_name": "Write",
+     "tool_input": {
+      "file_path": "<cwd>/src/app.py"
+     }
+    },
+    "expect": {
+     "action": "allow"
+    }
+   },
+   {
+    "stage": {
+     "id": "B",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "check_add": "test -f <cwd>/src/app.py"
+   },
+   {
+    "plant": {
+     "name": "app-present",
+     "red": "test -f <cwd>/src/zz.py",
+     "green": "test -f <cwd>/src/app.py"
+    }
+   },
+   {
+    "verify": {
+     "family": "codex",
+     "mock": "VERIFIED"
+    },
+    "expect": {
+     "ok": true,
+     "verdict": "VERIFIED"
+    }
+   },
+   {
+    "write": {
+     "path": "verify.md",
+     "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ncodex GO\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "V",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json <cwd>/build.json && cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/root/diagram.json <cwd>/diagram.json && python3 <repo>/capabilities/skills/rig-determinism-85/bin/rig-determinism-85 checklist <cwd>/build.json --root <cwd> --process-id julie_synthetic > <cwd>/certificate.json"
+   },
+   {
+    "sh": "printf '{\"operations\": []}\\n' > <cwd>/build.json"
+   },
+   {
+    "write": {
+     "path": "proof.md",
+     "content": "## Claim\nthe altered build is still certified\n## Receipts\nstale certificate\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false
+    }
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass",
+     "force": true,
+     "note": "shipping anyway"
+    },
+    "expect": {
+     "ok": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "the builder cannot certify itself",
+  "steps": [
+   {
+    "activate": {
+     "intent": "self-certify a build"
+    }
+   },
+   {
+    "verify": {
+     "family": "test",
+     "mock": "VERIFIED"
+    },
+    "expect": {
+     "ok": false,
+     "reason_contains": "GEV"
+    }
+   },
+   {
+    "write": {
+     "path": "intent.md",
+     "content": "## Goal\nSelf-certify\n## Done-test\n- cmd:true\n## Out of scope\n- none\n## Budget\n- cpu_minutes 5, usd 1, wallclock 300\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "I",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false
+    }
+   },
+   {
+    "write": {
+     "path": "diagnosis.md",
+     "content": "## Cell\nno coordinate recorded\n## Level fits\nnone\n## Mode necessity\nnone\n## Owner\nby feel\n## Rejected fits\nnone\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false
+    }
+   }
+  ]
+ },
+ {
+  "name": "a certificate with no cell-bound outcome row still blocks Proof",
+  "steps": [
+   {
+    "activate": {
+     "intent": "certify without an outcome row"
+    }
+   },
+   {
+    "write": {
+     "path": "intent.md",
+     "content": "## Goal\nCertify, no row\n## Done-test\n- cmd:test -f certificate.json\n## Out of scope\n- deployment\n## Budget\n- cpu_minutes 20, usd 3, wallclock 900\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "I",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "write": {
+     "path": "diagnosis.md",
+     "content": "## Cell\nL4-D2-A1-P\n## Level fits\nL4 accepted\n## Mode necessity\nA1\n## Owner\nT1 clock-free; plain computation carried by CPython\n## Rejected fits\nA3 rejected: no model call\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "D",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "mkdir -p <cwd>/src && printf 'x\\n' > <cwd>/src/app.py"
+   },
+   {
+    "write": {
+     "path": "build.md",
+     "content": "## Change\nCertify a build with no index row\n## Determinism\nrig-determinism-85 checklist recomputes the score\n## Artifacts\n- build.json\n"
+    }
+   },
+   {
+    "hook": {
+     "event": "pre-tool",
+     "tool_name": "Write",
+     "tool_input": {
+      "file_path": "<cwd>/src/app.py"
+     }
+    },
+    "expect": {
+     "action": "allow"
+    }
+   },
+   {
+    "stage": {
+     "id": "B",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "check_add": "test -f <cwd>/src/app.py"
+   },
+   {
+    "plant": {
+     "name": "app-present",
+     "red": "test -f <cwd>/zz.py",
+     "green": "test -f <cwd>/src/app.py"
+    }
+   },
+   {
+    "verify": {
+     "family": "codex",
+     "mock": "VERIFIED"
+    },
+    "expect": {
+     "ok": true,
+     "verdict": "VERIFIED"
+    }
+   },
+   {
+    "write": {
+     "path": "verify.md",
+     "content": "## Checks\ngreen\n## Planted failure\napp-present RED then GREEN\n## Independent verdict\ncodex VERIFIED\n"
+    }
+   },
+   {
+    "stage": {
+     "id": "V",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": true
+    }
+   },
+   {
+    "sh": "cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/build.json <cwd>/build.json && cp <repo>/capabilities/skills/rig-determinism-85/authority/reference/julie_synthetic/root/diagram.json <cwd>/diagram.json && python3 <repo>/capabilities/skills/rig-determinism-85/bin/rig-determinism-85 checklist <cwd>/build.json --root <cwd> --process-id julie_synthetic > <cwd>/certificate.json"
+   },
+   {
+    "write": {
+     "path": "proof.md",
+     "content": "## Claim\nbuild.json is certified\n## Receipts\ncertificate minted; no outcome-index row written\n"
+    }
+   },
+   {
+    "sh": "python3 -c \"import sys,json; sys.path.insert(0,'<repo>'); from rig_capabilities import build_diagnose; p={'goal':'certify without an outcome row','cell_id':'L4-D1-A1-P','done_test':['cmd:test -f certificate.json'],'out_of_scope':['deployment'],'effort_budget':{'cpu_minutes':20,'usd':3,'wallclock_seconds':900},'evidence_refs':['file:build.json']}; build_diagnose.diagnose(p); open('<cwd>/diagnosis.json','w').write(json.dumps(p))\""
+   },
+   {
+    "stage": {
+     "id": "P",
+     "status": "pass"
+    },
+    "expect": {
+     "ok": false,
+     "reason_contains": "outcome index has no row for L4-D1-A1-P"
+    }
+   }
+  ]
+ }
 ]
