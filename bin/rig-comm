@@ -1,0 +1,13 @@
+#!/bin/sh
+# rig-comm — public CLI shim for the Communications OS runtime (v17.7).
+# Resolves the installed skill in any harness, or the canonical repo.
+for r in \
+  "$HOME/.claude/skills/rig-communications-core" \
+  "$HOME/.codex/skills/rig-communications-core" \
+  "$HOME/.hermes/skills/rig-communications-core" \
+  "$HOME/.agents/skills/rig-communications-core" \
+  "$HOME/Developer/rig-capabilities/capabilities/skills/rig-communications-core"; do
+  [ -f "$r/rig_comms/__init__.py" ] && exec env PYTHONPATH="$r" python3 -m rig_comms "$@"
+done
+echo "rig-comm: rig-communications-core not found in any harness root" >&2
+exit 4
