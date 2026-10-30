@@ -1,6 +1,9 @@
 ---
 name: better-writing
 description: Focuses on improving product copy in your project.
+done_when:
+  - grep:capabilities/skills/better-writing/SKILL.md:Verb-first buttons
+  - grep:capabilities/skills/better-writing/SKILL.md:Never assemble a sentence from fragments
 ---
 
 # Interface writing

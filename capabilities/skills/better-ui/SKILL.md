@@ -1,6 +1,10 @@
 ---
 name: better-ui
 description: Polishes and improves the UI in your project. Covers concentric border radius, optical alignment, surface depth, contextual icons, hit areas and more.
+done_when:
+  - grep:capabilities/skills/better-ui/SKILL.md:Always .0\.96.; anything below
+  - grep:capabilities/skills/better-ui/SKILL.md:Never .will-change.{1,3}all
+  - grep:capabilities/skills/better-ui/surfaces.md:(?i)radius|shadow
 ---
 
 # UI polish

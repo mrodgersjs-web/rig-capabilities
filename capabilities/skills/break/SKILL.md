@@ -2,6 +2,10 @@
 name: break
 description: Renders a component you choose in every state and scenario on a temporary page and stress tests it.
 disable-model-invocation: true
+done_when:
+  - grep:capabilities/skills/break/SKILL.md:Feed scenarios as props and fixture data
+  - grep:capabilities/skills/break/SKILL.md:Leave the page up, delete it on request
+  - grep:capabilities/skills/break/scenarios.md:(?i)axis|axes
 ---
 
 # Break

@@ -21,11 +21,11 @@ status: Stable
 acl: internal
 outcome: "design-ux: every design job enters one router that fixes the mode, loads one main skill at a time, cites corpus law, is judged by an agent that did not build it, and stops at Gate-D before anything ships"
 done_when:
-  - cmd:python3 tools/claims_check.py
-  - cmd:python3 tools/claims_check.py --plant
-  - cmd:python3 tools/check_family.py
-  - cmd:python3 tools/check_family.py --self-test
-  - cmd:python3 tools/hook_cases.py
+  - cmd:python3 ../rig-design-studio-os/tools/claims_check.py
+  - cmd:python3 ../rig-design-studio-os/tools/claims_check.py --plant
+  - cmd:python3 ../rig-design-studio-os/tools/check_family.py
+  - cmd:python3 ../rig-design-studio-os/tools/check_family.py --self-test
+  - cmd:python3 ../rig-design-studio-os/tools/hook_cases.py
 quality_floor: 0.6
 ---
 
@@ -46,6 +46,16 @@ session start once wired, `ds-director` loads it before its first action, and `w
 plus `when-designing-websites` route design requests here. It is the front door for the family, not a
 deep reference an agent must already know about. All paths are relative to the meta repo
 `~/Developer/rig-design-studio-os`.
+
+## Cross-ref: the run method lives in rig-design-studio
+
+The end-to-end run method (board canvas -> stitch rounds -> open-design dev-handoff
+`rig.design-studio.dev-handoff.v1` -> verify loop) and the example corpus live in the
+`rig-design-studio` meta: rigds-board-canvas, rigds-stitch-rounds, rigds-dev-handoff, rigds-verify-loop
+plus subs (rigds-example-pull, rigds-manifest-merge, rigds-export-check, rigds-capture-honesty). This
+meta owns the design-craft skills below; when the task is running the design-to-build method itself,
+enter through `skill://rig-design-studio`. The dev-handoff contract is portable: any coding agent can
+consume a rig.design-studio.dev-handoff.v1 export without this family loaded.
 
 ## Decision routing (binding)
 

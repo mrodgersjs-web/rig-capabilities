@@ -1,6 +1,9 @@
 ---
 name: client-delivery-playbook
 description: "Stage-by-stage checklist for one RIG client engagement: kickoff, starter pack, build, handoff, proof, health and renewal, each with the artifact that must exist before moving on. Use when starting, running or closing out a client engagement."
+done_when:
+  - grep:capabilities/skills/client-delivery-playbook/SKILL.md:No number, no claim
+  - grep:capabilities/skills/client-delivery-playbook/SKILL.md:Messages to the client, deploys, invoices and anything public stop at Gate-D
 ---
 
 # client-delivery-playbook

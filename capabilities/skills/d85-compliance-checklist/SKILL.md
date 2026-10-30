@@ -5,6 +5,9 @@ version: 1.0.4
 tags: [d85, determinism, enforcement, coding, gate-d, checklist]
 metadata:
   author: RIG / Mike Rodgers
+done_when:
+  - grep:capabilities/skills/d85-compliance-checklist/SKILL.md:Mismatch rule
+  - grep:capabilities/skills/d85-compliance-checklist/SKILL.md:Builder never self-certifies
 ---
 
 # D85 Compliance Checklist — Build Quality and Certification

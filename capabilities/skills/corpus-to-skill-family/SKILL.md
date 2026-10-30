@@ -1,6 +1,9 @@
 ---
 name: corpus-to-skill-family
 description: "The step-by-step pipeline for turning YouTube channels, courses or documents into a meta-skill with stage skills and sub-skills: screen sources with Jev, capture transcripts, distill cited laws, build focused skills, gate them, file them into the skill surface, and add routing evals. Use when Mike says scrape these creators into skills or build a meta-skill from a corpus."
+done_when:
+  - grep:capabilities/skills/corpus-to-skill-family/SKILL.md:CLAIM\(<videoId>@mm:ss\)
+  - grep:capabilities/skills/corpus-to-skill-family/SKILL.md:it must stay at or above 0.85
 ---
 
 # corpus-to-skill-family

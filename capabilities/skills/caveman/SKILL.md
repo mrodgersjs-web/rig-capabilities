@@ -4,6 +4,8 @@ description: "Ultra-compressed communication mode that cuts output tokens while 
 outcome: "A shorter response that keeps every technical qualification and instruction intact."
 done_when:
   - file:capabilities/skills/caveman/SKILL.md
+  - grep:capabilities/skills/caveman/SKILL.md:Never drop not/never/no/only/except
+  - grep:capabilities/skills/caveman/SKILL.md:Never ADD word to sound caveman
 quality_floor: 0.6
 ---
 

@@ -1,6 +1,9 @@
 ---
 name: client-delivery
 description: "Deliver for a paying RIG client after the sale: kickoff and access, a starter pack, the scoped build or automation, handoff and training, proof of results, health checks and renewal. Use for a client kickoff, a starter pack, a build or CRM or site setup for a client, a handoff, a results report, or renewal prep."
+done_when:
+  - grep:capabilities/skills/client-delivery/SKILL.md:Anything sent to the client, deployed for them, or billed stops at Gate-D
+  - grep:capabilities/skills/client-delivery/SKILL.md:Every claimed result carries a ProofPacket
 ---
 
 # client-delivery

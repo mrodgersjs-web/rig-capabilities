@@ -1,6 +1,9 @@
 ---
 name: create-design-md
 description: Create or update a DESIGN.md from an existing product repository or public website. Use when asked to document an interface's design language, reconstruct its visual system, extract design tokens and guidance from current evidence, or give coding agents persistent UI context. Do not modify product source or promote accidental implementation patterns into design decisions.
+done_when:
+  - grep:capabilities/skills/create-design-md/SKILL.md:Never return, display, or summarize a DESIGN.md draft before lint and export succeed
+  - grep:capabilities/skills/create-design-md/SKILL.md:Use mappings, never sequences, for token groups
 ---
 
 # Create DESIGN.md

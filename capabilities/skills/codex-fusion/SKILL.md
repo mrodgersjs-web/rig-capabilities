@@ -1,6 +1,9 @@
 ---
 name: codex-fusion
 description: Select Fusion in Codex Desktop with GPT-6 Astra as architect, Blackwell or an existing coding subscription as builder, and a different model family as verifier. Use for Fusion teams, local builders, or reducing Astra usage while retaining native Desktop tools.
+done_when:
+  - grep:capabilities/skills/codex-fusion/SKILL.md:never invokes an OpenAI model
+  - grep:capabilities/skills/codex-fusion/SKILL.md:never invent a percentage saved
 ---
 
 # Codex Desktop Fusion
