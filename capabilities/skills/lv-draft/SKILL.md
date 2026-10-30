@@ -94,8 +94,8 @@ anything about a minor (Lane C: stop and hand back to Mike).
 | rc-linkedin-writer | agent (tool) | `~/.omp/agent/agents/rc-linkedin-writer.md` | when a feed-rhythm writer should draft posts or series copy |
 | linkedin-guru | agent (tool) | `~/Developer/rig-gtm-studio-v2/agents/linkedin-guru.md` | when a post brief should be turned into finished copy by the writer/craft/vocabulary trio |
 | dream-weaver | agent (tool) | `~/Developer/rig-gtm-studio-v2/agents/dream-weaver.md` | when a draft needs a deliberated treatment before the scoring loop |
-| step-3-draft | agent (tool) | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/step-3-draft.md` | when the growth-os drafting step should run with its own gates |
-| draft-body | agent (tool) | `~/.aside/u/0/skills/user/linkedin-growth-os/agents/sub/draft-body.md` | when the body sub-agent should write against a plan slot and its source claims |
+| step-3-draft | agent (tool) | `~/.aside/u/0/skill-library/linkedin-growth-os/agents/step-3-draft.md` | when the growth-os drafting step should run with its own gates |
+| draft-body | agent (tool) | `~/.aside/u/0/skill-library/linkedin-growth-os/agents/sub/draft-body.md` | when the body sub-agent should write against a plan slot and its source claims |
 | gtm-draft-only | Eden skill (tool) | `eden://settings/skills/gtm-draft-only` | prospecting lane: stage connection and comment drafts only; sending needs exact Gate-D approval |
 | rig-comms-drafting-loop | runner | `~/Developer/rig-capabilities/capabilities/loops/rig-comms-drafting-loop.md` | routines load it at run time; call this stage at GENERATE, respect the max-3 REVISE latch, and let the verifier certify at VERIFY |
 
@@ -123,6 +123,41 @@ anything about a minor (Lane C: stop and hand back to Mike).
 - AI may research, edit, stress-test and repurpose real material, but it may not take a post from nothing to a draft, and AI-written comments are forbidden entirely. [clark:content-system]
 - One approver. Mike is the final filter on every post; committees make corporate mush. [clark:content-system]
 - Never publish, schedule or send from this stage. Eden is the publisher of record and Gate-D governs live items. [viral-core]
+
+## Lessons from measured outcomes (added 2026-10-01)
+
+These four rules come from this account's own analytics read on 2026-10-01, not from a corpus.
+Provenance tag `[measured:eden-analytics-2026-10-01]` marks an observation on Mike's accounts;
+`[ext:...]` marks an outside finding. Do not blur the two.
+
+- **No closing device repeats within 14 days.** The same thesis close ("the floor drops... what is
+  left on top is judgment") shipped in three posts in two days, and a "PS: What did you...?" close
+  sat on nearly every post in the queue. Recognisable repetition is the AI tell this stage exists to
+  prevent. Check the last 14 days of shipped posts before drafting a close. [measured:eden-analytics-2026-10-01]
+- **Put the receipt in the body, not in a footnote.** Bare thesis lines scored `unverified_claim`
+  0.70-0.81 and did not move across 5 rewrites and 4 line-ablations; the same copy with a named
+  outlet and a date inline dropped to 0.34 and passed. Rewriting does not move that flag, adding the
+  source does. Every draft carries one named number and one named person or outlet in the body.
+  [measured:eden-analytics-2026-10-01]
+- **A poll is a format, and it is the only vehicle that has broken out on this account.** The one
+  post to pass 10K in three weeks closed on a four-option poll and drew 58 comments against 44-116
+  impressions for every non-poll post in the same window. Treat a poll as a first-class option in
+  the format catalog, not an afterthought. [measured:eden-analytics-2026-10-01]
+- **Machine output needs a fail-closed lint gate before it is a draft.** A voice-law audit found 20
+  posts carrying 42 em dashes and 22 posts burying the hook past the ~210-character fold, and every
+  one of them was Lane B, Lane C or unclassified machine output, while 26 hand-written Lane A posts
+  returned zero of both. The doctrine was never the problem; the missing executable check on the
+  producer was. [measured:eden-analytics-2026-10-01]
+- Format evidence from outside our own corpus, recorded as a conflict rather than a silent change:
+  this stage's house default is 6-9 slides, while getcreator's 8,400-post carousel benchmark puts
+  the engagement sweet spot at **9-12 slides** (5.4% engagement, 68-76% swipe-through) and Buffer's
+  45-52M post sample puts carousels at 21.77% median engagement, +278% vs video. The house default
+  has not been tested against this account's own baseline, so the two disagree until measured.
+  [ext:getcreator.io/stats/linkedin-carousel-benchmarks, ext:buffer.com/resources/state-of-social-media-engagement-2026]
+
+- `references/poll-vehicle.md` — polls as a vehicle: construction, cadence conflict, and the private
+  lead read-out. Distilled from three how-to transcripts 2026-10-01, every law cited. Load when the
+  format decision is a poll or when a poll has closed and needs its results post.
 
 ## Done-test
 
