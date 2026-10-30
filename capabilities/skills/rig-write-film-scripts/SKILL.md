@@ -11,7 +11,7 @@ acl: internal
 tags: [writing,film-scripts,communications,surfaces]
 outcome: "content-publishing: film-scripts drafts are engine-assembled and gate-scored, never written blind"
 done_when:
-  - grep:capabilities/skills/rig-write-film-SKILL.md:rig-communications-core
+  - grep:capabilities/skills/rig-write-film-scripts/SKILL.md:rig-communications-core
   - cmd:cd capabilities/skills/rig-communications-core && PYTHONPATH=. python3 -m rig_comms packet --surface film-scripts --brief /dev/null > /dev/null; test $? -eq 0
 quality_floor: 0.6
 ---

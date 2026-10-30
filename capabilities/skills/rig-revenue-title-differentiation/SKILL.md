@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-title-differentiation"
 description: "Fix duplicate/generic titles so each page is distinct to crawlers and clickers: keyword + benefit/value proposition + brand, verified against the site's own title set. Use when the trigger is 'titles are too similar', 'crawled but not indexed', 'title rewrite', or 'title tags audit'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-title-differentiation/SKILL.md:^## Step 2. The formula'
+  - 'grep:capabilities/skills/rig-revenue-title-differentiation/SKILL.md:^## Step 3. Verify before shipping'
 ---
 
 # Title differentiation (one mechanism)

@@ -19,6 +19,9 @@ verified_by: jake
 verified_on: 2026-08-30
 outcome: "security-review: an approved Semgrep ruleset plan runs to completion and merges into SARIF, with scan mode and Pro taint availability stated"
 done_when:
+  - 'grep:capabilities/skills/semgrep/SKILL.md:[A]lways use .--metrics=off.'
+  - 'grep:capabilities/skills/semgrep/SKILL.md:[S]tep 3 is a hard gate'
+  - 'cmd:bash capabilities/skills/semgrep/scripts/run-scans.sh --target /tmp --output-dir /tmp/semgrep-dryrun-fixture --mode run-all --rulesets capabilities/skills/semgrep/tests/rulesets.json --dry-run | grep -q -e --metrics=off'
   - file:capabilities/skills/semgrep/SKILL.md
   - file:capabilities/skills/semgrep/scripts/run-scans.sh
 great_example: examples/great/security-review/semgrep.md

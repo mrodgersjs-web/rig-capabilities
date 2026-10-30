@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-silo-architecture"
 description: "Organize a site into interlinked content silos: pillar page plus 3-5 longtail satellites, every article linked up to its money page and back, so link equity and topical authority compound. Use when the trigger is 'site structure', 'silo', 'internal linking plan', or 'cluster architecture'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-silo-architecture/SKILL.md:^## Step 2. Link rules'
+  - 'grep:capabilities/skills/rig-revenue-silo-architecture/SKILL.md:^## Step 3. Click depth'
 ---
 
 # Silo architecture (one mechanism)

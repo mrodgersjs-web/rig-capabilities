@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-review-engine"
 description: "Operate the review acquisition and reply engine with compliance hard rules: personal asks, keyword-natural replies to every review, no client-relationship confirmation, complaints taken offline. Use when the trigger is 'review strategy', 'get more reviews', 'reply to reviews', or 'review compliance'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-review-engine/SKILL.md:[c]ompliance rules .all mandatory.'
+  - 'grep:capabilities/skills/rig-revenue-review-engine/SKILL.md:[N]ever name a reviewer negatively'
 ---
 
 # Review engine (one mechanism)

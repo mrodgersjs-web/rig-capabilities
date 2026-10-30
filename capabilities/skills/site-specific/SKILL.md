@@ -1,6 +1,8 @@
 ---
 name: site-specific
 description: "Route site-specific tasks to an existing child skill; this router adds no capabilities."
+done_when:
+  - 'grep:capabilities/skills/site-specific/SKILL.md:[D]o not load unrelated children'
 ---
 
 <!-- canonical-category-router -->

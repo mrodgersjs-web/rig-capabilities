@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-stats-articles"
 description: "Build a stats article from the firm's own or properly licensed data — the clean link magnet: a structured data report others cite, with sources, methodology, and a named expert. Use when the trigger is 'stats article', 'data report', 'linkable asset from our data', or 'research content'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-stats-articles/SKILL.md:[n]ever scraped-and-stolen datasets'
+  - 'grep:capabilities/skills/rig-revenue-stats-articles/SKILL.md:[c]ontrarian checks'
 ---
 
 # Stats articles (one mechanism)

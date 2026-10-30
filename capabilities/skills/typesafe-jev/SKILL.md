@@ -4,6 +4,10 @@ description: "Call TypeSafe's Jev (System One) classifier from this machine: the
 tags: [rig, jev, typesafe, system-one, classifier, gates]
 metadata:
   verified: "2026-09-18, jev-1.13.0, live API from Denver; three primitives in one call, 292ms"
+done_when:
+  - 'grep:capabilities/skills/typesafe-jev/SKILL.md:[n]ever print it'
+  - 'grep:capabilities/skills/typesafe-jev/SKILL.md:[n]ever permission to act'
+  - 'grep:capabilities/skills/typesafe-jev/SKILL.md:^## Wiring check'
 ---
 
 # Jev (TypeSafe System One) from this machine

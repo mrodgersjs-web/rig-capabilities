@@ -1,6 +1,9 @@
 ---
 name: tool-intake
 description: "Adopt an outside tool, repo, app or model safely: check what already exists, evaluate license and upkeep, install where it can actually run, wire it only into the harnesses Mike named, and prove it works with a check that can fail. Use for 'clone and install this', 'set this up for aside and omp', 'install X on the 96GB', a new GitHub repo, or a new desktop app."
+done_when:
+  - 'grep:capabilities/skills/tool-intake/SKILL.md:[p]lant one failure and show the check go red'
+  - 'grep:capabilities/skills/tool-intake/SKILL.md:[W]ire only what was asked'
 ---
 
 # tool-intake

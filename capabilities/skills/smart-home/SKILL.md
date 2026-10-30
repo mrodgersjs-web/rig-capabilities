@@ -1,6 +1,8 @@
 ---
 name: smart-home
 description: "Route smart-home tasks to an existing child skill; this router adds no capabilities."
+done_when:
+  - 'grep:capabilities/skills/smart-home/SKILL.md:[D]o not load unrelated children'
 ---
 
 <!-- canonical-category-router -->

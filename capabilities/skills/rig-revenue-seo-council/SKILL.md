@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-seo-council"
 description: "Run the adversarial five-role review before a keyword target or page ships: intent analyst, SERP competitor, on-page technician, contrarian, searcher — then a judge weighs all five. Use when the trigger is 'roast this keyword', 'audit this page', 'pre-publish review', or 'council'."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-seo-council/SKILL.md:[a] single model pretending to be five voices'
+  - 'grep:capabilities/skills/rig-revenue-seo-council/SKILL.md:[S]HIP / REVISE / KILL'
 ---
 
 # SEO Council (one mechanism)

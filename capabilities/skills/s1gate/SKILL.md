@@ -4,6 +4,10 @@ description: "The RIG System-1 Gate. A governed decision layer on TypeSafe's Sys
 tags: [rig, doctrine, gates, verification, jev, typesafe, system-one]
 metadata:
   verified: "2026-09-18 against jev-1.13.0, live API, 13 rubrics, 25 unit tests"
+done_when:
+  - 'grep:capabilities/skills/s1gate/SKILL.md:[A]n undecidable rule ESCALATES'
+  - 'grep:capabilities/skills/s1gate/SKILL.md:[B]elow the floor: ESCALATE, never PASS'
+  - 'grep:capabilities/skills/s1gate/INTEGRATION.md:[A] score that only informs is a dashboard'
 ---
 
 # System-1 Gate (s1gate)
@@ -181,6 +185,23 @@ traffic.
    both came from a question that punished a legitimate pattern.
 4. Every rule needs a `reason`. The reason is what a human reads at 11pm.
 5. Ship `calibrated: false`. Collect labels. Measure. Then enforce.
+
+### Measured CLI/runtime facts (2026-10-01)
+
+- The subject argument must be exactly `kind:id@sha12` (e.g. `--subject
+  "ultra.research:<id>@<sha12>"`); any other shape fails.
+- **An uncalibrated rule downgrades what would be BLOCK into ESCALATE** ("run s1gate_calibrate
+  before enforcing"). So an ESCALATE on an advisory rubric cannot enforce — but its named reasons
+  are still substantive. In particular `claim_supported.noul` fires
+  `"citation does not carry the claim attached to it (source laundering)"`: a citation that does
+  not carry its claim is flagged cheaply and correctly.
+- **Corrective pattern for source laundering:** per-claim source-binding marks in the artifact —
+  `[vaulted]` (fetched into the research vault), `[capture]` (search-excerpt only), `[via]`
+  (secondary source not read at origin) — so secondhand figures are visibly secondhand.
+- A decision id in `~/.rig/s1gate/decisions.db` remains the only evidence that Jev judged an
+  artifact; a working selftest or repeated scoring is not classification quality.
+
+(Source: memory/episodic/2026-10-01.md L312; memory/episodic/2026-09-30.md L22.)
 
 ## Where this integrates
 

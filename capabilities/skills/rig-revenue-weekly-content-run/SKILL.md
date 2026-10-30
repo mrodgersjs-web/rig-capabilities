@@ -1,6 +1,9 @@
 ---
 name: "rig-revenue-weekly-content-run"
 description: "Run the weekly content production cycle for a client site: competitor-gap brief, forced-variable article production, silo linking, drafts-first publishing with a human approval gate, and RSS-derived social copy. Use when the trigger is 'weekly content run', 'this week's content', 'run the content engine', or a standing content cadence for a law/CPA/clinic/consulting firm."
+done_when:
+  - 'grep:capabilities/skills/rig-revenue-weekly-content-run/SKILL.md:[U]nreviewed YMYL claims do not ship'
+  - 'grep:capabilities/skills/rig-revenue-weekly-content-run/SKILL.md:^## Step 3. Review gates'
 ---
 
 # Weekly content run

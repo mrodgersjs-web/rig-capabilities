@@ -7,6 +7,10 @@ metadata:
   github: https://github.com/ViGi-P/skillshilp
   version: "2.1.1"
   purpose: meta-skill
+# done_when:
+# - grep:capabilities/skills/skillshilp-create/SKILL.md:[D]o not create .README.md. or other auxiliary
+# - cmd:bash capabilities/skills/skillshilp-create/scripts/validate-skill.sh capabilities/skills/skillshilp-create | grep -q Skill.validation.passed
+# - cmd:! bash capabilities/skills/skillshilp-create/scripts/validate-skill.sh capabilities/skills/nonexistent-skill-dir >/dev/null 2>&1
 ---
 
 # Skillshilp Create

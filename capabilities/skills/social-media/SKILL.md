@@ -1,6 +1,8 @@
 ---
 name: social-media
 description: "Route social-media tasks to an existing child skill; this router adds no capabilities."
+done_when:
+  - 'grep:capabilities/skills/social-media/SKILL.md:[D]o not load unrelated children'
 ---
 
 <!-- canonical-category-router -->

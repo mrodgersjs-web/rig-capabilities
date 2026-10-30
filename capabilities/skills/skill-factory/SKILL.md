@@ -1,6 +1,9 @@
 ---
 name: skill-factory
 description: "Turn a creator's corpus or a repeated workflow into a governed skill family: choose sources, capture transcripts, distill cited laws, build meta, stage and sub skills, gate them, file them under a meta, and evaluate the routing. Use for 'scrape his videos into skills', 'build a meta-skill from these channels', 'turn this into a skill', or upgrading an existing skill with evidence."
+done_when:
+  - 'grep:capabilities/skills/skill-factory/SKILL.md:[C]urated beats self-generated'
+  - 'grep:capabilities/skills/skill-factory/SKILL.md:[F]ile, never drop'
 ---
 
 # skill-factory

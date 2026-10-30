@@ -5,6 +5,9 @@ license: MIT
 metadata:
   author: ibelick
   version: "1.0.0"
+done_when:
+  - 'grep:capabilities/skills/ui-skills-root/SKILL.md:[r]eturn .no skill needed.'
+  - 'grep:capabilities/skills/ui-skills-root/SKILL.md:[s]elect the smallest useful skill set'
 ---
 
 # UI Skills Root

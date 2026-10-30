@@ -5,6 +5,10 @@ tags: [rig, doctrine, agentic-coding, claude-code, agent-architecture, fleet]
 metadata:
   source: "Tactical Agentic Coding course (https://agenticengineer.com/tactical-agentic-coding) + disler public repos (github.com/disler)"
   extracted: "2026-09-18"
+done_when:
+  - 'grep:capabilities/skills/rig-tac-doctrine/SKILL.md:[A]gents review agents'
+  - 'grep:capabilities/skills/rig-tac-doctrine/SKILL.md:[G]ates verify claims, not guesses'
+  - 'grep:capabilities/skills/rig-tac-doctrine/SKILL.md:[R]IG hard law outranks TAC'
 ---
 
 # TAC Doctrine
