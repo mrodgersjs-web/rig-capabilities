@@ -44,6 +44,10 @@ metadata:
     - publishing, git push, sending, deploying, purchasing or signing anything
     - authoring a new prompt while a stored prompt fits the job
     - content about a minor (routes to its own lane skills first; never auto-scheduled)
+done_when:
+  - grep:capabilities/skills/prompt-router/SKILL.md:MUST NOT present a third-party prompt as first-party
+  - grep:capabilities/skills/prompt-router/SKILL.md:MUST log one .pull. entry in .ledger.jsonl.
+  - grep:capabilities/skills/prompt-router/references/routing.md:(?i)route|rank
 ---
 
 # prompt-router
