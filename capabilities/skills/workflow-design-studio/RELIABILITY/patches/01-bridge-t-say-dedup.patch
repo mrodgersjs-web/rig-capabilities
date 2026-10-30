@@ -1,0 +1,50 @@
+--- a/.rig/bin/prime-chat-mcp
++++ b/.rig/bin/prime-chat-mcp
+@@ def t_say(a):
+     msg = (a.get("message") or "").strip()
+     if not msg:
+         raise ToolError("message is empty")
++    # workflow-design-studio defect-1 (DRAFT patch, do not apply without owner sign-off):
++    # duplicate re-sends of the same text must NOT mint a new job id. A re-send within
++    # DUP_WINDOW_S re-joins the existing job family instead of becoming an unpaired
++    # stuck-relay forever. Long-range repeats (> window) still mint fresh jobs.
++    fam = _dup_family(msg)
++    if fam:
++        meta = json.load(open(f"{JOBS}/{fam}/meta.json"))
++        meta.setdefault("retries", []).append({"ts": time.time(), "via": "t_say_dedup"})
++        json.dump(meta, open(f"{JOBS}/{fam}/meta.json", "w"))
++        _ledger({"tool": "prime_say_dup", "job": fam, "text": msg[:120]})
++        return _job_wait(fam, max(5, min(int(a.get("wait_seconds", 100)), 110)))
+     jid = uuid.uuid4().hex[:12]
+     d = f"{JOBS}/{jid}"
+     os.makedirs(d)
+     j = _jake()
+     if j:
+@@ def t_say(a) tail
+     meta["message"] = msg[:2000]
++    meta["text_key"] = msg.strip()
+     json.dump(meta, open(f"{d}/meta.json", "w"))
+     _ledger({"tool": "prime_say", "job": jid, "mode": meta["mode"], "text": msg[:300]})
+     return _job_wait(jid, max(5, min(int(a.get("wait_seconds", 100)), 110)))
+ 
++DUP_WINDOW_S = 1800
++
++
++def _dup_family(msg, window_s=DUP_WINDOW_S):
++    """Newest same-text job within window_s, or None. Text match is exact on the
++    stripped message (the same key the watchdog's supersede check uses)."""
++    now = time.time()
++    best = None
++    for name in sorted(os.listdir(JOBS)):
++        mp = os.path.join(JOBS, name, "meta.json")
++        if not os.path.exists(mp):
++            continue
++        try:
++            meta = json.load(open(mp))
++        except Exception:
++            continue
++        if (meta.get("message") or "").strip() != msg:
++            continue
++        if now - meta.get("started", 0) <= window_s:
++            best = name
++    return best

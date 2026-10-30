@@ -1,0 +1,22 @@
+--- a/.rig/runtimes/aside-watchdog/aside_watchdog.py
++++ b/.rig/runtimes/aside-watchdog/aside_watchdog.py
+@@ stuck-relays cand loop (reply is None and a newer answered same-text exists)
+             if reply is None:
+                 # a later re-send of the same text that WAS answered supersedes this one
+                 if any(x["reply"] is not None and x["meta"].get("started", 0) > meta.get("started", 0)
+                        and x["meta"].get("message") == meta.get("message") for x in cand):
+-                    continue
++                    # workflow-design-studio defect-1 (DRAFT patch): record the pairing instead
++                    # of silently skipping, so the superseded job can never re-surface as stuck
++                    # and the ledger shows WHY it is not stuck (mark dup-of at the watchdog level).
++                    newer = [x["name"] for x in cand if x["reply"] is not None
++                             and x["meta"].get("started", 0) > meta.get("started", 0)
++                             and x["meta"].get("message") == meta.get("message")][0]
++                    with open(LEDGER, "a") as f:
++                        f.write(json.dumps({"ts": time.strftime("%Y-%m-%dT%H:%M:%S%z"), "epoch": int(now),
++                                            "tool": "prime_reply_backfill", "job": name,
++                                            "mode": meta.get("mode"), "source": f"superseded-by:{newer}",
++                                            "reply": "(superseded duplicate; answered under newer job)"}, ensure_ascii=False) + "\n")
++                    backfilled += 1
++                    continue
+                 stuck.append({"job": name, "age_min": round(age / 60), "text": (meta.get("message") or "")[:80]})
