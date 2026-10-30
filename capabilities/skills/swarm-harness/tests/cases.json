@@ -1,0 +1,427 @@
+[
+  {
+    "name": "refuses Intent without the artifact",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "green path locks, wires, diverges, converges, synthesizes, cross-family verifies, seals",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\nAudit every citation in the design corpus.\n## SWARM-TYPE\nGL-AD\n## AGENTS\nN=3\n## FILE-OWNERSHIP\n- w1 writes out/w1.tsv only\n- w2 writes out/w2.tsv only\n- w3 writes out/w3.tsv only\n## DONE-TEST\n- cmd:test -f <cwd>/out/synthesis.md\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "spawn.md",
+          "content": "## Agents\n- agent: w1 model: xai-oauth/grok-4.7 writes: out/w1.tsv\n- agent: w2 model: mimo-plan/mimo-v2.6-pro writes: out/w2.tsv\n- agent: w3 model: xai-oauth/grok-4.7 writes: out/w3.tsv\n## Ownership\nOne writer per path; workers save every 5 rows.\n"
+        }
+      },
+      {
+        "counter": {
+          "name": "spawn_confirmed",
+          "value": 3
+        }
+      },
+      {
+        "stage": {
+          "id": "W",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w1.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w2.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w3.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "write": {
+          "path": "divergence.md",
+          "content": "## Angles\n- angle: timestamp existence vs transcript window\n- angle: does the cited second state the law\n- angle: law wording drift from the source\n## Worker-outputs\nout/w1.tsv out/w2.tsv out/w3.tsv\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "D",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "convergence.md",
+          "content": "## Conflicts\n- conflict: w1 says SUPPORTED, w2 says MISPLACED on item 20\n## Agreement\n- agree: 3 citations are past the cited second on every angle\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "C",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "synthesis.md",
+          "content": "## Claims\n- [w:grok-w1] an existence gate is not a support gate\n- [w:mimo-w2] 7 of 141 citations were stamped 30-90s off\n- [w:grok-w3] evidence windows must centre the claim\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Y",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "plant": {
+          "name": "planted-bad-citation",
+          "red": "test -f <cwd>/never-created-marker",
+          "green": "test ! -f <cwd>/never-created-marker"
+        }
+      },
+      {
+        "write": {
+          "path": "verify.md",
+          "content": "## Writer-family\ngrok\n## Verifier-family\nmimo\n## Verdicts\n- 141 judged, 123 SUPPORTED, 7 MISPLACED, 11 UNSUPPORTED\n"
+        }
+      },
+      {
+        "counter": {
+          "name": "unsupported_withdrawn",
+          "value": 11
+        }
+      },
+      {
+        "verify": {
+          "family": "codex",
+          "mock": "VERIFIED"
+        },
+        "expect": {
+          "ok": true,
+          "verdict": "VERIFIED"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "seal": {},
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "stage": {
+          "id": "P",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      }
+    ]
+  },
+  {
+    "name": "planted: a Flash worker model refuses Wire-lease",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## SWARM-TYPE\nGL-SW\n## AGENTS\nN=3\n## FILE-OWNERSHIP\none writer per path\n## DONE-TEST\n- cmd:true\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "spawn.md",
+          "content": "## Agents\n- agent: w1 model: blackwell/flash-next writes: a\n- agent: w2 model: mimo-plan/mimo-v2.6-pro writes: b\n- agent: w3 model: xai-oauth/grok-4.7 writes: c\n## Ownership\nok\n"
+        }
+      },
+      {
+        "counter": {
+          "name": "spawn_confirmed",
+          "value": 3
+        }
+      },
+      {
+        "stage": {
+          "id": "W",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "flash"
+        }
+      }
+    ]
+  },
+  {
+    "name": "planted: two workers on one angle refuses Diverge",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## SWARM-TYPE\nGL-SW\n## AGENTS\nN=3\n## FILE-OWNERSHIP\none per path\n## DONE-TEST\n- cmd:true\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        }
+      },
+      {
+        "write": {
+          "path": "spawn.md",
+          "content": "## Agents\n- agent: w1 model: xai-oauth/grok-4.7 writes: a\n- agent: w2 model: mimo-plan/mimo-v2.6-pro writes: b\n- agent: w3 model: xai-oauth/grok-4.7 writes: c\n## Ownership\nok\n"
+        }
+      },
+      {
+        "counter": {
+          "name": "spawn_confirmed",
+          "value": 3
+        }
+      },
+      {
+        "stage": {
+          "id": "W",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": true
+        }
+      },
+      {
+        "write": {
+          "path": "divergence.md",
+          "content": "## Angles\n- angle: the same angle three times\n## Worker-outputs\na b c\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "D",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false
+        }
+      }
+    ]
+  },
+  {
+    "name": "planted: a same-family verifier is refused at Verify",
+    "steps": [
+      {
+        "activate": {}
+      },
+      {
+        "write": {
+          "path": "intent.md",
+          "content": "## GOAL\ng\n## SWARM-TYPE\nGL-AD\n## AGENTS\nN=3\n## FILE-OWNERSHIP\none per path\n## DONE-TEST\n- cmd:true\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "I1",
+          "status": "pass"
+        }
+      },
+      {
+        "write": {
+          "path": "spawn.md",
+          "content": "## Agents\n- agent: w1 model: xai-oauth/grok-4.7 writes: a\n- agent: w2 model: mimo-plan/mimo-v2.6-pro writes: b\n- agent: w3 model: xai-oauth/grok-4.7 writes: c\n## Ownership\nok\n"
+        }
+      },
+      {
+        "counter": {
+          "name": "spawn_confirmed",
+          "value": 3
+        }
+      },
+      {
+        "stage": {
+          "id": "W",
+          "status": "pass"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w1.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w2.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "hook": {
+          "event": "pre-tool",
+          "tool_name": "Write",
+          "tool_input": {
+            "file_path": "<cwd>/out/w3.tsv"
+          }
+        },
+        "expect": {
+          "action": "allow"
+        }
+      },
+      {
+        "write": {
+          "path": "divergence.md",
+          "content": "## Angles\n- angle: one\n- angle: two\n- angle: three\n## Worker-outputs\na b c\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "D",
+          "status": "pass",
+          "expect": {
+            "ok": true
+          }
+        }
+      },
+      {
+        "write": {
+          "path": "convergence.md",
+          "content": "## Conflicts\n- conflict: x\n## Agreement\n- agree: y\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "C",
+          "status": "pass"
+        }
+      },
+      {
+        "write": {
+          "path": "synthesis.md",
+          "content": "## Claims\n- [w:a] one\n- [w:b] two\n- [w:c] three\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "Y",
+          "status": "pass"
+        }
+      },
+      {
+        "write": {
+          "path": "verify.md",
+          "content": "## Writer-family\ngrok\n## Verifier-family\ngrok\n## Verdicts\n- all supported\n"
+        }
+      },
+      {
+        "stage": {
+          "id": "V",
+          "status": "pass"
+        },
+        "expect": {
+          "ok": false,
+          "reason_contains": "independent_verdict"
+        }
+      }
+    ]
+  }
+]

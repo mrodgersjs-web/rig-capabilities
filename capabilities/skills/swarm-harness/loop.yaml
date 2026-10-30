@@ -1,0 +1,141 @@
+schema: rig.loop-skill.v11
+id: swarm-harness
+name: Swarm harness (GL-SW/GL-AD)
+version: 11.1.0
+doctrine_source:
+- capabilities/loops/swarm-harness.md
+coordinate:
+  level: 3
+  diamond: D2
+  bms_mode: A1
+  step: I1
+family: governance
+packet: LoopRunPacket
+modes:
+  auto: {}
+  walk:
+    stop_after_stage: true
+kill_switch:
+  max_iterations: 3
+  max_wall_minutes: 240
+  max_stop_blocks: 2
+outward_policy:
+  require_gate_d: true
+stages:
+- id: I1
+  name: Identity-lock
+  artifact: intent.md
+  write_policy:
+    mode: artifacts_only
+    deny_message: "No agent is spawned before the swarm is locked. Write intent.md: ## GOAL (one sentence all agents get) ## SWARM-TYPE (GL-SW or GL-AD) ## AGENTS (N; 3-10 GL-SW, 2-5 GL-AD) ## FILE-OWNERSHIP (one writer per path) ## DONE-TEST (executable)."
+  gate:
+  - type: file_contains
+    path: intent.md
+    patterns: ["^## GOAL", "^## SWARM-TYPE", "^## AGENTS", "^## FILE-OWNERSHIP", "^## DONE-TEST"]
+  - type: regex
+    path: intent.md
+    pattern: '(?im)^##\s*SWARM-TYPE\s*\n+\s*(GL-SW|GL-AD)\b'
+    hint: "name the swarm type: GL-SW research swarm or GL-AD adversarial/deviation swarm"
+  - type: regex
+    path: intent.md
+    pattern: '(?im)^##\s*DONE-TEST\s*\n\s*[-*]\s*(cmd|file|grep|mcp):\S'
+    hint: "the swarm's done-test must be executable, not an adjective"
+- id: W
+  name: Wire-lease
+  artifact: spawn.md
+  write_policy:
+    mode: open
+  gate:
+  - type: file_contains
+    path: spawn.md
+    patterns: ["^## Agents", "^## Ownership"]
+  - type: regex_count
+    path: spawn.md
+    pattern: '^\s*-\s*agent:\s*\S+\s+model:\s*\S+\s+writes:\s*\S+'
+    min: 3
+    hint: "every worker row needs an agent id, an explicitly pinned model, and the paths it alone writes (2026-09-29: a laws file was wiped by a parallel write)"
+  - type: regex_absent
+    path: spawn.md
+    pattern: '(?i)model:\s*\S*flash'
+    hint: "no Flash worker models (Mike's standing rule)"
+  - type: min_counter
+    counter: spawn_confirmed
+    min: 3
+- id: D
+  name: Diverge
+  artifact: divergence.md
+  write_policy:
+    mode: open
+  gate:
+  - type: file_contains
+    path: divergence.md
+    patterns: ["^## Angles", "^## Worker-outputs"]
+  - type: regex_count
+    path: divergence.md
+    pattern: '^\s*-\s*angle:\s*\S'
+    min: 3
+    hint: "one distinct angle per worker; two workers on the same angle is duplicated spend"
+  - type: files_written_min
+    min: 3
+    hint: "workers write to disk incrementally, never only in the final message (2026-09-29: MiMo/Grok workers died after returning an empty message)"
+- id: C
+  name: Converge
+  artifact: convergence.md
+  write_policy:
+    mode: open
+  gate:
+  - type: file_contains
+    path: convergence.md
+    patterns: ["^## Conflicts", "^## Agreement"]
+  - type: regex_count
+    path: convergence.md
+    pattern: '^\s*-\s*(conflict|agree):\s*\S'
+    min: 1
+    hint: "name the disagreement between workers; a swarm that only agrees was not diverging"
+- id: Y
+  name: Synthesize
+  artifact: synthesis.md
+  write_policy:
+    mode: open
+  gate:
+  - type: file_contains
+    path: synthesis.md
+    patterns: ["^## Claims"]
+  - type: regex_count
+    path: synthesis.md
+    pattern: '^\s*-\s*\[w:[A-Za-z0-9._-]+\]'
+    min: 3
+    hint: "every synthesized claim cites the worker that produced it"
+  - type: regex_absent
+    path: synthesis.md
+    pattern: '(?im)^##\s*Claims\s*\n\s*(none|n/?a)\s*$'
+    hint: "an empty claims section is a failed swarm, not a clean one"
+- id: V
+  name: Verify
+  artifact: verify.md
+  write_policy:
+    mode: open
+  gate:
+  - type: file_contains
+    path: verify.md
+    patterns: ["^## Writer-family", "^## Verifier-family", "^## Verdicts"]
+  - type: independent_verdict
+    min: 1
+    hint: "a different model family judges the workers' output; a same-family approve is self-scoring"
+  - type: planted_failure
+    min: 1
+    hint: "prove the verifier can go RED by feeding it one known-bad item"
+  - type: min_counter
+    counter: unsupported_withdrawn
+    min: 0
+- id: P
+  name: Proof
+  artifact: proof.json
+  gate:
+  - type: sealed
+closing_loop:
+  from:
+  - P
+  to: I1
+  max_iterations: 3
+  on_exhaust: park
