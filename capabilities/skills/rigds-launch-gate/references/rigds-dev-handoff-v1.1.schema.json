@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "rig.design-studio.dev-handoff.v1.1",
+  "title": "RIG Design Studio dev-handoff v1.1 — the measurement spine",
+  "description": "v1.1 ADDS pageIndex to v1. It deletes nothing. The reason for the bump: v1 exported cards, counts, deviations and a token set, but no stable identity for a page, so no measurement taken after launch could ever find its way back to the board card it came from. pageIndex is that key. Every other tool in the lifecycle joins on `url`.",
+  "x-version-policy": {
+    "additive": true,
+    "rule": "A version bump ADDS assertions and never deletes old ones. v1 exports stay checkable as long as they can be produced.",
+    "consumers-keying-on": "rig.design-studio.dev-handoff.v1.1 (accepts .v1 payloads; .v1 consumers should ignore unknown top-level keys)"
+  },
+
+  "type": "object",
+  "required": ["schema", "board", "exportedAt", "counts", "deviations", "tokenSet", "phases", "cards", "links", "pageIndex"],
+  "additionalProperties": true,
+
+  "properties": {
+    "schema": { "const": "rig.design-studio.dev-handoff.v1.1" },
+    "board": { "type": "object" },
+    "exportedAt": { "type": "string", "format": "date-time" },
+
+    "counts": {
+      "type": "object",
+      "required": ["cards", "links", "phases"],
+      "properties": {
+        "cards": { "type": "integer", "minimum": 0 },
+        "links": { "type": "integer", "minimum": 0 },
+        "phases": { "type": "integer", "minimum": 0 },
+        "pages": { "type": "integer", "minimum": 0, "description": "NEW: pageIndex.length. Derived, never typed." }
+      }
+    },
+
+    "deviations": {
+      "type": "object",
+      "required": ["min", "max", "outOfBudget"],
+      "properties": {
+        "min": { "type": "integer" },
+        "max": { "type": "integer" },
+        "outOfBudget": { "type": "integer", "minimum": 0 }
+      }
+    },
+
+    "tokenSet": {
+      "type": "object",
+      "required": ["name", "colors", "type", "antiPatterns"],
+      "properties": {
+        "name": { "const": "MASTER-CREATIVE-PROMPT v3.0" },
+        "colors": { "type": "object" },
+        "type": { "type": "object" },
+        "antiPatterns": { "type": "array", "minItems": 1 },
+        "provenance": {
+          "type": "object",
+          "description": "NEW. v1 declared the token set by hand. v1.1 records where it came from so rigds-token-pipeline can prove the built tokens match the handoff.",
+          "properties": {
+            "source": { "type": "string", "enum": ["hand-declared", "figma-variables", "tokens-studio", "scraper-extract", "style-dictionary"] },
+            "extractedAt": { "type": "string", "format": "date-time" },
+            "sha256": { "type": "string" }
+          },
+          "required": ["source"]
+        }
+      }
+    },
+
+    "phases": {
+      "type": "array",
+      "minItems": 4,
+      "description": "v1 shipped 4 (Discover/Define/Develop/Deliver). v1.1 accepts the full 7-phase Double Black Box: discover, define, gate, diverge, develop, deliver, measure.",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "blackBox"],
+        "properties": {
+          "id": { "type": "string" },
+          "label": { "type": "string" },
+          "blackBox": { "type": ["integer", "string"], "description": "1 = BB1, 2 = BB2, 'gate' = the pinch, 'measure' = post-ship" }
+        }
+      }
+    },
+
+    "cards": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "kindLabel", "phase", "phaseLabel", "upstream", "downstream", "outOfBudget"],
+        "properties": {
+          "id": { "type": "string" },
+          "kind": { "type": "string" },
+          "kindLabel": { "type": "string" },
+          "phase": { "type": "string" },
+          "phaseLabel": { "type": "string" },
+          "upstream": { "type": "array", "items": { "type": "string" } },
+          "downstream": { "type": "array", "items": { "type": "string" } },
+          "outOfBudget": { "type": "boolean" },
+          "url": { "type": ["string", "null"], "description": "NEW. The join key. null on cards that are not pages (a persona, a decision, a risk)." }
+        }
+      }
+    },
+
+    "links": { "type": "array" },
+
+    "pageIndex": {
+      "type": "array",
+      "description": "THE SPINE. One row per page in the system. The Screaming Frog / Ahrefs / GSC / GA4 / PostHog / CMS rows all join on `url`; this array is where they land. It is also how a measurement taken 3 months post-launch finds the card it belongs to.",
+      "items": {
+        "type": "object",
+        "required": ["url", "cardId", "phaseId"],
+        "properties": {
+          "url": { "type": "string", "format": "uri" },
+          "path": { "type": "string" },
+          "cardId": { "type": "string", "description": "Must resolve to a real card in cards[]." },
+          "phaseId": { "type": "string" },
+
+          "metric": {
+            "type": "object",
+            "description": "One primary metric per page. Exactly one. A page with two primary metrics has no primary metric.",
+            "properties": {
+              "name": { "type": "string" },
+              "unit": { "type": "string" },
+              "direction": { "type": "string", "enum": ["increase", "decrease", "any"] }
+            },
+            "required": ["name", "direction"]
+          },
+
+          "baseline": { "type": ["number", "null"], "description": "Measured BEFORE the design change. null = never baselined, which is a gap and is reported as one." },
+          "target": { "type": ["number", "null"] },
+          "measured": { "type": ["number", "null"], "description": "Populated by rigds-measure-loop after launch." },
+          "measuredAt": { "type": ["string", "null"], "format": "date-time" },
+          "source": { "type": "string", "description": "Provenance of the last measurement, e.g. 'ga4:organic' or 'posthog:funnel-home'. Untrusted data never lands here without a source." },
+
+          "evidence": {
+            "type": "array",
+            "description": "Command outputs and artifact hashes, same discipline as the ProofPacket. A measured number with no evidence path is not a measurement.",
+            "items": {
+              "type": "object",
+              "required": ["kind", "ref"],
+              "properties": {
+                "kind": { "type": "string", "enum": ["command", "screenshot", "export", "api", "log"] },
+                "ref": { "type": "string" },
+                "sha256": { "type": "string" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "x-new-assertions-for-export-check": [
+    "schema === 'rig.design-studio.dev-handoff.v1.1'",
+    "counts.pages === pageIndex.length  (derived, not typed)",
+    "every pageIndex[].cardId resolves to a real card in cards[]",
+    "every pageIndex[].url is unique",
+    "every card with a non-null url appears exactly once in pageIndex",
+    "pageIndex[].metric.direction is one of increase|decrease|any",
+    "pageIndex[].evidence[] entries carry kind + ref; an entry with measured != null has at least one evidence entry",
+    "tokenSet.provenance.source is present (a hand-declared token set is legal but must say so out loud)",
+    "all 7 phase ids present in phases[] (a 4-phase export is allowed but must carry an explicit legacy flag)"
+  ]
+}
