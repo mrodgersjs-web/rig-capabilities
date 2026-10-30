@@ -1,6 +1,9 @@
 ---
 name: xs-growth-os
 description: "JEV-FIRST entry point for Mike Rodgers' X (@RodgersRIG) audience-growth lane: every typed judgment (rank topics, screen tactics, gate drafts, verdict claims) routes through rig-s1gate before any frontier model call, and DEFERS when the classifier is down. LOAD THIS FILE AT THE START of any X-lane session; the route table inside is the only path to the child skills. Covers: corpus sourcing, weekly stage-aware planning, profile conversion assets, drafting posts/threads/replies, the reply engine, and measurement with wired actions. USE WHEN posting to X, planning an X week, writing a thread, running a reply batch, auditing the X profile, or asking why an X post flopped. Never publishes from here."
+done_when:
+  - 'grep:capabilities/skills/xs-growth-os/SKILL.md:[G]ate order . never reorder'
+  - 'grep:capabilities/skills/xs-growth-os/SKILL.md:[n]ever let an advisory PASS authorize a send'
 ---
 
 # X Growth OS — meta skill
