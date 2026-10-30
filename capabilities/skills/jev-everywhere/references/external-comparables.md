@@ -101,16 +101,19 @@ pattern that fails refutation gets cut rather than archived.
 - A never-auto lane for content about a minor, where even a clean PASS downgrades to
   ESCALATE (law 6).
 
-## Local self-hosted System One (adopted 2026-09-23)
+## Retired local System One comparison, 2026-09-23
 
-- razorback16/openjev (https://github.com/razorback16/openjev) - the adopted local route:
+Mike retired OpenJev on 2026-09-30. Use hosted JEV only, redact first, and defer if
+private details remain. This list is historical comparison evidence and does not
+authorize installing or restarting any local classifier.
+
+- razorback16/openjev (https://github.com/razorback16/openjev) was the selected historical candidate:
   DiffusionGemma 26B-A4B reads answer-slot probabilities in one read-only pass (no generation, so
   answers cannot go off-schema), Jev-compatible wire API and error shapes, Apache-2.0, measured
   latency tables, Docker (vLLM / NVIDIA) and in-process MLX (Apple silicon) backends. Kept caveat:
-  answer quality is whatever DiffusionGemma gives in this mode; evaluate on your own tasks. Deployed
-  here on the MLX backend; ops notes in ../references/embedding.md section 4 (quarantine xattr trap,
-  venv recipe, the one failing test).
-- Same-name candidates that lost the adopter checklist, kept for reversibility: SiliconLabAI/OpenJev
+  answer quality is whatever DiffusionGemma gives in this mode. The retired MLX deployment
+  observations are preserved in ../references/embedding.md section 4.
+- Other same-name historical candidates were SiliconLabAI/OpenJev
   (playground; parallel/oneshot modes parse LLM prose; useful part is Mapika/decider-2b),
   zhihz/openjev (frozen Qwen3-4B, no score primitive, sequential reads), xingwudao/OpenJev
   (deterministic mock only, "real inference planned", no license), nico-martin/open-jev (in-browser
