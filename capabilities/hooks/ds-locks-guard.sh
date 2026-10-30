@@ -4,7 +4,7 @@
 # parent: ds-session-start
 # event: PreToolUse:Edit|Write
 # outcome: design-ux: blocks edits to locked flagship regions (LOCK:SCREEN-00/01, LOCK:CTA-WIRING, LOCK:ENGINE-CORE) without an unlock
-# done_when: cmd:python3 tools/hook_cases.py ds-locks-guard
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-locks-guard
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u

@@ -4,7 +4,7 @@
 # parent: ds-pre-write-slop-lint
 # event: PostToolUse:Write
 # outcome: design-ux: runs claims_check on any written studio skill, law or exemplar file and blocks on unresolved or copied citations
-# done_when: cmd:python3 tools/hook_cases.py ds-citation-check
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-citation-check
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u

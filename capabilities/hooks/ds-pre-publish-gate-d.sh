@@ -4,7 +4,7 @@
 # parent: ds-session-start
 # event: PreToolUse:Bash
 # outcome: design-ux: blocks deploy, publish and push commands from studio repos unless an approved Gate-D token is present
-# done_when: cmd:python3 tools/hook_cases.py ds-pre-publish-gate-d
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-pre-publish-gate-d
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u

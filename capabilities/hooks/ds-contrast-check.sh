@@ -4,7 +4,7 @@
 # parent: ds-locks-guard
 # event: PostToolUse:Write
 # outcome: design-ux: blocks token files whose declared text/background pairs fall under 4.5:1
-# done_when: cmd:python3 tools/hook_cases.py ds-contrast-check
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-contrast-check
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u

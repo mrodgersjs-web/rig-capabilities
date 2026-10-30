@@ -4,7 +4,7 @@
 # parent: ds-locks-guard
 # event: PostToolUse:Write
 # outcome: design-ux: blocks site images written without a provenance sidecar (<file>.provenance.json naming source, license, generator)
-# done_when: cmd:python3 tools/hook_cases.py ds-image-provenance
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-image-provenance
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u
