@@ -4,20 +4,20 @@ Which stages have distilled laws and which are still pending. The raw corpus is 
 
 | stage | main skill | laws | pairs | file |
 |---|---|---|---|---|
-| discovery | ds-discovery | 55 | 28 | references/discovery.md |
-| brand_identity | ds-brand-identity | 50 | 20 | references/brand_identity.md |
-| typography | ds-typography | 35 | 20 | references/typography.md |
-| color | ds-color | 59 | 27 | references/color.md |
-| layout | ds-layout | 60 | 25 | references/layout.md |
-| ui_system | ds-ui-system | 42 | 20 | references/ui_system.md |
-| ux | ds-ux | 59 | 30 | references/ux.md |
-| motion_3d | ds-motion-3d | 50 | 24 | references/motion_3d.md |
-| imagery | ds-imagery | 50 | 26 | references/imagery.md |
-| ai_workflow | ds-ai-workflow | 45 | 18 | references/ai_workflow.md |
-| conversion_copy | ds-conversion-copy | 63 | 41 | references/conversion_copy.md |
-| build_ship | ds-build-ship | 49 | 8 | references/build_ship.md |
-| critique | ds-critique | 95 | 40 | references/critique.md |
-| business | ds-business | 60 | 30 | references/business.md |
-| career | ds-business | 50 | 27 | references/career.md |
+| discovery | ds-discovery | 74 | 42 | references/discovery.md |
+| brand_identity | ds-brand-identity | 70 | 33 | references/brand_identity.md |
+| typography | ds-typography | 56 | 46 | references/typography.md |
+| color | ds-color | 71 | 42 | references/color.md |
+| layout | ds-layout | 79 | 35 | references/layout.md |
+| ui_system | ds-ui-system | 68 | 34 | references/ui_system.md |
+| ux | ds-ux | 86 | 56 | references/ux.md |
+| motion_3d | ds-motion-3d | 74 | 39 | references/motion_3d.md |
+| imagery | ds-imagery | 71 | 40 | references/imagery.md |
+| ai_workflow | ds-ai-workflow | 88 | 34 | references/ai_workflow.md |
+| conversion_copy | ds-conversion-copy | 70 | 47 | references/conversion_copy.md |
+| build_ship | ds-build-ship | 49 | 20 | references/build_ship.md |
+| critique | ds-critique | 119 | 68 | references/critique.md |
+| business | ds-business | 79 | 41 | references/business.md |
+| career | ds-business | 60 | 37 | references/career.md |
 
-Totals: 822 laws, 384 pairs across 15 stages. Pending: none.
+Totals: 1114 laws, 614 pairs across 15 stages. Pending: none.

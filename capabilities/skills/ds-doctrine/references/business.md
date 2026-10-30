@@ -1,6 +1,6 @@
 # Business laws (Design Studio OS corpus)
 
-Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pKquP_em-Bs, T5JglDcd54A, junHy_vvoXU, Gx1bopqOfMU, Y-JFVdiimS4, tvKZEhUg3Eg, RUFV897DAGg, xc8KRd1GBGY, uVSdCJCvzag, r_Xg6drUJT4, vNL4PS1KCHY, GzTWvwtJVRU). Channels: Self-Made Web Designer, Jesse Showalter, Flux Academy, CharliMarieTV, Wes McDowell, Sam Crawford, Paige Brunton, Will Paterson. Publish dates 2016-02 to 2026-06. Top-10 sources in this set: flux-academy (4), self-made-web-designer (3), jesse-showalter (1), sam-crawford (1). Law table capped at 60; later videos add citations, pairs, and tables.
+Coverage: 20 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pKquP_em-Bs, T5JglDcd54A, junHy_vvoXU, Gx1bopqOfMU, Y-JFVdiimS4, tvKZEhUg3Eg, RUFV897DAGg, xc8KRd1GBGY, uVSdCJCvzag, r_Xg6drUJT4, vNL4PS1KCHY, GzTWvwtJVRU, q6_LZhs4t6M, j9Esan5T3Y8, iyNezw9D7k8, Q9vLsNNfPtI). Channels: Self-Made Web Designer, Jesse Showalter, Flux Academy, CharliMarieTV, Wes McDowell, Sam Crawford, Paige Brunton, Will Paterson, Satori Graphics, Every Tuesday. Publish dates 2016-02 to 2026-06. Top-10 sources in this set: flux-academy (4), self-made-web-designer (3), jesse-showalter (1), sam-crawford (2), satori-graphics (2). Wave 2 appends laws past 60; it does not renumber the audited table.
 
 ## Laws
 
@@ -19,7 +19,7 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | 9 | Name the priority stack for this project (features, search, usability, conversion, speed, access, look) and accept that they cannot all be maxed. | Self-Made Web Designer | CLAIM(WxZHUe8mvhU@04:33), CLAIM(WxZHUe8mvhU@04:55) | single-source | yes |
 | 10 | Borrow a pattern that already works, then adapt it to this client's context. Do not spend the budget inventing a new pattern. | Self-Made Web Designer | CLAIM(WxZHUe8mvhU@05:00), CLAIM(WxZHUe8mvhU@05:09) | single-source | yes |
 | 11 | Diagnose the real problem before you sell a site. A client who can pay may need a different next step. | Self-Made Web Designer | CLAIM(WxZHUe8mvhU@05:20), CLAIM(WxZHUe8mvhU@05:34) | single-source | yes |
-| 12 | State the reason for each choice in the review, using the client's own brief words. Silence is what turns a normal note into a fight. A cold outreach recording uses the same shape: who you are, one thing you liked, the critique, then how to reply. | Self-Made Web Designer, Flux Academy, CharliMarieTV, Will Paterson | CLAIM(WxZHUe8mvhU@05:48), CLAIM(WxZHUe8mvhU@06:07), CLAIM(_WyYr1p1XVk@00:16), CLAIM(_WyYr1p1XVk@12:54), CLAIM(Y-JFVdiimS4@07:59), CLAIM(Y-JFVdiimS4@08:17), CLAIM(vNL4PS1KCHY@00:23), CLAIM(vNL4PS1KCHY@04:45), CLAIM(GzTWvwtJVRU@06:40), CLAIM(GzTWvwtJVRU@07:30) | consensus | yes |
+| 12 | State the reason for each choice in the review, using the client's own brief words. Silence is what turns a normal note into a fight. A cold outreach recording uses the same shape: who you are, one thing you liked, the critique, then how to reply. On a logo send, say why the type and the colors were chosen, not only what they are. | Self-Made Web Designer, Flux Academy, CharliMarieTV, Will Paterson, Satori Graphics | CLAIM(WxZHUe8mvhU@05:48), CLAIM(WxZHUe8mvhU@06:07), CLAIM(_WyYr1p1XVk@00:16), CLAIM(_WyYr1p1XVk@12:54), CLAIM(Y-JFVdiimS4@07:59), CLAIM(Y-JFVdiimS4@08:17), CLAIM(vNL4PS1KCHY@00:23), CLAIM(vNL4PS1KCHY@04:45), CLAIM(GzTWvwtJVRU@06:40), CLAIM(GzTWvwtJVRU@07:30), CLAIM(q6_LZhs4t6M@02:41), CLAIM(q6_LZhs4t6M@03:20) | consensus | yes |
 | 13 | Before you call a flow done, watch someone outside the project try the task (sign up, or a fake purchase) and fix what they miss. | Self-Made Web Designer | CLAIM(WxZHUe8mvhU@06:18), CLAIM(WxZHUe8mvhU@06:28) | single-source | yes |
 | 14 | If your gut says decline, decline. Need for the fee is not a reason to take a bad-fit project. Pass fast when budget, timing, and portfolio value are all weak. | Self-Made Web Designer, Flux Academy | CLAIM(WxZHUe8mvhU@06:39), CLAIM(WxZHUe8mvhU@06:44), CLAIM(tvKZEhUg3Eg@03:47), CLAIM(tvKZEhUg3Eg@03:56) | consensus | yes |
 | 15 | Do not treat solo grinding as a virtue. Keep people around you who can help when a project stalls. | Self-Made Web Designer | CLAIM(WxZHUe8mvhU@06:55), CLAIM(WxZHUe8mvhU@07:09) | single-source | yes |
@@ -45,10 +45,10 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | # | law | creators | citations | consensus/single | top-10 source? |
 |---|-----|----------|-----------|------------------|----------------|
 | 27 | Present the big reveal live (room or call) with your commentary. Email the file only for small check-ins. | Flux Academy | CLAIM(_WyYr1p1XVk@00:43), CLAIM(_WyYr1p1XVk@01:04) | single-source | yes |
-| 28 | Open by restating the brief, the goal, and where the project stands. Keep that recap to a few minutes. | Flux Academy | CLAIM(_WyYr1p1XVk@02:43), CLAIM(_WyYr1p1XVk@03:06) | single-source | yes |
+| 28 | Open by restating the brief, the goal, and where the project stands. Keep that recap to a few minutes. On a logo send, that opening is the goals the mark has to hit. | Flux Academy, Satori Graphics | CLAIM(_WyYr1p1XVk@02:43), CLAIM(_WyYr1p1XVk@03:06), CLAIM(q6_LZhs4t6M@01:35), CLAIM(q6_LZhs4t6M@01:40) | consensus | yes |
 | 29 | Before the reveal, show a slice of process (research, writing, sketches, or wireframes) so the talk stays on the goal, not on taste. | Flux Academy | CLAIM(_WyYr1p1XVk@03:31), CLAIM(_WyYr1p1XVk@04:43) | single-source | yes |
 | 30 | Warn that a first look at a mark feels stark, especially in black and white. Attachment comes after seeing it in use. Say plainly that a first look is not supposed to wow them. | Flux Academy, Will Paterson | CLAIM(_WyYr1p1XVk@05:12), CLAIM(_WyYr1p1XVk@05:33), CLAIM(GzTWvwtJVRU@02:11), CLAIM(GzTWvwtJVRU@02:58) | consensus | yes |
-| 31 | Make relevant applications the longest section. Tie each mock back to a brief point while people are looking at the work, not at bullets. Do not show an option you do not want them to pick. | Flux Academy, Will Paterson | CLAIM(_WyYr1p1XVk@07:30), CLAIM(_WyYr1p1XVk@08:07), CLAIM(GzTWvwtJVRU@05:59), CLAIM(GzTWvwtJVRU@09:05) | consensus | yes |
+| 31 | Make relevant applications the longest section. Tie each mock back to a brief point while people are looking at the work, not at bullets. Do not show an option you do not want them to pick. Each mock shares the brand colors and the same restraint, and the imagery uses that type. | Flux Academy, Will Paterson, Satori Graphics | CLAIM(_WyYr1p1XVk@07:30), CLAIM(_WyYr1p1XVk@08:07), CLAIM(GzTWvwtJVRU@05:59), CLAIM(GzTWvwtJVRU@09:05), CLAIM(q6_LZhs4t6M@03:09), CLAIM(q6_LZhs4t6M@04:21) | consensus | yes |
 | 32 | Add a short stretch-ideas block beyond the brief, roughly assembled. Use it for forward talk and future work. Do not build those ideas to final inside the base fee. | Flux Academy | CLAIM(_WyYr1p1XVk@10:16), CLAIM(_WyYr1p1XVk@10:32) | single-source | yes |
 | 33 | When an objection lands, write it down, tie the answer back to the brief, agree a follow-up, and move on. Do not let the meeting become an open taste debate. | Flux Academy | CLAIM(_WyYr1p1XVk@12:11), CLAIM(_WyYr1p1XVk@13:32) | single-source | yes |
 | 34 | Close every reveal with written next steps and dates: what they owe, what you will do, and by when. Send the deck after the meeting. | Flux Academy | CLAIM(_WyYr1p1XVk@13:52), CLAIM(_WyYr1p1XVk@13:59) | single-source | yes |
@@ -71,7 +71,7 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | 41 | Name folders for a later you who has many more jobs: medium, then project, then a file name that states the brief. | CharliMarieTV | CLAIM(pKquP_em-Bs@00:23), CLAIM(pKquP_em-Bs@00:48) | single-source | no |
 | 42 | Number versions (V1, V2). Never label a file final. Keep only the latest outside a process folder; drag the previous latest in when you bump the number. | CharliMarieTV | CLAIM(pKquP_em-Bs@02:12), CLAIM(pKquP_em-Bs@02:28), CLAIM(pKquP_em-Bs@02:45) | single-source | no |
 | 43 | Inside each project, split reference images, client drafts, and final exports into their own folders, and prefix those folder names so they sort to the top. | CharliMarieTV | CLAIM(pKquP_em-Bs@01:32), CLAIM(pKquP_em-Bs@01:56) | single-source | no |
-| 44 | There is no project until the contract is signed and the first payment has landed. A good lunch is not a start. | Self-Made Web Designer | CLAIM(T5JglDcd54A@01:55), CLAIM(T5JglDcd54A@02:04) | single-source | yes |
+| 44 | There is no project until the contract is signed and the first payment has landed. A good lunch is not a start. Do not send artwork with no contract in the workflow. | Self-Made Web Designer, Satori Graphics | CLAIM(T5JglDcd54A@01:55), CLAIM(T5JglDcd54A@02:04), CLAIM(j9Esan5T3Y8@00:20), CLAIM(j9Esan5T3Y8@00:30) | consensus | yes |
 | 45 | Answer client mail inside 48 hours. Late replies kill more deals than weak comps. | Self-Made Web Designer | CLAIM(T5JglDcd54A@01:39), CLAIM(T5JglDcd54A@01:45) | single-source | yes |
 | 46 | On the first call, the client talks. Ask about the business, what they want, what the current site frustrates, and what past freelancers got wrong. | Self-Made Web Designer | CLAIM(T5JglDcd54A@00:53), CLAIM(T5JglDcd54A@01:10) | single-source | yes |
 | 47 | At kickoff, write dates for both sides. Waiting on their copy, images, brand files, or notes is what stalls the calendar. | Self-Made Web Designer | CLAIM(T5JglDcd54A@02:22), CLAIM(T5JglDcd54A@02:38) | single-source | yes |
@@ -93,6 +93,49 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | 58 | Give every offer an end date. A discount with no deadline does not create a reason to act today. | Wes McDowell | CLAIM(junHy_vvoXU@15:10), CLAIM(junHy_vvoXU@15:18) | single-source | no |
 | 59 | Pick one build tool, ship several real projects on it, and stop shopping for a new tool before the first paid site. | Sam Crawford | CLAIM(Gx1bopqOfMU@01:12), CLAIM(Gx1bopqOfMU@02:40) | single-source | yes |
 | 60 | If you will serve many industries, niche the offer by platform and put an industry filter on the work page so a prospect can self-select. | Sam Crawford | CLAIM(Gx1bopqOfMU@02:51), CLAIM(Gx1bopqOfMU@04:00) | single-source | yes |
+
+
+### Approval package (mockups as the send)
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 61 | Send the approval package as one visual story: goals, then the mark taken apart, then the palette, then mockups. Do not attach loose comps with a note that only asks for thoughts. | Satori Graphics | CLAIM(q6_LZhs4t6M@00:30), CLAIM(q6_LZhs4t6M@04:26) | single-source | yes |
+| 62 | Build that presentation file once and reuse it as the template on later client sends. Change the client fields, not the structure. | Satori Graphics | CLAIM(q6_LZhs4t6M@00:50), CLAIM(q6_LZhs4t6M@04:37) | single-source | yes |
+| 63 | Style the deck in the client's industry (type and color) so the presentation reads as part of the brand, not as a generic slide. | Satori Graphics | CLAIM(q6_LZhs4t6M@01:12), CLAIM(q6_LZhs4t6M@01:21) | single-source | yes |
+| 64 | Before the mockups, show the mark taken apart and the palette with the main color as the largest block, and say why those colors were chosen. | Satori Graphics | CLAIM(q6_LZhs4t6M@01:51), CLAIM(q6_LZhs4t6M@02:26) | single-source | yes |
+| 65 | Hold one typeface and one size through the whole presentation. Do not restyle the deck page by page. | Satori Graphics | CLAIM(q6_LZhs4t6M@02:37), CLAIM(q6_LZhs4t6M@02:41) | single-source | yes |
+
+
+### Pre-send checklist
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 66 | Before you send, run spell check in the design app. A typo in the artwork wastes a round and reads as careless. | Satori Graphics | CLAIM(j9Esan5T3Y8@00:51), CLAIM(j9Esan5T3Y8@01:02) | single-source | yes |
+| 67 | For print files, embed the fonts or outline the type, and keep a separate editable copy if you outline. Do not email the font files. | Satori Graphics | CLAIM(j9Esan5T3Y8@01:22), CLAIM(j9Esan5T3Y8@01:39), CLAIM(j9Esan5T3Y8@01:51) | single-source | yes |
+| 68 | Before send, read the brief again and check each point, including who it is for and what the brand must say. | Satori Graphics | CLAIM(j9Esan5T3Y8@02:01), CLAIM(j9Esan5T3Y8@02:28) | single-source | yes |
+| 69 | Name the delivery file with the project, your name, and the date. Do not send a file titled file one or design one. | Satori Graphics | CLAIM(j9Esan5T3Y8@02:34), CLAIM(j9Esan5T3Y8@02:46) | single-source | yes |
+| 70 | Check alignment before send. Obvious misalignment reads worse than a typo. Pick one alignment and hold it. | Satori Graphics | CLAIM(j9Esan5T3Y8@03:07), CLAIM(j9Esan5T3Y8@03:17) | single-source | yes |
+| 71 | Test-print before you send print work. Color and spacing problems that hide on screen show up on paper. | Satori Graphics | CLAIM(j9Esan5T3Y8@03:34), CLAIM(j9Esan5T3Y8@03:45) | single-source | yes |
+
+
+### Same content, several prices
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 72 | When the lessons are the same and only the buyer type changes the price, put several pricing plans on one course. Do not clone the members area once per price. | Sam Crawford | CLAIM(iyNezw9D7k8@01:32), CLAIM(iyNezw9D7k8@02:00), CLAIM(iyNezw9D7k8@04:01) | single-source | yes |
+| 73 | On the sales page, show each plan as its own block, and let the buyer check out only on the plan they qualify for. | Sam Crawford | CLAIM(iyNezw9D7k8@05:33), CLAIM(iyNezw9D7k8@06:32) | single-source | yes |
+| 74 | A higher plan can add extra products. Do not give every price the same bundle if the tier was meant to gate access. | Sam Crawford | CLAIM(iyNezw9D7k8@04:55), CLAIM(iyNezw9D7k8@05:05) | single-source | yes |
+
+
+### Digital product after publish
+
+| # | law | creators | citations | consensus/single | top-10 source? |
+|---|-----|----------|-----------|------------------|----------------|
+| 75 | On the product page, show mockup previews of the file in use before the buyer pays. A folder of files with no picture of use is not a listing. | Every Tuesday | CLAIM(Q9vLsNNfPtI@02:23), CLAIM(Q9vLsNNfPtI@02:32) | single-source | no |
+| 76 | After publish, keep making use-case videos for months and years. Do not ship the product and immediately start the next one. | Every Tuesday | CLAIM(Q9vLsNNfPtI@02:43), CLAIM(Q9vLsNNfPtI@04:17) | single-source | no |
+| 77 | When you quote what a product made, state net after fees and the year window. A gross figure with no period is not a result. | Every Tuesday | CLAIM(Q9vLsNNfPtI@02:56), CLAIM(Q9vLsNNfPtI@03:43) | single-source | no |
+| 78 | Sell a personal license and a commercial license as two prices, and send your own promo traffic to the storefront that pays you more. | Every Tuesday | CLAIM(Q9vLsNNfPtI@03:11), CLAIM(Q9vLsNNfPtI@03:22) | single-source | no |
+| 79 | Deliver the buyer folder as transparent files, named and sorted, not a raw scan dump. | Every Tuesday | CLAIM(Q9vLsNNfPtI@02:09), CLAIM(Q9vLsNNfPtI@02:12) | single-source | no |
 
 ## Looks like / does not (good vs bad pairs)
 
@@ -128,6 +171,17 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | 28 | Client talks most of the first call | Designer monologue about their own process | The call exists to learn the business | CLAIM(T5JglDcd54A@00:53) |
 | 29 | Wireframe with section topics only, no type choices | Gray boxes that already imply a font the client then demands | Early approval of a placeholder becomes a constraint | CLAIM(T5JglDcd54A@05:17) |
 | 30 | One revision per stage, closed when done | Reopening the sitemap after later stages have started | Forward motion is the service | CLAIM(T5JglDcd54A@07:54) |
+| 31 | One visual story: goals, construction, palette, then mockups in the brand colors | Loose comps plus a note that only asks for thoughts | The send has to carry the reasoning or the client judges taste alone | CLAIM(q6_LZhs4t6M@00:13) |
+| 32 | Presentation built once, reused on the next client | A new deck invented for every send | The structure is the system; the client fields change | CLAIM(q6_LZhs4t6M@00:50) |
+| 33 | Spell-checked artwork before send | A typo the client finds in the comp | Typos burn a round and the trust | CLAIM(j9Esan5T3Y8@01:02) |
+| 34 | Fonts embedded or outlined, plus an editable copy kept back | Font files emailed, or outlined type with no editable file left | A printer without the font breaks the job; outlined-only blocks later edits | CLAIM(j9Esan5T3Y8@01:39) |
+| 35 | Delivery file named with project, designer, and date | A file titled file one or design one | Unnamed files get lost on both sides | CLAIM(j9Esan5T3Y8@02:40) |
+| 36 | Test print in hand before the print send | Screen-only sign-off on print work | Paper shows color and spacing the monitor hides | CLAIM(j9Esan5T3Y8@03:45) |
+| 37 | One course, several prices by buyer type | Three cloned members areas for the same lessons | Extra areas are extra work when only the price changes | CLAIM(iyNezw9D7k8@01:46) |
+| 38 | Sales page with one block per plan the buyer is allowed to buy | One checkout that lets any buyer pick any price | Eligibility is the point of the tiers | CLAIM(iyNezw9D7k8@06:36) |
+| 39 | Use-case videos years after publish | Publish, then immediately start the next product | Later videos are what kept this set selling | CLAIM(Q9vLsNNfPtI@04:24) |
+| 40 | Net after fees, with the years named | A gross total with no window and no fee cut | The number people repeat is not what you kept | CLAIM(Q9vLsNNfPtI@03:43) |
+| 41 | Mockup previews on the product page | A file dump with no picture of use | Buyers need to see an application before they pay | CLAIM(Q9vLsNNfPtI@02:23) |
 
 ## Decision tables (option A vs B -> pick when)
 
@@ -147,6 +201,10 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 | Keyword in the name | One broad keyword inside a brand name | The whole search phrase as the domain | One word still helps recall and search | The phrase is so long people will not type it or trust it | CLAIM(RUFV897DAGg@05:25), CLAIM(RUFV897DAGg@06:01) |
 | Take the job | Budget and timing are solid, and you have assets or creative freedom | Budget, timing, and portfolio value are all weak | The output will be something you can stand behind | It fails the four-bucket sort; pass | CLAIM(tvKZEhUg3Eg@03:27) |
 | Cold outreach recording | Five or six specific notes, sent the same day | A long audit you polish for days | You need volume while you are starting | The prospect already asked for a paid review | CLAIM(Y-JFVdiimS4@03:38), CLAIM(Y-JFVdiimS4@09:42) |
+| Approval send | One visual-story file (goals, construction, palette, mockups) | Loose comps in an email | This send is the yes or no on the work | Never, in this video. A dump with no reasoning is the failure mode | CLAIM(q6_LZhs4t6M@04:42) |
+| Print file handoff | Embed or outline the type, and keep an editable copy | Email the font files so the printer can set the type | Always, in this video. Sending the font files is called out as not allowed | CLAIM(j9Esan5T3Y8@01:28), CLAIM(j9Esan5T3Y8@01:51) |
+| Same lessons, different buyer prices | One course, several pricing plans | A separate members area per price | The content does not change, only who pays what | The tiers also gate different lessons, so access is not the same set | CLAIM(iyNezw9D7k8@02:03), CLAIM(iyNezw9D7k8@05:08) |
+| Promo link when the product is listed twice | Send your own traffic to the storefront that pays you more | Send traffic to the marketplace with the lower cut | You control the link in the post or the video | The buyer already found the other listing on their own | CLAIM(Q9vLsNNfPtI@03:22) |
 
 ## Anti-patterns (cited)
 
@@ -177,6 +235,13 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 - Showing a logo option you already know they should not pick. CLAIM(GzTWvwtJVRU@05:59)
 - Stuffing every message above the fold because the client asked for it. CLAIM(vNL4PS1KCHY@03:18)
 - Putting the free file on the thank-you page with no confirm step. CLAIM(r_Xg6drUJT4@08:11)
+- Emailing loose comps with a note that only asks for thoughts. CLAIM(q6_LZhs4t6M@00:13)
+- Sending print files without embedding or outlining the type. CLAIM(j9Esan5T3Y8@01:22)
+- Emailing font files to the client or the printer. CLAIM(j9Esan5T3Y8@01:51)
+- Sending a delivery file titled file one. CLAIM(j9Esan5T3Y8@02:40)
+- Cloning a members area per price when the lessons are the same. CLAIM(iyNezw9D7k8@01:41)
+- Quoting product revenue without net and without the years. CLAIM(Q9vLsNNfPtI@02:56)
+- Publishing a digital product and never promoting it again. CLAIM(Q9vLsNNfPtI@04:17)
 
 ## Creator claims (unverified)
 
@@ -207,6 +272,13 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 - Keyword-in-domain still treated as a ranking factor in 2020, with the creator saying it was already fading. CLAIM(RUFV897DAGg@05:25)
 - 48,000 opt-ins claimed over a few years. Paige Brunton, 2023. CLAIM(r_Xg6drUJT4@27:43)
 - A first look at the Apple mark is retold as Jobs saying it would do, not as a wow. Will Paterson, 2023. Treat as anecdote. CLAIM(GzTWvwtJVRU@03:44)
+- This async story-file method was described as vastly raising the chance a design gets approved. Satori Graphics, 2021. No count attached. CLAIM(q6_LZhs4t6M@00:24)
+- Course framed as a path from zero to 100K in one year. Sam Crawford, 2023. CLAIM(iyNezw9D7k8@00:10)
+- That course's full price stated as 2K, or six payments of about $400. Sam Crawford, 2023. CLAIM(iyNezw9D7k8@00:31), CLAIM(iyNezw9D7k8@00:36)
+- Tutorial price examples, not a reported sale: fixed 1,000; 350 across 3 months; an enterprise fixed amount of 3,000. Sam Crawford, 2023. CLAIM(iyNezw9D7k8@03:00), CLAIM(iyNezw9D7k8@03:10), CLAIM(iyNezw9D7k8@03:55)
+- Personal license sold for $10 and an extended commercial license sold for $40. Every Tuesday, told in 2024 about a set published in 2016. CLAIM(Q9vLsNNfPtI@03:13), CLAIM(Q9vLsNNfPtI@03:15)
+- Lifetime net stated as $37,215 from the 2016 publish through the 2024 telling, after commissions and processing fees. Of that, $34,856 on Gumroad and $2,359 on Creative Market. Every Tuesday, 2024. CLAIM(Q9vLsNNfPtI@03:26), CLAIM(Q9vLsNNfPtI@03:35), CLAIM(Q9vLsNNfPtI@03:43)
+- Net by year, same telling: publish year (2016) $4,009; 2017 $8,410; 2018 $10,092; 2019 through 2024 an additional $14,703. Every Tuesday, 2024. CLAIM(Q9vLsNNfPtI@03:51), CLAIM(Q9vLsNNfPtI@03:56), CLAIM(Q9vLsNNfPtI@04:06), CLAIM(Q9vLsNNfPtI@04:11)
 
 ## Tool-specific (dated)
 
@@ -233,6 +305,10 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 - Facebook Page, 2021 repeat of the 2019 setup: cover of the offer in use, CTA aimed at a quote, automatic reply if nobody is watching the inbox, offer pinned to the top, weekly useful posts, turn off Shop if you do not sell there, connect Instagram because the same company owns it. CLAIM(uVSdCJCvzag@04:18), CLAIM(uVSdCJCvzag@16:29), CLAIM(uVSdCJCvzag@18:41), CLAIM(uVSdCJCvzag@26:01)
 - ConvertKit, 2023: form color from a hex, incentive email after confirm, subject-line tester on every send, visual automation for a welcome sequence, tags for clicks and purchases so later sends can target a slice. CLAIM(r_Xg6drUJT4@04:00), CLAIM(r_Xg6drUJT4@10:07), CLAIM(r_Xg6drUJT4@14:06), CLAIM(r_Xg6drUJT4@19:13), CLAIM(r_Xg6drUJT4@20:13)
 - Pitch used for the logo deck in 2023: goals on the opening slide, brand criteria (appropriate, memorable, simple, versatile), light and dark of the system, contextual mockups. CLAIM(GzTWvwtJVRU@01:27), CLAIM(GzTWvwtJVRU@02:58), CLAIM(GzTWvwtJVRU@05:15)
+- Photoshop PSD used as the client presentation: mockups in one tall file, about 1920 wide by 13,000 long, designed once and reused. Satori Graphics, 2021. CLAIM(q6_LZhs4t6M@00:35), CLAIM(q6_LZhs4t6M@00:41)
+- Built-in spell check in the design app, run before send. For print, embed fonts or outline type, and keep the live-text file. Satori Graphics, 2021. CLAIM(j9Esan5T3Y8@00:57), CLAIM(j9Esan5T3Y8@01:28)
+- Squarespace course collection, 2023: several pricing plans on one set of content (fixed or split), included products chosen per plan, digital-product blocks repeated on a sales page. Sam Crawford. CLAIM(iyNezw9D7k8@02:17), CLAIM(iyNezw9D7k8@02:42), CLAIM(iyNezw9D7k8@05:49)
+- Photoshop delivery trick told in 2024: scan textures at 600 DPI, halve that resolution to double the pixel dimensions, land at 300 DPI, cut the white, save transparent PNGs. Listed on Gumroad and Creative Market; promo links pointed at Gumroad. Every Tuesday. Product itself dates to 2016. CLAIM(Q9vLsNNfPtI@01:50), CLAIM(Q9vLsNNfPtI@01:59), CLAIM(Q9vLsNNfPtI@02:09), CLAIM(Q9vLsNNfPtI@02:32), CLAIM(Q9vLsNNfPtI@03:17)
 
 ## Disagreements between creators (who says what, cited)
 
@@ -242,12 +318,14 @@ Coverage: 16 videos read (WxZHUe8mvhU, 3TIYR3ekvjI, _WyYr1p1XVk, O96t2rfwmak, pK
 - Job boards: Sam Crawford (2026) says boards are the right first-client channel and that advice to avoid them is wrong for beginners. CLAIM(Gx1bopqOfMU@12:00). No counter in this set yet.
 - Revision window: Self-Made Web Designer sets 48 hours in one 2025 video and 24 hours in another. CLAIM(O96t2rfwmak@02:32), CLAIM(T5JglDcd54A@03:04). Same creator, two windows. The checkable rule is: pick one window, write it, and treat silence as approval.
 - How the first clients arrive: Sam Crawford (2026) puts job boards first for beginners and treats cold notes as a short-term lever. CLAIM(Gx1bopqOfMU@11:10). Flux Academy (2022) teaches Loom critiques of local sites as the beginner motion. CLAIM(Y-JFVdiimS4@00:00). Flux Academy (2025) says this creator does no outreach and that almost all leads arrive from content and the network. CLAIM(tvKZEhUg3Eg@00:36). Read them as stages, not as one rule: cold recordings while you have no proof, boards if people are already hiring, inbound once the content exists.
+- Big reveal channel: Flux Academy (2022) says present the big reveal live and email the file only for small check-ins. CLAIM(_WyYr1p1XVk@00:43). Satori Graphics (2021) treats a long async visual-story file as what wins approval, and contrasts it with a dump email, not with a live call. CLAIM(q6_LZhs4t6M@04:26). Read them as artifact plus room: walk that story file if you can be live; do not email loose comps either way.
+- File labels: CharliMarieTV (2016) numbers versions and forbids the word final. CLAIM(pKquP_em-Bs@02:12). Satori Graphics (2021) names the file the client receives with the project, the designer, and the date. CLAIM(j9Esan5T3Y8@02:46). Not a conflict: version inside the studio, dated project name on the delivery file.
 
 ## Suggested sub-skills (2-5 names, one line each, which law #s they own)
 
 - business-offer-diagnosis: what to sell, what to refuse, and which tradeoff wins. Laws 2, 4, 9, 11, 14.
 - business-scope-and-proposal: scoped yes, templated proposal, deposit, discovery metrics. Laws 16, 17, 18, 19, 20.
-- business-client-presentation: live reveal structure from brief to next steps. Laws 12, 27, 28, 29, 30, 31, 32, 33, 34.
-- business-onboarding-revisions: asset deadlines, revision caps, project folder, kickoff direction check. Laws 35, 36, 37, 38, 39, 40, 44, 45, 47, 51.
+- business-client-presentation: live reveal structure from brief to next steps, plus the async story file. Laws 12, 27, 28, 29, 30, 31, 32, 33, 34, 61, 62, 63, 64, 65.
+- business-onboarding-revisions: asset deadlines, revision caps, project folder, kickoff direction check, and the pre-send checklist. Laws 35, 36, 37, 38, 39, 40, 44, 45, 47, 51, 66, 67, 68, 69, 70, 71.
 - business-launch-and-retain: launch checks, handoff docs, and the follow-up that creates the next job. Laws 26, 52, 53.
-- business-price-and-scale: platform niche, case-study portfolio, stage pricing, channel order, hire order. Laws 59, 60, plus the price and hire rows in Decision tables.
+- business-price-and-scale: platform niche, case-study portfolio, stage pricing, channel order, hire order, several prices on one course, and digital-product listings. Laws 59, 60, 72, 73, 74, 75, 76, 77, 78, 79, plus the price and hire rows in Decision tables.

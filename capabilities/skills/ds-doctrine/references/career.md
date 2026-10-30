@@ -1,6 +1,6 @@
 # Career laws (Design Studio OS corpus)
 
-Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY7NFbN0e2M, F7IUNob5dn4, jt1WroGHvBs, carA7JNAyzQ, UtEnQCWd0m4, pkYXz_tEOVg, VXziHnT38Mg, kBAzt2Fz7cs, KO5eOtR2njU, WHR7bA1tKWc, h1cI9Ti1lG0, YD0x1HBaxZc). Channels: Satori Graphics, Flux Academy, NNgroup, Every Tuesday, Will Paterson, Mike Locke, The Futur. Publish dates 2011-01 to 2025-11. Top-10 sources in this set: satori-graphics (4), flux-academy (5).
+Coverage: 18 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY7NFbN0e2M, F7IUNob5dn4, jt1WroGHvBs, carA7JNAyzQ, UtEnQCWd0m4, pkYXz_tEOVg, VXziHnT38Mg, kBAzt2Fz7cs, KO5eOtR2njU, WHR7bA1tKWc, h1cI9Ti1lG0, YD0x1HBaxZc, T4BpeUTFWp8, 1016qkEkObE). Channels: Satori Graphics, Flux Academy, NNgroup, Every Tuesday, Will Paterson, Mike Locke, The Futur. Publish dates 2011-01 to 2025-11. Top-10 sources in this set: satori-graphics (6), flux-academy (5).
 
 ## Laws
 
@@ -8,14 +8,14 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 
 | # | law | creators | citations | consensus/single | top-10 source? |
 |---|-----|----------|-----------|------------------|----------------|
-| 1 | Treat the portfolio as the career gate. Strong craft that is badly shown still loses the click. | Satori Graphics | CLAIM(DZ2bB8tL4O0@00:00), CLAIM(ITpre4-99PI@08:21) | single-source | yes |
+| 1 | Treat the portfolio as the career gate. Strong craft that is badly shown still loses the click. | Satori Graphics | CLAIM(DZ2bB8tL4O0@00:00), CLAIM(ITpre4-99PI@08:21), CLAIM(1016qkEkObE@00:00) | single-source | yes |
 | 2 | Cut copy until a stranger can tell what you do without feeling lost. Extra paragraphs lower the chance they act. On a project page, short lines and large images beat a screen of text. | Satori Graphics, Flux Academy | CLAIM(DZ2bB8tL4O0@00:33), CLAIM(DZ2bB8tL4O0@01:00), CLAIM(mY7NFbN0e2M@08:35) | consensus | yes |
 | 3 | The portfolio is only as strong as its weakest piece. Remove the project you would not want a buyer to judge you by. | Satori Graphics | CLAIM(DZ2bB8tL4O0@01:30) | single-source | yes |
-| 4 | Put only best work on the site, shown large and sharp. Tiny, fast-moving thumbnails read as amateur. Curate every image; if you would not defend it, it does not ship. | Satori Graphics, Flux Academy | CLAIM(ITpre4-99PI@00:55), CLAIM(mq4tBpnFPbE@01:57), CLAIM(mq4tBpnFPbE@02:32), CLAIM(mY7NFbN0e2M@14:44) | consensus | yes |
+| 4 | Put only best work on the site, shown large and sharp. Tiny, fast-moving thumbnails read as amateur. Curate every image; if you would not defend it, it does not ship. | Satori Graphics, Flux Academy | CLAIM(ITpre4-99PI@00:55), CLAIM(mq4tBpnFPbE@01:57), CLAIM(mq4tBpnFPbE@02:32), CLAIM(mY7NFbN0e2M@14:44), CLAIM(1016qkEkObE@00:10) | consensus | yes |
 | 5 | Keep one type family across the whole folio so the site reads as one practice, not a pile of jobs. | Satori Graphics | CLAIM(DZ2bB8tL4O0@08:38), CLAIM(ITpre4-99PI@00:29), CLAIM(W0UrLHrVTmk@03:54) | single-source | yes |
 | 6 | Repeat a layout system (spacing, image treatment, project titles) so each case feels like the same studio. | Satori Graphics | CLAIM(ITpre4-99PI@03:21), CLAIM(ITpre4-99PI@07:51) | single-source | yes |
-| 7 | You do not need many pages. A short set of projects side by side beats a deep site nobody finishes. | Satori Graphics | CLAIM(DZ2bB8tL4O0@12:24) | single-source | yes |
-| 8 | Make the contact path obvious, and design the site so the next step is one action (talk about a project, or book a call). Do not bury it at the end of a long scroll. | Satori Graphics, Flux Academy | CLAIM(DZ2bB8tL4O0@04:22), CLAIM(DZ2bB8tL4O0@04:50), CLAIM(DZ2bB8tL4O0@17:01), CLAIM(F7IUNob5dn4@06:10) | consensus | yes |
+| 7 | You do not need many pages. A short set of projects side by side beats a deep site nobody finishes. | Satori Graphics | CLAIM(DZ2bB8tL4O0@12:24), CLAIM(1016qkEkObE@00:10) | single-source | yes |
+| 8 | Make the contact path obvious, and design the site so the next step is one action (talk about a project, or book a call). Do not bury it at the end of a long scroll. After a strong case, add a short prompt tied to the problem that case just showed, so the ask appears before the visitor leaves. The control itself must contrast with the page, or it will not get the click. | Satori Graphics, Flux Academy | CLAIM(DZ2bB8tL4O0@04:22), CLAIM(DZ2bB8tL4O0@04:50), CLAIM(DZ2bB8tL4O0@17:01), CLAIM(F7IUNob5dn4@06:10), CLAIM(T4BpeUTFWp8@01:08), CLAIM(1016qkEkObE@01:53) | consensus | yes |
 | 9 | If you have a point of view, show it. A tight visual niche (one material, one motion style) reads as passion, not as a limit, when the work is strong. | Satori Graphics | CLAIM(ITpre4-99PI@04:27) | single-source | yes |
 
 ### Case studies and proof
@@ -24,8 +24,8 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 |---|-----|----------|-----------|------------------|----------------|
 | 10 | Open each case with the problem in a few lines, then the solution. Buyers pay to remove a problem, not to admire a picture. For a UX case, also name the hypothesis, your role, what users can do now, the messy process, a measured effect if you have one, and what you learned. | Satori Graphics, NNgroup | CLAIM(DZ2bB8tL4O0@03:28), CLAIM(DZ2bB8tL4O0@03:28), CLAIM(DZ2bB8tL4O0@14:56), CLAIM(jt1WroGHvBs@00:26), CLAIM(jt1WroGHvBs@01:23), CLAIM(jt1WroGHvBs@02:00) | consensus | no |
 | 11 | Weave the case into the site. A dumped PDF or a disconnected writeup breaks the visit. | Satori Graphics | CLAIM(DZ2bB8tL4O0@01:59) | single-source | yes |
-| 12 | Add trust signals a buyer can check: who you helped, what changed, and a clear way to start a conversation. A client's own words outweigh your recap. Logos or a testimonial beat an empty proof slot. | Satori Graphics, Flux Academy | CLAIM(DZ2bB8tL4O0@02:32), CLAIM(mq4tBpnFPbE@04:26), CLAIM(mq4tBpnFPbE@04:51), CLAIM(mY7NFbN0e2M@12:28), CLAIM(F7IUNob5dn4@02:55) | consensus | yes |
-| 13 | Name the services as problems you remove, then hint at the kind of solution, before you show the gallery. | Satori Graphics | CLAIM(DZ2bB8tL4O0@17:31) | single-source | yes |
+| 12 | Add trust signals a buyer can check: who you helped, what changed, and a clear way to start a conversation. A client's own words outweigh your recap. Logos or a testimonial beat an empty proof slot. | Satori Graphics, Flux Academy | CLAIM(DZ2bB8tL4O0@02:32), CLAIM(mq4tBpnFPbE@04:26), CLAIM(mq4tBpnFPbE@04:51), CLAIM(mY7NFbN0e2M@12:28), CLAIM(F7IUNob5dn4@02:55), CLAIM(1016qkEkObE@01:07) | consensus | yes |
+| 13 | Name the services as problems you remove, then hint at the kind of solution, before you show the gallery. Show that benefit on a past job, not only as a promise. | Satori Graphics | CLAIM(DZ2bB8tL4O0@17:31), CLAIM(1016qkEkObE@02:21) | single-source | yes |
 | 14 | When you have no client yet, invent a local business with a real constraint and redesign it as if you were hired. A folio of made-up clients can still get you hired if the work is strong. | Satori Graphics, Every Tuesday | CLAIM(DZ2bB8tL4O0@05:51), CLAIM(DZ2bB8tL4O0@06:17), CLAIM(carA7JNAyzQ@03:42) | consensus | yes |
 | 15 | On a long social or Behance post, tell a short visual story: context, the mark in place, then the outcome. Do not rush the alignments. | Satori Graphics | CLAIM(W0UrLHrVTmk@05:53), CLAIM(W0UrLHrVTmk@06:46) | single-source | yes |
 | 16 | Show the work in motion when the project moves. A still crop hides the interaction the buyer is hiring. | Flux Academy | CLAIM(mq4tBpnFPbE@02:32), CLAIM(mq4tBpnFPbE@02:59) | single-source | yes |
@@ -58,7 +58,7 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 | 38 | Only put a client logo on the folio if you did the work. A borrowed mark is a false trust signal. | Will Paterson | CLAIM(kBAzt2Fz7cs@06:26) | single-source | no |
 | 39 | If an NDA hides the best client work, say so, and fill the gap with a passion project aimed at the jobs you want. Show the three to five pieces you would take again. | Will Paterson | CLAIM(VXziHnT38Mg@06:14), CLAIM(VXziHnT38Mg@08:24), CLAIM(VXziHnT38Mg@10:06) | single-source | no |
 | 40 | Put the buyers you want on the first screen, list only the services you do well, and make contact a form that lands in your inbox with almost no friction. | Will Paterson, Flux Academy | CLAIM(kBAzt2Fz7cs@01:14), CLAIM(kBAzt2Fz7cs@07:33), CLAIM(kBAzt2Fz7cs@11:04), CLAIM(F7IUNob5dn4@05:13) | consensus | yes |
-| 41 | Check the folio on a phone before you call it done. A desktop-only layout fails the device most visitors actually use. | Will Paterson | CLAIM(VXziHnT38Mg@07:51) | single-source | no |
+| 41 | Check the folio on a phone and in more than one browser before you call it done, and recheck after you ship. A desktop-only layout, a half-loaded image, or type sitting on top of an image fails the visit. | Will Paterson, Satori Graphics | CLAIM(VXziHnT38Mg@07:51), CLAIM(1016qkEkObE@03:05), CLAIM(1016qkEkObE@03:28) | consensus | yes |
 | 42 | A hiring glance fails on a pixelated portrait, placeholder copy, or a text effect you would not ship for a client. Hierarchy, type, and color are the bar, not the mockup glow. | Flux Academy | CLAIM(KO5eOtR2njU@01:13), CLAIM(KO5eOtR2njU@03:34), CLAIM(KO5eOtR2njU@06:00), CLAIM(KO5eOtR2njU@13:41) | single-source | yes |
 | 43 | If you do two crafts, say both in the first screen. A visitor should not have to guess whether you brand, edit, or build. | Will Paterson | CLAIM(YD0x1HBaxZc@01:21) | single-source | no |
 | 44 | Keep the project card visual. Put the long case (goals, dialogue, process) on its own page behind a clear link. | Will Paterson | CLAIM(YD0x1HBaxZc@02:01), CLAIM(YD0x1HBaxZc@13:12) | single-source | no |
@@ -68,6 +68,16 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 | 48 | For a portfolio domain: short, easy to say, easy to spell, and something you will still claim in five years. Write the email four times. If you stumble, change the name. | The Futur | CLAIM(h1cI9Ti1lG0@01:22), CLAIM(h1cI9Ti1lG0@01:57), CLAIM(h1cI9Ti1lG0@10:58) | single-source | no |
 | 49 | No hyphens in the domain. Avoid a name people already use for a different product, and avoid a homonym (pair / pear) you cannot say out loud without explaining. | The Futur | CLAIM(h1cI9Ti1lG0@05:18), CLAIM(h1cI9Ti1lG0@09:22), CLAIM(h1cI9Ti1lG0@10:09) | single-source | no |
 | 50 | If you use your personal name, accept that it can read as a smaller practice. A brand name can read larger, but only if you can still say it once and be found. | The Futur | CLAIM(h1cI9Ti1lG0@03:08), CLAIM(h1cI9Ti1lG0@04:37) | single-source | no |
+| 51 | On a project image, let a hover or a short note reveal the earlier sketch or the reason the choice was made. A finished picture with no trace of the decision only proves styling. | Satori Graphics | CLAIM(T4BpeUTFWp8@00:19) | single-source | yes |
+| 52 | In the case writeup, justify each choice by the job it did for the reader (who had to scan it, on which surface). A sentence that only says you liked the look is a school sentence. | Satori Graphics | CLAIM(T4BpeUTFWp8@01:47), CLAIM(T4BpeUTFWp8@02:09) | single-source | yes |
+| 53 | Pace a long case into sections (before, the problem, the solution, the result). One picture and one point per section. A scroll with no breaks loses the visit before the end. | Satori Graphics | CLAIM(T4BpeUTFWp8@02:30), CLAIM(T4BpeUTFWp8@03:02) | single-source | yes |
+| 54 | Add small motion on the folio (a fade, a menu that eases, a title that marks on hover) so the site feels considered. If the motion makes the visitor wait, it failed (see law 17). | Satori Graphics | CLAIM(T4BpeUTFWp8@03:17) | single-source | yes |
+| 55 | Add a short how-you-work block of a few named stages, and link each stage to a real job. A process list with no example is only a claim. | Satori Graphics | CLAIM(T4BpeUTFWp8@05:37), CLAIM(T4BpeUTFWp8@05:54) | single-source | yes |
+| 56 | When you email a lead or post the folio, send a short spoken walkthrough of three to five projects: the client's problem, then what you changed, in your own voice. A cold file drop loses that. | Satori Graphics | CLAIM(T4BpeUTFWp8@06:17), CLAIM(T4BpeUTFWp8@06:48) | single-source | yes |
+| 57 | Make the folio's own color, type, and motion match the tone of the work you want hired for. Edgy work gets a kinetic site. Refined work gets quieter type and a muted palette. The first scroll should preview the experience being bought, not only list the jobs. | Satori Graphics | CLAIM(T4BpeUTFWp8@06:55), CLAIM(T4BpeUTFWp8@07:22) | single-source | yes |
+| 58 | When the job is an interface, give the buyer something they can click that behaves like the finished product. A flat export makes them guess the thing you were hired to prove. | Satori Graphics | CLAIM(1016qkEkObE@00:27) | single-source | yes |
+| 59 | Keep the real names of the craft moves you made. Empty praise does not prove you know the work. A term the buyer in that niche cannot follow still fails the short-copy rule. | Satori Graphics | CLAIM(1016qkEkObE@01:24) | single-source | yes |
+| 60 | The folio is a hiring tool, not a gallery piece. Cut any block that does not show the work, say what you do, or lead to the ask. | Satori Graphics | CLAIM(1016qkEkObE@03:45), CLAIM(1016qkEkObE@04:03) | single-source | yes |
 
 ## Looks like / does not (good vs bad pairs)
 
@@ -82,7 +92,7 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 | 7 | Case opens on the client's problem | A pretty board with no reason the work existed | Payment is for the problem removed | CLAIM(DZ2bB8tL4O0@14:56) |
 | 8 | Invented local brief, treated as a real job | An empty portfolio while you wait to be hired | A constraint you wrote still proves judgment | CLAIM(DZ2bB8tL4O0@06:17) |
 | 9 | Social post with one theme, alignments checked | A rushed post with circles off-center | The post is a portfolio piece too | CLAIM(W0UrLHrVTmk@05:25) |
-| 10 | Names of people who already trusted you | Claims of quality with no outside proof | Social proof does the trusting for the visitor | CLAIM(mq4tBpnFPbE@04:51) |
+| 10 | Names of people who already trusted you | Claims of quality with no outside proof | Social proof does the trusting for the visitor | CLAIM(mq4tBpnFPbE@04:51), CLAIM(1016qkEkObE@01:07) |
 | 11 | Headline names the buyer and the problem | "Web designer and Framer developer" with no audience | Tools are not a positioning line | CLAIM(F7IUNob5dn4@01:10) |
 | 12 | One hire path, one button | Freelance, full-time, and collab all offered at once | Those buyers want different proof | CLAIM(F7IUNob5dn4@02:04) |
 | 13 | Work sitting on a contrasting ground | White comps on a white page | If the work blends into the page, it is not presented | CLAIM(F7IUNob5dn4@08:01) |
@@ -100,6 +110,16 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 | 25 | Visual card, full case one click away | The whole case dumped on the project tile | Buyers scan, then read | CLAIM(YD0x1HBaxZc@02:43) |
 | 26 | Two finished practice sites, then the streets | Months spent only on your own folio | Practice sites prove you can ship | CLAIM(WHR7bA1tKWc@05:59) |
 | 27 | Short name you can spell from hearing it | A dashed name, or a name that already means something else | People type what they heard | CLAIM(h1cI9Ti1lG0@09:22) |
+| 28 | Hover or a note shows the sketch or the reason | A finished image with no trace of the decision | Buyers trust work they can see was chosen | CLAIM(T4BpeUTFWp8@00:22) |
+| 29 | Choice written as the job it did | A line that only says you liked the look | Clients hire the problem removed | CLAIM(T4BpeUTFWp8@02:09) |
+| 30 | Case paced into sections, one picture and one point | A long scroll with no breaks | Attention needs a new clear beat | CLAIM(T4BpeUTFWp8@02:36) |
+| 31 | A short ask after the case, tied to that project | Contact only at the bottom | Many visitors never reach the end | CLAIM(T4BpeUTFWp8@01:00) |
+| 32 | How-you-work stages linked to a real job | A process list with no example | Shown steps beat claimed steps | CLAIM(T4BpeUTFWp8@06:04) |
+| 33 | Short spoken tour of a few projects | A cold file with no voice | The problem in your voice beats a drop | CLAIM(T4BpeUTFWp8@06:48) |
+| 34 | Folio tone matches the work you want | A generic frame around strong work | The first scroll is a sample of the buy | CLAIM(T4BpeUTFWp8@07:28) |
+| 35 | A clickable prototype that behaves like the product | A flat file handed to the buyer | They need to try the interface, not imagine it | CLAIM(1016qkEkObE@00:33) |
+| 36 | Images finish loading, type stays off the pictures, phone and desktop both work | A page that breaks on load or only works on one screen | A broken folio ends the visit | CLAIM(1016qkEkObE@03:12) |
+| 37 | A simple path: the work, what you do, then the ask | A cluttered layout that feels like an art piece | The folio is a hiring tool | CLAIM(1016qkEkObE@03:50) |
 
 ## Decision tables (option A vs B -> pick when)
 
@@ -114,6 +134,8 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 | Project count | Three to five pieces you would take again | Six to eight, with range around a strength | You are positioning for one kind of client | You still need to prove you can do adjacent work | CLAIM(VXziHnT38Mg@08:24), CLAIM(carA7JNAyzQ@04:41) |
 | Domain | Personal name | Invented brand | You want to be hired as yourself and can live with a smaller read | You want a studio name and you have checked it is not already a product | CLAIM(h1cI9Ti1lG0@03:08) |
 | First sites | Two practice builds, then outreach | Only your own folio for months | You have no client work yet | The folio already has real cases | CLAIM(WHR7bA1tKWc@03:02) |
+| Where the ask sits | A short prompt after each strong case, tied to that project | One contact control only at the bottom | The folio is long enough that many visitors leave early | The site is a short set and the one ask is already on the first screen | CLAIM(T4BpeUTFWp8@01:08), CLAIM(DZ2bB8tL4O0@04:50) |
+| What you hand over | A clickable prototype | A flat export | The job is an interface the buyer must try | The deliverable is print, and a fake click would invent interaction that does not exist | CLAIM(1016qkEkObE@00:27) |
 
 ## Anti-patterns (cited)
 
@@ -134,6 +156,12 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 - Templates presented as if they were client work. CLAIM(KO5eOtR2njU@09:55)
 - A dashed domain. CLAIM(h1cI9Ti1lG0@09:22)
 - Spending months only on your own folio before any other site exists. CLAIM(WHR7bA1tKWc@02:32)
+- A contact control that only appears at the bottom of a long folio. CLAIM(T4BpeUTFWp8@01:00)
+- A case sentence that only says you liked the look. CLAIM(T4BpeUTFWp8@01:47)
+- A long case with no section breaks. CLAIM(T4BpeUTFWp8@02:30)
+- A flat export where the job was an interface. CLAIM(1016qkEkObE@00:27)
+- A folio that breaks on load or only on one device. CLAIM(1016qkEkObE@03:17)
+- Clutter that does not lead to the work or the ask. CLAIM(1016qkEkObE@03:57)
 
 ## Creator claims (unverified)
 
@@ -143,6 +171,11 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 - A graduate folio made only of fictional clients still got this designer a job. 2016. CLAIM(carA7JNAyzQ@03:42)
 - A hiring look takes about 10 to 15 seconds. Flux Academy, 2025. CLAIM(KO5eOtR2njU@00:00)
 - Getting a folio off the ground can take six months if you only polish your own site. Mike Locke, 2011. CLAIM(WHR7bA1tKWc@05:59)
+- About half the visitors leave before a bottom-only contact control. Satori Graphics, 2025. No market named. CLAIM(T4BpeUTFWp8@01:04)
+- A case with no rhythm loses people once they have seen about 30% of it. Satori Graphics, 2025. No market named. CLAIM(T4BpeUTFWp8@03:08)
+- About 90% of portfolios are too static. Satori Graphics, 2025. No market named. CLAIM(T4BpeUTFWp8@07:35)
+- A spoken folio tour should run about one minute, for LinkedIn or a lead email. Satori Graphics, 2025. Duration is the creator's, not measured. CLAIM(T4BpeUTFWp8@06:17)
+- A no-code prototype skill can be picked up in a couple of hours and help you stand out. Satori Graphics, 2021. No salary market named. Sponsor segment, not a measured learning time. CLAIM(1016qkEkObE@04:37)
 
 ## Tool-specific (dated)
 
@@ -154,6 +187,9 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 - .design sold as a portfolio extension in 2018, with Facebook, Adobe, Amazon, and Airbnb cited as users of that ending. The Futur. CLAIM(h1cI9Ti1lG0@12:16)
 - Framer called out as the build surface for a mobile check of the folio. Will Paterson, 2025. CLAIM(VXziHnT38Mg@07:51)
 - Envato Elements is a sponsor read in the 2022 portfolio videos, not a portfolio law. CLAIM(pkYXz_tEOVg@00:00), CLAIM(kBAzt2Fz7cs@00:00)
+- Simplilearn SkillUp segment (free courses, certificates, interview and salary guides) is a sponsor read in the 2025-05 portfolio video, not a career law. CLAIM(T4BpeUTFWp8@04:01)
+- Behance named as a place for swipeable case chunks. Satori Graphics, 2025. CLAIM(T4BpeUTFWp8@02:49)
+- Framer sponsor read (2021-08): no-code prototyping, free tier, smart components, an insert menu, visual animation. Not a portfolio law. CLAIM(1016qkEkObE@04:14)
 
 ## Disagreements between creators (who says what, cited)
 
@@ -161,10 +197,12 @@ Coverage: 16 videos read (DZ2bB8tL4O0, W0UrLHrVTmk, ITpre4-99PI, mq4tBpnFPbE, mY
 - Domain ending: Wes McDowell in the business set (2020) treats a novelty extension as a last resort behind a tweaked .com. The Futur (2018) actively sells .design for portfolios. CLAIM(h1cI9Ti1lG0@12:16). For a personal folio, .design is a dated option. For a client business, prefer the .com rule in the business file.
 - First work: Mike Locke (2011) says build fictitious sites and then free charity sites before you sell. CLAIM(WHR7bA1tKWc@05:29). Later creators (Satori, Every Tuesday, Sam Crawford in the business set) still allow fictional work, but they do not require unpaid client work as the next step. Do not treat 2011 free-work advice as current pricing.
 - Pictures vs process: Flux Academy (2023) says do not drown the work and keep text short. CLAIM(mY7NFbN0e2M@04:55). NNgroup (2019) says employers want the messy process, not only pretty pictures. CLAIM(jt1WroGHvBs@00:10), CLAIM(jt1WroGHvBs@01:40). Hold both: images lead, and a UX case still owes role, process, and effect in short lines.
+- Motion and sound: Flux Academy says folio motion must not make the visitor wait. CLAIM(mq4tBpnFPbE@03:28). Satori Graphics (2025) pushes small motion, and even ambient audio, so the folio feels premium. CLAIM(T4BpeUTFWp8@03:17), CLAIM(T4BpeUTFWp8@07:55). Hold the Flux bar: motion is allowed only if the scroll still works. Ambient audio is a single-creator preference, not a law.
+- Craft terms vs short copy: Satori Graphics (2021) says drop real design terms into the text so you sound like you know the work. CLAIM(1016qkEkObE@01:24). Satori Graphics (2023) says cut copy until a stranger is not lost. CLAIM(DZ2bB8tL4O0@00:33). Hold both: use the correct term, in a short line a buyer in that niche can follow.
 
 ## Suggested sub-skills (2-5 names, one line each, which law #s they own)
 
 - career-portfolio-edit: what stays on the site, how many pages, how type and layout repeat. Laws 1, 3, 4, 5, 6, 7, 9.
-- career-case-study: problem, solution, trust, and the contact funnel. Laws 8, 10, 11, 12, 13, 14.
-- career-folio-craft: nav, contrast, image size, motion that does not block, work separated from the page. Laws 16, 17, 18, 19, 20, 21, 24, 26.
-- career-positioning: who you help, one ask, proof, and the button. Laws 8, 12, 22, 23.
+- career-case-study: problem, solution, trust, and the contact funnel. Laws 8, 10, 11, 12, 13, 14, 51, 52, 53, 55, 59.
+- career-folio-craft: nav, contrast, image size, motion that does not block, work separated from the page. Laws 16, 17, 18, 19, 20, 21, 24, 26, 41, 54, 57, 58, 60.
+- career-positioning: who you help, one ask, proof, and the button. Laws 8, 12, 22, 23, 56.

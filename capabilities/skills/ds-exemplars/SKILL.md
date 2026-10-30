@@ -3,7 +3,7 @@ name: ds-exemplars
 description: >-
   JEV-FIRST MANDATE, findable at task start and binding before any work: typed judgments go to rig-s1gate
   (Jev) BEFORE any frontier LLM call; DEFERRED when the classifier is down, never a guessed verdict.
-  Reference skill of design-studio-os: what good design looks like and what it does not. 384 paired
+  Reference skill of design-studio-os: what good design looks like and what it does not. 614 paired
   good-versus-bad contrasts that creators showed in the corpus, per stage, each with the reason and a
   CLAIM(<videoId>@mm:ss), plus per-pair cards in studio-exemplars/pairs/. Use to calibrate a critique,
   brief a designer, or check a screen against known failure shapes.
@@ -14,8 +14,7 @@ status: Stable
 acl: internal
 outcome: "design-ux: a critique or brief names the closest looks-like and does-not examples with their reasons and sources"
 done_when:
-  - cmd:python3 studio-exemplars/scripts/build_pairs.py --check
-  - cmd:python3 tools/claims_check.py studio-skills/skills/ds-exemplars/SKILL.md
+  - cmd:python3 ../rig-design-studio-os/tools/claims_check.py capabilities/skills/ds-exemplars/references/*.md
 quality_floor: 0.6
 ---
 
@@ -43,18 +42,18 @@ it before any critique; and `ds-gate-critique` cannot pass a session without a n
    ui.design scores the good side above the bad side. Third-party screenshots never enter a repo.
 
 ## Pairs per stage
-| discovery | 28 | references/discovery-pairs.md |
-| brand_identity | 20 | references/brand_identity-pairs.md |
-| typography | 20 | references/typography-pairs.md |
-| color | 27 | references/color-pairs.md |
-| layout | 25 | references/layout-pairs.md |
-| ui_system | 20 | references/ui_system-pairs.md |
-| ux | 30 | references/ux-pairs.md |
-| motion_3d | 24 | references/motion_3d-pairs.md |
-| imagery | 26 | references/imagery-pairs.md |
-| ai_workflow | 18 | references/ai_workflow-pairs.md |
-| conversion_copy | 41 | references/conversion_copy-pairs.md |
-| build_ship | 8 | references/build_ship-pairs.md |
-| critique | 40 | references/critique-pairs.md |
-| business | 30 | references/business-pairs.md |
-| career | 27 | references/career-pairs.md |
+| discovery | 42 | references/discovery-pairs.md |
+| brand_identity | 33 | references/brand_identity-pairs.md |
+| typography | 46 | references/typography-pairs.md |
+| color | 42 | references/color-pairs.md |
+| layout | 35 | references/layout-pairs.md |
+| ui_system | 34 | references/ui_system-pairs.md |
+| ux | 56 | references/ux-pairs.md |
+| motion_3d | 39 | references/motion_3d-pairs.md |
+| imagery | 40 | references/imagery-pairs.md |
+| ai_workflow | 34 | references/ai_workflow-pairs.md |
+| conversion_copy | 47 | references/conversion_copy-pairs.md |
+| build_ship | 20 | references/build_ship-pairs.md |
+| critique | 68 | references/critique-pairs.md |
+| business | 41 | references/business-pairs.md |
+| career | 37 | references/career-pairs.md |
