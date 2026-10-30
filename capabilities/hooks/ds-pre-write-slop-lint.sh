@@ -4,7 +4,7 @@
 # parent: ds-session-start
 # event: PreToolUse:Write
 # outcome: design-ux: blocks writing page copy that carries banned AI tells (em dashes, 'unlock', 'elevate', 'seamless', 'in today's fast-paced')
-# done_when: cmd:python3 tools/hook_cases.py ds-pre-write-slop-lint
+# done_when: cmd:python3 ../rig-design-studio-os/tools/hook_cases.py ds-pre-write-slop-lint
 # DORMANT until wired into a harness settings file by Mike. Canonical source: rig-design-studio-os/studio-harness.
 # JEV FIRST applies to judgments; this hook is deterministic CODE and never calls a model.
 set -u
