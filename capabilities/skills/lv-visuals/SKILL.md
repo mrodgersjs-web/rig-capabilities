@@ -154,6 +154,31 @@ never inherits a mascot, a hook or a commercial CTA.
   [rig-linkedin-image-harness].
 - Not scheduled, not published here: Eden drafts only, Mike publishes [li-visuals].
 
+## Lessons from measured outcomes (added 2026-10-01)
+
+Provenance tag `[measured:...]` marks an observation on this estate's own tooling; `[ext:...]` marks
+an outside finding.
+
+- **The image ship gate must be fail-closed on inspection, never on file metadata.** As built, the
+  viral ship score awarded `scene_fidelity: 85` for a `reference_image` path merely existing and
+  `brand_fidelity: 80` for the file being larger than 1 MB, summing 85+90+80 = SHIP for an image
+  nobody had looked at. Nothing in it read a single word of the artwork. This is the mechanical
+  reason the account's imagery is weak: the check that was meant to stop a bad image was scoring
+  file size. A fail-closed patch was written on 2026-09-17 and **left uncommitted**, so the defect is
+  live at time of writing. Rule: a fidelity score may only be awarded from a read of the rendered
+  pixels or an explicit human pass, and a missing check is a FAIL, never a default.
+  [measured:rig-viral viral_ship_score, 2026-09-17 patch, uncommitted]
+- **Carousel length evidence disagrees with the house default.** This stage says 6-9 slides;
+  getcreator's 8,400-post benchmark puts the engagement sweet spot at 9-12 slides (5.4% engagement,
+  68-76% swipe-through), and AuthoredUp's 3M-post study found that when median impressions fell 47%
+  platform-wide, native documents fell 43% while video fell 72%. The house default has no baseline
+  on this account, so the two are in conflict until measured. Named as a conflict, not changed
+  silently. [ext:getcreator.io/stats/linkedin-carousel-benchmarks, ext:authoredup.com/newsletter/linkedin-vanishing-audience]
+- **Mixed-media carousels are the open format edge.** Image plus 3-5 second video clips measured
+  2.33% engagement against 1.80% for image-only, and only about 7% of accounts use the form. Worth
+  one briefed Eden test before the format is written off. [ext:socialinsider.io via Bruna Keller,
+  instagram.com/p/DZYTutKE8Ne]
+
 ## Done-test
 
 `python3 capabilities/skills/linkedin-viral/scripts/check_ledger.py capabilities/skills/lv-visuals`
