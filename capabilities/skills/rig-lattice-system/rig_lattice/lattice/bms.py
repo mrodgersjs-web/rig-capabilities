@@ -44,6 +44,8 @@ from rig_lattice.lattice.constants import (
     ALTITUDE_BONUS,
     BMS_APPROVAL,
     BMS_COST_BAND,
+    assert_cost_tables_agree,
+    BMS_BUDGET_USD as _BMS_BUDGET_FROM_BANDS,
     BMS_NAME,
     BMS_THRESHOLD_EXPR,
     BMSMode,
@@ -53,12 +55,10 @@ from rig_lattice.lattice.constants import (
 # Per-mission USD budget per mode. A1 spends nothing because no model is in
 # the decision path; A4 spends nothing because the decision is a human gate,
 # not a model call. Source: rig-deviator system/orchestrator.py.
-BMS_BUDGET_USD: dict[str, float] = {
-    "A1": 0.00,
-    "A2": 0.10,
-    "A3": 0.50,
-    "A4": 0.00,
-}
+# Derived from BMS_COST_BAND (constants.py) - the generated cell contracts encode that
+# table, so it is the source and this is a convenience view, never an independent price.
+BMS_BUDGET_USD: dict[str, float] = dict(_BMS_BUDGET_FROM_BANDS)
+assert_cost_tables_agree(BMS_BUDGET_USD)
 
 
 def _clamp01(x: float) -> float:

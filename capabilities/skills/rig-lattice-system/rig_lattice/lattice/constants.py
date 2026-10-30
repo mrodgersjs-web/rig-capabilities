@@ -199,7 +199,12 @@ BMS_DOCTRINE: dict[str, str] = {
           "the gate, not the model, decides.",
     "A3": "A3 AGENT_BOUNDED — bounded agent runtime with hard tool and cost "
           "budgets, mandatory human approval.",
-    "A4": "A4 LLM_AGENT_FREE — adversarial, model-free decision path, "
+    # Name kept as LLM_AGENT_FREE for compatibility with the 147 generated A4 cell
+    # contracts (cells/L*-A4-*.yaml) and the archetypes/a4_llm_agent_free package
+    # path. Ruled 2026-09-29 (grill Q8=A): A4 is the HUMAN GATE. Flipping
+    # model_in_decision_path to False for A4 requires regenerating those 147
+    # contracts, which is its own card, not a two-line edit.
+    "A4": "A4 HUMAN_GATE (legacy name LLM_AGENT_FREE) — adversarial, a person is "
           "mandatory human approval.",
 }
 
@@ -220,6 +225,21 @@ BMS_THRESHOLD_EXPR: dict[str, str] = {
     "A4": "<0.25",
 }
 
+# SINGLE SOURCE OF TRUTH for BMS cost, decided 2026-09-29 (grill Q16=C).
+# Two tables used to price the same modes independently: BMS_COST_BAND here and
+# BMS_BUDGET_USD in lattice/bms.py. They disagreed on all four rows while one
+# verdict object printed both (cost_band "$1" beside budget_usd 0.5). The
+# generated bundle decides which is canonical: all 588 cells/L?-?-A? ?-*.yaml
+# contracts carry $0.001 / $0.05 / $1 / $50 (147 per mode), so THIS table is the
+# source and bms.py derives its float budget from it. Change the price here and
+# regenerate the cells; do not add a second table.
+#
+# Open, deliberately: A4 carries $50 here and model_in_decision_path: true in
+# all 147 of its contracts, while the doctrine (and Mike's 2026-09-29 ruling,
+# grill Q8=A) says A4 is the HUMAN GATE that spends nothing. Repricing A4 to
+# $0.00 and setting model_in_decision_path False is a regeneration of those 147
+# contracts, not an edit - filed as its own card. Until then the name stays
+# LLM_AGENT_FREE for path compatibility with archetypes/a4_llm_agent_free/.
 BMS_COST_BAND: dict[str, str] = {
     "A1": "$0.001",
     "A2": "$0.05",
@@ -227,7 +247,27 @@ BMS_COST_BAND: dict[str, str] = {
     "A4": "$50",
 }
 
-# Approval doctrine per mode: A1/A2 -> conditional, A3/A4 -> mandatory.
+
+def cost_band_to_usd(band: str) -> float:
+    return float(band.replace("$", ""))
+
+
+BMS_BUDGET_USD: dict[str, float] = {k: cost_band_to_usd(v) for k, v in BMS_COST_BAND.items()}
+
+
+def assert_cost_tables_agree(budget: dict[str, float] | None = None) -> None:
+    """Called at import by lattice/bms.py. A drift between the two tables is a defect,
+    not a configuration choice: the A1->A4 ladder is how work gets routed cheap-first,
+    and two prices for one mode makes that ladder unusable."""
+    b = budget if budget is not None else BMS_BUDGET_USD
+    for mode, usd in b.items():
+        band = BMS_COST_BAND.get(mode)
+        if band is None or cost_band_to_usd(band) != float(usd):
+            raise AssertionError(
+                f"BMS cost tables disagree for {mode}: BMS_COST_BAND={band!r} "
+                f"vs BMS_BUDGET_USD={usd!r}")
+
+
 BMS_APPROVAL: dict[str, str] = {
     "A1": "conditional",
     "A2": "conditional",
