@@ -10,6 +10,10 @@ metadata:
     - rig-write-resumes
     - application-packet-builder
     - browser-skill
+done_when:
+  - grep:capabilities/skills/hermes-resume-only-applications/SKILL.md:A run processes at most five target jobs
+  - grep:capabilities/skills/hermes-resume-only-applications/SKILL.md:Do not call a prepared or prefilled application APPLIED
+  - cmd:python3 capabilities/skills/hermes-resume-only-applications/verify_sources.py | python3 -c "import json,sys;d=json.load(sys.stdin);assert d['status'] in ('PASS','BLOCK') and len(d['checks'])>0"
 ---
 
 # Hermes resume-only applications

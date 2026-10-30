@@ -1,6 +1,9 @@
 ---
 name: gtm-skill-6eab988ba917-03766ede
 description: "Define campaign ICP before generation"
+done_when:
+  - grep:capabilities/skills/gtm-skill-6eab988ba917-03766ede/SKILL.md:Explicitly lock this definition for V1
+  - cmd:python3 -c "import json;f=json.load(open('capabilities/skills/gtm-skill-6eab988ba917-03766ede/fixtures.json'));e={x['expected'] for x in f};assert {'PASS','BLOCK'}<=e"
 ---
 
 # Define a Narrow, Psychographic ICP for V1

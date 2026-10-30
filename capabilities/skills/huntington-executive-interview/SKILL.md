@@ -1,6 +1,9 @@
 ---
 name: huntington-executive-interview
 description: Coach Mike for Huntington's Sr AI and Product Transformation Manager interview through job-aligned questions, unscored story gathering, concise executive rewrites, and consistent scored rehearsals.
+done_when:
+  - grep:capabilities/skills/huntington-executive-interview/SKILL.md:Never claim to be Andrew
+  - grep:capabilities/skills/huntington-executive-interview/SKILL.md:never promise compensation
 ---
 
 # Huntington executive interview coaching
