@@ -1,0 +1,32 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T15:53:32Z",
+  "signer": "codex",
+  "scope": "Source-quality and configured-install inventory, selected skill repairs, and fail-closed checks; no estate-wide runtime or outcome certification",
+  "source_sha256": {
+    "scripts/audit_installed_skill_agent_estate.py": "5629b115493c0621fd77d8b9e374c638e0fbb1981c46a5c4cac57450761e4103",
+    "scripts/audit_skill_agent_quality.py": "11a4c3d569d425693a74af44e643bedc0bdb304ea7919f7f2d13f4a212e45fbd",
+    "tests/test_installed_skill_agent_estate.py": "ee18930e5715d1b9bda55a7aa2d2702df63d76697b7d2b95d5914be315bcc05f",
+    "tests/test_skill_agent_quality_audit.py": "21083b49307d3e4e8054204ca7291dd0fe1193f58ed684e52f842b295a8e2ccc",
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "a1355323c75a3fae38c93e4ab572c7d13a719fa7892c8ebe802e66c479265ee6"
+  },
+  "commands": [
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary --gate", "exit_code": 1, "result": "225 assets; 20 spec-ready; 0 outcome-verified; 0 promotable"},
+    {"command": "python3 scripts/audit_installed_skill_agent_estate.py --summary --integrity-gate", "exit_code": 1, "result": "12 roots; 5734 entries; 400 broken links; 157 canonical byte drifts; 4605 noncanonical entries; one nested SKILL.md reported"},
+    {"command": "python3 -m unittest -v tests.test_installed_skill_agent_estate tests.test_skill_agent_quality_audit tests.test_promptfoo_outcome_screen tests.test_repair_colon_skill_descriptions", "exit_code": 0, "result": "18 tests passed"},
+    {"command": "ruff check scripts/audit_installed_skill_agent_estate.py scripts/audit_skill_agent_quality.py tests/test_installed_skill_agent_estate.py tests/test_skill_agent_quality_audit.py", "exit_code": 0, "result": "All checks passed"}
+  ],
+  "jev": {"decision_id": 56438, "verdict": "ESCALATE", "enforced": false, "reason": "ultra.proof calibration stale; advisory only"},
+  "independent_review": {"verdict": "PARTIAL", "finding": "No estate-wide outcome claim; same-ID format-variant false green fixed; nested SKILL.md now counted as unverified subskill"},
+  "residuals": [
+    "No retained asset has an independently verified held-out outcome score above 0.90",
+    "400 broken configured-install symlinks and 157 canonical byte drifts remain",
+    "4605 noncanonical installed entries and 114 unscanned entries need ownership and retention triage",
+    "YouTube transcript examples restored syntactically but referenced corpus transcripts directory is absent",
+    "OMP four-skill read check does not prove agent selection or behavior; remaining client paths unverified",
+    "Whole-worktree git diff --check reports unrelated pre-existing trailing whitespace in plans/ultraplan-v2/audit-final.log; scoped modified tracked files pass"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

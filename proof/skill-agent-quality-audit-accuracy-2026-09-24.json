@@ -1,0 +1,30 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T16:43:05Z",
+  "signer": "codex",
+  "scope": "Correct source-readiness classification of portable Agent Skills metadata and restore Jev rubric identity-map coverage; no asset outcome promotion",
+  "source_sha256": {
+    "scripts/audit_skill_agent_quality.py": "633538f2ce331493fa638aeb81e334fb615e2d8b325e21d085ecb25a05005528",
+    "tests/test_skill_agent_quality_audit.py": "b11dd05695637454ffbc92f2765d214a1aa62fbf9e4598895ec992c39f7043e1",
+    "capabilities/harnesses/s1gate/work-criteria.json": "69d6c3d28eab6e83f4880168678c8d50b65da662b0565feceea86729c9c637f7",
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "2a60bbfcbf31bc09cd42bddb9219e9588e37bf8879507335ace8d7d038cbc79a"
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_skill_agent_quality_audit tests.test_promptfoo_outcome_screen", "exit_code": 0, "result": "14 tests passed"},
+    {"command": "python3 -m unittest discover -s tests -p 'test_s1gate*.py' -q", "exit_code": 0, "result": "49 tests passed"},
+    {"command": "ruff check scripts/audit_skill_agent_quality.py tests/test_skill_agent_quality_audit.py", "exit_code": 0, "result": "All checks passed"},
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary", "exit_code": 0, "result": "243 assets; 20 spec-ready on limited screen; 0 outcome-verified; 0 promotable"},
+    {"command": "python3 -m json.tool capabilities/harnesses/s1gate/work-criteria.json", "exit_code": 0, "result": "Valid JSON"},
+    {"command": "git diff --check -- <scoped tracked files>", "exit_code": 0, "result": "No whitespace errors"}
+  ],
+  "external_standard": "https://agentskills.io/specification",
+  "residuals": [
+    "The source audit is a readiness screen, not an independent outcome verifier",
+    "No canonical skill or agent has held-out artifact-and-trace evidence above 0.90",
+    "Jev labels are not authenticated human-review receipts",
+    "Installed-copy and live client-path verification remain incomplete"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

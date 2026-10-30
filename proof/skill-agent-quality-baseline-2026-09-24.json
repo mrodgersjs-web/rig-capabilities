@@ -1,0 +1,39 @@
+{
+  "schema": "rig.proof_packet.v1",
+  "timestamp": "2026-09-24T15:11:02Z",
+  "signer": "codex",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "route": "when-building-or-fixing-agents -> skill-upgrades; Jev advisory; deterministic source audit",
+  "claim": "A stricter skill/agent quality standard and fail-closed baseline audit exist; estate-wide >0.90 outcomes are not established.",
+  "artifacts": {
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "sha256:654c98a671fc70ea1188c14b5386b74787a0c51b3f51cb63fca817e31e407bc2",
+    "scripts/audit_skill_agent_quality.py": "sha256:b5b61379e966a3018a5f18cb6f1e079c22171261a31f4ba0561b3c427cce0623",
+    "tests/test_skill_agent_quality_audit.py": "sha256:70aa96eda13170a13090137fff5a8994ca26e555acf05d33ff90e491fa530da9",
+    "openspec/changes/skill-agent-quality-gate/specs/asset-quality/spec.md": "sha256:201da14ea3e105e6b9a7479dbb566a764b8ece53002e87adddebe119de14461c"
+  },
+  "sources": [
+    "https://agentskills.io/specification",
+    "https://developers.openai.com/api/docs/guides/agent-evals",
+    "https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents",
+    "https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills",
+    "https://www.promptfoo.dev/docs/configuration/expected-outputs/",
+    "https://www.promptfoo.dev/docs/guides/testing-guardrails/",
+    "https://genai.owasp.org/llmrisk/llm062025-excessive-agency/"
+  ],
+  "gates": {
+    "source_audit": "223 assets; 0 spec-ready; 0 outcome-verified; 0 promotable",
+    "source_audit_gate": "expected FAIL exit 1; no false green",
+    "unit_tests": "3/3 quality-audit tests passed; 3/3 targeted installation tests passed",
+    "promptfoo": "eval-g1l-2026-09-24T15:06:30; 4/4 offline mission-router cases; routing only",
+    "jev": "ultra.proof decision 56196; advisory ESCALATE; vacuity noul 0.93; calibration stale",
+    "agent_standards_doctor": "PASS for doctrine/profile installation; not agent outcome proof",
+    "openspec_zone": "BLOCK mixed_zones from pre-existing unrelated dirty files",
+    "full_catalog_suite": "INTERRUPTED after more than four minutes; no full-suite claim"
+  },
+  "hard_blocks": [
+    "No source-bound held-out outcome datasets for all canonical skills and agents",
+    "Jev ultra.proof rubric calibration stale",
+    "Prime Agent runtime unavailable for live client verification",
+    "Repository-wide OpenSpec zone check blocked by unrelated dirty work"
+  ]
+}

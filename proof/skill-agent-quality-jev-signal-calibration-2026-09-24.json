@@ -1,0 +1,36 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T16:36:32Z",
+  "signer": "codex",
+  "scope": "Jev per-signal calibration, evidence binding, and effective enforcement reporting; no estate-wide quality promotion",
+  "source_sha256": {
+    "rig_capabilities/s1gate.py": "e08e0b101b2f595558d53761ce0f6d2ab4706ffc9ed37090387d834b7f51ebf0",
+    "rig_capabilities/s1gate_calibrate.py": "ae6c64ee39a6730c54b1c4194dd99aa20bf44d063dd43683af6eb98019a84ce5",
+    "rig_capabilities/s1gate_bridge.py": "775d1135c58f0de751cdd96268219099f85fe922b9b1e98641c6502c20faa855",
+    "bin/rig-s1gate": "4aca68fd8035ee2b6e88682ebfedfe160e12b1d21a677807ebdbbd5a32875248",
+    "tests/test_s1gate_calibrate.py": "79c560f649d3ee31f049fbc1f56533624aa3905f7c3f531bc94c035af0f4709a",
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "f603036f3dbeee75b77456c7a80f498de7ef9baf57858f1f1e264be8e2f7de2a",
+    "plans/skill-agent-quality-program.md": "2c00cf943bc4c51369d75077d4708ddfb6e65099dd596695ba4917e2b3ba4087"
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_s1gate_calibrate tests.test_mcp_s1gate tests.test_s1gate.TestVerdicts", "exit_code": 0, "result": "47 tests passed"},
+    {"command": "bin/rig-s1gate selftest", "exit_code": 0, "result": "6/6 rule checks passed; 74 rubrics loadable"},
+    {"command": "bin/rig-s1gate calibrate ultra.proof --signal done_test_is_vacuous.noul --direction above", "exit_code": 2, "result": "0 eligible per-signal labels; no certification; advisory only"},
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary", "exit_code": 0, "result": "243 assets; 20 spec-ready; 0 outcome-verified; 0 promotable"},
+    {"command": "python3 -m unittest discover -s tests -p 'test_s1gate*.py' -q", "exit_code": 1, "result": "49 tests; one adjacent failure: job.opsmd.fit missing identity key in work-criteria.json"},
+    {"command": "python3 -m py_compile <five scoped Python files>", "exit_code": 0, "result": "Passed"},
+    {"command": "git diff --check -- <scoped Jev files>", "exit_code": 0, "result": "Passed"}
+  ],
+  "jev": {"decision_id": 56653, "verdict": "ESCALATE", "enforced": false, "reason": "Calibration question remains advisory until signal-scoped held-out labels exist"},
+  "independent_review": {"verdict": "PARTIAL", "finding": "Prior model wildcard, prefix collision, evidence hash, and status-reporting gaps were patched; human label provenance remains self-asserted by local callers; broader rubric identity test still fails on adjacent catalog drift"},
+  "residuals": [
+    "No canonical skill or agent has an independently verified held-out outcome score above 0.90",
+    "Jev ultra.proof has zero eligible signal-scoped labels and cannot be certified",
+    "Human-labelled calibration rows currently rely on a trusted-local-caller assumption, not an authenticated human-review receipt",
+    "One broader s1gate test fails because job.opsmd.fit lacks a work-criteria identity entry",
+    "Installed-copy drift, broken links, and runtime coverage gaps remain from the estate audit"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

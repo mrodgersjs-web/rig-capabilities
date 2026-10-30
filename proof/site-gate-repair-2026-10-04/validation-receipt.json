@@ -1,0 +1,348 @@
+{
+  "schema": "rig.site-gate.validation-receipt.v1",
+  "at": "2026-10-05T02:11:35.777274+00:00",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "compileall",
+        "-q",
+        "capabilities/skills/jev-site-gate/scripts",
+        "capabilities/skills/client-mirror-site/scripts",
+        "tests/test_site_gate_evidence.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "--",
+        "capabilities/skills/jev-site-gate",
+        "capabilities/skills/client-mirror-site",
+        "tests/test_site_gate_evidence.py"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "npx",
+        "--no-install",
+        "--cache",
+        "/tmp/rig-openspec-npm-cache",
+        "@fission-ai/openspec@1.6.0",
+        "validate",
+        "site-evidence-repair",
+        "--strict",
+        "--no-interactive"
+      ],
+      "exit_code": 0,
+      "stdout": "Change 'site-evidence-repair' is valid\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/Users/rig128gb/Developer/rig-design-studio-os",
+        "apply",
+        "--check",
+        "/Users/rig128gb/Developer/rig-capabilities/proof/site-gate-repair-2026-10-04/design-sync.patch"
+      ],
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "router_parity": {
+    "/Users/rig128gb/Developer/rig-design-studio-os/studio-skills/skills/design-studio-os/SKILL.md": {
+      "expected": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "observed": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "pass": true
+    },
+    "/Users/rig128gb/Developer/rig-capabilities/capabilities/skills/design-studio-os/SKILL.md": {
+      "expected": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "observed": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "pass": true
+    },
+    "/Users/rig128gb/.codex/skills/design-studio-os/SKILL.md": {
+      "expected": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "observed": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "pass": true
+    },
+    "/Users/rig128gb/.aside/u/0/skills/user/design-studio-os/SKILL.md": {
+      "expected": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "observed": "9367dc675d8b34ca901df23ca6e27335d082230b1a2786da95055181a32fd7a9",
+      "pass": true
+    }
+  },
+  "production_gate": {
+    "path": "/Users/rig128gb/Developer/rig-client-mirror-sites/_tools/gate.py",
+    "sha256": "1a84261f66921226d877def40733ecb22738e6c4087ee1faf63ff36507ac5ed8",
+    "unchanged_from_audit": true
+  },
+  "authoring_sync": {
+    "path": "/Users/rig128gb/Developer/rig-design-studio-os/tools/sync_to_capabilities.py",
+    "sha256": "ef3e5e7deb22e77e2ce2a35e4e3548a6c601030d4dc2843758a35d79a5b18674",
+    "unchanged": true
+  },
+  "passed": true,
+  "scope": "Local commands and read-only byte parity; no promotion/runtime acceptance. Non-vacuous whitespace checks diff every final source file against /dev/null, including untracked files.",
+  "untracked_source_whitespace_checks": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/SKILL.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/references/BUILDER-BRIEF.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/references/DESIGN-PROCESS.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/references/PROBE.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/scripts/gate.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/scripts/jev.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/client-mirror-site/scripts/pull_board.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/SKILL.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/references/EVIDENCE-V2.md"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/references/criteria.v1.jev-vetted.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/references/criteria.v1.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/references/criteria.v2.json"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/scripts/evidence_contract.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/scripts/gate.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "capabilities/skills/jev-site-gate/scripts/jev.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "/dev/null",
+        "tests/test_site_gate_evidence.py"
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "npx",
+        "--no-install",
+        "--cache",
+        "/tmp/rig-openspec-npm-cache",
+        "@fission-ai/openspec@1.6.0",
+        "validate",
+        "site-evidence-repair",
+        "--strict",
+        "--no-interactive"
+      ],
+      "exit_code": 0,
+      "stdout": "Change 'site-evidence-repair' is valid\n",
+      "stderr": "",
+      "passed": true
+    }
+  ],
+  "whitespace_non_vacuity": {
+    "clean_exit_code": 1,
+    "clean_output": "",
+    "invalid_exit_code": 3,
+    "invalid_output": "/var/folders/5h/50rwllc566g_5gmcsssw0_gw0000gn/T/tmposz4x_vd/whitespace-fixture.txt:1: trailing whitespace.\n+trailing \n",
+    "passed": true
+  },
+  "whitespace_exit_semantics": "git diff --no-index reports exit1 for an ordinary changed file even with --check; clean output and rc0/1 are accepted. A deliberate trailing-whitespace fixture must produce a distinct failing result with the expected diagnostic."
+}

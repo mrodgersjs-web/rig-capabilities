@@ -1,0 +1,38 @@
+{
+  "schema": "rig.proofpacket.v1",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "timestamp_utc": "2026-09-24T16:19:41Z",
+  "signer": "codex",
+  "scope": "Canonical quality-workflow and done-test fail-closed hardening; source and install audit snapshots; no estate-wide outcome certification",
+  "source_sha256": {
+    "rig_capabilities/done_tests.py": "83fea3cfe8c9416b19fb520d670a925d87df7a6f64c689b0d5e416eee7e15627",
+    "scripts/audit_skill_agent_quality.py": "b06eb3fdf6c26c36e9a3e1bcaaef19471f41bb6b82d06fe2170c8a920a8ff5ee",
+    "tests/test_done_tests_ran.py": "a0a6027f44d5277e3c4f925f644e00a33480112c6b649d6d2e473822c49b4057",
+    "tests/test_skill_agent_quality_audit.py": "b2dd4c92369b2d42d257a1c2a14ea24a56dee2df163f6167dd91029064738a6f",
+    "capabilities/skills/skill-upgrades/SKILL.md": "592292b530bf8acfc7f2cfe54a954f986666ab74fd0378e24737aed887e5615e",
+    "capabilities/commands/skill-upgrades.md": "cf2b48014dcb28a5831941e7dfca67ad55d22b9dc13dc2a1b86f5860a96fc620",
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "6e653ffde604b13c37e8bb445c71987cf4bff0d71ccf8516c6c7658e8f01395d"
+  },
+  "commands": [
+    {"command": "python3 -m unittest -q tests.test_catalog.DoneTests tests.test_done_tests_ran tests.test_promptfoo_outcome_screen tests.test_skill_agent_quality_audit", "exit_code": 0, "result": "27 tests passed"},
+    {"command": "ruff check rig_capabilities/done_tests.py scripts/audit_skill_agent_quality.py tests/test_done_tests_ran.py tests/test_skill_agent_quality_audit.py tests/test_promptfoo_outcome_screen.py", "exit_code": 0, "result": "All checks passed"},
+    {"command": "git diff --check -- <scoped changed paths>", "exit_code": 0, "result": "No whitespace errors in scoped paths"},
+    {"command": "bin/rig-capabilities test skill-upgrades", "exit_code": 0, "result": "One infrastructure regression command passed; not an asset outcome score"},
+    {"command": "bin/rig-capabilities test skill-upgrades.md", "exit_code": 0, "result": "One infrastructure regression command passed; not an asset outcome score"},
+    {"command": "python3 scripts/audit_skill_agent_quality.py --summary --gate", "exit_code": 1, "result": "243 source assets; 20 spec-ready on limited screen; 0 outcome-verified; 0 promotable"},
+    {"command": "python3 scripts/audit_installed_skill_agent_estate.py --summary", "exit_code": 0, "result": "12 roots; 5734 entries; 400 broken links; 157 canonical byte drifts; 919 asset-by-root absence cells"}
+  ],
+  "jev": {"decision_id": 56525, "verdict": "ESCALATE", "enforced": false, "reason": "Narrative proof input and stale rubric calibration; no asset-level certification"},
+  "independent_review": {"verdict": "PASS_SCOPED", "finding": "Reviewer found and verified fixes for repo-path escape and unreadable-source crash; no remaining concrete false-green or crash in patched paths"},
+  "residuals": [
+    "No canonical asset has an independently verified held-out outcome score above 0.90",
+    "242 of 243 source assets lack a valid declared floor of at least 0.91; declared floors are not measured scores",
+    "400 broken configured-install symlinks, 157 canonical byte drifts, and 4605 noncanonical installed entries remain",
+    "Canonical cmd: checks still execute shell commands; source governance is the trust boundary, not a per-command sandbox",
+    "The full tests.test_catalog suite was red earlier this turn on existing done-test failures; focused regression tests are green",
+    "Portable Agent Skills validation rejects RIG-specific top-level fields in skill-upgrades; OMP read proves loadability for that client only",
+    "Jev ultra.proof was advisory, not calibrated for enforcement"
+  ],
+  "gate_d": "No outward action requested or taken",
+  "promotion": "BLOCKED"
+}

@@ -1,0 +1,51 @@
+{
+  "schema": "rig.site-gate.independent-review.v1",
+  "at": "2026-10-05T02:09:22.901Z",
+  "reviewer": {
+    "agent_id": "01a1099b-e545-7ed2-9af5-dc6393053af7",
+    "runtime": "Codex",
+    "family": "Codex",
+    "mode": "read-only",
+    "independent_of_writer": true,
+    "different_family": false
+  },
+  "evidence_type": "Actual returned subagent report; raw execution output remains in reviewer rollout. Not website-QA authority.",
+  "suite": {
+    "command": "python3 -m unittest tests.test_site_gate_evidence",
+    "ran": 82,
+    "elapsed_seconds": 15.466,
+    "exit_code": 0,
+    "passed": true
+  },
+  "exact_mutant": {
+    "name": "noncanonical /pains/00 alias re-signed under temporary fixture trust",
+    "exit_code": 1,
+    "criterion": "C00",
+    "passed": false,
+    "rejected": true
+  },
+  "positive_control": {
+    "criteria_passed": 30,
+    "criteria_total": 30,
+    "exit_code": 0,
+    "passed": true
+  },
+  "source_hashes_before": {
+    "contract": "e37f7bfc6317fec2781698c3b27383e9fdd7281f2fd6f49dabcee049b77b1015",
+    "gate": "9279221095b97582c5a0ec02434ff92c6d58508f1870d2c6cb803c37cb287407",
+    "tests": "890b2db72f595606400bab8377f81b83db83d9d15e1755d2e68326b7bdfccdf9"
+  },
+  "source_hashes_after": {
+    "contract": "e37f7bfc6317fec2781698c3b27383e9fdd7281f2fd6f49dabcee049b77b1015",
+    "gate": "9279221095b97582c5a0ec02434ff92c6d58508f1870d2c6cb803c37cb287407",
+    "tests": "890b2db72f595606400bab8377f81b83db83d9d15e1755d2e68326b7bdfccdf9"
+  },
+  "conclusion": "No further concrete bypass found within the reviewed fixes.",
+  "limits": [
+    "Same-family independent review only",
+    "Signed synthetic fixtures only",
+    "No production acceptance or certification",
+    "No edits or workers by reviewer",
+    "Final root coordinator replay pending terminal frozen handoff"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "schema": "rig.proof_packet.v1",
+  "timestamp": "2026-09-24T15:30:30Z",
+  "signer": "codex",
+  "status": "PARTIAL_NOT_CERTIFIED",
+  "claim": "Canonical skill YAML is parseable and new audit/Promptfoo screens fail closed. Estate-wide outcome quality above 0.90 is not established.",
+  "artifacts": {
+    "docs/SKILL-AGENT-QUALITY-STANDARD.md": "sha256:e3d169ce34cac4f9b42fa9ff33ff7a2efc4724f78c46a4e4fbbb8cc294475018",
+    "scripts/audit_skill_agent_quality.py": "sha256:2ca9e0cd15fc19ffdb38fad35cc57c1e3836f68b86c879ead16dd5e4e633a87e",
+    "scripts/check_promptfoo_outcomes.py": "sha256:9e4edc9b6c5e7c01b888cb4c924fd61793d6c6be19bdc61251f83697822f4ee8",
+    "scripts/repair_colon_skill_descriptions.py": "sha256:90a332cf6146f5a81fbdcd0465f46c33101e6c0e1becb64add789f3ae1317921",
+    "tests/test_skill_agent_quality_audit.py": "sha256:398260fa0ec45135e21e90b0f9ef4c7404c4df7a7b0974ff61e0910b516cfe72",
+    "tests/test_promptfoo_outcome_screen.py": "sha256:963b0b77e016c29610bc28d4707603beb4a397d8ef8f7eabf410a0a82f7bb483",
+    "tests/test_repair_colon_skill_descriptions.py": "sha256:53f77756517612dab05e6a511aa4c28b374fc8cac7791949e6bedee786907dc6"
+  },
+  "gates": {
+    "canonical_inventory": "223 assets: 200 skills, 23 agents; source scan, not installed estate",
+    "yaml_parse": "200/200 canonical top-level skill headers parsed; 20 syntax repairs",
+    "rig_contract_screen": "20/223 spec-ready on limited field-presence screen",
+    "portable_frontmatter_screen": "96/200 skills have only permitted top-level Agent Skills keys; full conformance unverified",
+    "outcome_screen": "0/223 outcome-verified; 0/223 promotable; --gate exit 1 as expected",
+    "promptfoo": "eval-xVp-2026-09-24T15:21:45 had 4/4 router cases; asset-outcome screen exit 1 because below 30 cases and missing source-bound metadata",
+    "jev": "ultra.proof decision 56355; advisory ESCALATE, enforced false; calibration stale",
+    "tests": "12/12 targeted tests passed; py_compile passed; repair dry-run idempotent",
+    "independent_verifier": "NOT_RUN"
+  },
+  "residuals": [
+    "No source-bound held-out outcome suites for all canonical assets",
+    "Installed cross-harness skills/agents and prompts are not covered by the 223-asset audit",
+    "Jev ultra.proof calibration is stale and advisory only",
+    "RIG top-level quality metadata conflicts with strict Agent Skills frontmatter validation",
+    "No independent artifact/trace verifier has approved the new screen or any asset promotion"
+  ]
+}

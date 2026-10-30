@@ -1,0 +1,89 @@
+{
+  "artifact_hashes": {
+    "workflows/resume-grounded-job-apply/PROMPT.md": "f492d703c17f28e9ac5794cd236a4fe84d4f41e3db2330c0b7789ea8ef72b408",
+    "workflows/resume-grounded-job-apply/SKILL.md": "0e4946c3a6be44ad2a8e4a03669c02aafbe74822db5158c5a18b3a2475d6bfad",
+    "workflows/resume-grounded-job-apply/references/CAPABILITIES.md": "7a5c066a9ee9ba09859a5c38862be82ab36105311b8110d32dada49fa22752fd",
+    "workflows/resume-grounded-job-apply/references/baseline-facts.json": "223314771c011522053314d77ef43922cb1f06adb3ba78b2b213918f3f60673c",
+    "workflows/resume-grounded-job-apply/scripts/check_answers.py": "1d8948b22167391df3b6c5aa475e938de8aa02b4d9f797705d253c3943d356d6",
+    "workflows/resume-grounded-job-apply/templates/answers.json": "1706d0e2757574444de4f41422e4d3c59301f1aecc67a06a62d241fc42420a9a",
+    "workflows/resume-grounded-job-apply/templates/applications.csv": "12b1ce0b6a84283edaf97ae7f7c027a8fa68e548bc5cb5578f3b81c22d344ba6",
+    "workflows/resume-grounded-job-apply/tests/test_answers.py": "f3af4e710190f6784fb3cc41b88b29ac6aa3ebbd3e7b438bf8c07714dc0edcc7"
+  },
+  "files_written": [
+    "proof/resume-grounded-job-apply/independent-review.json"
+  ],
+  "findings": [
+    {
+      "id": "RGA-001",
+      "impact": "A modified or stale facts file can authorize an unsupported prior-employment Yes while the checker reports PASS_STRUCTURED_CHECK.",
+      "reproduction": "Mutate in-memory facts.employers by adding HCA while leaving source_sha256 unchanged; submit prior_employer Yes with source resume:employer:hca; check() returns [].",
+      "required_fix": "Fail closed unless the facts artifact itself is pinned/verified, and validate every employer/alias source reference against a canonical extracted fact set or signed/pinned baseline. Add a regression that mutates employers without changing r\u00e9sum\u00e9 bytes.",
+      "severity": "P1",
+      "status": "OPEN",
+      "title": "Employer facts are not cryptographically or semantically bound to the r\u00e9sum\u00e9"
+    },
+    {
+      "id": "RGA-002",
+      "impact": "The executable gate can pass a packet without an exact destination or evidence-backed answer even though the workflow promises exact application review.",
+      "reproduction": "Use job_url='https://' and source='resume:anything' on a required other answer; check() returns [].",
+      "required_fix": "Parse the URL and require HTTPS hostname plus concrete job path/identifier. Define and validate structured source IDs for non-employer answers, or keep them unresolved until semantic review records a verified passage.",
+      "severity": "P2",
+      "status": "OPEN",
+      "title": "Exact job URL and non-employer r\u00e9sum\u00e9 citations are accepted without validation"
+    }
+  ],
+  "gate_matrix": {
+    "authorization": {
+      "evidence": "Skill starts in prepare mode, distinguishes installation from authorization, preserves existing exact-scope approval, and requires exact employer/role/files/answers review. The checker explicitly outputs submission_authorized:false and does not validate approval records.",
+      "status": "PASS_AS_PROCEDURE_ONLY"
+    },
+    "blanket_no_policy": {
+      "evidence": "PROMPT and SKILL restrict standing No to unlisted prior-employer questions and explicitly keep authorization, sponsorship, prior applications, military service, demographics, current employment, and worked-with relationships separate. Checker rejects a No for a known exact employer and rejects substring aliases, but cannot classify question semantics or time/affiliate qualifiers.",
+      "status": "PASS_WITH_MANUAL_REVIEW_REQUIRED"
+    },
+    "claim_limits": {
+      "evidence": "Tailoring cannot change history; dates/months, metrics, credentials, clearance, hiring probability, portal behavior, and live-test claims are explicitly constrained. Synthetic tests are not presented as portal evidence.",
+      "status": "PASS"
+    },
+    "duplicate_submit_and_receipt": {
+      "evidence": "Skill requires employer+requisition/canonical-URL dedupe, prior receipt checks, submission_attempted before one final action, no blind retry, and submitted_confirmed only from a role-bound ATS/email receipt. CSV exposes corresponding fields. There is no atomic reservation or executable cross-session duplicate gate.",
+      "status": "PASS_AS_PROCEDURE_ONLY"
+    },
+    "exact_destination_and_answer_source": {
+      "evidence": "Adversarial probe with job_url='https://' and a required current-employment answer sourced as resume:anything returned zero errors. startswith(https://) does not establish an exact ATS URL, and arbitrary resume: prefixes are not verified citations.",
+      "status": "FAIL"
+    },
+    "resume_employer_baseline": {
+      "evidence": "Pinned r\u00e9sum\u00e9 hash matches. Employer headings for RIG, Oracle/formerly Cerner, EmOpti, Advocate/former Aurora, and United States Army are present. HCA, Foxconn, Ideawake, Noom, Babyscripts, and Startup Health occur in partnership/investment/accomplishment passages rather than employer headings, consistent with the relationship exclusions.",
+      "status": "PASS"
+    },
+    "source_binding": {
+      "evidence": "Adversarial in-memory probe appended HCA as a fictitious employer to facts while retaining the real r\u00e9sum\u00e9 digest. A Yes answer sourced as resume:employer:hca returned zero errors. The checker binds the r\u00e9sum\u00e9 digest fields but does not bind or validate employer-fact content against the r\u00e9sum\u00e9 or a pinned facts-file digest.",
+      "status": "FAIL"
+    },
+    "synthetic_unit_tests": {
+      "command": "python3 -m unittest -v workflows.resume-grounded-job-apply.tests.test_answers",
+      "failures": 0,
+      "status": "PASS",
+      "tests": 12
+    }
+  },
+  "limitations": [
+    "The 12 tests are synthetic and no actual ATS portal, upload, form, authenticated account, receipt, or submission was exercised.",
+    "Authorization and duplicate prevention are currently procedural agent instructions, not atomic executable gates. Concurrent sessions can still race unless the verified cockpit ledger supplies reservation semantics.",
+    "Natural-language question classification, temporal qualifiers, affiliate clauses, attestations, and free-text materials require separate human/independent claim review.",
+    "Different-model-family GEV separation was not established."
+  ],
+  "outward_actions": 0,
+  "resume_source": {
+    "actual_sha256": "dcdaff7b551382546fda9f43c92fde7dc3c1428057f28f879df54efc515abb08",
+    "expected_sha256": "dcdaff7b551382546fda9f43c92fde7dc3c1428057f28f879df54efc515abb08",
+    "match": true,
+    "path": "/Users/rig128gb/Downloads/MikeRodgersResume.docx"
+  },
+  "reviewed_at": "2026-09-07T06:33:06.611461+00:00",
+  "reviewer": "codex-verification-lab / independent_site_review",
+  "schema": "rig.resume-grounded-job-apply-independent-review.v1",
+  "scope": "Read-only package, baseline, checker, and synthetic test review. No provider, browser, application portal, submission, or source-code changes.",
+  "status": "BLOCK"
+}

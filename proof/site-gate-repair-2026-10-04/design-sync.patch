@@ -1,0 +1,34 @@
+--- a/tools/sync_to_capabilities.py
++++ b/tools/sync_to_capabilities.py
+@@ -12,18 +12,25 @@
+ if not (M / 'studio-corpus').exists():  # running from a distributed copy
+     M = Path(os.environ.get('DS_STUDIO_ROOT', H / 'Developer/rig-design-studio-os'))
+ RC = H/'Developer/rig-capabilities/capabilities'; AS = H/'.aside/u/0/skills/user'
++COD = H/'.codex/skills'
+ dry = '--dry' in sys.argv
++only = set(sys.argv[sys.argv.index('--only') + 1].split(',')) if '--only' in sys.argv else set()
+ pairs = []
+ for d in sorted((M/'studio-skills/skills').iterdir()):
+-    if d.is_dir():
+-        pairs += [(d, RC/'skills'/d.name), (d, AS/d.name)]
+-for f in sorted((M/'studio-agents/agents').glob('*.md')): pairs.append((f, RC/'agents'/f.name))
+-for kind, ext in (('harnesses', '*.yaml'), ('loops', '*.md'), ('hooks', '*.sh')):
+-    for f in sorted((M/'studio-harness'/kind).glob(ext)): pairs.append((f, RC/kind/f.name))
++    if d.is_dir() and (not only or d.name in only):
++        pairs += [(d, RC/'skills'/d.name), (d, AS/d.name), (d, COD/d.name)]
++if only:
++    missing = only - {a.name for a, b in pairs}
++    if missing:
++        raise SystemExit('unknown skill ids: ' + ', '.join(sorted(missing)))
++if not only:
++    for f in sorted((M/'studio-agents/agents').glob('*.md')): pairs.append((f, RC/'agents'/f.name))
++    for kind, ext in (('harnesses', '*.yaml'), ('loops', '*.md'), ('hooks', '*.sh')):
++        for f in sorted((M/'studio-harness'/kind).glob(ext)): pairs.append((f, RC/kind/f.name))
+ def same(a, b):
+     if a.is_dir():
+         c = filecmp.dircmp(a, b, ignore=['__pycache__', '.DS_Store'])
+-        def ok(x): return not (x.left_only or x.right_only or x.diff_files) and all(ok(s) for s in x.subdirs.values())
++        def ok(x): return not (x.left_only or x.right_only or x.diff_files) and all(filecmp.cmp(os.path.join(x.left, n), os.path.join(x.right, n), shallow=False) for n in x.common_files) and all(ok(s) for s in x.subdirs.values())
+         return b.exists() and ok(c)
+     return b.exists() and filecmp.cmp(a, b, shallow=False)
+ for a, b in pairs:
