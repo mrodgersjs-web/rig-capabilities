@@ -321,6 +321,70 @@ def cmd_review(args) -> int:
     return 0
 
 
+def cmd_health(args) -> int:
+    """The gate's alarm panel. Every number comes with the verb it implies."""
+    from rig_capabilities import s1gate_health as H
+    h = H.health()
+    if args.json:
+        print(json.dumps(h, indent=2, default=str))
+    else:
+        print(H.render(h))
+    return 1 if h["verdict"] != "HEALTHY" else 0
+
+
+def cmd_canary(args) -> int:
+    """Frozen canary: separate MODEL drift from INPUT drift. Distinct from the
+    V40 anti-fabrication canary in rig_capabilities/canary.py."""
+    from rig_capabilities import s1gate_health as H
+    try:
+        if args.action == "seed":
+            if not args.file:
+                print("canary seed needs --file CASES.json (a list of "
+                      "{id, rubric, state, expect?})", file=sys.stderr)
+                return 3
+            cases = json.loads(Path(args.file).read_text(encoding="utf-8"))
+            if isinstance(cases, dict):
+                cases = cases.get("cases", [])
+            out = H.canary_seed(cases, model=args.model)
+            print("froze %d canary cases at %s" % (len(out["cases"]), H.CANARY_BASELINE))
+            return 0
+        if args.action == "run":
+            snap = H.canary_run(model=args.model)
+            if args.json:
+                print(json.dumps(snap, indent=2, default=str))
+            else:
+                print("canary run %s  model=%s  cases=%d  moved=%d"
+                      % (snap["ts"], snap["model"], len(snap["cases"]),
+                         len(snap.get("moved", []))))
+                for m in snap.get("moved", []):
+                    print("  MOVED  %-28s %s -> %s" % (m["id"],
+                                                       m.get("baseline_verdict"),
+                                                       m["new_verdict"]))
+                if not snap.get("moved"):
+                    print("  no verdict moved since baseline")
+            return 1 if snap.get("moved") else 0
+        if args.action == "status":
+            rep = H.canary_report()
+            if args.json:
+                print(json.dumps(rep, indent=2, default=str))
+            else:
+                if rep.get("available"):
+                    print("canary baseline: %s frozen cases, model=%s, %s snapshots, %s moved"
+                          % (rep.get("frozen_cases"), rep.get("model"),
+                             rep.get("snapshots"), len(rep.get("moved", []))))
+                else:
+                    print("canary not seeded -- %s" % rep.get("detail"))
+                for f in rep.get("findings", []):
+                    print("[%s] %s" % (f.get("severity", "info").upper(), f.get("id")))
+                    print("  DO:   %s" % f.get("action", ""))
+            return 1 if [f for f in rep.get("findings", [])
+                         if f.get("severity") == "action"] else 0
+    except H.S1GateHealthError as exc:
+        print("canary: %s" % exc, file=sys.stderr)
+        return 3
+    return 3
+
+
 def cmd_selftest(args) -> int:
     """Prove the rule engine and the fail-closed path without calling the API."""
     from rig_capabilities.s1gate import eval_condition
@@ -361,7 +425,9 @@ def main(argv=None) -> int:
     c.add_argument("--file", nargs="?", default=None)
     c.add_argument("--text", default=None)
     c.add_argument("--stdin", action="store_true")
-    c.add_argument("--subject", default=None)
+    c.add_argument("--subject", default=None,
+                   help="REQUIRED attribution, shape kind:id@sha12 "
+                        "(e.g. code.diff:pr-42@a1b2c3d4e5f6)")
     c.add_argument("--json", action="store_true")
     c.set_defaults(fn=cmd_check)
 
@@ -410,6 +476,17 @@ def main(argv=None) -> int:
     rk.add_argument("--subject", default=None); rk.add_argument("--json", action="store_true")
     rk.set_defaults(fn=cmd_rank)
     sub.add_parser("selftest").set_defaults(fn=cmd_selftest)
+
+    hp = sub.add_parser("health")
+    hp.add_argument("--json", action="store_true")
+    hp.set_defaults(fn=cmd_health)
+
+    cy = sub.add_parser("canary")
+    cy.add_argument("action", choices=["seed", "run", "status"])
+    cy.add_argument("--file", default=None)
+    cy.add_argument("--model", default=None)
+    cy.add_argument("--json", action="store_true")
+    cy.set_defaults(fn=cmd_canary)
 
     args = p.parse_args(argv)
     try:
