@@ -5,7 +5,7 @@ Expected: prints "RESULT: MOCK_OK docs=2 nodes=N", exit 0.
 """
 import importlib.metadata as m
 
-from llama_index.core import Document, VectorStoreIndex
+from llama_index.core import Document, Settings, VectorStoreIndex
 from llama_index.core.embeddings import MockEmbedding
 from llama_index.core.llms.mock import MockLLM
 
@@ -14,6 +14,8 @@ print("VERSION: llama-index-core", m.version("llama-index-core"))
 # MockEmbedding is exported from llama_index.core.embeddings in 0.14.25
 # (there is no llama_index.core.embeddings.mock_embedder module).
 embed = MockEmbedding(embed_dim=4)
+# tiktoken's native extension cannot load in this sandbox (system policy); the mock path needs no BPE tokenizer.
+Settings.tokenizer = lambda text: text.split()
 
 
 docs = [

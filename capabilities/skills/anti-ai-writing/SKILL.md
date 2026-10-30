@@ -4,6 +4,9 @@ description: Edit any piece of writing to remove AI tells. Strips banned words (
 metadata:
   source: "Tats anti-AI writing ruleset (Era 1 / Era 2 / Era 3 banned word + phrase + structure list, full compound-hyphen rule, weak-verb substitution table)"
   version: 1.0.0
+done_when:
+  - grep:capabilities/skills/anti-ai-writing/SKILL.md:Always structure your response as four blocks
+  - grep:capabilities/skills/anti-ai-writing/references/banned-list.md:(?i)delve
 ---
 
 # Anti-AI Writing

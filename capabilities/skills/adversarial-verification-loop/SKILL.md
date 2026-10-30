@@ -35,6 +35,15 @@ hooks:
 
 # Adversarial verification loop
 
+> **Added 2026-09-26 - byte-movement proof.** A plant that does not change the target is not
+> a plant. Five successive "plants" once reported a green suite because `sed -i '' "$expr"`
+> ran with **no file operand**, so nothing on disk ever moved. **Checksum the target before
+> and after every plant and refuse to record a plant whose bytes did not change.** Treat an
+> all-green run on a check you wrote minutes ago as the signal to audit the check. Corollary:
+> assert on the **expected count of results**, not on the absence of an error - a silently
+> short run (57 rows where 73 were expected) is the only signal you get. (BSD `sed -i`
+> silently matches nothing; use `edit_file`.)
+
 ```
 G Guard → R Red (plant, expect FAIL) → N Green (restore, expect PASS) → K Keep fixture → P Proof
    ▲            │ red did not fail          │ green did not pass

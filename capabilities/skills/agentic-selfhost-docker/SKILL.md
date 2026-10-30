@@ -30,7 +30,7 @@ flow:
   - Bring stacks down, then prove the runtime is back in its found state.
 done_when:
   - "grep:capabilities/skills/agentic-selfhost-docker/SKILL.md:found state"
-  - "grep:capabilities/skills/agentic-selfhost-docker/SKILL.md:BLOCKED (environment"
+  - "grep:capabilities/skills/agentic-selfhost-docker/SKILL.md:BLOCKED [(]environment"
   - "grep:capabilities/skills/agentic-selfhost-docker/SKILL.md:lsof -t -i"
   - "cmd:python3 -m rig_capabilities.skill_contract capabilities/skills/agentic-selfhost-docker/SKILL.md"
 out_of_scope:

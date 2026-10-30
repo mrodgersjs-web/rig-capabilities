@@ -30,7 +30,7 @@ flow:
   - Build the hello app, prove it through the API, export its DSL, and tear down.
 done_when:
   - "grep:capabilities/skills/agentic-setup-dify/SKILL.md:DIFY_AGENT_SERVER_SECRET_KEY"
-  - "grep:capabilities/skills/agentic-setup-dify/SKILL.md:Bearer $DIFY_API_KEY"
+  - "grep:capabilities/skills/agentic-setup-dify/SKILL.md:Bearer [$]DIFY_API_KEY"
   - "grep:capabilities/skills/agentic-setup-dify/SKILL.md:Gate-D"
   - "cmd:python3 -m rig_capabilities.skill_contract capabilities/skills/agentic-setup-dify/SKILL.md"
 out_of_scope:
@@ -102,7 +102,7 @@ In Dify: **Settings -> Model Provider -> OpenAI-API-compatible** (self-hosted ex
 Deterministic, no model required (references/hello-app.dsl.yml holds the importable skeleton; the API proof needs only the key):
 
 ```bash
-curl http://127.0.0.1:4510/v1/info -H "Authorization: Bearer $DIFY_API_KEY"
+curl http://127.0.0.1:4510/v1/info -H "Authorization: Bearer [$]DIFY_API_KEY"
 # expected: {"name": "...", "mode": "chat"|"workflow"|..., ...}
 ```
 

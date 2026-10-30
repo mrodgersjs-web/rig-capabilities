@@ -1,6 +1,9 @@
 ---
 name: anti-slop
 description: Deterministic anti-slop audit and fix router for web and app interfaces. Flags the generic AI-generated look — centered-hero-plus-cards, default Tailwind indigo/violet gradients, glassmorphism auroras, single-font single-radius monotony, emoji icons, marketing filler without numbers, missing states, wrong-easing motion, missing tabular-nums, sub-44px hit areas, platform-ignoring mobile UI — and routes every finding to the canonical skill that owns the fix. Use when building or reviewing web/app UI, when asked to "anti-slop" or "/anti-slop" a target, or before shipping any interface that must not look AI-generated.
+done_when:
+  - grep:capabilities/skills/anti-slop/SKILL.md:FLAG. requires file:line
+  - grep:capabilities/skills/anti-slop/SKILL.md:N flagged of \(11 web \+ 5 app\) checks
 ---
 
 # Anti-Slop
