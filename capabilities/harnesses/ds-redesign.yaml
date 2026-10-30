@@ -3,12 +3,17 @@ tier: main
 parent: ds-studio-session
 outcome: "design-ux: Redesign of an existing site run with every gate evidenced by a file or command output"
 done_when:
-  - file:studio-harness/harnesses/ds-redesign.yaml
-  - cmd:python3 tools/check_family.py
+  - file:capabilities/harnesses/ds-redesign.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem ds-redesign
 quality_floor: 0.6
 ---
 
 harness_id: ds-redesign
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
 harness_name: Redesign of an existing site
 session_type: redesign
 jev_first: 'Typed judgments at every gate go to rig-s1gate (Jev) before any frontier LLM call; classifier down means DEFERRED, never a guessed verdict.'

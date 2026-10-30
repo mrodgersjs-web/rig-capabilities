@@ -104,7 +104,7 @@ mutable_surface:
   session_state:
     path: .rig/forge/session-state.json
     fields: [session_id:string, loop:inner-or-outer, harness:string, harness_sha256_at_start:string, config_sha256:string]
-    record_before_first_write: sha256sum capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -d" " -f1 > .rig/forge/harness-start.sha256
+    record_before_first_write: shasum -a 256 capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -d" " -f1 > .rig/forge/harness-start.sha256
   checks:
     config_identity: python3 -c 'import sys,hashlib;sys.path.insert(0,"scripts");import compile_harnesses as CH;c=CH.parse_yaml_subset(open(sys.argv[1]).read()).get("mutable_surface",{}).get("config",{});sl=[str(x) for x in c.get("slots",[])];got=hashlib.sha256((chr(10).join(sl)+chr(10)).encode()).hexdigest();pin=str(c.get("sha256","")).strip();ok=bool(sl) and pin==got;print("CONFIG_IDENTITY slots="+str(len(sl))+" computed="+got[:16]+" sealed="+pin[:16]+" verdict="+("PASS" if ok else "RED slot vector and sealed hash differ"));sys.exit(0 if ok else 1)'
     surface_admission: python3 -c 'import sys;A=sys.argv;Y=A[1];P=list(A[2:]);sys.path.insert(0,"scripts");import compile_harnesses as CH;m=CH.parse_yaml_subset(open(Y).read()).get("mutable_surface",{});L=str(m.get("loop","inner")).strip();c=[(str(e.get("scope","never")),str(e.get("path",""))) for e in m.get("mutable_classes",[]) if str(e.get("path",""))];ok=lambda p,q:p==q or p.startswith(q if q.endswith("/") else q+"/");hit=lambda p:[(len(q),s) for s,q in c if ok(p,q)];top=lambda p:max(hit(p))[1] if hit(p) else "undeclared";bad=[(p,top(p)) for p in P if not(top(p)=="inner" or (top(p)=="outer" and L=="outer"))];print("SURFACE_ADMISSION loop="+L+" map="+str([(p,top(p)) for p in P])+" rejected="+str(bad));sys.exit(1 if bad else 0)'
@@ -114,8 +114,8 @@ mutable_surface:
     config_block: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/x.yaml";sed 's/slot:gate_count_band|int|8-15/slot:gate_count_band|int|8-20/' "$W/x.yaml" > "$W/y.yaml";eval "$(grep -m1 '^    config_identity:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/y.yaml";rc=$?;rm -rf "$W";test $rc -eq 1
     admission_pass: eval "$(grep -m1 '^    surface_admission:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" capabilities/harnesses/mh-02-harness-forge-session.yaml capabilities/harnesses/hn-01-forged-session.yaml .rig/forge/gate-5.3.txt
     admission_block: eval "$(grep -m1 '^    surface_admission:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" capabilities/harnesses/mh-02-harness-forge-session.yaml capabilities/harnesses/mh-02-harness-forge-session.yaml rig_capabilities/rounds.py scripts/compile_harnesses.py; rc=$?; test $rc -eq 1
-    freeze_pass: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";sha256sum "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 0
-    freeze_block: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";sha256sum "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";sed 's/slot:pattern_cadence|int|5/slot:pattern_cadence|int|9/' "$W/h.yaml" > "$W/t" && mv "$W/t" "$W/h.yaml";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 1
+    freeze_pass: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";shasum -a 256 "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 0
+    freeze_block: W=$(mktemp -d);cp capabilities/harnesses/mh-02-harness-forge-session.yaml "$W/h.yaml";shasum -a 256 "$W/h.yaml" | cut -d" " -f1 > "$W/harness-start.sha256";sed 's/slot:pattern_cadence|int|5/slot:pattern_cadence|int|9/' "$W/h.yaml" > "$W/t" && mv "$W/t" "$W/h.yaml";eval "$(grep -m1 '^    inner_loop_byte_freeze:' capabilities/harnesses/mh-02-harness-forge-session.yaml | cut -f2- -d:)" "$W/h.yaml" "$W";rc=$?;rm -rf "$W";test $rc -eq 1
   provenance:
     videos:
       - id: LEsKxMfRFjA
@@ -162,7 +162,7 @@ identity_lock:
       proof: "Session log contains the tuple declaration verbatim"
     - id: "0.5"
       requirement: "Runtime triple and loop role declared and the harness bytes pinned before the first write: mutable_surface.triple carries a non-empty model, harness and state, the harness path resolves on disk, mutable_surface.loop is exactly inner or outer, and the sha256 of the harness file at session start is recorded"
-      proof: "python3 -c asserting triple keys non-empty, os.path.isfile(triple.harness), loop in {inner,outer}; then sha256sum capabilities/harnesses/mh-02-harness-forge-session.yaml written to .rig/forge/harness-start.sha256; both recorded to .rig/forge/triple.txt"
+      proof: "python3 -c asserting triple keys non-empty, os.path.isfile(triple.harness), loop in {inner,outer}; then shasum -a 256 capabilities/harnesses/mh-02-harness-forge-session.yaml written to .rig/forge/harness-start.sha256; both recorded to .rig/forge/triple.txt"
 capability_gates:
   - category: "Structure"
     gates:

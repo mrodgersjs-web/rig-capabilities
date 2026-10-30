@@ -3,12 +3,17 @@ tier: sub
 parent: ds-website-build
 outcome: "design-ux: Craft gate run with every gate evidenced by a file or command output"
 done_when:
-  - file:studio-harness/harnesses/ds-gate-craft.yaml
-  - cmd:python3 tools/check_family.py
+  - file:capabilities/harnesses/ds-gate-craft.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem ds-gate-craft
 quality_floor: 0.6
 ---
 
 harness_id: ds-gate-craft
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
 harness_name: Craft gate
 session_type: gate
 jev_first: 'Typed judgments at every gate go to rig-s1gate (Jev) before any frontier LLM call; classifier down means DEFERRED, never a guessed verdict.'

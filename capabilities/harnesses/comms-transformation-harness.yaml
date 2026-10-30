@@ -1,0 +1,63 @@
+---
+outcome: communications: a consequential message ships only through this harness — sealed stages, verifier-only termination, 12-part proof packet; anything that skips a stage cannot produce the packet, so it cannot ship
+done_when:
+  - file:capabilities/harnesses/comms-transformation-harness.yaml
+  - cmd:printf '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"comms.verdict","arguments":{"role":"architect","decision":"pass","scores":{"fidelity":0.97},"stakes":"low"}}}\n' | (cd capabilities/skills/rig-communications-core && python3 -m rig_comms.mcp) | grep -o GEV_LOCK
+  - cmd:python3 -c "import sys; sys.path.insert(0,'capabilities/skills/rig-communications-core'); from rig_comms import seal, models; r=seal.build_v20_packet({'objective':'ask'},{'vehicle':'bluf'},'msg',[],models.AudienceModel(),[],[],{'e':1},[{'r':1}],'pass',True,[]); assert r['packet']['packet_hash'].startswith('sha256:'); assert 'delivery' in r['parts_missing']; print('OK')"
+  - grep:capabilities/harnesses/comms-transformation-harness.yaml:GEV_LOCK
+quality_floor: 0.65
+---
+
+harness_id: comms-transformation-harness
+harness_name: communications transformation (Build Card v1.0 sealed harness)
+status: stable
+source: "RIG Communications Governed Transformation Engine Build Card v1.0 (2026-09-07)"
+lane: communications
+session_type: comms-transformation-session
+coordinate_space:
+  levels: [L3, L4, L5]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_tuple: H_comms(intent_packet, audience_model, vehicle, energy_floors, gev_verdict, proof_packet)
+primary_diamonds: [D1, D3]
+bms_bias: "A2 for drafting and critique; A1 for golden replay, claims lint and sealing verification; A4 forbidden (no autonomous send, no private-lane scoring)"
+stake: |
+  Every shipped message carries a sealed 12-part proof packet; the drafting role
+  never issues the pass; hard floors override the weighted score; abstention is a
+  first-class verdict.
+identity_lock:
+  startup_phrase: "I move the recipient's state; I do not certify my own work."
+  gates:
+    - id: G1
+      requirement: "comms.intent_check.valid == true before any drafting (C1 state-delta proof obligation)"
+      proof: "run log contains the intent_check result JSON with valid:true"
+      failure_tier: halt
+    - id: G2
+      requirement: "C2 clean (c2_errors == []) and claim lint claim_support == 1.0 before drafting"
+      proof: "audience + claims tool outputs recorded in the run log"
+      failure_tier: halt
+    - id: G3
+      requirement: "vehicle chosen via comms.vehicle; a no-send advisory ends the run as a success"
+      proof: "vehicle JSON (or no_send_reasons) in run log"
+      failure_tier: halt
+    - id: G4
+      requirement: "all evaluator transcripts present (5 sim modes + 2 critics + redteam) before VERIFY"
+      proof: "eight typed evaluator reports attached; missing dimension -> not ship-eligible"
+      failure_tier: halt
+    - id: G5
+      requirement: "comms.verdict admitted with role='verifier' (GEV_LOCK refuses every drafting role)"
+      proof: "verdict JSON with admitted:true and role:verifier; GEV_LOCK appears in the log for any drafting-role attempt"
+      failure_tier: halt
+    - id: G6
+      requirement: "external sends require the human approval token (Gate-D); no token, no delivery"
+      proof: "approval event id recorded in the packet's delivery part"
+      failure_tier: halt
+    - id: G7
+      requirement: "sealed packet: seal.build_v20_packet complete:true after delivery + outcome; lineage.verify_chain intact:true"
+      proof: "packet_hash + verify_chain JSON in proof directory"
+      failure_tier: halt
+    - id: G8
+      requirement: "private lane (love-notes / PRIVATE-james) never enters this harness; PRIVACY_LOCK is terminal"
+      proof: "any private-surface attempt logs PRIVACY_LOCK with code -32001 and stops"
+      failure_tier: halt

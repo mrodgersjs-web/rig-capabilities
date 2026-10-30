@@ -3,12 +3,17 @@ tier: main
 parent: ds-studio-session
 outcome: "design-ux: Critique of existing work run with every gate evidenced by a file or command output"
 done_when:
-  - file:studio-harness/harnesses/ds-critique-session.yaml
-  - cmd:python3 tools/check_family.py
+  - file:capabilities/harnesses/ds-critique-session.yaml
+  - cmd:./bin/rig-capabilities goal-spec --stem ds-critique-session
 quality_floor: 0.6
 ---
 
 harness_id: ds-critique-session
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
 harness_name: Critique of existing work
 session_type: critique
 jev_first: 'Typed judgments at every gate go to rig-s1gate (Jev) before any frontier LLM call; classifier down means DEFERRED, never a guessed verdict.'
