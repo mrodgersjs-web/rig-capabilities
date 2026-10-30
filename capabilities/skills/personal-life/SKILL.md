@@ -1,6 +1,9 @@
 ---
 name: personal-life
 description: "Mike's personal life, not RIG work: family and gifts, purchases, health and insurance paperwork, benefits, legal lookups, scam checks, documents and forms, personal email and calendar. Use for anything personal, household or family."
+done_when:
+  - grep:capabilities/skills/personal-life/SKILL.md:Never print passwords, card numbers or account numbers
+  - grep:capabilities/skills/personal-life/SKILL.md:Family and health details never go to hosted models
 ---
 
 # personal-life

@@ -1,6 +1,9 @@
 ---
 name: personal-admin
 description: "Procedures for Mike's personal admin: gifts and purchases, health insurance and benefits paperwork, legal research, checking whether an email or message is a scam, and filling documents and forms. Use for a gift, an order, an insurance or benefits question, finding a lawyer, a suspicious email, or a form to fill."
+done_when:
+  - grep:capabilities/skills/personal-admin/SKILL.md:Never submit a sworn or official form
+  - grep:capabilities/skills/personal-admin/SKILL.md:read, never click
 ---
 
 # personal-admin
