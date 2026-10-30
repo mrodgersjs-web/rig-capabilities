@@ -1,6 +1,9 @@
 ---
 name: estate-housekeeping
 description: "Keep Mike's Aside estate tidy: archive finished chats, file chats and routines into project folders, find dead or silent routines, close stale agent tabs, and keep the daily Kanban board honest. Use for 'clean up chats', 'organize chats into projects', 'archive everything except pinned', 'close unused tabs', or a chat audit."
+done_when:
+  - grep:capabilities/skills/estate-housekeeping/SKILL.md:Pinned chats are never touched
+  - grep:capabilities/skills/estate-housekeeping/SKILL.md:Verify by re-listing
 ---
 
 # estate-housekeeping

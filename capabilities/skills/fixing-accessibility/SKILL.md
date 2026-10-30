@@ -1,6 +1,9 @@
 ---
 name: fixing-accessibility
 description: Audit and fix HTML accessibility issues including ARIA labels, keyboard navigation, focus management, color contrast, and form errors. Use when adding interactive controls, forms, dialogs, or reviewing WCAG compliance.
+done_when:
+  - grep:capabilities/skills/fixing-accessibility/SKILL.md:modals must trap focus while open
+  - grep:capabilities/skills/fixing-accessibility/SKILL.md:errors must be linked to fields using aria-describedby
 ---
 
 # fixing-accessibility

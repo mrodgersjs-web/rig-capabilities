@@ -9,7 +9,7 @@ acl: internal
 tags: [google-ads, google-ads-os, google-ads, campaigns]
 outcome: "revenue-gtm: each campaign type in the account has a stated job, its required assets are complete, and the budget map shows where the money lives and why"
 done_when:
-  - cmd:python3 capabilities/skills/google-ads-os/scripts/claims_check.py capabilities/skills/ga-campaigns/SKILL.md
+  - grep:capabilities/skills/ga-campaigns/SKILL.md:Inbound before outbound
   - cmd:python3 capabilities/skills/google-ads-os/scripts/check_family.py ga-campaigns
 quality_floor: 0.6
 metadata:

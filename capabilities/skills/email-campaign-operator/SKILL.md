@@ -3,6 +3,10 @@ name: email-campaign-operator
 description: Builds evidence-led email campaign drafts, dispatch banks, repurposed assets and independent review packets. Use for weekly opt-in nurture or the manually reviewed first 20 cold emails.
 version: 1.0.0
 status: candidate
+done_when:
+  - grep:capabilities/skills/email-campaign-operator/SKILL.md:BLOCKED_MANUAL_ONLY
+  - grep:capabilities/skills/email-campaign-operator/SKILL.md:Never invent proof, personal observations
+  - grep:capabilities/skills/email-campaign-operator/acceptance-scenarios.md:(?i)scenario
 ---
 
 <objective>

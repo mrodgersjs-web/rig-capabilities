@@ -1,6 +1,9 @@
 ---
 name: fixing-motion-performance
 description: Audit and fix animation performance issues including layout thrashing, compositor properties, scroll-linked motion, and blur effects. Use when animations stutter, transitions jank, or reviewing CSS/JS animation performance.
+done_when:
+  - grep:capabilities/skills/fixing-motion-performance/SKILL.md:never animate blur continuously
+  - grep:capabilities/skills/fixing-motion-performance/SKILL.md:never partially migrate APIs
 ---
 
 # fixing-motion-performance

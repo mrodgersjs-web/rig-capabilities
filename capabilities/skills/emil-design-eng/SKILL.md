@@ -1,6 +1,10 @@
 ---
 name: emil-design-eng
 description: This skill encodes Emil Kowalski's philosophy on UI polish, component design, animation decisions, and the invisible details that make software feel great.
+done_when:
+  - grep:capabilities/skills/emil-design-eng/SKILL.md:Never use ease-in for UI animations
+  - grep:capabilities/skills/emil-design-eng/SKILL.md:Never animate from scale\(0\)
+  - grep:capabilities/skills/emil-design-eng/SKILL.md:## Review Format \(Required\)
 ---
 
 # Design Engineering

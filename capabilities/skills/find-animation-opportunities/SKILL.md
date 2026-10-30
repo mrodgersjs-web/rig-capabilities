@@ -1,6 +1,9 @@
 ---
 name: find-animation-opportunities
 description: Search a codebase or UI for places that don't animate but should, and reject everything that shouldn't. Read-only; it proposes motion with exact values, it does not implement it. Use when the user asks "what could be animated here?" or wants to "make this feel more alive". For fixing existing animations, use improve-animations or review-animations instead.
+done_when:
+  - grep:capabilities/skills/find-animation-opportunities/SKILL.md:Never modify source code
+  - grep:capabilities/skills/find-animation-opportunities/SKILL.md:Part 2 .{1,3} Rejected candidates \(REQUIRED\)
 ---
 
 # Finding Animation Opportunities

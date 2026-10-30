@@ -65,6 +65,10 @@ def frontmatter(name, desc, tags, outcome, done_when, meta):
             f"done_when:\n{dw}\nquality_floor: 0.6\nmetadata:\n{md}\n---\n")
 
 
+# Stages that carry no CLAIM() tokens: claims_check exits 2 on zero claims, so their test is a grep on the stage's own procedure rule.
+ZERO_CLAIM_RULE = {'ga-campaigns': 'Inbound before outbound'}
+
+
 def stage_skill(stage, spec, n):
     jev = JEV.format(judgments=spec["judgments"], rubric=spec.get("rubric", "plan.readiness"))
     law_rows = "\n".join(f"- {l}" for l in n["laws"])
@@ -72,7 +76,7 @@ def stage_skill(stage, spec, n):
     checks = "\n".join(f"- [ ] {c}" for c in spec["checklist"])
     body = f"""{frontmatter(stage, spec['desc'] + ' JEV-FIRST MANDATE, findable at task start: every typed judgment in this stage goes to rig-s1gate (Jev) BEFORE any frontier LLM call, and DEFERRED is the only answer when the classifier is down. Child of google-ads-os.',
         ['google-ads', 'google-ads-os', 'google-ads', stage.split('-', 1)[1]], spec['outcome'],
-        [f'cmd:python3 capabilities/skills/google-ads-os/scripts/claims_check.py capabilities/skills/{stage}/SKILL.md',
+        [(f'grep:capabilities/skills/{stage}/SKILL.md:{ZERO_CLAIM_RULE[stage]}' if stage in ZERO_CLAIM_RULE else f'cmd:python3 capabilities/skills/google-ads-os/scripts/claims_check.py capabilities/skills/{stage}/SKILL.md'),
          f'cmd:python3 capabilities/skills/google-ads-os/scripts/check_family.py {stage}'],
         {'parent': 'google-ads-os', 'laws': str(len(n['laws'])), 'corpus': corpus_label()})}
 # {stage}: {spec['title']}
