@@ -1,0 +1,9 @@
+# Local audit limits
+
+The optional local audit schema is not a runtime adapter. Read the installed auditor's CLI and schema before use. Its result STRUCTURAL_PASS means that its local checks passed. It explicitly returns authorizes_submission false. It cannot authenticate provider responses, Mike's identity, ATS receipts, JEV quality, page appearance, Airtable writes, or native GrokBot import.
+
+The local stage aliases are setup for daily-setup, discovery for daily-discovery, employer-research for employer-initiative-research, resume-writing for resume-writer, cover-letter-writing for cover-letter-writer, writing-review for slopmonster-review, and airtable-sync for airtable-ledger. Inherited step names retain their original spelling. Initial provisional writers execute inside word-review-copy; their final writing-stage receipts follow targeted-confirmation after decisions are incorporated. This preserves the inherited eight-leaf order while allowing final revision checks.
+
+Each stage-level receipt declares status, can_advance, decision_id/request_id and applicable current source/artifact bindings according to the auditor. Those fields must be copied from genuine observed results, never generated to satisfy a fixture. Retain original provider bytes and hash alongside any locally normalized receipt, plus adapter/version and original request reference. A normalized PASS cannot override an original BLOCK, DEFER, unknown, malformed, contradictory or stale result. Reject contradictory status/can_advance values. Missing provenance remains a hold even if a local schema check accepts the file.
+
+Synthetic fixtures belong only to tests and must be labeled synthetic. They cannot enter operational receipts, tracker updates, approval history or submitted totals. Read [the full acceptance contract](acceptance.md) before interpreting any local audit result.
