@@ -1,0 +1,125 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-INTERVIEW-PREP-SESSION",
+      "name": "Traject interview-prep session (main process for a screen/interview)",
+      "description": "Traject interview-prep session (main process for a screen/interview) [traject-interview-prep-session] \u2014 compiled from capabilities/harnesses/traject-interview-prep-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "I1",
+          "category": "Identity Lock",
+          "name": "I1 the room is a data module in Lucy's Stage 0-8 order plus Run",
+          "description": "the room is a data module in Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only r\u00e9sum\u00e9-verified claims, and cleared story.bank + jd.decode",
+          "command": "room path (src/lib/<company>Content.ts) and both decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "I2",
+          "category": "Identity Lock",
+          "name": "I2 every drilled answer states a number or NONE and cleared int",
+          "description": "every drilled answer states a number or NONE and cleared interview.answer (required signals above 0.9); the floor and banned claims are never spoken",
+          "command": "per-answer score rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "I3",
+          "category": "Identity Lock",
+          "name": "I3 the 5-line debrief is saved within 2h to .traject/debriefs/",
+          "description": "the 5-line debrief is saved within 2h to .traject/debriefs/ and the room debrief tab",
+          "command": "debrief file path",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I drill numbers and gaps; I do not invent a proof line.",
+        "harness_tuple": "H_interview(room, drill, interview, debrief)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-interview-prep-session",
+          "session_type": "traject-interview-prep-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "the room is a data module in Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only r\u00e9sum\u00e9-verified claims, and cleared story.bank + jd.decode",
+        "every drilled answer states a number or NONE and cleared interview.answer (required signals above 0.9); the floor and banned claims are never spoken",
+        "the 5-line debrief is saved within 2h to .traject/debriefs/ and the room debrief tab"
+      ],
+      "anti_patterns": [
+        "Padding a room with an OWNER-ONLY or BANNED claim to sound strong",
+        "A drill rep that answers the adjacent question with zero numbers (the Sep 17 failure)",
+        "Calling an ATS_SUBMITTED row an interview without a Screen/Interview stage"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-interview-prep-session.yaml",
+        "source_sha256": "f778e2d8fbda339c10b16a72c39ace59977c381880ec15adf7511a906bb5c90c",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+---
+outcome: "outreach: a batch of T1-T6 and follow-up/negotiate notes that pass outreach_lint and the JEV outreach gates, each held at Gate-D with one ask and at most one nudge - nothing sent without Mike"
+activation: "Load when drafting HM/recruiter/warm outreach, a thank-you, or a negotiation note."
+instruction: "Draft to the template, lint, gate, hold every send at Gate-D; one ask, one nudge; assert the signed-in handle first."
+applies_when:
+  env: "LinkedIn and Gmail; outreach-events.jsonl / warm-network-log.jsonl"
+  runtime: "Aside browser; lucy outreach_lint.mjs"
+  deps: "traject-outreach-drafter; JEV outreach.* / followup.note / offer.eval"
+  params: "recipient, template (T1-T6 or follow-up/negotiate), matched reqs"
+  budget: "≤10 DMs/day, ≤10 invites/day & 60/week, spaced 3-10 min"
+  scale: "one note per recipient; batch drafts, single sends at Gate-D"
+permissions: [fs.read, fs.write, bash, browser.read, browser.modify, gate-d-required:send]
+flow:
+  - Draft to the template with verified matched reqs and one outcome.
+  - Run outreach_lint; gate with outreach.first/intro/reply.intent.
+  - Hold every send at Gate-D; assert the signed-in handle.
+done_when:
+  - file:capabilities/harnesses/traject-outreach-session.yaml
+  - grep:capabilities/harnesses/traject-outreach-session.yaml:outreach_lint
+  - grep:capabilities/harnesses/traject-outreach-session.yaml:Gate-D
+out_of_scope: [sending any note, the REPL linkedin global for Mike, banned claims]
+quality_floor: 0.8
+---
+
+harness_id: traject-outreach-session
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject outreach session (main process for HM/recruiter/warm and follow-up notes)
+status: stable
+lane: business-ops
+session_type: traject-outreach-session
+harness_tuple: H_outreach(draft, lint, gate, hold)
+parent_doctrine: capabilities/skills/traject-os
+conductor: capabilities/agents/traject-conductor.md
+loop: capabilities/loops/traject-daily-loop.md
+stake: |
+  "Draft outreach to the HM" resolves into a linted, gated draft held at Gate-D - one ask, one
+  nudge, never the client's account, never a banned claim.
+identity_lock:
+  startup_phrase: "I draft and hold; I do not send."
+  gates:
+    - id: O1
+      requirement: "the draft passed outreach_lint (no O-verified/O-cadence/O-resume/O-claim/O-length/W-recency/W-connected/W-desperate block) and cleared outreach.first/intro/reply.intent"
+      proof: "lint output and decision ids"
+      failure_tier: halt
+    - id: O2
+      requirement: "every send is held at Gate-D, the signed-in handle is Mike's (never the REPL linkedin global), and the note carries one ask and at most one nudge"
+      proof: "held_at: gate_d and the handle assertion"
+      failure_tier: stop
+anti_patterns:
+  - "Sending on Mike's behalf or from the client Coby Skonord's session"
+  - "A second nudge on the same thread; a banned claim in a note"

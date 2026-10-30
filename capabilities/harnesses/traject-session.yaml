@@ -1,0 +1,118 @@
+---
+outcome: "business-ops: a job-search mission moves through the eleven Traject stages with a qualified deduped target, a source-bound tailored résumé, an application held at final Submit, outreach held at Gate-D, a Lucy-ordered interview room, drilled answers with numbers, a 5-line debrief, a claims ledger that never publishes an unverified number, receipts for every fired lesson, and a closed run - or a named blocker at the exact stage it stopped"
+activation: "Load when traject-conductor opens any job-search task (qualify, tailor, apply, reach, room, drill, interview, debrief, follow-up, learn) and keep it active until the run closes."
+instruction: "Advance one stage at a time; a stage closes only when its gate below holds with proof; halt-tier failures stop the run at that stage, stop-tier gates wait for Mike, degrade-tier gates may close HELD with the gap named."
+applies_when:
+  env: "the Traject cockpit (cockpit-v2) and the Aside browser; ~/.applypilot store"
+  runtime: "Next.js rooms/pipeline; Aside for apply and outreach; Gmail and LinkedIn"
+  deps: "traject-os skill family, rig-s1gate with jobhunt.*/job.*/resume.*/interview.* rubrics, experience-lesson-records validator"
+  params: "task type, role/company, lane résumé"
+  budget: "one stage at a time; three passes per artifact before escalation"
+  scale: "one role per application; one room per company/role"
+permissions:
+  - fs.read
+  - fs.write
+  - bash
+  - browser.read
+  - browser.modify
+  - gate-d-required:send
+  - gate-d-required:submit
+  - gate-d-required:publish
+flow:
+  - Gate fit and dedupe before any tailoring or apply.
+  - Tailor source-bound; fill from confirmed work history; stop at final Submit.
+  - Draft outreach; hold every send at Gate-D; assert the signed-in handle.
+  - Build and drill the room; capture the 5-line debrief; classify claims.
+  - Close with receipts for every fired lesson and a validated run.
+done_when:
+  - file:capabilities/harnesses/traject-session.yaml
+  - grep:capabilities/harnesses/traject-session.yaml:failure_tier
+  - grep:capabilities/harnesses/traject-session.yaml:Gate-D
+  - cmd:python3 capabilities/skills/traject-os/scripts/validate_hierarchy.py
+out_of_scope:
+  - submitting an application, sending a message, publishing, or deploying without Mike's approval
+  - a claim or number not in the claims ledger
+  - certifying a stage on the operator's own word
+quality_floor: 0.8
+---
+
+harness_id: traject-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject OS job-search session (meta process for every job-search task)
+harness_name_short: traject meta process
+status: stable
+lane: business-ops
+session_type: traject-session
+harness_tuple: H_traject(fit, dedupe, tailor, apply_stop, reach_hold, room, drill, debrief, claims, learn, gate_d)
+parent_doctrine: capabilities/skills/traject-os
+conductor: capabilities/agents/traject-conductor.md
+loop: capabilities/loops/traject-daily-loop.md
+main_processes:
+  interview_prep: capabilities/harnesses/traject-interview-prep-session.yaml
+  application: capabilities/harnesses/traject-application-session.yaml
+  outreach: capabilities/harnesses/traject-outreach-session.yaml
+  proof_publish: capabilities/harnesses/traject-proof-publish-session.yaml
+sub_processes:
+  - capabilities/harnesses/traject-room-build.yaml
+  - capabilities/harnesses/traject-drill-rep.yaml
+  - capabilities/harnesses/traject-debrief-capture.yaml
+  - capabilities/harnesses/traject-apply-one-role.yaml
+stake: |
+  "Prep me / apply for me / reach out for me" resolves into evidence, not vibes: every role is
+  fit-gated and deduped, every tailored claim is source-bound, the operator stops before final
+  Submit, outreach is drafted and held at Gate-D, the room carries only verified claims, answers
+  carry numbers, the debrief is 5 lines, and nothing outward leaves the machine without Mike.
+
+identity_lock:
+  startup_phrase: "I prepare and hold; Mike alone submits, sends, and publishes."
+  gates:
+    - id: T1
+      requirement: "the role cleared JEV job.fit + jobhunt.select (required signals above 0.9) and a CODE dedupe against ~/.applypilot/applications.sqlite3 + Gmail receipts; band is base $250K target / $180K floor (2026-09-27)"
+      proof: "fit decision ids plus a dedupe receipt id"
+      failure_tier: halt
+    - id: T2
+      requirement: "the résumé is tailored source-bound and passed packet_lint with the current $180K floor, and cleared JEV resume.ats + resume.recruiter"
+      proof: "résumé sha256, packet_lint output, both decision ids"
+      failure_tier: halt
+    - id: T3
+      requirement: "the form is filled from confirmed-work-history.json and cleared JEV job.formfill/form.field; the run HARD-STOPs before final Submit (first-five human-click pilot)"
+      proof: "form_filled state and held_at: final_submit"
+      failure_tier: stop
+    - id: T4
+      requirement: "outreach passed outreach_lint and JEV outreach gates, carries one ask and at most one nudge, and every send is held at Gate-D; the signed-in handle is Mike's (never the REPL linkedin global)"
+      proof: "lint output, gate decision ids, held_at: gate_d"
+      failure_tier: stop
+    - id: T5
+      requirement: "the room follows Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only résumé-verified claims, and cleared story.bank + jd.decode"
+      proof: "room data-module path and both decision ids"
+      failure_tier: halt
+    - id: T6
+      requirement: "every drilled/live answer states a number or NONE and never speaks the floor or a banned claim; JEV interview.answer required signals above 0.9"
+      proof: "per-answer score rows with the number line"
+      failure_tier: halt
+    - id: T7
+      requirement: "the 5-line debrief is captured within 2h and saved to .traject/debriefs/ and the room debrief tab (CODE gate on the shape)"
+      proof: "debrief file path"
+      failure_tier: degrade
+    - id: T8
+      requirement: "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED before use, and publishing is held at Gate-D"
+      proof: "claims-ledger.jsonl rows"
+      failure_tier: halt
+    - id: T9
+      requirement: "run.jsonl carries a receipt for every Traject lesson whose trigger fired, and validate_lessons.py exits 0 on it"
+      proof: "validator output for the run"
+      failure_tier: halt
+    - id: T10
+      requirement: "the run closed: new lessons appended and their sub-skills patched in the same session, Sunday funnel mapped to JOB-SYSTEM-v2 lanes, ProofPacket sealed"
+      proof: "close record with proof hash and lesson ids"
+      failure_tier: degrade
+anti_patterns:
+  - "Submitting or sending on Mike's behalf - the first-five pilot means he alone clicks Submit/Send"
+  - "Reporting a filled form or a local draft as SENT - only a receipt makes it sent"
+  - "Stating the compensation floor or a banned claim in a room, drill, or message"
+  - "Using the REPL linkedin global for Mike - it may be the client Coby Skonord"
+  - "Loosening the band to hit a weekly volume number"

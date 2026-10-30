@@ -1,0 +1,111 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-PROOF-PUBLISH-SESSION",
+      "name": "Traject proof/publish session (main process for the claims ledger)",
+      "description": "Traject proof/publish session (main process for the claims ledger) [traject-proof-publish-session] \u2014 compiled from capabilities/harnesses/traject-proof-publish-session.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "P1",
+          "category": "Identity Lock",
+          "name": "P1 every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY",
+          "description": "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED with an evidence path, and admissible claims cleared atomic.claim",
+          "command": "claims-ledger.jsonl rows and decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "P2",
+          "category": "Identity Lock",
+          "name": "P2 publishing is held at Gate-D and a corrected claim is fixed",
+          "description": "publishing is held at Gate-D and a corrected claim is fixed on every surface (r\u00e9sum\u00e9, headline, room, template) in the same pass",
+          "command": "held_at: gate_d and the multi-surface edit record",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I classify and hold; I do not publish an unverified number.",
+        "harness_tuple": "H_proof(classify, verify, gate, hold)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-proof-publish-session",
+          "session_type": "traject-proof-publish-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED with an evidence path, and admissible claims cleared atomic.claim",
+        "publishing is held at Gate-D and a corrected claim is fixed on every surface (r\u00e9sum\u00e9, headline, room, template) in the same pass"
+      ],
+      "anti_patterns": [
+        "Publishing an OWNER-ONLY claim without Mike, or silently softening a claim only he can settle",
+        "Fixing a number in the r\u00e9sum\u00e9 while it still sits in the headline and the room"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-proof-publish-session.yaml",
+        "source_sha256": "bf6f9678c4f0dbc883bc80797bf84b6273db7c4adcfaaeb670accd7cc034b785",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

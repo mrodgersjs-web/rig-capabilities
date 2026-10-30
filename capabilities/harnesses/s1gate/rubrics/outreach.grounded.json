@@ -1,0 +1,83 @@
+{
+  "name": "outreach.grounded",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Semantic grounding gate for ONE machine-drafted LinkedIn outreach line (clients-ai-jobs bx-writer, 2026-10-30). Input is an EVIDENCE block (the only facts known about the recipient) followed by a LINE. Judges what deterministic checks cannot: whether the line asserts anything about the recipient, their history, their company or their feelings that the evidence does not state. Built after a drafting model wrote 'an open role for this kind of hire means the last one didn't land' from evidence that said only 'an open role posted recently'. Maker never grades: the drafting model never sees this verdict before the gate does.",
+  "questions": {
+    "invents_about_recipient": {
+      "type": "noul",
+      "instructions": "Does the LINE state or imply any fact about the recipient, their past hires, their team, their company's situation, or their reasons, that the EVIDENCE block does not state? A question that asks rather than asserts is not an invention.",
+      "criteria": {
+        "true": "The line asserts or presumes something about the recipient or their situation that is not in the evidence.",
+        "false": "Every statement about the recipient is in the evidence, or the line only asks."
+      }
+    },
+    "presumes_feelings": {
+      "type": "noul",
+      "instructions": "Does the LINE tell the recipient what they feel, fear, worry about, or want, as a statement rather than a question?",
+      "criteria": {
+        "true": "The line asserts the recipient's emotional state or motive.",
+        "false": "The line does not assert the recipient's feelings, or only asks about them."
+      }
+    },
+    "generic_ai_slop": {
+      "type": "noul",
+      "instructions": "Does the LINE read like generic AI-generated outreach that could be sent to anyone, rather than a plain question from one person to another?",
+      "criteria": {
+        "true": "Generic, templated, or AI-sounding.",
+        "false": "Plain and specific to what the evidence allows."
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "invents_about_recipient.noul >= 0.81",
+      "verdict": "BLOCK",
+      "reason": "asserts something about the recipient the evidence does not state"
+    },
+    {
+      "when": "presumes_feelings.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "tells the recipient what they feel"
+    },
+    {
+      "when": "generic_ai_slop.noul >= 0.70",
+      "verdict": "ESCALATE",
+      "reason": "reads as generic machine copy"
+    }
+  ],
+  "confidence_floor": 0.3,
+  "calibrated": false,
+  "calibration": {
+    "date": "2026-10-30",
+    "n_controls": 9,
+    "method": "hand-labelled controls, same evidence block, model jev-1.14.0",
+    "invents_good": [
+      0.73,
+      0.63,
+      0.78,
+      0.44
+    ],
+    "invents_bad": [
+      0.94,
+      0.96,
+      0.93,
+      0.86,
+      0.84
+    ],
+    "threshold": 0.81,
+    "margin": "thin: good max 0.78, bad min 0.84",
+    "status": "a hint, not a calibration; re-fit when 30 labelled rows exist and re-gate every prior PASS after any change",
+    "decision_ids": [
+      291086,
+      291087,
+      291088,
+      291089,
+      291090,
+      291091,
+      291092,
+      291093,
+      291094
+    ]
+  }
+}

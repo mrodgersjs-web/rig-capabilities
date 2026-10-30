@@ -1,0 +1,46 @@
+---
+outcome: "drill-rep: drilled answers with per-answer scores (qid, scores, gap, quote) and a number-or-NONE line, cleared by interview.answer"
+activation: "Load from traject-interview-prep-session when drilling a room before a screen."
+instruction: "Score each rep with interview.answer; enforce numbers-or-NONE; never speak the floor."
+applies_when:
+  env: "the Traject cockpit live-coach; pre-interview run.py score"
+  runtime: "pre-interview-meta scoring"
+  deps: "traject-coach-grader; a built room"
+  params: "room, question set"
+  budget: "reps per session; three fix attempts per weak answer"
+  scale: "one room per session"
+permissions: [fs.read, fs.write, bash]
+flow:
+  - Work the room cards in mock mode.
+  - Score each answer (interview.answer, training.readiness).
+  - Route gaps to debrief and learn.
+done_when:
+  - file:capabilities/harnesses/traject-drill-rep.yaml
+  - grep:capabilities/harnesses/traject-drill-rep.yaml:numbers or NONE
+out_of_scope: [stating the floor or a banned claim in a rep]
+quality_floor: 0.8
+---
+
+harness_id: traject-drill-rep
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject drill-rep sub-process
+status: stable
+lane: business-ops
+session_type: traject-drill-rep
+harness_tuple: H_drill(rep, score, gap)
+parent_doctrine: capabilities/skills/traject-os
+parent_process: capabilities/harnesses/traject-interview-prep-session.yaml
+sub_skill: capabilities/skills/traject-drill
+stake: "Every rep states a number or NONE; the Sep 17 zero-number failure is the bar."
+identity_lock:
+  startup_phrase: "I drill numbers and gaps; I do not let an answer go numberless."
+  gates:
+    - id: D1
+      requirement: "every rep states a number or NONE and cleared interview.answer (required signals above 0.9)"
+      proof: "per-answer score rows"
+      failure_tier: halt
+anti_patterns: ["Answering the adjacent question with zero numbers (the Sep 17 Salesforce failure)"]

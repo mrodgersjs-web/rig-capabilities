@@ -1,0 +1,71 @@
+---
+outcome: business-strategy: a business problem leaves as a cited five-section strategy document with a defensible only-statement, named trade-offs and delivery-plus-communication execution, screened by the deterministic lint and the Jev strategy.output rubric, every doctrine claim traceable to a corpus videoId
+done_when:
+  - file:capabilities/harnesses/strategy-document-session.yaml
+  - grep:capabilities/harnesses/strategy-document-session.yaml:claims_check.py
+  - grep:capabilities/harnesses/strategy-document-session.yaml:strategy.output
+  - grep:capabilities/harnesses/strategy-document-session.yaml:Gate-D
+quality_floor: 0.75
+---
+
+harness_id: strategy-document-session
+harness_name: strategy document session (business-strategy-os)
+status: stable
+lane: research-intel
+session_type: strategy-document
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, P]
+harness_tuple: H_doc(diagnose, new_value, innovation, argument, stories, lint, jev_gate)
+primary_diamonds: [D1, D3]
+bms_bias: "A1 verification-led — every gate's proof is executed (lint run, claims resolved, Jev decision id recorded), never read; A2 for the prose drafting of the argument and stories; A3 forbidden — no gate may pass on a reworded requirement; A4 forbidden — an unexecuted gate blocks clearance"
+parent: null
+executor: capabilities/agents/strategy-director.md
+sources:
+  meta_skill: capabilities/skills/business-strategy-os/SKILL.md
+  corpus: data/corpora/strategy/
+  lint: capabilities/skills/strategy-review/scripts/strategy_lint.py
+  claims: capabilities/skills/business-strategy-os/scripts/claims_check.py
+  jev_rubric: capabilities/harnesses/s1gate/rubrics/strategy.output.json
+
+identity_lock:
+  startup_phrase: "A goal is not a strategy."
+  gates:
+    - id: M1
+      requirement: "the stated strategy passes the how-not-how test and the fiercest-competitor test before any drafting begins"
+      proof: "strategy-diagnose output naming the disease and next_pillar"
+      failure_tier: halt
+    - id: M2
+      requirement: "new value is named before any innovation, story or execution exists; the value cannot be delivered by the competitive set"
+      proof: "strategy-new-value output with route (disagreement/difference/duplication) and sacrifice"
+      failure_tier: halt
+    - id: M3
+      requirement: "the only-statement names the customer-named category, a concrete innovation and exclusive value, and the sacrifice is named"
+      proof: "only-statement block plus strategy-only-statement-scorer output"
+      failure_tier: halt
+    - id: M4
+      requirement: "every doctrine claim carries CLAIM(videoId) and every id resolves in the corpus manifest"
+      proof: "claims_check.py exit 0 over the artifact and the family"
+      failure_tier: halt
+    - id: M5
+      requirement: "the deterministic lint is run and its high findings are closed before the Jev gate"
+      proof: "strategy_lint.py report with zero high findings"
+      failure_tier: halt
+    - id: M6
+      requirement: "Jev strategy.output ran and the decision id is recorded; an ESCALATE blocks clearance"
+      proof: "rig-s1gate decision id in the gate record"
+      failure_tier: halt
+    - id: M7
+      requirement: "no outward send, publish or spend happened inside the session"
+      proof: "Gate-D stop recorded"
+      failure_tier: halt
+
+anti_patterns:
+  - "Drafting the document before the value is named"
+  - "Writing a strategy that stops nothing"
+  - "Treating a Jev ESCALATE as a pass because lint was clean"
+  - "Presenting creator revenue claims as verified"
+  - "Letting the committee average the point of view"
+  - "Naming a category by delivery format instead of by what the customer shops for"

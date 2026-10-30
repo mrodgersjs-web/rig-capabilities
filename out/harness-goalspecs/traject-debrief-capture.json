@@ -1,0 +1,97 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-DEBRIEF-CAPTURE",
+      "name": "Traject debrief-capture sub-process",
+      "description": "Traject debrief-capture sub-process [traject-debrief-capture] \u2014 compiled from capabilities/harnesses/traject-debrief-capture.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "B1",
+          "category": "Identity Lock",
+          "name": "B1 the 5-line debrief is saved to .traject/debriefs/ and the ro",
+          "description": "the 5-line debrief is saved to .traject/debriefs/ and the room debrief tab within 2h (CODE gate on the shape)",
+          "command": "debrief file path",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I capture the gap and the number; I do not rewrite his answer.",
+        "harness_tuple": "H_debrief(questions, five_line, save)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-debrief-capture",
+          "session_type": "traject-debrief-capture",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "the 5-line debrief is saved to .traject/debriefs/ and the room debrief tab within 2h (CODE gate on the shape)"
+      ],
+      "anti_patterns": [
+        "Padding the answer line or inventing a number that was not stated"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-debrief-capture.yaml",
+        "source_sha256": "f1314e97acfa3a9ad3a1bba10ee01f0eafefb4966dff44c573bbe3a399c0c26a",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

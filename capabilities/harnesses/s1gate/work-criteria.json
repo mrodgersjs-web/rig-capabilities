@@ -1,6 +1,6 @@
 {
   "fail_closed": true,
-  "advisory_until_calibrated": true,
+  "advisory_until_calibrated": false,
   "command": "rig-s1gate check <rubric> --file <artifact> --subject <kind> --json",
   "kinds": {
     "ad.search": "ad.search",
@@ -14,6 +14,7 @@
     "comment.linkedin": "comment.linkedin",
     "company.fit": "company.fit",
     "contact.pick": "contact.pick",
+    "corpus.source": "corpus.source",
     "deal.stage": "deal.stage",
     "doctrine.surface": "doctrine.surface",
     "email.outreach": "email.outreach",
@@ -41,6 +42,7 @@
     "jobhunt.resume": "jobhunt.resume",
     "jobhunt.select": "jobhunt.select",
     "jobhunt.warm": "jobhunt.warm",
+    "lattice.asset-classify": "lattice.asset-classify",
     "magnet.lead": "magnet.lead",
     "mail.status": "mail.status",
     "memory.admission": "memory.admission",
@@ -51,8 +53,11 @@
     "model.routing": "model.routing",
     "nil.jacob": "nil.jacob",
     "offer.eval": "offer.eval",
+    "opportunity.money": "opportunity.money",
     "outreach.first": "outreach.first",
     "outreach.intro": "outreach.intro",
+    "page.truth": "page.truth",
+    "pain.signal": "pain.signal",
     "plan.readiness": "plan.readiness",
     "post.eden": "post.eden",
     "post.instagram": "post.instagram",
@@ -70,6 +75,7 @@
     "signal.performance": "signal.performance",
     "spend.continue": "spend.continue",
     "story.bank": "story.bank",
+    "strategy.output": "strategy.output",
     "training.readiness": "training.readiness",
     "ui.design": "ui.design",
     "ultra.execution": "ultra.execution",
@@ -157,9 +163,59 @@
     "jev.file-triage": "jev.file-triage",
     "jev.compact-read": "jev.compact-read",
     "jev.injection-screen": "jev.injection-screen",
-    "jev.gate-d": "jev.gate-d"
+    "jev.gate-d": "jev.gate-d",
+    "corpus.card": "corpus.card",
+    "film.coach-fit": "film.coach-fit",
+    "film-coach": "film.coach-fit",
+    "film-resource": "film.coach-fit",
+    "coach-fit": "film.coach-fit",
+    "film-study-resource": "film.coach-fit"
   },
   "min_noul": 0.9,
   "min_confidence": 0.9,
-  "bar": "Required noul and score/choice confidence must be above 0.9. 0.90 does not pass."
+  "bar": "Required noul and score/choice confidence must be above 0.9. 0.90 does not pass.",
+  "question_version": {
+    "current": "v1",
+    "adopted": "2026-10-01",
+    "policy": "A reworded question is a NEW INSTRUMENT. Every rubric carries a question_version; changing question wording bumps it and voids the case for reusing old labels. Rubric.rule_enforces already hash-binds rule + rubric + model and silently drops a rule to advisory when they stop matching -- that is the safety net, and this field is the visible record. Rules: (1) never edit question wording without bumping question_version; (2) a gold label answers ONE question_version and is superseded, never reused, when the wording moves; (3) thresholds belong to a question_version, not to the model.",
+    "history": [
+      {"version": "v0-promoted", "adopted": "2026-09-28", "note": "pre-versioning; rubrics shipped before this field existed"},
+      {"version": "v1", "adopted": "2026-10-01", "note": "versioning + two-sided threshold bands adopted from the shipwithjev.com jev-engineering doctrine"}
+    ]
+  },
+  "thresholds": {
+    "policy": "Two-sided bands, not a single cliff. One cutoff forces every uncertain case into a wrong bucket. Per-class bars, not one global bar: rare and costly classes deserve LOWER flagging bars than common cheap ones. Confidence measures the model's certainty, not the cost of being wrong -- so high-stakes categories escalate regardless of probability (stakes bypass, see jev.gate-d / never_auto).",
+    "error_pricing_note": "A false 'not fraud' and a false 'fraud' rarely cost the same. cost_of_false_pass is what a wrongly-PASSing case costs you; cost_of_false_block is what a wrongly-blocking case costs. Pick the cutoff that minimises total cost INCLUDING the cost of escalating. These weights are the input to that sweep, not the sweep itself.",
+    "bands": {
+      "accept": "confidence >= accept_at -> act on the verdict",
+      "review": "auto_fail_below <= confidence < accept_at -> ESCALATE to a System 2 model or a human; never re-roll to force a confident answer",
+      "auto_fail": "confidence < auto_fail_below -> BLOCK or safe default; the distribution is too flat to act on",
+      "unclear_lane": "A high probability on an UNCLEAR option is itself a routing signal. Route UNCLEAR to review directly instead of forcing it into a real category."
+    },
+    "default": {
+      "accept_at": 0.9,
+      "auto_fail_below": 0.35,
+      "cost_of_false_pass": 3.0,
+      "cost_of_false_block": 1.0,
+      "note": "0.90 does not pass, consistent with min_noul/min_confidence above."
+    },
+    "per_class": {
+      "_legend": "accept_at = act at or above; auto_fail_below = below this, stop. Rare/costly classes get LOWER accept_at so they flag more readily.",
+      "nil.jacob": {"accept_at": 0.75, "auto_fail_below": 0.35, "cost_of_false_pass": 10.0, "cost_of_false_block": 1.0, "class": "minor-safety", "stakes_bypass": true, "why": "content about a minor; never_auto survives any threshold"},
+      "jev.gate-d": {"accept_at": 0.75, "auto_fail_below": 0.35, "cost_of_false_pass": 10.0, "cost_of_false_block": 1.0, "class": "outward-irreversible", "stakes_bypass": true, "why": "outward, paid, destructive. Irreversible actions never ride a lone verdict at any confidence"},
+      "jev.injection-screen": {"accept_at": 0.75, "auto_fail_below": 0.35, "cost_of_false_pass": 10.0, "cost_of_false_block": 1.0, "class": "security", "stakes_bypass": true, "why": "a missed injection is an estate compromise"},
+      "jev.bash-gate": {"accept_at": 0.8, "auto_fail_below": 0.35, "cost_of_false_pass": 8.0, "cost_of_false_block": 1.0, "class": "destructive", "stakes_bypass": true, "why": "destructive shell commands"},
+      "jev.file-triage": {"accept_at": 0.8, "auto_fail_below": 0.35, "cost_of_false_pass": 8.0, "cost_of_false_block": 1.0, "class": "credential-bearing"},
+      "atomic.claim": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 5.0, "cost_of_false_block": 1.5, "class": "reputation", "why": "an unbacked claim in public costs more than a held one"},
+      "page.truth": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 5.0, "cost_of_false_block": 1.5, "class": "reputation"},
+      "code.review": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 4.0, "cost_of_false_block": 1.5, "class": "engineering"},
+      "code.diff": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 4.0, "cost_of_false_block": 1.5, "class": "engineering"},
+      "spend.continue": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 4.0, "cost_of_false_block": 2.0, "class": "money"},
+      "week.kill": {"accept_at": 0.85, "auto_fail_below": 0.35, "cost_of_false_pass": 3.0, "cost_of_false_block": 3.0, "class": "money", "why": "symmetric: killing live work and keeping dead work both cost"},
+      "post.linkedin": {"accept_at": 0.9, "auto_fail_below": 0.35, "cost_of_false_pass": 3.0, "cost_of_false_block": 1.0, "class": "content-public"},
+      "post.instagram": {"accept_at": 0.9, "auto_fail_below": 0.35, "cost_of_false_pass": 3.0, "cost_of_false_block": 1.0, "class": "content-public"},
+      "comment.linkedin": {"accept_at": 0.9, "auto_fail_below": 0.35, "cost_of_false_pass": 2.0, "cost_of_false_block": 1.0, "class": "content-public", "why": "comments are positive-only; cheap to hold"}
+    },
+    "unclassified_policy": "Any kind without a per_class entry uses `default`. As gold accumulates per kind, fit its cutoff by sweeping thresholds over labelled cases and record the fit date + labelled-set id here. Until then the default is a starting point, not a measurement."
+  }
 }

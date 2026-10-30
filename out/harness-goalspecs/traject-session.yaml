@@ -1,0 +1,212 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-SESSION",
+      "name": "Traject OS job-search session (meta process for every job-search task)",
+      "description": "Traject OS job-search session (meta process for every job-search task) [traject-session] \u2014 compiled from capabilities/harnesses/traject-session.yaml",
+      "anchor": "L2-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "T1",
+          "category": "Identity Lock",
+          "name": "T1 the role cleared JEV job.fit + jobhunt.select (required sign",
+          "description": "the role cleared JEV job.fit + jobhunt.select (required signals above 0.9) and a CODE dedupe against ~/.applypilot/applications.sqlite3 + Gmail receipts; band is base $250K target / $180K floor (2026-09-27)",
+          "command": "fit decision ids plus a dedupe receipt id",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T2",
+          "category": "Identity Lock",
+          "name": "T2 the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint w",
+          "description": "the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint with the current $180K floor, and cleared JEV resume.ats + resume.recruiter",
+          "command": "r\u00e9sum\u00e9 sha256, packet_lint output, both decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T3",
+          "category": "Identity Lock",
+          "name": "T3 the form is filled from confirmed-work-history.json and clea",
+          "description": "the form is filled from confirmed-work-history.json and cleared JEV job.formfill/form.field; the run HARD-STOPs before final Submit (first-five human-click pilot)",
+          "command": "form_filled state and held_at: final_submit",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T4",
+          "category": "Identity Lock",
+          "name": "T4 outreach passed outreach_lint and JEV outreach gates, carrie",
+          "description": "outreach passed outreach_lint and JEV outreach gates, carries one ask and at most one nudge, and every send is held at Gate-D; the signed-in handle is Mike's (never the REPL linkedin global)",
+          "command": "lint output, gate decision ids, held_at: gate_d",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T5",
+          "category": "Identity Lock",
+          "name": "T5 the room follows Lucy's Stage 0-8 order plus Run of Show / D",
+          "description": "the room follows Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only r\u00e9sum\u00e9-verified claims, and cleared story.bank + jd.decode",
+          "command": "room data-module path and both decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T6",
+          "category": "Identity Lock",
+          "name": "T6 every drilled/live answer states a number or NONE and never",
+          "description": "every drilled/live answer states a number or NONE and never speaks the floor or a banned claim; JEV interview.answer required signals above 0.9",
+          "command": "per-answer score rows with the number line",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T7",
+          "category": "Identity Lock",
+          "name": "T7 the 5-line debrief is captured within 2h and saved to .traje",
+          "description": "the 5-line debrief is captured within 2h and saved to .traject/debriefs/ and the room debrief tab (CODE gate on the shape)",
+          "command": "debrief file path",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        },
+        {
+          "id": "T8",
+          "category": "Identity Lock",
+          "name": "T8 every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY",
+          "description": "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED before use, and publishing is held at Gate-D",
+          "command": "claims-ledger.jsonl rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T9",
+          "category": "Identity Lock",
+          "name": "T9 run.jsonl carries a receipt for every Traject lesson whose t",
+          "description": "run.jsonl carries a receipt for every Traject lesson whose trigger fired, and validate_lessons.py exits 0 on it",
+          "command": "validator output for the run",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "T10",
+          "category": "Identity Lock",
+          "name": "T10 the run closed: new lessons appended and their sub-skills pa",
+          "description": "the run closed: new lessons appended and their sub-skills patched in the same session, Sunday funnel mapped to JOB-SYSTEM-v2 lanes, ProofPacket sealed",
+          "command": "close record with proof hash and lesson ids",
+          "failure_tier": "degrade",
+          "required": false,
+          "required_verdict": "SOFT",
+          "weight": 0.5
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I prepare and hold; Mike alone submits, sends, and publishes.",
+        "harness_tuple": "H_traject(fit, dedupe, tailor, apply_stop, reach_hold, room, drill, debrief, claims, learn, gate_d)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-session",
+          "session_type": "traject-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L2",
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "the role cleared JEV job.fit + jobhunt.select (required signals above 0.9) and a CODE dedupe against ~/.applypilot/applications.sqlite3 + Gmail receipts; band is base $250K target / $180K floor (2026-09-27)",
+        "the r\u00e9sum\u00e9 is tailored source-bound and passed packet_lint with the current $180K floor, and cleared JEV resume.ats + resume.recruiter",
+        "the form is filled from confirmed-work-history.json and cleared JEV job.formfill/form.field; the run HARD-STOPs before final Submit (first-five human-click pilot)",
+        "outreach passed outreach_lint and JEV outreach gates, carries one ask and at most one nudge, and every send is held at Gate-D; the signed-in handle is Mike's (never the REPL linkedin global)",
+        "the room follows Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only r\u00e9sum\u00e9-verified claims, and cleared story.bank + jd.decode",
+        "every drilled/live answer states a number or NONE and never speaks the floor or a banned claim; JEV interview.answer required signals above 0.9",
+        "the 5-line debrief is captured within 2h and saved to .traject/debriefs/ and the room debrief tab (CODE gate on the shape)",
+        "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED before use, and publishing is held at Gate-D",
+        "run.jsonl carries a receipt for every Traject lesson whose trigger fired, and validate_lessons.py exits 0 on it",
+        "the run closed: new lessons appended and their sub-skills patched in the same session, Sunday funnel mapped to JOB-SYSTEM-v2 lanes, ProofPacket sealed"
+      ],
+      "anti_patterns": [
+        "Submitting or sending on Mike's behalf - the first-five pilot means he alone clicks Submit/Send",
+        "Reporting a filled form or a local draft as SENT - only a receipt makes it sent",
+        "Stating the compensation floor or a banned claim in a room, drill, or message",
+        "Using the REPL linkedin global for Mike - it may be the client Coby Skonord",
+        "Loosening the band to hit a weekly volume number"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-session.yaml",
+        "source_sha256": "0bcd476519583de31f04776135810352342cd44c89f75110a1f185d641e7252d",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

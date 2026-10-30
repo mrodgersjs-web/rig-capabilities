@@ -1,0 +1,64 @@
+---
+outcome: "interview-prep: a company/role screen is prepared end to end - a Lucy-ordered room built from verified claims, drilled reps with per-answer numbers, and a 5-line debrief captured within 2h - with story.bank, jd.decode, and interview.answer receipts"
+activation: "Load when a screen or interview is set and Traject must prep Mike for it."
+instruction: "Build the room in Lucy's order, drill with numbers-or-NONE, run interview day, capture the 5-line debrief; hold anything outward at Gate-D."
+applies_when:
+  env: "the Traject cockpit room + live-coach; pre-interview .os runtime"
+  runtime: "Next.js rooms (src/lib/*Content.ts); pre-interview-meta run.py score"
+  deps: "traject-room-build, traject-drill-rep, traject-debrief-capture sub-processes"
+  params: "company, role, JD, panel, format"
+  budget: "one room per company/role; reps per session"
+  scale: "one interview cycle"
+permissions: [fs.read, fs.write, bash, browser.read]
+flow:
+  - Build the room from verified claims (story.bank, jd.decode).
+  - Drill reps and coach interview day (interview.answer, training.readiness).
+  - Capture the 5-line debrief within 2h.
+done_when:
+  - file:capabilities/harnesses/traject-interview-prep-session.yaml
+  - grep:capabilities/harnesses/traject-interview-prep-session.yaml:traject-room-build
+  - grep:capabilities/harnesses/traject-interview-prep-session.yaml:traject-debrief-capture
+out_of_scope: [sending thank-yous or follow-ups (traject-outreach-session), publishing any claim]
+quality_floor: 0.8
+---
+
+harness_id: traject-interview-prep-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject interview-prep session (main process for a screen/interview)
+status: stable
+lane: business-ops
+session_type: traject-interview-prep-session
+harness_tuple: H_interview(room, drill, interview, debrief)
+parent_doctrine: capabilities/skills/traject-os
+conductor: capabilities/agents/traject-conductor.md
+loop: capabilities/loops/traject-interview-loop.md
+sub_processes:
+  - capabilities/harnesses/traject-room-build.yaml
+  - capabilities/harnesses/traject-drill-rep.yaml
+  - capabilities/harnesses/traject-debrief-capture.yaml
+stake: |
+  "Prep me for the Amgen screen" resolves into a room whose every proof line is verified,
+  drilled answers that carry a number, and a 5-line debrief - never a banned claim or a spoken floor.
+identity_lock:
+  startup_phrase: "I drill numbers and gaps; I do not invent a proof line."
+  gates:
+    - id: I1
+      requirement: "the room is a data module in Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, holds only résumé-verified claims, and cleared story.bank + jd.decode"
+      proof: "room path (src/lib/<company>Content.ts) and both decision ids"
+      failure_tier: halt
+    - id: I2
+      requirement: "every drilled answer states a number or NONE and cleared interview.answer (required signals above 0.9); the floor and banned claims are never spoken"
+      proof: "per-answer score rows"
+      failure_tier: halt
+    - id: I3
+      requirement: "the 5-line debrief is saved within 2h to .traject/debriefs/ and the room debrief tab"
+      proof: "debrief file path"
+      failure_tier: degrade
+anti_patterns:
+  - "Padding a room with an OWNER-ONLY or BANNED claim to sound strong"
+  - "A drill rep that answers the adjacent question with zero numbers (the Sep 17 failure)"
+  - "Calling an ATS_SUBMITTED row an interview without a Screen/Interview stage"

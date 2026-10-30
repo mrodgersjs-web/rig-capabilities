@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
-"""skill-surface-label: a real-traffic routing eval, labeled by Jev-family models (Mike, 2026-09-29:
-"label them using JEV").
+"""skill-surface-label: real-traffic routing agreement sampled through hosted JEV only.
 
-Router under test: `skill-surface route --json` (hosted Jev; text naming people, clients, money,
-health or Jacob routes on local OpenJev instead).
-Labeler, never the model that routed the task:
-  hosted-Jev routes     -> local OpenJev (different model family, runs on Mike's own machine)
-  local OpenJev routes  -> local Laya
-Every label row names its labeler. Hosted-Jev decisions also get the label written into
-~/.rig/s1gate/decisions.db with labelled_by=<labeler>, never "human".
+Router under test: `skill-surface route --json`. Redact secrets before hosted verification;
+remaining private details defer. There is no local inference fallback.
+Hosted verifier agreement is the same model family as the router, so new rows are
+independent=false. Only preserved historical independent labels feed calibration.
 
   skill-surface-label build [--limit 200]    real chats -> _label-set.jsonl (stays on this machine)
   skill-surface-label build --append [--limit 50]  keep the set, add up to N newer real chats
-  skill-surface-label run [--workers 3]      route + label every unlabeled item (resumable)
-  skill-surface-label run --relabel          redo every row without an independent label (needs OpenJev up)
+  skill-surface-label run [--workers 3]      route + verify every unsampled item (resumable)
+  skill-surface-label run --relabel          resample rows without independent historical labels
   skill-surface-label report [--write]       agreement, per-level calibration, _route-evals-real.json;
                                              --write stores calibrated thresholds in the manifest
 """
@@ -39,7 +35,6 @@ SET = f"{LIB}/_label-set.jsonl"
 OUT = f"{LIB}/_labels.jsonl"
 EVAL = f"{LIB}/_route-evals-real.json"
 SS = f"{HOME}/.rig/bin/skill-surface"
-LAYA = f"{HOME}/.rig/bin/rig-laya"
 RIGCAP = f"{HOME}/Developer/rig-capabilities"
 PROBE = re.compile(r"^\s*(ok\.?|hello|hi|hey|greeting|12|test)\s*$|reply (exactly|with)|connectivity|connection test|"
                    r"model test|repl connection|example\.com|no tools|do not (browse|use tools)|verification probe|"
@@ -124,7 +119,7 @@ def build(limit, append=False):
             fh.write(json.dumps(r) + "\n")
     os.replace(SET + ".tmp", SET)
     sens = sum(1 for r in out if ss.SENSITIVE.search(r["text"]))
-    print(f"label set: {len(out)} real tasks ({new_n} new, {sens} private -> local lanes) | skipped {skipped} -> {SET}")
+    print(f"label set: {len(out)} real tasks ({new_n} new, {sens} require redaction or deferral) | skipped {skipped} -> {SET}")
     return 0
 
 
@@ -137,17 +132,6 @@ def route(text):
         return {"status": "ERROR", "error": (p.stderr or p.stdout)[-300:], "levels": []}
 
 
-def laya_noul(instructions, text):
-    d = ss.laya_resident(text, {"fit": {"type": "noul", "instructions": instructions}})
-    if d is not None:  # resident Laya on 127.0.0.1: same model and head as the CLI, no 17 s cold start
-        return (d.get("answers") or {}).get("fit", {}).get("noul"), d.get("model")
-    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONHOME", "PYTHONPATH", "PYTHONEXECUTABLE")}
-    env["HOME"] = HOME
-    p = subprocess.run([LAYA, "--state", text, "--type", "noul", "--question-id", "fit", "--instructions",
-                        instructions, "--json"], capture_output=True, text=True, timeout=180, env=env)
-    d = json.loads(p.stdout[p.stdout.find("{"):])
-    return (d.get("answers") or {}).get("fit", {}).get("noul"), d.get("model")
-
 
 STOP = f"{LIB}/_label-stop"
 
@@ -156,8 +140,8 @@ def label_one(item, t, prev=None):
     if os.path.exists(STOP):
         raise RuntimeError("stopped: remove skill-library/_label-stop to resume")
     text = item["text"] or item["title"]
-    reuse = prev and prev.get("levels") and not any(str(L.get("lane") or "").startswith("laya") for L in prev["levels"])
-    # a relabel keeps the original route (and its logged decision ids) unless Laya routed it, which Laya cannot grade
+    reuse = prev and prev.get("router") == "hosted-jev" and prev.get("levels") and all(
+        L.get("lane") in ("jev", "lane-rule") for L in prev["levels"])
     r = ({"levels": prev["levels"], "sensitive": prev.get("sensitive"), "status": prev.get("route_status"),
           "load": prev.get("load")} if reuse else route(text))
     lv = {L["level"]: L for L in r.get("levels", []) if "choice" in L}
@@ -165,9 +149,10 @@ def label_one(item, t, prev=None):
     skill = lv.get(2, {}).get("choice")
     if skill == meta:
         skill = None
-    local = bool(r.get("sensitive"))
+    safe_text, sensitive, privacy_error = ss.redact_for_hosted(text)
     row = {"id": item["id"], "title": item["title"], "text_sha256": hashlib.sha256(text.encode()).hexdigest(),
-           "sensitive": local, "route_status": r.get("status"), "router": "openjev-local" if local else "hosted-jev",
+           "sensitive": sensitive, "route_status": r.get("status"),
+           "router": "hosted-jev" if any(L.get("lane") == "jev" for L in lv.values()) else "not_evaluated",
            "levels": [{k: L.get(k) for k in ("level", "kind", "choice", "confidence", "verdict", "decision_id", "lane")}
                       for L in r.get("levels", []) if "choice" in L],
            "load": r.get("load"), "skills_used": item.get("skills_used", []), "ts": datetime.datetime.now().isoformat()}
@@ -175,14 +160,18 @@ def label_one(item, t, prev=None):
               if meta in t.metas else None)
     skill_q = (f"The skill '{skill}' ({(t.E[skill].get('purpose') or '')[:220]}) is the right skill to handle this request"
                if skill and skill in t.E else None)
-    state = f"Request from Mike: {text}"
-    labeler = os.environ.get("SS_LABELER", "auto")
+    row["independent"] = False
     try:
-        if not local and labeler in ("auto", "hosted-jev") and (labeler == "hosted-jev" or not ss.openjev_up()):
-            # OpenJev unreachable: hosted Jev verifies with a different question form. Same model family as the
-            # router, so these rows count as agreement, not independent truth, and never feed calibration.
+        if safe_text is None:
+            row.update({"labeler": None, "deferred": privacy_error})
+        elif not lv:
+            row.update({"labeler": None, "deferred": "routing provided no classified candidate"})
+        else:
             sys.path.insert(0, RIGCAP)
+            from rig_capabilities import s1gate
             from rig_capabilities.s1gate import DecisionLog, Rubric, evaluate
+            if s1gate.JEV_ENDPOINT != "https://api.typesafe.ai/v1/systemone":
+                raise RuntimeError("labeler requires the hosted JEV API endpoint")
             qs = {"meta_choice": {"type": "choice", "instructions": "Which area of Mike's skills should handle this request",
                                   "criteria": {**{mm: t.info(mm)[1] for mm in t.metas}, "other": "None of these areas fits"}}}
             if meta_q:
@@ -191,38 +180,24 @@ def label_one(item, t, prev=None):
                 qs["skill_fit"] = {"type": "noul", "instructions": skill_q}
             rb = Rubric(name="skill-surface.label", stage="label", lane="skill-surface",
                         description="Verify the routed meta and skill for one real task", questions=qs, rules=[])
-            res = evaluate(rb, state, subject=f"skill-surface label {item['id']}", log=DecisionLog())
+            log = DecisionLog()
+            try:
+                res = evaluate(rb, f"Request from Mike: {safe_text}",
+                               subject=f"skill-surface label sha256:{row['text_sha256']}",
+                               log=log, model="jev-latest")
+            finally:
+                log.close()
             if res.error:
                 raise RuntimeError(res.error)
+            if not str(res.model or "").startswith("jev-"):
+                raise RuntimeError("invalid hosted JEV label provenance")
             a = res.answers
-            row.update({"labeler": "hosted-jev-verifier", "independent": False, "label_decision_id": res.decision_id,
+            row.update({"labeler": "hosted-jev-verifier", "label_decision_id": res.decision_id,
+                        "label_model": res.model, "label_endpoint": s1gate.JEV_ENDPOINT,
                         "meta_fit": (a.get("meta_fit") or {}).get("noul"),
                         "skill_fit": (a.get("skill_fit") or {}).get("noul"),
                         "meta_choice": (a.get("meta_choice") or {}).get("choice"),
                         "meta_choice_conf": (a.get("meta_choice") or {}).get("confidence")})
-        elif local and not os.environ.get("SS_WITH_LAYA"):
-            row.update({"labeler": None, "deferred": "private task: waits for an independent local labeler (OpenJev or Laya)"})
-        elif local and any(str(L.get("lane") or "").startswith("laya") for L in row["levels"]):
-            row.update({"labeler": None, "deferred": "router fell back to Laya, so a Laya label would grade itself"})
-        elif not local:
-            qs = {"meta_choice": {"type": "choice", "instructions": "Which area of Mike's skills should handle this request",
-                                  "criteria": {**{mm: t.info(mm)[1] for mm in t.metas}, "other": "None of these areas fits"}}}
-            if meta_q:
-                qs["meta_fit"] = {"type": "noul", "instructions": meta_q}
-            if skill_q:
-                qs["skill_fit"] = {"type": "noul", "instructions": skill_q}
-            d = ss.openjev_ask(state, qs, timeout=180)
-            a = d.get("answers") or {}
-            row.update({"labeler": d.get("model") or "openjev", "independent": True,
-                        "meta_fit": (a.get("meta_fit") or {}).get("noul"),
-                        "skill_fit": (a.get("skill_fit") or {}).get("noul"),
-                        "meta_choice": (a.get("meta_choice") or {}).get("choice"),
-                        "meta_choice_conf": (a.get("meta_choice") or {}).get("confidence")})
-        else:
-            mf, model = laya_noul(meta_q, state) if meta_q else (None, None)
-            sf, _ = laya_noul(skill_q, state) if skill_q else (None, None)
-            row.update({"labeler": model or "laya", "independent": True, "meta_fit": mf, "skill_fit": sf,
-                        "meta_choice": None, "meta_choice_conf": None})
     except Exception as ex:
         row.update({"labeler": None, "label_error": f"{type(ex).__name__}: {ex}"[:200]})
     row["label_meta"] = lab(row.get("meta_fit"))
@@ -249,19 +224,14 @@ def latest_rows():
 def run(workers, relabel=False):
     items = [json.loads(line) for line in open(SET)]
     last = latest_rows()
-    if relabel:  # only independent labels count as done; verifier-only, deferred and failed rows are redone
-        if not ss.openjev_up():
-            print(f"{now()} relabel skipped: OpenJev unreachable (verifier-only rows would just repeat)", flush=True)
-            return 0
+    if relabel:
         done = {k for k, r in last.items() if r.get("independent") and r.get("labeler")}
     else:
         done = set(last)
     todo = [i for i in items if i["id"] not in done]
     t = ss.Tree(ss.load())
     print(f"{now()} labeling {len(todo)} of {len(items)} (already done {len(done)}), workers={workers}", flush=True)
-    sys.path.insert(0, RIGCAP)
-    from rig_capabilities.s1gate import DecisionLog
-    log = DecisionLog()
+    failed = 0
     t0 = time.time()
     with cf.ThreadPoolExecutor(max_workers=workers) as ex, open(OUT, "a") as fh:
         futs = {ex.submit(label_one, i, t, last.get(i["id"]) if relabel else None): i for i in todo}
@@ -272,19 +242,13 @@ def run(workers, relabel=False):
                 row = {"id": futs[fu]["id"], "error": f"{type(e).__name__}: {e}"[:200]}
             fh.write(json.dumps(row) + "\n")
             fh.flush()
-            for L in row.get("levels", []):
-                want = row.get("label_meta") if L["level"] == 1 else row.get("label_skill") if L["level"] == 2 else None
-                if L.get("decision_id") and want in ("good", "bad") and row.get("independent"):
-                    try:
-                        log.label(int(L["decision_id"]), want, by=f"{row.get('labeler')}-labeler")
-                    except Exception:
-                        pass
+            failed += bool(row.get("deferred") or row.get("label_error") or row.get("error"))
             lv = {L["level"]: L for L in row.get("levels", [])}
             print(f"{now()} [{n}/{len(todo)}] {row.get('router', '?'):<13} {str(lv.get(1, {}).get('choice')):<30} "
                   f"meta={row.get('label_meta')} skill={row.get('label_skill')} labeler={row.get('labeler')} "
                   f"({int(time.time() - t0)}s)", flush=True)
-    print(f"{now()} done", flush=True)
-    return 0
+    print(f"{now()} sampling complete; {failed} deferred or failed", flush=True)
+    return 2 if failed else 0
 
 
 def now():
@@ -321,7 +285,8 @@ def report(write):
         agree = [r for r in rr if r.get("meta_choice_conf") and r["meta_choice_conf"] >= 0.9]
         agree_n = sum(1 for r in agree if r["levels"] and r["levels"][0]["choice"] == r["meta_choice"])
         beh = [r for r in rr if r.get("behavior_agrees") is not None]
-        print(f"\n== router {router}: {len(rr)} tasks, labeled by {sorted({str(r['labeler']) for r in rr})} "
+        retired = " (retired historical route)" if router != "hosted-jev" else ""
+        print(f"\n== router {router}{retired}: {len(rr)} tasks, labeled by {sorted({str(r['labeler']) for r in rr})} "
               f"(independent: {sum(1 for r in rr if r.get('independent'))})")
         print(f"   meta labels  good {lm.count('good')}  bad {lm.count('bad')}  unsure {lm.count('unsure')}  none {lm.count(None)}")
         print(f"   skill labels good {ls.count('good')}  bad {ls.count('bad')}  unsure {ls.count('unsure')}")
@@ -340,6 +305,8 @@ def report(write):
         out[router] = cal
     ev = []
     for r in ok:
+        if not r.get("independent"):
+            continue
         meta = r["levels"][0]["choice"] if r.get("levels") else None
         if not meta:
             continue
@@ -360,7 +327,7 @@ def report(write):
     print(f"\nreal-traffic eval written: {len(ev)} tasks -> {EVAL}")
     if write:
         m = ss.load()
-        m["route_calibration"] = {"labeled_by": "jev-family labelers (OpenJev for hosted-Jev routes, Laya for local routes)",
+        m["route_calibration"] = {"labeled_by": "preserved independent historical labels only; hosted verifier agreement excluded",
                                   "at": datetime.datetime.now().isoformat(), "by_router": out}
         ss.save(m)
         print("calibration stored in manifest (route uses a level's threshold only when it has one)")

@@ -1,3 +1,6 @@
+/*
+# done_when: cmd:bun test tests/rig_prime_hook.test.ts
+*/
 // rig-prime (repo copy) — D85 deterministic-admission bridge for Orca/OMP.
 //
 // Live OMP config points here. Thin bridge: every gate invocation shells out to

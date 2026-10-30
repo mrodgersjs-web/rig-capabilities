@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+"""jobhunt-dispatch: the only thing allowed to act on a Jev judgement.
+
+Contract (2026-09-22):
+  * Jev SELECTS. It has no primitive through which a value can be created.
+  * A value with no provenance record is refused in CODE, before and regardless of
+    the judgement, so the rule survives a mis-scored answer.
+  * Any irreversible or outward action is returned to a human, never executed.
+
+Deterministic guards live here because they are enumerable and testable. Judgement
+(provenance sufficiency, truth fit, next action) is delegated to the job.* packs.
+"""
+import json, sys, argparse, hashlib
+IRREVERSIBLE = {"submit","send","publish","delete","pay","consent_accept","legal_agree",
+                "profile_edit","account_change","withdraw"}
+ACTION_SET = {"fill_next_field","prepare_tailored_packet","fetch_verified_recipient",
+              "needs_owner_answer","stop_before_submit","escalate_blocker",
+              "no_change_report_blocked"}
+
+def load_candidates(path):
+    return json.load(open(path))
+
+def provenance_ok(c):
+    # 2026-09-24: a field value supplied as a dict instead of a list of dicts used to raise
+    # AttributeError mid-run (traceback, exit 1). A crash during form-fill is worse than a
+    # refusal, so a malformed candidate container now resolves to "needs_owner_answer" the
+    # same way a provenance-less candidate does. Rollback: restore
+    # sessions/.../tmp/jobhunt-dispatch.bak-20260924 (sha 4994854b31b9186d).
+    if not isinstance(c, dict):
+        return False
+    return bool(c.get("source")) and bool(c.get("source_date")) and c.get("owner_confirmed") is True
+
+def field_decision(field, candidates, form_state_hash):
+    """Return (verdict, reason) for one field. Never invents."""
+    if not form_state_hash:
+        return "BLOCK", "state_freshness: no form state hash for this run; question wording must be freshly read"
+    cands = [c for c in (candidates.get("fields", {}).get(field, []) or []) if provenance_ok(c)]
+    if not cands:
+        return "needs_owner_answer", "no provenance-cleared candidate for this field; only Mike can decide"
+    return "answer_from_owner_file", f"{len(cands)} provenance-cleared candidate(s) available; Jev selects among them"
+
+def act(action, dry=True):
+    if action in IRREVERSIBLE:
+        return "needs_human_click", f"{action} is irreversible or outward; first-five pilot rule: a human takes it"
+    if action == "stop_before_submit":
+        return "needs_human_click", "reversible work is complete; the next step is Submit and belongs to Mike"
+    if action not in ACTION_SET:
+        return "BLOCK", f"unknown action {action!r}; not in the fixed set"
+    return ("WOULD_EXEC" if dry else "EXEC"), action
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--candidates", required=True)
+    ap.add_argument("--field")
+    ap.add_argument("--action")
+    ap.add_argument("--state-hash", default="")
+    a = ap.parse_args()
+    c = load_candidates(a.candidates)
+    if a.field:
+        v, r = field_decision(a.field, c, a.state_hash)
+    elif a.action:
+        v, r = act(a.action)
+    else:
+        v, r = "BLOCK", "no field and no action given"
+    print(json.dumps({"verdict": v, "reason": r}))
+    return 0 if v not in ("BLOCK",) else 2
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,0 +1,111 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-OUTREACH-SESSION",
+      "name": "Traject outreach session (main process for HM/recruiter/warm and follow-up notes)",
+      "description": "Traject outreach session (main process for HM/recruiter/warm and follow-up notes) [traject-outreach-session] \u2014 compiled from capabilities/harnesses/traject-outreach-session.yaml",
+      "anchor": "L3-D2-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "O1",
+          "category": "Identity Lock",
+          "name": "O1 the draft passed outreach_lint (no O-verified/O-cadence/O-re",
+          "description": "the draft passed outreach_lint (no O-verified/O-cadence/O-resume/O-claim/O-length/W-recency/W-connected/W-desperate block) and cleared outreach.first/intro/reply.intent",
+          "command": "lint output and decision ids",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        },
+        {
+          "id": "O2",
+          "category": "Identity Lock",
+          "name": "O2 every send is held at Gate-D, the signed-in handle is Mike's",
+          "description": "every send is held at Gate-D, the signed-in handle is Mike's (never the REPL linkedin global), and the note carries one ask and at most one nudge",
+          "command": "held_at: gate_d and the handle assertion",
+          "failure_tier": "stop",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I draft and hold; I do not send.",
+        "harness_tuple": "H_outreach(draft, lint, gate, hold)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-outreach-session",
+          "session_type": "traject-outreach-session",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D2",
+              "D3"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "the draft passed outreach_lint (no O-verified/O-cadence/O-resume/O-claim/O-length/W-recency/W-connected/W-desperate block) and cleared outreach.first/intro/reply.intent",
+        "every send is held at Gate-D, the signed-in handle is Mike's (never the REPL linkedin global), and the note carries one ask and at most one nudge"
+      ],
+      "anti_patterns": [
+        "Sending on Mike's behalf or from the client Coby Skonord's session",
+        "A second nudge on the same thread; a banned claim in a note"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": true,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-outreach-session.yaml",
+        "source_sha256": "ce5227d766e90c68ce8a5d3145ad2833a4d388b7e00ca5126a73cbc7f43bee5c",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

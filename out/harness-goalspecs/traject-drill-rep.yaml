@@ -1,0 +1,98 @@
+{
+  "goals": [
+    {
+      "id": "GL-TRAJECT-DRILL-REP",
+      "name": "Traject drill-rep sub-process",
+      "description": "Traject drill-rep sub-process [traject-drill-rep] \u2014 compiled from capabilities/harnesses/traject-drill-rep.yaml",
+      "anchor": "L3-D1-A1-I",
+      "bms_mode": "A1",
+      "gate": "",
+      "gates": [
+        {
+          "id": "D1",
+          "category": "Identity Lock",
+          "name": "D1 every rep states a number or NONE and cleared interview.answ",
+          "description": "every rep states a number or NONE and cleared interview.answer (required signals above 0.9)",
+          "command": "per-answer score rows",
+          "failure_tier": "halt",
+          "required": true,
+          "required_verdict": "GO",
+          "weight": 1.0
+        }
+      ],
+      "packet_type": "ProofPacket",
+      "depends_on": [],
+      "preconditions": {
+        "startup_phrase": "I drill numbers and gaps; I do not let an answer go numberless.",
+        "harness_tuple": "H_drill(rep, score, gap)",
+        "bms_bias": "",
+        "meta": {
+          "harness_id": "traject-drill-rep",
+          "session_type": "traject-drill-rep",
+          "governs_loops": [],
+          "coordinate_space": {
+            "levels": [
+              "L3",
+              "L4"
+            ],
+            "diamonds": [
+              "D1",
+              "D2"
+            ],
+            "bms_modes": [
+              "A1",
+              "A2"
+            ],
+            "iqrsqpi_steps": [
+              "I",
+              "Q",
+              "R",
+              "S",
+              "Q2",
+              "P",
+              "I2"
+            ]
+          },
+          "self_improvement": {},
+          "doctrine_focus": null,
+          "library": null,
+          "batch": null
+        }
+      },
+      "success_conditions": [],
+      "failure_states": [],
+      "quality_criteria": [
+        "every rep states a number or NONE and cleared interview.answer (required signals above 0.9)"
+      ],
+      "anti_patterns": [
+        "Answering the adjacent question with zero numbers (the Sep 17 Salesforce failure)"
+      ],
+      "anti_generic_threshold": 80.0,
+      "approval_required": false,
+      "steps": [
+        "Intent",
+        "Question",
+        "Research",
+        "Solution",
+        "Quality",
+        "Proof",
+        "Integrate"
+      ],
+      "_meta": {
+        "source": "capabilities/harnesses/traject-drill-rep.yaml",
+        "source_sha256": "65813fe83a715c7512fc8d505ccac55af86e73b9d85140f83cb516fc71d851e0",
+        "final_rule": [],
+        "failure_protocol": {
+          "halt": [],
+          "degrade": [],
+          "stop": [],
+          "gate_mapping": {},
+          "prose": []
+        },
+        "gates_without_proof": [],
+        "phase_gates": [],
+        "phases_beyond_source": []
+      }
+    }
+  ]
+}

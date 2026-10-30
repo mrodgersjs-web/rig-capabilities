@@ -1,0 +1,57 @@
+---
+outcome: "application: a qualified role is tailored source-bound, its form filled from confirmed work history, and the run held at final Submit with a receipt - Mike alone clicks Submit. resume.* and job.formfill receipts recorded."
+activation: "Load when a qualified role must be tailored and applied through the Aside bridge."
+instruction: "Tailor source-bound, lint with the current $180K floor, fill from confirmed history, HARD STOP at final Submit; never submit."
+applies_when:
+  env: "Aside browser on an ATS; ~/.applypilot store"
+  runtime: "ATS form fill; lucy tailor_resume.py + packet_lint.mjs"
+  deps: "traject-apply-one-role sub-process; aside-job-operator"
+  params: "qualified role, lane résumé, req id"
+  budget: "one role per run; three tailoring passes"
+  scale: "one application (single-writer)"
+permissions: [fs.read, fs.write, bash, browser.read, browser.modify, gate-d-required:submit]
+flow:
+  - Tailor source-bound and lint (resume.ats, resume.recruiter).
+  - Fill from confirmed-work-history.json (job.formfill, form.field).
+  - HARD STOP before final Submit; capture the receipt after Mike submits.
+done_when:
+  - file:capabilities/harnesses/traject-application-session.yaml
+  - grep:capabilities/harnesses/traject-application-session.yaml:traject-apply-one-role
+  - grep:capabilities/harnesses/traject-application-session.yaml:final Submit
+out_of_scope: [clicking final Submit, inventing a metric or employer fact]
+quality_floor: 0.8
+---
+
+harness_id: traject-application-session
+coordinate_space:
+  levels: [L2, L3, L4]
+  diamonds: [D1, D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject application session (main process for one tailored application)
+status: stable
+lane: business-ops
+session_type: traject-application-session
+harness_tuple: H_application(tailor, lint, fill, stop)
+parent_doctrine: capabilities/skills/traject-os
+conductor: capabilities/agents/traject-conductor.md
+loop: capabilities/loops/traject-daily-loop.md
+sub_processes:
+  - capabilities/harnesses/traject-apply-one-role.yaml
+stake: |
+  "Apply for this role" resolves into a source-bound résumé and a filled form that stops before
+  the one click only Mike may make.
+identity_lock:
+  startup_phrase: "I tailor and fill; I do not submit."
+  gates:
+    - id: A1
+      requirement: "the résumé is tailored source-bound and passed packet_lint with the current $180K floor, clearing resume.ats + resume.recruiter"
+      proof: "sha256, packet_lint output, decision ids"
+      failure_tier: halt
+    - id: A2
+      requirement: "the form is filled from confirmed work history, clearing job.formfill/form.field, and the run HARD-STOPs before final Submit"
+      proof: "form_filled and held_at: final_submit"
+      failure_tier: stop
+anti_patterns:
+  - "Submitting the form; the first-five pilot reserves the click for Mike"
+  - "A stale $200K floor in packet_lint gating the résumé"

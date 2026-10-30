@@ -1,0 +1,55 @@
+---
+outcome: "proof-publish: every claim classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED with evidence, publishing held at Gate-D, and any correction applied to every surface at once"
+activation: "Load when a number or claim is about to enter a résumé, room, message, or the public site, and when a claim is corrected."
+instruction: "Classify each claim, gate admissible ones with atomic.claim, hold publishing at Gate-D, and fix a claim on every surface in one pass."
+applies_when:
+  env: "claims-ledger.jsonl; résumé, rooms, outreach, rodgersintelligence.com"
+  runtime: "the claims ledger; proof pages"
+  deps: "traject-claim-verifier; atomic.claim rubric"
+  params: "claim text, surfaces, evidence"
+  budget: "per claim; one classification pass per document"
+  scale: "one ledger row per claim"
+permissions: [fs.read, fs.write, bash, gate-d-required:publish]
+flow:
+  - Classify each claim (VERIFIED / OWNER-ONLY / BANNED).
+  - Gate admissible claims with atomic.claim.
+  - Hold publishing at Gate-D; fix corrections on every surface at once.
+done_when:
+  - file:capabilities/harnesses/traject-proof-publish-session.yaml
+  - grep:capabilities/harnesses/traject-proof-publish-session.yaml:VERIFIED-BY-ARTIFACT
+  - grep:capabilities/harnesses/traject-proof-publish-session.yaml:Gate-D
+out_of_scope: [publishing without Mike, upgrading OWNER-ONLY without verification]
+quality_floor: 0.8
+---
+
+harness_id: traject-proof-publish-session
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject proof/publish session (main process for the claims ledger)
+status: stable
+lane: business-ops
+session_type: traject-proof-publish-session
+harness_tuple: H_proof(classify, verify, gate, hold)
+parent_doctrine: capabilities/skills/traject-os
+conductor: capabilities/agents/traject-conductor.md
+loop: capabilities/loops/traject-weekly-learn-loop.md
+stake: |
+  "Can I say this?" resolves into a classified claim with evidence, published only at Gate-D, and
+  a correction that lands on every surface at once.
+identity_lock:
+  startup_phrase: "I classify and hold; I do not publish an unverified number."
+  gates:
+    - id: P1
+      requirement: "every claim is classified VERIFIED-BY-ARTIFACT / OWNER-ONLY / BANNED-UNSUPPORTED with an evidence path, and admissible claims cleared atomic.claim"
+      proof: "claims-ledger.jsonl rows and decision ids"
+      failure_tier: halt
+    - id: P2
+      requirement: "publishing is held at Gate-D and a corrected claim is fixed on every surface (résumé, headline, room, template) in the same pass"
+      proof: "held_at: gate_d and the multi-surface edit record"
+      failure_tier: stop
+anti_patterns:
+  - "Publishing an OWNER-ONLY claim without Mike, or silently softening a claim only he can settle"
+  - "Fixing a number in the résumé while it still sits in the headline and the room"

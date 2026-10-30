@@ -1,0 +1,46 @@
+---
+outcome: "apply-one-role: one role deduped, tailored source-bound, form filled from confirmed history, and held at final Submit with a receipt - Mike alone clicks Submit"
+activation: "Load from traject-application-session for a single role through the Aside bridge."
+instruction: "Dedupe as CODE, tailor source-bound, lint with the $180K floor, fill, and HARD STOP before final Submit."
+applies_when:
+  env: "Aside browser on an ATS; ~/.applypilot store"
+  runtime: "ATS form fill; tailor_resume.py + packet_lint.mjs"
+  deps: "traject-apply-operator; traject-dedupe-checker"
+  params: "role, lane résumé, req id"
+  budget: "one role; three tailoring passes"
+  scale: "one application (single-writer)"
+permissions: [fs.read, fs.write, bash, browser.read, browser.modify, gate-d-required:submit]
+flow:
+  - Dedupe against the store and receipts (CODE gate).
+  - Tailor source-bound; lint with the current $180K floor.
+  - Fill from confirmed history; HARD STOP before final Submit.
+done_when:
+  - file:capabilities/harnesses/traject-apply-one-role.yaml
+  - grep:capabilities/harnesses/traject-apply-one-role.yaml:HARD STOP
+out_of_scope: [clicking final Submit, a duplicate application]
+quality_floor: 0.8
+---
+
+harness_id: traject-apply-one-role
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject apply-one-role sub-process
+status: stable
+lane: business-ops
+session_type: traject-apply-one-role
+harness_tuple: H_apply_one(dedupe, tailor, fill, stop)
+parent_doctrine: capabilities/skills/traject-os
+parent_process: capabilities/harnesses/traject-application-session.yaml
+sub_skill: capabilities/skills/traject-apply-bridge
+stake: "One role, source-bound and filled, stopped before the one click only Mike may make."
+identity_lock:
+  startup_phrase: "I fill and stop; I do not submit."
+  gates:
+    - id: F1
+      requirement: "the role is deduped (CODE), tailored source-bound, packet_lint clean at $180K, and the run HARD-STOPs before final Submit"
+      proof: "dedupe receipt, sha256, lint output, held_at: final_submit"
+      failure_tier: stop
+anti_patterns: ["Submitting the form", "Re-applying to a role already in the store"]

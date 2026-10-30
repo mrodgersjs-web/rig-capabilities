@@ -1,0 +1,46 @@
+---
+outcome: "room-build: a Traject room data module in Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief, from verified claims only, gated by story.bank and jd.decode"
+activation: "Load from traject-interview-prep-session when a room must be built for a company/role."
+instruction: "Assemble the room tabs in Lucy's order from résumé-verified claims; gate story.bank and jd.decode; never state the floor or a banned claim."
+applies_when:
+  env: "the Traject cockpit; src/lib/<company>Content.ts (model: amgenContent.ts)"
+  runtime: "Next.js data module; lucyMethodContent.ts shared tabs"
+  deps: "traject-room-builder; traject-company-researcher; traject-jd-decoder"
+  params: "company, role, JD, panel"
+  budget: "one room; three content passes"
+  scale: "one room object"
+permissions: [fs.read, fs.write, bash]
+flow:
+  - Research panel/company and decode the JD.
+  - Build the Lucy Stage 0-8 tabs plus Run of Show / DECISIONS / debrief.
+  - Gate story.bank and jd.decode with only verified claims.
+done_when:
+  - file:capabilities/harnesses/traject-room-build.yaml
+  - grep:capabilities/harnesses/traject-room-build.yaml:Stage 0
+out_of_scope: [drilling the room, any unverified claim]
+quality_floor: 0.8
+---
+
+harness_id: traject-room-build
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D2, D3]
+  bms_modes: [A1, A2]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject room-build sub-process
+status: stable
+lane: business-ops
+session_type: traject-room-build
+harness_tuple: H_room(research, decode, tabs, gate)
+parent_doctrine: capabilities/skills/traject-os
+parent_process: capabilities/harnesses/traject-interview-prep-session.yaml
+sub_skill: capabilities/skills/traject-room-build
+stake: "A room in Lucy's order from verified claims, or a named gap - never a padded proof line."
+identity_lock:
+  startup_phrase: "I build from verified claims; I do not invent a proof line."
+  gates:
+    - id: R1
+      requirement: "tabs follow Lucy's Stage 0-8 order plus Run of Show / DECISIONS / debrief; only résumé-verified claims; cleared story.bank + jd.decode"
+      proof: "room path and both decision ids"
+      failure_tier: halt
+anti_patterns: ["A banned claim or the spoken floor in a room card"]

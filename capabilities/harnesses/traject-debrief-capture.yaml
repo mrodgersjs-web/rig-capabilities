@@ -1,0 +1,46 @@
+---
+outcome: "debrief-capture: a 5-line debrief per question saved to .traject/debriefs/ and the room debrief tab within 2h, with gaps routed to learn"
+activation: "Load from traject-interview-prep-session within 2h of a screen or interview."
+instruction: "Write the 5-line debrief per question (CODE gate on the shape) and save it to both stores."
+applies_when:
+  env: "<project>/.traject/debriefs/; the room debrief tab"
+  runtime: "markdown debrief store"
+  deps: "traject-debrief-clerk; a held interview"
+  params: "company, role, date, questions"
+  budget: "≤2h after; one debrief per interview"
+  scale: "one file per interview"
+permissions: [fs.read, fs.write, bash]
+flow:
+  - List the questions asked.
+  - Write the 5-line block per question.
+  - Save to both stores; route gaps to learn.
+done_when:
+  - file:capabilities/harnesses/traject-debrief-capture.yaml
+  - grep:capabilities/harnesses/traject-debrief-capture.yaml:5-line
+out_of_scope: [inventing what was said]
+quality_floor: 0.8
+---
+
+harness_id: traject-debrief-capture
+coordinate_space:
+  levels: [L3, L4]
+  diamonds: [D1, D2]
+  bms_modes: [A1]
+  iqrsqpi_steps: [I, Q, R, S, Q2, P, I2]
+harness_name: Traject debrief-capture sub-process
+status: stable
+lane: business-ops
+session_type: traject-debrief-capture
+harness_tuple: H_debrief(questions, five_line, save)
+parent_doctrine: capabilities/skills/traject-os
+parent_process: capabilities/harnesses/traject-interview-prep-session.yaml
+sub_skill: capabilities/skills/traject-debrief
+stake: "The 5-line shape (question / answer / ownership gap / number or NONE / next) is a CODE gate."
+identity_lock:
+  startup_phrase: "I capture the gap and the number; I do not rewrite his answer."
+  gates:
+    - id: B1
+      requirement: "the 5-line debrief is saved to .traject/debriefs/ and the room debrief tab within 2h (CODE gate on the shape)"
+      proof: "debrief file path"
+      failure_tier: degrade
+anti_patterns: ["Padding the answer line or inventing a number that was not stated"]
