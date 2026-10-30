@@ -16,6 +16,10 @@ All three land in the same decision log (`~/.rig/s1gate/decisions.db`) and resol
 the key from keychain item `com.rig.env.TYPESAFE_API_KEY` (also honored:
 `~/.rig-secrets/typesafe.env`). Never print the key.
 
+Use the hosted JEV API at `https://api.typesafe.ai/v1/systemone` with `jev-latest`.
+Redact before sending any state. If private details remain, safe redaction is unavailable,
+or the API fails, defer. Do not install or restart OpenJev or Laya as a fallback.
+
 Request-shape traps (they cost real 422s and silent mis-rules):
 
 - `noul` takes NO `criteria`, instructions only.
@@ -75,8 +79,8 @@ route is marked in the ledger rather than accepted. Note the boundary from
 5. Fail closed: on `ProviderError`, timeout, or unparseable answer, defer the item
    untouched and retry next tick. Wire a fail-loud line (one explicit `BLOCKED:`)
    rather than a silent zero-output run.
-6. Redact before send (bridge `SECRET_PATTERNS` or equivalent). A secret that leaves
-   the machine to the classifier is a leak even if the classifier is fast.
+6. Redact before send with `capabilities/hooks/redact_state.py`. If private details
+   remain after secret redaction, defer the item without calling the classifier.
 7. Shadow first: feature-flag the Jev path, log decisions without acting on them
    (external precedent: Notra's `NOTRA_JEV_CLASSIFIERS` flag), then flip when the
    traces are clean. Respect `TYPESAFE_DAILY_BUDGET_USD` / `TYPESAFE_DAILY_MAX_CALLS`;
@@ -120,62 +124,52 @@ situations, all in `references/decision-criteria.md`:
 state to `api.typesafe.ai`. Anything you would not paste into a third-party form
 does not go into state: no credentials, no tokens, no client source you do not own,
 no health or financial detail, nothing private about Jacob. If a judgment is worth
-making on data that must stay local, say so and keep the pattern reproducible
-offline instead of quietly shipping the state out.
+making on data that must stay local, defer that judgment. Local inference is retired.
 
-## 4. The local route: OpenJev (self-hosted System One)
+## 4. Retired OpenJev experiments, historical evidence only
 
-Adopted 2026-09-23 after an adopter-checklist comparison of five same-named projects. Winner:
+Mike retired OpenJev on 2026-09-30 and directed all classifier work to hosted JEV.
+This section preserves the earlier observations. It is not a deployment or recovery recipe.
+Do not use it to reinstall, restart, or select a local inference route.
+
+The 2026-09-23 comparison selected
 `razorback16/openjev` (Apache-2.0, code and weights). Why it won: it makes real typed reads
 (DiffusionGemma 26B-A4B denoises answer slots in one read-only pass; the distribution IS the answer,
 zero text generation, so an answer cannot go off-schema), it is wire-compatible with TypeSafe's API
 down to the error shapes (its author checked them against the live API), it ships a runnable check
 (`pytest`, including a real-model test) and a Docker image, and its numbers are measured (p50 27-31
 ms per read with `samples: 1` on an RTX PRO 6000; 0.2-0.4 s for 3 questions on M3 Ultra via MLX).
-Losers, recorded so the swap stays reversible: `SiliconLabAI/OpenJev` (a playground whose
+Other historical candidates were `SiliconLabAI/OpenJev` (a playground whose
 parallel/oneshot modes parse LLM prose; its useful part is `Mapika/decider-2b`), `zhihz/openjev`
 (frozen Qwen3-4B, no score primitive, sequential reads), `xingwudao/OpenJev` (mock only, no
 license), `nico-martin/open-jev` (in-browser scope).
 
-Deployment here (2026-09-23): MLX backend on this Mac, loopback only.
-
-    ssh localhost 'cd ~/Developer/openjev && nohup env OPENJEV_BACKEND=mlx OPENJEV_HOST=127.0.0.1 \
-      OPENJEV_PORT=8080 ./.venv/bin/python -m openjev > ~/Developer/openjev/openjev-server.log 2>&1 &'
-    curl http://127.0.0.1:8080/v1/models      # readiness: it answers only once the model is loaded
+The 2026-09-23 deployment used MLX on this Mac and a loopback listener.
 
 - Started through `ssh localhost` on purpose: the sandboxed tool tree has NO Metal device
   (`mlx.core` raises `metal::load_device`) and an SSH login session does. A headless probe is not
-  evidence that MLX is broken here.
-- venv recipe that works on this Mac: `~/.local/bin/uv venv --python
-  ~/.local/share/uv/python/cpython-3.11-macos-aarch64-none/bin/python3.11 .venv`, then
-  `uv pip install --python .venv/bin/python -e '.[test,mlx]'`. The `~/.local/bin/python3.x` shims
-  are linker-signed brew stubs that refuse adhoc wheels; uv's cpython-3.12.12 build on this machine
-  is broken (its `libpython` refuses to load); `RIG-Memory-OS/.venv` is the proven reference recipe.
-- Quarantine trap (this sandbox): every file this tool writes or downloads gets
-  `com.apple.quarantine` stamped with `Aside`, and dyld then refuses to load it ("library load
-  disallowed by system policy") however it is signed. Fix before any native import:
-  `find <venv> -type f -exec xattr -c {} +`. The signature class is a red herring; the xattr is it.
-- Suite status on this machine: 54 passed, 16 skipped (MLX model tests need
+  evidence of an MLX defect in that run.
+- The recorded environment used uv's CPython 3.11. The note reported that the local
+  Python shims refused some wheels and a CPython 3.12.12 build could not load its library.
+  These were observations from that deployment, not current environment checks.
+- The run encountered an Aside quarantine attribute and a native-library loading refusal.
+  No quarantine removal or environment rebuild is authorized by this historical note.
+- Suite status recorded on 2026-09-23 was 54 passed, 16 skipped (MLX model tests needed
   `OPENJEV_MLX_TEST_MODEL`), 1 failed (`test_deeply_nested_body_is_rejected_not_crashed`:
-  RecursionError in `json/encoder.py` instead of a clean 422). That failure is real and open.
-- Production lane, staged on the Blackwell box: image `razorback16/openjev:0.4.0` pulled
+  RecursionError in `json/encoder.py` instead of a clean 422). No later resolution is recorded here.
+- The image `razorback16/openjev:0.4.0` was staged on the Blackwell box
   (`/root/openjev-pull.log`, chosen port in `/root/openjev-port`), tested GPU class (RTX PRO 6000
-  Blackwell). All three GPUs are currently held by `mimo26-flash` and the `rig-commercial-foundry`
-  stack (~91 GB of 97.8 GB each), so the container waits for VRAM. Run:
-  `docker run -d --gpus all --ipc=host -p 127.0.0.1:8080:8080 -v ~/.cache/huggingface:/root/.cache/huggingface razorback16/openjev:0.4.0`
-  and reach it over an SSH tunnel: no new credentials, no LAN-exposed port.
+  Blackwell). At that time all three GPUs were occupied by `mimo26-flash` and the
+  `rig-commercial-foundry` stack (~91 GB of 97.8 GB each), so no serving route was proven.
 
-Pointing the whole layer at it (one config line): `S1GATE_JEV_ENDPOINT` and `S1GATE_JEV_MODEL` are
-env overrides read by `rig_capabilities/s1gate.py`, so the CLI, the MCP tool, the hooks and `ask()`
-all retarget together; `TYPESAFE_BASE_URL` does the same for the official TypeSafe SDK. Wire
-differences to encode in tests, not memory: OpenJev accepts `jev-latest` / `jev-preview` aliases
-but answers 400 on a pinned `jev-1.13.0`; a single-option choice or single-level score answers
-directly and bills no tokens; long question lists are read in chunks of about 12 in parallel.
+The retired experiment used endpoint and model overrides. Those overrides must not
+select OpenJev for current work. Historical wire tests found that aliases were accepted,
+but a pinned `jev-1.13.0` request returned 400. Single-option answers and chunked question
+lists had different behavior from hosted JEV.
 
 Quality discipline (laws 3 and 4 hold here too): the author's own caveat is that answer quality is
 whatever DiffusionGemma 26B-A4B gives in this read mode, so evaluate on your own tasks before
-enforcing anything. Parity against hosted `jev-1.13.0` on our own rubric states is the calibration
-start, not a proof of equivalence.
+enforcing anything. The comparison below did not prove provider equivalence.
 
 Parity probe, 2026-09-23 (same doctrine.surface rubric, same artifacts, both routes live):
 
@@ -186,10 +180,8 @@ Parity probe, 2026-09-23 (same doctrine.surface rubric, same artifacts, both rou
 
 Verdict agreement 2/2. The finding that matters is the calibration gap: OpenJev's noul answers
 saturate near 1.0 where hosted Jev returns 0.95-0.99, so thresholds and confidence floors tuned on
-one route do not transfer to the other. Until the local route is calibrated from labelled decisions
-(law 3), the policy is: local first for state that must stay on the machine and for bulk triage;
-hosted for any gate whose thresholds were tuned against hosted behavior; never mix routes when
-thresholding one decision. First raw call (3 primitives, 178 input tokens, 0 output tokens)
+one route do not transfer to the other. The old local-first policy is retired.
+First raw call (3 primitives, 178 input tokens, 0 output tokens)
 answered noul 0.99996 / choice "technical" 0.9996 / score 1.9999 in 1.7 s cold; gate runs measured
-269-826 ms local. Hosted latency today ranged 211-3285 ms across runs, so judge routes on p50, not
-one number.
+269-826 ms local. Hosted latency in the 2026-09-23 runs ranged 211-3285 ms.
+These timings describe those runs, not current serving performance.
