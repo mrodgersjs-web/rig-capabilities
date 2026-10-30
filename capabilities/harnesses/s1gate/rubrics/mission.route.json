@@ -1,0 +1,27 @@
+{
+  "name": "mission.route",
+  "stage": "plan",
+  "lane": "agent-composition",
+  "description": "Advisory System-1 classification of a natural-language mission into one meta-skill lane. Never grants execution authority.",
+  "calibrated": false,
+  "never_auto": false,
+  "confidence_floor": 0.35,
+  "questions": {
+    "lane": {
+      "type": "choice",
+      "instructions": "Choose the single best work lane for the user's task. Choose no_match when unclear or multiple lanes are equally central.",
+      "criteria": {
+        "when-building-or-fixing-agents": "Build, evaluate, or repair agents, prompts, skills, or agent harnesses",
+        "when-shipping-code": "Implement, debug, test, review, or ship software code",
+        "when-working-with-data": "Build or analyze data pipelines, databases, or datasets",
+        "when-securing-the-estate": "Investigate or improve security, access, secrets, or incident response",
+        "when-designing-interfaces": "Design or improve UI, UX, or accessibility",
+        "when-researching-or-deciding": "Research evidence or compare options before a decision",
+        "when-selling-or-running-gtm": "Sales, lead generation, GTM, or campaign planning",
+        "when-writing-content": "Write or edit articles, copy, newsletters, or other content",
+        "no_match": "Intent is vague, ambiguous, or outside these lanes"
+      }
+    }
+  },
+  "rules": []
+}

@@ -1,0 +1,67 @@
+{
+  "name": "job.navigate",
+  "stage": "plan",
+  "lane": "job",
+  "description": "DECISION LAYER. Chooses the next action in an application run. state = the observed workflow state (fresh form snapshot hash, ledger row, evidence inventory, candidate-set provenance). Jev selects from a fixed action set and never executes; a separate dispatcher runs only allowlisted reversible actions. Any irreversible or outward step routes to a human regardless of score.",
+  "questions": {
+    "next_action": {
+      "type": "choice",
+      "instructions": "Select exactly one next action from the fixed set",
+      "criteria": {
+        "fill_next_field": "the next field has a provenance-cleared candidate and the form state is fresh",
+        "prepare_tailored_packet": "the job is qualified and no role-bound packet exists yet",
+        "fetch_verified_recipient": "outreach is planned and the recipient identity is not yet verified",
+        "needs_owner_answer": "a required value cannot be answered from evidence and only Mike can decide",
+        "stop_before_submit": "every reversible step is complete; a human must take the irreversible one",
+        "escalate_blocker": "an evidence contradiction, duplicate risk or unavailable tool makes all other actions unsafe",
+        "no_change_report_blocked": "a required precondition failed; report BLOCKED and stop"
+      }
+    },
+    "state_observable": {
+      "type": "noul",
+      "instructions": "Is the current workflow state actually observed from fresh evidence, such as a current form read-back or a timestamped file hash, rather than assumed from a prior run, a cache, or a narrative claim?"
+    },
+    "irreversible_step": {
+      "type": "noul",
+      "instructions": "Does the next action cross an irreversible or outward boundary: submitting an application, sending a message, publishing, deleting, paying, accepting a legal term, changing an account, or editing a public profile?"
+    },
+    "evidence_sufficiency": {
+      "type": "score",
+      "instructions": "How much verified evidence backs the chosen action",
+      "criteria": [
+        "no evidence, or only narrative assertion",
+        "one dated source, unverified against the live target",
+        "one verified source or read-back",
+        "two independent sources agreeing",
+        "two independent sources plus a recorded hash or receipt reference"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "irreversible_step.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "next step is irreversible or outward: must become stop_before_submit and be taken by a human (first-five pilot rule)"
+    },
+    {
+      "when": "state_observable.noul < 0.50",
+      "verdict": "BLOCK",
+      "reason": "state was not observed from fresh evidence; fail closed rather than act on an assumed state"
+    },
+    {
+      "when": "evidence_sufficiency.score < 2.0",
+      "verdict": "ESCALATE",
+      "reason": "not enough evidence to justify any action"
+    },
+    {
+      "when": "next_action.choice == needs_owner_answer",
+      "verdict": "ESCALATE",
+      "reason": "only Mike can answer this; stop and present the exact question"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Division of labour, by RIG law 'deterministic before agentic': code holds the irreversible-action allowlist and the fresh-state hash check, because both are enumerable and testable. Jev supplies judgement only where code cannot: what the state means and which action the evidence supports. The navigator never performs the action. A choice answer is a routing decision and carries no confidence floor guarantee for the action itself; the action still re-checks its own preconditions in the dispatcher. Advisory while calibrated:false."
+}

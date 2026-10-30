@@ -1,0 +1,71 @@
+{
+  "name": "routine.health",
+  "stage": "verify",
+  "lane": "ops",
+  "description": "Judge a routine's RUN OUTPUT -- not its definition: did this run produce its artifact, is the output non-vacuous, did it hit a BLOCKED line, and did it stay inside the wire. This is the run-level health check that routine.run cannot give, because routine.run judges the definition and escalates every output.",
+  "questions": {
+    "artifact": {
+      "type": "noul",
+      "instructions": "The run output names at least one concrete artifact it produced: a file path, an exported row count, a URL, a receipt, a decision id, or a named record it wrote."
+    },
+    "non_vacuous": {
+      "type": "noul",
+      "instructions": "The output contains real content -- counts, names, rows, findings, diffs, or values -- and not only a status word such as done, success, completed, or 'nothing to do'."
+    },
+    "blocked_line": {
+      "type": "noul",
+      "instructions": "The output contains an explicit BLOCKED: or ERROR line, or states plainly that the run failed or could not do the work it was scheduled to do. A run that says there was nothing to do is NOT a blocked run -- that is a vacuous run and the other questions carry it."
+    },
+    "outward_action": {
+      "type": "noul",
+      "instructions": "The run performed or queued an outward action: sending mail or a message, publishing or posting, pushing to git, deploying, spending money, or changing a credential."
+    },
+    "quality": {
+      "type": "score",
+      "instructions": "How trustworthy this run output is as evidence the routine did its job",
+      "criteria": [
+        "A status word with nothing behind it",
+        "A claim of success with no artifact and no content",
+        "Names the command or the mode but not the result",
+        "Names a produced artifact and real content, with no BLOCKED line",
+        "Artifact, real content, counts the run can back up, and a stated next run"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "blocked_line.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "the run reported BLOCKED or ERROR -- it did not do its job and must not be called done"
+    },
+    {
+      "when": "outward_action.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "outward action inside a routine run -- Gate-D before anything leaves the wire"
+    },
+    {
+      "when": "artifact.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no artifact named -- vacuous run, and a clean run with zero output is indistinguishable from success"
+    },
+    {
+      "when": "non_vacuous.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "output is non-substantive -- there is nothing here to verify"
+    },
+    {
+      "when": "quality.score <= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "this output is not evidence of a completed run"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "scope": "Input is the OUTPUT TEXT of one run. routine.run (the existing pack) judges the routine's definition and escalates every output by design; this pack is the missing run-level gate.",
+    "thresholds": "Provisional and uncalibrated (law 3), so the two BLOCK rules currently report ESCALATE with a downgraded-BLOCK reason. The house bar applies to artifact and non_vacuous: a required noul passes only above 0.90.",
+    "blocked_line_reworded": "Reworded after decision 120508: the vacuous fixture ('Completed successfully. Nothing to do this week.') scored blocked_line 0.58 with the old wording ('was skipped' caught 'nothing to do'), firing a reason that named the wrong failure. Verdict was already correct via artifact/non_vacuous/quality."
+  }
+}

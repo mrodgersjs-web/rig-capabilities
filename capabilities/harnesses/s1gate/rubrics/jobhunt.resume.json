@@ -1,0 +1,440 @@
+{
+  "name": "jobhunt.resume",
+  "stage": "build",
+  "lane": "job",
+  "description": "Jobhunt 0-10 quality bar for a resume, scored against a target lane or posting. state = the resume's extracted text, optionally followed by '=== TARGET ===' and the posting or target-lane brief. Scored on an 11-level scale where 0 is a defect, 5 is average and ignored, 10 is what good looks like. Goal: every question at 9.5 or above before submission.",
+  "questions": {
+    "a1_musthave_coverage": {
+      "type": "score",
+      "instructions": "How completely the resume answers the target's stated must-have skills, tools and responsibilities in the target's own words",
+      "criteria": [
+        "0: fewer than half the must-haves appear at all",
+        "2: more than half appear; wording drifts from the target",
+        "3: all appear, but only in a keyword strip or skills block",
+        "4: all appear inside real bullets; one or two carry no proof",
+        "5: most must-haves in the target's words with evidence beside them",
+        "6: every must-have in the target's words; one bullet unsupported",
+        "7: every must-have backed by a dated bullet; numbers thin",
+        "8: every must-have backed by a dated, quantified outcome",
+        "9: 8's level and the target's own framing is echoed in the opener",
+        "10: every must-have restated in the target's words and answered with a dated, quantified outcome a reader can verify"
+      ]
+    },
+    "a2_parseability": {
+      "type": "score",
+      "instructions": "Whether a plain-text ATS extraction preserves all content with clean structure",
+      "criteria": [
+        "0: tables, text boxes or graphics destroy content",
+        "2: text survives but dates or order are mangled",
+        "3: parses, but core content sits in a table or multi-column block",
+        "4: single column, one non-standard heading name",
+        "5: clean single column and standard headings; one ambiguous date",
+        "6: standard headings, MM/YYYY throughout, contact block plain text",
+        "7: 6's level plus no empty paragraphs or orphan headings",
+        "8: 7's level plus consistent tense and punctuation in every bullet",
+        "9: 8's level plus a professional, versioned filename",
+        "10: 9's level plus extraction is byte-stable and the file hash is recorded"
+      ]
+    },
+    "a3_chronology": {
+      "type": "score",
+      "instructions": "How completely and consistently dates and gaps are handled",
+      "criteria": [
+        "0: contradictory dates or a gap an ATS flags as inconsistency",
+        "2: months missing on the current role",
+        "3: months missing on two or more roles",
+        "4: months present, one combined range left undeclared",
+        "5: exact months where forms need them; one combined range declared",
+        "6: no unexplained gap; any overlap between roles is explained",
+        "7: 6's level plus month precision matches the applications filed",
+        "8: 7's level plus every level change has its date",
+        "9: 8's level plus date format identical everywhere",
+        "10: 9's level plus chronology survives cross-check against the completed applications"
+      ]
+    },
+    "a4_title_level_calibration": {
+      "type": "score",
+      "instructions": "Whether titles stay verbatim and the framing matches the target's level and domain",
+      "criteria": [
+        "0: a title was altered, invented or inflated",
+        "2: framing reads a level above the target",
+        "3: framing is generic and level-neutral",
+        "4: opening line names the domain but not the level",
+        "5: titles verbatim and the level reads compatible with the target",
+        "6: titles verbatim and the opener names the target's domain",
+        "7: 6's level plus the opener names the class of problem owned",
+        "8: 7's level plus seniority is evidenced by scope, not adjectives",
+        "9: 8's level plus the target's own role wording appears once in the opener",
+        "10: 9's level plus the level calibration is consistent across every role block"
+      ]
+    },
+    "a5_quantified_outcomes": {
+      "type": "score",
+      "instructions": "How much of the experience is stated as a measurable outcome with a resolvable basis",
+      "criteria": [
+        "0: no numbers anywhere",
+        "2: one or two numbers in the whole document",
+        "3: numbers appear only in the summary",
+        "4: half the senior bullets carry a number",
+        "5: most senior bullets carry a number or named outcome",
+        "6: most bullets carry a number with scope (team, budget, region)",
+        "7: every senior bullet carries a number and scope",
+        "8: 7's level plus each number traces to an owner-verifiable source",
+        "9: 8's level plus outcomes are business results, not activity counts",
+        "10: 9's level plus every claim survives a sceptical read with no open question"
+      ]
+    },
+    "b1_opening_answers_who": {
+      "type": "score",
+      "instructions": "Whether the first three lines say who he is, at what level, and for what class of problem",
+      "criteria": [
+        "0: adjective-heavy leader language, no domain",
+        "2: names a domain but reads generic",
+        "3: names domain and level, no problem owned",
+        "4: names domain, level and one vague goal",
+        "5: names domain and level and the class of work",
+        "6: 5's level plus one evidence hook in the first block",
+        "7: 6's level plus the hook carries a number",
+        "8: 7's level plus the hook names the buyer's problem",
+        "9: 8's level plus it is two sentences or fewer",
+        "10: 9's level plus a recruiter could restate his pitch back after reading only these lines"
+      ]
+    },
+    "b2_top_third_density": {
+      "type": "score",
+      "instructions": "How much of the top third of page one maps to what the target wants",
+      "criteria": [
+        "0: the top third is a paragraph of adjectives",
+        "2: a quarter relevant",
+        "3: a third relevant",
+        "4: nearly half relevant",
+        "5: half the top-third lines map to a target requirement",
+        "6: more than half map to a target requirement",
+        "7: the top third is mostly target-relevant and the rest is trimmed",
+        "8: 7's level plus the highest-value evidence appears above the fold",
+        "9: 8's level plus nothing above the fold is filler",
+        "10: 9's level plus the top third alone would earn a full read"
+      ]
+    },
+    "b3_scannability": {
+      "type": "score",
+      "instructions": "Whether a skimming recruiter can absorb it in thirty seconds",
+      "criteria": [
+        "0: paragraphs past four lines or more than two pages",
+        "2: bullets present, most past four lines",
+        "3: bullets at three or four lines",
+        "4: bullets at two or three lines, uneven spacing",
+        "5: bullets mostly two lines with deliberate whitespace",
+        "6: 5's level plus scannable headings that match the target's vocabulary",
+        "7: 6's level plus the strongest bullet is first in each role",
+        "8: 7's level plus no redundant phrasing between bullets",
+        "9: 8's level plus one page for a ten-year scope is achievable without loss",
+        "10: 9's level plus a thirty-second read leaves a complete picture"
+      ]
+    },
+    "b4_differentiation": {
+      "type": "score",
+      "instructions": "How unmistakable he is against a generic AI leader resume",
+      "criteria": [
+        "0: interchangeable with any AI leadership resume",
+        "2: one unusual fact, unquantified",
+        "3: one distinctive proof, buried low",
+        "4: two distinctive proofs, both unquantified",
+        "5: one distinctive proof with a number in the top third",
+        "6: two distinctive proofs with numbers",
+        "7: 6's level plus one proof only he can claim (domain, scale or event)",
+        "8: 7's level plus the proofs are results, not job duties",
+        "9: 8's level plus the proofs name recognisable customers or entities",
+        "10: 9's level plus the differentiation is the spine of the whole document"
+      ]
+    },
+    "b5_story_coherence": {
+      "type": "score",
+      "instructions": "Whether the career reads as a deliberate progression with this role as the obvious next step",
+      "criteria": [
+        "0: the moves look unrelated and unexplained",
+        "2: one unexplained move or gap dominates",
+        "3: a pattern is visible but never stated",
+        "4: the pattern is stated in the summary only",
+        "5: the pattern is visible and the next step is credible",
+        "6: 5's level plus each move has a one-line reason",
+        "7: 6's level plus the most recent role clearly builds on the prior ones",
+        "8: 7's level plus the target role is the natural continuation",
+        "9: 8's level plus the summary states the trajectory in one clause",
+        "10: 9's level plus a sceptic would call the path intentional"
+      ]
+    },
+    "c1_names_their_problem": {
+      "type": "score",
+      "instructions": "How directly the resume answers the problem the target says it is hiring for",
+      "criteria": [
+        "0: only his own experience, no connection to their need",
+        "2: a plausible problem, not theirs",
+        "3: their domain's problem in his words",
+        "4: their problem approximated using their vocabulary",
+        "5: their problem named in their own words from the posting",
+        "6: 5's level plus one line of evidence against it",
+        "7: 6's level plus the evidence is a comparable win",
+        "8: 7's level plus two comparable wins at similar scope",
+        "9: 8's level plus the wins are in their sector or an adjacent regulated one",
+        "10: 9's level plus he addresses the hardest duty in the posting first"
+      ]
+    },
+    "c2_same_class_of_outcome": {
+      "type": "score",
+      "instructions": "Whether he has personally owned outcomes of the same scale and complexity the target implies",
+      "criteria": [
+        "0: only adjacent or smaller-scale work",
+        "2: one comparable example, scope unstated",
+        "3: one comparable example with scope stated",
+        "4: two comparable examples, one thin on scope",
+        "5: one comparable win with clear scope and a result",
+        "6: two comparable wins with scope and results",
+        "7: 6's level plus the complexity (ambiguity, stakeholders) is explicit",
+        "8: 7's level plus one win shows recovery or turnaround",
+        "9: 8's level plus the wins span strategy and execution, not one or the other",
+        "10: 9's level plus a hiring manager could hand him the same problem on day one"
+      ]
+    },
+    "c3_scale_with_provenance": {
+      "type": "score",
+      "instructions": "Whether team, budget, portfolio or executive scale is stated and can be backed",
+      "criteria": [
+        "0: no scale stated anywhere",
+        "2: scale claimed with no basis",
+        "3: one scale number with no basis",
+        "4: two scale numbers, basis vague",
+        "5: two scale numbers with a named basis",
+        "6: team and budget or portfolio both stated with basis",
+        "7: 6's level plus the executive audience is named",
+        "8: 7's level plus scope is stated per role, not once globally",
+        "9: 8's level plus every scale figure has an owner-verifiable source",
+        "10: 9's level plus the scale is unusual enough to be remembered"
+      ]
+    },
+    "c4_execution_over_vocabulary": {
+      "type": "score",
+      "instructions": "Whether he shows shipped work rather than strategy vocabulary",
+      "criteria": [
+        "0: buzzwords with no delivered artifact",
+        "2: one shipped artifact, unquantified",
+        "3: one shipped artifact with a date",
+        "4: two shipped artifacts, one vague",
+        "5: named shipped artifacts with dates and scope",
+        "6: 5's level plus the artifacts are systems or platforms, not slides",
+        "7: 6's level plus a named integration or adoption result",
+        "8: 7's level plus an operating cadence he established is named",
+        "9: 8's level plus he names what he built that outlived him",
+        "10: 9's level plus the delivery record is unmistakable in every role block"
+      ]
+    },
+    "c5_bet_a_quarter_on_him": {
+      "type": "score",
+      "instructions": "Whether the precision of the details signals reliability under load",
+      "criteria": [
+        "0: details sloppy or internally contradictory",
+        "2: consistent formatting but vague claims",
+        "3: clean and competent but unremarkable",
+        "4: clean, with one strong detail",
+        "5: competent, clean, with two strong specific details",
+        "6: 5's level plus numbers appear where a careful person would ask",
+        "7: 6's level plus no sentence raises a follow-up he cannot answer",
+        "8: 7's level plus the document demonstrates judgement (prioritisation, tradeoffs)",
+        "9: 8's level plus he names what he would not do as well as what he would",
+        "10: 9's level plus the reader would assume he is already operating at that level"
+      ]
+    },
+    "d1_screen_questions_answerable": {
+      "type": "score",
+      "instructions": "Whether the five questions a recruiter asks on a first screen can each be answered from the text alone",
+      "criteria": [
+        "0: most of the five cannot be answered from the text",
+        "2: two or three are answerable",
+        "3: three are answerable, one contradicts itself",
+        "4: four are answerable, one is thin",
+        "5: all five are answerable and mutually consistent",
+        "6: 5's level plus each answer is one sentence of evidence",
+        "7: 6's level plus the numbers match across every section",
+        "8: 7's level plus the answers anticipate the obvious follow-up",
+        "9: 8's level plus no answer needs a caveat he has to remember",
+        "10: 9's level plus the five answers are consistent with the applications he already filed"
+      ]
+    },
+    "d2_landmines_absent_or_explained": {
+      "type": "score",
+      "instructions": "Whether gaps, title oddities, level shifts or short tenures are absent or pre-explained",
+      "criteria": [
+        "0: a landmine is present and unexplained (a gap, a one-year stint, a title drop)",
+        "2: one landmine unexplained, one explained",
+        "3: all landmines present but explained only in a cover letter",
+        "4: one landmine explained inline, awkwardly",
+        "5: the obvious landmines are explained inline in one neutral clause each",
+        "6: 5's level plus explanations are factual, never defensive",
+        "7: 6's level plus no landmine invites a compensation or performance question",
+        "8: 7's level plus level changes are framed as scope growth",
+        "9: 8's level plus a screener would not pause on any line",
+        "10: 9's level plus the one apparent weakness is framed as a deliberate, explained choice"
+      ]
+    },
+    "d3_level_scope_consistency": {
+      "type": "score",
+      "instructions": "Whether seniority and scope hold steady or grow across roles",
+      "criteria": [
+        "0: a title or scope regression with no explanation",
+        "2: scope inconsistent between summary and role blocks",
+        "3: scope stated once globally and contradicted by roles",
+        "4: scope mostly consistent, one role unstated",
+        "5: scope stated per role and coherent",
+        "6: 5's level plus scope grows across the career",
+        "7: 6's level plus team size or budget trajectory is visible",
+        "8: 7's level plus the most recent role is the largest",
+        "9: 8's level plus the growth is evidenced, not asserted",
+        "10: 9's level plus a reader would describe him as one level throughout with growth inside it"
+      ]
+    },
+    "d4_recent_role_relevant": {
+      "type": "score",
+      "instructions": "Whether the most recent work obviously points at the target, or the bridge is stated",
+      "criteria": [
+        "0: the most recent role looks unrelated to the target",
+        "2: relevance implied but not stated",
+        "3: relevance stated in the summary only",
+        "4: relevance stated in the summary and one role line",
+        "5: the most recent role or an explicit bridge line makes relevance obvious",
+        "6: 5's level plus the bridge names the target's domain",
+        "7: 6's level plus the bridge carries an outcome",
+        "8: 7's level plus the bridge explains why he is moving now",
+        "9: 8's level plus the bridge is in the top third",
+        "10: 9's level plus the reader concludes he has already been doing this job"
+      ]
+    },
+    "d5_no_invited_trap_question": {
+      "type": "score",
+      "instructions": "Whether nothing in the resume invites a question he would rather not take on a first call",
+      "criteria": [
+        "0: a claim invites a trap question (comp history, reason for leaving, an overlapping employer)",
+        "2: one trap invited and unaddressed",
+        "3: a phrasing invites an ownership question he cannot evidence",
+        "4: a phrasing invites a scope question he cannot evidence",
+        "5: no phrase invites a question he cannot answer comfortably",
+        "6: 5's level plus nothing implies availability problems or short tenure ahead",
+        "7: 6's level plus nothing oversells a title he did not hold",
+        "8: 7's level plus nothing implies a client relationship that is really a prospect",
+        "9: 8's level plus a sceptic finds nothing to push on",
+        "10: 9's level plus every likely hard question has a prepared, true answer in the story bank"
+      ]
+    },
+    "e1_skills_to_musthave_map": {
+      "type": "score",
+      "instructions": "Whether each stated requirement maps to one line of evidence",
+      "criteria": [
+        "0: no mapping and no evidence",
+        "2: a skills list plus scattered evidence",
+        "3: half the must-haves have a matching evidence line",
+        "4: most have a matching line, the map is implicit",
+        "5: every must-have has a matching evidence line a reader can find",
+        "6: 5's level plus the mapping is visible in the bullet wording",
+        "7: 6's level plus the mapping is ordered like the posting",
+        "8: 7's level plus the top three requirements get the strongest evidence",
+        "9: 8's level plus the map is implicit but unmistakable",
+        "10: 9's level plus a screener could tick every box without re-reading"
+      ]
+    },
+    "e2_gaps_named_not_hidden": {
+      "type": "score",
+      "instructions": "Whether missing requirements are named honestly with the honest mitigation in the same breath",
+      "criteria": [
+        "0: gaps hidden or denied",
+        "2: gaps admitted without mitigation",
+        "3: gaps named vaguely",
+        "4: one gap named with weak mitigation",
+        "5: the real gaps are named with an honest mitigation each",
+        "6: 5's level plus the mitigation is adjacent experience, not a promise",
+        "7: 6's level plus no mitigation claims an unproven skill",
+        "8: 7's level plus the gaps are limited to nice-to-haves",
+        "9: 8's level plus he names what he would learn first",
+        "10: 9'slevel plus the gap handling itself demonstrates judgement"
+      ]
+    },
+    "e3_one_sentence_why_this_company": {
+      "type": "score",
+      "instructions": "Whether one sentence says why this company and not another, grounded in an observed fact",
+      "criteria": [
+        "0: generic or absent",
+        "2: about their size or funding, generic",
+        "3: names them but with a clich\u00e9",
+        "4: names them and one true fact, weakly connected",
+        "5: names them and one observed fact, connected to his work",
+        "6: 5's level plus the fact is not on their homepage",
+        "7: 6's level plus the sentence shows he read their product or customers",
+        "8: 7's level plus it names a problem he has already solved",
+        "9: 8's level plus it is one sentence he could say aloud",
+        "10: 9's level plus the sentence could open the interview"
+      ]
+    },
+    "e4_language_match_to_posting": {
+      "type": "score",
+      "instructions": "How closely the opening restates the posting's own top requirement and answers it",
+      "criteria": [
+        "0: no overlap in language",
+        "2: a few shared nouns, no structure",
+        "3: shared nouns and one shared duty",
+        "4: the top duty is implied, not stated",
+        "5: the top duty is restated and answered once",
+        "6: 5's level plus the second duty is answered",
+        "7: 6's level plus the top three duties each answered",
+        "8: 7's level plus the posting's phrasing is reused naturally",
+        "9: 8's level plus the opener reads as written for this job",
+        "10: 9'slevel plus every requirement is answered in the posting's own vocabulary"
+      ]
+    },
+    "e5_lane_fit": {
+      "type": "score",
+      "instructions": "Whether this is squarely his lane rather than a screening-out lane",
+      "criteria": [
+        "0: a known screen-out lane (coding-first IC, ML or research, security or platform architecture, quota sales)",
+        "2: one lane signal conflicts with the target",
+        "3: ambiguous lane, competes with specialists",
+        "4: adjacent lane with a credible bridge",
+        "5: AI strategy, transformation, adoption, implementation or customer-facing deployment, stated once",
+        "6: 5's level plus the resume does not signal a competing lane",
+        "7: 6's level plus the lane is named in the headline",
+        "8: 7'slevel plus the lane is evidenced by two roles",
+        "9: 8's level plus the lane is reinforced by scope, not title alone",
+        "10: 9's level plus a screener would describe him by the target's own lane name"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "d1_screen_questions_answerable.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "the resume would not survive a five-question screen: fix the answerable-evidence gap before applying"
+    },
+    {
+      "when": "d2_landmines_absent_or_explained.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "a screen landmine (gap, title oddity, level shift) is unexplained"
+    },
+    {
+      "when": "a2_parseability.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "an ATS would mangle this file; fix layout before upload"
+    },
+    {
+      "when": "a1_musthave_coverage.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "must-haves missing in the target's own words; re-tailor"
+    },
+    {
+      "when": "e5_lane_fit.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "this is a screen-out lane for this candidate"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Category D is Phone-screen survival (Mike's choice, replacing Evidence/claim integrity on 2026-09-22). Deterministic claim and hash binding still runs in the pipeline, just not as a Jev question. 9.5 is the operating target the daily routine reports against; it is a goal, not a calibrated threshold. All verdicts are advisory because calibrated:false. Unrelated to the existing resume.ats pack, which keeps its own 4-level scale and thresholds: do NOT merge them or rescale them, because resume.ats rules read thresholds like 'score < 1.50' that mean something different on an 11-level scale. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently."
+}

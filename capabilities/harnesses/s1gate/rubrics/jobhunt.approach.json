@@ -1,0 +1,67 @@
+{
+  "name": "jobhunt.approach",
+  "stage": "plan",
+  "lane": "job",
+  "description": "Jobhunt 0-10 macro routing: company-first versus job-first per target, plus the daily floor and the daily learning loop. state = the target's profile (band, fit, contact status, live req) and the day's own ledger. Answers the question of which approach wins for this target, then holds the day to a floor.",
+  "questions": {
+    "k1_track_routing": {
+      "type": "choice",
+      "instructions": "Which track this target should get this week",
+      "criteria": {
+        "company_first": "Build the relationship and express evergreen interest now; apply when a role matures",
+        "job_first": "Apply to the live requisition now and run the standard packet",
+        "both": "Do both: apply now and start the relationship in parallel",
+        "ignore": "Neither: skip this target this week and say why"
+      }
+    },
+    "k2_daily_floor_held": {
+      "type": "score",
+      "instructions": "Whether the day held the minimums without dropping pay or integrity gates",
+      "criteria": [
+        "0: zero applications and zero touches",
+        "2: touches only, no applications",
+        "3: one application and a few touches, gates skipped",
+        "4: the floor was attempted but pay or fit gates were skipped to hit it",
+        "5: three applications prepared and ten company touches, with pay, fit and dedupe gates intact",
+        "6: 5's level plus the batch was ordered by fit, band and reuse",
+        "7: 6's level plus nothing below a 5 on lane fit was prepared at all",
+        "8: 7's level plus one hiring-manager message went out under the human-send rule",
+        "9: 8's level plus one new target entered the company list",
+        "10: 9's level plus the day's work is reproducible from the ledger with no unexplained gaps"
+      ]
+    },
+    "k3_learning_applied": {
+      "type": "score",
+      "instructions": "Whether the day produced one reversible improvement and recorded it",
+      "criteria": [
+        "0: nothing was learned or recorded",
+        "2: an action with no rollback",
+        "3: a change with no test",
+        "4: a change tested against one good input only",
+        "5: one evidence-backed reversible change with a rollback and a recorded result",
+        "6: 5's level plus a known-good and a planted-failure check both ran",
+        "7: 6's level plus the change is written where the next run will read it",
+        "8: 7's level plus the change names the metric it is supposed to move",
+        "9: 8's level plus that metric is checked the next day",
+        "10: 9's level plus the loop has now moved a real funnel number"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "k2_daily_floor_held.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "the daily floor was missed or was met by weakening pay, fit or integrity gates"
+    },
+    {
+      "when": "k3_learning_applied.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "no reversible improvement was recorded today; the loop is not learning"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "A score that only informs is a dashboard: k1 must choose a track, k2 must name what to do tomorrow, k3 must name what changed. Volume goals never justify skipping f1 base-pay verification or f5 dedupe. Advisory while calibrated:false. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently."
+}

@@ -1,0 +1,72 @@
+{
+  "name": "training.readiness",
+  "stage": "route",
+  "lane": "app",
+  "description": "TransformFit daily readiness. Given yesterday's session and today's sleep, soreness and RPE inputs, decide train as planned, reduce volume, deload, or rest. Pain is never programmed through.",
+  "questions": {
+    "recommendation": {
+      "type": "choice",
+      "instructions": "What should today's session be, from the inputs in the row",
+      "criteria": {
+        "train_as_planned": "Run today's session as written -- the inputs are normal or better for this athlete",
+        "reduce_volume": "Train the movement but cut sets or load -- one input is off, the block can continue",
+        "deload": "Cut the week down: accumulated fatigue across several inputs, not one bad night",
+        "rest": "Do not train today -- the body needs recovery more than it needs the session"
+      }
+    },
+    "pain": {
+      "type": "noul",
+      "instructions": "The inputs report pain or a possible injury -- a joint, a sharp or localised pain, or pain that changes movement -- rather than ordinary muscle soreness from training."
+    },
+    "fatigued": {
+      "type": "noul",
+      "instructions": "The inputs show accumulated fatigue rather than one bad data point: short sleep AND high soreness AND effort well above plan at the same time."
+    },
+    "readiness": {
+      "type": "score",
+      "instructions": "Readiness to train today, from yesterday's session load, sleep, soreness and RPE together",
+      "criteria": [
+        "Wrecked: very poor sleep, high soreness, and yesterday's session was maximal",
+        "Low: one input is clearly bad and the others are below this athlete's normal",
+        "Mixed: normal on most inputs, one is off",
+        "Good: normal sleep and soreness for this athlete",
+        "Fresh: better than normal on every input"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "pain.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "pain is not soreness -- never program through it, this is a safety referral"
+    },
+    {
+      "when": "recommendation.choice == rest",
+      "verdict": "ESCALATE",
+      "reason": "a rest call changes the week -- surface it to the coach rather than auto-applying it"
+    },
+    {
+      "when": "recommendation.choice == deload",
+      "verdict": "ESCALATE",
+      "reason": "a deload changes the week -- surface it to the coach"
+    },
+    {
+      "when": "fatigued.noul >= 0.60",
+      "verdict": "ESCALATE",
+      "reason": "accumulated fatigue across inputs -- the plan must change and a human decides how"
+    },
+    {
+      "when": "readiness.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "readiness is low -- do not run the planned session as written"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "shape": "train_as_planned and reduce_volume are the reversible calls and pass through; deload and rest change the week and always surface to the coach. Pain blocks programming entirely.",
+    "thresholds": "Provisional and uncalibrated (law 3), so the pain BLOCK currently reports ESCALATE with a downgraded-BLOCK reason."
+  }
+}

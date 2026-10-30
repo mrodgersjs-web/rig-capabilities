@@ -1,0 +1,90 @@
+{
+  "name": "rlane.social-measure",
+  "stage": "verify",
+  "lane": "social",
+  "description": "Routine-lane gate for read-only social measurement and schedule watches (Eden schedule, LinkedIn tomorrow-check, t+24h, impression watch, inbound watch, Reddit scans).",
+  "questions": {
+    "artifact": {
+      "type": "noul",
+      "instructions": "The run output names at least one concrete produced artifact a reader can check: a file path, a row count read back from a store, a URL, a decision id, or a command with its exit code."
+    },
+    "blocked_line": {
+      "type": "noul",
+      "instructions": "The run output contains an explicit BLOCKED, FAILED, PARKED or ERROR line, or says it could not do the scheduled work. Saying there was nothing to do is NOT blocked."
+    },
+    "identity_stated": {
+      "type": "noul",
+      "instructions": "The output states which signed-in account was checked or that the identity guard passed or failed."
+    },
+    "numbers_sourced": {
+      "type": "noul",
+      "instructions": "Every metric in the output (impressions, counts, slots) is tied to where it was read this run: a page, analytics view, or file path."
+    },
+    "platform_write": {
+      "type": "noul",
+      "instructions": "The run posted, commented, liked, followed, connected, DMed, scheduled, or edited anything on the platform."
+    },
+    "throttle_signal": {
+      "type": "noul",
+      "instructions": "The output reports a login redirect, checkpoint, CAPTCHA, HTTP 999, or unusual-activity signal."
+    },
+    "quality": {
+      "type": "score",
+      "instructions": "How strong this run output is as evidence the lane's done-test was met.",
+      "criteria": [
+        "Status word only",
+        "Claim with no artifact or content",
+        "Names the mode or command but not the result",
+        "Artifact plus real content, no BLOCKED line",
+        "Artifact, real content, counts it can back up, and the next step or next run named"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "blocked_line.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "run reported BLOCKED/PARKED/ERROR: done-test not met"
+    },
+    {
+      "when": "artifact.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no checkable artifact named"
+    },
+    {
+      "when": "identity_stated.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "identity guard result not stated"
+    },
+    {
+      "when": "numbers_sourced.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "metrics not tied to a source read this run"
+    },
+    {
+      "when": "platform_write.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "write on a read-only lane"
+    },
+    {
+      "when": "throttle_signal.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "throttle signal: stop the lane for the day"
+    },
+    {
+      "when": "quality.score <= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "output is not evidence of a met done-test"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true,
+  "notes": {
+    "done_test": "Numbers come from the platform's own page or file read this run, identity guard result is stated, and nothing was written to the platform.",
+    "author": "routine build-out 2026-10-04 (session 2026-10-03_xdjQtAGJmfSsidtm)",
+    "policy": "ESCALATE-only and never_auto until calibrated with labelled runs; no BLOCK rules by design.",
+    "scope": "one rubric per routine lane, judges a routine RUN OUTPUT, not its definition"
+  }
+}

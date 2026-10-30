@@ -1,0 +1,83 @@
+{
+  "name": "job.formfill",
+  "stage": "build",
+  "lane": "job",
+  "description": "FORM-FILL CONTRACT. Scores one field-value pair before it is typed. state = the field's exact question text, the proposed value, and its provenance record. Jev can only SELECT from candidates supplied with provenance; a field with no candidate must return needs_owner_answer and the value must never be generated, inferred or borrowed from another employer's answer.",
+  "questions": {
+    "candidate_provenance": {
+      "type": "score",
+      "instructions": "How well the proposed value is sourced",
+      "criteria": [
+        "invented, guessed, or copied from an unrelated application",
+        "remembered but with no source, date or owner",
+        "from a saved fact file with no date",
+        "from a dated saved fact file or a direct owner answer",
+        "direct owner answer, dated, with the file hash recorded",
+        "owner-confirmed and independently re-read back from the filed artifact"
+      ]
+    },
+    "field_truth_fit": {
+      "type": "score",
+      "instructions": "How exactly the value answers THIS field's own wording",
+      "criteria": [
+        "answers a different question",
+        "close but changes the scope, the employer or the timeframe",
+        "true in substance but the field asks for a narrower or broader claim",
+        "answers the field correctly with one caveat unstated",
+        "answers exactly what is asked, true as stated",
+        "answers exactly, and states the one caveat the field makes relevant"
+      ]
+    },
+    "answer_gap_handling": {
+      "type": "choice",
+      "instructions": "When no candidate qualifies, what must happen",
+      "criteria": {
+        "answer_from_evidence": "a provenance-cleared candidate exists and is the truthful answer",
+        "answer_from_owner_file": "the value exists in a dated confirmed-answers file for THIS employer",
+        "needs_owner_answer": "no qualifying candidate; only Mike can decide this value",
+        "leave_optional_blank": "the field is explicitly voluntary and leaving it empty is the correct answer",
+        "reject_field": "the field asks for something outside the scope of this application"
+      }
+    },
+    "no_inferred_identity": {
+      "type": "noul",
+      "instructions": "Does the proposed value infer a demographic identity, a legal attestation, a sponsorship status, a consent choice, a credential, or a date the owner never explicitly stated?"
+    },
+    "state_freshness": {
+      "type": "noul",
+      "instructions": "Is the field set and its exact question wording read from a fresh form state captured in this run, rather than a stale draft, a cached snapshot, or an earlier session's capture?"
+    }
+  },
+  "rules": [
+    {
+      "when": "no_inferred_identity.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "the value infers an identity, legal term, consent or date the owner never stated; never invent one"
+    },
+    {
+      "when": "candidate_provenance.score < 2.0",
+      "verdict": "BLOCK",
+      "reason": "the value has no provenance; a generated answer is not an answer"
+    },
+    {
+      "when": "state_freshness.noul < 0.50",
+      "verdict": "BLOCK",
+      "reason": "filling a form whose question wording is not freshly read; wording changes between captures"
+    },
+    {
+      "when": "answer_gap_handling.choice == needs_owner_answer",
+      "verdict": "ESCALATE",
+      "reason": "no qualifying candidate exists; present the verbatim question to Mike"
+    },
+    {
+      "when": "field_truth_fit.score < 3.0",
+      "verdict": "ESCALATE",
+      "reason": "the value does not answer this field's exact wording"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "The contract that makes a classifier safe to run a form: Jev sees the question, the candidates and their provenance, and it may only choose. It has no action through which a value could be created. Anything that would require invention resolves to needs_owner_answer by construction. The dispatcher must also enforce this in code by refusing to type a value that has no provenance record, so the rule survives a mis-scored judgement. Layout and required-field detection stay deterministic. Advisory while calibrated:false."
+}

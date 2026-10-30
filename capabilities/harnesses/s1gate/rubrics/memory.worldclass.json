@@ -1,0 +1,54 @@
+{
+  "name": "memory.worldclass",
+  "stage": "measure",
+  "lane": "memory",
+  "description": "Judge one RIG Memory OS process, result, or outcome against the world-class ladder. State = evidence dump (config, live status, tests, outputs). Score is the maturity rung; the 0.9 bar is maturity >= 3.6/4.",
+  "questions": {
+    "maturity": {
+      "type": "score",
+      "instructions": "Maturity of this component given the evidence",
+      "criteria": [
+        "Broken, absent, or silently failing -- it does not produce what it promises",
+        "Manually drivable only -- works when a human runs it, no schedule, no monitoring",
+        "Scheduled and observed -- runs unattended, logs exist, failures surface and the last tick is green",
+        "Best practice -- contract documented, failures alert, plant-tested or receipt-proven, honest status separate from loaded, idempotent where it should be",
+        "World class -- outcomes measured against a north-star metric, self-healing within named bounds, calibration or feedback loop feeding improvements, evidence queryable by downstream consumers"
+      ]
+    },
+    "verified": {
+      "type": "noul",
+      "instructions": "The evidence contains proof this component actually produces its claimed output (command output, row counts, log lines, test results) rather than config or intent alone"
+    },
+    "trustworthy_output": {
+      "type": "noul",
+      "instructions": "A downstream consumer (agent, dashboard, human) can treat this component's output as true without re-checking it"
+    },
+    "gap_action": {
+      "type": "choice",
+      "instructions": "The single most effective action to raise this component to the best-practice rung",
+      "criteria": {
+        "none": "Already at best practice or world class",
+        "fix_config": "A stale binding, dead path, wrong profile, or missing env value explains the failure",
+        "fix_code": "A real defect in shipped code must be repaired",
+        "build_missing": "The capability does not exist yet and must be built",
+        "await_time": "A time-gated release condition (observation window, calibration corpus) is the only blocker; nothing to repair"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "maturity.score < 3.00",
+      "verdict": "ESCALATE",
+      "reason": "below best-practice rung -- belongs on the fix-or-build list"
+    },
+    {
+      "when": "verified.noul < 0.50",
+      "verdict": "ESCALATE",
+      "reason": "claim rests on config/intent, not on produced evidence"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

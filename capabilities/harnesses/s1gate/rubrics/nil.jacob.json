@@ -2,7 +2,7 @@
   "name": "nil.jacob",
   "stage": "distribute",
   "lane": "C",
-  "description": "Lane C: athletic development / recruiting / NIL content about a MINOR. Detection precedence over Lanes A and B. never_auto is hard-set: a machine PASS is a recommendation to a human, never a licence to publish.",
+  "description": "Lane C: athletic development / recruiting / NIL content about a MINOR. Detection precedence over Lanes A and B. never_auto is hard-set: a machine PASS is a recommendation to a human, never a licence to publish. Applies to anything published or sent outward from this lane: posts, replies, captions, profile copy, and outbound mail. Object of the gate is exposure of a minor to adults he did not choose; a private email SENT BY THE GUARDIAN to one named adult provider is the sanctioned channel, not the exposure this rule exists to stop (compliance correction 2026-09-18: NCAA recruiting limits bind institutions and their staff, not the prospect, so outbound guardian email and NCSA messaging are permitted at any division; what stays barred is PUBLIC recruiting interaction with a coach, soliciting an early reply, manufacturing 'coach said' content, and private DMs from the athlete's own account on child-safety grounds).",
   "questions": {
     "reveals_location": {
       "type": "noul",
@@ -10,7 +10,7 @@
     },
     "adult_contact": {
       "type": "noul",
-      "instructions": "Solicits, invites, or facilitates contact from adults, recruiters, coaches, or scouts"
+      "instructions": "Published or sent to a public surface, this piece invites or facilitates contact from adults, recruiters, coaches or scouts AT SCALE -- a call for DMs, a contact route printed for strangers, or an ask that pulls an adult into a minor's public thread. A one-to-one email that the guardian themselves sends to one named provider does not count here."
     },
     "commercial_cta": {
       "type": "noul",
@@ -46,7 +46,7 @@
     {
       "when": "adult_contact.noul >= 0.25",
       "verdict": "BLOCK",
-      "reason": "no coach/recruiter contact before spring 2028"
+      "reason": "a public surface is being used to solicit adult/coach contact -- keep that interaction private and guardian-sent (see the 2026-09-18 correction; the old 'spring 2028' bar was wrong on both the date and the rule)"
     },
     {
       "when": "third_party_minor.noul >= 0.40",
@@ -82,5 +82,8 @@
   "confidence_floor": 0.4,
   "calibrated": false,
   "calibration": {},
-  "never_auto": true
+  "never_auto": true,
+  "notes": {
+    "adult_contact_correction": "2026-09-30: rule reason said 'no coach/recruiter contact before spring 2028'. That premise was retracted in the lane's own research (research/01a-coach-contact-CORRECTION-2026-09-18.md): the NCAA binds institutions, not the prospect, class of 2029 D1 private electronic communication opens 2027-09-01, and guardian-sent email plus NCSA messaging were already permitted. The gate was blocking the sanctioned channel. Threshold left at 0.25, question re-scoped to PUBLIC solicitation so private guardian outreach is not the target."
+  }
 }

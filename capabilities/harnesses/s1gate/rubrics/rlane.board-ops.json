@@ -1,0 +1,90 @@
+{
+  "name": "rlane.board-ops",
+  "stage": "verify",
+  "lane": "ops",
+  "description": "Routine-lane gate for board, queue, and operating-review routines (QUEUE puller and scoreboard, LOOP, daily review, evening checkpoint, Telegram status, decision memos, council watch).",
+  "questions": {
+    "artifact": {
+      "type": "noul",
+      "instructions": "The run output names at least one concrete produced artifact a reader can check: a file path, a row count read back from a store, a URL, a decision id, or a command with its exit code."
+    },
+    "blocked_line": {
+      "type": "noul",
+      "instructions": "The run output contains an explicit BLOCKED, FAILED, PARKED or ERROR line, or says it could not do the scheduled work. Saying there was nothing to do is NOT blocked."
+    },
+    "board_read": {
+      "type": "noul",
+      "instructions": "The output shows the board or queue was read this run: a probe result, open-row count, or table read-back."
+    },
+    "items_with_evidence": {
+      "type": "noul",
+      "instructions": "Each item the run claimed, moved, or marked done is named with its row id and an evidence path. If no item was moved, the output says why with a count."
+    },
+    "on_task": {
+      "type": "noul",
+      "instructions": "The output is about this routine's scheduled job, not an unrelated task picked up mid-session."
+    },
+    "secret_printed": {
+      "type": "noul",
+      "instructions": "The output prints a token, PAT, API key, or password value."
+    },
+    "quality": {
+      "type": "score",
+      "instructions": "How strong this run output is as evidence the lane's done-test was met.",
+      "criteria": [
+        "Status word only",
+        "Claim with no artifact or content",
+        "Names the mode or command but not the result",
+        "Artifact plus real content, no BLOCKED line",
+        "Artifact, real content, counts it can back up, and the next step or next run named"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "blocked_line.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "run reported BLOCKED/PARKED/ERROR: done-test not met"
+    },
+    {
+      "when": "artifact.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no checkable artifact named"
+    },
+    {
+      "when": "board_read.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "board not read this run"
+    },
+    {
+      "when": "items_with_evidence.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "moved items lack ids or evidence"
+    },
+    {
+      "when": "on_task.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "run drifted off its scheduled task"
+    },
+    {
+      "when": "secret_printed.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "secret in output"
+    },
+    {
+      "when": "quality.score <= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "output is not evidence of a met done-test"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true,
+  "notes": {
+    "done_test": "The board was read live this run, each claimed or moved item has an id and evidence, and the run stayed on its own task.",
+    "author": "routine build-out 2026-10-04 (session 2026-10-03_xdjQtAGJmfSsidtm)",
+    "policy": "ESCALATE-only and never_auto until calibrated with labelled runs; no BLOCK rules by design.",
+    "scope": "one rubric per routine lane, judges a routine RUN OUTPUT, not its definition"
+  }
+}

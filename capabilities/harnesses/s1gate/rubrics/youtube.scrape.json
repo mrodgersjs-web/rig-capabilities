@@ -1,0 +1,75 @@
+{
+  "name": "youtube.scrape",
+  "stage": "research",
+  "lane": "ingest",
+  "description": "Advisory check for a YouTube capture. The source must be named, quotes must come from a transcript or be omitted, and unclear rights stop the job.",
+  "questions": {
+    "source_named": {
+      "type": "noul",
+      "instructions": "The artifact contains a https://www.youtube.com/watch URL and the video title."
+    },
+    "transcript_or_honest_gap": {
+      "type": "noul",
+      "instructions": "Every claimed quote is tied to a transcript, or the artifact says the transcript is missing and quotes nothing."
+    },
+    "no_fabricated_quote": {
+      "type": "noul",
+      "instructions": "The artifact does not invent dialogue, timestamps, or claims the speaker did not make."
+    },
+    "rights": {
+      "type": "noul",
+      "instructions": "The capture uses only a public title, description, or transcript. It does not use a logged-in session or a private video."
+    },
+    "coverage": {
+      "type": "score",
+      "instructions": "How complete is the capture relative to what it claims.",
+      "criteria": [
+        "No source",
+        "A URL with no captured text",
+        "A title or description only",
+        "A partial transcript, and the missing part is named",
+        "A transcript or an honest gap for every claimed quote, without the source URL",
+        "The full transcript text is in the artifact, with the source URL and a rights label"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "source_named.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "video source is not named"
+    },
+    {
+      "when": "no_fabricated_quote.noul <= 0.90",
+      "verdict": "BLOCK",
+      "reason": "quote is not from a transcript"
+    },
+    {
+      "when": "transcript_or_honest_gap.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "transcript gap is hidden"
+    },
+    {
+      "when": "coverage.score <= 4.50",
+      "verdict": "ESCALATE",
+      "reason": "capture is too thin to use"
+    },
+    {
+      "when": "coverage.confidence <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "answer distribution is not above 0.95"
+    },
+    {
+      "when": "rights.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "capture rights are not public metadata"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "bar": "Pass line is above 0.9. A noul of 0.90 fails the rule `noul <= 0.90`; 0.91 or higher passes. Score and choice confidence use `confidence <= 0.90`. A score is a mean on levels 0..5, so above 0.9 of that scale is a mean above 4.50."
+  }
+}

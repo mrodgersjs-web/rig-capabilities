@@ -1,0 +1,110 @@
+{
+  "name": "jobhunt.warm",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Jobhunt 0-10 bar for company-first evergreen outreach: people he follows or who follow him, second-degree contacts, and interest expressed as a company matures roles. state = the drafted message plus who the recipient is and the true basis for reaching out. Scales to both job-first and company-first tracks.",
+  "questions": {
+    "i1_right_person": {
+      "type": "score",
+      "instructions": "Whether this person can actually help his name reach the company",
+      "criteria": [
+        "0: a random follower with no connection",
+        "2: a stranger in an unrelated function",
+        "3: a peer in an adjacent function",
+        "4: a peer in his function at any company",
+        "5: works at a target company or in the function he wants, in reach",
+        "6: 5's level plus he can name why this person specifically",
+        "7: 6's level plus second degree or shared community",
+        "8: 7's level plus they post about the domain",
+        "9: 8's level plus they are known to hire or build teams",
+        "10: 9's level plus he has interacted with them before and they responded"
+      ]
+    },
+    "i2_truthful_context": {
+      "type": "score",
+      "instructions": "Whether the stated basis for reaching out is true",
+      "criteria": [
+        "0: implies a prior relationship that does not exist",
+        "2: claims to be a long-time reader without evidence",
+        "3: honest but vague about being new",
+        "4: names where he found them but not why",
+        "5: names the actual basis (followed their work, replied to a post, met at an event)",
+        "6: 5's level plus the basis is specific enough to be checked",
+        "7: 6's level plus he can say when and where",
+        "8: 7's level plus he references something of theirs by name",
+        "9: 8's level plus he has already given value in public (a real comment)",
+        "10: 9's level plus they would recognise the basis immediately"
+      ]
+    },
+    "i3_evergreen_framing": {
+      "type": "score",
+      "instructions": "Whether interest is stated as evergreen interest in the company, not a job plea",
+      "criteria": [
+        "0: asks for a job at a company with no open req",
+        "2: expresses interest in a specific role only",
+        "3: expresses interest in the company, tied to a req",
+        "4: expresses interest in the company, one line",
+        "5: states he wants to work there as roles mature, and asks for nothing now",
+        "6: 5's level plus one reason why this company",
+        "7: 6's level plus the reason is an observed fact about them",
+        "8: 7's level plus it connects to work he has already done for their kind of customer",
+        "9: 8's level plus he offers to be useful now without being asked",
+        "10: 9's level plus the message would still make sense a year from now"
+      ]
+    },
+    "i4_ask_discipline": {
+      "type": "score",
+      "instructions": "Whether the ask is absent or genuinely tiny",
+      "criteria": [
+        "0: asks a stranger for a referral",
+        "2: asks for 30 minutes",
+        "3: asks for advice with a long setup",
+        "4: asks one question but with obligation implied",
+        "5: asks for nothing, or for one tiny signal (tell me if a req opens on X team)",
+        "6: 5's level plus the tiny ask is time-free for them",
+        "7: 6's level plus declining is easy and unstated",
+        "8: 7's level plus he offers his help first",
+        "9: 8's level plus there is no ask at all in the first message",
+        "10: 9's level plus he is the one giving first and it costs them nothing"
+      ]
+    },
+    "i5_pacing_and_rotation": {
+      "type": "score",
+      "instructions": "Whether outreach is steady and human-paced rather than bursty",
+      "criteria": [
+        "0: a burst of follows and DMs in one hour",
+        "2: a burst across one company in one session",
+        "3: steady but all in one block of time",
+        "4: steady, one session per day, no jitter",
+        "5: consistent daily rotation with jitter and a daily cap",
+        "6: 5's level plus comments precede DMs wherever possible",
+        "7: 6's level plus the queue is pre-scored before any send",
+        "8: 7's level plus follow-ups only after a real interval",
+        "9: 8's level plus volume sits under platform limits with room to spare",
+        "10: 9's level plus a human reviewer could not tell it was scheduled"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "i2_truthful_context.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "the stated basis for contact is not true; never imply a relationship that does not exist"
+    },
+    {
+      "when": "i4_ask_discipline.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "the ask is too large for a first evergreen contact; remove it"
+    },
+    {
+      "when": "i5_pacing_and_rotation.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "burst pattern would suppress the very people we are trying to reach; hold the queue and spread it"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Never auto-send. Pacing is a hard limit, not a preference: a burst pattern suppresses reach and risks the account. Evergreen interest is allowed without a req; asking for a referral from a stranger is not. Lane-agnostic: applies to job-first and company-first outreach alike. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently."
+}

@@ -1,0 +1,81 @@
+{
+  "name": "rlane.job",
+  "stage": "verify",
+  "lane": "jobsearch",
+  "description": "Routine-lane gate for Mike's job-push routines (AINA scorer, applier, recruiter sends, Gmail/Airtable sync, LinkedIn discovery, prep drafts). Judges one run output.",
+  "questions": {
+    "artifact": {
+      "type": "noul",
+      "instructions": "The run output names at least one concrete produced artifact a reader can check: a file path, a row count read back from a store, a URL, a decision id, or a command with its exit code."
+    },
+    "blocked_line": {
+      "type": "noul",
+      "instructions": "Decides only whether the RUN itself is blocked. Answer 0 when the only park lines are per-item park values with a reason -- PARKED:DRAFT_ONLY, PARKED:HOLD, PARKED:RECRUITER, PARKED:<REASON> in general: those are terminal item states and are NOT blocked. Answer 1 only when the output has a run-level BLOCKED, FAILED or ERROR line, or a bare PARKED without a reason saying the run could not do its scheduled work. Saying there was nothing to do is NOT blocked."
+    },
+    "per_item_state": {
+      "type": "noul",
+      "instructions": "Every job or item the run touched is listed with an id and a terminal state such as scored, submitted, skipped with a reason, or parked with a reason. Parked with a reason includes PARKED:DRAFT_ONLY, PARKED:HOLD and PARKED:RECRUITER: those are terminal states and the run must keep them, not drop them. A batch where every item has an id and one of those terminal values is complete and fully terminal: answer 1. Answer 0 only when items are missing ids or are left in limbo with no terminal state."
+    },
+    "approval_cited": {
+      "type": "noul",
+      "instructions": "If the run submitted, sent, or messaged anything outward, it cites the approval id or approval file that authorized it. If nothing outward happened, answer yes."
+    },
+    "comp_or_secret": {
+      "type": "noul",
+      "instructions": "The output prints a salary figure, a compensation number, an API key, a token, or a password."
+    },
+    "quality": {
+      "type": "score",
+      "instructions": "How strong this run output is as evidence the lane's done-test was met.",
+      "criteria": [
+        "Status word only",
+        "Claim with no artifact or content",
+        "Names the mode or command but not the result",
+        "Artifact plus real content, no BLOCKED line",
+        "Artifact, real content, counts it can back up, and the next step or next run named"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "blocked_line.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "run reported BLOCKED/FAILED/ERROR: done-test not met"
+    },
+    {
+      "when": "artifact.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no checkable artifact named"
+    },
+    {
+      "when": "per_item_state.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "items lack ids or terminal states"
+    },
+    {
+      "when": "approval_cited.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "outward action without a cited approval"
+    },
+    {
+      "when": "comp_or_secret.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "comp figure or secret in run output"
+    },
+    {
+      "when": "quality.score <= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "output is not evidence of a met done-test"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true,
+  "notes": {
+    "done_test": "Each job worked has an id and a terminal state (scored/submitted/parked with reason); counts are read back from the store; no outward action outside a named approval id.",
+    "author": "routine build-out 2026-10-04 (session 2026-10-03_xdjQtAGJmfSsidtm)",
+    "policy": "ESCALATE-only and never_auto until calibrated with labelled runs; no BLOCK rules by design.",
+    "scope": "one rubric per routine lane, judges a routine RUN OUTPUT, not its definition"
+  }
+}

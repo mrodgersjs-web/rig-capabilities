@@ -1,0 +1,52 @@
+{
+  "name": "substack.issue",
+  "stage": "verify",
+  "lane": "substack",
+  "description": "Substack Growth OS: grade one draft Substack issue (rigoperator.substack.com, RIG B2B lane) before it reaches Mike. Judges angle originality, reader fit, evidence, the free/paid split, the single next step and generic-AI risk. Criteria come from ss-bestseller and substack-doctrine (914-transcript corpus). Advisory until calibrated against Mike's labels.",
+  "questions": {
+    "archetype": {
+      "type": "choice",
+      "instructions": "Given the title, subtitle and body of this newsletter issue, which archetype is it?",
+      "criteria": {
+        "original_take": "Names a specific mechanism, tension, failure or number from real work that the obvious version of this topic would miss",
+        "competent": "Useful and correct, but the angle is the expected one for this topic",
+        "repeat": "Restates generic advice already saturating the topic",
+        "rehash": "Vague: the title does not say what the reader leaves with"
+      }
+    },
+    "reader_named": {
+      "type": "noul",
+      "instructions": "The issue is written for one identifiable reader (a role with a concrete problem, e.g. an owner or ops lead whose AI tools are not running anything) and every section serves that reader"
+    },
+    "evidence_grounded": {
+      "type": "noul",
+      "instructions": "Claims are backed by dated, specific receipts from real work (a build, a failure, a measured number, a named and permissioned client) rather than assertion or invented statistics"
+    },
+    "depth_split": {
+      "type": "noul",
+      "instructions": "The free part delivers real value on its own (the what and the why), and anything behind a paywall or offered as a paid perk is the how: implementation, templates or walkthroughs a reader would pay for. If there is no paywall, answer for whether the free part stands alone."
+    },
+    "next_step_clear": {
+      "type": "noul",
+      "instructions": "The issue ends with exactly one clear next step for the reader (reply, subscribe, upgrade, download one asset, or book the review), not several competing asks and not none"
+    },
+    "generic_risk": {
+      "type": "noul",
+      "instructions": "This issue reads like generic AI-written content marketing that any competitor could publish unchanged (buzzwords, listicle padding, no lived detail)"
+    }
+  },
+  "rules": [
+    {"when": "archetype.choice == rehash", "verdict": "BLOCK", "reason": "the title does not name a payoff; rewrite the title and first lines before Mike sees it (threshold provisional, pending calibration)"},
+    {"when": "archetype.choice == repeat", "verdict": "BLOCK", "reason": "saturated generic take; find the RIG-specific mechanism or failure first (collision engine / idea gates)"},
+    {"when": "generic_risk.noul >= 0.60", "verdict": "BLOCK", "reason": "reads as generic AI content; run anti-slop and replace abstractions with receipts"},
+    {"when": "evidence_grounded.noul <= 0.40", "verdict": "BLOCK", "reason": "claims are not traceable to receipts; every number needs a source (Mike's hard law)"},
+    {"when": "reader_named.noul <= 0.50", "verdict": "ESCALATE", "reason": "no clear reader; tie the issue to the ss-strategy reader card"},
+    {"when": "depth_split.noul <= 0.50", "verdict": "ESCALATE", "reason": "free part does not stand alone or the paid part is not the how; fix the split per ss-bestseller"},
+    {"when": "next_step_clear.noul <= 0.50", "verdict": "ESCALATE", "reason": "no single next step; pick one (ss-convert)"}
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {"created": "2026-09-28 for ss-growth-os / ss-write / ss-gate; replaces post.viral as the issue grader. Calibrate with rig-s1gate label once Mike has approved or rejected 20+ issues."}
+}

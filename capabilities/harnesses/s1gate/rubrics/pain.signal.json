@@ -1,0 +1,113 @@
+{
+  "name": "pain.signal",
+  "stage": "distribute",
+  "lane": "gtm",
+  "description": "Paid-service pain classifier for public small-business posts (W5-PAIN-SIGNALS, Project Make Money). Scores where money is ALREADY being spent on a service, vendor, software, or paid staff role and the buyer is unhappy with it or the work is AI-doable. Input is one post: title plus selftext excerpt. Advisory (calibrated:false) -- it can PASS or ESCALATE but never BLOCK; Mike's 0.8 bar is applied downstream in pain/SIGNALS.csv.",
+  "questions": {
+    "is_business_owner_or_operator": {
+      "type": "noul",
+      "instructions": "The author is a small-business owner, partner, practice owner, or operator who decides how the business spends money (or is directly quoting one), not an employee venting, a job seeker, a student, a consumer, or a would-be entrepreneur with no business yet"
+    },
+    "mentions_paying_for_a_service_or_staff_role": {
+      "type": "noul",
+      "instructions": "The post describes money actually being spent (or a paid role being staffed) on an external service, vendor, agency, software subscription, or employee/contractor function: a real budget line, a price, a monthly cost, or a salary/wage"
+    },
+    "dissatisfaction_or_cost_pain": {
+      "type": "score",
+      "instructions": "How strong is the dissatisfaction, waste, or cost pain expressed about the thing the business pays for?",
+      "criteria": [
+        "No pain; the post is neutral or happy about what they pay for",
+        "Mild mention of cost with no complaint",
+        "Vague annoyance; nothing specific about the paid thing",
+        "Some grumbling; the paid thing is named but not the problem",
+        "Concrete complaint about a paid service or paid role",
+        "Clear dissatisfaction with specifics: what fails, how often, what it costs them",
+        "Dissatisfaction plus a cost figure or quantified waste (dollars, hours, lost customers)",
+        "Actively frustrated: considering cancelling, firing, switching, or doing it themselves",
+        "Tried alternatives or confronted the vendor; still stuck; cost and failure both quantified",
+        "Explicit money-for-nothing pain: paying while the work is late, wrong, missing, or lost them business"
+      ]
+    },
+    "ai_could_do_this_work": {
+      "type": "score",
+      "instructions": "How much of the paid work described could AI or automation plausibly do now?",
+      "criteria": [
+        "None of it; purely physical or in-person trade work",
+        "Almost none; a single trivial task might be automated",
+        "A small admin sliver (reminders, templates) with the core human",
+        "Some documentation or record-keeping could be generated",
+        "Repetitive office tasks partly automatable (sorting, categorising, standard replies)",
+        "A clear desk workflow: scheduling, follow-up, logging, or reporting could run automatically",
+        "Phone, email, or message handling is central and describable as a scriptable flow",
+        "Structured back-office work: intake, billing, records, review requests, appointment booking",
+        "Mostly text, phone, scheduling, or records work an agent could run end to end with human review",
+        "The entire paid function is software-shaped (answering, booking, data entry, chasing, reporting) and described in enough detail to automate"
+      ]
+    },
+    "service_category": {
+      "type": "choice",
+      "instructions": "Which paid service category (budget line) is this pain about? Choose the closest; no_paid_service only when no money is being spent",
+      "criteria": {
+        "answering_intake": "Phone answering service, call handling, front desk, receptionist, client intake, missed calls",
+        "bookkeeping_accounting": "Bookkeeper, accountant, bookkeeping, reconciliation, monthly close",
+        "billing_insurance": "Medical/legal billing, coding, insurance claims, A/R chasing, collections",
+        "marketing_seo_ads": "Marketing agency, SEO, paid ads, social media management, email marketing",
+        "reviews_reputation": "Review generation, reputation management, ratings monitoring",
+        "website_software": "Website, CRM or SaaS subscription, app maintenance, software the business pays for",
+        "it_msp_security": "MSP, IT support, helpdesk, cybersecurity, backups",
+        "scheduling_admin": "Scheduling, admin assistant, virtual assistant, data entry, paperwork",
+        "hiring_hr_payroll": "Recruiting, staffing agencies, HR, payroll service, wages for a role AI could trim",
+        "legal_compliance": "Lawyers, compliance consultants, licensing, regulatory paperwork",
+        "cleaning_facilities": "Cleaning, maintenance, facilities, grounds",
+        "coaching_consulting": "Coaches, consultants, fractional executives, agencies selling advice",
+        "sales_leadgen": "Lead generation, cold outreach, appointment setters, SDR-as-a-service",
+        "courier_delivery": "Delivery, courier, logistics, shipping services",
+        "equipment_vendor": "Equipment leases, vendor contracts, supply ordering, maintenance contracts",
+        "other_paid_service": "Real paid-service pain that fits none of the categories above",
+        "no_paid_service": "No paid service, vendor, software, or paid role is involved"
+      }
+    },
+    "buyer_industry": {
+      "type": "choice",
+      "instructions": "Which industry is the buyer's business in? general_small_business only when nothing more specific is stated",
+      "criteria": {
+        "law": "Law firm, legal practice, paralegal services",
+        "dentistry": "Dental practice, orthodontics, dental office",
+        "healthcare_medical": "Medical clinic, private practice, therapy practice, home health, chiropractic",
+        "accounting_cpa": "CPA firm, accounting practice, tax preparer, bookkeeping firm",
+        "construction_trades": "Construction, contracting, remodeling, specialty trades",
+        "hvac_plumbing_electrical": "HVAC, plumbing, electrical, roofing, mechanical trades",
+        "real_estate_property": "Real estate brokerage, property management, leasing, short-term rentals",
+        "restaurant_food": "Restaurant, food service, catering, bakery, bar, food truck",
+        "retail_ecommerce": "Retail store, e-commerce shop, boutique",
+        "manufacturing": "Manufacturing, fabrication, machining, industrial production",
+        "it_msp": "Managed IT, MSP, software shop, tech services",
+        "marketing_agency": "Marketing, creative, or advertising agency",
+        "insurance": "Insurance agency, brokerage, benefits",
+        "physical_therapy_rehab": "Physical therapy, rehab, chiropractic-adjacent clinics",
+        "veterinary_pet": "Veterinary clinic, pet services, grooming, boarding",
+        "fitness_wellness": "Gym, fitness studio, wellness, personal training",
+        "beauty_medspa": "Salon, spa, medspa, aesthetics",
+        "transport_logistics": "Trucking, delivery, fleet, logistics, moving",
+        "professional_services_other": "Consulting, staffing, or professional services not covered above",
+        "general_small_business": "No industry is stated or inferable"
+      }
+    }
+  },
+  "rules": [
+    {
+      "when": "is_business_owner_or_operator.noul >= 0.80 and mentions_paying_for_a_service_or_staff_role.noul >= 0.80 and dissatisfaction_or_cost_pain.score >= 7.20",
+      "verdict": "ESCALATE",
+      "reason": "high-confidence paid-service pain from a buyer"
+    },
+    {
+      "when": "mentions_paying_for_a_service_or_staff_role.noul <= 0.20",
+      "verdict": "ESCALATE",
+      "reason": "no paid spend in post -- drop from pain corpus"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

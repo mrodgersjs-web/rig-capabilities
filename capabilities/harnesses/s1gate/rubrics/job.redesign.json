@@ -1,0 +1,64 @@
+{
+  "name": "job.redesign",
+  "stage": "build",
+  "lane": "job",
+  "description": "REDESIGN JUDGE. Ranks candidate rewrites against an incumbent artifact. state = the incumbent text and its score vector, plus one or more candidate rewrites. Jev never writes: a separate text model produces candidates and this pack decides whether any replaces the incumbent. Discard any candidate that raises the mean by adding unverifiable prose.",
+  "questions": {
+    "fact_drift": {
+      "type": "noul",
+      "instructions": "Does the candidate add, drop, restate or move any number, employer, title, date, credential, technology or outcome relative to the incumbent? Any drift counts."
+    },
+    "outcome_leads": {
+      "type": "score",
+      "instructions": "How well the candidate's bullets lead with the business outcome",
+      "criteria": [
+        "duty-first throughout",
+        "one bullet leads with an outcome",
+        "some bullets lead with an outcome",
+        "most bullets lead with an outcome and carry a number",
+        "every bullet leads with a measurable outcome at its original scope"
+      ]
+    },
+    "regression_check": {
+      "type": "noul",
+      "instructions": "Compared with the incumbent, is the candidate better on the named weak questions without dropping on the questions that were already strong?"
+    },
+    "target_alignment_gain": {
+      "type": "score",
+      "instructions": "How much the candidate closes the target-dependent gap against the live posting",
+      "criteria": [
+        "no target language moved closer",
+        "one requirement now mirrored in the target's own words",
+        "the top two requirements mirrored with evidence beside them",
+        "the top three requirements mirrored and the summary names the target's mandate",
+        "every must-have mirrored and answered with a dated, quantified outcome"
+      ]
+    },
+    "no_padding_for_the_scorer": {
+      "type": "noul",
+      "instructions": "Does the candidate add words, adjectives, duplicated requirements or restated claims whose only purpose is to raise this rubric's score rather than to inform a human reader?"
+    }
+  },
+  "rules": [
+    {
+      "when": "fact_drift.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "the candidate altered a fact; a rewrite rearranges and emphasises, never invents"
+    },
+    {
+      "when": "no_padding_for_the_scorer.noul >= 0.50",
+      "verdict": "BLOCK",
+      "reason": "the candidate pads to raise the score; a higher mean bought with unverifiable prose is not improvement"
+    },
+    {
+      "when": "regression_check.noul < 0.50",
+      "verdict": "BLOCK",
+      "reason": "the candidate regresses on a strong question; keep the incumbent"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Applied 2026-09-22 and it already caught one: a blackwell rewrite of 28 bullets scored 4.61 against the incumbent's 4.86 and was discarded. Deterministic first: the code token-diff (every number and proper noun must be present in both directions) is the primary fact-drift gate and runs before Jev sees anything; Jev's noul is the backstop for drift the token diff cannot see, such as restated scope. no_padding_for_the_scorer exists because the operating goal is a 9.5 mean and a 9.5 earned by padding is worse than a 4.9 honestly measured. Advisory while calibrated:false."
+}

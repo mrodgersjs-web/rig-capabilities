@@ -1,0 +1,104 @@
+{
+ "name": "strategy.output",
+ "stage": "verify",
+ "lane": "strategy",
+ "description": "Advisory quality screen for a business-strategy artifact (strategy argument, 'only' statement, strategy document, or strategy review) produced under business-strategy-os. Asks whether it is a real strategy or an average one. Section counting and banned-phrase linting stay in code (strategy_lint.py); only judgment is asked here.",
+ "questions": {
+  "category_customer_frame": {
+   "type": "noul",
+   "instructions": "The artifact names the category the way a customer shopping for it would name it (what they compare against), not by delivery format, technology or industry jargon."
+  },
+  "genuine_disagreement": {
+   "type": "noul",
+   "instructions": "The artifact states a specific belief about how the category should work that most current competitors would reject in good faith. It is not a platitude every competitor already claims (quality, service, innovation, customer focus)."
+  },
+  "only_claim_holds": {
+   "type": "noul",
+   "instructions": "The artifact's 'we are the only X who Y, so customers get Z' claim (or its equivalent) would be conceded as true by the fiercest competitor: Y is something competitors do not do, and Z is value customers cannot get elsewhere."
+  },
+  "tradeoffs_named": {
+   "type": "noul",
+   "instructions": "The artifact names concrete things the business will stop doing, refuse to do, or change, not only things it will add."
+  },
+  "concrete_innovation": {
+   "type": "noul",
+   "instructions": "The differentiating action is a concrete, observable innovation (product feature, production method, route to market, bundling, branding taken to an extreme, targeting, customer experience, pricing or culture), not a claimed virtue."
+  },
+  "externally_visible": {
+   "type": "noul",
+   "instructions": "The execution names delivery and communication actions specific enough that a customer, investor or partner could see the strategy just by looking at the business."
+  },
+  "strategy_not_goal": {
+   "type": "noul",
+   "instructions": "The artifact explains how the business will win. It is not a goal, target, vision statement or wish list presented as a strategy."
+  },
+  "specificity": {
+   "type": "score",
+   "instructions": "How specific is this strategy to this business in this category",
+   "criteria": [
+    "Boilerplate that would fit almost any company",
+    "Fits most companies in the category",
+    "Some specifics, but the core claim fits competitors",
+    "Specific to this business, with one generic core element",
+    "Specific: a direct competitor could not claim it",
+    "Specific, evidenced, and a competitor would reject it in good faith"
+   ]
+  }
+ },
+ "rules": [
+  {
+   "when": "category_customer_frame.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "category is framed by format or jargon, not by what the customer shops for"
+  },
+  {
+   "when": "genuine_disagreement.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "no belief a competitor would reject: this is the category average"
+  },
+  {
+   "when": "only_claim_holds.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "the 'only' claim would not survive the fiercest-competitor test"
+  },
+  {
+   "when": "tradeoffs_named.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "no trade-offs: nothing is stopped, refused or changed"
+  },
+  {
+   "when": "concrete_innovation.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "differentiation is a claimed virtue, not an observable innovation"
+  },
+  {
+   "when": "externally_visible.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "execution is not visible to an outsider"
+  },
+  {
+   "when": "strategy_not_goal.noul <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "this is a goal or wish list, not a way to win"
+  },
+  {
+   "when": "specificity.score <= 4.50",
+   "verdict": "ESCALATE",
+   "reason": "strategy is not specific enough to this business"
+  },
+  {
+   "when": "specificity.confidence <= 0.90",
+   "verdict": "ESCALATE",
+   "reason": "specificity answer distribution is not concentrated"
+  }
+ ],
+ "confidence_floor": 0.9,
+ "calibrated": false,
+ "calibration": {},
+ "never_auto": false,
+ "notes": {
+  "bar": "Pass line is above 0.9 for every noul and a specificity mean above 4.50 (the work-criteria.json bar).",
+  "provenance": "Added 2026-09-26 (Aside session FZ5G1NeEd86P2RZw). Questions are the checks Alex M H Smith states in his own method videos: category as the customer frames it, strategy argument, how we must change, the only-statement with the fiercest-competitor test, delivery plus communication, visible to an external party CLAIM(y1-5nxulR68); new value, 3 Ds, nine innovation types, claimed service without an innovation CLAIM(ElaWyEeHS1w); a strategy is not a goal CLAIM(STExF7xbKzU).",
+  "planted_failure": "A boilerplate strategy (customer-focused, high quality, innovative, grow 20%) must ESCALATE on genuine_disagreement, only_claim_holds and specificity; the red/green pair lives in capabilities/skills/business-strategy-os/references/jev-fixtures/."
+ }
+}

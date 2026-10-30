@@ -1,0 +1,45 @@
+{
+  "name": "substack.note",
+  "stage": "verify",
+  "lane": "substack",
+  "description": "Substack Growth OS: grade one draft Substack Note for Mike Rodgers (RIG B2B lane) before it is shown to him. Judges whether it stands alone, stops the scroll, carries a specific detail, stays in lane, and avoids pitching. Advisory until calibrated against Mike's labels.",
+  "questions": {
+    "stands_alone": {
+      "type": "noul",
+      "instructions": "A reader who has never heard of Mike gets a complete idea from this Note alone, without clicking anything"
+    },
+    "hook_stops_scroll": {
+      "type": "noul",
+      "instructions": "The first line would make a busy operator in a feed stop and read the rest"
+    },
+    "specific_detail": {
+      "type": "noul",
+      "instructions": "The Note carries at least one concrete, lived detail (a number, a named tool or step, a real moment from work or life) instead of an abstraction"
+    },
+    "pitch_heavy": {
+      "type": "noul",
+      "instructions": "The Note is mainly a promotion (subscribe, upgrade, buy, book) rather than giving the reader something first"
+    },
+    "lane_violation": {
+      "type": "noul",
+      "instructions": "The Note mentions or depicts a minor or a child's athletics, or uses the characters Birch, Unit 7 or The Coach"
+    },
+    "generic_risk": {
+      "type": "noul",
+      "instructions": "This Note reads like generic AI-written motivational or marketing content anyone could post"
+    }
+  },
+  "rules": [
+    {"when": "lane_violation.noul >= 0.50", "verdict": "BLOCK", "reason": "lane violation: minor or Lane A cast on the RIG publication; never auto-draft this (Gate-D, per-post yes only)"},
+    {"when": "generic_risk.noul >= 0.60", "verdict": "BLOCK", "reason": "generic AI content; replace with a lived detail"},
+    {"when": "pitch_heavy.noul >= 0.70", "verdict": "ESCALATE", "reason": "mostly a pitch; lead with value, save asks for sprint launches (ss-bestseller)"},
+    {"when": "stands_alone.noul <= 0.50", "verdict": "ESCALATE", "reason": "does not stand alone; Notes are read in the feed, not after a click"},
+    {"when": "hook_stops_scroll.noul <= 0.50", "verdict": "ESCALATE", "reason": "first line does not stop the scroll; rewrite it"},
+    {"when": "specific_detail.noul <= 0.40", "verdict": "ESCALATE", "reason": "no concrete detail; add the number, step or moment"}
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {"created": "2026-09-28 for ss-notes; replaces post.viral as the Note grader. Calibrate with rig-s1gate label as Mike posts or rejects drafts."}
+}

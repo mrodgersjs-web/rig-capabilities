@@ -1,0 +1,148 @@
+{
+  "name": "resume.recruiter",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Project Get a Job: the human half of the resume bar. Simulates a recruiter's first pass -- roughly the time it takes to read a headline, one summary line and the most recent role. Input is the resume text, then '=== JD ===', then the posting.",
+  "questions": {
+    "six_second_read": {
+      "type": "score",
+      "instructions": "From the title line and first role alone, how confidently could a recruiter say what this person does and whether it matches the opening they are filling?",
+      "criteria": [
+        "Cannot tell, or reads as the wrong function",
+        "Broad category is clear, the specific fit is not",
+        "Both the function and the fit to this opening are clear",
+        "Function, fit and a differentiating proof point are all clear"
+      ]
+    },
+    "verification_risk": {
+      "type": "noul",
+      "instructions": "The resume contains at least one claim a recruiter could check against a public source -- a licence or certification registry, a public profile, a company record -- and find absent or contradicted."
+    },
+    "profile_consistency": {
+      "type": "noul",
+      "instructions": "Nothing in the resume would contradict a standard public professional profile for the same person: same titles, same employers, same seniority, same dates."
+    },
+    "obvious_next_question": {
+      "type": "choice",
+      "instructions": "What would a recruiter most likely probe first on a screening call?",
+      "criteria": {
+        "scope_of_role": "How big was the team, budget or remit really",
+        "recency_of_hands_on": "How current and how hands-on the technical work is",
+        "why_leaving_or_gap": "An employment gap, overlap or a move that needs explaining",
+        "self_employment": "What the founder or consulting period actually was",
+        "specific_metric": "Where a specific number came from",
+        "nothing_obvious": "No single question stands out"
+      }
+    },
+    "seniority_signal": {
+      "type": "choice",
+      "instructions": "What level does this resume read as, independent of the titles claimed?",
+      "criteria": {
+        "below_posting": "Reads junior to the posting",
+        "matches_posting": "Reads at the posting's level",
+        "above_posting": "Reads senior to the posting, a flight-risk or comp-mismatch signal",
+        "ambiguous": "Level is genuinely unclear"
+      }
+    },
+    "narrative_coherence": {
+      "type": "noul",
+      "instructions": "The career reads as a deliberate progression toward this kind of role, rather than a set of unrelated moves."
+    },
+    "reads_as_human": {
+      "type": "noul",
+      "instructions": "The writing reads as a person describing real work, rather than keyword-optimised or template-generated filler."
+    },
+    "differentiation": {
+      "type": "score",
+      "instructions": "How clearly does this resume say something a dozen other qualified applicants for the same posting could NOT say?",
+      "criteria": [
+        "Interchangeable with any qualified applicant",
+        "One mildly distinguishing element",
+        "A clear differentiator supported by evidence",
+        "A specific, evidenced differentiator directly relevant to this posting"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "seniority_signal.choice == below_posting",
+      "verdict": "ESCALATE",
+      "reason": "reads junior to the posting"
+    },
+    {
+      "when": "verification_risk.noul < 0.40",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.50)"
+    },
+    {
+      "when": "profile_consistency.noul < 0.58",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.72)"
+    },
+    {
+      "when": "narrative_coherence.noul < 0.73",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.91)"
+    },
+    {
+      "when": "reads_as_human.noul < 0.58",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.73)"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "method": "control-anchored, 2026-09-21, jev-1.13.0. STRONG = clean in-band senior resume; WEAK = generic no-content resume. Floor = 0.8 x STRONG, so a target can never exceed what a good document actually scores.",
+    "controls": {
+      "six_second_read": {
+        "strong": 0.98,
+        "weak": 0.0,
+        "separation": 0.98,
+        "usable": true,
+        "floor": 0.78
+      },
+      "verification_risk": {
+        "strong": 0.5,
+        "weak": 0.27,
+        "separation": 0.23,
+        "usable": true,
+        "floor": 0.4
+      },
+      "profile_consistency": {
+        "strong": 0.72,
+        "weak": 0.46,
+        "separation": 0.26,
+        "usable": true,
+        "floor": 0.58
+      },
+      "narrative_coherence": {
+        "strong": 0.91,
+        "weak": 0.07,
+        "separation": 0.84,
+        "usable": true,
+        "floor": 0.73
+      },
+      "reads_as_human": {
+        "strong": 0.73,
+        "weak": 0.13,
+        "separation": 0.6,
+        "usable": true,
+        "floor": 0.58
+      },
+      "differentiation": {
+        "strong": 0.77,
+        "weak": 0.0,
+        "separation": 0.77,
+        "usable": true,
+        "floor": 0.62
+      }
+    }
+  },
+  "never_auto": false,
+  "notes": {
+    "boundary": "A simulated first pass, not a real recruiter. No calibration against real screen outcomes exists. obvious_next_question is diagnostic, not pass/fail: it tells Mike what to prepare, and a clean resume can still return a question.",
+    "disabled_questions": "These questions could not separate a strong control from a deliberately weak one and their rules are removed until rewritten: none. Reporting a number from an unusable question would be a dashboard, not a gate.",
+    "ceiling_warning": "Six questions have a strong-control ceiling below 0.75, so a 0.90 target on them is unreachable by construction. Targets are now 0.8 x the measured strong control, per question."
+  }
+}

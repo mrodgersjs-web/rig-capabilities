@@ -26,7 +26,7 @@
   },
   "rules": [
     {
-      "when": "skill.confidence <= 0.9000",
+      "when": "skill.confidence <= 0.8968",
       "verdict": "ESCALATE",
       "reason": "skill confidence at or below 0.90: human or meta-router decides"
     },
@@ -48,35 +48,35 @@
     "rules": {
       "skill.confidence": {
         "direction": "below",
-        "threshold": 0.9,
+        "threshold": 0.8968,
         "label_scope": "signal",
         "train": {
-          "threshold": 0.9,
+          "threshold": 0.8968,
           "precision": 1.0,
           "recall": 1.0,
           "false_block_rate": 0.0
         },
         "holdout": {
-          "threshold": 0.9,
-          "precision": 0.8,
+          "threshold": 0.8968,
+          "precision": 0.8888888888888888,
           "recall": 1.0,
-          "false_block_rate": 0.038461538461538464
+          "false_block_rate": 0.02564102564102564
         },
         "combined": {
-          "threshold": 0.9,
-          "precision": 0.9,
+          "threshold": 0.8968,
+          "precision": 0.9473684210526315,
           "recall": 1.0,
-          "false_block_rate": 0.015873015873015872
+          "false_block_rate": 0.010416666666666666
         },
-        "n_labelled": 72,
-        "n_good": 63,
-        "n_bad": 9,
-        "labeled_set_sha256": "31d8774823b976fb17e387a1d07148087978d3a7d12f614738a1d8139d1a9ab1",
+        "n_labelled": 114,
+        "n_good": 96,
+        "n_bad": 18,
+        "labeled_set_sha256": "c4c79591d9d88ffc652a48a3db7c2813292cb6fccb85084f218724ed77f4ed58",
         "model": "jev-1.13.0",
         "models_seen": [
           "jev-1.13.0"
         ],
-        "rule_sha256": "85b8c155e4eea1a6222340a31dd93ae78acb3c801ab289138cbe0801ebd8fa06",
+        "rule_sha256": "54e63639db0fb2e544bad8c9b536c08aadeb96d3528f92218d081985fbf6d676",
         "rubric_sha256": "a1812c59e2101371de3d657e36799f106407f8c15f6c6739df336f2ecb92e5dd",
         "max_false_block_rate": 0.05,
         "min_recall": 0.5,

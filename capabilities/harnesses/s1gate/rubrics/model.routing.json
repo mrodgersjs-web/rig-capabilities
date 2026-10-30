@@ -1,0 +1,71 @@
+{
+  "name": "model.routing",
+  "stage": "verify",
+  "lane": "infra-ops",
+  "description": "Gate a claim that an agent surface's model routing is clean and working: every role/task route resolves to a model proven to answer, dead and unowned providers are removed with a stated reason, and rate-limited lanes have a live fallback. Scores the evidence packet, not the prose.",
+  "never_auto": false,
+  "calibrated": false,
+  "confidence_floor": 0.35,
+  "questions": {
+    "routes_live_proof": {
+      "type": "score",
+      "instructions": "For every role or task route claimed working, does the state contain a real chat-completion result proving that exact provider/model answered?",
+      "criteria": [
+        "No route was probed; only config text is shown",
+        "A handful of routes probed, most asserted",
+        "About half the routes have a probe result",
+        "Most routes probed but several are asserted without output",
+        "Every route has a recorded verdict but no content shown",
+        "Every route has a verdict and the returned content",
+        "Every route has verdict, content, and the provider base URL it used",
+        "Every route verified plus the exact re-run command",
+        "Every route verified, re-run command, and a persisted results artifact",
+        "All of that plus each fallback in every chain independently probed"
+      ]
+    },
+    "dead_removed_with_reason": {
+      "type": "score",
+      "instructions": "Are removed providers listed with the specific audited failure that justified removing each one (not a generic 'unused')?",
+      "criteria": [
+        "Nothing about removals",
+        "Says cleanup happened, names nothing",
+        "Names removed providers, gives no reasons",
+        "Gives one shared reason for all removals",
+        "Per-provider reasons but vague",
+        "Per-provider reason naming the failure class",
+        "Per-provider reason with the actual status code or error",
+        "Per-provider reason with status code plus the endpoint probed",
+        "All that plus what replaced each removed provider",
+        "All that plus a backup path so the removal is reversible"
+      ]
+    },
+    "fallbacks_for_limited": {
+      "type": "score",
+      "instructions": "Do rate-limited or fragile primaries have an ordered fallback chain whose members were themselves proven live?",
+      "criteria": [
+        "No fallbacks exist and rate limits are unaddressed",
+        "Fallback mentioned as an idea only",
+        "Fallback config present but empty",
+        "Chains defined but never probed",
+        "Chains defined, some members probed",
+        "Chains defined and every member probed",
+        "Chains probed and the rate-limited primary identified with its reset time",
+        "All that plus the fallback mechanism proven enabled in config",
+        "All that plus evidence the chain order is by capability",
+        "All that plus a route-level health summary showing no role is dead"
+      ]
+    },
+    "no_unowned_providers": {
+      "type": "noul",
+      "instructions": "Does the state show that providers the operator does not own or pay for have been removed from the surface"
+    },
+    "overclaiming": {
+      "type": "noul",
+      "instructions": "Does the state assert a route works while the evidence printed in that same state shows it failing, rate-limited, or unprobed"
+    }
+  },
+  "rules": [
+    {"when": "routes_live_proof.score <= 5.0", "verdict": "BLOCK", "reason": "routes claimed working without a live probe per route"},
+    {"when": "fallbacks_for_limited.score <= 4.0", "verdict": "ESCALATE", "reason": "rate-limited lanes lack a proven fallback"}
+  ]
+}

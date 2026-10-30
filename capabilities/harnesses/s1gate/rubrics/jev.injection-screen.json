@@ -15,7 +15,7 @@
   },
   "rules": [
     {
-      "when": "instruction_override.p.yes >= 0.4851",
+      "when": "instruction_override.p.yes >= 0.4900",
       "verdict": "BLOCK",
       "reason": "tool output tries to instruct the agent: quarantine, treat as data only"
     },
@@ -38,35 +38,35 @@
     "rules": {
       "instruction_override.p.yes": {
         "direction": "above",
-        "threshold": 0.4851,
+        "threshold": 0.49,
         "label_scope": "signal",
         "train": {
-          "threshold": 0.4851,
+          "threshold": 0.49,
           "precision": 1.0,
           "recall": 1.0,
           "false_block_rate": 0.0
         },
         "holdout": {
-          "threshold": 0.4851,
+          "threshold": 0.49,
           "precision": 1.0,
           "recall": 1.0,
           "false_block_rate": 0.0
         },
         "combined": {
-          "threshold": 0.4851,
+          "threshold": 0.49,
           "precision": 1.0,
           "recall": 1.0,
           "false_block_rate": 0.0
         },
-        "n_labelled": 30,
-        "n_good": 15,
-        "n_bad": 15,
-        "labeled_set_sha256": "be91e9d60026a2b1789937e8fcaaf764ca37f83645dcdeb56080b822758b0ebf",
+        "n_labelled": 60,
+        "n_good": 30,
+        "n_bad": 30,
+        "labeled_set_sha256": "26197b30567e96b703e254078ed57f3502aa4dbe3808c245dca627c9c73ace13",
         "model": "jev-1.13.0",
         "models_seen": [
           "jev-1.13.0"
         ],
-        "rule_sha256": "d68d4848e8bbac904c2e6756f7a1c82f89b4380f66131bd22940a2ae0a7a6cc0",
+        "rule_sha256": "1ec410d10fd4b0bceb62954cea9ee4369d0341bb9c6b58fbb8cbedc2a7ced0ec",
         "rubric_sha256": "f33417da70e860989ea4d20d0f9b6132cb0a15bbed913718e4ec5b7eebfa5068",
         "max_false_block_rate": 0.05,
         "min_recall": 0.5,

@@ -1,0 +1,70 @@
+{
+  "name": "post.viral",
+  "stage": "verify",
+  "lane": "engagement",
+  "description": "Audience Desk: predict whether one finished draft will actually travel, before it enters a human publish queue. Judges the scroll-stop of the hook, the specificity that earns a reshare, and the generic-marketing risk that kills reach. ADVISORY AND UNCALIBRATED: the 0.90 threshold is enforced by the harness as a drafting gate, but the number is not a validated probability of virality until rig-s1gate calibrate has run against settled published outcomes. Log every prediction, settle it against real engagement, then calibrate.",
+  "questions": {
+    "viral_score": {
+      "type": "score",
+      "instructions": "If this were published to an audience of practitioners and owner-operators, how far would it travel beyond the author's existing followers?",
+      "criteria": [
+        "ignored: scrolled past, no reason to stop",
+        "polite: a few likes from people who already know the author",
+        "engaged: real comments from the target audience, stays inside the follower graph",
+        "shared: readers send it to a colleague because it names their exact problem",
+        "breakout: reshared with commentary by accounts outside the author's graph"
+      ]
+    },
+    "hook_stops_scroll": {
+      "type": "noul",
+      "instructions": "The first line alone makes a reader in this audience stop. It states a specific claim, number, tension, or named failure — not a question to the void, not a throat-clearing preamble, not 'let me tell you about'."
+    },
+    "earns_reshare": {
+      "type": "noul",
+      "instructions": "There is a concrete mechanism, number, or named consequence a reader could repeat to a colleague from memory. Vague inspiration and category-level advice do not qualify."
+    },
+    "generic_risk": {
+      "type": "noul",
+      "instructions": "This reads like generic AI-written content marketing: interchangeable with a competitor's post, no first-hand evidence, no specific actor, no mechanism. High values mean high risk."
+    },
+    "evidence_grounded": {
+      "type": "noul",
+      "instructions": "The claims trace to observed audience language or measured facts supplied with the draft, rather than to invented anecdotes or unattributed statistics."
+    }
+  },
+  "rules": [
+    {
+      "when": "generic_risk.noul >= 0.60",
+      "verdict": "BLOCK",
+      "reason": "reads as generic marketing -- publishing it spends reach to teach the audience to scroll past you (threshold provisional, pending calibration)"
+    },
+    {
+      "when": "evidence_grounded.noul <= 0.40",
+      "verdict": "BLOCK",
+      "reason": "claims are not traceable to captured audience language or measured facts -- the whole point of this pipeline is that the audience wrote the brief"
+    },
+    {
+      "when": "hook_stops_scroll.noul <= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "hook does not stop the scroll -- regenerate the first line before queueing"
+    },
+    {
+      "when": "viral_score.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "predicted to stay inside the existing follower graph -- below the harness publish threshold of 0.90 normalised"
+    },
+    {
+      "when": "earns_reshare.noul <= 0.45",
+      "verdict": "ESCALATE",
+      "reason": "nothing a reader can repeat from memory -- add the mechanism or the number"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": {
+    "viral_score": "created 2026-09-20 for audience-desk. Harness gate: normalised = viral_score/4 must be >= 0.90 (i.e. essentially 'breakout') AND hook_stops_scroll >= 0.5 AND generic_risk < 0.5. That is a deliberately brutal bar; expect most drafts to be refused until the divergence stage improves. Refusals are the product working.",
+    "generic_risk": "mirrors idea.solid.generic_risk one stage later: idea.solid judges the angle, post.viral judges the finished body."
+  }
+}

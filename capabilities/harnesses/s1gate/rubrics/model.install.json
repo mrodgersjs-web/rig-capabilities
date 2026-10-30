@@ -1,0 +1,61 @@
+{
+  "name": "model.install",
+  "stage": "verify",
+  "lane": "infra-ops",
+  "description": "Gate a claim that AI models are installed and working across agent surfaces. Requires live HTTP proof per model plus a read-back of each surface's own config file. Scores the evidence packet, not the prose.",
+  "never_auto": false,
+  "calibrated": false,
+  "confidence_floor": 0.35,
+  "questions": {
+    "live_proof_present": {
+      "type": "score",
+      "instructions": "For the models claimed installed, does the state contain a real HTTP chat-completion response proving the endpoint answered?",
+      "criteria": [
+        "No HTTP responses at all, only config text or intent to test",
+        "Some responses shown but errors and failures dominate over successes",
+        "Responses shown for most models but several are missing or only config assertions",
+        "Every claimed model has a printed successful response body",
+        "Every claimed model has a printed successful response plus a re-run command and exit code"
+      ]
+    },
+    "registered_per_surface": {
+      "type": "score",
+      "instructions": "Does the state show each named surface's own on-disk config file containing the model, read back after the edit?",
+      "criteria": [
+        "No config read-back, the claim relies on having run an edit command",
+        "One surface's config shown, the rest asserted",
+        "Some surfaces shown, others asserted without read-back",
+        "Each named surface's config file is printed with the model present",
+        "Each surface printed plus the authoritative upstream source is identified and verified"
+      ]
+    },
+    "root_cause_named": {
+      "type": "noul",
+      "instructions": "Where something was found broken, does the state name the actual mechanism that caused it rather than only describing the symptom or the fix applied"
+    },
+    "overclaiming": {
+      "type": "noul",
+      "instructions": "Does the state assert that something works while the evidence printed in that same state shows it failing, untested, or quota-limited"
+    }
+  },
+  "rules": [
+    {
+      "when": "live_proof_present.score <= 2.5",
+      "verdict": "BLOCK",
+      "reason": "models claimed working without live HTTP proof per model"
+    },
+    {
+      "when": "registered_per_surface.score <= 2.5",
+      "verdict": "BLOCK",
+      "reason": "config presence asserted without reading back each surface's own file"
+    },
+    {
+      "when": "root_cause_named.noul <= 0.5",
+      "verdict": "ESCALATE",
+      "reason": "a failure was patched at the symptom, the mechanism is unnamed"
+    }
+  ],
+  "notes": {
+    "overclaiming": "recorded as signal only; measured non-discriminating on the ablation corpus (good 0.54/0.57 vs bad 0.48-0.59, distributions overlap) so enforcing it blocks true claims. Kept in questions for future data."
+  }
+}

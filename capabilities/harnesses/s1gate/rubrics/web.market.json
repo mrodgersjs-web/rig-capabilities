@@ -1,0 +1,136 @@
+{
+  "name": "web.market",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "RIG market-fit gate for a sales page, built from the Sept 2026 Eden social sweep findings verified at source (Isenberg, Pierce, Torti, Saraev, Reimer): sell finished work, anchor against the human alternative, name the system, lead with one named pain, prefer boring reliable jobs, make the rulebook and accountability visible, and offer a diagnostic wedge. Input is an evidence dossier of observable page facts.",
+  "questions": {
+    "mkt_finished_work": {
+      "type": "score",
+      "instructions": "Does the page sell a finished, checkable deliverable rather than a tool, an AI capability or automation itself? (family M, weight 3)",
+      "criteria": [
+        "Sells technology or 'AI' itself; no deliverable named",
+        "Sells a service category (automation, AI consulting)",
+        "Names a tool stack or platform as the offer",
+        "Names a process area but not a finished output",
+        "Names a finished output in generic terms",
+        "Names one finished output a buyer could check",
+        "Finished output plus who receives and owns it",
+        "Finished output, owner, and acceptance test stated",
+        "Finished output with written acceptance and a sample shown",
+        "Every offer is a named, checkable finished job with a visible sample"
+      ]
+    },
+    "mkt_human_alternative": {
+      "type": "score",
+      "instructions": "Is the offer anchored against the human or status-quo alternative the buyer pays for today (staff hours, a hire, an agency, lost inquiries) without invented numbers? (family M, weight 2)",
+      "criteria": [
+        "No comparison to any alternative",
+        "Vague 'save time and money'",
+        "Unsourced percentage savings",
+        "Names an alternative (hire, agency, freelancer) without its cost",
+        "Names the alternative and what it fails to do",
+        "Compares routes on accountability and ownership",
+        "Compares routes on cost structure, no invented figures",
+        "Gives the buyer a way to compute their own cost of the gap",
+        "Buyer-computable anchor plus a published price to compare against",
+        "Clear, honest comparison against the human alternative using the buyer's own numbers"
+      ]
+    },
+    "mkt_named_system": {
+      "type": "score",
+      "instructions": "Is the offering packaged as a named, bounded system whose named components each map to a business outcome? (family M, weight 2)",
+      "criteria": [
+        "Unnamed list of services",
+        "Generic service names (Consulting, Automation)",
+        "One named offer, components unnamed",
+        "Named offer with a feature list",
+        "Named offer, components described as technology",
+        "Named components mapped to outcomes",
+        "Named system with outcomes and a scope boundary",
+        "Named system per buyer situation",
+        "Named system per vertical on a shared spine",
+        "Memorable named system per vertical, every component an outcome with an acceptance test"
+      ]
+    },
+    "mkt_named_pain_lead": {
+      "type": "score",
+      "instructions": "Does the page open with one named, specific pain the buyer already feels, before method or capability? (family M, weight 3)",
+      "criteria": [
+        "Opens with the company or its technology",
+        "Opens with a slogan",
+        "Opens with a broad category problem",
+        "Names a problem area without a moment",
+        "Names a specific failure moment",
+        "Specific failure moment in the buyer's words",
+        "Specific pain plus its cost to the buyer",
+        "Specific pain, its cost, and who it happens to",
+        "A distinct pain per vertical, in that vertical's language",
+        "Opening pain so specific the target reader feels named, with the moment and the cost"
+      ]
+    },
+    "mkt_boring_reliable_job": {
+      "type": "score",
+      "instructions": "Does the offer lead with a boring, repeatable, checkable job rather than a flashy agent, chatbot or voice AI? (family M, weight 1)",
+      "criteria": [
+        "Leads with chatbot, voice or agent novelty",
+        "Leads with 'AI transformation'",
+        "Novelty first, jobs second",
+        "Jobs first, novelty mixed in",
+        "One repeatable job named",
+        "Repeatable job with its frequency",
+        "Repeatable job and the failure it prevents",
+        "Repeatable job, failure prevented, and how it is checked",
+        "Several repeatable jobs ranked by reliability",
+        "Boring, checkable jobs are the whole pitch; novelty appears only as a component"
+      ]
+    },
+    "mkt_rulebook_accountability": {
+      "type": "score",
+      "instructions": "Does the page make its written rulebook (what 'correct' looks like) and personal accountability for mistakes a visible part of the product? (family M, weight 2)",
+      "criteria": [
+        "No mention of standards or accountability",
+        "Generic 'quality' claim",
+        "Testing mentioned in passing",
+        "Says acceptance criteria exist",
+        "Shows some acceptance criteria",
+        "Shows a named list of tests",
+        "Test list plus who owns failures",
+        "Written definition of correct plus a named owner of mistakes",
+        "Rulebook shown, owner named, and what happens when it fails",
+        "Rulebook and accountability are the headline product, with a sample and a stated remedy"
+      ]
+    },
+    "mkt_diagnostic_wedge": {
+      "type": "score",
+      "instructions": "Is there a free or paid diagnostic that produces a standalone asset and a clear, stated path into the build? (family M, weight 2)",
+      "criteria": [
+        "No diagnostic step",
+        "Free call only",
+        "Diagnostic mentioned, no output",
+        "Diagnostic with a vague output",
+        "Diagnostic with a named output",
+        "Priced diagnostic with a named output",
+        "Priced diagnostic, named output and timeline",
+        "Output usable without the vendor",
+        "Plus its relationship to the build price stated (credited or not)",
+        "Priced, time-boxed diagnostic whose output stands alone and whose credit toward the build is explicit"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "mkt_finished_work.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "sells a tool or category, not a finished deliverable"
+    },
+    {
+      "when": "mkt_named_pain_lead.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "no specific buyer pain in the opening"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

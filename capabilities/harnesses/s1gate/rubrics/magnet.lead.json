@@ -1,0 +1,195 @@
+{
+  "name": "magnet.lead",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "Lead-magnet quality for a B2B service (Taki MicroMagnet rules plus conversion practice): splinter naming, two-minute value, a delivered result, fair friction, the next step baked in at the point of need, vertical variants, shareability, proof of method, honesty and discoverability. Input is an evidence dossier of the magnet's observable facts.",
+  "questions": {
+    "lm_splinter_name": {
+      "type": "score",
+      "instructions": "Is the magnet named as a specific splinter outcome rather than a broad topic? (family J, weight 2)",
+      "criteria": [
+        "Unnamed",
+        "Generic 'guide'",
+        "Topic title",
+        "Topic plus audience",
+        "Specific problem named",
+        "Specific outcome named",
+        "Outcome and audience",
+        "Outcome, audience and time",
+        "Irresistibly specific",
+        "The name alone tells the buyer the exact result they get"
+      ]
+    },
+    "lm_fast_consumption": {
+      "type": "score",
+      "instructions": "Can the buyer get value in about two minutes per step without reading a long article? (family J, weight 2)",
+      "criteria": [
+        "Long ebook",
+        "Long article",
+        "Long video",
+        "Medium read",
+        "Long checklist",
+        "Checklist",
+        "Interactive checklist",
+        "Interactive, two-minute steps",
+        "Immediate result on screen",
+        "Instant, interactive, result in minutes"
+      ]
+    },
+    "lm_outcome_delivered": {
+      "type": "score",
+      "instructions": "Does the magnet deliver a usable result (a diagnosis, a score, a plan), not just information? (family J, weight 3)",
+      "criteria": [
+        "Pitch only",
+        "Information only",
+        "Tips",
+        "A framework",
+        "Self-assessment",
+        "Self-assessment with a result",
+        "Result plus what it means",
+        "Result, meaning and next action",
+        "Personalised result and plan",
+        "A result the buyer would pay for"
+      ]
+    },
+    "lm_friction_fairness": {
+      "type": "score",
+      "instructions": "Is access friction fair to the value (ungated, or a fair, disclosed exchange)? (family J, weight 2)",
+      "criteria": [
+        "Hard gate for trivial content",
+        "Hard gate, unclear data use",
+        "Gate bundled with marketing opt-in",
+        "Gate, disclosed",
+        "Soft gate",
+        "Ungated, basic",
+        "Ungated, full value",
+        "Ungated, answers not tracked",
+        "Ungated, local-only data, stated",
+        "Zero friction, explicit data boundary, full value"
+      ]
+    },
+    "lm_next_step_baked": {
+      "type": "score",
+      "instructions": "Is the next step (review or build) built into the result at the point of need rather than a footer call to action? (family J, weight 3)",
+      "criteria": [
+        "No next step",
+        "Footer call to action only",
+        "Generic call to action",
+        "Call to action after the result",
+        "Call to action tied to the result",
+        "Per-result next step",
+        "Per-failure next step",
+        "Per-failure next step with its cost",
+        "Plus fit guidance (when not to buy)",
+        "Inline, per-failure, priced, honest next step"
+      ]
+    },
+    "lm_vertical_variant": {
+      "type": "score",
+      "instructions": "Does the magnet speak to specific verticals (examples, native language) rather than generic businesses? (family J, weight 2)",
+      "criteria": [
+        "Generic",
+        "One vague example",
+        "Generic examples",
+        "One vertical example",
+        "Several vertical examples",
+        "Vertical-labelled sections",
+        "Vertical variants",
+        "Vertical variants in native language",
+        "Per-vertical versions",
+        "Each vertical gets its own native version"
+      ]
+    },
+    "lm_shareable": {
+      "type": "score",
+      "instructions": "Can the buyer forward the result to a partner or decision-maker (print, export, link)? (family J, weight 1)",
+      "criteria": [
+        "Cannot be saved",
+        "Screenshot only",
+        "Copy text",
+        "Print",
+        "Print to PDF",
+        "Export file",
+        "Export plus summary",
+        "Forwardable summary",
+        "Board-ready summary",
+        "One-click, polished, forwardable result"
+      ]
+    },
+    "lm_method_proof": {
+      "type": "score",
+      "instructions": "Does the magnet demonstrate the seller's method and expertise while being useful on its own? (family J, weight 2)",
+      "criteria": [
+        "No method visible",
+        "Generic advice",
+        "Some expertise",
+        "Named method",
+        "Named method, partly shown",
+        "Method shown",
+        "Method shown with rationale",
+        "The method is the product sample",
+        "Distinctive method",
+        "Unmistakable proof the seller knows this cold"
+      ]
+    },
+    "lm_honesty": {
+      "type": "score",
+      "instructions": "Does the magnet avoid manipulative framing and tell the buyer when they do not need to buy? (family J, weight 1)",
+      "criteria": [
+        "Manipulative",
+        "Fear-driven",
+        "Pushy",
+        "Neutral",
+        "Neutral and fair",
+        "Fair with caveats",
+        "States its limits",
+        "States when not to buy",
+        "Honest scoring",
+        "Radically honest; earns trust"
+      ]
+    },
+    "lm_discoverability": {
+      "type": "score",
+      "instructions": "Is the magnet easy to reach from the site and ads (prominent, one click)? (family J, weight 1)",
+      "criteria": [
+        "Hidden",
+        "Buried link",
+        "Footer",
+        "Navigation link",
+        "Home section",
+        "Home call to action",
+        "Primary call to action",
+        "Primary call to action and ad sitelink",
+        "Everywhere relevant",
+        "The obvious first step from every entry"
+      ]
+    },
+    "lm_continuation_path": {
+      "type": "score",
+      "instructions": "After value is delivered, is there a consented, useful way to continue (save results, full kit, reply to a human)? (family J, weight 1)",
+      "criteria": [
+        "Dead end",
+        "Homepage link only",
+        "Contact link",
+        "Contact form",
+        "Contact with context",
+        "Optional save or export",
+        "Optional follow-up with consent",
+        "Consented follow-up and a human reply",
+        "Plus the result carried into the inquiry",
+        "Seamless consented continuation that carries the result"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "lm_outcome_delivered.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "magnet delivers information, not a result"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

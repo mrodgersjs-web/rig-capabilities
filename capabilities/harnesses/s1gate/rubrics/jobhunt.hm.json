@@ -1,0 +1,110 @@
+{
+  "name": "jobhunt.hm",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "Jobhunt 0-10 bar for a hiring-manager message and its target selection. state = the drafted message plus the recipient's title, ownership and the source that verified them. Outbound is irreversible: this scores the draft and the target, it never authorises sending.",
+  "questions": {
+    "h1_right_person": {
+      "type": "score",
+      "instructions": "Whether the recipient owns the problem and can move this requisition",
+      "criteria": [
+        "0: anyone at the company",
+        "2: a recruiter for a different function",
+        "3: a recruiter for the right function but not this team",
+        "4: the hiring manager by guess only, identity unverified",
+        "5: the likely hiring manager, identity verified from a public source",
+        "6: 5's level plus their ownership of the problem is stated somewhere public",
+        "7: 6's level plus they have run a comparable team before",
+        "8: 7's level plus there is a path to them through someone he knows",
+        "9: 8's level plus they are actively hiring or publicly said so",
+        "10: 9's level plus they already know his name"
+      ]
+    },
+    "h2_specificity": {
+      "type": "score",
+      "instructions": "How specific the opener is to this person and this team",
+      "criteria": [
+        "0: a template with the name pasted in",
+        "2: names their company and the role",
+        "3: names their company and a generic industry fact",
+        "4: names their team but a fact anyone could cite",
+        "5: names one observed fact about their work or their team's need",
+        "6: 5's level plus the fact is not on their homepage",
+        "7: 6's level plus the fact is recent and dated",
+        "8: 7's level plus the fact shows he read their product, customers or post",
+        "9: 8's level plus the fact connects to something he has done",
+        "10: 9's level plus the opener could only have been written to this person"
+      ]
+    },
+    "h3_value_in_one_sentence": {
+      "type": "score",
+      "instructions": "Whether one sentence ties a specific delivered outcome to the problem they have",
+      "criteria": [
+        "0: he asks for something and offers nothing",
+        "2: offers a skill, no outcome",
+        "3: names one outcome, no connection to them",
+        "4: names one outcome loosely connected",
+        "5: one sentence connecting one delivered outcome to their stated problem",
+        "6: 5's level plus the outcome carries a number",
+        "7: 6's level plus the outcome is in their sector or an adjacent regulated one",
+        "8: 7's level plus the outcome is at their scale",
+        "9: 8's level plus he names what he would do in the first 90 days",
+        "10: 9's level plus the sentence makes the meeting optional"
+      ]
+    },
+    "h4_the_ask": {
+      "type": "score",
+      "instructions": "Whether the ask is small, specific and easy to say yes to",
+      "criteria": [
+        "0: asks for a 30-minute call as the opening line",
+        "2: asks a vague favour",
+        "3: asks for career advice with no framing",
+        "4: asks for a call but with a specific topic",
+        "5: a small, specific, time-bounded ask that is easy to accept",
+        "6: 5's level plus the ask is answerable in one line",
+        "7: 6's level plus declining costs the recipient nothing",
+        "8: 7's level plus he states he is not asking about a specific requisition",
+        "9: 8's level plus he offers a way to say no without awkwardness",
+        "10: 9's level plus the ask would still be worth it to him if the answer is no"
+      ]
+    },
+    "h5_tone_and_truth": {
+      "type": "score",
+      "instructions": "Whether the message is confident, honest and free of unverified claims",
+      "criteria": [
+        "0: overselling or a claim not on the resume",
+        "2: one unsupported claim",
+        "3: apologetic or grovelling tone",
+        "4: safe but flat",
+        "5: confident and honest, every claim on the resume",
+        "6: 5's level plus the tone matches a peer, not a supplicant",
+        "7: 6's level plus no flattery that is not true",
+        "8: 7's level plus the message is under 120 words and reads aloud well",
+        "9: 8's level plus it names a real constraint he has (timing, location) rather than hiding it",
+        "10: 9's level plus a stranger would describe him as a professional who is not desperate"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "h1_right_person.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "the recipient is not verified as the person who owns this problem; do not send"
+    },
+    {
+      "when": "h5_tone_and_truth.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "the draft contains a claim that is not on the resume, or oversells; rewrite before sending"
+    },
+    {
+      "when": "h2_specificity.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "generic opener; rewrite with one observed fact about the recipient"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Mike alone sends, per the first-five pilot and Gate-D. Scoring is advisory while calibrated:false. Message and recipient must be scored together: a good message to the wrong person is a 0. Do not add claims that are not on the cleared resume. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently."
+}

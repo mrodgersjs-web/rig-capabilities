@@ -1,0 +1,56 @@
+{
+  "name": "job.opsmd.fit",
+  "stage": "distribute",
+  "lane": "job",
+  "description": "James Loehr Managing Director search: qualify one posting for a multi-unit / regional operations leader (rental-fleet, dealership groups, hospitality, facilities, logistics, PE-backed multi-site service businesses). Band per playbook 6b verified in jobs/comp-bands.md: TC >= $275K floor, base $185K+ target (lane-dependent), walk-away base $170K only with TC restore. National, relocation accepted. Routes to skip / apply / warm-intro-first.",
+  "questions": {
+    "comp_band": {
+      "type": "score",
+      "instructions": "Total compensation this posting most plausibly pays, using the posted range and any bonus language. Base, bonus, OTE and equity are separate quantities; never substitute one for another. If no number is posted, infer from title, company size and multi-unit scope; unknown pay is never a pass.",
+      "criteria": [
+        "Base clearly below $150K and no bonus structure that could plausibly restore total comp to $275K",
+        "Base $150K-$175K with a bonus-heavy structure plausibly restoring total comp to $275K+ (rental/mobility pattern: $150-175K base plus large target bonus), or unposted with a single-unit manager title",
+        "Base $175K-$225K, or unposted with a Managing Director / GM / multi-unit director title at a multi-site operator",
+        "Base $225K or more stated or strongly implied, or total comp clearly $300K or more"
+      ]
+    },
+    "role_shape": {
+      "type": "choice",
+      "instructions": "Which shape best describes the job as written",
+      "criteria": {
+        "multi_site_ops_md": "Managing Director, GM, Regional VP or Director over multiple sites or units in a service operations business (rental/fleet, dealership, hospitality, facilities, logistics)",
+        "pe_portfolio_operating": "Operating MD / GM / turnaround leader inside a PE-backed multi-site company",
+        "single_site_or_ic": "One site only, or an individual contributor seat",
+        "functional_head_non_ops": "Head of a non-operations function (finance, HR, IT, marketing, legal)",
+        "sales_quota": "Primarily a quota-carrying sales seat",
+        "not_a_fit": "Unrelated function or seniority band"
+      }
+    },
+    "hard_disqualifier": {
+      "type": "noul",
+      "instructions": "The posting requires something the candidate does not have: an active security clearance, a specific professional license (CDL, CPA, PE), 10+ years managing software engineering teams, clinical credentials, or a named vendor certification as a must-have"
+    },
+    "seniority_match": {
+      "type": "noul",
+      "instructions": "The seniority is Managing Director, GM, Regional VP, Senior Director or Director of multi-site operations. Single-unit manager-and-below or pure IC is not a match"
+    },
+    "ops_evidence_fits": {
+      "type": "noul",
+      "instructions": "A candidate whose proof is multi-unit operations leadership (airport with 150 employees and 7 managers, district and regional scope, EBITDA goal beats, market-share gains, fleet and revenue accountability) would be a credible finalist for this role"
+    }
+  },
+  "rules": [
+    { "when": "role_shape.choice == not_a_fit", "verdict": "BLOCK", "reason": "wrong function or band" },
+    { "when": "role_shape.choice == sales_quota", "verdict": "BLOCK", "reason": "quota seat, not the target lane" },
+    { "when": "role_shape.choice == single_site_or_ic", "verdict": "BLOCK", "reason": "below multi-unit scope" },
+    { "when": "hard_disqualifier.noul >= 0.70", "verdict": "BLOCK", "reason": "must-have the candidate lacks" },
+    { "when": "comp_band.score < 1.00", "verdict": "BLOCK", "reason": "below walk-away with no total-comp path to $275K" },
+    { "when": "seniority_match.noul < 0.40", "verdict": "ESCALATE", "reason": "seniority unclear; human reads the JD" },
+    { "when": "comp_band.score >= 2.00", "verdict": "ESCALATE", "reason": "in band -- warm-intro-first, do not cold-apply first" }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Authored 2026-09-23 for the James Loehr MD lane as the ops sibling of job.fit.json (Mike's Head-of-AI lane does NOT apply here). Comp thresholds updated 2026-09-23 from jobs/comp-bands.md (6 live pay-transparency postings): rental/mobility is bonus-heavy at base (SIXT: 150-175K base + 100K bonus target = TTC 250K+), hospitality/dealer/consulting ops pay 180-275K base. Final band sign-off pending (playbook s7 item 8). james-os Avis-confidential figures never enter state text. Advisory until labelled against James's own skip/apply decisions."
+}

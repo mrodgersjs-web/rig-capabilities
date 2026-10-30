@@ -1,0 +1,81 @@
+{
+  "name": "rlane.fleet-system",
+  "stage": "verify",
+  "lane": "ops",
+  "description": "Routine-lane gate for fleet and system-health routines (fleet improvement loop, host health watch, D85, knowledge freshness, skill promotion, lessons, runner landscape).",
+  "questions": {
+    "artifact": {
+      "type": "noul",
+      "instructions": "The run output names at least one concrete produced artifact a reader can check: a file path, a row count read back from a store, a URL, a decision id, or a command with its exit code."
+    },
+    "blocked_line": {
+      "type": "noul",
+      "instructions": "The run output contains an explicit BLOCKED, FAILED, PARKED or ERROR line, or says it could not do the scheduled work. Saying there was nothing to do is NOT blocked."
+    },
+    "command_output": {
+      "type": "noul",
+      "instructions": "Each health or change claim is paired with the exact command run and its observed output or exit code."
+    },
+    "ledger_readback": {
+      "type": "noul",
+      "instructions": "Any change the run made is recorded in a ledger or file and the output says it was read back. If the run made no change, answer yes."
+    },
+    "destructive": {
+      "type": "noul",
+      "instructions": "The run deleted data, rebooted or killed a host service, or changed a credential without naming Mike's approval."
+    },
+    "quality": {
+      "type": "score",
+      "instructions": "How strong this run output is as evidence the lane's done-test was met.",
+      "criteria": [
+        "Status word only",
+        "Claim with no artifact or content",
+        "Names the mode or command but not the result",
+        "Artifact plus real content, no BLOCKED line",
+        "Artifact, real content, counts it can back up, and the next step or next run named"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "blocked_line.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "run reported BLOCKED/PARKED/ERROR: done-test not met"
+    },
+    {
+      "when": "artifact.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "no checkable artifact named"
+    },
+    {
+      "when": "command_output.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "claims without command output"
+    },
+    {
+      "when": "ledger_readback.noul <= 0.90",
+      "verdict": "ESCALATE",
+      "reason": "change not read back"
+    },
+    {
+      "when": "destructive.noul >= 0.50",
+      "verdict": "ESCALATE",
+      "reason": "destructive change without approval"
+    },
+    {
+      "when": "quality.score <= 2.50",
+      "verdict": "ESCALATE",
+      "reason": "output is not evidence of a met done-test"
+    }
+  ],
+  "confidence_floor": 0.9,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": true,
+  "notes": {
+    "done_test": "Every health claim is backed by a command plus its observed output, false negatives are separated from real faults, and changes are appended to a ledger with read-back.",
+    "author": "routine build-out 2026-10-04 (session 2026-10-03_xdjQtAGJmfSsidtm)",
+    "policy": "ESCALATE-only and never_auto until calibrated with labelled runs; no BLOCK rules by design.",
+    "scope": "one rubric per routine lane, judges a routine RUN OUTPUT, not its definition"
+  }
+}

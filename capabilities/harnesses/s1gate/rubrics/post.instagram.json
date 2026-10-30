@@ -41,7 +41,7 @@
   },
   "rules": [
     {
-      "when": "medical_claim.noul >= 0.55",
+      "when": "medical_claim.noul >= 0.5726",
       "verdict": "BLOCK",
       "reason": "unsourced health claim"
     },
@@ -68,7 +68,46 @@
   ],
   "confidence_floor": 0.3,
   "calibrated": false,
-  "calibration": {},
+  "calibration": {
+    "rules": {
+      "medical_claim.noul": {
+        "direction": "above",
+        "threshold": 0.5726,
+        "label_scope": "signal",
+        "train": {
+          "threshold": 0.5726,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "holdout": {
+          "threshold": 0.5726,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "combined": {
+          "threshold": 0.5726,
+          "precision": 1.0,
+          "recall": 1.0,
+          "false_block_rate": 0.0
+        },
+        "n_labelled": 66,
+        "n_good": 49,
+        "n_bad": 17,
+        "labeled_set_sha256": "9f72224db6154a52b2613eed1abdf8bac9e385aaab0df63407bb6a776db1885f",
+        "model": "jev-1.13.0",
+        "models_seen": [
+          "jev-1.13.0"
+        ],
+        "rule_sha256": "ef38103fa75c39234ee9a77ec9ea5fd9fdd6877d0de24ef2f026b4e0b60ee1ae",
+        "rubric_sha256": "6fc1e1b57504274b812471d3c56b049b7734ff5aaadb8dda9abe236792830968",
+        "max_false_block_rate": 0.05,
+        "min_recall": 0.5,
+        "tie": "middle"
+      }
+    }
+  },
   "never_auto": false,
   "notes": {
     "unverified_claim": "reworded 2026-09-18 after a false block on a first-person audit post (decision id 6)"

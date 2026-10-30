@@ -1,0 +1,200 @@
+{
+  "name": "web.aeo",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "AI-search and answer-engine readiness for a business page: can ChatGPT, Perplexity, Google AI features and classic search extract, trust and quote the business accurately. Input is an evidence dossier of measured page facts (served HTML, JSON-LD, headings, text).",
+  "questions": {
+    "aeo_entity_clarity": {
+      "type": "score",
+      "instructions": "Can a machine reader extract who the business is, what it sells, where, and for whom from the first screen of text? (family L, weight 3)",
+      "criteria": [
+        "Cannot be determined",
+        "Name only",
+        "Name and a vague category",
+        "Name and category",
+        "Name, category and location",
+        "Name, category, location and audience",
+        "Plus the founder or operator named",
+        "Plus a one-sentence definition quotable as-is",
+        "Plus the same definition restated in title, meta and H1",
+        "Entity fully defined in quotable sentences, consistent across title, meta, H1 and schema"
+      ]
+    },
+    "aeo_structured_data_depth": {
+      "type": "score",
+      "instructions": "How complete and valid is the structured data (JSON-LD) for search and AI engines? (family L, weight 3)",
+      "criteria": [
+        "No JSON-LD",
+        "Broken or invalid JSON-LD",
+        "One generic type (WebPage/WebSite)",
+        "Organization or LocalBusiness only",
+        "Business type with address or service area",
+        "Business plus FAQPage",
+        "Plus Offer data with prices",
+        "Plus Person/founder and Service entries",
+        "Plus per-service or per-vertical entities",
+        "Rich, valid, mutually consistent graph: business, person, services, offers, FAQ"
+      ]
+    },
+    "aeo_llms_txt": {
+      "type": "score",
+      "instructions": "Is there a machine-readable site summary (llms.txt or equivalent) at the domain that states offer, prices and boundaries? (family L, weight 1)",
+      "criteria": [
+        "None",
+        "Referenced but missing",
+        "Present, boilerplate",
+        "Present, lists pages only",
+        "Lists pages with descriptions",
+        "States offer and audience",
+        "States offer, audience and prices",
+        "Plus boundaries (what it is not)",
+        "Plus links that match the sitemap",
+        "Complete, current, and consistent with the site and schema"
+      ]
+    },
+    "aeo_faq_answerable": {
+      "type": "score",
+      "instructions": "Does the page answer the buyer's likely questions in direct question-and-answer form? (family L, weight 2)",
+      "criteria": [
+        "No questions answered",
+        "Marketing questions only",
+        "One or two generic FAQs",
+        "Several generic FAQs",
+        "FAQs on price or process",
+        "FAQs on price, process and scope",
+        "Plus objections (risk, ownership, lock-in)",
+        "Plus vertical-specific questions",
+        "Direct one-sentence answers first, detail after",
+        "Comprehensive, direct, quotable answers to real buyer questions"
+      ]
+    },
+    "aeo_quotable_facts": {
+      "type": "score",
+      "instructions": "Does the page contain specific, self-contained facts an AI assistant could quote (prices, timelines, scope limits, deliverables)? (family L, weight 2)",
+      "criteria": [
+        "None",
+        "Adjectives only",
+        "One vague fact",
+        "A few facts, buried",
+        "Facts present but need surrounding context",
+        "Several standalone facts",
+        "Standalone facts on price and scope",
+        "Plus timeline and deliverables",
+        "Plus explicit boundaries",
+        "Dense, standalone, mutually consistent facts across the page"
+      ]
+    },
+    "aeo_nap_consistency": {
+      "type": "score",
+      "instructions": "Are business name, location and contact route explicit and consistent for local search? (family L, weight 1)",
+      "criteria": [
+        "None",
+        "Name only",
+        "Name and city once",
+        "Name and city, no contact route",
+        "Name, city and a contact form",
+        "Plus email or phone",
+        "Plus service area",
+        "Consistent across page text and schema",
+        "Plus street address or verifiable registration",
+        "Full, consistent name, location and contact in text and schema, with service area"
+      ]
+    },
+    "aeo_price_machine_readable": {
+      "type": "score",
+      "instructions": "Are prices and quote-only offers stated consistently in page text and structured data? (family L, weight 2)",
+      "criteria": [
+        "No prices anywhere",
+        "'Contact for pricing' only",
+        "Price range in text only",
+        "One price in text",
+        "Prices in text, none in schema",
+        "Prices in schema, not in text",
+        "Prices in both, partial",
+        "Prices in both, consistent",
+        "Plus quote-only offers explicitly marked as quoted",
+        "Every offer's price or quote status consistent in text and schema"
+      ]
+    },
+    "aeo_crawlable_content": {
+      "type": "score",
+      "instructions": "Is core content present in served HTML with a semantic heading hierarchy and landmarks? (family L, weight 2)",
+      "criteria": [
+        "Empty shell until JavaScript runs",
+        "Mostly JavaScript-rendered",
+        "Partially server-rendered",
+        "Content present, no headings",
+        "Content with an H1 only",
+        "H1 and some H2s",
+        "Proper heading hierarchy",
+        "Plus landmarks (main, nav)",
+        "Plus descriptive link text",
+        "Fully server-rendered, semantic, landmarked and descriptive"
+      ]
+    },
+    "aeo_topical_depth": {
+      "type": "score",
+      "instructions": "Does the site offer dedicated, linked pages per service and per vertical that an AI engine could cite for specific queries? (family L, weight 2)",
+      "criteria": [
+        "Single page, no depth",
+        "One service page",
+        "A few generic pages",
+        "Service pages, no vertical pages",
+        "Verticals mentioned, no vertical pages",
+        "Some vertical pages",
+        "Vertical pages linked from the page",
+        "Service-by-vertical pages",
+        "Plus articles answering buyer questions",
+        "Complete, interlinked topical cluster per service and vertical"
+      ]
+    },
+    "aeo_third_party_corroboration": {
+      "type": "score",
+      "instructions": "Are there verifiable third-party signals (directories, profiles, reviews, citations) that corroborate the business? (family L, weight 1)",
+      "criteria": [
+        "None",
+        "A social link only",
+        "One profile link",
+        "Several own profiles",
+        "One third-party listing",
+        "Several listings",
+        "One named third-party mention",
+        "Reviews or citations",
+        "Consistent corroboration across sources",
+        "Strong, independent, consistent corroboration"
+      ]
+    },
+    "aeo_freshness": {
+      "type": "score",
+      "instructions": "Does the content show it is current (dates, recent updates, current-year facts)? (family L, weight 1)",
+      "criteria": [
+        "Stale references",
+        "Undated",
+        "Copyright year only",
+        "One date",
+        "Dated content",
+        "Recent dated content",
+        "Last-updated shown",
+        "Recent and consistently dated",
+        "Plus dateModified in schema",
+        "Clearly current across page and schema"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "aeo_structured_data_depth.score <= 1.00",
+      "verdict": "ESCALATE",
+      "reason": "no usable structured data"
+    },
+    {
+      "when": "aeo_entity_clarity.score <= 2.00",
+      "verdict": "ESCALATE",
+      "reason": "machine reader cannot tell what the business sells"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

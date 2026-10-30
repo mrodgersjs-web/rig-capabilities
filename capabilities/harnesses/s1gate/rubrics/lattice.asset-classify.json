@@ -1,0 +1,83 @@
+{
+  "name": "lattice.asset-classify",
+  "description": "Classify one proposed or existing RIG asset (a Recall build card, a skill, an agent, a harness, a loop, a hook or a workflow) onto the real RIG lattice axes: asset kind, BMS archetype family (A1-A4), altitude level (L1-L7) and diamond plane (D1-D3), plus whether it is buildable now. Advisory until calibrated - it classifies, it does not gate.",
+  "stage": "plan",
+  "lane": "build",
+  "never_auto": true,
+  "calibrated": false,
+  "confidence_floor": 0.35,
+  "questions": {
+    "asset_kind": {
+      "type": "choice",
+      "instructions": "Which RIG asset kind does this card actually specify? Judge by what the card asks to exist, not by the domain it talks about.",
+      "criteria": {
+        "skill": "A named instruction surface an agent loads (SKILL.md, doctrine text, checklist).",
+        "agent": "A role with a system prompt, tools and an owner; it decides and acts.",
+        "harness": "A goal wrapper with stages, gates and a done-test around other assets.",
+        "loop": "A repeating cycle with state, an exit condition and a kill switch.",
+        "hook": "A deterministic interception at a lifecycle event (pre-tool, stop, session-start).",
+        "workflow": "A fixed sequence of typed steps, branches allowed, no autonomous decisions.",
+        "platform_layer": "Software that must be built and run: an app, service, registry, database or UI.",
+        "doctrine": "A scoring or thinking system: criteria, formulas, scales, gates expressed as rules.",
+        "research_input": "A survey, repo index or comparison that informs a build but is not itself buildable.",
+        "other": "None of the above fits."
+      }
+    },
+    "bms_archetype": {
+      "type": "choice",
+      "instructions": "Which BMS archetype family does the work belong in, judged by how much deterministic mechanism the card can actually carry? A1 python-only (deterministic, confidence >= 0.75), A2 hybrid (code with a model in a bounded slot), A3 agent-bounded (agentic with checkpoints), A4 llm-free (open model work, doctrine and novel frames).",
+      "criteria": {
+        "A1_python_only": "Deterministic code can carry it end to end: schemas, checks, counters, routing tables, gates.",
+        "A2_hybrid": "Code owns the spine, one typed model call inside a bounded slot with a fixed answer set.",
+        "A3_agent_bounded": "Needs an agent with checkpoints, tool use and a bounded budget; no fixed answer set.",
+        "A4_llm_free": "Open-ended synthesis, doctrine, framing or exploration where a deterministic spine would be a lie.",
+        "other": "Cannot be placed on the mode axis."
+      }
+    },
+    "level": {
+      "type": "choice",
+      "instructions": "Altitude of the work on the L1-L7 ladder: L1 direct deterministic repeatable, L2 structured but parameterized, L3 workflow with branches, L4 bounded agentic with checkpoints, L5 mechanism plus tradeoff reasoning, L6 strategic synthesis required, L7 doctrine, exploration or a novel frame.",
+      "criteria": {
+        "L1": "Direct, deterministic, repeatable.",
+        "L2": "Structured but parameterized.",
+        "L3": "Workflow with branches.",
+        "L4": "Bounded agentic with checkpoints.",
+        "L5": "Mechanism plus tradeoff reasoning.",
+        "L6": "Strategic synthesis required.",
+        "L7": "Doctrine, exploration, novel frame.",
+        "other": "Spans levels so tightly it cannot be placed."
+      }
+    },
+    "plane": {
+      "type": "choice",
+      "instructions": "Diamond plane the work owns: D1 Physical (operations, assets, devices, infrastructure, payments, scheduling), D2 Cognitive (classification, research, synthesis, reasoning, doctrine, strategy), D3 Nature (feedback loops, cycles, regeneration, resilience, behaviour patterns).",
+      "criteria": {
+        "D1_physical": "Operations, assets, logistics, devices, infrastructure, payments, inventory, scheduling.",
+        "D2_cognitive": "Classification, research, synthesis, reasoning workflows, doctrine, strategy.",
+        "D3_nature": "Feedback loops, cycles, regeneration, resilience, behaviour patterns.",
+        "other": "Genuinely spans planes with no primary owner."
+      }
+    },
+    "buildable_now": {
+      "type": "noul",
+      "instructions": "How buildable is this today with the estate that already exists (models, harnesses, registries, data, credentials)? noul high when the parts exist and only assembly is missing; noul low when it depends on unbuilt systems, unknown data or money."
+    }
+  },
+  "rules": [
+    {
+      "when": "asset_kind.choice == 'other'",
+      "verdict": "ESCALATE",
+      "reason": "asset kind does not fit the six RIG asset classes - the taxonomy needs a new row, not a guess"
+    },
+    {
+      "when": "buildable_now.noul < 0.30",
+      "verdict": "ESCALATE",
+      "reason": "not buildable on the current estate: name the missing dependency before scheduling it"
+    },
+    {
+      "when": "bms_archetype.choice == 'A1_python_only'",
+      "verdict": "ESCALATE",
+      "reason": "A1 means build it as code first - flag so it is not built as an agent by habit"
+    }
+  ]
+}

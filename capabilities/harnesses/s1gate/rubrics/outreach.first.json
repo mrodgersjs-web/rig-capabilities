@@ -1,0 +1,248 @@
+{
+  "name": "outreach.first",
+  "stage": "verify",
+  "lane": "gtm",
+  "description": "First-touch cold outreach quality (email or LinkedIn) for a local B2B service. Pierce rule: lead with one named vertical pain, never the audit. Complements email.outreach, which stays the pre-send safety gate. Input: the full draft plus the observed facts about the recipient it relies on.",
+  "questions": {
+    "out_named_pain_first": {
+      "type": "score",
+      "instructions": "Does the first line name one specific pain the recipient's business likely has, before any offer? (family K, weight 3)",
+      "criteria": [
+        "Opens with the sender or company",
+        "Opens with a pleasantry",
+        "Generic industry problem",
+        "Problem area named",
+        "Specific failure named",
+        "Specific failure in their industry",
+        "Specific failure tied to their business",
+        "Tied to something observed at their business",
+        "Observed failure plus its cost to them",
+        "First line names a pain they recognise instantly, from an observation at their business"
+      ]
+    },
+    "out_no_audit_lead": {
+      "type": "score",
+      "instructions": "Does the first touch avoid leading with a paid audit, a price or a meeting request? (family K, weight 2)",
+      "criteria": [
+        "Leads with a price or paid offer",
+        "Leads with a meeting request",
+        "Leads with a calendar link",
+        "Offer in the first paragraph",
+        "Offer before the problem",
+        "Problem first, heavy offer",
+        "Problem first, soft offer mention",
+        "Problem first, free resource offered",
+        "Problem first, permission-based question",
+        "Pain first; the only ask is permission or a free, useful next step"
+      ]
+    },
+    "out_recipient_evidence": {
+      "type": "score",
+      "instructions": "Does it cite an observed, verifiable fact about this recipient's business? (family K, weight 3)",
+      "criteria": [
+        "Nothing about the recipient",
+        "Name merge field only",
+        "Company name only",
+        "Industry reference",
+        "Generic company-level fact",
+        "One observed fact about their business",
+        "Observed fact with its source",
+        "Observed fact tied to the pain",
+        "Two observed facts tied to the pain",
+        "A specific, verifiable observation that proves this was written for them"
+      ]
+    },
+    "out_one_ask": {
+      "type": "score",
+      "instructions": "Is there exactly one clear, low-pressure ask? (family K, weight 2)",
+      "criteria": [
+        "No ask",
+        "Three or more asks",
+        "Two competing asks",
+        "One ask, buried",
+        "One ask, vague",
+        "One ask, clear",
+        "One clear ask at the end",
+        "One clear, easy ask",
+        "One ask with a stated no-pressure out",
+        "Exactly one clear, easy, no-pressure ask"
+      ]
+    },
+    "out_ask_cost_low": {
+      "type": "score",
+      "instructions": "How little effort does the ask require of the recipient? (family K, weight 2)",
+      "criteria": [
+        "Requires a purchase",
+        "Requires a long meeting",
+        "Requires a 30-minute call",
+        "Requires a 15-minute call",
+        "Requires filling a form",
+        "Requires reading a long resource",
+        "Requires a short reply",
+        "Requires a one-word reply",
+        "A free useful thing, no reply needed",
+        "Costs seconds and helps even without a reply"
+      ]
+    },
+    "out_sender_credibility": {
+      "type": "score",
+      "instructions": "Does one line establish who the sender is and why credible, without inflation? (family K, weight 2)",
+      "criteria": [
+        "No sender identity",
+        "Name only",
+        "Name and company",
+        "Name, company, vague role",
+        "Name, role and location",
+        "Plus one relevant credential",
+        "Plus why they are qualified for this problem",
+        "Plus a verifiable reference (site, method)",
+        "Credible, local, verifiable, no inflation",
+        "One line makes the sender credible, local and checkable"
+      ]
+    },
+    "out_brevity": {
+      "type": "score",
+      "instructions": "Is it short and scannable? (family K, weight 1)",
+      "criteria": [
+        "Over 300 words",
+        "250 to 300 words",
+        "200 to 250 words",
+        "170 to 200 words",
+        "150 to 170 words",
+        "120 to 150 words",
+        "100 to 120 words, dense",
+        "80 to 120 words, scannable",
+        "50 to 90 words, scannable",
+        "Under 90 words, every line earns its place"
+      ]
+    },
+    "out_vertical_language": {
+      "type": "score",
+      "instructions": "Does it use the recipient industry's own terms correctly? (family K, weight 2)",
+      "criteria": [
+        "No industry language",
+        "Generic business terms",
+        "Wrong industry terms",
+        "One industry word",
+        "Some industry words",
+        "Industry terms used correctly",
+        "Native terms for their workflow",
+        "Native terms plus their customers' language",
+        "Reads like an insider",
+        "Reads like someone who has worked their front office"
+      ]
+    },
+    "out_claim_hygiene": {
+      "type": "score",
+      "instructions": "Are all claims supportable, with no invented results, clients or numbers? (family K, weight 3)",
+      "criteria": [
+        "Invented results or clients",
+        "Unsupported numbers",
+        "Implied results",
+        "Vague superlatives",
+        "Mild puffery",
+        "Mostly supportable",
+        "All supportable, one soft claim",
+        "All claims supportable",
+        "All claims supportable and labelled",
+        "Every claim is checkable; nothing invented"
+      ]
+    },
+    "out_compliance": {
+      "type": "score",
+      "instructions": "Does it identify the sender honestly and give a clear way to opt out? (family K, weight 1)",
+      "criteria": [
+        "Deceptive sender or subject",
+        "Sender identity missing",
+        "Identity unclear",
+        "Identity present, no opt-out",
+        "Opt-out implied",
+        "Soft opt-out line",
+        "Clear opt-out line",
+        "Clear identity and opt-out",
+        "Plus a physical location",
+        "Identity, location and a clear opt-out; nothing deceptive"
+      ]
+    },
+    "out_subject_specificity": {
+      "type": "score",
+      "instructions": "Is the subject line specific to the recipient's situation and free of hype? (family K, weight 2)",
+      "criteria": [
+        "Spammy or clickbait",
+        "Generic ('Quick question')",
+        "Generic benefit",
+        "Mentions the industry",
+        "Mentions their company",
+        "Mentions a specific thing",
+        "Specific to their situation",
+        "Specific and intriguing",
+        "Specific, plain, recognisable",
+        "Plain and specific to something at their business, no hype"
+      ]
+    },
+    "out_value_first": {
+      "type": "score",
+      "instructions": "Does it give something useful even if they never reply? (family K, weight 2)",
+      "criteria": [
+        "Pure pitch",
+        "Pitch with filler",
+        "Pitch with a generic tip",
+        "One generic insight",
+        "One relevant insight",
+        "One specific observation",
+        "Observation plus what it means",
+        "Observation, meaning and a free check",
+        "Useful without a reply",
+        "Leaves them better off even if they never answer"
+      ]
+    },
+    "out_human_voice": {
+      "type": "score",
+      "instructions": "Does it read like one person writing to one person, not a template or AI output? (family K, weight 2)",
+      "criteria": [
+        "Obvious template or AI slop",
+        "Template with merge fields",
+        "Stiff and corporate",
+        "Generic but clean",
+        "Mostly natural",
+        "Natural",
+        "Natural and specific",
+        "One person to one person",
+        "Distinct voice",
+        "Unmistakably one human writing to another"
+      ]
+    },
+    "out_trigger_timing": {
+      "type": "score",
+      "instructions": "Does it tie to a real reason this matters now (season, event, observed change)? (family K, weight 1)",
+      "criteria": [
+        "No reason for now",
+        "Fake urgency",
+        "Generic timing",
+        "Vague seasonal reference",
+        "Relevant season",
+        "Observed trigger",
+        "Recent observed trigger",
+        "Trigger tied to the pain",
+        "Timely trigger with its consequence",
+        "A clear, real reason this matters now"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "out_claim_hygiene.score <= 4.00",
+      "verdict": "BLOCK",
+      "reason": "unsupported claim in outreach"
+    },
+    {
+      "when": "out_compliance.score <= 3.00",
+      "verdict": "ESCALATE",
+      "reason": "sender identity or opt-out missing"
+    }
+  ],
+  "confidence_floor": 0.2,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false
+}

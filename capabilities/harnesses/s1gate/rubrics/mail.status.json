@@ -1,0 +1,23 @@
+{
+  "name": "mail.status", "stage": "measure", "lane": "job",
+  "description": "Classify one job-search email thread (subject + first message + latest message) into the pipeline event it represents, the company, and the role. Deterministic code cannot do this reliably from ATS boilerplate.",
+  "questions": {
+    "event": {"type":"choice","instructions":"What this thread most recently represents in the candidate's pipeline","criteria":{
+      "application_received":"Automated acknowledgment that an application was received or is under review; no decision",
+      "rejected":"The employer declined to move forward, chose another candidate, closed or filled the role, or said the profile is not a match",
+      "interview_invite":"An invitation, scheduling request, confirmation, reminder or calendar item for a screen or interview",
+      "assessment":"A take-home, HackerRank or other assessment step",
+      "advance":"Explicit notice the candidate is moving to a next round after a conversation",
+      "recruiter_outreach":"An inbound recruiter or search-firm approach not tied to an application the candidate submitted",
+      "candidate_sent":"A message the candidate himself sent (thank-you, follow-up, reply)",
+      "other":"Portal task, security code, digest, or unrelated"}},
+    "stage_reached": {"type":"choice","instructions":"Furthest stage evidenced anywhere in the thread","criteria":{
+      "application":"No human conversation evidenced","recruiter_screen":"A recruiter or coordinator screen was held or scheduled","hiring_manager":"A hiring-manager or panel conversation was held or scheduled","assessment":"A technical assessment was assigned","final_or_offer":"Final round or offer"}},
+    "explicit_reason": {"type":"noul","instructions":"The employer states a concrete reason for its decision rather than boilerplate"},
+    "role_is_leadership": {"type":"noul","instructions":"The role named in the thread is Director, Senior Director, VP, Head-of, Executive Director, Chief, or Principal/Distinguished level"},
+    "role_is_hands_on_ic": {"type":"noul","instructions":"The role named in the thread is an individual-contributor engineering, architect, or developer seat"}
+  },
+  "rules": [],
+  "confidence_floor": 0.35, "calibrated": false, "calibration": {}, "never_auto": false,
+  "notes": "Created 2026-09-18 for the Gmail pipeline audit. No rules: this is a pure classifier consumed by code."
+}

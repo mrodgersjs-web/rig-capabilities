@@ -1,0 +1,216 @@
+{
+  "name": "jobhunt.select",
+  "stage": "plan",
+  "lane": "job",
+  "description": "Jobhunt 0-10 gating and ordering for candidate selection. state = the posting's employer text plus the candidate's known eligibility and the dedupe result. Target 250K base, 200K base floor, 325K all-in is aspiration only. Produces both the go/no-go and the order to apply in.",
+  "questions": {
+    "f1_base_pay_verified": {
+      "type": "score",
+      "instructions": "Whether applicable base pay is verified from employer text at or above the target",
+      "criteria": [
+        "0: unknown pay or below the $200K base floor",
+        "2: a broad range whose minimum is below the floor",
+        "3: a range that merely overlaps the floor",
+        "4: a range with a stated minimum but not tied to location",
+        "5: employer-stated base range whose minimum meets the $200K floor for this location",
+        "6: 5's level plus the range comes from the posting, not an aggregator",
+        "7: 6's level plus the maximum reaches $250K",
+        "8: 7's level plus the midpoint is at or above $250K",
+        "9: 8's level plus the band is stated for the exact location being applied to",
+        "10: 9's level plus band, bonus and equity are each separately identified"
+      ]
+    },
+    "f2_location_and_travel": {
+      "type": "score",
+      "instructions": "Whether location, remote or onsite status and travel are verified and owner-answered where required",
+      "criteria": [
+        "0: unverified",
+        "2: location known, remote status unknown",
+        "3: remote status known, travel unknown",
+        "4: travel stated qualitatively only",
+        "5: location and hybrid or onsite status verified from the posting",
+        "6: 5's level plus travel percentage stated",
+        "7: 6's level plus Denver or remote is explicit",
+        "8: 7's level plus relocation, if required, is an owner answer on file",
+        "9: 8's level plus the requirement matches what Mike has already confirmed",
+        "10: 9's level plus no location or travel answer is borrowed from another employer"
+      ]
+    },
+    "f3_authorization_sponsorship": {
+      "type": "score",
+      "instructions": "Whether work authorization and sponsorship answers are truthful and sourced",
+      "criteria": [
+        "0: invented or unanswered on a required field",
+        "2: answered, source is an undated note",
+        "3: sponsorship answered generally, not for this employer",
+        "4: authorization answered, prior-employment question unanswered",
+        "5: authorization and sponsorship answered with a dated source",
+        "6: 5's level plus prior-employment questions answered per employer",
+        "7: 6's level plus the source reference is recorded in the packet",
+        "8: 7's level plus no optional disclosure is inferred",
+        "9: 8's level plus every required legal answer has its own evidence row",
+        "10: 9's level plus all answers are consistent with filings already made"
+      ]
+    },
+    "f4_real_vacancy": {
+      "type": "score",
+      "instructions": "Whether this is an active vacancy rather than a talent pool or future opening",
+      "criteria": [
+        "0: a talent pool or future-opening listing",
+        "2: a requisition id but no live page check",
+        "3: a requisition id with a stale page check",
+        "4: live page checked more than 14 days ago",
+        "5: active requisition verified live within the last 7 days",
+        "6: 5's level plus the posting names a team or manager",
+        "7: 6's level plus the req has an age of 0 to 7 days",
+        "8: 7's level plus there is an inbound signal or a warm contact",
+        "9: 8's level plus the req is behind a relationship that can move it",
+        "10: 9's level plus he is applying before the req is widely visible"
+      ]
+    },
+    "f5_dedupe_clean": {
+      "type": "score",
+      "instructions": "Whether employer, requisition, portal and mail history are all clear of a prior attempt",
+      "criteria": [
+        "0: hits a PARKED or uncertain record",
+        "2: req matches a prior attempt with unknown outcome",
+        "3: req matches a prior attempt that was rejected",
+        "4: employer overlap only, no req match",
+        "5: no employer plus requisition match in the ledger, mail or portal",
+        "6: 5's level plus a canonical URL check is recorded",
+        "7: 6's level plus the mail box has been searched for this req",
+        "8: 7's level plus the portal history is clear",
+        "9: 8's level plus any manual application by Luca has been reconciled",
+        "10: 9's level plus the dedupe evidence is timestamped and stored"
+      ]
+    },
+    "g1_lane_fit_for_order": {
+      "type": "score",
+      "instructions": "Lane fit for ranking the day's candidates",
+      "criteria": [
+        "0: excluded lane",
+        "2: one lane signal conflicts",
+        "3: ambiguous lane",
+        "4: adjacent lane with a bridge",
+        "5: squarely the target lane, stated once",
+        "6: 5's level plus no competing lane signal",
+        "7: 6's level plus the lane is named in the headline",
+        "8: 7's level plus evidenced by two roles",
+        "9: 8's level plus reinforced by scope",
+        "10: 9's level plus their lane words describe him"
+      ]
+    },
+    "g2_band_distance_from_target": {
+      "type": "score",
+      "instructions": "How far the base band sits from the $250K target",
+      "criteria": [
+        "0: at or below the $200K floor",
+        "2: maximum at $215K",
+        "3: maximum at $230K",
+        "4: midpoint at $235K",
+        "5: maximum at $250K",
+        "6: midpoint at $250K",
+        "7: midpoint at $265K",
+        "8: midpoint at $285K",
+        "9: midpoint at or above $300K",
+        "10: 9's level plus the band is narrow and the floor is well clear of $250K"
+      ]
+    },
+    "g3_evidence_reuse": {
+      "type": "score",
+      "instructions": "How much of an already-cleared packet can be reused",
+      "criteria": [
+        "0: everything must be rewritten from scratch",
+        "2: a quarter is reusable",
+        "3: a third is reusable",
+        "4: half is reusable but the top third must change",
+        "5: half is reusable with one paragraph rewritten",
+        "6: 60 percent reusable, summary and two bullets change",
+        "7: 70 percent reusable, summary changes only",
+        "8: 80 percent reusable, one clause changes",
+        "9: reuses a cleared packet with a cover note only",
+        "10: reuses a cleared packet unchanged and the target's top requirement is already answered"
+      ]
+    },
+    "g4_urgency": {
+      "type": "score",
+      "instructions": "How urgent the window is",
+      "criteria": [
+        "0: posted 30 or more days ago",
+        "2: 15 to 21 days",
+        "3: 11 to 14 days",
+        "4: 8 to 10 days",
+        "5: posted 5 to 7 days ago",
+        "6: 3 to 4 days",
+        "7: 1 to 2 days",
+        "8: posted today",
+        "9: today plus a warm signal in the last week",
+        "10: an inbound or referred path that expires within days"
+      ]
+    },
+    "g5_competition_heuristics": {
+      "type": "score",
+      "instructions": "How crowded the field is likely to be",
+      "criteria": [
+        "0: brand-name employer, easy apply, public 3 weeks",
+        "2: easy apply on any board",
+        "3: a niche board only",
+        "4: a niche board plus a domain requirement",
+        "5: a domain requirement most applicants will not meet",
+        "6: 5's level plus a second unusual requirement (clearance, sector tenure)",
+        "7: 6's level plus the req sits behind a smaller company",
+        "8: 7's level plus there is a referral path in reach",
+        "9: 8's level plus the req is unadvertised or very new",
+        "10: 9's level plus he would be one of very few people in the world for it"
+      ]
+    },
+    "g6_ordering_rule": {
+      "type": "score",
+      "instructions": "Whether today's batch is ordered by fit, band and reuse before any volume goal",
+      "criteria": [
+        "0: ordered by nothing, applied in list order",
+        "2: ordered by band only",
+        "3: ordered by band and recency",
+        "4: ordered by fit and band but volume forced the tail",
+        "5: the top three by fit plus band plus reuse were prepared first",
+        "6: 5's level plus nothing below a 5 on g1 was prepared at all",
+        "7: 6's level plus the tail was cut rather than padded",
+        "8: 7's level plus each prepared item names its one reason it ranks here",
+        "9: 8's level plus the order survives a re-read with no reshuffle",
+        "10: 9's level plus the ordering rule is written down and followed daily"
+      ]
+    }
+  },
+  "rules": [
+    {
+      "when": "f1_base_pay_verified.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "base pay is not verified at or above the $200K floor for this location; do not spend a packet on it"
+    },
+    {
+      "when": "f4_real_vacancy.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "not a live active vacancy"
+    },
+    {
+      "when": "f5_dedupe_clean.score < 5.0",
+      "verdict": "BLOCK",
+      "reason": "duplicate or uncertain prior attempt; reconcile before any further work"
+    },
+    {
+      "when": "f3_authorization_sponsorship.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "required legal answer missing or unsourced"
+    },
+    {
+      "when": "g6_ordering_rule.score < 5.0",
+      "verdict": "ESCALATE",
+      "reason": "the day's batch was not ordered by fit, band and reuse before volume"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {},
+  "never_auto": false,
+  "notes": "Base, bonus, OTE and equity are separate quantities; never substitute one for another. Unknown pay is never a pass. 325K all-in never satisfies f1. Ordering question g6 exists because a score that only informs is a dashboard: the number must choose the order. Advisory while calibrated:false. SCALE CORRECTION 2026-09-22: the live Jev API hard-caps score levels at 10 (\"Too many score levels. Must have at most 10 levels\"), contradicting the typesafe-jev skill doc which claims max 11. This pack therefore carries 10 levels labelled 0,2,3,4,5,6,7,8,9,10: the single \"just above 0\" filler rung was removed and every anchor label and body kept verbatim, so 0 = bad, 5 = average and 10 = world class still hold and rule thresholds (5.0) are unchanged. Operating goal is 9.5 on the 0-10 label scale. If the returned mean proves index-based (max 8 over 10 rungs) rather than label-based, the equivalent goal is 8.55 and the next run must say so rather than rescale silently."
+}

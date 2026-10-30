@@ -1,0 +1,165 @@
+{
+  "name": "resume.screen",
+  "stage": "build",
+  "lane": "job",
+  "description": "Project Get a Job: the AI-screen half of the resume bar. Input is the resume text, then a line '=== JD ===', then the posting. Every question is atomic and answerable from those two texts alone. Advisory: these are properties WE control, not a probability that any employer's system passes the file.",
+  "questions": {
+    "requirements_mirrored": {
+      "type": "score",
+      "instructions": "For the must-have requirements the candidate genuinely meets, does the resume use the posting's own terms for them, rather than a synonym a literal matcher would miss? Judge only requirements the resume actually evidences; do not reward covering a requirement it does not meet.",
+      "criteria": [
+        "Met requirements are described in unrelated vocabulary",
+        "About half of met requirements share the posting's wording",
+        "Most met requirements use the posting's own terms",
+        "Every met requirement uses the posting's terms with evidence beside it"
+      ]
+    },
+    "match_in_opening": {
+      "type": "score",
+      "instructions": "How much of the case for THIS role is visible in the opening third of the resume (title line, summary, first role) without reading further?",
+      "criteria": [
+        "Opening points at a different kind of role",
+        "Opening is generically relevant; the proof is further down",
+        "Opening names this role's core work with one concrete proof",
+        "Opening names this role's core work with specific, dated, quantified proof"
+      ]
+    },
+    "requirement_checkable": {
+      "type": "score",
+      "instructions": "Where the posting states a countable bar (years in a named specialty, team size, budget, scope), can a reader verify it from what is written, rather than having to assume?",
+      "criteria": [
+        "Countable bars cannot be checked from the text",
+        "Some are checkable; key ones need assumption",
+        "Most countable bars are directly checkable",
+        "Every countable bar the candidate meets is directly checkable from dates and scope"
+      ]
+    },
+    "title_alignment": {
+      "type": "noul",
+      "instructions": "The headline or title line would be read as the same job family the posting is filling, rather than a more senior, more junior, or different function."
+    },
+    "outcome_density": {
+      "type": "score",
+      "instructions": "Share of experience bullets ending in a measurable business outcome or named result rather than a duty description.",
+      "criteria": [
+        "Almost all bullets are duty descriptions",
+        "Some outcomes, mostly activity",
+        "Most bullets end in a measurable outcome",
+        "Nearly every bullet is outcome-first with a number and scope"
+      ]
+    },
+    "unverifiable_claim": {
+      "type": "noul",
+      "instructions": "The resume asserts a credential, employer, title, date or figure that a careful reader would want to verify and could not, or that reads as added to match the posting rather than drawn from real history."
+    },
+    "employee_framing": {
+      "type": "noul",
+      "instructions": "This reads as a candidate seeking a full-time employed role, not a consultant, founder or vendor pitching services."
+    },
+    "parse_safe_structure": {
+      "type": "noul",
+      "instructions": "The text shows conventional resume structure: recognisable section headings, one role per dated block, contact details in the body, no evidence of multi-column or graphical layout artifacts such as interleaved fragments."
+    },
+    "scope_credibility": {
+      "type": "noul",
+      "instructions": "The seniority implied by the claims is consistent across the document, without a jump that a reader would find implausible for the dates and titles shown."
+    }
+  },
+  "rules": [
+    {
+      "when": "title_alignment.noul < 0.70",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.87)"
+    },
+    {
+      "when": "parse_safe_structure.noul < 0.77",
+      "verdict": "ESCALATE",
+      "reason": "below 80% of the measured strong-control value (0.96)"
+    },
+    {
+      "when": "scope_credibility.noul < 0.58",
+      "verdict": "ESCALATE",
+      "reason": "below the 0.58 scope floor (Mike-approved 2026-10-13 ~11:45 MDT change from 0.62 (sidepanel ioDlsuk53zpwE7nj); outcome data showed no separation)"
+    }
+  ],
+  "confidence_floor": 0.35,
+  "calibrated": false,
+  "calibration": {
+    "method": "control-anchored, 2026-09-21, jev-1.13.0. STRONG = clean in-band senior resume; WEAK = generic no-content resume. Floor = 0.8 x STRONG, so a target can never exceed what a good document actually scores.",
+    "controls": {
+      "requirements_mirrored": {
+        "strong": 0.61,
+        "weak": 0.04,
+        "separation": 0.57,
+        "usable": true,
+        "floor": 0.49
+      },
+      "match_in_opening": {
+        "strong": 0.96,
+        "weak": 0.15,
+        "separation": 0.81,
+        "usable": true,
+        "floor": 0.77
+      },
+      "requirement_checkable": {
+        "strong": 0.73,
+        "weak": 0.06,
+        "separation": 0.67,
+        "usable": true,
+        "floor": 0.58
+      },
+      "title_alignment": {
+        "strong": 0.87,
+        "weak": 0.1,
+        "separation": 0.77,
+        "usable": true,
+        "floor": 0.7
+      },
+      "outcome_density": {
+        "strong": 0.55,
+        "weak": 0.0,
+        "separation": 0.55,
+        "usable": true,
+        "floor": 0.44
+      },
+      "unverifiable_claim": {
+        "strong": 0.53,
+        "weak": 0.59,
+        "separation": -0.06,
+        "usable": false,
+        "floor": null
+      },
+      "employee_framing": {
+        "strong": 0.91,
+        "weak": 0.91,
+        "separation": 0.0,
+        "usable": false,
+        "floor": null
+      },
+      "parse_safe_structure": {
+        "strong": 0.96,
+        "weak": 0.44,
+        "separation": 0.52,
+        "usable": true,
+        "floor": 0.77
+      },
+      "scope_credibility": {
+        "strong": 0.78,
+        "weak": 0.32,
+        "separation": 0.46,
+        "usable": true,
+        "floor": 0.62
+      }
+    }
+  },
+  "never_auto": false,
+  "notes": {
+    "boundary": "These are properties of the document, which we control. They are NOT a probability that a given employer's ATS or model passes the file. No calibration against employer outcomes exists, so no threshold here may be reported as a pass rate.",
+    "layout": "True layout parseability (columns, tables, text boxes, link targets, page count) is checked deterministically in resume_lint.py, not here. Jev sees text only and cannot see a text box.",
+    "employment_continuity_DEFECT": "MEASURED 2026-09-21 and NOT FIT FOR PURPOSE. Perfect synthetic control (no gaps, all months) returned 0.71, a control with a real 3-year gap returned 0.53, and a real dense 11-role resume returned 0.17-0.18 and did NOT move across four structural rewrites (overlap removed 0.19, all-years format 0.23, employer roles grouped 0.17, early career condensed 0.17). The question discriminates on short synthetic inputs but is pinned and unresponsive on real documents, and its ceiling is far below the 0.90 rule. Its rule is therefore disabled. Do not report a low value here as a resume defect. Rewrite as an atomic, checkable question (e.g. 'a date gap longer than three months is left unexplained') and re-measure against controls before re-enabling.",
+    "threshold_provenance": "The 0.90 rules were chosen aspirationally, not measured. A noul question's usable range must be established from known-good and known-bad controls FIRST. Any rule whose threshold sits above its control ceiling is a false-block generator, which is the failure mode that gets a gate switched off.",
+    "disabled_questions": "These questions could not separate a strong control from a deliberately weak one and their rules are removed until rewritten: unverifiable_claim, employee_framing. Reporting a number from an unusable question would be a dashboard, not a gate.",
+    "ceiling_warning": "Six questions have a strong-control ceiling below 0.75, so a 0.90 target on them is unreachable by construction. Targets are now 0.8 x the measured strong control, per question.",
+    "employment_continuity_RETIRED": "RETIRED 2026-09-21 as INVALID for senior candidates. It does not measure continuity; it measures ROLE COUNT. Measured on clean, fully-dated, gapless synthetic controls: 4 roles = 0.78, 5 roles = 0.60, 7 roles = 0.61. Document length does NOT drive it (padding the 4-role control from 90 to 509 words moved it 0.78 -> 0.83), and neither does same-employer repetition (0.60 different employers vs 0.66 same employer, grouped 0.66). Nine rewrites of a real 11-role resume stayed pinned at 0.16-0.23: overlap removed, all-years, no mixed ranges, employer roles split, employer rename removed, early career condensed. A 20-year career is therefore penalised for existing. Passing it would require deleting real jobs, which is the wrong trade. Replace with a deterministic gap check in code (parse dates, flag any unexplained break > 3 months) - that is arithmetic, not a judgement, and should never have been asked of a classifier."
+  }
+}
