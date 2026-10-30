@@ -130,7 +130,7 @@ class TestSwarmLedger(unittest.TestCase):
 
     def test_trimmed_mean_drops_the_extremes(self):
         for i, p in enumerate([0.44, 0.58, 0.62, 0.66, 0.71]):
-            self._add("F%d" % i, "fam%d" % (i % 3), p)
+            self._add("F%d" % i, "fam%d" % (i % 3), p, low_correlation=(i == 0))
         got = uf.aggregate(self.led.all())
         self.assertAlmostEqual(got["value"], 0.62, places=3)
         self.assertEqual(got["n"], 5)
@@ -261,6 +261,105 @@ class TestSwarmLedger(unittest.TestCase):
         again = uf.Ledger(self.led.path)
         self.assertEqual(again.get(rec["id"])["outcome"], 1)
         self.assertEqual(json.loads(again.path.read_text().splitlines()[0])["outcome"], 1)
+
+
+class TestEnsembleHygieneAndPlants(unittest.TestCase):
+    """Conductor D-20261001-083903-8fab: capping + calibration must go RED on
+    planted failures, not just green on the happy path. Each mutant below is a
+    planted defect; the test asserts the check detects it.
+    """
+
+    def setUp(self):
+        self.dir = tempfile.mkdtemp()
+        self.led = uf.Ledger(os.path.join(self.dir, "forecasts.jsonl"))
+
+    def _add(self, name, family, p, **kw):
+        kw.setdefault("reasons_for", "evidence supports it")
+        kw.setdefault("reasons_against", "evidence against it")
+        return self.led.add("r1", "ULTRA ships", name, family, p, **kw)
+
+    def _crowd(self, probs=(0.44, 0.58, 0.62, 0.66, 0.71), low_at=0):
+        for i, p in enumerate(probs):
+            self._add("F%d" % i, "fam%d" % (i % 5), p, low_correlation=(i == low_at))
+        return self.led.all()
+
+    def test_planted_overconfident_stream_is_capped(self):
+        got = uf.aggregate(self._crowd((0.99, 0.99, 0.99, 0.99, 0.99)))
+        self.assertGreater(got["capped_count"], 0, "0.99 voices must be winsorized")
+        self.assertLessEqual(got["value"], 0.98 + 1e-9)
+        self.assertTrue(uf.verify_aggregate(got)["ok"])
+
+    def test_planted_uncapped_mutant_goes_red(self):
+        recs = self._crowd((0.99, 0.99, 0.99, 0.99, 0.99))
+        mutant = uf.aggregate(recs, cap_bounds=None)      # planted defect: no cap
+        verdict = uf.verify_aggregate(mutant)
+        self.assertFalse(verdict["ok"])
+        self.assertTrue(any("capping skipped" in r for r in verdict["reasons"]))
+        good = uf.aggregate(recs)
+        self.assertNotEqual(mutant["value"], good["value"],
+                            "the mutant must actually change the number, else the red proves nothing")
+
+    def test_planted_missing_caveat_goes_red(self):
+        got = uf.aggregate(self._crowd())
+        del got["correlation_caveat"]                        # planted defect
+        verdict = uf.verify_aggregate(got)
+        self.assertFalse(verdict["ok"])
+        self.assertTrue(any("caveat missing" in r for r in verdict["reasons"]))
+
+    def test_swarm_without_low_correlation_member_is_refused(self):
+        for i, p in enumerate((0.44, 0.58, 0.62, 0.66, 0.71)):
+            self._add("F%d" % i, "fam%d" % (i % 5), p)   # nobody flagged
+        got = uf.aggregate(self.led.all())
+        self.assertFalse(got["diverse"])
+        self.assertTrue(any("low-correlation" in r for r in got["refusals"]), got["refusals"])
+
+    def test_planted_forged_diversity_goes_red(self):
+        got = uf.aggregate(self._crowd())
+        got["low_correlation_members"] = 0                 # planted defect: forged flag
+        verdict = uf.verify_aggregate(got)
+        self.assertFalse(verdict["ok"])
+        self.assertTrue(any("slot empty" in r for r in verdict["reasons"]))
+
+    def _resolved(self, n, outcome_fn):
+        out = []
+        for i in range(n):
+            rec = self._add("R%d" % i, "fam%d" % (i % 5), 0.2 + 0.6 * ((i * 7) % 10) / 10.0,
+                            low_correlation=(i == 0))
+            self.led.resolve(rec["id"], outcome_fn(i))
+            out.append(self.led.get(rec["id"]))
+        return out
+
+    def test_platt_withheld_on_thin_history(self):
+        resolved = self._resolved(15, lambda i: i % 2)
+        fit = uf.platt_fit(resolved)
+        self.assertIsNone(fit["fit"])
+        self.assertIn("worse than none", fit["why"])
+        with self.assertRaises(uf.UltraForecastError):
+            uf.calibrate(0.7, fit)      # a withheld calibrator never passes numbers through
+
+    def test_platt_withheld_on_single_class_history(self):
+        resolved = self._resolved(25, lambda i: 1)          # every outcome is 1
+        fit = uf.platt_fit(resolved)
+        self.assertIsNone(fit["fit"])
+        self.assertIn("single-class", fit["why"])
+
+    def test_platt_fits_and_refits_on_cadence(self):
+        resolved = self._resolved(40, lambda i: i % 2)
+        fit = uf.platt_fit(resolved)
+        self.assertIsNotNone(fit["fit"])
+        self.assertEqual(fit["fit_n"], 40)
+        self.assertEqual(fit["fitted_on"], "resolved ledger (probability, outcome) pairs")
+        self.assertFalse(uf.platt_stale(fit, 40))
+        self.assertFalse(uf.platt_stale(fit, 89))
+        self.assertTrue(uf.platt_stale(fit, 90), ">=50 newly resolved must demand a refit")
+        self.assertTrue(uf.platt_stale({"fit": None}, 10000),
+                        "a withheld calibrator is always stale")
+
+    def test_platt_shrinks_an_overconfident_history(self):
+        over = [{"probability": 0.9, "outcome": i % 2} for i in range(40)]
+        fit = uf.platt_fit(over)
+        self.assertIsNotNone(fit["fit"])
+        self.assertLess(uf.calibrate(0.9, fit), 0.9, "an overconfident history must shrink high numbers")
 
 
 if __name__ == "__main__":  # pragma: no cover
