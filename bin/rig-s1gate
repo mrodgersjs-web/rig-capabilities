@@ -50,16 +50,43 @@ from rig_capabilities.s1gate_improve import improve, rank  # noqa: E402
 EXIT = {PASS: 0, BLOCK: 1, ESCALATE: 2}
 
 
+MAX_STATE_CHARS = 60000          # the provider's own limit is close to this; a longer state comes back as
+                                 # HTTP 400 max_tokens_exceeded, which the hook logs as UNAVAILABLE and proceeds -
+                                 # so before 2026-10-31 large commits were never judged at all.
+
+
+def _truncate(state: str, budget: int) -> str:
+    """Keep the whole artifact when it fits. Otherwise keep the head (file list and first hunks, where the
+    structure of a diff is legible) and the tail (usually the newest hunks and any closing stat), and say exactly
+    what was dropped so the judge, and anyone reading the decision row later, knows the verdict was reached on a
+    partial view. Truncation is never silent."""
+    if budget <= 0 or len(state) <= budget:
+        return state
+    head_n, tail_n = int(budget * 0.78), int(budget * 0.15)
+    dropped = len(state) - head_n - tail_n
+    marker = ("\n\n[s1gate: state truncated for the provider - %d of %d characters shown, %d omitted from the "
+              "middle. Verdict reached on a partial view; see --max-state-chars.]\n\n"
+              % (head_n + tail_n, len(state), dropped))
+    return state[:head_n] + marker + state[-tail_n:]
+
+
 def _read_state(args) -> str:
     if args.text:
-        return args.text
-    if args.file == "-" or args.stdin:
-        return sys.stdin.read()
-    if args.file:
-        return Path(args.file).read_text(encoding="utf-8")
-    if not sys.stdin.isatty():
-        return sys.stdin.read()
-    raise SystemExit("s1gate: no input. Use --file, --text, or pipe to stdin.")
+        state = args.text
+    elif args.file == "-" or args.stdin:
+        state = sys.stdin.read()
+    elif args.file:
+        state = Path(args.file).read_text(encoding="utf-8")
+    elif not sys.stdin.isatty():
+        state = sys.stdin.read()
+    else:
+        raise SystemExit("s1gate: no input. Use --file, --text, or pipe to stdin.")
+    budget = getattr(args, "max_state_chars", MAX_STATE_CHARS)
+    if state and budget >= 0 and len(state) > budget:
+        print("s1gate: state %d chars over the %d-char provider budget - middle omitted (verdict is on a partial "
+              "view)" % (len(state), budget), file=sys.stderr)
+        return _truncate(state, budget)
+    return state
 
 
 def cmd_list(args) -> int:
@@ -429,6 +456,10 @@ def main(argv=None) -> int:
                    help="REQUIRED attribution, shape kind:id@sha12 "
                         "(e.g. code.diff:pr-42@a1b2c3d4e5f6)")
     c.add_argument("--json", action="store_true")
+    c.add_argument("--max-state-chars", type=int, default=MAX_STATE_CHARS,
+                   help="truncate the middle of a state larger than this before sending (default %(default)s; "
+                        "0 disables truncation and lets the provider reject the call). Large diffs were silently "
+                        "unjudged before this existed, because the provider answers HTTP 400 max_tokens_exceeded.")
     c.set_defaults(fn=cmd_check)
 
     l = sub.add_parser("label")
